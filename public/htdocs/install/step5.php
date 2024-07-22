@@ -492,7 +492,7 @@ if ($action == "set") {
 	// If upgrade
 	if (!getDolGlobalString('MAIN_VERSION_LAST_UPGRADE') || ($conf->global->MAIN_VERSION_LAST_UPGRADE == DOL_VERSION)) {
 		// Upgrade is finished (database is on the same version than files)
-		print '<img class="valignmiddle inline-block paddingright" src="../theme/common/octicons/build/svg/checklist.svg" width="20" alt="Configuration">';
+		print '<img class="valignmiddle inline-block paddingright" src="' . constant('BASE_URL') . '/htdocs/theme/common/octicons/build/svg/checklist.svg" width="20" alt="Configuration">';
 		print ' <span class="valignmiddle">'.$langs->trans("SystemIsUpgraded")."</span><br>";
 
 		// Create install.lock file if it does not exists.

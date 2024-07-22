@@ -39,4 +39,6 @@ if (!empty($path)) {
 
 $filename = BASE_PATH . '/htdocs/' . $path . $file . '.php';
 
+define('DOL_DOCUMENT_ROOT', constant('BASE_PATH') . '/htdocs');
+
 require_once $filename;

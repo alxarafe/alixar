@@ -554,31 +554,34 @@ function pHeader($subtitle, $next, $action = 'set', $param = '', $forcejqueryurl
     header("X-Content-Type-Options: nosniff");
     header("X-Frame-Options: SAMEORIGIN"); // Frames allowed only if on same domain (stop some XSS attacks)
 
+    $defaultcss = constant('BASE_URL') . '/htdocs/install/default.css';
+    $logo = constant('BASE_URL') . '/htdocs/theme/dolibarr_logo.svg';
+
     print '<!DOCTYPE HTML>' . "\n";
     print '<html>' . "\n";
     print '<head>' . "\n";
     print '<meta charset="' . $conf->file->character_set_client . '">' . "\n";
     print '<meta name="viewport" content="width=device-width, initial-scale=1.0">' . "\n";
     print '<meta name="generator" content="Dolibarr installer">' . "\n";
-    print '<link rel="stylesheet" type="text/css" href="default.css">' . "\n";
+    print '<link rel="stylesheet" type="text/css" href="' . $defaultcss . '">' . "\n";
 
     print '<!-- Includes CSS for JQuery -->' . "\n";
     if ($jQueryUiCustomPath) {
         print '<link rel="stylesheet" type="text/css" href="' . $jQueryUiCustomPath . 'css/' . $jquerytheme . '/jquery-ui.min.css" />' . "\n"; // JQuery
     } else {
-        print '<link rel="stylesheet" type="text/css" href="../includes/jquery/css/' . $jquerytheme . '/jquery-ui.min.css" />' . "\n"; // JQuery
+        print '<link rel="stylesheet" type="text/css" href="' . constant('BASE_URL') . '/htdocs/includes/jquery/css/' . $jquerytheme . '/jquery-ui.min.css" />' . "\n"; // JQuery
     }
 
     print '<!-- Includes JS for JQuery -->' . "\n";
     if ($jQueryCustomPath) {
         print '<script type="text/javascript" src="' . $jQueryCustomPath . 'jquery.min.js"></script>' . "\n";
     } else {
-        print '<script type="text/javascript" src="../includes/jquery/js/jquery.min.js"></script>' . "\n";
+        print '<script type="text/javascript" src="' . constant('BASE_URL') . '/htdocs/includes/jquery/js/jquery.min.js"></script>' . "\n";
     }
     if ($jQueryUiCustomPath) {
         print '<script type="text/javascript" src="' . $jQueryUiCustomPath . 'jquery-ui.min.js"></script>' . "\n";
     } else {
-        print '<script type="text/javascript" src="../includes/jquery/js/jquery-ui.min.js"></script>' . "\n";
+        print '<script type="text/javascript" src="' . constant('BASE_URL') . '/htdocs/includes/jquery/js/jquery-ui.min.js"></script>' . "\n";
     }
 
     print '<title>' . $langs->trans("DolibarrSetup") . '</title>' . "\n";
@@ -587,7 +590,7 @@ function pHeader($subtitle, $next, $action = 'set', $param = '', $forcejqueryurl
     print '<body>' . "\n";
 
     print '<div class="divlogoinstall" style="text-align:center">';
-    print '<img class="imglogoinstall" src="../theme/dolibarr_logo.svg" alt="Dolibarr logo" width="300px"><br>';
+    print '<img class="imglogoinstall" src="' . $logo . '" alt="Dolibarr logo" width="300px"><br>';
     print DOL_VERSION;
     print '</div><br>';
 

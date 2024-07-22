@@ -383,7 +383,7 @@ if (!$error && $db->connected && $action == "set") {
 	}
 
 	// Show title of step
-	print '<h3><img class="valignmiddle inline-block paddingright" src="../theme/common/octicons/build/svg/gear.svg" width="20" alt="Configuration"> '.$langs->trans("ConfigurationFile").'</h3>';
+	print '<h3><img class="valignmiddle inline-block paddingright" src="' . constant('BASE_URL') . '/htdocs/theme/common/octicons/build/svg/gear.svg" width="20" alt="Configuration"> '.$langs->trans("ConfigurationFile").'</h3>';
 	print '<table cellspacing="0" width="100%" cellpadding="1" border="0">';
 
 	// Check parameter main_dir
@@ -538,7 +538,7 @@ if (!$error && $db->connected && $action == "set") {
 		print '<tr><td>';
 		print $langs->trans("ConfFileReload");
 		print '</td>';
-		print '<td><img src="../theme/eldy/img/tick.png" alt="Ok"></td></tr>';
+		print '<td><img src="' . constant('BASE_URL') . '/htdocs/theme/eldy/img/tick.png" alt="Ok"></td></tr>';
 
 		// Create database user if requested
 		if (isset($db_create_user) && ($db_create_user == "1" || $db_create_user == "on")) {
@@ -590,7 +590,7 @@ if (!$error && $db->connected && $action == "set") {
 							print $langs->trans("UserCreation").' : ';
 							print $dolibarr_main_db_user;
 							print '</td>';
-							print '<td><img src="../theme/eldy/img/tick.png" alt="Ok"></td></tr>';
+							print '<td><img src="' . constant('BASE_URL') . '/htdocs/theme/eldy/img/tick.png" alt="Ok"></td></tr>';
 						} else {
 							if ($db->errno() == 'DB_ERROR_RECORD_ALREADY_EXISTS'
 								|| $db->errno() == 'DB_ERROR_KEY_NAME_ALREADY_EXISTS'
@@ -618,7 +618,7 @@ if (!$error && $db->connected && $action == "set") {
 					print $langs->trans("UserCreation").' : ';
 					print $dolibarr_main_db_user;
 					print '</td>';
-					print '<td><img src="../theme/eldy/img/error.png" alt="Error"></td>';
+					print '<td><img src="' . constant('BASE_URL') . '/htdocs/theme/eldy/img/error.png" alt="Error"></td>';
 					print '</tr>';
 
 					// warning message due to connection failure
@@ -649,7 +649,7 @@ if (!$error && $db->connected && $action == "set") {
 					print $langs->trans("DatabaseCreation")." (".$langs->trans("User")." ".$userroot.") : ";
 					print $dolibarr_main_db_name;
 					print '</td>';
-					print '<td><img src="../theme/eldy/img/tick.png" alt="Ok"></td></tr>';
+					print '<td><img src="' . constant('BASE_URL') . '/htdocs/theme/eldy/img/tick.png" alt="Ok"></td></tr>';
 
 					$newdb->select_db($dolibarr_main_db_name);
 					$check1 = $newdb->getDefaultCharacterSetDatabase();
@@ -677,7 +677,7 @@ if (!$error && $db->connected && $action == "set") {
 				print $langs->trans("DatabaseCreation")." (".$langs->trans("User")." ".$userroot.") : ";
 				print $dolibarr_main_db_name;
 				print '</td>';
-				print '<td><img src="../theme/eldy/img/error.png" alt="Error"></td>';
+				print '<td><img src="' . constant('BASE_URL') . '/htdocs/theme/eldy/img/error.png" alt="Error"></td>';
 				print '</tr>';
 
 				// warning message
@@ -706,7 +706,7 @@ if (!$error && $db->connected && $action == "set") {
 				print $langs->trans("ServerConnection")." (".$langs->trans("User")." ".$conf->db->user.") : ";
 				print $dolibarr_main_db_host;
 				print "</td><td>";
-				print '<img src="../theme/eldy/img/tick.png" alt="Ok">';
+				print '<img src="' . constant('BASE_URL') . '/htdocs/theme/eldy/img/tick.png" alt="Ok">';
 				print "</td></tr>";
 
 				// server access ok, basic access ok
@@ -716,7 +716,7 @@ if (!$error && $db->connected && $action == "set") {
 					print $langs->trans("DatabaseConnection")." (".$langs->trans("User")." ".$conf->db->user.") : ";
 					print $dolibarr_main_db_name;
 					print "</td><td>";
-					print '<img src="../theme/eldy/img/tick.png" alt="Ok">';
+					print '<img src="' . constant('BASE_URL') . '/htdocs/theme/eldy/img/tick.png" alt="Ok">';
 					print "</td></tr>";
 
 					$error = 0;
@@ -726,7 +726,7 @@ if (!$error && $db->connected && $action == "set") {
 					print $langs->trans("DatabaseConnection")." (".$langs->trans("User")." ".$conf->db->user.") : ";
 					print $dolibarr_main_db_name;
 					print '</td><td>';
-					print '<img src="../theme/eldy/img/error.png" alt="Error">';
+					print '<img src="' . constant('BASE_URL') . '/htdocs/theme/eldy/img/error.png" alt="Error">';
 					print "</td></tr>";
 
 					// warning message
@@ -744,7 +744,7 @@ if (!$error && $db->connected && $action == "set") {
 				print $langs->trans("ServerConnection")." (".$langs->trans("User")." ".$conf->db->user.") : ";
 				print $dolibarr_main_db_host;
 				print '</td><td>';
-				print '<img src="../theme/eldy/img/error.png" alt="Error">';
+				print '<img src="' . constant('BASE_URL') . '/htdocs/theme/eldy/img/error.png" alt="Error">';
 				print "</td></tr>";
 
 				// warning message
@@ -1046,7 +1046,7 @@ function write_conf_file($conffile)
 			print $langs->trans("SaveConfigurationFile");
 			print ' <strong>'.$conffile.'</strong>';
 			print "</td><td>";
-			print '<img src="../theme/eldy/img/tick.png" alt="Ok">';
+			print '<img src="' . constant('BASE_URL') . '/htdocs/theme/eldy/img/tick.png" alt="Ok">';
 			print "</td></tr>";
 		} else {
 			$error++;
