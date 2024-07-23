@@ -415,7 +415,7 @@ class FormTicket
 					console.log("We have selected id="+idgroupticket);
 
 					if (idgroupticket != "") {
-						$.ajax({ url: \'' . DOL_URL_ROOT . '/core/ajax/fetchKnowledgeRecord.php\',
+						$.ajax({ url: \'' . constant('BASE_URL') . '/core/ajax/fetchKnowledgeRecord.php\',
 							 data: { action: \'getKnowledgeRecord\', idticketgroup: idgroupticket, token: \'' . newToken() . '\', lang:\'' . $langs->defaultlang . '\', public:' . ($public) . ' },
 							 type: \'GET\',
 							 success: function(response) {
@@ -500,7 +500,7 @@ class FormTicket
             print '<input id="securitycode" placeholder="' . $langs->trans("SecurityCode") . '" class="flat input-icon-security width125" type="text" maxlength="5" name="code" tabindex="3" />';
             print '</span>';
             print '<span class="nowrap inline-block">';
-            print '<img class="inline-block valignmiddle" src="' . DOL_URL_ROOT . '/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />';
+            print '<img class="inline-block valignmiddle" src="' . constant('BASE_URL') . '/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />';
             print '<a class="inline-block valignmiddle" href="" tabindex="4" data-role="button">' . img_picto($langs->trans("Refresh"), 'refresh', 'id="captcha_refresh_img"') . '</a>';
             print '</span>';
             print '</td></tr>';
@@ -554,7 +554,7 @@ class FormTicket
                     $out .= '<div id="attachfile_' . $key . '">';
                     $out .= img_mime($listofnames[$key]) . ' ' . $listofnames[$key];
                     if (!$this->withfilereadonly) {
-                        $out .= ' <input type="image" style="border: 0px;" src="' . DOL_URL_ROOT . '/theme/' . $conf->theme . '/img/delete.png" value="' . ($key + 1) . '" class="removedfile" id="removedfile_' . $key . '" name="removedfile_' . $key . '" />';
+                        $out .= ' <input type="image" style="border: 0px;" src="' . constant('BASE_URL') . '/theme/' . $conf->theme . '/img/delete.png" value="' . ($key + 1) . '" class="removedfile" id="removedfile_' . $key . '" name="removedfile_' . $key . '" />';
                     }
                     $out .= '<br></div>';
                 }
@@ -1672,7 +1672,7 @@ class FormTicket
                     $out .= '<div id="attachfile_' . $key . '">';
                     $out .= img_mime($listofnames[$key]) . ' ' . $listofnames[$key];
                     if (!$this->withfilereadonly) {
-                        $out .= ' <input type="image" style="border: 0px;" src="' . DOL_URL_ROOT . '/theme/' . $conf->theme . '/img/delete.png" value="' . ($key + 1) . '" class="removedfile reposition" id="removedfile_' . $key . '" name="removedfile_' . $key . '" />';
+                        $out .= ' <input type="image" style="border: 0px;" src="' . constant('BASE_URL') . '/theme/' . $conf->theme . '/img/delete.png" value="' . ($key + 1) . '" class="removedfile reposition" id="removedfile_' . $key . '" name="removedfile_' . $key . '" />';
                     }
                     $out .= '<br></div>';
                 }

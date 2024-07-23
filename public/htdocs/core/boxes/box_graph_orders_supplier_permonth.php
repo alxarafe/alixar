@@ -139,9 +139,9 @@ class box_graph_orders_supplier_permonth extends ModeleBoxes
 
                 $filenamenb = $dir . "/" . $prefix . "orderssuppliernbinyear-" . $endyear . ".png";
                 // default value for customer mode
-                $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstats&amp;file=ordersnbinyear-' . $endyear . '.png';
+                $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=orderstats&amp;file=ordersnbinyear-' . $endyear . '.png';
                 if ($mode == 'supplier') {
-                    $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstatssupplier&amp;file=orderssuppliernbinyear-' . $endyear . '.png';
+                    $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=orderstatssupplier&amp;file=orderssuppliernbinyear-' . $endyear . '.png';
                 }
 
                 $px1 = new DolGraph();
@@ -180,9 +180,9 @@ class box_graph_orders_supplier_permonth extends ModeleBoxes
 
                 $filenamenb = $dir . "/" . $prefix . "orderssupplieramountinyear-" . $endyear . ".png";
                 // default value for customer mode
-                $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstats&amp;file=ordersamountinyear-' . $endyear . '.png';
+                $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=orderstats&amp;file=ordersamountinyear-' . $endyear . '.png';
                 if ($mode == 'supplier') {
-                    $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstatssupplier&amp;file=orderssupplieramountinyear-' . $endyear . '.png';
+                    $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=orderstatssupplier&amp;file=orderssupplieramountinyear-' . $endyear . '.png';
                 }
 
                 $px2 = new DolGraph();

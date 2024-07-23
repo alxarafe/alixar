@@ -889,7 +889,7 @@ if ($resql) {
     }
 
     // Code to adjust value date with plus and less picto using an Ajax call instead of a full reload of page
-    $urlajax = DOL_URL_ROOT . '/core/ajax/bankconciliate.php?token=' . currentToken();
+    $urlajax = constant('BASE_URL') . '/core/ajax/bankconciliate.php?token=' . currentToken();
     print '
     <script type="text/javascript">
     $(function() {
@@ -920,7 +920,7 @@ if ($resql) {
     if ($action != 'addline') {
         if (!getDolGlobalString('BANK_DISABLE_DIRECT_INPUT')) {
             if (!getDolGlobalString('BANK_USE_OLD_VARIOUS_PAYMENT')) {  // Default is to record miscellaneous direct entries using miscellaneous payments
-                $newcardbutton = dolGetButtonTitle($langs->trans('AddBankRecord'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/compta/bank/various_payment/card.php?action=create&accountid=' . urlencode($search_account) . '&backtopage=' . urlencode($_SERVER['PHP_SELF'] . '?id=' . urlencode($search_account)), '', $user->rights->banque->modifier);
+                $newcardbutton = dolGetButtonTitle($langs->trans('AddBankRecord'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/compta/bank/various_payment/card.php?action=create&accountid=' . urlencode($search_account) . '&backtopage=' . urlencode($_SERVER['PHP_SELF'] . '?id=' . urlencode($search_account)), '', $user->rights->banque->modifier);
             } else { // If direct entries is not done using miscellaneous payments
                 $newcardbutton = dolGetButtonTitle($langs->trans('AddBankRecord'), '', 'fa fa-plus-circle', $_SERVER["PHP_SELF"] . '?action=addline&token=' . newToken() . '&page=' . $page . $param, '', $user->rights->banque->modifier);
             }

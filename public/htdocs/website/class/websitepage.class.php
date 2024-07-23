@@ -796,7 +796,7 @@ class WebsitePage extends CommonObject
         $label .= '<b>' . $langs->trans('Title') . ':</b> ' . $this->title . '<br>';
         $label .= '<b>' . $langs->trans('Language') . ':</b> ' . $this->lang;
 
-        $url = DOL_URL_ROOT . '/website/index.php?websiteid=' . $this->fk_website . '&pageid=' . $this->id;
+        $url = constant('BASE_URL') . '/website/index.php?websiteid=' . $this->fk_website . '&pageid=' . $this->id;
 
         $linkclose = '';
         if (empty($notooltip)) {

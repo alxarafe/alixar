@@ -363,7 +363,7 @@ class ActionsTicket extends CommonHookActions
                                 $filePath = DOL_DATA_ROOT . '/' . $doc->filepath . '/' . $doc->filename;
                                 $mime = dol_mimetype($filePath);
                                 $thumb = $arraymsgs['id'] . '/thumbs/' . substr($doc->filename, 0, strrpos($doc->filename, '.')) . '_mini' . substr($doc->filename, strrpos($doc->filename, '.'));
-                                $doclink = DOL_URL_ROOT . '/document.php?hashp=' . urlencode($doc->share);
+                                $doclink = constant('BASE_URL') . '/document.php?hashp=' . urlencode($doc->share);
 
                                 $mimeAttr = ' mime="' . $mime . '" ';
                                 $class = '';

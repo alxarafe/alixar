@@ -373,7 +373,7 @@ $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
 $newcardbutton = '';
 if ($user->hasRight('intracommreport', 'write')) {
-    $newcardbutton .= dolGetButtonTitle($langs->trans("NewDeclaration"), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/intracommreport/card.php?action=create&amp;type=' . $type);
+    $newcardbutton .= dolGetButtonTitle($langs->trans("NewDeclaration"), '', 'fa fa-plus-circle', constant('BASE_URL') . '/intracommreport/card.php?action=create&amp;type=' . $type);
 }
 
 print '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST" name="formulaire">';

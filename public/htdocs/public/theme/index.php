@@ -26,5 +26,5 @@
 
 require '../../master.inc.php';
 
-header("Location: " . DOL_URL_ROOT . '/public/error-404.php');
+header("Location: " . constant('BASE_URL') . '/public/error-404.php');
 exit;

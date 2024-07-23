@@ -21,7 +21,7 @@
  */
 
 //define('NOTOKENRENEWAL',1); // Disables token renewal
-//require '../../../../main.inc.php';
+//require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require '../../connectors/php/config.inc.php'; // This include the define('NOTOKENRENEWAL',1) and the require main.in.php
 
 global $Config;
@@ -115,7 +115,7 @@ if ( sServerPath.length > 0 )
     oConnector.ConnectorUrl += 'ServerPath=' + encodeURIComponent( sServerPath ) + '&' ;
 
 /* @CHANGE LDR Overwrite value coming from parameters for security purpose */
-oConnector.ConnectorUrl = '<?php echo DOL_URL_ROOT . '/core/filemanagerdol/connectors/php/connector.php?'; ?>';
+oConnector.ConnectorUrl = '<?php echo constant('BASE_URL') . '/core/filemanagerdol/connectors/php/connector.php?'; ?>';
 console.log('ConnectorUrl='+oConnector.ConnectorUrl);
 
 oConnector.ResourceType     = GetUrlParam( 'Type' );

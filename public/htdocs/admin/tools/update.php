@@ -140,7 +140,7 @@ print str_replace('{s}', $dolibarrroot, $langs->trans("UnpackPackageInDolibarrRo
 print '<b>' . $langs->trans("StepNb", 3) . '</b>: ';
 print $langs->trans("RemoveLock", $dolibarrdataroot . '/install.lock') . '<br>';
 print '<b>' . $langs->trans("StepNb", 4) . '</b>: ';
-$fullurl = '<a href="' . constant('BASE_URL') . '/install/" target="_blank" rel="noopener noreferrer">' . DOL_URL_ROOT . '/install/</a>';
+$fullurl = '<a href="' . constant('BASE_URL') . '/install/" target="_blank" rel="noopener noreferrer">' . constant('BASE_URL') . '/install/</a>';
 print str_replace('{s}', $fullurl, $langs->trans("CallUpdatePage", '{s}')) . '<br>';
 print '<b>' . $langs->trans("StepNb", 5) . '</b>: ';
 print $langs->trans("RestoreLock", $dolibarrdataroot . '/install.lock') . '<br>';
@@ -154,7 +154,7 @@ print '<br>';
 
 print $langs->trans("AddExtensionThemeModuleOrOther") . '<br>';
 print '<hr>';
-$texttoshow = $langs->trans("GoModuleSetupArea", DOL_URL_ROOT . '/admin/modules.php?mode=deploy', '{s2}');
+$texttoshow = $langs->trans("GoModuleSetupArea", constant('BASE_URL') . '/admin/modules.php?mode=deploy', '{s2}');
 $texttoshow = str_replace('{s2}', img_picto('', 'tools', 'class="pictofixedwidth"') . $langs->transnoentities("Home") . ' - ' . $langs->transnoentities("Setup") . ' - ' . $langs->transnoentities("Modules"), $texttoshow);
 print $texttoshow;
 

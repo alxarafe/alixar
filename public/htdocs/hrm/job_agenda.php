@@ -197,7 +197,7 @@ if ($object->id > 0) {
     if (isModEnabled('agenda')) {
         if ($user->hasRight('agenda', 'myactions', 'create') || $user->hasRight('agenda', 'allactions', 'create')) {
             $newcardbutton = '';
-            $newcardbutton .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/comm/action/card.php?action=create' . $out);
+            $newcardbutton .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/comm/action/card.php?action=create' . $out);
         }
     }
 

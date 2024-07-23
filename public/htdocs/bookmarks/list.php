@@ -272,7 +272,7 @@ print '<input type="hidden" name="mode" value="' . $mode . '">';
 
 
 $newcardbutton = '';
-$newcardbutton .= dolGetButtonTitle($langs->trans('New'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/bookmarks/card.php?action=create&backtopage=' . urlencode(DOL_URL_ROOT . '/bookmarks/list.php'), '', $permissiontoadd);
+$newcardbutton .= dolGetButtonTitle($langs->trans('New'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/bookmarks/card.php?action=create&backtopage=' . urlencode(constant('BASE_URL') . '/bookmarks/list.php'), '', $permissiontoadd);
 
 print_barre_liste($title, $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, $massactionbutton, $num, $nbtotalofrecords, 'bookmark', 0, $newcardbutton, '', $limit, 0, 0, 1);
 

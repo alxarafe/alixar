@@ -782,10 +782,10 @@ class Paiement extends CommonObject
                 if (!$error) {
                     $url = '';
                     if ($mode == 'payment') {
-                        $url = DOL_URL_ROOT . '/compta/paiement/card.php?id=';
+                        $url = constant('BASE_URL') . '/compta/paiement/card.php?id=';
                     }
                     if ($mode == 'payment_supplier') {
-                        $url = DOL_URL_ROOT . '/fourn/paiement/card.php?id=';
+                        $url = constant('BASE_URL') . '/fourn/paiement/card.php?id=';
                     }
                     if ($url) {
                         $result = $acc->add_url_line($bank_line_id, $this->id, $url, '(paiement)', $mode);
@@ -808,7 +808,7 @@ class Paiement extends CommonObject
                                 $result = $acc->add_url_line(
                                     $bank_line_id,
                                     $fac->thirdparty->id,
-                                    DOL_URL_ROOT . '/comm/card.php?socid=',
+                                    constant('BASE_URL') . '/comm/card.php?socid=',
                                     $fac->thirdparty->name,
                                     'company'
                                 );
@@ -826,7 +826,7 @@ class Paiement extends CommonObject
                                 $result = $acc->add_url_line(
                                     $bank_line_id,
                                     $fac->thirdparty->id,
-                                    DOL_URL_ROOT . '/fourn/card.php?socid=',
+                                    constant('BASE_URL') . '/fourn/card.php?socid=',
                                     $fac->thirdparty->name,
                                     'company'
                                 );
@@ -844,7 +844,7 @@ class Paiement extends CommonObject
                     $result = $acc->add_url_line(
                         $bank_line_id,
                         $this->id_prelevement,
-                        DOL_URL_ROOT . '/compta/prelevement/card.php?id=',
+                        constant('BASE_URL') . '/compta/prelevement/card.php?id=',
                         $this->num_payment,
                         $addbankurl
                     );
@@ -855,7 +855,7 @@ class Paiement extends CommonObject
                     $result = $acc->add_url_line(
                         $bank_line_id,
                         $this->id_prelevement,
-                        DOL_URL_ROOT . '/compta/prelevement/card.php?id=',
+                        constant('BASE_URL') . '/compta/prelevement/card.php?id=',
                         $this->num_prelevement,
                         'withdraw'
                     );
@@ -1341,7 +1341,7 @@ class Paiement extends CommonObject
             $linkclose = ($morecss ? ' class="' . $morecss . '"' : '');
         }
 
-        $url = DOL_URL_ROOT . '/compta/paiement/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/compta/paiement/card.php?id=' . $this->id;
 
         $linkstart = '<a href="' . $url . '"';
         $linkstart .= $linkclose . '>';

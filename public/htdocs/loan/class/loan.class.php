@@ -559,7 +559,7 @@ class Loan extends CommonObject
             $label .= '<br><strong>' . $langs->trans('Label') . ':</strong> ' . $this->label;
         }
 
-        $url = DOL_URL_ROOT . '/loan/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/loan/card.php?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not

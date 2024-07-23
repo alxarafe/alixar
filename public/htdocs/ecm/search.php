@@ -214,7 +214,7 @@ print '<table class="border centpercent"><tr><td width="40%" valign="top">';
 
 //print load_fiche_titre($langs->trans("ECMSectionsManual"));
 
-print '<form method="post" action="' . DOL_URL_ROOT . '/ecm/search.php">';
+print '<form method="post" action="' . constant('BASE_URL') . '/ecm/search.php">';
 print '<input type="hidden" name="token" value="' . newToken() . '">';
 print '<table class="nobordernopadding" width="100%">';
 print "<tr class=\"liste_titre\">";
@@ -228,7 +228,7 @@ print "</table></form>";
 
 //print load_fiche_titre($langs->trans("ECMSectionAuto"));
 
-print '<form method="post" action="' . DOL_URL_ROOT . '/ecm/search.php">';
+print '<form method="post" action="' . constant('BASE_URL') . '/ecm/search.php">';
 print '<input type="hidden" name="token" value="' . newToken() . '">';
 print '<table class="nobordernopadding" width="100%">';
 print "<tr class=\"liste_titre\">";

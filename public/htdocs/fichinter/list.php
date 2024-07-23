@@ -519,7 +519,7 @@ print '<input type="hidden" name="page_y" value="">';
 print '<input type="hidden" name="mode" value="' . $mode . '">';
 
 $newcardbutton = '';
-$url = DOL_URL_ROOT . '/fichinter/card.php?action=create';
+$url = constant('BASE_URL') . '/fichinter/card.php?action=create';
 if (!empty($socid)) {
     $url .= '&socid=' . $socid;
 }

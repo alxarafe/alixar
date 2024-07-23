@@ -193,9 +193,9 @@ $objcon = new stdClass();
 $out = '';
 $morehtmlright = '';
 
-$messagingUrl = DOL_URL_ROOT . '/product/messaging.php?id=' . $object->id;
+$messagingUrl = constant('BASE_URL') . '/product/messaging.php?id=' . $object->id;
 $morehtmlright .= dolGetButtonTitle($langs->trans('ShowAsConversation'), '', 'fa fa-comments imgforviewmode', $messagingUrl, '', 1);
-$messagingUrl = DOL_URL_ROOT . '/product/agenda.php?id=' . $object->id;
+$messagingUrl = constant('BASE_URL') . '/product/agenda.php?id=' . $object->id;
 $morehtmlright .= dolGetButtonTitle($langs->trans('MessageListViewType'), '', 'fa fa-bars imgforviewmode', $messagingUrl, '', 2);
 
 if (isModEnabled('agenda')) {
@@ -208,7 +208,7 @@ if (isModEnabled('agenda')) {
     }
 
     $linktocreatetimeBtnStatus = $user->hasRight('agenda', 'myactions', 'create') || $user->hasRight('agenda', 'allactions', 'create');
-    $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/comm/action/card.php?action=create' . $out, '', $linktocreatetimeBtnStatus);
+    $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/comm/action/card.php?action=create' . $out, '', $linktocreatetimeBtnStatus);
 }
 
 

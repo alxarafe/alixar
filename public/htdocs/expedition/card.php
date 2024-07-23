@@ -145,7 +145,7 @@ if (empty($reshook)) {
     if ($cancel) {
         if ($origin && $origin_id > 0) {
             if ($origin == 'commande') {
-                header("Location: " . DOL_URL_ROOT . '/expedition/shipment.php?id=' . ((int) $origin_id));
+                header("Location: " . constant('BASE_URL') . '/expedition/shipment.php?id=' . ((int) $origin_id));
                 exit;
             }
         } else {
@@ -458,7 +458,7 @@ if (empty($reshook)) {
         if ($result > 0) {
             $db->commit();
 
-            header("Location: " . DOL_URL_ROOT . '/delivery/card.php?action=create_delivery&id=' . $result);
+            header("Location: " . constant('BASE_URL') . '/delivery/card.php?action=create_delivery&id=' . $result);
             exit;
         } else {
             $db->rollback();
@@ -515,7 +515,7 @@ if (empty($reshook)) {
         $also_update_stock = (GETPOST('alsoUpdateStock', 'alpha') ? 1 : 0);
         $result = $object->delete($user, 0, $also_update_stock);
         if ($result > 0) {
-            header("Location: " . DOL_URL_ROOT . '/expedition/index.php');
+            header("Location: " . constant('BASE_URL') . '/expedition/index.php');
             exit;
         } else {
             setEventMessages($object->error, $object->errors, 'errors');
@@ -2726,7 +2726,7 @@ if ($action == 'create') {
             if (isModEnabled('invoice') && ($object->status == Expedition::STATUS_VALIDATED || $object->status == Expedition::STATUS_CLOSED)) {
                 if ($user->hasRight('facture', 'creer')) {
                     if (getDolGlobalString('WORKFLOW_BILL_ON_SHIPMENT') !== '0') {
-                        print dolGetButtonAction('', $langs->trans('CreateBill'), 'default', DOL_URL_ROOT . '/compta/facture/card.php?action=create&origin=' . $object->element . '&originid=' . $object->id . '&socid=' . $object->socid, '');
+                        print dolGetButtonAction('', $langs->trans('CreateBill'), 'default', constant('BASE_URL') . '/compta/facture/card.php?action=create&origin=' . $object->element . '&originid=' . $object->id . '&socid=' . $object->socid, '');
                     }
                 }
             }

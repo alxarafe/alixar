@@ -41,24 +41,24 @@ function categories_prepare_head(Categorie $object, $type)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/categories/viewcat.php?id=' . $object->id . '&amp;type=' . $type;
+    $head[$h][0] = constant('BASE_URL') . '/categories/viewcat.php?id=' . $object->id . '&amp;type=' . $type;
     $head[$h][1] = $langs->trans("Category");
     $head[$h][2] = 'card';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/categories/photos.php?id=' . $object->id . '&amp;type=' . $type;
+    $head[$h][0] = constant('BASE_URL') . '/categories/photos.php?id=' . $object->id . '&amp;type=' . $type;
     $head[$h][1] = $langs->trans("Photos");
     $head[$h][2] = 'photos';
     $h++;
 
     if (getDolGlobalInt('MAIN_MULTILANGS')) {
-        $head[$h][0] = DOL_URL_ROOT . '/categories/traduction.php?id=' . $object->id . '&amp;type=' . $type;
+        $head[$h][0] = constant('BASE_URL') . '/categories/traduction.php?id=' . $object->id . '&amp;type=' . $type;
         $head[$h][1] = $langs->trans("Translation");
         $head[$h][2] = 'translation';
         $h++;
     }
 
-    $head[$h][0] = DOL_URL_ROOT . '/categories/info.php?id=' . $object->id . '&amp;type=' . $type;
+    $head[$h][0] = constant('BASE_URL') . '/categories/info.php?id=' . $object->id . '&amp;type=' . $type;
     $head[$h][1] = $langs->trans("Info");
     $head[$h][2] = 'info';
     $h++;
@@ -92,12 +92,12 @@ function categoriesadmin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/categories/admin/categorie.php';
+    $head[$h][0] = constant('BASE_URL') . '/categories/admin/categorie.php';
     $head[$h][1] = $langs->trans("Setup");
     $head[$h][2] = 'setup';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/categories/admin/categorie_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/categories/admin/categorie_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFieldsCategories");
     $nbExtrafields = $extrafields->attributes['categorie']['count'];
     if ($nbExtrafields > 0) {

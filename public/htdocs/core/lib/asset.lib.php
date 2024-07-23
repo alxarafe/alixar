@@ -41,7 +41,7 @@ function assetAdminPrepareHead()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/asset/admin/setup.php';
+    $head[$h][0] = constant('BASE_URL') . '/asset/admin/setup.php';
     $head[$h][1] = $langs->trans("Settings");
     $head[$h][2] = 'settings';
     $h++;
@@ -56,7 +56,7 @@ function assetAdminPrepareHead()
     //); // to remove a tab
     complete_head_from_modules($conf, $langs, null, $head, $h, 'asset_admin');
 
-    $head[$h][0] = DOL_URL_ROOT . '/asset/admin/asset_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/asset/admin/asset_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFields");
     $nbExtrafields = $extrafields->attributes['asset']['count'];
     if ($nbExtrafields > 0) {
@@ -65,7 +65,7 @@ function assetAdminPrepareHead()
     $head[$h][2] = 'asset_extrafields';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/asset/admin/assetmodel_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/asset/admin/assetmodel_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFieldsAssetModel");
     $nbExtrafields = $extrafields->attributes['asset_model']['count'];
     if ($nbExtrafields > 0) {
@@ -94,32 +94,32 @@ function assetPrepareHead(Asset $object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/asset/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/asset/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Card");
     $head[$h][2] = 'card';
     $h++;
 
     if (empty($object->not_depreciated)) {
-        $head[$h][0] = DOL_URL_ROOT . '/asset/depreciation_options.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/asset/depreciation_options.php?id=' . $object->id;
         $head[$h][1] = $langs->trans("AssetDepreciationOptions");
         $head[$h][2] = 'depreciation_options';
         $h++;
     }
 
-    $head[$h][0] = DOL_URL_ROOT . '/asset/accountancy_codes.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/asset/accountancy_codes.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("AssetAccountancyCodes");
     $head[$h][2] = 'accountancy_codes';
     $h++;
 
     if (empty($object->not_depreciated)) {
-        $head[$h][0] = DOL_URL_ROOT . '/asset/depreciation.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/asset/depreciation.php?id=' . $object->id;
         $head[$h][1] = $langs->trans("AssetDepreciation");
         $head[$h][2] = 'depreciation';
         $h++;
     }
 
     if (isset($object->disposal_date) && $object->disposal_date !== "") {
-        $head[$h][0] = DOL_URL_ROOT . '/asset/disposal.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/asset/disposal.php?id=' . $object->id;
         $head[$h][1] = $langs->trans("AssetDisposal");
         $head[$h][2] = 'disposal';
         $h++;
@@ -133,7 +133,7 @@ function assetPrepareHead(Asset $object)
         if (!empty($object->note_public)) {
             $nbNote++;
         }
-        $head[$h][0] = DOL_URL_ROOT . '/asset/note.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/asset/note.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('Notes');
         if ($nbNote > 0) {
             $head[$h][1] .= (!getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER') ? '<span class="badge marginleftonlyshort">' . $nbNote . '</span>' : '');
@@ -147,7 +147,7 @@ function assetPrepareHead(Asset $object)
     $upload_dir = $conf->asset->dir_output . "/asset/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/asset/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/asset/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -155,7 +155,7 @@ function assetPrepareHead(Asset $object)
     $head[$h][2] = 'document';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/asset/agenda.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/asset/agenda.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Events");
     $head[$h][2] = 'agenda';
     $h++;
@@ -190,7 +190,7 @@ function assetModelPrepareHead($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/asset/model/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/asset/model/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Card");
     $head[$h][2] = 'card';
     $h++;
@@ -203,7 +203,7 @@ function assetModelPrepareHead($object)
         if (!empty($object->note_public)) {
             $nbNote++;
         }
-        $head[$h][0] = DOL_URL_ROOT . '/asset/model/note.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/asset/model/note.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('Notes');
         if ($nbNote > 0) {
             $head[$h][1] .= (!getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER') ? '<span class="badge marginleftonlyshort">' . $nbNote . '</span>' : '');
@@ -212,7 +212,7 @@ function assetModelPrepareHead($object)
         $h++;
     }
 
-    $head[$h][0] = DOL_URL_ROOT . '/asset/model/agenda.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/asset/model/agenda.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Events");
     $head[$h][2] = 'agenda';
     $h++;

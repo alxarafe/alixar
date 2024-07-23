@@ -39,13 +39,13 @@ function knowledgemanagementAdminPrepareHead()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/knowledgemanagement.php';
+    $head[$h][0] = constant('BASE_URL') . '/admin/knowledgemanagement.php';
     $head[$h][1] = $langs->trans("Setup");
     $head[$h][2] = 'setup';
     $h++;
 
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/knowledgerecord_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/admin/knowledgerecord_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFields");
     $nbExtrafields = $extrafields->attributes['knowledgemanagement_knowledgerecord']['count'];
     if ($nbExtrafields > 0) {

@@ -44,7 +44,7 @@ function resource_prepare_head($object)
 
     if (!getDolGlobalString('MAIN_DISABLE_CONTACTS_TAB') && (!getDolGlobalString('RESOURCE_HIDE_ADD_CONTACT_USER') || !getDolGlobalString('RESOURCE_HIDE_ADD_CONTACT_THIPARTY'))) {
         $nbContact = count($object->liste_contact(-1, 'internal')) + count($object->liste_contact(-1, 'external'));
-        $head[$h][0] = DOL_URL_ROOT . '/resource/contact.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/resource/contact.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('ContactsAddresses');
         if ($nbContact > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbContact . '</span>';
@@ -67,7 +67,7 @@ function resource_prepare_head($object)
         if (!empty($object->note_public)) {
             $nbNote++;
         }
-        $head[$h][0] = DOL_URL_ROOT . '/resource/note.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/resource/note.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('Notes');
         if ($nbNote > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';
@@ -79,7 +79,7 @@ function resource_prepare_head($object)
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
     $upload_dir = $conf->resource->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
-    $head[$h][0] = DOL_URL_ROOT . '/resource/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/resource/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Documents");
     if ($nbFiles > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbFiles . '</span>';
@@ -87,7 +87,7 @@ function resource_prepare_head($object)
     $head[$h][2] = 'documents';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/resource/agenda.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/resource/agenda.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Events");
     if (isModEnabled('agenda') && ($user->hasRight('agenda', 'myactions', 'read') || $user->hasRight('agenda', 'allactions', 'read'))) {
         $head[$h][1] .= '/';
@@ -123,7 +123,7 @@ function resource_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/resource.php';
+    $head[$h][0] = constant('BASE_URL') . '/admin/resource.php';
     $head[$h][1] = $langs->trans("ResourceSetup");
     $head[$h][2] = 'general';
     $h++;
@@ -134,7 +134,7 @@ function resource_admin_prepare_head()
     // $this->tabs = array('entity:-tabname:Title:@mymodule:/mymodule/mypage.php?id=__ID__');   to remove a tab
     complete_head_from_modules($conf, $langs, null, $head, $h, 'resource_admin');
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/resource_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/admin/resource_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFields");
     $nbExtrafields = $extrafields->attributes['resource']['count'];
     if ($nbExtrafields > 0) {

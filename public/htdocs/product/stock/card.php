@@ -113,14 +113,14 @@ if ($reshook < 0) {
     setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 }
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/product/stock/list.php';
+    $backurlforlist = constant('BASE_URL') . '/product/stock/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/product/stock/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/product/stock/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -192,7 +192,7 @@ if (empty($reshook)) {
         $result = $object->delete($user);
         if ($result > 0) {
             setEventMessages($langs->trans("RecordDeleted"), null, 'mesgs');
-            header("Location: " . DOL_URL_ROOT . '/product/stock/list.php?restore_lastsearch_values=1');
+            header("Location: " . constant('BASE_URL') . '/product/stock/list.php?restore_lastsearch_values=1');
             exit;
         } else {
             setEventMessages($object->error, $object->errors, 'errors');

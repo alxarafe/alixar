@@ -589,7 +589,7 @@ class PaymentExpenseReport extends CommonObject
                 // Add link 'payment', 'payment_supplier', 'payment_expensereport' in bank_url between payment and bank transaction
                 $url = '';
                 if ($mode == 'payment_expensereport') {
-                    $url = DOL_URL_ROOT . '/expensereport/payment/card.php?rowid=';
+                    $url = constant('BASE_URL') . '/expensereport/payment/card.php?rowid=';
                 }
                 if ($url) {
                     $result = $acc->add_url_line($bank_line_id, $this->id, $url, '(paiement)', $mode);
@@ -609,7 +609,7 @@ class PaymentExpenseReport extends CommonObject
                             $result = $acc->add_url_line(
                                 $bank_line_id,
                                 $fuser->id,
-                                DOL_URL_ROOT . '/user/card.php?id=',
+                                constant('BASE_URL') . '/user/card.php?id=',
                                 $fuser->getFullName($langs),
                                 'user'
                             );

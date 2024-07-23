@@ -452,7 +452,7 @@ if (empty($reshook)) {
         $companybankaccount = new CompanyBankAccount($db);
         $res = $companybankaccount->setAsDefault(GETPOSTINT('ribid'));
         if ($res) {
-            $url = DOL_URL_ROOT . '/societe/paymentmodes.php?socid=' . $object->id;
+            $url = constant('BASE_URL') . '/societe/paymentmodes.php?socid=' . $object->id;
             header('Location: ' . $url);
             exit;
         } else {
@@ -767,7 +767,7 @@ if (empty($reshook)) {
             try {
                 $companypaymentmode->setAsDefault($id);
 
-                $url = DOL_URL_ROOT . '/societe/paymentmodes.php?socid=' . $object->id;
+                $url = constant('BASE_URL') . '/societe/paymentmodes.php?socid=' . $object->id;
                 header('Location: ' . $url);
                 exit;
             } catch (Exception $e) {
@@ -785,7 +785,7 @@ if (empty($reshook)) {
                 // @phan-suppress-next-line PhanDeprecatedFunction
                 $result = $cu->save();
 
-                $url = DOL_URL_ROOT . '/societe/paymentmodes.php?socid=' . $object->id;
+                $url = constant('BASE_URL') . '/societe/paymentmodes.php?socid=' . $object->id;
                 header('Location: ' . $url);
                 exit;
             } catch (Exception $e) {
@@ -817,7 +817,7 @@ if (empty($reshook)) {
                     }
                 }
 
-                $url = DOL_URL_ROOT . '/societe/paymentmodes.php?socid=' . $object->id;
+                $url = constant('BASE_URL') . '/societe/paymentmodes.php?socid=' . $object->id;
                 header('Location: ' . $url);
                 exit;
             } catch (Exception $e) {
@@ -850,7 +850,7 @@ if (empty($reshook)) {
                     }
                 }
 
-                $url = DOL_URL_ROOT . '/societe/paymentmodes.php?socid=' . $object->id;
+                $url = constant('BASE_URL') . '/societe/paymentmodes.php?socid=' . $object->id;
                 if (GETPOSTINT('page_y')) {
                     $url .= '&page_y=' . GETPOSTINT('page_y');
                 }

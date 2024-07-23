@@ -351,7 +351,7 @@ if ($action == 'updatelines' && $usercancreate) {
         $db->commit();
         setEventMessages($langs->trans("ReceptionUpdated"), null);
 
-        header("Location: " . DOL_URL_ROOT . '/expedition/dispatch.php?id=' . $object->id);
+        header("Location: " . constant('BASE_URL') . '/expedition/dispatch.php?id=' . $object->id);
         exit;
     }
 } elseif ($action == 'setdate_livraison' && $usercancreate) {
@@ -1324,7 +1324,7 @@ if ($object->id > 0 || !empty($object->ref)) {
 				newproductrow=0
 				result=false;
 				tabproduct.forEach(product => {
-					$.ajax({ url: \'' . DOL_URL_ROOT . '/expedition/ajax/searchfrombarcode.php\',
+					$.ajax({ url: \'' . constant('BASE_URL') . '/expedition/ajax/searchfrombarcode.php\',
 						data: { "token":"' . newToken() . '", "action":"existbarcode","fk_entrepot": warehousetouse, "barcode":element, "mode":mode},
 						type: \'POST\',
 						async: false,

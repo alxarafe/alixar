@@ -456,7 +456,7 @@ if ($object->id > 0) {
         $outstandingTotal = $tmp['total_ht'];
         $outstandingTotalIncTax = $tmp['total_ttc'];
         $text = $langs->trans("OverAllSupplierProposals");
-        $link = DOL_URL_ROOT . '/supplier_proposal/list.php?socid=' . $object->id;
+        $link = constant('BASE_URL') . '/supplier_proposal/list.php?socid=' . $object->id;
         $icon = 'bill';
         if ($link) {
             $boxstat .= '<a href="' . $link . '" class="boxstatsindicator thumbstat nobold nounderline">';
@@ -477,7 +477,7 @@ if ($object->id > 0) {
         $outstandingTotal = $tmp['total_ht'];
         $outstandingTotalIncTax = $tmp['total_ttc'];
         $text = $langs->trans("OverAllOrders");
-        $link = DOL_URL_ROOT . '/fourn/commande/list.php?socid=' . $object->id;
+        $link = constant('BASE_URL') . '/fourn/commande/list.php?socid=' . $object->id;
         $icon = 'bill';
         if ($link) {
             $boxstat .= '<a href="' . $link . '" class="boxstatsindicator thumbstat nobold nounderline">';
@@ -499,7 +499,7 @@ if ($object->id > 0) {
         $outstandingTotalIncTax = $tmp['total_ttc'];
 
         $text = $langs->trans("OverAllInvoices");
-        $link = DOL_URL_ROOT . '/fourn/facture/list.php?socid=' . $object->id;
+        $link = constant('BASE_URL') . '/fourn/facture/list.php?socid=' . $object->id;
         $icon = 'bill';
         if ($link) {
             $boxstat .= '<a href="' . $link . '" class="boxstatsindicator thumbstat nobold nounderline">';
@@ -514,7 +514,7 @@ if ($object->id > 0) {
 
         // Box outstanding bill
         $text = $langs->trans("CurrentOutstandingBill");
-        $link = DOL_URL_ROOT . '/fourn/recap-fourn.php?socid=' . $object->id;
+        $link = constant('BASE_URL') . '/fourn/recap-fourn.php?socid=' . $object->id;
         $icon = 'bill';
         if ($link) {
             $boxstat .= '<a href="' . $link . '" class="boxstatsindicator thumbstat nobold nounderline">';
@@ -531,7 +531,7 @@ if ($object->id > 0) {
         $outstandingOpenedLate = $tmp['opened'];
         if ($outstandingOpened != $outstandingOpenedLate && !empty($outstandingOpenedLate)) {
             $text = $langs->trans("CurrentOutstandingBillLate");
-            $link = DOL_URL_ROOT . '/fourn/recap-fourn.php?socid=' . $object->id;
+            $link = constant('BASE_URL') . '/fourn/recap-fourn.php?socid=' . $object->id;
             $icon = 'bill';
             if ($link) {
                 $boxstat .= '<a href="' . $link . '" class="boxstatsindicator thumbstat nobold nounderline">';
@@ -906,7 +906,7 @@ if ($object->id > 0) {
         if (isModEnabled('supplier_proposal') && $user->hasRight("supplier_proposal", "creer")) {
             $langs->load("supplier_proposal");
             if ($object->status == 1) {
-                print dolGetButtonAction('', $langs->trans('AddSupplierProposal'), 'default', DOL_URL_ROOT . '/supplier_proposal/card.php?action=create&amp;socid=' . $object->id, '');
+                print dolGetButtonAction('', $langs->trans('AddSupplierProposal'), 'default', constant('BASE_URL') . '/supplier_proposal/card.php?action=create&amp;socid=' . $object->id, '');
             } else {
                 print dolGetButtonAction($langs->trans('ThirdPartyIsClosed'), $langs->trans('AddSupplierProposal'), 'default', $_SERVER['PHP_SELF'] . '#', '', false);
             }
@@ -915,7 +915,7 @@ if ($object->id > 0) {
         if ($user->hasRight('fournisseur', 'commande', 'creer') || $user->hasRight('supplier_order', 'creer')) {
             $langs->load("orders");
             if ($object->status == 1) {
-                print dolGetButtonAction('', $langs->trans('AddSupplierOrderShort'), 'default', DOL_URL_ROOT . '/fourn/commande/card.php?action=create&amp;token=' . newToken() . '&amp;socid=' . $object->id, '');
+                print dolGetButtonAction('', $langs->trans('AddSupplierOrderShort'), 'default', constant('BASE_URL') . '/fourn/commande/card.php?action=create&amp;token=' . newToken() . '&amp;socid=' . $object->id, '');
             } else {
                 print dolGetButtonAction($langs->trans('ThirdPartyIsClosed'), $langs->trans('AddSupplierOrderShort'), 'default', $_SERVER['PHP_SELF'] . '#', '', false);
             }
@@ -925,7 +925,7 @@ if ($object->id > 0) {
             if (!empty($orders2invoice) && $orders2invoice > 0) {
                 if ($object->status == 1) {
                     // Company is open
-                    print dolGetButtonAction('', $langs->trans('CreateInvoiceForThisSupplier'), 'default', DOL_URL_ROOT . '/fourn/commande/list.php?socid=' . $object->id . '&amp;search_billed=0&amp;autoselectall=1', '');
+                    print dolGetButtonAction('', $langs->trans('CreateInvoiceForThisSupplier'), 'default', constant('BASE_URL') . '/fourn/commande/list.php?socid=' . $object->id . '&amp;search_billed=0&amp;autoselectall=1', '');
                 } else {
                     print dolGetButtonAction('', $langs->trans('CreateInvoiceForThisCustomer'), 'default', $_SERVER['PHP_SELF'] . '#', '', false);
                 }
@@ -937,7 +937,7 @@ if ($object->id > 0) {
         if ($user->hasRight('fournisseur', 'facture', 'creer') || $user->hasRight('supplier_invoice', 'creer')) {
             $langs->load("bills");
             if ($object->status == 1) {
-                print dolGetButtonAction('', $langs->trans('AddBill'), 'default', DOL_URL_ROOT . '/fourn/facture/card.php?action=create&amp;socid=' . $object->id, '');
+                print dolGetButtonAction('', $langs->trans('AddBill'), 'default', constant('BASE_URL') . '/fourn/facture/card.php?action=create&amp;socid=' . $object->id, '');
             } else {
                 print dolGetButtonAction($langs->trans('ThirdPartyIsClosed'), $langs->trans('AddBill'), 'default', $_SERVER['PHP_SELF'] . '#', '', false);
             }
@@ -946,7 +946,7 @@ if ($object->id > 0) {
         // Add action
         if (isModEnabled('agenda') && getDolGlobalString('MAIN_REPEATTASKONEACHTAB') && $object->status == 1) {
             if ($user->hasRight("agenda", "myactions", "create")) {
-                print dolGetButtonAction('', $langs->trans('AddAction'), 'default', DOL_URL_ROOT . '/comm/action/card.php?action=create&amp;socid=' . $object->id, '');
+                print dolGetButtonAction('', $langs->trans('AddAction'), 'default', constant('BASE_URL') . '/comm/action/card.php?action=create&amp;socid=' . $object->id, '');
             } else {
                 print dolGetButtonAction($langs->trans('NotAllowed'), $langs->trans('AddAction'), 'default', $_SERVER['PHP_SELF'] . '#', '', false);
             }

@@ -151,7 +151,7 @@ llxHeader('', $title);
 $head = array();
 
 $h = 0;
-$head[$h][0] = DOL_URL_ROOT . '/compta/prelevement/line.php?id=' . ((int) $id) . '&type=' . urlencode($type);
+$head[$h][0] = constant('BASE_URL') . '/compta/prelevement/line.php?id=' . ((int) $id) . '&type=' . urlencode($type);
 $head[$h][1] = $title;
 $hselected = $h;
 $h++;
@@ -213,7 +213,7 @@ if ($id) {
 
         $rej = new RejetPrelevement($db, $user, $type);
 
-        print '<form name="confirm_rejet" method="post" action="' . DOL_URL_ROOT . '/compta/prelevement/line.php?id=' . $id . '">';
+        print '<form name="confirm_rejet" method="post" action="' . constant('BASE_URL') . '/compta/prelevement/line.php?id=' . $id . '">';
         print '<input type="hidden" name="token" value="' . newToken() . '">';
         print '<input type="hidden" name="action" value="confirm_rejet">';
         print '<input type="hidden" name="type" value="' . $type . '">';

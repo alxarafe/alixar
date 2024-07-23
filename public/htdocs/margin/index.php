@@ -35,4 +35,4 @@ if ($user->hasRight('produit', 'lire')) {
     $page = 'agentMargins';
 }
 
-header('Location: ' . DOL_URL_ROOT . '/margin/' . $page . '.php');
+header('Location: ' . constant('BASE_URL') . '/margin/' . $page . '.php');

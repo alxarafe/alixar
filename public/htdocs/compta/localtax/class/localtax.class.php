@@ -548,7 +548,7 @@ class Localtax extends CommonObject
                     }
 
                     // Mise a jour liens
-                    $result = $acc->add_url_line($bank_line_id, $this->id, DOL_URL_ROOT . '/compta/localtax/card.php?id=', "(VATPayment)", "payment_vat");
+                    $result = $acc->add_url_line($bank_line_id, $this->id, constant('BASE_URL') . '/compta/localtax/card.php?id=', "(VATPayment)", "payment_vat");
                     if ($result < 0) {
                         $this->error = $acc->error;
                         $ok = 0;

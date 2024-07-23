@@ -30,7 +30,7 @@
  */
 
 // Load Dolibarr environment
-require "../main.inc.php";
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -619,7 +619,7 @@ if ($sql_select) {
         }
 
         if (($objp->info_bits & 2) == 2) { ?>
-            <a href="<?php echo DOL_URL_ROOT . '/comm/remx.php?id=' . $object->id; ?>">
+            <a href="<?php echo constant('BASE_URL') . '/comm/remx.php?id=' . $object->id; ?>">
             <?php
             $txt = '';
             print img_object($langs->trans("ShowReduc"), 'reduc') . ' ';

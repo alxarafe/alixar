@@ -122,14 +122,14 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/contact/list.php';
+    $backurlforlist = constant('BASE_URL') . '/contact/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/contact/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/contact/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -330,7 +330,7 @@ if (empty($reshook)) {
                 header("Location: " . $backurlforlist);
                 exit;
             } else {
-                header("Location: " . DOL_URL_ROOT . '/contact/list.php');
+                header("Location: " . constant('BASE_URL') . '/contact/list.php');
                 exit;
             }
         } else {
@@ -1571,7 +1571,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
 
             $MAXEVENT = 10;
 
-            $morehtmlright = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/contact/agenda.php?id=' . $object->id);
+            $morehtmlright = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/contact/agenda.php?id=' . $object->id);
 
             // List of actions on element
             include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';

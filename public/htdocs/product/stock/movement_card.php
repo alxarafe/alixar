@@ -1073,7 +1073,7 @@ if ($resql) {
         if (!empty($arrayfields['m.inventorycode']['checked'])) {
             // Inventory code
             print '<td><a href="'
-                        . DOL_URL_ROOT . '/product/stock/movement_card.php?id=' . urlencode($objp->entrepot_id)
+                        . constant('BASE_URL') . '/product/stock/movement_card.php?id=' . urlencode($objp->entrepot_id)
                         . '&search_inventorycode=' . urlencode($objp->inventorycode)
                         . '&search_type_mouvement=' . urlencode($objp->type_mouvement)
                         . '">'
@@ -1217,7 +1217,7 @@ if ($action != 'create' && $action != 'edit' && $action != 'delete' && $id > 0) 
 
     $MAXEVENT = 10;
 
-    $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/product/agenda.php?id=' . $object->id);
+    $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/product/agenda.php?id=' . $object->id);
 
     // List of actions on element
     include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';

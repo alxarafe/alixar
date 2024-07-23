@@ -89,7 +89,7 @@ $form = new Form($db);
 $h = 0;
 
 $head = array();
-$head[$h][0] = DOL_URL_ROOT . '/don/payment/card.php?id=' . $id;
+$head[$h][0] = constant('BASE_URL') . '/don/payment/card.php?id=' . $id;
 $head[$h][1] = $langs->trans("DonationPayment");
 $hselected = $h;
 $h++;

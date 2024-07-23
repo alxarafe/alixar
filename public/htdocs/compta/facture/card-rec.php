@@ -157,14 +157,14 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/compta/facture/invoicetemplate_list.php';
+    $backurlforlist = constant('BASE_URL') . '/compta/facture/invoicetemplate_list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/compta/facture/invoicetemplate_list.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/compta/facture/invoicetemplate_list.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -308,7 +308,7 @@ if (empty($reshook)) {
     if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('facture', 'supprimer')) {
         $object->delete($user);
 
-        header("Location: " . DOL_URL_ROOT . '/compta/facture/invoicetemplate_list.php');
+        header("Location: " . constant('BASE_URL') . '/compta/facture/invoicetemplate_list.php');
         exit;
     }
 

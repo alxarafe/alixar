@@ -459,7 +459,7 @@ function actions_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/comm/action/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/comm/action/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("CardAction");
     $head[$h][2] = 'card';
     $h++;
@@ -469,7 +469,7 @@ function actions_prepare_head($object)
         include_once DOL_DOCUMENT_ROOT . '/resource/class/dolresource.class.php';
         $resource = new Dolresource($db);
 
-        $head[$h][0] = DOL_URL_ROOT . '/resource/element_resource.php?element=action&element_id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/resource/element_resource.php?element=action&element_id=' . $object->id;
         $listofresourcelinked = $resource->getElementResources($object->element, $object->id);
         $nbResources = (is_array($listofresourcelinked) ? count($listofresourcelinked) : 0);
         $head[$h][1] = $langs->trans("Resources");
@@ -486,7 +486,7 @@ function actions_prepare_head($object)
     $upload_dir = $conf->agenda->dir_output . "/" . $object->id;
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/comm/action/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/comm/action/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Documents");
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= (!getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER') ? '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>' : '');
@@ -494,7 +494,7 @@ function actions_prepare_head($object)
     $head[$h][2] = 'documents';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/comm/action/info.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/comm/action/info.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Info');
     $head[$h][2] = 'info';
     $h++;
@@ -520,29 +520,29 @@ function calendars_prepare_head($param)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/comm/action/list.php?mode=show_list' . ($param ? '&' . $param : '');
+    $head[$h][0] = constant('BASE_URL') . '/comm/action/list.php?mode=show_list' . ($param ? '&' . $param : '');
     $head[$h][1] = $langs->trans("ViewList");
     $head[$h][2] = 'cardlist';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/comm/action/index.php?mode=show_month' . ($param ? '&' . $param : '');
+    $head[$h][0] = constant('BASE_URL') . '/comm/action/index.php?mode=show_month' . ($param ? '&' . $param : '');
     $head[$h][1] = $langs->trans("ViewCal");
     $head[$h][2] = 'cardmonth';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/comm/action/index.php?mode=show_week' . ($param ? '&' . $param : '');
+    $head[$h][0] = constant('BASE_URL') . '/comm/action/index.php?mode=show_week' . ($param ? '&' . $param : '');
     $head[$h][1] = $langs->trans("ViewWeek");
     $head[$h][2] = 'cardweek';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/comm/action/index.php?mode=show_day' . ($param ? '&' . $param : '');
+    $head[$h][0] = constant('BASE_URL') . '/comm/action/index.php?mode=show_day' . ($param ? '&' . $param : '');
     $head[$h][1] = $langs->trans("ViewDay");
     $head[$h][2] = 'cardday';
     $h++;
 
     //if (!empty($conf->global->AGENDA_USE_EVENT_TYPE))
     if (getDolGlobalString('AGENDA_SHOW_PERTYPE')) {
-        $head[$h][0] = DOL_URL_ROOT . '/comm/action/pertype.php' . ($param ? '?' . $param : '');
+        $head[$h][0] = constant('BASE_URL') . '/comm/action/pertype.php' . ($param ? '?' . $param : '');
         $head[$h][1] = $langs->trans("ViewPerType");
         $head[$h][2] = 'cardpertype';
         $h++;
@@ -550,7 +550,7 @@ function calendars_prepare_head($param)
 
     $newparam = $param;
     $newparam = preg_replace('/&?search_filtert=\d+/', '', $newparam);
-    $head[$h][0] = DOL_URL_ROOT . '/comm/action/peruser.php' . ($newparam ? '?' . $newparam : '');
+    $head[$h][0] = constant('BASE_URL') . '/comm/action/peruser.php' . ($newparam ? '?' . $newparam : '');
     $head[$h][1] = $langs->trans("ViewPerUser");
     $head[$h][2] = 'cardperuser';
     $h++;

@@ -1159,9 +1159,9 @@ class MouvementStock extends CommonObject
 
         // Link to page of warehouse tab
         if ($option == 'movements') {
-            $url = DOL_URL_ROOT . '/product/stock/movement_list.php?search_ref=' . $this->id;
+            $url = constant('BASE_URL') . '/product/stock/movement_list.php?search_ref=' . $this->id;
         } else {
-            $url = DOL_URL_ROOT . '/product/stock/movement_list.php?id=' . $this->warehouse_id . '&msid=' . $this->id;
+            $url = constant('BASE_URL') . '/product/stock/movement_list.php?id=' . $this->warehouse_id . '&msid=' . $this->id;
         }
 
         $link = '<a href="' . $url . '"' . ($notooltip ? '' : ' title="' . dol_escape_htmltag($label, 1) . '" class="classfortooltip' . ($morecss ? ' ' . $morecss : '') . '"');

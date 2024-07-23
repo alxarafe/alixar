@@ -1462,9 +1462,9 @@ class Mo extends CommonObject
             $label = implode($this->getTooltipContentArray($params));
         }
 
-        $url = DOL_URL_ROOT . '/mrp/mo_card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/mrp/mo_card.php?id=' . $this->id;
         if ($option == 'production') {
-            $url = DOL_URL_ROOT . '/mrp/mo_production.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/mrp/mo_production.php?id=' . $this->id;
         }
 
         if ($option != 'nolink') {

@@ -34,11 +34,11 @@ function zapierAdminPrepareHead()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/zapier/admin/setup.php';
+    $head[$h][0] = constant('BASE_URL') . '/zapier/admin/setup.php';
     $head[$h][1] = $langs->trans("Settings");
     $head[$h][2] = 'settings';
     $h++;
-    $head[$h][0] = DOL_URL_ROOT . '/zapier/admin/about.php';
+    $head[$h][0] = constant('BASE_URL') . '/zapier/admin/about.php';
     $head[$h][1] = $langs->trans("About");
     $head[$h][2] = 'about';
     $h++;

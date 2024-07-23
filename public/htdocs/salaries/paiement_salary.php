@@ -63,7 +63,7 @@ if (($action == 'add_payment' || ($action == 'confirm_paiement' && $confirm == '
     $error = 0;
 
     if ($cancel) {
-        $loc = DOL_URL_ROOT . '/salaries/card.php?id=' . $id;
+        $loc = constant('BASE_URL') . '/salaries/card.php?id=' . $id;
         header("Location: " . $loc);
         exit;
     }
@@ -138,7 +138,7 @@ if (($action == 'add_payment' || ($action == 'confirm_paiement' && $confirm == '
 
             if (!$error) {
                 $db->commit();
-                $loc = DOL_URL_ROOT . '/salaries/card.php?id=' . $id;
+                $loc = constant('BASE_URL') . '/salaries/card.php?id=' . $id;
                 header('Location: ' . $loc);
                 exit;
             } else {

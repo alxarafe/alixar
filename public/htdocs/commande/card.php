@@ -157,14 +157,14 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/commande/list.php';
+    $backurlforlist = constant('BASE_URL') . '/commande/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/commande/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/commande/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -1387,7 +1387,7 @@ if (empty($reshook)) {
 
                     if ($deposit) {
                         setEventMessage('DepositGenerated');
-                        $locationTarget = DOL_URL_ROOT . '/compta/facture/card.php?id=' . $deposit->id;
+                        $locationTarget = constant('BASE_URL') . '/compta/facture/card.php?id=' . $deposit->id;
                     } else {
                         $error++;
                         setEventMessages($object->error, $object->errors, 'errors');
@@ -3162,7 +3162,7 @@ if ($action == 'create' && $usercancreate) {
 
             $MAXEVENT = 10;
 
-            $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/commande/agenda.php?id=' . $object->id);
+            $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/commande/agenda.php?id=' . $object->id);
 
             // List of actions on element
             include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';

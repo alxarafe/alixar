@@ -52,7 +52,7 @@ $action   = GETPOST('action', 'alpha');
 $confirm  = GETPOST('confirm', 'alpha');
 
 // Store current page url
-$url_page_current = DOL_URL_ROOT . '/ticket/document.php';
+$url_page_current = constant('BASE_URL') . '/ticket/document.php';
 
 // Get parameters
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;

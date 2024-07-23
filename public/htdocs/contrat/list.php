@@ -579,7 +579,7 @@ $num = $db->num_rows($resql);
 if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $search_all && !$page) {
     $obj = $db->fetch_object($resql);
     $id = $obj->rowid;
-    header("Location: " . DOL_URL_ROOT . '/contrat/card.php?id=' . $id);
+    header("Location: " . constant('BASE_URL') . '/contrat/card.php?id=' . $id);
     exit;
 }
 
@@ -745,7 +745,7 @@ if (GETPOSTINT('nomassaction') || in_array($massaction, array('presend', 'predel
 }
 $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
-$url = DOL_URL_ROOT . '/contrat/card.php?action=create';
+$url = constant('BASE_URL') . '/contrat/card.php?action=create';
 if (!empty($socid)) {
     $url .= '&socid=' . ((int) $socid);
 }

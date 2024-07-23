@@ -96,7 +96,7 @@ if (empty($reshook)) {
             header("Location: " . $backtopage);
             exit;
         } else {
-            header('Location: ' . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $object->id . '&type=' . $type);
+            header('Location: ' . constant('BASE_URL') . '/categories/viewcat.php?id=' . $object->id . '&type=' . $type);
             exit;
         }
     }
@@ -129,7 +129,7 @@ if (empty($reshook)) {
                     header("Location: " . $backtopage);
                     exit;
                 } else {
-                    header('Location: ' . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $object->id . '&type=' . $type);
+                    header('Location: ' . constant('BASE_URL') . '/categories/viewcat.php?id=' . $object->id . '&type=' . $type);
                     exit;
                 }
             } else {

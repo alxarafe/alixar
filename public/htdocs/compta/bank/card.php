@@ -97,7 +97,7 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/compta/bank/list.php';
+    $backurlforlist = constant('BASE_URL') . '/compta/bank/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {

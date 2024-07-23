@@ -92,7 +92,7 @@ if (!empty($project_ref) && !empty($withproject)) {
             $id = $tasksarray[0]->id;
             $object->fetch($id);
         } else {
-            header("Location: " . DOL_URL_ROOT . '/projet/tasks.php?id=' . $projectstatic->id . ($withproject ? '&withproject=1' : '') . (empty($mode) ? '' : '&mode=' . $mode));
+            header("Location: " . constant('BASE_URL') . '/projet/tasks.php?id=' . $projectstatic->id . ($withproject ? '&withproject=1' : '') . (empty($mode) ? '' : '&mode=' . $mode));
             exit;
         }
     }

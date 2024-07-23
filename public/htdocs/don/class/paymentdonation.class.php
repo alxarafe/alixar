@@ -619,7 +619,7 @@ class PaymentDonation extends CommonObject
                 // Add link 'payment', 'payment_supplier', 'payment_donation' in bank_url between payment and bank transaction
                 $url = '';
                 if ($mode == 'payment_donation') {
-                    $url = DOL_URL_ROOT . '/don/payment/card.php?rowid=';
+                    $url = constant('BASE_URL') . '/don/payment/card.php?rowid=';
                 }
                 if ($url) {
                     $result = $acc->add_url_line($bank_line_id, $this->id, $url, '(paiement)', $mode);

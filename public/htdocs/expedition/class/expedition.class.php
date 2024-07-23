@@ -1921,7 +1921,7 @@ class Expedition extends CommonObject
             $label = implode($this->getTooltipContentArray($params));
         }
 
-        $url = DOL_URL_ROOT . '/expedition/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/expedition/card.php?id=' . $this->id;
 
         if ($short) {
             return $url;

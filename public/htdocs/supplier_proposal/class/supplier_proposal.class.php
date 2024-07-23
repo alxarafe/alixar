@@ -2265,7 +2265,7 @@ class SupplierProposal extends CommonObject
             $response->warning_delay = $delay_warning / 60 / 60 / 24;
             $response->label = $label;
             $response->labelShort = $labelShort;
-            $response->url = DOL_URL_ROOT . '/supplier_proposal/list.php?search_status=' . $status;
+            $response->url = constant('BASE_URL') . '/supplier_proposal/list.php?search_status=' . $status;
             $response->img = img_object('', "propal");
 
             // This assignment in condition is not a bug. It allows walking the results.
@@ -2537,10 +2537,10 @@ class SupplierProposal extends CommonObject
         }
 
         if ($option == '') {
-            $url = DOL_URL_ROOT . '/supplier_proposal/card.php?id=' . $this->id . $get_params;
+            $url = constant('BASE_URL') . '/supplier_proposal/card.php?id=' . $this->id . $get_params;
         }
         if ($option == 'document') {
-            $url = DOL_URL_ROOT . '/supplier_proposal/document.php?id=' . $this->id . $get_params;
+            $url = constant('BASE_URL') . '/supplier_proposal/document.php?id=' . $this->id . $get_params;
         }
 
         if ($option !== 'nolink') {

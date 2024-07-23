@@ -1643,7 +1643,7 @@ class Ticket extends CommonObject
             $label = implode($this->getTooltipContentArray($params));
         }
 
-        $url = DOL_URL_ROOT . '/ticket/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/ticket/card.php?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not
@@ -3170,7 +3170,7 @@ class Ticket extends CommonObject
             //$response->warning_delay = $delay_warning / 60 / 60 / 24;
             $response->label = $label;
             $response->labelShort = $labelShort;
-            $response->url = DOL_URL_ROOT . '/ticket/list.php?search_fk_statut[]=' . $status;
+            $response->url = constant('BASE_URL') . '/ticket/list.php?search_fk_statut[]=' . $status;
             $response->img = img_object('', "ticket");
 
             // This assignment in condition is not a bug. It allows walking the results.

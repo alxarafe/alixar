@@ -65,7 +65,7 @@ $object = new AccountingAccount($db);
  */
 
 if (GETPOST('cancel', 'alpha')) {
-    $urltogo = $backtopage ? $backtopage : DOL_URL_ROOT . '/accountancy/admin/account.php';
+    $urltogo = $backtopage ? $backtopage : constant('BASE_URL') . '/accountancy/admin/account.php';
     header("Location: " . $urltogo);
     exit;
 }
@@ -119,7 +119,7 @@ if ($action == 'add' && $user->hasRight('accounting', 'chartofaccount')) {
             }
             if (!$error) {
                 setEventMessages("RecordCreatedSuccessfully", null, 'mesgs');
-                $urltogo = $backtopage ? $backtopage : DOL_URL_ROOT . '/accountancy/admin/account.php';
+                $urltogo = $backtopage ? $backtopage : constant('BASE_URL') . '/accountancy/admin/account.php';
                 header("Location: " . $urltogo);
                 exit;
             }

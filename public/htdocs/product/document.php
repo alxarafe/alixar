@@ -296,7 +296,7 @@ if ($object->id) {
                 print $langs->trans('PropalMergePdfProductActualFile');
             }
 
-            print '<form name="filemerge" action="' . DOL_URL_ROOT . '/product/document.php?id=' . $object->id . '" method="post">';
+            print '<form name="filemerge" action="' . constant('BASE_URL') . '/product/document.php?id=' . $object->id . '" method="post">';
             print '<input type="hidden" name="token" value="' . newToken() . '">';
             print '<input type="hidden" name="action" value="filemerge">';
             if (count($filetomerge->lines) == 0) {

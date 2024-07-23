@@ -204,7 +204,7 @@ if (GETPOST("viewcal") || GETPOST("viewweek") || GETPOST("viewday")) {
         }
     }
     //print $param;
-    header("Location: " . DOL_URL_ROOT . '/comm/action/index.php?' . $param);
+    header("Location: " . constant('BASE_URL') . '/comm/action/index.php?' . $param);
     exit;
 }
 
@@ -733,7 +733,7 @@ $tmpforcreatebutton = dol_getdate(dol_now(), true);
 
 $newparam = '&month=' . str_pad((string) $month, 2, "0", STR_PAD_LEFT) . '&year=' . $tmpforcreatebutton['year'];
 
-$url = DOL_URL_ROOT . '/comm/action/card.php?action=create';
+$url = constant('BASE_URL') . '/comm/action/card.php?action=create';
 $url .= '&apyear=' . $tmpforcreatebutton['year'] . '&apmonth=' . $tmpforcreatebutton['mon'] . '&apday=' . $tmpforcreatebutton['mday'] . '&aphour=' . $tmpforcreatebutton['hours'] . '&apmin=' . $tmpforcreatebutton['minutes'];
 $url .= '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . ($newparam ? '?' . $newparam : ''));
 

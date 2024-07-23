@@ -1411,13 +1411,13 @@ class Project extends CommonObject
             if (preg_match('/\.php$/', $option)) {
                 $url = dol_buildpath($option, 1) . '?id=' . $this->id;
             } elseif ($option == 'task') {
-                $url = DOL_URL_ROOT . '/projet/tasks.php?id=' . $this->id;
+                $url = constant('BASE_URL') . '/projet/tasks.php?id=' . $this->id;
             } elseif ($option == 'preview') {
-                $url = DOL_URL_ROOT . '/projet/element.php?id=' . $this->id;
+                $url = constant('BASE_URL') . '/projet/element.php?id=' . $this->id;
             } elseif ($option == 'eventorganization') {
-                $url = DOL_URL_ROOT . '/eventorganization/conferenceorbooth_list.php?projectid=' . $this->id;
+                $url = constant('BASE_URL') . '/eventorganization/conferenceorbooth_list.php?projectid=' . $this->id;
             } else {
-                $url = DOL_URL_ROOT . '/projet/card.php?id=' . $this->id;
+                $url = constant('BASE_URL') . '/projet/card.php?id=' . $this->id;
             }
             // Add param to save lastsearch_values or not
             $add_save_lastsearch_values = ($save_lastsearch_value == 1 ? 1 : 0);
@@ -2227,7 +2227,7 @@ class Project extends CommonObject
         $response->warning_delay = $conf->project->warning_delay / 60 / 60 / 24;
         $response->label = $langs->trans("OpenedProjects");
         $response->labelShort = $langs->trans("Opened");
-        $response->url = DOL_URL_ROOT . '/projet/list.php?search_project_user=-1&search_status=1&mainmenu=project';
+        $response->url = constant('BASE_URL') . '/projet/list.php?search_project_user=-1&search_status=1&mainmenu=project';
         $response->img = img_object('', "projectpub");
         $response->nbtodo = 0;
         $response->nbtodolate = 0;
@@ -2244,7 +2244,7 @@ class Project extends CommonObject
 
         $projectsListId = null;
         if (!$user->hasRight("projet", "all", "lire")) {
-            $response->url = DOL_URL_ROOT . '/projet/list.php?search_status=1&mainmenu=project';
+            $response->url = constant('BASE_URL') . '/projet/list.php?search_status=1&mainmenu=project';
             $projectsListId = $this->getProjectsAuthorizedForUser($user, 0, 1);
             if (empty($projectsListId)) {
                 return $response;

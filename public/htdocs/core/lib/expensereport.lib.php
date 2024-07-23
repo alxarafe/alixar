@@ -38,7 +38,7 @@ function expensereport_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/expensereport/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/expensereport/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("ExpenseReport");
     $head[$h][2] = 'card';
     $h++;
@@ -54,7 +54,7 @@ function expensereport_prepare_head($object)
     $upload_dir = $conf->expensereport->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/expensereport/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/expensereport/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -70,7 +70,7 @@ function expensereport_prepare_head($object)
         if (!empty($object->note_public)) {
             $nbNote++;
         }
-        $head[$h][0] = DOL_URL_ROOT . '/expensereport/note.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/expensereport/note.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('Notes');
         if ($nbNote > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';
@@ -79,7 +79,7 @@ function expensereport_prepare_head($object)
         $h++;
     }
 
-    $head[$h][0] = DOL_URL_ROOT . '/expensereport/info.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/expensereport/info.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Info");
     $head[$h][2] = 'info';
     $h++;
@@ -105,7 +105,7 @@ function payment_expensereport_prepare_head(PaymentExpenseReport $object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/expensereport/payment/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/expensereport/payment/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("ExpenseReportPayment");
     $head[$h][2] = 'payment';
     $h++;
@@ -116,7 +116,7 @@ function payment_expensereport_prepare_head(PaymentExpenseReport $object)
     // $this->tabs = array('entity:-tabname);                                                   to remove a tab
     complete_head_from_modules($conf, $langs, $object, $head, $h, 'payment_expensereport');
 
-    $head[$h][0] = DOL_URL_ROOT . '/expensereport/payment/info.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/expensereport/payment/info.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Info");
     $head[$h][2] = 'info';
     $h++;
@@ -164,7 +164,7 @@ function expensereport_admin_prepare_head()
     // $this->tabs = array('entity:-tabname:Title:@mymodule:/mymodule/mypage.php?id=__ID__');   to remove a tab
     complete_head_from_modules($conf, $langs, null, $head, $h, 'expensereport_admin');
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/expensereport_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/admin/expensereport_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFields");
     $nbExtrafields = $extrafields->attributes['expensereport']['count'];
     if ($nbExtrafields > 0) {

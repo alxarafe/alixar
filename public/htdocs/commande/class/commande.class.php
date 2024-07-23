@@ -3585,17 +3585,17 @@ class Commande extends CommonOrder
             $label = $labelShort = $url = '';
             if ($mode == 'toship') {
                 $delay_warning = $conf->commande->client->warning_delay / 60 / 60 / 24;
-                $url = DOL_URL_ROOT . '/commande/list.php?search_status=-2&mainmenu=commercial&leftmenu=orders';
+                $url = constant('BASE_URL') . '/commande/list.php?search_status=-2&mainmenu=commercial&leftmenu=orders';
                 $label = $langs->transnoentitiesnoconv("OrdersToProcess");
                 $labelShort = $langs->transnoentitiesnoconv("Opened");
             }
             if ($mode == 'tobill') {
-                $url = DOL_URL_ROOT . '/commande/list.php?search_status=-3&search_billed=0&mainmenu=commercial&leftmenu=orders';
+                $url = constant('BASE_URL') . '/commande/list.php?search_status=-3&search_billed=0&mainmenu=commercial&leftmenu=orders';
                 $label = $langs->trans("OrdersToBill"); // We set here bill but may be billed or ordered
                 $labelShort = $langs->trans("ToBill");
             }
             if ($mode == 'shippedtobill') {
-                $url = DOL_URL_ROOT . '/commande/list.php?search_status=3&search_billed=0&mainmenu=commercial&leftmenu=orders';
+                $url = constant('BASE_URL') . '/commande/list.php?search_status=3&search_billed=0&mainmenu=commercial&leftmenu=orders';
                 $label = $langs->trans("OrdersToBill"); // We set here bill but may be billed or ordered
                 $labelShort = $langs->trans("StatusOrderDelivered") . ' ' . $langs->trans("and") . ' ' . $langs->trans("ToBill");
             }
@@ -3812,9 +3812,9 @@ class Commande extends CommonOrder
         $result = '';
 
         if (isModEnabled("shipping") && ($option == '1' || $option == '2')) {
-            $url = DOL_URL_ROOT . '/expedition/shipment.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/expedition/shipment.php?id=' . $this->id;
         } else {
-            $url = DOL_URL_ROOT . '/commande/card.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/commande/card.php?id=' . $this->id;
         }
 
         if (!$user->hasRight('commande', 'lire')) {

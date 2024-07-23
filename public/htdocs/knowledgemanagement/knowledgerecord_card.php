@@ -106,14 +106,14 @@ if ($reshook < 0) {
 if (empty($reshook)) {
     $error = 0;
 
-    $backurlforlist = DOL_URL_ROOT . '/knowledgemanagement/knowledgerecord_list.php';
+    $backurlforlist = constant('BASE_URL') . '/knowledgemanagement/knowledgerecord_list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/knowledgemanagement/knowledgerecord_card.php?id=' . ($id > 0 ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/knowledgemanagement/knowledgerecord_card.php?id=' . ($id > 0 ? $id : '__ID__');
             }
         }
     }
@@ -554,7 +554,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
         $MAXEVENT = 10;
 
-        $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/knowledgemanagement/knowledgerecord_agenda.php?id=' . $object->id);
+        $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/knowledgemanagement/knowledgerecord_agenda.php?id=' . $object->id);
 
         // List of actions on element
         include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';

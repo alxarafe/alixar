@@ -892,7 +892,7 @@ $arrayofselected = is_array($toselect) ? $toselect : array();
 if ($num == 1 && !empty($conf->global->MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE) && $search_all) {
     $obj = $db->fetch_object($resql);
     $id = $obj->rowid;
-    header("Location: " . DOL_URL_ROOT . '/expedition/card.php?id=' . $id);
+    header("Location: " . constant('BASE_URL') . '/expedition/card.php?id=' . $id);
     exit;
 }
 
@@ -1013,7 +1013,7 @@ $newcardbutton  = '';
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewKanban'), '', 'fa fa-th-list imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=kanban' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ($mode == 'kanban' ? 2 : 1), array('morecss' => 'reposition'));
 $newcardbutton .= dolGetButtonTitleSeparator();
-$newcardbutton .= dolGetButtonTitle($langs->trans('NewSending'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/expedition/card.php?action=create2', '', $user->hasRight('expedition', 'creer'));
+$newcardbutton .= dolGetButtonTitle($langs->trans('NewSending'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/expedition/card.php?action=create2', '', $user->hasRight('expedition', 'creer'));
 
 $i = 0;
 print '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">' . "\n";

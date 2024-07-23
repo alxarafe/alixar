@@ -290,7 +290,7 @@ if (!$rowid && $action != 'create' && $action != 'edit') {
 
         if ($user->hasRight('adherent', 'configurer')) {
             $newcardbutton .= dolGetButtonTitleSeparator();
-            $newcardbutton .= dolGetButtonTitle($langs->trans('NewMemberType'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/adherents/type.php?action=create');
+            $newcardbutton .= dolGetButtonTitle($langs->trans('NewMemberType'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/adherents/type.php?action=create');
         }
 
         print '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
@@ -798,9 +798,9 @@ if ($rowid > 0) {
 
             if (!getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
                 print '<td class="liste_titre center nowraponall">';
-                print '<input type="image" class="liste_titre" src="' . DOL_URL_ROOT . '/theme/' . $conf->theme . '/img/search.png" name="button_search" value="' . dol_escape_htmltag($langs->trans("Search")) . '" title="' . dol_escape_htmltag($langs->trans("Search")) . '">';
+                print '<input type="image" class="liste_titre" src="' . constant('BASE_URL') . '/theme/' . $conf->theme . '/img/search.png" name="button_search" value="' . dol_escape_htmltag($langs->trans("Search")) . '" title="' . dol_escape_htmltag($langs->trans("Search")) . '">';
                 print '&nbsp; ';
-                print '<input type="image" class="liste_titre" src="' . DOL_URL_ROOT . '/theme/' . $conf->theme . '/img/searchclear.png" name="button_removefilter" value="' . dol_escape_htmltag($langs->trans("RemoveFilter")) . '" title="' . dol_escape_htmltag($langs->trans("RemoveFilter")) . '">';
+                print '<input type="image" class="liste_titre" src="' . constant('BASE_URL') . '/theme/' . $conf->theme . '/img/searchclear.png" name="button_removefilter" value="' . dol_escape_htmltag($langs->trans("RemoveFilter")) . '" title="' . dol_escape_htmltag($langs->trans("RemoveFilter")) . '">';
                 print '</td>';
             }
 

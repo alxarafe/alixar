@@ -141,7 +141,7 @@ class box_graph_invoices_permonth extends ModeleBoxes
 
                 $filenamenb = $dir . "/" . $prefix . "invoicesnbinyear-" . $endyear . ".png";
                 // default value for customer mode
-                $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=billstats&file=invoicesnbinyear-' . $endyear . '.png';
+                $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=billstats&file=invoicesnbinyear-' . $endyear . '.png';
 
                 $px1 = new DolGraph();
                 $mesg = $px1->isGraphKo();
@@ -182,7 +182,7 @@ class box_graph_invoices_permonth extends ModeleBoxes
 
                 $filenamenb = $dir . "/" . $prefix . "invoicesamountinyear-" . $endyear . ".png";
                 // default value for customer mode
-                $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=billstats&file=invoicesamountinyear-' . $endyear . '.png';
+                $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=billstats&file=invoicesamountinyear-' . $endyear . '.png';
 
                 $px2 = new DolGraph();
                 $mesg = $px2->isGraphKo();

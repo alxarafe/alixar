@@ -36,7 +36,7 @@
  *       \brief      Page of a contract
  */
 
-require "../main.inc.php";
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/price.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contract.lib.php';
@@ -128,14 +128,14 @@ if ($reshook < 0) {
     setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 }
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/contrat/list.php';
+    $backurlforlist = constant('BASE_URL') . '/contrat/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/contrat/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/contrat/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -2292,8 +2292,8 @@ if ($action == 'create') {
             $MAXEVENT = 10;
 
             $morehtmlcenter = '<div class="nowraponall">';
-            $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullConversation'), '', 'fa fa-comments imgforviewmode', DOL_URL_ROOT . '/contrat/messaging.php?id=' . $object->id);
-            $morehtmlcenter .= dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/contrat/agenda.php?id=' . $object->id);
+            $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullConversation'), '', 'fa fa-comments imgforviewmode', constant('BASE_URL') . '/contrat/messaging.php?id=' . $object->id);
+            $morehtmlcenter .= dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/contrat/agenda.php?id=' . $object->id);
             $morehtmlcenter .= '</div>';
 
 

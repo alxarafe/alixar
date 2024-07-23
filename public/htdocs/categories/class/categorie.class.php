@@ -1738,7 +1738,7 @@ class Categorie extends CommonObject
             $label = implode($this->getTooltipContentArray($params));
         }
 
-        $url = DOL_URL_ROOT . '/categories/viewcat.php?id=' . $this->id . '&type=' . $this->type . $moreparam . '&backtopage=' . urlencode($_SERVER['PHP_SELF'] . ($moreparam ? '?' . $moreparam : ''));
+        $url = constant('BASE_URL') . '/categories/viewcat.php?id=' . $this->id . '&type=' . $this->type . $moreparam . '&backtopage=' . urlencode($_SERVER['PHP_SELF'] . ($moreparam ? '?' . $moreparam : ''));
 
         if ($option !== 'nolink') {
             // Add param to save lastsearch_values or not

@@ -49,7 +49,7 @@ function prelevement_prepare_head(BonPrelevement $object)
         $titleoftab = "BankTransferReceipts";
     }
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/prelevement/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/prelevement/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans($titleoftab);
     $head[$h][2] = 'prelevement';
     $h++;
@@ -62,17 +62,17 @@ function prelevement_prepare_head(BonPrelevement $object)
         $titleoftab = $langs->trans("Salaries");
     }
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/prelevement/factures.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/prelevement/factures.php?id=' . $object->id;
     $head[$h][1] = $titleoftab;
     $head[$h][2] = 'invoices';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/prelevement/fiche-rejet.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/prelevement/fiche-rejet.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Rejects");
     $head[$h][2] = 'rejects';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/prelevement/fiche-stat.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/prelevement/fiche-stat.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Statistics");
     $head[$h][2] = 'statistics';
     $h++;
@@ -133,7 +133,7 @@ function bon_prelevement_prepare_head(BonPrelevement $object, $nbOfInvoices, $nb
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/prelevement/create.php?type=bank-transfer';
+    $head[$h][0] = constant('BASE_URL') . '/compta/prelevement/create.php?type=bank-transfer';
     $head[$h][1] = ($nbOfInvoices <= 0 ? $langs->trans("Invoices") : $langs->trans("Invoices") . '<span class="badge marginleftonlyshort">' . $nbOfInvoices . '</span>');
     $head[$h][2] = 'invoice';
     $h++;

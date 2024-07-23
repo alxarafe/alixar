@@ -3694,7 +3694,7 @@ function dragAndDropFileUpload($htmlname)
 				$(".cssDragDropArea").removeClass("highlightDragDropArea");
 				counterdragdrop = 0;
 				$.ajax({
-					url: "' . DOL_URL_ROOT . '/core/ajax/fileupload.php",
+					url: "' . constant('BASE_URL') . '/core/ajax/fileupload.php",
 					type: "POST",
 					processData: false,
 					contentType: false,

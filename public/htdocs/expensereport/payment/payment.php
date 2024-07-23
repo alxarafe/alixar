@@ -57,7 +57,7 @@ if ($action == 'add_payment') {
     $error = 0;
 
     if ($cancel) {
-        $loc = DOL_URL_ROOT . '/expensereport/card.php?id=' . $id;
+        $loc = constant('BASE_URL') . '/expensereport/card.php?id=' . $id;
         header("Location: " . $loc);
         exit;
     }
@@ -148,7 +148,7 @@ if ($action == 'add_payment') {
 
             if (!$error) {
                 $db->commit();
-                $loc = DOL_URL_ROOT . '/expensereport/card.php?id=' . $id;
+                $loc = constant('BASE_URL') . '/expensereport/card.php?id=' . $id;
                 header('Location: ' . $loc);
                 exit;
             } else {

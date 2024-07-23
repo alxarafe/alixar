@@ -41,7 +41,7 @@ $langs->loadLangs(array('errors', 'users', 'companies', 'ldap', 'other'));
 
 // Security check
 if (getDolGlobalString('MAIN_SECURITY_DISABLEFORGETPASSLINK')) {
-    header("Location: " . DOL_URL_ROOT . '/');
+    header("Location: " . constant('BASE_URL') . '/');
     exit;
 }
 
@@ -109,7 +109,7 @@ if (empty($reshook)) {
                 $newpassword = $edituser->setPassword($user, $edituser->pass_temp, 0);
                 dol_syslog("passwordforgotten.php new password for user->id=" . $edituser->id . " validated in database");
 
-                header("Location: " . DOL_URL_ROOT . '/');
+                header("Location: " . constant('BASE_URL') . '/');
                 exit;
             } else {
                 $langs->load("errors");
@@ -212,16 +212,16 @@ if (getDolGlobalString('MAIN_SECURITY_ENABLE_SENDPASSWORD')) {
 // Show logo (search in order: small company logo, large company logo, theme logo, common logo)
 $width = 0;
 $rowspan = 2;
-$urllogo = DOL_URL_ROOT . '/theme/common/login_logo.png';
+$urllogo = constant('BASE_URL') . '/theme/common/login_logo.png';
 if (!empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $mysoc->logo_small)) {
-    $urllogo = DOL_URL_ROOT . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
+    $urllogo = constant('BASE_URL') . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
 } elseif (!empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output . '/logos/' . $mysoc->logo)) {
-    $urllogo = DOL_URL_ROOT . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/' . $mysoc->logo);
+    $urllogo = constant('BASE_URL') . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/' . $mysoc->logo);
     $width = 128;
 } elseif (is_readable(DOL_DOCUMENT_ROOT . '/theme/' . $conf->theme . '/img/dolibarr_logo.svg')) {
-    $urllogo = DOL_URL_ROOT . '/theme/' . $conf->theme . '/img/dolibarr_logo.svg';
+    $urllogo = constant('BASE_URL') . '/theme/' . $conf->theme . '/img/dolibarr_logo.svg';
 } elseif (is_readable(DOL_DOCUMENT_ROOT . '/theme/dolibarr_logo.svg')) {
-    $urllogo = DOL_URL_ROOT . '/theme/dolibarr_logo.svg';
+    $urllogo = constant('BASE_URL') . '/theme/dolibarr_logo.svg';
 }
 
 // Security graphical code

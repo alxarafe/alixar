@@ -599,7 +599,7 @@ class ChargeSociales extends CommonObject
 
         $result = '';
 
-        $url = DOL_URL_ROOT . '/compta/sociales/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/compta/sociales/card.php?id=' . $this->id;
 
         if ($short) {
             return $url;

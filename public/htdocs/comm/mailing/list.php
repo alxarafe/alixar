@@ -340,7 +340,7 @@ print '<input type="hidden" name="mode" value="' . $mode . '">';
 
 $newcardbutton = '';
 if ($user->hasRight('mailing', 'creer')) {
-    $newcardbutton .= dolGetButtonTitle($langs->trans('NewMailing'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/comm/mailing/card.php?action=create');
+    $newcardbutton .= dolGetButtonTitle($langs->trans('NewMailing'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/comm/mailing/card.php?action=create');
 }
 
 print_barre_liste($title, $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, $massactionbutton, $num, $nbtotalofrecords, 'object_email', 0, $newcardbutton, '', $limit, 0, 0, 1);

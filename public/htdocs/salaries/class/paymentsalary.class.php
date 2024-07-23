@@ -637,7 +637,7 @@ class PaymentSalary extends CommonObject
                 // Add link 'payment_salary' in bank_url between payment and bank transaction
                 $url = '';
                 if ($mode == 'payment_salary') {
-                    $url = DOL_URL_ROOT . '/salaries/payment_salary/card.php?id=';
+                    $url = constant('BASE_URL') . '/salaries/payment_salary/card.php?id=';
                 }
 
                 if ($url) {
@@ -662,7 +662,7 @@ class PaymentSalary extends CommonObject
                                 $result = $acc->add_url_line(
                                     $bank_line_id,
                                     $fuser->id,
-                                    DOL_URL_ROOT . '/user/card.php?id=',
+                                    constant('BASE_URL') . '/user/card.php?id=',
                                     $fuser->getFullName($langs),
                                     'user'
                                 );
@@ -865,7 +865,7 @@ class PaymentSalary extends CommonObject
             $label = implode($this->getTooltipContentArray($params));
         }
 
-        $url = DOL_URL_ROOT . '/salaries/payment_salary/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/salaries/payment_salary/card.php?id=' . $this->id;
 
         if ($option !== 'nolink') {
             // Add param to save lastsearch_values or not

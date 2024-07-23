@@ -283,7 +283,7 @@ if ($resql) {
                 $endmonth -= 12;
             }
             $endyear = ($endmonth < getDolGlobalInt('SOCIETE_FISCAL_MONTH_START', 1)) ? $y + 1 : $y;
-            print $langs->trans("UseMenuToSetBindindManualy", DOL_URL_ROOT . '/accountancy/expensereport/list.php?search_date_startday=1&search_date_startmonth=' . ((int) $startmonth) . '&search_date_startyear=' . ((int) $startyear) . '&search_date_endday=&search_date_endmonth=' . ((int) $endmonth) . '&search_date_endyear=' . ((int) $endyear), $langs->transnoentitiesnoconv("ToBind"));
+            print $langs->trans("UseMenuToSetBindindManualy", constant('BASE_URL') . '/accountancy/expensereport/list.php?search_date_startday=1&search_date_startmonth=' . ((int) $startmonth) . '&search_date_startyear=' . ((int) $startyear) . '&search_date_endday=&search_date_endmonth=' . ((int) $endmonth) . '&search_date_endyear=' . ((int) $endyear), $langs->transnoentitiesnoconv("ToBind"));
         } else {
             print $row[1];
         }
@@ -382,7 +382,7 @@ if ($resql) {
         //print '</td>';
         //print '<td>';
         if ($row[0] == 'tobind') {
-            print $langs->trans("UseMenuToSetBindindManualy", DOL_URL_ROOT . '/accountancy/expensereport/list.php?search_year=' . ((int) $y), $langs->transnoentitiesnoconv("ToBind"));
+            print $langs->trans("UseMenuToSetBindindManualy", constant('BASE_URL') . '/accountancy/expensereport/list.php?search_year=' . ((int) $y), $langs->transnoentitiesnoconv("ToBind"));
         } else {
             print $row[1];
         }

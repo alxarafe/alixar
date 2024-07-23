@@ -270,7 +270,7 @@ class FormResource
         }
 
         if ($conf->use_javascript_ajax && empty($disableautocomplete)) {
-            $out .= ajax_multiautocompleter($htmlname, $fields, DOL_URL_ROOT . '/core/ajax/ziptown.php') . "\n";
+            $out .= ajax_multiautocompleter($htmlname, $fields, constant('BASE_URL') . '/core/ajax/ziptown.php') . "\n";
             $moreattrib .= ' autocomplete="off"';
         }
         $out .= '<input id="' . $htmlname . '" class="maxwidthonsmartphone' . ($morecss ? ' ' . $morecss : '') . '" type="text"' . ($moreattrib ? ' ' . $moreattrib : '') . ' name="' . $htmlname . '" ' . $size . ' value="' . $selected . '">' . "\n";

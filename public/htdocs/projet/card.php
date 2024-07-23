@@ -127,7 +127,7 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/projet/list.php';
+    $backurlforlist = constant('BASE_URL') . '/projet/list.php';
 
     // Cancel
     if ($cancel) {
@@ -148,7 +148,7 @@ if (empty($reshook)) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/projet/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/projet/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -514,7 +514,7 @@ if (empty($reshook)) {
                 $tmpurl = preg_replace('/__SOCID__/', (string) $object->socid, $tmpurl);
                 $urlback = $tmpurl . (preg_match('/\?/', $tmpurl) ? '&' : '?') . 'restore_lastsearch_values=1';
             } else {
-                $urlback = DOL_URL_ROOT . '/projet/list.php?restore_lastsearch_values=1';
+                $urlback = constant('BASE_URL') . '/projet/list.php?restore_lastsearch_values=1';
             }
 
             header("Location: " . $urlback);
@@ -1746,8 +1746,8 @@ if ($action == 'create' && $user->hasRight('projet', 'creer')) {
         $MAXEVENT = 10;
 
         $morehtmlcenter = '<div class="nowraponall">';
-        $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullConversation'), '', 'fa fa-comments imgforviewmode', DOL_URL_ROOT . '/projet/messaging.php?id=' . $object->id);
-        $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullList'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/projet/agenda.php?id=' . $object->id);
+        $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullConversation'), '', 'fa fa-comments imgforviewmode', constant('BASE_URL') . '/projet/messaging.php?id=' . $object->id);
+        $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullList'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/projet/agenda.php?id=' . $object->id);
         $morehtmlcenter .= '</div>';
 
         // List of actions on element

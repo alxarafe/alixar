@@ -287,7 +287,7 @@ if ($action == 'updatelines' && $permissiontoreceive) {
         $db->commit();
         setEventMessages($langs->trans("ReceptionUpdated"), null);
 
-        header("Location: " . DOL_URL_ROOT . '/reception/dispatch.php?id=' . $object->id);
+        header("Location: " . constant('BASE_URL') . '/reception/dispatch.php?id=' . $object->id);
         exit;
     }
 }

@@ -873,7 +873,7 @@ if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $s
 
     $id = $obj->rowid;
 
-    header("Location: " . DOL_URL_ROOT . '/comm/propal/card.php?id=' . $id);
+    header("Location: " . constant('BASE_URL') . '/comm/propal/card.php?id=' . $id);
     exit;
 }
 
@@ -1088,7 +1088,7 @@ if (in_array($massaction, array('presend', 'predelete', 'closed'))) {
 }
 $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
-$url = DOL_URL_ROOT . '/comm/propal/card.php?action=create';
+$url = constant('BASE_URL') . '/comm/propal/card.php?action=create';
 if (!empty($socid)) {
     $url .= '&socid=' . $socid;
 }

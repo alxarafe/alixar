@@ -619,7 +619,7 @@ class PaymentSocialContribution extends CommonObject
                 // Add link 'payment', 'payment_supplier', 'payment_sc' in bank_url between payment and bank transaction
                 $url = '';
                 if ($mode == 'payment_sc') {
-                    $url = DOL_URL_ROOT . '/compta/payment_sc/card.php?id=';
+                    $url = constant('BASE_URL') . '/compta/payment_sc/card.php?id=';
                 }
                 if ($url) {
                     $result = $acc->add_url_line($bank_line_id, $this->id, $url, '(paiement)', $mode);
@@ -635,7 +635,7 @@ class PaymentSocialContribution extends CommonObject
                     if ($mode == 'payment_sc') {
                         $socialcontrib = new ChargeSociales($this->db);
                         $socialcontrib->fetch($key);
-                        $result = $acc->add_url_line($bank_line_id, $socialcontrib->id, DOL_URL_ROOT . '/compta/charges.php?id=', $socialcontrib->type_label . (($socialcontrib->lib && $socialcontrib->lib != $socialcontrib->type_label) ? ' (' . $socialcontrib->lib . ')' : ''), 'sc');
+                        $result = $acc->add_url_line($bank_line_id, $socialcontrib->id, constant('BASE_URL') . '/compta/charges.php?id=', $socialcontrib->type_label . (($socialcontrib->lib && $socialcontrib->lib != $socialcontrib->type_label) ? ' (' . $socialcontrib->lib . ')' : ''), 'sc');
                         if ($result <= 0) {
                             dol_print_error($this->db);
                         }
@@ -648,7 +648,7 @@ class PaymentSocialContribution extends CommonObject
                             $result = $acc->add_url_line(
                                 $bank_line_id,
                                 $socialcontrib->fk_user,
-                                DOL_URL_ROOT . '/user/card.php?id=',
+                                constant('BASE_URL') . '/user/card.php?id=',
                                 $fuser->getFullName($langs),
                                 'user'
                             );

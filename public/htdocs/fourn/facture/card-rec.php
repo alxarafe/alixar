@@ -262,7 +262,7 @@ if (empty($reshook)) {
     if ($action == 'confirm_deleteinvoice' && $confirm == 'yes' && ($user->hasRight("fournisseur", "facture", "supprimer") || $user->hasRight("supplier_invoice", "supprimer"))) {
         $object->delete($user);
 
-        header('Location: ' . DOL_URL_ROOT . '/fourn/facture/list-rec.php');
+        header('Location: ' . constant('BASE_URL') . '/fourn/facture/list-rec.php');
         exit;
     }
 

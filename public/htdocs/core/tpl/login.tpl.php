@@ -72,7 +72,7 @@ if (!preg_match('/mainmenu=/', $php_self)) {
     $php_self .= (preg_match('/\?/', $php_self) ? '&' : '?') . 'mainmenu=home';
 }
 if (preg_match('/' . preg_quote('core/modules/oauth', '/') . '/', $php_self)) {
-    $php_self = DOL_URL_ROOT . '/index.php?mainmenu=home';
+    $php_self = constant('BASE_URL') . '/index.php?mainmenu=home';
 }
 $php_self = preg_replace('/(\?|&amp;|&)action=[^&]+/', '\1', $php_self);
 $php_self = preg_replace('/(\?|&amp;|&)actionlogin=[^&]+/', '\1', $php_self);
@@ -122,7 +122,7 @@ if (getDolGlobalString('ADD_UNSPLASH_LOGIN_BACKGROUND')) {
     <?php
 } else {
     ?>
-    <body class="body bodylogin"<?php print !getDolGlobalString('MAIN_LOGIN_BACKGROUND') ? '' : ' style="background-size: cover; background-position: center center; background-attachment: fixed; background-repeat: no-repeat; background-image: url(\'' . DOL_URL_ROOT . '/viewimage.php?cache=1&noalt=1&modulepart=mycompany&file=logos/' . urlencode(getDolGlobalString('MAIN_LOGIN_BACKGROUND')) . '\')"'; ?>>
+    <body class="body bodylogin"<?php print !getDolGlobalString('MAIN_LOGIN_BACKGROUND') ? '' : ' style="background-size: cover; background-position: center center; background-attachment: fixed; background-repeat: no-repeat; background-image: url(\'' . constant('BASE_URL') . '/viewimage.php?cache=1&noalt=1&modulepart=mycompany&file=logos/' . urlencode(getDolGlobalString('MAIN_LOGIN_BACKGROUND')) . '\')"'; ?>>
     <?php
 }
 ?>
@@ -311,7 +311,7 @@ if ($forgetpasslink || $helpcenterlink) {
     echo '<br>';
     echo '<div class="center" style="margin-top: 5px;">';
     if ($forgetpasslink) {
-        $url = DOL_URL_ROOT . '/user/passwordforgotten.php' . $moreparam;
+        $url = constant('BASE_URL') . '/user/passwordforgotten.php' . $moreparam;
         if (getDolGlobalString('MAIN_PASSWORD_FORGOTLINK')) {
             $url = getDolGlobalString('MAIN_PASSWORD_FORGOTLINK');
         }
@@ -325,7 +325,7 @@ if ($forgetpasslink || $helpcenterlink) {
     }
 
     if ($helpcenterlink) {
-        $url = DOL_URL_ROOT . '/support/index.php' . $moreparam;
+        $url = constant('BASE_URL') . '/support/index.php' . $moreparam;
         if (getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE')) {
             $url = getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE');
         }

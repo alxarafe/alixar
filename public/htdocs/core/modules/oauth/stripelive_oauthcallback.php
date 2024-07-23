@@ -119,7 +119,7 @@ if ($action == 'delete') {
     setEventMessages($langs->trans('TokenDeleted'), null, 'mesgs');
 
     if (empty($backtourl)) {
-        $backtourl = DOL_URL_ROOT . '/';
+        $backtourl = constant('BASE_URL') . '/';
     }
 
     header('Location: ' . $backtourl);
@@ -167,7 +167,7 @@ if (GETPOST('code')) {     // We are coming from oauth provider page
     }
 
     if (empty($url)) {
-        $url = DOL_URL_ROOT . '/';
+        $url = constant('BASE_URL') . '/';
     }
 
     // we go on oauth provider authorization page

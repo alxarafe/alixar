@@ -528,7 +528,7 @@ class ConferenceOrBooth extends ActionComm
         $label .= '<br>';
         $label .= '<b>' . $langs->trans('Ref') . ':</b> ' . $this->id;
 
-        $url = DOL_URL_ROOT . '/eventorganization/conferenceorbooth_card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/eventorganization/conferenceorbooth_card.php?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not
@@ -580,7 +580,7 @@ class ConferenceOrBooth extends ActionComm
                     $pospoint = strpos($filearray[0]['name'], '.');
 
                     $pathtophoto = '/' . $this->ref . '/thumbs/' . substr($filename, 0, $pospoint) . '_mini' . substr($filename, $pospoint);
-                    $result .= '<div class="floatleft inline-block valignmiddle divphotoref"><img class="photouserphoto userphoto" alt="No photo" border="0" src="' . DOL_URL_ROOT . '/viewimage.php?modulepart=eventorganisation&entity=' . $conf->entity . '&file=' . urlencode($pathtophoto) . '"></div>';
+                    $result .= '<div class="floatleft inline-block valignmiddle divphotoref"><img class="photouserphoto userphoto" alt="No photo" border="0" src="' . constant('BASE_URL') . '/viewimage.php?modulepart=eventorganisation&entity=' . $conf->entity . '&file=' . urlencode($pathtophoto) . '"></div>';
 
                     $result .= '</div>';
                 } else {

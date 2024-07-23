@@ -95,7 +95,7 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight("fournis
     $result = $object->delete($user);
     if ($result > 0) {
         $db->commit();
-        header('Location: ' . DOL_URL_ROOT . '/fourn/paiement/list.php');
+        header('Location: ' . constant('BASE_URL') . '/fourn/paiement/list.php');
         exit;
     } else {
         setEventMessages($object->error, $object->errors, 'errors');

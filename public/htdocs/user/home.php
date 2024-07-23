@@ -91,7 +91,7 @@ print load_fiche_titre($langs->trans("MenuUsersAndGroups"), $resultboxes['select
 
 
 // Search User
-$searchbox = '<form method="post" action="' . DOL_URL_ROOT . '/core/search.php">';
+$searchbox = '<form method="post" action="' . constant('BASE_URL') . '/core/search.php">';
 $searchbox .= '<input type="hidden" name="token" value="' . newToken() . '">';
 
 $searchbox .= '<table class="noborder nohover centpercent">';

@@ -250,7 +250,7 @@ if ($resql) {
         $param .= '&search_account=' . urlencode((string) ($search_account));
     }
 
-    $url = DOL_URL_ROOT . '/compta/paiement/cheque/card.php?action=new';
+    $url = constant('BASE_URL') . '/compta/paiement/cheque/card.php?action=new';
 
     $newcardbutton  = '';
     $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));

@@ -43,14 +43,14 @@ function facture_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/facture/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/facture/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('CustomerInvoice');
     $head[$h][2] = 'compta';
     $h++;
 
     if (!getDolGlobalString('MAIN_DISABLE_CONTACTS_TAB')) {
         $nbContact = count($object->liste_contact(-1, 'internal')) + count($object->liste_contact(-1, 'external'));
-        $head[$h][0] = DOL_URL_ROOT . '/compta/facture/contact.php?id=' . urlencode((string) ($object->id));
+        $head[$h][0] = constant('BASE_URL') . '/compta/facture/contact.php?id=' . urlencode((string) ($object->id));
         $head[$h][1] = $langs->trans('ContactsAddresses');
         if ($nbContact > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbContact . '</span>';
@@ -76,7 +76,7 @@ function facture_prepare_head($object)
         }
         $langs->load("banks");
 
-        $head[$h][0] = DOL_URL_ROOT . '/compta/facture/prelevement.php?id=' . urlencode((string) ($object->id));
+        $head[$h][0] = constant('BASE_URL') . '/compta/facture/prelevement.php?id=' . urlencode((string) ($object->id));
         $head[$h][1] = $langs->trans('StandingOrders');
         if ($nbStandingOrders > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbStandingOrders . '</span>';
@@ -99,7 +99,7 @@ function facture_prepare_head($object)
         if (!empty($object->note_public)) {
             $nbNote++;
         }
-        $head[$h][0] = DOL_URL_ROOT . '/compta/facture/note.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/compta/facture/note.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('Notes');
         if ($nbNote > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';
@@ -113,7 +113,7 @@ function facture_prepare_head($object)
     $upload_dir = $conf->facture->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/compta/facture/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/facture/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -121,7 +121,7 @@ function facture_prepare_head($object)
     $head[$h][2] = 'documents';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/facture/agenda.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/facture/agenda.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Events");
     if (isModEnabled('agenda') && ($user->hasRight('agenda', 'myactions', 'read') || $user->hasRight('agenda', 'allactions', 'read'))) {
         $nbEvent = 0;
@@ -180,12 +180,12 @@ function invoice_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/invoice.php';
+    $head[$h][0] = constant('BASE_URL') . '/admin/invoice.php';
     $head[$h][1] = $langs->trans("Miscellaneous");
     $head[$h][2] = 'general';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/payment.php';
+    $head[$h][0] = constant('BASE_URL') . '/admin/payment.php';
     $head[$h][1] = $langs->trans("Payments");
     $head[$h][2] = 'payment';
     $h++;
@@ -196,7 +196,7 @@ function invoice_admin_prepare_head()
     // $this->tabs = array('entity:-tabname:Title:@mymodule:/mymodule/mypage.php?id=__ID__'); to remove a tab
     complete_head_from_modules($conf, $langs, null, $head, $h, 'invoice_admin');
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/facture/admin/invoice_cust_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/compta/facture/admin/invoice_cust_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFieldsCustomerInvoices");
     $nbExtrafields = $extrafields->attributes['facture']['count'];
     if ($nbExtrafields > 0) {
@@ -205,7 +205,7 @@ function invoice_admin_prepare_head()
     $head[$h][2] = 'attributes';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/facture/admin/invoicedet_cust_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/compta/facture/admin/invoicedet_cust_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFieldsLines");
     $nbExtrafields = $extrafields->attributes['facturedet']['count'];
     if ($nbExtrafields > 0) {
@@ -214,7 +214,7 @@ function invoice_admin_prepare_head()
     $head[$h][2] = 'attributeslines';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/facture/admin/invoice_rec_cust_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/compta/facture/admin/invoice_rec_cust_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFieldsCustomerInvoicesRec");
     $nbExtrafields = $extrafields->attributes['facture_rec']['count'];
     if ($nbExtrafields > 0) {
@@ -223,7 +223,7 @@ function invoice_admin_prepare_head()
     $head[$h][2] = 'attributesrec';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/facture/admin/invoicedet_rec_cust_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/compta/facture/admin/invoicedet_rec_cust_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFieldsLinesRec");
     $nbExtrafields = $extrafields->attributes['facturedet_rec']['count'];
     if ($nbExtrafields > 0) {
@@ -233,7 +233,7 @@ function invoice_admin_prepare_head()
     $h++;
 
     if (getDolGlobalInt('INVOICE_USE_SITUATION') > 0) { // Warning, implementation with value 1 is seriously bugged and a new one not compatible is expected to become stable
-        $head[$h][0] = DOL_URL_ROOT . '/admin/invoice_situation.php';
+        $head[$h][0] = constant('BASE_URL') . '/admin/invoice_situation.php';
         $head[$h][1] = $langs->trans("InvoiceSituation");
         $head[$h][2] = 'situation';
         $h++;
@@ -258,12 +258,12 @@ function invoice_rec_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/facture/card-rec.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/facture/card-rec.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("RepeatableInvoice");
     $head[$h][2] = 'card';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/facture/agenda-rec.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/facture/agenda-rec.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Events");
     if (isModEnabled('agenda') && ($user->hasRight('agenda', 'myactions', 'read') || $user->hasRight('agenda', 'allactions', 'read'))) {
         $nbEvent = 0;
@@ -321,7 +321,7 @@ function supplier_invoice_rec_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/fourn/facture/card-rec.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/fourn/facture/card-rec.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("RepeatableSupplierInvoice");
     $head[$h][2] = 'card';
     $h++;

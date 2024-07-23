@@ -829,9 +829,9 @@ if ($reshook < 0) {
 $newcardbutton = empty($hookmanager->resPrint) ? '' : $hookmanager->resPrint;
 
 if (empty($reshook)) {
-    $newcardbutton .= dolGetButtonTitle($langs->trans('ViewFlatList'), '', 'fa fa-list paddingleft imgforviewmode', DOL_URL_ROOT . '/accountancy/bookkeeping/list.php?' . $param, '', 1, array('morecss' => 'marginleftonly btnTitleSelected'));
-    $newcardbutton .= dolGetButtonTitle($langs->trans('GroupByAccountAccounting'), '', 'fa fa-stream paddingleft imgforviewmode', DOL_URL_ROOT . '/accountancy/bookkeeping/listbyaccount.php?' . $param, '', 1, array('morecss' => 'marginleftonly'));
-    $newcardbutton .= dolGetButtonTitle($langs->trans('GroupBySubAccountAccounting'), '', 'fa fa-align-left vmirror paddingleft imgforviewmode', DOL_URL_ROOT . '/accountancy/bookkeeping/listbyaccount.php?type=sub' . $param, '', 1, array('morecss' => 'marginleftonly'));
+    $newcardbutton .= dolGetButtonTitle($langs->trans('ViewFlatList'), '', 'fa fa-list paddingleft imgforviewmode', constant('BASE_URL') . '/accountancy/bookkeeping/list.php?' . $param, '', 1, array('morecss' => 'marginleftonly btnTitleSelected'));
+    $newcardbutton .= dolGetButtonTitle($langs->trans('GroupByAccountAccounting'), '', 'fa fa-stream paddingleft imgforviewmode', constant('BASE_URL') . '/accountancy/bookkeeping/listbyaccount.php?' . $param, '', 1, array('morecss' => 'marginleftonly'));
+    $newcardbutton .= dolGetButtonTitle($langs->trans('GroupBySubAccountAccounting'), '', 'fa fa-align-left vmirror paddingleft imgforviewmode', constant('BASE_URL') . '/accountancy/bookkeeping/listbyaccount.php?type=sub' . $param, '', 1, array('morecss' => 'marginleftonly'));
 
     $url = './card.php?action=create';
     if (!empty($socid)) {

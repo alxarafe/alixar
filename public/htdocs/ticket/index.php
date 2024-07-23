@@ -99,7 +99,7 @@ print load_fiche_titre($langs->trans('TicketsIndex'), $resultboxes['selectboxlis
 $dir = '';
 $prefix = '';
 $filenamenb = $dir . "/" . $prefix . "ticketinyear-" . $endyear . ".png";
-$fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=ticket&amp;file=ticketinyear-' . $endyear . '.png';
+$fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=ticket&amp;file=ticketinyear-' . $endyear . '.png';
 
 $stats = new TicketStats($db, $socid, $userid);
 $param_year = 'DOLUSERCOOKIE_ticket_by_status_year';

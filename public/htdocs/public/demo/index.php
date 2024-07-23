@@ -70,7 +70,7 @@ $url .= ($url ? '&' : '') . ($conf->dol_hide_leftmenu ? 'dol_hide_leftmenu=' . $
 $url .= ($url ? '&' : '') . ($conf->dol_optimize_smallscreen ? 'dol_optimize_smallscreen=' . $conf->dol_optimize_smallscreen : '');
 $url .= ($url ? '&' : '') . ($conf->dol_no_mouse_hover ? 'dol_no_mouse_hover=' . $conf->dol_no_mouse_hover : '');
 $url .= ($url ? '&' : '') . ($conf->dol_use_jmobile ? 'dol_use_jmobile=' . $conf->dol_use_jmobile : '');
-$url = DOL_URL_ROOT . '/index.php' . ($url ? '?' . $url : '');
+$url = constant('BASE_URL') . '/index.php' . ($url ? '?' . $url : '');
 
 $tmpaction = 'view';
 $parameters = array();
@@ -83,14 +83,14 @@ if (empty($reshook)) {
             'default' => '1', 'key' => 'profdemoservonly', 'label' => 'DemoCompanyServiceOnly',
             'disablemodules' => 'adherent,barcode,bom,cashdesk,don,expedition,externalsite,ftp,incoterm,mailmanspip,margin,mrp,prelevement,product,productbatch,stock,takepos',
             //'icon'=>DOL_URL_ROOT.'/public/demo/dolibarr_screenshot8.png',
-            'icon' => DOL_URL_ROOT . '/public/demo/demo-profile-service.jpg',
+            'icon' => constant('BASE_URL') . '/public/demo/demo-profile-service.jpg',
             'url' => $url,
             'lang' => '',
         ),
         array(
             'default' => '0', 'key' => 'profmanufacture', 'label' => 'DemoCompanyManufacturing',
             'disablemodules' => 'adherent,contrat,don,externalsite,ficheinter,ftp,mailmanspip,prelevement,service',
-            'icon' => DOL_URL_ROOT . '/public/demo/demo-profile-manufacturing.jpg',
+            'icon' => constant('BASE_URL') . '/public/demo/demo-profile-manufacturing.jpg',
             'url' => $url,
             'lang' => '',
         ),
@@ -98,7 +98,7 @@ if (empty($reshook)) {
             'default' => '0', 'key' => 'profdemoprodstock', 'label' => 'DemoCompanyProductAndStocks',
             'disablemodules' => 'adherent,bom,contrat,don,externalsite,ficheinter,ftp,mailmanspip,mrp,prelevement,service',
             //'icon'=>DOL_URL_ROOT.'/public/demo/dolibarr_screenshot2.png',
-            'icon' => DOL_URL_ROOT . '/public/demo/demo-profile-product.jpg',
+            'icon' => constant('BASE_URL') . '/public/demo/demo-profile-product.jpg',
             'url' => $url,
             'lang' => '',
         ),
@@ -106,7 +106,7 @@ if (empty($reshook)) {
             'default' => '0', 'key' => 'profdemofun2', 'label' => 'DemoFundation2',
             'disablemodules' => 'barcode,cashdesk,bom,commande,commercial,compta,comptabilite,contrat,expedition,externalsite,ficheinter,ftp,incoterm,mailmanspip,margin,mrp,prelevement,product,productbatch,projet,propal,propale,service,societe,stock,tax,takepos',
             //'icon'=>DOL_URL_ROOT.'/public/demo/dolibarr_screenshot6.png',
-            'icon' => DOL_URL_ROOT . '/public/demo/demo-profile-foundation.jpg',
+            'icon' => constant('BASE_URL') . '/public/demo/demo-profile-foundation.jpg',
             'url' => $url,
             'lang' => '',
         ),
@@ -115,7 +115,7 @@ if (empty($reshook)) {
             'default' => '0', 'key' => 'profdemoall', 'label' => 'ChooseYourDemoProfilMore',
             'disablemodules' => 'adherent,cashdesk,don,externalsite,mailmanspip',
             //'icon'=>DOL_URL_ROOT.'/public/demo/dolibarr_screenshot9.png'
-            'icon' => DOL_URL_ROOT . '/public/demo/demo-profile-all.jpg',
+            'icon' => constant('BASE_URL') . '/public/demo/demo-profile-all.jpg',
             'lang' => '',
         )
     );
@@ -283,7 +283,7 @@ print "\n";
 
 print '<div class="demoban demobackground">';
 print '<div class="right" style="padding-right: 30px; padding-top: 30px;">';
-print '<a alt="Official portal of your ERP CRM application" targe="_blank" href="https://www.dolibarr.org?utm_medium=website&utm_source=demo"><img class="demologo" src="' . DOL_URL_ROOT . '/theme/dolibarr_logo.svg" alt="Dolibarr logo"></a>';
+print '<a alt="Official portal of your ERP CRM application" targe="_blank" href="https://www.dolibarr.org?utm_medium=website&utm_source=demo"><img class="demologo" src="' . constant('BASE_URL') . '/theme/dolibarr_logo.svg" alt="Dolibarr logo"></a>';
 print '</div>';
 print '</div>';
 

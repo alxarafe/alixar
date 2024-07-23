@@ -161,7 +161,7 @@ class box_graph_product_distribution extends ModeleBoxes
                 }
 
                 $filenamenb = $dir . "/prodserforpropal-" . $year . ".png";
-                $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=proposalstats&amp;file=prodserforpropal-' . $year . '.png';
+                $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=proposalstats&amp;file=prodserforpropal-' . $year . '.png';
 
                 $px2 = new DolGraph();
                 $mesg = $px2->isGraphKo();
@@ -224,7 +224,7 @@ class box_graph_product_distribution extends ModeleBoxes
                 }
 
                 $filenamenb = $dir . "/prodserfororder-" . $year . ".png";
-                $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstats&amp;file=prodserfororder-' . $year . '.png';
+                $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=orderstats&amp;file=prodserfororder-' . $year . '.png';
 
                 $px3 = new DolGraph();
                 $mesg = $px3->isGraphKo();
@@ -288,7 +288,7 @@ class box_graph_product_distribution extends ModeleBoxes
                     $data1 = array(array(0 => $langs->trans("None"), 1 => 1));
                 }
                 $filenamenb = $dir . "/prodserforinvoice-" . $year . ".png";
-                $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=productstats&amp;file=prodserforinvoice-' . $year . '.png';
+                $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=productstats&amp;file=prodserforinvoice-' . $year . '.png';
 
                 $px1 = new DolGraph();
                 $mesg = $px1->isGraphKo();

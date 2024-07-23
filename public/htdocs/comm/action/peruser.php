@@ -503,7 +503,7 @@ if ($user->hasRight('agenda', 'myactions', 'create') || $user->hasRight('agenda'
         $newparam .= '&end_d=' . ((int) $end_d);
     }
 
-    $urltocreateaction = DOL_URL_ROOT . '/comm/action/card.php?action=create';
+    $urltocreateaction = constant('BASE_URL') . '/comm/action/card.php?action=create';
     $urltocreateaction .= '&apyear=' . $tmpforcreatebutton['year'] . '&apmonth=' . $tmpforcreatebutton['mon'] . '&apday=' . $tmpforcreatebutton['mday'] . '&aphour=' . $tmpforcreatebutton['hours'] . '&apmin=' . $tmpforcreatebutton['minutes'];
     $urltocreateaction .= '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . ($newparam ? '?' . $newparam : ''));
 
@@ -1106,19 +1106,19 @@ jQuery(document).ready(function() {
 		if (ids == \'none\') /* No event */
 		{
 			/* alert(\'no event\'); */
-			url = "' . DOL_URL_ROOT . '/comm/action/card.php?action=create&assignedtouser="+userid+"&datep="+year+month+day+hour+min+"00&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?year=' . $year . '&month=' . $month . '&day=' . $day . ($begin_h !== '' ? '&begin_h=' . $begin_h : '') . ($end_h !== '' ? '&end_h=' . $end_h : '') . ($begin_d !== '' ? '&begin_d=' . $begin_d : '') . ($end_d !== '' ? '&end_d=' . $end_d : '')) . '"
+			url = "' . constant('BASE_URL') . '/comm/action/card.php?action=create&assignedtouser="+userid+"&datep="+year+month+day+hour+min+"00&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?year=' . $year . '&month=' . $month . '&day=' . $day . ($begin_h !== '' ? '&begin_h=' . $begin_h : '') . ($end_h !== '' ? '&end_h=' . $end_h : '') . ($begin_d !== '' ? '&begin_d=' . $begin_d : '') . ($end_d !== '' ? '&end_d=' . $end_d : '')) . '"
 			window.location.href = url;
 		}
 		else if (ids.indexOf(",") > -1)	/* There is several events */
 		{
 			/* alert(\'several events\'); */
-			url = "' . DOL_URL_ROOT . '/comm/action/list.php?mode=show_list&search_actioncode="+jQuery("#search_actioncode").val()+"&search_status="+jQuery("#selectsearch_status").val()+"&filtert="+userid+"&dateselectyear="+year+"&dateselectmonth="+month+"&dateselectday="+day;
+			url = "' . constant('BASE_URL') . '/comm/action/list.php?mode=show_list&search_actioncode="+jQuery("#search_actioncode").val()+"&search_status="+jQuery("#selectsearch_status").val()+"&filtert="+userid+"&dateselectyear="+year+"&dateselectmonth="+month+"&dateselectday="+day;
 			window.location.href = url;
 		}
 		else	/* One event */
 		{
 			/* alert(\'one event\'); */
-			url = "' . DOL_URL_ROOT . '/comm/action/card.php?action=view&id="+ids
+			url = "' . constant('BASE_URL') . '/comm/action/card.php?action=view&id="+ids
 			window.location.href = url;
 		}
 	});

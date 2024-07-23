@@ -1443,7 +1443,7 @@ class ActionComm extends CommonObject
                 $response->warning_delay = $conf->agenda->warning_delay / 60 / 60 / 24;
                 $response->label = $langs->trans("ActionsToDo");
                 $response->labelShort = $langs->trans("ActionsToDoShort");
-                $response->url = DOL_URL_ROOT . '/comm/action/list.php?mode=show_list&actioncode=0&status=todo&mainmenu=agenda';
+                $response->url = constant('BASE_URL') . '/comm/action/list.php?mode=show_list&actioncode=0&status=todo&mainmenu=agenda';
                 if ($user->hasRight("agenda", "allactions", "read")) {
                     $response->url .= '&filtert=-1';
                 }
@@ -1772,11 +1772,11 @@ class ActionComm extends CommonObject
 
         $url = '';
         if ($option == 'birthday') {
-            $url = DOL_URL_ROOT . '/contact/perso.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/contact/perso.php?id=' . $this->id;
         } elseif ($option == 'holiday') {
-            $url = DOL_URL_ROOT . '/holiday/card.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/holiday/card.php?id=' . $this->id;
         } else {
-            $url = DOL_URL_ROOT . '/comm/action/card.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/comm/action/card.php?id=' . $this->id;
         }
 
         if ($option !== 'nolink') {

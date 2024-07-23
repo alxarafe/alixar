@@ -76,7 +76,7 @@ if ($action == 'add' || $action == 'addproduct' || $action == 'update') {
 
     if (GETPOST('cancel', 'alpha')) {
         if (empty($backtopage)) {
-            $backtopage = ($urlsource ? $urlsource : ((!empty($url) && !preg_match('/^http/i', $url)) ? $url : DOL_URL_ROOT . '/bookmarks/list.php'));
+            $backtopage = ($urlsource ? $urlsource : ((!empty($url) && !preg_match('/^http/i', $url)) ? $url : constant('BASE_URL') . '/bookmarks/list.php'));
         }
         header("Location: " . $backtopage);
         exit;
@@ -115,7 +115,7 @@ if ($action == 'add' || $action == 'addproduct' || $action == 'update') {
 
         if ($res > 0) {
             if (empty($backtopage)) {
-                $backtopage = ($urlsource ? $urlsource : ((!empty($url) && !preg_match('/^http/i', $url)) ? $url : DOL_URL_ROOT . '/bookmarks/list.php'));
+                $backtopage = ($urlsource ? $urlsource : ((!empty($url) && !preg_match('/^http/i', $url)) ? $url : constant('BASE_URL') . '/bookmarks/list.php'));
             }
             header("Location: " . $backtopage);
             exit;
@@ -214,7 +214,7 @@ if ($id > 0 && !preg_match('/^add/i', $action)) {
         print '<input type="hidden" name="token" value="' . newToken() . '">';
         print '<input type="hidden" name="action" value="update">';
         print '<input type="hidden" name="id" value="' . $object->id . '">';
-        print '<input type="hidden" name="urlsource" value="' . DOL_URL_ROOT . '/bookmarks/card.php?id=' . $object->id . '">';
+        print '<input type="hidden" name="urlsource" value="' . constant('BASE_URL') . '/bookmarks/card.php?id=' . $object->id . '">';
         print '<input type="hidden" name="backtopage" value="' . $backtopage . '">';
     }
 

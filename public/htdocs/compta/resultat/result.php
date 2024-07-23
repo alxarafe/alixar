@@ -241,7 +241,7 @@ if ($modecompta == "CREANCES-DETTES") {
     $periodlink = $textprevyear . $textnextyear;
     $exportlink = '';
     $description = $langs->trans("RulesResultBookkeepingPersonalized");
-    $description .= ' (' . $langs->trans("SeePageForSetup", DOL_URL_ROOT . '/accountancy/admin/categories_list.php?search_country_id=' . $mysoc->country_id . '&mainmenu=accountancy&leftmenu=accountancy_admin', $langs->transnoentitiesnoconv("Accountancy") . ' / ' . $langs->transnoentitiesnoconv("Setup") . ' / ' . $langs->transnoentitiesnoconv("AccountingCategory")) . ')';
+    $description .= ' (' . $langs->trans("SeePageForSetup", constant('BASE_URL') . '/accountancy/admin/categories_list.php?search_country_id=' . $mysoc->country_id . '&mainmenu=accountancy&leftmenu=accountancy_admin', $langs->transnoentitiesnoconv("Accountancy") . ' / ' . $langs->transnoentitiesnoconv("Setup") . ' / ' . $langs->transnoentitiesnoconv("AccountingCategory")) . ')';
     $builddate = dol_now();
 }
 

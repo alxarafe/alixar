@@ -1418,7 +1418,7 @@ class Holiday extends CommonObject
             $label = implode($this->getTooltipContentArray($params));
         }
 
-        $url = DOL_URL_ROOT . '/holiday/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/holiday/card.php?id=' . $this->id;
 
         //if ($option != 'nolink')
         //{
@@ -2461,7 +2461,7 @@ class Holiday extends CommonObject
             $response->warning_delay = $conf->holiday->approve->warning_delay / 60 / 60 / 24;
             $response->label = $langs->trans("HolidaysToApprove");
             $response->labelShort = $langs->trans("ToApprove");
-            $response->url = DOL_URL_ROOT . '/holiday/list.php?search_status=2&amp;mainmenu=hrm&amp;leftmenu=holiday';
+            $response->url = constant('BASE_URL') . '/holiday/list.php?search_status=2&amp;mainmenu=hrm&amp;leftmenu=holiday';
             $response->img = img_object('', "holiday");
 
             while ($obj = $this->db->fetch_object($resql)) {

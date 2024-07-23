@@ -108,12 +108,12 @@ if ($mode != '') {
 $h = 0;
 $head = array();
 
-$head[$h][0] = DOL_URL_ROOT . '/product/stats/card.php?id=all';
+$head[$h][0] = constant('BASE_URL') . '/product/stats/card.php?id=all';
 $head[$h][1] = $langs->trans("Chart");
 $head[$h][2] = 'chart';
 $h++;
 
-$head[$h][0] = DOL_URL_ROOT . '/product/popuprop.php';
+$head[$h][0] = constant('BASE_URL') . '/product/popuprop.php';
 $head[$h][1] = $langs->trans("ProductsServicesPerPopularity");
 if ((string) $type == '0') {
     $head[$h][1] = $langs->trans("ProductsPerPopularity");

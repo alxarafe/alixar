@@ -155,14 +155,14 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/comm/propal/list.php';
+    $backurlforlist = constant('BASE_URL') . '/comm/propal/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/comm/propal/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/comm/propal/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -269,7 +269,7 @@ if (empty($reshook)) {
         // Delete proposal
         $result = $object->delete($user);
         if ($result > 0) {
-            header('Location: ' . DOL_URL_ROOT . '/comm/propal/list.php?restore_lastsearch_values=1');
+            header('Location: ' . constant('BASE_URL') . '/comm/propal/list.php?restore_lastsearch_values=1');
             exit();
         } else {
             $langs->load("errors");
@@ -751,7 +751,7 @@ if (empty($reshook)) {
                     $error++;
                 } else {
                     // Needed if object linked modified by trigger (because linked objects can't be fetched two times : linkedObjectsFullLoaded)
-                    $locationTarget = DOL_URL_ROOT . '/comm/propal/card.php?id=' . $object->id;
+                    $locationTarget = constant('BASE_URL') . '/comm/propal/card.php?id=' . $object->id;
                 }
 
                 $deposit = null;
@@ -775,7 +775,7 @@ if (empty($reshook)) {
 
                     if ($deposit) {
                         setEventMessage('DepositGenerated');
-                        $locationTarget = DOL_URL_ROOT . '/compta/facture/card.php?id=' . $deposit->id;
+                        $locationTarget = constant('BASE_URL') . '/compta/facture/card.php?id=' . $deposit->id;
                     } else {
                         $error++;
                         setEventMessages($object->error, $object->errors, 'errors');
@@ -3214,7 +3214,7 @@ if ($action == 'create') {
 
         $MAXEVENT = 10;
 
-        $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/comm/propal/agenda.php?id=' . $object->id);
+        $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/comm/propal/agenda.php?id=' . $object->id);
 
         // List of actions on element
         include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';

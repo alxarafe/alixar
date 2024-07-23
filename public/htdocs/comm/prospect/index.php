@@ -64,7 +64,7 @@ print '<div class="fichecenter"><div class="fichethirdleft">';
 
 if (isModEnabled("propal")) {
     $var = false;
-    print '<form method="post" action="' . DOL_URL_ROOT . '/comm/propal/card.php">';
+    print '<form method="post" action="' . constant('BASE_URL') . '/comm/propal/card.php">';
     print '<input type="hidden" name="token" value="' . newToken() . '">';
     print '<table class="noborder nohover centpercent">';
     print '<tr class="liste_titre"><td colspan="3">' . $langs->trans("SearchAProposal") . '</td></tr>';

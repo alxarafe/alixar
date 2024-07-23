@@ -50,7 +50,7 @@ $(document).ready(function(){
     $(".imgupforline").hide();
     $(".imgdownforline").hide();
     $(".lineupdown").removeAttr('href');
-    $(".tdlineupdown").css("background-image",'url(<?php echo DOL_URL_ROOT . '/theme/' . $conf->theme . '/img/grip.png'; ?>)');
+    $(".tdlineupdown").css("background-image",'url(<?php echo constant('BASE_URL') . '/theme/' . $conf->theme . '/img/grip.png'; ?>)');
     $(".tdlineupdown").css("background-repeat","no-repeat");
     $(".tdlineupdown").css("background-position","center center");
 

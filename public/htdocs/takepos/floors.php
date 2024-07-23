@@ -156,7 +156,7 @@ function updateplace(idplace, left, top) {
     console.log("updateplace idplace="+idplace+" left="+left+" top="+top);
     $.ajax({
         type: "POST",
-        url: "<?php echo DOL_URL_ROOT . '/takepos/floors.php'; ?>",
+        url: "<?php echo constant('BASE_URL') . '/takepos/floors.php'; ?>",
         data: { action: "update", left: left, top: top, place: idplace, token: '<?php echo currentToken(); ?>' }
     }).done(function( msg ) {
         window.location.href='floors.php?mode=edit&floor=<?php echo urlencode((string) ($floor)); ?>';
@@ -168,7 +168,7 @@ function updatename(rowid) {
     console.log("updatename rowid="+rowid+" after="+after);
     $.ajax({
         type: "POST",
-        url: "<?php echo DOL_URL_ROOT . '/takepos/floors.php'; ?>",
+        url: "<?php echo constant('BASE_URL') . '/takepos/floors.php'; ?>",
         data: { action: "updatename", place: rowid, newname: after, token: '<?php echo currentToken(); ?>' }
     }).done(function( msg ) {
         window.location.href='floors.php?mode=edit&floor=<?php echo urlencode((string) ($floor)); ?>';

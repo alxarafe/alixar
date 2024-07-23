@@ -110,11 +110,11 @@ print load_fiche_titre($langs->trans('Replenishment'), '', 'stock');
 
 $head = array();
 
-$head[0][0] = DOL_URL_ROOT . '/product/stock/replenish.php';
+$head[0][0] = constant('BASE_URL') . '/product/stock/replenish.php';
 $head[0][1] = $langs->trans('MissingStocks');
 $head[0][2] = 'replenish';
 
-$head[1][0] = DOL_URL_ROOT . '/product/stock/replenishorders.php';
+$head[1][0] = constant('BASE_URL') . '/product/stock/replenishorders.php';
 $head[1][1] = $texte;
 $head[1][2] = 'replenishorders';
 
@@ -314,7 +314,7 @@ if ($resql) {
         $showline = dolDispatchToDo($obj->rowid) && (!$search_product || in_array($search_product, getProducts($obj->rowid)));
 
         if ($showline) {
-            $href = DOL_URL_ROOT . '/fourn/commande/card.php?id=' . $obj->rowid;
+            $href = constant('BASE_URL') . '/fourn/commande/card.php?id=' . $obj->rowid;
 
             print '<tr>';
 
@@ -324,7 +324,7 @@ if ($resql) {
             print '</td>';
 
             // Company
-            $href = DOL_URL_ROOT . '/fourn/card.php?socid=' . $obj->socid;
+            $href = constant('BASE_URL') . '/fourn/card.php?socid=' . $obj->socid;
             print '<td class="tdoverflowmax150" title="' . dol_escape_htmltag($obj->name) . '"><a href="' . $href . '">' . img_object($langs->trans('ShowCompany'), 'company') . ' ' . $obj->name . '</a></td>';
 
             // Author

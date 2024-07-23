@@ -61,7 +61,7 @@ if ($id > 0 || !empty($ref)) {
 if (!$error) {
     $object->fetch_thirdparty();
 } else {
-    header('Location: ' . DOL_URL_ROOT . '/comm/propal/list.php');
+    header('Location: ' . constant('BASE_URL') . '/comm/propal/list.php');
     exit;
 }
 

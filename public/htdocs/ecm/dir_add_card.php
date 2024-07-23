@@ -127,7 +127,7 @@ if ($action == 'add' && $permissiontoadd) {
             header("Location: " . $backtopage);
             exit;
         } else {
-            header("Location: " . DOL_URL_ROOT . '/ecm/index.php?action=file_manager' . ($module ? '&module=' . $module : ''));
+            header("Location: " . constant('BASE_URL') . '/ecm/index.php?action=file_manager' . ($module ? '&module=' . $module : ''));
             exit;
         }
     }
@@ -191,7 +191,7 @@ if ($action == 'add' && $permissiontoadd) {
             header("Location: " . $backtopage);
             exit;
         } else {
-            header("Location: " . DOL_URL_ROOT . '/ecm/index.php?action=file_manager');
+            header("Location: " . constant('BASE_URL') . '/ecm/index.php?action=file_manager');
             exit;
         }
     }

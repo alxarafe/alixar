@@ -54,7 +54,7 @@ $(document).ready(function() {
         root: '<?php print dol_escape_js($openeddir); ?>',
         // Ajax called if we click to expand a dir (not a file). Parameter 'dir' is provided as a POST parameter by fileTree code to this following URL.
         // We must use token=currentToken() and not newToken() here because ajaxdirtree has NOTOKENRENEWAL define so there is no rollup of token so we must compare with the one valid on main page
-        script: '<?php echo DOL_URL_ROOT . '/core/ajax/ajaxdirtree.php?token=' . currentToken() . '&modulepart=' . urlencode($module) . (empty($preopened) ? '' : '&preopened=' . urlencode($preopened)) . '&openeddir=' . urlencode($openeddir) . (empty($paramwithoutsection) ? '' : $paramwithoutsection); ?>',
+        script: '<?php echo constant('BASE_URL') . '/core/ajax/ajaxdirtree.php?token=' . currentToken() . '&modulepart=' . urlencode($module) . (empty($preopened) ? '' : '&preopened=' . urlencode($preopened)) . '&openeddir=' . urlencode($openeddir) . (empty($paramwithoutsection) ? '' : $paramwithoutsection); ?>',
         folderEvent: 'click',   // 'dblclick'
         multiFolder: false  },
         // Called if we click on a file (not a dir)
@@ -83,7 +83,7 @@ $(document).ready(function() {
     $('#refreshbutton').click( function() {
         console.log("Click on refreshbutton");
         $.pleaseBePatient("<?php echo $langs->trans('PleaseBePatient'); ?>");
-        $.get("<?php echo DOL_URL_ROOT . '/ecm/ajax/ecmdatabase.php'; ?>", {
+        $.get("<?php echo constant('BASE_URL') . '/ecm/ajax/ecmdatabase.php'; ?>", {
             action: 'build',
             token: '<?php echo newToken(); ?>',
             element: 'ecm'

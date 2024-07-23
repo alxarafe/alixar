@@ -191,14 +191,14 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/compta/facture/list.php';
+    $backurlforlist = constant('BASE_URL') . '/compta/facture/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/compta/facture/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/compta/facture/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -290,7 +290,7 @@ if (empty($reshook)) {
         ) {
             $result = $object->delete($user, 0, $idwarehouse);
             if ($result > 0) {
-                header('Location: ' . DOL_URL_ROOT . '/compta/facture/list.php?restore_lastsearch_values=1');
+                header('Location: ' . constant('BASE_URL') . '/compta/facture/list.php?restore_lastsearch_values=1');
                 exit();
             } else {
                 setEventMessages($object->error, $object->errors, 'errors');
@@ -5894,7 +5894,7 @@ if ($action == 'create') {
                         // Sometimes we can receive more, so we accept to enter more and will offer a button to convert into discount (but it is not a credit note, just a prepayment done)
                         //print '<a class="butAction" href="'.DOL_URL_ROOT.'/compta/paiement.php?facid='.$object->id.'&amp;action=create&amp;accountid='.$object->fk_account.'">'.$langs->trans('DoPayment').'</a>';
                         unset($params['attr']['title']);
-                        print dolGetButtonAction($langs->trans('DoPayment'), '', 'default', DOL_URL_ROOT . '/compta/paiement.php?facid=' . $object->id . '&amp;action=create' . ($object->fk_account > 0 ? '&amp;accountid=' . $object->fk_account : ''), '', true, $params);
+                        print dolGetButtonAction($langs->trans('DoPayment'), '', 'default', constant('BASE_URL') . '/compta/paiement.php?facid=' . $object->id . '&amp;action=create' . ($object->fk_account > 0 ? '&amp;accountid=' . $object->fk_account : ''), '', true, $params);
                     }
                 }
             }
@@ -6004,7 +6004,7 @@ if ($action == 'create') {
             if (($object->type == Facture::TYPE_STANDARD || $object->type == Facture::TYPE_DEPOSIT || $object->type == Facture::TYPE_PROFORMA) && $object->status == 0 && $usercancreate) {
                 if (!$objectidnext && count($object->lines) > 0) {
                     unset($params['attr']['title']);
-                    print dolGetButtonAction($langs->trans('ChangeIntoRepeatableInvoice'), '', 'default', DOL_URL_ROOT . '/compta/facture/card-rec.php?facid=' . $object->id . '&amp;action=create', '', true, $params);
+                    print dolGetButtonAction($langs->trans('ChangeIntoRepeatableInvoice'), '', 'default', constant('BASE_URL') . '/compta/facture/card-rec.php?facid=' . $object->id . '&amp;action=create', '', true, $params);
                 }
             }
 
@@ -6138,7 +6138,7 @@ if ($action == 'create') {
 
         $MAXEVENT = 10;
 
-        $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/compta/facture/agenda.php?id=' . $object->id);
+        $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/compta/facture/agenda.php?id=' . $object->id);
 
         // List of actions on element
         include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';

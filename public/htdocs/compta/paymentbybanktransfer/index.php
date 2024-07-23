@@ -76,7 +76,7 @@ $user = new User($db);
 
 $newcardbutton = '';
 if ($usercancreate) {
-    $newcardbutton .= dolGetButtonTitle($langs->trans('NewPaymentByBankTransfer'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/compta/prelevement/create.php?type=bank-transfer');
+    $newcardbutton .= dolGetButtonTitle($langs->trans('NewPaymentByBankTransfer'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/compta/prelevement/create.php?type=bank-transfer');
 }
 
 print load_fiche_titre($langs->trans("SuppliersStandingOrdersArea"), $newcardbutton);

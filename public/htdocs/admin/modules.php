@@ -280,7 +280,7 @@ if ($action == 'install' && $allowonlineinstall) {
     }
 
     if (!$error) {
-        $message = $langs->trans("SetupIsReadyForUse", DOL_URL_ROOT . '/admin/modules.php?mainmenu=home', $langs->transnoentitiesnoconv("Home") . ' - ' . $langs->transnoentitiesnoconv("Setup") . ' - ' . $langs->transnoentitiesnoconv("Modules"));
+        $message = $langs->trans("SetupIsReadyForUse", constant('BASE_URL') . '/admin/modules.php?mainmenu=home', $langs->transnoentitiesnoconv("Home") . ' - ' . $langs->transnoentitiesnoconv("Setup") . ' - ' . $langs->transnoentitiesnoconv("Modules"));
         setEventMessages($message, null, 'warnings');
     }
 } elseif ($action == 'install' && !$allowonlineinstall) {
@@ -1064,7 +1064,7 @@ if ($mode == 'common' || $mode == 'commonkanban') {
             // Help
             print '<td class="center nowrap" style="width: 82px;">';
             //print $form->textwithpicto('', $text, 1, $imginfo, 'minheight20', 0, 2, 1);
-            print '<a href="javascript:document_preview(\'' . DOL_URL_ROOT . '/admin/modulehelp.php?id=' . ((int) $objMod->numero) . '\',\'text/html\',\'' . dol_escape_js($langs->trans("Module")) . '\')">' . img_picto(($objMod->isCoreOrExternalModule() == 'external' ? $langs->trans("ExternalModule") . ' - ' : '') . $langs->trans("ClickToShowDescription"), $imginfo) . '</a>';
+            print '<a href="javascript:document_preview(\'' . constant('BASE_URL') . '/admin/modulehelp.php?id=' . ((int) $objMod->numero) . '\',\'text/html\',\'' . dol_escape_js($langs->trans("Module")) . '\')">' . img_picto(($objMod->isCoreOrExternalModule() == 'external' ? $langs->trans("ExternalModule") . ' - ' : '') . $langs->trans("ClickToShowDescription"), $imginfo) . '</a>';
             print '</td>';
 
             // Version
@@ -1143,7 +1143,7 @@ if ($mode == 'marketplace') {
 
     print '<tr class="oddeven">' . "\n";
     $url = 'https://www.dolistore.com';
-    print '<td class="hideonsmartphone"><a href="' . $url . '" target="_blank" rel="noopener noreferrer external"><img border="0" class="imgautosize imgmaxwidth180" src="' . DOL_URL_ROOT . '/theme/dolistore_logo.png"></a></td>';
+    print '<td class="hideonsmartphone"><a href="' . $url . '" target="_blank" rel="noopener noreferrer external"><img border="0" class="imgautosize imgmaxwidth180" src="' . constant('BASE_URL') . '/theme/dolistore_logo.png"></a></td>';
     print '<td><span class="opacitymedium">' . $langs->trans("DoliStoreDesc") . '</span></td>';
     print '<td><a href="' . $url . '" target="_blank" rel="noopener noreferrer external">' . $url . '</a></td>';
     print '</tr>';
@@ -1366,7 +1366,7 @@ if ($mode == 'deploy') {
         } else {
             print $langs->trans("UnpackPackageInModulesRoot", $dirins) . '<br>';
             print '<b>' . $langs->trans("StepNb", 4) . '</b>: ';
-            print $langs->trans("SetupIsReadyForUse", DOL_URL_ROOT . '/admin/modules.php?mainmenu=home', $langs->transnoentitiesnoconv("Home") . ' - ' . $langs->transnoentitiesnoconv("Setup") . ' - ' . $langs->transnoentitiesnoconv("Modules")) . '<br>';
+            print $langs->trans("SetupIsReadyForUse", constant('BASE_URL') . '/admin/modules.php?mainmenu=home', $langs->transnoentitiesnoconv("Home") . ' - ' . $langs->transnoentitiesnoconv("Setup") . ' - ' . $langs->transnoentitiesnoconv("Modules")) . '<br>';
         }
     }
 
@@ -1413,7 +1413,7 @@ if ($mode == 'develop') {
     print '<tr class="oddeven" height="80">' . "\n";
     $url = 'https://partners.dolibarr.org';
     print '<td class="center">';
-    print'<a href="' . $url . '" target="_blank" rel="noopener noreferrer external"><img border="0" class="imgautosize imgmaxwidth180" src="' . DOL_URL_ROOT . '/theme/dolibarr_preferred_partner.png"></a>';
+    print'<a href="' . $url . '" target="_blank" rel="noopener noreferrer external"><img border="0" class="imgautosize imgmaxwidth180" src="' . constant('BASE_URL') . '/theme/dolibarr_preferred_partner.png"></a>';
     print '</td>';
     print '<td>' . $langs->trans("DoliPartnersDesc") . '</td>';
     print '<td><a href="' . $url . '" target="_blank" rel="noopener noreferrer external">';

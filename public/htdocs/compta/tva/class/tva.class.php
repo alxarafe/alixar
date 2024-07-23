@@ -678,7 +678,7 @@ class Tva extends CommonObject
                     }
 
                     // Update links
-                    $result = $acc->add_url_line($bank_line_id, $this->id, DOL_URL_ROOT . '/compta/tva/card.php?id=', "(VATPayment)", "payment_vat");
+                    $result = $acc->add_url_line($bank_line_id, $this->id, constant('BASE_URL') . '/compta/tva/card.php?id=', "(VATPayment)", "payment_vat");
                     if ($result < 0) {
                         $this->error = $acc->error;
                         $ok = 0;
@@ -751,7 +751,7 @@ class Tva extends CommonObject
             $label .= '<br><b>' . $langs->trans('Label') . ':</b> ' . $this->label;
         }
 
-        $url = DOL_URL_ROOT . '/compta/tva/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/compta/tva/card.php?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not

@@ -187,11 +187,11 @@ if (!empty($object->id)) {
     $morehtmlright = '';
 
     // Show link to change view in message
-    $messagingUrl = DOL_URL_ROOT . '/projet/messaging.php?id=' . $object->id;
+    $messagingUrl = constant('BASE_URL') . '/projet/messaging.php?id=' . $object->id;
     $morehtmlright .= dolGetButtonTitle($langs->trans('ShowAsConversation'), '', 'fa fa-comments imgforviewmode', $messagingUrl, '', 1);
 
     // Show link to change view in agenda
-    $messagingUrl = DOL_URL_ROOT . '/projet/agenda.php?id=' . $object->id;
+    $messagingUrl = constant('BASE_URL') . '/projet/agenda.php?id=' . $object->id;
     $morehtmlright .= dolGetButtonTitle($langs->trans('MessageListViewType'), '', 'fa fa-bars imgforviewmode', $messagingUrl, '', 2);
 
 
@@ -208,7 +208,7 @@ if (!empty($object->id)) {
     // Show link to add event
     if (isModEnabled('agenda')) {
         $addActionBtnRight = $user->hasRight('agenda', 'myactions', 'create') || $user->hasRight('agenda', 'allactions', 'create');
-        $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/comm/action/card.php?action=create' . $out . '&socid=' . $object->socid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', $addActionBtnRight);
+        $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/comm/action/card.php?action=create' . $out . '&socid=' . $object->socid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', $addActionBtnRight);
     }
 
     $param = '&id=' . $object->id;

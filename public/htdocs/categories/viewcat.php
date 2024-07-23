@@ -166,7 +166,7 @@ if ($user->hasRight('categorie', 'supprimer') && $action == 'confirm_delete' && 
             header("Location: " . $backtopage);
             exit;
         } else {
-            header("Location: " . DOL_URL_ROOT . '/categories/index.php?type=' . $type);
+            header("Location: " . constant('BASE_URL') . '/categories/index.php?type=' . $type);
             exit;
         }
     } else {
@@ -262,7 +262,7 @@ $title = Categorie::$MAP_TYPE_TITLE_AREA[$type];
 $head = categories_prepare_head($object, $type);
 print dol_get_fiche_head($head, 'card', $langs->trans($title), -1, 'category');
 
-$backtolist = (GETPOST('backtolist') ? GETPOST('backtolist') : DOL_URL_ROOT . '/categories/index.php?leftmenu=cat&type=' . urlencode($type));
+$backtolist = (GETPOST('backtolist') ? GETPOST('backtolist') : constant('BASE_URL') . '/categories/index.php?leftmenu=cat&type=' . urlencode($type));
 $linkback = '<a href="' . dol_sanitizeUrl($backtolist) . '">' . $langs->trans("BackToList") . '</a>';
 $object->next_prev_filter = 'type = ' . ((int) $object->type);
 $object->ref = $object->label;
@@ -345,7 +345,7 @@ print "</div>";
 
 $newcardbutton = '';
 if ($user->hasRight('categorie', 'creer')) {
-    $link = DOL_URL_ROOT . '/categories/card.php';
+    $link = constant('BASE_URL') . '/categories/card.php';
     $link .= '?action=create';
     $link .= '&type=' . $type;
     $link .= '&catorigin=' . $object->id;
@@ -543,7 +543,7 @@ if ($type == Categorie::TYPE_PRODUCT) {
             $param = '&limit=' . $limit . '&id=' . $id . '&type=' . $type;
             $num = count($prods);
             $nbtotalofrecords = '';
-            $newcardbutton = dolGetButtonTitle($langs->trans("AddProduct"), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/product/card.php?action=create&categories[]=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', $user->rights->societe->creer);
+            $newcardbutton = dolGetButtonTitle($langs->trans("AddProduct"), '', 'fa fa-plus-circle', constant('BASE_URL') . '/product/card.php?action=create&categories[]=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', $user->rights->societe->creer);
 
             // @phan-suppress-next-line PhanPluginSuspiciousParamOrder
             print_barre_liste($langs->trans("ProductsAndServices"), $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, $massactionbutton, $num, $nbtotalofrecords, 'products', 0, $newcardbutton, '', $limit);
@@ -632,7 +632,7 @@ if ($type == Categorie::TYPE_CUSTOMER) {
             $param = '&limit=' . $limit . '&id=' . $id . '&type=' . $type;
             $num = count($socs);
             $nbtotalofrecords = '';
-            $newcardbutton = dolGetButtonTitle($langs->trans("AddThirdParty"), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/societe/card.php?action=create&client=3&custcats[]=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', $user->rights->societe->creer);
+            $newcardbutton = dolGetButtonTitle($langs->trans("AddThirdParty"), '', 'fa fa-plus-circle', constant('BASE_URL') . '/societe/card.php?action=create&client=3&custcats[]=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', $user->rights->societe->creer);
 
             // @phan-suppress-next-line PhanPluginSuspiciousParamOrder
             print_barre_liste($langs->trans("Customers"), $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, $massactionbutton, $num, $nbtotalofrecords, 'companies', 0, $newcardbutton, '', $limit);
@@ -720,7 +720,7 @@ if ($type == Categorie::TYPE_SUPPLIER) {
             $param = '&limit=' . $limit . '&id=' . $id . '&type=' . $type;
             $num = count($socs);
             $nbtotalofrecords = '';
-            $newcardbutton = dolGetButtonTitle($langs->trans("AddSupplier"), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/societe/card.php?action=create&fournisseur=1&suppcats[]=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', $user->rights->societe->creer);
+            $newcardbutton = dolGetButtonTitle($langs->trans("AddSupplier"), '', 'fa fa-plus-circle', constant('BASE_URL') . '/societe/card.php?action=create&fournisseur=1&suppcats[]=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', $user->rights->societe->creer);
 
             // @phan-suppress-next-line PhanPluginSuspiciousParamOrder
             print_barre_liste($langs->trans("Suppliers"), $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, $massactionbutton, $num, $nbtotalofrecords, 'companies', 0, $newcardbutton, '', $limit);
@@ -809,7 +809,7 @@ if ($type == Categorie::TYPE_MEMBER) {
             $param = '&limit=' . $limit . '&id=' . $id . '&type=' . $type;
             $num = count($members);
             $nbtotalofrecords = '';
-            $newcardbutton = dolGetButtonTitle($langs->trans("AddMember"), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/adherents/card.php?action=create&memcats[]=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', $user->hasRight('adherent', 'creer'));
+            $newcardbutton = dolGetButtonTitle($langs->trans("AddMember"), '', 'fa fa-plus-circle', constant('BASE_URL') . '/adherents/card.php?action=create&memcats[]=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', $user->hasRight('adherent', 'creer'));
 
             // @phan-suppress-next-line PhanPluginSuspiciousParamOrder
             print_barre_liste($langs->trans("Member"), $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, $massactionbutton, $num, $nbtotalofrecords, 'members', 0, $newcardbutton, '', $limit);
@@ -898,7 +898,7 @@ if ($type == Categorie::TYPE_CONTACT) {
             $param = '&limit=' . $limit . '&id=' . $id . '&type=' . $type;
             $num = count($contacts);
             $nbtotalofrecords = '';
-            $newcardbutton = dolGetButtonTitle($langs->trans("AddContact"), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/contact/card.php?action=create&contcats[]=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', $user->rights->societe->creer);
+            $newcardbutton = dolGetButtonTitle($langs->trans("AddContact"), '', 'fa fa-plus-circle', constant('BASE_URL') . '/contact/card.php?action=create&contcats[]=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', $user->rights->societe->creer);
 
             // @phan-suppress-next-line PhanPluginSuspiciousParamOrder
             print_barre_liste($langs->trans("Contact"), $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, $massactionbutton, $num, $nbtotalofrecords, 'contact', 0, $newcardbutton, '', $limit);

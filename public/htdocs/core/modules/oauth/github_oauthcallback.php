@@ -141,7 +141,7 @@ if (GETPOST('code')) {     // We are coming from oauth provider page
         unset($_SESSION["backtourlsavedbeforeoauthjump"]);
 
         if (empty($backtourl)) {
-            $backtourl = DOL_URL_ROOT . '/';
+            $backtourl = constant('BASE_URL') . '/';
         }
 
         header('Location: ' . $backtourl);

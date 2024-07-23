@@ -399,7 +399,7 @@ $num = $db->num_rows($resql);
 if ($num == 1 && getDolGlobalInt('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $search_all && !$page) {
     $obj = $db->fetch_object($resql);
     $id = $obj->rowid;
-    header("Location: " . DOL_URL_ROOT . '/product/stock/card.php?id=' . $id);
+    header("Location: " . constant('BASE_URL') . '/product/stock/card.php?id=' . $id);
     exit;
 }
 
@@ -479,7 +479,7 @@ $newcardbutton = '';
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewKanban'), '', 'fa fa-th-list imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=kanban' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ($mode == 'kanban' ? 2 : 1), array('morecss' => 'reposition'));
 $newcardbutton .= dolGetButtonTitleSeparator();
-$newcardbutton .= dolGetButtonTitle($langs->trans('MenuNewWarehouse'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/product/stock/card.php?action=create&backtopage=' . urlencode($_SERVER['PHP_SELF']), '', $user->hasRight('stock', 'creer'));
+$newcardbutton .= dolGetButtonTitle($langs->trans('MenuNewWarehouse'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/product/stock/card.php?action=create&backtopage=' . urlencode($_SERVER['PHP_SELF']), '', $user->hasRight('stock', 'creer'));
 
 print_barre_liste($title, $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, $massactionbutton, $num, $nbtotalofrecords, 'stock', 0, $newcardbutton, '', $limit, 0, 0, 1);
 

@@ -174,7 +174,7 @@ if (empty($reshook)) {
             $ret = $object->create($user);
             if ($ret > 0) {
                 $db->commit();
-                $urltogo = ($backtopage ? $backtopage : DOL_URL_ROOT . '/compta/bank/various_payment/list.php');
+                $urltogo = ($backtopage ? $backtopage : constant('BASE_URL') . '/compta/bank/various_payment/list.php');
                 header("Location: " . $urltogo);
                 exit;
             } else {
@@ -205,7 +205,7 @@ if (empty($reshook)) {
 
                 if ($result >= 0) {
                     $db->commit();
-                    header("Location: " . DOL_URL_ROOT . '/compta/bank/various_payment/list.php');
+                    header("Location: " . constant('BASE_URL') . '/compta/bank/various_payment/list.php');
                     exit;
                 } else {
                     $object->error = $accountline->error;

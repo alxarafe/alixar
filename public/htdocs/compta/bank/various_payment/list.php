@@ -365,7 +365,7 @@ $num = $db->num_rows($resql);
 if ($num == 1 && getDolGlobalInt('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $search_all && !$page) {
     $obj = $db->fetch_object($resql);
     $id = $obj->rowid;
-    header("Location: " . DOL_URL_ROOT . '/compta/bank/various_payment/card.php?id=' . $id);
+    header("Location: " . constant('BASE_URL') . '/compta/bank/various_payment/card.php?id=' . $id);
     exit;
 }
 
@@ -426,7 +426,7 @@ if ($search_accountancy_subledger > 0) {
     $param .= '&search_accountancy_subledger=' . urlencode($search_accountancy_subledger);
 }
 
-$url = DOL_URL_ROOT . '/compta/bank/various_payment/card.php?action=create';
+$url = constant('BASE_URL') . '/compta/bank/various_payment/card.php?action=create';
 if (!empty($socid)) {
     $url .= '&socid=' . urlencode((string) ($socid));
 }

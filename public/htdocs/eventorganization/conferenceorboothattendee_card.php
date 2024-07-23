@@ -136,9 +136,9 @@ if (empty($reshook)) {
     $error = 0;
 
     if (!empty($withproject)) {
-        $backurlforlist = DOL_URL_ROOT . '/eventorganization/conferenceorboothattendee_list.php?withproject=1&fk_project=' . ((int) $fk_project);
+        $backurlforlist = constant('BASE_URL') . '/eventorganization/conferenceorboothattendee_list.php?withproject=1&fk_project=' . ((int) $fk_project);
     } else {
-        $backurlforlist = DOL_URL_ROOT . '/eventorganization/conferenceorboothattendee_list.php';
+        $backurlforlist = constant('BASE_URL') . '/eventorganization/conferenceorboothattendee_list.php';
     }
 
     if (empty($backtopage) || ($cancel && empty($id))) {
@@ -146,7 +146,7 @@ if (empty($reshook)) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/eventorganization/conferenceorboothattendee_card.php?fk_project=' . ((int) $fk_project) . '&id=' . ($id > 0 ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/eventorganization/conferenceorboothattendee_card.php?fk_project=' . ((int) $fk_project) . '&id=' . ($id > 0 ? $id : '__ID__');
             }
         }
     }

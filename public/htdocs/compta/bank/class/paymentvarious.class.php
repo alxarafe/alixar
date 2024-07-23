@@ -577,7 +577,7 @@ class PaymentVarious extends CommonObject
 
                     if (!$error) {
                         // Add link 'payment_various' in bank_url between payment and bank transaction
-                        $url = DOL_URL_ROOT . '/compta/bank/various_payment/card.php?id=';
+                        $url = constant('BASE_URL') . '/compta/bank/various_payment/card.php?id=';
 
                         $result = $acc->add_url_line($bank_line_id, $this->id, $url, "(VariousPayment)", "payment_various");
                         if ($result <= 0) {
@@ -706,7 +706,7 @@ class PaymentVarious extends CommonObject
         $label .= '<br>';
         $label .= '<b>' . $langs->trans('Ref') . ':</b> ' . $this->ref;
 
-        $url = DOL_URL_ROOT . '/compta/bank/various_payment/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/compta/bank/various_payment/card.php?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not

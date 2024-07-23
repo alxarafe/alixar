@@ -526,7 +526,7 @@ print '<input type="hidden" name="page_y" value="">';
 print '<input type="hidden" name="mode" value="' . $mode . '">';
 
 
-$url = DOL_URL_ROOT . '/salaries/card.php?action=create';
+$url = constant('BASE_URL') . '/salaries/card.php?action=create';
 if (!empty($socid)) {
     $url .= '&socid=' . $socid;
 }

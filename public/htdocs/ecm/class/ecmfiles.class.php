@@ -912,7 +912,7 @@ class EcmFiles extends CommonObject
         $label .= '<br>';
         $label .= '<b>' . $langs->trans('Ref') . ':</b> ' . $this->ref;
 
-        $url = DOL_URL_ROOT . '/ecm/file_card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/ecm/file_card.php?id=' . $this->id;
 
         $linkclose = '';
         if (empty($notooltip)) {

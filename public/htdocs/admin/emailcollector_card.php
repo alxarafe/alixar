@@ -125,9 +125,9 @@ if (empty($reshook)) {
     $permissiontoadd = 1;
     $permissiontodelete = 1;
     if (empty($backtopage)) {
-        $backtopage = DOL_URL_ROOT . '/admin/emailcollector_card.php?id=' . ($id > 0 ? $id : '__ID__');
+        $backtopage = constant('BASE_URL') . '/admin/emailcollector_card.php?id=' . ($id > 0 ? $id : '__ID__');
     }
-    $backurlforlist = DOL_URL_ROOT . '/admin/emailcollector_list.php';
+    $backurlforlist = constant('BASE_URL') . '/admin/emailcollector_list.php';
 
     // Actions cancel, add, update, delete or clone
     include DOL_DOCUMENT_ROOT . '/core/actions_addupdatedelete.inc.php';
@@ -844,7 +844,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     print '</div>';
 
     if (!empty($conf->use_javascript_ajax)) {
-        $urltorefreshaftermove = DOL_URL_ROOT . '/admin/emailcollector_card.php?id=' . $id;
+        $urltorefreshaftermove = constant('BASE_URL') . '/admin/emailcollector_card.php?id=' . $id;
         include DOL_DOCUMENT_ROOT . '/core/tpl/ajaxrow.tpl.php';
     }
 

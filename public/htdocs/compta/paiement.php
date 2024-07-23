@@ -313,9 +313,9 @@ if (empty($reshook)) {
                 }
             }
             if ($invoiceid > 0) {
-                $loc = DOL_URL_ROOT . '/compta/facture/card.php?facid=' . $invoiceid;
+                $loc = constant('BASE_URL') . '/compta/facture/card.php?facid=' . $invoiceid;
             } else {
-                $loc = DOL_URL_ROOT . '/compta/paiement/card.php?id=' . $paiement_id;
+                $loc = constant('BASE_URL') . '/compta/paiement/card.php?id=' . $paiement_id;
             }
             header('Location: ' . $loc);
             exit;
@@ -429,7 +429,7 @@ if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paie
 								json["imgClicked"] = imgId;
 							}
 
-							$.post("' . DOL_URL_ROOT . '/compta/ajaxpayment.php", json, function(data)
+							$.post("' . constant('BASE_URL') . '/compta/ajaxpayment.php", json, function(data)
 							{
 								json = $.parseJSON(data);
 

@@ -934,7 +934,7 @@ class Don extends CommonObject
             $label .= ' - ' . $moretitle;
         }
 
-        $url = DOL_URL_ROOT . '/don/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/don/card.php?id=' . $this->id;
 
         $add_save_lastsearch_values = ($save_lastsearch_value == 1 ? 1 : 0);
         if ($save_lastsearch_value == -1 && isset($_SERVER["PHP_SELF"]) && preg_match('/list\.php/', $_SERVER["PHP_SELF"])) {

@@ -218,7 +218,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         if (empty($reshook)) {
             // Show
             if ($permissiontoadd) {
-                print dolGetButtonAction($langs->trans('AddPartnership'), '', 'default', DOL_URL_ROOT . '/partnership/partnership_card.php?action=create&fk_member=' . $object->id . '&backtopage=' . urlencode(DOL_URL_ROOT . '/adherents/partnership.php?id=' . $object->id), '', $permissiontoadd);
+                print dolGetButtonAction($langs->trans('AddPartnership'), '', 'default', constant('BASE_URL') . '/partnership/partnership_card.php?action=create&fk_member=' . $object->id . '&backtopage=' . urlencode(constant('BASE_URL') . '/adherents/partnership.php?id=' . $object->id), '', $permissiontoadd);
             }
         }
         print '</div>' . "\n";

@@ -197,7 +197,7 @@ jQuery(document).ready(function() {
   getphpurl = $.ajax({
     type: "GET",
 	data: { token: \'' . currentToken() . '\' },
-    url: \'' . DOL_URL_ROOT . '/public/notice.php\',
+    url: \'' . constant('BASE_URL') . '/public/notice.php\',
     cache: false,
     /* async: false, */
     /* crossDomain: true,*/
@@ -237,7 +237,7 @@ jQuery(document).ready(function() {
   getcssurl = $.ajax({
     type: "GET",
 	data: { token: \'notrequired\' },
-    url: \'' . DOL_URL_ROOT . '/includes/jquery/css/base/jquery-ui.css\',
+    url: \'' . constant('BASE_URL') . '/includes/jquery/css/base/jquery-ui.css\',
     cache: false,
     /* async: false, */
     /* crossDomain: true, */
@@ -317,7 +317,7 @@ jQuery(document).ready(function() {
   getimgurl = $.ajax({
     type: "GET",
 	data: { token: \'notrequired\' },
-    url: \'' . DOL_URL_ROOT . '/theme/eldy/img/help.png\',
+    url: \'' . constant('BASE_URL') . '/theme/eldy/img/help.png\',
     cache: false,
     /* async: false, */
     /* crossDomain: true,*/
@@ -357,7 +357,7 @@ jQuery(document).ready(function() {
   getjsurl = $.ajax({
     type: "GET",
 	data: { token: \'notrequired\' },
-    url: \'' . DOL_URL_ROOT . '/core/js/lib_rare.js\',
+    url: \'' . constant('BASE_URL') . '/core/js/lib_rare.js\',
     cache: false,
     /* async: false, */
     /* crossDomain: true,*/
@@ -397,7 +397,7 @@ jQuery(document).ready(function() {
   getjsphpurl = $.ajax({
     type: "GET",
 	data: { token: \'' . currentToken() . '\' },
-    url: \'' . DOL_URL_ROOT . '/core/js/lib_head.js.php\',
+    url: \'' . constant('BASE_URL') . '/core/js/lib_head.js.php\',
     cache: false,
     /* async: false, */
     /* crossDomain: true,*/

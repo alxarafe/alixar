@@ -725,7 +725,7 @@ if (empty($numref)) {
     print "</table>";
 
     // Code to adjust value date with plus and less picto using an Ajax call instead of a full reload of page
-    $urlajax = DOL_URL_ROOT . '/core/ajax/bankconciliate.php?token=' . currentToken();
+    $urlajax = constant('BASE_URL') . '/core/ajax/bankconciliate.php?token=' . currentToken();
     print '
     <script type="text/javascript">
     $(function() {

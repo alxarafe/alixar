@@ -1008,7 +1008,7 @@ class doc_generic_project_odt extends ModelePDFProjects
                         'title' => "ListSocialContributionAssociatedProject",
                         'class' => 'ChargeSociales',
                         'table' => 'chargesociales',
-                        'urlnew' => DOL_URL_ROOT . '/compta/sociales/card.php?action=create&projectid=' . $object->id,
+                        'urlnew' => constant('BASE_URL') . '/compta/sociales/card.php?action=create&projectid=' . $object->id,
                         'test' => isModEnabled('tax') && $user->hasRight('tax', 'charges', 'lire')
                     ),
                     'stock_mouvement' => array(

@@ -3420,8 +3420,8 @@ class Propal extends CommonObject
             $response->warning_delay = $delay_warning / 60 / 60 / 24;
             $response->label = $label;
             $response->labelShort = $labelShort;
-            $response->url = DOL_URL_ROOT . '/comm/propal/list.php?search_status=' . $status . '&mainmenu=commercial&leftmenu=propals';
-            $response->url_late = DOL_URL_ROOT . '/comm/propal/list.php?search_status=' . $status . '&mainmenu=commercial&leftmenu=propals&sortfield=p.datep&sortorder=asc';
+            $response->url = constant('BASE_URL') . '/comm/propal/list.php?search_status=' . $status . '&mainmenu=commercial&leftmenu=propals';
+            $response->url_late = constant('BASE_URL') . '/comm/propal/list.php?search_status=' . $status . '&mainmenu=commercial&leftmenu=propals&sortfield=p.datep&sortorder=asc';
             $response->img = img_object('', "propal");
 
             // This assignment in condition is not a bug. It allows walking the results.
@@ -3742,13 +3742,13 @@ class Propal extends CommonObject
         $url = '';
         if ($user->hasRight('propal', 'lire')) {
             if ($option == '') {
-                $url = DOL_URL_ROOT . '/comm/propal/card.php?id=' . $this->id . $get_params;
+                $url = constant('BASE_URL') . '/comm/propal/card.php?id=' . $this->id . $get_params;
             } elseif ($option == 'compta') {  // deprecated
-                $url = DOL_URL_ROOT . '/comm/propal/card.php?id=' . $this->id . $get_params;
+                $url = constant('BASE_URL') . '/comm/propal/card.php?id=' . $this->id . $get_params;
             } elseif ($option == 'expedition') {
-                $url = DOL_URL_ROOT . '/expedition/propal.php?id=' . $this->id . $get_params;
+                $url = constant('BASE_URL') . '/expedition/propal.php?id=' . $this->id . $get_params;
             } elseif ($option == 'document') {
-                $url = DOL_URL_ROOT . '/comm/propal/document.php?id=' . $this->id . $get_params;
+                $url = constant('BASE_URL') . '/comm/propal/document.php?id=' . $this->id . $get_params;
             }
 
             if ($option != 'nolink') {

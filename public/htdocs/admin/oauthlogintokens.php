@@ -196,19 +196,19 @@ if ($mode == 'setup' && $user->admin) {
                 // We pass this param list in to 'state' because we need it before and after the redirect.
 
                 // Note: github does not accept csrf key inside the state parameter (only known values)
-                $urltorenew = $urlwithroot . '/core/modules/oauth/github_oauthcallback.php?shortscope=' . urlencode($shortscope) . '&state=' . urlencode($shortscope) . '&backtourl=' . urlencode(DOL_URL_ROOT . '/admin/oauthlogintokens.php');
-                $urltodelete = $urlwithroot . '/core/modules/oauth/github_oauthcallback.php?action=delete&token=' . newToken() . '&backtourl=' . urlencode(DOL_URL_ROOT . '/admin/oauthlogintokens.php');
+                $urltorenew = $urlwithroot . '/core/modules/oauth/github_oauthcallback.php?shortscope=' . urlencode($shortscope) . '&state=' . urlencode($shortscope) . '&backtourl=' . urlencode(constant('BASE_URL') . '/admin/oauthlogintokens.php');
+                $urltodelete = $urlwithroot . '/core/modules/oauth/github_oauthcallback.php?action=delete&token=' . newToken() . '&backtourl=' . urlencode(constant('BASE_URL') . '/admin/oauthlogintokens.php');
                 $urltocheckperms = 'https://github.com/settings/applications/';
             } elseif ($keyforsupportedoauth2array == 'OAUTH_GOOGLE_NAME') {
                 // List of keys that will be converted into scopes (from constants 'SCOPE_state_in_uppercase' in file of service).
                 // List of scopes for Google are here: https://developers.google.com/identity/protocols/oauth2/scopes
                 // We pass this key list into the param 'state' because we need it before and after the redirect.
-                $urltorenew = $urlwithroot . '/core/modules/oauth/google_oauthcallback.php?shortscope=' . urlencode($shortscope) . '&state=' . urlencode($state) . '-' . $oauthstateanticsrf . '&backtourl=' . urlencode(DOL_URL_ROOT . '/admin/oauthlogintokens.php');
-                $urltodelete = $urlwithroot . '/core/modules/oauth/google_oauthcallback.php?action=delete&token=' . newToken() . '&backtourl=' . urlencode(DOL_URL_ROOT . '/admin/oauthlogintokens.php');
+                $urltorenew = $urlwithroot . '/core/modules/oauth/google_oauthcallback.php?shortscope=' . urlencode($shortscope) . '&state=' . urlencode($state) . '-' . $oauthstateanticsrf . '&backtourl=' . urlencode(constant('BASE_URL') . '/admin/oauthlogintokens.php');
+                $urltodelete = $urlwithroot . '/core/modules/oauth/google_oauthcallback.php?action=delete&token=' . newToken() . '&backtourl=' . urlencode(constant('BASE_URL') . '/admin/oauthlogintokens.php');
                 $urltocheckperms = 'https://security.google.com/settings/security/permissions';
             } elseif (!empty($supportedoauth2array[$keyforsupportedoauth2array]['returnurl'])) {
-                $urltorenew = $urlwithroot . $supportedoauth2array[$keyforsupportedoauth2array]['returnurl'] . '?shortscope=' . urlencode($shortscope) . '&state=' . urlencode($state) . '&backtourl=' . urlencode(DOL_URL_ROOT . '/admin/oauthlogintokens.php');
-                $urltodelete = $urlwithroot . $supportedoauth2array[$keyforsupportedoauth2array]['returnurl'] . '?action=delete&token=' . newToken() . '&backtourl=' . urlencode(DOL_URL_ROOT . '/admin/oauthlogintokens.php');
+                $urltorenew = $urlwithroot . $supportedoauth2array[$keyforsupportedoauth2array]['returnurl'] . '?shortscope=' . urlencode($shortscope) . '&state=' . urlencode($state) . '&backtourl=' . urlencode(constant('BASE_URL') . '/admin/oauthlogintokens.php');
+                $urltodelete = $urlwithroot . $supportedoauth2array[$keyforsupportedoauth2array]['returnurl'] . '?action=delete&token=' . newToken() . '&backtourl=' . urlencode(constant('BASE_URL') . '/admin/oauthlogintokens.php');
                 $urltocheckperms = '';
             } else {
                 $urltorenew = '';

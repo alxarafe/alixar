@@ -5500,13 +5500,13 @@ class Product extends CommonObject
         }
 
         if ($option == 'supplier' || $option == 'category') {
-            $url = DOL_URL_ROOT . '/product/price_suppliers.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/product/price_suppliers.php?id=' . $this->id;
         } elseif ($option == 'stock') {
-            $url = DOL_URL_ROOT . '/product/stock/product.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/product/stock/product.php?id=' . $this->id;
         } elseif ($option == 'composition') {
-            $url = DOL_URL_ROOT . '/product/composition/card.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/product/composition/card.php?id=' . $this->id;
         } else {
-            $url = DOL_URL_ROOT . '/product/card.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/product/card.php?id=' . $this->id;
         }
 
         if ($option !== 'nolink') {

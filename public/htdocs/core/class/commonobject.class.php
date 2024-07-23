@@ -9486,22 +9486,22 @@ abstract class CommonObject
                             if (array_key_exists('share', $val) && $val['share']) {
                                 if (empty($maxHeight) || ($photo_vignette && $imgarray['height'] > $maxHeight)) {
                                     $return .= '<!-- Show original file (thumb not yet available with shared links) -->';
-                                    $return .= '<img class="photo photowithmargin' . ($addphotorefcss ? ' ' . $addphotorefcss : '') . '"' . ($maxHeight ? ' height="' . $maxHeight . '"' : '') . ' src="' . DOL_URL_ROOT . '/viewimage.php?hashp=' . urlencode($val['share']) . ($cache ? '&cache=' . urlencode($cache) : '') . '" title="' . dol_escape_htmltag($alt) . '">';
+                                    $return .= '<img class="photo photowithmargin' . ($addphotorefcss ? ' ' . $addphotorefcss : '') . '"' . ($maxHeight ? ' height="' . $maxHeight . '"' : '') . ' src="' . constant('BASE_URL') . '/viewimage.php?hashp=' . urlencode($val['share']) . ($cache ? '&cache=' . urlencode($cache) : '') . '" title="' . dol_escape_htmltag($alt) . '">';
                                 } else {
                                     $return .= '<!-- Show original file -->';
-                                    $return .= '<img class="photo photowithmargin' . ($addphotorefcss ? ' ' . $addphotorefcss : '') . '" height="' . $maxHeight . '" src="' . DOL_URL_ROOT . '/viewimage.php?hashp=' . urlencode($val['share']) . ($cache ? '&cache=' . urlencode($cache) : '') . '" title="' . dol_escape_htmltag($alt) . '">';
+                                    $return .= '<img class="photo photowithmargin' . ($addphotorefcss ? ' ' . $addphotorefcss : '') . '" height="' . $maxHeight . '" src="' . constant('BASE_URL') . '/viewimage.php?hashp=' . urlencode($val['share']) . ($cache ? '&cache=' . urlencode($cache) : '') . '" title="' . dol_escape_htmltag($alt) . '">';
                                 }
                             } else {
                                 $return .= '<!-- Show nophoto file (because file is not shared) -->';
-                                $return .= '<img class="photo photowithmargin' . ($addphotorefcss ? ' ' . $addphotorefcss : '') . '" height="' . $maxHeight . '" src="' . DOL_URL_ROOT . '/public/theme/common/nophoto.png" title="' . dol_escape_htmltag($alt) . '">';
+                                $return .= '<img class="photo photowithmargin' . ($addphotorefcss ? ' ' . $addphotorefcss : '') . '" height="' . $maxHeight . '" src="' . constant('BASE_URL') . '/public/theme/common/nophoto.png" title="' . dol_escape_htmltag($alt) . '">';
                             }
                         } else {
                             if (empty($maxHeight) || ($photo_vignette && $imgarray['height'] > $maxHeight)) {
                                 $return .= '<!-- Show thumb -->';
-                                $return .= '<img class="photo photowithmargin' . ($addphotorefcss ? ' ' . $addphotorefcss : '') . ' maxwidth150onsmartphone maxwidth200"' . ($maxHeight ? ' height="' . $maxHeight . '"' : '') . ' src="' . DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $this->entity . ($cache ? '&cache=' . urlencode($cache) : '') . '&file=' . urlencode($pdirthumb . $photo_vignette) . '" title="' . dol_escape_htmltag($alt) . '">';
+                                $return .= '<img class="photo photowithmargin' . ($addphotorefcss ? ' ' . $addphotorefcss : '') . ' maxwidth150onsmartphone maxwidth200"' . ($maxHeight ? ' height="' . $maxHeight . '"' : '') . ' src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $this->entity . ($cache ? '&cache=' . urlencode($cache) : '') . '&file=' . urlencode($pdirthumb . $photo_vignette) . '" title="' . dol_escape_htmltag($alt) . '">';
                             } else {
                                 $return .= '<!-- Show original file -->';
-                                $return .= '<img class="photo photowithmargin' . ($addphotorefcss ? ' ' . $addphotorefcss : '') . '" height="' . $maxHeight . '" src="' . DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $this->entity . ($cache ? '&cache=' . urlencode($cache) : '') . '&file=' . urlencode($pdir . $photo) . '" title="' . dol_escape_htmltag($alt) . '">';
+                                $return .= '<img class="photo photowithmargin' . ($addphotorefcss ? ' ' . $addphotorefcss : '') . '" height="' . $maxHeight . '" src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $this->entity . ($cache ? '&cache=' . urlencode($cache) : '') . '&file=' . urlencode($pdir . $photo) . '" title="' . dol_escape_htmltag($alt) . '">';
                             }
                         }
 
@@ -9541,7 +9541,7 @@ abstract class CommonObject
                     }
 
                     if (empty($size)) {     // Format origine
-                        $return .= '<img class="photo photowithmargin" src="' . DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $this->entity . '&file=' . urlencode($pdir . $photo) . '">';
+                        $return .= '<img class="photo photowithmargin" src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $this->entity . '&file=' . urlencode($pdir . $photo) . '">';
 
                         if ($showfilename) {
                             $return .= '<br>' . $viewfilename;

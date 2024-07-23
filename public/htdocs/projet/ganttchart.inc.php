@@ -212,7 +212,7 @@ function constructGanttLine($tarr, $task, $task_dependencies, $level = 0, $proje
         //$link=DOL_URL_ROOT.'/projet/tasks.php?withproject=1&id='.abs($task["task_id"]);
         $link = '';
     } else {
-        $link = DOL_URL_ROOT . '/projet/tasks/contact.php?withproject=1&id=' . $task["task_id"];
+        $link = constant('BASE_URL') . '/projet/tasks/contact.php?withproject=1&id=' . $task["task_id"];
     }
 
     // Name

@@ -282,7 +282,7 @@ if (empty($reshook)) {
 
                 if ($result >= 0) {
                     $db->commit();
-                    header("Location: " . DOL_URL_ROOT . '/compta/tva/list.php');
+                    header("Location: " . constant('BASE_URL') . '/compta/tva/list.php');
                     exit;
                 } else {
                     $object->error = $accountline->error;

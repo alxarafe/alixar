@@ -113,7 +113,7 @@ if (getDolGlobalString('MAIN_MANIFEST_APPLI_LOGO_URL')) {
             $imgSize = getimagesize($iconPath);
             if (!empty($imgSize)) {
                 $icon = new stdClass();
-                $icon->src = DOL_URL_ROOT . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode($iconRelativePath);
+                $icon->src = constant('BASE_URL') . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode($iconRelativePath);
                 $icon->sizes = $imgSize[0] . "x" . $imgSize[1];
                 $icon->type = "image/png";
                 $manifest->icons[] = $icon;
@@ -128,7 +128,7 @@ if (getDolGlobalString('MAIN_MANIFEST_APPLI_LOGO_URL')) {
             $imgSize = getimagesize($iconPath);
             if ($imgSize) {
                 $icon = new stdClass();
-                $icon->src = DOL_URL_ROOT . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode($iconRelativePath);
+                $icon->src = constant('BASE_URL') . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode($iconRelativePath);
                 $icon->sizes = $imgSize[0] . "x" . $imgSize[1];
                 $icon->type = "image/png";
                 $manifest->icons[] = $icon;
@@ -143,7 +143,7 @@ if (getDolGlobalString('MAIN_MANIFEST_APPLI_LOGO_URL')) {
             $imgSize = getimagesize($iconPath);
             if ($imgSize) {
                 $icon = new stdClass();
-                $icon->src = DOL_URL_ROOT . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode($iconRelativePath);
+                $icon->src = constant('BASE_URL') . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode($iconRelativePath);
                 $icon->sizes = $imgSize[0] . "x" . $imgSize[1];
                 $icon->type = "image/png";
                 $manifest->icons[] = $icon;
@@ -155,7 +155,7 @@ if (getDolGlobalString('MAIN_MANIFEST_APPLI_LOGO_URL')) {
 // Add Dolibarr std icon
 if (empty($manifest->icons)) {
     $icon = new stdClass();
-    $icon->src = DOL_URL_ROOT . '/theme/dolibarr_256x256_color.png';
+    $icon->src = constant('BASE_URL') . '/theme/dolibarr_256x256_color.png';
     $icon->sizes = "256x256";
     $icon->type = "image/png";
     $manifest->icons[] = $icon;

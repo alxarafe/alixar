@@ -109,11 +109,11 @@ if (!isset($mode) || $mode != 'noajax') {    // For ajax call
 
 if (empty($url)) {  // autoset $url but it is better to have it defined before into filemanager.tpl.php (not possible when in auto tree)
     if (!empty($module) && $module == 'medias' && !GETPOST('website')) {
-        $url = DOL_URL_ROOT . '/ecm/index_medias.php';
+        $url = constant('BASE_URL') . '/ecm/index_medias.php';
     } elseif (GETPOSTISSET('website')) {
-        $url = DOL_URL_ROOT . '/website/index.php';
+        $url = constant('BASE_URL') . '/website/index.php';
     } else {
-        $url = DOL_URL_ROOT . '/ecm/index.php';
+        $url = constant('BASE_URL') . '/ecm/index.php';
     }
 }
 

@@ -307,7 +307,7 @@ print dol_get_fiche_head($head, 'index_medias', '', -1, '');
 // Add filemanager component
 $module = 'medias';
 if (empty($url)) {
-    $url = DOL_URL_ROOT . '/ecm/index_medias.php'; // Must be an url without param
+    $url = constant('BASE_URL') . '/ecm/index_medias.php'; // Must be an url without param
 }
 include DOL_DOCUMENT_ROOT . '/core/tpl/filemanager.tpl.php';
 

@@ -1477,7 +1477,7 @@ class FactureFournisseurRec extends CommonInvoice
             }
         }
 
-        $url = DOL_URL_ROOT . '/fourn/facture/card-rec.php?facid=' . $this->id;
+        $url = constant('BASE_URL') . '/fourn/facture/card-rec.php?facid=' . $this->id;
 
         if ($short) {
             return $url;

@@ -261,7 +261,7 @@ if ($type == 'bank-transfer') {
     $label = 'NewPaymentByBankTransfer';
     $typefilter = 'type=' . $type;
 }
-$newcardbutton .= dolGetButtonTitle($langs->trans($label), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/compta/prelevement/create.php' . ($typefilter ? '?' . $typefilter : '') . ($sourcetype ? '&sourcetype=' . $sourcetype : ''));
+$newcardbutton .= dolGetButtonTitle($langs->trans($label), '', 'fa fa-plus-circle', constant('BASE_URL') . '/compta/prelevement/create.php' . ($typefilter ? '?' . $typefilter : '') . ($sourcetype ? '&sourcetype=' . $sourcetype : ''));
 
 print_barre_liste($title, $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, $massactionbutton, $num, $nbtotalofrecords, 'generic', 0, $newcardbutton, '', $limit);
 

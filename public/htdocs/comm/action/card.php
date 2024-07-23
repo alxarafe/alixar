@@ -306,9 +306,9 @@ if (empty($reshook) && $action == 'add') {
 
     if (empty($backtopage)) {
         if ($socid > 0) {
-            $backtopage = DOL_URL_ROOT . '/societe/agenda.php?socid=' . $socid;
+            $backtopage = constant('BASE_URL') . '/societe/agenda.php?socid=' . $socid;
         } else {
-            $backtopage = DOL_URL_ROOT . '/comm/action/index.php';
+            $backtopage = constant('BASE_URL') . '/comm/action/index.php';
         }
     }
 
@@ -731,9 +731,9 @@ if (empty($reshook) && $action == 'add') {
             dol_syslog("Back to " . $backtopage . ($moreparam ? (preg_match('/\?/', $backtopage) ? '&' . $moreparam : '?' . $moreparam) : ''));
             header("Location: " . $backtopage . ($moreparam ? (preg_match('/\?/', $backtopage) ? '&' . $moreparam : '?' . $moreparam) : ''));
         } elseif ($idaction) {
-            header("Location: " . DOL_URL_ROOT . '/comm/action/card.php?id=' . $idaction . ($moreparam ? '&' . $moreparam : ''));
+            header("Location: " . constant('BASE_URL') . '/comm/action/card.php?id=' . $idaction . ($moreparam ? '&' . $moreparam : ''));
         } else {
-            header("Location: " . DOL_URL_ROOT . '/comm/action/index.php' . ($moreparam ? '?' . $moreparam : ''));
+            header("Location: " . constant('BASE_URL') . '/comm/action/index.php' . ($moreparam ? '?' . $moreparam : ''));
         }
         exit;
     }
@@ -1570,7 +1570,7 @@ if ($action == 'create') {
         print "\n" . '<script type="text/javascript">';
         print '$(document).ready(function () {
 	               $("#projectid").change(function () {
-                        var url = "' . DOL_URL_ROOT . '/projet/ajax/projects.php?mode=gettasks&socid="+$("#search_socid").val()+"&projectid="+$("#projectid").val();
+                        var url = "' . constant('BASE_URL') . '/projet/ajax/projects.php?mode=gettasks&socid="+$("#search_socid").val()+"&projectid="+$("#projectid").val();
 						console.log("Call url to get new list of tasks: "+url);
                         $.get(url, function(data) {
                             console.log(data);
@@ -2091,7 +2091,7 @@ if ($id > 0) {
                 print '<td id="project-task-input-container" >';
 
                 $urloption = '?action=create&donotclearsession=1'; // we use create not edit for more flexibility
-                $url = DOL_URL_ROOT . '/comm/action/card.php' . $urloption;
+                $url = constant('BASE_URL') . '/comm/action/card.php' . $urloption;
 
                 // update task list
                 print "\n" . '<script type="text/javascript" >';

@@ -880,7 +880,7 @@ class FormFile
 
                     $out .= '<tr class="oddeven">';
 
-                    $documenturl = DOL_URL_ROOT . '/document.php';
+                    $documenturl = constant('BASE_URL') . '/document.php';
                     if (isset($conf->global->DOL_URL_ROOT_DOCUMENT_PHP)) {
                         $documenturl = getDolGlobalString('DOL_URL_ROOT_DOCUMENT_PHP'); // To use another wrapper
                     }
@@ -1474,7 +1474,7 @@ class FormFile
 
                             $urlforhref = getAdvancedPreviewUrl($modulepart, $relativepath . $fileinfo['filename'] . '.' . strtolower($fileinfo['extension']), 1, '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity));
                             if (empty($urlforhref)) {
-                                $urlforhref = DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity) . '&file=' . urlencode($relativepath . $fileinfo['filename'] . '.' . strtolower($fileinfo['extension']));
+                                $urlforhref = constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity) . '&file=' . urlencode($relativepath . $fileinfo['filename'] . '.' . strtolower($fileinfo['extension']));
                                 print '<a href="' . $urlforhref . '" class="aphoto" target="_blank" rel="noopener noreferrer">';
                             } else {
                                 print '<a href="' . $urlforhref['url'] . '" class="' . $urlforhref['css'] . '" target="' . $urlforhref['target'] . '" mime="' . $urlforhref['mime'] . '">';
@@ -1486,7 +1486,7 @@ class FormFile
                                 //print ' style="max-height: '.$maxheightmini.'px"';
                                 print ' style="max-height: 24px"';
                             }
-                            print ' src="' . DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity) . '&file=' . urlencode($relativepath . $smallfile) . '" title="">';
+                            print ' src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity) . '&file=' . urlencode($relativepath . $smallfile) . '" title="">';
                             print '</a>';
                         } else {
                             print '&nbsp;';
@@ -1536,7 +1536,7 @@ class FormFile
                         if ($useinecm == 1 || $useinecm == 5) { // ECM manual tree only
                             // $section is inside $param
                             $newparam = preg_replace('/&file=.*$/', '', $param); // We don't need param file=
-                            $backtopage = DOL_URL_ROOT . '/ecm/index.php?&section_dir=' . urlencode($relativepath) . $newparam;
+                            $backtopage = constant('BASE_URL') . '/ecm/index.php?&section_dir=' . urlencode($relativepath) . $newparam;
                             print '<a class="editfielda editfilelink" href="' . constant('BASE_URL') . '/ecm/file_card.php?urlfile=' . urlencode($file['name']) . $param . '&backtopage=' . urlencode($backtopage) . '" rel="' . urlencode($file['name']) . '">' . img_edit('default', 0, 'class="paddingrightonly"') . '</a>';
                         }
 
@@ -1555,7 +1555,7 @@ class FormFile
                                     }
                                     // Set the backtourl
                                     if ($modulepart == 'medias' && !GETPOST('website')) {
-                                        $moreparaminurl .= '&backtourl=' . urlencode(DOL_URL_ROOT . '/ecm/index_medias.php?file_manager=1&modulepart=' . $modulepart . '&section_dir=' . $relativepath);
+                                        $moreparaminurl .= '&backtourl=' . urlencode(constant('BASE_URL') . '/ecm/index_medias.php?file_manager=1&modulepart=' . $modulepart . '&section_dir=' . $relativepath);
                                     }
                                     // Link to convert into webp
                                     if (!preg_match('/\.webp$/i', $file['name'])) {
@@ -1578,7 +1578,7 @@ class FormFile
                                     }
                                     // Set the backtourl
                                     if ($modulepart == 'medias' && !GETPOST('website')) {
-                                        $moreparaminurl .= '&backtourl=' . urlencode(DOL_URL_ROOT . '/ecm/index_medias.php?file_manager=1&modulepart=' . $modulepart . '&section_dir=' . $relativepath);
+                                        $moreparaminurl .= '&backtourl=' . urlencode(constant('BASE_URL') . '/ecm/index_medias.php?file_manager=1&modulepart=' . $modulepart . '&section_dir=' . $relativepath);
                                     }
                                     //var_dump($moreparaminurl);
                                     print '<a class="editfielda" href="' . constant('BASE_URL') . '/core/photos_resize.php?modulepart=' . urlencode($newmodulepart) . $moreparaminurl . '&file=' . urlencode($relativepath . $fileinfo['filename'] . '.' . strtolower($fileinfo['extension'])) . '" title="' . dol_escape_htmltag($langs->trans("ResizeOrCrop")) . '">' . img_picto($langs->trans("ResizeOrCrop"), 'resize', 'class="paddingrightonly"') . '</a>';

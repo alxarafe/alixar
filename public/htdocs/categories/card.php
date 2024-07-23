@@ -121,25 +121,25 @@ if (empty($reshook)) {
                 header("Location: " . $backtopage);
                 exit;
             } elseif ($idProdOrigin) {
-                header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $idProdOrigin . '&type=' . $type);
+                header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $idProdOrigin . '&type=' . $type);
                 exit;
             } elseif ($idCompanyOrigin) {
-                header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $idCompanyOrigin . '&type=' . $type);
+                header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $idCompanyOrigin . '&type=' . $type);
                 exit;
             } elseif ($idSupplierOrigin) {
-                header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $idSupplierOrigin . '&type=' . $type);
+                header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $idSupplierOrigin . '&type=' . $type);
                 exit;
             } elseif ($idMemberOrigin) {
-                header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $idMemberOrigin . '&type=' . $type);
+                header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $idMemberOrigin . '&type=' . $type);
                 exit;
             } elseif ($idContactOrigin) {
-                header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $idContactOrigin . '&type=' . $type);
+                header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $idContactOrigin . '&type=' . $type);
                 exit;
             } elseif ($idProjectOrigin) {
-                header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $idProjectOrigin . '&type=' . $type);
+                header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $idProjectOrigin . '&type=' . $type);
                 exit;
             } else {
-                header("Location: " . DOL_URL_ROOT . '/categories/index.php?leftmenu=cat&type=' . $type);
+                header("Location: " . constant('BASE_URL') . '/categories/index.php?leftmenu=cat&type=' . $type);
                 exit;
             }
         }
@@ -187,26 +187,26 @@ if (empty($reshook)) {
                 header("Location: " . $backtopage);
                 exit;
             } elseif ($idProdOrigin) {
-                header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $idProdOrigin . '&type=' . $type . '&mesg=' . urlencode($langs->trans("CatCreated")));
+                header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $idProdOrigin . '&type=' . $type . '&mesg=' . urlencode($langs->trans("CatCreated")));
                 exit;
             } elseif ($idCompanyOrigin) {
-                header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $idCompanyOrigin . '&type=' . $type . '&mesg=' . urlencode($langs->trans("CatCreated")));
+                header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $idCompanyOrigin . '&type=' . $type . '&mesg=' . urlencode($langs->trans("CatCreated")));
                 exit;
             } elseif ($idSupplierOrigin) {
-                header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $idSupplierOrigin . '&type=' . $type . '&mesg=' . urlencode($langs->trans("CatCreated")));
+                header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $idSupplierOrigin . '&type=' . $type . '&mesg=' . urlencode($langs->trans("CatCreated")));
                 exit;
             } elseif ($idMemberOrigin) {
-                header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $idMemberOrigin . '&type=' . $type . '&mesg=' . urlencode($langs->trans("CatCreated")));
+                header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $idMemberOrigin . '&type=' . $type . '&mesg=' . urlencode($langs->trans("CatCreated")));
                 exit;
             } elseif ($idContactOrigin) {
-                header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $idContactOrigin . '&type=' . $type . '&mesg=' . urlencode($langs->trans("CatCreated")));
+                header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $idContactOrigin . '&type=' . $type . '&mesg=' . urlencode($langs->trans("CatCreated")));
                 exit;
             } elseif ($idProjectOrigin) {
-                header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $idProjectOrigin . '&type=' . $type . '&mesg=' . urlencode($langs->trans("CatCreated")));
+                header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $idProjectOrigin . '&type=' . $type . '&mesg=' . urlencode($langs->trans("CatCreated")));
                 exit;
             }
 
-            header("Location: " . DOL_URL_ROOT . '/categories/viewcat.php?id=' . $result . '&type=' . $type);
+            header("Location: " . constant('BASE_URL') . '/categories/viewcat.php?id=' . $result . '&type=' . $type);
             exit;
         }
     }

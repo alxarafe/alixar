@@ -26,7 +26,7 @@
  *  \brief      Actors of a task
  */
 
-require "../../main.inc.php";
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
@@ -134,7 +134,7 @@ if (!empty($project_ref) && !empty($withproject)) {
         if (count($tasksarray) > 0) {
             $id = $tasksarray[0]->id;
         } else {
-            header("Location: " . DOL_URL_ROOT . '/projet/tasks.php?id=' . $projectstatic->id . ($withproject ? '&withproject=1' : '') . (empty($mode) ? '' : '&mode=' . $mode));
+            header("Location: " . constant('BASE_URL') . '/projet/tasks.php?id=' . $projectstatic->id . ($withproject ? '&withproject=1' : '') . (empty($mode) ? '' : '&mode=' . $mode));
             exit;
         }
     }

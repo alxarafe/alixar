@@ -1005,7 +1005,7 @@ if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $s
     $obj = $db->fetch_object($resql);
     $id = $obj->id;
 
-    header("Location: " . DOL_URL_ROOT . '/compta/facture/card.php?id=' . $id);
+    header("Location: " . constant('BASE_URL') . '/compta/facture/card.php?id=' . $id);
     exit;
 }
 
@@ -1232,7 +1232,7 @@ $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 // Show the new button only when this page is not opend from the Extended POS
 $newcardbutton = '';
 if ($contextpage != 'poslist') {
-    $url = DOL_URL_ROOT . '/compta/facture/card.php?action=create';
+    $url = constant('BASE_URL') . '/compta/facture/card.php?action=create';
     if (!empty($socid)) {
         $url .= '&socid=' . $socid;
     }

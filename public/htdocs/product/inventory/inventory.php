@@ -343,8 +343,8 @@ if (empty($reshook)) {
         }
     }
 
-    $backurlforlist = DOL_URL_ROOT . '/product/inventory/list.php';
-    $backtopage = DOL_URL_ROOT . '/product/inventory/inventory.php?id=' . $object->id . '&page=' . $page . $paramwithsearch;
+    $backurlforlist = constant('BASE_URL') . '/product/inventory/list.php';
+    $backtopage = constant('BASE_URL') . '/product/inventory/inventory.php?id=' . $object->id . '&page=' . $page . $paramwithsearch;
 
     // Actions cancel, add, update, delete or clone
     include DOL_DOCUMENT_ROOT . '/core/actions_addupdatedelete.inc.php';
@@ -761,7 +761,7 @@ if ($action == 'updatebyscaning') {
 						if(product.Qty!=0){
 							console.log("We change #"+product.Id+"_input to match input in scanner box");
 							if(product.hasOwnProperty("reelqty")){
-								$.ajax({ url: \'' . DOL_URL_ROOT . '/product/inventory/ajax/searchfrombarcode.php\',
+								$.ajax({ url: \'' . constant('BASE_URL') . '/product/inventory/ajax/searchfrombarcode.php\',
 									data: { "token":"' . newToken() . '", "action":"addnewlineproduct", "fk_entrepot":product.Warehouse, "batch":product.Batch, "fk_inventory":' . dol_escape_js($object->id) . ', "fk_product":product.fk_product, "reelqty":product.reelqty},
 									type: \'POST\',
 									async: false,
@@ -832,7 +832,7 @@ if ($action == 'updatebyscaning') {
 			newproductrow=0
 			result=false;
 			tabproduct.forEach(product => {
-				$.ajax({ url: \'' . DOL_URL_ROOT . '/product/inventory/ajax/searchfrombarcode.php\',
+				$.ajax({ url: \'' . constant('BASE_URL') . '/product/inventory/ajax/searchfrombarcode.php\',
 					data: { "token":"' . newToken() . '", "action":"existbarcode", ' . (!empty($object->fk_warehouse) ? '"fk_entrepot":' . $object->fk_warehouse . ', ' : '') . (!empty($object->fk_product) ? '"fk_product":' . $object->fk_product . ', ' : '') . '"barcode":element, "product":product, "mode":mode},
 					type: \'POST\',
 					async: false,

@@ -132,14 +132,14 @@ if ($reshook < 0) {
 if (empty($reshook)) {
     $error = 0;
 
-    $backurlforlist = DOL_URL_ROOT . '/salaries/list.php';
+    $backurlforlist = constant('BASE_URL') . '/salaries/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/salaries/card.php?id=' . ($id > 0 ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/salaries/card.php?id=' . ($id > 0 ? $id : '__ID__');
             }
         }
     }
@@ -356,7 +356,7 @@ if ($action == 'confirm_delete') {
         $ret = $object->delete($user);
         if ($ret > 0) {
             $db->commit();
-            header("Location: " . DOL_URL_ROOT . '/salaries/list.php');
+            header("Location: " . constant('BASE_URL') . '/salaries/list.php');
             exit;
         } else {
             $db->rollback();
@@ -699,7 +699,7 @@ if ($action == 'create' && $permissiontoadd) {
     print '$( document ).ready(function() {';
     print '$("#updateAmountWithLastSalary").on("click", function updateAmountWithLastSalary() {
 					var fk_user = $("#fk_user").val()
-					var url = "' . DOL_URL_ROOT . '/salaries/ajax/ajaxsalaries.php?fk_user="+fk_user;
+					var url = "' . constant('BASE_URL') . '/salaries/ajax/ajaxsalaries.php?fk_user="+fk_user;
 					console.log("We click on link to autofill salary amount url="+url);
 
 					if (fk_user != -1) {
@@ -1128,7 +1128,7 @@ if ($id > 0) {
 
         // Emit payment
         if ($object->paye == 0 && ((price2num($object->amount) < 0 && $resteapayer < 0) || (price2num($object->amount) > 0 && $resteapayer > 0)) && $permissiontoadd) {
-            print dolGetButtonAction('', $langs->trans('DoPayment'), 'default', DOL_URL_ROOT . '/salaries/paiement_salary.php?action=create&token=' . newToken() . '&id=' . $object->id, '');
+            print dolGetButtonAction('', $langs->trans('DoPayment'), 'default', constant('BASE_URL') . '/salaries/paiement_salary.php?action=create&token=' . newToken() . '&id=' . $object->id, '');
         }
 
         // Classify 'paid'
@@ -1138,7 +1138,7 @@ if ($id > 0) {
         }
 
         // Transfer request
-        print dolGetButtonAction('', $langs->trans('MakeTransferRequest'), 'default', DOL_URL_ROOT . '/salaries/virement_request.php?id=' . $object->id, '');
+        print dolGetButtonAction('', $langs->trans('MakeTransferRequest'), 'default', constant('BASE_URL') . '/salaries/virement_request.php?id=' . $object->id, '');
 
         // Clone
         if ($permissiontoadd) {

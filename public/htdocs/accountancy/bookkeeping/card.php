@@ -107,7 +107,7 @@ if ($reshook < 0) {
 }
 if (empty($reshook)) {
     if ($cancel) {
-        header("Location: " . DOL_URL_ROOT . '/accountancy/bookkeeping/list.php');
+        header("Location: " . constant('BASE_URL') . '/accountancy/bookkeeping/list.php');
         exit;
     }
 

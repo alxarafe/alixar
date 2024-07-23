@@ -101,7 +101,7 @@ $data = $stats_project->getNbByMonthWithPrevYear($endyear, $startyear);
 //var_dump($data);
 
 $filenamenb = $conf->project->dir_output . "/stats/projectnbprevyear-" . $year . ".png";
-$fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=projectstats&amp;file=projectnbprevyear-' . $year . '.png';
+$fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=projectstats&amp;file=projectnbprevyear-' . $year . '.png';
 
 $px1 = new DolGraph();
 $mesg = $px1->isGraphKo();
@@ -134,7 +134,7 @@ if (getDolGlobalString('PROJECT_USE_OPPORTUNITIES')) {
     // $data = array(array('Lib',val1,val2,val3),...)
 
     $filenamenb = $conf->project->dir_output . "/stats/projectamountprevyear-" . $year . ".png";
-    $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=projectstats&amp;file=projectamountprevyear-' . $year . '.png';
+    $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=projectstats&amp;file=projectamountprevyear-' . $year . '.png';
 
     $px2 = new DolGraph();
     $mesg = $px2->isGraphKo();
@@ -170,7 +170,7 @@ if (getDolGlobalString('PROJECT_USE_OPPORTUNITIES')) {
     // $data = array(array('Lib',val1,val2,val3),...)
 
     $filenamenb = $conf->project->dir_output . "/stats/projecttransrateprevyear-" . $year . ".png";
-    $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=projectstats&amp;file=projecttransrateprevyear-' . $year . '.png';
+    $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=projectstats&amp;file=projecttransrateprevyear-' . $year . '.png';
 
     $px3 = new DolGraph();
     $mesg = $px3->isGraphKo();
@@ -216,7 +216,7 @@ if (!count($arrayyears)) {
 
 $h = 0;
 $head = array();
-$head[$h][0] = DOL_URL_ROOT . '/projet/stats/index.php';
+$head[$h][0] = constant('BASE_URL') . '/projet/stats/index.php';
 $head[$h][1] = $langs->trans("ByMonthYear");
 $head[$h][2] = 'byyear';
 $h++;

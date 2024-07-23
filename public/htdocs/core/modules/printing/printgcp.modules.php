@@ -165,8 +165,8 @@ class printing_printgcp extends PrintingDriver
                     'varname' => 'PRINTGCP_TOKEN_ACCESS',
                     'info' => $access,
                     'type' => 'info',
-                    'renew' => $urlwithroot . '/core/modules/oauth/google_oauthcallback.php?state=userinfo_email,userinfo_profile,cloud_print&backtourl=' . urlencode(DOL_URL_ROOT . '/printing/admin/printing.php?mode=setup&driver=printgcp'),
-                    'delete' => ($storage->hasAccessToken($this->OAUTH_SERVICENAME_GOOGLE) ? $urlwithroot . '/core/modules/oauth/google_oauthcallback.php?action=delete&token=' . newToken() . '&backtourl=' . urlencode(DOL_URL_ROOT . '/printing/admin/printing.php?mode=setup&driver=printgcp') : '')
+                    'renew' => $urlwithroot . '/core/modules/oauth/google_oauthcallback.php?state=userinfo_email,userinfo_profile,cloud_print&backtourl=' . urlencode(constant('BASE_URL') . '/printing/admin/printing.php?mode=setup&driver=printgcp'),
+                    'delete' => ($storage->hasAccessToken($this->OAUTH_SERVICENAME_GOOGLE) ? $urlwithroot . '/core/modules/oauth/google_oauthcallback.php?action=delete&token=' . newToken() . '&backtourl=' . urlencode(constant('BASE_URL') . '/printing/admin/printing.php?mode=setup&driver=printgcp') : '')
                 );
                 if ($token_ok) {
                     $expiredat = '';

@@ -632,7 +632,7 @@ if ($id > 0 || !empty($ref)) {
             }
 
             print load_fiche_titre($langs->trans("ProductToAddSearch"), '', '');
-            print '<form action="' . DOL_URL_ROOT . '/product/composition/card.php?id=' . $id . '" method="POST">';
+            print '<form action="' . constant('BASE_URL') . '/product/composition/card.php?id=' . $id . '" method="POST">';
             print '<input type="hidden" name="action" value="search">';
             print '<input type="hidden" name="id" value="' . $id . '">';
             print '<div class="inline-block">';
@@ -656,7 +656,7 @@ if ($id > 0 || !empty($ref)) {
         // List of products
         if ($action == 'search') {
             print '<br>';
-            print '<form action="' . DOL_URL_ROOT . '/product/composition/card.php?id=' . $id . '" method="post">';
+            print '<form action="' . constant('BASE_URL') . '/product/composition/card.php?id=' . $id . '" method="post">';
             print '<input type="hidden" name="token" value="' . newToken() . '">';
             print '<input type="hidden" name="action" value="add_prod">';
             print '<input type="hidden" name="id" value="' . $id . '">';

@@ -57,7 +57,7 @@ if ($action == 'add_payment' || ($action == 'confirm_paiement' && $confirm == 'y
     $error = 0;
 
     if ($cancel) {
-        $loc = DOL_URL_ROOT . '/compta/sociales/card.php?id=' . $chid;
+        $loc = constant('BASE_URL') . '/compta/sociales/card.php?id=' . $chid;
         header("Location: " . $loc);
         exit;
     }
@@ -130,7 +130,7 @@ if ($action == 'add_payment' || ($action == 'confirm_paiement' && $confirm == 'y
 
             if (!$error) {
                 $db->commit();
-                $loc = DOL_URL_ROOT . '/compta/sociales/card.php?id=' . $chid;
+                $loc = constant('BASE_URL') . '/compta/sociales/card.php?id=' . $chid;
                 header('Location: ' . $loc);
                 exit;
             } else {

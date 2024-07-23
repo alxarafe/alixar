@@ -48,7 +48,7 @@ foreach ($linkedObjectBlock as $key => $objectlink) {
     } ?>
     <tr class="<?php echo $trclass; ?>">
         <td><?php echo $langs->trans("SupplierInvoice"); ?></td>
-        <td><a href="<?php echo DOL_URL_ROOT . '/fourn/facture/card.php?facid=' . $objectlink->id ?>"><?php echo img_object($langs->trans("ShowBill"), "bill") . ' ' . $objectlink->ref; ?></a></td>
+        <td><a href="<?php echo constant('BASE_URL') . '/fourn/facture/card.php?facid=' . $objectlink->id ?>"><?php echo img_object($langs->trans("ShowBill"), "bill") . ' ' . $objectlink->ref; ?></a></td>
         <td class="left"><?php echo $objectlink->ref_supplier; ?></td>
         <td class="center"><?php echo dol_print_date($objectlink->date, 'day'); ?></td>
         <td class="right"><?php

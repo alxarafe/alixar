@@ -51,7 +51,7 @@ llxHeader();
 
 $localtax_static = new Localtax($db);
 
-$url = DOL_URL_ROOT . '/compta/localtax/card.php?action=create&localTaxType=' . $ltt;
+$url = constant('BASE_URL') . '/compta/localtax/card.php?action=create&localTaxType=' . $ltt;
 if (!empty($socid)) {
     $url .= '&socid=' . $socid;
 }

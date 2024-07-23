@@ -50,7 +50,7 @@ function societe_prepare_head(Societe $object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/societe/card.php?socid=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/societe/card.php?socid=' . $object->id;
     $head[$h][1] = $langs->trans("ThirdParty");
     $head[$h][2] = 'card';
     $h++;
@@ -88,7 +88,7 @@ function societe_prepare_head(Societe $object)
             dol_setcache($cachekey, $nbContact, 120);   // If setting cache fails, this is not a problem, so we do not test result.
         }
 
-        $head[$h][0] = DOL_URL_ROOT . '/societe/contact.php?socid=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/societe/contact.php?socid=' . $object->id;
         $head[$h][1] = $langs->trans('ContactsAddresses');
         if ($nbContact > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbContact . '</span>';
@@ -98,7 +98,7 @@ function societe_prepare_head(Societe $object)
     }
     if (getDolGlobalString('MAIN_SUPPORT_SHARED_CONTACT_BETWEEN_THIRDPARTIES')) {
         // Some features may be unstable with this option, like permissions rules, import contact, ...
-        $head[$h][0] = DOL_URL_ROOT . '/societe/societecontact.php?socid=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/societe/societecontact.php?socid=' . $object->id;
         $nbContact = count($object->liste_contact(-1, 'internal')) + count($object->liste_contact(-1, 'external'));
         $head[$h][1] = $langs->trans("ContactsAddressesExt");
         if ($nbContact > 0) {
@@ -109,7 +109,7 @@ function societe_prepare_head(Societe $object)
     }
 
     if ($object->client == 1 || $object->client == 2 || $object->client == 3) {
-        $head[$h][0] = DOL_URL_ROOT . '/comm/card.php?socid=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/comm/card.php?socid=' . $object->id;
         $head[$h][1] = '';
         if (!getDolGlobalString('SOCIETE_DISABLE_PROSPECTS') && ($object->client == 2 || $object->client == 3)) {
             $head[$h][1] .= $langs->trans("Prospect");
@@ -126,7 +126,7 @@ function societe_prepare_head(Societe $object)
         if (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
             $langs->load("products");
             // price
-            $head[$h][0] = DOL_URL_ROOT . '/societe/price.php?socid=' . $object->id;
+            $head[$h][0] = constant('BASE_URL') . '/societe/price.php?socid=' . $object->id;
             $head[$h][1] = $langs->trans("CustomerPrices");
             $head[$h][2] = 'price';
             $h++;
@@ -137,7 +137,7 @@ function societe_prepare_head(Societe $object)
         $supplier_module_enabled = 1;
     }
     if ($supplier_module_enabled == 1 && $object->fournisseur && $user->hasRight('fournisseur', 'lire')) {
-        $head[$h][0] = DOL_URL_ROOT . '/fourn/card.php?socid=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/fourn/card.php?socid=' . $object->id;
         $head[$h][1] = $langs->trans("Supplier");
         $head[$h][2] = 'supplier';
         $h++;
@@ -166,7 +166,7 @@ function societe_prepare_head(Societe $object)
             }
             dol_setcache($cachekey, $nbProject, 120);   // If setting cache fails, this is not a problem, so we do not test result.
         }
-        $head[$h][0] = DOL_URL_ROOT . '/societe/project.php?socid=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/societe/project.php?socid=' . $object->id;
         $head[$h][1] = $langs->trans("Projects");
         if ($nbProject > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbProject . '</span>';
@@ -177,7 +177,7 @@ function societe_prepare_head(Societe $object)
 
     // Tab to link resources
     if (isModEnabled('resource') && getDolGlobalString('RESOURCE_ON_THIRDPARTIES')) {
-        $head[$h][0] = DOL_URL_ROOT . '/resource/element_resource.php?element=societe&element_id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/resource/element_resource.php?element=societe&element_id=' . $object->id;
         $head[$h][1] = $langs->trans("Resources");
         $head[$h][2] = 'resources';
         $h++;
@@ -188,7 +188,7 @@ function societe_prepare_head(Societe $object)
         (isModEnabled('order') || isModEnabled('propal') || isModEnabled('invoice') || isModEnabled('intervention') || isModEnabled("supplier_proposal") || isModEnabled("supplier_order") || isModEnabled("supplier_invoice"))
         && !getDolGlobalString('THIRDPARTIES_DISABLE_RELATED_OBJECT_TAB')
     ) {
-        $head[$h][0] = DOL_URL_ROOT . '/societe/consumption.php?socid=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/societe/consumption.php?socid=' . $object->id;
         $head[$h][1] = $langs->trans("Referers");
         $head[$h][2] = 'consumption';
         $h++;
@@ -235,7 +235,7 @@ function societe_prepare_head(Societe $object)
 
         //if (isModEnabled('stripe') && $nbBankAccount > 0) $nbBankAccount = '...'; // No way to know exact number
 
-        $head[$h][0] = DOL_URL_ROOT . '/societe/paymentmodes.php?socid=' . urlencode((string) ($object->id));
+        $head[$h][0] = constant('BASE_URL') . '/societe/paymentmodes.php?socid=' . urlencode((string) ($object->id));
         $head[$h][1] = $title;
         if ($foundonexternalonlinesystem) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">...</span>';
@@ -255,7 +255,7 @@ function societe_prepare_head(Societe $object)
             $site_filter_list[] = 'dolibarr_portal';
         }
 
-        $head[$h][0] = DOL_URL_ROOT . '/societe/website.php?id=' . urlencode((string) ($object->id));
+        $head[$h][0] = constant('BASE_URL') . '/societe/website.php?id=' . urlencode((string) ($object->id));
         $head[$h][1] = $langs->trans("WebSiteAccounts");
         $nbNote = 0;
         $sql = "SELECT COUNT(n.rowid) as nb";
@@ -283,7 +283,7 @@ function societe_prepare_head(Societe $object)
         if ($user->hasRight('partnership', 'read')) {
             $langs->load("partnership");
             $nbPartnership = is_array($object->partnerships) ? count($object->partnerships) : 0;
-            $head[$h][0] = DOL_URL_ROOT . '/partnership/partnership_list.php?socid=' . $object->id;
+            $head[$h][0] = constant('BASE_URL') . '/partnership/partnership_list.php?socid=' . $object->id;
             $head[$h][1] = $langs->trans("Partnerships");
             $nbNote = 0;
             $sql = "SELECT COUNT(n.rowid) as nb";
@@ -333,7 +333,7 @@ function societe_prepare_head(Societe $object)
             dol_setcache($cachekey, $nbTicket, 120);        // If setting cache fails, this is not a problem, so we do not test result.
         }
 
-        $head[$h][0] = DOL_URL_ROOT . '/ticket/list.php?socid=' . urlencode((string) ($object->id));
+        $head[$h][0] = constant('BASE_URL') . '/ticket/list.php?socid=' . urlencode((string) ($object->id));
         $head[$h][1] = $langs->trans("Tickets");
         if ($nbTicket > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbTicket . '</span>';
@@ -379,7 +379,7 @@ function societe_prepare_head(Societe $object)
                 dol_setcache($cachekey, $nbNotif, 120);     // If setting cache fails, this is not a problem, so we do not test result.
             }
 
-            $head[$h][0] = DOL_URL_ROOT . '/societe/notify/card.php?socid=' . urlencode((string) ($object->id));
+            $head[$h][0] = constant('BASE_URL') . '/societe/notify/card.php?socid=' . urlencode((string) ($object->id));
             $head[$h][1] = $langs->trans("Notifications");
             if ($nbNotif > 0) {
                 $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNotif . '</span>';
@@ -396,7 +396,7 @@ function societe_prepare_head(Societe $object)
         if (!empty($object->note_public)) {
             $nbNote++;
         }
-        $head[$h][0] = DOL_URL_ROOT . '/societe/note.php?id=' . urlencode((string) ($object->id));
+        $head[$h][0] = constant('BASE_URL') . '/societe/note.php?id=' . urlencode((string) ($object->id));
         $head[$h][1] = $langs->trans("Notes");
         if ($nbNote > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';
@@ -422,7 +422,7 @@ function societe_prepare_head(Societe $object)
             dol_setcache($cachekey, $totalAttached, 120);       // If setting cache fails, this is not a problem, so we do not test result.
         }
 
-        $head[$h][0] = DOL_URL_ROOT . '/societe/document.php?socid=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/societe/document.php?socid=' . $object->id;
         $head[$h][1] = $langs->trans("Documents");
         if (($totalAttached) > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($totalAttached) . '</span>';
@@ -431,7 +431,7 @@ function societe_prepare_head(Societe $object)
         $h++;
     }
 
-    $head[$h][0] = DOL_URL_ROOT . '/societe/messaging.php?socid=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/societe/messaging.php?socid=' . $object->id;
     $head[$h][1] = $langs->trans("Events");
     if (isModEnabled('agenda') && ($user->hasRight('agenda', 'myactions', 'read') || $user->hasRight('agenda', 'allactions', 'read'))) {
         $nbEvent = 0;
@@ -489,7 +489,7 @@ function societe_prepare_head2($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/societe/card.php?socid=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/societe/card.php?socid=' . $object->id;
     $head[$h][1] = $langs->trans("ThirdParty");
     $head[$h][2] = 'company';
     $h++;
@@ -520,7 +520,7 @@ function societe_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/societe/admin/societe.php';
+    $head[$h][0] = constant('BASE_URL') . '/societe/admin/societe.php';
     $head[$h][1] = $langs->trans("Miscellaneous");
     $head[$h][2] = 'general';
     $h++;
@@ -531,7 +531,7 @@ function societe_admin_prepare_head()
     // $this->tabs = array('entity:-tabname:Title:@mymodule:/mymodule/mypage.php?id=__ID__');   to remove a tab
     complete_head_from_modules($conf, $langs, null, $head, $h, 'company_admin');
 
-    $head[$h][0] = DOL_URL_ROOT . '/societe/admin/societe_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/societe/admin/societe_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFieldsThirdParties");
     $nbExtrafields = $extrafields->attributes['societe']['count'];
     if ($nbExtrafields > 0) {
@@ -540,7 +540,7 @@ function societe_admin_prepare_head()
     $head[$h][2] = 'attributes';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/societe/admin/contact_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/societe/admin/contact_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFieldsContacts");
     $nbExtrafields = $extrafields->attributes['socpeople']['count'];
     if ($nbExtrafields > 0) {
@@ -884,7 +884,7 @@ function show_projects($conf, $langs, $db, $object, $backtopage = '', $nocreatel
 
         $newcardbutton = '';
         if (isModEnabled('project') && $user->hasRight('projet', 'creer') && empty($nocreatelink)) {
-            $newcardbutton .= dolGetButtonTitle($langs->trans('AddProject'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/projet/card.php?socid=' . $object->id . '&amp;action=create&amp;backtopage=' . urlencode($backtopage));
+            $newcardbutton .= dolGetButtonTitle($langs->trans('AddProject'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/projet/card.php?socid=' . $object->id . '&amp;action=create&amp;backtopage=' . urlencode($backtopage));
         }
 
         print "\n";
@@ -1280,7 +1280,7 @@ function show_contacts($conf, $langs, $db, $object, $backtopage = '', $showuserl
     $newcardbutton = '';
     if ($user->hasRight('societe', 'contact', 'creer')) {
         $addcontact = (getDolGlobalString('SOCIETE_ADDRESSES_MANAGEMENT') ? $langs->trans("AddContact") : $langs->trans("AddContactAddress"));
-        $newcardbutton .= dolGetButtonTitle($addcontact, '', 'fa fa-plus-circle', DOL_URL_ROOT . '/contact/card.php?socid=' . $object->id . '&amp;action=create&amp;backtopage=' . urlencode($backtopage));
+        $newcardbutton .= dolGetButtonTitle($addcontact, '', 'fa fa-plus-circle', constant('BASE_URL') . '/contact/card.php?socid=' . $object->id . '&amp;action=create&amp;backtopage=' . urlencode($backtopage));
     }
 
     print "\n";

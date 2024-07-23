@@ -24,7 +24,7 @@
  *      \brief      Page to setup margin module
  */
 
-include '../../main.inc.php';
+include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';

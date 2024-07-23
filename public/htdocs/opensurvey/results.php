@@ -1165,9 +1165,9 @@ if ($nbofcheckbox >= 2) {
     print '<p class="affichageresultats">' . "\n";
 
     if (isset($meilleurecolonne) && $compteursujet == "1") {
-        print '<img src="' . DOL_URL_ROOT . '/opensurvey/img/medaille.png"> ' . $langs->trans('TheBestChoice') . ": <b>" . $meilleursujet . "</b> - <b>" . $meilleurecolonne . "</b> " . $vote_str . ".\n";
+        print '<img src="' . constant('BASE_URL') . '/opensurvey/img/medaille.png"> ' . $langs->trans('TheBestChoice') . ": <b>" . $meilleursujet . "</b> - <b>" . $meilleurecolonne . "</b> " . $vote_str . ".\n";
     } elseif (isset($meilleurecolonne)) {
-        print '<img src="' . DOL_URL_ROOT . '/opensurvey/img/medaille.png"> ' . $langs->trans('TheBestChoices') . ": <b>" . $meilleursujet . "</b> - <b>" . $meilleurecolonne . "</b> " . $vote_str . ".\n";
+        print '<img src="' . constant('BASE_URL') . '/opensurvey/img/medaille.png"> ' . $langs->trans('TheBestChoices') . ": <b>" . $meilleursujet . "</b> - <b>" . $meilleurecolonne . "</b> " . $vote_str . ".\n";
     }
     print '<br></p><br>' . "\n";
 }

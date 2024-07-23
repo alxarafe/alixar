@@ -66,13 +66,13 @@ class WebPortalTheme
 
         $this->loadPrimaryColor();
 
-        $urllogo = DOL_URL_ROOT . '/theme/common/login_logo.png';
+        $urllogo = constant('BASE_URL') . '/theme/common/login_logo.png';
         if (!empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $mysoc->logo_small)) {
-            $urllogo = DOL_URL_ROOT . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
+            $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
         } elseif (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output . '/logos/' . $mysoc->logo)) {
-            $urllogo = DOL_URL_ROOT . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/' . $mysoc->logo);
+            $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/' . $mysoc->logo);
         } elseif (is_readable(DOL_DOCUMENT_ROOT . '/theme/dolibarr_logo.svg')) {
-            $urllogo = DOL_URL_ROOT . '/theme/dolibarr_logo.svg';
+            $urllogo = constant('BASE_URL') . '/theme/dolibarr_logo.svg';
         }
 
         $this->loginLogoUrl = getDolGlobalString('WEBPORTAL_LOGIN_LOGO_URL', $urllogo);

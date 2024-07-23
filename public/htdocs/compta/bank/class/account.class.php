@@ -1380,7 +1380,7 @@ class Account extends CommonObject
             $response->warning_delay = $conf->bank->rappro->warning_delay / 60 / 60 / 24;
             $response->label = $langs->trans("TransactionsToConciliate");
             $response->labelShort = $langs->trans("TransactionsToConciliateShort");
-            $response->url = DOL_URL_ROOT . '/compta/bank/list.php?leftmenu=bank&amp;mainmenu=bank';
+            $response->url = constant('BASE_URL') . '/compta/bank/list.php?leftmenu=bank&amp;mainmenu=bank';
             $response->img = img_object('', "payment");
 
             while ($obj = $this->db->fetch_object($resql)) {

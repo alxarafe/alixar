@@ -89,7 +89,7 @@ $form = new Form($db);
 
 $h = 0;
 
-$head[$h][0] = DOL_URL_ROOT . '/loan/payment/card.php?id=' . $id;
+$head[$h][0] = constant('BASE_URL') . '/loan/payment/card.php?id=' . $id;
 $head[$h][1] = $langs->trans("PaymentLoan");
 $hselected = $h;
 $h++;

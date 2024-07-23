@@ -39,7 +39,7 @@ function contact_prepare_head(Contact $object)
     $tab = 0;
     $head = array();
 
-    $head[$tab][0] = DOL_URL_ROOT . '/contact/card.php?id=' . $object->id;
+    $head[$tab][0] = constant('BASE_URL') . '/contact/card.php?id=' . $object->id;
     $head[$tab][1] = $langs->trans("Contact");
     $head[$tab][2] = 'card';
     $tab++;
@@ -50,13 +50,13 @@ function contact_prepare_head(Contact $object)
     ) {
         $langs->load("ldap");
 
-        $head[$tab][0] = DOL_URL_ROOT . '/contact/ldap.php?id=' . $object->id;
+        $head[$tab][0] = constant('BASE_URL') . '/contact/ldap.php?id=' . $object->id;
         $head[$tab][1] = $langs->trans("LDAPCard");
         $head[$tab][2] = 'ldap';
         $tab++;
     }
 
-    $head[$tab][0] = DOL_URL_ROOT . '/contact/perso.php?id=' . $object->id;
+    $head[$tab][0] = constant('BASE_URL') . '/contact/perso.php?id=' . $object->id;
     $head[$tab][1] = $langs->trans("PersonalInformations");
     $head[$tab][2] = 'perso';
     $tab++;
@@ -87,7 +87,7 @@ function contact_prepare_head(Contact $object)
             }
             dol_setcache($cachekey, $nbProject, 120);   // If setting cache fails, this is not a problem, so we do not test result.
         }
-        $head[$tab][0] = DOL_URL_ROOT . '/contact/project.php?id=' . $object->id;
+        $head[$tab][0] = constant('BASE_URL') . '/contact/project.php?id=' . $object->id;
         $head[$tab][1] = $langs->trans("Projects");
         if ($nbProject > 0) {
             $head[$tab][1] .= '<span class="badge marginleftonlyshort">' . $nbProject . '</span>';
@@ -98,7 +98,7 @@ function contact_prepare_head(Contact $object)
 
     // Related items
     if (isModEnabled('order') || isModEnabled("propal") || isModEnabled('invoice') || isModEnabled('intervention') || isModEnabled("supplier_proposal") || isModEnabled("supplier_order") || isModEnabled("supplier_invoice")) {
-        $head[$tab][0] = DOL_URL_ROOT . '/contact/consumption.php?id=' . $object->id;
+        $head[$tab][0] = constant('BASE_URL') . '/contact/consumption.php?id=' . $object->id;
         $head[$tab][1] = $langs->trans("Referers");
         $head[$tab][2] = 'consumption';
         $tab++;
@@ -113,7 +113,7 @@ function contact_prepare_head(Contact $object)
     // Notes
     if (!getDolGlobalString('MAIN_DISABLE_NOTES_TAB')) {
         $nbNote = (empty($object->note_private) ? 0 : 1) + (empty($object->note_public) ? 0 : 1);
-        $head[$tab][0] = DOL_URL_ROOT . '/contact/note.php?id=' . $object->id;
+        $head[$tab][0] = constant('BASE_URL') . '/contact/note.php?id=' . $object->id;
         $head[$tab][1] = $langs->trans("Note");
         if ($nbNote > 0) {
             $head[$tab][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';
@@ -127,7 +127,7 @@ function contact_prepare_head(Contact $object)
     $upload_dir = $conf->societe->dir_output . "/contact/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$tab][0] = DOL_URL_ROOT . '/contact/document.php?id=' . $object->id;
+    $head[$tab][0] = constant('BASE_URL') . '/contact/document.php?id=' . $object->id;
     $head[$tab][1] = $langs->trans("Documents");
     if (($nbFiles + $nbLinks) > 0) {
         $head[$tab][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -136,7 +136,7 @@ function contact_prepare_head(Contact $object)
     $tab++;
 
     // Agenda / Events
-    $head[$tab][0] = DOL_URL_ROOT . '/contact/agenda.php?id=' . $object->id;
+    $head[$tab][0] = constant('BASE_URL') . '/contact/agenda.php?id=' . $object->id;
     $head[$tab][1] = $langs->trans("Events");
     if (isModEnabled('agenda') && ($user->hasRight('agenda', 'myactions', 'read') || $user->hasRight('agenda', 'allactions', 'read'))) {
         $head[$tab][1] .= '/';
@@ -182,7 +182,7 @@ function show_contacts_projects($conf, $langs, $db, $object, $backtopage = '', $
 
         $newcardbutton = '';
         if (isModEnabled('project') && $user->hasRight('projet', 'creer') && empty($nocreatelink)) {
-            $newcardbutton .= dolGetButtonTitle($langs->trans('AddProject'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/projet/card.php?socid=' . $object->id . '&amp;action=create&amp;backtopage=' . urlencode($backtopage));
+            $newcardbutton .= dolGetButtonTitle($langs->trans('AddProject'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/projet/card.php?socid=' . $object->id . '&amp;action=create&amp;backtopage=' . urlencode($backtopage));
         }
 
         print "\n";

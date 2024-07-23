@@ -49,7 +49,7 @@ $socid    = GETPOSTINT('socid');
 $action   = GETPOST('action', 'aZ09');
 
 // Store current page url
-$url_page_current = DOL_URL_ROOT . '/ticket/agenda.php';
+$url_page_current = constant('BASE_URL') . '/ticket/agenda.php';
 
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
 $sortfield = GETPOST('sortfield', 'aZ09comma');
@@ -253,9 +253,9 @@ if (!empty($object->id)) {
 
     $morehtmlright = '';
 
-    $messagingUrl = DOL_URL_ROOT . '/ticket/messaging.php?track_id=' . $object->track_id;
+    $messagingUrl = constant('BASE_URL') . '/ticket/messaging.php?track_id=' . $object->track_id;
     $morehtmlright .= dolGetButtonTitle($langs->trans('ShowAsConversation'), '', 'fa fa-comments imgforviewmode', $messagingUrl, '', 1);
-    $messagingUrl = DOL_URL_ROOT . '/ticket/agenda.php?track_id=' . $object->track_id;
+    $messagingUrl = constant('BASE_URL') . '/ticket/agenda.php?track_id=' . $object->track_id;
     $morehtmlright .= dolGetButtonTitle($langs->trans('MessageListViewType'), '', 'fa fa-bars imgforviewmode', $messagingUrl, '', 1, array('morecss' => 'btnTitleSelected'));
 
     // Show link to send an email (if read and not closed)
@@ -270,7 +270,7 @@ if (!empty($object->id)) {
 
     // Show link to add event (if read and not closed)
     $btnstatus = $object->status < Ticket::STATUS_CLOSED && $action != "presend" && $action != "presend_addmessage";
-    $url = DOL_URL_ROOT . '/comm/action/card.php?action=create&datep=now&origin=ticket&originid=' . $object->id . '&projectid=' . $object->fk_project . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id);
+    $url = constant('BASE_URL') . '/comm/action/card.php?action=create&datep=now&origin=ticket&originid=' . $object->id . '&projectid=' . $object->fk_project . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id);
     $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', $url, 'add-new-ticket-even-button', $btnstatus);
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/memory.lib.php';

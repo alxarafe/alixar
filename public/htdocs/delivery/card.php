@@ -179,7 +179,7 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('expedit
         if (!empty($backtopage)) {
             header("Location: " . $backtopage);
         } else {
-            header("Location: " . DOL_URL_ROOT . '/expedition/list.php?restore_lastsearch_values=1');
+            header("Location: " . constant('BASE_URL') . '/expedition/list.php?restore_lastsearch_values=1');
         }
         exit;
     } else {
@@ -659,7 +659,7 @@ if ($action == 'create') {
 
                 if ($user->hasRight('expedition', 'delivery', 'supprimer')) {
                     if (getDolGlobalInt('MAIN_SUBMODULE_EXPEDITION')) {
-                        print dolGetButtonAction('', $langs->trans('Delete'), 'delete', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&amp;expid=' . $object->origin_id . '&amp;action=delete&amp;token=' . newToken() . '&amp;backtopage=' . urlencode(DOL_URL_ROOT . '/expedition/card.php?id=' . $object->origin_id), '');
+                        print dolGetButtonAction('', $langs->trans('Delete'), 'delete', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&amp;expid=' . $object->origin_id . '&amp;action=delete&amp;token=' . newToken() . '&amp;backtopage=' . urlencode(constant('BASE_URL') . '/expedition/card.php?id=' . $object->origin_id), '');
                     } else {
                         print dolGetButtonAction('', $langs->trans('Delete'), 'delete', $_SERVER["PHP_SELF"] . '?action=delete&amp;token=' . newToken() . '&amp;id=' . $object->id, '');
                     }

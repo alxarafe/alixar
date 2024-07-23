@@ -517,7 +517,7 @@ class BookKeeping extends CommonObject
         $label .= '<br>';
         $label .= '<b>' . $langs->trans('Ref') . ':</b> ' . $this->piece_num;
 
-        $url = DOL_URL_ROOT . '/accountancy/bookkeeping/card.php?piece_num=' . $this->piece_num;
+        $url = constant('BASE_URL') . '/accountancy/bookkeeping/card.php?piece_num=' . $this->piece_num;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not

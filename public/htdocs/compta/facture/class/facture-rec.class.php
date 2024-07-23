@@ -1471,7 +1471,7 @@ class FactureRec extends CommonInvoice
             }
         }
 
-        $url = DOL_URL_ROOT . '/compta/facture/card-rec.php?facid=' . $this->id;
+        $url = constant('BASE_URL') . '/compta/facture/card-rec.php?facid=' . $this->id;
 
         if ($short) {
             return $url;

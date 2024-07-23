@@ -110,7 +110,7 @@ if ($action != 'delete' && !GETPOSTINT('afteroauthloginreturn') && (empty($state
     dol_syslog("state or statewithscopeonly and/or requestedpermissionsarray are empty");
     setEventMessages($langs->trans('ScopeUndefined'), null, 'errors');
     if (empty($backtourl)) {
-        $backtourl = DOL_URL_ROOT . '/';
+        $backtourl = constant('BASE_URL') . '/';
     }
     header('Location: ' . $backtourl);
     exit();
@@ -347,7 +347,7 @@ if (!GETPOST('code')) {
             unset($_SESSION["backtourlsavedbeforeoauthjump"]);
 
             if (empty($backtourl)) {
-                $backtourl = DOL_URL_ROOT . '/';
+                $backtourl = constant('BASE_URL') . '/';
             }
 
             // If call back to this url was for a OAUTH2 login

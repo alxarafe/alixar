@@ -1020,7 +1020,7 @@ if ($resql) {
     if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $search_all) {
         $obj = $db->fetch_object($resql);
         $id = $obj->rowid;
-        header("Location: " . DOL_URL_ROOT . '/fourn/commande/card.php?id=' . $id);
+        header("Location: " . constant('BASE_URL') . '/fourn/commande/card.php?id=' . $id);
         exit;
     }
 
@@ -1211,10 +1211,10 @@ if ($resql) {
     }
     $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
-    $url = DOL_URL_ROOT . '/fourn/commande/card.php?action=create';
+    $url = constant('BASE_URL') . '/fourn/commande/card.php?action=create';
     if ($socid > 0) {
         $url .= '&socid=' . ((int) $socid);
-        $url .= '&backtopage=' . urlencode(DOL_URL_ROOT . '/fourn/commande/list.php?socid=' . ((int) $socid));
+        $url .= '&backtopage=' . urlencode(constant('BASE_URL') . '/fourn/commande/list.php?socid=' . ((int) $socid));
     }
     $newcardbutton = '';
     $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));

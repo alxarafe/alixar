@@ -71,7 +71,7 @@ llxHeader('', $title);
 
 $newcardbutton = '';
 if ($usercancreate) {
-    $newcardbutton .= dolGetButtonTitle($langs->trans('NewDeposit'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/compta/paiement/cheque/card.php?action=new');
+    $newcardbutton .= dolGetButtonTitle($langs->trans('NewDeposit'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/compta/paiement/cheque/card.php?action=new');
 }
 
 print load_fiche_titre($title, $newcardbutton, $checkdepositstatic->picto);

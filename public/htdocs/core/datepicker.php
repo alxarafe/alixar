@@ -76,7 +76,7 @@ print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://ww
 print '<html>' . "\n";
 print '<head>' . "\n";
 if (GETPOST('mode') && GETPOST('mode') == 'test') {
-    print '<script nonce="' . getNonce() . '" type="text/javascript" src="' . DOL_URL_ROOT . '/core/js/lib_head.js.php"></script>' . "\n";
+    print '<script nonce="' . getNonce() . '" type="text/javascript" src="' . constant('BASE_URL') . '/core/js/lib_head.js.php"></script>' . "\n";
 } else {
     print '<title>' . $langs->trans("Calendar") . '</title>';
 }
@@ -188,9 +188,9 @@ function displayBox($selectedDate, $month, $year)
     </tr>
     <tr>
         <td class="dpButtons"
-            onClick="loadMonth('<?php echo DOL_URL_ROOT . '/core/' ?>','<?php echo $month?>','<?php echo $year - 1?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">&lt;&lt;</td>
+            onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php echo $month?>','<?php echo $year - 1?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">&lt;&lt;</td>
         <td class="dpButtons"
-            onClick="loadMonth('<?php echo DOL_URL_ROOT . '/core/' ?>','<?php if ($month == 1) {
+            onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php if ($month == 1) {
                 echo "12";
                                 } else {
                                     echo $month - 1;
@@ -200,9 +200,9 @@ function displayBox($selectedDate, $month, $year)
                                     echo $year;
                                 } ?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">&lt;</td>
         <td colspan="3" class="dpButtons"
-            onClick="loadMonth('<?php echo DOL_URL_ROOT . '/core/' ?>','<?php echo (int) dol_print_date($today, '%m')?>','<?php echo $todayArray["year"]?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')"><?php echo '-' ?></td>
+            onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php echo (int) dol_print_date($today, '%m')?>','<?php echo $todayArray["year"]?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')"><?php echo '-' ?></td>
         <td class="dpButtons"
-            onClick="loadMonth('<?php echo DOL_URL_ROOT . '/core/' ?>','<?php if ($month == 12) {
+            onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php if ($month == 12) {
                 echo "1";
                                 } else {
                                     echo $month + 1;
@@ -212,7 +212,7 @@ function displayBox($selectedDate, $month, $year)
                                     echo $year;
                                 } ?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">&gt;</td>
         <td class="dpButtons"
-            onClick="loadMonth('<?php echo DOL_URL_ROOT . '/core/' ?>','<?php echo $month?>','<?php echo $year + 1?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">&gt;&gt;</td>
+            onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php echo $month?>','<?php echo $year + 1?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">&gt;&gt;</td>
     </tr>
     <tr class="dpDayNames">
     <?php

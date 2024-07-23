@@ -362,7 +362,7 @@ $i = 0;
 if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $search_all && !$page) {
     $obj = $db->fetch_object($resql);
     $id = $obj->rowid;
-    header("Location: " . DOL_URL_ROOT . '/product/stock/productlot_card.php?id=' . $id);
+    header("Location: " . constant('BASE_URL') . '/product/stock/productlot_card.php?id=' . $id);
     exit;
 }
 

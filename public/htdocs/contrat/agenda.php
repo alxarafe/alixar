@@ -24,7 +24,7 @@
  *      \brief      Page of contract events
  */
 
-require "../main.inc.php";
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contract.lib.php';
@@ -253,11 +253,11 @@ if ($object->id > 0) {
         if ($user->hasRight('agenda', 'myactions', 'create') || $user->hasRight('agenda', 'allactions', 'create')) {
             $backtopage = $_SERVER['PHP_SELF'] . '?id=' . $object->id;
             $out = '&origin=' . $object->element . '&originid=' . $object->id . '&backtopage=' . urlencode($backtopage);
-            $messagingUrl = DOL_URL_ROOT . '/contrat/messaging.php?id=' . $object->id;
+            $messagingUrl = constant('BASE_URL') . '/contrat/messaging.php?id=' . $object->id;
             $newcardbutton .= dolGetButtonTitle($langs->trans('ShowAsConversation'), '', 'fa fa-comments imgforviewmode', $messagingUrl, '', 1);
-            $messagingUrl = DOL_URL_ROOT . '/contrat/agenda.php?id=' . $object->id;
+            $messagingUrl = constant('BASE_URL') . '/contrat/agenda.php?id=' . $object->id;
             $newcardbutton .= dolGetButtonTitle($langs->trans('MessageListViewType'), '', 'fa fa-bars imgforviewmode', $messagingUrl, '', 2);
-            $newcardbutton .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/comm/action/card.php?action=create' . $out);
+            $newcardbutton .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/comm/action/card.php?action=create' . $out);
         }
     }
 

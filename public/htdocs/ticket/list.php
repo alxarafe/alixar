@@ -172,7 +172,7 @@ if ($user->socid > 0) {
 }
 
 // Store current page url
-$url_page_current = DOL_URL_ROOT . '/ticket/list.php';
+$url_page_current = constant('BASE_URL') . '/ticket/list.php';
 
 if ($project_ref) {
     $tmpproject = new Project($db);
@@ -516,7 +516,7 @@ $num = $db->num_rows($resql);
 if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $search_all && !$page) {
     $obj = $db->fetch_object($resql);
     $id = $obj->rowid;
-    header("Location: " . DOL_URL_ROOT . '/ticket/card.php?id=' . $id);
+    header("Location: " . constant('BASE_URL') . '/ticket/card.php?id=' . $id);
     exit;
 }
 
@@ -770,7 +770,7 @@ if ($projectid) {
     print '<input type="hidden" name="projectid" value="' . $projectid . '" >';
 }
 
-$url = DOL_URL_ROOT . '/ticket/card.php?action=create' . ($socid ? '&socid=' . $socid : '') . ($projectid ? '&origin=projet_project&originid=' . $projectid : '');
+$url = constant('BASE_URL') . '/ticket/card.php?action=create' . ($socid ? '&socid=' . $socid : '') . ($projectid ? '&origin=projet_project&originid=' . $projectid : '');
 if (!empty($socid)) {
     $url .= '&socid=' . $socid;
 }

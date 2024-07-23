@@ -448,7 +448,7 @@ if ($step == 1 || !$datatoexport) {
 
     $h = 0;
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=1';
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=1';
     $head[$h][1] = $langs->trans("Step") . " 1";
     $hselected = $h;
     $h++;
@@ -508,11 +508,11 @@ if ($step == 2 && $datatoexport) {
 
     $h = 0;
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=1';
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=1';
     $head[$h][1] = $langs->trans("Step") . " 1";
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=2&datatoexport=' . $datatoexport;
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=2&datatoexport=' . $datatoexport;
     $head[$h][1] = $langs->trans("Step") . " 2";
     $hselected = $h;
     $h++;
@@ -677,7 +677,7 @@ if ($step == 2 && $datatoexport) {
 if ($step == 3 && $datatoexport) {
     if (count($array_selected) < 1) {      // This occurs when going back to page after sessecion expired
         // Switch to step 2
-        header("Location: " . DOL_URL_ROOT . '/exports/export.php?step=2&datatoexport=' . $datatoexport);
+        header("Location: " . constant('BASE_URL') . '/exports/export.php?step=2&datatoexport=' . $datatoexport);
         exit;
     }
 
@@ -690,15 +690,15 @@ if ($step == 3 && $datatoexport) {
 
     $h = 0;
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=1';
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=1';
     $head[$h][1] = $langs->trans("Step") . " 1";
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=2&datatoexport=' . $datatoexport;
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=2&datatoexport=' . $datatoexport;
     $head[$h][1] = $langs->trans("Step") . " 2";
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=3&datatoexport=' . $datatoexport;
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=3&datatoexport=' . $datatoexport;
     $head[$h][1] = $langs->trans("Step") . " 3";
     $hselected = $h;
     $h++;
@@ -846,7 +846,7 @@ if ($step == 3 && $datatoexport) {
 if ($step == 4 && $datatoexport) {
     if (count($array_selected) < 1) {     // This occurs when going back to page after sessecion expired
         // Switch to step 2
-        header("Location: " . DOL_URL_ROOT . '/exports/export.php?step=2&datatoexport=' . $datatoexport);
+        header("Location: " . constant('BASE_URL') . '/exports/export.php?step=2&datatoexport=' . $datatoexport);
         exit;
     }
 
@@ -862,23 +862,23 @@ if ($step == 4 && $datatoexport) {
     $stepoffset = 0;
     $h = 0;
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=1';
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=1';
     $head[$h][1] = $langs->trans("Step") . " 1";
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=2&datatoexport=' . $datatoexport;
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=2&datatoexport=' . $datatoexport;
     $head[$h][1] = $langs->trans("Step") . " 2";
     $h++;
 
     // If filters exist
     if ($usefilters && isset($objexport->array_export_TypeFields[0]) && is_array($objexport->array_export_TypeFields[0])) {
-        $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=3&datatoexport=' . $datatoexport;
+        $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=3&datatoexport=' . $datatoexport;
         $head[$h][1] = $langs->trans("Step") . " 3";
         $h++;
         $stepoffset++;
     }
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=4&datatoexport=' . $datatoexport;
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=4&datatoexport=' . $datatoexport;
     $head[$h][1] = $langs->trans("Step") . " " . (3 + $stepoffset);
     $hselected = $h;
     $h++;
@@ -1120,7 +1120,7 @@ if ($step == 4 && $datatoexport) {
 if ($step == 5 && $datatoexport) {
     if (count($array_selected) < 1) {      // This occurs when going back to page after session expired
         // Switch to step 2
-        header("Location: " . DOL_URL_ROOT . '/exports/export.php?step=2&datatoexport=' . $datatoexport);
+        header("Location: " . constant('BASE_URL') . '/exports/export.php?step=2&datatoexport=' . $datatoexport);
         exit;
     }
 
@@ -1136,27 +1136,27 @@ if ($step == 5 && $datatoexport) {
     $h = 0;
     $stepoffset = 0;
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=1';
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=1';
     $head[$h][1] = $langs->trans("Step") . " 1";
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=2&datatoexport=' . $datatoexport;
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=2&datatoexport=' . $datatoexport;
     $head[$h][1] = $langs->trans("Step") . " 2";
     $h++;
 
     // si le filtrage est parameter pour l'export ou pas
     if ($usefilters && isset($objexport->array_export_TypeFields[0]) && is_array($objexport->array_export_TypeFields[0])) {
-        $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=3&datatoexport=' . $datatoexport;
+        $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=3&datatoexport=' . $datatoexport;
         $head[$h][1] = $langs->trans("Step") . " 3";
         $h++;
         $stepoffset++;
     }
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=4&datatoexport=' . $datatoexport;
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=4&datatoexport=' . $datatoexport;
     $head[$h][1] = $langs->trans("Step") . " " . (3 + $stepoffset);
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/exports/export.php?step=5&datatoexport=' . $datatoexport;
+    $head[$h][0] = constant('BASE_URL') . '/exports/export.php?step=5&datatoexport=' . $datatoexport;
     $head[$h][1] = $langs->trans("Step") . " " . (4 + $stepoffset);
     $hselected = $h;
     $h++;

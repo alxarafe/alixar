@@ -106,7 +106,7 @@ if ($action == "productinfo") {
     $prod->fetch($idproduct);
     print '<button type="button" class="publicphonebutton2 phoneblue total" onclick="AddProductConfirm(place, ' . $idproduct . ')">' . $langs->trans('Add') . '</button>';
     print "<br><b>" . $prod->label . "</b><br>";
-    print '<img class="imgwrapper" width="60%" src="' . DOL_URL_ROOT . '/takepos/public/auto_order.php?genimg=pro&query=pro&id=' . $idproduct . '">';
+    print '<img class="imgwrapper" width="60%" src="' . constant('BASE_URL') . '/takepos/public/auto_order.php?genimg=pro&query=pro&id=' . $idproduct . '">';
     print "<br>" . $prod->description;
     print "<br><b>" . price($prod->price_ttc, 1, $langs, 1, -1, -1, $conf->currency) . "</b>";
     print '<br>';
@@ -161,7 +161,7 @@ if ($action == "productinfo") {
             $prod = new Product($db);
             $prod->fetch($line->fk_product);
             print "<b>" . $prod->label . "</b><br>";
-            print '<img class="imgwrapper" width="60%" src="' . DOL_URL_ROOT . '/takepos/public/auto_order.php?genimg=pro&query=pro&id=' . $line->fk_product . '">';
+            print '<img class="imgwrapper" width="60%" src="' . constant('BASE_URL') . '/takepos/public/auto_order.php?genimg=pro&query=pro&id=' . $line->fk_product . '">';
             print "<br>" . $prod->description;
             print "<br><b>" . price($prod->price_ttc, 1, $langs, 1, -1, -1, $conf->currency) . "</b>";
             print '<br>';
@@ -250,10 +250,10 @@ if ($action == "productinfo") {
         place=placeid;
         <?php
         if (defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
-            echo '$("#phonediv2").load("' . DOL_URL_ROOT . '/takepos/public/auto_order.php?mobilepage=invoice&place="+place+" #tablelines", function() {
+            echo '$("#phonediv2").load("' . constant('BASE_URL') . '/takepos/public/auto_order.php?mobilepage=invoice&place="+place+" #tablelines", function() {
 			});';
         } else {
-            echo '$("#phonediv2").load("' . DOL_URL_ROOT . '/takepos/invoice.php?mobilepage=invoice&place="+place+" #tablelines", function() {
+            echo '$("#phonediv2").load("' . constant('BASE_URL') . '/takepos/invoice.php?mobilepage=invoice&place="+place+" #tablelines", function() {
 			});';
         }
         ?>
@@ -265,7 +265,7 @@ if ($action == "productinfo") {
         // If is a public terminal first show product information
         if (defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
             print 'place=placeid;
-			$("#phonediv1").load("' . DOL_URL_ROOT . '/takepos/public/auto_order.php?action=productinfo&token=' . newToken() . '&place="+place+"&idproduct="+productid, function() {
+			$("#phonediv1").load("' . constant('BASE_URL') . '/takepos/public/auto_order.php?action=productinfo&token=' . newToken() . '&place="+place+"&idproduct="+productid, function() {
 			});';
         } else {
             print 'AddProductConfirm(placeid, productid);';
@@ -281,10 +281,10 @@ if ($action == "productinfo") {
         place=placeid;
         <?php
         if (defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
-            echo '$("#phonediv2").load("' . DOL_URL_ROOT . '/takepos/public/auto_order.php?mobilepage=invoice&action=addline&token=' . newToken() . '&place="+place+"&idproduct="+productid, function() {
+            echo '$("#phonediv2").load("' . constant('BASE_URL') . '/takepos/public/auto_order.php?mobilepage=invoice&action=addline&token=' . newToken() . '&place="+place+"&idproduct="+productid, function() {
 			});';
         } else {
-            echo '$("#phonediv2").load("' . DOL_URL_ROOT . '/takepos/invoice.php?mobilepage=invoice&action=addline&token=' . newToken() . '&place="+place+"&idproduct="+productid, function() {
+            echo '$("#phonediv2").load("' . constant('BASE_URL') . '/takepos/invoice.php?mobilepage=invoice&action=addline&token=' . newToken() . '&place="+place+"&idproduct="+productid, function() {
 			});';
         } ?>
 
@@ -335,10 +335,10 @@ if ($action == "productinfo") {
         <?php
         if (defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
             // Load invoice.php to get categories by using auto_order so it will define INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE
-            echo '$("#phonediv1").load("' . DOL_URL_ROOT . '/takepos/public/auto_order.php?format=div&mobilepage=cats&place="+place+" #tablelines", function() {
+            echo '$("#phonediv1").load("' . constant('BASE_URL') . '/takepos/public/auto_order.php?format=div&mobilepage=cats&place="+place+" #tablelines", function() {
 			});';
         } else {
-            echo '$("#phonediv1").load("' . DOL_URL_ROOT . '/takepos/invoice.php?mobilepage=cats&place="+place+"", function() {
+            echo '$("#phonediv1").load("' . constant('BASE_URL') . '/takepos/invoice.php?mobilepage=cats&place="+place+"", function() {
 			});';
         }
         ?>
@@ -348,10 +348,10 @@ if ($action == "productinfo") {
         console.log("We click on LoadProducts()");
         <?php
         if (defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
-            echo '$("#phonediv1").load("' . DOL_URL_ROOT . '/takepos/public/auto_order.php?format=div&mobilepage=products&catid="+idcat+"&place="+place+"", function() {
+            echo '$("#phonediv1").load("' . constant('BASE_URL') . '/takepos/public/auto_order.php?format=div&mobilepage=products&catid="+idcat+"&place="+place+"", function() {
 			});';
         } else {
-            echo '$("#phonediv1").load("' . DOL_URL_ROOT . '/takepos/invoice.php?mobilepage=products&catid="+idcat+"&place="+place+"", function() {
+            echo '$("#phonediv1").load("' . constant('BASE_URL') . '/takepos/invoice.php?mobilepage=products&catid="+idcat+"&place="+place+"", function() {
 			});';
         } ?>
     }
@@ -365,12 +365,12 @@ if ($action == "productinfo") {
         console.log("TakeposPrintingOrder");
         <?php
         if (defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
-            echo '$("#phonediv2").load("' . DOL_URL_ROOT . '/takepos/public/auto_order.php?action=order&token=' . newToken() . '&mobilepage=order&place="+place, function() {
+            echo '$("#phonediv2").load("' . constant('BASE_URL') . '/takepos/public/auto_order.php?action=order&token=' . newToken() . '&mobilepage=order&place="+place, function() {
 			});';
-            echo '$("#phonediv1").load("' . DOL_URL_ROOT . '/takepos/public/auto_order.php?action=publicpayment&token=' . newToken() . '&place="+place, function() {
+            echo '$("#phonediv1").load("' . constant('BASE_URL') . '/takepos/public/auto_order.php?action=publicpayment&token=' . newToken() . '&place="+place, function() {
 			});';
         } else {
-            echo '$("#phonediv2").load("' . DOL_URL_ROOT . '/takepos/invoice.php?action=order&token=' . newToken() . '&place="+place, function() {
+            echo '$("#phonediv2").load("' . constant('BASE_URL') . '/takepos/invoice.php?action=order&token=' . newToken() . '&place="+place, function() {
 			});';
         } ?>
     }

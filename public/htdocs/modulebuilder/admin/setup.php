@@ -95,7 +95,7 @@ $form = new Form($db);
 $help_url = '';
 llxHeader('', $langs->trans("ModulebuilderSetup"), $help_url);
 
-$linkback = '<a href="' . ($backtopage ? $backtopage : DOL_URL_ROOT . '/admin/modules.php') . '">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php') . '">' . $langs->trans("BackToModuleList") . '</a>';
 
 print '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';
 print '<input type="hidden" name="token" value="' . newToken() . '">';

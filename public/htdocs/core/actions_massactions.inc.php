@@ -1815,7 +1815,7 @@ if (!$error && ($massaction == 'clonetasks' || ($action == 'clonetasks' && $conf
 
     if (!$error) {
         setEventMessage($langs->trans('NumberOfTasksCloned', $num));
-        header("Refresh: 1;URL=" . DOL_URL_ROOT . '/projet/tasks.php?id=' . GETPOSTINT('projectid'));
+        header("Refresh: 1;URL=" . constant('BASE_URL') . '/projet/tasks.php?id=' . GETPOSTINT('projectid'));
     }
 }
 

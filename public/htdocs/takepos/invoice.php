@@ -1240,7 +1240,7 @@ $(document).ready(function() {
         selectedtext=$('#'+selectedline).find("td:first").html();
         <?php
         if (defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
-            print '$("#phonediv1").load("' . DOL_URL_ROOT . '/takepos/public/auto_order.php?action=editline&token=' . newToken() . '&placeid="+placeid+"&selectedline="+selectedline, function() {
+            print '$("#phonediv1").load("' . constant('BASE_URL') . '/takepos/public/auto_order.php?action=editline&token=' . newToken() . '&placeid="+placeid+"&selectedline="+selectedline, function() {
 			});';
         }
         ?>
@@ -1389,7 +1389,7 @@ function DolibarrTakeposPrinting(id) {
     $.ajax({
         type: "GET",
         data: { token: '<?php echo currentToken(); ?>' },
-        url: "<?php print DOL_URL_ROOT . '/takepos/ajax/ajax.php?action=printinvoiceticket&token=' . newToken() . '&term=' . urlencode(isset($_SESSION["takeposterminal"]) ? $_SESSION["takeposterminal"] : '') . '&id='; ?>" + id,
+        url: "<?php print constant('BASE_URL') . '/takepos/ajax/ajax.php?action=printinvoiceticket&token=' . newToken() . '&term=' . urlencode(isset($_SESSION["takeposterminal"]) ? $_SESSION["takeposterminal"] : '') . '&id='; ?>" + id,
 
     });
     return true;
@@ -1694,7 +1694,7 @@ if (!empty($_SESSION["basiclayout"]) && $_SESSION["basiclayout"] == 1) {
             }
             $htmlforlines .= ' onclick="LoadProducts(' . $row['id'] . ');">';
             if (defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
-                $htmlforlines .= '<img class="imgwrapper" width="33%" src="' . DOL_URL_ROOT . '/takepos/public/auto_order.php?genimg=cat&query=cat&id=' . $row['id'] . '"><br>';
+                $htmlforlines .= '<img class="imgwrapper" width="33%" src="' . constant('BASE_URL') . '/takepos/public/auto_order.php?genimg=cat&query=cat&id=' . $row['id'] . '"><br>';
             } else {
                 $htmlforlines .= '<td class="left">';
             }
@@ -1724,7 +1724,7 @@ if (!empty($_SESSION["basiclayout"]) && $_SESSION["basiclayout"] == 1) {
             $htmlforlines .= ' onclick="AddProduct(\'' . $place . '\', ' . $row->id . ')"';
             $htmlforlines .= '>';
             if (defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
-                $htmlforlines .= '<img class="imgwrapper" width="33%" src="' . DOL_URL_ROOT . '/takepos/public/auto_order.php?genimg=pro&query=pro&id=' . $row->id . '"><br>';
+                $htmlforlines .= '<img class="imgwrapper" width="33%" src="' . constant('BASE_URL') . '/takepos/public/auto_order.php?genimg=pro&query=pro&id=' . $row->id . '"><br>';
                 $htmlforlines .= $row->label . ' ' . price($row->price_ttc, 1, $langs, 1, -1, -1, $conf->currency);
                 $htmlforlines .= '</div>' . "\n";
             } else {

@@ -36,13 +36,13 @@ function stock_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/product/stock/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/product/stock/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Warehouse");
     $head[$h][2] = 'card';
     $h++;
 
     if ($user->hasRight('stock', 'mouvement', 'lire')) {
-        $head[$h][0] = DOL_URL_ROOT . '/product/stock/movement_list.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/product/stock/movement_list.php?id=' . $object->id;
         $head[$h][1] = $langs->trans("StockMovements");
         $head[$h][2] = 'movements';
         $h++;
@@ -73,7 +73,7 @@ function stock_prepare_head($object)
     // $this->tabs = array('entity:-tabname);                                                   to remove a tab
     complete_head_from_modules($conf, $langs, $object, $head, $h, 'stock', 'add', 'core');
 
-    $head[$h][0] = DOL_URL_ROOT . '/product/stock/info.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/product/stock/info.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Info");
     $head[$h][2] = 'info';
     $h++;
@@ -102,7 +102,7 @@ function stock_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/stock.php';
+    $head[$h][0] = constant('BASE_URL') . '/admin/stock.php';
     $head[$h][1] = $langs->trans("Miscellaneous");
     $head[$h][2] = 'general';
     $h++;
@@ -113,7 +113,7 @@ function stock_admin_prepare_head()
     // $this->tabs = array('entity:-tabname:Title:@mymodule:/mymodule/mypage.php?id=__ID__');   to remove a tab
     complete_head_from_modules($conf, $langs, null, $head, $h, 'stock_admin');
 
-    $head[$h][0] = DOL_URL_ROOT . '/product/admin/stock_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/product/admin/stock_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFields");
     $nbExtrafields = $extrafields->attributes['entrepot']['count'];
     if ($nbExtrafields > 0) {
@@ -122,7 +122,7 @@ function stock_admin_prepare_head()
     $head[$h][2] = 'attributes';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/product/admin/stock_mouvement_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/product/admin/stock_mouvement_extrafields.php';
     $head[$h][1] = $langs->trans("StockMouvementExtraFields");
     $nbExtrafields = $extrafields->attributes['stock_mouvement']['count'];
     if ($nbExtrafields > 0) {
@@ -131,7 +131,7 @@ function stock_admin_prepare_head()
     $head[$h][2] = 'stockMouvementAttributes';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/product/admin/inventory_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/product/admin/inventory_extrafields.php';
     $head[$h][1] = $langs->trans("InventoryExtraFields");
     $nbExtrafields = $extrafields->attributes['inventory']['count'];
     if ($nbExtrafields > 0) {

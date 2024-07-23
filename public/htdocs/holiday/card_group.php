@@ -133,14 +133,14 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/holiday/list.php';
+    $backurlforlist = constant('BASE_URL') . '/holiday/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/holiday/card_group.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/holiday/card_group.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -350,7 +350,7 @@ if (empty($reshook)) {
                 // If no SQL error we redirect to the request card
                 if (!$error) {
                     $db->commit();
-                    header('Location: ' . DOL_URL_ROOT . '/holiday/list.php');
+                    header('Location: ' . constant('BASE_URL') . '/holiday/list.php');
                     exit;
                 } else {
                     $db->rollback();

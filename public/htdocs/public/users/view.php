@@ -116,10 +116,10 @@ if (!empty($object->photo)) {
 $urllogo = '';
 $urllogofull = '';
 if (!empty($logosmall) && is_readable($dir . '/' . $logosmall)) {
-    $urllogo = DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . ($conf->entity > 1 ? '&amp;entity=' . $conf->entity : '') . '&amp;securekey=' . urlencode($securekey) . '&amp;file=' . urlencode($logosmall);
+    $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . ($conf->entity > 1 ? '&amp;entity=' . $conf->entity : '') . '&amp;securekey=' . urlencode($securekey) . '&amp;file=' . urlencode($logosmall);
     $urllogofull = $dolibarr_main_url_root . '/viewimage.php?modulepart=' . $modulepart . ($conf->entity > 1 ? '&entity=' . $conf->entity : '') . '&securekey=' . urlencode($securekey) . '&file=' . urlencode($logosmall);
 } elseif (!empty($logo) && is_readable($dir . '/' . $logo)) {
-    $urllogo = DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . ($conf->entity > 1 ? '&amp;entity=' . $conf->entity : '') . '&amp;securekey=' . urlencode($securekey) . '&amp;file=' . urlencode($logo);
+    $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . ($conf->entity > 1 ? '&amp;entity=' . $conf->entity : '') . '&amp;securekey=' . urlencode($securekey) . '&amp;file=' . urlencode($logo);
     $urllogofull = $dolibarr_main_url_root . '/viewimage.php?modulepart=' . $modulepart . ($conf->entity > 1 ? '&entity=' . $conf->entity : '') . '&securekey=' . urlencode($securekey) . '&file=' . urlencode($logo);
 }
 
@@ -427,10 +427,10 @@ if (!getDolUserInt('USER_PUBLIC_HIDE_COMPANY', 0, $object)) {
     $urllogo = '';
     $urllogofull = '';
     if (!empty($logosmall) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $logosmall)) {
-        $urllogo = DOL_URL_ROOT . '/viewimage.php?modulepart=mycompany' . ($conf->entity > 1 ? '&amp;entity=' . $conf->entity : '') . '&amp;file=' . urlencode('logos/thumbs/' . $logosmall);
+        $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany' . ($conf->entity > 1 ? '&amp;entity=' . $conf->entity : '') . '&amp;file=' . urlencode('logos/thumbs/' . $logosmall);
         $urllogofull = $dolibarr_main_url_root . '/viewimage.php?modulepart=mycompany' . ($conf->entity > 1 ? '&entity=' . $conf->entity : '') . '&file=' . urlencode('logos/thumbs/' . $logosmall);
     } elseif (!empty($logo) && is_readable($conf->mycompany->dir_output . '/logos/' . $logo)) {
-        $urllogo = DOL_URL_ROOT . '/viewimage.php?modulepart=mycompany' . ($conf->entity > 1 ? '&amp;entity=' . $conf->entity : '') . '&amp;file=' . urlencode('logos/' . $logo);
+        $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany' . ($conf->entity > 1 ? '&amp;entity=' . $conf->entity : '') . '&amp;file=' . urlencode('logos/' . $logo);
         $urllogofull = $dolibarr_main_url_root . '/viewimage.php?modulepart=mycompany' . ($conf->entity > 1 ? '&entity=' . $conf->entity : '') . '&file=' . urlencode('logos/' . $logo);
     }
     // Output html code for logo

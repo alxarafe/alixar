@@ -1136,7 +1136,7 @@ if ($mode == 'graph') {
         dol_mkdir($dir);
         // $customreportkey may be defined when using customreports.php as an include
         $filenamekey = $dir . '/customreport_' . $object->element . (empty($customreportkey) ? '' : $customreportkey) . '.png';
-        $fileurlkey = DOL_URL_ROOT . '/viewimage.php?modulepart=user&file=customreport_' . $object->element . (empty($customreportkey) ? '' : $customreportkey) . '.png';
+        $fileurlkey = constant('BASE_URL') . '/viewimage.php?modulepart=user&file=customreport_' . $object->element . (empty($customreportkey) ? '' : $customreportkey) . '.png';
 
         $px1->draw($filenamekey, $fileurlkey);
 

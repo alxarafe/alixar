@@ -928,7 +928,7 @@ class Fichinter extends CommonObject
             $label = implode($this->getTooltipContentArray($params));
         }
 
-        $url = DOL_URL_ROOT . '/fichinter/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/fichinter/card.php?id=' . $this->id;
 
         if ($option !== 'nolink') {
             // Add param to save lastsearch_values or not

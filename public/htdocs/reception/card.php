@@ -490,7 +490,7 @@ if (empty($reshook)) {
     } elseif ($action == 'confirm_delete' && $confirm == 'yes' && $permissiontodelete) {
         $result = $object->delete($user);
         if ($result > 0) {
-            header("Location: " . DOL_URL_ROOT . '/reception/index.php');
+            header("Location: " . constant('BASE_URL') . '/reception/index.php');
             exit;
         } else {
             setEventMessages($object->error, $object->errors, 'errors');

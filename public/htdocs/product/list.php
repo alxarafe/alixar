@@ -717,7 +717,7 @@ $num = $db->num_rows($resql);
 if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $search_all) {
     $obj = $db->fetch_object($resql);
     $id = $obj->rowid;
-    header("Location: " . DOL_URL_ROOT . '/product/card.php?id=' . $id);
+    header("Location: " . constant('BASE_URL') . '/product/card.php?id=' . $id);
     exit;
 }
 
@@ -890,11 +890,11 @@ if ($type === "") {
 $newcardbutton .= dolGetButtonTitleSeparator();
 if ((isModEnabled('product') && $type === "") || $type == Product::TYPE_PRODUCT) {
     $label = 'NewProduct';
-    $newcardbutton .= dolGetButtonTitle($langs->trans($label), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/product/card.php?action=create&type=0', '', $perm, $params);
+    $newcardbutton .= dolGetButtonTitle($langs->trans($label), '', 'fa fa-plus-circle', constant('BASE_URL') . '/product/card.php?action=create&type=0', '', $perm, $params);
 }
 if ((isModEnabled('service') && $type === "") || $type == Product::TYPE_SERVICE) {
     $label = 'NewService';
-    $newcardbutton .= dolGetButtonTitle($langs->trans($label), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/product/card.php?action=create&type=1', '', $perm, $params);
+    $newcardbutton .= dolGetButtonTitle($langs->trans($label), '', 'fa fa-plus-circle', constant('BASE_URL') . '/product/card.php?action=create&type=1', '', $perm, $params);
 }
 
 print '<form id="searchFormList" action="' . $_SERVER["PHP_SELF"] . '" method="POST" name="formulaire">';

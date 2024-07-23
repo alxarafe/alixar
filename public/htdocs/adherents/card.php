@@ -139,14 +139,14 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/adherents/list.php';
+    $backurlforlist = constant('BASE_URL') . '/adherents/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/adherents/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/adherents/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -2087,9 +2087,9 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
             $MAX = 10;
 
             $morehtmlcenter = '';
-            $messagingUrl = DOL_URL_ROOT . '/adherents/messaging.php?rowid=' . $object->id;
+            $messagingUrl = constant('BASE_URL') . '/adherents/messaging.php?rowid=' . $object->id;
             $morehtmlcenter .= dolGetButtonTitle($langs->trans('ShowAsConversation'), '', 'fa fa-comments imgforviewmode', $messagingUrl, '', 1);
-            $morehtmlcenter .= dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/adherents/agenda.php?id=' . $object->id);
+            $morehtmlcenter .= dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/adherents/agenda.php?id=' . $object->id);
 
             // List of actions on element
             include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';

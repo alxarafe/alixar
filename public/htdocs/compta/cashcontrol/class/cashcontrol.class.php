@@ -406,7 +406,7 @@ class CashControl extends CommonObject
         $label .= '<br>';
         $label .= '<b>' . $langs->trans('Ref') . ':</b> ' . ($this->ref ? $this->ref : $this->id);
 
-        $url = DOL_URL_ROOT . '/compta/cashcontrol/cashcontrol_card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/compta/cashcontrol/cashcontrol_card.php?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not

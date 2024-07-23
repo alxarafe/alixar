@@ -185,7 +185,7 @@ if ($modetax == 1) {
 if ($modetax == 2) {
     $calcmode = $langs->trans('OptionPaymentForProductAndServices');
 }
-$calcmode .= '<br>(' . $langs->trans("TaxModuleSetupToModifyRules", DOL_URL_ROOT . '/admin/taxes.php') . ')';
+$calcmode .= '<br>(' . $langs->trans("TaxModuleSetupToModifyRules", constant('BASE_URL') . '/admin/taxes.php') . ')';
 // Set period
 $period = $form->selectDate($date_start, 'date_start', 0, 0, 0, '', 1, 0, 0, '', '', '', '', 1, '', '', 'tzserver');
 $period .= ' - ';

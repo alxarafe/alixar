@@ -128,7 +128,7 @@ function check_events() {
 
         console.log("Call ajax to check events with time_js_next_test = "+time_js_next_test+" dolnotif_nb_test_for_page="+dolnotif_nb_test_for_page);
 
-        $.ajax("<?php print DOL_URL_ROOT . '/core/ajax/check_notifications.php'; ?>", {
+        $.ajax("<?php print constant('BASE_URL') . '/core/ajax/check_notifications.php'; ?>", {
             type: "POST",   // Usually post or get
             async: true,
             data: { time_js_next_test: time_js_next_test, forcechecknow: 1, token: currentToken, dolnotif_nb_test_for_page: dolnotif_nb_test_for_page },
@@ -141,7 +141,7 @@ function check_events() {
                     var audio = null;
                     <?php
                     if (getDolGlobalString('AGENDA_REMINDER_BROWSER_SOUND')) {
-                        print 'audio = new Audio(\'' . DOL_URL_ROOT . '/theme/common/sound/notification_agenda.wav\');';
+                        print 'audio = new Audio(\'' . constant('BASE_URL') . '/theme/common/sound/notification_agenda.wav\');';
                     }
                     ?>
                     var listofreminderids = '';
@@ -152,8 +152,8 @@ function check_events() {
                         var url = "notdefined";
                         var title = "Not defined";
                         var body = value.label;
-                        var icon = '<?php print DOL_URL_ROOT . '/theme/common/octicons/build/svg/bell.svg'; ?>';
-                        var image = '<?php print DOL_URL_ROOT . '/theme/common/octicons/build/svg/bell.svg'; ?>';
+                        var icon = '<?php print constant('BASE_URL') . '/theme/common/octicons/build/svg/bell.svg'; ?>';
+                        var image = '<?php print constant('BASE_URL') . '/theme/common/octicons/build/svg/bell.svg'; ?>';
                         if (value.type == 'agenda' && value.location != null && value.location != '') {
                             body += '\n' + value.location;
                         }
@@ -164,7 +164,7 @@ function check_events() {
 
                         if (value.type == 'agenda')
                         {
-                            url = '<?php print DOL_URL_ROOT . '/comm/action/card.php?id='; ?>' + value.id_agenda;
+                            url = '<?php print constant('BASE_URL') . '/comm/action/card.php?id='; ?>' + value.id_agenda;
                             title = '<?php print dol_escape_js($langs->transnoentities('EventReminder')) ?>';
                         }
                         var extra = {
@@ -201,7 +201,7 @@ function check_events() {
 
                     // Update status of all notifications we sent on browser (listofreminderids)
                     console.log("Flag notification as done for listofreminderids="+listofreminderids);
-                    $.ajax("<?php print DOL_URL_ROOT . '/core/ajax/check_notifications.php?action=stopreminder&listofreminderids='; ?>"+listofreminderids, {
+                    $.ajax("<?php print constant('BASE_URL') . '/core/ajax/check_notifications.php?action=stopreminder&listofreminderids='; ?>"+listofreminderids, {
                         type: "POST",   // Usually post or get
                         async: true,
                         data: { time_js_next_test: time_js_next_test, token: currentToken }

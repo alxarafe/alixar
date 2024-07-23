@@ -374,7 +374,7 @@ $num = $db->num_rows($resql);
 if ($num == 1 && getDolGlobalInt('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $search_all && !$page) {
     $obj = $db->fetch_object($resql);
     $id = $obj->rowid;
-    header("Location: " . DOL_URL_ROOT . '/workstation/workstation_card.php?id=' . ((int) $id));
+    header("Location: " . constant('BASE_URL') . '/workstation/workstation_card.php?id=' . ((int) $id));
     exit;
 }
 

@@ -120,11 +120,11 @@ if ($id > 0) {
 
 
     if (file_exists($file)) {
-        $url = DOL_URL_ROOT . '/viewimage.php?modulepart=graph_stock&amp;file=entrepot-' . $entrepot->id . '-' . $year . '.png';
+        $url = constant('BASE_URL') . '/viewimage.php?modulepart=graph_stock&amp;file=entrepot-' . $entrepot->id . '-' . $year . '.png';
         print '<img src="' . $url . '" alt="Valorisation du stock annee ' . ($year) . '">';
 
         if (file_exists(DOL_DATA_ROOT . '/entrepot/temp/entrepot-' . $entrepot->id . '-' . ($year - 1) . '.png')) {
-            $url = DOL_URL_ROOT . '/viewimage.php?modulepart=graph_stock&amp;file=entrepot-' . $entrepot->id . '-' . ($year - 1) . '.png';
+            $url = constant('BASE_URL') . '/viewimage.php?modulepart=graph_stock&amp;file=entrepot-' . $entrepot->id . '-' . ($year - 1) . '.png';
             print '<br><img src="' . $url . '" alt="Valorisation du stock annee ' . ($year - 1) . '">';
         }
     } else {

@@ -262,7 +262,7 @@ if ($action == 'create') {
 
     // Object card
     // ------------------------------------------------------------
-    $backtolist = (GETPOST('backtolist') ? GETPOST('backtolist') : DOL_URL_ROOT . '/variants/list.php?leftmenu=?restore_lastsearch_values=1');
+    $backtolist = (GETPOST('backtolist') ? GETPOST('backtolist') : constant('BASE_URL') . '/variants/list.php?leftmenu=?restore_lastsearch_values=1');
     $linkback = '<a href="' . dol_sanitizeUrl($backtolist) . '">' . $langs->trans("BackToList") . '</a>';
 
     dol_banner_tab($object, 'id', $linkback);

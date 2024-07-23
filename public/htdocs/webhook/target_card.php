@@ -603,7 +603,7 @@ if ($action == "test") {
 		function getDatatToSendTriggerCode(triggercode){
 			$.ajax({
 				method: \'GET\',
-				url:  \'' . DOL_URL_ROOT . '/webhook/ajax/webhook.php\',
+				url:  \'' . constant('BASE_URL') . '/webhook/ajax/webhook.php\',
 				data: { action: "getjsonformtrigger", triggercode: triggercode , token:"' . currentToken() . '"},
 				success: function(response) {
 					obj = JSON.stringify(response);

@@ -231,7 +231,7 @@ if ($result < 0) {
 
         // Fabrication tableau 1
         $file = $conf->bank->dir_temp . "/balance" . $account . "-" . $year . $month . ".png";
-        $fileurl = DOL_URL_ROOT . '/viewimage.php?modulepart=banque_temp&file=' . "/balance" . $account . "-" . $year . $month . ".png";
+        $fileurl = constant('BASE_URL') . '/viewimage.php?modulepart=banque_temp&file=' . "/balance" . $account . "-" . $year . $month . ".png";
         $title = $langs->transnoentities("Balance") . ' - ' . $langs->transnoentities("Month") . ': ' . $month . ' ' . $langs->transnoentities("Year") . ': ' . $year;
         $graph_datas = array();
         foreach ($datas as $i => $val) {
@@ -370,7 +370,7 @@ if ($result < 0) {
 
         // Fabrication tableau 2
         $file = $conf->bank->dir_temp . "/balance" . $account . "-" . $year . ".png";
-        $fileurl = DOL_URL_ROOT . '/viewimage.php?modulepart=banque_temp&file=' . "/balance" . $account . "-" . $year . ".png";
+        $fileurl = constant('BASE_URL') . '/viewimage.php?modulepart=banque_temp&file=' . "/balance" . $account . "-" . $year . ".png";
         $title = $langs->transnoentities("Balance") . ' - ' . $langs->transnoentities("Year") . ': ' . $year;
         $graph_datas = array();
         foreach ($datas as $i => $val) {
@@ -487,7 +487,7 @@ if ($result < 0) {
 
         // Fabrication tableau 3
         $file = $conf->bank->dir_temp . "/balance" . $account . ".png";
-        $fileurl = DOL_URL_ROOT . '/viewimage.php?modulepart=banque_temp&file=' . "/balance" . $account . ".png";
+        $fileurl = constant('BASE_URL') . '/viewimage.php?modulepart=banque_temp&file=' . "/balance" . $account . ".png";
         $title = $langs->transnoentities("Balance") . " - " . $langs->transnoentities("AllTime");
         $graph_datas = array();
         foreach ($datas as $i => $val) {
@@ -623,7 +623,7 @@ if ($result < 0) {
 
         // Fabrication tableau 4a
         $file = $conf->bank->dir_temp . "/movement" . $account . "-" . $year . $month . ".png";
-        $fileurl = DOL_URL_ROOT . '/viewimage.php?modulepart=banque_temp&file=' . "/movement" . $account . "-" . $year . $month . ".png";
+        $fileurl = constant('BASE_URL') . '/viewimage.php?modulepart=banque_temp&file=' . "/movement" . $account . "-" . $year . $month . ".png";
         $title = $langs->transnoentities("BankMovements") . ' - ' . $langs->transnoentities("Month") . ': ' . $month . ' ' . $langs->transnoentities("Year") . ': ' . $year;
         $graph_datas = array();
         foreach ($data_credit as $i => $val) {
@@ -724,7 +724,7 @@ if ($result < 0) {
 
         // Fabrication tableau 4b
         $file = $conf->bank->dir_temp . "/movement" . $account . "-" . $year . ".png";
-        $fileurl = DOL_URL_ROOT . '/viewimage.php?modulepart=banque_temp&file=' . "/movement" . $account . "-" . $year . ".png";
+        $fileurl = constant('BASE_URL') . '/viewimage.php?modulepart=banque_temp&file=' . "/movement" . $account . "-" . $year . ".png";
         $title = $langs->transnoentities("BankMovements") . ' - ' . $langs->transnoentities("Year") . ': ' . $year;
         $graph_datas = array();
         foreach ($data_credit as $i => $val) {

@@ -38,12 +38,12 @@ function moPrepareHead($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/mrp/mo_card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/mrp/mo_card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("ManufacturingOrder");
     $head[$h][2] = 'card';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/mrp/mo_production.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/mrp/mo_production.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Production");
     $arrayproduced = $object->fetchLinesLinked('produced', 0);
     $nbProduced = 0;
@@ -54,7 +54,7 @@ function moPrepareHead($object)
     $head[$h][2] = 'production';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/mrp/mo_movements.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/mrp/mo_movements.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("StockMovements");
     $nbMove = $object->countMovements();
     $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbMove . '</span>';
@@ -69,7 +69,7 @@ function moPrepareHead($object)
         if (!empty($object->note_public)) {
             $nbNote++;
         }
-        $head[$h][0] = DOL_URL_ROOT . '/mrp/mo_note.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/mrp/mo_note.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('Notes');
         if ($nbNote > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';
@@ -83,7 +83,7 @@ function moPrepareHead($object)
     $upload_dir = $conf->mrp->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/mrp/mo_document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/mrp/mo_document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -91,7 +91,7 @@ function moPrepareHead($object)
     $head[$h][2] = 'document';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/mrp/mo_agenda.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/mrp/mo_agenda.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Events");
     $head[$h][2] = 'agenda';
     $h++;

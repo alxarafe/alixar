@@ -512,7 +512,7 @@ if ($resql) {
 
         $id = $obj->rowid;
 
-        header("Location: " . DOL_URL_ROOT . '/supplier_proposal/card.php?id=' . $id);
+        header("Location: " . constant('BASE_URL') . '/supplier_proposal/card.php?id=' . $id);
         exit;
     }
 
@@ -641,7 +641,7 @@ if ($resql) {
     }
     $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
-    $url = DOL_URL_ROOT . '/supplier_proposal/card.php?action=create';
+    $url = constant('BASE_URL') . '/supplier_proposal/card.php?action=create';
     if (!empty($socid)) {
         $url .= '&socid=' . $socid;
     }

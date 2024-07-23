@@ -39,7 +39,7 @@ function emailcollectorPrepareHead($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/emailcollector_card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/admin/emailcollector_card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("EmailCollector");
     $head[$h][2] = 'card';
     $h++;

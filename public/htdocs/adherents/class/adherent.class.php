@@ -1737,7 +1737,7 @@ class Adherent extends CommonObject
 
             $insertid = $acct->addline($dateop, $operation, $label, $amount, $num_chq, '', $user, $emetteur_nom, $emetteur_banque);
             if ($insertid > 0) {
-                $inserturlid = $acct->add_url_line($insertid, $this->id, DOL_URL_ROOT . '/adherents/card.php?rowid=', $this->getFullName($langs), 'member');
+                $inserturlid = $acct->add_url_line($insertid, $this->id, constant('BASE_URL') . '/adherents/card.php?rowid=', $this->getFullName($langs), 'member');
                 if ($inserturlid > 0) {
                     // Update table subscription
                     $sql = "UPDATE " . MAIN_DB_PREFIX . "subscription SET fk_bank=" . ((int) $insertid);
@@ -2333,9 +2333,9 @@ class Adherent extends CommonObject
             $label = implode($this->getTooltipContentArray($params));
         }
 
-        $url = DOL_URL_ROOT . '/adherents/card.php?rowid=' . ((int) $this->id);
+        $url = constant('BASE_URL') . '/adherents/card.php?rowid=' . ((int) $this->id);
         if ($option == 'subscription') {
-            $url = DOL_URL_ROOT . '/adherents/subscription.php?rowid=' . ((int) $this->id);
+            $url = constant('BASE_URL') . '/adherents/subscription.php?rowid=' . ((int) $this->id);
         }
 
         if ($option != 'nolink') {
@@ -2565,10 +2565,10 @@ class Adherent extends CommonObject
                 $warning_delay = $conf->adherent->subscription->warning_delay / 60 / 60 / 24;
                 $label = $langs->trans("MembersWithSubscriptionToReceive");
                 $labelShort = $langs->trans("MembersWithSubscriptionToReceiveShort");
-                $url = DOL_URL_ROOT . '/adherents/list.php?mainmenu=members&amp;statut=' . self::STATUS_VALIDATED . '&amp;filter=outofdate';
+                $url = constant('BASE_URL') . '/adherents/list.php?mainmenu=members&amp;statut=' . self::STATUS_VALIDATED . '&amp;filter=outofdate';
             } elseif ($mode == 'shift') {
                 $warning_delay = $conf->adherent->subscription->warning_delay / 60 / 60 / 24;
-                $url = DOL_URL_ROOT . '/adherents/list.php?mainmenu=members&amp;statut=' . self::STATUS_DRAFT;
+                $url = constant('BASE_URL') . '/adherents/list.php?mainmenu=members&amp;statut=' . self::STATUS_DRAFT;
                 $label = $langs->trans("MembersListToValid");
                 $labelShort = $langs->trans("ToValidate");
             }

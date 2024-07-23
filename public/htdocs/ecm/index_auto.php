@@ -519,7 +519,7 @@ if (empty($action) || $action == 'file_manager' || preg_match('/refresh/i', $act
 // Start right panel
 
 $mode = 'noajax';
-$url = DOL_URL_ROOT . '/ecm/index_auto.php';
+$url = constant('BASE_URL') . '/ecm/index_auto.php';
 include_once DOL_DOCUMENT_ROOT . '/core/ajax/ajaxdirpreview.php';
 
 

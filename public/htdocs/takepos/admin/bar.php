@@ -224,7 +224,7 @@ if (getDolGlobalInt('TAKEPOS_BAR_RESTAURANT')) {
         print '<a target="_blank" rel="noopener noreferrer" href="' . $urlwithroot . '/takepos/public/menu.php">' . $urlwithroot . '/takepos/public/menu.php</a>';
         print '</td>';
         print '<td class="right">';
-        print '<a target="_blank" rel="noopener noreferrer" href="printqr.php"><img src="' . DOL_URL_ROOT . '/takepos/genimg/qr.php" height="42" width="42"></a>';
+        print '<a target="_blank" rel="noopener noreferrer" href="printqr.php"><img src="' . constant('BASE_URL') . '/takepos/genimg/qr.php" height="42" width="42"></a>';
         print '</td></tr>';
         print '</table>';
         print '</div>';
@@ -252,7 +252,7 @@ if (getDolGlobalInt('TAKEPOS_BAR_RESTAURANT')) {
             print '<a target="_blank" rel="noopener noreferrer" href="' . $urlwithroot . "/takepos/public/auto_order.php?key=" . dol_encode($row['rowid']) . '">' . $urlwithroot . "/takepos/public/auto_order.php?key=" . dol_encode($row['rowid']) . '</a>';
             print '</td>';
             print '<td class="right">';
-            print '<a target="_blank" rel="noopener noreferrer" href="printqr.php?id=' . $row['rowid'] . '"><img src="' . DOL_URL_ROOT . '/takepos/genimg/qr.php?key=' . dol_encode($row['rowid']) . '" height="42" width="42"></a>';
+            print '<a target="_blank" rel="noopener noreferrer" href="printqr.php?id=' . $row['rowid'] . '"><img src="' . constant('BASE_URL') . '/takepos/genimg/qr.php?key=' . dol_encode($row['rowid']) . '" height="42" width="42"></a>';
             print '</td></tr>';
         }
 

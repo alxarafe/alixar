@@ -276,7 +276,7 @@ if ($action == 'create') {
 
     print load_fiche_titre($langs->trans("NewMenu"), '', 'title_setup');
 
-    print '<form action="' . DOL_URL_ROOT . '/admin/menus/edit.php?menuId=' . GETPOSTINT('menuId') . '" method="POST" name="formmenucreate">';
+    print '<form action="' . constant('BASE_URL') . '/admin/menus/edit.php?menuId=' . GETPOSTINT('menuId') . '" method="POST" name="formmenucreate">';
     print '<input type="hidden" name="action" value="add">';
     print '<input type="hidden" name="token" value="' . newToken() . '">';
 

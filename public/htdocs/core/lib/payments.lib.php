@@ -36,7 +36,7 @@ function payment_prepare_head(Paiement $object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/paiement/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/paiement/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Payment");
     $head[$h][2] = 'payment';
     $h++;
@@ -47,7 +47,7 @@ function payment_prepare_head(Paiement $object)
     // $this->tabs = array('entity:-tabname);                                                   to remove a tab
     complete_head_from_modules($conf, $langs, $object, $head, $h, 'payment');
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/paiement/info.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/paiement/info.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Info");
     $head[$h][2] = 'info';
     $h++;
@@ -57,7 +57,7 @@ function payment_prepare_head(Paiement $object)
     $upload_dir = $conf->compta->payment->dir_output . '/' . $object->ref;
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/compta/paiement/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/paiement/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -84,7 +84,7 @@ function bankline_prepare_head($id)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/bank/line.php?rowid=' . $id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/bank/line.php?rowid=' . $id;
     $head[$h][1] = $langs->trans('BankTransaction');
     $head[$h][2] = 'bankline';
     $h++;
@@ -95,7 +95,7 @@ function bankline_prepare_head($id)
     // $this->tabs = array('entity:-tabname);                                                   to remove a tab
     complete_head_from_modules($conf, $langs, null, $head, $h, 'bankline');
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/bank/info.php?rowid=' . $id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/bank/info.php?rowid=' . $id;
     $head[$h][1] = $langs->trans("Info");
     $head[$h][2] = 'info';
     $h++;
@@ -119,7 +119,7 @@ function payment_supplier_prepare_head(Paiement $object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/fourn/paiement/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/fourn/paiement/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Payment");
     $head[$h][2] = 'payment';
     $h++;
@@ -130,7 +130,7 @@ function payment_supplier_prepare_head(Paiement $object)
     // $this->tabs = array('entity:-tabname);                                                   to remove a tab
     complete_head_from_modules($conf, $langs, $object, $head, $h, 'payment_supplier');
 
-    $head[$h][0] = DOL_URL_ROOT . '/fourn/paiement/info.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/fourn/paiement/info.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Info');
     $head[$h][2] = 'info';
     $h++;
@@ -140,7 +140,7 @@ function payment_supplier_prepare_head(Paiement $object)
     $upload_dir = $conf->fournisseur->payment->dir_output . '/' . $object->ref;
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/fourn/paiement/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/fourn/paiement/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';

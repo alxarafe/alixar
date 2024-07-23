@@ -101,7 +101,7 @@ class FileUpload
         $this->options = array(
             'script_url' => $_SERVER['PHP_SELF'],
             'upload_dir' => $dir_output . '/' . $object_ref . '/',
-            'upload_url' => DOL_URL_ROOT . '/document.php?modulepart=' . $element . '&attachment=1&file=/' . $object_ref . '/',
+            'upload_url' => constant('BASE_URL') . '/document.php?modulepart=' . $element . '&attachment=1&file=/' . $object_ref . '/',
             'param_name' => 'files',
             // Set the following option to 'POST', if your server does not support
             // DELETE requests. This is a parameter sent to the client:
@@ -135,7 +135,7 @@ class FileUpload
                 */
                 'thumbnail' => array(
                     'upload_dir' => $dir_output . '/' . $object_ref . '/thumbs/',
-                    'upload_url' => DOL_URL_ROOT . '/document.php?modulepart=' . urlencode($element) . '&attachment=1&file=' . urlencode('/' . $object_ref . '/thumbs/'),
+                    'upload_url' => constant('BASE_URL') . '/document.php?modulepart=' . urlencode($element) . '&attachment=1&file=' . urlencode('/' . $object_ref . '/thumbs/'),
                     'max_width' => 80,
                     'max_height' => 80
                 )

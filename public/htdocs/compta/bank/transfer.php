@@ -180,13 +180,13 @@ if ($action == 'add' && $user->hasRight('banque', 'transfer')) {
                 }
 
                 if (!$error) {
-                    $result = $tmpaccountfrom->add_url_line($bank_line_id_from, $bank_line_id_to, DOL_URL_ROOT . '/compta/bank/line.php?rowid=', '(banktransfert)', 'banktransfert');
+                    $result = $tmpaccountfrom->add_url_line($bank_line_id_from, $bank_line_id_to, constant('BASE_URL') . '/compta/bank/line.php?rowid=', '(banktransfert)', 'banktransfert');
                 }
                 if (!($result > 0)) {
                     $error++;
                 }
                 if (!$error) {
-                    $result = $tmpaccountto->add_url_line($bank_line_id_to, $bank_line_id_from, DOL_URL_ROOT . '/compta/bank/line.php?rowid=', '(banktransfert)', 'banktransfert');
+                    $result = $tmpaccountto->add_url_line($bank_line_id_to, $bank_line_id_from, constant('BASE_URL') . '/compta/bank/line.php?rowid=', '(banktransfert)', 'banktransfert');
                 }
                 if (!($result > 0)) {
                     $error++;
@@ -208,7 +208,7 @@ if ($action == 'add' && $user->hasRight('banque', 'transfer')) {
     if (!$error) {
         $db->commit();
 
-        header("Location: " . DOL_URL_ROOT . '/compta/bank/transfer.php');
+        header("Location: " . constant('BASE_URL') . '/compta/bank/transfer.php');
         exit;
     } else {
         $db->rollback();

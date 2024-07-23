@@ -44,7 +44,7 @@ function tax_prepare_head(ChargeSociales $object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/sociales/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/sociales/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('SocialContribution');
     $head[$h][2] = 'card';
     $h++;
@@ -60,7 +60,7 @@ function tax_prepare_head(ChargeSociales $object)
     $upload_dir = $conf->tax->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/compta/sociales/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/sociales/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Documents");
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -76,7 +76,7 @@ function tax_prepare_head(ChargeSociales $object)
     if (!empty($object->note_public)) {
         $nbNote++;
     }
-    $head[$h][0] = DOL_URL_ROOT . '/compta/sociales/note.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/sociales/note.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Notes');
     if ($nbNote > 0) {
         $head[$h][1] .= (!getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER') ? '<span class="badge marginleftonlyshort">' . $nbNote . '</span>' : '');
@@ -85,7 +85,7 @@ function tax_prepare_head(ChargeSociales $object)
     $h++;
 
 
-    $head[$h][0] = DOL_URL_ROOT . '/compta/sociales/info.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/sociales/info.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Info");
     $head[$h][2] = 'info';
     $h++;

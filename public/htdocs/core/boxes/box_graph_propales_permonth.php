@@ -139,7 +139,7 @@ class box_graph_propales_permonth extends ModeleBoxes
                 $datatype1 = array_pad(array(), ($endyear - $startyear + 1), 'bars');
 
                 $filenamenb = $dir . "/" . $prefix . "propalsnbinyear-" . $endyear . ".png";
-                $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=propalstats&amp;file=propalsnbinyear-' . $endyear . '.png';
+                $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=propalstats&amp;file=propalsnbinyear-' . $endyear . '.png';
 
                 $px1 = new DolGraph();
                 $mesg = $px1->isGraphKo();
@@ -179,7 +179,7 @@ class box_graph_propales_permonth extends ModeleBoxes
                 //$datatype2 = array('lines','bars');
 
                 $filenamenb = $dir . "/" . $prefix . "propalsamountinyear-" . $endyear . ".png";
-                $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=propalstats&amp;file=propalsamountinyear-' . $endyear . '.png';
+                $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=propalstats&amp;file=propalsamountinyear-' . $endyear . '.png';
 
                 $px2 = new DolGraph();
                 $mesg = $px2->isGraphKo();

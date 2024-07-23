@@ -161,7 +161,7 @@ if ((!($id > 0) && empty($ref)) || $notab) {
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/product/stats/card.php' . ($type != '' ? '?type=' . ((int) $type) : '');
+    $head[$h][0] = constant('BASE_URL') . '/product/stats/card.php' . ($type != '' ? '?type=' . ((int) $type) : '');
     $head[$h][1] = $langs->trans("Chart");
     $head[$h][2] = 'chart';
     $h++;
@@ -175,7 +175,7 @@ if ((!($id > 0) && empty($ref)) || $notab) {
     }
 
 
-    $head[$h][0] = DOL_URL_ROOT . '/product/popuprop.php' . ($type != '' ? '?type=' . ((int) $type) : '');
+    $head[$h][0] = constant('BASE_URL') . '/product/popuprop.php' . ($type != '' ? '?type=' . ((int) $type) : '');
     $head[$h][1] = $langs->trans("ProductsServicesPerPopularity");
     if ((string) $type == '0') {
         $head[$h][1] = $langs->trans("ProductsPerPopularity");
@@ -458,7 +458,7 @@ if ($result || !($id > 0)) {
                     $px->SetShading(3);
                     //print 'x '.$key.' '.$graphfiles[$key]['file'];
 
-                    $url = DOL_URL_ROOT . '/viewimage.php?modulepart=' . $graphfiles[$key]['modulepart'] . '&entity=' . ((int) $object->entity) . '&file=' . urlencode($graphfiles[$key]['file']) . ($notab ? '&notab=' . $notab : '');
+                    $url = constant('BASE_URL') . '/viewimage.php?modulepart=' . $graphfiles[$key]['modulepart'] . '&entity=' . ((int) $object->entity) . '&file=' . urlencode($graphfiles[$key]['file']) . ($notab ? '&notab=' . $notab : '');
                     $px->draw($dir . "/" . $graphfiles[$key]['file'], $url);
 
                     $graphfiles[$key]['total'] = $px->total();

@@ -809,7 +809,7 @@ $num = $db->num_rows($resql);
 if ($num == 1 && getDolGlobalInt('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $search_all && !$page) {
     $obj = $db->fetch_object($resql);
     $id = $obj->facid;
-    header("Location: " . DOL_URL_ROOT . '/fourn/facture/card.php?facid=' . $id);
+    header("Location: " . constant('BASE_URL') . '/fourn/facture/card.php?facid=' . $id);
     exit;
 }
 
@@ -978,7 +978,7 @@ if (GETPOSTINT('nomassaction') || in_array($massaction, array('presend', 'predel
 }
 $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
-$url = DOL_URL_ROOT . '/fourn/facture/card.php?action=create';
+$url = constant('BASE_URL') . '/fourn/facture/card.php?action=create';
 if (!empty($socid)) {
     $url .= '&socid=' . urlencode((string) ($socid));
 }

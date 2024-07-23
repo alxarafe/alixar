@@ -78,7 +78,7 @@ if (!function_exists('dol_getprefix')) {
 }
 
 
-include '../../main.inc.php';
+include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';

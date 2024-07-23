@@ -54,7 +54,7 @@ print $langs->trans("HelpCenterDesc2") . "</span><br>\n";
 
 print '<br>';
 
-$homeurl = DOL_URL_ROOT . '/';
+$homeurl = constant('BASE_URL') . '/';
 if (GETPOST('dol_hide_toptmenu')) {
     $homeurl .= (strpos($homeurl, '?') === false ? '?' : '&') . 'dol_hide_toptmenu=1';
 }

@@ -182,14 +182,14 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/fourn/commande/list.php' . ($socid > 0 ? '?socid=' . ((int) $socid) : '');
+    $backurlforlist = constant('BASE_URL') . '/fourn/commande/list.php' . ($socid > 0 ? '?socid=' . ((int) $socid) : '');
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/fourn/commande/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/fourn/commande/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -1114,7 +1114,7 @@ if (empty($reshook)) {
     if ($action == 'confirm_delete' && $confirm == 'yes' && $usercandelete) {
         $result = $object->delete($user);
         if ($result > 0) {
-            header("Location: " . DOL_URL_ROOT . '/fourn/commande/list.php?restore_lastsearch_values=1');
+            header("Location: " . constant('BASE_URL') . '/fourn/commande/list.php?restore_lastsearch_values=1');
             exit;
         } else {
             setEventMessages($object->error, $object->errors, 'errors');

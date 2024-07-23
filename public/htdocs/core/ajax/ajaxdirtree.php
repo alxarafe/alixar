@@ -42,7 +42,7 @@ if (!defined('NOREQUIREAJAX')) {
 }
 
 if (!isset($mode) || $mode != 'noajax') {    // For ajax call
-    $res = @include '../../main.inc.php';
+    $res = @include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
     include_once DOL_DOCUMENT_ROOT . '/core/lib/files.lib.php';
     include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
     include_once DOL_DOCUMENT_ROOT . '/core/lib/treeview.lib.php';
@@ -71,7 +71,7 @@ if (!isset($mode) || $mode != 'noajax') {    // For ajax call
         $selecteddir = preg_replace('/\/$/', '', $selecteddir); // We removed last '/' except if it is '/'
     }
     if (empty($url)) {
-        $url = DOL_URL_ROOT . '/ecm/index.php';
+        $url = constant('BASE_URL') . '/ecm/index.php';
     }
 }
 
@@ -469,7 +469,7 @@ function treeOutputForAbsoluteDir($sqltree, $selecteddir, $fullpathselecteddir, 
                         // Edit link
                         print '<!-- edit link -->';
                         print '<td class="right" width="18"><a class="editfielda" href="';
-                        print DOL_URL_ROOT . '/ecm/dir_card.php?module=' . urlencode($modulepart) . '&section=' . $val['id'] . '&relativedir=' . urlencode($val['fullrelativename']);
+                        print constant('BASE_URL') . '/ecm/dir_card.php?module=' . urlencode($modulepart) . '&section=' . $val['id'] . '&relativedir=' . urlencode($val['fullrelativename']);
                         print '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?file_manager=1&website=' . $websitekey . '&pageid=' . $pageid);
                         print '">' . img_edit($langs->trans("Edit") . ' - ' . $langs->trans("View"), 0, 'class="valignmiddle opacitymedium"') . '</a></td>';
 

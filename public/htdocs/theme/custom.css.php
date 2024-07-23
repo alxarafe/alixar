@@ -41,7 +41,7 @@ if (!defined('NOREQUIREAJAX')) {
 
 session_cache_limiter('public');
 
-require_once __DIR__ . '/../main.inc.php'; // __DIR__ allow this script to be included in custom themes
+require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // __DIR__ allow this script to be included in custom themes
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 // Define css type

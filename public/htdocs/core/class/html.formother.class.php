@@ -874,7 +874,7 @@ class FormOther
             $langs->load("other");
             if (empty($conf->dol_use_jmobile) && !empty($conf->use_javascript_ajax) && !getDolGlobalInt('MAIN_USE_HTML5_COLOR_SELECTOR')) {
                 $out .= '<link rel="stylesheet" media="screen" type="text/css" href="' . constant('BASE_URL') . 'includes/jquery/plugins/jpicker/css/jPicker-1.1.6.css" />';
-                $out .= '<script nonce="' . getNonce() . '" type="text/javascript" src="' . DOL_URL_ROOT . '/includes/jquery/plugins/jpicker/jpicker-1.1.6.js"></script>';
+                $out .= '<script nonce="' . getNonce() . '" type="text/javascript" src="' . constant('BASE_URL') . '/includes/jquery/plugins/jpicker/jpicker-1.1.6.js"></script>';
                 $out .= '<script nonce="' . getNonce() . '" type="text/javascript">
 	             jQuery(document).ready(function(){
 					var originalhex = null;
@@ -897,7 +897,7 @@ class FormOther
 		                    },
 		                },
 		                images: {
-		                    clientPath: \'' . DOL_URL_ROOT . '/includes/jquery/plugins/jpicker/images/\',
+		                    clientPath: \'' . constant('BASE_URL') . '/includes/jquery/plugins/jpicker/images/\',
 		                    picker: { file: \'../../../../../theme/common/colorpicker.png\', width: 14, height: 14 }
 		          		},
 		                localization: // alter these to change the text presented by the picker (e.g. different language)
@@ -965,7 +965,7 @@ class FormOther
             // In most cases, this is not used. We used instead function with no specific list of colors
             if (empty($conf->dol_use_jmobile) && !empty($conf->use_javascript_ajax)) {
                 $out .= '<link rel="stylesheet" href="' . constant('BASE_URL') . 'includes/jquery/plugins/colorpicker/jquery.colorpicker.css" type="text/css" media="screen" />';
-                $out .= '<script nonce="' . getNonce() . '" src="' . DOL_URL_ROOT . '/includes/jquery/plugins/colorpicker/jquery.colorpicker.js" type="text/javascript"></script>';
+                $out .= '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/plugins/colorpicker/jquery.colorpicker.js" type="text/javascript"></script>';
                 $out .= '<script nonce="' . getNonce() . '" type="text/javascript">
 	             jQuery(document).ready(function(){
 	                 jQuery(\'#colorpicker' . $prefix . '\').colorpicker({
@@ -1297,7 +1297,7 @@ class FormOther
 	        	if (boxorder==\'A:A-B:B\' && closing == 1)	// There is no more boxes on screen, and we are after a delete of a box so we must hide title
 	        	{
 	        		jQuery.ajax({
-	        			url: \'' . DOL_URL_ROOT . '/core/ajax/box.php?closing=1&boxorder=\'+boxorder+\'&zone=' . $areacode . '&userid=\'+' . $user->id . ',
+	        			url: \'' . constant('BASE_URL') . '/core/ajax/box.php?closing=1&boxorder=\'+boxorder+\'&zone=' . $areacode . '&userid=\'+' . $user->id . ',
 	        			async: false
 	        		});
 	        		// We force reload to be sure to get all boxes into list
@@ -1306,7 +1306,7 @@ class FormOther
 	        	else
 	        	{
 	        		jQuery.ajax({
-	        			url: \'' . DOL_URL_ROOT . '/core/ajax/box.php?closing=\'+closing+\'&boxorder=\'+boxorder+\'&zone=' . $areacode . '&userid=\'+' . $user->id . ',
+	        			url: \'' . constant('BASE_URL') . '/core/ajax/box.php?closing=\'+closing+\'&boxorder=\'+boxorder+\'&zone=' . $areacode . '&userid=\'+' . $user->id . ',
 	        			async: true
 	        		});
 	        	}
@@ -1321,7 +1321,7 @@ class FormOther
 	            		var right_list = cleanSerialize(jQuery("#boxhalfright").sortable("serialize"));
 	            		var boxorder = \'A:\' + left_list + \'-B:\' + right_list;
 	    				jQuery.ajax({
-	    					url: \'' . DOL_URL_ROOT . '/core/ajax/box.php?boxorder=\'+boxorder+\'&boxid=\'+boxid+\'&zone=' . $areacode . '&userid=' . $user->id . '\'
+	    					url: \'' . constant('BASE_URL') . '/core/ajax/box.php?boxorder=\'+boxorder+\'&boxid=\'+boxid+\'&zone=' . $areacode . '&userid=' . $user->id . '\'
 	    		        }).done(function() {
 	        				window.location.search=\'mainmenu=' . GETPOST("mainmenu", "aZ09") . '&leftmenu=' . GETPOST('leftmenu', "aZ09") . '\';
 						});

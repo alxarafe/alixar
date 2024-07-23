@@ -392,7 +392,7 @@ if ($resql) {
                         // Build barcode on disk (not used, this is done to make debug easier)
                         $result = $module->writeBarCode($obj->example, $obj->encoding, 'Y');
                         // Generate on the fly and output barcode with generator
-                        $url = DOL_URL_ROOT . '/viewimage.php?modulepart=barcode&amp;generator=' . urlencode($obj->coder) . '&amp;code=' . urlencode($obj->example) . '&amp;encoding=' . urlencode($obj->encoding);
+                        $url = constant('BASE_URL') . '/viewimage.php?modulepart=barcode&amp;generator=' . urlencode($obj->coder) . '&amp;code=' . urlencode($obj->example) . '&amp;encoding=' . urlencode($obj->encoding);
                         //print $url;
                         print '<img src="' . $url . '" title="' . $obj->example . '" border="0">';
                     } else {

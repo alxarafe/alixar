@@ -327,7 +327,7 @@ if (empty($action) || $action == 'editfile' || $action == 'file_manager' || preg
         // $_POST['dir']
         $mode = 'noajax';
         if (empty($url)) {
-            $url = DOL_URL_ROOT . '/ecm/index.php';
+            $url = constant('BASE_URL') . '/ecm/index.php';
         }
         include DOL_DOCUMENT_ROOT . '/core/ajax/ajaxdirtree.php';
 
@@ -352,11 +352,11 @@ if (empty($action) || $action == 'editfile' || $action == 'file_manager' || preg
 $mode = 'noajax';
 if (empty($url)) {  // autoset $url but it is better to have it defined before (for example by ecm/index.php, ecm/index_medias.php, website/index.php)
     if (!empty($module) && $module == 'medias' && !GETPOST('website')) {
-        $url = DOL_URL_ROOT . '/ecm/index_medias.php';
+        $url = constant('BASE_URL') . '/ecm/index_medias.php';
     } elseif (GETPOSTISSET('website')) {
-        $url = DOL_URL_ROOT . '/website/index.php';
+        $url = constant('BASE_URL') . '/website/index.php';
     } else {
-        $url = DOL_URL_ROOT . '/ecm/index.php';
+        $url = constant('BASE_URL') . '/ecm/index.php';
     }
 }
 include DOL_DOCUMENT_ROOT . '/core/ajax/ajaxdirpreview.php'; // Show content of a directory on right side

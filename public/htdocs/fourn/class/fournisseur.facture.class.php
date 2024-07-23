@@ -2722,7 +2722,7 @@ class FactureFournisseur extends CommonInvoice
             $response->label = $langs->trans("SupplierBillsToPay");
             $response->labelShort = $langs->trans("StatusToPay");
 
-            $response->url = DOL_URL_ROOT . '/fourn/facture/list.php?search_status=1&mainmenu=billing&leftmenu=suppliers_bills';
+            $response->url = constant('BASE_URL') . '/fourn/facture/list.php?search_status=1&mainmenu=billing&leftmenu=suppliers_bills';
             $response->img = img_object($langs->trans("Bills"), "bill");
 
             $facturestatic = new FactureFournisseur($this->db);
@@ -2737,7 +2737,7 @@ class FactureFournisseur extends CommonInvoice
 
                 if ($facturestatic->hasDelay()) {
                     $response->nbtodolate++;
-                    $response->url_late = DOL_URL_ROOT . '/fourn/facture/list.php?search_option=late&mainmenu=billing&leftmenu=suppliers_bills';
+                    $response->url_late = constant('BASE_URL') . '/fourn/facture/list.php?search_option=late&mainmenu=billing&leftmenu=suppliers_bills';
                 }
             }
 
@@ -2853,11 +2853,11 @@ class FactureFournisseur extends CommonInvoice
         $result = '';
 
         if ($option == 'withdraw') {
-            $url = DOL_URL_ROOT . '/compta/facture/prelevement.php?facid=' . $this->id . '&type=bank-transfer';
+            $url = constant('BASE_URL') . '/compta/facture/prelevement.php?facid=' . $this->id . '&type=bank-transfer';
         } elseif ($option == 'document') {
-            $url = DOL_URL_ROOT . '/fourn/facture/document.php?facid=' . $this->id;
+            $url = constant('BASE_URL') . '/fourn/facture/document.php?facid=' . $this->id;
         } else {
-            $url = DOL_URL_ROOT . '/fourn/facture/card.php?facid=' . $this->id;
+            $url = constant('BASE_URL') . '/fourn/facture/card.php?facid=' . $this->id;
         }
 
         if ($short) {

@@ -117,7 +117,7 @@ if (!isModEnabled('multicompany')) {
 
     $multicompanyList .= '<ul class="ullistonly left" style="list-style: none;">';
     foreach ($listofentities as $entityid => $entitycursor) {
-        $url = DOL_URL_ROOT . '/core/multicompany_page.php?action=switchentity&token=' . newToken() . '&entity=' . ((int) $entityid) . ($backtourl ? '&backtourl=' . urlencode($backtourl) : '');
+        $url = constant('BASE_URL') . '/core/multicompany_page.php?action=switchentity&token=' . newToken() . '&entity=' . ((int) $entityid) . ($backtourl ? '&backtourl=' . urlencode($backtourl) : '');
         $multicompanyList .= '<li class="lilistonly" style="height: 2.5em; font-size: 1.15em;">';
         $multicompanyList .= '<a class="dropdown-item multicompany-item" id="multicompany-item-' . $entityid . '" data-id="' . $entityid . '" href="' . dol_escape_htmltag($url) . '">';
         $multicompanyList .= img_picto('', 'entity', 'class="pictofixedwidth"');

@@ -180,9 +180,9 @@ if (empty($reshook)) {
         $res = $object->delete($user);
         if ($res > 0) {
             if ($savtype == 'bank-transfer') {
-                header("Location: " . DOL_URL_ROOT . '/compta/paymentbybanktransfer/index.php');
+                header("Location: " . constant('BASE_URL') . '/compta/paymentbybanktransfer/index.php');
             } else {
-                header("Location: " . DOL_URL_ROOT . '/compta/prelevement/index.php');
+                header("Location: " . constant('BASE_URL') . '/compta/prelevement/index.php');
             }
             exit;
         }

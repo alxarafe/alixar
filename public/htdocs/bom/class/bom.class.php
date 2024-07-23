@@ -1136,7 +1136,7 @@ class BOM extends CommonObject
             $label = implode($this->getTooltipContentArray($params));
         }
 
-        $url = DOL_URL_ROOT . '/bom/bom_card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/bom/bom_card.php?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not
@@ -2017,7 +2017,7 @@ class BOMLine extends CommonObjectLine
         $label .= '<br>';
         $label .= '<b>' . $langs->trans('Ref') . ':</b> ' . $this->ref;
 
-        $url = DOL_URL_ROOT . '/bom/bomline_card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/bom/bomline_card.php?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not

@@ -101,7 +101,7 @@ $h = 0;
 
 $head = array();
 
-$head[$h][0] = DOL_URL_ROOT . '/salaries/payment_salary/card.php?id=' . $id;
+$head[$h][0] = constant('BASE_URL') . '/salaries/payment_salary/card.php?id=' . $id;
 $head[$h][1] = $langs->trans("SalaryPayment");
 $hselected = $h;
 $h++;

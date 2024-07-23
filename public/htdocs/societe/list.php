@@ -861,16 +861,16 @@ if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && ($
     $id = $obj->rowid;
     if (getDolGlobalString('SOCIETE_ON_SEARCH_AND_LIST_GO_ON_CUSTOMER_OR_SUPPLIER_CARD')) {
         if ($obj->client > 0) {
-            header("Location: " . DOL_URL_ROOT . '/comm/card.php?socid=' . $id);
+            header("Location: " . constant('BASE_URL') . '/comm/card.php?socid=' . $id);
             exit;
         }
         if ($obj->fournisseur > 0) {
-            header("Location: " . DOL_URL_ROOT . '/fourn/card.php?socid=' . $id);
+            header("Location: " . constant('BASE_URL') . '/fourn/card.php?socid=' . $id);
             exit;
         }
     }
 
-    header("Location: " . DOL_URL_ROOT . '/societe/card.php?socid=' . $id);
+    header("Location: " . constant('BASE_URL') . '/societe/card.php?socid=' . $id);
     exit;
 }
 
@@ -1148,7 +1148,7 @@ if ($contextpage == 'poslist' && $type == 't' && (getDolGlobalString('PRODUIT_MU
 // Show the new button only when this page is not opend from the Extended POS (pop-up window)
 // but allow it too, when a user has the rights to create a new customer
 if ($contextpage != 'poslist') {
-    $url = DOL_URL_ROOT . '/societe/card.php?action=create' . $typefilter;
+    $url = constant('BASE_URL') . '/societe/card.php?action=create' . $typefilter;
     if (!empty($socid)) {
         $url .= '&socid=' . $socid;
     }
@@ -1157,7 +1157,7 @@ if ($contextpage != 'poslist') {
     $newcardbutton .= dolGetButtonTitle($langs->trans('ViewKanban'), '', 'fa fa-th-list imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=kanban' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ($mode == 'kanban' ? 2 : 1), array('morecss' => 'reposition'));
     $newcardbutton .= dolGetButtonTitle($langs->trans($label), '', 'fa fa-plus-circle', $url, '', $user->hasRight('societe', 'creer'));
 } elseif ($user->hasRight('societe', 'creer')) {
-    $url = DOL_URL_ROOT . '/societe/card.php?action=create&type=t&contextpage=poslist&optioncss=print&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?type=t&contextpage=poslist&nomassaction=1&optioncss=print&place=' . $place);
+    $url = constant('BASE_URL') . '/societe/card.php?action=create&type=t&contextpage=poslist&optioncss=print&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?type=t&contextpage=poslist&nomassaction=1&optioncss=print&place=' . $place);
     $label = 'MenuNewCustomer';
     $newcardbutton = dolGetButtonTitle($langs->trans($label), '', 'fa fa-plus-circle', $url);
 }

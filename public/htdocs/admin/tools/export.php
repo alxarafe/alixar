@@ -70,7 +70,7 @@ $utils = new Utils($db);
 
 if ($file && !$what) {
     //print DOL_URL_ROOT.'/dolibarr_export.php';
-    header("Location: " . DOL_URL_ROOT . '/admin/tools/dolibarr_export.php?msg=' . urlencode($langs->trans("ErrorFieldRequired", $langs->transnoentities("ExportMethod"))) . (GETPOSTINT('page_y') ? '&page_y=' . GETPOSTINT('page_y') : ''));
+    header("Location: " . constant('BASE_URL') . '/admin/tools/dolibarr_export.php?msg=' . urlencode($langs->trans("ErrorFieldRequired", $langs->transnoentities("ExportMethod"))) . (GETPOSTINT('page_y') ? '&page_y=' . GETPOSTINT('page_y') : ''));
     exit;
 }
 

@@ -48,7 +48,7 @@ if (!defined('NOIPCHECK')) {
 if (!defined('NOBROWSERNOTIF')) {
     define('NOBROWSERNOTIF', '1');
 }
-include '../../main.inc.php';
+include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 $action = GETPOST('action', 'aZ09');
 $idticketgroup = GETPOST('idticketgroup', 'aZ09');

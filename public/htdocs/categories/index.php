@@ -84,7 +84,7 @@ llxHeader('', $title, '', '', 0, 0, $arrayofjs, $arrayofcss);
 
 $newcardbutton = '';
 if ($user->hasRight('categorie', 'creer')) {
-    $newcardbutton .= dolGetButtonTitle($langs->trans('NewCategory'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/categories/card.php?action=create&type=' . $type . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?type=' . $type . $moreparam) . $moreparam);
+    $newcardbutton .= dolGetButtonTitle($langs->trans('NewCategory'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/categories/card.php?action=create&type=' . $type . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?type=' . $type . $moreparam) . $moreparam);
 }
 
 print load_fiche_titre($title, $newcardbutton, 'object_category');

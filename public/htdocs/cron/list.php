@@ -201,7 +201,7 @@ if (empty($reshook)) {
             // Add $param from extra fields
             include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_list_search_param.tpl.php';
 
-            header("Location: " . DOL_URL_ROOT . '/cron/list.php?' . $param . ($sortfield ? '&sortfield=' . $sortfield : '') . ($sortorder ? '&sortorder=' . $sortorder : '')); // Make a redirect to avoid to run twice the job when using back
+            header("Location: " . constant('BASE_URL') . '/cron/list.php?' . $param . ($sortfield ? '&sortfield=' . $sortfield : '') . ($sortorder ? '&sortorder=' . $sortorder : '')); // Make a redirect to avoid to run twice the job when using back
             exit;
         }
     }
@@ -417,7 +417,7 @@ print '<input type="hidden" name="mode" value="' . $mode . '">';
 
 // Line with explanation and button new
 $newcardbutton = '';
-$newcardbutton .= dolGetButtonTitle($langs->trans('New'), $langs->trans('CronCreateJob'), 'fa fa-plus-circle', DOL_URL_ROOT . '/cron/card.php?action=create&backtopage=' . urlencode($_SERVER['PHP_SELF'] . '?mode=modulesetup'), '', $user->hasRight('cron', 'create'));
+$newcardbutton .= dolGetButtonTitle($langs->trans('New'), $langs->trans('CronCreateJob'), 'fa fa-plus-circle', constant('BASE_URL') . '/cron/card.php?action=create&backtopage=' . urlencode($_SERVER['PHP_SELF'] . '?mode=modulesetup'), '', $user->hasRight('cron', 'create'));
 
 
 if ($mode == 'modulesetup') {

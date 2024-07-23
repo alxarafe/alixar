@@ -880,7 +880,7 @@ if ($id > 0 || !empty($ref)) {
                 //print load_fiche_titre($langs->trans("CreateShipment"));
                 print '<div class="tabsAction">';
 
-                print '<form method="GET" action="' . DOL_URL_ROOT . '/expedition/card.php">';
+                print '<form method="GET" action="' . constant('BASE_URL') . '/expedition/card.php">';
                 print '<input type="hidden" name="action" value="create">';
                 //print '<input type="hidden" name="id" value="'.$object->id.'">';
                 print '<input type="hidden" name="shipping_method_id" value="' . $object->shipping_method_id . '">';

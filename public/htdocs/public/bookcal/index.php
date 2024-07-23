@@ -144,14 +144,14 @@ function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $
     if (getDolGlobalInt('BOOKCAL_SHOW_COMPANY_LOGO') || getDolGlobalString('BOOPKCAL_PUBLIC_INTERFACE_TOPIC')) {
         // Print logo
         if (getDolGlobalInt('BOOKCAL_SHOW_COMPANY_LOGO')) {
-            $urllogo = DOL_URL_ROOT . '/theme/common/login_logo.png';
+            $urllogo = constant('BASE_URL') . '/theme/common/login_logo.png';
 
             if (!empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $mysoc->logo_small)) {
-                $urllogo = DOL_URL_ROOT . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
+                $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
             } elseif (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output . '/logos/' . $mysoc->logo)) {
-                $urllogo = DOL_URL_ROOT . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/' . $mysoc->logo);
+                $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/' . $mysoc->logo);
             } elseif (is_readable(DOL_DOCUMENT_ROOT . '/theme/dolibarr_logo.svg')) {
-                $urllogo = DOL_URL_ROOT . '/theme/dolibarr_logo.svg';
+                $urllogo = constant('BASE_URL') . '/theme/dolibarr_logo.svg';
             }
         }
     }
@@ -173,7 +173,7 @@ function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $
     }
     print '</div>';
     if (!getDolGlobalInt('MAIN_HIDE_POWERED_BY')) {
-        print '<div class="poweredbypublicpayment opacitymedium right hideonsmartphone"><a class="poweredbyhref" href="https://www.dolibarr.org?utm_medium=website&utm_source=poweredby" target="dolibarr" rel="noopener">' . $langs->trans("PoweredBy") . '<br><img src="' . DOL_URL_ROOT . '/theme/dolibarr_logo.svg" width="80px"></a></div>';
+        print '<div class="poweredbypublicpayment opacitymedium right hideonsmartphone"><a class="poweredbyhref" href="https://www.dolibarr.org?utm_medium=website&utm_source=poweredby" target="dolibarr" rel="noopener">' . $langs->trans("PoweredBy") . '<br><img src="' . constant('BASE_URL') . '/theme/dolibarr_logo.svg" width="80px"></a></div>';
     }
     print '</div>';
 
@@ -312,7 +312,7 @@ dol_htmloutput_errors($errmsg);
 if ($action == 'create') {
     $backtopage = $_SERVER["PHP_SELF"] . '?id=' . $id . '&datechosen=' . $datechosen;
 } else {
-    $backtopage = DOL_URL_ROOT . '/public/bookcal/index.php?id=' . $id;
+    $backtopage = constant('BASE_URL') . '/public/bookcal/index.php?id=' . $id;
 }
 
 //print '<div class="">';
@@ -574,7 +574,7 @@ if ($action == 'afteradd') {
 			datestring = $(this).children("div").data("date");
 			$.ajax({
 				type: "POST",
-				url: "' . DOL_URL_ROOT . '/public/bookcal/bookcalAjax.php",
+				url: "' . constant('BASE_URL') . '/public/bookcal/bookcalAjax.php",
 				data: {
 					action: "verifyavailability",
 					id: ' . $id . ',

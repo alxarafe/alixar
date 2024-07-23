@@ -54,7 +54,7 @@ function pdf_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/pdf.php';
+    $head[$h][0] = constant('BASE_URL') . '/admin/pdf.php';
     $head[$h][1] = $langs->trans("Parameters");
     $head[$h][2] = 'general';
     $h++;
@@ -66,7 +66,7 @@ function pdf_admin_prepare_head()
     complete_head_from_modules($conf, $langs, null, $head, $h, 'pdf_admin');
 
     if (isModEnabled("propal") || isModEnabled('invoice') || isModEnabled('reception')) {
-        $head[$h][0] = DOL_URL_ROOT . '/admin/pdf_other.php';
+        $head[$h][0] = constant('BASE_URL') . '/admin/pdf_other.php';
         $head[$h][1] = $langs->trans("Others");
         $head[$h][2] = 'other';
         $h++;

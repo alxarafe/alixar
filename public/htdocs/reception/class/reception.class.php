@@ -1281,7 +1281,7 @@ class Reception extends CommonObject
         $label .= '<br><b>' . $langs->trans('Ref') . ':</b> ' . $this->ref;
         $label .= '<br><b>' . $langs->trans('RefSupplier') . ':</b> ' . ($this->ref_supplier ? $this->ref_supplier : '');
 
-        $url = DOL_URL_ROOT . '/reception/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/reception/card.php?id=' . $this->id;
 
         if ($short) {
             return $url;

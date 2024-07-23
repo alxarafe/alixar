@@ -45,13 +45,13 @@ function conferenceorboothPrepareHead($object, $with_project = 0)
         $withProjectUrl = "&withproject=1";
     }
 
-    $head[$h][0] = DOL_URL_ROOT . '/eventorganization/conferenceorbooth_card.php?id=' . $object->id . $withProjectUrl;
+    $head[$h][0] = constant('BASE_URL') . '/eventorganization/conferenceorbooth_card.php?id=' . $object->id . $withProjectUrl;
     $head[$h][1] = $langs->trans("Card");
     $head[$h][2] = 'card';
     $h++;
 
     if (getDolGlobalString('MAIN_FEATURES_LEVEL') && getDolGlobalInt('MAIN_FEATURES_LEVEL') >= 2) {
-        $head[$h][0] = DOL_URL_ROOT . '/eventorganization/conferenceorbooth_contact.php?id=' . $object->id . $withProjectUrl;
+        $head[$h][0] = constant('BASE_URL') . '/eventorganization/conferenceorbooth_contact.php?id=' . $object->id . $withProjectUrl;
         $head[$h][1] = $langs->trans("ContactsAddresses");
         $head[$h][2] = 'contact';
         $h++;
@@ -90,7 +90,7 @@ function conferenceorboothPrepareHead($object, $with_project = 0)
     $upload_dir = $conf->eventorganization->dir_output . "/conferenceorbooth/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/eventorganization/conferenceorbooth_document.php?id=' . $object->id . $withProjectUrl;
+    $head[$h][0] = constant('BASE_URL') . '/eventorganization/conferenceorbooth_document.php?id=' . $object->id . $withProjectUrl;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -128,7 +128,7 @@ function conferenceorboothProjectPrepareHead($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/eventorganization/conferenceorbooth_list.php?projectid=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/eventorganization/conferenceorbooth_list.php?projectid=' . $object->id;
     $head[$h][1] = $langs->trans("ConferenceOrBooth");
     $head[$h][2] = 'conferenceorbooth';
     // Enable caching of conf or booth count attendees
@@ -155,7 +155,7 @@ function conferenceorboothProjectPrepareHead($object)
     }
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/eventorganization/conferenceorboothattendee_list.php?fk_project=' . $object->id . '&withproject=1';
+    $head[$h][0] = constant('BASE_URL') . '/eventorganization/conferenceorboothattendee_list.php?fk_project=' . $object->id . '&withproject=1';
     $head[$h][1] = $langs->trans("Attendees");
     $head[$h][2] = 'attendees';
     // Enable caching of conf or booth count attendees

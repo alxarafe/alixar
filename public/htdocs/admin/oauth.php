@@ -165,7 +165,7 @@ if ($action == 'confirm_delete') {
     $globalkey = empty($provider) ? $label : $label . '-' . $provider;
 
     if (getDolGlobalString($globalkey . '_ID') && getDolGlobalString($globalkey . '_SECRET')) { // If ID and secret exist, we delete first the token
-        $backtourl = DOL_URL_ROOT . '/admin/oauth.php?action=delete_entry&provider=' . $provider . '&label=' . $label . '&token=' . newToken();
+        $backtourl = constant('BASE_URL') . '/admin/oauth.php?action=delete_entry&provider=' . $provider . '&label=' . $label . '&token=' . newToken();
         $urlwithouturlroot = preg_replace('/' . preg_quote(DOL_URL_ROOT, '/') . '$/i', '', trim($dolibarr_main_url_root));
         $urlwithroot = $urlwithouturlroot . DOL_URL_ROOT;
         $callbacktodel = $urlwithroot;

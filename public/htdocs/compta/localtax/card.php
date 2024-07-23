@@ -112,7 +112,7 @@ if ($action == 'delete') {
 
             if ($result >= 0) {
                 $db->commit();
-                header("Location: " . DOL_URL_ROOT . '/compta/localtax/list.php?localTaxType=' . $object->ltt);
+                header("Location: " . constant('BASE_URL') . '/compta/localtax/list.php?localTaxType=' . $object->ltt);
                 exit;
             } else {
                 $object->error = $accountline->error;
@@ -218,7 +218,7 @@ if ($action == 'create') {
 if ($id) {
     $h = 0;
     $head = array();
-    $head[$h][0] = DOL_URL_ROOT . '/compta/localtax/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/compta/localtax/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Card');
     $head[$h][2] = 'card';
     $h++;

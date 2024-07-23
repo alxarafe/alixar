@@ -92,7 +92,7 @@ function shipping_prepare_head($object)
     $upload_dir = $conf->expedition->dir_output . "/sending/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/expedition/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/expedition/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -193,7 +193,7 @@ function delivery_prepare_head($object)
     $upload_dir = $conf->expedition->dir_output . "/sending/" . dol_sanitizeFileName($tmpobject->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $tmpobject->element, $tmpobject->id);
-    $head[$h][0] = DOL_URL_ROOT . '/expedition/document.php?id=' . $tmpobject->id;
+    $head[$h][0] = constant('BASE_URL') . '/expedition/document.php?id=' . $tmpobject->id;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';

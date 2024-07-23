@@ -59,7 +59,7 @@ $data = $stats->getNbByMonth($year);
 dol_mkdir($conf->reception->dir_temp);
 
 $filename = $conf->reception->dir_temp . "/reception" . $year . ".png";
-$fileurl = DOL_URL_ROOT . '/viewimage.php?modulepart=receptionstats&file=reception' . $year . '.png';
+$fileurl = constant('BASE_URL') . '/viewimage.php?modulepart=receptionstats&file=reception' . $year . '.png';
 
 $px = new DolGraph();
 $mesg = $px->isGraphKo();

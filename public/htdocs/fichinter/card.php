@@ -127,14 +127,14 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/fichinter/list.php';
+    $backurlforlist = constant('BASE_URL') . '/fichinter/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/fichinter/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/fichinter/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -510,7 +510,7 @@ if (empty($reshook)) {
             setEventMessages($object->error, $object->errors, 'errors');
         }
 
-        header('Location: ' . DOL_URL_ROOT . '/fichinter/list.php?leftmenu=ficheinter&restore_lastsearch_values=1');
+        header('Location: ' . constant('BASE_URL') . '/fichinter/list.php?leftmenu=ficheinter&restore_lastsearch_values=1');
         exit;
     } elseif ($action == 'setdescription' && $user->hasRight('ficheinter', 'creer')) {
         $result = $object->set_description($user, GETPOST('description'));
@@ -1777,7 +1777,7 @@ if ($action == 'create') {
 
         $MAXEVENT = 10;
 
-        $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/fichinter/agenda.php?id=' . $object->id);
+        $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/fichinter/agenda.php?id=' . $object->id);
 
         // List of actions on element
         include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';

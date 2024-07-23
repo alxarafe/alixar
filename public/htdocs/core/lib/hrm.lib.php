@@ -38,7 +38,7 @@ function establishment_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/hrm/establishment/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/hrm/establishment/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Establishment");
     $head[$h][2] = 'card';
     $h++;
@@ -49,7 +49,7 @@ function establishment_prepare_head($object)
     // $this->tabs = array('entity:-tabname);                                                   to remove a tab
     complete_head_from_modules($conf, $langs, $object, $head, $h, 'establishment');
 
-    $head[$h][0] = DOL_URL_ROOT . '/hrm/establishment/info.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/hrm/establishment/info.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Info");
     $head[$h][2] = 'info';
     $h++;
@@ -75,12 +75,12 @@ function hrm_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/hrm/admin/admin_hrm.php';
+    $head[$h][0] = constant('BASE_URL') . '/hrm/admin/admin_hrm.php';
     $head[$h][1] = $langs->trans("Parameters");
     $head[$h][2] = 'parameters';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/hrm/admin/admin_establishment.php';
+    $head[$h][0] = constant('BASE_URL') . '/hrm/admin/admin_establishment.php';
     $head[$h][1] = $langs->trans("Establishments");
     $head[$h][2] = 'establishments';
     $h++;

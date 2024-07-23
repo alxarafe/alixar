@@ -40,7 +40,7 @@ if (!defined('NOHEADERNOFOOTER')) {
     define('NOHEADERNOFOOTER', '1');
 }
 
-include '../../main.inc.php';
+include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 include_once DOL_DOCUMENT_ROOT . '/core/class/html.form.class.php';
 
 

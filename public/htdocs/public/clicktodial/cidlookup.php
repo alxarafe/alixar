@@ -52,7 +52,7 @@ if (!defined('USESUFFIXINLOG')) {
     define('USESUFFIXINLOG', '_cidlookup');
 }
 
-include '../../main.inc.php';
+include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 $phone = GETPOST('phone');
 $securitykey = GETPOST('securitykey');

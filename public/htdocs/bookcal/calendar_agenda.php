@@ -243,9 +243,9 @@ if ($object->id > 0) {
 
     if (isModEnabled('agenda')) {
         if ($user->hasRight('agenda', 'myactions', 'create') || $user->hasRight('agenda', 'allactions', 'create')) {
-            $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/comm/action/card.php?action=create' . $out);
+            $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/comm/action/card.php?action=create' . $out);
         } else {
-            $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/comm/action/card.php?action=create' . $out, '', 0);
+            $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/comm/action/card.php?action=create' . $out, '', 0);
         }
     }
 

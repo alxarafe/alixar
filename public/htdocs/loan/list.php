@@ -269,7 +269,7 @@ if (GETPOSTINT('nomassaction') || in_array($massaction, array('presend', 'predel
 $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
 
-$url = DOL_URL_ROOT . '/loan/card.php?action=create';
+$url = constant('BASE_URL') . '/loan/card.php?action=create';
 if (!empty($socid)) {
     $url .= '&socid=' . $socid;
 }

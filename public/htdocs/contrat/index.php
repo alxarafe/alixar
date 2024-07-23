@@ -28,7 +28,7 @@
  *      \brief      Home page of contract area
  */
 
-require "../main.inc.php";
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once DOL_DOCUMENT_ROOT . "/contrat/class/contrat.class.php";
 require_once DOL_DOCUMENT_ROOT . "/product/class/product.class.php";
 

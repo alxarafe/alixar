@@ -37,7 +37,7 @@ function bookcalAdminPrepareHead()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/bookcal/admin/setup.php';
+    $head[$h][0] = constant('BASE_URL') . '/bookcal/admin/setup.php';
     $head[$h][1] = $langs->trans("Settings");
     $head[$h][2] = 'settings';
     $h++;

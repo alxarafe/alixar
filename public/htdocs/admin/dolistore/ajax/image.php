@@ -29,7 +29,7 @@ if (!defined('NOTOKENRENEWAL')) {
  *      \brief      Page des information dolistore
  */
 
-require "../../../main.inc.php";
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/admin/dolistore/class/dolistore.class.php';
 
 

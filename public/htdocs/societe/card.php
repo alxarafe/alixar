@@ -179,14 +179,14 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/societe/list.php';
+    $backurlforlist = constant('BASE_URL') . '/societe/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/societe/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/societe/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -1244,7 +1244,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
             print '$(document).ready(function () {
                 $("#name").select2({
                     ajax: {
-                      url: "' . DOL_URL_ROOT . '/core/ajax/ajaxcompanies.php",
+                      url: "' . constant('BASE_URL') . '/core/ajax/ajaxcompanies.php",
                       dataType: "json",
                       delay: 250,
                       data: function (params) {
@@ -1278,7 +1278,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
 
                     if(Customer.logo !== null ) {
                         logo = \'<img src="\';
-                        logo += \'' . DOL_URL_ROOT . '/viewimage.php?modulepart=societe&amp;entity=1&amp;file=\' + Customer.key + "%2Flogos%2Fthumbs%2F" + Customer.logo.replace(".", "_mini.") + "&amp;cache=0";
+                        logo += \'' . constant('BASE_URL') . '/viewimage.php?modulepart=societe&amp;entity=1&amp;file=\' + Customer.key + "%2Flogos%2Fthumbs%2F" + Customer.logo.replace(".", "_mini.") + "&amp;cache=0";
                         logo += \'" /></div>\';
                     } else {
                         logo = \'<div class="floatleft inline-block valigntop photowithmargin" style="padding:0 10px"><div class="photosociete photoref" alt="No photo"><span class="fas fa-building" style="color: #6c6aa8;"></span></div></div>\';
@@ -3217,8 +3217,8 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
             $MAXEVENT = 10;
 
             $morehtmlcenter = '<div class="nowraponall">';
-            $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullConversation'), '', 'fa fa-comments imgforviewmode', DOL_URL_ROOT . '/societe/messaging.php?socid=' . $object->id);
-            $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullList'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/societe/agenda.php?socid=' . $object->id);
+            $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullConversation'), '', 'fa fa-comments imgforviewmode', constant('BASE_URL') . '/societe/messaging.php?socid=' . $object->id);
+            $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullList'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/societe/agenda.php?socid=' . $object->id);
             $morehtmlcenter .= '</div>';
 
             // List of actions on element

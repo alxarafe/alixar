@@ -111,9 +111,9 @@ if (!$user->hasRight("cashdesk", "run") && !$user->hasRight("takepos", "run")) {
 $permissiontoadd = ($user->hasRight("cashdesk", "run") || $user->hasRight("takepos", "run"));
 $permissiontodelete = ($user->hasRight("cashdesk", "run") || $user->hasRight("takepos", "run")) || ($permissiontoadd && $object->status == 0);
 if (empty($backtopage)) {
-    $backtopage = DOL_URL_ROOT . '/compta/cashcontrol/cashcontrol_card.php?id=' . (!empty($id) && $id > 0 ? $id : '__ID__');
+    $backtopage = constant('BASE_URL') . '/compta/cashcontrol/cashcontrol_card.php?id=' . (!empty($id) && $id > 0 ? $id : '__ID__');
 }
-$backurlforlist = DOL_URL_ROOT . '/compta/cashcontrol/cashcontrol_list.php';
+$backurlforlist = constant('BASE_URL') . '/compta/cashcontrol/cashcontrol_list.php';
 $triggermodname = 'CACHCONTROL_MODIFY'; // Name of trigger action code to execute when we modify record
 
 if (!getDolGlobalString('CASHDESK_ID_BANKACCOUNT_CASH') && !getDolGlobalString('CASHDESK_ID_BANKACCOUNT_CASH1')) {
@@ -608,7 +608,7 @@ if (empty($action) || $action == "view" || $action == "close") {
         print $langs->trans("ErrorRecordNotFound");
     } else {
         $head = array();
-        $head[0][0] = DOL_URL_ROOT . '/compta/cashcontrol/cashcontrol_card.php?id=' . $object->id;
+        $head[0][0] = constant('BASE_URL') . '/compta/cashcontrol/cashcontrol_card.php?id=' . $object->id;
         $head[0][1] = $langs->trans("CashControl");
         $head[0][2] = 'cashcontrol';
 

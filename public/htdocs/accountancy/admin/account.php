@@ -402,7 +402,7 @@ if ($resql) {
     $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
     $newcardbutton = '';
-    $newcardbutton = dolGetButtonTitle($langs->trans('Addanaccount'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/accountancy/admin/card.php?action=create', '', $permissiontoadd);
+    $newcardbutton = dolGetButtonTitle($langs->trans('Addanaccount'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/accountancy/admin/card.php?action=create', '', $permissiontoadd);
 
 
     print '<form method="POST" id="searchFormList" action="' . $_SERVER["PHP_SELF"] . '">';

@@ -87,10 +87,10 @@ $data = $stats->getNbByMonthWithPrevYear($endyear, $startyear);
 
 if (!$user->hasRight('societe', 'client', 'voir')) {
     $filenamenb = $dir . '/ticketsnbinyear-' . $user->id . '-' . $year . '.png';
-    $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=ticketstats&file=ticketsnbinyear-' . $user->id . '-' . $year . '.png';
+    $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=ticketstats&file=ticketsnbinyear-' . $user->id . '-' . $year . '.png';
 } else {
     $filenamenb = $dir . '/ticketsnbinyear-' . $year . '.png';
-    $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=ticketstats&file=ticketsnbinyear-' . $year . '.png';
+    $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=ticketstats&file=ticketsnbinyear-' . $year . '.png';
 }
 
 $px1 = new DolGraph();
@@ -137,7 +137,7 @@ if (!count($arrayyears)) {
 
 $h = 0;
 $head = array();
-$head[$h][0] = DOL_URL_ROOT . '/ticket/stats/index.php';
+$head[$h][0] = constant('BASE_URL') . '/ticket/stats/index.php';
 $head[$h][1] = $langs->trans("ByMonthYear");
 $head[$h][2] = 'byyear';
 $h++;

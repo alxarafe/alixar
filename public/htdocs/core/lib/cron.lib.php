@@ -36,12 +36,12 @@ function cronadmin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/cron/admin/cron.php';
+    $head[$h][0] = constant('BASE_URL') . '/cron/admin/cron.php';
     $head[$h][1] = $langs->trans("Miscellaneous");
     $head[$h][2] = 'setup';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/cron/list.php?mode=modulesetup';
+    $head[$h][0] = constant('BASE_URL') . '/cron/list.php?mode=modulesetup';
     $head[$h][1] = $langs->trans("Module2300Name");
     $head[$h][2] = 'jobs';
     $h++;
@@ -66,12 +66,12 @@ function cron_prepare_head(Cronjob $object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/cron/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/cron/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("CronTask");
     $head[$h][2] = 'card';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/cron/info.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/cron/info.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Info");
     $head[$h][2] = 'info';
     $h++;

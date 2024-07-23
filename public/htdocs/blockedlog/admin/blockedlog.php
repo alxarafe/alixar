@@ -90,7 +90,7 @@ llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-blockedlog page-admi
 
 $linkback = '';
 if ($withtab) {
-    $linkback = '<a href="' . ($backtopage ? $backtopage : DOL_URL_ROOT . '/admin/modules.php') . '">' . $langs->trans("BackToModuleList") . '</a>';
+    $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php') . '">' . $langs->trans("BackToModuleList") . '</a>';
 }
 
 print load_fiche_titre($langs->trans("ModuleSetup") . ' ' . $langs->trans('BlockedLog'), $linkback);

@@ -126,7 +126,7 @@ if ($cancel) {
         header("Location: " . $backtopage);
         exit;
     }
-    header("Location: " . DOL_URL_ROOT . '/fourn/facture/list.php');
+    header("Location: " . constant('BASE_URL') . '/fourn/facture/list.php');
     exit;
 }
 
@@ -365,9 +365,9 @@ if (empty($reshook)) {
                     }
                 }
                 if ($invoiceid > 0) {
-                    $loc = DOL_URL_ROOT . '/fourn/facture/card.php?facid=' . $invoiceid;
+                    $loc = constant('BASE_URL') . '/fourn/facture/card.php?facid=' . $invoiceid;
                 } else {
-                    $loc = DOL_URL_ROOT . '/fourn/paiement/card.php?id=' . $paiement_id;
+                    $loc = constant('BASE_URL') . '/fourn/paiement/card.php?id=' . $paiement_id;
                 }
                 header('Location: ' . $loc);
                 exit;
@@ -451,7 +451,7 @@ if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paie
 								json["imgClicked"] = imgId;
 							}
 
-							$.post("' . DOL_URL_ROOT . '/compta/ajaxpayment.php", json, function(data)
+							$.post("' . constant('BASE_URL') . '/compta/ajaxpayment.php", json, function(data)
 							{
 								json = $.parseJSON(data);
 

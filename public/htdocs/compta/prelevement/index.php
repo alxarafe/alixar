@@ -68,7 +68,7 @@ if (prelevement_check_config() < 0) {
 
 $newcardbutton = '';
 if ($usercancreate) {
-    $newcardbutton .= dolGetButtonTitle($langs->trans('NewStandingOrder'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/compta/prelevement/create.php?type=');
+    $newcardbutton .= dolGetButtonTitle($langs->trans('NewStandingOrder'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/compta/prelevement/create.php?type=');
 }
 
 print load_fiche_titre($langs->trans("CustomersStandingOrdersArea"), $newcardbutton);

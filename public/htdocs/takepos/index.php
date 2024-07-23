@@ -967,7 +967,7 @@ function DolibarrOpenDrawer() {
     $.ajax({
         type: "GET",
         data: { token: '<?php echo currentToken(); ?>' },
-        url: "<?php print DOL_URL_ROOT . '/takepos/ajax/ajax.php?action=opendrawer&token=' . newToken() . '&term=' . urlencode(empty($_SESSION["takeposterminal"]) ? '' : $_SESSION["takeposterminal"]); ?>",
+        url: "<?php print constant('BASE_URL') . '/takepos/ajax/ajax.php?action=opendrawer&token=' . newToken() . '&term=' . urlencode(empty($_SESSION["takeposterminal"]) ? '' : $_SESSION["takeposterminal"]); ?>",
     });
 }
 
@@ -1180,7 +1180,7 @@ if (!getDolGlobalString('TAKEPOS_HIDE_HEAD_BAR')) {
                     <div class="login_block_other takepos">
                     <input type="text" id="search" name="search" class="input-nobottom" onkeyup="Search2('<?php echo dol_escape_js($keyCodeForEnter); ?>', null);" placeholder="<?php echo dol_escape_htmltag($langs->trans("Search")); ?>" autofocus>
                     <a onclick="ClearSearch(false);" class="nohover"><span class="fa fa-backspace"></span></a>
-                    <a href="<?php echo DOL_URL_ROOT . '/'; ?>" target="backoffice" rel="opener"><!-- we need rel="opener" here, we are on same domain and we need to be able to reuse this tab several times -->
+                    <a href="<?php echo constant('BASE_URL') . '/'; ?>" target="backoffice" rel="opener"><!-- we need rel="opener" here, we are on same domain and we need to be able to reuse this tab several times -->
                     <span class="fas fa-home"></span></a>
                     <?php if (empty($conf->dol_use_jmobile)) { ?>
                     <a class="hideonsmartphone" onclick="FullScreen();" title="<?php echo dol_escape_htmltag($langs->trans("ClickFullScreenEscapeToLeave")); ?>"><span class="fa fa-expand-arrows-alt"></span></a>
@@ -1191,7 +1191,7 @@ if (!getDolGlobalString('TAKEPOS_HIDE_HEAD_BAR')) {
                 ?>
                 <div class="login_block_user">
                 <?php
-                print top_menu_user(1, DOL_URL_ROOT . '/user/logout.php?token=' . newToken() . '&urlfrom=' . urlencode('/takepos/?setterminal=' . ((int) $term)));
+                print top_menu_user(1, constant('BASE_URL') . '/user/logout.php?token=' . newToken() . '&urlfrom=' . urlencode('/takepos/?setterminal=' . ((int) $term)));
                 ?>
                 </div>
             </div>
@@ -1470,7 +1470,7 @@ if ($r % 3 == 2) {
 }
 
 if (getDolGlobalString('TAKEPOS_HIDE_HEAD_BAR')) {
-    $menus[$r++] = array('title' => '<span class="fa fa-sign-out-alt paddingrightonly"></span><div class="trunc">' . $langs->trans("Logout") . '</div>', 'action' => 'window.location.href=\'' . DOL_URL_ROOT . '/user/logout.php?token=' . newToken() . '\';');
+    $menus[$r++] = array('title' => '<span class="fa fa-sign-out-alt paddingrightonly"></span><div class="trunc">' . $langs->trans("Logout") . '</div>', 'action' => 'window.location.href=\'' . constant('BASE_URL') . '/user/logout.php?token=' . newToken() . '\';');
 }
 
 if (getDolGlobalString('TAKEPOS_WEIGHING_SCALE')) {

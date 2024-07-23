@@ -603,7 +603,7 @@ if (empty($reshook)) {
             if ($nb_bills_created == 1) {
                 if (getDolGlobalInt('MAIN_MASSACTION_CREATEBILLS_REDIRECT_IF_ONE') == 1) {
                     // Redirect to generated invoice if unique
-                    header('Location: ' . DOL_URL_ROOT . '/compta/facture/card.php?id=' . urlencode((string) $lastid));
+                    header('Location: ' . constant('BASE_URL') . '/compta/facture/card.php?id=' . urlencode((string) $lastid));
                     exit;
                 }
                 $texttoshow = $langs->trans('BillXCreated', '{s1}');
@@ -612,7 +612,7 @@ if (empty($reshook)) {
             } else {
                 if (getDolGlobalInt('MAIN_MASSACTION_CREATEBILLS_REDIRECT_IF_MANY') == 1) {
                     // Redirect to invoice list
-                    header("Location: " . DOL_URL_ROOT . '/compta/facture/list.php?mainmenu=billing&leftmenu=customers_bills');
+                    header("Location: " . constant('BASE_URL') . '/compta/facture/list.php?mainmenu=billing&leftmenu=customers_bills');
                     exit;
                 }
                 setEventMessages($langs->trans('BillCreated', $nb_bills_created), null, 'mesgs');
@@ -1201,7 +1201,7 @@ $arrayofselected = is_array($toselect) ? $toselect : array();
 if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $search_all) {
     $obj = $db->fetch_object($resql);
     $id = $obj->rowid;
-    header("Location: " . DOL_URL_ROOT . '/commande/card.php?id=' . $id);
+    header("Location: " . constant('BASE_URL') . '/commande/card.php?id=' . $id);
     exit;
 }
 
@@ -1388,7 +1388,7 @@ if (in_array($massaction, array('presend', 'predelete', 'createbills'))) {
 }
 $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
-$url = DOL_URL_ROOT . '/commande/card.php?action=create';
+$url = constant('BASE_URL') . '/commande/card.php?action=create';
 if (!empty($socid)) {
     $url .= '&socid=' . $socid;
 }

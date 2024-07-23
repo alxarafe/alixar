@@ -171,7 +171,7 @@ if ($resql) {
             $relativepath = $name;
             $file = $conf->agenda->dir_temp . "/" . $name;
             $modulepart = 'actionsreport';
-            $documenturl = DOL_URL_ROOT . '/document.php';
+            $documenturl = constant('BASE_URL') . '/document.php';
             if (isset($conf->global->DOL_URL_ROOT_DOCUMENT_PHP)) {
                 $documenturl = getDolGlobalString('DOL_URL_ROOT_DOCUMENT_PHP'); // To use another wrapper
             }

@@ -2087,7 +2087,7 @@ class Contrat extends CommonObject
 
         $result = '';
 
-        $url = DOL_URL_ROOT . '/contrat/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/contrat/card.php?id=' . $this->id;
 
         //if ($option !== 'nolink')
         //{
@@ -2324,15 +2324,15 @@ class Contrat extends CommonObject
                 $warning_delay = $conf->contrat->services->inactifs->warning_delay;
                 $label = $langs->trans("BoardNotActivatedServices");
                 $labelShort = $langs->trans("BoardNotActivatedServicesShort");
-                $url = DOL_URL_ROOT . '/contrat/services_list.php?mainmenu=commercial&leftmenu=contracts&search_status=0&sortfield=cd.date_fin_validite&sortorder=asc';
+                $url = constant('BASE_URL') . '/contrat/services_list.php?mainmenu=commercial&leftmenu=contracts&search_status=0&sortfield=cd.date_fin_validite&sortorder=asc';
             } elseif ($mode == 'expired') {
                 $warning_delay = $conf->contrat->services->expires->warning_delay;
-                $url = DOL_URL_ROOT . '/contrat/services_list.php?mainmenu=commercial&leftmenu=contracts&search_status=4&filter=expired&sortfield=cd.date_fin_validite&sortorder=asc';
+                $url = constant('BASE_URL') . '/contrat/services_list.php?mainmenu=commercial&leftmenu=contracts&search_status=4&filter=expired&sortfield=cd.date_fin_validite&sortorder=asc';
                 $label = $langs->trans("BoardExpiredServices");
                 $labelShort = $langs->trans("BoardExpiredServicesShort");
             } else {
                 $warning_delay = $conf->contrat->services->expires->warning_delay;
-                $url = DOL_URL_ROOT . '/contrat/services_list.php?mainmenu=commercial&leftmenu=contracts&search_status=4&sortfield=cd.date_fin_validite&sortorder=asc';
+                $url = constant('BASE_URL') . '/contrat/services_list.php?mainmenu=commercial&leftmenu=contracts&search_status=4&sortfield=cd.date_fin_validite&sortorder=asc';
                 //$url.= '&op2day='.$arraydatetouse['mday'].'&op2month='.$arraydatetouse['mon'].'&op2year='.$arraydatetouse['year'];
                 //if ($warning_delay >= 0) $url.='&amp;filter=expired';
                 $label = $langs->trans("BoardRunningServices");

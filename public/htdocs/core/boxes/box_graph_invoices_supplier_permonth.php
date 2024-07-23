@@ -137,7 +137,7 @@ class box_graph_invoices_supplier_permonth extends ModeleBoxes
 
                 $filenamenb = $dir . "/" . $prefix . "invoicessuppliernbinyear-" . $endyear . ".png";
                 // default value for customer mode
-                $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=billstatssupplier&file=invoicessuppliernbinyear-' . $endyear . '.png';
+                $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=billstatssupplier&file=invoicessuppliernbinyear-' . $endyear . '.png';
 
                 $px1 = new DolGraph();
                 $mesg = $px1->isGraphKo();
@@ -177,7 +177,7 @@ class box_graph_invoices_supplier_permonth extends ModeleBoxes
 
                 $filenamenb = $dir . "/" . $prefix . "invoicessupplieramountinyear-" . $endyear . ".png";
                 // default value for customer mode
-                $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=billstatssupplier&file=invoicessupplieramountinyear-' . $endyear . '.png';
+                $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=billstatssupplier&file=invoicessupplieramountinyear-' . $endyear . '.png';
 
                 $px2 = new DolGraph();
                 $mesg = $px2->isGraphKo();

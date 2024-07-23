@@ -322,14 +322,14 @@ if ($action != 'export_csv') {
 		</script>';
 
         if ($type == 'sub') {
-            $newcardbutton .= dolGetButtonTitle($langs->trans('AccountBalance') . " - " . $langs->trans('GroupByAccountAccounting'), '', 'fa fa-stream paddingleft imgforviewmode', DOL_URL_ROOT . '/accountancy/bookkeeping/balance.php?' . $url_param, '', 1, array('morecss' => 'marginleftonly'));
-            $newcardbutton .= dolGetButtonTitle($langs->trans('AccountBalance') . " - " . $langs->trans('GroupBySubAccountAccounting'), '', 'fa fa-align-left vmirror paddingleft imgforviewmode', DOL_URL_ROOT . '/accountancy/bookkeeping/balance.php?type=sub&' . $url_param, '', 1, array('morecss' => 'marginleftonly btnTitleSelected'));
+            $newcardbutton .= dolGetButtonTitle($langs->trans('AccountBalance') . " - " . $langs->trans('GroupByAccountAccounting'), '', 'fa fa-stream paddingleft imgforviewmode', constant('BASE_URL') . '/accountancy/bookkeeping/balance.php?' . $url_param, '', 1, array('morecss' => 'marginleftonly'));
+            $newcardbutton .= dolGetButtonTitle($langs->trans('AccountBalance') . " - " . $langs->trans('GroupBySubAccountAccounting'), '', 'fa fa-align-left vmirror paddingleft imgforviewmode', constant('BASE_URL') . '/accountancy/bookkeeping/balance.php?type=sub&' . $url_param, '', 1, array('morecss' => 'marginleftonly btnTitleSelected'));
         } else {
-            $newcardbutton .= dolGetButtonTitle($langs->trans('AccountBalance') . " - " . $langs->trans('GroupByAccountAccounting'), '', 'fa fa-stream paddingleft imgforviewmode', DOL_URL_ROOT . '/accountancy/bookkeeping/balance.php?' . $url_param, '', 1, array('morecss' => 'marginleftonly btnTitleSelected'));
-            $newcardbutton .= dolGetButtonTitle($langs->trans('AccountBalance') . " - " . $langs->trans('GroupBySubAccountAccounting'), '', 'fa fa-align-left vmirror paddingleft imgforviewmode', DOL_URL_ROOT . '/accountancy/bookkeeping/balance.php?type=sub&' . $url_param, '', 1, array('morecss' => 'marginleftonly'));
+            $newcardbutton .= dolGetButtonTitle($langs->trans('AccountBalance') . " - " . $langs->trans('GroupByAccountAccounting'), '', 'fa fa-stream paddingleft imgforviewmode', constant('BASE_URL') . '/accountancy/bookkeeping/balance.php?' . $url_param, '', 1, array('morecss' => 'marginleftonly btnTitleSelected'));
+            $newcardbutton .= dolGetButtonTitle($langs->trans('AccountBalance') . " - " . $langs->trans('GroupBySubAccountAccounting'), '', 'fa fa-align-left vmirror paddingleft imgforviewmode', constant('BASE_URL') . '/accountancy/bookkeeping/balance.php?type=sub&' . $url_param, '', 1, array('morecss' => 'marginleftonly'));
         }
         $newcardbutton .= dolGetButtonTitleSeparator();
-        $newcardbutton .= dolGetButtonTitle($langs->trans('NewAccountingMvt'), '', 'fa fa-plus-circle paddingleft', DOL_URL_ROOT . '/accountancy/bookkeeping/card.php?action=create');
+        $newcardbutton .= dolGetButtonTitle($langs->trans('NewAccountingMvt'), '', 'fa fa-plus-circle paddingleft', constant('BASE_URL') . '/accountancy/bookkeeping/card.php?action=create');
     }
     if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
         $param .= '&contextpage=' . urlencode($contextpage);
@@ -597,7 +597,7 @@ if ($action != 'export_csv') {
         $urlzoom = '';
         if ($type == 'sub') {
             if ($line->subledger_account) {
-                $urlzoom = DOL_URL_ROOT . '/accountancy/bookkeeping/listbyaccount.php?type=sub&search_accountancy_code_start=' . urlencode($line->subledger_account) . '&search_accountancy_code_end=' . urlencode($line->subledger_account);
+                $urlzoom = constant('BASE_URL') . '/accountancy/bookkeeping/listbyaccount.php?type=sub&search_accountancy_code_start=' . urlencode($line->subledger_account) . '&search_accountancy_code_end=' . urlencode($line->subledger_account);
                 if (GETPOSTISSET('date_startmonth')) {
                     $urlzoom .= '&search_date_startmonth=' . GETPOSTINT('date_startmonth') . '&search_date_startday=' . GETPOSTINT('date_startday') . '&search_date_startyear=' . GETPOSTINT('date_startyear');
                 }
@@ -607,7 +607,7 @@ if ($action != 'export_csv') {
             }
         } else {
             if ($line->numero_compte) {
-                $urlzoom = DOL_URL_ROOT . '/accountancy/bookkeeping/listbyaccount.php?search_accountancy_code_start=' . urlencode($line->numero_compte) . '&search_accountancy_code_end=' . urlencode($line->numero_compte);
+                $urlzoom = constant('BASE_URL') . '/accountancy/bookkeeping/listbyaccount.php?search_accountancy_code_start=' . urlencode($line->numero_compte) . '&search_accountancy_code_end=' . urlencode($line->numero_compte);
                 if (GETPOSTISSET('date_startmonth')) {
                     $urlzoom .= '&search_date_startmonth=' . GETPOSTINT('date_startmonth') . '&search_date_startday=' . GETPOSTINT('date_startday') . '&search_date_startyear=' . GETPOSTINT('date_startyear');
                 }

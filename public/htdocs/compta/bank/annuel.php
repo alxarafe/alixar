@@ -357,7 +357,7 @@ if ($result < 0) {
 
     // Fabrication tableau 4b
     $file = $conf->bank->dir_temp . "/credmovement" . $id . "-" . $year . ".png";
-    $fileurl = DOL_URL_ROOT . '/viewimage.php?modulepart=banque_temp&file=' . "/credmovement" . $id . "-" . $year . ".png";
+    $fileurl = constant('BASE_URL') . '/viewimage.php?modulepart=banque_temp&file=' . "/credmovement" . $id . "-" . $year . ".png";
     $title = $langs->transnoentities("Credit") . ' - ' . $langs->transnoentities("Year") . ': ' . ($year - 2) . ' - ' . ($year - 1) . " - " . $year;
     $graph_datas = array();
     for ($i = 0; $i < 12; $i++) {
@@ -438,7 +438,7 @@ if ($result < 0) {
     }
 
     $file = $conf->bank->dir_temp . "/debmovement" . $id . "-" . $year . ".png";
-    $fileurl = DOL_URL_ROOT . '/viewimage.php?modulepart=banque_temp&file=' . "/debmovement" . $id . "-" . $year . ".png";
+    $fileurl = constant('BASE_URL') . '/viewimage.php?modulepart=banque_temp&file=' . "/debmovement" . $id . "-" . $year . ".png";
     $title = $langs->transnoentities("Debit") . ' - ' . $langs->transnoentities("Year") . ': ' . ($year - 2) . ' - ' . ($year - 1) . " - " . $year;
     $graph_datas = array();
     for ($i = 0; $i < 12; $i++) {

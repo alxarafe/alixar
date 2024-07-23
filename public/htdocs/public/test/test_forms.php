@@ -81,7 +81,7 @@ print '<br><br>' . "\n";
 
 print "Test 4d: a select with ajax refresh and with onchange call of url<br>\n";
 $selected = -1;
-print $form->selectArrayAjax('testselectc', DOL_URL_ROOT . '/core/ajax/selectsearchbox.php', $selected, '', '', 0, 1, 'minwidth100', 1);
+print $form->selectArrayAjax('testselectc', constant('BASE_URL') . '/core/ajax/selectsearchbox.php', $selected, '', '', 0, 1, 'minwidth100', 1);
 
 print '<br><br>' . "\n";
 
@@ -114,11 +114,11 @@ if (is_file(DOL_DOCUMENT_ROOT . '/includes/flowjs/flow.js')) {
     print '&nbsp;<span id="filespan">No file selected.</span>';
     print '<br><div class="progress-bar filepgbar taligncenter" role="progressbar" style="width:1%;display:none"><span class="small valigntop">0%</span></div>';
     print '<br><button type="button" style="display:none;" data-fileidentifier="" class="btn green-haze btn-circle cancelfileinput" id="filecancel">Cancel</button>';
-    print '<script src="' . DOL_URL_ROOT . '/includes/flowjs/flow.js"></script>';
+    print '<script src="' . constant('BASE_URL') . '/includes/flowjs/flow.js"></script>';
     print '<script>
 	jQuery(document).ready(function() {
 		var flow = new Flow({
-			target:"' . DOL_URL_ROOT . '/core/ajax/flowjs-server.php",
+			target:"' . constant('BASE_URL') . '/core/ajax/flowjs-server.php",
 			query:{module:"test", token:"' . newToken() . '"},
 			testChunks:false
 		});

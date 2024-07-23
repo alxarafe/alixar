@@ -115,14 +115,14 @@ if ($reshook < 0) {
 if (empty($reshook)) {
     $error = 0;
 
-    $backurlforlist = DOL_URL_ROOT . '/hrm/skill_list.php';
+    $backurlforlist = constant('BASE_URL') . '/hrm/skill_list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/hrm/skill_list.php?id=' . ($id > 0 ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/hrm/skill_list.php?id=' . ($id > 0 ? $id : '__ID__');
             }
         }
     }
@@ -171,7 +171,7 @@ if (empty($reshook)) {
                 }
             }
             setEventMessages($langs->trans("SaveLevelSkill"), null);
-            header("Location: " . DOL_URL_ROOT . '/hrm/skill_tab.php?id=' . $id . '&objecttype=job');
+            header("Location: " . constant('BASE_URL') . '/hrm/skill_tab.php?id=' . $id . '&objecttype=job');
             exit;
         }
     } elseif ($action == 'confirm_deleteskill' && $confirm == 'yes') {

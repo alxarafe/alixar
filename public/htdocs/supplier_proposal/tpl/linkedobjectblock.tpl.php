@@ -44,7 +44,7 @@ foreach ($linkedObjectBlock as $key => $objectlink) {
     } ?>
     <tr class="<?php echo $trclass; ?>">
         <td><?php echo $langs->trans("SupplierProposal"); ?></td>
-        <td><a href="<?php echo DOL_URL_ROOT . '/supplier_proposal/card.php?id=' . $objectlink->id ?>"><?php echo img_object($langs->trans("ShowSupplierProposal"), "supplier_proposal") . ' ' . $objectlink->ref; ?></a></td>
+        <td><a href="<?php echo constant('BASE_URL') . '/supplier_proposal/card.php?id=' . $objectlink->id ?>"><?php echo img_object($langs->trans("ShowSupplierProposal"), "supplier_proposal") . ' ' . $objectlink->ref; ?></a></td>
         <td></td>
         <td class="center"><?php echo dol_print_date($objectlink->datec, 'day'); ?></td>
         <td class="right"><?php

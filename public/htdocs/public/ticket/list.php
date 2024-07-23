@@ -95,7 +95,7 @@ if (!isModEnabled('ticket')) {
  */
 
 if ($cancel) {
-    $backtopage = getDolGlobalString('TICKET_URL_PUBLIC_INTERFACE', DOL_URL_ROOT . '/public/ticket/');
+    $backtopage = getDolGlobalString('TICKET_URL_PUBLIC_INTERFACE', constant('BASE_URL') . '/public/ticket/');
 
     header("Location: " . $backtopage);
     exit;

@@ -66,7 +66,7 @@ class box_bookmarks extends ModeleBoxes
 
         $this->info_box_head = array(
             'text' => $langs->trans("BoxMyLastBookmarks", $max),
-            'sublink' => DOL_URL_ROOT . '/bookmarks/list.php',
+            'sublink' => constant('BASE_URL') . '/bookmarks/list.php',
         );
         if ($user->hasRight("bookmark", "creer")) {
             $this->info_box_head['subpicto'] = 'bookmark';
@@ -119,7 +119,7 @@ class box_bookmarks extends ModeleBoxes
                     $this->info_box_contents[$line][0] = array(
                         'td' => 'class="center" colspan="2"',
                         'tooltip' => $mytxt,
-                        'url' => DOL_URL_ROOT . '/bookmarks/list.php', 'text' => $mytxt,
+                        'url' => constant('BASE_URL') . '/bookmarks/list.php', 'text' => $mytxt,
                     );
                 }
 

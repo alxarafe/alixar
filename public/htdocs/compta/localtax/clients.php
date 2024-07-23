@@ -147,13 +147,13 @@ $calc = getDolGlobalString('MAIN_INFO_LOCALTAX_CALC') . $local;
 $description = '';
 if ($calc == 0 || $calc == 1) { // Calculate on invoice for goods and services
     $calcmode = $calc == 0 ? $langs->trans("CalcModeLT" . $local) : $langs->trans("CalcModeLT" . $local . "Rec");
-    $calcmode .= ' <span class="opacitymedium">(' . $langs->trans("TaxModuleSetupToModifyRulesLT", DOL_URL_ROOT . '/admin/company.php') . ')</span>';
+    $calcmode .= ' <span class="opacitymedium">(' . $langs->trans("TaxModuleSetupToModifyRulesLT", constant('BASE_URL') . '/admin/company.php') . ')</span>';
     $period = $form->selectDate($date_start, 'date_start', 0, 0, 0, '', 1, 0) . ' - ' . $form->selectDate($date_end, 'date_end', 0, 0, 0, '', 1, 0);
     if (isModEnabled('comptabilite')) {
         $description .= '<br>' . $langs->trans("WarningDepositsNotIncluded");
     }
     $description .= $fsearch;
-    $description .= ' <span class="opacitymedium">(' . $langs->trans("TaxModuleSetupToModifyRulesLT", DOL_URL_ROOT . '/admin/company.php') . ')</span>';
+    $description .= ' <span class="opacitymedium">(' . $langs->trans("TaxModuleSetupToModifyRulesLT", constant('BASE_URL') . '/admin/company.php') . ')</span>';
     $builddate = dol_now();
 
     $elementcust = $langs->trans("CustomersInvoices");
@@ -165,13 +165,13 @@ if ($calc == 0 || $calc == 1) { // Calculate on invoice for goods and services
 }
 if ($calc == 2) {   // Invoice for goods, payment for services
     $calcmode = $langs->trans("CalcModeLT2Debt");
-    $calcmode .= ' <span class="opacitymedium">(' . $langs->trans("TaxModuleSetupToModifyRulesLT", DOL_URL_ROOT . '/admin/company.php') . ')</span>';
+    $calcmode .= ' <span class="opacitymedium">(' . $langs->trans("TaxModuleSetupToModifyRulesLT", constant('BASE_URL') . '/admin/company.php') . ')</span>';
     $period = $form->selectDate($date_start, 'date_start', 0, 0, 0, '', 1, 0) . ' - ' . $form->selectDate($date_end, 'date_end', 0, 0, 0, '', 1, 0);
     if (isModEnabled('comptabilite')) {
         $description .= '<br>' . $langs->trans("WarningDepositsNotIncluded");
     }
     $description .= $fsearch;
-    $description .= '<span class="opacitymedium">(' . $langs->trans("TaxModuleSetupToModifyRulesLT", DOL_URL_ROOT . '/admin/company.php') . ')</span>';
+    $description .= '<span class="opacitymedium">(' . $langs->trans("TaxModuleSetupToModifyRulesLT", constant('BASE_URL') . '/admin/company.php') . ')</span>';
     $builddate = dol_now();
 
     $elementcust = $langs->trans("CustomersInvoices");

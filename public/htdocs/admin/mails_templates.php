@@ -662,7 +662,7 @@ $linkback = '';
 $titlepicto = 'title_setup';
 
 
-$url = DOL_URL_ROOT . '/admin/mails_templates.php?action=create';
+$url = constant('BASE_URL') . '/admin/mails_templates.php?action=create';
 $newcardbutton = '';
 $newcardbutton .= dolGetButtonTitle($langs->trans('NewEMailTemplate'), '', 'fa fa-plus-circle', $url, '', $permissiontoadd);
 

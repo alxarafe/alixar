@@ -103,7 +103,7 @@ if (getDolGlobalString('MAIN_SEARCH_FORM_ON_HOME_AREAS')) {     // TODO Add a se
     }
 
     if (count($listofsearchfields)) {
-        print '<form method="post" action="' . DOL_URL_ROOT . '/core/search.php">';
+        print '<form method="post" action="' . constant('BASE_URL') . '/core/search.php">';
         print '<input type="hidden" name="token" value="' . newToken() . '">';
         print '<table class="noborder nohover centpercent">';
         $i = 0;

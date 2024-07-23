@@ -797,7 +797,7 @@ class Delivery extends CommonObject
             $label = implode($this->getTooltipContentArray($params));
         }
 
-        $url = DOL_URL_ROOT . '/delivery/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/delivery/card.php?id=' . $this->id;
 
         //if ($option !== 'nolink')
         //{

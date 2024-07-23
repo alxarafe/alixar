@@ -385,7 +385,7 @@ if ($search_date_limit_endyear) {
     $param .= '&search_date_limit_endyear=' . urlencode((string) ($search_date_limit_endyear));
 }
 
-$url = DOL_URL_ROOT . '/compta/sociales/card.php?action=create';
+$url = constant('BASE_URL') . '/compta/sociales/card.php?action=create';
 
 $newcardbutton = '';
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));

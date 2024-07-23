@@ -26,7 +26,7 @@
  *  \brief      Page of a project task comment
  */
 
-require "../../main.inc.php";
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
@@ -70,7 +70,7 @@ if (!empty($project_ref) && !empty($withproject)) {
         if (count($objectsarray) > 0) {
             $id = $objectsarray[0]->id;
         } else {
-            header("Location: " . DOL_URL_ROOT . '/projet/tasks.php?id=' . $projectstatic->id . (empty($mode) ? '' : '&mode=' . $mode));
+            header("Location: " . constant('BASE_URL') . '/projet/tasks.php?id=' . $projectstatic->id . (empty($mode) ? '' : '&mode=' . $mode));
         }
     }
 }

@@ -531,7 +531,7 @@ class Opensurveysondage extends CommonObject
             $label = implode($this->getTooltipContentArray($params));
         }
 
-        $url = DOL_URL_ROOT . '/opensurvey/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/opensurvey/card.php?id=' . $this->id;
 
         // Add param to save lastsearch_values or not
         $add_save_lastsearch_values = ($save_lastsearch_value == 1 ? 1 : 0);

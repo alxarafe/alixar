@@ -142,7 +142,7 @@ print '<br>';
 
 
 print '<br>';
-print $langs->trans("OnlyActiveElementsAreShown", DOL_URL_ROOT . '/admin/modules.php');
+print $langs->trans("OnlyActiveElementsAreShown", constant('BASE_URL') . '/admin/modules.php');
 
 $constname = 'WEBSERVICES_KEY';
 

@@ -183,7 +183,7 @@ if ($action == 'up') {
 
         setEventMessages($langs->trans("MenuDeleted"), null, 'mesgs');
 
-        header("Location: " . DOL_URL_ROOT . '/admin/menus/index.php?menu_handler=' . $menu_handler);
+        header("Location: " . constant('BASE_URL') . '/admin/menus/index.php?menu_handler=' . $menu_handler);
         exit;
     } else {
         $db->rollback();
@@ -242,7 +242,7 @@ if ($action == 'delete') {
 
 $newcardbutton = '';
 if ($user->admin) {
-    $newcardbutton .= dolGetButtonTitle($langs->trans('New'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/admin/menus/edit.php?menuId=0&action=create&menu_handler=' . urlencode($menu_handler) . '&backtopage=' . urlencode($_SERVER['PHP_SELF']));
+    $newcardbutton .= dolGetButtonTitle($langs->trans('New'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/admin/menus/edit.php?menuId=0&action=create&menu_handler=' . urlencode($menu_handler) . '&backtopage=' . urlencode($_SERVER['PHP_SELF']));
 }
 
 print '<form name="newmenu" class="nocellnopadd" action="' . $_SERVER["PHP_SELF"] . '">';

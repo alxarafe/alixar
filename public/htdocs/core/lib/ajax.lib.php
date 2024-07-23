@@ -661,7 +661,7 @@ function ajax_constantonoff($code, $input = array(), $entity = null, $revertonof
 		<script>
 			$(document).ready(function() {
 				var input = ' . json_encode($input) . ';
-				var url = \'' . DOL_URL_ROOT . '/core/ajax/constantonoff.php\';
+				var url = \'' . constant('BASE_URL') . '/core/ajax/constantonoff.php\';
 				var code = \'' . dol_escape_js($code) . '\';
 				var entity = \'' . dol_escape_js($entity) . '\';
 				var strict = \'' . dol_escape_js($strict) . '\';
@@ -742,7 +742,7 @@ function ajax_object_onoff($object, $code, $field, $text_on, $text_off, $input =
             // Set constant
             $("#set_' . $htmlname . '_' . $object->id . '").click(function() {
 				console.log("Click managed by ajax_object_onoff");
-                $.get( "' . DOL_URL_ROOT . '/core/ajax/objectonoff.php", {
+                $.get( "' . constant('BASE_URL') . '/core/ajax/objectonoff.php", {
                     action: \'set\',
                     field: \'' . dol_escape_js($field) . '\',
                     value: \'1\',
@@ -774,7 +774,7 @@ function ajax_object_onoff($object, $code, $field, $text_on, $text_off, $input =
             // Del constant
             $("#del_' . $htmlname . '_' . $object->id . '").click(function() {
 				console.log("Click managed by ajax_object_onoff");
-                $.get( "' . DOL_URL_ROOT . '/core/ajax/objectonoff.php", {
+                $.get( "' . constant('BASE_URL') . '/core/ajax/objectonoff.php", {
                     action: \'set\',
                     field: \'' . dol_escape_js($field) . '\',
                     value: \'0\',

@@ -37,7 +37,7 @@ function intracommReportAdminPrepareHead()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/intracommreport/admin/intracommreport.php';
+    $head[$h][0] = constant('BASE_URL') . '/intracommreport/admin/intracommreport.php';
     $head[$h][1] = $langs->trans("Parameters");
     $head[$h][2] = 'general';
     $h++;
@@ -68,7 +68,7 @@ function intracommReportPrepareHead($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/intracommreport/card.php?rowid=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/intracommreport/card.php?rowid=' . $object->id;
     $head[$h][1] = $langs->trans("Card");
     $head[$h][2] = 'card';
     $h++;

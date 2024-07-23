@@ -44,7 +44,7 @@ if (!defined('NOREQUIREAJAX')) {
     define('NOREQUIREAJAX', '1');
 }
 
-require_once __DIR__ . '/../main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Define mime type
 top_httphead('text/javascript');

@@ -43,13 +43,13 @@ function calendarPrepareHead($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/bookcal/calendar_card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/bookcal/calendar_card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Calendar");
     $head[$h][2] = 'card';
     $h++;
 
     if ($object->status == Calendar::STATUS_VALIDATED) {
-        $head[$h][0] = DOL_URL_ROOT . '/bookcal/booking_list.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/bookcal/booking_list.php?id=' . $object->id;
         $head[$h][1] = $langs->trans("Bookings");
         $head[$h][2] = 'booking';
         $h++;
@@ -57,7 +57,7 @@ function calendarPrepareHead($object)
 
 
     if ($showtabofpagecontact) {
-        $head[$h][0] = DOL_URL_ROOT . '/bookcal/calendar_contact.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/bookcal/calendar_contact.php?id=' . $object->id;
         $head[$h][1] = $langs->trans("Contacts");
         $head[$h][2] = 'contact';
         $h++;
@@ -72,7 +72,7 @@ function calendarPrepareHead($object)
             if (!empty($object->note_public)) {
                 $nbNote++;
             }
-            $head[$h][0] = DOL_URL_ROOT . '/bookcal/calendar_note.php?id=' . $object->id;
+            $head[$h][0] = constant('BASE_URL') . '/bookcal/calendar_note.php?id=' . $object->id;
             $head[$h][1] = $langs->trans('Notes');
             if ($nbNote > 0) {
                 $head[$h][1] .= (!getDolGlobalInt('MAIN_OPTIMIZEFORTEXTBROWSER') ? '<span class="badge marginleftonlyshort">' . $nbNote . '</span>' : '');
@@ -88,7 +88,7 @@ function calendarPrepareHead($object)
         $upload_dir = $conf->bookcal->dir_output . "/calendar/" . dol_sanitizeFileName($object->ref);
         $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
         $nbLinks = Link::count($db, $object->element, $object->id);
-        $head[$h][0] = DOL_URL_ROOT . '/bookcal/calendar_document.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/bookcal/calendar_document.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('Documents');
         if (($nbFiles + $nbLinks) > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -98,7 +98,7 @@ function calendarPrepareHead($object)
     }
 
     if ($showtabofpageagenda) {
-        $head[$h][0] = DOL_URL_ROOT . '/bookcal/calendar_agenda.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/bookcal/calendar_agenda.php?id=' . $object->id;
         $head[$h][1] = $langs->trans("Events");
         $head[$h][2] = 'agenda';
         $h++;

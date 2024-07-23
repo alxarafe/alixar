@@ -39,7 +39,7 @@ if (!defined('NOREQUIRESOC')) {
     define('NOREQUIRESOC', '1');
 }
 
-include '../../main.inc.php';
+include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 $id = GETPOSTINT('id');
 $element = GETPOST('element', 'aZ09arobase');

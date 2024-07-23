@@ -82,7 +82,7 @@ function reception_prepare_head(Reception $object)
     $upload_dir = $conf->reception->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/reception/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/reception/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -137,7 +137,7 @@ function reception_admin_prepare_head()
     complete_head_from_modules($conf, $langs, null, $head, $h, 'reception_admin');
 
     if (getDolGlobalString('MAIN_SUBMODULE_RECEPTION')) {
-        $head[$h][0] = DOL_URL_ROOT . '/admin/reception_extrafields.php';
+        $head[$h][0] = constant('BASE_URL') . '/admin/reception_extrafields.php';
         $head[$h][1] = $langs->trans("ExtraFields");
         $nbExtrafields = $extrafields->attributes['reception']['count'];
         if ($nbExtrafields > 0) {
@@ -148,7 +148,7 @@ function reception_admin_prepare_head()
     }
 
     if (getDolGlobalString('MAIN_SUBMODULE_RECEPTION')) {
-        $head[$h][0] = DOL_URL_ROOT . '/admin/receptiondet_batch_extrafields.php';
+        $head[$h][0] = constant('BASE_URL') . '/admin/receptiondet_batch_extrafields.php';
         $head[$h][1] = $langs->trans("ExtraFieldsLines");
         $nbExtrafields = $extrafields->attributes['receptiondet_batch']['count'];
         if ($nbExtrafields > 0) {

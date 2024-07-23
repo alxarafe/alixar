@@ -361,7 +361,7 @@ print '<input type="hidden" name="contextpage" value="' . $contextpage . '">';
 print '<input type="hidden" name="page_y" value="">';
 print '<input type="hidden" name="mode" value="' . $mode . '">';
 
-$url = DOL_URL_ROOT . '/compta/tva/card.php?action=create';
+$url = constant('BASE_URL') . '/compta/tva/card.php?action=create';
 if (!empty($socid)) {
     $url .= '&socid=' . $socid;
 }

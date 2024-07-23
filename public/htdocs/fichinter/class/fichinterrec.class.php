@@ -645,7 +645,7 @@ class FichinterRec extends Fichinter
         $result = '';
         $label = $langs->trans("ShowInterventionModel") . ': ' . $this->ref;
 
-        $url = DOL_URL_ROOT . '/fichinter/card-rec.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/fichinter/card-rec.php?id=' . $this->id;
 
         if ($short) {
             return $url;

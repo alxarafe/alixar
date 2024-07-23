@@ -114,7 +114,7 @@ if ($reshook < 0) {
 // Add file in email form
 if (empty($reshook)) {
     if ($cancel) {
-        $backtopage = getDolGlobalString('TICKET_URL_PUBLIC_INTERFACE', DOL_URL_ROOT . '/public/ticket/');
+        $backtopage = getDolGlobalString('TICKET_URL_PUBLIC_INTERFACE', constant('BASE_URL') . '/public/ticket/');
 
         header("Location: " . $backtopage);
         exit;

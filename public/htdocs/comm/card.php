@@ -709,7 +709,7 @@ if ($object->id > 0) {
         $outstandingTotal = $tmp['total_ht'];
         $outstandingTotalIncTax = $tmp['total_ttc'];
         $text = $langs->trans("OverAllProposals");
-        $link = DOL_URL_ROOT . '/comm/propal/list.php?socid=' . $object->id;
+        $link = constant('BASE_URL') . '/comm/propal/list.php?socid=' . $object->id;
         $icon = 'bill';
         if ($link) {
             $boxstat .= '<a href="' . $link . '" class="boxstatsindicator thumbstat nobold nounderline">';
@@ -730,7 +730,7 @@ if ($object->id > 0) {
         $outstandingTotal = $tmp['total_ht'];
         $outstandingTotalIncTax = $tmp['total_ttc'];
         $text = $langs->trans("OverAllOrders");
-        $link = DOL_URL_ROOT . '/commande/list.php?socid=' . $object->id;
+        $link = constant('BASE_URL') . '/commande/list.php?socid=' . $object->id;
         $icon = 'bill';
         if ($link) {
             $boxstat .= '<a href="' . $link . '" class="boxstatsindicator thumbstat nobold nounderline">';
@@ -752,7 +752,7 @@ if ($object->id > 0) {
         $outstandingTotalIncTax = $tmp['total_ttc'];
 
         $text = $langs->trans("OverAllInvoices");
-        $link = DOL_URL_ROOT . '/compta/facture/list.php?socid=' . $object->id;
+        $link = constant('BASE_URL') . '/compta/facture/list.php?socid=' . $object->id;
         $icon = 'bill';
         if ($link) {
             $boxstat .= '<a href="' . $link . '" class="boxstatsindicator thumbstat nobold nounderline">';
@@ -771,7 +771,7 @@ if ($object->id > 0) {
             $warn = ' ' . img_warning($langs->trans("OutstandingBillReached"));
         }
         $text = $langs->trans("CurrentOutstandingBill");
-        $link = DOL_URL_ROOT . '/compta/recap-compta.php?socid=' . $object->id;
+        $link = constant('BASE_URL') . '/compta/recap-compta.php?socid=' . $object->id;
         $icon = 'bill';
         if ($link) {
             $boxstat .= '<a href="' . $link . '" class="boxstatsindicator thumbstat nobold nounderline">';
@@ -792,7 +792,7 @@ if ($object->id > 0) {
                 $warn = ' ' . img_warning($langs->trans("OutstandingBillReached"));
             }
             $text = $langs->trans("CurrentOutstandingBillLate");
-            $link = DOL_URL_ROOT . '/compta/recap-compta.php?socid=' . $object->id;
+            $link = constant('BASE_URL') . '/compta/recap-compta.php?socid=' . $object->id;
             $icon = 'bill';
             if ($link) {
                 $boxstat .= '<a href="' . $link . '" class="boxstatsindicator thumbstat nobold nounderline">';

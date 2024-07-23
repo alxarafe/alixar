@@ -174,14 +174,14 @@ if ((!empty($objUser->id) || !empty($objcon->id)) && $permok) {
 
 $morehtmlright = '';
 
-$messagingUrl = DOL_URL_ROOT . '/user/messaging.php?userid=' . $object->id;
+$messagingUrl = constant('BASE_URL') . '/user/messaging.php?userid=' . $object->id;
 $morehtmlright .= dolGetButtonTitle($langs->trans('ShowAsConversation'), '', 'fa fa-comments imgforviewmode', $messagingUrl, '', 1);
-$messagingUrl = DOL_URL_ROOT . '/user/agenda.php?id=' . $object->id;
+$messagingUrl = constant('BASE_URL') . '/user/agenda.php?id=' . $object->id;
 $morehtmlright .= dolGetButtonTitle($langs->trans('MessageListViewType'), '', 'fa fa-bars imgforviewmode', $messagingUrl, '', 2);
 
 if (isModEnabled('agenda')) {
     if ($user->hasRight('agenda', 'myactions', 'create') || $user->hasRight('agenda', 'allactions', 'create')) {
-        $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/comm/action/card.php?action=create' . $out);
+        $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/comm/action/card.php?action=create' . $out);
     }
 }
 

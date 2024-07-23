@@ -30,7 +30,7 @@
  *  \brief      List all tasks of a project
  */
 
-require "../../main.inc.php";
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
@@ -590,7 +590,7 @@ $num = $db->num_rows($resql);
 if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $search_all) {
     $obj = $db->fetch_object($resql);
     $id = $obj->id;     // in select, task id has been aliases into 'id'
-    header("Location: " . DOL_URL_ROOT . '/projet/tasks/task.php?id=' . $id . '&withproject=1');
+    header("Location: " . constant('BASE_URL') . '/projet/tasks/task.php?id=' . $id . '&withproject=1');
     exit;
 }
 
@@ -746,7 +746,7 @@ $newcardbutton = '';
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewKanban'), '', 'fa fa-th-list imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=kanban' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ($mode == 'kanban' ? 2 : 1), array('morecss' => 'reposition'));
 $newcardbutton .= dolGetButtonTitleSeparator();
-$newcardbutton .= dolGetButtonTitle($langs->trans('NewTask'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/projet/tasks.php?action=create&backtopage=' . urlencode(DOL_URL_ROOT . '/projet/tasks/list.php'), '', $permissiontocreate);
+$newcardbutton .= dolGetButtonTitle($langs->trans('NewTask'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/projet/tasks.php?action=create&backtopage=' . urlencode(constant('BASE_URL') . '/projet/tasks/list.php'), '', $permissiontocreate);
 
 
 // Show description of content

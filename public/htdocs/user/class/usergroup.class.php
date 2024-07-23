@@ -830,9 +830,9 @@ class UserGroup extends CommonObject
         }
 
         if ($option == 'permissions') {
-            $url = DOL_URL_ROOT . '/user/group/perms.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/user/group/perms.php?id=' . $this->id;
         } else {
-            $url = DOL_URL_ROOT . '/user/group/card.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/user/group/card.php?id=' . $this->id;
         }
 
         if ($option != 'nolink') {

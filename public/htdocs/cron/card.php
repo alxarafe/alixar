@@ -77,7 +77,7 @@ if (!empty($cancel)) {
         if ($backtopage) {
             header("Location: " . $backtopage);
         } else {
-            header("Location: " . DOL_URL_ROOT . '/cron/list.php');
+            header("Location: " . constant('BASE_URL') . '/cron/list.php');
         }
         exit;
     }
@@ -91,7 +91,7 @@ if ($action == 'confirm_delete' && $confirm == "yes" && $permissiontodelete) {
         setEventMessages($object->error, $object->errors, 'errors');
         $action = 'edit';
     } else {
-        header("Location: " . DOL_URL_ROOT . '/cron/list.php');
+        header("Location: " . constant('BASE_URL') . '/cron/list.php');
         exit;
     }
 }

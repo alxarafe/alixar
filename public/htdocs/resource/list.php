@@ -433,7 +433,7 @@ print '<input type="hidden" name="page" value="' . $page . '">';
 print '<input type="hidden" name="contextpage" value="' . $contextpage . '">';
 
 $newcardbutton = '';
-$url = DOL_URL_ROOT . '/resource/card.php?action=create';
+$url = constant('BASE_URL') . '/resource/card.php?action=create';
 
 $newcardbutton = dolGetButtonTitle($langs->trans('NewResource'), '', 'fa fa-plus-circle', $url, '', $permissiontoadd);
 

@@ -107,7 +107,7 @@ if (empty($conf->dol_no_mouse_hover)) {
 	    elemtostoretooltiptimer.data("openTimeoutId", setTimeout(function() {
 			target.tooltip("close");
 			$.ajax({
-					url:"' . DOL_URL_ROOT . '/core/ajax/ajaxtooltip.php",
+					url:"' . constant('BASE_URL') . '/core/ajax/ajaxtooltip.php",
 					type: "post",
 					async: true,
 					data: params,

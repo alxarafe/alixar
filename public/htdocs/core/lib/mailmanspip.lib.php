@@ -34,12 +34,12 @@ function mailmanspip_admin_prepare_head()
 
     return array(
         array(
-            DOL_URL_ROOT . '/admin/mailman.php',
+            constant('BASE_URL') . '/admin/mailman.php',
             'Mailman',
             'mailman'
         ),
         array(
-            DOL_URL_ROOT . '/admin/spip.php',
+            constant('BASE_URL') . '/admin/spip.php',
             'SPIP',
             'spip'
         )

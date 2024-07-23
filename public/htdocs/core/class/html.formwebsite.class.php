@@ -386,7 +386,7 @@ class FormWebsite
             $contentHtml = file_exists($pathtoTemplateFile) ? make_substitutions(@file_get_contents($pathtoTemplateFile), $substitutionarray) : '';
 
             $out .= '<div class="template-option" data-template="' . $template . '" data-content="' . htmlentities($contentHtml) . '">';
-            $out .= '<img class="maillayout" alt="' . $template . '" src="' . DOL_URL_ROOT . '/theme/common/maillayout/' . $template . '.png" />';
+            $out .= '<img class="maillayout" alt="' . $template . '" src="' . constant('BASE_URL') . '/theme/common/maillayout/' . $template . '.png" />';
             $out .= '<span class="template-option-text">' . ($template != 'text'  ? ucfirst($template) : ucfirst($templateFunction)) . '</span>';
             $out .= '</div>';
         }

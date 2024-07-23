@@ -172,9 +172,9 @@ if ((!empty($objthirdparty->id) || !empty($objcon->id)) && $permok) {
 
 $morehtmlright = '';
 
-$messagingUrl = DOL_URL_ROOT . '/societe/messaging.php?socid=' . $object->id;
+$messagingUrl = constant('BASE_URL') . '/societe/messaging.php?socid=' . $object->id;
 $morehtmlright .= dolGetButtonTitle($langs->trans('ShowAsConversation'), '', 'fa fa-comments imgforviewmode', $messagingUrl, '', 1);
-$messagingUrl = DOL_URL_ROOT . '/societe/agenda.php?socid=' . $object->id;
+$messagingUrl = constant('BASE_URL') . '/societe/agenda.php?socid=' . $object->id;
 $morehtmlright .= dolGetButtonTitle($langs->trans('MessageListViewType'), '', 'fa fa-bars imgforviewmode', $messagingUrl, '', 2);
 
 // // Show link to send an email (if read and not closed)
@@ -189,7 +189,7 @@ $morehtmlright .= dolGetButtonTitle($langs->trans('MessageListViewType'), '', 'f
 
 if (isModEnabled('agenda')) {
     if ($user->hasRight('agenda', 'myactions', 'create') || $user->hasRight('agenda', 'allactions', 'create')) {
-        $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/comm/action/card.php?action=create' . $out);
+        $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/comm/action/card.php?action=create' . $out);
     }
 }
 

@@ -86,7 +86,7 @@ if (is_array($custcats) && !empty($custcats)) {
 $data = $stats->getNbByMonthWithPrevYear($endyear, $startyear);
 
 $filenamenb = $dir . "/salariesnbinyear-" . $year . ".png";
-$fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=donationStats&amp;file=donationinyear-' . $year . '.png';
+$fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=donationStats&amp;file=donationinyear-' . $year . '.png';
 
 $px1 = new DolGraph();
 $mesg = $px1->isGraphKo();
@@ -115,7 +115,7 @@ if (!$mesg) {
 $data = $stats->getAmountByMonthWithPrevYear($endyear, $startyear);
 
 $filenameamount = $dir . "/donationamount-" . $year . ".png";
-$fileurlamount = DOL_URL_ROOT . '/viewimage.php?modulepart=donationStats&amp;file=donationamoutinyear-' . $year . '.png';
+$fileurlamount = constant('BASE_URL') . '/viewimage.php?modulepart=donationStats&amp;file=donationamoutinyear-' . $year . '.png';
 
 $px2 = new DolGraph();
 $mesg = $px2->isGraphKo();
@@ -143,7 +143,7 @@ if (!$mesg) {
 $data = $stats->getAverageByMonthWithPrevYear($endyear, $startyear);
 
 $filename_avg = $dir . "/donationaverage-" . $year . ".png";
-$fileurl_avg = DOL_URL_ROOT . '/viewimage.php?modulepart=donationStats&file=donationaverageinyear-' . $year . '.png';
+$fileurl_avg = constant('BASE_URL') . '/viewimage.php?modulepart=donationStats&file=donationaverageinyear-' . $year . '.png';
 
 $px3 = new DolGraph();
 $mesg = $px3->isGraphKo();
@@ -183,7 +183,7 @@ if (!count($arrayyears)) {
 
 $h = 0;
 $head = array();
-$head[$h][0] = DOL_URL_ROOT . '/don/stats/index.php';
+$head[$h][0] = constant('BASE_URL') . '/don/stats/index.php';
 $head[$h][1] = $langs->trans("ByMonthYear");
 $head[$h][2] = 'byyear';
 $h++;

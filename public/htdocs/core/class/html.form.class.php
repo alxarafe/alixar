@@ -1132,7 +1132,7 @@ class Form
             $out .= '</select>';
 
             if ($conf->use_javascript_ajax && empty($disableautocomplete)) {
-                $out .= ajax_multiautocompleter('location_incoterms', array(), DOL_URL_ROOT . '/core/ajax/locationincoterms.php') . "\n";
+                $out .= ajax_multiautocompleter('location_incoterms', array(), constant('BASE_URL') . '/core/ajax/locationincoterms.php') . "\n";
                 $moreattrib .= ' autocomplete="off"';
             }
             $out .= '<input id="location_incoterms" class="maxwidthonsmartphone type="text" name="location_incoterms" value="' . $location_incoterms . '">' . "\n";
@@ -1378,7 +1378,7 @@ class Form
 
             $out .= ajax_event($htmlname, $events);
 
-            $out .= ajax_autocompleter($selected, $htmlname, DOL_URL_ROOT . '/societe/ajax/company.php', $urloption, getDolGlobalString('COMPANY_USE_SEARCH_TO_SELECT'), 0, $ajaxoptions);
+            $out .= ajax_autocompleter($selected, $htmlname, constant('BASE_URL') . '/societe/ajax/company.php', $urloption, getDolGlobalString('COMPANY_USE_SEARCH_TO_SELECT'), 0, $ajaxoptions);
         } else {
             // Immediate load of all database
             $out .= $this->select_thirdparty_list($selected, $htmlname, $filter, $showempty, $showtype, $forcecombo, $events, '', 0, $limit, $morecss, $moreparam, $multiple, $excludeids, $showcode);
@@ -1457,7 +1457,7 @@ class Form
 
             $out .= ajax_event($htmlname, $events);
 
-            $out .= ajax_autocompleter($selected, $htmlname, DOL_URL_ROOT . '/contact/ajax/contact.php', $urloption, getDolGlobalString('CONTACT_USE_SEARCH_TO_SELECT'), 0, $events);
+            $out .= ajax_autocompleter($selected, $htmlname, constant('BASE_URL') . '/contact/ajax/contact.php', $urloption, getDolGlobalString('CONTACT_USE_SEARCH_TO_SELECT'), 0, $events);
         } else {
             // Immediate load of all database
             $multiple = false;
@@ -2669,7 +2669,7 @@ class Form
             }
             // mode=1 means customers products
             $urloption = ($socid > 0 ? 'socid=' . $socid . '&' : '') . 'htmlname=' . $htmlname . '&outjson=1&price_level=' . $price_level . '&type=' . $filtertype . '&mode=1&status=' . $status . '&status_purchase=' . $status_purchase . '&finished=' . $finished . '&hidepriceinlabel=' . $hidepriceinlabel . '&warehousestatus=' . $warehouseStatus;
-            $out .= ajax_autocompleter($selected, $htmlname, DOL_URL_ROOT . '/product/ajax/products.php', $urloption, $conf->global->PRODUIT_USE_SEARCH_TO_SELECT, 1, $ajaxoptions);
+            $out .= ajax_autocompleter($selected, $htmlname, constant('BASE_URL') . '/product/ajax/products.php', $urloption, $conf->global->PRODUIT_USE_SEARCH_TO_SELECT, 1, $ajaxoptions);
 
             if (isModEnabled('variants') && is_array($selected_combinations)) {
                 // Code to automatically insert with javascript the select of attributes under the select of product
@@ -2698,7 +2698,7 @@ class Form
 
 							console.log("A change has started. We get variants fields to inject html select");
 
-							jQuery.getJSON("' . DOL_URL_ROOT . '/variants/ajax/getCombinations.php", {
+							jQuery.getJSON("' . constant('BASE_URL') . '/variants/ajax/getCombinations.php", {
 								id: jQuery(this).val()
 							}, function (data) {
 								jQuery(\'div#attributes_box\').empty();
@@ -3607,7 +3607,7 @@ class Form
 
             // mode=2 means suppliers products
             $urloption = ($socid > 0 ? 'socid=' . $socid . '&' : '') . 'htmlname=' . $htmlname . '&outjson=1&price_level=' . $price_level . '&type=' . $filtertype . '&mode=2&status=' . $status . '&finished=' . $finished . '&alsoproductwithnosupplierprice=' . $alsoproductwithnosupplierprice;
-            print ajax_autocompleter($selected, $htmlname, DOL_URL_ROOT . '/product/ajax/products.php', $urloption, getDolGlobalString('PRODUIT_USE_SEARCH_TO_SELECT'), 0, $ajaxoptions);
+            print ajax_autocompleter($selected, $htmlname, constant('BASE_URL') . '/product/ajax/products.php', $urloption, getDolGlobalString('PRODUIT_USE_SEARCH_TO_SELECT'), 0, $ajaxoptions);
 
             print($hidelabel ? '' : $langs->trans("RefOrLabel") . ' : ') . '<input type="text" class="' . $morecss . '" name="search_' . $htmlname . '" id="search_' . $htmlname . '" value="' . $selected_input_value . '"' . ($placeholder ? ' placeholder="' . $placeholder . '"' : '') . '>';
         } else {
@@ -6633,7 +6633,7 @@ class Form
                     $langs->load("errors");
                     $new_country_code = $reg[1];
                     $country_id = dol_getIdFromCode($this->db, $new_country_code, 'c_pays', 'code', 'rowid');
-                    $this->error .= '<br>' . $langs->trans("ErrorFixThisHere", DOL_URL_ROOT . '/admin/dict.php?id=10' . ($country_id > 0 ? '&countryidforinsert=' . $country_id : ''));
+                    $this->error .= '<br>' . $langs->trans("ErrorFixThisHere", constant('BASE_URL') . '/admin/dict.php?id=10' . ($country_id > 0 ? '&countryidforinsert=' . $country_id : ''));
                 }
                 $this->error .= '</span>';
                 return -1;
@@ -7080,7 +7080,7 @@ class Form
                     $retstringbuttom = '';
                     if (!$disabled) {
                         $retstringbuttom = '<button id="' . $prefix . 'Button" type="button" class="dpInvisibleButtons"';
-                        $base = DOL_URL_ROOT . '/core/';
+                        $base = constant('BASE_URL') . '/core/';
                         $retstringbuttom .= ' onClick="showDP(\'' . $base . '\',\'' . $prefix . '\',\'' . $langs->trans("FormatDateShortJavaInput") . '\',\'' . $langs->defaultlang . '\');"';
                         $retstringbuttom .= '>' . img_object($langs->trans("SelectDate"), 'calendarday', 'class="datecallink"') . '</button>';
                     } else {
@@ -7571,7 +7571,7 @@ class Form
             }
 
             $urloption = '';
-            $out .= ajax_autocompleter($selected, $htmlname, DOL_URL_ROOT . '/ticket/ajax/tickets.php', $urloption, $conf->global->PRODUIT_USE_SEARCH_TO_SELECT, 1, $ajaxoptions);
+            $out .= ajax_autocompleter($selected, $htmlname, constant('BASE_URL') . '/ticket/ajax/tickets.php', $urloption, $conf->global->PRODUIT_USE_SEARCH_TO_SELECT, 1, $ajaxoptions);
 
             if (empty($hidelabel)) {
                 $out .= $langs->trans("RefOrLabel") . ' : ';
@@ -7797,7 +7797,7 @@ class Form
             }
 
             $urloption = '';
-            $out .= ajax_autocompleter($selected, $htmlname, DOL_URL_ROOT . '/projet/ajax/projects.php', $urloption, $conf->global->PRODUIT_USE_SEARCH_TO_SELECT, 1, $ajaxoptions);
+            $out .= ajax_autocompleter($selected, $htmlname, constant('BASE_URL') . '/projet/ajax/projects.php', $urloption, $conf->global->PRODUIT_USE_SEARCH_TO_SELECT, 1, $ajaxoptions);
 
             if (empty($hidelabel)) {
                 $out .= $langs->trans("RefOrLabel") . ' : ';
@@ -8027,7 +8027,7 @@ class Form
 
             $urloption = '';
 
-            $out .= ajax_autocompleter($selected, $htmlname, DOL_URL_ROOT . '/adherents/ajax/adherents.php', $urloption, $conf->global->PRODUIT_USE_SEARCH_TO_SELECT, 1, $ajaxoptions);
+            $out .= ajax_autocompleter($selected, $htmlname, constant('BASE_URL') . '/adherents/ajax/adherents.php', $urloption, $conf->global->PRODUIT_USE_SEARCH_TO_SELECT, 1, $ajaxoptions);
 
             if (empty($hidelabel)) {
                 $out .= $langs->trans("RefOrLabel") . ' : ';
@@ -8366,7 +8366,7 @@ class Form
             }
 
             // Set url and param to call to get json of the search results
-            $urlforajaxcall = DOL_URL_ROOT . '/core/ajax/selectobject.php';
+            $urlforajaxcall = constant('BASE_URL') . '/core/ajax/selectobject.php';
             $urloption = 'htmlname=' . urlencode($htmlname) . '&outjson=1&objectdesc=' . urlencode($objectdescorig) . '&objectfield=' . urlencode($objectfield) . ($sortfield ? '&sortfield=' . urlencode($sortfield) : '');
 
             // Activate the auto complete using ajax call.
@@ -9074,7 +9074,7 @@ class Form
                 $out .= '}' . "\n";
                 $out .= 'function formatSelection(record) {' . "\n";
                 if ($elemtype == 'category') {
-                    $out .= 'return \'<span><img src="' . DOL_URL_ROOT . '/theme/eldy/img/object_category.png"> \'+record.text+\'</span>\';';
+                    $out .= 'return \'<span><img src="' . constant('BASE_URL') . '/theme/eldy/img/object_category.png"> \'+record.text+\'</span>\';';
                 } else {
                     $out .= 'return record.text;';
                 }
@@ -10036,7 +10036,7 @@ class Form
         }
 
         // Barcode image  @phan-suppress-next-line PhanUndeclaredProperty
-        $url = DOL_URL_ROOT . '/viewimage.php?modulepart=barcode&generator=' . urlencode($object->barcode_type_coder) . '&code=' . urlencode($object->barcode) . '&encoding=' . urlencode($object->barcode_type_code);
+        $url = constant('BASE_URL') . '/viewimage.php?modulepart=barcode&generator=' . urlencode($object->barcode_type_coder) . '&code=' . urlencode($object->barcode) . '&encoding=' . urlencode($object->barcode_type_code);
         $out = '<!-- url barcode = ' . $url . ' -->';
         $out .= '<img src="' . $url . '"' . ($morecss ? ' class="' . $morecss . '"' : '') . '>';
 
@@ -10173,7 +10173,7 @@ class Form
                         $ret .= '<a href="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $entity . '&file=' . urlencode($originalfile) . '&cache=' . $cache . '">';
                     }
                 }
-                $ret .= '<img alt="" class="photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . ' photologo' . (preg_replace('/[^a-z]/i', '_', $file)) . '" ' . ($width ? ' width="' . $width . '"' : '') . ($height ? ' height="' . $height . '"' : '') . ' src="' . DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $entity . '&file=' . urlencode($file) . '&cache=' . $cache . '">';
+                $ret .= '<img alt="" class="photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . ' photologo' . (preg_replace('/[^a-z]/i', '_', $file)) . '" ' . ($width ? ' width="' . $width . '"' : '') . ($height ? ' height="' . $height . '"' : '') . ' src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $entity . '&file=' . urlencode($file) . '&cache=' . $cache . '">';
                 if ($addlinktofullsize) {
                     $ret .= '</a>';
                 }
@@ -10186,7 +10186,7 @@ class Form
                         $ret .= '<a href="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $entity . '&file=' . urlencode($originalfile) . '&cache=' . $cache . '">';
                     }
                 }
-                $ret .= '<img class="photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . '" alt="Photo alt" id="photologo' . (preg_replace('/[^a-z]/i', '_', $file)) . '" class="' . $cssclass . '" ' . ($width ? ' width="' . $width . '"' : '') . ($height ? ' height="' . $height . '"' : '') . ' src="' . DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $entity . '&file=' . urlencode($altfile) . '&cache=' . $cache . '">';
+                $ret .= '<img class="photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . '" alt="Photo alt" id="photologo' . (preg_replace('/[^a-z]/i', '_', $file)) . '" class="' . $cssclass . '" ' . ($width ? ' width="' . $width . '"' : '') . ($height ? ' height="' . $height . '"' : '') . ' src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $entity . '&file=' . urlencode($altfile) . '&cache=' . $cache . '">';
                 if ($addlinktofullsize) {
                     $ret .= '</a>';
                 }
@@ -10516,7 +10516,7 @@ class Form
 											method: "POST",
 											dataType: "json",
 											data: { fk_c_exp_tax_cat: $(this).val(), token: \'' . currentToken() . '\' },
-											url: "' . (DOL_URL_ROOT . '/expensereport/ajax/ajaxik.php?' . implode('&', $params)) . '",
+											url: "' . (constant('BASE_URL') . '/expensereport/ajax/ajaxik.php?' . implode('&', $params)) . '",
 										}).done(function( data, textStatus, jqXHR ) {
 											console.log(data);
 											if (typeof data.up != "undefined") {

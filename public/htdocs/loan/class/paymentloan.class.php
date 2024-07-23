@@ -572,7 +572,7 @@ class PaymentLoan extends CommonObject
                 // Add link 'payment_loan' in bank_url between payment and bank transaction
                 $url = '';
                 if ($mode == 'payment_loan') {
-                    $url = DOL_URL_ROOT . '/loan/payment/card.php?id=';
+                    $url = constant('BASE_URL') . '/loan/payment/card.php?id=';
                 }
                 if ($url) {
                     $result = $acc->add_url_line($bank_line_id, $this->id, $url, '(payment)', $mode);
@@ -585,7 +585,7 @@ class PaymentLoan extends CommonObject
 
                 // Add link 'loan' in bank_url between invoice and bank transaction (for each invoice concerned by payment)
                 if ($mode == 'payment_loan') {
-                    $result = $acc->add_url_line($bank_line_id, $fk_loan, DOL_URL_ROOT . '/loan/card.php?id=', ($this->label ? $this->label : ''), 'loan');
+                    $result = $acc->add_url_line($bank_line_id, $fk_loan, constant('BASE_URL') . '/loan/card.php?id=', ($this->label ? $this->label : ''), 'loan');
                     if ($result <= 0) {
                         dol_print_error($this->db);
                     }
@@ -671,7 +671,7 @@ class PaymentLoan extends CommonObject
             $label .= ' - ' . $moretitle;
         }
 
-        $url = DOL_URL_ROOT . '/loan/payment/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/loan/payment/card.php?id=' . $this->id;
 
         $add_save_lastsearch_values = ($save_lastsearch_value == 1 ? 1 : 0);
         if ($save_lastsearch_value == -1 && isset($_SERVER["PHP_SELF"]) && preg_match('/list\.php/', $_SERVER["PHP_SELF"])) {

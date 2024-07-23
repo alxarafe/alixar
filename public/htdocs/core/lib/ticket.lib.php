@@ -42,12 +42,12 @@ function ticketAdminPrepareHead()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/ticket.php';
+    $head[$h][0] = constant('BASE_URL') . '/admin/ticket.php';
     $head[$h][1] = $langs->trans("TicketSettings");
     $head[$h][2] = 'settings';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/ticket_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/admin/ticket_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFieldsTicket");
     $nbExtrafields = $extrafields->attributes['ticket']['count'];
     if ($nbExtrafields > 0) {
@@ -56,7 +56,7 @@ function ticketAdminPrepareHead()
     $head[$h][2] = 'attributes';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/admin/ticket_public.php';
+    $head[$h][0] = constant('BASE_URL') . '/admin/ticket_public.php';
     $head[$h][1] = $langs->trans("PublicInterface");
     $head[$h][2] = 'public';
     $h++;
@@ -88,14 +88,14 @@ function ticket_prepare_head($object)
 
     $h = 0;
     $head = array();
-    $head[$h][0] = DOL_URL_ROOT . '/ticket/card.php?track_id=' . $object->track_id;
+    $head[$h][0] = constant('BASE_URL') . '/ticket/card.php?track_id=' . $object->track_id;
     $head[$h][1] = $langs->trans("Ticket");
     $head[$h][2] = 'tabTicket';
     $h++;
 
     if (!getDolGlobalInt('MAIN_DISABLE_CONTACTS_TAB') && empty($user->socid) && isModEnabled("societe")) {
         $nbContact = count($object->liste_contact(-1, 'internal')) + count($object->liste_contact(-1, 'external'));
-        $head[$h][0] = DOL_URL_ROOT . '/ticket/contact.php?track_id=' . $object->track_id;
+        $head[$h][0] = constant('BASE_URL') . '/ticket/contact.php?track_id=' . $object->track_id;
         $head[$h][1] = $langs->trans('ContactsAddresses');
         if ($nbContact > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbContact . '</span>';
@@ -120,7 +120,7 @@ function ticket_prepare_head($object)
             $nbFiles += count(dol_dir_list($upload_msg_dir, "files"));
         }
     }
-    $head[$h][0] = DOL_URL_ROOT . '/ticket/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/ticket/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Documents");
     if ($nbFiles > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbFiles . '</span>';
@@ -139,10 +139,10 @@ function ticket_prepare_head($object)
     }
 
     if ($ticketViewType == "messaging") {
-        $head[$h][0] = DOL_URL_ROOT . '/ticket/messaging.php?track_id=' . $object->track_id;
+        $head[$h][0] = constant('BASE_URL') . '/ticket/messaging.php?track_id=' . $object->track_id;
     } else {
         // $ticketViewType == "list"
-        $head[$h][0] = DOL_URL_ROOT . '/ticket/agenda.php?track_id=' . $object->track_id;
+        $head[$h][0] = constant('BASE_URL') . '/ticket/agenda.php?track_id=' . $object->track_id;
     }
     $head[$h][1] = $langs->trans('Events');
     if (isModEnabled('agenda') && ($user->hasRight('agenda', 'myactions', 'read') || $user->hasRight('agenda', 'allactions', 'read'))) {
@@ -241,14 +241,14 @@ function llxHeaderTicket($title, $head = "", $disablejs = 0, $disablehead = 0, $
     if (getDolGlobalInt('TICKET_SHOW_COMPANY_LOGO') || getDolGlobalString('TICKET_PUBLIC_INTERFACE_TOPIC')) {
         // Print logo
         if (getDolGlobalInt('TICKET_SHOW_COMPANY_LOGO')) {
-            $urllogo = DOL_URL_ROOT . '/theme/common/login_logo.png';
+            $urllogo = constant('BASE_URL') . '/theme/common/login_logo.png';
 
             if (!empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $mysoc->logo_small)) {
-                $urllogo = DOL_URL_ROOT . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
+                $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
             } elseif (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output . '/logos/' . $mysoc->logo)) {
-                $urllogo = DOL_URL_ROOT . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/' . $mysoc->logo);
+                $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/' . $mysoc->logo);
             } elseif (is_readable(DOL_DOCUMENT_ROOT . '/theme/dolibarr_logo.svg')) {
-                $urllogo = DOL_URL_ROOT . '/theme/dolibarr_logo.svg';
+                $urllogo = constant('BASE_URL') . '/theme/dolibarr_logo.svg';
             }
         }
     }
@@ -268,7 +268,7 @@ function llxHeaderTicket($title, $head = "", $disablejs = 0, $disablehead = 0, $
         }
         print '</div>';
         if (!getDolGlobalInt('MAIN_HIDE_POWERED_BY')) {
-            print '<div class="poweredbypublicpayment opacitymedium right hideonsmartphone"><a class="poweredbyhref" href="https://www.dolibarr.org?utm_medium=website&utm_source=poweredby" target="dolibarr" rel="noopener">' . $langs->trans("PoweredBy") . '<br><img src="' . DOL_URL_ROOT . '/theme/dolibarr_logo.svg" width="80px"></a></div>';
+            print '<div class="poweredbypublicpayment opacitymedium right hideonsmartphone"><a class="poweredbyhref" href="https://www.dolibarr.org?utm_medium=website&utm_source=poweredby" target="dolibarr" rel="noopener">' . $langs->trans("PoweredBy") . '<br><img src="' . constant('BASE_URL') . '/theme/dolibarr_logo.svg" width="80px"></a></div>';
         }
         print '</div>';
     }

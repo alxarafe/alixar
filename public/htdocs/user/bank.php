@@ -191,7 +191,7 @@ if ($action == 'delete_confirmed' && !$cancel && $permissiontoaddbankaccount) {
         setEventMessages($account->error, $account->errors, 'errors');
     } else {
         setEventMessages($langs->trans("RecordDeleted"), null, 'mesgs');
-        header("Location: " . DOL_URL_ROOT . '/user/bank.php?id=' . $object->id);
+        header("Location: " . constant('BASE_URL') . '/user/bank.php?id=' . $object->id);
         exit;
     }
     $action = '';

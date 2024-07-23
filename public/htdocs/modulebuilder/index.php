@@ -1635,7 +1635,7 @@ if ($dirins && $action == 'initobject' && $module && $objectname) {
             setEventMessages($result, null, 'errors');
         }
         setEventMessages($langs->trans('WarningModuleNeedRefresh', $langs->transnoentities($module)), null, 'warnings');
-        header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=objects&module=' . $module);
+        header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=objects&module=' . $module);
         exit;
     }
 }
@@ -1685,7 +1685,7 @@ if ($dirins && $action == 'initdic' && $module && empty($cancel)) {
                 opcache_reset();    // remove the include cache hell !
             }
             clearstatcache(true);
-            header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=dictionaries&module=' . $module . ($forceddirread ? '@' . $dirread : ''));
+            header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=dictionaries&module=' . $module . ($forceddirread ? '@' . $dirread : ''));
             exit;
         }
     }
@@ -1837,7 +1837,7 @@ if ($dirins && $action == 'addproperty' && empty($cancel) && !empty($module) && 
         setEventMessages($langs->trans('WarningDatabaseIsNotUpdated'), null);
 
         // Make a redirect to reload all data
-        header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=objects&module=' . $module . ($forceddirread ? '@' . $dirread : '') . '&tabobj=' . $objectname . '&nocache=' . time());
+        header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=objects&module=' . $module . ($forceddirread ? '@' . $dirread : '') . '&tabobj=' . $objectname . '&nocache=' . time());
         exit;
     }
 }
@@ -1879,7 +1879,7 @@ if ($dirins && $action == 'confirm_deleteproperty' && $propertykey) {
         clearstatcache(true);
 
         // Make a redirect to reload all data
-        header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=objects&module=' . $module . ($forceddirread ? '@' . $dirread : '') . '&tabobj=' . $objectname);
+        header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=objects&module=' . $module . ($forceddirread ? '@' . $dirread : '') . '&tabobj=' . $objectname);
         exit;
     }
 }
@@ -2058,7 +2058,7 @@ if ($dirins && $action == 'confirm_deleteobject' && $objectname) {
             setEventMessages($result, null, 'errors');
         }
         setEventMessages($langs->trans('WarningModuleNeedRefresh', $langs->transnoentities($module)), null, 'warnings');
-        header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=objects&tabobj=deleteobject&module=' . urlencode($module));
+        header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=objects&tabobj=deleteobject&module=' . urlencode($module));
         exit;
     }
 }
@@ -2150,7 +2150,7 @@ if (($dirins && $action == 'confirm_deletedictionary' && $dicname) || ($dirins &
             opcache_reset();    // remove the include cache hell !
         }
         clearstatcache(true);
-        header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=dictionaries&module=' . $module . ($forceddirread ? '@' . $dirread : ''));
+        header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=dictionaries&module=' . $module . ($forceddirread ? '@' . $dirread : ''));
         exit;
     }
 }
@@ -2192,7 +2192,7 @@ if ($dirins && $action == 'updatedictionary' && GETPOST('dictionnarykey')) {
                 opcache_reset();    // remove the include cache hell !
             }
             clearstatcache(true);
-            header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=dictionaries&module=' . $module . ($forceddirread ? '@' . $dirread : ''));
+            header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=dictionaries&module=' . $module . ($forceddirread ? '@' . $dirread : ''));
             exit;
         }
     }
@@ -2366,7 +2366,7 @@ if ($dirins && $action == 'addright' && !empty($module) && empty($cancel)) {
         if (function_exists('opcache_invalidate')) {
             opcache_reset();    // remove the include cache hell !
         }
-        header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=permissions&module=' . $module);
+        header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=permissions&module=' . $module);
         exit;
     }
 }
@@ -2472,7 +2472,7 @@ if ($dirins && GETPOST('action') == 'update_right' && GETPOST('modifyright') && 
             if (function_exists('opcache_invalidate')) {
                 opcache_reset();    // remove the include cache hell !
             }
-            header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=permissions&module=' . $module);
+            header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=permissions&module=' . $module);
             exit;
         }
     }
@@ -2505,7 +2505,7 @@ if ($dirins && $action == 'confirm_deleteright' && !empty($module) && GETPOSTINT
                 setEventMessages($result, null, 'errors');
             }
             setEventMessages($langs->trans('WarningModuleNeedRefresh', $langs->transnoentities($module)), null, 'warnings');
-            header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=permissions&module=' . $module);
+            header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=permissions&module=' . $module);
             exit;
         }
 
@@ -2523,7 +2523,7 @@ if ($dirins && $action == 'confirm_deleteright' && !empty($module) && GETPOSTINT
                 opcache_reset();    // remove the include cache hell !
             }
 
-            header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=permissions&module=' . $module);
+            header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=permissions&module=' . $module);
             exit;
         }
     }
@@ -2649,7 +2649,7 @@ if ($dirins && $action == 'confirm_deletemenu' && GETPOSTINT('menukey')) {
             setEventMessages($result, null, 'errors');
         }
         setEventMessages($langs->trans('WarningModuleNeedRefresh', $langs->transnoentities($module)), null, 'warnings');
-        header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=menus&module=' . $module);
+        header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=menus&module=' . $module);
         exit;
     }
     // load class and check if menu exist
@@ -2694,7 +2694,7 @@ if ($dirins && $action == 'confirm_deletemenu' && GETPOSTINT('menukey')) {
         }
 
         setEventMessages($langs->trans('MenuDeletedSuccessfuly'), null);
-        header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=menus&module=' . $module);
+        header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=menus&module=' . $module);
         exit;
     }
 }
@@ -2709,7 +2709,7 @@ if ($dirins && $action == 'addmenu' && empty($cancel)) {
             setEventMessages($result, null, 'errors');
         }
         setEventMessages($langs->trans('WarningModuleNeedRefresh', $langs->transnoentities($module)), null, 'warnings');
-        header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=menus&module=' . $module);
+        header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=menus&module=' . $module);
         exit;
     }
     $error = 0;
@@ -2844,7 +2844,7 @@ if ($dirins && $action == 'addmenu' && empty($cancel)) {
                 exit;
             }*/
 
-            header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=menus&module=' . $module);
+            header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=menus&module=' . $module);
             setEventMessages($langs->trans('MenuAddedSuccesfuly'), null);
             exit;
         }
@@ -2866,7 +2866,7 @@ if ($dirins && $action == "update_menu" && GETPOSTINT('menukey') && GETPOST('tab
                 setEventMessages($result, null, 'errors');
             }
             setEventMessages($langs->trans('WarningModuleNeedRefresh', $langs->transnoentities($module)), null, 'warnings');
-            header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=menus&module=' . $module);
+            header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=menus&module=' . $module);
             exit;
         }
         $error = 0;
@@ -2943,7 +2943,7 @@ if ($dirins && $action == "update_menu" && GETPOSTINT('menukey') && GETPOST('tab
                 }
 
                 setEventMessages($langs->trans('MenuUpdatedSuccessfuly'), null);
-                header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=menus&module=' . $module);
+                header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=menus&module=' . $module);
                 exit;
             }
         }
@@ -2965,7 +2965,7 @@ if ($dirins && $action == "update_props_module" && !empty(GETPOST('keydescriptio
             setEventMessages($result, null, 'errors');
         }
         setEventMessages($langs->trans('WarningModuleNeedRefresh', $langs->transnoentities($module)), null, 'warnings');
-        header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=menus&module=' . $module);
+        header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=menus&module=' . $module);
         exit;
     }
     $pathtofile = $listofmodules[strtolower($module)]['moduledescriptorrelpath'];
@@ -3024,7 +3024,7 @@ if ($dirins && $action == "update_props_module" && !empty(GETPOST('keydescriptio
             opcache_reset();
         }
         setEventMessages($langs->trans('PropertyModuleUpdated', $propertyToUpdate), null);
-        header("Location: " . DOL_URL_ROOT . '/modulebuilder/index.php?tab=description&module=' . $module);
+        header("Location: " . constant('BASE_URL') . '/modulebuilder/index.php?tab=description&module=' . $module);
         exit;
     }
 }
@@ -3215,7 +3215,7 @@ if (is_array($listofmodules) && count($listofmodules) > 0) {
                     } else {
                         // Case standard admin page (not a page provided by the
                         // module but a page provided by dolibarr)
-                        $urltouse = DOL_URL_ROOT . '/admin/' . $urlpage;
+                        $urltouse = constant('BASE_URL') . '/admin/' . $urlpage;
                         $linktoenabledisable .= ' <a href="' . $urltouse . (preg_match('/\?/', $urltouse) ? '&' : '?') . 'save_lastsearch_values=1&backtopage=' . urlencode($backtourl) . '" title="' . $langs->trans("Setup") . '">' . img_picto($langs->trans("Setup"), "setup", 'style="padding-right: 8px"') . '</a>';
                     }
                 }
@@ -4360,7 +4360,7 @@ if ($module == 'initmodule') {
 
                             $mod = strtolower($module);
                             $obj = strtolower($tabobj);
-                            $newproperty = dolGetButtonTitle($langs->trans('NewProperty'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/modulebuilder/index.php?tab=objects&module=' . urlencode($module) . '&tabobj=createproperty&obj=' . urlencode($tabobj));
+                            $newproperty = dolGetButtonTitle($langs->trans('NewProperty'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/modulebuilder/index.php?tab=objects&module=' . urlencode($module) . '&tabobj=createproperty&obj=' . urlencode($tabobj));
                             $nbOfProperties = count($reflectorpropdefault['fields']);
 
                             print_barre_liste($langs->trans("ObjectProperties"), 0, $_SERVER["PHP_SELF"], '', '', '', '', '', $nbOfProperties, '', 0, $newproperty, '', '', 0, 0, 1);
@@ -4803,7 +4803,7 @@ if ($module == 'initmodule') {
                 //print dol_get_fiche_head($head3, $tabdic, '', -1, ''); // Level 3
 
 
-                $newdict = dolGetButtonTitle($langs->trans('NewDictionary'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/modulebuilder/index.php?tab=dictionaries&module=' . urlencode($module) . '&tabdic=newdictionary');
+                $newdict = dolGetButtonTitle($langs->trans('NewDictionary'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/modulebuilder/index.php?tab=dictionaries&module=' . urlencode($module) . '&tabdic=newdictionary');
                 print_barre_liste($langs->trans("ListOfDictionariesEntries"), '', $_SERVER["PHP_SELF"], '', '', '', '', '', '', '', 0, $newdict, '', '', 0, 0, 1);
 
                 if ($tabdic != 'newdictionary') {

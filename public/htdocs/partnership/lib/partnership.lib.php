@@ -40,13 +40,13 @@ function partnershipAdminPrepareHead()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/partnership/admin/setup.php';
+    $head[$h][0] = constant('BASE_URL') . '/partnership/admin/setup.php';
     $head[$h][1] = $langs->trans("Settings");
     $head[$h][2] = 'settings';
     $h++;
 
 
-    $head[$h][0] = DOL_URL_ROOT . '/partnership/admin/partnership_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/partnership/admin/partnership_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFields");
     $nbExtrafields = $extrafields->attributes['partnership']['count'];
     if ($nbExtrafields > 0) {
@@ -55,7 +55,7 @@ function partnershipAdminPrepareHead()
     $head[$h][2] = 'partnership_extrafields';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/partnership/admin/website.php';
+    $head[$h][0] = constant('BASE_URL') . '/partnership/admin/website.php';
     $head[$h][1] = $langs->trans("BlankSubscriptionForm");
     $head[$h][2] = 'website';
     $h++;
@@ -90,7 +90,7 @@ function partnershipPrepareHead($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/partnership/partnership_card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/partnership/partnership_card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Card");
     $head[$h][2] = 'card';
     $h++;
@@ -103,7 +103,7 @@ function partnershipPrepareHead($object)
         if (!empty($object->note_public)) {
             $nbNote++;
         }
-        $head[$h][0] = DOL_URL_ROOT . '/partnership/partnership_note.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/partnership/partnership_note.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('Notes');
         if ($nbNote > 0) {
             $head[$h][1] .= (!getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER') ? '<span class="badge marginleftonlyshort">' . $nbNote . '</span>' : '');
@@ -117,7 +117,7 @@ function partnershipPrepareHead($object)
     $upload_dir = $conf->partnership->dir_output . "/partnership/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/partnership/partnership_document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/partnership/partnership_document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -125,7 +125,7 @@ function partnershipPrepareHead($object)
     $head[$h][2] = 'document';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/partnership/partnership_agenda.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/partnership/partnership_agenda.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Events");
     $head[$h][2] = 'agenda';
     $h++;

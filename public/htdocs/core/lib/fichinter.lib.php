@@ -44,14 +44,14 @@ function fichinter_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/fichinter/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/fichinter/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Intervention");
     $head[$h][2] = 'card';
     $h++;
 
     if (!getDolGlobalString('MAIN_DISABLE_CONTACTS_TAB')) {
         $nbContact = count($object->liste_contact(-1, 'internal')) + count($object->liste_contact(-1, 'external'));
-        $head[$h][0] = DOL_URL_ROOT . '/fichinter/contact.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/fichinter/contact.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('InterventionContact');
         if ($nbContact > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbContact . '</span>';
@@ -84,7 +84,7 @@ function fichinter_prepare_head($object)
         //  }
         // }
 
-        $head[$h][0] = DOL_URL_ROOT . '/resource/element_resource.php?element=fichinter&element_id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/resource/element_resource.php?element=fichinter&element_id=' . $object->id;
         $head[$h][1] = $langs->trans("Resources");
         if ($nbResource > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbResource . '</span>';
@@ -101,7 +101,7 @@ function fichinter_prepare_head($object)
         if (!empty($object->note_public)) {
             $nbNote++;
         }
-        $head[$h][0] = DOL_URL_ROOT . '/fichinter/note.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/fichinter/note.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('Notes');
         if ($nbNote > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';
@@ -115,7 +115,7 @@ function fichinter_prepare_head($object)
     $upload_dir = $conf->ficheinter->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/fichinter/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/fichinter/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Documents");
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -123,7 +123,7 @@ function fichinter_prepare_head($object)
     $head[$h][2] = 'documents';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/fichinter/agenda.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/fichinter/agenda.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Events');
     if (isModEnabled('agenda') && ($user->hasRight('agenda', 'myactions', 'read') || $user->hasRight('agenda', 'allactions', 'read'))) {
         $nbEvent = 0;
@@ -191,7 +191,7 @@ function fichinter_admin_prepare_head()
     // $this->tabs = array('entity:-tabname:Title:@mymodule:/mymodule/mypage.php?id=__ID__');   to remove a tab
     complete_head_from_modules($conf, $langs, null, $head, $h, 'fichinter_admin');
 
-    $head[$h][0] = DOL_URL_ROOT . '/fichinter/admin/fichinter_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/fichinter/admin/fichinter_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFields");
     $nbExtrafields = $extrafields->attributes['fichinter']['count'];
     if ($nbExtrafields > 0) {
@@ -200,7 +200,7 @@ function fichinter_admin_prepare_head()
     $head[$h][2] = 'attributes';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/fichinter/admin/fichinterdet_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/fichinter/admin/fichinterdet_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFieldsLines");
     $nbExtrafields = $extrafields->attributes['fichinterdet']['count'];
     if ($nbExtrafields > 0) {
@@ -227,7 +227,7 @@ function fichinter_rec_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/fichinter/card-rec.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/fichinter/card-rec.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("CardFichinter");
     $head[$h][2] = 'card';
     $h++;

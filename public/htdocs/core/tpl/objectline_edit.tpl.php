@@ -107,7 +107,7 @@ $coldisplay++;
             if ($line->fk_parent_line > 0) {
                 echo img_picto('', 'rightarrow');
             } ?>
-            <a href="<?php echo DOL_URL_ROOT . '/product/card.php?id=' . $line->fk_product; ?>">
+            <a href="<?php echo constant('BASE_URL') . '/product/card.php?id=' . $line->fk_product; ?>">
             <?php
             if ($line->product_type == 1) {
                 echo img_object($langs->trans('ShowService'), 'service');

@@ -47,7 +47,7 @@ if (!defined('NOCSRFCHECK')) {
     define("NOCSRFCHECK", 1); // We accept to go on this page from external web site.
 }
 
-require "../main.inc.php";
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/dav/dav.class.php';
@@ -212,7 +212,7 @@ $server = new \Sabre\DAV\Server($nodes);
 
 // If you want to run the SabreDAV server in a custom location (using mod_rewrite for instance)
 // You can override the baseUri here.
-$baseUri = DOL_URL_ROOT . '/dav/fileserver.php/';
+$baseUri = constant('BASE_URL') . '/dav/fileserver.php/';
 if (isset($baseUri)) {
     $server->setBaseUri($baseUri);
 }
@@ -220,7 +220,7 @@ if (isset($baseUri)) {
 // Add authentication function
 if (
     (!getDolGlobalString('DAV_ALLOW_PUBLIC_DIR')
-    || !preg_match('/' . preg_quote(DOL_URL_ROOT . '/dav/fileserver.php/public', '/') . '/', $_SERVER["PHP_SELF"]))
+    || !preg_match('/' . preg_quote(constant('BASE_URL') . '/dav/fileserver.php/public', '/') . '/', $_SERVER["PHP_SELF"]))
     && !preg_match('/^sabreAction=asset&assetName=[a-zA-Z0-9%\-\/]+\.(png|css|woff|ico|ttf)$/', $_SERVER["QUERY_STRING"])   // URL for Sabre browser resources
 ) {
     //var_dump($_SERVER["QUERY_STRING"]);exit;

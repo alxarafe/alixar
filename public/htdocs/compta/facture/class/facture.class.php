@@ -1996,9 +1996,9 @@ class Facture extends CommonInvoice
         $result = '';
 
         if ($option == 'withdraw') {
-            $url = DOL_URL_ROOT . '/compta/facture/prelevement.php?facid=' . $this->id;
+            $url = constant('BASE_URL') . '/compta/facture/prelevement.php?facid=' . $this->id;
         } else {
-            $url = DOL_URL_ROOT . '/compta/facture/card.php?id=' . $this->id;
+            $url = constant('BASE_URL') . '/compta/facture/card.php?id=' . $this->id;
         }
 
         if (!$user->hasRight("facture", "read")) {
@@ -4963,7 +4963,7 @@ class Facture extends CommonInvoice
             $response->warning_delay = $conf->facture->client->warning_delay / 60 / 60 / 24;
             $response->label = $langs->trans("CustomerBillsUnpaid");
             $response->labelShort = $langs->trans("Unpaid");
-            $response->url = DOL_URL_ROOT . '/compta/facture/list.php?search_status=1&mainmenu=billing&leftmenu=customers_bills';
+            $response->url = constant('BASE_URL') . '/compta/facture/list.php?search_status=1&mainmenu=billing&leftmenu=customers_bills';
             $response->img = img_object('', "bill");
 
             $generic_facture = new Facture($this->db);
@@ -4978,7 +4978,7 @@ class Facture extends CommonInvoice
 
                 if ($generic_facture->hasDelay()) {
                     $response->nbtodolate++;
-                    $response->url_late = DOL_URL_ROOT . '/compta/facture/list.php?search_option=late&mainmenu=billing&leftmenu=customers_bills';
+                    $response->url_late = constant('BASE_URL') . '/compta/facture/list.php?search_option=late&mainmenu=billing&leftmenu=customers_bills';
                 }
             }
 

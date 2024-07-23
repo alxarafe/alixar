@@ -88,7 +88,7 @@ $data = $stats->getNbByMonthWithPrevYear($endyear, $startyear);
 
 
 $filenamenb = $dir . '/subscriptionsnbinyear-' . $year . '.png';
-$fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=memberstats&file=subscriptionsnbinyear-' . $year . '.png';
+$fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=memberstats&file=subscriptionsnbinyear-' . $year . '.png';
 
 
 $px1 = new DolGraph();
@@ -121,7 +121,7 @@ $data = $stats->getAmountByMonthWithPrevYear($endyear, $startyear);
 // $data = array(array('Lib',val1,val2,val3),...)
 
 $filenameamount = $dir . '/subscriptionsamountinyear-' . $year . '.png';
-$fileurlamount = DOL_URL_ROOT . '/viewimage.php?modulepart=memberstats&file=subscriptionsamountinyear-' . $year . '.png';
+$fileurlamount = constant('BASE_URL') . '/viewimage.php?modulepart=memberstats&file=subscriptionsamountinyear-' . $year . '.png';
 
 $px2 = new DolGraph();
 $mesg = $px2->isGraphKo();

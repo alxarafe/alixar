@@ -3544,7 +3544,7 @@ if (!GETPOST('hide_websitemenu')) {
 													// Sending data via AJAX
 													$.ajax({
 														type: \'POST\',
-														url: \'' . DOL_URL_ROOT . '/core/ajax/editinline.php\',
+														url: \'' . constant('BASE_URL') . '/core/ajax/editinline.php\',
 														data: {
 															website_ref: \'' . $website->ref . '\',
 															page_id: \'' . $websitepage->id . '\',
@@ -3744,7 +3744,7 @@ if (!GETPOST('hide_websitemenu')) {
                             /* Save url */
                             jQuery.ajax({
                                 method: "POST",
-                                url: "' . DOL_URL_ROOT . '/core/ajax/saveinplace.php",
+                                url: "' . constant('BASE_URL') . '/core/ajax/saveinplace.php",
                                 data: {
                                     field: \'editval_virtualhost\',
                                     element: \'website\',
@@ -3946,7 +3946,7 @@ if ($action == 'editcss') {
     $uploadfolder = $conf->website->dir_output . '/' . $websitekey;
     if (dol_is_file($uploadfolder . '/favicon.png')) {
         print '<div class="inline-block valignmiddle marginrightonly">';
-        print '<img style="max-height: 80px" src="' . DOL_URL_ROOT . '/viewimage.php?modulepart=website&file=' . $websitekey . '/favicon.png">';
+        print '<img style="max-height: 80px" src="' . constant('BASE_URL') . '/viewimage.php?modulepart=website&file=' . $websitekey . '/favicon.png">';
         print '</div>';
     }
     print '</tr></td>';
@@ -4856,7 +4856,7 @@ if ($action == 'editfile' || $action == 'file_manager' || $action == 'convertimg
     $module = 'medias';
     $formalreadyopen = 2;   // So the form to submit a new file will not be open another time inside the core/tpl/filemanager.tpl.php
     if (empty($url)) {
-        $url = DOL_URL_ROOT . '/website/index.php'; // Must be an url without param
+        $url = constant('BASE_URL') . '/website/index.php'; // Must be an url without param
     }
     include DOL_DOCUMENT_ROOT . '/core/tpl/filemanager.tpl.php';
 
@@ -4903,7 +4903,7 @@ if ($action == 'editcontent') {
     $contentforedit .= $objectpage->content;
 
     $nbrep = array();
-    $contentforedit = preg_replace('/(<img.*src=")(?!http)/', '\1' . DOL_URL_ROOT . '/viewimage.php?modulepart=medias&file=', $contentforedit, -1, $nbrep);
+    $contentforedit = preg_replace('/(<img.*src=")(?!http)/', '\1' . constant('BASE_URL') . '/viewimage.php?modulepart=medias&file=', $contentforedit, -1, $nbrep);
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $poscursor = array('x' => GETPOST('PAGE_CONTENT_x'), 'y' => GETPOST('PAGE_CONTENT_y'));

@@ -32,7 +32,7 @@ define('NOTOKENRENEWAL', 1); // Disables token renewal
 // a web page that require security controls and
 // is a security hole if anybody can access without
 // being an authenticated user.
-require_once '../../../../main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 $uri = preg_replace('/^http(s?):\/\//i', '', $dolibarr_main_url_root);
 $pos = strstr($uri, '/'); // $pos contient alors url sans nom domaine
 if ($pos == '/') {
@@ -50,7 +50,7 @@ $Config['Enabled'] = true;
 // Path to user files relative to the document root.
 $extEntity = (empty($entity) ? 1 : $entity); // For multicompany with external access
 
-$Config['UserFilesPath'] = DOL_URL_ROOT . '/viewimage.php?modulepart=medias' . (empty($website) ? '' : '_' . $website) . '&entity=' . $extEntity . '&file=';
+$Config['UserFilesPath'] = constant('BASE_URL') . '/viewimage.php?modulepart=medias' . (empty($website) ? '' : '_' . $website) . '&entity=' . $extEntity . '&file=';
 $Config['UserFilesAbsolutePathRelative'] = (!empty($entity) ? '/' . $entity : '') . (empty($website) ? '/medias/' : ('/website/' . $website));
 
 

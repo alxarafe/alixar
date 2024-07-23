@@ -153,13 +153,13 @@ if ($result) {
 
     $file = 'entrepot-' . $year . '.png';
     if (file_exists($conf->stock->dir_temp . '/' . $file)) {
-        $url = DOL_URL_ROOT . '/viewimage.php?modulepart=graph_stock&amp;file=' . $file;
+        $url = constant('BASE_URL') . '/viewimage.php?modulepart=graph_stock&amp;file=' . $file;
         print '<img src="' . $url . '">';
     }
 
     $file = 'entrepot-' . ($year - 1) . '.png';
     if (file_exists($conf->stock->dir_temp . '/' . $file)) {
-        $url = DOL_URL_ROOT . '/viewimage.php?modulepart=graph_stock&amp;file=' . $file;
+        $url = constant('BASE_URL') . '/viewimage.php?modulepart=graph_stock&amp;file=' . $file;
         print '<br><img src="' . $url . '">';
     }
 } else {

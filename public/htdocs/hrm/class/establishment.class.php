@@ -452,7 +452,7 @@ class Establishment extends CommonObject
         $label .= '<br>';
         $label .= '<b>' . $langs->trans('Residence') . ':</b> ' . $this->address . ', ' . $this->zip . ' ' . $this->town;
 
-        $url = DOL_URL_ROOT . '/hrm/establishment/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/hrm/establishment/card.php?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not

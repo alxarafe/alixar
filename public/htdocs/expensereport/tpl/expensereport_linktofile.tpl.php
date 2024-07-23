@@ -42,13 +42,13 @@ if (!getDolGlobalString('EXPENSEREPORT_DISABLE_ATTACHMENT_ON_LINES')) {
                 //print $file['path'].'/'.$minifile.'<br>';
                 $urlforhref = getAdvancedPreviewUrl($modulepart, $relativepath . $fileinfo['filename'] . '.' . strtolower($fileinfo['extension']), 1, '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity));
                 if (empty($urlforhref)) {
-                    $urlforhref = DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity) . '&file=' . urlencode($file['relativename'] . '.' . strtolower($fileinfo['extension']));
+                    $urlforhref = constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity) . '&file=' . urlencode($file['relativename'] . '.' . strtolower($fileinfo['extension']));
                     print '<a href="' . $urlforhref . '" class="aphoto" target="_blank" rel="noopener noreferrer">';
                 } else {
                     print '<a href="' . $urlforhref['url'] . '" class="' . $urlforhref['css'] . '" target="' . $urlforhref['target'] . '" mime="' . $urlforhref['mime'] . '">';
                 }
                 print '<div class="photoref backgroundblank">';
-                print '<img class="photoexpensereport photorefcenter" height="' . $maxheightmini . '" src="' . DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity) . '&file=' . urlencode($relativepath . $minifile) . '" title="">';
+                print '<img class="photoexpensereport photorefcenter" height="' . $maxheightmini . '" src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity) . '&file=' . urlencode($relativepath . $minifile) . '" title="">';
                 print '</div>';
                 print '</a>';
             } else {
@@ -84,7 +84,7 @@ if (!getDolGlobalString('EXPENSEREPORT_DISABLE_ATTACHMENT_ON_LINES')) {
                         }
                         // If the preview file is found
                         if (file_exists($fileimage)) {
-                            $thumbshown = '<img height="' . $heightforphotref . '" class="photo photowithmargin photowithborder" src="' . DOL_URL_ROOT . '/viewimage.php?modulepart=apercu' . urlencode($modulepart) . '&file=' . urlencode($relativepathimage) . '">';
+                            $thumbshown = '<img height="' . $heightforphotref . '" class="photo photowithmargin photowithborder" src="' . constant('BASE_URL') . '/viewimage.php?modulepart=apercu' . urlencode($modulepart) . '&file=' . urlencode($relativepathimage) . '">';
                         }
                     }
                 }

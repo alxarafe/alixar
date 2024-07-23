@@ -728,7 +728,7 @@ class FormCompany extends Form
 
             print "\n" . '<!-- Input text for third party with Ajax.Autocompleter (selectCompaniesForNewContact) -->' . "\n";
             print '<input type="text" size="30" id="search_' . $htmlname . '" name="search_' . $htmlname . '" value="' . $name . '" />';
-            print ajax_autocompleter(($socid ? $socid : -1), $htmlname, DOL_URL_ROOT . '/societe/ajax/ajaxcompanies.php', '', $minLength, 0);
+            print ajax_autocompleter(($socid ? $socid : -1), $htmlname, constant('BASE_URL') . '/societe/ajax/ajaxcompanies.php', '', $minLength, 0);
             return $socid;
         } else {
             // Search to list thirdparties
@@ -920,7 +920,7 @@ class FormCompany extends Form
         }
 
         if ($conf->use_javascript_ajax && empty($disableautocomplete)) {
-            $out .= ajax_multiautocompleter($htmlname, $fields, DOL_URL_ROOT . '/core/ajax/ziptown.php') . "\n";
+            $out .= ajax_multiautocompleter($htmlname, $fields, constant('BASE_URL') . '/core/ajax/ziptown.php') . "\n";
             $moreattrib .= ' autocomplete="off"';
         }
         $out .= '<input id="' . $htmlname . '" class="maxwidthonsmartphone' . ($morecss ? ' ' . $morecss : '') . '" type="text"' . ($moreattrib ? ' ' . $moreattrib : '') . ' name="' . $htmlname . '" ' . $size . ' value="' . $selected . '">' . "\n";
@@ -1199,7 +1199,7 @@ class FormCompany extends Form
 						var image = $(this).prev(".pictoprospectstatus");
 						$.ajax({
 							type: "POST",
-							url: \'' . DOL_URL_ROOT . '/core/ajax/ajaxstatusprospect.php\',
+							url: \'' . constant('BASE_URL') . '/core/ajax/ajaxstatusprospect.php\',
 							data: { id: statusid, prospectid: prospectid, token: \'' . newToken() . '\', action: \'updatestatusprospect\' },
 							success: function(response) {
 								console.log(response.img);

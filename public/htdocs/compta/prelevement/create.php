@@ -188,7 +188,7 @@ if (empty($reshook)) {
                     setEventMessages($texttoshow, null);
                 }
 
-                header("Location: " . DOL_URL_ROOT . '/compta/prelevement/card.php?id=' . urlencode((string) ($bprev->id)) . '&type=' . urlencode((string) ($type)));
+                header("Location: " . constant('BASE_URL') . '/compta/prelevement/card.php?id=' . urlencode((string) ($bprev->id)) . '&type=' . urlencode((string) ($type)));
                 exit;
             }
         }

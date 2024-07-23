@@ -280,10 +280,10 @@ if (!empty($conf->global->$paramlogo)) {
 $urllogo = '';
 $urllogofull = '';
 if (!empty($logosmall) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $logosmall)) {
-    $urllogo = DOL_URL_ROOT . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/thumbs/' . $logosmall);
+    $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/thumbs/' . $logosmall);
     $urllogofull = $dolibarr_main_url_root . '/viewimage.php?modulepart=mycompany&entity=' . $conf->entity . '&file=' . urlencode('logos/thumbs/' . $logosmall);
 } elseif (!empty($logo) && is_readable($conf->mycompany->dir_output . '/logos/' . $logo)) {
-    $urllogo = DOL_URL_ROOT . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/' . $logo);
+    $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/' . $logo);
     $urllogofull = $dolibarr_main_url_root . '/viewimage.php?modulepart=mycompany&entity=' . $conf->entity . '&file=' . urlencode('logos/' . $logo);
 }
 // Output html code for logo
@@ -294,7 +294,7 @@ if ($urllogo) {
     print '>';
     print '</div>';
     if (!getDolGlobalString('MAIN_HIDE_POWERED_BY')) {
-        print '<div class="poweredbypublicpayment opacitymedium right"><a class="poweredbyhref" href="https://www.dolibarr.org?utm_medium=website&utm_source=poweredby" target="dolibarr" rel="noopener">' . $langs->trans("PoweredBy") . '<br><img class="poweredbyimg" src="' . DOL_URL_ROOT . '/theme/dolibarr_logo.svg" width="80px"></a></div>';
+        print '<div class="poweredbypublicpayment opacitymedium right"><a class="poweredbyhref" href="https://www.dolibarr.org?utm_medium=website&utm_source=poweredby" target="dolibarr" rel="noopener">' . $langs->trans("PoweredBy") . '<br><img class="poweredbyimg" src="' . constant('BASE_URL') . '/theme/dolibarr_logo.svg" width="80px"></a></div>';
     }
     print '</div>';
 }
@@ -743,7 +743,7 @@ if ($action == "dosign" && empty($cancel)) {
     print '</div>';
 
     // Add js code managed into the div #signature
-    print '<script language="JavaScript" type="text/javascript" src="' . DOL_URL_ROOT . '/includes/jquery/plugins/jSignature/jSignature.js"></script>
+    print '<script language="JavaScript" type="text/javascript" src="' . constant('BASE_URL') . '/includes/jquery/plugins/jSignature/jSignature.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function() {
 	  $("#signature").jSignature({ color:"#000", lineWidth:0, ' . (empty($conf->dol_optimize_smallscreen) ? '' : 'width: 280, ') . 'height: 180});
@@ -760,7 +760,7 @@ if ($action == "dosign" && empty($cancel)) {
 				var name = document.getElementById("name").value;
 				$.ajax({
 					type: "POST",
-					url: "' . DOL_URL_ROOT . '/core/ajax/onlineSign.php",
+					url: "' . constant('BASE_URL') . '/core/ajax/onlineSign.php",
 					dataType: "text",
 					data: {
 						"action" : "importSignature",

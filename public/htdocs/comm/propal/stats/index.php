@@ -124,10 +124,10 @@ $data = $stats->getNbByMonthWithPrevYear($endyear, $startyear);
 
 if (!$user->hasRight('societe', 'client', 'voir')) {
     $filenamenb = $dir . '/proposalsnbinyear-' . $user->id . '-' . $year . '.png';
-    $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=propalstats&file=proposalsnbinyear-' . $user->id . '-' . $year . '.png';
+    $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=propalstats&file=proposalsnbinyear-' . $user->id . '-' . $year . '.png';
 } else {
     $filenamenb = $dir . '/proposalsnbinyear-' . $year . '.png';
-    $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=propalstats&file=proposalsnbinyear-' . $year . '.png';
+    $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=propalstats&file=proposalsnbinyear-' . $year . '.png';
 }
 
 $px1 = new DolGraph();
@@ -160,10 +160,10 @@ $data = $stats->getAmountByMonthWithPrevYear($endyear, $startyear, 0);
 
 if (!$user->hasRight('societe', 'client', 'voir')) {
     $filenameamount = $dir . '/proposalsamountinyear-' . $user->id . '-' . $year . '.png';
-    $fileurlamount = DOL_URL_ROOT . '/viewimage.php?modulepart=propalstats&file=proposalsamountinyear-' . $user->id . '-' . $year . '.png';
+    $fileurlamount = constant('BASE_URL') . '/viewimage.php?modulepart=propalstats&file=proposalsamountinyear-' . $user->id . '-' . $year . '.png';
 } else {
     $filenameamount = $dir . '/proposalsamountinyear-' . $year . '.png';
-    $fileurlamount = DOL_URL_ROOT . '/viewimage.php?modulepart=propalstats&file=proposalsamountinyear-' . $year . '.png';
+    $fileurlamount = constant('BASE_URL') . '/viewimage.php?modulepart=propalstats&file=proposalsamountinyear-' . $year . '.png';
 }
 
 $px2 = new DolGraph();
@@ -196,18 +196,18 @@ $fileurl_avg = '';
 if (!$user->hasRight('societe', 'client', 'voir')) {
     $filename_avg = $dir . '/ordersaverage-' . $user->id . '-' . $year . '.png';
     if ($mode == 'customer') {
-        $fileurl_avg = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstats&file=ordersaverage-' . $user->id . '-' . $year . '.png';
+        $fileurl_avg = constant('BASE_URL') . '/viewimage.php?modulepart=orderstats&file=ordersaverage-' . $user->id . '-' . $year . '.png';
     }
     if ($mode == 'supplier') {
-        $fileurl_avg = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstatssupplier&file=ordersaverage-' . $user->id . '-' . $year . '.png';
+        $fileurl_avg = constant('BASE_URL') . '/viewimage.php?modulepart=orderstatssupplier&file=ordersaverage-' . $user->id . '-' . $year . '.png';
     }
 } else {
     $filename_avg = $dir . '/ordersaverage-' . $year . '.png';
     if ($mode == 'customer') {
-        $fileurl_avg = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstats&file=ordersaverage-' . $year . '.png';
+        $fileurl_avg = constant('BASE_URL') . '/viewimage.php?modulepart=orderstats&file=ordersaverage-' . $year . '.png';
     }
     if ($mode == 'supplier') {
-        $fileurl_avg = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstatssupplier&file=ordersaverage-' . $year . '.png';
+        $fileurl_avg = constant('BASE_URL') . '/viewimage.php?modulepart=orderstatssupplier&file=ordersaverage-' . $year . '.png';
     }
 }
 
@@ -251,7 +251,7 @@ if (!count($arrayyears)) {
 
 $h = 0;
 $head = array();
-$head[$h][0] = DOL_URL_ROOT . '/comm/propal/stats/index.php';
+$head[$h][0] = constant('BASE_URL') . '/comm/propal/stats/index.php';
 $head[$h][1] = $langs->trans("ByMonthYear");
 $head[$h][2] = 'byyear';
 $h++;

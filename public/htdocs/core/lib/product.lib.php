@@ -145,13 +145,13 @@ function product_prepare_head($object)
     // Tab to link resources
     if (isModEnabled('resource')) {
         if ($object->isProduct() && getDolGlobalString('RESOURCE_ON_PRODUCTS')) {
-            $head[$h][0] = DOL_URL_ROOT . '/resource/element_resource.php?element=product&ref=' . $object->ref;
+            $head[$h][0] = constant('BASE_URL') . '/resource/element_resource.php?element=product&ref=' . $object->ref;
             $head[$h][1] = $langs->trans("Resources");
             $head[$h][2] = 'resources';
             $h++;
         }
         if ($object->isService() && getDolGlobalString('RESOURCE_ON_SERVICES')) {
-            $head[$h][0] = DOL_URL_ROOT . '/resource/element_resource.php?element=service&ref=' . $object->ref;
+            $head[$h][0] = constant('BASE_URL') . '/resource/element_resource.php?element=service&ref=' . $object->ref;
             $head[$h][1] = $langs->trans("Resources");
             $head[$h][2] = 'resources';
             $h++;
@@ -183,7 +183,7 @@ function product_prepare_head($object)
         if (!empty($object->note_public)) {
             $nbNote++;
         }
-        $head[$h][0] = DOL_URL_ROOT . '/product/note.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/product/note.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('Notes');
         if ($nbNote > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';
@@ -212,7 +212,7 @@ function product_prepare_head($object)
         $nbFiles += count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     }
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/product/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/product/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -221,7 +221,7 @@ function product_prepare_head($object)
     $h++;
 
     // Log
-    $head[$h][0] = DOL_URL_ROOT . '/product/messaging.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/product/messaging.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Events");
     if (isModEnabled('agenda') && ($user->hasRight('agenda', 'myactions', 'read') || $user->hasRight('agenda', 'allactions', 'read'))) {
         $head[$h][1] .= '/';
@@ -286,7 +286,7 @@ function productlot_prepare_head($object)
         if (!empty($object->note_public)) {
             $nbNote++;
         }
-        $head[$h][0] = DOL_URL_ROOT . '/product/stock/productlot_note.php?id=' . $object->id;
+        $head[$h][0] = constant('BASE_URL') . '/product/stock/productlot_note.php?id=' . $object->id;
         $head[$h][1] = $langs->trans('Notes');
         if ($nbNote > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';
@@ -352,7 +352,7 @@ function product_admin_prepare_head()
     // $this->tabs = array('entity:-tabname);                                                   to remove a tab
     complete_head_from_modules($conf, $langs, null, $head, $h, 'product_admin');
 
-    $head[$h][0] = DOL_URL_ROOT . '/product/admin/product_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/product/admin/product_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFields");
     $nbExtrafields = $extrafields->attributes['product']['count'];
     if ($nbExtrafields > 0) {
@@ -361,7 +361,7 @@ function product_admin_prepare_head()
     $head[$h][2] = 'attributes';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/product/admin/product_supplier_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/product/admin/product_supplier_extrafields.php';
     $head[$h][1] = $langs->trans("ProductSupplierExtraFields");
     $nbExtrafields = $extrafields->attributes['product_fournisseur_price']['count'];
     if ($nbExtrafields > 0) {
@@ -403,7 +403,7 @@ function product_lot_admin_prepare_head()
     // $this->tabs = array('entity:-tabname);                                                   to remove a tab
     complete_head_from_modules($conf, $langs, null, $head, $h, 'product_lot_admin');
 
-    $head[$h][0] = DOL_URL_ROOT . '/product/admin/product_lot_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/product/admin/product_lot_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFields");
     $nbExtrafields = $extrafields->attributes['product_lot']['count'];
     if ($nbExtrafields > 0) {

@@ -171,14 +171,14 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/expensereport/list.php';
+    $backurlforlist = constant('BASE_URL') . '/expensereport/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/expensereport/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/expensereport/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -2241,12 +2241,12 @@ if ($action == 'create') {
                                     //print $file['path'].'/'.$minifile.'<br>';
                                     $urlforhref = getAdvancedPreviewUrl($modulepart, $relativepath . '/' . $fileinfo['filename'] . '.' . strtolower($fileinfo['extension']), 1, '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity));
                                     if (empty($urlforhref)) {
-                                        $urlforhref = DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity) . '&file=' . urlencode($relativepath . $fileinfo['filename'] . '.' . strtolower($fileinfo['extension']));
+                                        $urlforhref = constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity) . '&file=' . urlencode($relativepath . $fileinfo['filename'] . '.' . strtolower($fileinfo['extension']));
                                         print '<a href="' . $urlforhref . '" class="aphoto" target="_blank" rel="noopener noreferrer">';
                                     } else {
                                         print '<a href="' . $urlforhref['url'] . '" class="' . $urlforhref['css'] . '" target="' . $urlforhref['target'] . '" mime="' . $urlforhref['mime'] . '">';
                                     }
-                                    print '<img class="photo" height="' . $maxheightmini . '" src="' . DOL_URL_ROOT . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity) . '&file=' . urlencode($relativepath . '/' . $minifile) . '" title="">';
+                                    print '<img class="photo" height="' . $maxheightmini . '" src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . (empty($object->entity) ? $conf->entity : $object->entity) . '&file=' . urlencode($relativepath . '/' . $minifile) . '" title="">';
                                     print '</a>';
                                 } else {
                                     if (preg_match('/\.pdf$/i', $ecmfilesstatic->filename)) {
@@ -2277,7 +2277,7 @@ if ($action == 'create') {
                                             print '<a href="' . $urlforhref['url'] . '" class="' . $urlforhref['css'] . '" target="' . $urlforhref['target'] . '" mime="' . $urlforhref['mime'] . '">';
                                             // If the preview file is found we display the thumb
                                             if (file_exists($fileimage)) {
-                                                print '<img height="' . $heightforphotref . '" class="photo photowithmargin photowithborder" src="' . DOL_URL_ROOT . '/viewimage.php?modulepart=apercu' . $modulepart . '&amp;file=' . urlencode($relativepathimage) . '">';
+                                                print '<img height="' . $heightforphotref . '" class="photo photowithmargin photowithborder" src="' . constant('BASE_URL') . '/viewimage.php?modulepart=apercu' . $modulepart . '&amp;file=' . urlencode($relativepathimage) . '">';
                                             } else {
                                                 // Else, we display an icon
                                                 print img_mime($ecmfilesstatic->filename);

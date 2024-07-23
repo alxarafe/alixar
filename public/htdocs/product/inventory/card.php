@@ -116,7 +116,7 @@ if (empty($reshook)) {
     $savaction = $action;
     $error = 0;
 
-    $backurlforlist = DOL_URL_ROOT . '/product/inventory/list.php';
+    $backurlforlist = constant('BASE_URL') . '/product/inventory/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
@@ -160,7 +160,7 @@ if (empty($reshook)) {
 
     if (!$error && $savaction == 'confirm_validate' && $action == '' && $object->id > 0) {
         // Switch to the tab inventory
-        header("Location: " . DOL_URL_ROOT . '/product/inventory/inventory.php?id=' . $object->id);
+        header("Location: " . constant('BASE_URL') . '/product/inventory/inventory.php?id=' . $object->id);
         exit;
     }
 }

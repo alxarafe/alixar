@@ -153,13 +153,13 @@ function print_auguria_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout
         }
 
         if (!empty($mysoc->logo_squarred_mini) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $mysoc->logo_squarred_mini)) {
-            $urllogo = DOL_URL_ROOT . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_mini);
+            $urllogo = constant('BASE_URL') . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_mini);
             /*} elseif (!empty($mysoc->logo_mini) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_mini))
             {
             $urllogo=DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/thumbs/'.$mysoc->logo_mini);
             }*/
         } else {
-            $urllogo = DOL_URL_ROOT . '/theme/dolibarr_512x512_white.png';
+            $urllogo = constant('BASE_URL') . '/theme/dolibarr_512x512_white.png';
             $logoContainerAdditionalClass = '';
         }
 

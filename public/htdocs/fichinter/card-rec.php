@@ -229,7 +229,7 @@ if ($action == 'add') {
         // on update le nombre d'inter crée à partir du modèle
         $object->updateNbGenDone();
         //on redirige vers la fiche d'intervention nouvellement crée
-        header('Location: ' . DOL_URL_ROOT . '/fichinter/card.php?id=' . $newfichinterid);
+        header('Location: ' . constant('BASE_URL') . '/fichinter/card.php?id=' . $newfichinterid);
         exit;
     } else {
         setEventMessages($newinter->error, $newinter->errors, 'errors');

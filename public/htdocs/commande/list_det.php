@@ -706,7 +706,7 @@ if ($resql) {
     if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $search_all) {
         $obj = $db->fetch_object($resql);
         $id = $obj->rowid;
-        header("Location: " . DOL_URL_ROOT . '/commande/card.php?id=' . $id);
+        header("Location: " . constant('BASE_URL') . '/commande/card.php?id=' . $id);
         exit;
     }
 
@@ -880,7 +880,7 @@ if ($resql) {
     // }
     $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
-    $url = DOL_URL_ROOT . '/commande/card.php?action=create';
+    $url = constant('BASE_URL') . '/commande/card.php?action=create';
     if (!empty($socid)) {
         $url .= '&socid=' . $socid;
     }

@@ -41,22 +41,22 @@ function recruitmentAdminPrepareHead()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/recruitment/admin/setup.php';
+    $head[$h][0] = constant('BASE_URL') . '/recruitment/admin/setup.php';
     $head[$h][1] = $langs->trans("JobPositions");
     $head[$h][2] = 'settings';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/recruitment/admin/setup_candidatures.php';
+    $head[$h][0] = constant('BASE_URL') . '/recruitment/admin/setup_candidatures.php';
     $head[$h][1] = $langs->trans("RecruitmentCandidatures");
     $head[$h][2] = 'settings_candidatures';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/recruitment/admin/public_interface.php';
+    $head[$h][0] = constant('BASE_URL') . '/recruitment/admin/public_interface.php';
     $head[$h][1] = $langs->trans("PublicUrl");
     $head[$h][2] = 'publicurl';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/recruitment/admin/jobposition_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/recruitment/admin/jobposition_extrafields.php';
     $head[$h][1] = $langs->trans("ExtrafieldsJobPosition");
     $nbExtrafields = $extrafields->attributes['recruitment_recruitmentjobposition']['count'];
     if ($nbExtrafields > 0) {
@@ -65,7 +65,7 @@ function recruitmentAdminPrepareHead()
     $head[$h][2] = 'jobposition_extrafields';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/recruitment/admin/candidature_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/recruitment/admin/candidature_extrafields.php';
     $head[$h][1] = $langs->trans("ExtrafieldsApplication");
     $nbExtrafields = $extrafields->attributes['recruitment_recruitmentcandidature']['count'];
     if ($nbExtrafields > 0) {

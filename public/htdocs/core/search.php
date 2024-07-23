@@ -58,84 +58,84 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
  */
 
 if (GETPOST('search_proposal') != '') {
-    header("Location: " . DOL_URL_ROOT . '/comm/propal/list.php?sall=' . urlencode(GETPOST('search_proposal')));
+    header("Location: " . constant('BASE_URL') . '/comm/propal/list.php?sall=' . urlencode(GETPOST('search_proposal')));
     exit;
 }
 if (GETPOST('search_customer_order') != '') {
-    header("Location: " . DOL_URL_ROOT . '/commande/list.php?sall=' . urlencode(GETPOST('search_customer_order')));
+    header("Location: " . constant('BASE_URL') . '/commande/list.php?sall=' . urlencode(GETPOST('search_customer_order')));
     exit;
 }
 if (GETPOST('search_supplier_order') != '') {
-    header("Location: " . DOL_URL_ROOT . '/fourn/commande/list.php?search_all=' . urlencode(GETPOST('search_supplier_order')));
+    header("Location: " . constant('BASE_URL') . '/fourn/commande/list.php?search_all=' . urlencode(GETPOST('search_supplier_order')));
     exit;
 }
 if (GETPOST('search_intervention') != '') {
-    header("Location: " . DOL_URL_ROOT . '/fichinter/list.php?sall=' . urlencode(GETPOST('search_intervention')));
+    header("Location: " . constant('BASE_URL') . '/fichinter/list.php?sall=' . urlencode(GETPOST('search_intervention')));
     exit;
 }
 if (GETPOST('search_contract') != '') {
-    header("Location: " . DOL_URL_ROOT . '/contrat/list.php?sall=' . urlencode(GETPOST('search_contract')));
+    header("Location: " . constant('BASE_URL') . '/contrat/list.php?sall=' . urlencode(GETPOST('search_contract')));
     exit;
 }
 if (GETPOST('search_invoice') != '') {
-    header("Location: " . DOL_URL_ROOT . '/compta/facture/list.php?sall=' . urlencode(GETPOST('search_invoice')));
+    header("Location: " . constant('BASE_URL') . '/compta/facture/list.php?sall=' . urlencode(GETPOST('search_invoice')));
     exit;
 }
 if (GETPOST('search_supplier_invoice') != '') {
-    header("Location: " . DOL_URL_ROOT . '/fourn/facture/list.php?sall=' . urlencode(GETPOST('search_supplier_invoice')));
+    header("Location: " . constant('BASE_URL') . '/fourn/facture/list.php?sall=' . urlencode(GETPOST('search_supplier_invoice')));
     exit;
 }
 if (GETPOST('search_supplier_proposal') != '') {
-    header("Location: " . DOL_URL_ROOT . '/supplier_proposal/list.php?sall=' . urlencode(GETPOST('search_supplier_proposal')));
+    header("Location: " . constant('BASE_URL') . '/supplier_proposal/list.php?sall=' . urlencode(GETPOST('search_supplier_proposal')));
     exit;
 }
 if (GETPOST('search_donation') != '') {
-    header("Location: " . DOL_URL_ROOT . '/don/list.php?sall=' . urlencode(GETPOST('search_donation')));
+    header("Location: " . constant('BASE_URL') . '/don/list.php?sall=' . urlencode(GETPOST('search_donation')));
     exit;
 }
 if (GETPOST('search_product') != '') {
-    header("Location: " . DOL_URL_ROOT . '/product/list.php?sall=' . urlencode(GETPOST('search_product')));
+    header("Location: " . constant('BASE_URL') . '/product/list.php?sall=' . urlencode(GETPOST('search_product')));
     exit;
 }
 if (GETPOST('search_thirdparty') != '') {
-    header("Location: " . DOL_URL_ROOT . '/societe/list.php?mode=search&sall=' . urlencode(GETPOST('search_thirdparty')));
+    header("Location: " . constant('BASE_URL') . '/societe/list.php?mode=search&sall=' . urlencode(GETPOST('search_thirdparty')));
     exit;
 }
 if (GETPOST('search_contact') != '') {
-    header("Location: " . DOL_URL_ROOT . '/contact/list.php?mode=search&sall=' . urlencode(GETPOST('search_contact')));
+    header("Location: " . constant('BASE_URL') . '/contact/list.php?mode=search&sall=' . urlencode(GETPOST('search_contact')));
     exit;
 }
 if (GETPOST('search_deplacement') != '') {
-    header("Location: " . DOL_URL_ROOT . '/compta/deplacement/list.php?mode=search&sall=' . urlencode(GETPOST('search_deplacement')));
+    header("Location: " . constant('BASE_URL') . '/compta/deplacement/list.php?mode=search&sall=' . urlencode(GETPOST('search_deplacement')));
     exit;
 }
 if (GETPOST('search_expensereport') != '') {
-    header("Location: " . DOL_URL_ROOT . '/expensereport/list.php?mode=search&sall=' . urlencode(GETPOST('search_expensereport')));
+    header("Location: " . constant('BASE_URL') . '/expensereport/list.php?mode=search&sall=' . urlencode(GETPOST('search_expensereport')));
     exit;
 }
 if (GETPOST('search_holiday') != '') {
-    header("Location: " . DOL_URL_ROOT . '/holiday/list.php?mode=search&sall=' . urlencode(GETPOST('search_holiday')));
+    header("Location: " . constant('BASE_URL') . '/holiday/list.php?mode=search&sall=' . urlencode(GETPOST('search_holiday')));
     exit;
 }
 if (GETPOST('search_member') != '') {
-    header("Location: " . DOL_URL_ROOT . '/adherents/list.php?mode=search&sall=' . urlencode(GETPOST('search_member')));
+    header("Location: " . constant('BASE_URL') . '/adherents/list.php?mode=search&sall=' . urlencode(GETPOST('search_member')));
     exit;
 }
 if (GETPOST('search_project') != '') {
-    header("Location: " . DOL_URL_ROOT . '/projet/list.php?mode=search&search_all=' . urlencode(GETPOST('search_project')));
+    header("Location: " . constant('BASE_URL') . '/projet/list.php?mode=search&search_all=' . urlencode(GETPOST('search_project')));
     exit;
 }
 if (GETPOST('search_task') != '') {
-    header("Location: " . DOL_URL_ROOT . '/projet/tasks/list.php?mode=search&search_all=' . urlencode(GETPOST('search_task')));
+    header("Location: " . constant('BASE_URL') . '/projet/tasks/list.php?mode=search&search_all=' . urlencode(GETPOST('search_task')));
     exit;
 }
 
 if (GETPOST('search_user') != '') {
-    header("Location: " . DOL_URL_ROOT . '/user/list.php?search_all=' . urlencode(GETPOST('search_user')));
+    header("Location: " . constant('BASE_URL') . '/user/list.php?search_all=' . urlencode(GETPOST('search_user')));
     exit;
 }
 if (GETPOST('search_group') != '') {
-    header("Location: " . DOL_URL_ROOT . '/user/group/list.php?search_all=' . urlencode(GETPOST('search_group')));
+    header("Location: " . constant('BASE_URL') . '/user/group/list.php?search_all=' . urlencode(GETPOST('search_group')));
     exit;
 }
 

@@ -121,14 +121,14 @@ if ($reshook < 0) {
 if (empty($reshook)) {
     $error = 0;
 
-    $backurlforlist = DOL_URL_ROOT . '/mrp/mo_list.php';
+    $backurlforlist = constant('BASE_URL') . '/mrp/mo_list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         //var_dump($backurlforlist);exit;
         if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
             $backtopage = $backurlforlist;
         } else {
-            $backtopage = DOL_URL_ROOT . '/mrp/mo_production.php?id=' . ($id > 0 ? $id : '__ID__');
+            $backtopage = constant('BASE_URL') . '/mrp/mo_production.php?id=' . ($id > 0 ? $id : '__ID__');
         }
     }
     $triggermodname = 'MO_MODIFY'; // Name of trigger action code to execute when we modify record
@@ -137,7 +137,7 @@ if (empty($reshook)) {
         $also_cancel_consumed_and_produced_lines = (GETPOST('alsoCancelConsumedAndProducedLines', 'alpha') ? 1 : 0);
         $result = $object->cancel($user, 0, $also_cancel_consumed_and_produced_lines);
         if ($result > 0) {
-            header("Location: " . DOL_URL_ROOT . '/mrp/mo_card.php?id=' . $object->id);
+            header("Location: " . constant('BASE_URL') . '/mrp/mo_card.php?id=' . $object->id);
             exit;
         } else {
             $action = '';
@@ -1867,7 +1867,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo DOL_URL_ROOT . '/mrp/ajax/interface.php'; ?>",
+                        url: "<?php echo constant('BASE_URL') . '/mrp/ajax/interface.php'; ?>",
                         data: {
                             action: "updateselectbatchbywarehouse",
                             permissiontoproduce: <?php echo $permissiontoproduce ?>,
@@ -1928,7 +1928,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo DOL_URL_ROOT . '/mrp/ajax/interface.php'; ?>",
+                        url: "<?php echo constant('BASE_URL') . '/mrp/ajax/interface.php'; ?>",
                         data: {
                             action: "updateselectwarehousebybatch",
                             permissiontoproduce: <?php echo $permissiontoproduce ?>,

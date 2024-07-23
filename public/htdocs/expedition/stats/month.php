@@ -59,7 +59,7 @@ $data = $stats->getNbByMonth($year);
 dol_mkdir($conf->expedition->dir_temp);
 
 $filename = $conf->expedition->dir_temp . "/expedition" . $year . ".png";
-$fileurl = DOL_URL_ROOT . '/viewimage.php?modulepart=expeditionstats&file=expedition' . $year . '.png';
+$fileurl = constant('BASE_URL') . '/viewimage.php?modulepart=expeditionstats&file=expedition' . $year . '.png';
 
 $px = new DolGraph();
 $mesg = $px->isGraphKo();

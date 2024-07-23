@@ -227,14 +227,14 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = DOL_URL_ROOT . '/product/list.php?type=' . $type;
+    $backurlforlist = constant('BASE_URL') . '/product/list.php?type=' . $type;
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/product/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/product/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -1008,7 +1008,7 @@ if (empty($reshook)) {
         $result = $object->delete($user);
 
         if ($result > 0) {
-            header('Location: ' . DOL_URL_ROOT . '/product/list.php?type=' . $object->type . '&delprod=' . urlencode($object->ref));
+            header('Location: ' . constant('BASE_URL') . '/product/list.php?type=' . $object->type . '&delprod=' . urlencode($object->ref));
             exit;
         } else {
             setEventMessages($langs->trans($object->error), null, 'errors');
@@ -3090,8 +3090,8 @@ if ($action != 'create' && $action != 'edit' && $action != 'delete') {
 
     $MAXEVENT = 10;
     $morehtmlcenter = '<div class="nowraponall">';
-    $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullConversation'), '', 'fa fa-comments imgforviewmode', DOL_URL_ROOT . '/product/messaging.php?id=' . $object->id);
-    $morehtmlcenter .= dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/product/agenda.php?id=' . $object->id);
+    $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullConversation'), '', 'fa fa-comments imgforviewmode', constant('BASE_URL') . '/product/messaging.php?id=' . $object->id);
+    $morehtmlcenter .= dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/product/agenda.php?id=' . $object->id);
     $morehtmlcenter .= '</div>';
 
     // List of actions on element

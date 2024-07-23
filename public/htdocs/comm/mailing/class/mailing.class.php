@@ -804,7 +804,7 @@ class Mailing extends CommonObject
             $label = implode($this->getTooltipContentArray($params));
         }
 
-        $url = DOL_URL_ROOT . '/comm/mailing/card.php?id=' . $this->id;
+        $url = constant('BASE_URL') . '/comm/mailing/card.php?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not

@@ -36,7 +36,7 @@ function salaries_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/salaries/card.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/salaries/card.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Salary");
     $head[$h][2] = 'card';
     $h++;
@@ -57,7 +57,7 @@ function salaries_prepare_head($object)
             dol_print_error($db);
         }
         $langs->load("banks");
-        $head[$h][0] = DOL_URL_ROOT . '/salaries/virement_request.php?id=' . $object->id . '&type=bank-transfer';
+        $head[$h][0] = constant('BASE_URL') . '/salaries/virement_request.php?id=' . $object->id . '&type=bank-transfer';
         $head[$h][1] = $langs->trans('BankTransfer');
         if ($nbStandingOrders > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbStandingOrders . '</span>';
@@ -77,7 +77,7 @@ function salaries_prepare_head($object)
     $upload_dir = $conf->salaries->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . '/salaries/document.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/salaries/document.php?id=' . $object->id;
     $head[$h][1] = $langs->trans('Documents');
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -85,7 +85,7 @@ function salaries_prepare_head($object)
     $head[$h][2] = 'documents';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/salaries/info.php?id=' . $object->id;
+    $head[$h][0] = constant('BASE_URL') . '/salaries/info.php?id=' . $object->id;
     $head[$h][1] = $langs->trans("Info");
     $head[$h][2] = 'info';
     $h++;
@@ -112,7 +112,7 @@ function salaries_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/salaries/admin/salaries.php';
+    $head[$h][0] = constant('BASE_URL') . '/salaries/admin/salaries.php';
     $head[$h][1] = $langs->trans("Miscellaneous");
     $head[$h][2] = 'general';
     $h++;
@@ -123,7 +123,7 @@ function salaries_admin_prepare_head()
     // $this->tabs = array('entity:-tabname:Title:@mymodule:/mymodule/mypage.php?id=__ID__');   to remove a tab
     complete_head_from_modules($conf, $langs, null, $head, $h, 'salaries_admin');
 
-    $head[$h][0] = DOL_URL_ROOT . '/salaries/admin/salaries_extrafields.php';
+    $head[$h][0] = constant('BASE_URL') . '/salaries/admin/salaries_extrafields.php';
     $head[$h][1] = $langs->trans("ExtraFieldsSalaries");
     $nbExtrafields = $extrafields->attributes['salary']['count'];
     if ($nbExtrafields > 0) {

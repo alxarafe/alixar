@@ -38,17 +38,17 @@ function webportalAdminPrepareHead()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . '/webportal/admin/setup.php';
+    $head[$h][0] = constant('BASE_URL') . '/webportal/admin/setup.php';
     $head[$h][1] = $langs->trans("Settings");
     $head[$h][2] = 'settings';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/webportal/admin/setup_theme.php';
+    $head[$h][0] = constant('BASE_URL') . '/webportal/admin/setup_theme.php';
     $head[$h][1] = $langs->trans("SkinAndColors");
     $head[$h][2] = 'themesettings';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . '/webportal/admin/configcss.php';
+    $head[$h][0] = constant('BASE_URL') . '/webportal/admin/configcss.php';
     $head[$h][1] = $langs->trans("CSSPage");
     $head[$h][2] = 'css';
     $h++;

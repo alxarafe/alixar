@@ -174,7 +174,7 @@ class AccountingJournal extends CommonObject
 
         $result = '';
 
-        $url = DOL_URL_ROOT . '/accountancy/admin/journals_list.php?id=35';
+        $url = constant('BASE_URL') . '/accountancy/admin/journals_list.php?id=35';
 
         $label = '<u>' . $langs->trans("ShowAccountingJournal") . '</u>';
         if (!empty($this->code)) {

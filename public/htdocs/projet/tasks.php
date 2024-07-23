@@ -26,7 +26,7 @@
  *  \brief      List all tasks of a project
  */
 
-require "../main.inc.php";
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
@@ -391,7 +391,7 @@ if ($action == 'createtask' && $user->hasRight('projet', 'creer')) {
                 header("Location: " . $backtopage);
                 exit;
             } elseif (empty($projectid)) {
-                header("Location: " . DOL_URL_ROOT . '/projet/tasks/list.php' . (empty($mode) ? '' : '?mode=' . $mode));
+                header("Location: " . constant('BASE_URL') . '/projet/tasks/list.php' . (empty($mode) ? '' : '?mode=' . $mode));
                 exit;
             }
             $id = $projectid;
@@ -402,7 +402,7 @@ if ($action == 'createtask' && $user->hasRight('projet', 'creer')) {
             exit;
         } elseif (empty($id)) {
             // We go back on task list
-            header("Location: " . DOL_URL_ROOT . '/projet/tasks/list.php' . (empty($mode) ? '' : '?mode=' . $mode));
+            header("Location: " . constant('BASE_URL') . '/projet/tasks/list.php' . (empty($mode) ? '' : '?mode=' . $mode));
             exit;
         }
     }
@@ -878,7 +878,7 @@ if ($action == 'create' && $user->hasRight('projet', 'creer') && (empty($object-
         }
     }
 
-    $linktocreatetask = dolGetButtonTitle($langs->trans('AddTask'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/projet/tasks.php?action=create' . $param . '&backtopage=' . urlencode($_SERVER['PHP_SELF'] . '?id=' . $object->id), '', $linktocreatetaskUserRight, $linktocreatetaskParam);
+    $linktocreatetask = dolGetButtonTitle($langs->trans('AddTask'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/projet/tasks.php?action=create' . $param . '&backtopage=' . urlencode($_SERVER['PHP_SELF'] . '?id=' . $object->id), '', $linktocreatetaskUserRight, $linktocreatetaskParam);
 
     print '<form method="POST" id="searchFormList" action="' . $_SERVER["PHP_SELF"] . '?id=' . $object->id . '">';
     print '<input type="hidden" name="optioncss" value="' . $optioncss . '">';
@@ -891,8 +891,8 @@ if ($action == 'create' && $user->hasRight('projet', 'creer') && (empty($object-
     print '<input type="hidden" name="contextpage" value="' . $contextpage . '">';
 
     $title = $langs->trans("ListOfTasks");
-    $linktotasks = dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/projet/tasks.php?id=' . $object->id, '', 1, array('morecss' => 'reposition btnTitleSelected'));
-    $linktotasks .= dolGetButtonTitle($langs->trans('ViewGantt'), '', 'fa fa-stream imgforviewmode', DOL_URL_ROOT . '/projet/ganttview.php?id=' . $object->id . '&withproject=1', '', 1, array('morecss' => 'reposition marginleftonly'));
+    $linktotasks = dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/projet/tasks.php?id=' . $object->id, '', 1, array('morecss' => 'reposition btnTitleSelected'));
+    $linktotasks .= dolGetButtonTitle($langs->trans('ViewGantt'), '', 'fa fa-stream imgforviewmode', constant('BASE_URL') . '/projet/ganttview.php?id=' . $object->id . '&withproject=1', '', 1, array('morecss' => 'reposition marginleftonly'));
 
     //print_barre_liste($title, 0, $_SERVER["PHP_SELF"], '', $sortfield, $sortorder, $linktotasks, $num, $totalnboflines, 'generic', 0, '', '', 0, 1);
     print load_fiche_titre($title, $linktotasks . ' &nbsp; ' . $linktocreatetask, 'projecttask', '', '', '', $massactionbutton);

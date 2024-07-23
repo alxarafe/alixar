@@ -60,7 +60,7 @@ $lineid = GETPOSTINT('lineid');
 
 
 // Store current page url
-$url_page_current = DOL_URL_ROOT . '/ticket/contact.php';
+$url_page_current = constant('BASE_URL') . '/ticket/contact.php';
 
 $hookmanager->initHooks(array('contactticketcard', 'globalcard'));
 $object = new Ticket($db);

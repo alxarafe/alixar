@@ -538,7 +538,7 @@ if ($id > 0) {      // For user tab
 } else {
     $title = $langs->trans("ListTripsAndExpenses");
 
-    $url = DOL_URL_ROOT . '/expensereport/card.php?action=create';
+    $url = constant('BASE_URL') . '/expensereport/card.php?action=create';
     if (!empty($socid)) {
         $url .= '&socid=' . $socid;
     }

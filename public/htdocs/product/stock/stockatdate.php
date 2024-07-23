@@ -380,11 +380,11 @@ if ($ext == 'csv') {
 
     $head = array();
 
-    $head[0][0] = DOL_URL_ROOT . '/product/stock/stockatdate.php';
+    $head[0][0] = constant('BASE_URL') . '/product/stock/stockatdate.php';
     $head[0][1] = $langs->trans("StockAtDateInPast");
     $head[0][2] = 'stockatdatepast';
 
-    $head[1][0] = DOL_URL_ROOT . '/product/stock/stockatdate.php?mode=future';
+    $head[1][0] = constant('BASE_URL') . '/product/stock/stockatdate.php?mode=future';
     $head[1][1] = $langs->trans("StockAtDateInFuture");
     $head[1][2] = 'stockatdatefuture';
 
@@ -705,7 +705,7 @@ while ($i < ($limit ? min($num, $limit) : $num)) {
                 // Movements
                 print '<td class="right">';
                 if ($nbofmovement > 0) {
-                    $url = DOL_URL_ROOT . '/product/stock/movement_list.php?idproduct=' . $objp->rowid;
+                    $url = constant('BASE_URL') . '/product/stock/movement_list.php?idproduct=' . $objp->rowid;
                     if (GETPOSTISSET('datemonth')) {
                         $url .= '&search_date_startday=' . GETPOSTINT('dateday');
                         $url .= '&search_date_startmonth=' . GETPOSTINT('datemonth');

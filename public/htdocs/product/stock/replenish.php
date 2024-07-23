@@ -579,11 +579,11 @@ llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock_re
 
 $head = array();
 
-$head[0][0] = DOL_URL_ROOT . '/product/stock/replenish.php';
+$head[0][0] = constant('BASE_URL') . '/product/stock/replenish.php';
 $head[0][1] = $title;
 $head[0][2] = 'replenish';
 
-$head[1][0] = DOL_URL_ROOT . '/product/stock/replenishorders.php';
+$head[1][0] = constant('BASE_URL') . '/product/stock/replenishorders.php';
 $head[1][1] = $langs->trans("ReplenishmentOrders");
 $head[1][2] = 'replenishorders';
 

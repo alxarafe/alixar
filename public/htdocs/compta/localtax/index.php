@@ -247,7 +247,7 @@ $description = $fsearch;
 $name = $langs->transcountry($localTaxType == 1 ? "LT1ReportByMonth" : "LT2ReportByMonth", $mysoc->country_code);
 $description .= $langs->trans($LT);
 $calcmode = $langs->trans("LTReportBuildWithOptionDefinedInModule") . ' ';
-$calcmode .= ' <span class="opacitymedium">(' . $langs->trans("TaxModuleSetupToModifyRulesLT", DOL_URL_ROOT . '/admin/company.php') . ')</span>';
+$calcmode .= ' <span class="opacitymedium">(' . $langs->trans("TaxModuleSetupToModifyRulesLT", constant('BASE_URL') . '/admin/company.php') . ')</span>';
 
 $period = $form->selectDate($date_start, 'date_start', 0, 0, 0, '', 1, 0) . ' - ' . $form->selectDate($date_end, 'date_end', 0, 0, 0, '', 1, 0);
 

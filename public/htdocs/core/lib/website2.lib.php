@@ -618,10 +618,10 @@ function showWebsiteTemplates(Website $website)
 
                             $templatedir = $dirtheme . "/" . $subdir;
                             $file = $dirtheme . "/" . $subdirwithoutzip . ".jpg";
-                            $url = DOL_URL_ROOT . '/viewimage.php?modulepart=doctemplateswebsite&file=' . $subdirwithoutzip . ".jpg";
+                            $url = constant('BASE_URL') . '/viewimage.php?modulepart=doctemplateswebsite&file=' . $subdirwithoutzip . ".jpg";
 
                             if (!file_exists($file)) {
-                                $url = DOL_URL_ROOT . '/public/theme/common/nophoto.png';
+                                $url = constant('BASE_URL') . '/public/theme/common/nophoto.png';
                             }
 
                             $originalfile = basename($file);

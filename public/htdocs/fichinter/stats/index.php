@@ -84,10 +84,10 @@ $data = $stats->getNbByMonthWithPrevYear($endyear, $startyear);
 
 if (!$user->hasRight('societe', 'client', 'voir')) {
     $filenamenb = $dir . '/interventionsnbinyear-' . $user->id . '-' . $year . '.png';
-    $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=interventionstats&file=interventionsnbinyear-' . $user->id . '-' . $year . '.png';
+    $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=interventionstats&file=interventionsnbinyear-' . $user->id . '-' . $year . '.png';
 } else {
     $filenamenb = $dir . '/interventionsnbinyear-' . $year . '.png';
-    $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=interventionstats&file=interventionsnbinyear-' . $year . '.png';
+    $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=interventionstats&file=interventionsnbinyear-' . $year . '.png';
 }
 
 $px1 = new DolGraph();
@@ -120,10 +120,10 @@ $data = $stats->getAmountByMonthWithPrevYear($endyear, $startyear);
 
 if (!$user->hasRight('societe', 'client', 'voir')) {
     $filenameamount = $dir . '/interventionsamountinyear-' . $user->id . '-' . $year . '.png';
-    $fileurlamount = DOL_URL_ROOT . '/viewimage.php?modulepart=interventionstats&file=interventionsamountinyear-' . $user->id . '-' . $year . '.png';
+    $fileurlamount = constant('BASE_URL') . '/viewimage.php?modulepart=interventionstats&file=interventionsamountinyear-' . $user->id . '-' . $year . '.png';
 } else {
     $filenameamount = $dir . '/interventionsamountinyear-' . $year . '.png';
-    $fileurlamount = DOL_URL_ROOT . '/viewimage.php?modulepart=interventionstats&file=interventionsamountinyear-' . $year . '.png';
+    $fileurlamount = constant('BASE_URL') . '/viewimage.php?modulepart=interventionstats&file=interventionsamountinyear-' . $year . '.png';
 }
 
 $px2 = new DolGraph();
@@ -155,10 +155,10 @@ $data = $stats->getAverageByMonthWithPrevYear($endyear, $startyear);
 
 if (!$user->hasRight('societe', 'client', 'voir')) {
     $filename_avg = $dir . '/interventionsaverage-' . $user->id . '-' . $year . '.png';
-    $fileurl_avg = DOL_URL_ROOT . '/viewimage.php?modulepart=interventionstats&file=interventionsaverage-' . $user->id . '-' . $year . '.png';
+    $fileurl_avg = constant('BASE_URL') . '/viewimage.php?modulepart=interventionstats&file=interventionsaverage-' . $user->id . '-' . $year . '.png';
 } else {
     $filename_avg = $dir . '/interventionsaverage-' . $year . '.png';
-    $fileurl_avg = DOL_URL_ROOT . '/viewimage.php?modulepart=interventionstats&file=interventionsaverage-' . $year . '.png';
+    $fileurl_avg = constant('BASE_URL') . '/viewimage.php?modulepart=interventionstats&file=interventionsaverage-' . $year . '.png';
 }
 
 $px3 = new DolGraph();
@@ -201,7 +201,7 @@ if (!count($arrayyears)) {
 
 $h = 0;
 $head = array();
-$head[$h][0] = DOL_URL_ROOT . '/fichinter/stats/index.php';
+$head[$h][0] = constant('BASE_URL') . '/fichinter/stats/index.php';
 $head[$h][1] = $langs->trans("ByMonthYear");
 $head[$h][2] = 'byyear';
 $h++;

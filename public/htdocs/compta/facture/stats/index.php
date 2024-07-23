@@ -135,10 +135,10 @@ $data = $stats->getNbByMonthWithPrevYear($endyear, $startyear);
 
 $filenamenb = $dir . "/invoicesnbinyear-" . $year . ".png";
 if ($mode == 'customer') {
-    $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=billstats&file=invoicesnbinyear-' . $year . '.png';
+    $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=billstats&file=invoicesnbinyear-' . $year . '.png';
 }
 if ($mode == 'supplier') {
-    $fileurlnb = DOL_URL_ROOT . '/viewimage.php?modulepart=billstatssupplier&file=invoicesnbinyear-' . $year . '.png';
+    $fileurlnb = constant('BASE_URL') . '/viewimage.php?modulepart=billstatssupplier&file=invoicesnbinyear-' . $year . '.png';
 }
 
 $px1 = new DolGraph();
@@ -171,10 +171,10 @@ $data = $stats->getAmountByMonthWithPrevYear($endyear, $startyear);
 
 $filenameamount = $dir . "/invoicesamountinyear-" . $year . ".png";
 if ($mode == 'customer') {
-    $fileurlamount = DOL_URL_ROOT . '/viewimage.php?modulepart=billstats&amp;file=invoicesamountinyear-' . $year . '.png';
+    $fileurlamount = constant('BASE_URL') . '/viewimage.php?modulepart=billstats&amp;file=invoicesamountinyear-' . $year . '.png';
 }
 if ($mode == 'supplier') {
-    $fileurlamount = DOL_URL_ROOT . '/viewimage.php?modulepart=billstatssupplier&amp;file=invoicesamountinyear-' . $year . '.png';
+    $fileurlamount = constant('BASE_URL') . '/viewimage.php?modulepart=billstatssupplier&amp;file=invoicesamountinyear-' . $year . '.png';
 }
 
 $px2 = new DolGraph();
@@ -207,18 +207,18 @@ $data = $stats->getAverageByMonthWithPrevYear($endyear, $startyear);
 if (!$user->hasRight('societe', 'client', 'voir')) {
     $filename_avg = $dir . '/ordersaverage-' . $user->id . '-' . $year . '.png';
     if ($mode == 'customer') {
-        $fileurl_avg = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstats&file=ordersaverage-' . $user->id . '-' . $year . '.png';
+        $fileurl_avg = constant('BASE_URL') . '/viewimage.php?modulepart=orderstats&file=ordersaverage-' . $user->id . '-' . $year . '.png';
     }
     if ($mode == 'supplier') {
-        $fileurl_avg = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstatssupplier&file=ordersaverage-' . $user->id . '-' . $year . '.png';
+        $fileurl_avg = constant('BASE_URL') . '/viewimage.php?modulepart=orderstatssupplier&file=ordersaverage-' . $user->id . '-' . $year . '.png';
     }
 } else {
     $filename_avg = $dir . '/ordersaverage-' . $year . '.png';
     if ($mode == 'customer') {
-        $fileurl_avg = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstats&file=ordersaverage-' . $year . '.png';
+        $fileurl_avg = constant('BASE_URL') . '/viewimage.php?modulepart=orderstats&file=ordersaverage-' . $year . '.png';
     }
     if ($mode == 'supplier') {
-        $fileurl_avg = DOL_URL_ROOT . '/viewimage.php?modulepart=orderstatssupplier&file=ordersaverage-' . $year . '.png';
+        $fileurl_avg = constant('BASE_URL') . '/viewimage.php?modulepart=orderstatssupplier&file=ordersaverage-' . $year . '.png';
     }
 }
 
@@ -260,7 +260,7 @@ if (!count($arrayyears)) {
 
 $h = 0;
 $head = array();
-$head[$h][0] = DOL_URL_ROOT . '/compta/facture/stats/index.php?mode=' . urlencode($mode);
+$head[$h][0] = constant('BASE_URL') . '/compta/facture/stats/index.php?mode=' . urlencode($mode);
 $head[$h][1] = $langs->trans("ByMonthYear");
 $head[$h][2] = 'byyear';
 $h++;

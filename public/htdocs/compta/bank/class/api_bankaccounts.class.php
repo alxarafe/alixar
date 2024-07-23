@@ -286,7 +286,7 @@ class BankAccounts extends DolibarrApi
          * Creating links between bank line record and its source
          */
 
-        $url = DOL_URL_ROOT . '/compta/bank/line.php?rowid=';
+        $url = constant('BASE_URL') . '/compta/bank/line.php?rowid=';
         $label = '(banktransfert)';
         $type = 'banktransfert';
 

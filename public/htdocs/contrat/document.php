@@ -29,7 +29,7 @@
  *       \brief      Page des documents joints sur les contrats
  */
 
-require "../main.inc.php";
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contract.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';

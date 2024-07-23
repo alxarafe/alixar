@@ -264,7 +264,7 @@ if ($optioncss != '') {
 $param = "&sref=" . $sref . "&snom=" . $snom . "&fourn_id=" . $fourn_id . (isset($type) ? "&amp;type=" . $type : "") . (empty($sRefSupplier) ? "" : "&amp;srefsupplier=" . $sRefSupplier);
 
 $newcardbutton = '';
-$newcardbutton .= dolGetButtonTitle($langs->trans('New'), '', 'fa fa-plus-circle', DOL_URL_ROOT . '/product/list.php?action=create&backtopage=' . urlencode($_SERVER['PHP_SELF']), '', $permissiontoadd);
+$newcardbutton .= dolGetButtonTitle($langs->trans('New'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/product/list.php?action=create&backtopage=' . urlencode($_SERVER['PHP_SELF']), '', $permissiontoadd);
 
 print_barre_liste($texte, $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, '', $num, $nbtotalofrecords, 'generic', 0, $newcardbutton);
 

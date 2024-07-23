@@ -130,7 +130,7 @@ $now = dol_now();
 $actionobject = new ActionsTicket($db);
 
 // Store current page url
-$url_page_current = DOL_URL_ROOT . '/ticket/card.php';
+$url_page_current = constant('BASE_URL') . '/ticket/card.php';
 
 // Security check - Protection if external user
 if ($user->socid > 0) {
@@ -167,14 +167,14 @@ if (empty($reshook)) {
         $search_agenda_label = '';
     }
 
-    $backurlforlist = DOL_URL_ROOT . '/ticket/list.php';
+    $backurlforlist = constant('BASE_URL') . '/ticket/list.php';
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = DOL_URL_ROOT . '/ticket/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = constant('BASE_URL') . '/ticket/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -1422,7 +1422,7 @@ if ($action == 'create' || $action == 'presend') {
                     print dolGetButtonAction($langs->trans('UnableToCreateInterIfNoSocid'), $langs->trans('TicketAddIntervention'), 'default', $_SERVER['PHP_SELF'] . '#', '', false);
                 }
                 if ($object->fk_soc > 0 && isset($object->status) && $object->status < Ticket::STATUS_CLOSED && $user->hasRight('ficheinter', 'creer')) {
-                    print dolGetButtonAction('', $langs->trans('TicketAddIntervention'), 'default', DOL_URL_ROOT . '/fichinter/card.php?action=create&token=' . newToken() . '&socid=' . $object->fk_soc . '&origin=ticket_ticket&originid=' . $object->id, '');
+                    print dolGetButtonAction('', $langs->trans('TicketAddIntervention'), 'default', constant('BASE_URL') . '/fichinter/card.php?action=create&token=' . newToken() . '&socid=' . $object->fk_soc . '&origin=ticket_ticket&originid=' . $object->id, '');
                 }
 
                 // Close ticket if status is read
@@ -1545,7 +1545,7 @@ if ($action == 'create' || $action == 'presend') {
 
             $morehtmlright = '';
 
-            $messagingUrl = DOL_URL_ROOT . '/ticket/agenda.php?track_id=' . $object->track_id;
+            $messagingUrl = constant('BASE_URL') . '/ticket/agenda.php?track_id=' . $object->track_id;
             $morehtmlright .= dolGetButtonTitle($langs->trans('MessageListViewType'), '', 'fa fa-bars imgforviewmode', $messagingUrl, '', 1);
 
             // Show link to add a message (if read and not closed)
@@ -1602,8 +1602,8 @@ if ($action == 'create' || $action == 'presend') {
                 $MAXEVENT = 10;
 
                 $morehtmlcenter = '<div class="nowraponall">';
-                $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullConversation'), '', 'fa fa-comments imgforviewmode', DOL_URL_ROOT . '/ticket/messaging.php?id=' . $object->id);
-                $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullList'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT . '/ticket/agenda.php?id=' . $object->id);
+                $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullConversation'), '', 'fa fa-comments imgforviewmode', constant('BASE_URL') . '/ticket/messaging.php?id=' . $object->id);
+                $morehtmlcenter .= dolGetButtonTitle($langs->trans('FullList'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/ticket/agenda.php?id=' . $object->id);
                 $morehtmlcenter .= '</div>';
 
                 // List of actions on element

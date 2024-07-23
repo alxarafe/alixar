@@ -94,7 +94,7 @@ $formadmin = new FormAdmin($db);
 llxHeader('', $langs->trans("WebsiteSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-website_options');
 
 $titre = $langs->trans("WebsiteSetup");
-$linkback = '<a href="' . ($backtopage ? $backtopage : DOL_URL_ROOT . '/admin/modules.php') . '">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php') . '">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($titre, $linkback, 'title_setup');
 
 // Onglets

@@ -257,17 +257,17 @@ if (!function_exists('dol_loginfunction')) {
 
         // Show logo (search in order: small company logo, large company logo, theme logo, common logo)
         $width = 0;
-        $urllogo = DOL_URL_ROOT . '/theme/common/login_logo.png';
+        $urllogo = constant('BASE_URL') . '/theme/common/login_logo.png';
 
         if (!empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $mysoc->logo_small)) {
-            $urllogo = DOL_URL_ROOT . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
+            $urllogo = constant('BASE_URL') . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
         } elseif (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output . '/logos/' . $mysoc->logo)) {
-            $urllogo = DOL_URL_ROOT . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/' . $mysoc->logo);
+            $urllogo = constant('BASE_URL') . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/' . $mysoc->logo);
             $width = 128;
         } elseif (!empty($mysoc->logo_squarred_small) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $mysoc->logo_squarred_small)) {
-            $urllogo = DOL_URL_ROOT . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_small);
+            $urllogo = constant('BASE_URL') . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_small);
         } elseif (is_readable(DOL_DOCUMENT_ROOT . '/theme/dolibarr_logo.svg')) {
-            $urllogo = DOL_URL_ROOT . '/theme/dolibarr_logo.svg';
+            $urllogo = constant('BASE_URL') . '/theme/dolibarr_logo.svg';
         }
 
         // Security graphical code
@@ -307,9 +307,9 @@ if (!function_exists('dol_loginfunction')) {
         // Set jquery theme
         $dol_loginmesg = (!empty($_SESSION["dol_loginmesg"]) ? $_SESSION["dol_loginmesg"] : '');
 
-        $favicon = DOL_URL_ROOT . '/theme/dolibarr_256x256_color.png';
+        $favicon = constant('BASE_URL') . '/theme/dolibarr_256x256_color.png';
         if (!empty($mysoc->logo_squarred_mini)) {
-            $favicon = DOL_URL_ROOT . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_mini);
+            $favicon = constant('BASE_URL') . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_mini);
         }
         if (getDolGlobalString('MAIN_FAVICON_URL')) {
             $favicon = getDolGlobalString('MAIN_FAVICON_URL');
@@ -586,7 +586,7 @@ function dolJSToSetRandomPassword($htmlname, $htmlnameofbutton = 'generate_token
             jQuery("#' . dol_escape_js($htmlnameofbutton) . '").click(function() {
 				var currenttoken = jQuery("meta[name=anti-csrf-currenttoken]").attr("content");
 				console.log("We click on the button ' . dol_escape_js($htmlnameofbutton) . ' to suggest a key. anti-csrf-currentotken is "+currenttoken+". We will fill ' . dol_escape_js($htmlname) . '");
-				jQuery.get( "' . DOL_URL_ROOT . '/core/ajax/security.php", {
+				jQuery.get( "' . constant('BASE_URL') . '/core/ajax/security.php", {
             		action: \'getrandompassword\',
             		generic: ' . ($generic ? '1' : '0') . ',
 					token: currenttoken

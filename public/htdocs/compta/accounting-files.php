@@ -856,7 +856,7 @@ if (!empty($date_start) && !empty($date_stop)) {
                         print $tmppreview;
                     }
                     $filename = ($filecursor['name'] ? $filecursor['name'] : $filecursor['ref']);
-                    print '<a href=' . DOL_URL_ROOT . '/' . $filecursor['link'] . ' target="_blank" rel="noopener noreferrer" title="' . dol_escape_htmltag($filename) . '">';
+                    print '<a href=' . constant('BASE_URL') . '/' . $filecursor['link'] . ' target="_blank" rel="noopener noreferrer" title="' . dol_escape_htmltag($filename) . '">';
                     if (empty($tmppreview)) {
                         print img_picto('', 'generic', '', false, 0, 0, '', 'pictonopreview pictofixedwidth paddingright');
                     }

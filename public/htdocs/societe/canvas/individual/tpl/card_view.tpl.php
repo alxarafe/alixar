@@ -148,7 +148,7 @@ if ($this->control->tpl['action_delete']) {
             <td><?php echo $langs->trans('RIB'); ?></td>
             <td class="right">
             <?php if ($user->hasRight('societe', 'creer')) { ?>
-            <a href="<?php echo DOL_URL_ROOT . '/societe/paymentmodes.php?socid=' . $this->control->tpl['id']; ?>"><?php echo $this->control->tpl['image_edit']; ?></a>
+            <a href="<?php echo constant('BASE_URL') . '/societe/paymentmodes.php?socid=' . $this->control->tpl['id']; ?>"><?php echo $this->control->tpl['image_edit']; ?></a>
             <?php } else { ?>
             &nbsp;
             <?php } ?>
@@ -166,7 +166,7 @@ if ($this->control->tpl['action_delete']) {
             <td><?php echo $langs->trans('SalesRepresentatives'); ?></td>
             <td class="right">
             <?php if ($user->hasRight('societe', 'creer')) { ?>
-            <a href="<?php echo DOL_URL_ROOT . '/societe/commerciaux.php?socid=' . $this->control->tpl['id']; ?>"><?php echo $this->control->tpl['image_edit']; ?></a>
+            <a href="<?php echo constant('BASE_URL') . '/societe/commerciaux.php?socid=' . $this->control->tpl['id']; ?>"><?php echo $this->control->tpl['image_edit']; ?></a>
             <?php } else { ?>
             &nbsp;
             <?php } ?>
