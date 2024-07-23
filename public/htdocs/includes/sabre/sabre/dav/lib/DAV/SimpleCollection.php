@@ -94,7 +94,7 @@ class SimpleCollection extends Collection
         if (isset($this->children[$name])) {
             return $this->children[$name];
         }
-        throw new Exception\NotFound('File not found: '.$name.' in \''.$this->getName().'\'');
+        throw new Exception\NotFound('File not found: ' . $name . ' in \'' . $this->getName() . '\'');
     }
 
     /**

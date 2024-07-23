@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler;
 
 use Exception;
@@ -80,10 +81,10 @@ class RestException extends Exception
     public function __construct($httpStatusCode, $errorMessage = null, array $details = array(), Exception $previous = null)
     {
         $events = Scope::get('Restler')->getEvents();
-        if(count($events)<= 1){
+        if(count($events) <= 1){
             $this->stage = 'setup';
         } else {
-            $this->stage = $previous ? $events[count($events)-2] : end($events);
+            $this->stage = $previous ? $events[count($events) - 2] : end($events);
         }
         $this->details = $details;
         parent::__construct($errorMessage, $httpStatusCode, $previous);
@@ -136,4 +137,3 @@ class RestException extends Exception
         . $this->getStage() . ' stage';
     }
 }
-

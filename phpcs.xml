@@ -10,7 +10,7 @@
     <file>Modules</file>
     <file>Dolibarr</file>
     <file>dev</file>
-    <file>htdocs</file>
+    <file>public</file>
     <file>scripts</file>
     <file>test</file>
     <exclude-pattern>vendor/*</exclude-pattern>

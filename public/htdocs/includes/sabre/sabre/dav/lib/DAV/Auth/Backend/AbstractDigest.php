@@ -121,7 +121,7 @@ abstract class AbstractDigest implements BackendInterface
             return [false, 'Username or password was incorrect'];
         }
 
-        return [true, $this->principalPrefix.$username];
+        return [true, $this->principalPrefix . $username];
     }
 
     /**

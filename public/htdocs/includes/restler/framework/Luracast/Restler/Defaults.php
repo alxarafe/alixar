@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler;
 
 use Luracast\Restler\Data\ValidationInfo;
@@ -361,6 +362,4 @@ class Defaults
         Defaults::$$name = $value;
         return true;
     }
-
 }
-

@@ -150,11 +150,11 @@ class Inbox extends DAV\Collection implements IInbox
             ],
             [
                 'privilege' => '{DAV:}unbind',
-                'principal' => $this->getOwner().'/calendar-proxy-write',
+                'principal' => $this->getOwner() . '/calendar-proxy-write',
                 'protected' => true,
             ],
             [
-                'privilege' => '{'.CalDAV\Plugin::NS_CALDAV.'}schedule-deliver',
+                'privilege' => '{' . CalDAV\Plugin::NS_CALDAV . '}schedule-deliver',
                 'principal' => '{DAV:}authenticated',
                 'protected' => true,
             ],

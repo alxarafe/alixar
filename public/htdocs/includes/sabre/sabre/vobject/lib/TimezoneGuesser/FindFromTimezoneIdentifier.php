@@ -66,6 +66,6 @@ class FindFromTimezoneIdentifier implements TimezoneFinder
      */
     private function getIdentifiersBC()
     {
-        return include __DIR__.'/../timezonedata/php-bc.php';
+        return include __DIR__ . '/../timezonedata/php-bc.php';
     }
 }

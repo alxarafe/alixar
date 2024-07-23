@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the DebugBar package.
  *
@@ -245,7 +246,8 @@ class MessagesCollector extends AbstractLogger implements DataCollectorInterface
     /**
      * @return array
      */
-    public function getAssets() {
+    public function getAssets()
+    {
         return $this->isHtmlVarDumperUsed() ? $this->getVarDumper()->getAssets() : array();
     }
 

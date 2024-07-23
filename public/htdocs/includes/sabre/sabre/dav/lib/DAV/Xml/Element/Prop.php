@@ -92,11 +92,11 @@ class Prop implements XmlDeserializable
             } else {
                 $type = gettype($deserializer);
                 if ('string' === $type) {
-                    $type .= ' ('.$deserializer.')';
+                    $type .= ' (' . $deserializer . ')';
                 } elseif ('object' === $type) {
-                    $type .= ' ('.get_class($deserializer).')';
+                    $type .= ' (' . get_class($deserializer) . ')';
                 }
-                throw new \LogicException('Could not use this type as a deserializer: '.$type);
+                throw new \LogicException('Could not use this type as a deserializer: ' . $type);
             }
         } else {
             $value = Complex::xmlDeserialize($reader);

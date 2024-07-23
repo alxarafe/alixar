@@ -140,7 +140,7 @@ class Writer extends XMLWriter
                     $this->writeAttribute('xmlns', '');
                 } else {
                     if (!isset($this->adhocNamespaces[$namespace])) {
-                        $this->adhocNamespaces[$namespace] = 'x'.(count($this->adhocNamespaces) + 1);
+                        $this->adhocNamespaces[$namespace] = 'x' . (count($this->adhocNamespaces) + 1);
                     }
                     $result = $this->startElementNS($this->adhocNamespaces[$namespace], $localName, $namespace);
                 }
@@ -151,7 +151,7 @@ class Writer extends XMLWriter
 
         if (!$this->namespacesWritten) {
             foreach ($this->namespaceMap as $namespace => $prefix) {
-                $this->writeAttribute(($prefix ? 'xmlns:'.$prefix : 'xmlns'), $namespace);
+                $this->writeAttribute(($prefix ? 'xmlns:' . $prefix : 'xmlns'), $namespace);
             }
             $this->namespacesWritten = true;
         }
@@ -237,14 +237,14 @@ class Writer extends XMLWriter
         if (array_key_exists($namespace, $this->namespaceMap)) {
             // It's an attribute with a namespace we know
             return $this->writeAttribute(
-                $this->namespaceMap[$namespace].':'.$localName,
+                $this->namespaceMap[$namespace] . ':' . $localName,
                 $value
             );
         }
 
         // We don't know the namespace, we must add it in-line
         if (!isset($this->adhocNamespaces[$namespace])) {
-            $this->adhocNamespaces[$namespace] = 'x'.(count($this->adhocNamespaces) + 1);
+            $this->adhocNamespaces[$namespace] = 'x' . (count($this->adhocNamespaces) + 1);
         }
 
         return $this->writeAttributeNS(

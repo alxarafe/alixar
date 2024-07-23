@@ -94,7 +94,8 @@ class CalendarQueryValidator
             foreach ($parent->{$filter['name']} as $subComponent) {
                 if (
                     $this->validateCompFilters($subComponent, $filter['comp-filters']) &&
-                    $this->validatePropFilters($subComponent, $filter['prop-filters'])) {
+                    $this->validatePropFilters($subComponent, $filter['prop-filters'])
+                ) {
                     // We had a match, so this comp-filter succeeds
                     continue 2;
                 }
@@ -337,7 +338,7 @@ class CalendarQueryValidator
 
                 // no break
             case 'VFREEBUSY':
-                throw new \Sabre\DAV\Exception\NotImplemented('time-range filters are currently not supported on '.$component->name.' components');
+                throw new \Sabre\DAV\Exception\NotImplemented('time-range filters are currently not supported on ' . $component->name . ' components');
             case 'COMPLETED':
             case 'CREATED':
             case 'DTEND':
@@ -348,7 +349,7 @@ class CalendarQueryValidator
                 return $start <= $component->getDateTime() && $end >= $component->getDateTime();
 
             default:
-                throw new \Sabre\DAV\Exception\BadRequest('You cannot create a time-range filter on a '.$component->name.' component');
+                throw new \Sabre\DAV\Exception\BadRequest('You cannot create a time-range filter on a ' . $component->name . ' component');
         }
     }
 }

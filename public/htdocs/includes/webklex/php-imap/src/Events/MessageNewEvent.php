@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     MessageNewEvent.php
 * Category: Event
@@ -19,8 +20,8 @@ use Webklex\PHPIMAP\Message;
  *
  * @package Webklex\PHPIMAP\Events
  */
-class MessageNewEvent extends Event {
-
+class MessageNewEvent extends Event
+{
     /** @var Message $message */
     public $message;
 
@@ -29,7 +30,8 @@ class MessageNewEvent extends Event {
      * @var Message[] $messages
      * @return void
      */
-    public function __construct($messages) {
+    public function __construct($messages)
+    {
         $this->message = $messages[0];
     }
 }

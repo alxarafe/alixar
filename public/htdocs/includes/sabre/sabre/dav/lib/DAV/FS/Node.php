@@ -78,7 +78,7 @@ abstract class Node implements INode
         list($parentPath) = Uri\split($this->path);
         list(, $newName) = Uri\split($name);
 
-        $newPath = $parentPath.'/'.$newName;
+        $newPath = $parentPath . '/' . $newName;
         rename($this->path, $newPath);
 
         $this->path = $newPath;

@@ -1,8 +1,9 @@
 <?php
-/* Copyright (C) 2010-2011	Regis Houssin <regis.houssin@inodbox.com>
+/* Copyright (C) 2010-2011  Regis Houssin <regis.houssin@inodbox.com>
  * Copyright (C) 2013		Juanjo Menent <jmenent@2byte.es>
  * Copyright (C) 2014       Marcos García <marcosgdf@gmail.com>
  * Copyright (C) 2017       Charlene Benke <cf.benke@patas-monkey.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,37 +33,37 @@ $langs->load("donations");
 $total = 0;
 $ilink = 0;
 foreach ($linkedObjectBlock as $key => $objectlink) {
-	$ilink++;
+    $ilink++;
 
-	$trclass = 'oddeven';
-	if ($ilink == count($linkedObjectBlock) && empty($noMoreLinkedObjectBlockAfter) && count($linkedObjectBlock) <= 1) {
-		$trclass .= ' liste_sub_total';
-	}
-	print '<tr class="'.$trclass.'">';
-	print '<td>'.$langs->trans("Donation").'</td>';
-	print '<td>'.$objectlink->getNomUrl(1).'</td>';
-	print '<td class="center">'.$objectlink->ref_client.'</td>';
-	print '<td class="center">'.dol_print_date($objectlink->date, 'day').'</td>';
-	print '<td class="right">';
-	$total = $total + $objectlink->total_ht;
-	echo price($objectlink->total_ht);
+    $trclass = 'oddeven';
+    if ($ilink == count($linkedObjectBlock) && empty($noMoreLinkedObjectBlockAfter) && count($linkedObjectBlock) <= 1) {
+        $trclass .= ' liste_sub_total';
+    }
+    print '<tr class="' . $trclass . '">';
+    print '<td>' . $langs->trans("Donation") . '</td>';
+    print '<td>' . $objectlink->getNomUrl(1) . '</td>';
+    print '<td class="center">' . $objectlink->ref_client . '</td>';
+    print '<td class="center">' . dol_print_date($objectlink->date, 'day') . '</td>';
+    print '<td class="right">';
+    $total = $total + $objectlink->total_ht;
+    echo price($objectlink->total_ht);
 }
 print '</td>';
-print '<td class="right">'.$objectlink->getLibStatut(3).'</td>';
+print '<td class="right">' . $objectlink->getLibStatut(3) . '</td>';
 print '</tr>';
 
 if (count($linkedObjectBlock) > 1) {
-	?>
-	<tr class="liste_total <?php echo(empty($noMoreLinkedObjectBlockAfter) ? 'liste_sub_total' : ''); ?>">
-		<td><?php echo $langs->trans("Total"); ?></td>
-		<td></td>
-		<td class="center"></td>
-		<td class="center"></td>
-		<td class="right"><?php echo price($total); ?></td>
-		<td class="right"></td>
-		<td class="right"></td>
-	</tr>
-	<?php
+    ?>
+    <tr class="liste_total <?php echo(empty($noMoreLinkedObjectBlockAfter) ? 'liste_sub_total' : ''); ?>">
+        <td><?php echo $langs->trans("Total"); ?></td>
+        <td></td>
+        <td class="center"></td>
+        <td class="center"></td>
+        <td class="right"><?php echo price($total); ?></td>
+        <td class="right"></td>
+        <td class="right"></td>
+    </tr>
+    <?php
 }
 
 print "<!-- END PHP TEMPLATE -->\n";

@@ -111,7 +111,7 @@ class Swift_Transport_SendmailTransport extends Swift_Transport_AbstractSmtpTran
             }
 
             if (false === strpos($command, ' -f')) {
-                $command .= ' -f'.escapeshellarg($this->getReversePath($message) ?? '');
+                $command .= ' -f' . escapeshellarg($this->getReversePath($message) ?? '');
             }
 
             $buffer->initialize(array_merge($this->params, ['command' => $command]));
@@ -142,7 +142,7 @@ class Swift_Transport_SendmailTransport extends Swift_Transport_AbstractSmtpTran
             $count = parent::send($message, $failedRecipients);
         } else {
             $this->throwException(new Swift_TransportException(
-                'Unsupported sendmail command flags ['.$command.']. '.
+                'Unsupported sendmail command flags [' . $command . ']. ' .
                 'Must be one of "-bs" or "-t" but can include additional flags.'
                 ));
         }

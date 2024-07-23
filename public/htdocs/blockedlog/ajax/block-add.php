@@ -1,6 +1,8 @@
 <?php
+
 /* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2017 ATM Consulting       <contact@atm-consulting.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,30 +24,29 @@
  *      \brief      block-add
  */
 
-
 // This script is called with a POST method.
 // Directory to scan (full path) is inside POST['dir'].
 
 if (!defined('NOTOKENRENEWAL')) {
-	define('NOTOKENRENEWAL', 1); // Disables token renewal
+    define('NOTOKENRENEWAL', 1); // Disables token renewal
 }
 if (!defined('NOREQUIREMENU')) {
-	define('NOREQUIREMENU', '1');
+    define('NOREQUIREMENU', '1');
 }
 if (!defined('NOREQUIREHTML')) {
-	define('NOREQUIREHTML', '1');
+    define('NOREQUIREHTML', '1');
 }
 
-$res = require '../../main.inc.php';
+$res = require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 $id = GETPOSTINT('id');
 $element = GETPOST('element', 'alpha');
 $action = GETPOST('action', 'aZ09');
 
 if ($element === 'facture') {
-	$result = restrictedArea($user, 'facture', $id, '', '', 'fk_soc', 'rowid', 0);
+    $result = restrictedArea($user, 'facture', $id, '', '', 'fk_soc', 'rowid', 0);
 } else {
-	accessforbidden('Bad value for element');
+    accessforbidden('Bad value for element');
 }
 
 
@@ -56,18 +57,18 @@ if ($element === 'facture') {
 top_httphead();
 
 if (empty($action)) {
-	print 'No action logged. Empty action code.';
-	exit;
+    print 'No action logged. Empty action code.';
+    exit;
 }
 
 if ($element === 'facture') {
-	require_once DOL_DOCUMENT_ROOT.'/blockedlog/class/blockedlog.class.php';
-	require_once DOL_DOCUMENT_ROOT.'/compta/facture/class/facture.class.php';
+    require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/blockedlog.class.php';
+    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
-	$facture = new Facture($db);
-	if ($facture->fetch($id) > 0) {
-		$facture->call_trigger($action, $user);
-	}
+    $facture = new Facture($db);
+    if ($facture->fetch($id) > 0) {
+        $facture->call_trigger($action, $user);
+    }
 
-	print 'Object '.$element.' logged with action code = '.$action;
+    print 'Object ' . $element . ' logged with action code = ' . $action;
 }

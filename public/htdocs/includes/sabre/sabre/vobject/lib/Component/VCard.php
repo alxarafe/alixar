@@ -280,7 +280,7 @@ class VCard extends VObject\Document
                 if (isset($this->N)) {
                     $value = explode(';', (string) $this->N);
                     if (isset($value[1]) && $value[1]) {
-                        $this->FN = $value[1].' '.$value[0];
+                        $this->FN = $value[1] . ' ' . $value[0];
                     } else {
                         $this->FN = $value[0];
                     }
@@ -439,8 +439,8 @@ class VCard extends VObject\Document
     {
         return [
             'VERSION' => '4.0',
-            'PRODID' => '-//Sabre//Sabre VObject '.VObject\Version::VERSION.'//EN',
-            'UID' => 'sabre-vobject-'.VObject\UUIDUtil::getUUID(),
+            'PRODID' => '-//Sabre//Sabre VObject ' . VObject\Version::VERSION . '//EN',
+            'UID' => 'sabre-vobject-' . VObject\UUIDUtil::getUUID(),
         ];
     }
 

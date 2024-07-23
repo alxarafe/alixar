@@ -1,6 +1,6 @@
 <?php
-namespace Luracast\Restler\Format;
 
+namespace Luracast\Restler\Format;
 
 use Luracast\Restler\RestException;
 
@@ -52,5 +52,4 @@ abstract class DependentFormat extends Format
     {
         $this->checkDependency();
     }
-
 } 

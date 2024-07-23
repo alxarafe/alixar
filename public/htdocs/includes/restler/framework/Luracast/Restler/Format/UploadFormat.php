@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\Format;
 
 use Luracast\Restler\RestException;
@@ -64,7 +65,7 @@ class UploadFormat extends Format
      */
     public static $suppressExceptionsAsError = false;
 
-    protected static function checkFile(& $file, $doMimeCheck = false, $doSizeCheck = false)
+    protected static function checkFile(&$file, $doMimeCheck = false, $doSizeCheck = false)
     {
         try {
             if ($file['error']) {
@@ -73,7 +74,7 @@ class UploadFormat extends Format
                 throw new RestException($file['error'] > 5 ? 500 : 413, static::$errors[$file['error']]);
             }
             $typeElements = explode('/', $file['type']);
-            $genericType = $typeElements[0].'/*';
+            $genericType = $typeElements[0] . '/*';
             if (
                 $doMimeCheck
                 && !(
@@ -143,5 +144,4 @@ class UploadFormat extends Format
     {
         return false;
     }
-
 }

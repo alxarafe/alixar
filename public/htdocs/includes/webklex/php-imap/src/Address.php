@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     Address.php
 * Category: -
@@ -17,8 +18,8 @@ namespace Webklex\PHPIMAP;
  *
  * @package Webklex\PHPIMAP
  */
-class Address {
-
+class Address
+{
     /**
      * Address attributes
      * @var string $personal
@@ -37,12 +38,18 @@ class Address {
      * Address constructor.
      * @param object   $object
      */
-    public function __construct($object) {
-        if (property_exists($object, "personal")){ $this->personal = $object->personal; }
-        if (property_exists($object, "mailbox")){ $this->mailbox = $object->mailbox; }
-        if (property_exists($object, "host")){ $this->host = $object->host; }
-        if (property_exists($object, "mail")){ $this->mail = $object->mail; }
-        if (property_exists($object, "full")){ $this->full = $object->full; }
+    public function __construct($object)
+    {
+        if (property_exists($object, "personal")){ $this->personal = $object->personal; 
+}
+        if (property_exists($object, "mailbox")){ $this->mailbox = $object->mailbox; 
+}
+        if (property_exists($object, "host")){ $this->host = $object->host; 
+}
+        if (property_exists($object, "mail")){ $this->mail = $object->mail; 
+}
+        if (property_exists($object, "full")){ $this->full = $object->full; 
+}
     }
 
 
@@ -51,7 +58,8 @@ class Address {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->full ? $this->full : "";
     }
 
@@ -60,7 +68,8 @@ class Address {
      *
      * @return array
      */
-    public function __serialize(){
+    public function __serialize()
+    {
         return [
             "personal" => $this->personal,
             "mailbox" => $this->mailbox,
@@ -75,7 +84,8 @@ class Address {
      *
      * @return array
      */
-    public function toArray(){
+    public function toArray()
+    {
         return $this->__serialize();
     }
 
@@ -84,7 +94,8 @@ class Address {
      *
      * @return string
      */
-    public function toString(){
+    public function toString()
+    {
         return $this->__toString();
     }
 }

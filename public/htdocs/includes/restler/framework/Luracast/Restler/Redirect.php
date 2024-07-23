@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler;
 
 use Luracast\Restler\Format\JsonFormat;

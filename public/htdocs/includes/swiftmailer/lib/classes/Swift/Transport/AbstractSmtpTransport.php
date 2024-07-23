@@ -72,9 +72,9 @@ abstract class Swift_Transport_AbstractSmtpTransport implements Swift_Transport
     {
         if ('[' !== substr($domain, 0, 1)) {
             if (filter_var($domain, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                $domain = '['.$domain.']';
+                $domain = '[' . $domain . ']';
             } elseif (filter_var($domain, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-                $domain = '[IPv6:'.$domain.']';
+                $domain = '[IPv6:' . $domain . ']';
             }
         }
 
@@ -444,19 +444,22 @@ abstract class Swift_Transport_AbstractSmtpTransport implements Swift_Transport
     protected function assertResponseCode($response, $wanted)
     {
         if (!$response) {
-            $this->throwException(new Swift_TransportException('Expected response code '.implode('/', $wanted).' but got an empty response'));
+            $this->throwException(new Swift_TransportException('Expected response code ' . implode('/', $wanted) . ' but got an empty response'));
         }
 
         list($code) = sscanf($response, '%3d');
         $valid = (empty($wanted) || \in_array($code, $wanted));
 
-        if ($evt = $this->eventDispatcher->createResponseEvent($this, $response,
-            $valid)) {
+        if (
+            $evt = $this->eventDispatcher->createResponseEvent(
+            $this, $response,
+            $valid)
+        ) {
             $this->eventDispatcher->dispatchEvent($evt, 'responseReceived');
         }
 
         if (!$valid) {
-            $this->throwException(new Swift_TransportException('Expected response code '.implode('/', $wanted).' but got code "'.$code.'", with message "'.$response.'"', $code));
+            $this->throwException(new Swift_TransportException('Expected response code ' . implode('/', $wanted) . ' but got code "' . $code . '", with message "' . $response . '"', $code));
         }
     }
 
@@ -514,7 +517,8 @@ abstract class Swift_Transport_AbstractSmtpTransport implements Swift_Transport
             return 0;
         }
 
-        return $this->doMailTransaction($message, $reversePath, array_keys($to),
+        return $this->doMailTransaction(
+            $message, $reversePath, array_keys($to),
             $failedRecipients);
     }
 
@@ -531,11 +535,11 @@ abstract class Swift_Transport_AbstractSmtpTransport implements Swift_Transport
 
     public function __sleep()
     {
-        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
+        throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);
     }
 
     public function __wakeup()
     {
-        throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
+        throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
     }
 }

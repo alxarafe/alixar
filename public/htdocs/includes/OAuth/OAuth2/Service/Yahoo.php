@@ -8,7 +8,6 @@ use OAuth\Common\Http\Uri\Uri;
 
 class Yahoo extends AbstractService
 {
-
     /**
     * {@inheritdoc}
     */
@@ -74,5 +73,4 @@ class Yahoo extends AbstractService
         $encodedCredentials = base64_encode($this->credentials->getConsumerId() . ':' . $this->credentials->getConsumerSecret());
         return array('Authorization' => 'Basic ' . $encodedCredentials);
     }
-
 }

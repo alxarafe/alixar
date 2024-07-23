@@ -115,7 +115,7 @@ class DateAndOrTime extends Property
         $now = new DateTime();
 
         $tzFormat = 0 === $now->getTimezone()->getOffset($now) ? '\\Z' : 'O';
-        $nowParts = DateTimeParser::parseVCardDateTime($now->format('Ymd\\This'.$tzFormat));
+        $nowParts = DateTimeParser::parseVCardDateTime($now->format('Ymd\\This' . $tzFormat));
 
         $dateParts = DateTimeParser::parseVCardDateTime($this->getValue());
 
@@ -252,16 +252,18 @@ class DateAndOrTime extends Property
         // value-date = element date {
         //     xsd:string { pattern = "\d{8}|\d{4}-\d\d|--\d\d(\d\d)?|---\d\d" }
         //   }
-        if (($d('year') || $d('month') || $d('date'))
-            && (!$d('hour') && !$d('minute') && !$d('second') && !$d('timezone'))) {
+        if (
+            ($d('year') || $d('month') || $d('date'))
+            && (!$d('hour') && !$d('minute') && !$d('second') && !$d('timezone'))
+        ) {
             if ($d('year') && $d('month') && $d('date')) {
-                $value .= $r('year').$r('month').$r('date');
+                $value .= $r('year') . $r('month') . $r('date');
             } elseif ($d('year') && $d('month') && !$d('date')) {
-                $value .= $r('year').'-'.$r('month');
+                $value .= $r('year') . '-' . $r('month');
             } elseif (!$d('year') && $d('month')) {
-                $value .= '--'.$r('month').$r('date');
+                $value .= '--' . $r('month') . $r('date');
             } elseif (!$d('year') && !$d('month') && $d('date')) {
-                $value .= '---'.$r('date');
+                $value .= '---' . $r('date');
             }
 
             // # 4.3.2
@@ -269,14 +271,16 @@ class DateAndOrTime extends Property
         //     xsd:string { pattern = "(\d\d(\d\d(\d\d)?)?|-\d\d(\d\d?)|--\d\d)"
         //                          ~ "(Z|[+\-]\d\d(\d\d)?)?" }
         //   }
-        } elseif ((!$d('year') && !$d('month') && !$d('date'))
-                  && ($d('hour') || $d('minute') || $d('second'))) {
+        } elseif (
+            (!$d('year') && !$d('month') && !$d('date'))
+                  && ($d('hour') || $d('minute') || $d('second'))
+        ) {
             if ($d('hour')) {
-                $value .= $r('hour').$r('minute').$r('second');
+                $value .= $r('hour') . $r('minute') . $r('second');
             } elseif ($d('minute')) {
-                $value .= '-'.$r('minute').$r('second');
+                $value .= '-' . $r('minute') . $r('second');
             } elseif ($d('second')) {
-                $value .= '--'.$r('second');
+                $value .= '--' . $r('second');
             }
 
             $value .= $r('timezone');
@@ -288,14 +292,14 @@ class DateAndOrTime extends Property
         //   }
         } elseif ($d('date') && $d('hour')) {
             if ($d('year') && $d('month') && $d('date')) {
-                $value .= $r('year').$r('month').$r('date');
+                $value .= $r('year') . $r('month') . $r('date');
             } elseif (!$d('year') && $d('month') && $d('date')) {
-                $value .= '--'.$r('month').$r('date');
+                $value .= '--' . $r('month') . $r('date');
             } elseif (!$d('year') && !$d('month') && $d('date')) {
-                $value .= '---'.$r('date');
+                $value .= '---' . $r('date');
             }
 
-            $value .= 'T'.$r('hour').$r('minute').$r('second').
+            $value .= 'T' . $r('hour') . $r('minute') . $r('second') .
                       $r('timezone');
         }
 
@@ -357,7 +361,7 @@ class DateAndOrTime extends Property
         } catch (InvalidDataException $e) {
             $messages[] = [
                 'level' => 3,
-                'message' => 'The supplied value ('.$value.') is not a correct DATE-AND-OR-TIME property',
+                'message' => 'The supplied value (' . $value . ') is not a correct DATE-AND-OR-TIME property',
                 'node' => $this,
             ];
         }

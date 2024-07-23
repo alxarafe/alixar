@@ -1,7 +1,9 @@
 <?php
+
 /* Copyright (C) 2004-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2010  Laurent Destailleur     <eldy@users.sourceforge.net>
  * Copyright (C) 2016       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +23,7 @@
  *       \file       htdocs/install/index.php
  *       \ingroup    install
  *       \brief      Show page to select language. This is done only for a first installation.
- *					 For a reinstall this page redirect to page check.php
+ *                   For a reinstall this page redirect to page check.php
  */
 
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
@@ -35,8 +37,8 @@ $err = 0;
 
 // If the config file exists and is filled, we're not on first install so we skip the language selection page
 if (file_exists($conffile) && isset($dolibarr_main_url_root)) {
-	header("Location: check.php?testget=ok");
-	exit;
+    header("Location: check.php?testget=ok");
+    exit;
 }
 
 $langs->load("admin");
@@ -52,8 +54,8 @@ pHeader("", "check"); // Next step = check
 
 
 if (!is_readable($conffile)) {
-	print '<br>';
-	print '<span class="opacitymedium">'.$langs->trans("NoReadableConfFileSoStartInstall").'</span>';
+    print '<br>';
+    print '<span class="opacitymedium">' . $langs->trans("NoReadableConfFileSoStartInstall") . '</span>';
 }
 
 
@@ -62,7 +64,7 @@ print '<br><br><div class="center">';
 print '<table>';
 
 print '<tr>';
-print '<td>'.$langs->trans("DefaultLanguage").' : </td><td>';
+print '<td>' . $langs->trans("DefaultLanguage") . ' : </td><td>';
 print $formadmin->select_language('auto', 'selectlang', 1, 0, 0, 1);
 print '</td>';
 print '</tr>';
@@ -75,5 +77,5 @@ print '</table></div>';
 
 // If there's no error, we display the next step button
 if ($err == 0) {
-	pFooter(0);
+    pFooter(0);
 }

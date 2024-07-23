@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\Data;
 
 /**
@@ -12,8 +13,8 @@ namespace Luracast\Restler\Data;
  * @link       http://luracast.com/products/restler/
  *
  */
-interface iValidate {
-
+interface iValidate
+{
     /**
      * method used for validation.
      *
@@ -29,4 +30,3 @@ interface iValidate {
      */
     public static function validate($input, ValidationInfo $info);
 }
-

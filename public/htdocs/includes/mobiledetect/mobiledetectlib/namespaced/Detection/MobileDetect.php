@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Little piece of PHP to make Mobile_Detect auto-loadable in PSR-0 compatible PHP autoloaders like
  * the Symfony Universal ClassLoader by Fabien Potencier. Since PSR-0 handles an underscore in
@@ -17,6 +18,9 @@
  */
 
 namespace Detection;
+
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Mobile_Detect.php';
 
-class MobileDetect extends \Mobile_Detect {}
+class MobileDetect extends \Mobile_Detect
+{
+}

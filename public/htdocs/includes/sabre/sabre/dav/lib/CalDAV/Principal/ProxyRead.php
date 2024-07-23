@@ -104,7 +104,7 @@ class ProxyRead implements IProxyRead
      */
     public function getPrincipalUrl()
     {
-        return $this->principalInfo['uri'].'/'.$this->getName();
+        return $this->principalInfo['uri'] . '/' . $this->getName();
     }
 
     /**

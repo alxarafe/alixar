@@ -118,7 +118,7 @@ class Cli
             if (isset($options['q'])) {
                 $this->quiet = true;
             }
-            $this->log($this->colorize('green', 'sabre/vobject ').$this->colorize('yellow', Version::VERSION));
+            $this->log($this->colorize('green', 'sabre/vobject ') . $this->colorize('yellow', Version::VERSION));
 
             foreach ($options as $name => $value) {
                 switch ($name) {
@@ -151,7 +151,7 @@ class Cli
                                 break;
 
                             default:
-                                throw new InvalidArgumentException('Unknown format: '.$value);
+                                throw new InvalidArgumentException('Unknown format: ' . $value);
                         }
                         break;
                     case 'pretty':
@@ -183,11 +183,11 @@ class Cli
                                 break;
 
                             default:
-                                throw new InvalidArgumentException('Unknown format: '.$value);
+                                throw new InvalidArgumentException('Unknown format: ' . $value);
                         }
                         break;
                     default:
-                        throw new InvalidArgumentException('Unknown option: '.$name);
+                        throw new InvalidArgumentException('Unknown option: ' . $name);
                 }
             }
 
@@ -206,11 +206,11 @@ class Cli
             }
 
             if (!in_array($positional[0], ['validate', 'repair', 'convert', 'color'])) {
-                throw new InvalidArgumentException('Unknown command: '.$positional[0]);
+                throw new InvalidArgumentException('Unknown command: ' . $positional[0]);
             }
         } catch (InvalidArgumentException $e) {
             $this->showHelp();
-            $this->log('Error: '.$e->getMessage(), 'red');
+            $this->log('Error: ' . $e->getMessage(), 'red');
 
             return 1;
         }
@@ -251,7 +251,7 @@ class Cli
         } catch (EofException $e) {
             // end of file
         } catch (\Exception $e) {
-            $this->log('Error: '.$e->getMessage(), 'red');
+            $this->log('Error: ' . $e->getMessage(), 'red');
 
             return 2;
         }
@@ -268,23 +268,23 @@ class Cli
         $this->log('  vobject [options] command [arguments]');
         $this->log('');
         $this->log('Options:', 'yellow');
-        $this->log($this->colorize('green', '  -q            ')."Don't output anything.");
-        $this->log($this->colorize('green', '  -help -h      ').'Display this help message.');
-        $this->log($this->colorize('green', '  --format      ').'Convert to a specific format. Must be one of: vcard, vcard21,');
-        $this->log($this->colorize('green', '  --forgiving   ').'Makes the parser less strict.');
+        $this->log($this->colorize('green', '  -q            ') . "Don't output anything.");
+        $this->log($this->colorize('green', '  -help -h      ') . 'Display this help message.');
+        $this->log($this->colorize('green', '  --format      ') . 'Convert to a specific format. Must be one of: vcard, vcard21,');
+        $this->log($this->colorize('green', '  --forgiving   ') . 'Makes the parser less strict.');
         $this->log('                vcard30, vcard40, icalendar20, jcal, jcard, json, mimedir.');
-        $this->log($this->colorize('green', '  --inputformat ').'If the input format cannot be guessed from the extension, it');
+        $this->log($this->colorize('green', '  --inputformat ') . 'If the input format cannot be guessed from the extension, it');
         $this->log('                must be specified here.');
         // Only PHP 5.4 and up
         if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
-            $this->log($this->colorize('green', '  --pretty      ').'json pretty-print.');
+            $this->log($this->colorize('green', '  --pretty      ') . 'json pretty-print.');
         }
         $this->log('');
         $this->log('Commands:', 'yellow');
-        $this->log($this->colorize('green', '  validate').' source_file              Validates a file for correctness.');
-        $this->log($this->colorize('green', '  repair').' source_file [output_file]  Repairs a file.');
-        $this->log($this->colorize('green', '  convert').' source_file [output_file] Converts a file.');
-        $this->log($this->colorize('green', '  color').' source_file                 Colorize a file, useful for debugging.');
+        $this->log($this->colorize('green', '  validate') . ' source_file              Validates a file for correctness.');
+        $this->log($this->colorize('green', '  repair') . ' source_file [output_file]  Repairs a file.');
+        $this->log($this->colorize('green', '  convert') . ' source_file [output_file] Converts a file.');
+        $this->log($this->colorize('green', '  color') . ' source_file                 Colorize a file, useful for debugging.');
         $this->log(
         <<<HELP
 
@@ -315,10 +315,10 @@ HELP
 
         switch ($vObj->name) {
             case 'VCALENDAR':
-                $this->log('iCalendar: '.(string) $vObj->VERSION);
+                $this->log('iCalendar: ' . (string) $vObj->VERSION);
                 break;
             case 'VCARD':
-                $this->log('vCard: '.(string) $vObj->VERSION);
+                $this->log('vCard: ' . (string) $vObj->VERSION);
                 break;
         }
 
@@ -335,9 +335,9 @@ HELP
             foreach ($warnings as $warn) {
                 $extra = '';
                 if ($warn['node'] instanceof Property) {
-                    $extra = ' (property: "'.$warn['node']->name.'")';
+                    $extra = ' (property: "' . $warn['node']->name . '")';
                 }
-                $this->log('  ['.$levels[$warn['level']].'] '.$warn['message'].$extra);
+                $this->log('  [' . $levels[$warn['level']] . '] ' . $warn['message'] . $extra);
             }
         }
 
@@ -355,10 +355,10 @@ HELP
 
         switch ($vObj->name) {
             case 'VCALENDAR':
-                $this->log('iCalendar: '.(string) $vObj->VERSION);
+                $this->log('iCalendar: ' . (string) $vObj->VERSION);
                 break;
             case 'VCARD':
-                $this->log('vCard: '.(string) $vObj->VERSION);
+                $this->log('vCard: ' . (string) $vObj->VERSION);
                 break;
         }
 
@@ -375,9 +375,9 @@ HELP
             foreach ($warnings as $warn) {
                 $extra = '';
                 if ($warn['node'] instanceof Property) {
-                    $extra = ' (property: "'.$warn['node']->name.'")';
+                    $extra = ' (property: "' . $warn['node']->name . '")';
                 }
-                $this->log('  ['.$levels[$warn['level']].'] '.$warn['message'].$extra);
+                $this->log('  [' . $levels[$warn['level']] . '] ' . $warn['message'] . $extra);
             }
         }
         fwrite($this->stdout, $vObj->serialize());
@@ -431,7 +431,7 @@ HELP
         }
 
         if ($forceInput && $vObj->name !== $forceInput) {
-            throw new \Exception('You cannot convert a '.strtolower($vObj->name).' to '.$this->format);
+            throw new \Exception('You cannot convert a ' . strtolower($vObj->name) . ' to ' . $this->format);
         }
         if ($convertVersion) {
             $vObj = $vObj->convert($convertVersion);
@@ -478,7 +478,7 @@ HELP
             'purple' => '0;35',
         ];
 
-        return "\033[".$colors[$color].'m'.$str."\033[".$colors[$resetTo].'m';
+        return "\033[" . $colors[$color] . 'm' . $str . "\033[" . $colors[$resetTo] . 'm';
     }
 
     /**
@@ -496,7 +496,7 @@ HELP
     {
         $this->cWrite('cyan', 'BEGIN');
         $this->cWrite('red', ':');
-        $this->cWrite('yellow', $vObj->name."\n");
+        $this->cWrite('yellow', $vObj->name . "\n");
 
         /**
          * Gives a component a 'score' for sorting purposes.
@@ -566,7 +566,7 @@ HELP
 
         $this->cWrite('cyan', 'END');
         $this->cWrite('red', ':');
-        $this->cWrite('yellow', $vObj->name."\n");
+        $this->cWrite('yellow', $vObj->name . "\n");
     }
 
     /**
@@ -588,7 +588,7 @@ HELP
         $this->cWrite('red', ':');
 
         if ($property instanceof Property\Binary) {
-            $this->cWrite('default', 'embedded binary stripped. ('.strlen($property->getValue()).' bytes)');
+            $this->cWrite('default', 'embedded binary stripped. (' . strlen($property->getValue()) . ' bytes)');
         } else {
             $parts = $property->getParts();
             $first1 = true;
@@ -699,7 +699,7 @@ HELP
             if ('default' !== $color) {
                 $msg = $this->colorize($color, $msg);
             }
-            fwrite($this->stderr, $msg."\n");
+            fwrite($this->stderr, $msg . "\n");
         }
     }
 }

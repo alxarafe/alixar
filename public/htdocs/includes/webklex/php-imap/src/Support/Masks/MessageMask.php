@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File: MessageMask.php
 * Category: Mask
@@ -20,8 +21,8 @@ use Webklex\PHPIMAP\Message;
  *
  * @package Webklex\PHPIMAP\Support\Masks
  */
-class MessageMask extends Mask {
-
+class MessageMask extends Mask
+{
     /** @var Message $parent */
     protected $parent;
 
@@ -30,7 +31,8 @@ class MessageMask extends Mask {
      *
      * @return null
      */
-    public function getHtmlBody(){
+    public function getHtmlBody()
+    {
         $bodies = $this->parent->getBodies();
         if (!isset($bodies['html'])) {
             return null;
@@ -48,13 +50,14 @@ class MessageMask extends Mask {
      *
      * @return string|null
      */
-    public function getCustomHTMLBody($callback = false) {
+    public function getCustomHTMLBody($callback = false)
+    {
         $body = $this->getHtmlBody();
         if($body === null) return null;
 
         if ($callback !== false) {
             $aAttachment = $this->parent->getAttachments();
-            $aAttachment->each(function($oAttachment) use(&$body, $callback) {
+            $aAttachment->each(function ($oAttachment) use (&$body, $callback) {
                 /** @var Attachment $oAttachment */
                 if(is_callable($callback)) {
                     $body = $callback($body, $oAttachment);
@@ -73,11 +76,12 @@ class MessageMask extends Mask {
      *
      * @return string|null
      */
-    public function getHTMLBodyWithEmbeddedBase64Images() {
-        return $this->getCustomHTMLBody(function($body, $oAttachment){
+    public function getHTMLBodyWithEmbeddedBase64Images()
+    {
+        return $this->getCustomHTMLBody(function ($body, $oAttachment) {
             /** @var Attachment $oAttachment */
             if ($oAttachment->id) {
-                $body = str_replace('cid:'.$oAttachment->id, 'data:'.$oAttachment->getContentType().';base64, '.base64_encode($oAttachment->getContent()), $body);
+                $body = str_replace('cid:' . $oAttachment->id, 'data:' . $oAttachment->getContentType() . ';base64, ' . base64_encode($oAttachment->getContent()), $body);
             }
 
             return $body;

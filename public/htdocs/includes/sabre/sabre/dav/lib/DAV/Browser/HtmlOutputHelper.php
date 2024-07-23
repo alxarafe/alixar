@@ -93,7 +93,7 @@ class HtmlOutputHelper
     {
         $url = $this->h($this->fullUrl($url));
 
-        return '<a href="'.$url.'">'.($label ? $this->h($label) : $url).'</a>';
+        return '<a href="' . $url . '">' . ($label ? $this->h($label) : $url) . '</a>';
     }
 
     /**
@@ -108,11 +108,11 @@ class HtmlOutputHelper
     {
         list($ns, $localName) = XmlService::parseClarkNotation($element);
         if (isset($this->namespaceMap[$ns])) {
-            $propName = $this->namespaceMap[$ns].':'.$localName;
+            $propName = $this->namespaceMap[$ns] . ':' . $localName;
         } else {
             $propName = $element;
         }
 
-        return '<span title="'.$this->h($element).'">'.$this->h($propName).'</span>';
+        return '<span title="' . $this->h($element) . '">' . $this->h($propName) . '</span>';
     }
 }

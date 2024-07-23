@@ -164,7 +164,8 @@ class Swift_CharacterStream_NgCharacterStream implements Swift_CharacterStream
         switch ($this->mapType) {
             case Swift_CharacterReader::MAP_TYPE_FIXED_LEN:
                 $len = $length * $this->map;
-                $ret = substr($this->datas,
+                $ret = substr(
+                    $this->datas,
                         $this->currentPos * $this->map,
                         $len);
                 $this->currentPos += $length;
@@ -192,7 +193,7 @@ class Swift_CharacterStream_NgCharacterStream implements Swift_CharacterStream
                 $to = $start;
                 for (; $this->currentPos < $end; ++$this->currentPos) {
                     if (isset($this->map['i'][$this->currentPos])) {
-                        $ret .= substr($this->datas, $start, $to - $start).'?';
+                        $ret .= substr($this->datas, $start, $to - $start) . '?';
                         $start = $this->map['p'][$this->currentPos];
                     } else {
                         $to = $this->map['p'][$this->currentPos];

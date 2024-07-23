@@ -168,7 +168,7 @@ class SimplePDO extends AbstractBackend
             $result[] = [
                 'id' => $row['id'],
                 'uri' => $row['uri'],
-                'etag' => '"'.md5($row['calendardata']).'"',
+                'etag' => '"' . md5($row['calendardata']) . '"',
                 'calendarid' => $calendarId,
                 'size' => strlen($row['calendardata']),
                 'calendardata' => $row['calendardata'],
@@ -208,7 +208,7 @@ class SimplePDO extends AbstractBackend
         return [
             'id' => $row['id'],
             'uri' => $row['uri'],
-            'etag' => '"'.md5($row['calendardata']).'"',
+            'etag' => '"' . md5($row['calendardata']) . '"',
             'calendarid' => $calendarId,
             'size' => strlen($row['calendardata']),
             'calendardata' => $row['calendardata'],
@@ -243,7 +243,7 @@ class SimplePDO extends AbstractBackend
             $calendarData,
         ]);
 
-        return '"'.md5($calendarData).'"';
+        return '"' . md5($calendarData) . '"';
     }
 
     /**
@@ -270,7 +270,7 @@ class SimplePDO extends AbstractBackend
         $stmt = $this->pdo->prepare('UPDATE simple_calendarobjects SET calendardata = ? WHERE calendarid = ? AND uri = ?');
         $stmt->execute([$calendarData, $calendarId, $objectUri]);
 
-        return '"'.md5($calendarData).'"';
+        return '"' . md5($calendarData) . '"';
     }
 
     /**

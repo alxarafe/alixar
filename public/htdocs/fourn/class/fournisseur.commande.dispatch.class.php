@@ -1,9 +1,11 @@
 <?php
+
 /* Copyright (C) 2015 Laurent Destailleur <eldy@users.sourceforge.net>
  * Copyright (C) 2014 Juanjo Menent	      <jmenent@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024  Christophe Battarel	<christophe@altairis.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +29,7 @@
  */
 
 // Put here all includes required by your class file
-require_once DOL_DOCUMENT_ROOT."/reception/class/receptionlinebatch.class.php";
+require_once DOL_DOCUMENT_ROOT . "/reception/class/receptionlinebatch.class.php";
 
 
 /**
@@ -36,68 +38,68 @@ require_once DOL_DOCUMENT_ROOT."/reception/class/receptionlinebatch.class.php";
  */
 class CommandeFournisseurDispatch extends ReceptionLineBatch
 {
-	/**
-	 * @var string ID to identify managed object
-	 */
-	public $element = 'commandefournisseurdispatch';
-	/**
-	 * @var int ID
-	 */
-	public $fk_commande;
-	/**
-	 * @var int ID
-	 */
-	public $fk_commandefourndet;
+    /**
+     * @var string ID to identify managed object
+     */
+    public $element = 'commandefournisseurdispatch';
+    /**
+     * @var int ID
+     */
+    public $fk_commande;
+    /**
+     * @var int ID
+     */
+    public $fk_commandefourndet;
 
 
-	/**
-	 *  Create object into database
-	 *
-	 *  @param	User	$user        User that creates
-	 *  @param  int		$notrigger   0=launch triggers after, 1=disable triggers
-	 *  @return int      		   	 Return integer <0 if KO, Id of created object if OK
-	 */
-	public function create($user, $notrigger = 0)
-	{
-		if (empty($this->fk_element) && !empty($this->fk_commande)) {
-			$this->fk_element = $this->fk_commande;
-		}
-		if (empty($this->fk_elementdet) && !empty($this->fk_commandefourndet)) {
-			$this->fk_elementdet = $this->fk_commandefourndet;
-		}
+    /**
+     *  Create object into database
+     *
+     *  @param  User    $user        User that creates
+     *  @param  int     $notrigger   0=launch triggers after, 1=disable triggers
+     *  @return int                  Return integer <0 if KO, Id of created object if OK
+     */
+    public function create($user, $notrigger = 0)
+    {
+        if (empty($this->fk_element) && !empty($this->fk_commande)) {
+            $this->fk_element = $this->fk_commande;
+        }
+        if (empty($this->fk_elementdet) && !empty($this->fk_commandefourndet)) {
+            $this->fk_elementdet = $this->fk_commandefourndet;
+        }
 
-		return parent::create($user, $notrigger);
-	}
+        return parent::create($user, $notrigger);
+    }
 
-	/**
-	 *  Load object in memory from the database
-	 *
-	 *  @param	int		$id    	Id object
-	 *  @param	string	$ref	Ref
-	 *  @return int          	Return integer <0 if KO, >0 if OK
-	 */
-	public function fetch($id, $ref = '')
-	{
-		$ret = parent::fetch($id, $ref);
-		if ($ret > 0) {
-			$this->fk_commande = $this->fk_element;
-			$this->fk_commandefourndet = $this->fk_elementdet;
-		}
-		return $ret;
-	}
+    /**
+     *  Load object in memory from the database
+     *
+     *  @param  int     $id     Id object
+     *  @param  string  $ref    Ref
+     *  @return int             Return integer <0 if KO, >0 if OK
+     */
+    public function fetch($id, $ref = '')
+    {
+        $ret = parent::fetch($id, $ref);
+        if ($ret > 0) {
+            $this->fk_commande = $this->fk_element;
+            $this->fk_commandefourndet = $this->fk_elementdet;
+        }
+        return $ret;
+    }
 
-	/**
-	 *  Update object into database
-	 *
-	 *  @param	User	$user        User that modifies
-	 *  @param  int		$notrigger	 0=launch triggers after, 1=disable triggers
-	 *  @return int     		   	 Return integer <0 if KO, >0 if OK
-	 */
-	public function update($user, $notrigger = 0)
-	{
-		$this->fk_element = $this->fk_commande;
-		$this->fk_elementdet = $this->fk_commandefourndet;
+    /**
+     *  Update object into database
+     *
+     *  @param  User    $user        User that modifies
+     *  @param  int     $notrigger   0=launch triggers after, 1=disable triggers
+     *  @return int                  Return integer <0 if KO, >0 if OK
+     */
+    public function update($user, $notrigger = 0)
+    {
+        $this->fk_element = $this->fk_commande;
+        $this->fk_elementdet = $this->fk_commandefourndet;
 
-		return parent::update($user, $notrigger);
-	}
+        return parent::update($user, $notrigger);
+    }
 }

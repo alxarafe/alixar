@@ -99,8 +99,8 @@ class CalendarMultiGetReport implements XmlDeserializable
             switch ($elem['name']) {
                 case '{DAV:}prop':
                     $newProps['properties'] = array_keys($elem['value']);
-                    if (isset($elem['value']['{'.Plugin::NS_CALDAV.'}calendar-data'])) {
-                        $newProps += $elem['value']['{'.Plugin::NS_CALDAV.'}calendar-data'];
+                    if (isset($elem['value']['{' . Plugin::NS_CALDAV . '}calendar-data'])) {
+                        $newProps += $elem['value']['{' . Plugin::NS_CALDAV . '}calendar-data'];
                     }
                     break;
                 case '{DAV:}href':

@@ -1,4 +1,5 @@
 <?php
+
 namespace Mike42\Escpos\PrintConnectors;
 
 /**

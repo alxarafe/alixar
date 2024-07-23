@@ -112,12 +112,13 @@ class AWS extends AbstractAuth
         $amzHeaders = $this->getAmzHeaders();
 
         $signature = base64_encode(
-            $this->hmacsha1($secretKey,
-                $this->request->getMethod()."\n".
-                $contentMD5."\n".
-                $this->request->getHeader('Content-type')."\n".
-                $requestDate."\n".
-                $amzHeaders.
+            $this->hmacsha1(
+                $secretKey,
+                $this->request->getMethod() . "\n" .
+                $contentMD5 . "\n" .
+                $this->request->getHeader('Content-type') . "\n" .
+                $requestDate . "\n" .
+                $amzHeaders .
                 $this->request->getUrl()
             )
         );
@@ -184,14 +185,14 @@ class AWS extends AbstractAuth
         $headers = $this->request->getHeaders();
         foreach ($headers as $headerName => $headerValue) {
             if (0 === strpos(strtolower($headerName), 'x-amz-')) {
-                $amzHeaders[strtolower($headerName)] = str_replace(["\r\n"], [' '], $headerValue[0])."\n";
+                $amzHeaders[strtolower($headerName)] = str_replace(["\r\n"], [' '], $headerValue[0]) . "\n";
             }
         }
         ksort($amzHeaders);
 
         $headerStr = '';
         foreach ($amzHeaders as $h => $v) {
-            $headerStr .= $h.':'.$v;
+            $headerStr .= $h . ':' . $v;
         }
 
         return $headerStr;
@@ -213,7 +214,7 @@ class AWS extends AbstractAuth
         $key = str_pad($key, $blocksize, chr(0x00));
         $ipad = str_repeat(chr(0x36), $blocksize);
         $opad = str_repeat(chr(0x5c), $blocksize);
-        $hmac = pack('H*', sha1(($key ^ $opad).pack('H*', sha1(($key ^ $ipad).$message))));
+        $hmac = pack('H*', sha1(($key ^ $opad) . pack('H*', sha1(($key ^ $ipad) . $message))));
 
         return $hmac;
     }

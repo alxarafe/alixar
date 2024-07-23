@@ -2,6 +2,7 @@
 
 /**
  * Copyright (C) 2024       Rafael San José         <rsanjose@alxarafe.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,14 +32,28 @@ require_once $autoload_filename;
 
 define('BASE_URL', Functions::getUrl());
 
+// Define Dolibarr Constants
+define('DOL_DOCUMENT_ROOT', constant('BASE_PATH') . '/htdocs');
+define('DOL_URL_ROOT', constant('BASE_URL') . '/htdocs');
+
 $path = $_GET['url_route'] ?? '';
 $file = $_GET['url_filename'] ?? 'index';
+$api = $_GET['api_route'] ?? '';
 if (!empty($path)) {
     $path .= '/';
 }
 
+/**
+ * Dolibarr uses the $_SERVER['PHP_SELF'] variable in much of the code to know how it
+ * has been invoked. Now it doesn't work because the entry point is unique.
+ * Here we put a temporary patch while it is migrating.
+ */
+$_SERVER['PHP_SELF'] = DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $file . '.php';
+if (!empty($api)) {
+    $_SERVER['PHP_SELF'] = DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $file . '.php' . DIRECTORY_SEPARATOR . $api;
+}
+
 $filename = BASE_PATH . '/htdocs/' . $path . $file . '.php';
 
-define('DOL_DOCUMENT_ROOT', constant('BASE_PATH') . '/htdocs');
-
+// Loads Dolibarr codefile
 require_once $filename;

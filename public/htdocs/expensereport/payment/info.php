@@ -1,8 +1,10 @@
 <?php
+
 /* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2013      Marcos García        <marcosgdf@gmail.com>
  * Copyright (C) 2015       Alexandre Spangaro  <aspangaro@open-dsi.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,16 +21,16 @@
  */
 
 /**
- *		\file       htdocs/expensereport/payment/info.php
- *		\ingroup    Expense report
- *		\brief      Tab payment info
+ *      \file       htdocs/expensereport/payment/info.php
+ *      \ingroup    Expense report
+ *      \brief      Tab payment info
  */
 
 // Load Dolibarr environment
-require '../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/expensereport/class/paymentexpensereport.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/expensereport.lib.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/paymentexpensereport.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/expensereport.lib.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('bills', 'trips'));
@@ -60,7 +62,7 @@ $head = payment_expensereport_prepare_head($object);
 print dol_get_fiche_head($head, 'info', $langs->trans("ExpenseReportPayment"), -1, 'payment');
 
 
-//$linkback = '<a href="' . DOL_URL_ROOT . '/expensereport/payment/list.php">' . $langs->trans("BackToList") . '</a>';
+//$linkback = '<a href="' . constant('BASE_URL') . 'expensereport/payment/list.php">' . $langs->trans("BackToList") . '</a>';
 
 dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', '');
 

@@ -58,6 +58,6 @@ class CalAddress extends Text
             $everythingElse = strtolower($everythingElse);
         }
 
-        return $schema.':'.$everythingElse;
+        return $schema . ':' . $everythingElse;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of escpos-php: PHP receipt printer library for use with
  * ESC/POS-compatible thermal and impact printers.
@@ -27,7 +28,7 @@ class NativeEscposImage extends EscposImage
         $imgData = str_repeat("\0", $imgHeight * $imgWidth);
         for ($y = 0; $y < $imgHeight; $y++) {
             for ($x = 0; $x < $imgWidth; $x++) {
-                $imgData[$y * $imgWidth + $x] = $image -> getPixel($x, $y) == 0 ? 0: 1;
+                $imgData[$y * $imgWidth + $x] = $image -> getPixel($x, $y) == 0 ? 0 : 1;
             }
         }
         $this -> setImgWidth($imgWidth);

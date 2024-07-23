@@ -63,7 +63,7 @@ class Collection extends BaseCollection implements IACL
      */
     public function getChild($name)
     {
-        $path = $this->path.'/'.$name;
+        $path = $this->path . '/' . $name;
 
         if (!file_exists($path)) {
             throw new NotFound('File could not be located');

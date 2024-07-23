@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Mail_Mime class is used to create MIME E-mail messages
  *
@@ -56,7 +57,6 @@
  *            in the mime_mail.class by Tobias Ratschiller <tobias@dnet.it>
  *            and Sascha Schumann <sascha@schumann.cx>
  */
-
 
 /**
  * require PEAR
@@ -323,8 +323,9 @@ class Mail_mime
      * @return bool          True on success
      * @access public
      */
-    function addHTMLImage($file,
-        $c_type='application/octet-stream',
+    function addHTMLImage(
+        $file,
+        $c_type = 'application/octet-stream',
         $name = '',
         $isfile = true,
         $content_id = null
@@ -394,19 +395,20 @@ class Mail_mime
      * @return mixed              True on success or PEAR_Error object
      * @access public
      */
-    function addAttachment($file,
-        $c_type      = 'application/octet-stream',
-        $name        = '',
-        $isfile      = true,
-        $encoding    = 'base64',
+    function addAttachment(
+        $file,
+        $c_type = 'application/octet-stream',
+        $name = '',
+        $isfile = true,
+        $encoding = 'base64',
         $disposition = 'attachment',
-        $charset     = '',
-        $language    = '',
-        $location    = '',
-        $n_encoding  = null,
-        $f_encoding  = null,
+        $charset = '',
+        $language = '',
+        $location = '',
+        $n_encoding = null,
+        $f_encoding = null,
         $description = '',
-        $h_charset   = null,
+        $h_charset = null,
         $add_headers = array()
     ) {
         $bodyfile = null;
@@ -707,7 +709,10 @@ class Mail_mime
      * @return mixed The complete e-mail or PEAR error object
      * @access public
      */
-    function getMessage($separation = null, $params = null, $headers = null,
+    function getMessage(
+        $separation = null,
+        $params = null,
+        $headers = null,
         $overwrite = false
     ) {
         if ($separation === null) {
@@ -852,7 +857,7 @@ class Mail_mime
             }
             foreach ($this->_html_images as $i => $img) {
                 $cid = $this->_html_images[$i]['cid']; 
-                if (!preg_match('#'.preg_quote($domainID).'$#', $cid)) {
+                if (!preg_match('#' . preg_quote($domainID) . '$#', $cid)) {
                     $this->_html_images[$i]['cid'] = $cid . $domainID;
                 }
             }
@@ -867,7 +872,7 @@ class Mail_mime
                             preg_quote($value['name'], '#') . '\1\s*\)#';
 
                 $rep   = array();
-                $rep[] = '\1\2=\3cid:' . $value['cid'] .'\3';
+                $rep[] = '\1\2=\3cid:' . $value['cid'] . '\3';
                 $rep[] = 'url(\1cid:' . $value['cid'] . '\1)';
 
                 $this->_htmlbody = preg_replace($regex, $rep, $this->_htmlbody);
@@ -886,110 +891,110 @@ class Mail_mime
 
         switch (true) {
         case $text && !$attachments:
-            $message =& $this->_addTextPart($null, $this->_txtbody);
+                $message =& $this->_addTextPart($null, $this->_txtbody);
             break;
 
         case !$text && !$html && $attachments:
-            $message =& $this->_addMixedPart();
-            for ($i = 0; $i < count($this->_parts); $i++) {
-                $this->_addAttachmentPart($message, $this->_parts[$i]);
-            }
+                $message =& $this->_addMixedPart();
+                for ($i = 0; $i < count($this->_parts); $i++) {
+                    $this->_addAttachmentPart($message, $this->_parts[$i]);
+                    }
             break;
 
         case $text && $attachments:
-            $message =& $this->_addMixedPart();
-            $this->_addTextPart($message, $this->_txtbody);
-            for ($i = 0; $i < count($this->_parts); $i++) {
-                $this->_addAttachmentPart($message, $this->_parts[$i]);
-            }
+                $message =& $this->_addMixedPart();
+                $this->_addTextPart($message, $this->_txtbody);
+                for ($i = 0; $i < count($this->_parts); $i++) {
+                    $this->_addAttachmentPart($message, $this->_parts[$i]);
+                    }
             break;
 
         case $html && !$attachments && !$html_images:
-            if (isset($this->_txtbody)) {
-                $message =& $this->_addAlternativePart($null);
-                $this->_addTextPart($message, $this->_txtbody);
-                $this->_addHtmlPart($message);
-            } else {
-                $message =& $this->_addHtmlPart($null);
-            }
+                if (isset($this->_txtbody)) {
+                    $message =& $this->_addAlternativePart($null);
+                    $this->_addTextPart($message, $this->_txtbody);
+                    $this->_addHtmlPart($message);
+                    } else {
+                    $message =& $this->_addHtmlPart($null);
+                    }
             break;
 
         case $html && !$attachments && $html_images:
-            // * Content-Type: multipart/alternative;
-            //    * text
-            //    * Content-Type: multipart/related;
-            //       * html
-            //       * image...
-            if (isset($this->_txtbody)) {
-                $message =& $this->_addAlternativePart($null);
-                $this->_addTextPart($message, $this->_txtbody);
+                // * Content-Type: multipart/alternative;
+                //    * text
+                //    * Content-Type: multipart/related;
+                //       * html
+                //       * image...
+                if (isset($this->_txtbody)) {
+                    $message =& $this->_addAlternativePart($null);
+                    $this->_addTextPart($message, $this->_txtbody);
 
-                $ht =& $this->_addRelatedPart($message);
-                $this->_addHtmlPart($ht);
-                for ($i = 0; $i < count($this->_html_images); $i++) {
-                    $this->_addHtmlImagePart($ht, $this->_html_images[$i]);
-                }
-            } else {
+                    $ht =& $this->_addRelatedPart($message);
+                    $this->_addHtmlPart($ht);
+                    for ($i = 0; $i < count($this->_html_images); $i++) {
+                        $this->_addHtmlImagePart($ht, $this->_html_images[$i]);
+                    }
+                    } else {
+                    // * Content-Type: multipart/related;
+                    //    * html
+                    //    * image...
+                    $message =& $this->_addRelatedPart($null);
+                    $this->_addHtmlPart($message);
+                    for ($i = 0; $i < count($this->_html_images); $i++) {
+                        $this->_addHtmlImagePart($message, $this->_html_images[$i]);
+                    }
+                    }
+                /*
+                // #13444, #9725: the code below was a non-RFC compliant hack
                 // * Content-Type: multipart/related;
-                //    * html
+                //    * Content-Type: multipart/alternative;
+                //        * text
+                //        * html
                 //    * image...
                 $message =& $this->_addRelatedPart($null);
-                $this->_addHtmlPart($message);
-                for ($i = 0; $i < count($this->_html_images); $i++) {
-                    $this->_addHtmlImagePart($message, $this->_html_images[$i]);
-                }
-            }
-            /*
-            // #13444, #9725: the code below was a non-RFC compliant hack
-            // * Content-Type: multipart/related;
-            //    * Content-Type: multipart/alternative;
-            //        * text
-            //        * html
-            //    * image...
-            $message =& $this->_addRelatedPart($null);
-            if (isset($this->_txtbody)) {
+                if (isset($this->_txtbody)) {
                 $alt =& $this->_addAlternativePart($message);
                 $this->_addTextPart($alt, $this->_txtbody);
                 $this->_addHtmlPart($alt);
-            } else {
+                } else {
                 $this->_addHtmlPart($message);
-            }
-            for ($i = 0; $i < count($this->_html_images); $i++) {
+                }
+                for ($i = 0; $i < count($this->_html_images); $i++) {
                 $this->_addHtmlImagePart($message, $this->_html_images[$i]);
-            }
-            */
+                }
+                */
             break;
 
         case $html && $attachments && !$html_images:
-            $message =& $this->_addMixedPart();
-            if (isset($this->_txtbody)) {
-                $alt =& $this->_addAlternativePart($message);
-                $this->_addTextPart($alt, $this->_txtbody);
-                $this->_addHtmlPart($alt);
-            } else {
-                $this->_addHtmlPart($message);
-            }
-            for ($i = 0; $i < count($this->_parts); $i++) {
+                $message =& $this->_addMixedPart();
+                if (isset($this->_txtbody)) {
+                    $alt =& $this->_addAlternativePart($message);
+                    $this->_addTextPart($alt, $this->_txtbody);
+                    $this->_addHtmlPart($alt);
+                    } else {
+                    $this->_addHtmlPart($message);
+                    }
+                for ($i = 0; $i < count($this->_parts); $i++) {
                 $this->_addAttachmentPart($message, $this->_parts[$i]);
-            }
+                    }
             break;
 
         case $html && $attachments && $html_images:
-            $message =& $this->_addMixedPart();
-            if (isset($this->_txtbody)) {
-                $alt =& $this->_addAlternativePart($message);
-                $this->_addTextPart($alt, $this->_txtbody);
-                $rel =& $this->_addRelatedPart($alt);
-            } else {
-                $rel =& $this->_addRelatedPart($message);
-            }
-            $this->_addHtmlPart($rel);
-            for ($i = 0; $i < count($this->_html_images); $i++) {
+                $message =& $this->_addMixedPart();
+                if (isset($this->_txtbody)) {
+                    $alt =& $this->_addAlternativePart($message);
+                    $this->_addTextPart($alt, $this->_txtbody);
+                    $rel =& $this->_addRelatedPart($alt);
+                    } else {
+                    $rel =& $this->_addRelatedPart($message);
+                    }
+                $this->_addHtmlPart($rel);
+                for ($i = 0; $i < count($this->_html_images); $i++) {
                 $this->_addHtmlImagePart($rel, $this->_html_images[$i]);
-            }
-            for ($i = 0; $i < count($this->_parts); $i++) {
+                    }
+                for ($i = 0; $i < count($this->_parts); $i++) {
                 $this->_addAttachmentPart($message, $this->_parts[$i]);
-            }
+                    }
             break;
         }
 
@@ -1157,7 +1162,7 @@ class Mail_mime
                 $this->_build_params['boundary'] = '=_' . md5(rand() . microtime());
             }
 
-            $header .= ";$eol boundary=\"".$this->_build_params['boundary']."\"";
+            $header .= ";$eol boundary=\"" . $this->_build_params['boundary'] . "\"";
         }
 
         $this->_build_params['ctype'] = $header;
@@ -1312,7 +1317,7 @@ class Mail_mime
      */
     function encodeHeader($name, $value, $charset, $encoding)
     {
-        $mime_part = new Mail_mimePart;
+        $mime_part = new Mail_mimePart();
         return $mime_part->encodeHeader(
             $name, $value, $charset, $encoding, $this->_build_params['eol']
         );
@@ -1353,27 +1358,27 @@ class Mail_mime
         // See get()
         switch (true) {
         case $text && !$attachments:
-            $headers['Content-Type'] = 'text/plain';
+                $headers['Content-Type'] = 'text/plain';
             break;
 
         case !$text && !$html && $attachments:
         case $text && $attachments:
         case $html && $attachments && !$html_images:
         case $html && $attachments && $html_images:
-            $headers['Content-Type'] = 'multipart/mixed';
+                $headers['Content-Type'] = 'multipart/mixed';
             break;
 
         case $html && !$attachments && !$html_images && isset($this->_txtbody):
         case $html && !$attachments && $html_images && isset($this->_txtbody):
-            $headers['Content-Type'] = 'multipart/alternative';
+                $headers['Content-Type'] = 'multipart/alternative';
             break;
 
         case $html && !$attachments && !$html_images && !isset($this->_txtbody):
-            $headers['Content-Type'] = 'text/html';
+                $headers['Content-Type'] = 'text/html';
             break;
 
         case $html && !$attachments && $html_images && !isset($this->_txtbody):
-            $headers['Content-Type'] = 'multipart/related';
+                $headers['Content-Type'] = 'multipart/related';
             break;
 
         default:
@@ -1406,7 +1411,8 @@ class Mail_mime
             // multipart message: and boundary
             if (!empty($this->_build_params['boundary'])) {
                 $boundary = $this->_build_params['boundary'];
-            } else if (!empty($this->_headers['Content-Type'])
+            } else if (
+                !empty($this->_headers['Content-Type'])
                 && preg_match('/boundary="([^"]+)"/', $this->_headers['Content-Type'], $m)
             ) {
                 $boundary = $m[1];
@@ -1444,14 +1450,16 @@ class Mail_mime
         }
 
         // text body
-        if ($this->_build_params['text_encoding'] == '7bit'
+        if (
+            $this->_build_params['text_encoding'] == '7bit'
             && !preg_match('/ascii/i', $this->_build_params['text_charset'])
             && preg_match('/[^\x00-\x7F]/', $this->_txtbody)
         ) {
             $this->_build_params['text_encoding'] = 'quoted-printable';
         }
         // html body
-        if ($this->_build_params['html_encoding'] == '7bit'
+        if (
+            $this->_build_params['html_encoding'] == '7bit'
             && !preg_match('/ascii/i', $this->_build_params['html_charset'])
             && preg_match('/[^\x00-\x7F]/', $this->_htmlbody)
         ) {
@@ -1490,5 +1498,4 @@ class Mail_mime
         // PEAR::raiseError() is not PHP 5.4 compatible
         return new PEAR_Error($message);
     }
-
 } // End of class

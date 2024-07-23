@@ -38,24 +38,24 @@ function parseDate(string $dateString)
     $weekday = '(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)';
     $wkday = '(Mon|Tue|Wed|Thu|Fri|Sat|Sun)';
     $time = '([0-1]\d|2[0-3])(\:[0-5]\d){2}';
-    $date3 = $month.' ([12]\d|3[01]| [1-9])';
-    $date2 = '(0[1-9]|[12]\d|3[01])\-'.$month.'\-\d{2}';
+    $date3 = $month . ' ([12]\d|3[01]| [1-9])';
+    $date2 = '(0[1-9]|[12]\d|3[01])\-' . $month . '\-\d{2}';
     // 4-digit year cannot begin with 0 - unix timestamp begins in 1970
-    $date1 = '(0[1-9]|[12]\d|3[01]) '.$month.' [1-9]\d{3}';
+    $date1 = '(0[1-9]|[12]\d|3[01]) ' . $month . ' [1-9]\d{3}';
 
     // ANSI C's asctime() format
     // 4-digit year cannot begin with 0 - unix timestamp begins in 1970
-    $asctime_date = $wkday.' '.$date3.' '.$time.' [1-9]\d{3}';
+    $asctime_date = $wkday . ' ' . $date3 . ' ' . $time . ' [1-9]\d{3}';
     // RFC 850, obsoleted by RFC 1036
-    $rfc850_date = $weekday.', '.$date2.' '.$time.' GMT';
+    $rfc850_date = $weekday . ', ' . $date2 . ' ' . $time . ' GMT';
     // RFC 822, updated by RFC 1123
-    $rfc1123_date = $wkday.', '.$date1.' '.$time.' GMT';
+    $rfc1123_date = $wkday . ', ' . $date1 . ' ' . $time . ' GMT';
     // allowed date formats by RFC 2616
     $HTTP_date = "($rfc1123_date|$rfc850_date|$asctime_date)";
 
     // allow for space around the string and strip it
     $dateString = trim($dateString, ' ');
-    if (!preg_match('/^'.$HTTP_date.'$/', $dateString)) {
+    if (!preg_match('/^' . $HTTP_date . '$/', $dateString)) {
         return false;
     }
 
@@ -374,7 +374,7 @@ function parseMimeType(string $str): array
 function encodePath(string $path): string
 {
     return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\)\/:@])/', function ($match) {
-        return '%'.sprintf('%02x', ord($match[0]));
+        return '%' . sprintf('%02x', ord($match[0]));
     }, $path);
 }
 
@@ -386,7 +386,7 @@ function encodePath(string $path): string
 function encodePathSegment(string $pathSegment): string
 {
     return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\):@])/', function ($match) {
-        return '%'.sprintf('%02x', ord($match[0]));
+        return '%' . sprintf('%02x', ord($match[0]));
     }, $pathSegment);
 }
 

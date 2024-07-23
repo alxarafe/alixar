@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Contains EveOnline class.
  * PHP version 5.4
  * @copyright 2014 Michael Cummings
  * @author    Michael Cummings <mgcummings@yahoo.com>
  */
+
 namespace OAuth\OAuth2\Service;
 
 use OAuth\Common\Consumer\CredentialsInterface;

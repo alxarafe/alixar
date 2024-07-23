@@ -80,7 +80,7 @@ class CurlClient extends AbstractClient
             $extraHeaders['Content-Type'] = 'Content-Type: application/x-www-form-urlencoded';
         }
 
-        $extraHeaders['Host']       = 'Host: '.$endpoint->getHost();
+        $extraHeaders['Host']       = 'Host: ' . $endpoint->getHost();
         $extraHeaders['Connection'] = 'Connection: close';
 
         $ch = curl_init();
@@ -132,7 +132,7 @@ class CurlClient extends AbstractClient
             if (empty($errStr)) {
                 throw new TokenResponseException('Failed to request resource.', $responseCode);
             }
-            throw new TokenResponseException('cURL Error # '.$errNo.': '.$errStr, $responseCode);
+            throw new TokenResponseException('cURL Error # ' . $errNo . ': ' . $errStr, $responseCode);
         }
 
         curl_close($ch);

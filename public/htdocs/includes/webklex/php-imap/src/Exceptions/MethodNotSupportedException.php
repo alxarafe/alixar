@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     MethodNotSupportedException.php
 * Category: Exception
@@ -12,13 +13,13 @@
 
 namespace Webklex\PHPIMAP\Exceptions;
 
-use \Exception;
+use Exception;
 
 /**
  * Class MethodNotSupportedException
  *
  * @package Webklex\PHPIMAP\Exceptions
  */
-class MethodNotSupportedException extends Exception {
-
+class MethodNotSupportedException extends Exception
+{
 }

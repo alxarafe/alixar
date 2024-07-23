@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
  * Copyright (C) 2004       Benoit Mortier          <benoit.mortier@opensides.be>
  * Copyright (C) 2004       Sebastien DiCintio      <sdicintio@ressource-toi.org>
@@ -33,7 +34,7 @@
 if (!defined('DOL_INC_FOR_VERSION_ERROR')) {
     define('DOL_INC_FOR_VERSION_ERROR', '1');
 }
-require_once constant('BASE_PATH') . '/htdocs/filefunc.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/htdocs/filefunc.inc.php';
 
 
 // Define DOL_DOCUMENT_ROOT used for install/upgrade process
@@ -41,11 +42,11 @@ if (!defined('DOL_DOCUMENT_ROOT')) {
     define('DOL_DOCUMENT_ROOT', constant('BASE_PATH') . '/htdocs');
 }
 
-require_once DOL_DOCUMENT_ROOT . '/core/class/conf.class.php';
-require_once DOL_DOCUMENT_ROOT . '/core/class/translate.class.php';
-require_once DOL_DOCUMENT_ROOT . '/core/lib/functions.lib.php';
-require_once DOL_DOCUMENT_ROOT . '/core/lib/admin.lib.php';
-require_once DOL_DOCUMENT_ROOT . '/core/lib/files.lib.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/conf.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/translate.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
 $conf = new Conf();
 
@@ -554,8 +555,8 @@ function pHeader($subtitle, $next, $action = 'set', $param = '', $forcejqueryurl
     header("X-Content-Type-Options: nosniff");
     header("X-Frame-Options: SAMEORIGIN"); // Frames allowed only if on same domain (stop some XSS attacks)
 
-    $defaultcss = constant('BASE_URL') . '/htdocs/install/default.css';
-    $logo = constant('BASE_URL') . '/htdocs/theme/dolibarr_logo.svg';
+    $defaultcss = constant('DOL_URL_ROOT') . '/install/default.css';
+    $logo = constant('DOL_URL_ROOT') . '/theme/dolibarr_logo.svg';
 
     print '<!DOCTYPE HTML>' . "\n";
     print '<html>' . "\n";
@@ -569,19 +570,19 @@ function pHeader($subtitle, $next, $action = 'set', $param = '', $forcejqueryurl
     if ($jQueryUiCustomPath) {
         print '<link rel="stylesheet" type="text/css" href="' . $jQueryUiCustomPath . 'css/' . $jquerytheme . '/jquery-ui.min.css" />' . "\n"; // JQuery
     } else {
-        print '<link rel="stylesheet" type="text/css" href="' . constant('BASE_URL') . '/htdocs/includes/jquery/css/' . $jquerytheme . '/jquery-ui.min.css" />' . "\n"; // JQuery
+        print '<link rel="stylesheet" type="text/css" href="' . constant('DOL_URL_ROOT') . '/includes/jquery/css/' . $jquerytheme . '/jquery-ui.min.css" />' . "\n"; // JQuery
     }
 
     print '<!-- Includes JS for JQuery -->' . "\n";
     if ($jQueryCustomPath) {
         print '<script type="text/javascript" src="' . $jQueryCustomPath . 'jquery.min.js"></script>' . "\n";
     } else {
-        print '<script type="text/javascript" src="' . constant('BASE_URL') . '/htdocs/includes/jquery/js/jquery.min.js"></script>' . "\n";
+        print '<script type="text/javascript" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/js/jquery.min.js"></script>' . "\n";
     }
     if ($jQueryUiCustomPath) {
         print '<script type="text/javascript" src="' . $jQueryUiCustomPath . 'jquery-ui.min.js"></script>' . "\n";
     } else {
-        print '<script type="text/javascript" src="' . constant('BASE_URL') . '/htdocs/includes/jquery/js/jquery-ui.min.js"></script>' . "\n";
+        print '<script type="text/javascript" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/js/jquery-ui.min.js"></script>' . "\n";
     }
 
     print '<title>' . $langs->trans("DolibarrSetup") . '</title>' . "\n";

@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     EncodingAliases.php
 * Category: -
@@ -18,8 +19,8 @@ namespace Webklex\PHPIMAP;
  *
  * @package Webklex\PHPIMAP
  */
-class EncodingAliases {
-   
+class EncodingAliases
+{
     /**
      * Contains email encoding mappings
      *
@@ -472,11 +473,11 @@ class EncodingAliases {
      *
      * @return string
      */
-    public static function get($encoding, $fallback = null) {
+    public static function get($encoding, $fallback = null)
+    {
         if (isset(self::$aliases[strtolower($encoding)])) {
             return self::$aliases[strtolower($encoding)];
         }
         return $fallback !== null ? $fallback : $encoding;
     }
-    
 }

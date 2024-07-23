@@ -1,7 +1,9 @@
 <?php
+
 /* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2013		Marcos García		<marcosgdf@gmail.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,12 +25,11 @@
  *    \brief      Tab for Supplier Payment Information
  */
 
-
 // Load Dolibarr environment
-require '../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/payments.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/fourn/class/paiementfourn.class.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/paiementfourn.class.php';
 
 
 // Load translation files required by the page
@@ -41,19 +42,19 @@ $id = GETPOSTINT('id');
 $object = new PaiementFourn($db);
 
 // Load object
-include DOL_DOCUMENT_ROOT.'/core/actions_fetchobject.inc.php'; // Must be include, not include_once.
+include DOL_DOCUMENT_ROOT . '/core/actions_fetchobject.inc.php'; // Must be include, not include_once.
 
 $result = restrictedArea($user, $object->element, $object->id, 'paiementfourn', '');
 
 // Security check
 $socid = ''; // Prevents PHP Warning:  Undefined variable $socid on line 55
 if ($user->socid) {
-	$socid = $user->socid;
+    $socid = $user->socid;
 }
 // Now check also permission on thirdparty of invoices of payments. Thirdparty were loaded by the fetch_object before based on first invoice.
 // It should be enough because all payments are done on invoices of the same thirdparty.
 if ($socid && $socid != $object->thirdparty->id) {
-	accessforbidden();
+    accessforbidden();
 }
 
 
@@ -76,7 +77,7 @@ $head = payment_supplier_prepare_head($object);
 
 print dol_get_fiche_head($head, 'info', $langs->trans("SupplierPayment"), 0, 'payment');
 
-$linkback = '<a href="'.DOL_URL_ROOT.'/fourn/paiement/list.php?restore_lastsearch_values=1">'.$langs->trans("BackToList").'</a>';
+$linkback = '<a href="' . constant('BASE_URL') . 'fourn/paiement/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
 dol_banner_tab($object, 'id', $linkback, -1, 'rowid', 'ref');
 

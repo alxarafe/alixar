@@ -50,11 +50,11 @@ class TimeStamp extends Text
         $parts = DateTimeParser::parseVCardDateTime($this->getValue());
 
         $dateStr =
-            $parts['year'].'-'.
-            $parts['month'].'-'.
-            $parts['date'].'T'.
-            $parts['hour'].':'.
-            $parts['minute'].':'.
+            $parts['year'] . '-' .
+            $parts['month'] . '-' .
+            $parts['date'] . 'T' .
+            $parts['hour'] . ':' .
+            $parts['minute'] . ':' .
             $parts['second'];
 
         // Timezone

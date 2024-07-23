@@ -140,8 +140,10 @@ class Swift_Encoder_QpEncoder implements Swift_Encoder
 
     protected function initSafeMap()
     {
-        foreach (array_merge(
-            [0x09, 0x20], range(0x21, 0x3C), range(0x3E, 0x7E)) as $byte) {
+        foreach (
+            array_merge(
+            [0x09, 0x20], range(0x21, 0x3C), range(0x3E, 0x7E)) as $byte
+        ) {
             $this->safeMap[$byte] = \chr($byte);
         }
     }
@@ -278,7 +280,8 @@ class Swift_Encoder_QpEncoder implements Swift_Encoder
      */
     protected function standardize($string)
     {
-        $string = str_replace(["\t=0D=0A", ' =0D=0A', '=0D=0A'],
+        $string = str_replace(
+            ["\t=0D=0A", ' =0D=0A', '=0D=0A'],
             ["=09\r\n", "=20\r\n", "\r\n"], $string
             );
         switch ($end = \ord(substr($string, -1))) {

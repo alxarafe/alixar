@@ -456,9 +456,11 @@ class ApiRequestor
             $hasFile
         );
 
-        if (isset($rheaders['request-id'])
-        && \is_string($rheaders['request-id'])
-        && '' !== $rheaders['request-id']) {
+        if (
+            isset($rheaders['request-id'])
+            && \is_string($rheaders['request-id'])
+            && '' !== $rheaders['request-id']
+        ) {
             self::$requestTelemetry = new RequestTelemetry(
                 $rheaders['request-id'],
                 Util\Util::currentTimeMillis() - $requestStartMs
@@ -495,9 +497,11 @@ class ApiRequestor
             $readBodyChunkCallable
         );
 
-        if (isset($rheaders['request-id'])
-        && \is_string($rheaders['request-id'])
-        && '' !== $rheaders['request-id']) {
+        if (
+            isset($rheaders['request-id'])
+            && \is_string($rheaders['request-id'])
+            && '' !== $rheaders['request-id']
+        ) {
             self::$requestTelemetry = new RequestTelemetry(
                 $rheaders['request-id'],
                 Util\Util::currentTimeMillis() - $requestStartMs

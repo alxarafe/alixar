@@ -68,7 +68,7 @@ class Principal extends DAV\Xml\Property\Href
             throw new DAV\Exception('The href argument must be specified for the HREF principal type.');
         }
         if ($href) {
-            $href = rtrim($href, '/').'/';
+            $href = rtrim($href, '/') . '/';
             parent::__construct($href);
         }
     }
@@ -180,7 +180,7 @@ class Principal extends DAV\Xml\Property\Href
             case '{DAV:}all':
                 return new self(self::ALL);
             default:
-                throw new BadRequest('Unknown or unsupported principal type: '.$tree['name']);
+                throw new BadRequest('Unknown or unsupported principal type: ' . $tree['name']);
         }
     }
 }

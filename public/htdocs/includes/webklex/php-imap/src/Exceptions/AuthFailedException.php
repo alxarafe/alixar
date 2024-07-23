@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     AuthFailedException.php
 * Category: Exception
@@ -12,13 +13,13 @@
 
 namespace Webklex\PHPIMAP\Exceptions;
 
-use \Exception;
+use Exception;
 
 /**
  * Class AuthFailedException
  *
  * @package Webklex\PHPIMAP\Exceptions
  */
-class AuthFailedException extends Exception {
-
+class AuthFailedException extends Exception
+{
 }

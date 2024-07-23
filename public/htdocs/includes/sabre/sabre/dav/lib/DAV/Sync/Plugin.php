@@ -152,7 +152,7 @@ class Plugin extends DAV\ServerPlugin
 
         // Pre-fetching children, if this is possible.
         foreach (array_merge($added, $modified) as $item) {
-            $fullPath = $collectionUrl.'/'.$item;
+            $fullPath = $collectionUrl . '/' . $item;
             $fullPaths[] = $fullPath;
         }
 
@@ -166,14 +166,14 @@ class Plugin extends DAV\ServerPlugin
         // Deleted items also show up as 'responses'. They have no properties,
         // and a single {DAV:}status element set as 'HTTP/1.1 404 Not Found'.
         foreach ($deleted as $item) {
-            $fullPath = $collectionUrl.'/'.$item;
+            $fullPath = $collectionUrl . '/' . $item;
             $responses[] = new DAV\Xml\Element\Response($fullPath, [], 404);
         }
         if ($resultTruncated) {
-            $responses[] = new DAV\Xml\Element\Response($collectionUrl.'/', [], 507);
+            $responses[] = new DAV\Xml\Element\Response($collectionUrl . '/', [], 507);
         }
 
-        $multiStatus = new DAV\Xml\Response\MultiStatus($responses, self::SYNCTOKEN_PREFIX.$syncToken);
+        $multiStatus = new DAV\Xml\Response\MultiStatus($responses, self::SYNCTOKEN_PREFIX . $syncToken);
 
         $this->server->httpResponse->setStatus(207);
         $this->server->httpResponse->setHeader('Content-Type', 'application/xml; charset=utf-8');
@@ -193,7 +193,7 @@ class Plugin extends DAV\ServerPlugin
                 return;
             }
 
-            return self::SYNCTOKEN_PREFIX.$token;
+            return self::SYNCTOKEN_PREFIX . $token;
         });
     }
 

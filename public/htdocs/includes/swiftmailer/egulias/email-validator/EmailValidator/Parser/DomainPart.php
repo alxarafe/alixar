@@ -217,7 +217,7 @@ class DomainPart extends Parser
 
     private function checkNotAllowedChars(array $token)
     {
-        $notAllowed = [EmailLexer::S_BACKSLASH => true, EmailLexer::S_SLASH=> true];
+        $notAllowed = [EmailLexer::S_BACKSLASH => true, EmailLexer::S_SLASH => true];
         if (isset($notAllowed[$token['type']])) {
             throw new CharNotAllowed();
         }
@@ -254,7 +254,8 @@ class DomainPart extends Parser
                 throw new ExpectingDTEXT();
             }
 
-            if ($this->lexer->token['type'] === EmailLexer::INVALID ||
+            if (
+                $this->lexer->token['type'] === EmailLexer::INVALID ||
                 $this->lexer->token['type'] === EmailLexer::C_DEL   ||
                 $this->lexer->token['type'] === EmailLexer::S_LF
             ) {
@@ -265,9 +266,11 @@ class DomainPart extends Parser
                 throw new ExpectingDTEXT();
             }
 
-            if ($this->lexer->isNextTokenAny(
+            if (
+                $this->lexer->isNextTokenAny(
                 array(EmailLexer::S_HTAB, EmailLexer::S_SP, $this->lexer->token['type'] === EmailLexer::CRLF)
-            )) {
+                )
+            ) {
                 $this->warnings[CFWSWithFWS::CODE] = new CFWSWithFWS();
                 $this->parseFWS();
             }
@@ -290,7 +293,6 @@ class DomainPart extends Parser
             }
 
             $addressLiteral .= $this->lexer->token['value'];
-
         } while ($this->lexer->moveNext());
 
         $addressLiteral = str_replace('[', '', $addressLiteral);
@@ -322,11 +324,12 @@ class DomainPart extends Parser
         $matchesIP  = array();
 
         // Extract IPv4 part from the end of the address-literal (if there is one)
-        if (preg_match(
+        if (
+            preg_match(
             '/\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/',
             $addressLiteral,
             $matchesIP
-        ) > 0
+            ) > 0
         ) {
             $index = strrpos($addressLiteral, $matchesIP[0]);
             if ($index === 0) {
@@ -371,8 +374,10 @@ class DomainPart extends Parser
             throw new DomainHyphened();
         }
 
-        if ($this->lexer->token['type'] === EmailLexer::S_BACKSLASH
-            && $this->lexer->isNextToken(EmailLexer::GENERIC)) {
+        if (
+            $this->lexer->token['type'] === EmailLexer::S_BACKSLASH
+            && $this->lexer->isNextToken(EmailLexer::GENERIC)
+        ) {
             throw new ExpectingATEXT();
         }
     }

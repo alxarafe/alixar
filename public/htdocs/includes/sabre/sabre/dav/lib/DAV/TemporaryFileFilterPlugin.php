@@ -77,7 +77,7 @@ class TemporaryFileFilterPlugin extends ServerPlugin
     public function __construct($dataDir = null)
     {
         if (!$dataDir) {
-            $dataDir = ini_get('session.save_path').'/sabredav/';
+            $dataDir = ini_get('session.save_path') . '/sabredav/';
         }
         if (!is_dir($dataDir)) {
             mkdir($dataDir);
@@ -172,7 +172,7 @@ class TemporaryFileFilterPlugin extends ServerPlugin
 
         foreach ($this->temporaryFilePatterns as $tempFile) {
             if (preg_match($tempFile, $tempPath)) {
-                return $this->getDataDir().'/sabredav_'.md5($path).'.tempfile';
+                return $this->getDataDir() . '/sabredav_' . md5($path) . '.tempfile';
             }
         }
 
@@ -276,7 +276,7 @@ class TemporaryFileFilterPlugin extends ServerPlugin
                 '{DAV:}getlastmodified' => new Xml\Property\GetLastModified(filemtime($tempLocation)),
                 '{DAV:}getcontentlength' => filesize($tempLocation),
                 '{DAV:}resourcetype' => new Xml\Property\ResourceType(null),
-                '{'.Server::NS_SABREDAV.'}tempFile' => true,
+                '{' . Server::NS_SABREDAV . '}tempFile' => true,
             ],
         ];
 

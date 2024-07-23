@@ -124,7 +124,7 @@ class CalendarObject extends \Sabre\DAV\File implements ICalendarObject, \Sabre\
     {
         $mime = 'text/calendar; charset=utf-8';
         if (isset($this->objectData['component']) && $this->objectData['component']) {
-            $mime .= '; component='.$this->objectData['component'];
+            $mime .= '; component=' . $this->objectData['component'];
         }
 
         return $mime;
@@ -142,7 +142,7 @@ class CalendarObject extends \Sabre\DAV\File implements ICalendarObject, \Sabre\
         if (isset($this->objectData['etag'])) {
             return $this->objectData['etag'];
         } else {
-            return '"'.md5($this->get()).'"';
+            return '"' . md5($this->get()) . '"';
         }
     }
 
@@ -210,12 +210,12 @@ class CalendarObject extends \Sabre\DAV\File implements ICalendarObject, \Sabre\
             ],
             [
                 'privilege' => '{DAV:}all',
-                'principal' => $this->calendarInfo['principaluri'].'/calendar-proxy-write',
+                'principal' => $this->calendarInfo['principaluri'] . '/calendar-proxy-write',
                 'protected' => true,
             ],
             [
                 'privilege' => '{DAV:}read',
-                'principal' => $this->calendarInfo['principaluri'].'/calendar-proxy-read',
+                'principal' => $this->calendarInfo['principaluri'] . '/calendar-proxy-read',
                 'protected' => true,
             ],
         ];

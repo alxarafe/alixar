@@ -68,11 +68,12 @@ class Plugin extends ServerPlugin
         $server->on('propFind', [$this, 'propFind']);
 
         $server->xml->namespaceMap[self::NS_CALENDARSERVER] = 'cs';
-        $server->resourceTypeMapping['\\Sabre\\CalDAV\\Notifications\\ICollection'] = '{'.self::NS_CALENDARSERVER.'}notification';
+        $server->resourceTypeMapping['\\Sabre\\CalDAV\\Notifications\\ICollection'] = '{' . self::NS_CALENDARSERVER . '}notification';
 
-        array_push($server->protectedProperties,
-            '{'.self::NS_CALENDARSERVER.'}notification-URL',
-            '{'.self::NS_CALENDARSERVER.'}notificationtype'
+        array_push(
+            $server->protectedProperties,
+            '{' . self::NS_CALENDARSERVER . '}notification-URL',
+            '{' . self::NS_CALENDARSERVER . '}notificationtype'
         );
     }
 
@@ -87,8 +88,8 @@ class Plugin extends ServerPlugin
             $principalUrl = $node->getPrincipalUrl();
 
             // notification-URL property
-            $propFind->handle('{'.self::NS_CALENDARSERVER.'}notification-URL', function () use ($principalUrl, $caldavPlugin) {
-                $notificationPath = $caldavPlugin->getCalendarHomeForPrincipal($principalUrl).'/notifications/';
+            $propFind->handle('{' . self::NS_CALENDARSERVER . '}notification-URL', function () use ($principalUrl, $caldavPlugin) {
+                $notificationPath = $caldavPlugin->getCalendarHomeForPrincipal($principalUrl) . '/notifications/';
 
                 return new DAV\Xml\Property\Href($notificationPath);
             });
@@ -96,7 +97,7 @@ class Plugin extends ServerPlugin
 
         if ($node instanceof INode) {
             $propFind->handle(
-                '{'.self::NS_CALENDARSERVER.'}notificationtype',
+                '{' . self::NS_CALENDARSERVER . '}notificationtype',
                 [$node, 'getNotificationType']
             );
         }

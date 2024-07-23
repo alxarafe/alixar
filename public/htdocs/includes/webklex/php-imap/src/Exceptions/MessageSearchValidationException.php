@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     MessageSearchValidationException.php
 * Category: Exception
@@ -12,13 +13,13 @@
 
 namespace Webklex\PHPIMAP\Exceptions;
 
-use \Exception;
+use Exception;
 
 /**
  * Class MessageSearchValidationException
  *
  * @package Webklex\PHPIMAP\Exceptions
  */
-class MessageSearchValidationException extends Exception {
-
+class MessageSearchValidationException extends Exception
+{
 }

@@ -1,5 +1,7 @@
 <?php
+
 /* Copyright (C) 2010 Regis Houssin  <regis.houssin@inodbox.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,19 +28,19 @@
  * Check validity of user/password/entity
  * If test is ko, reason must be filled into $_SESSION["dol_loginmesg"]
  *
- * @param	string	$usertotest		Login
- * @param	string	$passwordtotest	Password
- * @param   int		$entitytotest   Number of instance (always 1 if module multicompany not enabled)
- * @return	string					Login if OK, '' if KO
+ * @param   string  $usertotest     Login
+ * @param   string  $passwordtotest Password
+ * @param   int     $entitytotest   Number of instance (always 1 if module multicompany not enabled)
+ * @return  string                  Login if OK, '' if KO
  */
 function check_user_password_empty($usertotest, $passwordtotest, $entitytotest)
 {
-	global $langs;
+    global $langs;
 
-	dol_syslog("functions_empty::check_user_password_empty usertotest=".$usertotest);
+    dol_syslog("functions_empty::check_user_password_empty usertotest=" . $usertotest);
 
-	$login = '';
-	$_SESSION["dol_loginmesg"] = $langs->transnoentitiesnoconv("FailedToLogin");
+    $login = '';
+    $_SESSION["dol_loginmesg"] = $langs->transnoentitiesnoconv("FailedToLogin");
 
-	return $login;
+    return $login;
 }

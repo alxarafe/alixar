@@ -103,7 +103,7 @@ class TimeZoneUtil
         }
 
         if ($failIfUncertain) {
-            throw new InvalidArgumentException('We were unable to determine the correct PHP timezone for tzid: '.$tzid);
+            throw new InvalidArgumentException('We were unable to determine the correct PHP timezone for tzid: ' . $tzid);
         }
 
         // If we got all the way here, we default to whatever has been set as the PHP default timezone.
@@ -245,10 +245,10 @@ class TimeZoneUtil
         }
 
         self::$map = array_merge(
-            include __DIR__.'/timezonedata/windowszones.php',
-            include __DIR__.'/timezonedata/lotuszones.php',
-            include __DIR__.'/timezonedata/exchangezones.php',
-            include __DIR__.'/timezonedata/php-workaround.php'
+            include __DIR__ . '/timezonedata/windowszones.php',
+            include __DIR__ . '/timezonedata/lotuszones.php',
+            include __DIR__ . '/timezonedata/exchangezones.php',
+            include __DIR__ . '/timezonedata/php-workaround.php'
         );
     }
 
@@ -267,6 +267,6 @@ class TimeZoneUtil
      */
     public static function getIdentifiersBC()
     {
-        return include __DIR__.'/timezonedata/php-bc.php';
+        return include __DIR__ . '/timezonedata/php-bc.php';
     }
 }

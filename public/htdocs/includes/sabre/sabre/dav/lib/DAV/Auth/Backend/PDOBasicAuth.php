@@ -91,7 +91,7 @@ class PDOBasicAuth extends AbstractBasic
      */
     public function validateUserPass($username, $password)
     {
-        $stmt = $this->pdo->prepare('SELECT '.$this->digestColumn.' FROM '.$this->tableName.' WHERE '.$this->uuidColumn.' = ?');
+        $stmt = $this->pdo->prepare('SELECT ' . $this->digestColumn . ' FROM ' . $this->tableName . ' WHERE ' . $this->uuidColumn . ' = ?');
         $stmt->execute([$username]);
         $result = $stmt->fetchAll();
 

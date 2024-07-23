@@ -104,7 +104,7 @@ class ProxyWrite implements IProxyWrite
      */
     public function getPrincipalUrl()
     {
-        return $this->principalInfo['uri'].'/'.$this->getName();
+        return $this->principalInfo['uri'] . '/' . $this->getName();
     }
 
     /**

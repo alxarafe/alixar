@@ -254,7 +254,7 @@ function valueObject(Reader $reader, string $className, string $namespace)
 function repeatingElements(Reader $reader, string $childElementName): array
 {
     if ('{' !== $childElementName[0]) {
-        $childElementName = '{}'.$childElementName;
+        $childElementName = '{}' . $childElementName;
     }
     $result = [];
 

@@ -64,7 +64,7 @@ class ICalendar implements SplitterInterface
 
             // Get component UID for recurring Events search
             if (!$component->UID) {
-                $component->UID = sha1(microtime()).'-vobjectimport';
+                $component->UID = sha1(microtime()) . '-vobjectimport';
             }
             $uid = (string) $component->UID;
 
@@ -90,7 +90,7 @@ class ICalendar implements SplitterInterface
         if ($object = array_shift($this->objects)) {
             // create our baseobject
             $object->version = '2.0';
-            $object->prodid = '-//Sabre//Sabre VObject '.VObject\Version::VERSION.'//EN';
+            $object->prodid = '-//Sabre//Sabre VObject ' . VObject\Version::VERSION . '//EN';
             $object->calscale = 'GREGORIAN';
 
             // add vtimezone information to obj (if we have it)

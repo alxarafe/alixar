@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     AttachmentCollection.php
 * Category: Collection
@@ -17,6 +18,6 @@ namespace Webklex\PHPIMAP\Support;
  *
  * @package Webklex\PHPIMAP\Support
  */
-class AttachmentCollection extends PaginatedCollection {
-
+class AttachmentCollection extends PaginatedCollection
+{
 }

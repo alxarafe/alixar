@@ -1,5 +1,7 @@
 <?php
+
 /* Copyright (C) 2005-2007 Laurent Destailleur  <eldy@users.sourceforge.net>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,32 +19,32 @@
  */
 
 /**
- *		\file       htdocs/core/antispamimage.php
- *		\brief      Return antispam image
+ *      \file       htdocs/core/antispamimage.php
+ *      \brief      Return antispam image
  */
 
 define('NOLOGIN', 1);
 
 if (!defined('NOREQUIREUSER')) {
-	define('NOREQUIREUSER', 1);
+    define('NOREQUIREUSER', 1);
 }
 if (!defined('NOREQUIREDB')) {
-	define('NOREQUIREDB', 1);
+    define('NOREQUIREDB', 1);
 }
 if (!defined('NOREQUIRETRAN')) {
-	define('NOREQUIRETRAN', 1);
+    define('NOREQUIRETRAN', 1);
 }
 if (!defined('NOREQUIREMENU')) {
-	define('NOREQUIREMENU', 1);
+    define('NOREQUIREMENU', 1);
 }
 if (!defined('NOREQUIRESOC')) {
-	define('NOREQUIRESOC', 1);
+    define('NOREQUIRESOC', 1);
 }
 if (!defined('NOTOKENRENEWAL')) {
-	define('NOTOKENRENEWAL', 1);
+    define('NOTOKENRENEWAL', 1);
 }
 
-require_once '../main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 
 /*
@@ -54,7 +56,7 @@ $letters = 'aAbBCDeEFgGhHJKLmMnNpPqQRsStTuVwWXYZz2345679';
 $number = strlen($letters);
 $string = '';
 for ($i = 0; $i < $length; $i++) {
-	$string .= $letters[mt_rand(0, $number - 1)];
+    $string .= $letters[mt_rand(0, $number - 1)];
 }
 //print $string;
 
@@ -64,8 +66,8 @@ $_SESSION[$sessionkey] = $string;
 
 $img = imagecreate(80, 32);
 if (empty($img)) {
-	dol_print_error(null, "Problem with GD creation");
-	exit;
+    dol_print_error(null, "Problem with GD creation");
+    exit;
 }
 
 // Define mime type

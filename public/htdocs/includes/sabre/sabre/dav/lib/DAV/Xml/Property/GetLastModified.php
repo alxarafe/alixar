@@ -40,7 +40,7 @@ class GetLastModified implements Element
         if ($time instanceof DateTime) {
             $this->time = clone $time;
         } else {
-            $this->time = new DateTime('@'.$time);
+            $this->time = new DateTime('@' . $time);
         }
 
         // Setting timezone to UTC

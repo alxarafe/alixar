@@ -56,10 +56,10 @@ class FindFromTimezoneMap implements TimezoneFinder
     {
         if ([] === $this->map) {
             $this->map = array_merge(
-                include __DIR__.'/../timezonedata/windowszones.php',
-                include __DIR__.'/../timezonedata/lotuszones.php',
-                include __DIR__.'/../timezonedata/exchangezones.php',
-                include __DIR__.'/../timezonedata/php-workaround.php'
+                include __DIR__ . '/../timezonedata/windowszones.php',
+                include __DIR__ . '/../timezonedata/lotuszones.php',
+                include __DIR__ . '/../timezonedata/exchangezones.php',
+                include __DIR__ . '/../timezonedata/php-workaround.php'
             );
         }
 

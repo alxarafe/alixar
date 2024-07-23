@@ -1,4 +1,5 @@
 <?php
+
 use Luracast\Restler\Restler;
 use Luracast\Restler\Util;
 
@@ -31,7 +32,6 @@ function exceptions()
         $call_trace
             = parse_backtrace(debug_backtrace());
     }
-
 }
 exceptions();
 
@@ -64,18 +64,18 @@ if ($success && isset($api)) {
 } else {
     if (isset($response['error']['message'])) {
         $icon = '<icon class="denied"></icon>';
-        $title = end(explode(':',$response['error']['message'],2));
+        $title = end(explode(':', $response['error']['message'], 2));
     } else {
         $icon = '<icon class="warning"></icon>';
         $title = 'No Matching Resource';
     }
 }
-function render($data, $shadow=true)
+function render($data, $shadow = true)
 {
     $r = '';
     if (empty($data))
         return $r;
-    $r .= $shadow ? "<ul class=\"shadow\">\n": "<ul>\n";
+    $r .= $shadow ? "<ul class=\"shadow\">\n" : "<ul>\n";
     if (is_array($data)) {
         // field name
         foreach ($data as $key => $value) {
@@ -86,7 +86,7 @@ function render($data, $shadow=true)
             $r .= '<span>';
             if (is_array($value)) {
                 // recursive
-                $r .= render($value,false);
+                $r .= render($value, false);
             } else {
                 // value, with hyperlinked hyperlinks
                 if (is_bool($value)) {
@@ -118,8 +118,8 @@ foreach ($reqHeadersArr as $key => $value) {
 }
 // $requestHeaders = $this->encode(apache_request_headers(), FALSE,
 // FALSE);
-$responseHeaders = implode(PHP_EOL, headers_list()).PHP_EOL.'Status: HTTP/1.1 ';
-$responseHeaders .= Util::$restler->responseCode.' '.\Luracast\Restler\RestException::$codes[Util::$restler->responseCode];
+$responseHeaders = implode(PHP_EOL, headers_list()) . PHP_EOL . 'Status: HTTP/1.1 ';
+$responseHeaders .= Util::$restler->responseCode . ' ' . \Luracast\Restler\RestException::$codes[Util::$restler->responseCode];
 
 ?>
 <!DOCTYPE html>
@@ -128,7 +128,7 @@ $responseHeaders .= Util::$restler->responseCode.' '.\Luracast\Restler\RestExcep
     <title><?php echo $title?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style>
-        <?php include __DIR__.'/debug.css'; ?>
+        <?php include __DIR__ . '/debug.css'; ?>
     </style>
 </head>
 <body>
@@ -143,7 +143,7 @@ $responseHeaders .= Util::$restler->responseCode.' '.\Luracast\Restler\RestExcep
         foreach($stages['failure'] as $stage){
             echo '<a href="#" class="failure">'
                 . $stage
-                . ($stage==$curStage ? ' <span class="state"/> ' : '')
+                . ($stage == $curStage ? ' <span class="state"/> ' : '')
                 . '</a>';
         }
     } else {

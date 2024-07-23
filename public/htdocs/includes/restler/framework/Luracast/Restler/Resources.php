@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler;
 
 use Luracast\Restler\Data\Text;
@@ -151,7 +152,8 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
     {
         $userClass = Defaults::$userIdentifierClass;
         $this->cacheName = $userClass::getCacheIdentifier() . '_resources_' . $id;
-        if ($this->restler->getProductionMode()
+        if (
+            $this->restler->getProductionMode()
             && !$this->restler->refreshCache
             && $this->restler->cache->isCached($this->cacheName)
         ) {
@@ -352,8 +354,9 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                         } elseif (strtolower($responseClass) == 'array') {
                             $operation->responseClass = 'Array';
                             $rt = $m['return'];
-                            if (isset(
-                            $rt[CommentParser::$embeddedDataName]['type'])
+                            if (
+                                isset(
+                                $rt[CommentParser::$embeddedDataName]['type'])
                             ) {
                                 $rt = $rt[CommentParser::$embeddedDataName]
                                 ['type'];
@@ -406,7 +409,6 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                         ? $a->path > $b->path
                         : $order[$a->operations[0]->httpMethod] >
                         $order[$b->operations[0]->httpMethod];
-
             }
         );
         return $r;
@@ -478,8 +480,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
         $summary = 'description',
         $notes = 'long description',
         $responseClass = 'void'
-    )
-    {
+    ) {
         //reset body params
         $this->_bodyParam = array(
             'required' => false,
@@ -615,7 +616,8 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                     }
                 }
                 $r->defaultValue = "{\n    \""
-                    . implode("\": \"\",\n    \"",
+                    . implode(
+                        "\": \"\",\n    \"",
                         array_keys($c->properties))
                     . "\": \"\"\n}";
                 return $r;
@@ -637,7 +639,8 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                         }
                     }
                     $r->defaultValue = "[\n    {\n        \""
-                        . implode("\": \"\",\n        \"",
+                        . implode(
+                            "\": \"\",\n        \"",
                             array_keys($c->properties))
                         . "\": \"\"\n    }\n]";
                     return $r;
@@ -713,7 +716,6 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
         $data = get_object_vars($instance);
         $reflectionClass = new \ReflectionClass($className);
         foreach ($data as $key => $value) {
-
             $propertyMetaData = null;
 
             try {
@@ -753,11 +755,12 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                 'type' => $type,
                 'description' => $description
             );
-            if (Util::nestedValue(
+            if (
+                Util::nestedValue(
                 $propertyMetaData,
                 CommentParser::$embeddedDataName,
                 'required'
-            )
+                )
             ) {
                 $properties[$key]['required'] = true;
             }
@@ -844,7 +847,8 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
         $this->cacheName = $userClass::getCacheIdentifier()
             . '_resources-v'
             . $this->restler->_requestedApiVersion;
-        if ($this->restler->getProductionMode()
+        if (
+            $this->restler->getProductionMode()
             && !$this->restler->refreshCache
             && $this->restler->cache->isCached($this->cacheName)
         ) {
@@ -908,7 +912,6 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                     $r->apiVersion = $data->apiVersion;
                 }
             }
-
         }
         return $r;
     }
@@ -994,7 +997,8 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
         ) {
             return false;
         }
-        if ($this->_authenticated
+        if (
+            $this->_authenticated
             && static::$accessControlFunction
             && (!call_user_func(
                 static::$accessControlFunction, $route['metadata']))

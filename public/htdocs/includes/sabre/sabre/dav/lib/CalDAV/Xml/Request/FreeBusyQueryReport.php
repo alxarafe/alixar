@@ -59,7 +59,7 @@ class FreeBusyQueryReport implements XmlDeserializable
      */
     public static function xmlDeserialize(Reader $reader)
     {
-        $timeRange = '{'.Plugin::NS_CALDAV.'}time-range';
+        $timeRange = '{' . Plugin::NS_CALDAV . '}time-range';
 
         $start = null;
         $end = null;

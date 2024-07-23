@@ -209,7 +209,7 @@ abstract class AbstractBackend implements BackendInterface
             );
             if ($results) {
                 // We have a match
-                return $calendar['uri'].'/'.$results[0];
+                return $calendar['uri'] . '/' . $results[0];
             }
         }
     }

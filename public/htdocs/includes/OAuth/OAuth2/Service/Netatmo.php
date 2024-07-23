@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Netatmo service.
  *
@@ -26,7 +27,6 @@ use OAuth\Common\Http\Uri\UriInterface;
  */
 class Netatmo extends AbstractService
 {
-
     // SCOPES
     // @link https://dev.netatmo.com/doc/authentication/scopes
 
@@ -63,8 +63,7 @@ class Netatmo extends AbstractService
      */
     public function getAuthorizationEndpoint()
     {
-        return new Uri($this->baseApiUri.'oauth2/authorize');
-
+        return new Uri($this->baseApiUri . 'oauth2/authorize');
     }
 
     /**
@@ -72,7 +71,7 @@ class Netatmo extends AbstractService
      */
     public function getAccessTokenEndpoint()
     {
-        return new Uri($this->baseApiUri.'oauth2/token');
+        return new Uri($this->baseApiUri . 'oauth2/token');
     }
 
     /**

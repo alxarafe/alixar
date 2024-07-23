@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler;
 
 /**
@@ -18,5 +19,4 @@ namespace Luracast\Restler;
 
 class InvalidAuthCredentials extends RestException
 {
-
 }

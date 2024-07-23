@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the DebugBar package.
  *
@@ -123,6 +124,6 @@ class FileStorage implements StorageInterface
      */
     public function makeFilename($id)
     {
-        return $this->dirname . basename($id). ".json";
+        return $this->dirname . basename($id) . ".json";
     }
 }

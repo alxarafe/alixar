@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Strava service.
  *

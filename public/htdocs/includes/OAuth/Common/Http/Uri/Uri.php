@@ -134,7 +134,7 @@ class Uri implements UriInterface
         // after the first colon (":") character found within a userinfo
         // subcomponent unless the data after the colon is the empty string
         // (indicating no password)"
-        if ($colonPos !== false && strlen($rawUserInfo)-1 > $colonPos) {
+        if ($colonPos !== false && strlen($rawUserInfo) - 1 > $colonPos) {
             return substr($rawUserInfo, 0, $colonPos) . ':********';
         } else {
             return $rawUserInfo;
@@ -213,7 +213,7 @@ class Uri implements UriInterface
      */
     public function getAuthority()
     {
-        $authority = $this->userInfo ? $this->userInfo.'@' : '';
+        $authority = $this->userInfo ? $this->userInfo . '@' : '';
         $authority .= $this->host;
 
         if ($this->explicitPortSpecified) {
@@ -228,7 +228,7 @@ class Uri implements UriInterface
      */
     public function getRawAuthority()
     {
-        $authority = $this->rawUserInfo ? $this->rawUserInfo.'@' : '';
+        $authority = $this->rawUserInfo ? $this->rawUserInfo . '@' : '';
         $authority .= $this->host;
 
         if ($this->explicitPortSpecified) {

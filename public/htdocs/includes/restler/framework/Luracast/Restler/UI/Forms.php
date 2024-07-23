@@ -19,7 +19,6 @@ use Luracast\Restler\UI\Tags as T;
 use Luracast\Restler\User;
 use Luracast\Restler\Util;
 
-
 /**
  * Utility class for automatically generating forms for the given http method
  * and api url
@@ -129,7 +128,6 @@ class Forms implements iFilter
                         ? $restler->getRequestData()
                         : array()
                 );
-
         } catch (RestException $e) {
             //echo $e->getErrorMessage();
             $info = false;

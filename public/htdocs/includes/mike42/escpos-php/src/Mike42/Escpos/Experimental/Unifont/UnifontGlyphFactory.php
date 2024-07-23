@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Mike42\Escpos\Experimental\Unifont;
 
 class UnifontGlyphFactory implements ColumnFormatGlyphFactory

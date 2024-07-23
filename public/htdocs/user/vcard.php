@@ -1,9 +1,11 @@
 <?php
-/* Copyright (C) 2004      	Rodolphe Quiedeville <rodolphe@quiedeville.org>
+
+/* Copyright (C) 2004       Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2023 	Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2005-2012 	Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2020		Tobias Sekan		<tobias.sekan@startmail.com>
  * Copyright (C) 2021-2022 	Anthony Berton		<anthony.berton@bb2a.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,23 +22,23 @@
  */
 
 /**
- *	    \file       htdocs/user/vcard.php
+ *      \file       htdocs/user/vcard.php
  *      \ingroup    user
- *		\brief      Page to return a user vcard
+ *      \brief      Page to return a user vcard
  */
 
 // Load Dolibarr environment
-require '../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
-require_once DOL_DOCUMENT_ROOT.'/societe/class/societe.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/vcard.class.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/vcard.class.php';
 
 $id = GETPOSTINT('id');
 
 // Security check
 $socid = 0;
 if ($user->socid > 0) {
-	$socid = $user->socid;
+    $socid = $user->socid;
 }
 $feature2 = 'user';
 $result = restrictedArea($user, 'user', $id, 'user', $feature2);
@@ -44,14 +46,14 @@ $result = restrictedArea($user, 'user', $id, 'user', $feature2);
 $object = new User($db);
 $result = $object->fetch($id);
 if ($result <= 0) {
-	dol_print_error($db, $object->error);
-	exit;
+    dol_print_error($db, $object->error);
+    exit;
 }
 
 // Data from linked company
 $company = new Societe($db);
 if ($object->socid > 0) {
-	$result = $company->fetch($object->socid);
+    $result = $company->fetch($object->socid);
 }
 
 
@@ -67,10 +69,10 @@ $filename = trim(urldecode($v->getFileName())); // "Nom prenom.vcf"
 $filenameurlencoded = dol_sanitizeFileName(urlencode($filename));
 //$filename = dol_sanitizeFileName($filename);
 
-top_httphead('text/x-vcard; name="'.$filename.'"');
+top_httphead('text/x-vcard; name="' . $filename . '"');
 
-header("Content-Disposition: attachment; filename=\"".$filename."\"");
-header("Content-Length: ".dol_strlen($output));
+header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
+header("Content-Length: " . dol_strlen($output));
 header("Connection: close");
 
 print $output;

@@ -1,9 +1,11 @@
 <?php
+
 /* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
  * Copyright (C) 2004       Benoit Mortier          <benoit.mortier@opensides.be>
  * Copyright (C) 2004       Sebastien DiCintio      <sdicintio@ressource-toi.org>
  * Copyright (C) 2004-2008  Laurent Destailleur     <eldy@users.sourceforge.net>
  * Copyright (C) 2015-2016  Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,15 +22,14 @@
  */
 
 /**
- *	\file       htdocs/install/step4.php
- *	\ingroup	install
- *	\brief      Ask login and password of Dolibarr admin user
+ *  \file       htdocs/install/step4.php
+ *  \ingroup    install
+ *  \brief      Ask login and password of Dolibarr admin user
  */
 
-
 include_once 'inc.php';
-require_once $dolibarr_main_document_root.'/core/class/conf.class.php';
-require_once $dolibarr_main_document_root.'/core/lib/admin.lib.php';
+require_once $dolibarr_main_document_root . '/core/class/conf.class.php';
+require_once $dolibarr_main_document_root . '/core/lib/admin.lib.php';
 
 global $langs;
 
@@ -41,11 +42,11 @@ $langs->loadLangs(array("admin", "install"));
 $useforcedwizard = false;
 $forcedfile = "./install.forced.php";
 if ($conffile == "/etc/dolibarr/conf.php") {
-	$forcedfile = "/etc/dolibarr/install.forced.php";
+    $forcedfile = "/etc/dolibarr/install.forced.php";
 }
 if (@file_exists($forcedfile)) {
-	$useforcedwizard = true;
-	include_once $forcedfile;
+    $useforcedwizard = true;
+    include_once $forcedfile;
 }
 
 dolibarr_install_syslog("--- step4: entering step4.php page");
@@ -63,15 +64,15 @@ pHeader($langs->trans("AdminAccountCreation"), "step5");
 
 // Test if we can run a first install process
 if (!is_writable($conffile)) {
-	print $langs->trans("ConfFileIsNotWritable", $conffiletoshow);
-	pFooter(1, $setuplang, 'jscheckparam');
-	exit;
+    print $langs->trans("ConfFileIsNotWritable", $conffiletoshow);
+    pFooter(1, $setuplang, 'jscheckparam');
+    exit;
 }
 
 
-print '<h3><img class="valignmiddle inline-block paddingright" src="' . constant('BASE_URL') . '/htdocs/theme/common/octicons/build/svg/key.svg" width="20" alt="Database"> '.$langs->trans("DolibarrAdminLogin").'</h3>';
+print '<h3><img class="valignmiddle inline-block paddingright" src="' . constant('DOL_URL_ROOT') . '/theme/common/octicons/build/svg/key.svg" width="20" alt="Database"> ' . $langs->trans("DolibarrAdminLogin") . '</h3>';
 
-print $langs->trans("LastStepDesc").'<br><br>';
+print $langs->trans("LastStepDesc") . '<br><br>';
 
 
 print '<table cellspacing="0" cellpadding="2">';
@@ -79,40 +80,40 @@ print '<table cellspacing="0" cellpadding="2">';
 $db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int) $conf->db->port);
 
 if ($db->ok) {
-	print '<tr><td><label for="login">'.$langs->trans("Login").' :</label></td><td>';
-	print '<input id="login" name="login" type="text" value="'.(GETPOSTISSET("login") ? GETPOST("login", 'alpha') : (isset($force_install_dolibarrlogin) ? $force_install_dolibarrlogin : '')).'"'.(@$force_install_noedit == 2 && $force_install_dolibarrlogin !== null ? ' disabled' : '').' autofocus></td></tr>';
-	print '<tr><td><label for="pass">'.$langs->trans("Password").' :</label></td><td>';
-	print '<input type="password" id="pass" name="pass" autocomplete="new-password" minlength="8"></td></tr>';
-	print '<tr><td><label for="pass_verif">'.$langs->trans("PasswordRetype").' :</label></td><td>';
-	print '<input type="password" id="pass_verif" name="pass_verif" autocomplete="new-password" minlength="8"></td></tr>';
-	print '</table>';
+    print '<tr><td><label for="login">' . $langs->trans("Login") . ' :</label></td><td>';
+    print '<input id="login" name="login" type="text" value="' . (GETPOSTISSET("login") ? GETPOST("login", 'alpha') : (isset($force_install_dolibarrlogin) ? $force_install_dolibarrlogin : '')) . '"' . (@$force_install_noedit == 2 && $force_install_dolibarrlogin !== null ? ' disabled' : '') . ' autofocus></td></tr>';
+    print '<tr><td><label for="pass">' . $langs->trans("Password") . ' :</label></td><td>';
+    print '<input type="password" id="pass" name="pass" autocomplete="new-password" minlength="8"></td></tr>';
+    print '<tr><td><label for="pass_verif">' . $langs->trans("PasswordRetype") . ' :</label></td><td>';
+    print '<input type="password" id="pass_verif" name="pass_verif" autocomplete="new-password" minlength="8"></td></tr>';
+    print '</table>';
 
-	if (GETPOSTINT("error") == 1) {
-		print '<br>';
-		print '<div class="error">'.$langs->trans("PasswordsMismatch").'</div>';
-		$error = 0; // We show button
-	}
+    if (GETPOSTINT("error") == 1) {
+        print '<br>';
+        print '<div class="error">' . $langs->trans("PasswordsMismatch") . '</div>';
+        $error = 0; // We show button
+    }
 
-	if (GETPOSTINT("error") == 2) {
-		print '<br>';
-		print '<div class="error">';
-		print $langs->trans("PleaseTypePassword");
-		print '</div>';
-		$error = 0; // We show button
-	}
+    if (GETPOSTINT("error") == 2) {
+        print '<br>';
+        print '<div class="error">';
+        print $langs->trans("PleaseTypePassword");
+        print '</div>';
+        $error = 0; // We show button
+    }
 
-	if (GETPOSTINT("error") == 3) {
-		print '<br>';
-		print '<div class="error">'.$langs->trans("PleaseTypeALogin").'</div>';
-		$error = 0; // We show button
-	}
+    if (GETPOSTINT("error") == 3) {
+        print '<br>';
+        print '<div class="error">' . $langs->trans("PleaseTypeALogin") . '</div>';
+        $error = 0; // We show button
+    }
 }
 
 $ret = 0;
 if ($error && isset($argv[1])) {
-	$ret = 1;
+    $ret = 1;
 }
-dolibarr_install_syslog("Exit ".$ret);
+dolibarr_install_syslog("Exit " . $ret);
 
 dolibarr_install_syslog("--- step4: end");
 
@@ -122,5 +123,5 @@ $db->close();
 
 // Return code if ran from command line
 if ($ret) {
-	exit($ret);
+    exit($ret);
 }

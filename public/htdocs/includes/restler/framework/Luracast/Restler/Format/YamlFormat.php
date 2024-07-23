@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\Format;
 
 use Symfony\Component\Yaml\Yaml;
@@ -34,4 +35,3 @@ class YamlFormat extends DependentFormat
         return Yaml::parse($data);
     }
 }
-

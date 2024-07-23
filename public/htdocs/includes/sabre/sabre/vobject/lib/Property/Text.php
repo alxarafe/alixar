@@ -218,13 +218,13 @@ class Text extends Property
 
         $str = $this->name;
         if ($this->group) {
-            $str = $this->group.'.'.$this->name;
+            $str = $this->group . '.' . $this->name;
         }
         foreach ($this->parameters as $param) {
             if ('QUOTED-PRINTABLE' === $param->getValue()) {
                 continue;
             }
-            $str .= ';'.$param->serialize();
+            $str .= ';' . $param->serialize();
         }
 
         // If the resulting value contains a \n, we must encode it as
@@ -244,21 +244,21 @@ class Text extends Property
                 if ($ord >= 32 && $ord <= 126) {
                     $lastLine .= $val[$ii];
                 } else {
-                    $lastLine .= '='.\strtoupper(\bin2hex($val[$ii]));
+                    $lastLine .= '=' . \strtoupper(\bin2hex($val[$ii]));
                 }
                 if (\strlen($lastLine) >= 75) {
                     // Soft line break
-                    $out .= $lastLine."=\r\n ";
+                    $out .= $lastLine . "=\r\n ";
                     $lastLine = null;
                 }
             }
             if (!\is_null($lastLine)) {
-                $out .= $lastLine."\r\n";
+                $out .= $lastLine . "\r\n";
             }
 
             return $out;
         } else {
-            $str .= ':'.$val;
+            $str .= ':' . $val;
 
             $str = \preg_replace(
                 '/(
@@ -377,7 +377,7 @@ class Text extends Property
             if (count($parts) < $minimum) {
                 $warnings[] = [
                     'level' => $options & self::REPAIR ? 1 : 3,
-                    'message' => 'The '.$this->name.' property must have at least '.$minimum.' values. It only has '.count($parts),
+                    'message' => 'The ' . $this->name . ' property must have at least ' . $minimum . ' values. It only has ' . count($parts),
                     'node' => $this,
                 ];
                 if ($options & self::REPAIR) {

@@ -14,6 +14,7 @@
  * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
+
 return [
     'CST6CDT' => 'America/Chicago',
     'Cuba' => 'America/Havana',

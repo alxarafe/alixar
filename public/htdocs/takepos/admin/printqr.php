@@ -1,5 +1,7 @@
 <?php
+
 /* Copyright (C) 2020       Andreu Bisquerra Gaya  <jove@bisquerra.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +18,17 @@
  */
 
 /**
- *	\file       htdocs/takepos/admin/printqr.php
- *	\ingroup    takepos
- *	\brief      Print QR Menu
+ *  \file       htdocs/takepos/admin/printqr.php
+ *  \ingroup    takepos
+ *  \brief      Print QR Menu
  */
 
 // Load Dolibarr environment
-require '../../main.inc.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Security check
 if (!$user->admin) {
-	accessforbidden();
+    accessforbidden();
 }
 
 $langs->load("cashdesk");
@@ -38,14 +40,14 @@ $id = GETPOSTINT('id');
 print '<center>';
 
 if (GETPOSTISSET("id")) {
-	print '<h1><b>'.$langs->trans("ScanToOrder").'</b></h1>';
-	print "<img src='".DOL_URL_ROOT."/takepos/genimg/qr.php?key=".dol_encode($id)."' width='30%'>";
+    print '<h1><b>' . $langs->trans("ScanToOrder") . '</b></h1>';
+    print "<img src='" . DOL_URL_ROOT . "/takepos/genimg/qr.php?key=" . dol_encode($id) . "' width='30%'>";
 } else {
-	print '<h1><b>'.$langs->trans("ScanToMenu").'</b></h1>';
-	print "<img src='".DOL_URL_ROOT."/takepos/genimg/qr.php' width='30%'>";
+    print '<h1><b>' . $langs->trans("ScanToMenu") . '</b></h1>';
+    print "<img src='" . DOL_URL_ROOT . "/takepos/genimg/qr.php' width='30%'>";
 }
 
-print '<h1><b>'.$mysoc->name.'</b></h1>';
+print '<h1><b>' . $mysoc->name . '</b></h1>';
 
 print '</center>';
 

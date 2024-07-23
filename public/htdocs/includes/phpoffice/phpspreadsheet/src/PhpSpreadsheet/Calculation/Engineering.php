@@ -1708,7 +1708,8 @@ class Engineering
         $imaginary = ($imaginary === null) ? 0.0 : Functions::flattenSingleValue($imaginary);
         $suffix = ($suffix === null) ? 'i' : Functions::flattenSingleValue($suffix);
 
-        if (((is_numeric($realNumber)) && (is_numeric($imaginary))) &&
+        if (
+            ((is_numeric($realNumber)) && (is_numeric($imaginary))) &&
             (($suffix == 'i') || ($suffix == 'j') || ($suffix == ''))
         ) {
             $complex = new Complex($realNumber, $imaginary, $suffix);
@@ -2779,11 +2780,13 @@ class Engineering
                 }
 
                 return $value;
-            } elseif ((($fromUOM == 'K') || ($fromUOM == 'kel')) &&
+            } elseif (
+                (($fromUOM == 'K') || ($fromUOM == 'kel')) &&
                 (($toUOM == 'K') || ($toUOM == 'kel'))
             ) {
                 return $value;
-            } elseif ((($fromUOM == 'C') || ($fromUOM == 'cel')) &&
+            } elseif (
+                (($fromUOM == 'C') || ($fromUOM == 'cel')) &&
                 (($toUOM == 'C') || ($toUOM == 'cel'))
             ) {
                 return $value;

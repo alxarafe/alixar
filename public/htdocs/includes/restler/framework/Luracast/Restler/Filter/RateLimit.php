@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\Filter;
 
 use Luracast\Restler\Defaults;
@@ -65,9 +66,10 @@ class RateLimit implements iFilter, iUseAuthentication
      * @return void
      */
     public static function setLimit(
-        $unit, $usagePerUnit, $authenticatedUsagePerUnit = null
-    )
-    {
+        $unit,
+        $usagePerUnit,
+        $authenticatedUsagePerUnit = null
+    ) {
         static::$unit = $unit;
         static::$usagePerUnit = $usagePerUnit;
         static::$authenticatedUsagePerUnit =
@@ -76,7 +78,8 @@ class RateLimit implements iFilter, iUseAuthentication
 
     public function __isAllowed()
     {
-        if (static::$authenticatedUsagePerUnit
+        if (
+            static::$authenticatedUsagePerUnit
             == static::$usagePerUnit
         ) return $this->check();
         return null;
@@ -123,7 +126,7 @@ class RateLimit implements iFilter, iUseAuthentication
             $lastRequest = $this->restler->cache->get($id, true)
                 ? : array('time' => 0, 'used' => 0);
             $time = $lastRequest['time'];
-            $diff = time() - $time; # in seconds
+            $diff = time() - $time; // in seconds
             $used = $lastRequest['used'];
 
             header("X-RateLimit-Limit: $maxPerUnit per " . static::$unit);
@@ -134,7 +137,8 @@ class RateLimit implements iFilter, iUseAuthentication
                 header("X-RateLimit-Remaining: 0");
                 $wait = $timeUnit - $diff;
                 sleep(1);
-                throw new RestException(429,
+                throw new RestException(
+                    429,
                     'Rate limit of ' . $maxPerUnit . ' request' .
                     ($maxPerUnit > 1 ? 's' : '') . ' per '
                     . static::$unit . ' exceeded. Please wait for '
@@ -145,7 +149,8 @@ class RateLimit implements iFilter, iUseAuthentication
             }
             $remainingPerUnit = $maxPerUnit - $used;
             header("X-RateLimit-Remaining: $remainingPerUnit");
-            $this->restler->cache->set($id,
+            $this->restler->cache->set(
+                $id,
                 array('time' => $time, 'used' => $used));
         }
         return true;

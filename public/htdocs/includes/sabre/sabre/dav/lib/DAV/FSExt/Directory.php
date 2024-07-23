@@ -47,15 +47,15 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota, DAV\IMoveTa
         if ('.' == $name || '..' == $name) {
             throw new DAV\Exception\Forbidden('Permission denied to . and ..');
         }
-        $newPath = $this->path.'/'.$name;
+        $newPath = $this->path . '/' . $name;
         file_put_contents($newPath, $data);
         clearstatcache(true, $newPath);
 
-        return '"'.sha1(
-            fileinode($newPath).
-            filesize($newPath).
+        return '"' . sha1(
+            fileinode($newPath) .
+            filesize($newPath) .
             filemtime($newPath)
-        ).'"';
+        ) . '"';
     }
 
     /**
@@ -69,7 +69,7 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota, DAV\IMoveTa
         if ('.' == $name || '..' == $name) {
             throw new DAV\Exception\Forbidden('Permission denied to . and ..');
         }
-        $newPath = $this->path.'/'.$name;
+        $newPath = $this->path . '/' . $name;
         mkdir($newPath);
         clearstatcache(true, $newPath);
     }
@@ -88,7 +88,7 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota, DAV\IMoveTa
      */
     public function getChild($name)
     {
-        $path = $this->path.'/'.$name;
+        $path = $this->path . '/' . $name;
 
         if (!file_exists($path)) {
             throw new DAV\Exception\NotFound('File could not be located');
@@ -115,7 +115,7 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota, DAV\IMoveTa
         if ('.' == $name || '..' == $name) {
             throw new DAV\Exception\Forbidden('Permission denied to . and ..');
         }
-        $path = $this->path.'/'.$name;
+        $path = $this->path . '/' . $name;
 
         return file_exists($path);
     }
@@ -207,6 +207,6 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota, DAV\IMoveTa
         // PHP allows us to access protected properties from other objects, as
         // long as they are defined in a class that has a shared inheritance
         // with the current class.
-        return rename($sourceNode->path, $this->path.'/'.$targetName);
+        return rename($sourceNode->path, $this->path . '/' . $targetName);
     }
 }

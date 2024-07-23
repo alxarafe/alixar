@@ -281,7 +281,8 @@ class DebugBarVarDumper implements AssetProvider
      *
      * @return array
      */
-    public function getAssets() {
+    public function getAssets()
+    {
         $dumper = $this->getDumper();
         $dumper->resetDumpHeader(); // this will cause the default dump header to regenerate
         return array(

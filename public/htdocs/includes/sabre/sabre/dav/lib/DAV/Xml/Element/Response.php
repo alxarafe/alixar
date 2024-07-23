@@ -121,7 +121,7 @@ class Response implements Element
          *   - EITHER a status and additional href(s)
          *     OR one or more propstat(s)
          */
-        $writer->writeElement('{DAV:}href', $writer->contextUri.\Sabre\HTTP\encodePath($this->getHref()));
+        $writer->writeElement('{DAV:}href', $writer->contextUri . \Sabre\HTTP\encodePath($this->getHref()));
 
         $empty = true;
         $httpStatus = $this->getHTTPStatus();
@@ -135,14 +135,14 @@ class Response implements Element
             $empty = false;
             $writer->startElement('{DAV:}propstat');
             $writer->writeElement('{DAV:}prop', $properties);
-            $writer->writeElement('{DAV:}status', 'HTTP/1.1 '.$status.' '.\Sabre\HTTP\Response::$statusCodes[$status]);
+            $writer->writeElement('{DAV:}status', 'HTTP/1.1 ' . $status . ' ' . \Sabre\HTTP\Response::$statusCodes[$status]);
             $writer->endElement(); // {DAV:}propstat
         }
 
         // The WebDAV spec only allows the status element on responses _without_ a propstat
         if ($empty) {
             if (null !== $httpStatus) {
-                $writer->writeElement('{DAV:}status', 'HTTP/1.1 '.$httpStatus.' '.\Sabre\HTTP\Response::$statusCodes[$httpStatus]);
+                $writer->writeElement('{DAV:}status', 'HTTP/1.1 ' . $httpStatus . ' ' . \Sabre\HTTP\Response::$statusCodes[$httpStatus]);
             } else {
                 /*
                 * The WebDAV spec _requires_ at least one DAV:propstat to appear for
@@ -154,7 +154,7 @@ class Response implements Element
                 */
                 $writer->writeElement('{DAV:}propstat', [
                     '{DAV:}prop' => [],
-                    '{DAV:}status' => 'HTTP/1.1 418 '.\Sabre\HTTP\Response::$statusCodes[418],
+                    '{DAV:}status' => 'HTTP/1.1 418 ' . \Sabre\HTTP\Response::$statusCodes[418],
                 ]);
             }
         }

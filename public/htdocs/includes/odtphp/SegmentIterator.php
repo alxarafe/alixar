@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Segments iterator
  * You need PHP 5.2 at least
@@ -44,7 +45,6 @@ class SegmentIterator implements RecursiveIterator
     }
     public function next()
     {
-        $this->key ++;
+        $this->key++;
     }
 }
-

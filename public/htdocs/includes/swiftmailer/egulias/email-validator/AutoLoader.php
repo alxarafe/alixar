@@ -45,9 +45,9 @@ class EguliasAutoLoader
             $nsparts = explode('\\', $class);
             $class = array_pop($nsparts);
             $path = $this->path . 'swiftmailer/egulias/email-validator/EmailValidator/';
-            $max=count($nsparts);
-            for ($i=2; $i<$max;$i++) {
-                $path .= $nsparts[$i].'/';
+            $max = count($nsparts);
+            for ($i = 2; $i < $max;$i++) {
+                $path .= $nsparts[$i] . '/';
             }
             $nsparts = array();
             $path .= str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';

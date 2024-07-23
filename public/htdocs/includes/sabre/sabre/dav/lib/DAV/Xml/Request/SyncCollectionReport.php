@@ -88,7 +88,7 @@ class SyncCollectionReport implements XmlDeserializable
 
         foreach ($required as $elem) {
             if (!array_key_exists($elem, $elems)) {
-                throw new BadRequest('The '.$elem.' element in the {DAV:}sync-collection report is required');
+                throw new BadRequest('The ' . $elem . ' element in the {DAV:}sync-collection report is required');
             }
         }
 

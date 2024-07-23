@@ -107,7 +107,7 @@ class MimeDir extends Parser
     public function setCharset($charset)
     {
         if (!in_array($charset, self::$SUPPORTED_CHARSETS)) {
-            throw new \InvalidArgumentException('Unsupported encoding. (Supported encodings: '.implode(', ', self::$SUPPORTED_CHARSETS).')');
+            throw new \InvalidArgumentException('Unsupported encoding. (Supported encodings: ' . implode(', ', self::$SUPPORTED_CHARSETS) . ')');
         }
         $this->charset = $charset;
     }
@@ -145,10 +145,12 @@ class MimeDir extends Parser
 
         // BOM is ZERO WIDTH NO-BREAK SPACE (U+FEFF).
         // It's 0xEF 0xBB 0xBF in UTF-8 hex.
-        if (3 <= strlen($line)
+        if (
+            3 <= strlen($line)
             && 0xef === ord($line[0])
             && 0xbb === ord($line[1])
-            && 0xbf === ord($line[2])) {
+            && 0xbf === ord($line[2])
+        ) {
             $line = substr($line, 3);
         }
 
@@ -170,7 +172,7 @@ class MimeDir extends Parser
             try {
                 $line = $this->readLine();
             } catch (EofException $oEx) {
-                $line = 'END:'.$this->root->name;
+                $line = 'END:' . $this->root->name;
             }
             if ('END:' === strtoupper(substr($line, 0, 4))) {
                 break;
@@ -183,7 +185,7 @@ class MimeDir extends Parser
 
         $name = strtoupper(substr($line, 4));
         if ($name !== $this->root->name) {
-            throw new ParseException('Invalid MimeDir file. expected: "END:'.$this->root->name.'" got: "END:'.$name.'"');
+            throw new ParseException('Invalid MimeDir file. expected: "END:' . $this->root->name . '" got: "END:' . $name . '"');
         }
     }
 
@@ -200,7 +202,7 @@ class MimeDir extends Parser
         // Start of a new component
         if ('BEGIN:' === strtoupper(substr($line, 0, 6))) {
             if (substr($line, 6) === $this->root->name) {
-                throw new ParseException('Invalid MimeDir file. Unexpected component: "'.$line.'" in document type '.$this->root->name);
+                throw new ParseException('Invalid MimeDir file. Unexpected component: "' . $line . '" in document type ' . $this->root->name);
             }
             $component = $this->root->createComponent(substr($line, 6), [], false);
 
@@ -218,7 +220,7 @@ class MimeDir extends Parser
 
             $name = strtoupper(substr($line, 4));
             if ($name !== $component->name) {
-                throw new ParseException('Invalid MimeDir file. expected: "END:'.$component->name.'" got: "END:'.$name.'"');
+                throw new ParseException('Invalid MimeDir file. expected: "END:' . $component->name . '" got: "END:' . $name . '"');
             }
 
             return $component;
@@ -308,7 +310,7 @@ class MimeDir extends Parser
             if ("\t" === $nextLine[0] || ' ' === $nextLine[0]) {
                 $curLine = \substr($nextLine, 1);
                 $line .= $curLine;
-                $rawLine .= "\n ".$curLine;
+                $rawLine .= "\n " . $curLine;
             } else {
                 $this->lineBuffer = $nextLine;
                 break;
@@ -383,7 +385,7 @@ class MimeDir extends Parser
                         //  frequently does with X-APPLE-STRUCTURED-LOCATION
                         continue;
                     }
-                    throw new ParseException('Invalid Mimedir file. Line starting at '.$this->startLine.' did not follow iCalendar/vCard conventions');
+                    throw new ParseException('Invalid Mimedir file. Line starting at ' . $this->startLine . ' did not follow iCalendar/vCard conventions');
                 }
                 if (is_null($property['parameters'][$lastParam])) {
                     $property['parameters'][$lastParam] = $value;
@@ -428,7 +430,7 @@ class MimeDir extends Parser
             if ($this->options & self::OPTION_IGNORE_INVALID_LINES) {
                 return false;
             }
-            throw new ParseException('Invalid Mimedir file. Line starting at '.$this->startLine.' did not follow iCalendar/vCard conventions');
+            throw new ParseException('Invalid Mimedir file. Line starting at ' . $this->startLine . ' did not follow iCalendar/vCard conventions');
         }
 
         // vCard 2.1 states that parameters may appear without a name, and only
@@ -469,7 +471,7 @@ class MimeDir extends Parser
                     $property['value'] = mb_convert_encoding($property['value'], 'UTF-8', $charset);
                     break;
                 default:
-                    throw new ParseException('Unsupported CHARSET: '.$propObj['CHARSET']);
+                    throw new ParseException('Unsupported CHARSET: ' . $propObj['CHARSET']);
             }
             $propObj->setRawMimeDirValue($property['value']);
         }
@@ -543,7 +545,7 @@ class MimeDir extends Parser
     {
         $regex = '#  (?: (\\\\ (?: \\\\ | N | n | ; | , ) )';
         if ($delimiter) {
-            $regex .= ' | ('.$delimiter.')';
+            $regex .= ' | (' . $delimiter . ')';
         }
         $regex .= ') #x';
 
@@ -674,7 +676,7 @@ class MimeDir extends Parser
                 // Reading the line
                 $this->readLine();
                 // Grabbing the raw form
-                $value .= "\n".$this->rawLine;
+                $value .= "\n" . $this->rawLine;
             }
         }
 

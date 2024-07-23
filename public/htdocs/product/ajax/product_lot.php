@@ -1,6 +1,8 @@
 <?php
-/* Copyright (C) 2023 	Laurent Destailleur  	<eldy@users.sourceforge.net>
+
+/* Copyright (C) 2023   Laurent Destailleur     <eldy@users.sourceforge.net>
  * Copyright (C) 2023   Lionel Vessiller     	<lvessiller@easya.solutions>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +19,29 @@
  */
 
 /**
- *	\file       htdocs/product/ajax/product_lot.php
- *	\brief      Ajax search component for ProductLot.
+ *  \file       htdocs/product/ajax/product_lot.php
+ *  \brief      Ajax search component for ProductLot.
  */
 
 if (!defined('NOTOKENRENEWAL')) {
-	define('NOTOKENRENEWAL', '1');
+    define('NOTOKENRENEWAL', '1');
 }
 if (!defined('NOREQUIREMENU')) {
-	define('NOREQUIREMENU', '1');
+    define('NOREQUIREMENU', '1');
 }
 if (!defined('NOREQUIREHTML')) {
-	define('NOREQUIREHTML', '1');
+    define('NOREQUIREHTML', '1');
 }
 if (!defined('NOREQUIREAJAX')) {
-	define('NOREQUIREAJAX', '1');
+    define('NOREQUIREAJAX', '1');
 }
 if (!defined('NOBROWSERNOTIF')) {
-	define('NOBROWSERNOTIF', '1');
+    define('NOBROWSERNOTIF', '1');
 }
 
 // Load Dolibarr environment
-require '../../main.inc.php'; // Load $user and permissions
-require_once DOL_DOCUMENT_ROOT.'/product/stock/class/productlot.class.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
+require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
 
 $action = GETPOST('action', 'aZ09');
 $productId = GETPOSTINT('product_id');
@@ -58,16 +60,16 @@ top_httphead('application/json');
 $rows = array();
 
 if ($action == 'search' && $batch != '') {
-	$productLot = new Productlot($db);
-	$result = $productLot->fetch('', $productId, $batch);
+    $productLot = new Productlot($db);
+    $result = $productLot->fetch('', $productId, $batch);
 
-	if ($result > 0 && $productLot->id > 0) {
-		$rows[] = array(
-			'rowid' => $productLot->id,
-			'sellby' => ($productLot->sellby ? dol_print_date($productLot->sellby, 'day') : ''),
-			'eatby' => ($productLot->eatby ? dol_print_date($productLot->eatby, 'day') : ''),
-		);
-	}
+    if ($result > 0 && $productLot->id > 0) {
+        $rows[] = array(
+            'rowid' => $productLot->id,
+            'sellby' => ($productLot->sellby ? dol_print_date($productLot->sellby, 'day') : ''),
+            'eatby' => ($productLot->eatby ? dol_print_date($productLot->eatby, 'day') : ''),
+        );
+    }
 }
 
 echo json_encode($rows);

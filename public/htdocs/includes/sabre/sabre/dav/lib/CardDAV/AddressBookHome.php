@@ -128,7 +128,7 @@ class AddressBookHome extends DAV\Collection implements DAV\IExtendedCollection,
                 return $child;
             }
         }
-        throw new DAV\Exception\NotFound('Addressbook with name \''.$name.'\' could not be found');
+        throw new DAV\Exception\NotFound('Addressbook with name \'' . $name . '\' could not be found');
     }
 
     /**
@@ -156,7 +156,7 @@ class AddressBookHome extends DAV\Collection implements DAV\IExtendedCollection,
      */
     public function createExtendedCollection($name, MkCol $mkCol)
     {
-        if (!$mkCol->hasResourceType('{'.Plugin::NS_CARDDAV.'}addressbook')) {
+        if (!$mkCol->hasResourceType('{' . Plugin::NS_CARDDAV . '}addressbook')) {
             throw new DAV\Exception\InvalidResourceType('Unknown resourceType for this collection');
         }
         $properties = $mkCol->getRemainingValues();

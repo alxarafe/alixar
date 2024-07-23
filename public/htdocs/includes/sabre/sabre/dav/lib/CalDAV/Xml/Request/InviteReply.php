@@ -112,23 +112,23 @@ class InviteReply implements XmlDeserializable
 
         foreach ($elems as $name => $value) {
             switch ($name) {
-                case '{'.Plugin::NS_CALENDARSERVER.'}hosturl':
+                case '{' . Plugin::NS_CALENDARSERVER . '}hosturl':
                     foreach ($value as $bla) {
                         if ('{DAV:}href' === $bla['name']) {
                             $calendarUri = $bla['value'];
                         }
                     }
                     break;
-                case '{'.Plugin::NS_CALENDARSERVER.'}invite-accepted':
+                case '{' . Plugin::NS_CALENDARSERVER . '}invite-accepted':
                     $status = DAV\Sharing\Plugin::INVITE_ACCEPTED;
                     break;
-                case '{'.Plugin::NS_CALENDARSERVER.'}invite-declined':
+                case '{' . Plugin::NS_CALENDARSERVER . '}invite-declined':
                     $status = DAV\Sharing\Plugin::INVITE_DECLINED;
                     break;
-                case '{'.Plugin::NS_CALENDARSERVER.'}in-reply-to':
+                case '{' . Plugin::NS_CALENDARSERVER . '}in-reply-to':
                     $inReplyTo = $value;
                     break;
-                case '{'.Plugin::NS_CALENDARSERVER.'}summary':
+                case '{' . Plugin::NS_CALENDARSERVER . '}summary':
                     $summary = $value;
                     break;
                 case '{DAV:}href':

@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\Format;
 
 /**
@@ -26,7 +27,7 @@ abstract class Format implements iFormat
     /**
      * @var string charset encoding defaults to UTF8
      */
-    protected $charset='utf-8';
+    protected $charset = 'utf-8';
 
     /**
      * Injected at runtime
@@ -135,6 +136,4 @@ abstract class Format implements iFormat
     {
         return $this->getExtension();
     }
-
 }
-

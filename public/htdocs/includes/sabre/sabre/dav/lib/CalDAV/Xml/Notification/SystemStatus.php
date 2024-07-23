@@ -106,7 +106,7 @@ class SystemStatus implements NotificationInterface
                 break;
         }
 
-        $writer->startElement('{'.Plugin::NS_CALENDARSERVER.'}systemstatus');
+        $writer->startElement('{' . Plugin::NS_CALENDARSERVER . '}systemstatus');
         $writer->writeAttribute('type', $type);
         $writer->endElement();
     }
@@ -117,7 +117,7 @@ class SystemStatus implements NotificationInterface
      */
     public function xmlSerializeFull(Writer $writer)
     {
-        $cs = '{'.Plugin::NS_CALENDARSERVER.'}';
+        $cs = '{' . Plugin::NS_CALENDARSERVER . '}';
         switch ($this->type) {
             case self::TYPE_LOW:
                 $type = 'low';
@@ -131,11 +131,11 @@ class SystemStatus implements NotificationInterface
                 break;
         }
 
-        $writer->startElement($cs.'systemstatus');
+        $writer->startElement($cs . 'systemstatus');
         $writer->writeAttribute('type', $type);
 
         if ($this->description) {
-            $writer->writeElement($cs.'description', $this->description);
+            $writer->writeElement($cs . 'description', $this->description);
         }
         if ($this->href) {
             $writer->writeElement('{DAV:}href', $this->href);

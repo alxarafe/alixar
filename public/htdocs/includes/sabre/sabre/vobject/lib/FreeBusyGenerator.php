@@ -528,12 +528,12 @@ class FreeBusyGenerator
                 continue;
             }
 
-            $busyTime[0] = new \DateTimeImmutable('@'.$busyTime['start'], $tz);
-            $busyTime[1] = new \DateTimeImmutable('@'.$busyTime['end'], $tz);
+            $busyTime[0] = new \DateTimeImmutable('@' . $busyTime['start'], $tz);
+            $busyTime[1] = new \DateTimeImmutable('@' . $busyTime['end'], $tz);
 
             $prop = $calendar->createProperty(
                 'FREEBUSY',
-                $busyTime[0]->format('Ymd\\THis\\Z').'/'.$busyTime[1]->format('Ymd\\THis\\Z')
+                $busyTime[0]->format('Ymd\\THis\\Z') . '/' . $busyTime[1]->format('Ymd\\THis\\Z')
             );
 
             // Only setting FBTYPE if it's not BUSY, because BUSY is the

@@ -214,7 +214,7 @@ class Plugin extends DAV\ServerPlugin
                     $this->server->httpRequest,
                     $this->server->httpResponse
                 );
-                throw new NotAuthenticated(implode(', ', $reasons).'. Login was needed for privilege: '.implode(', ', $failed).' on '.$uri);
+                throw new NotAuthenticated(implode(', ', $reasons) . '. Login was needed for privilege: ' . implode(', ', $failed) . ' on ' . $uri);
             }
             if ($throwExceptions) {
                 throw new NeedPrivileges($uri, $failed);
@@ -655,7 +655,7 @@ class Plugin extends DAV\ServerPlugin
 
             if (!isset($flat[$current['privilege']])) {
                 // Ignoring privileges that are not in the supported-privileges list.
-                $this->server->getLogger()->debug('A node has the "'.$current['privilege'].'" in its ACL list, but this privilege was not reported in the supportedPrivilegeSet list. This will be ignored.');
+                $this->server->getLogger()->debug('A node has the "' . $current['privilege'] . '" in its ACL list, but this privilege was not reported in the supportedPrivilegeSet list. This will be ignored.');
                 continue;
             }
             foreach ($flat[$current['privilege']]['aggregates'] as $subPriv) {
@@ -744,7 +744,7 @@ class Plugin extends DAV\ServerPlugin
 
             $results = $principalCollection->searchPrincipals($searchProperties, $test);
             foreach ($results as $result) {
-                $lookupResults[] = rtrim($uri, '/').'/'.$result;
+                $lookupResults[] = rtrim($uri, '/') . '/' . $result;
             }
         }
 
@@ -791,7 +791,8 @@ class Plugin extends DAV\ServerPlugin
             }
         });
 
-        array_push($server->protectedProperties,
+        array_push(
+            $server->protectedProperties,
             '{DAV:}alternate-URI-set',
             '{DAV:}principal-URL',
             '{DAV:}group-membership',
@@ -957,12 +958,12 @@ class Plugin extends DAV\ServerPlugin
                 return new Href($node->getAlternateUriSet());
             });
             $propFind->handle('{DAV:}principal-URL', function () use ($node) {
-                return new Href($node->getPrincipalUrl().'/');
+                return new Href($node->getPrincipalUrl() . '/');
             });
             $propFind->handle('{DAV:}group-member-set', function () use ($node) {
                 $members = $node->getGroupMemberSet();
                 foreach ($members as $k => $member) {
-                    $members[$k] = rtrim($member, '/').'/';
+                    $members[$k] = rtrim($member, '/') . '/';
                 }
 
                 return new Href($members);
@@ -970,7 +971,7 @@ class Plugin extends DAV\ServerPlugin
             $propFind->handle('{DAV:}group-membership', function () use ($node) {
                 $members = $node->getGroupMembership();
                 foreach ($members as $k => $member) {
-                    $members[$k] = rtrim($member, '/').'/';
+                    $members[$k] = rtrim($member, '/') . '/';
                 }
 
                 return new Href($members);
@@ -982,14 +983,14 @@ class Plugin extends DAV\ServerPlugin
             $val = $this->principalCollectionSet;
             // Ensuring all collections end with a slash
             foreach ($val as $k => $v) {
-                $val[$k] = $v.'/';
+                $val[$k] = $v . '/';
             }
 
             return new Href($val);
         });
         $propFind->handle('{DAV:}current-user-principal', function () {
             if ($url = $this->getCurrentUserPrincipal()) {
-                return new Xml\Property\Principal(Xml\Property\Principal::HREF, $url.'/');
+                return new Xml\Property\Principal(Xml\Property\Principal::HREF, $url . '/');
             } else {
                 return new Xml\Property\Principal(Xml\Property\Principal::UNAUTHENTICATED);
             }
@@ -1023,7 +1024,7 @@ class Plugin extends DAV\ServerPlugin
         /* Adding ACL properties */
         if ($node instanceof IACL) {
             $propFind->handle('{DAV:}owner', function () use ($node) {
-                return new Href($node->getOwner().'/');
+                return new Href($node->getOwner() . '/');
             });
         }
     }
@@ -1157,21 +1158,21 @@ class Plugin extends DAV\ServerPlugin
         foreach ($newAcl as $newAce) {
             // Do we recognize the privilege
             if (!isset($supportedPrivileges[$newAce['privilege']])) {
-                throw new Exception\NotSupportedPrivilege('The privilege you specified ('.$newAce['privilege'].') is not recognized by this server');
+                throw new Exception\NotSupportedPrivilege('The privilege you specified (' . $newAce['privilege'] . ') is not recognized by this server');
             }
 
             if ($supportedPrivileges[$newAce['privilege']]['abstract']) {
-                throw new Exception\NoAbstract('The privilege you specified ('.$newAce['privilege'].') is an abstract privilege');
+                throw new Exception\NoAbstract('The privilege you specified (' . $newAce['privilege'] . ') is an abstract privilege');
             }
 
             // Looking up the principal
             try {
                 $principal = $this->server->tree->getNodeForPath($newAce['principal']);
             } catch (NotFound $e) {
-                throw new Exception\NotRecognizedPrincipal('The specified principal ('.$newAce['principal'].') does not exist');
+                throw new Exception\NotRecognizedPrincipal('The specified principal (' . $newAce['principal'] . ') does not exist');
             }
             if (!($principal instanceof IPrincipal)) {
-                throw new Exception\NotRecognizedPrincipal('The specified uri ('.$newAce['principal'].') is not a principal');
+                throw new Exception\NotRecognizedPrincipal('The specified uri (' . $newAce['principal'] . ') is not a principal');
             }
         }
         $node->setACL($newAcl);
@@ -1210,7 +1211,7 @@ class Plugin extends DAV\ServerPlugin
             // Finding all principals under the request uri that match the
             // current principal.
             foreach ($currentPrincipals as $currentPrincipal) {
-                if ($currentPrincipal === $path || 0 === strpos($currentPrincipal, $path.'/')) {
+                if ($currentPrincipal === $path || 0 === strpos($currentPrincipal, $path . '/')) {
                     $result[] = $currentPrincipal;
                 }
             }

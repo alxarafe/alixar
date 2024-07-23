@@ -325,8 +325,10 @@ class Worksheet extends WriterPart
         }
 
         // Set Zero Height row
-        if ((string) $pSheet->getDefaultRowDimension()->getZeroHeight() === '1' ||
-            strtolower((string) $pSheet->getDefaultRowDimension()->getZeroHeight()) == 'true') {
+        if (
+            (string) $pSheet->getDefaultRowDimension()->getZeroHeight() === '1' ||
+            strtolower((string) $pSheet->getDefaultRowDimension()->getZeroHeight()) == 'true'
+        ) {
             $objWriter->writeAttribute('zeroHeight', '1');
         }
 
@@ -485,13 +487,17 @@ class Worksheet extends WriterPart
                     $objWriter->writeAttribute('dxfId', $this->getParentWriter()->getStylesConditionalHashTable()->getIndexForHashCode($conditional->getHashCode()));
                     $objWriter->writeAttribute('priority', $id++);
 
-                    if (($conditional->getConditionType() == Conditional::CONDITION_CELLIS || $conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT)
-                        && $conditional->getOperatorType() != Conditional::OPERATOR_NONE) {
+                    if (
+                        ($conditional->getConditionType() == Conditional::CONDITION_CELLIS || $conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT)
+                        && $conditional->getOperatorType() != Conditional::OPERATOR_NONE
+                    ) {
                         $objWriter->writeAttribute('operator', $conditional->getOperatorType());
                     }
 
-                    if ($conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT
-                        && $conditional->getText() !== null) {
+                    if (
+                        $conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT
+                        && $conditional->getText() !== null
+                    ) {
                         $objWriter->writeAttribute('text', $conditional->getText());
                     }
 
@@ -499,25 +505,35 @@ class Worksheet extends WriterPart
                         $objWriter->writeAttribute('stopIfTrue', '1');
                     }
 
-                    if ($conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT
+                    if (
+                        $conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT
                         && $conditional->getOperatorType() == Conditional::OPERATOR_CONTAINSTEXT
-                        && $conditional->getText() !== null) {
+                        && $conditional->getText() !== null
+                    ) {
                         $objWriter->writeElement('formula', 'NOT(ISERROR(SEARCH("' . $conditional->getText() . '",' . $cellCoordinate . ')))');
-                    } elseif ($conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT
+                    } elseif (
+                        $conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT
                         && $conditional->getOperatorType() == Conditional::OPERATOR_BEGINSWITH
-                        && $conditional->getText() !== null) {
+                        && $conditional->getText() !== null
+                    ) {
                         $objWriter->writeElement('formula', 'LEFT(' . $cellCoordinate . ',' . strlen($conditional->getText()) . ')="' . $conditional->getText() . '"');
-                    } elseif ($conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT
+                    } elseif (
+                        $conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT
                         && $conditional->getOperatorType() == Conditional::OPERATOR_ENDSWITH
-                        && $conditional->getText() !== null) {
+                        && $conditional->getText() !== null
+                    ) {
                         $objWriter->writeElement('formula', 'RIGHT(' . $cellCoordinate . ',' . strlen($conditional->getText()) . ')="' . $conditional->getText() . '"');
-                    } elseif ($conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT
+                    } elseif (
+                        $conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT
                         && $conditional->getOperatorType() == Conditional::OPERATOR_NOTCONTAINS
-                        && $conditional->getText() !== null) {
+                        && $conditional->getText() !== null
+                    ) {
                         $objWriter->writeElement('formula', 'ISERROR(SEARCH("' . $conditional->getText() . '",' . $cellCoordinate . '))');
-                    } elseif ($conditional->getConditionType() == Conditional::CONDITION_CELLIS
+                    } elseif (
+                        $conditional->getConditionType() == Conditional::CONDITION_CELLIS
                         || $conditional->getConditionType() == Conditional::CONDITION_CONTAINSTEXT
-                        || $conditional->getConditionType() == Conditional::CONDITION_EXPRESSION) {
+                        || $conditional->getConditionType() == Conditional::CONDITION_EXPRESSION
+                    ) {
                         foreach ($conditional->getConditions() as $formula) {
                             // Formula
                             $objWriter->writeElement('formula', $formula);
@@ -777,9 +793,11 @@ class Worksheet extends WriterPart
                         }
 
                         foreach ($rules as $rule) {
-                            if (($column->getFilterType() === Column::AUTOFILTER_FILTERTYPE_FILTER) &&
+                            if (
+                                ($column->getFilterType() === Column::AUTOFILTER_FILTERTYPE_FILTER) &&
                                 ($rule->getOperator() === Rule::AUTOFILTER_COLUMN_RULE_EQUAL) &&
-                                ($rule->getValue() === '')) {
+                                ($rule->getValue() === '')
+                            ) {
                                 //    Filter rule for Blanks
                                 $objWriter->writeAttribute('blank', 1);
                             } elseif ($rule->getRuleType() === Rule::AUTOFILTER_RULETYPE_DYNAMICFILTER) {

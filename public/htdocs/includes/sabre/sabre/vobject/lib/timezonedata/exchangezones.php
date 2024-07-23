@@ -11,6 +11,7 @@
  * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
+
 return [
     'Universal Coordinated Time' => 'UTC',
     'Casablanca, Monrovia' => 'Africa/Casablanca',

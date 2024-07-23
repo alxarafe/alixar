@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\Data;
 
 /**
@@ -15,7 +16,6 @@ namespace Luracast\Restler\Data;
  */
 interface iValueObject
 {
-
     /**
      * This static method is called for creating an instance of the class by
      * passing the initiation values as an array.
@@ -36,4 +36,3 @@ interface iValueObject
      */
     public function __toString();
 }
-

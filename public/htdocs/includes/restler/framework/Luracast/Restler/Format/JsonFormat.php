@@ -68,10 +68,10 @@ class JsonFormat extends Format
 
         $options = 0;
 
-        if ((PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 4) // PHP >= 5.4
+        if (
+            (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 4) // PHP >= 5.4
             || PHP_MAJOR_VERSION > 5 // PHP >= 6.0
         ) {
-
             if ($humanReadable) {
                 $options |= JSON_PRETTY_PRINT;
             }
@@ -134,7 +134,8 @@ class JsonFormat extends Format
 
         $options = 0;
         if (self::$bigIntAsString) {
-            if ((PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 4) // PHP >= 5.4
+            if (
+                (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 4) // PHP >= 5.4
                 || PHP_MAJOR_VERSION > 5 // PHP >= 6.0
             ) {
                 $options |= JSON_BIGINT_AS_STRING;
@@ -178,8 +179,8 @@ class JsonFormat extends Format
         for ($c = 0; $c < $len; $c++) {
             $char = $json [$c];
             switch ($char) {
-                case '{' :
-                case '[' :
+                case '{':
+                case '[':
                     if (!$inString) {
                         $newJson .= $char . "\n" .
                             str_repeat($tab, $indentLevel + 1);
@@ -188,8 +189,8 @@ class JsonFormat extends Format
                         $newJson .= $char;
                     }
                     break;
-                case '}' :
-                case ']' :
+                case '}':
+                case ']':
                     if (!$inString) {
                         $indentLevel--;
                         $newJson .= "\n" .
@@ -198,7 +199,7 @@ class JsonFormat extends Format
                         $newJson .= $char;
                     }
                     break;
-                case ',' :
+                case ',':
                     if (!$inString) {
                         $newJson .= ",\n" .
                             str_repeat($tab, $indentLevel);
@@ -206,20 +207,20 @@ class JsonFormat extends Format
                         $newJson .= $char;
                     }
                     break;
-                case ':' :
+                case ':':
                     if (!$inString) {
                         $newJson .= ': ';
                     } else {
                         $newJson .= $char;
                     }
                     break;
-                case '"' :
+                case '"':
                     if ($c == 0) {
                         $inString = true;
                     } elseif ($c > 0 && $json [$c - 1] != '\\') {
                         $inString = !$inString;
                     }
-                default :
+                default:
                     $newJson .= $char;
                     break;
             }
@@ -237,13 +238,10 @@ class JsonFormat extends Format
     protected function handleJsonError()
     {
         if (function_exists('json_last_error_msg') && json_last_error() !== JSON_ERROR_NONE) {
-
             // PHP >= 5.5.0
 
             $message = json_last_error_msg();
-
         } elseif (function_exists('json_last_error')) {
-
             // PHP >= 5.3.0
 
             switch (json_last_error()) {

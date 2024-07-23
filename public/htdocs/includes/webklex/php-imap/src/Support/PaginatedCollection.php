@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     PaginatedCollection.php
 * Category: Collection
@@ -21,8 +22,8 @@ use Illuminate\Pagination\Paginator;
  *
  * @package Webklex\PHPIMAP\Support
  */
-class PaginatedCollection extends Collection {
-
+class PaginatedCollection extends Collection
+{
     /**
      * Number of total entries
      *
@@ -39,7 +40,8 @@ class PaginatedCollection extends Collection {
      *
      * @return LengthAwarePaginator
      */
-    public function paginate($per_page = 15, $page = null, $page_name = 'page', $prepaginated = false) {
+    public function paginate($per_page = 15, $page = null, $page_name = 'page', $prepaginated = false)
+    {
         $page = $page ?: Paginator::resolveCurrentPage($page_name);
 
         $total = $this->total ? $this->total : $this->count();
@@ -62,7 +64,8 @@ class PaginatedCollection extends Collection {
      *
      * @return LengthAwarePaginator
      */
-    protected function paginator($items, $total, $per_page, $current_page, array $options) {
+    protected function paginator($items, $total, $per_page, $current_page, array $options)
+    {
         return new LengthAwarePaginator($items, $total, $per_page, $current_page, $options);
     }
 
@@ -72,7 +75,8 @@ class PaginatedCollection extends Collection {
      *
      * @return int|null
      */
-    public function total($total = null) {
+    public function total($total = null)
+    {
         if($total === null) {
             return $this->total;
         }

@@ -1,5 +1,6 @@
 <?php
 /* Copyright (C) 2024  Laurent Destailleur <eldy@users.sourceforge.net>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,23 +18,23 @@
 
 // Protection to avoid direct call of template
 if (empty($context) || !is_object($context)) {
-	print "Error, template page can't be called as URL";
-	exit(1);
+    print "Error, template page can't be called as URL";
+    exit(1);
 }
 
 if (!empty($context->title)) {
-	$title = $context->title;
+    $title = $context->title;
 } else {
-	$title = 'WebPortal';
+    $title = 'WebPortal';
 }
 
-$head = '<link rel="stylesheet" href="'.$context->rootUrl.'css/global.css.php">'."\n";
+$head = '<link rel="stylesheet" href="' . $context->rootUrl . 'css/global.css.php">' . "\n";
 
 //$jNotifyCSSUrl = dol_buildpath('/includes/jquery/plugins/jnotify/jquery.jnotify.css', 2);
 //$head .= '<link rel="stylesheet" href="'.$jNotifyCSSUrl.' ">'."\n";
 
 if (getDolGlobalString('WEBPORTAL_CUSTOM_CSS')) {
-	$head .= '<link rel="stylesheet" type="text/css" href="'.$context->rootUrl.'css/themes/custom.css.php?revision='.getDolGlobalInt('WEBPORTAL_PARAMS_REV').'">'."\n";
+    $head .= '<link rel="stylesheet" type="text/css" href="' . $context->rootUrl . 'css/themes/custom.css.php?revision=' . getDolGlobalInt('WEBPORTAL_PARAMS_REV') . '">' . "\n";
 }
 // JQuery
 //$jQueryJSUrl = $context->rootUrl.'includes/jquery/js/jquery.js';
@@ -48,6 +49,6 @@ if (getDolGlobalString('WEBPORTAL_CUSTOM_CSS')) {
 top_htmlhead($head, $title);
 ?>
 <body
-		data-theme="custom"
-		data-controller="<?php print dol_escape_htmltag($context->controller); ?>"
+        data-theme="custom"
+        data-controller="<?php print dol_escape_htmltag($context->controller); ?>"
 >

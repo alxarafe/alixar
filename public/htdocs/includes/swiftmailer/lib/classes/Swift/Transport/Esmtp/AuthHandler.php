@@ -184,9 +184,9 @@ class Swift_Transport_Esmtp_AuthHandler implements Swift_Transport_EsmtpHandler
                 }
             }
 
-            $message = 'Failed to authenticate on SMTP server with username "'.$this->username.'" using '.$count.' possible authenticators.';
+            $message = 'Failed to authenticate on SMTP server with username "' . $this->username . '" using ' . $count . ' possible authenticators.';
             foreach ($errors as $error) {
-                $message .= ' Authenticator '.$error[0].' returned '.$error[1].'.';
+                $message .= ' Authenticator ' . $error[0] . ' returned ' . $error[1] . '.';
             }
             throw new Swift_TransportException($message);
         }
@@ -263,6 +263,6 @@ class Swift_Transport_Esmtp_AuthHandler implements Swift_Transport_EsmtpHandler
             }
         }
 
-        throw new Swift_TransportException('Auth mode '.$mode.' is invalid');
+        throw new Swift_TransportException('Auth mode ' . $mode . ' is invalid');
     }
 }

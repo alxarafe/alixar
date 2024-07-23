@@ -67,7 +67,7 @@ class Apache implements BackendInterface
             return [false, 'No REMOTE_USER, REDIRECT_REMOTE_USER, or PHP_AUTH_USER property was found in the PHP $_SERVER super-global. This likely means your server is not configured correctly'];
         }
 
-        return [true, $this->principalPrefix.$remoteUser];
+        return [true, $this->principalPrefix . $remoteUser];
     }
 
     /**

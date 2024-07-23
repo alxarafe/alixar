@@ -1,5 +1,7 @@
 <?php
+
 /* Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,47 +18,47 @@
  */
 
 /**
- *	\file       /htdocs/webhook/ajax/webhook.php
- *	\brief      File to make Ajax action on webhook
+ *  \file       /htdocs/webhook/ajax/webhook.php
+ *  \brief      File to make Ajax action on webhook
  */
 
 if (!defined('NOTOKENRENEWAL')) {
-	define('NOTOKENRENEWAL', '1'); // Disables token renewal
+    define('NOTOKENRENEWAL', '1'); // Disables token renewal
 }
 if (!defined('NOREQUIREHTML')) {
-	define('NOREQUIREHTML', '1');
+    define('NOREQUIREHTML', '1');
 }
 if (!defined('NOREQUIREAJAX')) {
-	define('NOREQUIREAJAX', '1');
+    define('NOREQUIREAJAX', '1');
 }
 if (!defined('NOREQUIRESOC')) {
-	define('NOREQUIRESOC', '1');
+    define('NOREQUIRESOC', '1');
 }
 // Do not check anti CSRF attack test
 if (!defined('NOREQUIREMENU')) {
-	define('NOREQUIREMENU', '1');
+    define('NOREQUIREMENU', '1');
 }
 // If we need access without being logged.
-if (!empty($_GET['public'])) {	// Keep $_GET here. GETPOST() is not yet defined so we use $_GET
-	if (!defined("NOLOGIN")) {
-		define("NOLOGIN", '1');
-	}
+if (!empty($_GET['public'])) {  // Keep $_GET here. GETPOST() is not yet defined so we use $_GET
+    if (!defined("NOLOGIN")) {
+        define("NOLOGIN", '1');
+    }
 }
 if (!defined('NOIPCHECK')) {
-	define('NOIPCHECK', '1'); // Do not check IP defined into conf $dolibarr_main_restrict_ip
+    define('NOIPCHECK', '1'); // Do not check IP defined into conf $dolibarr_main_restrict_ip
 }
 if (!defined('NOBROWSERNOTIF')) {
-	define('NOBROWSERNOTIF', '1');
+    define('NOBROWSERNOTIF', '1');
 }
 include '../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/webhook/class/target.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/webhook/class/target.class.php';
 
 $action = GETPOST('action', 'aZ09');
 $triggercode = GETPOST('triggercode');
 
 // Security check
 if (empty($user->admin)) {
-	accessforbidden();
+    accessforbidden();
 }
 
 
@@ -74,71 +76,71 @@ if (empty($user->admin)) {
 top_httphead('application/json');
 
 if ($action == "getjsonformtrigger") {
-	$response = '';
-	$objnotfound = 0;
+    $response = '';
+    $objnotfound = 0;
 
-	$json = new stdClass();
+    $json = new stdClass();
 
-	if (!empty($triggercode)) {
-		// Clean triggercode to removes keep only Object trigger name
-		$objecttriggername = array();
-		preg_match('#\((.*?)\)#', $triggercode, $objecttriggername);
+    if (!empty($triggercode)) {
+        // Clean triggercode to removes keep only Object trigger name
+        $objecttriggername = array();
+        preg_match('#\((.*?)\)#', $triggercode, $objecttriggername);
 
-		$json->triggercode = empty($objecttriggername[1]) ? $triggercode : $objecttriggername[1];
+        $json->triggercode = empty($objecttriggername[1]) ? $triggercode : $objecttriggername[1];
 
-		if (!empty($json->triggercode)) {
-			$objtype = explode("_", $json->triggercode)[0];
-			$obj = findobjecttosend($objtype);
-			if (is_object($obj)) {
-				dol_syslog("Ajax webhook: We clean object fetched");
-				$properties = dol_get_object_properties($obj);
-				foreach ($properties as $key => $property) {
-					if (empty($property)) {
-						unset($obj->$key);
-					}
-				}
-				unset($obj->db);
-				unset($obj->fields);
-				unset($obj->table_element);
-				unset($obj->picto);
-				unset($obj->isextrafieldmanaged);
-				unset($obj->ismultientitymanaged);
+        if (!empty($json->triggercode)) {
+            $objtype = explode("_", $json->triggercode)[0];
+            $obj = findobjecttosend($objtype);
+            if (is_object($obj)) {
+                dol_syslog("Ajax webhook: We clean object fetched");
+                $properties = dol_get_object_properties($obj);
+                foreach ($properties as $key => $property) {
+                    if (empty($property)) {
+                        unset($obj->$key);
+                    }
+                }
+                unset($obj->db);
+                unset($obj->fields);
+                unset($obj->table_element);
+                unset($obj->picto);
+                unset($obj->isextrafieldmanaged);
+                unset($obj->ismultientitymanaged);
 
-				$json->object = $obj;
-			} else {
-				$objnotfound ++;
-			}
-		} else {
-			$objnotfound ++;
-		}
+                $json->object = $obj;
+            } else {
+                $objnotfound++;
+            }
+        } else {
+            $objnotfound++;
+        }
 
-		if ($objnotfound) {
-			dol_syslog("Ajax webhook: Class not found for trigger code ".$json->triggercode);
-			$json->object = new stdClass();
-			$json->object->field1 = 'field1';
-			$json->object->field2 = 'field2';
-			$json->object->field3 = 'field3';
-		}
-	}
+        if ($objnotfound) {
+            dol_syslog("Ajax webhook: Class not found for trigger code " . $json->triggercode);
+            $json->object = new stdClass();
+            $json->object->field1 = 'field1';
+            $json->object->field2 = 'field2';
+            $json->object->field3 = 'field3';
+        }
+    }
 
-	$response = json_encode($json);
-	echo $response;
+    $response = json_encode($json);
+    echo $response;
 }
 
 /**
  * Find and init a specimen for the given object type
  *
- * @param 	string      $objecttype		Object type to init as a specimen
+ * @param   string      $objecttype     Object type to init as a specimen
  * @return object|false
  */
 function findobjecttosend($objecttype)
 {
-	dol_syslog("Ajax webhook: We fetch object of type = ".$objecttype." and we init it as specimen");
-	$obj = fetchObjectByElement(0, dol_strtolower($objecttype));
-	if (is_object($obj)) {
-		$obj->initAsSpecimen();
-	} else {
-		return false;
-	}
-	return $obj;
+    dol_syslog("Ajax webhook: We fetch object of type = " . $objecttype . " and we init it as specimen");
+    $obj = fetchObjectByElement(0, dol_strtolower($objecttype));
+    if (is_object($obj)) {
+        $obj->initAsSpecimen();
+    } else {
+        return false;
+    }
+    return $obj;
 }

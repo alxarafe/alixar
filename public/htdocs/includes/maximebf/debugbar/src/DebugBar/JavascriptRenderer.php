@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the DebugBar package.
  *
@@ -721,7 +722,8 @@ class JavascriptRenderer
         foreach ($additionalAssets as $assets) {
             $basePath = isset($assets['base_path']) ? $assets['base_path'] : '';
             $baseUrl = isset($assets['base_url']) ? $assets['base_url'] : '';
-            $root = $this->getRelativeRoot($relativeTo,
+            $root = $this->getRelativeRoot(
+                $relativeTo,
                 $this->makeUriRelativeTo($basePath, $this->basePath),
                 $this->makeUriRelativeTo($baseUrl, $this->baseUrl));
             if (isset($assets['css'])) {
@@ -1051,7 +1053,6 @@ class JavascriptRenderer
         } else {
             return "<script type=\"text/javascript\"{$nonce}>\n$js\n</script>\n";
         }
-
     }
 
     /**
@@ -1072,7 +1073,8 @@ class JavascriptRenderer
         }
 
         if ($this->ajaxHandlerClass) {
-            $js .= sprintf("%s.ajaxHandler = new %s(%s, undefined, %s);\n",
+            $js .= sprintf(
+                "%s.ajaxHandler = new %s(%s, undefined, %s);\n",
                 $this->variableName,
                 $this->ajaxHandlerClass,
                 $this->variableName,
@@ -1089,7 +1091,8 @@ class JavascriptRenderer
         }
 
         if ($this->openHandlerUrl !== null) {
-            $js .= sprintf("%s.setOpenHandler(new %s(%s));\n", $this->variableName,
+            $js .= sprintf(
+                "%s.setOpenHandler(new %s(%s));\n", $this->variableName,
                 $this->openHandlerClass,
                 json_encode(array("url" => $this->openHandlerUrl)));
         }
@@ -1129,7 +1132,8 @@ class JavascriptRenderer
                 if (!isset($opts['title'])) {
                     $opts['title'] = ucfirst(str_replace('_', ' ', $name));
                 }
-                $js .= sprintf("%s.addTab(\"%s\", new %s({%s%s}));\n",
+                $js .= sprintf(
+                    "%s.addTab(\"%s\", new %s({%s%s}));\n",
                     $varname,
                     $name,
                     isset($options['tab']) ? $options['tab'] : 'PhpDebugBar.DebugBar.Tab',
@@ -1137,7 +1141,8 @@ class JavascriptRenderer
                     isset($options['widget']) ? sprintf('%s"widget": new %s()', count($opts) ? ', ' : '', $options['widget']) : ''
                 );
             } elseif (isset($options['indicator']) || isset($options['icon'])) {
-                $js .= sprintf("%s.addIndicator(\"%s\", new %s(%s), \"%s\");\n",
+                $js .= sprintf(
+                    "%s.addIndicator(\"%s\", new %s(%s), \"%s\");\n",
                     $varname,
                     $name,
                     isset($options['indicator']) ? $options['indicator'] : 'PhpDebugBar.DebugBar.Indicator',
@@ -1174,7 +1179,8 @@ class JavascriptRenderer
      */
     protected function getAddDatasetCode($requestId, $data, $suffix = null)
     {
-        $js = sprintf("%s.addDataSet(%s, \"%s\"%s);\n",
+        $js = sprintf(
+            "%s.addDataSet(%s, \"%s\"%s);\n",
             $this->variableName,
             json_encode($data),
             $requestId,
@@ -1190,7 +1196,7 @@ class JavascriptRenderer
     protected function getNonceAttribute()
     {
         if ($nonce = $this->getCspNonce()) {
-            return ' nonce="' . $nonce .'"';
+            return ' nonce="' . $nonce . '"';
         }
 
         return '';

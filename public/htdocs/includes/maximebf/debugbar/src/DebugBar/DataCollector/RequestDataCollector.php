@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the DebugBar package.
  *
@@ -76,7 +77,8 @@ class RequestDataCollector extends DataCollector implements Renderable, AssetPro
     /**
      * @return array
      */
-    public function getAssets() {
+    public function getAssets()
+    {
         return $this->isHtmlVarDumperUsed() ? $this->getVarDumper()->getAssets() : array();
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler;
 
 use Exception;
@@ -15,7 +16,8 @@ use Exception;
  * @link       http://luracast.com/products/restler/
  *
  */
-interface iCompose {
+interface iCompose
+{
     /**
      * Result of an api call is passed to this method
      * to create a standard structure for the data

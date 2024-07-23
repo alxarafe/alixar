@@ -80,7 +80,7 @@ class Client extends EventEmitter
         $this->curlSettings = [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_NOBODY => false,
-            CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
+            CURLOPT_USERAGENT => 'sabre-http/' . Version::VERSION . ' (http://sabre.io/)',
         ];
         if ($separatedHeaders) {
             $this->curlSettings[CURLOPT_HEADERFUNCTION] = [$this, 'receiveCurlHeader'];
@@ -139,7 +139,7 @@ class Client extends EventEmitter
                 // This was a HTTP error
                 if ($code >= 400) {
                     $this->emit('error', [$request, $response, &$retry, $retryCount]);
-                    $this->emit('error:'.$code, [$request, $response, &$retry, $retryCount]);
+                    $this->emit('error:' . $code, [$request, $response, &$retry, $retryCount]);
                 }
             } catch (ClientException $e) {
                 $this->emit('exception', [$request, $e, &$retry, $retryCount]);
@@ -242,7 +242,7 @@ class Client extends EventEmitter
                     }
                 } elseif (self::STATUS_HTTPERROR === $curlResult['status']) {
                     $this->emit('error', [$request, $curlResult['response'], &$retry, $retryCount]);
-                    $this->emit('error:'.$curlResult['http_code'], [$request, $curlResult['response'], &$retry, $retryCount]);
+                    $this->emit('error:' . $curlResult['http_code'], [$request, $curlResult['response'], &$retry, $retryCount]);
 
                     if ($retry) {
                         ++$retryCount;
@@ -399,7 +399,7 @@ class Client extends EventEmitter
         $nHeaders = [];
         foreach ($request->getHeaders() as $key => $values) {
             foreach ($values as $value) {
-                $nHeaders[] = $key.': '.$value;
+                $nHeaders[] = $key . ': ' . $value;
             }
         }
 

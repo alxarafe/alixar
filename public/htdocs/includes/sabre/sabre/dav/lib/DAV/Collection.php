@@ -39,7 +39,7 @@ abstract class Collection extends Node implements ICollection
                 return $child;
             }
         }
-        throw new Exception\NotFound('File not found: '.$name);
+        throw new Exception\NotFound('File not found: ' . $name);
     }
 
     /**
@@ -89,7 +89,7 @@ abstract class Collection extends Node implements ICollection
      */
     public function createFile($name, $data = null)
     {
-        throw new Exception\Forbidden('Permission denied to create file (filename '.$name.')');
+        throw new Exception\Forbidden('Permission denied to create file (filename ' . $name . ')');
     }
 
     /**

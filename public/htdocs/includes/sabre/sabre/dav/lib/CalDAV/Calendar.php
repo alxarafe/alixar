@@ -260,16 +260,16 @@ class Calendar implements ICalendar, DAV\IProperties, DAV\Sync\ISyncCollection, 
             ],
             [
                 'privilege' => '{DAV:}read',
-                'principal' => $this->getOwner().'/calendar-proxy-write',
+                'principal' => $this->getOwner() . '/calendar-proxy-write',
                 'protected' => true,
             ],
             [
                 'privilege' => '{DAV:}read',
-                'principal' => $this->getOwner().'/calendar-proxy-read',
+                'principal' => $this->getOwner() . '/calendar-proxy-read',
                 'protected' => true,
             ],
             [
-                'privilege' => '{'.Plugin::NS_CALDAV.'}read-free-busy',
+                'privilege' => '{' . Plugin::NS_CALDAV . '}read-free-busy',
                 'principal' => '{DAV:}authenticated',
                 'protected' => true,
             ],
@@ -282,7 +282,7 @@ class Calendar implements ICalendar, DAV\IProperties, DAV\Sync\ISyncCollection, 
             ];
             $acl[] = [
                 'privilege' => '{DAV:}write',
-                'principal' => $this->getOwner().'/calendar-proxy-write',
+                'principal' => $this->getOwner() . '/calendar-proxy-write',
                 'protected' => true,
             ];
         }
@@ -308,12 +308,12 @@ class Calendar implements ICalendar, DAV\IProperties, DAV\Sync\ISyncCollection, 
 
             [
                 'privilege' => '{DAV:}read',
-                'principal' => $this->getOwner().'/calendar-proxy-write',
+                'principal' => $this->getOwner() . '/calendar-proxy-write',
                 'protected' => true,
             ],
             [
                 'privilege' => '{DAV:}read',
-                'principal' => $this->getOwner().'/calendar-proxy-read',
+                'principal' => $this->getOwner() . '/calendar-proxy-read',
                 'protected' => true,
             ],
         ];
@@ -325,7 +325,7 @@ class Calendar implements ICalendar, DAV\IProperties, DAV\Sync\ISyncCollection, 
             ];
             $acl[] = [
                 'privilege' => '{DAV:}write',
-                'principal' => $this->getOwner().'/calendar-proxy-write',
+                'principal' => $this->getOwner() . '/calendar-proxy-write',
                 'protected' => true,
             ];
         }

@@ -126,7 +126,7 @@ class Plugin extends DAV\ServerPlugin
         );
 
         if ('application/x-sabredav-partialupdate' != $contentType) {
-            throw new DAV\Exception\UnsupportedMediaType('Unknown Content-Type header "'.$contentType.'"');
+            throw new DAV\Exception\UnsupportedMediaType('Unknown Content-Type header "' . $contentType . '"');
         }
 
         $len = $this->server->httpRequest->getHeader('Content-Length');
@@ -140,10 +140,10 @@ class Plugin extends DAV\ServerPlugin
                     $range[2] = $range[1] + $len - 1;
                 } else {
                     if ($range[2] < $range[1]) {
-                        throw new DAV\Exception\RequestedRangeNotSatisfiable('The end offset ('.$range[2].') is lower than the start offset ('.$range[1].')');
+                        throw new DAV\Exception\RequestedRangeNotSatisfiable('The end offset (' . $range[2] . ') is lower than the start offset (' . $range[1] . ')');
                     }
                     if ($range[2] - $range[1] + 1 != $len) {
-                        throw new DAV\Exception\RequestedRangeNotSatisfiable('Actual data length ('.$len.') is not consistent with begin ('.$range[1].') and end ('.$range[2].') offsets');
+                        throw new DAV\Exception\RequestedRangeNotSatisfiable('Actual data length (' . $len . ') is not consistent with begin (' . $range[1] . ') and end (' . $range[2] . ') offsets');
                     }
                 }
                 break;

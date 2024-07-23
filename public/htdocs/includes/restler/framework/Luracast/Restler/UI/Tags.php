@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\UI;
 
 use ArrayAccess;
@@ -262,7 +263,7 @@ class Tags implements ArrayAccess, Countable
         return count($this->children);
     }
 
-    private function markAsChildren(& $children)
+    private function markAsChildren(&$children)
     {
         foreach ($children as $i => $child) {
             if (is_string($child))

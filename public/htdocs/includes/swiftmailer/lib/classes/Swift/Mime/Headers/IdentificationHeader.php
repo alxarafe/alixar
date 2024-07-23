@@ -162,7 +162,7 @@ class Swift_Mime_Headers_IdentificationHeader extends Swift_Mime_Headers_Abstrac
             $angleAddrs = [];
 
             foreach ($this->ids as $id) {
-                $angleAddrs[] = '<'.$this->addressEncoder->encodeString($id).'>';
+                $angleAddrs[] = '<' . $this->addressEncoder->encodeString($id) . '>';
             }
 
             $this->setCachedValue(implode(' ', $angleAddrs));
@@ -183,7 +183,7 @@ class Swift_Mime_Headers_IdentificationHeader extends Swift_Mime_Headers_Abstrac
         $emailValidation = class_exists(MessageIDValidation::class) ? new MessageIDValidation() : new RFCValidation();
 
         if (!$this->emailValidator->isValid($id, $emailValidation)) {
-            throw new Swift_RfcComplianceException('Invalid ID given <'.$id.'>');
+            throw new Swift_RfcComplianceException('Invalid ID given <' . $id . '>');
         }
     }
 }

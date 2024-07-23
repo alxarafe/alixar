@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     ClientManager.php
 * Category: -
@@ -19,8 +20,8 @@ namespace Webklex\PHPIMAP;
  *
  * @mixin Client
  */
-class ClientManager {
-
+class ClientManager
+{
     /**
      * All library config
      *
@@ -37,7 +38,8 @@ class ClientManager {
      * ClientManager constructor.
      * @param array|string $config
      */
-    public function __construct($config = []) {
+    public function __construct($config = [])
+    {
         $this->setConfig($config);
     }
 
@@ -49,7 +51,8 @@ class ClientManager {
      * @return mixed
      * @throws Exceptions\MaskNotFoundException
      */
-    public function __call($method, $parameters) {
+    public function __call($method, $parameters)
+    {
         $callable = [$this->account(), $method];
 
         return call_user_func_array($callable, $parameters);
@@ -62,7 +65,8 @@ class ClientManager {
      * @return Client
      * @throws Exceptions\MaskNotFoundException
      */
-    public function make($config) {
+    public function make($config)
+    {
         return new Client($config);
     }
 
@@ -73,7 +77,8 @@ class ClientManager {
      *
      * @return mixed|null
      */
-    public static function get($key, $default = null) {
+    public static function get($key, $default = null)
+    {
         $parts = explode('.', $key);
         $value = null;
         foreach($parts as $part) {
@@ -102,7 +107,8 @@ class ClientManager {
      * @return Client
      * @throws Exceptions\MaskNotFoundException
      */
-    public function account($name = null) {
+    public function account($name = null)
+    {
         $name = $name ?: $this->getDefaultAccount();
 
         // If the connection has not been resolved yet we will resolve it now as all
@@ -123,7 +129,8 @@ class ClientManager {
      * @return Client
      * @throws Exceptions\MaskNotFoundException
      */
-    protected function resolve($name) {
+    protected function resolve($name)
+    {
         $config = $this->getClientConfig($name);
 
         return new Client($config);
@@ -135,7 +142,8 @@ class ClientManager {
      *
      * @return array
      */
-    protected function getClientConfig($name) {
+    protected function getClientConfig($name)
+    {
         if ($name === null || $name === 'null') {
             return ['driver' => 'null'];
         }
@@ -148,7 +156,8 @@ class ClientManager {
      *
      * @return string
      */
-    public function getDefaultAccount() {
+    public function getDefaultAccount()
+    {
         return self::$config['default'];
     }
 
@@ -158,7 +167,8 @@ class ClientManager {
      *
      * @return void
      */
-    public function setDefaultAccount($name) {
+    public function setDefaultAccount($name)
+    {
         self::$config['default'] = $name;
     }
 
@@ -174,14 +184,15 @@ class ClientManager {
      *
      * @return $this
      */
-    public function setConfig($config) {
+    public function setConfig($config)
+    {
 
         if(is_array($config) === false) {
             $config = require $config;
         }
 
         $config_key = 'imap';
-        $path = __DIR__.'/config/'.$config_key.'.php';
+        $path = __DIR__ . '/config/' . $config_key . '.php';
 
         $vendor_config = require $path;
         $config = $this->array_merge_recursive_distinct($vendor_config, $config);
@@ -189,7 +200,6 @@ class ClientManager {
         if(is_array($config)){
             if(isset($config['default'])){
                 if(isset($config['accounts']) && $config['default'] != false){
-
                     $default_config = $vendor_config['accounts']['default'];
                     if(isset($config['accounts'][$config['default']])){
                         $default_config = array_merge($default_config, $config['accounts'][$config['default']]);
@@ -227,7 +237,8 @@ class ClientManager {
      * @link   http://www.php.net/manual/en/function.array-merge-recursive.php#96201
      * @author Mark Roduner <mark.roduner@gmail.com>
      */
-    private function array_merge_recursive_distinct() {
+    private function array_merge_recursive_distinct()
+    {
 
         $arrays = func_get_args();
         $base = array_shift($arrays);
@@ -235,11 +246,9 @@ class ClientManager {
         if(!is_array($base)) $base = empty($base) ? array() : array($base);
 
         foreach($arrays as $append) {
-
             if(!is_array($append)) $append = array($append);
 
             foreach($append as $key => $value) {
-
                 if(!array_key_exists($key, $base) and !is_numeric($key)) {
                     $base[$key] = $append[$key];
                     continue;
@@ -252,9 +261,7 @@ class ClientManager {
                 } else {
                     $base[$key] = $value;
                 }
-
             }
-
         }
 
         return $base;

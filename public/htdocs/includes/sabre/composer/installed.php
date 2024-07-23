@@ -1,4 +1,6 @@
-<?php return array(
+<?php 
+
+return array(
     'root' => array(
         'pretty_version' => 'dev-develop',
         'version' => 'dev-develop',

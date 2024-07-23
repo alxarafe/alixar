@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler;
 
 use stdClass;
@@ -163,7 +164,8 @@ class Explorer implements iProvideMultiVersionApi
         ) {
             $filename .= '.js';
         }
-        PassThrough::file(__DIR__ . '/explorer/' . (empty($filename) ? 'index.html' : $filename), false,
+        PassThrough::file(
+            __DIR__ . '/explorer/' . (empty($filename) ? 'index.html' : $filename), false,
             0); //60 * 60 * 24);
     }
 
@@ -302,8 +304,8 @@ class Explorer implements iProvideMultiVersionApi
                     $description = ''; //'<section class="body-param">';
                     foreach ($firstChild['children'] as $child) {
                         $description .= isset($child['required']) && $child['required']
-                            ? '**' . $child['name'] . '** (required)  '.PHP_EOL
-                            : $child['name'] . '  '.PHP_EOL;
+                            ? '**' . $child['name'] . '** (required)  ' . PHP_EOL
+                            : $child['name'] . '  ' . PHP_EOL;
                     }
                     //$description .= '</section>';
                 }
@@ -312,8 +314,8 @@ class Explorer implements iProvideMultiVersionApi
                 $description = ''; //'<section class="body-param">';
                 foreach ($children as $child) {
                     $description .= isset($child['required']) && $child['required']
-                        ? '**' . $child['name'] . '** (required)  '.PHP_EOL
-                        : $child['name'] . '  '.PHP_EOL;
+                        ? '**' . $child['name'] . '** (required)  ' . PHP_EOL
+                        : $child['name'] . '  ' . PHP_EOL;
                 }
                 //$description .= '</section>';
 
@@ -460,8 +462,11 @@ class Explorer implements iProvideMultiVersionApi
                     )
                 ));
             } elseif ($info->contentType && $info->contentType != 'indexed') {
-                if (is_string($info->contentType) && $t = Util::nestedValue(static::$dataTypeAlias,
-                        strtolower($info->contentType))) {
+                if (
+                    is_string($info->contentType) && $t = Util::nestedValue(
+                    static::$dataTypeAlias,
+                        strtolower($info->contentType))
+                ) {
                     if (is_array($t)) {
                         $object->items = (object)array(
                             'type'   => $t[0],

@@ -159,8 +159,10 @@ class Plugin extends DAV\ServerPlugin
             return;
         }
         list($contentType) = explode(';', $contentType);
-        if ('application/x-www-form-urlencoded' !== $contentType &&
-            'multipart/form-data' !== $contentType) {
+        if (
+'application/x-www-form-urlencoded' !== $contentType &&
+            'multipart/form-data' !== $contentType
+        ) {
             return;
         }
         $postVars = $request->getPostData();
@@ -204,7 +206,7 @@ class Plugin extends DAV\ServerPlugin
                             $resourceType,
                             $properties
                         );
-                        $this->server->createCollection($uri.'/'.$folderName, $mkCol);
+                        $this->server->createCollection($uri . '/' . $folderName, $mkCol);
                     }
                     break;
 
@@ -225,7 +227,7 @@ class Plugin extends DAV\ServerPlugin
                     list(, $newName) = Uri\split($newName);
 
                     if (is_uploaded_file($file['tmp_name'])) {
-                        $this->server->createFile($uri.'/'.$newName, fopen($file['tmp_name'], 'r'));
+                        $this->server->createFile($uri . '/' . $newName, fopen($file['tmp_name'], 'r'));
                     }
                     break;
                 // @codeCoverageIgnoreEnd
@@ -275,7 +277,7 @@ class Plugin extends DAV\ServerPlugin
 
             foreach ($subNodes as $subPath => $subProps) {
                 $subNode = $this->server->tree->getNodeForPath($subPath);
-                $fullPath = $this->server->getBaseUri().HTTP\encodePath($subPath);
+                $fullPath = $this->server->getBaseUri() . HTTP\encodePath($subPath);
                 list(, $displayPath) = Uri\split($subPath);
 
                 $subNodes[$subPath]['subNode'] = $subNode;
@@ -294,11 +296,11 @@ class Plugin extends DAV\ServerPlugin
                 }
 
                 $html .= '<tr>';
-                $html .= '<td class="nameColumn"><a href="'.$this->escapeHTML($subProps['fullPath']).'"><span class="oi" data-glyph="'.$this->escapeHTML($type['icon']).'"></span> '.$this->escapeHTML($subProps['displayPath']).'</a></td>';
-                $html .= '<td class="typeColumn">'.$this->escapeHTML($type['string']).'</td>';
+                $html .= '<td class="nameColumn"><a href="' . $this->escapeHTML($subProps['fullPath']) . '"><span class="oi" data-glyph="' . $this->escapeHTML($type['icon']) . '"></span> ' . $this->escapeHTML($subProps['displayPath']) . '</a></td>';
+                $html .= '<td class="typeColumn">' . $this->escapeHTML($type['string']) . '</td>';
                 $html .= '<td>';
                 if (isset($subProps['{DAV:}getcontentlength'])) {
-                    $html .= $this->escapeHTML($subProps['{DAV:}getcontentlength'].' bytes');
+                    $html .= $this->escapeHTML($subProps['{DAV:}getcontentlength'] . ' bytes');
                 }
                 $html .= '</td><td>';
                 if (isset($subProps['{DAV:}getlastmodified'])) {
@@ -313,11 +315,11 @@ class Plugin extends DAV\ServerPlugin
 
                 $buttonActions = '';
                 if ($subProps['subNode'] instanceof DAV\IFile) {
-                    $buttonActions = '<a href="'.$this->escapeHTML($subProps['fullPath']).'?sabreAction=info"><span class="oi" data-glyph="info"></span></a>';
+                    $buttonActions = '<a href="' . $this->escapeHTML($subProps['fullPath']) . '?sabreAction=info"><span class="oi" data-glyph="info"></span></a>';
                 }
                 $this->server->emit('browserButtonActions', [$subProps['fullPath'], $subProps['subNode'], &$buttonActions]);
 
-                $html .= '<td>'.$buttonActions.'</td>';
+                $html .= '<td>' . $buttonActions . '</td>';
                 $html .= '</tr>';
             }
 
@@ -378,11 +380,11 @@ class Plugin extends DAV\ServerPlugin
         $html .= '<table class="propTable">';
         foreach ($this->server->getPlugins() as $plugin) {
             $info = $plugin->getPluginInfo();
-            $html .= '<tr><th>'.$info['name'].'</th>';
-            $html .= '<td>'.$info['description'].'</td>';
+            $html .= '<tr><th>' . $info['name'] . '</th>';
+            $html .= '<td>' . $info['description'] . '</td>';
             $html .= '<td>';
             if (isset($info['link']) && $info['link']) {
-                $html .= '<a href="'.$this->escapeHTML($info['link']).'"><span class="oi" data-glyph="book"></span></a>';
+                $html .= '<a href="' . $this->escapeHTML($info['link']) . '"><span class="oi" data-glyph="book"></span></a>';
             }
             $html .= '</td></tr>';
         }
@@ -446,8 +448,8 @@ HTML;
         // If the path is empty, there's no parent.
         if ($path) {
             list($parentUri) = Uri\split($path);
-            $fullPath = $this->server->getBaseUri().HTTP\encodePath($parentUri);
-            $html .= '<a href="'.$fullPath.'" class="btn">⇤ Go to parent</a>';
+            $fullPath = $this->server->getBaseUri() . HTTP\encodePath($parentUri);
+            $html .= '<a href="' . $fullPath . '" class="btn">⇤ Go to parent</a>';
         } else {
             $html .= '<span class="btn disabled">⇤ Go to parent</span>';
         }
@@ -530,7 +532,7 @@ HTML;
      */
     protected function getAssetUrl($assetName)
     {
-        return $this->server->getBaseUri().'?sabreAction=asset&assetName='.urlencode($assetName);
+        return $this->server->getBaseUri() . '?sabreAction=asset&assetName=' . urlencode($assetName);
     }
 
     /**
@@ -544,8 +546,8 @@ HTML;
      */
     protected function getLocalAssetPath($assetName)
     {
-        $assetDir = __DIR__.'/assets/';
-        $path = $assetDir.$assetName;
+        $assetDir = __DIR__ . '/assets/';
+        $path = $assetDir . $assetName;
 
         // Making sure people aren't trying to escape from the base path.
         $path = str_replace('\\', '/', $path);
@@ -722,7 +724,7 @@ HTML;
             $this->server->xml->namespaceMap
         );
 
-        return '<tr><th>'.$html->xmlName($name).'</th><td>'.$this->drawPropertyValue($html, $value).'</td></tr>';
+        return '<tr><th>' . $html->xmlName($name) . '</th><td>' . $this->drawPropertyValue($html, $value) . '</td></tr>';
     }
 
     /**
@@ -748,7 +750,7 @@ HTML;
             $xml = explode("\n", $xml);
             $xml = array_slice($xml, 2, -2);
 
-            return '<pre>'.$html->h(implode("\n", $xml)).'</pre>';
+            return '<pre>' . $html->h(implode("\n", $xml)) . '</pre>';
         } else {
             return '<em>unknown</em>';
         }

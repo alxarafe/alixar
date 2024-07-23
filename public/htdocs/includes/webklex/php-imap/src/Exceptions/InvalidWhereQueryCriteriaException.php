@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     InvalidWhereQueryCriteriaException.php
 * Category: Exception
@@ -12,13 +13,13 @@
 
 namespace Webklex\PHPIMAP\Exceptions;
 
-use \Exception;
+use Exception;
 
 /**
  * Class InvalidWhereQueryCriteriaException
  *
  * @package Webklex\PHPIMAP\Exceptions
  */
-class InvalidWhereQueryCriteriaException extends Exception {
-
+class InvalidWhereQueryCriteriaException extends Exception
+{
 }

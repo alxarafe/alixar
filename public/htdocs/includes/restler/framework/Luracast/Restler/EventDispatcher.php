@@ -1,5 +1,7 @@
 <?php
+
 namespace Luracast\Restler;
+
 /**
  * Static event broadcasting system for Restler
  *
@@ -11,6 +13,7 @@ namespace Luracast\Restler;
  * @link       http://luracast.com/products/restler/
  *
  */
+
 use Closure;
 
 class EventDispatcher
@@ -21,7 +24,8 @@ class EventDispatcher
     public static $self;
     protected $events = array();
 
-    public function __construct() {
+    public function __construct()
+    {
         static::$self = $this;
         if (!empty(static::$_waitList)) {
             foreach (static::$_waitList as $param) {
@@ -88,11 +92,9 @@ class EventDispatcher
     {
         $this->events[] = $eventName;
         $params = func_get_args();
-        $eventName = 'on'.ucfirst(array_shift($params));
+        $eventName = 'on' . ucfirst(array_shift($params));
         if (isset($this->listeners[$eventName]))
             foreach ($this->listeners[$eventName] as $callback)
                 call_user_func_array($callback, $params);
     }
-
 }
-

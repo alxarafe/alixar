@@ -64,7 +64,7 @@ class Node extends DAV\File implements INode, DAVACL\IACL
      */
     public function getName()
     {
-        return $this->notification->getId().'.xml';
+        return $this->notification->getId() . '.xml';
     }
 
     /**

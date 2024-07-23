@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Delicious service.
  *
@@ -53,7 +54,6 @@ class Delicious extends AbstractService
     public function getAuthorizationEndpoint()
     {
         return new Uri('https://delicious.com/auth/authorize');
-
     }
 
     /**

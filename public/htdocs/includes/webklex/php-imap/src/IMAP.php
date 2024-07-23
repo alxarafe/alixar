@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File: IMAP.php
 * Category: -
@@ -17,8 +18,8 @@ namespace Webklex\PHPIMAP;
  *
  * Independent imap const holder
  */
-class IMAP {
-
+class IMAP
+{
     /**
      * Message const
      *
@@ -371,5 +372,4 @@ class IMAP {
      * @link http://php.net/manual/en/imap.constants.php
      */
     const IMAP_GC_TEXTS = 4;
-    
 }

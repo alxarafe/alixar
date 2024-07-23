@@ -77,14 +77,14 @@ class Swift_Signers_SMimeSigner implements Swift_Signers_BodySigner
      */
     public function setSignCertificate($certificate, $privateKey = null, $signOptions = PKCS7_DETACHED, $extraCerts = null)
     {
-        $this->signCertificate = 'file://'.str_replace('\\', '/', realpath($certificate));
+        $this->signCertificate = 'file://' . str_replace('\\', '/', realpath($certificate));
 
         if (null !== $privateKey) {
             if (\is_array($privateKey)) {
                 $this->signPrivateKey = $privateKey;
-                $this->signPrivateKey[0] = 'file://'.str_replace('\\', '/', realpath($privateKey[0]));
+                $this->signPrivateKey[0] = 'file://' . str_replace('\\', '/', realpath($privateKey[0]));
             } else {
-                $this->signPrivateKey = 'file://'.str_replace('\\', '/', realpath($privateKey));
+                $this->signPrivateKey = 'file://' . str_replace('\\', '/', realpath($privateKey));
             }
         }
 
@@ -111,10 +111,10 @@ class Swift_Signers_SMimeSigner implements Swift_Signers_BodySigner
             $this->encryptCert = [];
 
             foreach ($recipientCerts as $cert) {
-                $this->encryptCert[] = 'file://'.str_replace('\\', '/', realpath($cert));
+                $this->encryptCert[] = 'file://' . str_replace('\\', '/', realpath($cert));
             }
         } else {
-            $this->encryptCert = 'file://'.str_replace('\\', '/', realpath($recipientCerts));
+            $this->encryptCert = 'file://' . str_replace('\\', '/', realpath($recipientCerts));
         }
 
         if (null !== $cipher) {
@@ -265,7 +265,8 @@ class Swift_Signers_SMimeSigner implements Swift_Signers_BodySigner
         $signedMessageStream = new Swift_ByteStream_TemporaryFileByteStream();
 
         // Sign the message using openssl
-        if (!openssl_pkcs7_sign(
+        if (
+            !openssl_pkcs7_sign(
                 $messageStream->getPath(),
                 $signedMessageStream->getPath(),
                 $this->signCertificate,
@@ -323,7 +324,8 @@ class Swift_Signers_SMimeSigner implements Swift_Signers_BodySigner
         $encryptedMessageStream = new Swift_ByteStream_TemporaryFileByteStream();
 
         // Encrypt the message
-        if (!openssl_pkcs7_encrypt(
+        if (
+            !openssl_pkcs7_encrypt(
                 $messageStream->getPath(),
                 $encryptedMessageStream->getPath(),
                 $this->encryptCert,
@@ -496,7 +498,7 @@ class Swift_Signers_SMimeSigner implements Swift_Signers_BodySigner
         foreach ($headerLines as $headerLine) {
             // Handle headers that span multiple lines
             if (false === strpos($headerLine, ':')) {
-                $headers[$currentHeaderName] .= ' '.trim($headerLine ?? '');
+                $headers[$currentHeaderName] .= ' ' . trim($headerLine ?? '');
                 continue;
             }
 

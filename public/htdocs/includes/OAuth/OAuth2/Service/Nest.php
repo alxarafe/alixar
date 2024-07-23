@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nest service.
  *
@@ -26,7 +27,6 @@ use OAuth\Common\Http\Uri\UriInterface;
  */
 class Nest extends AbstractService
 {
-
     public function __construct(
         CredentialsInterface $credentials,
         ClientInterface $httpClient,

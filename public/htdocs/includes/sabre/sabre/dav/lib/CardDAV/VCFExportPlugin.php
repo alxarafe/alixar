@@ -39,7 +39,7 @@ class VCFExportPlugin extends DAV\ServerPlugin
         $this->server->on('method:GET', [$this, 'httpGet'], 90);
         $server->on('browserButtonActions', function ($path, $node, &$actions) {
             if ($node instanceof IAddressBook) {
-                $actions .= '<a href="'.htmlspecialchars($path, ENT_QUOTES, 'UTF-8').'?export"><span class="oi" data-glyph="book"></span></a>';
+                $actions .= '<a href="' . htmlspecialchars($path, ENT_QUOTES, 'UTF-8') . '?export"><span class="oi" data-glyph="book"></span></a>';
             }
         });
     }
@@ -72,7 +72,7 @@ class VCFExportPlugin extends DAV\ServerPlugin
         }
 
         $nodes = $this->server->getPropertiesForPath($path, [
-            '{'.Plugin::NS_CARDDAV.'}address-data',
+            '{' . Plugin::NS_CARDDAV . '}address-data',
         ], 1);
 
         $format = 'text/directory';
@@ -92,9 +92,9 @@ class VCFExportPlugin extends DAV\ServerPlugin
             '',
             $node->getName()
         );
-        $filename .= '-'.date('Y-m-d').$filenameExtension;
+        $filename .= '-' . date('Y-m-d') . $filenameExtension;
 
-        $response->setHeader('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
         $response->setHeader('Content-Type', $format);
 
         $response->setStatus(200);
@@ -114,10 +114,10 @@ class VCFExportPlugin extends DAV\ServerPlugin
         $output = '';
 
         foreach ($nodes as $node) {
-            if (!isset($node[200]['{'.Plugin::NS_CARDDAV.'}address-data'])) {
+            if (!isset($node[200]['{' . Plugin::NS_CARDDAV . '}address-data'])) {
                 continue;
             }
-            $nodeData = $node[200]['{'.Plugin::NS_CARDDAV.'}address-data'];
+            $nodeData = $node[200]['{' . Plugin::NS_CARDDAV . '}address-data'];
 
             // Parsing this node so VObject can clean up the output.
             $vcard = VObject\Reader::read($nodeData);

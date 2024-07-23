@@ -66,7 +66,7 @@ class PrincipalCollection extends AbstractPrincipalCollection implements IExtend
         }
 
         $this->principalBackend->createPrincipal(
-            $this->principalPrefix.'/'.$name,
+            $this->principalPrefix . '/' . $name,
             $mkCol
         );
     }

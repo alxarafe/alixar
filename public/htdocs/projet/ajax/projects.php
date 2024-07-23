@@ -1,8 +1,10 @@
 <?php
+
 /* Copyright (C) 2006      Andre Cianfarani     <acianfa@free.fr>
  * Copyright (C) 2005-2013 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2007-2020 Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2014-2015 Marcos García        <marcosgdf@gmail.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,26 +26,26 @@
  */
 
 if (!defined('NOTOKENRENEWAL')) {
-	define('NOTOKENRENEWAL', 1); // Disables token renewal
+    define('NOTOKENRENEWAL', 1); // Disables token renewal
 }
 if (!defined('NOREQUIREMENU')) {
-	define('NOREQUIREMENU', '1');
+    define('NOREQUIREMENU', '1');
 }
 if (!defined('NOREQUIREHTML')) {
-	define('NOREQUIREHTML', '1');
+    define('NOREQUIREHTML', '1');
 }
 if (!defined('NOREQUIREAJAX')) {
-	define('NOREQUIREAJAX', '1');
+    define('NOREQUIREAJAX', '1');
 }
 if (!defined('NOREQUIRESOC')) {
-	define('NOREQUIRESOC', '1');
+    define('NOREQUIRESOC', '1');
 }
 if (!defined('NOREQUIREHTML')) {
-	define('NOREQUIREHTML', '1');
+    define('NOREQUIREHTML', '1');
 }
 
 // Load Dolibarr environment
-require '../../main.inc.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 $htmlname = GETPOST('htmlname', 'aZ09');
 $socid = GETPOSTINT('socid');
@@ -59,34 +61,34 @@ restrictedArea($user, 'projet', 0, 'projet&project');
 
 dol_syslog("Call ajax projet/ajax/projects.php");
 
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formprojet.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 
 // Mode to get list of projects
 if (empty($mode) || $mode != 'gettasks') {
-	top_httphead('application/json');
+    top_httphead('application/json');
 
-	// When used from jQuery, the search term is added as GET param "term".
-	$searchkey = (GETPOSTISSET($htmlname) ? GETPOST($htmlname, 'aZ09') : '');
+    // When used from jQuery, the search term is added as GET param "term".
+    $searchkey = (GETPOSTISSET($htmlname) ? GETPOST($htmlname, 'aZ09') : '');
 
-	$formproject = new FormProjets($db);
-	$arrayresult = $formproject->select_projects_list($socid, '', '', 0, 0, 1, $discard_closed, 0, 0, 1, $searchkey);
+    $formproject = new FormProjets($db);
+    $arrayresult = $formproject->select_projects_list($socid, '', '', 0, 0, 1, $discard_closed, 0, 0, 1, $searchkey);
 
-	$db->close();
+    $db->close();
 
-	print json_encode($arrayresult);
+    print json_encode($arrayresult);
 
-	return;
+    return;
 }
 
 // Mode to get list of tasks
 // THIS MODE RETURNS HTML NOT JSON - THE CALL SHOULD BE UPDATE IN THE FUTURE
 if ($mode == 'gettasks') {
-	top_httphead();
+    top_httphead();
 
-	$formproject = new FormProjets($db);
-	$formproject->selectTasks((!empty($socid) ? $socid : -1), 0, 'taskid', 24, 1, '1', 1, 0, 0, 'maxwidth500', GETPOSTINT('projectid'), '');
+    $formproject = new FormProjets($db);
+    $formproject->selectTasks((!empty($socid) ? $socid : -1), 0, 'taskid', 24, 1, '1', 1, 0, 0, 'maxwidth500', GETPOSTINT('projectid'), '');
 
-	$db->close();
+    $db->close();
 
-	return;
+    return;
 }

@@ -1,5 +1,7 @@
 <?php
-/* Copyright (C) 2024       Frédéric France			<frederic.france@free.fr>
+
+/* Copyright (C) 2024       Frédéric France           <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,76 +28,76 @@
  */
 class GeoMapEditor
 {
-	/**
-	 * __contruct
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-	}
+    /**
+     * __contruct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+    }
 
-	/**
-	 * getHtml
-	 *
-	 * @param string $htmlname htmlname
-	 * @param string $geojson  json of geometric objects
-	 * @param string $centroidjson  json of geometric center of object
-	 * @param string $markertype type of marker, point, multipts, linestrg, polygon
-	 *
-	 * @return string
-	 */
-	public function getHtml($htmlname, $geojson, $centroidjson, $markertype)
-	{
-		global $langs;
+    /**
+     * getHtml
+     *
+     * @param string $htmlname htmlname
+     * @param string $geojson  json of geometric objects
+     * @param string $centroidjson  json of geometric center of object
+     * @param string $markertype type of marker, point, multipts, linestrg, polygon
+     *
+     * @return string
+     */
+    public function getHtml($htmlname, $geojson, $centroidjson, $markertype)
+    {
+        global $langs;
 
-		$out = '<input id="' . $htmlname . '" name="' . $htmlname . '" size="100" value="' . htmlentities($geojson, ENT_QUOTES) . '"/>';
-		$out .= '<div id="map_' . $htmlname . '" style="width: 600px; height: 350px;"></div>';
-		if ($geojson != '{}') {
-			// OpenLayers it's "longitude, latitude".
-			// inverting coordinates
-			$tmp = json_decode($geojson);
-			$tmp2 = new stdClass();
-			$tmp2->type = $tmp->type;
-			$tmp2->coordinates = [];
-			if ($tmp->type == 'Point') {
-				$tmp2->coordinates = [$tmp->coordinates[1], $tmp->coordinates[0]];
-			} elseif ($tmp->type == 'Polygon') {
-				foreach ($tmp->coordinates as $polygon) {
-					$polyg = [];
-					foreach ($polygon as $key => $value) {
-						$polyg[] = [$value[1], $value[0]];
-					}
-					$tmp2->coordinates[] = $polyg;
-				}
-			} else {
-				foreach ($tmp->coordinates as $key => $value) {
-					$tmp2->coordinates[] = [$value[1], $value[0]];
-				}
-			}
-			$geojson = json_encode($tmp2);
-		}
-		if ($centroidjson != '{}') {
-			if (null === json_decode($centroidjson)) {
-				$centroidjson = '{}';
-			} else {
-				// OpenLayers it's "longitude, latitude".
-				// inverting coordinates
-				$tmp = json_decode($centroidjson);
-				$tmp2 = new stdClass();
-				$tmp2->type = $tmp->type;
-				$tmp2->coordinates = [];
-				if ($tmp->type == 'Point') {
-					$tmp2->coordinates = [$tmp->coordinates[1], $tmp->coordinates[0]];
-				} else {
-					foreach ($tmp->coordinates as $key => $value) {
-						$tmp2->coordinates[] = [$value[1], $value[0]];
-					}
-				}
-				$centroidjson = json_encode($tmp2);
-			}
-		}
-		$out .= '
+        $out = '<input id="' . $htmlname . '" name="' . $htmlname . '" size="100" value="' . htmlentities($geojson, ENT_QUOTES) . '"/>';
+        $out .= '<div id="map_' . $htmlname . '" style="width: 600px; height: 350px;"></div>';
+        if ($geojson != '{}') {
+            // OpenLayers it's "longitude, latitude".
+            // inverting coordinates
+            $tmp = json_decode($geojson);
+            $tmp2 = new stdClass();
+            $tmp2->type = $tmp->type;
+            $tmp2->coordinates = [];
+            if ($tmp->type == 'Point') {
+                $tmp2->coordinates = [$tmp->coordinates[1], $tmp->coordinates[0]];
+            } elseif ($tmp->type == 'Polygon') {
+                foreach ($tmp->coordinates as $polygon) {
+                    $polyg = [];
+                    foreach ($polygon as $key => $value) {
+                        $polyg[] = [$value[1], $value[0]];
+                    }
+                    $tmp2->coordinates[] = $polyg;
+                }
+            } else {
+                foreach ($tmp->coordinates as $key => $value) {
+                    $tmp2->coordinates[] = [$value[1], $value[0]];
+                }
+            }
+            $geojson = json_encode($tmp2);
+        }
+        if ($centroidjson != '{}') {
+            if (null === json_decode($centroidjson)) {
+                $centroidjson = '{}';
+            } else {
+                // OpenLayers it's "longitude, latitude".
+                // inverting coordinates
+                $tmp = json_decode($centroidjson);
+                $tmp2 = new stdClass();
+                $tmp2->type = $tmp->type;
+                $tmp2->coordinates = [];
+                if ($tmp->type == 'Point') {
+                    $tmp2->coordinates = [$tmp->coordinates[1], $tmp->coordinates[0]];
+                } else {
+                    foreach ($tmp->coordinates as $key => $value) {
+                        $tmp2->coordinates[] = [$value[1], $value[0]];
+                    }
+                }
+                $centroidjson = json_encode($tmp2);
+            }
+        }
+        $out .= '
 		<script>
 			var geoms = JSON.parse(\'' . $geojson . '\');
 			var centroid = JSON.parse(\'' . $centroidjson . '\');
@@ -226,6 +228,6 @@ class GeoMapEditor
 			}
 		</script>';
 
-		return $out;
-	}
+        return $out;
+    }
 }

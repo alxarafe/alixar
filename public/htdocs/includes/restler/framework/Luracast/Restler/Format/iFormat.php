@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\Format;
 
 /**
@@ -106,4 +107,3 @@ interface iFormat
      */
     public function isWritable();
 }
-

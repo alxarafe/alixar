@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     Attachment.php
 * Category: -
@@ -49,8 +50,8 @@ use Webklex\PHPIMAP\Support\Masks\AttachmentMask;
  * @method string  setDisposition(string $disposition)
  * @method string  setImgSrc(string $img_src)
  */
-class Attachment {
-
+class Attachment
+{
     /**
      * @var Message $oMessage
      */
@@ -95,7 +96,8 @@ class Attachment {
      * @param Message   $oMessage
      * @param Part      $part
      */
-    public function __construct(Message $oMessage, Part $part) {
+    public function __construct(Message $oMessage, Part $part)
+    {
         $this->config = ClientManager::get('options');
 
         $this->oMessage = $oMessage;
@@ -119,7 +121,8 @@ class Attachment {
      * @return mixed
      * @throws MethodNotFoundException
      */
-    public function __call($method, $arguments) {
+    public function __call($method, $arguments)
+    {
         if(strtolower(substr($method, 0, 3)) === 'get') {
             $name = Str::snake(substr($method, 3));
 
@@ -136,7 +139,7 @@ class Attachment {
             return $this->attributes[$name];
         }
 
-        throw new MethodNotFoundException("Method ".self::class.'::'.$method.'() is not supported');
+        throw new MethodNotFoundException("Method " . self::class . '::' . $method . '() is not supported');
     }
 
     /**
@@ -146,7 +149,8 @@ class Attachment {
      *
      * @return mixed
      */
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         $this->attributes[$name] = $value;
 
         return $this->attributes[$name];
@@ -158,7 +162,8 @@ class Attachment {
      *
      * @return mixed|null
      */
-    public function __get($name) {
+    public function __get($name)
+    {
         if(isset($this->attributes[$name])) {
             return $this->attributes[$name];
         }
@@ -169,7 +174,8 @@ class Attachment {
     /**
      * Determine the structure type
      */
-    protected function findType() {
+    protected function findType()
+    {
         switch ($this->part->type) {
             case IMAP::ATTACHMENT_TYPE_MESSAGE:
                 $this->type = 'message';
@@ -204,7 +210,8 @@ class Attachment {
     /**
      * Fetch the given attachment
      */
-    protected function fetch() {
+    protected function fetch()
+    {
 
         $content = $this->part->content;
 
@@ -242,17 +249,19 @@ class Attachment {
      *
      * @return boolean
      */
-    public function save($path, $filename = null) {
+    public function save($path, $filename = null)
+    {
         $filename = $filename ? $filename : $this->getName();
 
-        return file_put_contents($path.$filename, $this->getContent()) !== false;
+        return file_put_contents($path . $filename, $this->getContent()) !== false;
     }
 
     /**
      * Set the attachment name and try to decode it
      * @param $name
      */
-    public function setName($name) {
+    public function setName($name)
+    {
         $decoder = $this->config['decoder']['attachment'];
         if ($name !== null) {
             if($decoder === 'utf-8' && extension_loaded('imap')) {
@@ -268,7 +277,8 @@ class Attachment {
      *
      * @return string|null
      */
-    public function getMimeType(){
+    public function getMimeType()
+    {
         return (new \finfo())->buffer($this->getContent(), FILEINFO_MIME_TYPE);
     }
 
@@ -277,7 +287,8 @@ class Attachment {
      *
      * @return string|null
      */
-    public function getExtension(){
+    public function getExtension()
+    {
         $deprecated_guesser = "\Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser";
         if (class_exists($deprecated_guesser) !== false){
             return $deprecated_guesser::getInstance()->guess($this->getMimeType());
@@ -292,14 +303,16 @@ class Attachment {
      *
      * @return array
      */
-    public function getAttributes(){
+    public function getAttributes()
+    {
         return $this->attributes;
     }
 
     /**
      * @return Message
      */
-    public function getMessage(){
+    public function getMessage()
+    {
         return $this->oMessage;
     }
 
@@ -309,7 +322,8 @@ class Attachment {
      *
      * @return $this
      */
-    public function setMask($mask){
+    public function setMask($mask)
+    {
         if(class_exists($mask)){
             $this->mask = $mask;
         }
@@ -322,7 +336,8 @@ class Attachment {
      *
      * @return string
      */
-    public function getMask(){
+    public function getMask()
+    {
         return $this->mask;
     }
 
@@ -333,12 +348,13 @@ class Attachment {
      * @return mixed
      * @throws MaskNotFoundException
      */
-    public function mask($mask = null){
+    public function mask($mask = null)
+    {
         $mask = $mask !== null ? $mask : $this->mask;
         if(class_exists($mask)){
             return new $mask($this);
         }
 
-        throw new MaskNotFoundException("Unknown mask provided: ".$mask);
+        throw new MaskNotFoundException("Unknown mask provided: " . $mask);
     }
 }

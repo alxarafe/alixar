@@ -46,8 +46,10 @@ class Twitter extends AbstractService
      */
     public function getAuthorizationEndpoint()
     {
-        if ($this->authorizationEndpoint != self::ENDPOINT_AUTHENTICATE
-        && $this->authorizationEndpoint != self::ENDPOINT_AUTHORIZE) {
+        if (
+            $this->authorizationEndpoint != self::ENDPOINT_AUTHENTICATE
+            && $this->authorizationEndpoint != self::ENDPOINT_AUTHORIZE
+        ) {
             $this->authorizationEndpoint = self::ENDPOINT_AUTHENTICATE;
         }
         return new Uri($this->authorizationEndpoint);

@@ -1,6 +1,8 @@
 <?php
+
 /* Copyright (C) 2001-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2009  Laurent Destailleur     <eldy@users.sourceforge.net>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,16 +25,16 @@
  */
 
 // Load Dolibarr environment
-require '../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/expedition/class/expedition.class.php';
-require_once DOL_DOCUMENT_ROOT.'/expedition/class/expeditionstats.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/dolgraph.class.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expeditionstats.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
 
 $year = GETPOSTINT('year');
 
 // Security check
 if ($user->socid) {
-	$socid = $user->socid;
+    $socid = $user->socid;
 }
 restrictedArea($user, 'expedition');
 
@@ -49,31 +51,31 @@ $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height');
 $mesg = '';
 $mode = '';
 
-print load_fiche_titre($langs->trans("StatisticsOfSendings").' '.$year, $mesg);
+print load_fiche_titre($langs->trans("StatisticsOfSendings") . ' ' . $year, $mesg);
 
 $stats = new ExpeditionStats($db, $socid, $mode);
 $data = $stats->getNbByMonth($year);
 
 dol_mkdir($conf->expedition->dir_temp);
 
-$filename = $conf->expedition->dir_temp."/expedition".$year.".png";
-$fileurl = DOL_URL_ROOT.'/viewimage.php?modulepart=expeditionstats&file=expedition'.$year.'.png';
+$filename = $conf->expedition->dir_temp . "/expedition" . $year . ".png";
+$fileurl = DOL_URL_ROOT . '/viewimage.php?modulepart=expeditionstats&file=expedition' . $year . '.png';
 
 $px = new DolGraph();
 $mesg = $px->isGraphKo();
 if (!$mesg) {
-	$px->SetData($data);
-	$px->SetMaxValue($px->GetCeilMaxValue());
-	$px->SetWidth($WIDTH);
-	$px->SetHeight($HEIGHT);
-	$px->SetYLabel($langs->trans("NbOfSendings"));
-	$px->SetShading(3);
-	$px->SetHorizTickIncrement(1);
-	$px->draw($filename, $fileurl);
+    $px->SetData($data);
+    $px->SetMaxValue($px->GetCeilMaxValue());
+    $px->SetWidth($WIDTH);
+    $px->SetHeight($HEIGHT);
+    $px->SetYLabel($langs->trans("NbOfSendings"));
+    $px->SetShading(3);
+    $px->SetHorizTickIncrement(1);
+    $px->draw($filename, $fileurl);
 }
 
 print '<table class="border centpercent">';
-print '<tr><td class="center">'.$langs->trans("NbOfSendingsByMonth").'</td>';
+print '<tr><td class="center">' . $langs->trans("NbOfSendingsByMonth") . '</td>';
 print '<td class="center">';
 print $px->show();
 print '</td></tr>';

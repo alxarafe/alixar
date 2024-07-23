@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Restler 2 compatibility mode enabler
  */
+
 use Luracast\Restler\Defaults;
 use Luracast\Restler\AutoLoader;
 use Luracast\Restler\CommentParser;
@@ -11,7 +13,8 @@ $classMap = array();
 //find lowercase php files representing a class/interface
 foreach (explode(PATH_SEPARATOR, get_include_path()) as $path)
     foreach (new DirectoryIterator($path) as $fileInfo)
-        if ($fileInfo->isFile()
+        if (
+            $fileInfo->isFile()
             && 'php' === $fileInfo->getExtension()
             && ctype_lower($fileInfo->getBasename('.php'))
             && preg_match(

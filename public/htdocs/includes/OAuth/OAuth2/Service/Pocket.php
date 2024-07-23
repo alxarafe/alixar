@@ -114,7 +114,7 @@ class Pocket extends AbstractService
         }
         
         $token = new StdOAuth2Token();
-        #$token->setRequestToken($data['access_token']);
+        // $token->setRequestToken($data['access_token']);
         $token->setAccessToken($data['access_token']);
         $token->setEndOfLife(StdOAuth2Token::EOL_NEVER_EXPIRES);
         unset($data['access_token']);

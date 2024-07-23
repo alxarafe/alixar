@@ -155,7 +155,7 @@ class CalendarHome implements DAV\IExtendedCollection, DAVACL\IACL
             }
         }
 
-        throw new NotFound('Node with name \''.$name.'\' could not be found');
+        throw new NotFound('Node with name \'' . $name . '\' could not be found');
     }
 
     /**
@@ -235,7 +235,7 @@ class CalendarHome implements DAV\IExtendedCollection, DAVACL\IACL
                     $isSubscription = true;
                     break;
                 default:
-                    throw new DAV\Exception\InvalidResourceType('Unknown resourceType: '.$rt);
+                    throw new DAV\Exception\InvalidResourceType('Unknown resourceType: ' . $rt);
             }
         }
 
@@ -291,17 +291,17 @@ class CalendarHome implements DAV\IExtendedCollection, DAVACL\IACL
             ],
             [
                 'privilege' => '{DAV:}read',
-                'principal' => $this->principalInfo['uri'].'/calendar-proxy-write',
+                'principal' => $this->principalInfo['uri'] . '/calendar-proxy-write',
                 'protected' => true,
             ],
             [
                 'privilege' => '{DAV:}write',
-                'principal' => $this->principalInfo['uri'].'/calendar-proxy-write',
+                'principal' => $this->principalInfo['uri'] . '/calendar-proxy-write',
                 'protected' => true,
             ],
             [
                 'privilege' => '{DAV:}read',
-                'principal' => $this->principalInfo['uri'].'/calendar-proxy-read',
+                'principal' => $this->principalInfo['uri'] . '/calendar-proxy-read',
                 'protected' => true,
             ],
         ];

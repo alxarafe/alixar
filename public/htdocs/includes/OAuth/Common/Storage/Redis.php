@@ -84,7 +84,8 @@ class Redis implements TokenStorageInterface
      */
     public function hasAccessToken($service)
     {
-        if (isset($this->cachedTokens[$service])
+        if (
+            isset($this->cachedTokens[$service])
             && $this->cachedTokens[$service] instanceof TokenInterface
         ) {
             return true;
@@ -166,7 +167,8 @@ class Redis implements TokenStorageInterface
      */
     public function hasAuthorizationState($service)
     {
-        if (isset($this->cachedStates[$service])
+        if (
+            isset($this->cachedStates[$service])
             && null !== $this->cachedStates[$service]
         ) {
             return true;

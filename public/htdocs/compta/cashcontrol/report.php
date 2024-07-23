@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2001-2002  Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2020  Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2005-2010  Regis Houssin        <regis.houssin@capnetworks.com>
@@ -9,6 +10,7 @@
  * Copyright (C) 2017       Alexandre Spangaro   <aspangaro@open-dsi.fr>
  * Copyright (C) 2018       Andreu Bisquerra	 <jove@bisquerra.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,33 +27,33 @@
  */
 
 /**
- *	\file       htdocs/compta/cashcontrol/report.php
- *	\ingroup    cashdesk|takepos
- *	\brief      List of sales from POS
+ *  \file       htdocs/compta/cashcontrol/report.php
+ *  \ingroup    cashdesk|takepos
+ *  \brief      List of sales from POS
  */
 
 if (!defined('NOREQUIREMENU')) {
-	define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
+    define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
 }
 if (!defined('NOBROWSERNOTIF')) {
-	define('NOBROWSERNOTIF', '1'); // Disable browser notification
+    define('NOBROWSERNOTIF', '1'); // Disable browser notification
 }
 
 $optioncss = "print";
 
 // Load Dolibarr environment
-require '../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/compta/cashcontrol/class/cashcontrol.class.php';
-require_once DOL_DOCUMENT_ROOT.'/compta/bank/class/account.class.php';
-require_once DOL_DOCUMENT_ROOT.'/compta/facture/class/facture.class.php';
-require_once DOL_DOCUMENT_ROOT.'/compta/cashcontrol/class/cashcontrol.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/compta/cashcontrol/class/cashcontrol.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/compta/cashcontrol/class/cashcontrol.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 
 $langs->loadLangs(array("bills", "banks"));
 
 $id = GETPOSTINT('id');
-$summaryonly = GETPOSTINT('summaryonly');		// May be used for ticket Z
+$summaryonly = GETPOSTINT('summaryonly');       // May be used for ticket Z
 
 $object = new CashControl($db);
 $object->fetch($id);
@@ -61,13 +63,13 @@ $sortorder = 'ASC';
 $sortfield = 'b.datev,b.dateo,b.rowid';
 
 $arrayfields = array(
-	'b.rowid' => array('label' => $langs->trans("Ref"), 'checked' => 1),
-	'b.dateo' => array('label' => $langs->trans("DateOperationShort"), 'checked' => 1),
-	'b.num_chq' => array('label' => $langs->trans("Number"), 'checked' => 1),
-	'ba.ref' => array('label' => $langs->trans("BankAccount"), 'checked' => 1),
-	'cp.code' => array('label' => $langs->trans("PaymentMode"), 'checked' => 1),
-	'b.debit' => array('label' => $langs->trans("Debit"), 'checked' => 1, 'position' => 600),
-	'b.credit' => array('label' => $langs->trans("Credit"), 'checked' => 1, 'position' => 605),
+    'b.rowid' => array('label' => $langs->trans("Ref"), 'checked' => 1),
+    'b.dateo' => array('label' => $langs->trans("DateOperationShort"), 'checked' => 1),
+    'b.num_chq' => array('label' => $langs->trans("Number"), 'checked' => 1),
+    'ba.ref' => array('label' => $langs->trans("BankAccount"), 'checked' => 1),
+    'cp.code' => array('label' => $langs->trans("PaymentMode"), 'checked' => 1),
+    'b.debit' => array('label' => $langs->trans("Debit"), 'checked' => 1, 'position' => 600),
+    'b.credit' => array('label' => $langs->trans("Credit"), 'checked' => 1, 'position' => 605),
 );
 
 $syear  = $object->year_close;
@@ -78,12 +80,12 @@ $posmodule = $object->posmodule;
 $terminalid = $object->posnumber;
 
 // Security check
-if ($user->socid > 0) {	// Protection if external user
-	//$socid = $user->socid;
-	accessforbidden();
+if ($user->socid > 0) { // Protection if external user
+    //$socid = $user->socid;
+    accessforbidden();
 }
 if (!$user->hasRight('cashdesk', 'run') && !$user->hasRight('takepos', 'run')) {
-	accessforbidden();
+    accessforbidden();
 }
 
 
@@ -129,329 +131,329 @@ $sql.=" OR b.fk_account = ".((int) $conf->global->CASHDESK_ID_BANKACCOUNT_CHEQUE
 $sql.=")";
 */
 $sql = "SELECT f.rowid as facid, f.ref, f.datef as do, pf.amount as amount, b.fk_account as bankid, cp.code";
-$sql .= " FROM ".MAIN_DB_PREFIX."paiement_facture as pf, ".MAIN_DB_PREFIX."facture as f, ".MAIN_DB_PREFIX."paiement as p, ".MAIN_DB_PREFIX."c_paiement as cp, ".MAIN_DB_PREFIX."bank as b";
+$sql .= " FROM " . MAIN_DB_PREFIX . "paiement_facture as pf, " . MAIN_DB_PREFIX . "facture as f, " . MAIN_DB_PREFIX . "paiement as p, " . MAIN_DB_PREFIX . "c_paiement as cp, " . MAIN_DB_PREFIX . "bank as b";
 $sql .= " WHERE pf.fk_facture = f.rowid AND p.rowid = pf.fk_paiement AND cp.id = p.fk_paiement AND p.fk_bank = b.rowid";
-$sql .= " AND f.module_source = '".$db->escape($posmodule)."'";
-$sql .= " AND f.pos_source = '".$db->escape($terminalid)."'";
+$sql .= " AND f.module_source = '" . $db->escape($posmodule) . "'";
+$sql .= " AND f.pos_source = '" . $db->escape($terminalid) . "'";
 $sql .= " AND f.paye = 1";
-$sql .= " AND p.entity = ".$conf->entity; // Never share entities for features related to accountancy
+$sql .= " AND p.entity = " . $conf->entity; // Never share entities for features related to accountancy
 /*if ($key == 'cash')       $sql.=" AND cp.code = 'LIQ'";
 elseif ($key == 'cheque') $sql.=" AND cp.code = 'CHQ'";
 elseif ($key == 'card')   $sql.=" AND cp.code = 'CB'";
 else
 {
-	dol_print_error(null, 'Value for key = '.$key.' not supported');
-	exit;
+    dol_print_error(null, 'Value for key = '.$key.' not supported');
+    exit;
 }*/
 if ($syear && !$smonth) {
-	$sql .= " AND datef BETWEEN '".$db->idate(dol_get_first_day($syear, 1))."' AND '".$db->idate(dol_get_last_day($syear, 12))."'";
+    $sql .= " AND datef BETWEEN '" . $db->idate(dol_get_first_day($syear, 1)) . "' AND '" . $db->idate(dol_get_last_day($syear, 12)) . "'";
 } elseif ($syear && $smonth && !$sday) {
-	$sql .= " AND datef BETWEEN '".$db->idate(dol_get_first_day($syear, $smonth))."' AND '".$db->idate(dol_get_last_day($syear, $smonth))."'";
+    $sql .= " AND datef BETWEEN '" . $db->idate(dol_get_first_day($syear, $smonth)) . "' AND '" . $db->idate(dol_get_last_day($syear, $smonth)) . "'";
 } elseif ($syear && $smonth && $sday) {
-	$sql .= " AND datef BETWEEN '".$db->idate(dol_mktime(0, 0, 0, $smonth, $sday, $syear))."' AND '".$db->idate(dol_mktime(23, 59, 59, $smonth, $sday, $syear))."'";
+    $sql .= " AND datef BETWEEN '" . $db->idate(dol_mktime(0, 0, 0, $smonth, $sday, $syear)) . "' AND '" . $db->idate(dol_mktime(23, 59, 59, $smonth, $sday, $syear)) . "'";
 } else {
-	dol_print_error(null, 'Year not defined');
+    dol_print_error(null, 'Year not defined');
 }
 
 $resql = $db->query($sql);
 if ($resql) {
-	$num = $db->num_rows($resql);
-	$i = 0;
+    $num = $db->num_rows($resql);
+    $i = 0;
 
-	print "<!-- title of cash fence -->\n";
-	print '<center>';
-	print '<h2>';
+    print "<!-- title of cash fence -->\n";
+    print '<center>';
+    print '<h2>';
 
-	$nameterminal = getDolGlobalString("TAKEPOS_TERMINAL_NAME_".$object->posnumber);
-	print $langs->trans("CashControl")." #".$object->id.(($nameterminal != "TAKEPOS_TERMINAL_NAME_".$object->posnumber) ? '<br>'.$nameterminal : '');
-	if ($object->status == $object::STATUS_DRAFT) {
-		print '<br><span class="opacitymedium small">('.$langs->trans("Draft").")</span>";
-	}
-	print "</h2>";
-	print $mysoc->name;
-	print '<br>'.$langs->trans("DateCreationShort").": ".dol_print_date($object->date_creation, 'dayhour');
-	$userauthor = $object->fk_user_valid;
-	if (empty($userauthor)) {
-		$userauthor = $object->fk_user_creat;
-	}
+    $nameterminal = getDolGlobalString("TAKEPOS_TERMINAL_NAME_" . $object->posnumber);
+    print $langs->trans("CashControl") . " #" . $object->id . (($nameterminal != "TAKEPOS_TERMINAL_NAME_" . $object->posnumber) ? '<br>' . $nameterminal : '');
+    if ($object->status == $object::STATUS_DRAFT) {
+        print '<br><span class="opacitymedium small">(' . $langs->trans("Draft") . ")</span>";
+    }
+    print "</h2>";
+    print $mysoc->name;
+    print '<br>' . $langs->trans("DateCreationShort") . ": " . dol_print_date($object->date_creation, 'dayhour');
+    $userauthor = $object->fk_user_valid;
+    if (empty($userauthor)) {
+        $userauthor = $object->fk_user_creat;
+    }
 
-	$uservalid = new User($db);
-	if ($userauthor > 0) {
-		$uservalid->fetch($userauthor);
-		print '<br>'.$langs->trans("Author").': '.$uservalid->getFullName($langs);
-	}
-	print '<br>'.$langs->trans("Period").': '.$object->year_close.($object->month_close ? '-'.$object->month_close : '').($object->day_close ? '-'.$object->day_close : '');
-	print '</center>';
+    $uservalid = new User($db);
+    if ($userauthor > 0) {
+        $uservalid->fetch($userauthor);
+        print '<br>' . $langs->trans("Author") . ': ' . $uservalid->getFullName($langs);
+    }
+    print '<br>' . $langs->trans("Period") . ': ' . $object->year_close . ($object->month_close ? '-' . $object->month_close : '') . ($object->day_close ? '-' . $object->day_close : '');
+    print '</center>';
 
-	$invoicetmp = new Facture($db);
+    $invoicetmp = new Facture($db);
 
-	if (!$summaryonly) {
-		print "<div style='text-align: right'><h2>";
-		print $langs->trans("InitialBankBalance").' - '.$langs->trans("Cash").' : <div class="inline-block amount width100">'.price($object->opening).'</div>';
-		print "</h2></div>";
-	} else {
-		print '<br>';
-	}
+    if (!$summaryonly) {
+        print "<div style='text-align: right'><h2>";
+        print $langs->trans("InitialBankBalance") . ' - ' . $langs->trans("Cash") . ' : <div class="inline-block amount width100">' . price($object->opening) . '</div>';
+        print "</h2></div>";
+    } else {
+        print '<br>';
+    }
 
-	$param = '';
+    $param = '';
 
-	if (!$summaryonly) {
-		print '<div class="div-table-responsive">';
-		print '<table class="tagtable liste">'."\n";
+    if (!$summaryonly) {
+        print '<div class="div-table-responsive">';
+        print '<table class="tagtable liste">' . "\n";
 
-		// Fields title
-		print '<tr class="liste_titre">';
-		print_liste_field_titre($arrayfields['b.rowid']['label'], $_SERVER['PHP_SELF'], 'b.rowid', '', $param, '', $sortfield, $sortorder);
-		print_liste_field_titre($arrayfields['b.dateo']['label'], $_SERVER['PHP_SELF'], 'b.dateo', '', $param, '"', $sortfield, $sortorder, 'center ');
-		print_liste_field_titre($arrayfields['ba.ref']['label'], $_SERVER['PHP_SELF'], 'ba.ref', '', $param, '', $sortfield, $sortorder, 'right ');
-		print_liste_field_titre($arrayfields['cp.code']['label'], $_SERVER['PHP_SELF'], 'cp.code', '', $param, '', $sortfield, $sortorder, 'right ');
-		print_liste_field_titre($arrayfields['b.debit']['label'], $_SERVER['PHP_SELF'], 'b.amount', '', $param, '', $sortfield, $sortorder, 'right ');
-		print_liste_field_titre($arrayfields['b.credit']['label'], $_SERVER['PHP_SELF'], 'b.amount', '', $param, '', $sortfield, $sortorder, 'right ');
-		print "</tr>\n";
-	}
+        // Fields title
+        print '<tr class="liste_titre">';
+        print_liste_field_titre($arrayfields['b.rowid']['label'], $_SERVER['PHP_SELF'], 'b.rowid', '', $param, '', $sortfield, $sortorder);
+        print_liste_field_titre($arrayfields['b.dateo']['label'], $_SERVER['PHP_SELF'], 'b.dateo', '', $param, '"', $sortfield, $sortorder, 'center ');
+        print_liste_field_titre($arrayfields['ba.ref']['label'], $_SERVER['PHP_SELF'], 'ba.ref', '', $param, '', $sortfield, $sortorder, 'right ');
+        print_liste_field_titre($arrayfields['cp.code']['label'], $_SERVER['PHP_SELF'], 'cp.code', '', $param, '', $sortfield, $sortorder, 'right ');
+        print_liste_field_titre($arrayfields['b.debit']['label'], $_SERVER['PHP_SELF'], 'b.amount', '', $param, '', $sortfield, $sortorder, 'right ');
+        print_liste_field_titre($arrayfields['b.credit']['label'], $_SERVER['PHP_SELF'], 'b.amount', '', $param, '', $sortfield, $sortorder, 'right ');
+        print "</tr>\n";
+    }
 
-	// Loop on each record
-	$cash = $bank = $cheque = $other = 0;
+    // Loop on each record
+    $cash = $bank = $cheque = $other = 0;
 
-	$totalqty = 0;
-	$totalvat = 0;
-	$totalvatperrate = array();
-	$totallocaltax1 = 0;
-	$totallocaltax2 = 0;
-	$cachebankaccount = array();
-	$cacheinvoiceid = array();
-	$transactionspertype = array();
-	$amountpertype = array();
+    $totalqty = 0;
+    $totalvat = 0;
+    $totalvatperrate = array();
+    $totallocaltax1 = 0;
+    $totallocaltax2 = 0;
+    $cachebankaccount = array();
+    $cacheinvoiceid = array();
+    $transactionspertype = array();
+    $amountpertype = array();
 
-	$totalarray = array('nbfield' => 0, 'pos' => array());
-	while ($i < $num) {
-		$objp = $db->fetch_object($resql);
+    $totalarray = array('nbfield' => 0, 'pos' => array());
+    while ($i < $num) {
+        $objp = $db->fetch_object($resql);
 
-		// Load bankaccount
-		if (empty($cachebankaccount[$objp->bankid])) {
-			$bankaccounttmp = new Account($db);
-			$bankaccounttmp->fetch($objp->bankid);
-			$cachebankaccount[$objp->bankid] = $bankaccounttmp;
-			$bankaccount = $bankaccounttmp;
-		} else {
-			$bankaccount = $cachebankaccount[$objp->bankid];
-		}
+        // Load bankaccount
+        if (empty($cachebankaccount[$objp->bankid])) {
+            $bankaccounttmp = new Account($db);
+            $bankaccounttmp->fetch($objp->bankid);
+            $cachebankaccount[$objp->bankid] = $bankaccounttmp;
+            $bankaccount = $bankaccounttmp;
+        } else {
+            $bankaccount = $cachebankaccount[$objp->bankid];
+        }
 
-		$invoicetmp->fetch($objp->facid);
+        $invoicetmp->fetch($objp->facid);
 
-		if (empty($cacheinvoiceid[$objp->facid])) {
-			$cacheinvoiceid[$objp->facid] = $objp->facid; // First time this invoice is found into list of invoice x payments
-			foreach ($invoicetmp->lines as $line) {
-				$totalqty += $line->qty;
-				$totalvat += $line->total_tva;
-				if ($line->tva_tx) {
-					if (empty($totalvatperrate[$line->tva_tx])) {
-						$totalvatperrate[$line->tva_tx] = 0;
-					}
-					$totalvatperrate[$line->tva_tx] += $line->total_tva;
-				}
-				$totallocaltax1 += $line->total_localtax1;
-				$totallocaltax2 += $line->total_localtax2;
-			}
-		}
+        if (empty($cacheinvoiceid[$objp->facid])) {
+            $cacheinvoiceid[$objp->facid] = $objp->facid; // First time this invoice is found into list of invoice x payments
+            foreach ($invoicetmp->lines as $line) {
+                $totalqty += $line->qty;
+                $totalvat += $line->total_tva;
+                if ($line->tva_tx) {
+                    if (empty($totalvatperrate[$line->tva_tx])) {
+                        $totalvatperrate[$line->tva_tx] = 0;
+                    }
+                    $totalvatperrate[$line->tva_tx] += $line->total_tva;
+                }
+                $totallocaltax1 += $line->total_localtax1;
+                $totallocaltax2 += $line->total_localtax2;
+            }
+        }
 
-		if ($object->posmodule == "takepos") {
-			$var1 = 'CASHDESK_ID_BANKACCOUNT_CASH'.$object->posnumber;
-		} else {
-			$var1 = 'CASHDESK_ID_BANKACCOUNT_CASH';
-		}
+        if ($object->posmodule == "takepos") {
+            $var1 = 'CASHDESK_ID_BANKACCOUNT_CASH' . $object->posnumber;
+        } else {
+            $var1 = 'CASHDESK_ID_BANKACCOUNT_CASH';
+        }
 
-		if ($objp->code == 'CHQ') {
-			$cheque += $objp->amount;
-			if (empty($transactionspertype[$objp->code])) {
-				$transactionspertype[$objp->code] = 0;
-			}
-			$transactionspertype[$objp->code] += 1;
-		} elseif ($objp->code == 'CB') {
-			$bank += $objp->amount;
-			if (empty($transactionspertype[$objp->code])) {
-				$transactionspertype[$objp->code] = 0;
-			}
-			$transactionspertype[$objp->code] += 1;
-		} else {
-			if (getDolGlobalString($var1) == $bankaccount->id) {
-				$cash += $objp->amount;
-				// } elseif (getDolGlobalString($var2) == $bankaccount->id) $bank+=$objp->amount;
-				//elseif (getDolGlobalString($var3) == $bankaccount->id) $cheque+=$objp->amount;
-				if (empty($transactionspertype['CASH'])) {
-					$transactionspertype['CASH'] = 0;
-				}
-				$transactionspertype['CASH'] += 1;
-			} else {
-				$other += $objp->amount;
-				if (empty($transactionspertype['OTHER'])) {
-					$transactionspertype['OTHER'] = 0;
-				}
-				$transactionspertype['OTHER'] += 1;
-			}
-		}
+        if ($objp->code == 'CHQ') {
+            $cheque += $objp->amount;
+            if (empty($transactionspertype[$objp->code])) {
+                $transactionspertype[$objp->code] = 0;
+            }
+            $transactionspertype[$objp->code] += 1;
+        } elseif ($objp->code == 'CB') {
+            $bank += $objp->amount;
+            if (empty($transactionspertype[$objp->code])) {
+                $transactionspertype[$objp->code] = 0;
+            }
+            $transactionspertype[$objp->code] += 1;
+        } else {
+            if (getDolGlobalString($var1) == $bankaccount->id) {
+                $cash += $objp->amount;
+                // } elseif (getDolGlobalString($var2) == $bankaccount->id) $bank+=$objp->amount;
+                //elseif (getDolGlobalString($var3) == $bankaccount->id) $cheque+=$objp->amount;
+                if (empty($transactionspertype['CASH'])) {
+                    $transactionspertype['CASH'] = 0;
+                }
+                $transactionspertype['CASH'] += 1;
+            } else {
+                $other += $objp->amount;
+                if (empty($transactionspertype['OTHER'])) {
+                    $transactionspertype['OTHER'] = 0;
+                }
+                $transactionspertype['OTHER'] += 1;
+            }
+        }
 
-		if (empty($amountpertype[$objp->code])) {
-			$amountpertype[$objp->code] = 0;
-		}
+        if (empty($amountpertype[$objp->code])) {
+            $amountpertype[$objp->code] = 0;
+        }
 
-		if ($objp->amount < 0) {
-			$amountpertype[$objp->code] += $objp->amount;
-		}
-		if ($objp->amount > 0) {
-			$amountpertype[$objp->code] -= $objp->amount;
-		}
+        if ($objp->amount < 0) {
+            $amountpertype[$objp->code] += $objp->amount;
+        }
+        if ($objp->amount > 0) {
+            $amountpertype[$objp->code] -= $objp->amount;
+        }
 
-		if (!$summaryonly) {
-			print '<tr class="oddeven">';
+        if (!$summaryonly) {
+            print '<tr class="oddeven">';
 
-			// Ref
-			print '<td class="nowrap left">';
-			print $invoicetmp->getNomUrl(1);
-			print '</td>';
-			if (!$i) {
-				$totalarray['nbfield']++;
-			}
+            // Ref
+            print '<td class="nowrap left">';
+            print $invoicetmp->getNomUrl(1);
+            print '</td>';
+            if (!$i) {
+                $totalarray['nbfield']++;
+            }
 
-			// Date ope
-			print '<td class="nowrap left">';
-			print '<span id="dateoperation_'.$objp->rowid.'">'.dol_print_date($db->jdate($objp->do), "day")."</span>";
-			print "</td>\n";
-			if (!$i) {
-				$totalarray['nbfield']++;
-			}
+            // Date ope
+            print '<td class="nowrap left">';
+            print '<span id="dateoperation_' . $objp->rowid . '">' . dol_print_date($db->jdate($objp->do), "day") . "</span>";
+            print "</td>\n";
+            if (!$i) {
+                $totalarray['nbfield']++;
+            }
 
-			// Bank account
-			print '<td class="nowrap right">';
-			print $bankaccount->getNomUrl(1);
-			print "</td>\n";
-			if (!$i) {
-				$totalarray['nbfield']++;
-			}
+            // Bank account
+            print '<td class="nowrap right">';
+            print $bankaccount->getNomUrl(1);
+            print "</td>\n";
+            if (!$i) {
+                $totalarray['nbfield']++;
+            }
 
-			// Type
-			print '<td class="right">';
-			print $objp->code;
-			print "</td>\n";
-			if (!$i) {
-				$totalarray['nbfield']++;
-			}
+            // Type
+            print '<td class="right">';
+            print $objp->code;
+            print "</td>\n";
+            if (!$i) {
+                $totalarray['nbfield']++;
+            }
 
-			// Debit
-			print '<td class="right">';
-			if ($objp->amount < 0) {
-				print '<span class="amount">'.price($objp->amount * -1).'</span>';
-				$totalarray['val']['totaldebfield'] += $objp->amount;
-			}
-			print "</td>\n";
-			if (!$i) {
-				$totalarray['nbfield']++;
-			}
-			if (!$i) {
-				$totalarray['pos'][$totalarray['nbfield']] = 'totaldebfield';
-			}
+            // Debit
+            print '<td class="right">';
+            if ($objp->amount < 0) {
+                print '<span class="amount">' . price($objp->amount * -1) . '</span>';
+                $totalarray['val']['totaldebfield'] += $objp->amount;
+            }
+            print "</td>\n";
+            if (!$i) {
+                $totalarray['nbfield']++;
+            }
+            if (!$i) {
+                $totalarray['pos'][$totalarray['nbfield']] = 'totaldebfield';
+            }
 
-			// Credit
-			print '<td class="right">';
-			if ($objp->amount > 0) {
-				print '<span class="amount">'.price($objp->amount).'</span>';
-				$totalarray['val']['totalcredfield'] += $objp->amount;
-			}
-			print "</td>\n";
-			if (!$i) {
-				$totalarray['nbfield']++;
-			}
-			if (!$i) {
-				$totalarray['pos'][$totalarray['nbfield']] = 'totalcredfield';
-			}
+            // Credit
+            print '<td class="right">';
+            if ($objp->amount > 0) {
+                print '<span class="amount">' . price($objp->amount) . '</span>';
+                $totalarray['val']['totalcredfield'] += $objp->amount;
+            }
+            print "</td>\n";
+            if (!$i) {
+                $totalarray['nbfield']++;
+            }
+            if (!$i) {
+                $totalarray['pos'][$totalarray['nbfield']] = 'totalcredfield';
+            }
 
-			print "</tr>";
-		}
+            print "</tr>";
+        }
 
-		$i++;
-	}
+        $i++;
+    }
 
-	if (!$summaryonly) {
-		// Show total line
-		include DOL_DOCUMENT_ROOT.'/core/tpl/list_print_total.tpl.php';
+    if (!$summaryonly) {
+        // Show total line
+        include DOL_DOCUMENT_ROOT . '/core/tpl/list_print_total.tpl.php';
 
-		print "</table>";
-		print "</div>";
-	}
+        print "</table>";
+        print "</div>";
+    }
 
-	//$cash = $amountpertype['LIQ'] + $object->opening;
-	$newcash = price2num($cash + (float) $object->opening, 'MT');
+    //$cash = $amountpertype['LIQ'] + $object->opening;
+    $newcash = price2num($cash + (float) $object->opening, 'MT');
 
-	print '<div style="text-align: right">';
-	print '<h2>';
+    print '<div style="text-align: right">';
+    print '<h2>';
 
-	print $langs->trans("Cash").(!empty($transactionspertype['CASH']) ? ' ('.$transactionspertype['CASH'].' '.$langs->trans("Articles").')' : '').' : ';
-	if (!$summaryonly) {
-		print '<div class="inline-block amount width100">'.($cash >= 0 ? '+' : '').price($cash).'</div>';
-		print '<div class="inline-block amount width100">'.price($newcash).'</div>';
-	} else {
-		print '<div class="inline-block amount width100"></div>';
-		print '<div class="inline-block amount width100">'.price($cash).'</div>';
-	}
-	if (!$summaryonly && $object->status == $object::STATUS_VALIDATED && $newcash != $object->cash) {
-		print ' <div class="inline-block amountremaintopay fontsizeunset small"><> '.$langs->trans("Declared").': '.price($object->cash).'</div>';
-	}
-	print "<br>";
+    print $langs->trans("Cash") . (!empty($transactionspertype['CASH']) ? ' (' . $transactionspertype['CASH'] . ' ' . $langs->trans("Articles") . ')' : '') . ' : ';
+    if (!$summaryonly) {
+        print '<div class="inline-block amount width100">' . ($cash >= 0 ? '+' : '') . price($cash) . '</div>';
+        print '<div class="inline-block amount width100">' . price($newcash) . '</div>';
+    } else {
+        print '<div class="inline-block amount width100"></div>';
+        print '<div class="inline-block amount width100">' . price($cash) . '</div>';
+    }
+    if (!$summaryonly && $object->status == $object::STATUS_VALIDATED && $newcash != $object->cash) {
+        print ' <div class="inline-block amountremaintopay fontsizeunset small"><> ' . $langs->trans("Declared") . ': ' . price($object->cash) . '</div>';
+    }
+    print "<br>";
 
-	//print '<br>';
-	print $langs->trans("PaymentTypeCHQ").(!empty($transactionspertype['CHQ']) ? ' ('.$transactionspertype['CHQ'].' '.$langs->trans("Articles").')' : '').' : ';
-	print '<div class="inline-block amount width100"></div>';
-	print '<div class="inline-block amount width100">'.price($cheque).'</div>';
-	if (!$summaryonly && $object->status == $object::STATUS_VALIDATED && $cheque != $object->cheque) {
-		print ' <div class="inline-block amountremaintopay fontsizeunset small"><> '.$langs->trans("Declared").' : '.price($object->cheque).'</div>';
-	}
-	print "<br>";
+    //print '<br>';
+    print $langs->trans("PaymentTypeCHQ") . (!empty($transactionspertype['CHQ']) ? ' (' . $transactionspertype['CHQ'] . ' ' . $langs->trans("Articles") . ')' : '') . ' : ';
+    print '<div class="inline-block amount width100"></div>';
+    print '<div class="inline-block amount width100">' . price($cheque) . '</div>';
+    if (!$summaryonly && $object->status == $object::STATUS_VALIDATED && $cheque != $object->cheque) {
+        print ' <div class="inline-block amountremaintopay fontsizeunset small"><> ' . $langs->trans("Declared") . ' : ' . price($object->cheque) . '</div>';
+    }
+    print "<br>";
 
-	//print '<br>';
-	print $langs->trans("PaymentTypeCB").(!empty($transactionspertype['CB']) ? ' ('.$transactionspertype['CB'].' '.$langs->trans("Articles").')' : '').' : ';
-	print '<div class="inline-block amount width100"></div>';
-	print '<div class="inline-block amount width100">'.price($bank).'</div>';
-	if (!$summaryonly && $object->status == $object::STATUS_VALIDATED && $bank != $object->card) {
-		print ' <div class="inline-block amountremaintopay fontsizeunset small"><> '.$langs->trans("Declared").': '.price($object->card).'</div>';
-	}
-	print "<br>";
+    //print '<br>';
+    print $langs->trans("PaymentTypeCB") . (!empty($transactionspertype['CB']) ? ' (' . $transactionspertype['CB'] . ' ' . $langs->trans("Articles") . ')' : '') . ' : ';
+    print '<div class="inline-block amount width100"></div>';
+    print '<div class="inline-block amount width100">' . price($bank) . '</div>';
+    if (!$summaryonly && $object->status == $object::STATUS_VALIDATED && $bank != $object->card) {
+        print ' <div class="inline-block amountremaintopay fontsizeunset small"><> ' . $langs->trans("Declared") . ': ' . price($object->card) . '</div>';
+    }
+    print "<br>";
 
-	// print '<br>';
-	if ($other) {
-		print ''.$langs->trans("Other").(!empty($transactionspertype['OTHER']) ? ' ('.$transactionspertype['OTHER'].' '.$langs->trans("Articles").')' : '').' : ';
-		print '<div class="inline-block amount width100"></div>';
-		print '<div class="inline-block amount width100">'.price($other)."</div>";
-		print '<br>';
-	}
+    // print '<br>';
+    if ($other) {
+        print '' . $langs->trans("Other") . (!empty($transactionspertype['OTHER']) ? ' (' . $transactionspertype['OTHER'] . ' ' . $langs->trans("Articles") . ')' : '') . ' : ';
+        print '<div class="inline-block amount width100"></div>';
+        print '<div class="inline-block amount width100">' . price($other) . "</div>";
+        print '<br>';
+    }
 
-	print "<br>";
+    print "<br>";
 
-	print $langs->trans("Total").' ('.$totalqty.' '.$langs->trans("Articles").') : <div class="inline-block amount width100"></div><div class="inline-block amount width100">'.price((float) $cash + (float) $cheque + (float) $bank + (float) $other).'</div>';
+    print $langs->trans("Total") . ' (' . $totalqty . ' ' . $langs->trans("Articles") . ') : <div class="inline-block amount width100"></div><div class="inline-block amount width100">' . price((float) $cash + (float) $cheque + (float) $bank + (float) $other) . '</div>';
 
-	print '<br>'.$langs->trans("TotalVAT").' : <div class="inline-block amount width100"></div><div class="inline-block amount width100">'.price($totalvat).'</div>';
+    print '<br>' . $langs->trans("TotalVAT") . ' : <div class="inline-block amount width100"></div><div class="inline-block amount width100">' . price($totalvat) . '</div>';
 
-	if ($mysoc->useLocalTax(1)) {
-		print '<br>'.$langs->trans("TotalLT1").' : <div class="inline-block amount width100"></div><div class="inline-block amount width100">'.price($totallocaltax1).'</div>';
-	}
-	if ($mysoc->useLocalTax(1)) {
-		print '<br>'.$langs->trans("TotalLT2").' : <div class="inline-block amount width100"></div><div class="inline-block amount width100">'.price($totallocaltax2).'</div>';
-	}
+    if ($mysoc->useLocalTax(1)) {
+        print '<br>' . $langs->trans("TotalLT1") . ' : <div class="inline-block amount width100"></div><div class="inline-block amount width100">' . price($totallocaltax1) . '</div>';
+    }
+    if ($mysoc->useLocalTax(1)) {
+        print '<br>' . $langs->trans("TotalLT2") . ' : <div class="inline-block amount width100"></div><div class="inline-block amount width100">' . price($totallocaltax2) . '</div>';
+    }
 
-	if (!empty($totalvatperrate) && is_array($totalvatperrate)) {
-		print '<br><br><div class="small inline-block">'.$langs->trans("VATRate").'</div>';
-		foreach ($totalvatperrate as $keyrate => $valuerate) {
-			print '<br><div class="small">'.$langs->trans("VATRate").' '.vatrate($keyrate, 1).' : <div class="inline-block amount width100"></div><div class="inline-block amount width100">'.price($valuerate).'</div></div>';
-		}
-	}
+    if (!empty($totalvatperrate) && is_array($totalvatperrate)) {
+        print '<br><br><div class="small inline-block">' . $langs->trans("VATRate") . '</div>';
+        foreach ($totalvatperrate as $keyrate => $valuerate) {
+            print '<br><div class="small">' . $langs->trans("VATRate") . ' ' . vatrate($keyrate, 1) . ' : <div class="inline-block amount width100"></div><div class="inline-block amount width100">' . price($valuerate) . '</div></div>';
+        }
+    }
 
-	print '</h2>';
-	print '</div>';
+    print '</h2>';
+    print '</div>';
 
-	print '</form>';
+    print '</form>';
 
-	$db->free($resql);
+    $db->free($resql);
 } else {
-	dol_print_error($db);
+    dol_print_error($db);
 }
 
 print '</div>';

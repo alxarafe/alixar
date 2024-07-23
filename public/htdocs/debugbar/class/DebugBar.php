@@ -1,6 +1,8 @@
 <?php
-/* Copyright (C) 2023	Laurent Destailleur		<eldy@users.sourceforge.net>
+
+/* Copyright (C) 2023   Laurent Destailleur     <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +19,9 @@
  */
 
 /**
- *	\file       htdocs/debugbar/class/DebugBar.php
- *	\brief      Class for debugbar
- *	\ingroup    debugbar
+ *  \file       htdocs/debugbar/class/DebugBar.php
+ *  \brief      Class for debugbar
+ *  \ingroup    debugbar
  */
 
 dol_include_once('/debugbar/class/autoloader.php');
@@ -45,57 +47,57 @@ dol_include_once('/debugbar/class/DataCollector/DolHooksCollector.php');
 
 class DolibarrDebugBar extends DebugBar
 {
-	/**
-	 * Constructor
-	 *
-	 */
-	public function __construct()
-	{
-		//$this->addCollector(new PhpInfoCollector());
-		//$this->addCollector(new DolMessagesCollector());
-		$this->addCollector(new DolRequestDataCollector());
-		//$this->addCollector(new DolConfigCollector());      // Disabled for security purpose
-		$this->addCollector(new DolTimeDataCollector());
-		$this->addCollector(new PhpCollector());
-		$this->addCollector(new DolMemoryCollector());
-		//$this->addCollector(new DolExceptionsCollector());
-		$this->addCollector(new DolQueryCollector());
-		$this->addCollector(new DolibarrCollector());
-		$this->addCollector(new DolHooksCollector());
-		if (isModEnabled('syslog')) {
-			$this->addCollector(new DolLogsCollector());
-		}
-	}
+    /**
+     * Constructor
+     *
+     */
+    public function __construct()
+    {
+        //$this->addCollector(new PhpInfoCollector());
+        //$this->addCollector(new DolMessagesCollector());
+        $this->addCollector(new DolRequestDataCollector());
+        //$this->addCollector(new DolConfigCollector());      // Disabled for security purpose
+        $this->addCollector(new DolTimeDataCollector());
+        $this->addCollector(new PhpCollector());
+        $this->addCollector(new DolMemoryCollector());
+        //$this->addCollector(new DolExceptionsCollector());
+        $this->addCollector(new DolQueryCollector());
+        $this->addCollector(new DolibarrCollector());
+        $this->addCollector(new DolHooksCollector());
+        if (isModEnabled('syslog')) {
+            $this->addCollector(new DolLogsCollector());
+        }
+    }
 
-	/**
-	 * Returns a JavascriptRenderer for this instance
-	 *
-	 * @param string $baseUrl Base url
-	 * @param string $basePath Base path
-	 * @return \DebugBar\JavascriptRenderer      String content
-	 */
-	public function getJavascriptRenderer($baseUrl = null, $basePath = null)
-	{
-		if ($baseUrl === null) {
-			$baseUrl = DOL_URL_ROOT.'/includes/maximebf/debugbar/src/DebugBar/Resources';
-		}
-		$renderer = parent::getJavascriptRenderer($baseUrl, $basePath);
-		$renderer->disableVendor('jquery');			// We already have jquery loaded globally by the main.inc.php
-		$renderer->disableVendor('fontawesome');	// We already have fontawesome loaded globally by the main.inc.php
-		$renderer->disableVendor('highlightjs');	// We don't need this
-		$renderer->setEnableJqueryNoConflict(false);	// We don't need no conflict
+    /**
+     * Returns a JavascriptRenderer for this instance
+     *
+     * @param string $baseUrl Base url
+     * @param string $basePath Base path
+     * @return \DebugBar\JavascriptRenderer      String content
+     */
+    public function getJavascriptRenderer($baseUrl = null, $basePath = null)
+    {
+        if ($baseUrl === null) {
+            $baseUrl = DOL_URL_ROOT . '/includes/maximebf/debugbar/src/DebugBar/Resources';
+        }
+        $renderer = parent::getJavascriptRenderer($baseUrl, $basePath);
+        $renderer->disableVendor('jquery');         // We already have jquery loaded globally by the main.inc.php
+        $renderer->disableVendor('fontawesome');    // We already have fontawesome loaded globally by the main.inc.php
+        $renderer->disableVendor('highlightjs');    // We don't need this
+        $renderer->setEnableJqueryNoConflict(false);    // We don't need no conflict
 
-		return $renderer;
-	}
+        return $renderer;
+    }
 
-	/**
-	 * Returns a JavascriptRenderer for this instance
-	 *
-	 * @return \DebugBar\JavascriptRenderer      String content
-	 * @deprecated Use getJavascriptRenderer
-	 */
-	public function getRenderer()
-	{
-		return $this->getJavascriptRenderer();
-	}
+    /**
+     * Returns a JavascriptRenderer for this instance
+     *
+     * @return \DebugBar\JavascriptRenderer      String content
+     * @deprecated Use getJavascriptRenderer
+     */
+    public function getRenderer()
+    {
+        return $this->getJavascriptRenderer();
+    }
 }

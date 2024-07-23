@@ -77,7 +77,7 @@ class Principal extends DAV\Node implements IPrincipal, DAV\IProperties, IACL
         }
 
         if (isset($this->principalProperties['{http://sabredav.org/ns}email-address'])) {
-            $uris[] = 'mailto:'.$this->principalProperties['{http://sabredav.org/ns}email-address'];
+            $uris[] = 'mailto:' . $this->principalProperties['{http://sabredav.org/ns}email-address'];
         }
 
         return array_unique($uris);

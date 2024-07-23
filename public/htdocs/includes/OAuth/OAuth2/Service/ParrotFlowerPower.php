@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ParrotFlowerPower service.
  *
@@ -28,7 +29,6 @@ use OAuth\Common\Token\TokenInterface;
  */
 class ParrotFlowerPower extends AbstractService
 {
-
     public function __construct(
         CredentialsInterface $credentials,
         ClientInterface $httpClient,
@@ -55,8 +55,7 @@ class ParrotFlowerPower extends AbstractService
      */
     public function getAuthorizationEndpoint()
     {
-        return new Uri($this->baseApiUri.'oauth2/v1/authorize');
-
+        return new Uri($this->baseApiUri . 'oauth2/v1/authorize');
     }
 
     /**
@@ -64,7 +63,7 @@ class ParrotFlowerPower extends AbstractService
      */
     public function getAccessTokenEndpoint()
     {
-        return new Uri($this->baseApiUri.'user/v1/authenticate');
+        return new Uri($this->baseApiUri . 'user/v1/authenticate');
     }
 
     /**
@@ -130,7 +129,7 @@ class ParrotFlowerPower extends AbstractService
         );
 
         $responseBody = $this->httpClient->retrieveResponse(
-            new Uri($this->baseApiUri.'user/v1/refresh'),
+            new Uri($this->baseApiUri . 'user/v1/refresh'),
             $parameters,
             $this->getExtraOAuthHeaders()
         );

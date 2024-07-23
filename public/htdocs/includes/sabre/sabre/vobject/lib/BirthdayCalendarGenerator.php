@@ -136,7 +136,7 @@ class BirthdayCalendarGenerator
             $unknownYear = false;
 
             if (!$dateParts['year']) {
-                $object->BDAY = self::DEFAULT_YEAR.'-'.$dateParts['month'].'-'.$dateParts['date'];
+                $object->BDAY = self::DEFAULT_YEAR . '-' . $dateParts['month'] . '-' . $dateParts['date'];
 
                 $unknownYear = true;
             }

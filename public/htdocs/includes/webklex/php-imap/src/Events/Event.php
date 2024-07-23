@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     Event.php
 * Category: Event
@@ -17,12 +18,13 @@ namespace Webklex\PHPIMAP\Events;
  *
  * @package Webklex\PHPIMAP\Events
  */
-abstract class Event {
-
+abstract class Event
+{
     /**
      * Dispatch the event with the given arguments.
      */
-    public static function dispatch() {
+    public static function dispatch()
+    {
         return new static(func_get_args());
     }
 }

@@ -363,7 +363,7 @@ class VCalendar extends VObject\Document
     {
         return [
             'VERSION' => '2.0',
-            'PRODID' => '-//Sabre//Sabre VObject '.VObject\Version::VERSION.'//EN',
+            'PRODID' => '-//Sabre//Sabre VObject ' . VObject\Version::VERSION . '//EN',
             'CALSCALE' => 'GREGORIAN',
         ];
     }
@@ -452,7 +452,7 @@ class VCalendar extends VObject\Document
                     if ($isMaster && $uidList[$uid]['hasMaster']) {
                         $warnings[] = [
                             'level' => 3,
-                            'message' => 'More than one master object was found for the object with UID '.$uid,
+                            'message' => 'More than one master object was found for the object with UID ' . $uid,
                             'node' => $this,
                         ];
                     }

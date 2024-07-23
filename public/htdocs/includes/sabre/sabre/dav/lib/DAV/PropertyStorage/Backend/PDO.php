@@ -80,7 +80,7 @@ class PDO implements BackendInterface
             return;
         }
 
-        $query = 'SELECT name, value, valuetype FROM '.$this->tableName.' WHERE path = ?';
+        $query = 'SELECT name, value, valuetype FROM ' . $this->tableName . ' WHERE path = ?';
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([$path]);
 
@@ -132,7 +132,7 @@ SQL;
             }
 
             $updateStmt = $this->pdo->prepare($updateSql);
-            $deleteStmt = $this->pdo->prepare('DELETE FROM '.$this->tableName.' WHERE path = ? AND name = ?');
+            $deleteStmt = $this->pdo->prepare('DELETE FROM ' . $this->tableName . ' WHERE path = ? AND name = ?');
 
             foreach ($properties as $name => $value) {
                 if (!is_null($value)) {
@@ -173,7 +173,7 @@ SQL;
      */
     public function delete($path)
     {
-        $stmt = $this->pdo->prepare('DELETE FROM '.$this->tableName."  WHERE path = ? OR path LIKE ? ESCAPE '='");
+        $stmt = $this->pdo->prepare('DELETE FROM ' . $this->tableName . "  WHERE path = ? OR path LIKE ? ESCAPE '='");
         $childPath = strtr(
             $path,
             [
@@ -181,7 +181,7 @@ SQL;
                 '%' => '=%',
                 '_' => '=_',
             ]
-        ).'/%';
+        ) . '/%';
 
         $stmt->execute([$path, $childPath]);
     }
@@ -202,21 +202,21 @@ SQL;
         // also compatible across db engines, so we're letting PHP do all the
         // updates. Much slower, but it should still be pretty fast in most
         // cases.
-        $select = $this->pdo->prepare('SELECT id, path FROM '.$this->tableName.'  WHERE path = ? OR path LIKE ?');
-        $select->execute([$source, $source.'/%']);
+        $select = $this->pdo->prepare('SELECT id, path FROM ' . $this->tableName . '  WHERE path = ? OR path LIKE ?');
+        $select->execute([$source, $source . '/%']);
 
-        $update = $this->pdo->prepare('UPDATE '.$this->tableName.' SET path = ? WHERE id = ?');
+        $update = $this->pdo->prepare('UPDATE ' . $this->tableName . ' SET path = ? WHERE id = ?');
         while ($row = $select->fetch(\PDO::FETCH_ASSOC)) {
             // Sanity check. SQL may select too many records, such as records
             // with different cases.
-            if ($row['path'] !== $source && 0 !== strpos($row['path'], $source.'/')) {
+            if ($row['path'] !== $source && 0 !== strpos($row['path'], $source . '/')) {
                 continue;
             }
 
             $trailingPart = substr($row['path'], strlen($source) + 1);
             $newPath = $destination;
             if ($trailingPart) {
-                $newPath .= '/'.$trailingPart;
+                $newPath .= '/' . $trailingPart;
             }
             $update->execute([$newPath, $row['id']]);
         }

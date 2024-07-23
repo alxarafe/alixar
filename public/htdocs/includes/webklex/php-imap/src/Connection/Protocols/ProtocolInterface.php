@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File: ImapProtocol.php
 * Category: Protocol
@@ -24,8 +25,8 @@ use Webklex\PHPIMAP\Exceptions\RuntimeException;
  *
  * @package Webklex\PHPIMAP\Connection\Protocols
  */
-interface ProtocolInterface {
-
+interface ProtocolInterface
+{
     /**
      * Protocol constructor.
      * @param bool $cert_validation set to false to skip SSL certificate validation

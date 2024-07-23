@@ -1,7 +1,9 @@
 <?php
+
 /* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2018 Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2024      Alexandre Janniaux   <alexandre.janniaux@gmail.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,42 +20,42 @@
  */
 
 /**
- *		\file       htdocs/core/lib/emaillayout.lib.php
- *		\brief      File for getting email html models
+ *      \file       htdocs/core/lib/emaillayout.lib.php
+ *      \brief      File for getting email html models
  */
 
 /**
  * Get empty html
  *
- * @param	string	$name	Name of template
- * @return 	string  $out  	Html content
+ * @param   string  $name   Name of template
+ * @return  string  $out    Html content
  */
 function getHtmlOfLayout($name)
 {
-	global $conf, $mysoc, $user, $langs;
+    global $conf, $mysoc, $user, $langs;
 
-	$commonSubstitutionArray = getCommonSubstitutionArray($langs);
+    $commonSubstitutionArray = getCommonSubstitutionArray($langs);
 
-	$specificSubstitutionArray = array(
-		'__LOGO_URL__' => !empty($mysoc->logo) && dol_is_file($conf->mycompany->dir_output.'/logos/'.$mysoc->logo) ? DOL_URL_ROOT.'/viewimage.php?modulepart=mycompany&file='.urlencode('logos/'.$mysoc->logo) : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABkCAIAAABM5OhcAAABGklEQVR4nO3SwQ3AIBDAsNLJb3SWIEJC9gR5ZM3MB6f9twN4k7FIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIvEBtxYAkgpLmAeAAAAAElFTkSuQmCC',
-		'__TITLEOFMAILHOLDER__' => $langs->trans('TitleOfMailHolder'),
-		'__CONTENOFMAILHOLDER__' => $langs->trans('ContentOfMailHolder'),
-		'__USERSIGNATURE__' => !empty($user->signature) ? dol_htmlentities($user->signature) : '',
-		'__GRAY_RECTANGLE__' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABkCAIAAABM5OhcAAABGklEQVR4nO3SwQ3AIBDAsNLJb3SWIEJC9gR5ZM3MB6f9twN4k7FIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIvEBtxYAkgpLmAeAAAAAElFTkSuQmCC',
-	);
+    $specificSubstitutionArray = array(
+        '__LOGO_URL__' => !empty($mysoc->logo) && dol_is_file($conf->mycompany->dir_output . '/logos/' . $mysoc->logo) ? DOL_URL_ROOT . '/viewimage.php?modulepart=mycompany&file=' . urlencode('logos/' . $mysoc->logo) : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABkCAIAAABM5OhcAAABGklEQVR4nO3SwQ3AIBDAsNLJb3SWIEJC9gR5ZM3MB6f9twN4k7FIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIvEBtxYAkgpLmAeAAAAAElFTkSuQmCC',
+        '__TITLEOFMAILHOLDER__' => $langs->trans('TitleOfMailHolder'),
+        '__CONTENOFMAILHOLDER__' => $langs->trans('ContentOfMailHolder'),
+        '__USERSIGNATURE__' => !empty($user->signature) ? dol_htmlentities($user->signature) : '',
+        '__GRAY_RECTANGLE__' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABkCAIAAABM5OhcAAABGklEQVR4nO3SwQ3AIBDAsNLJb3SWIEJC9gR5ZM3MB6f9twN4k7FIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIvEBtxYAkgpLmAeAAAAAElFTkSuQmCC',
+    );
 
-	$substitutionarray = array_merge($commonSubstitutionArray, $specificSubstitutionArray);
+    $substitutionarray = array_merge($commonSubstitutionArray, $specificSubstitutionArray);
 
-	$templatePath = DOL_DOCUMENT_ROOT . '/install/doctemplates/maillayout/';
+    $templatePath = DOL_DOCUMENT_ROOT . '/install/doctemplates/maillayout/';
 
-	$templateFile = $templatePath . $name . '.html';
-	if (file_exists($templateFile)) {
-		$out = file_get_contents($templateFile);
-	} else {
-		$out = '';
-	}
+    $templateFile = $templatePath . $name . '.html';
+    if (file_exists($templateFile)) {
+        $out = file_get_contents($templateFile);
+    } else {
+        $out = '';
+    }
 
-	$out = make_substitutions($out, $substitutionarray);
+    $out = make_substitutions($out, $substitutionarray);
 
-	return $out;
+    return $out;
 }

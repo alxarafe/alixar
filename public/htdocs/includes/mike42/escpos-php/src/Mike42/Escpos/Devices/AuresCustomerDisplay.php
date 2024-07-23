@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of escpos-php: PHP receipt printer library for use with
  * ESC/POS-compatible thermal and impact printers.
@@ -20,7 +21,6 @@ use Mike42\Escpos\Printer;
  */
 class AuresCustomerDisplay extends Printer
 {
-
     /**
      * Indicates that the text should wrap and type over
      * existing text on the screen, rather than scroll.
@@ -142,7 +142,7 @@ class AuresCustomerDisplay extends Printer
     public function feed(int $lines = 1)
     {
         self::validateInteger($lines, 1, 255, __FUNCTION__);
-        for ($i = 0; $i < $lines; $i ++) {
+        for ($i = 0; $i < $lines; $i++) {
             $this->connector->write("\r\n");
         }
     }

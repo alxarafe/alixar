@@ -122,11 +122,11 @@ class File extends Node implements DAV\PartialUpdate\IPatchSupport
      */
     public function getETag()
     {
-        return '"'.sha1(
-            fileinode($this->path).
-            filesize($this->path).
+        return '"' . sha1(
+            fileinode($this->path) .
+            filesize($this->path) .
             filemtime($this->path)
-        ).'"';
+        ) . '"';
     }
 
     /**

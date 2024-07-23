@@ -55,7 +55,7 @@ class Subscription extends Collection implements ISubscription, IACL
 
         foreach ($required as $r) {
             if (!isset($subscriptionInfo[$r])) {
-                throw new \InvalidArgumentException('The '.$r.' field is required when creating a subscription node');
+                throw new \InvalidArgumentException('The ' . $r . ' field is required when creating a subscription node');
             }
         }
     }
@@ -191,12 +191,12 @@ class Subscription extends Collection implements ISubscription, IACL
             ],
             [
                 'privilege' => '{DAV:}all',
-                'principal' => $this->getOwner().'/calendar-proxy-write',
+                'principal' => $this->getOwner() . '/calendar-proxy-write',
                 'protected' => true,
             ],
             [
                 'privilege' => '{DAV:}read',
-                'principal' => $this->getOwner().'/calendar-proxy-read',
+                'principal' => $this->getOwner() . '/calendar-proxy-read',
                 'protected' => true,
             ],
         ];

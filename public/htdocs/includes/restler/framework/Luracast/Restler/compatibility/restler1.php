@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Restler 1 compatibility mode enabler
  */
+
 use Luracast\Restler\Defaults;
 
 //changes in iAuthenticate

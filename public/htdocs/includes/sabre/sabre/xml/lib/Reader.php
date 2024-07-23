@@ -39,7 +39,7 @@ class Reader extends XMLReader
             return null;
         }
 
-        return '{'.$this->namespaceURI.'}'.$this->localName;
+        return '{' . $this->namespaceURI . '}' . $this->localName;
     }
 
     /**
@@ -298,10 +298,10 @@ class Reader extends XMLReader
 
         $type = gettype($deserializer);
         if ('string' === $type) {
-            $type .= ' ('.$deserializer.')';
+            $type .= ' (' . $deserializer . ')';
         } elseif ('object' === $type) {
-            $type .= ' ('.get_class($deserializer).')';
+            $type .= ' (' . get_class($deserializer) . ')';
         }
-        throw new \LogicException('Could not use this type as a deserializer: '.$type.' for element: '.$name);
+        throw new \LogicException('Could not use this type as a deserializer: ' . $type . ' for element: ' . $name);
     }
 }

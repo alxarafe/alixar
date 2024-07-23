@@ -1,7 +1,9 @@
 <?php
+
 /* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +25,7 @@
  */
 
 // Load Dolibarr environment
-require '../main.inc.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "other"));
@@ -31,7 +33,7 @@ $langs->loadLangs(array("companies", "other"));
 // Security check
 $socid = 0;
 if ($user->socid > 0) {
-	$socid = $user->socid;
+    $socid = $user->socid;
 }
 
 
@@ -49,7 +51,7 @@ $text = $langs->trans("Tools");
 print load_fiche_titre($text, '', 'wrench');
 
 // Show description of content
-print '<div class="justify opacitymedium">'.$langs->trans("ToolsDesc").'</div><br><br>';
+print '<div class="justify opacitymedium">' . $langs->trans("ToolsDesc") . '</div><br><br>';
 
 
 // Show logo

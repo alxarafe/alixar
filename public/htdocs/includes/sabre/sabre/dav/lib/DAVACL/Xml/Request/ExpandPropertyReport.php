@@ -85,7 +85,7 @@ class ExpandPropertyReport implements XmlDeserializable
                 $elem['attributes']['namespace'] :
                 'DAV:';
 
-            $propName = '{'.$namespace.'}'.$elem['attributes']['name'];
+            $propName = '{' . $namespace . '}' . $elem['attributes']['name'];
 
             $value = null;
             if (is_array($elem['value'])) {

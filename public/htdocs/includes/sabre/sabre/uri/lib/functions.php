@@ -59,7 +59,7 @@ function resolve(string $basePath, string $newPath): string
             if (false !== $length) {
                 $path = substr($path, 0, $length);
             }
-            $path .= '/'.$delta['path'];
+            $path .= '/' . $delta['path'];
         }
     } else {
         $path = $base['path'] ?: '/';
@@ -84,7 +84,7 @@ function resolve(string $basePath, string $newPath): string
     $path = implode('/', $newPathParts);
 
     // If the source url ended with a /, we want to preserve that.
-    $newParts['path'] = 0 === strpos($path, '/') ? $path : '/'.$path;
+    $newParts['path'] = 0 === strpos($path, '/') ? $path : '/' . $path;
     if ($delta['query']) {
         $newParts['query'] = $delta['query'];
     } elseif (!empty($base['query']) && empty($delta['host']) && empty($delta['path'])) {
@@ -131,7 +131,7 @@ function normalize(string $uri): string
                     break;
             }
         }
-        $parts['path'] = '/'.implode('/', $newPathParts);
+        $parts['path'] = '/' . implode('/', $newPathParts);
     }
 
     if ($parts['scheme']) {
@@ -224,30 +224,30 @@ function build(array $parts): string
     if (!empty($parts['host'])) {
         $authority = $parts['host'];
         if (!empty($parts['user'])) {
-            $authority = $parts['user'].'@'.$authority;
+            $authority = $parts['user'] . '@' . $authority;
         }
         if (!empty($parts['port'])) {
-            $authority = $authority.':'.$parts['port'];
+            $authority = $authority . ':' . $parts['port'];
         }
     }
 
     if (!empty($parts['scheme'])) {
         // If there's a scheme, there's also a host.
-        $uri = $parts['scheme'].':';
+        $uri = $parts['scheme'] . ':';
     }
     if ($authority || (!empty($parts['scheme']) && 'file' === $parts['scheme'])) {
         // No scheme, but there is a host.
-        $uri .= '//'.$authority;
+        $uri .= '//' . $authority;
     }
 
     if (!empty($parts['path'])) {
         $uri .= $parts['path'];
     }
     if (!empty($parts['query'])) {
-        $uri .= '?'.$parts['query'];
+        $uri .= '?' . $parts['query'];
     }
     if (!empty($parts['fragment'])) {
-        $uri .= '#'.$parts['fragment'];
+        $uri .= '#' . $parts['fragment'];
     }
 
     return $uri;

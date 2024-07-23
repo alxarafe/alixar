@@ -48,7 +48,7 @@ class SupportedCollationSet implements XmlSerializable
         ];
 
         foreach ($collations as $collation) {
-            $writer->writeElement('{'.Plugin::NS_CALDAV.'}supported-collation', $collation);
+            $writer->writeElement('{' . Plugin::NS_CALDAV . '}supported-collation', $collation);
         }
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\Data;
 
 use Exception;
@@ -16,5 +17,4 @@ use Exception;
  */
 class Invalid extends Exception
 {
-
 }

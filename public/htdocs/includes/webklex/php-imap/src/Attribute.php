@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     Attribute.php
 * Category: -
@@ -20,8 +21,8 @@ use Carbon\Carbon;
  *
  * @package Webklex\PHPIMAP
  */
-class Attribute implements ArrayAccess {
-
+class Attribute implements ArrayAccess
+{
     /** @var string $name */
     protected $name;
 
@@ -37,7 +38,8 @@ class Attribute implements ArrayAccess {
      * @param string   $name
      * @param array|mixed      $value
      */
-    public function __construct($name, $value = null) {
+    public function __construct($name, $value = null)
+    {
         $this->setName($name);
         $this->add($value);
     }
@@ -48,7 +50,8 @@ class Attribute implements ArrayAccess {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return implode(", ", $this->values);
     }
 
@@ -57,7 +60,8 @@ class Attribute implements ArrayAccess {
      *
      * @return string
      */
-    public function toString(){
+    public function toString()
+    {
         return $this->__toString();
     }
 
@@ -66,7 +70,8 @@ class Attribute implements ArrayAccess {
      *
      * @return array
      */
-    public function __serialize(){
+    public function __serialize()
+    {
         return $this->values;
     }
 
@@ -75,7 +80,8 @@ class Attribute implements ArrayAccess {
      *
      * @return array
      */
-    public function toArray(){
+    public function toArray()
+    {
         return $this->__serialize();
     }
 
@@ -84,7 +90,8 @@ class Attribute implements ArrayAccess {
      *
      * @return Carbon|null
      */
-    public function toDate(){
+    public function toDate()
+    {
         $date = $this->first();
         if ($date instanceof Carbon) return $date;
 
@@ -97,7 +104,8 @@ class Attribute implements ArrayAccess {
      * @param  mixed  $key
      * @return bool
      */
-    public function offsetExists($key) {
+    public function offsetExists($key)
+    {
         return array_key_exists($key, $this->values);
     }
 
@@ -107,7 +115,8 @@ class Attribute implements ArrayAccess {
      * @param  mixed  $key
      * @return mixed
      */
-    public function offsetGet($key) {
+    public function offsetGet($key)
+    {
         return $this->values[$key];
     }
 
@@ -118,7 +127,8 @@ class Attribute implements ArrayAccess {
      * @param  mixed  $value
      * @return void
      */
-    public function offsetSet($key, $value) {
+    public function offsetSet($key, $value)
+    {
         if (is_null($key)) {
             $this->values[] = $value;
         } else {
@@ -132,7 +142,8 @@ class Attribute implements ArrayAccess {
      * @param  string  $key
      * @return void
      */
-    public function offsetUnset($key) {
+    public function offsetUnset($key)
+    {
         unset($this->values[$key]);
     }
 
@@ -143,7 +154,8 @@ class Attribute implements ArrayAccess {
      *
      * @return Attribute
      */
-    public function add($value, $strict = false) {
+    public function add($value, $strict = false)
+    {
         if (is_array($value)) {
             return $this->merge($value, $strict);
         }elseif ($value !== null) {
@@ -160,7 +172,8 @@ class Attribute implements ArrayAccess {
      *
      * @return Attribute
      */
-    public function merge($values, $strict = false) {
+    public function merge($values, $strict = false)
+    {
         if (is_array($values)) {
             foreach ($values as $value) {
                 $this->attach($value, $strict);
@@ -176,7 +189,8 @@ class Attribute implements ArrayAccess {
      *
      * @return bool
      */
-    public function contains($value) {
+    public function contains($value)
+    {
         foreach ($this->values as $v) {
             if ($v === $value) {
                 return true;
@@ -190,7 +204,8 @@ class Attribute implements ArrayAccess {
      * @param $value
      * @param bool $strict
      */
-    public function attach($value, $strict = false) {
+    public function attach($value, $strict = false)
+    {
         if ($strict === true) {
             if ($this->contains($value) === false) {
                 $this->values[] = $value;
@@ -206,7 +221,8 @@ class Attribute implements ArrayAccess {
      *
      * @return Attribute
      */
-    public function setName($name){
+    public function setName($name)
+    {
         $this->name = $name;
 
         return $this;
@@ -217,7 +233,8 @@ class Attribute implements ArrayAccess {
      *
      * @return string
      */
-    public function getName(){
+    public function getName()
+    {
         return $this->name;
     }
 
@@ -226,7 +243,8 @@ class Attribute implements ArrayAccess {
      *
      * @return array
      */
-    public function get(){
+    public function get()
+    {
         return $this->values;
     }
 
@@ -235,7 +253,8 @@ class Attribute implements ArrayAccess {
      *
      * @return array
      */
-    public function all(){
+    public function all()
+    {
         return $this->get();
     }
 
@@ -244,7 +263,8 @@ class Attribute implements ArrayAccess {
      *
      * @return mixed|null
      */
-    public function first(){
+    public function first()
+    {
         if ($this->offsetExists(0)) {
             return $this->values[0];
         }
@@ -256,7 +276,8 @@ class Attribute implements ArrayAccess {
      *
      * @return mixed|null
      */
-    public function last(){
+    public function last()
+    {
         if (($cnt = $this->count()) > 0) {
             return $this->values[$cnt - 1];
         }
@@ -268,7 +289,8 @@ class Attribute implements ArrayAccess {
      *
      * @return int
      */
-    public function count(){
+    public function count()
+    {
         return count($this->values);
     }
 }

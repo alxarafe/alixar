@@ -7,6 +7,7 @@
  * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
+
 return [
     'Dateline' => 'Etc/GMT-12',
     'Samoa' => 'Pacific/Apia',

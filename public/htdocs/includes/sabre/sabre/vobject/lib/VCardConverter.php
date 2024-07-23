@@ -102,7 +102,7 @@ class VCardConverter
                 // uses.
                 $parts = DateTimeParser::parseVCardDateTime($property->getValue());
                 if (is_null($parts['year'])) {
-                    $newValue = '1604-'.$parts['month'].'-'.$parts['date'];
+                    $newValue = '1604-' . $parts['month'] . '-' . $parts['date'];
                     $newProperty->setValue($newValue);
                     $newProperty['X-APPLE-OMIT-YEAR'] = '1604';
                 }
@@ -116,11 +116,11 @@ class VCardConverter
                     // group, so we first need to find a groupname that doesn't
                     // exist yet.
                     $x = 1;
-                    while ($output->select('ITEM'.$x.'.')) {
+                    while ($output->select('ITEM' . $x . '.')) {
                         ++$x;
                     }
-                    $output->add('ITEM'.$x.'.X-ABDATE', $newProperty->getValue(), ['VALUE' => 'DATE-AND-OR-TIME']);
-                    $output->add('ITEM'.$x.'.X-ABLABEL', '_$!<Anniversary>!$_');
+                    $output->add('ITEM' . $x . '.X-ABDATE', $newProperty->getValue(), ['VALUE' => 'DATE-AND-OR-TIME']);
+                    $output->add('ITEM' . $x . '.X-ABLABEL', '_$!<Anniversary>!$_');
                 }
             } elseif ('KIND' === $property->name) {
                 switch (strtolower($property->getValue())) {
@@ -156,7 +156,7 @@ class VCardConverter
                 // then we're stripping the year from the vcard 4 value.
                 $parts = DateTimeParser::parseVCardDateTime($property->getValue());
                 if ($parts['year'] === $property['X-APPLE-OMIT-YEAR']->getValue()) {
-                    $newValue = '--'.$parts['month'].'-'.$parts['date'];
+                    $newValue = '--' . $parts['month'] . '-' . $parts['date'];
                     $newProperty->setValue($newValue);
                 }
 
@@ -193,7 +193,7 @@ class VCardConverter
                     if (!$property->group) {
                         break;
                     }
-                    $label = $input->{$property->group.'.X-ABLABEL'};
+                    $label = $input->{$property->group . '.X-ABLABEL'};
 
                     // We only support converting anniversaries.
                     if (!$label || '_$!<Anniversary>!$_' !== $label->getValue()) {
@@ -268,11 +268,13 @@ class VCardConverter
         if (isset($parameters['TYPE'])) {
             $newTypes = [];
             foreach ($parameters['TYPE']->getParts() as $typePart) {
-                if (in_array(
+                if (
+                    in_array(
                     strtoupper($typePart),
                     ['JPEG', 'PNG', 'GIF']
-                )) {
-                    $mimeType = 'image/'.strtolower($typePart);
+                    )
+                ) {
+                    $mimeType = 'image/' . strtolower($typePart);
                 } else {
                     $newTypes[] = $typePart;
                 }
@@ -287,7 +289,7 @@ class VCardConverter
             }
         }
 
-        $newProperty->setValue('data:'.$mimeType.';base64,'.base64_encode($value));
+        $newProperty->setValue('data:' . $mimeType . ';base64,' . base64_encode($value));
 
         return $newProperty;
     }

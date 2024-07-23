@@ -93,7 +93,7 @@ class SupportedPrivilegeSet implements XmlSerializable, HtmlOutput
                 echo ' <i>(abstract)</i>';
             }
             if (isset($priv['description'])) {
-                echo ' '.$html->h($priv['description']);
+                echo ' ' . $html->h($priv['description']);
             }
             if (isset($priv['aggregates'])) {
                 echo "\n<ul>\n";

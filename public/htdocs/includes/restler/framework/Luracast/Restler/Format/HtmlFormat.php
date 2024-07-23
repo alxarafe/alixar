@@ -423,7 +423,8 @@ class HtmlFormat extends DependentFormat
                 static::$cacheDirectory = Defaults::$cacheDirectory . DIRECTORY_SEPARATOR . $template;
                 if (!file_exists(static::$cacheDirectory)) {
                     if (!mkdir(static::$cacheDirectory, 0770, true)) {
-                        throw new RestException(500,
+                        throw new RestException(
+                            500,
                             'Unable to create cache directory `' . static::$cacheDirectory . '`');
                     }
                 }

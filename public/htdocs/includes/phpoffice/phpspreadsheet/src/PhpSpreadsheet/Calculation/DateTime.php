@@ -66,8 +66,10 @@ class DateTime
     public static function getDateValue($dateValue)
     {
         if (!is_numeric($dateValue)) {
-            if ((is_string($dateValue)) &&
-                (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_GNUMERIC)) {
+            if (
+                (is_string($dateValue)) &&
+                (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_GNUMERIC)
+            ) {
                 return Functions::VALUE();
             }
             if ((is_object($dateValue)) && ($dateValue instanceof \DateTimeInterface)) {
@@ -282,9 +284,11 @@ class DateTime
         $year = ($year !== null) ? StringHelper::testStringAsNumeric($year) : 0;
         $month = ($month !== null) ? StringHelper::testStringAsNumeric($month) : 0;
         $day = ($day !== null) ? StringHelper::testStringAsNumeric($day) : 0;
-        if ((!is_numeric($year)) ||
+        if (
+            (!is_numeric($year)) ||
             (!is_numeric($month)) ||
-            (!is_numeric($day))) {
+            (!is_numeric($day))
+        ) {
             return Functions::VALUE();
         }
         $year = (int) $year;

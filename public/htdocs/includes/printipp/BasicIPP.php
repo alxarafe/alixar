@@ -36,7 +36,7 @@
    - RFC 3382
  */
 
-require_once ("http_class.php");
+require_once("http_class.php");
 
 class ippException extends \Exception
 {
@@ -50,8 +50,9 @@ class ippException extends \Exception
 
     public function getErrorFormatted()
     {
-        $return = sprintf("[ipp]: %s -- " . _(" file %s, line %s"),
-            $this->getMessage() , $this->getFile() , $this->getLine());
+        $return = sprintf(
+            "[ipp]: %s -- " . _(" file %s, line %s"),
+            $this->getMessage(), $this->getFile(), $this->getLine());
         return $return;
     }
 
@@ -74,7 +75,7 @@ class BasicIPP
     public $ssl = false;
     public $debug_level = 3; // max 3: almost silent
     public $alert_on_end_tag; // debugging purpose: echo "END tag OK" if (1 and  reads while end tag)
-    public $with_exceptions = 1; // compatibility mode for old scripts		// DOL_LDR_CHANGE set this to 1
+    public $with_exceptions = 1; // compatibility mode for old scripts      // DOL_LDR_CHANGE set this to 1
     public $handle_http_exceptions = 1;
 
     // readables variables
@@ -189,7 +190,7 @@ class BasicIPP
             . "printer-uri" // printer-uri | name
             . $length . $uri;
         $this->printer_uri = $uri;
-        self::_putDebug(sprintf(_("Printer URI: %s") , $uri) , 2);
+        self::_putDebug(sprintf(_("Printer URI: %s"), $uri), 2);
         $this->setup->uri = 1;
     }
 
@@ -221,7 +222,7 @@ class BasicIPP
                 $this->datatail = chr(0x0c);
             }
         }
-        self::_putDebug(_("Forcing data to be interpreted as RAW TEXT") , 2);
+        self::_putDebug(_("Forcing data to be interpreted as RAW TEXT"), 2);
     }
 
     public function unsetRawText()
@@ -229,7 +230,7 @@ class BasicIPP
         $this->setup->datatype = 'BINARY';
         $this->datahead = '';
         $this->datatail = '';
-        self::_putDebug(_("Unset forcing data to be interpreted as RAW TEXT") , 2);
+        self::_putDebug(_("Unset forcing data to be interpreted as RAW TEXT"), 2);
     }
 
     public function setBinary()
@@ -258,7 +259,7 @@ class BasicIPP
             . "attributes-charset" // attributes-charset | name
             . self::_giveMeStringLength($charset) // value-length
             . $charset; // value
-        self::_putDebug(sprintf(_("Charset: %s") , $charset) , 2);
+        self::_putDebug(sprintf(_("Charset: %s"), $charset), 2);
         $this->setup->charset = 1;
     }
 
@@ -270,7 +271,7 @@ class BasicIPP
             . "attributes-natural-language" //attributes-natural-language
             . self::_giveMeStringLength($language) // value-length
             . $language; // value
-        self::_putDebug(sprintf(_("Language: %s") , $language) , 2);
+        self::_putDebug(sprintf(_("Language: %s"), $language), 2);
         $this->setup->language = 1;
     }
 
@@ -279,7 +280,7 @@ class BasicIPP
         self::setBinary();
         $length = chr(strlen($mime_media_type));
         while (strlen($length) < 2) $length = chr(0x00) . $length;
-        self::_putDebug(sprintf(_("mime type: %s") , $mime_media_type) , 2);
+        self::_putDebug(sprintf(_("mime type: %s"), $mime_media_type), 2);
         $this->meta->mime_media_type = chr(0x49) // document-format tag
             . self::_giveMeStringLength('document-format') . 'document-format' //
             . self::_giveMeStringLength($mime_media_type) . $mime_media_type; // value
@@ -307,7 +308,7 @@ class BasicIPP
             . "copies" // copies    |             name
             . self::_giveMeStringLength($copies) // value-length
             . $copies;
-        self::_putDebug(sprintf(_("Copies: %s") , $nbrcopies) , 2);
+        self::_putDebug(sprintf(_("Copies: %s"), $nbrcopies), 2);
         $this->setup->copies = 1;
     }
 
@@ -321,12 +322,11 @@ class BasicIPP
         $length = strlen($document_name);
         $length = chr($length);
         while (strlen($length) < 2) $length = chr(0x00) . $length;
-        self::_putDebug(sprintf(_("document name: %s") , $document_name) , 2);
+        self::_putDebug(sprintf(_("document name: %s"), $document_name), 2);
         $this->meta->document_name = chr(0x41) // textWithoutLanguage tag
             . chr(0x00) . chr(0x0d) // name-length
             . "document-name" // mimeMediaType
             . self::_giveMeStringLength($document_name) . $document_name; // value
-
     }
 
     public function setJobName($jobname = '', $absolute = false)
@@ -346,13 +346,13 @@ class BasicIPP
             $jobname = $this->values->jobname;
         }
         $this->values->jobname = $jobname;
-        $jobname.= $postpend;
+        $jobname .= $postpend;
         $this->meta->jobname = chr(0x42) // nameWithoutLanguage type || value-tag
             . chr(0x00) . chr(0x08) //  name-length
             . "job-name" //  job-name || name
             . self::_giveMeStringLength($jobname) // value-length
             . $jobname; // value
-        self::_putDebug(sprintf(_("Job name: %s") , $jobname) , 2);
+        self::_putDebug(sprintf(_("Job name: %s"), $jobname), 2);
         $this->setup->jobname = 1;
     }
 
@@ -380,7 +380,7 @@ class BasicIPP
             . "requesting-user-name"
             . self::_giveMeStringLength($username) // value-length
             . $username;
-        self::_putDebug(sprintf(_("Username: %s") , $username) , 2);
+        self::_putDebug(sprintf(_("Username: %s"), $username), 2);
         $this->setup->username = 1;
     }
 
@@ -393,7 +393,7 @@ class BasicIPP
     {
         $this->password = $password;
         $this->username = $username;
-        self::_putDebug(_("Setting password") , 2);
+        self::_putDebug(_("Setting password"), 2);
         $this->setup->password = 1;
     }
 
@@ -425,7 +425,7 @@ class BasicIPP
             . "sides" // sides |             name
             . self::_giveMeStringLength($sides) //               value-length
             . $sides; // one-sided |          value
-        self::_putDebug(sprintf(_("Sides value set to %s") , $sides) , 2);
+        self::_putDebug(sprintf(_("Sides value set to %s"), $sides), 2);
     }
 
     public function setFidelity()
@@ -438,7 +438,7 @@ class BasicIPP
             . "ipp-attribute-fidelity" // ipp-attribute-fidelity | name
             . chr(0x00) . chr(0x01) //  value-length
             . chr(0x01); //  true | value
-        self::_putDebug(_("Fidelity attribute is set (paranoid mode)") , 3);
+        self::_putDebug(_("Fidelity attribute is set (paranoid mode)"), 3);
     }
 
     public function unsetFidelity()
@@ -451,7 +451,7 @@ class BasicIPP
             . "ipp-attribute-fidelity" // ipp-attribute-fidelity | name
             . chr(0x00) . chr(0x01) //               value-length
             . chr(0x00); // false |                   value
-        self::_putDebug(_("Fidelity attribute is unset") , 2);
+        self::_putDebug(_("Fidelity attribute is unset"), 2);
     }
 
     public function setMessage($message = '')
@@ -467,7 +467,7 @@ class BasicIPP
                 . "message"
                 . self::_giveMeStringLength(substr($message, 0, 127))
                 . substr($message, 0, 127);
-        self::_putDebug(sprintf(_('Setting message to "%s"') , $message) , 2);
+        self::_putDebug(sprintf(_('Setting message to "%s"'), $message), 2);
     }
 
     public function setPageRanges($page_ranges)
@@ -480,7 +480,7 @@ class BasicIPP
         }
         $page_ranges = trim(str_replace("-", ":", $page_ranges));
         $first = true;
-        #$page_ranges = split(' ', $page_ranges);
+        // $page_ranges = split(' ', $page_ranges);
         $page_ranges = preg_split('# #', $page_ranges);
         foreach($page_ranges as $page_range)
         {
@@ -557,14 +557,17 @@ class BasicIPP
         else
         {
             trigger_error(
-                sprintf(_('SetAttribute: Tag "%s" is not a printer or a job attribute'),
-                    $attribute) , E_USER_NOTICE);
+                sprintf(
+                    _('SetAttribute: Tag "%s" is not a printer or a job attribute'),
+                    $attribute), E_USER_NOTICE);
             self::_putDebug(
-                sprintf(_('SetAttribute: Tag "%s" is not a printer or a job attribute'),
-                    $attribute) , 3);
+                sprintf(
+                    _('SetAttribute: Tag "%s" is not a printer or a job attribute'),
+                    $attribute), 3);
             self::_errorLog(
-                sprintf(_('SetAttribute: Tag "%s" is not a printer or a job attribute'),
-                    $attribute) , 2);
+                sprintf(
+                    _('SetAttribute: Tag "%s" is not a printer or a job attribute'),
+                    $attribute), 2);
             return FALSE;
         }
     }
@@ -598,14 +601,17 @@ class BasicIPP
         else
         {
             trigger_error(
-                sprintf(_('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
-                    $attribute) , E_USER_NOTICE);
+                sprintf(
+                    _('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
+                    $attribute), E_USER_NOTICE);
             self::_putDebug(
-                sprintf(_('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
-                    $attribute) , 3);
+                sprintf(
+                    _('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
+                    $attribute), 3);
             self::_errorLog(
-                sprintf(_('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
-                    $attribute) , 2);
+                sprintf(
+                    _('unsetAttribute: Tag "%s" is not a printer or a job attribute'),
+                    $attribute), 2);
             return FALSE;
         }
         return true;
@@ -669,7 +675,7 @@ class BasicIPP
         $debug = '';
         for ($i = 0; $i < $this->debug_count; $i++)
         {
-            $debug.= $this->debug[$i];
+            $debug .= $this->debug[$i];
         }
         $this->debug = array();
         $this->debug_count = 0;
@@ -698,7 +704,7 @@ class BasicIPP
             $this->output = $this->stringjob;
             if ($this->setup->datatype == "TEXT")
             {
-                $this->output.= chr(0x16);
+                $this->output .= chr(0x16);
             }
             $post_values = array(
                 "Content-Type" => "application/ipp",
@@ -775,13 +781,13 @@ class BasicIPP
         */
         $this->response_completed[] = "no";
         unset($this->serverouptut);
-        self::_putDebug(_("Processing HTTP request") , 2);
+        self::_putDebug(_("Processing HTTP request"), 2);
         $this->serveroutput->headers = array();
         $this->serveroutput->body = "";
-        $http = new http_class;
+        $http = new http_class();
         if (!$this->unix) {
-        	// DOL_LDR_CHANGE
-        	if (empty($this->host)) $this->host='127.0.0.1';
+            // DOL_LDR_CHANGE
+            if (empty($this->host)) $this->host = '127.0.0.1';
             $http->host = $this->host;
         }
         else {
@@ -826,7 +832,8 @@ class BasicIPP
                 "File" => $post_values["File"]
             );
         }
-        if (isset($post_values["FileType"])
+        if (
+            isset($post_values["FileType"])
             && !strcmp($post_values["FileType"], "TEXT")
         )
         {
@@ -848,7 +855,7 @@ class BasicIPP
         }
         else
         {
-        	$success = $http->Open($arguments);
+            $success = $http->Open($arguments);
         }
         if ($success[0] == true)
         {
@@ -917,7 +924,7 @@ class BasicIPP
                     }
 
                     self::_putDebug(htmlentities($body));
-                    $this->serveroutput->body.= $body;
+                    $this->serveroutput->body .= $body;
                 }
                 self::_putDebug("********* END RESPONSE BODY ********");
             }
@@ -1095,18 +1102,18 @@ class BasicIPP
     protected function _setOperationId()
     {
         $prepend = '';
-        $this->operation_id+= 1;
+        $this->operation_id += 1;
         $this->meta->operation_id = self::_integerBuild($this->operation_id);
         self::_putDebug("operation id is: " . $this->operation_id, 2);
     }
 
     protected function _setJobId()
     {
-        $this->meta->jobid+= 1;
+        $this->meta->jobid += 1;
         $prepend = '';
         $prepend_length = 4 - strlen($this->meta->jobid);
         for ($i = 0; $i < $prepend_length; $i++) {
-            $prepend.= '0';
+            $prepend .= '0';
         }
         return $prepend . $this->meta->jobid;
     }
@@ -1175,12 +1182,12 @@ class BasicIPP
 
             default:
                 $server_response = preg_replace("/: $/", '', $this->serveroutput->headers[0]);
-                #$strings = split(' ', $server_response, 3);
+                // $strings = split(' ', $server_response, 3);
                 $strings = preg_split('# #', $server_response, 3);
                 $errno = $strings[1];
                 $string = strtoupper(str_replace(' ', '_', $strings[2]));
                 trigger_error(
-                    sprintf(_("server responds %s") , $server_response),
+                    sprintf(_("server responds %s"), $server_response),
                     E_USER_WARNING);
                 self::_errorLog("server responds " . $server_response, 1);
                 $this->serveroutput->httpstatus =
@@ -1216,18 +1223,20 @@ class BasicIPP
 
             default:
                 $this->serveroutput->ipp_version =
-                    sprintf("%u.%u (Unknown)",
+                    sprintf(
+                        "%u.%u (Unknown)",
                         ord($this->serveroutput->body[$this->_parsing->offset]) * 256,
                         ord($this->serveroutput->body[$this->_parsing->offset + 1]));
                 break;
         }
         self::_putDebug("I P P    R E S P O N S E :\n\n");
         self::_putDebug(
-            sprintf("IPP version %s%s: %s",
+            sprintf(
+                "IPP version %s%s: %s",
                 ord($this->serveroutput->body[$this->_parsing->offset]),
                 ord($this->serveroutput->body[$this->_parsing->offset + 1]),
                 $this->serveroutput->ipp_version));
-        $this->_parsing->offset+= 2;
+        $this->_parsing->offset += 2;
         return;
     }
 
@@ -1237,7 +1246,7 @@ class BasicIPP
             (ord($this->serveroutput->body[$this->_parsing->offset]) * 256)
             + ord($this->serveroutput->body[$this->_parsing->offset + 1]);
         $this->serveroutput->status = "NOT PARSED";
-        $this->_parsing->offset+= 2;
+        $this->_parsing->offset += 2;
         if (strlen($this->serveroutput->body) < $this->_parsing->offset)
         {
             return false;
@@ -1416,7 +1425,7 @@ class BasicIPP
                 substr($this->serveroutput->body, $this->_parsing->offset, 4)
             );
         self::_putDebug("request-id " . $this->serveroutput->request_id, 2);
-        $this->_parsing->offset+= 4;
+        $this->_parsing->offset += 4;
         return;
     }
 
@@ -1424,7 +1433,7 @@ class BasicIPP
     {
         // they are _signed_ integers
         $value_parsed = 0;
-        for ($i = strlen($value); $i > 0; $i --)
+        for ($i = strlen($value); $i > 0; $i--)
         {
             $value_parsed +=
                 (
@@ -1470,7 +1479,7 @@ class BasicIPP
                 trigger_error(
                     _("_stringJob: Printer URI is not set: die"),
                     E_USER_WARNING);
-                self::_putDebug(_("_stringJob: Printer URI is not set: die") , 4);
+                self::_putDebug(_("_stringJob: Printer URI is not set: die"), 4);
                 self::_errorLog(" Printer URI is not set, die", 2);
                 return FALSE;
             }
@@ -1534,9 +1543,10 @@ class BasicIPP
                     . $this->meta->page_ranges
                     . $jobattributes;
         }
-        $this->stringjob.= chr(0x03); // end-of-attributes | end-of-attributes-tag
+        $this->stringjob .= chr(0x03); // end-of-attributes | end-of-attributes-tag
         self::_putDebug(
-            sprintf(_("String sent to the server is: %s"),
+            sprintf(
+                _("String sent to the server is: %s"),
                 $this->stringjob)
             );
         return TRUE;
@@ -1640,9 +1650,9 @@ class BasicIPP
     protected function _giveMeStringLength($string)
     {
         $length = strlen($string);
-        if ($length > ((0xFF << 8) + 0xFF)  )
+        if ($length > ((0xFF << 8) + 0xFF))
         {
-            $errmsg = sprintf (
+            $errmsg = sprintf(
                 _('max string length for an ipp meta-information = %d, while here %d'),
                 ((0xFF << 8) + 0xFF), $length);
 
@@ -1652,7 +1662,7 @@ class BasicIPP
             }
             else
             {
-                trigger_error ($errmsg, E_USER_ERROR);
+                trigger_error($errmsg, E_USER_ERROR);
             }
         }
         $int1 = $length & 0xFF;
@@ -1798,7 +1808,7 @@ class BasicIPP
         if ($value >= 2147483647 || $value < - 2147483648)
         {
             trigger_error(
-                _("Values must be between -2147483648 and 2147483647: assuming '0'") , E_USER_WARNING);
+                _("Values must be between -2147483648 and 2147483647: assuming '0'"), E_USER_WARNING);
             return chr(0x00) . chr(0x00) . chr(0x00) . chr(0x00);
         }
         $initial_value = $value;
@@ -1806,10 +1816,10 @@ class BasicIPP
         $value -= $int1;
         $value = $value >> 8;
         $int2 = $value & 0xFF;
-        $value-= $int2;
+        $value -= $int2;
         $value = $value >> 8;
         $int3 = $value & 0xFF;
-        $value-= $int3;
+        $value -= $int3;
         $value = $value >> 8;
         $int4 = $value & 0xFF; //64bits
         if ($initial_value < 0) {
@@ -1824,7 +1834,7 @@ class BasicIPP
 
     protected function _rangeOfIntegerBuild($integers)
     {
-        #$integers = split(":", $integers);
+        // $integers = split(":", $integers);
         $integers = preg_split("#:#", $integers);
         for ($i = 0; $i < 2; $i++) {
             $outvalue[$i] = self::_integerBuild($integers[$i]);
@@ -1882,9 +1892,9 @@ class BasicIPP
                 break;
 
             default:
-                trigger_error(sprintf(_('SetAttribute: Tag "%s": cannot set attribute') , $attribute) , E_USER_NOTICE);
-                self::_putDebug(sprintf(_('SetAttribute: Tag "%s": cannot set attribute') , $attribute) , 2);
-                self::_errorLog(sprintf(_('SetAttribute: Tag "%s": cannot set attribute') , $attribute) , 2);
+                trigger_error(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
+                self::_putDebug(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+                self::_errorLog(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
                 return FALSE;
                 break;
         }
@@ -1907,9 +1917,9 @@ class BasicIPP
                 break;
 
             default:
-                trigger_error(sprintf(_('SetAttribute: Tag "%s": cannot set attribute') , $attribute) , E_USER_NOTICE);
-                self::_putDebug(sprintf(_('SetAttribute: Tag "%s": cannot set attribute') , $attribute) , 2);
-                self::_errorLog(sprintf(_('SetAttribute: Tag "%s": cannot set attribute') , $attribute) , 2);
+                trigger_error(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
+                self::_putDebug(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+                self::_errorLog(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
                 return FALSE;
                 break;
         }
@@ -1932,9 +1942,9 @@ class BasicIPP
                 break;
 
             default:
-                trigger_error(sprintf(_('SetAttribute: Tag "%s": cannot set attribute') , $attribute) , E_USER_NOTICE);
-                self::_putDebug(sprintf(_('SetAttribute: Tag "%s": cannot set attribute') , $attribute) , 2);
-                self::_errorLog(sprintf(_('SetAttribute: Tag "%s": cannot set attribute') , $attribute) , 2);
+                trigger_error(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), E_USER_NOTICE);
+                self::_putDebug(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
+                self::_errorLog(sprintf(_('SetAttribute: Tag "%s": cannot set attribute'), $attribute), 2);
                 return FALSE;
                 break;
         }
@@ -1957,7 +1967,6 @@ class BasicIPP
         $this->debug[$this->debug_count] = substr($string, 0, 1024);
         $this->debug_count++;
         //$this->debug .= substr($string,0,1024);
-
     }
 
     //
@@ -1969,7 +1978,7 @@ class BasicIPP
             return;
         }
 
-        $string = sprintf('%s : %s:%s user %s : %s', basename($_SERVER['PHP_SELF']) , $this->host, $this->port, $this->requesting_user, $string_to_log);
+        $string = sprintf('%s : %s:%s user %s : %s', basename($_SERVER['PHP_SELF']), $this->host, $this->port, $this->requesting_user, $string_to_log);
 
         if ($this->log_type == 0)
         {
@@ -1977,7 +1986,7 @@ class BasicIPP
             return;
         }
 
-        $string = sprintf("%s %s Host %s:%s user %s : %s\n", date('M d H:i:s') , basename($_SERVER['PHP_SELF']) , $this->host, $this->port, $this->requesting_user, $string_to_log);
+        $string = sprintf("%s %s Host %s:%s user %s : %s\n", date('M d H:i:s'), basename($_SERVER['PHP_SELF']), $this->host, $this->port, $this->requesting_user, $string_to_log);
         error_log($string, $this->log_type, $this->log_destination);
         return;
     }

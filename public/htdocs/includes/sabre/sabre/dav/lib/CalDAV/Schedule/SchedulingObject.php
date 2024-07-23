@@ -117,12 +117,12 @@ class SchedulingObject extends \Sabre\CalDAV\CalendarObject implements IScheduli
             ],
             [
                 'privilege' => '{DAV:}all',
-                'principal' => $this->objectData['principaluri'].'/calendar-proxy-write',
+                'principal' => $this->objectData['principaluri'] . '/calendar-proxy-write',
                 'protected' => true,
             ],
             [
                 'privilege' => '{DAV:}read',
-                'principal' => $this->objectData['principaluri'].'/calendar-proxy-read',
+                'principal' => $this->objectData['principaluri'] . '/calendar-proxy-read',
                 'protected' => true,
             ],
         ];

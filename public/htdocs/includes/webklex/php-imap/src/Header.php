@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File: Header.php
 * Category: -
@@ -12,7 +13,6 @@
 
 namespace Webklex\PHPIMAP;
 
-
 use Carbon\Carbon;
 use Webklex\PHPIMAP\Exceptions\InvalidMessageDateException;
 use Webklex\PHPIMAP\Exceptions\MethodNotFoundException;
@@ -22,8 +22,8 @@ use Webklex\PHPIMAP\Exceptions\MethodNotFoundException;
  *
  * @package Webklex\PHPIMAP
  */
-class Header {
-
+class Header
+{
     /**
      * Raw header
      *
@@ -66,7 +66,8 @@ class Header {
      *
      * @throws InvalidMessageDateException
      */
-    public function __construct($raw_header, $attributize = true) {
+    public function __construct($raw_header, $attributize = true)
+    {
         $this->raw = $raw_header;
         $this->config = ClientManager::get('options');
         $this->attributize = $attributize;
@@ -81,17 +82,17 @@ class Header {
      * @return Attribute|mixed
      * @throws MethodNotFoundException
      */
-    public function __call($method, $arguments) {
+    public function __call($method, $arguments)
+    {
         if(strtolower(substr($method, 0, 3)) === 'get') {
             $name = preg_replace('/(.)(?=[A-Z])/u', '$1_', substr(strtolower($method), 3));
 
             if(in_array($name, array_keys($this->attributes))) {
                 return $this->attributes[$name];
             }
-
         }
 
-        throw new MethodNotFoundException("Method ".self::class.'::'.$method.'() is not supported');
+        throw new MethodNotFoundException("Method " . self::class . '::' . $method . '() is not supported');
     }
 
     /**
@@ -100,7 +101,8 @@ class Header {
      *
      * @return Attribute|null
      */
-    public function __get($name) {
+    public function __get($name)
+    {
         return $this->get($name);
     }
 
@@ -110,7 +112,8 @@ class Header {
      *
      * @return Attribute|mixed
      */
-    public function get($name) {
+    public function get($name)
+    {
         if(isset($this->attributes[$name])) {
             return $this->attributes[$name];
         }
@@ -126,7 +129,8 @@ class Header {
      *
      * @return Attribute
      */
-    public function set($name, $value, $strict = false) {
+    public function set($name, $value, $strict = false)
+    {
         if(isset($this->attributes[$name]) && $strict === false) {
             if ($this->attributize) {
                 $this->attributes[$name]->add($value, true);
@@ -156,7 +160,8 @@ class Header {
      *
      * @return mixed|null
      */
-    public function find($pattern) {
+    public function find($pattern)
+    {
         if (preg_match_all($pattern, $this->raw, $matches)) {
             if (isset($matches[1])) {
                 if(count($matches[1]) > 0) {
@@ -172,7 +177,8 @@ class Header {
      *
      * @return string|null
      */
-    public function getBoundary(){
+    public function getBoundary()
+    {
         $boundary = $this->find("/boundary\=(.*)/i");
 
         if ($boundary === null) {
@@ -188,7 +194,8 @@ class Header {
      *
      * @return string
      */
-    private function clearBoundaryString($str) {
+    private function clearBoundaryString($str)
+    {
         return str_replace(['"', '\r', '\n', "\n", "\r", ";", "\s"], "", $str);
     }
 
@@ -197,7 +204,8 @@ class Header {
      *
      * @throws InvalidMessageDateException
      */
-    protected function parse(){
+    protected function parse()
+    {
         $header = $this->rfc822_parse_headers($this->raw);
 
         $this->extractAddresses($header);
@@ -231,7 +239,8 @@ class Header {
      *
      * @return object
      */
-    public function rfc822_parse_headers($raw_headers){
+    public function rfc822_parse_headers($raw_headers)
+    {
         $headers = [];
         $imap_headers = [];
         if (extension_loaded('imap') && $this->config["rfc822"]) {
@@ -294,7 +303,7 @@ class Header {
                 case 'reply_to':
                 case 'sender':
                     $value = $this->decodeAddresses($values);
-                    $headers[$key."address"] = implode(", ", $values);
+                    $headers[$key . "address"] = implode(", ", $values);
                     break;
                 case 'subject':
                     $value = implode(" ", $values);
@@ -333,7 +342,8 @@ class Header {
      * @return array The decoded elements are returned in an array of objects, where each
      * object has two properties, charset and text.
      */
-    public function mime_header_decode($text){
+    public function mime_header_decode($text)
+    {
         if (extension_loaded('imap')) {
             return \imap_mime_header_decode($text);
         }
@@ -351,7 +361,8 @@ class Header {
      *
      * @return bool
      */
-    private function notDecoded($encoded, $decoded) {
+    private function notDecoded($encoded, $decoded)
+    {
         return 0 === strpos($decoded, '=?')
             && strlen($decoded) - 2 === strpos($decoded, '?=')
             && false !== strpos($encoded, $decoded);
@@ -365,7 +376,8 @@ class Header {
      *
      * @return mixed|string
      */
-    public function convertEncoding($str, $from = "ISO-8859-2", $to = "UTF-8") {
+    public function convertEncoding($str, $from = "ISO-8859-2", $to = "UTF-8")
+    {
 
         $from = EncodingAliases::get($from, $this->fallback_encoding);
         $to = EncodingAliases::get($to, $this->fallback_encoding);
@@ -414,7 +426,8 @@ class Header {
      *
      * @return string
      */
-    public function getEncoding($structure) {
+    public function getEncoding($structure)
+    {
         if (property_exists($structure, 'parameters')) {
             foreach ($structure->parameters as $parameter) {
                 if (strtolower($parameter->attribute) == "charset") {
@@ -436,7 +449,8 @@ class Header {
      *
      * @return bool
      */
-    private function is_uft8($value) {
+    private function is_uft8($value)
+    {
         return strpos(strtolower($value), '=?utf-8?') === 0;
     }
 
@@ -446,7 +460,8 @@ class Header {
      *
      * @return mixed
      */
-    private function decode($value) {
+    private function decode($value)
+    {
         if (is_array($value)) {
             return $this->decodeArray($value);
         }
@@ -494,7 +509,8 @@ class Header {
      *
      * @return array
      */
-    private function decodeArray($values) {
+    private function decodeArray($values)
+    {
         foreach($values as $key => $value) {
             $values[$key] = $this->decode($value);
         }
@@ -504,7 +520,8 @@ class Header {
     /**
      * Try to extract the priority from a given raw header string
      */
-    private function findPriority() {
+    private function findPriority()
+    {
         if(($priority = $this->get("x_priority")) === null) return;
         switch((int)"$priority"){
             case IMAP::MESSAGE_PRIORITY_HIGHEST;
@@ -536,7 +553,8 @@ class Header {
      *
      * @return array
      */
-    private function decodeAddresses($values) {
+    private function decodeAddresses($values)
+    {
         $addresses = [];
 
         if (extension_loaded('mailparse') && $this->config["rfc822"]) {
@@ -565,11 +583,13 @@ class Header {
                 if (strpos($split_address, ",") == strlen($split_address) - 1) {
                     $split_address = substr($split_address, 0, -1);
                 }
-                if (preg_match(
+                if (
+                    preg_match(
                     '/^(?:(?P<name>.+)\s)?(?(name)<|<?)(?P<email>[^\s]+?)(?(name)>|>?)$/',
                     $split_address,
                     $matches
-                )) {
+                    )
+                ) {
                     $name = trim(rtrim($matches["name"]));
                     $email = trim(rtrim($matches["email"]));
                     list($mailbox, $host) = array_pad(explode("@", $email), 2, null);
@@ -589,7 +609,8 @@ class Header {
      * Extract a given part as address array from a given header
      * @param object $header
      */
-    private function extractAddresses($header) {
+    private function extractAddresses($header)
+    {
         foreach(['from', 'to', 'cc', 'bcc', 'reply_to', 'sender'] as $key){
             if (property_exists($header, $key)) {
                 $this->set($key, $this->parseAddresses($header->$key));
@@ -603,7 +624,8 @@ class Header {
      *
      * @return array
      */
-    private function parseAddresses($list) {
+    private function parseAddresses($list)
+    {
         $addresses = [];
 
         if (is_array($list) === false) {
@@ -636,8 +658,8 @@ class Header {
                 }
             }
 
-            $address->mail = ($address->mailbox && $address->host) ? $address->mailbox.'@'.$address->host : false;
-            $address->full = ($address->personal) ? $address->personal.' <'.$address->mail.'>' : $address->mail;
+            $address->mail = ($address->mailbox && $address->host) ? $address->mailbox . '@' . $address->host : false;
+            $address->full = ($address->personal) ? $address->personal . ' <' . $address->mail . '>' : $address->mail;
 
             $addresses[] = new Address($address);
         }
@@ -648,7 +670,8 @@ class Header {
     /**
      * Search and extract potential header extensions
      */
-    private function extractHeaderExtensions(){
+    private function extractHeaderExtensions()
+    {
         foreach ($this->attributes as $key => $value) {
             if (is_array($value)) {
                 $value = implode(", ", $value);
@@ -701,7 +724,8 @@ class Header {
      *
      * @throws InvalidMessageDateException
      */
-    private function parseDate($header) {
+    private function parseDate($header)
+    {
 
         if (property_exists($header, 'date')) {
             $parsed_date = null;
@@ -733,7 +757,7 @@ class Header {
                 try{
                     $parsed_date = Carbon::parse($date);
                 } catch (\Exception $_e) {
-                    throw new InvalidMessageDateException("Invalid message date. ID:".$this->get("message_id"), 1100, $e);
+                    throw new InvalidMessageDateException("Invalid message date. ID:" . $this->get("message_id"), 1100, $e);
                 }
             }
 
@@ -746,8 +770,8 @@ class Header {
      *
      * @return array
      */
-    public function getAttributes() {
+    public function getAttributes()
+    {
         return $this->attributes;
     }
-
 }

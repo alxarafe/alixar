@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File: Structure.php
 * Category: -
@@ -12,7 +13,6 @@
 
 namespace Webklex\PHPIMAP;
 
-
 use Webklex\PHPIMAP\Exceptions\InvalidMessageDateException;
 use Webklex\PHPIMAP\Exceptions\MessageContentFetchingException;
 
@@ -21,8 +21,8 @@ use Webklex\PHPIMAP\Exceptions\MessageContentFetchingException;
  *
  * @package Webklex\PHPIMAP
  */
-class Structure {
-
+class Structure
+{
     /**
      * Raw structure
      *
@@ -64,7 +64,8 @@ class Structure {
      * @throws MessageContentFetchingException
      * @throws InvalidMessageDateException
      */
-    public function __construct($raw_structure, Header $header) {
+    public function __construct($raw_structure, Header $header)
+    {
         $this->raw = $raw_structure;
         $this->header = $header;
         $this->config = ClientManager::get('options');
@@ -77,7 +78,8 @@ class Structure {
      * @throws MessageContentFetchingException
      * @throws InvalidMessageDateException
      */
-    protected function parse(){
+    protected function parse()
+    {
         $this->findContentType();
         $this->parts = $this->find_parts();
     }
@@ -85,7 +87,8 @@ class Structure {
     /**
      * Determine the message content type
      */
-    public function findContentType(){
+    public function findContentType()
+    {
         $content_type = $this->header->get("content_type");
         $content_type = (is_array($content_type)) ? implode(' ', $content_type) : $content_type;
         if(stripos($content_type, 'multipart') === 0) {
@@ -103,7 +106,8 @@ class Structure {
      * @return Part[]
      * @throws InvalidMessageDateException
      */
-    private function parsePart($context, $part_number = 0){
+    private function parsePart($context, $part_number = 0)
+    {
         $body = $context;
         while (($pos = strpos($body, "\r\n")) > 0) {
             $body = substr($body, $pos + 2);
@@ -126,8 +130,9 @@ class Structure {
      * @return array
      * @throws InvalidMessageDateException
      */
-    private function detectParts($boundary, $context, $part_number = 0){
-        $base_parts = explode( $boundary, $context);
+    private function detectParts($boundary, $context, $part_number = 0)
+    {
+        $base_parts = explode($boundary, $context);
         $final_parts = [];
         foreach($base_parts as $ctx) {
             $ctx = substr($ctx, 2);
@@ -150,7 +155,8 @@ class Structure {
      * @throws MessageContentFetchingException
      * @throws InvalidMessageDateException
      */
-    public function find_parts(){
+    public function find_parts()
+    {
         if($this->type === IMAP::MESSAGE_TYPE_MULTIPART) {
             if (($boundary = $this->header->getBoundary()) === null)  {
                 throw new MessageContentFetchingException("no content found", 0);
@@ -168,7 +174,8 @@ class Structure {
      * @return string|null
      * @Depricated since version 2.4.4
      */
-    public function getBoundary(){
+    public function getBoundary()
+    {
         return $this->header->getBoundary();
     }
 }

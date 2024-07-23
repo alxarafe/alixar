@@ -1,5 +1,7 @@
 <?php
+
 /* Copyright (C) 2009-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +24,7 @@
  */
 
 if (!defined('NOTOKENRENEWAL')) {
-	define('NOTOKENRENEWAL', '1'); // Do not roll the Anti CSRF token (used if MAIN_SECURITY_CSRF_WITH_TOKEN is on)
+    define('NOTOKENRENEWAL', '1'); // Do not roll the Anti CSRF token (used if MAIN_SECURITY_CSRF_WITH_TOKEN is on)
 }
 
 
@@ -30,29 +32,29 @@ if (!defined('NOTOKENRENEWAL')) {
  * This file is a wrapper, so empty header
  *
  * @ignore
- * @return	void
+ * @return  void
  */
 function llxHeader()
 {
-	print '<html><title>Build an import example file</title><body>';
+    print '<html><title>Build an import example file</title><body>';
 }
 
 /**
  * This file is a wrapper, so empty footer
  *
  * @ignore
- * @return	void
+ * @return  void
  */
 function llxFooter()
 {
-	print '</body></html>';
+    print '</body></html>';
 }
 
 // Load Dolibarr environment
-require '../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/imports/class/import.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/modules/import/modules_import.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/imports/class/import.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/import/modules_import.php';
 
 $datatoimport = GETPOST('datatoimport');
 $format = GETPOST('format');
@@ -62,16 +64,16 @@ $langs->load("exports");
 
 // Check exportkey
 if (empty($datatoimport)) {
-	$user->getrights();
+    $user->getrights();
 
-	llxHeader();
-	print '<div class="error">Bad value for datatoimport.</div>';
-	llxFooter();
-	exit;
+    llxHeader();
+    print '<div class="error">Bad value for datatoimport.</div>';
+    llxFooter();
+    exit;
 }
 
 
-$filename = $langs->transnoentitiesnoconv("ExampleOfImportFile").'_'.$datatoimport.'.'.$format;
+$filename = $langs->transnoentitiesnoconv("ExampleOfImportFile") . '_' . $datatoimport . '.' . $format;
 
 $objimport = new Import($db);
 $objimport->load_arrays($user, $datatoimport);
@@ -81,32 +83,32 @@ $valuestarget = $objimport->array_import_examplevalues[0];
 
 $attachment = true;
 if (GETPOSTISSET("attachment")) {
-	$attachment = GETPOST("attachment");
+    $attachment = GETPOST("attachment");
 }
 //$attachment = false;
 $contenttype = dol_mimetype($format);
 if (GETPOSTISSET("contenttype")) {
-	$contenttype = GETPOST("contenttype");
+    $contenttype = GETPOST("contenttype");
 }
 //$contenttype='text/plain';
 $outputencoding = 'UTF-8';
 
 if ($contenttype) {
-	header('Content-Type: '.$contenttype.($outputencoding ? '; charset='.$outputencoding : ''));
+    header('Content-Type: ' . $contenttype . ($outputencoding ? '; charset=' . $outputencoding : ''));
 }
 if ($attachment) {
-	header('Content-Disposition: attachment; filename="'.$filename.'"');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
 }
 
 
 // List of targets fields
-$headerlinefields = array();	// Array of fields (label to show)
-$contentlinevalues = array();	// Array of example values
+$headerlinefields = array();    // Array of fields (label to show)
+$contentlinevalues = array();   // Array of example values
 $i = 0;
 foreach ($fieldstarget as $code => $label) {
-	$withoutstar = preg_replace('/\*/', '', $fieldstarget[$code]);
-	$headerlinefields[] = $langs->transnoentities($withoutstar).($withoutstar != $fieldstarget[$code] ? '*' : '').' ('.$code.')';
-	$contentlinevalues[] = (isset($valuestarget[$code]) ? $valuestarget[$code] : '');
+    $withoutstar = preg_replace('/\*/', '', $fieldstarget[$code]);
+    $headerlinefields[] = $langs->transnoentities($withoutstar) . ($withoutstar != $fieldstarget[$code] ? '*' : '') . ' (' . $code . ')';
+    $contentlinevalues[] = (isset($valuestarget[$code]) ? $valuestarget[$code] : '');
 }
 //var_dump($headerlinefields);
 //var_dump($contentlinevalues);

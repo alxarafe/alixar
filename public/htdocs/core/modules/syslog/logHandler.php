@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  */
@@ -23,112 +24,112 @@
  */
 abstract class LogHandler
 {
-	/**
-	 * @var string Code for the handler
-	 */
-	public $code;
+    /**
+     * @var string Code for the handler
+     */
+    public $code;
 
-	protected $ident = 0;
+    protected $ident = 0;
 
-	/**
-	 * @var string[] Array of error messages
-	 */
-	public $errors = [];
+    /**
+     * @var string[] Array of error messages
+     */
+    public $errors = [];
 
 
-	/**
-	 * Return name of logger
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return ucfirst($this->code);
-	}
+    /**
+     * Return name of logger
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return ucfirst($this->code);
+    }
 
-	/**
-	 * Content of the info tooltip.
-	 *
-	 * @return string
-	 */
-	public function getInfo()
-	{
-		return '';
-	}
+    /**
+     * Content of the info tooltip.
+     *
+     * @return string
+     */
+    public function getInfo()
+    {
+        return '';
+    }
 
-	/**
-	 * Return warning if something is wrong with logger
-	 *
-	 * @return string
-	 */
-	public function getWarning()
-	{
-		return '';
-	}
+    /**
+     * Return warning if something is wrong with logger
+     *
+     * @return string
+     */
+    public function getWarning()
+    {
+        return '';
+    }
 
-	/**
-	 * Version of the module ('x.y.z' or 'dolibarr' or 'experimental' or 'development')
-	 *
-	 * @return string
-	 */
-	public function getVersion()
-	{
-		return 'development';
-	}
+    /**
+     * Version of the module ('x.y.z' or 'dolibarr' or 'experimental' or 'development')
+     *
+     * @return string
+     */
+    public function getVersion()
+    {
+        return 'development';
+    }
 
-	/**
-	 * Is the logger active ?
-	 *
-	 * @return int		1 if logger enabled
-	 */
-	public function isActive()
-	{
-		return 0;
-	}
+    /**
+     * Is the logger active ?
+     *
+     * @return int      1 if logger enabled
+     */
+    public function isActive()
+    {
+        return 0;
+    }
 
-	/**
-	 * Configuration variables of the module
-	 *
-	 * @return array
-	 */
-	public function configure()
-	{
-		return array();
-	}
+    /**
+     * Configuration variables of the module
+     *
+     * @return array
+     */
+    public function configure()
+    {
+        return array();
+    }
 
-	/**
-	 * Function that checks if the configuration is valid.
-	 * It will be called after setting the configuration.
-	 * The function returns an array with error messages
-	 *
-	 * @return bool
-	 */
-	public function checkConfiguration()
-	{
-		return true;
-	}
+    /**
+     * Function that checks if the configuration is valid.
+     * It will be called after setting the configuration.
+     * The function returns an array with error messages
+     *
+     * @return bool
+     */
+    public function checkConfiguration()
+    {
+        return true;
+    }
 
-	/**
-	 * Set current ident.
-	 *
-	 * @param	int		$ident		1=Increase ident of 1, -1=Decrease ident of 1
-	 * @return 	void
-	 */
-	public function setIdent($ident)
-	{
-		$this->ident += $ident;
-	}
+    /**
+     * Set current ident.
+     *
+     * @param   int     $ident      1=Increase ident of 1, -1=Decrease ident of 1
+     * @return  void
+     */
+    public function setIdent($ident)
+    {
+        $this->ident += $ident;
+    }
 
-	/**
-	 * Export the message
-	 *
-	 * @param   array   $content            Array containing the info about the message
-	 * @param   string  $suffixinfilename   When output is a file, append this suffix into default log filename.
-	 * @return  void
-	 */
-	public function export($content, $suffixinfilename = '')
-	{
-		// Code to output log
-		return;
-	}
+    /**
+     * Export the message
+     *
+     * @param   array   $content            Array containing the info about the message
+     * @param   string  $suffixinfilename   When output is a file, append this suffix into default log filename.
+     * @return  void
+     */
+    public function export($content, $suffixinfilename = '')
+    {
+        // Code to output log
+        return;
+    }
 }

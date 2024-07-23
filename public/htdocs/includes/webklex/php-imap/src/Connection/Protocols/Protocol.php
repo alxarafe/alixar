@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File: ImapProtocol.php
 * Category: Protocol
@@ -19,8 +20,8 @@ use Webklex\PHPIMAP\Exceptions\ConnectionFailedException;
  *
  * @package Webklex\PHPIMAP\Connection\Protocols
  */
-abstract class Protocol implements ProtocolInterface {
-
+abstract class Protocol implements ProtocolInterface
+{
     /**
      * Default connection timeout in seconds
      */
@@ -64,7 +65,8 @@ abstract class Protocol implements ProtocolInterface {
      *
      * @return int
      */
-    public function getCryptoMethod() {
+    public function getCryptoMethod()
+    {
         // Allow the best TLS version(s) we can
         $cryptoMethod = STREAM_CRYPTO_METHOD_TLS_CLIENT;
 
@@ -84,7 +86,8 @@ abstract class Protocol implements ProtocolInterface {
      *
      * @return $this
      */
-    public function enableCertValidation() {
+    public function enableCertValidation()
+    {
         $this->cert_validation = true;
         return $this;
     }
@@ -93,7 +96,8 @@ abstract class Protocol implements ProtocolInterface {
      * Disable SSL certificate validation
      * @return $this
      */
-    public function disableCertValidation() {
+    public function disableCertValidation()
+    {
         $this->cert_validation = false;
         return $this;
     }
@@ -104,7 +108,8 @@ abstract class Protocol implements ProtocolInterface {
      *
      * @return $this
      */
-    public function setCertValidation($cert_validation) {
+    public function setCertValidation($cert_validation)
+    {
         $this->cert_validation = $cert_validation;
         return $this;
     }
@@ -114,7 +119,8 @@ abstract class Protocol implements ProtocolInterface {
      *
      * @return bool
      */
-    public function getCertValidation() {
+    public function getCertValidation()
+    {
         return $this->cert_validation;
     }
 
@@ -124,7 +130,8 @@ abstract class Protocol implements ProtocolInterface {
      *
      * @return $this
      */
-    public function setProxy($options) {
+    public function setProxy($options)
+    {
         foreach ($this->proxy as $key => $val) {
             if (isset($options[$key])) {
                 $this->proxy[$key] = $options[$key];
@@ -139,7 +146,8 @@ abstract class Protocol implements ProtocolInterface {
      *
      * @return array
      */
-    public function getProxy() {
+    public function getProxy()
+    {
         return $this->proxy;
     }
 
@@ -149,7 +157,8 @@ abstract class Protocol implements ProtocolInterface {
      *
      * @return array
      */
-    private function defaultSocketOptions($transport) {
+    private function defaultSocketOptions($transport)
+    {
         $options = [];
         if ($this->encryption != false) {
             $options["ssl"] = [
@@ -163,7 +172,7 @@ abstract class Protocol implements ProtocolInterface {
             $options[$transport]["request_fulluri"] = $this->proxy["request_fulluri"];
 
             if ($this->proxy["username"] != null) {
-                $auth = base64_encode($this->proxy["username"].':'.$this->proxy["password"]);
+                $auth = base64_encode($this->proxy["username"] . ':' . $this->proxy["password"]);
 
                 $options[$transport]["header"] = [
                     "Proxy-Authorization: Basic $auth"
@@ -184,13 +193,15 @@ abstract class Protocol implements ProtocolInterface {
      * @return resource|boolean The socket created.
      * @throws ConnectionFailedException
      */
-    protected function createStream($transport, $host, $port, $timeout) {
+    protected function createStream($transport, $host, $port, $timeout)
+    {
         $socket = "$transport://$host:$port";
-        $stream = stream_socket_client($socket, $errno, $errstr, $timeout,
+        $stream = stream_socket_client(
+            $socket, $errno, $errstr, $timeout,
             STREAM_CLIENT_CONNECT,
             stream_context_create($this->defaultSocketOptions($transport))
         );
-        //stream_set_timeout($stream, $timeout);	// Hang id $strem empty and already done line 199
+        //stream_set_timeout($stream, $timeout);    // Hang id $strem empty and already done line 199
 
         if (!$stream) {
             throw new ConnectionFailedException($errstr, $errno);
@@ -206,7 +217,8 @@ abstract class Protocol implements ProtocolInterface {
     /**
      * @return int
      */
-    public function getConnectionTimeout() {
+    public function getConnectionTimeout()
+    {
         return $this->connection_timeout;
     }
 
@@ -214,11 +226,11 @@ abstract class Protocol implements ProtocolInterface {
      * @param int $connection_timeout
      * @return Protocol
      */
-    public function setConnectionTimeout($connection_timeout) {
+    public function setConnectionTimeout($connection_timeout)
+    {
         if ($connection_timeout !== null) {
             $this->connection_timeout = $connection_timeout;
         }
         return $this;
     }
-
 }

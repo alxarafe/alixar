@@ -381,10 +381,10 @@ class Server implements LoggerAwareInterface, EmitterInterface
             if (substr($decodedUri, strlen($decodedUri) - strlen($pathInfo)) === $pathInfo) {
                 $baseUri = substr($decodedUri, 0, strlen($decodedUri) - strlen($pathInfo));
 
-                return rtrim($baseUri, '/').'/';
+                return rtrim($baseUri, '/') . '/';
             }
 
-            throw new Exception('The REQUEST_URI ('.$uri.') did not end with the contents of PATH_INFO ('.$pathInfo.'). This server might be misconfigured.');
+            throw new Exception('The REQUEST_URI (' . $uri . ') did not end with the contents of PATH_INFO (' . $pathInfo . '). This server might be misconfigured.');
         }
 
         // The last fallback is that we're just going to assume the server root.
@@ -453,7 +453,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
     {
         $method = $request->getMethod();
 
-        if (!$this->emit('beforeMethod:'.$method, [$request, $response])) {
+        if (!$this->emit('beforeMethod:' . $method, [$request, $response])) {
             return;
         }
 
@@ -469,8 +469,8 @@ class Server implements LoggerAwareInterface, EmitterInterface
             return;
         }
 
-        if ($this->emit('method:'.$method, [$request, $response])) {
-            $exMessage = 'There was no plugin in the system that was willing to handle this '.$method.' method.';
+        if ($this->emit('method:' . $method, [$request, $response])) {
+            $exMessage = 'There was no plugin in the system that was willing to handle this ' . $method . ' method.';
             if ('GET' === $method) {
                 $exMessage .= ' Enable the Browser plugin to get a better result here.';
             }
@@ -479,7 +479,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
             throw new Exception\NotImplemented($exMessage);
         }
 
-        if (!$this->emit('afterMethod:'.$method, [$request, $response])) {
+        if (!$this->emit('afterMethod:' . $method, [$request, $response])) {
             return;
         }
 
@@ -570,10 +570,10 @@ class Server implements LoggerAwareInterface, EmitterInterface
 
         // A special case, if the baseUri was accessed without a trailing
         // slash, we'll accept it as well.
-        } elseif ($uri.'/' === $baseUri) {
+        } elseif ($uri . '/' === $baseUri) {
             return '';
         } else {
-            throw new Exception\Forbidden('Requested uri ('.$uri.') is out of base uri ('.$this->getBaseUri().')');
+            throw new Exception\Forbidden('Requested uri (' . $uri . ') is out of base uri (' . $this->getBaseUri() . ')');
         }
     }
 
@@ -767,7 +767,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
         if ($destination === $requestPath) {
             throw new Exception\Forbidden('Source and destination uri are identical.');
         }
-        if (substr($destination, 0, strlen($requestPath) + 1) === $requestPath.'/') {
+        if (substr($destination, 0, strlen($requestPath) + 1) === $requestPath . '/') {
             throw new Exception\Conflict('The destination may not be part of the same subtree as the source path.');
         }
 
@@ -899,7 +899,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
 
         foreach ($this->tree->getChildren($path) as $childNode) {
             if ('' !== $path) {
-                $subPath = $path.'/'.$childNode->getName();
+                $subPath = $path . '/' . $childNode->getName();
             } else {
                 $subPath = $childNode->getName();
             }
@@ -1101,7 +1101,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
             $etag = null;
         }
 
-        $this->tree->markDirty($dir.'/'.$name);
+        $this->tree->markDirty($dir . '/' . $name);
 
         $this->emit('afterBind', [$uri]);
         $this->emit('afterCreateFile', [$uri, $parent]);
@@ -1395,7 +1395,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
                 }
                 $lastMod = $node->getLastModified();
                 if ($lastMod) {
-                    $lastMod = new \DateTime('@'.$lastMod);
+                    $lastMod = new \DateTime('@' . $lastMod);
                     if ($lastMod <= $date) {
                         $response->setStatus(304);
                         $response->setHeader('Last-Modified', HTTP\toDate($lastMod));
@@ -1418,7 +1418,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
                 }
                 $lastMod = $node->getLastModified();
                 if ($lastMod) {
-                    $lastMod = new \DateTime('@'.$lastMod);
+                    $lastMod = new \DateTime('@' . $lastMod);
                     if ($lastMod > $date) {
                         throw new Exception\PreconditionFailed('An If-Unmodified-Since header was specified, but the entity has been changed since the specified date.', 'If-Unmodified-Since');
                     }
@@ -1480,7 +1480,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
 
             // If we ended here, it means there was no valid ETag + token
             // combination found for the current condition. This means we fail!
-            throw new Exception\PreconditionFailed('Failed to find a valid token/etag combination for '.$uri, 'If');
+            throw new Exception\PreconditionFailed('Failed to find a valid token/etag combination for ' . $uri, 'If');
         }
 
         return true;

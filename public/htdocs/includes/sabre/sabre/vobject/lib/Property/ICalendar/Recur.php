@@ -80,7 +80,7 @@ class Recur extends Property
     {
         $out = [];
         foreach ($this->value as $key => $value) {
-            $out[] = $key.'='.(is_array($value) ? implode(',', $value) : $value);
+            $out[] = $key . '=' . (is_array($value) ? implode(',', $value) : $value);
         }
 
         return strtoupper(implode(';', $out));
@@ -243,7 +243,7 @@ class Recur extends Property
             if ('' === $value) {
                 $warnings[] = [
                     'level' => $repair ? 1 : 3,
-                    'message' => 'Invalid value for '.$key.' in '.$this->name,
+                    'message' => 'Invalid value for ' . $key . ' in ' . $this->name,
                     'node' => $this,
                 ];
                 if ($repair) {
@@ -320,7 +320,7 @@ class Recur extends Property
         if (!isset($values['FREQ'])) {
             $warnings[] = [
                 'level' => $repair ? 1 : 3,
-                'message' => 'FREQ is required in '.$this->name,
+                'message' => 'FREQ is required in ' . $this->name,
                 'node' => $this,
             ];
             if ($repair) {

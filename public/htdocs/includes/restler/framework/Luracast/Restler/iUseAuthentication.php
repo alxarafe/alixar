@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler;
 
 /**
@@ -27,6 +28,5 @@ interface iUseAuthentication
      *
      * @return mixed
      */
-    public function __setAuthenticationStatus($isAuthenticated=false);
+    public function __setAuthenticationStatus($isAuthenticated = false);
 }
-

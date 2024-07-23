@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\Data;
 
 use Luracast\Restler\CommentParser;
@@ -172,8 +173,8 @@ class ValidationInfo implements iValueObject
 
     public static function numericValue($value)
     {
-        return ( int )$value == $value
-            ? ( int )$value
+        return (int)$value == $value
+            ? (int)$value
             : floatval($value);
     }
 
@@ -188,7 +189,7 @@ class ValidationInfo implements iValueObject
     {
         return is_array($value)
             ? implode($glue, $value)
-            : ( string )$value;
+            : (string)$value;
     }
 
     public static function booleanValue($value)
@@ -266,8 +267,7 @@ class ValidationInfo implements iValueObject
      */
     public static function __set_state(array $info)
     {
-        $o = new self ($info);
+        $o = new self($info);
         return $o;
     }
 }
-

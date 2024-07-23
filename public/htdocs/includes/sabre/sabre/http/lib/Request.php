@@ -112,8 +112,8 @@ class Request extends Message implements RequestInterface
     {
         if (!$this->absoluteUrl) {
             // Guessing we're a http endpoint.
-            $this->absoluteUrl = 'http://'.
-                ($this->getHeader('Host') ?? 'localhost').
+            $this->absoluteUrl = 'http://' .
+                ($this->getHeader('Host') ?? 'localhost') .
                 $this->getUrl();
         }
 
@@ -175,13 +175,13 @@ class Request extends Message implements RequestInterface
             return trim(decodePath(substr($uri, strlen($baseUri))), '/');
         }
 
-        if ($uri.'/' === $baseUri) {
+        if ($uri . '/' === $baseUri) {
             return '';
         }
         // A special case, if the baseUri was accessed without a trailing
         // slash, we'll accept it as well.
 
-        throw new \LogicException('Requested uri ('.$this->getUrl().') is out of base uri ('.$this->getBaseUrl().')');
+        throw new \LogicException('Requested uri (' . $this->getUrl() . ') is out of base uri (' . $this->getBaseUrl() . ')');
     }
 
     /**
@@ -248,7 +248,7 @@ class Request extends Message implements RequestInterface
      */
     public function __toString(): string
     {
-        $out = $this->getMethod().' '.$this->getUrl().' HTTP/'.$this->getHttpVersion()."\r\n";
+        $out = $this->getMethod() . ' ' . $this->getUrl() . ' HTTP/' . $this->getHttpVersion() . "\r\n";
 
         foreach ($this->getHeaders() as $key => $value) {
             foreach ($value as $v) {
@@ -256,7 +256,7 @@ class Request extends Message implements RequestInterface
                     list($v) = explode(' ', $v, 2);
                     $v .= ' REDACTED';
                 }
-                $out .= $key.': '.$v."\r\n";
+                $out .= $key . ': ' . $v . "\r\n";
             }
         }
         $out .= "\r\n";

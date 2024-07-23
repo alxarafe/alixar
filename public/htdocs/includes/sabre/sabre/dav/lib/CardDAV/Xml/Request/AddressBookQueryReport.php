@@ -141,13 +141,13 @@ class AddressBookQueryReport implements XmlDeserializable
             switch ($elem['name']) {
                 case '{DAV:}prop':
                     $newProps['properties'] = array_keys($elem['value']);
-                    if (isset($elem['value']['{'.Plugin::NS_CARDDAV.'}address-data'])) {
-                        $newProps += $elem['value']['{'.Plugin::NS_CARDDAV.'}address-data'];
+                    if (isset($elem['value']['{' . Plugin::NS_CARDDAV . '}address-data'])) {
+                        $newProps += $elem['value']['{' . Plugin::NS_CARDDAV . '}address-data'];
                     }
                     break;
-                case '{'.Plugin::NS_CARDDAV.'}filter':
+                case '{' . Plugin::NS_CARDDAV . '}filter':
                     if (!is_null($newProps['filters'])) {
-                        throw new BadRequest('You can only include 1 {'.Plugin::NS_CARDDAV.'}filter element');
+                        throw new BadRequest('You can only include 1 {' . Plugin::NS_CARDDAV . '}filter element');
                     }
                     if (isset($elem['attributes']['test'])) {
                         $newProps['test'] = $elem['attributes']['test'];
@@ -158,14 +158,14 @@ class AddressBookQueryReport implements XmlDeserializable
 
                     $newProps['filters'] = [];
                     foreach ((array) $elem['value'] as $subElem) {
-                        if ($subElem['name'] === '{'.Plugin::NS_CARDDAV.'}prop-filter') {
+                        if ($subElem['name'] === '{' . Plugin::NS_CARDDAV . '}prop-filter') {
                             $newProps['filters'][] = $subElem['value'];
                         }
                     }
                     break;
-                case '{'.Plugin::NS_CARDDAV.'}limit':
+                case '{' . Plugin::NS_CARDDAV . '}limit':
                     foreach ($elem['value'] as $child) {
-                        if ($child['name'] === '{'.Plugin::NS_CARDDAV.'}nresults') {
+                        if ($child['name'] === '{' . Plugin::NS_CARDDAV . '}nresults') {
                             $newProps['limit'] = (int) $child['value'];
                         }
                     }

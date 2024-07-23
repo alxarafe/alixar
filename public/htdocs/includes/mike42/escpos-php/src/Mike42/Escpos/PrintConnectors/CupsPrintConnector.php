@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of escpos-php: PHP receipt printer library for use with
  * ESC/POS-compatible thermal and impact printers.
@@ -21,7 +22,6 @@ use BadMethodCallException;
  */
 class CupsPrintConnector implements PrintConnector
 {
-    
     /**
      * @var array $buffer
      *  Buffer of accumilated data.

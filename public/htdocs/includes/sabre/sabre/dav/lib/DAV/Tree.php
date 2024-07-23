@@ -67,7 +67,7 @@ class Tree implements INodeByPath
 
         while (count($parts)) {
             if (!($node instanceof ICollection)) {
-                throw new Exception\NotFound('Could not find node at path: '.$path);
+                throw new Exception\NotFound('Could not find node at path: ' . $path);
             }
 
             if ($node instanceof INodeByPath) {
@@ -204,7 +204,7 @@ class Tree implements INodeByPath
         }
 
         foreach ($node->getChildren() as $child) {
-            $this->cache[$basePath.$child->getName()] = $child;
+            $this->cache[$basePath . $child->getName()] = $child;
             yield $child;
         }
     }
@@ -232,7 +232,7 @@ class Tree implements INodeByPath
         // flushing the entire cache
         $path = trim($path, '/');
         foreach ($this->cache as $nodePath => $node) {
-            if ('' === $path || $nodePath == $path || 0 === strpos((string) $nodePath, $path.'/')) {
+            if ('' === $path || $nodePath == $path || 0 === strpos((string) $nodePath, $path . '/')) {
                 unset($this->cache[$nodePath]);
             }
         }
@@ -272,13 +272,13 @@ class Tree implements INodeByPath
             $parentNode = $this->getNodeForPath($parent);
             if ($parentNode instanceof IMultiGet) {
                 foreach ($parentNode->getMultipleChildren($children) as $childNode) {
-                    $fullPath = $parent.'/'.$childNode->getName();
+                    $fullPath = $parent . '/' . $childNode->getName();
                     $result[$fullPath] = $childNode;
                     $this->cache[$fullPath] = $childNode;
                 }
             } else {
                 foreach ($children as $child) {
-                    $fullPath = $parent.'/'.$child;
+                    $fullPath = $parent . '/' . $child;
                     $result[$fullPath] = $this->getNodeForPath($fullPath);
                 }
             }

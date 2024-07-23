@@ -1,6 +1,8 @@
 <?php
+
 /*
  * Copyright (C) 2013   Florian Henry      <florian.henry@open-concept.pro>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,73 +30,73 @@
  */
 class FormCron extends Form
 {
-	/**
-	 * @var DoliDB Database handler.
-	 */
-	public $db;
+    /**
+     * @var DoliDB Database handler.
+     */
+    public $db;
 
-	/**
-	 * @var string Error code (or message)
-	 */
-	public $error = '';
+    /**
+     * @var string Error code (or message)
+     */
+    public $error = '';
 
-	/**
-	 *  Constructor
-	 *
-	 *  @param      DoliDB      $db      Database handler
-	 */
-	public function __construct($db)
-	{
-		$this->db = $db;
-	}
+    /**
+     *  Constructor
+     *
+     *  @param      DoliDB      $db      Database handler
+     */
+    public function __construct($db)
+    {
+        $this->db = $db;
+    }
 
 
 	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-	/**
-	 *  Display On Off selector
-	 *
-	 *  @param  string      $htmlname       Html control name
-	 *  @param  integer     $selected       selected value
-	 *  @param  integer     $readonly       Select is read only or not
-	 *  @return string                      HTML select field
-	 */
-	public function select_typejob($htmlname, $selected = 0, $readonly = 0)
-	{
+    /**
+     *  Display On Off selector
+     *
+     *  @param  string      $htmlname       Html control name
+     *  @param  integer     $selected       selected value
+     *  @param  integer     $readonly       Select is read only or not
+     *  @return string                      HTML select field
+     */
+    public function select_typejob($htmlname, $selected = 0, $readonly = 0)
+    {
 		// phpcs:enable
-		global $langs;
+        global $langs;
 
-		$langs->load('cron');
+        $langs->load('cron');
 
-		$out = '';
-		if (!empty($readonly)) {
-			if ($selected == 'command') {
-				$out = img_picto('', 'terminal', 'class="pictofixedwidth marginrightonly"').'<span class="">'.$langs->trans('CronType_command').'</span>';
-			} elseif ($selected == 'method') {
-				$out = img_picto('', 'code', 'class="pictofixedwidth marginrightonly"').'<span class="">'.$langs->trans('CronType_method').'</span>';
-			}
-		} else {
-			$out = '<SELECT class="flat" name="'.$htmlname.'" id="'.$htmlname.'" />';
+        $out = '';
+        if (!empty($readonly)) {
+            if ($selected == 'command') {
+                $out = img_picto('', 'terminal', 'class="pictofixedwidth marginrightonly"') . '<span class="">' . $langs->trans('CronType_command') . '</span>';
+            } elseif ($selected == 'method') {
+                $out = img_picto('', 'code', 'class="pictofixedwidth marginrightonly"') . '<span class="">' . $langs->trans('CronType_method') . '</span>';
+            }
+        } else {
+            $out = '<SELECT class="flat" name="' . $htmlname . '" id="' . $htmlname . '" />';
 
-			if ($selected == 'command') {
-				$selected_attr = ' selected ';
-			} else {
-				$selected_attr = '';
-			}
-			$out .= '<OPTION value="command" '.$selected_attr.'>'.$langs->trans('CronType_command').'</OPTION>';
+            if ($selected == 'command') {
+                $selected_attr = ' selected ';
+            } else {
+                $selected_attr = '';
+            }
+            $out .= '<OPTION value="command" ' . $selected_attr . '>' . $langs->trans('CronType_command') . '</OPTION>';
 
-			if ($selected == 'method') {
-				$selected_attr = ' selected ';
-			} else {
-				$selected_attr = '';
-			}
-			$out .= '<OPTION value="method" '.$selected_attr.'>'.$langs->trans('CronType_method').'</OPTION>';
+            if ($selected == 'method') {
+                $selected_attr = ' selected ';
+            } else {
+                $selected_attr = '';
+            }
+            $out .= '<OPTION value="method" ' . $selected_attr . '>' . $langs->trans('CronType_method') . '</OPTION>';
 
-			$out .= '</SELECT>';
-		}
-		if (empty($readonly)) {
-			$out .= ajax_combobox($htmlname);
-		}
+            $out .= '</SELECT>';
+        }
+        if (empty($readonly)) {
+            $out .= ajax_combobox($htmlname);
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 }

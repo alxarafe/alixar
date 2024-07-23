@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Hubic service.
  *
@@ -26,7 +27,6 @@ use OAuth\Common\Http\Uri\UriInterface;
  */
 class Hubic extends AbstractService
 {
-
     // Scopes
     const SCOPE_USAGE_GET       = 'usage.r';
     const SCOPE_ACCOUNT_GET     = 'account.r';
@@ -66,7 +66,6 @@ class Hubic extends AbstractService
     public function getAuthorizationEndpoint()
     {
         return new Uri('https://api.hubic.com/oauth/auth');
-
     }
 
     /**

@@ -186,7 +186,7 @@ class Plugin extends DAV\ServerPlugin
             foreach ($existingLocks as $existingLock) {
                 foreach ($conditions as $condition) {
                     foreach ($condition['tokens'] as $token) {
-                        if ($token['token'] === 'opaquelocktoken:'.$existingLock->token) {
+                        if ($token['token'] === 'opaquelocktoken:' . $existingLock->token) {
                             $found = $existingLock;
                             break 3;
                         }
@@ -236,7 +236,7 @@ class Plugin extends DAV\ServerPlugin
         $this->lockNode($uri, $lockInfo);
 
         $response->setHeader('Content-Type', 'application/xml; charset=utf-8');
-        $response->setHeader('Lock-Token', '<opaquelocktoken:'.$lockInfo->token.'>');
+        $response->setHeader('Lock-Token', '<opaquelocktoken:' . $lockInfo->token . '>');
         $response->setStatus($newFile ? 201 : 200);
         $response->setBody($this->generateLockResponse($lockInfo));
 
@@ -265,11 +265,11 @@ class Plugin extends DAV\ServerPlugin
         // Windows sometimes forgets to include < and > in the Lock-Token
         // header
         if ('<' !== $lockToken[0]) {
-            $lockToken = '<'.$lockToken.'>';
+            $lockToken = '<' . $lockToken . '>';
         }
 
         foreach ($locks as $lock) {
-            if ('<opaquelocktoken:'.$lock->token.'>' == $lockToken) {
+            if ('<opaquelocktoken:' . $lock->token . '>' == $lockToken) {
                 $this->unlockNode($path, $lock);
                 $response->setHeader('Content-Length', '0');
                 $response->setStatus(204);

@@ -30,7 +30,7 @@ class User extends DAVACL\Principal implements DAV\ICollection
      */
     public function createFile($name, $data = null)
     {
-        throw new DAV\Exception\Forbidden('Permission denied to create file (filename '.$name.')');
+        throw new DAV\Exception\Forbidden('Permission denied to create file (filename ' . $name . ')');
     }
 
     /**
@@ -54,9 +54,9 @@ class User extends DAVACL\Principal implements DAV\ICollection
      */
     public function getChild($name)
     {
-        $principal = $this->principalBackend->getPrincipalByPath($this->getPrincipalURL().'/'.$name);
+        $principal = $this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/' . $name);
         if (!$principal) {
-            throw new DAV\Exception\NotFound('Node with name '.$name.' was not found');
+            throw new DAV\Exception\NotFound('Node with name ' . $name . ' was not found');
         }
         if ('calendar-proxy-read' === $name) {
             return new ProxyRead($this->principalBackend, $this->principalProperties);
@@ -66,7 +66,7 @@ class User extends DAVACL\Principal implements DAV\ICollection
             return new ProxyWrite($this->principalBackend, $this->principalProperties);
         }
 
-        throw new DAV\Exception\NotFound('Node with name '.$name.' was not found');
+        throw new DAV\Exception\NotFound('Node with name ' . $name . ' was not found');
     }
 
     /**
@@ -77,10 +77,10 @@ class User extends DAVACL\Principal implements DAV\ICollection
     public function getChildren()
     {
         $r = [];
-        if ($this->principalBackend->getPrincipalByPath($this->getPrincipalURL().'/calendar-proxy-read')) {
+        if ($this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/calendar-proxy-read')) {
             $r[] = new ProxyRead($this->principalBackend, $this->principalProperties);
         }
-        if ($this->principalBackend->getPrincipalByPath($this->getPrincipalURL().'/calendar-proxy-write')) {
+        if ($this->principalBackend->getPrincipalByPath($this->getPrincipalURL() . '/calendar-proxy-write')) {
             $r[] = new ProxyWrite($this->principalBackend, $this->principalProperties);
         }
 
@@ -122,12 +122,12 @@ class User extends DAVACL\Principal implements DAV\ICollection
         $acl = parent::getACL();
         $acl[] = [
             'privilege' => '{DAV:}read',
-            'principal' => $this->principalProperties['uri'].'/calendar-proxy-read',
+            'principal' => $this->principalProperties['uri'] . '/calendar-proxy-read',
             'protected' => true,
         ];
         $acl[] = [
             'privilege' => '{DAV:}read',
-            'principal' => $this->principalProperties['uri'].'/calendar-proxy-write',
+            'principal' => $this->principalProperties['uri'] . '/calendar-proxy-write',
             'protected' => true,
         ];
 

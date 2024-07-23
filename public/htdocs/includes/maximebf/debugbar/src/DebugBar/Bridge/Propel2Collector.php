@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the DebugBar package.
  *
@@ -191,7 +192,6 @@ class Propel2Collector extends DataCollector implements Renderable, AssetProvide
                 if ($isSuccess) {
                     $this->queryCount++;
                 }
-
             } else {
                 $message = $record['message'];
             }
@@ -269,10 +269,10 @@ class Propel2Collector extends DataCollector implements Renderable, AssetProvide
     {
         $additionalName  = '';
         if ($this->getLogger() !== $this->getDefaultLogger()) {
-            $additionalName = ' ('.$this->getLogger()->getName().')';
+            $additionalName = ' (' . $this->getLogger()->getName() . ')';
         }
 
-        return 'propel2'.$additionalName;
+        return 'propel2' . $additionalName;
     }
 
     /**
@@ -287,8 +287,8 @@ class Propel2Collector extends DataCollector implements Renderable, AssetProvide
                 'map' => $this->getName(),
                 'default' => '[]'
             ),
-            $this->getName().':badge' => array(
-                'map' => $this->getName().'.nb_statements',
+            $this->getName() . ':badge' => array(
+                'map' => $this->getName() . '.nb_statements',
                 'default' => 0
             ),
         );

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of escpos-php: PHP receipt printer library for use with
  * ESC/POS-compatible thermal and impact printers.
@@ -12,7 +13,7 @@
 
 namespace Mike42\Escpos;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 /**
  * Class to handle data about a particular CodePage, as loaded from the receipt print
@@ -81,7 +82,7 @@ class CodePage
      * @throws InvalidArgumentException Where the data is now known or computable.
      * @return array Data for this encoding.
      */
-    public function getDataArray() : array
+    public function getDataArray(): array
     {
         // Make string
         if ($this->data !== null) {
@@ -110,7 +111,7 @@ class CodePage
      *
      * @return string Unique identifier of the code page.
      */
-    public function getId() : string
+    public function getId(): string
     {
         return $this->id;
     }
@@ -118,7 +119,7 @@ class CodePage
     /**
      * @return string Name of the code page.
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -152,7 +153,7 @@ class CodePage
      * @param string $encodingName Name of the encoding
      * @return array 128-entry array of code points
      */
-    protected static function generateEncodingArray(string $encodingName) : array
+    protected static function generateEncodingArray(string $encodingName): array
     {
         // Set up converter for encoding
         $missingChar = chr(self::MISSING_CHAR_CODE);
@@ -182,7 +183,7 @@ class CodePage
     }
 
 
-    private static function encodingArrayFromData(array $data) : array
+    private static function encodingArrayFromData(array $data): array
     {
         $text = implode("", $data); // Join lines
         $codePointIterator = \IntlBreakIterator::createCodePointInstance();

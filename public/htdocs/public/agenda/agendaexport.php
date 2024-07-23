@@ -1,5 +1,7 @@
 <?php
+
 /* Copyright (C) 2008-2024 Laurent Destailleur <eldy@users.sourceforge.net>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +18,12 @@
  */
 
 /**
- * 	\file       htdocs/public/agenda/agendaexport.php
- * 	\ingroup    agenda
- * 	\brief      Page to export agenda into a vcal, ical or rss
- * 				http://127.0.0.1/dolibarr/public/agenda/agendaexport.php?format=vcal&exportkey=cle
- * 				http://127.0.0.1/dolibarr/public/agenda/agendaexport.php?format=ical&type=event&exportkey=cle
- * 				http://127.0.0.1/dolibarr/public/agenda/agendaexport.php?format=rss&exportkey=cle
+ *  \file       htdocs/public/agenda/agendaexport.php
+ *  \ingroup    agenda
+ *  \brief      Page to export agenda into a vcal, ical or rss
+ *              http://127.0.0.1/dolibarr/public/agenda/agendaexport.php?format=vcal&exportkey=cle
+ *              http://127.0.0.1/dolibarr/public/agenda/agendaexport.php?format=ical&type=event&exportkey=cle
+ *              http://127.0.0.1/dolibarr/public/agenda/agendaexport.php?format=rss&exportkey=cle
  *              Other parameters into url are:
  *              &notolderthan=99
  *              &year=2015
@@ -30,25 +32,25 @@
  */
 
 if (!defined('NOTOKENRENEWAL')) {
-	define('NOTOKENRENEWAL', '1');
+    define('NOTOKENRENEWAL', '1');
 }
 if (!defined('NOREQUIREMENU')) {
-	define('NOREQUIREMENU', '1'); // If there is no menu to show
+    define('NOREQUIREMENU', '1'); // If there is no menu to show
 }
 if (!defined('NOREQUIREHTML')) {
-	define('NOREQUIREHTML', '1'); // If we don't need to load the html.form.class.php
+    define('NOREQUIREHTML', '1'); // If we don't need to load the html.form.class.php
 }
 if (!defined('NOREQUIREAJAX')) {
-	define('NOREQUIREAJAX', '1');
+    define('NOREQUIREAJAX', '1');
 }
 if (!defined('NOLOGIN')) {
-	define("NOLOGIN", 1); // This means this output page does not require to be logged.
+    define("NOLOGIN", 1); // This means this output page does not require to be logged.
 }
 if (!defined('NOCSRFCHECK')) {
-	define("NOCSRFCHECK", 1); // We accept to go on this page from external web site.
+    define("NOCSRFCHECK", 1); // We accept to go on this page from external web site.
 }
 if (!defined('NOIPCHECK')) {
-	define('NOIPCHECK', '1'); // Do not check IP defined into conf $dolibarr_main_restrict_ip
+    define('NOIPCHECK', '1'); // Do not check IP defined into conf $dolibarr_main_restrict_ip
 }
 
 
@@ -57,20 +59,20 @@ if (!defined('NOIPCHECK')) {
 /**
  * Header function
  *
- * @return	void
+ * @return  void
  */
 function llxHeaderVierge()
 {
-	print '<html><title>Export agenda cal</title><body>';
+    print '<html><title>Export agenda cal</title><body>';
 }
 /**
  * Footer function
  *
- * @return	void
+ * @return  void
  */
 function llxFooterVierge()
 {
-	print '</body></html>';
+    print '</body></html>';
 }
 
 // For MultiCompany module.
@@ -78,81 +80,81 @@ function llxFooterVierge()
 // Because 2 entities can have the same ref
 $entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
 if (is_numeric($entity)) {
-	define("DOLENTITY", $entity);
+    define("DOLENTITY", $entity);
 }
 
 // Load Dolibarr environment
-require '../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/comm/action/class/actioncomm.class.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 
 $object = new ActionComm($db);
 
 // Not older than
 if (!getDolGlobalString('MAIN_AGENDA_EXPORT_PAST_DELAY')) {
-	$conf->global->MAIN_AGENDA_EXPORT_PAST_DELAY = 100; // default limit
+    $conf->global->MAIN_AGENDA_EXPORT_PAST_DELAY = 100; // default limit
 }
 
 // Define format, type and filter
 $format = 'ical';
 $type = 'event';
 if (GETPOST("format", 'alpha')) {
-	$format = GETPOST("format", 'alpha');
+    $format = GETPOST("format", 'alpha');
 }
 if (GETPOST("type", 'alpha')) {
-	$type = GETPOST("type", 'alpha');
+    $type = GETPOST("type", 'alpha');
 }
 
 $filters = array();
 if (GETPOSTINT("year")) {
-	$filters['year'] = GETPOSTINT("year");
+    $filters['year'] = GETPOSTINT("year");
 }
 if (GETPOSTINT("id")) {
-	$filters['id'] = GETPOSTINT("id");
+    $filters['id'] = GETPOSTINT("id");
 }
 if (GETPOSTINT("idfrom")) {
-	$filters['idfrom'] = GETPOSTINT("idfrom");
+    $filters['idfrom'] = GETPOSTINT("idfrom");
 }
 if (GETPOSTINT("idto")) {
-	$filters['idto'] = GETPOSTINT("idto");
+    $filters['idto'] = GETPOSTINT("idto");
 }
 if (GETPOST("project", 'alpha')) {
-	$filters['project'] = GETPOST("project", 'alpha');
+    $filters['project'] = GETPOST("project", 'alpha');
 }
 if (GETPOST("logina", 'alpha')) {
-	$filters['logina'] = GETPOST("logina", 'alpha');
+    $filters['logina'] = GETPOST("logina", 'alpha');
 }
 if (GETPOST("logint", 'alpha')) {
-	$filters['logint'] = GETPOST("logint", 'alpha');
+    $filters['logint'] = GETPOST("logint", 'alpha');
 }
-if (GETPOST("notactiontype", 'alpha')) {	// deprecated
-	$filters['notactiontype'] = GETPOST("notactiontype", 'alpha');
+if (GETPOST("notactiontype", 'alpha')) {    // deprecated
+    $filters['notactiontype'] = GETPOST("notactiontype", 'alpha');
 }
 if (GETPOST("actiontype", 'alpha')) {
-	$filters['actiontype'] = GETPOST("actiontype", 'alpha');
+    $filters['actiontype'] = GETPOST("actiontype", 'alpha');
 }
 if (GETPOST("actioncode", 'alpha')) {
-	$filters['actioncode'] = GETPOST("actioncode", 'alpha');
+    $filters['actioncode'] = GETPOST("actioncode", 'alpha');
 }
 if (GETPOSTINT("notolderthan")) {
-	$filters['notolderthan'] = GETPOSTINT("notolderthan");
+    $filters['notolderthan'] = GETPOSTINT("notolderthan");
 } else {
-	$filters['notolderthan'] = getDolGlobalString('MAIN_AGENDA_EXPORT_PAST_DELAY', 100);
+    $filters['notolderthan'] = getDolGlobalString('MAIN_AGENDA_EXPORT_PAST_DELAY', 100);
 }
 if (GETPOSTINT("limit")) {
-	$filters['limit'] = GETPOSTINT("limit");
+    $filters['limit'] = GETPOSTINT("limit");
 } else {
-	$filters['limit'] = 1000;
+    $filters['limit'] = 1000;
 }
 if (GETPOST("module", 'alpha')) {
-	$filters['module'] = GETPOST("module", 'alpha');
+    $filters['module'] = GETPOST("module", 'alpha');
 }
 if (GETPOST("status", "intcomma")) {
-	$filters['status'] = GETPOST("status", "intcomma");
+    $filters['status'] = GETPOST("status", "intcomma");
 }
 
 // Security check
 if (!isModEnabled('agenda')) {
-	httponly_accessforbidden('Module Agenda not enabled');
+    httponly_accessforbidden('Module Agenda not enabled');
 }
 
 
@@ -162,14 +164,14 @@ if (!isModEnabled('agenda')) {
 
 // Check config
 if (!getDolGlobalString('MAIN_AGENDA_XCAL_EXPORTKEY')) {
-	$user->getrights();
+    $user->getrights();
 
-	top_httphead();
+    top_httphead();
 
-	llxHeaderVierge();
-	print '<div class="error">Module Agenda was not configured properly.</div>';
-	llxFooterVierge();
-	exit;
+    llxHeaderVierge();
+    print '<div class="error">Module Agenda was not configured properly.</div>';
+    llxFooterVierge();
+    exit;
 }
 
 // Initialize technical object to manage hooks. Note that conf->hooks_modules contains array of hooks
@@ -177,27 +179,27 @@ $hookmanager->initHooks(array('agendaexport'));
 
 $reshook = $hookmanager->executeHooks('doActions', $filters); // Note that $action and $object may have been modified by some
 if ($reshook < 0) {
-	top_httphead();
+    top_httphead();
 
-	llxHeaderVierge();
-	if (!empty($hookmanager->errors) && is_array($hookmanager->errors)) {
-		print '<div class="error">'.implode('<br>', $hookmanager->errors).'</div>';
-	} else {
-		print '<div class="error">'.$hookmanager->error.'</div>';
-	}
-	llxFooterVierge();
+    llxHeaderVierge();
+    if (!empty($hookmanager->errors) && is_array($hookmanager->errors)) {
+        print '<div class="error">' . implode('<br>', $hookmanager->errors) . '</div>';
+    } else {
+        print '<div class="error">' . $hookmanager->error . '</div>';
+    }
+    llxFooterVierge();
 } elseif (empty($reshook)) {
-	// Check exportkey
-	if (!GETPOST("exportkey") || getDolGlobalString('MAIN_AGENDA_XCAL_EXPORTKEY') != GETPOST("exportkey")) {
-		$user->getrights();
+    // Check exportkey
+    if (!GETPOST("exportkey") || getDolGlobalString('MAIN_AGENDA_XCAL_EXPORTKEY') != GETPOST("exportkey")) {
+        $user->getrights();
 
-		top_httphead();
+        top_httphead();
 
-		llxHeaderVierge();
-		print '<div class="error">Bad value for key.</div>';
-		llxFooterVierge();
-		exit;
-	}
+        llxHeaderVierge();
+        print '<div class="error">Bad value for key.</div>';
+        llxFooterVierge();
+        exit;
+    }
 }
 
 
@@ -206,193 +208,193 @@ $shortfilename = 'dolibarrcalendar';
 $filename = $shortfilename;
 // Complete long filename
 foreach ($filters as $key => $value) {
-	//if ($key == 'notolderthan')    $filename.='-notolderthan'.$value; This filter key is already added before and does not need to be in filename
-	if ($key == 'year') {
-		$filename .= '-year'.$value;
-	}
-	if ($key == 'id') {
-		$filename .= '-id'.$value;
-	}
-	if ($key == 'idfrom') {
-		$filename .= '-idfrom'.$value;
-	}
-	if ($key == 'idto') {
-		$filename .= '-idto'.$value;
-	}
-	if ($key == 'project') {
-		$filename .= '-project'.$value;
-		$shortfilename .= '-project'.$value;
-	}
-	if ($key == 'logina') {
-		$filename .= '-logina'.$value; // Author
-	}
-	if ($key == 'logint') {
-		$filename .= '-logint'.$value; // Assigned to
-	}
-	if ($key == 'notactiontype') {	// deprecated
-		$filename .= '-notactiontype'.$value;
-	}
-	if ($key == 'actiontype') {
-		$filename .= '-actiontype'.$value;
-	}
-	if ($key == 'actioncode') {
-		$filename .= '-actioncode'.$value;
-	}
-	if ($key == 'module') {
-		$filename .= '-module'.$value;
-		if ($value == 'project@eventorganization') {
-			$shortfilename .= '-project';
-		} elseif ($value == 'conforbooth@eventorganization') {
-			$shortfilename .= '-conforbooth';
-		}
-	}
-	if ($key == 'status') {
-		$filename .= '-status'.$value;
-	}
+    //if ($key == 'notolderthan')    $filename.='-notolderthan'.$value; This filter key is already added before and does not need to be in filename
+    if ($key == 'year') {
+        $filename .= '-year' . $value;
+    }
+    if ($key == 'id') {
+        $filename .= '-id' . $value;
+    }
+    if ($key == 'idfrom') {
+        $filename .= '-idfrom' . $value;
+    }
+    if ($key == 'idto') {
+        $filename .= '-idto' . $value;
+    }
+    if ($key == 'project') {
+        $filename .= '-project' . $value;
+        $shortfilename .= '-project' . $value;
+    }
+    if ($key == 'logina') {
+        $filename .= '-logina' . $value; // Author
+    }
+    if ($key == 'logint') {
+        $filename .= '-logint' . $value; // Assigned to
+    }
+    if ($key == 'notactiontype') {  // deprecated
+        $filename .= '-notactiontype' . $value;
+    }
+    if ($key == 'actiontype') {
+        $filename .= '-actiontype' . $value;
+    }
+    if ($key == 'actioncode') {
+        $filename .= '-actioncode' . $value;
+    }
+    if ($key == 'module') {
+        $filename .= '-module' . $value;
+        if ($value == 'project@eventorganization') {
+            $shortfilename .= '-project';
+        } elseif ($value == 'conforbooth@eventorganization') {
+            $shortfilename .= '-conforbooth';
+        }
+    }
+    if ($key == 'status') {
+        $filename .= '-status' . $value;
+    }
 }
 // Add extension
 if ($format == 'vcal') {
-	$shortfilename .= '.vcs';
-	$filename .= '.vcs';
+    $shortfilename .= '.vcs';
+    $filename .= '.vcs';
 }
 if ($format == 'ical') {
-	$shortfilename .= '.ics';
-	$filename .= '.ics';
+    $shortfilename .= '.ics';
+    $filename .= '.ics';
 }
 if ($format == 'rss') {
-	$shortfilename .= '.rss';
-	$filename .= '.rss';
+    $shortfilename .= '.rss';
+    $filename .= '.rss';
 }
 if ($shortfilename == 'dolibarrcalendar') {
-	$langs->load("errors");
+    $langs->load("errors");
 
-	top_httphead();
+    top_httphead();
 
-	llxHeaderVierge();
-	print '<div class="error">'.$langs->trans("ErrorWrongValueForParameterX", 'format').'</div>';
-	llxFooterVierge();
-	exit;
+    llxHeaderVierge();
+    print '<div class="error">' . $langs->trans("ErrorWrongValueForParameterX", 'format') . '</div>';
+    llxFooterVierge();
+    exit;
 }
 
 $agenda = new ActionComm($db);
 
 $cachedelay = 0;
 if (getDolGlobalString('MAIN_AGENDA_EXPORT_CACHE')) {
-	$cachedelay = getDolGlobalString('MAIN_AGENDA_EXPORT_CACHE');
+    $cachedelay = getDolGlobalString('MAIN_AGENDA_EXPORT_CACHE');
 }
 
 $exportholidays = GETPOSTINT('includeholidays');
 
 // Build file
 if ($format == 'ical' || $format == 'vcal') {
-	// For export of conforbooth, we disable the filter 'notolderthan'
-	if (!empty($filters['project']) && !empty($filters['module']) && ($filters['module'] == 'project@eventorganization' || $filters['module'] == 'conforbooth@eventorganization')) {
-		$filters['notolderthan'] = null;
-	}
+    // For export of conforbooth, we disable the filter 'notolderthan'
+    if (!empty($filters['project']) && !empty($filters['module']) && ($filters['module'] == 'project@eventorganization' || $filters['module'] == 'conforbooth@eventorganization')) {
+        $filters['notolderthan'] = null;
+    }
 
-	$result = $agenda->build_exportfile($format, $type, $cachedelay, $filename, $filters, $exportholidays);
-	if ($result >= 0) {
-		$attachment = true;
-		if (GETPOSTISSET("attachment")) {
-			$attachment = GETPOST("attachment");
-		}
-		//$attachment = false;
-		$contenttype = 'text/calendar';
-		if (GETPOSTISSET("contenttype")) {
-			$contenttype = GETPOST("contenttype");
-		}
-		//$contenttype='text/plain';
-		$outputencoding = 'UTF-8';
+    $result = $agenda->build_exportfile($format, $type, $cachedelay, $filename, $filters, $exportholidays);
+    if ($result >= 0) {
+        $attachment = true;
+        if (GETPOSTISSET("attachment")) {
+            $attachment = GETPOST("attachment");
+        }
+        //$attachment = false;
+        $contenttype = 'text/calendar';
+        if (GETPOSTISSET("contenttype")) {
+            $contenttype = GETPOST("contenttype");
+        }
+        //$contenttype='text/plain';
+        $outputencoding = 'UTF-8';
 
-		if ($contenttype) {
-			header('Content-Type: '.$contenttype.($outputencoding ? '; charset='.$outputencoding : ''));
-		}
-		if ($attachment) {
-			header('Content-Disposition: attachment; filename="'.$shortfilename.'"');
-		}
+        if ($contenttype) {
+            header('Content-Type: ' . $contenttype . ($outputencoding ? '; charset=' . $outputencoding : ''));
+        }
+        if ($attachment) {
+            header('Content-Disposition: attachment; filename="' . $shortfilename . '"');
+        }
 
-		if ($cachedelay) {
-			header('Cache-Control: max-age='.$cachedelay.', private, must-revalidate');
-		} else {
-			header('Cache-Control: private, must-revalidate');
-		}
+        if ($cachedelay) {
+            header('Cache-Control: max-age=' . $cachedelay . ', private, must-revalidate');
+        } else {
+            header('Cache-Control: private, must-revalidate');
+        }
 
-		header("X-Frame-Options: SAMEORIGIN"); // By default, frames allowed only if on same domain (stop some XSS attacks)
+        header("X-Frame-Options: SAMEORIGIN"); // By default, frames allowed only if on same domain (stop some XSS attacks)
 
-		// Clean parameters
-		$outputfile = $conf->agenda->dir_temp.'/'.$filename;
-		$result = readfile($outputfile);
-		if (!$result) {
-			print 'File '.$outputfile.' was empty.';
-		}
+        // Clean parameters
+        $outputfile = $conf->agenda->dir_temp . '/' . $filename;
+        $result = readfile($outputfile);
+        if (!$result) {
+            print 'File ' . $outputfile . ' was empty.';
+        }
 
-		//header("Location: ".DOL_URL_ROOT.'/document.php?modulepart=agenda&file='.urlencode($filename));
-		exit;
-	} else {
-		top_httphead();
+        //header("Location: ".DOL_URL_ROOT.'/document.php?modulepart=agenda&file='.urlencode($filename));
+        exit;
+    } else {
+        top_httphead();
 
-		print 'Error '.$agenda->error;
+        print 'Error ' . $agenda->error;
 
-		exit;
-	}
+        exit;
+    }
 }
 
 if ($format == 'rss') {
-	$result = $agenda->build_exportfile($format, $type, $cachedelay, $filename, $filters, $exportholidays);
-	if ($result >= 0) {
-		$attachment = false;
-		if (GETPOSTISSET("attachment")) {
-			$attachment = GETPOST("attachment");
-		}
-		//$attachment = false;
-		$contenttype = 'application/rss+xml';
-		if (GETPOSTISSET("contenttype")) {
-			$contenttype = GETPOST("contenttype");
-		}
-		//$contenttype='text/plain';
-		$outputencoding = 'UTF-8';
+    $result = $agenda->build_exportfile($format, $type, $cachedelay, $filename, $filters, $exportholidays);
+    if ($result >= 0) {
+        $attachment = false;
+        if (GETPOSTISSET("attachment")) {
+            $attachment = GETPOST("attachment");
+        }
+        //$attachment = false;
+        $contenttype = 'application/rss+xml';
+        if (GETPOSTISSET("contenttype")) {
+            $contenttype = GETPOST("contenttype");
+        }
+        //$contenttype='text/plain';
+        $outputencoding = 'UTF-8';
 
-		if ($contenttype) {
-			header('Content-Type: '.$contenttype.($outputencoding ? '; charset='.$outputencoding : ''));
-		}
-		if ($attachment) {
-			header('Content-Disposition: attachment; filename="'.$filename.'"');
-		} else {
-			header('Content-Disposition: inline; filename="'.$filename.'"');
-		}
+        if ($contenttype) {
+            header('Content-Type: ' . $contenttype . ($outputencoding ? '; charset=' . $outputencoding : ''));
+        }
+        if ($attachment) {
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+        } else {
+            header('Content-Disposition: inline; filename="' . $filename . '"');
+        }
 
-		// Ajout directives pour resoudre bug IE
-		//header('Cache-Control: Public, must-revalidate');
-		//header('Pragma: public');
-		if ($cachedelay) {
-			header('Cache-Control: max-age='.$cachedelay.', private, must-revalidate');
-		} else {
-			header('Cache-Control: private, must-revalidate');
-		}
+        // Ajout directives pour resoudre bug IE
+        //header('Cache-Control: Public, must-revalidate');
+        //header('Pragma: public');
+        if ($cachedelay) {
+            header('Cache-Control: max-age=' . $cachedelay . ', private, must-revalidate');
+        } else {
+            header('Cache-Control: private, must-revalidate');
+        }
 
-		header("X-Frame-Options: SAMEORIGIN"); // By default, frames allowed only if on same domain (stop some XSS attacks)
+        header("X-Frame-Options: SAMEORIGIN"); // By default, frames allowed only if on same domain (stop some XSS attacks)
 
-		// Clean parameters
-		$outputfile = $conf->agenda->dir_temp.'/'.$filename;
-		$result = readfile($outputfile);
-		if (!$result) {
-			print 'File '.$outputfile.' was empty.';
-		}
+        // Clean parameters
+        $outputfile = $conf->agenda->dir_temp . '/' . $filename;
+        $result = readfile($outputfile);
+        if (!$result) {
+            print 'File ' . $outputfile . ' was empty.';
+        }
 
-		// header("Location: ".DOL_URL_ROOT.'/document.php?modulepart=agenda&file='.urlencode($filename));
-		exit;
-	} else {
-		top_httphead();
+        // header("Location: ".DOL_URL_ROOT.'/document.php?modulepart=agenda&file='.urlencode($filename));
+        exit;
+    } else {
+        top_httphead();
 
-		print 'Error '.$agenda->error;
+        print 'Error ' . $agenda->error;
 
-		exit;
-	}
+        exit;
+    }
 }
 
 
 top_httphead();
 
 llxHeaderVierge();
-print '<div class="error">'.$agenda->error.'</div>';
+print '<div class="error">' . $agenda->error . '</div>';
 llxFooterVierge();

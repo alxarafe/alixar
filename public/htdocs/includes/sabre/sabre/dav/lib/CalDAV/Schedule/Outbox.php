@@ -90,7 +90,7 @@ class Outbox extends DAV\Collection implements IOutbox
     {
         return [
             [
-                'privilege' => '{'.CalDAV\Plugin::NS_CALDAV.'}schedule-send',
+                'privilege' => '{' . CalDAV\Plugin::NS_CALDAV . '}schedule-send',
                 'principal' => $this->getOwner(),
                 'protected' => true,
             ],
@@ -100,18 +100,18 @@ class Outbox extends DAV\Collection implements IOutbox
                 'protected' => true,
             ],
             [
-                'privilege' => '{'.CalDAV\Plugin::NS_CALDAV.'}schedule-send',
-                'principal' => $this->getOwner().'/calendar-proxy-write',
+                'privilege' => '{' . CalDAV\Plugin::NS_CALDAV . '}schedule-send',
+                'principal' => $this->getOwner() . '/calendar-proxy-write',
                 'protected' => true,
             ],
             [
                 'privilege' => '{DAV:}read',
-                'principal' => $this->getOwner().'/calendar-proxy-read',
+                'principal' => $this->getOwner() . '/calendar-proxy-read',
                 'protected' => true,
             ],
             [
                 'privilege' => '{DAV:}read',
-                'principal' => $this->getOwner().'/calendar-proxy-write',
+                'principal' => $this->getOwner() . '/calendar-proxy-write',
                 'protected' => true,
             ],
         ];

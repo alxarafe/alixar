@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of escpos-php: PHP receipt printer library for use with
  * ESC/POS-compatible thermal and impact printers.
@@ -178,8 +179,10 @@ class EscposPrintBuffer implements PrintBuffer
             }
             if ($cacheData) {
                 $dataArray = unserialize($cacheData);
-                if (isset($dataArray["key"]) && isset($dataArray["available"]) &&
-                        isset($dataArray["encode"]) && $dataArray["key"] == $cacheKey) {
+                if (
+                    isset($dataArray["key"]) && isset($dataArray["available"]) &&
+                        isset($dataArray["encode"]) && $dataArray["key"] == $cacheKey
+                ) {
                     $this -> available = $dataArray["available"];
                     $this -> encode = $dataArray["encode"];
                     return;

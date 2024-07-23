@@ -1,9 +1,11 @@
 <?php
+
 /* Copyright (C) 2005      Patrick Rouillon     <patrick@rouillon.net>
  * Copyright (C) 2005-2016 Destailleur Laurent  <eldy@users.sourceforge.net>
  * Copyright (C) 2005-2012 Regis Houssin		<regis.houssin@inodbox.com>
  * Copyright (C) 2011-2015 Philippe Grand       <philippe.grand@atoo-net.com>
  * Copyright (C) 2021  Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,13 +28,13 @@
  */
 
 // Load Dolibarr environment
-require '../../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formcompany.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formother.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formprojet.class.php';
-require_once DOL_DOCUMENT_ROOT.'/projet/class/project.class.php';
-require_once DOL_DOCUMENT_ROOT.'/product/stock/stocktransfer/class/stocktransfer.class.php';
-require_once DOL_DOCUMENT_ROOT.'/product/stock/stocktransfer/lib/stocktransfer_stocktransfer.lib.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransfer.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/lib/stocktransfer_stocktransfer.lib.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('facture', 'orders', 'sendings', 'companies', 'stocks'));
@@ -46,26 +48,26 @@ $object = new StockTransfer($db);
 
 // Load object
 if ($id > 0 || !empty($ref)) {
-	$ret = $object->fetch($id, $ref);
-	if ($ret == 0) {
-		$langs->load("errors");
-		setEventMessages($langs->trans('ErrorRecordNotFound'), null, 'errors');
-		$error++;
-	} elseif ($ret < 0) {
-		setEventMessages($object->error, $object->errors, 'errors');
-		$error++;
-	}
+    $ret = $object->fetch($id, $ref);
+    if ($ret == 0) {
+        $langs->load("errors");
+        setEventMessages($langs->trans('ErrorRecordNotFound'), null, 'errors');
+        $error++;
+    } elseif ($ret < 0) {
+        setEventMessages($object->error, $object->errors, 'errors');
+        $error++;
+    }
 }
 if (!$error) {
-	$object->fetch_thirdparty();
+    $object->fetch_thirdparty();
 } else {
-	header('Location: '.dol_buildpath('/stocktransfer/stocktransfer_list.php', 1));
-	exit;
+    header('Location: ' . dol_buildpath('/stocktransfer/stocktransfer_list.php', 1));
+    exit;
 }
 
 // Security check
 if ($user->socid) {
-	$socid = $user->socid;
+    $socid = $user->socid;
 }
 
 $result = restrictedArea($user, 'stocktransfer', $id, '', 'stocktransfer');
@@ -76,35 +78,35 @@ $result = restrictedArea($user, 'stocktransfer', $id, '', 'stocktransfer');
  */
 
 if ($action == 'addcontact' && $user->hasRight('stocktransfer', 'stocktransfer', 'write')) {
-	if ($object->id > 0) {
-		$contactid = (GETPOSTINT('userid') ? GETPOSTINT('userid') : GETPOSTINT('contactid'));
-		$result = $object->add_contact($contactid, GETPOST("typecontact") ? GETPOST("typecontact") : GETPOST("type"), GETPOST("source"));
-	}
+    if ($object->id > 0) {
+        $contactid = (GETPOSTINT('userid') ? GETPOSTINT('userid') : GETPOSTINT('contactid'));
+        $result = $object->add_contact($contactid, GETPOST("typecontact") ? GETPOST("typecontact") : GETPOST("type"), GETPOST("source"));
+    }
 
-	if ($result >= 0) {
-		header("Location: ".$_SERVER['PHP_SELF']."?id=".$object->id);
-		exit;
-	} else {
-		if ($object->error == 'DB_ERROR_RECORD_ALREADY_EXISTS') {
-			$langs->load("errors");
-			setEventMessages($langs->trans("ErrorThisContactIsAlreadyDefinedAsThisType"), null, 'errors');
-		} else {
-			setEventMessages($object->error, $object->errors, 'errors');
-		}
-	}
+    if ($result >= 0) {
+        header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $object->id);
+        exit;
+    } else {
+        if ($object->error == 'DB_ERROR_RECORD_ALREADY_EXISTS') {
+            $langs->load("errors");
+            setEventMessages($langs->trans("ErrorThisContactIsAlreadyDefinedAsThisType"), null, 'errors');
+        } else {
+            setEventMessages($object->error, $object->errors, 'errors');
+        }
+    }
 } elseif ($action == 'swapstatut' && $user->hasRight('stocktransfer', 'stocktransfer', 'write')) { // Toggle the status of a contact
-	if ($object->id > 0) {
-		$result = $object->swapContactStatus(GETPOST('ligne'));
-	}
+    if ($object->id > 0) {
+        $result = $object->swapContactStatus(GETPOST('ligne'));
+    }
 } elseif ($action == 'deletecontact' && $user->hasRight('stocktransfer', 'stocktransfer', 'write')) { // Deletes a contact
-	$result = $object->delete_contact($lineid);
+    $result = $object->delete_contact($lineid);
 
-	if ($result >= 0) {
-		header("Location: ".$_SERVER['PHP_SELF']."?id=".$object->id);
-		exit;
-	} else {
-		dol_print_error($db);
-	}
+    if ($result >= 0) {
+        header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $object->id);
+        exit;
+    } else {
+        dol_print_error($db);
+    }
 }
 
 
@@ -119,49 +121,49 @@ $formcompany = new FormCompany($db);
 $formother = new FormOther($db);
 
 if ($object->id > 0) {
-	$head = stocktransferPrepareHead($object);
-	print dol_get_fiche_head($head, 'contact', $langs->trans("StockTransfer"), -1, 'stock');
+    $head = stocktransferPrepareHead($object);
+    print dol_get_fiche_head($head, 'contact', $langs->trans("StockTransfer"), -1, 'stock');
 
 
-	// Proposal card
+    // Proposal card
 
-	$linkback = '<a href="'.DOL_URL_ROOT.'/comm/propal/list.php?restore_lastsearch_values=1'.(!empty($socid) ? '&socid='.$socid : '').'">'.$langs->trans("BackToList").'</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . 'comm/propal/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
 
 
-	$morehtmlref = '<div class="refidno">';
-	// Thirdparty
-	$morehtmlref .= empty($object->thirdparty) ? '' : $object->thirdparty->getNomUrl(1, 'customer');
-	if (!getDolGlobalInt('MAIN_DISABLE_OTHER_LINK') && $object->thirdparty->id > 0) {
-		$morehtmlref .= ' (<a href="'.DOL_URL_ROOT.'/commande/list.php?socid='.$object->thirdparty->id.'&search_societe='.urlencode($object->thirdparty->name).'">'.$langs->trans("OtherOrders").'</a>)';
-	}
-	// Project
-	if (isModEnabled('project')) {
-		$langs->load("projects");
-		if (!empty($object->fk_project)) {
-			$morehtmlref .= '<br>';
-			$proj = new Project($db);
-			$proj->fetch($object->fk_project);
-			$morehtmlref .= $proj->getNomUrl(1);
-			if ($proj->title) {
-				$morehtmlref .= '<span class="opacitymedium"> - '.dol_escape_htmltag($proj->title).'</span>';
-			}
-		}
-	}
-	$morehtmlref .= '</div>';
+    $morehtmlref = '<div class="refidno">';
+    // Thirdparty
+    $morehtmlref .= empty($object->thirdparty) ? '' : $object->thirdparty->getNomUrl(1, 'customer');
+    if (!getDolGlobalInt('MAIN_DISABLE_OTHER_LINK') && $object->thirdparty->id > 0) {
+        $morehtmlref .= ' (<a href="' . constant('BASE_URL') . 'commande/list.php?socid=' . $object->thirdparty->id . '&search_societe=' . urlencode($object->thirdparty->name) . '">' . $langs->trans("OtherOrders") . '</a>)';
+    }
+    // Project
+    if (isModEnabled('project')) {
+        $langs->load("projects");
+        if (!empty($object->fk_project)) {
+            $morehtmlref .= '<br>';
+            $proj = new Project($db);
+            $proj->fetch($object->fk_project);
+            $morehtmlref .= $proj->getNomUrl(1);
+            if ($proj->title) {
+                $morehtmlref .= '<span class="opacitymedium"> - ' . dol_escape_htmltag($proj->title) . '</span>';
+            }
+        }
+    }
+    $morehtmlref .= '</div>';
 
-	dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref, '', 0, '', '', 1);
+    dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref, '', 0, '', '', 1);
 
-	print dol_get_fiche_end();
+    print dol_get_fiche_end();
 
-	$user->rights->stocktransfer->write = $user->hasRight('stocktransfer', 'stocktransfer', 'write');
-	// Contacts lines (modules that overwrite templates must declare this into descriptor)
-	$dirtpls = array_merge($conf->modules_parts['tpl'], array('/core/tpl'));
-	foreach ($dirtpls as $reldir) {
-		$res = @include dol_buildpath($reldir.'/contacts.tpl.php');
-		if ($res) {
-			break;
-		}
-	}
+    $user->rights->stocktransfer->write = $user->hasRight('stocktransfer', 'stocktransfer', 'write');
+    // Contacts lines (modules that overwrite templates must declare this into descriptor)
+    $dirtpls = array_merge($conf->modules_parts['tpl'], array('/core/tpl'));
+    foreach ($dirtpls as $reldir) {
+        $res = @include dol_buildpath($reldir . '/contacts.tpl.php');
+        if ($res) {
+            break;
+        }
+    }
 }
 
 // End of page

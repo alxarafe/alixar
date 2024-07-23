@@ -96,8 +96,8 @@ class AddressBookMultiGetReport implements XmlDeserializable
             switch ($elem['name']) {
                 case '{DAV:}prop':
                     $newProps['properties'] = array_keys($elem['value']);
-                    if (isset($elem['value']['{'.Plugin::NS_CARDDAV.'}address-data'])) {
-                        $newProps += $elem['value']['{'.Plugin::NS_CARDDAV.'}address-data'];
+                    if (isset($elem['value']['{' . Plugin::NS_CARDDAV . '}address-data'])) {
+                        $newProps += $elem['value']['{' . Plugin::NS_CARDDAV . '}address-data'];
                     }
                     break;
                 case '{DAV:}href':

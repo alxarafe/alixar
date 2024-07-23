@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the DebugBar package.
  *
@@ -200,7 +201,7 @@ class TimeDataCollector extends DataCollector implements Renderable
             $this->stopMeasure($name);
         }
 
-        usort($this->measures, function($a, $b) {
+        usort($this->measures, function ($a, $b) {
             if ($a['start'] == $b['start']) {
                 return 0;
             }

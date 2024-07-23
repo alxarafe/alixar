@@ -82,11 +82,11 @@ class Microsoft extends AbstractService
      */
     public function getAuthorizationEndpoint()
     {
-    	$tenant = $this->storage->getTenant();
+        $tenant = $this->storage->getTenant();
 
-    	//return new Uri('https://login.live.com/oauth20_authorize.srf');
+        //return new Uri('https://login.live.com/oauth20_authorize.srf');
         //return new Uri('https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize');
-        return new Uri('https://login.microsoftonline.com/'.$tenant.'/oauth2/v2.0/authorize');
+        return new Uri('https://login.microsoftonline.com/' . $tenant . '/oauth2/v2.0/authorize');
     }
 
     /**
@@ -94,11 +94,11 @@ class Microsoft extends AbstractService
      */
     public function getAccessTokenEndpoint()
     {
-    	$tenant = $this->storage->getTenant();
+        $tenant = $this->storage->getTenant();
 
         //return new Uri('https://login.live.com/oauth20_token.srf');
         //return new Uri('https://login.microsoftonline.com/organizations/oauth2/v2.0/token');
-        return new Uri('https://login.microsoftonline.com/'.$tenant.'/oauth2/v2.0/token');
+        return new Uri('https://login.microsoftonline.com/' . $tenant . '/oauth2/v2.0/token');
     }
 
     /**

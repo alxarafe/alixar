@@ -100,7 +100,7 @@ class Digest extends AbstractAuth
      */
     public function validatePassword(string $password): bool
     {
-        $this->A1 = md5($this->digestParts['username'].':'.$this->realm.':'.$password);
+        $this->A1 = md5($this->digestParts['username'] . ':' . $this->realm . ':' . $password);
 
         return $this->validate();
     }
@@ -125,7 +125,7 @@ class Digest extends AbstractAuth
             return false;
         }
 
-        $A2 = $this->request->getMethod().':'.$this->digestParts['uri'];
+        $A2 = $this->request->getMethod() . ':' . $this->digestParts['uri'];
 
         if ('auth-int' === $this->digestParts['qop']) {
             // Making sure we support this qop value
@@ -135,7 +135,7 @@ class Digest extends AbstractAuth
             // We need to add an md5 of the entire request body to the A2 part of the hash
             $body = $this->request->getBody();
             $this->request->setBody($body);
-            $A2 .= ':'.md5($body);
+            $A2 .= ':' . md5($body);
         } elseif (!($this->qop & self::QOP_AUTH)) {
             return false;
         }
@@ -167,7 +167,7 @@ class Digest extends AbstractAuth
                 break;
         }
 
-        $this->response->addHeader('WWW-Authenticate', 'Digest realm="'.$this->realm.'",qop="'.$qop.'",nonce="'.$this->nonce.'",opaque="'.$this->opaque.'"');
+        $this->response->addHeader('WWW-Authenticate', 'Digest realm="' . $this->realm . '",qop="' . $qop . '",nonce="' . $this->nonce . '",opaque="' . $this->opaque . '"');
         $this->response->setStatus(401);
     }
 

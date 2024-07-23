@@ -147,7 +147,7 @@ class Json extends Parser
         $valueType = strtoupper($valueType);
 
         if (isset($parameters['group'])) {
-            $propertyName = $parameters['group'].'.'.$propertyName;
+            $propertyName = $parameters['group'] . '.' . $propertyName;
             unset($parameters['group']);
         }
 

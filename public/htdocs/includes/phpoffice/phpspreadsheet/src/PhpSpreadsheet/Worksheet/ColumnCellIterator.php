@@ -143,9 +143,11 @@ class ColumnCellIterator extends CellIterator
     {
         do {
             ++$this->currentRow;
-        } while (($this->onlyExistingCells) &&
+        } while (
+            ($this->onlyExistingCells) &&
             (!$this->worksheet->cellExistsByColumnAndRow($this->columnIndex, $this->currentRow)) &&
-            ($this->currentRow <= $this->endRow));
+            ($this->currentRow <= $this->endRow)
+        );
     }
 
     /**
@@ -155,9 +157,11 @@ class ColumnCellIterator extends CellIterator
     {
         do {
             --$this->currentRow;
-        } while (($this->onlyExistingCells) &&
+        } while (
+            ($this->onlyExistingCells) &&
             (!$this->worksheet->cellExistsByColumnAndRow($this->columnIndex, $this->currentRow)) &&
-            ($this->currentRow >= $this->startRow));
+            ($this->currentRow >= $this->startRow)
+        );
     }
 
     /**
@@ -178,15 +182,19 @@ class ColumnCellIterator extends CellIterator
     protected function adjustForExistingOnlyRange()
     {
         if ($this->onlyExistingCells) {
-            while ((!$this->worksheet->cellExistsByColumnAndRow($this->columnIndex, $this->startRow)) &&
-                ($this->startRow <= $this->endRow)) {
+            while (
+                (!$this->worksheet->cellExistsByColumnAndRow($this->columnIndex, $this->startRow)) &&
+                ($this->startRow <= $this->endRow)
+            ) {
                 ++$this->startRow;
             }
             if ($this->startRow > $this->endRow) {
                 throw new PhpSpreadsheetException('No cells exist within the specified range');
             }
-            while ((!$this->worksheet->cellExistsByColumnAndRow($this->columnIndex, $this->endRow)) &&
-                ($this->endRow >= $this->startRow)) {
+            while (
+                (!$this->worksheet->cellExistsByColumnAndRow($this->columnIndex, $this->endRow)) &&
+                ($this->endRow >= $this->startRow)
+            ) {
                 --$this->endRow;
             }
             if ($this->endRow < $this->startRow) {

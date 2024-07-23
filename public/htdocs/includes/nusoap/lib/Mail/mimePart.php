@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Mail_mimePart class is used to create MIME E-mail messages
  *
@@ -178,25 +179,25 @@ class Mail_mimePart
         foreach ($params as $key => $value) {
             switch ($key) {
             case 'encoding':
-                $this->_encoding = $value;
-                $headers['Content-Transfer-Encoding'] = $value;
+                    $this->_encoding = $value;
+                    $headers['Content-Transfer-Encoding'] = $value;
                 break;
 
             case 'cid':
-                $headers['Content-ID'] = '<' . $value . '>';
+                    $headers['Content-ID'] = '<' . $value . '>';
                 break;
 
             case 'location':
-                $headers['Content-Location'] = $value;
+                    $headers['Content-Location'] = $value;
                 break;
 
             case 'body_file':
-                $this->_body_file = $value;
+                    $this->_body_file = $value;
                 break;
 
             // for backward compatibility
             case 'dfilename':
-                $params['filename'] = $value;
+                    $params['filename'] = $value;
                 break;
             }
         }
@@ -300,7 +301,7 @@ class Mail_mimePart
      *         an indexed array. On error returns PEAR error object.
      * @access public
      */
-    function encode($boundary=null)
+    function encode($boundary = null)
     {
         $encoded =& $this->_encoded;
 
@@ -325,7 +326,6 @@ class Mail_mimePart
             }
 
             $encoded['body'] .= '--' . $boundary . '--' . $eol;
-
         } else if ($this->_body) {
             $encoded['body'] = $this->_getEncodedData($this->_body, $this->_encoding);
         } else if ($this->_body_file) {
@@ -365,7 +365,7 @@ class Mail_mimePart
      * @access public
      * @since 1.6.0
      */
-    function encodeToFile($filename, $boundary=null, $skip_head=false)
+    function encodeToFile($filename, $boundary = null, $skip_head = false)
     {
         if (file_exists($filename) && !is_writable($filename)) {
             $err = $this->_raiseError('File is not writeable: ' . $filename);
@@ -403,7 +403,7 @@ class Mail_mimePart
      * @return array True on sucess or PEAR error object
      * @access private
      */
-    function _encodePartToFile($fh, $boundary=null, $skip_head=false)
+    function _encodePartToFile($fh, $boundary = null, $skip_head = false)
     {
         $eol = $this->_eol;
 
@@ -432,7 +432,6 @@ class Mail_mimePart
             }
 
             fwrite($fh, $eol . '--' . $boundary . '--' . $eol);
-
         } else if ($this->_body) {
             fwrite($fh, $f_eol . $this->_getEncodedData($this->_body, $this->_encoding));
         } else if ($this->_body_file) {
@@ -508,7 +507,7 @@ class Mail_mimePart
      * @return string Encoded data or PEAR error object
      * @access private
      */
-    function _getEncodedDataFromFile($filename, $encoding, $fh=null)
+    function _getEncodedDataFromFile($filename, $encoding, $fh = null)
     {
         if (!is_readable($filename)) {
             $err = $this->_raiseError('Unable to read file: ' . $filename);
@@ -524,47 +523,47 @@ class Mail_mimePart
 
         switch ($encoding) {
         case 'quoted-printable':
-            while (!feof($fd)) {
-                $buffer = $this->_quotedPrintableEncode(fgets($fd));
-                if ($fh) {
-                    fwrite($fh, $buffer);
-                } else {
-                    $data .= $buffer;
-                }
-            }
+                while (!feof($fd)) {
+                    $buffer = $this->_quotedPrintableEncode(fgets($fd));
+                    if ($fh) {
+                        fwrite($fh, $buffer);
+                    } else {
+                        $data .= $buffer;
+                    }
+                    }
             break;
 
         case 'base64':
-            while (!feof($fd)) {
-                // Should read in a multiple of 57 bytes so that
-                // the output is 76 bytes per line. Don't use big chunks
-                // because base64 encoding is memory expensive
-                $buffer = fread($fd, 57 * 9198); // ca. 0.5 MB
-                $buffer = base64_encode($buffer);
-                $buffer = chunk_split($buffer, 76, $this->_eol);
-                if (feof($fd)) {
-                    $buffer = rtrim($buffer);
-                }
+                while (!feof($fd)) {
+                    // Should read in a multiple of 57 bytes so that
+                    // the output is 76 bytes per line. Don't use big chunks
+                    // because base64 encoding is memory expensive
+                    $buffer = fread($fd, 57 * 9198); // ca. 0.5 MB
+                    $buffer = base64_encode($buffer);
+                    $buffer = chunk_split($buffer, 76, $this->_eol);
+                    if (feof($fd)) {
+                        $buffer = rtrim($buffer);
+                    }
 
-                if ($fh) {
-                    fwrite($fh, $buffer);
-                } else {
-                    $data .= $buffer;
-                }
-            }
+                    if ($fh) {
+                        fwrite($fh, $buffer);
+                    } else {
+                        $data .= $buffer;
+                    }
+                    }
             break;
 
         case '8bit':
         case '7bit':
         default:
-            while (!feof($fd)) {
-                $buffer = fread($fd, 1048576); // 1 MB
-                if ($fh) {
-                    fwrite($fh, $buffer);
-                } else {
-                    $data .= $buffer;
-                }
-            }
+                while (!feof($fd)) {
+                    $buffer = fread($fd, 1048576); // 1 MB
+                    if ($fh) {
+                        fwrite($fh, $buffer);
+                    } else {
+                        $data .= $buffer;
+                    }
+                    }
         }
 
         fclose($fd);
@@ -585,7 +584,7 @@ class Mail_mimePart
      *
      * @access private
      */
-    function _quotedPrintableEncode($input , $line_max = 76)
+    function _quotedPrintableEncode($input, $line_max = 76)
     {
         $eol = $this->_eol;
         /*
@@ -619,7 +618,8 @@ class Mail_mimePart
                     ; // Do nothing if a TAB is not on eol
                 } elseif (($dec == 61) || ($dec < 32) || ($dec > 126)) {
                     $char = $escape . sprintf('%02X', $dec);
-                } elseif (($dec == 46) && (($newline == '')
+                } elseif (
+                    ($dec == 46) && (($newline == '')
                     || ((strlen($newline) + strlen("=2E")) >= $line_max))
                 ) {
                     // Bug #9722: convert full-stop at bol,
@@ -662,8 +662,13 @@ class Mail_mimePart
      *
      * @access private
      */
-    function _buildHeaderParam($name, $value, $charset=null, $language=null,
-        $encoding=null, $maxLength=75
+    function _buildHeaderParam(
+        $name,
+        $value,
+        $charset = null,
+        $language = null,
+        $encoding = null,
+        $maxLength = 75
     ) {
         // RFC 2045:
         // value needs encoding if contains non-ASCII chars or is longer than 78 chars
@@ -736,8 +741,12 @@ class Mail_mimePart
      * @return string Parameter line
      * @access private
      */
-    function _buildRFC2047Param($name, $value, $charset,
-        $encoding='quoted-printable', $maxLength=76
+    function _buildRFC2047Param(
+        $name,
+        $value,
+        $charset,
+        $encoding = 'quoted-printable',
+        $maxLength = 76
     ) {
         // WARNING: RFC 2047 says: "An 'encoded-word' MUST NOT be used in
         // parameter of a MIME Content-Type or Content-Disposition field",
@@ -764,7 +773,6 @@ class Mail_mimePart
                 $len = strlen($value) + $add_len;
             }
             $quoted .= $prefix . $value . $suffix;
-
         } else {
             // quoted-printable
             $value = $this->encodeQP($value);
@@ -807,8 +815,12 @@ class Mail_mimePart
      * @access public
      * @since 1.6.1
      */
-    function encodeHeader($name, $value, $charset='ISO-8859-1',
-        $encoding='quoted-printable', $eol="\r\n"
+    function encodeHeader(
+        $name,
+        $value,
+        $charset = 'ISO-8859-1',
+        $encoding = 'quoted-printable',
+        $eol = "\r\n"
     ) {
         // Structured headers
         $comma_headers = array(
@@ -870,7 +882,7 @@ class Mail_mimePart
                     if ($word) {
                         // non-ASCII: require encoding
                         if (preg_match('#([^\s\x21-\x7E]){1}#', $word)) {
-                            if ($word[0] == '"' && $word[strlen($word)-1] == '"') {
+                            if ($word[0] == '"' && $word[strlen($word) - 1] == '"') {
                                 // de-quote quoted-string, encoding changes
                                 // string to atom
                                 $search = array("\\\"", "\\\\");
@@ -887,14 +899,15 @@ class Mail_mimePart
                             $word = Mail_mimePart::encodeHeaderValue(
                                 $word, $charset, $encoding, $last_len, $eol
                             );
-                        } else if (($word[0] != '"' || $word[strlen($word)-1] != '"')
+                        } else if (
+                            ($word[0] != '"' || $word[strlen($word) - 1] != '"')
                             && preg_match('/[\(\)\<\>\\\.\[\]@,;:"]/', $word)
                         ) {
                             // ASCII: quote string if needed
-                            $word = '"'.addcslashes($word, '\\"').'"';
+                            $word = '"' . addcslashes($word, '\\"') . '"';
                         }
                     }
-                    $value .= $word.' '.$address;
+                    $value .= $word . ' ' . $address;
                 } else {
                     // addr-spec not found, don't encode (?)
                     $value .= $part;
@@ -906,13 +919,13 @@ class Mail_mimePart
 
             // remove header name prefix (there could be EOL too)
             $value = preg_replace(
-                '/^'.$name.':('.preg_quote($eol, '/').')* /', '', $value
+                '/^' . $name . ':(' . preg_quote($eol, '/') . ')* /', '', $value
             );
         } else {
             // Unstructured header
             // non-ASCII: require encoding
             if (preg_match('#([^\s\x21-\x7E]){1}#', $value)) {
-                if ($value[0] == '"' && $value[strlen($value)-1] == '"') {
+                if ($value[0] == '"' && $value[strlen($value) - 1] == '"') {
                     // de-quote quoted-string, encoding changes
                     // string to atom
                     $search = array("\\\"", "\\\\");
@@ -923,11 +936,11 @@ class Mail_mimePart
                 $value = Mail_mimePart::encodeHeaderValue(
                     $value, $charset, $encoding, strlen($name) + 2, $eol
                 );
-            } else if (strlen($name.': '.$value) > 78) {
+            } else if (strlen($name . ': ' . $value) > 78) {
                 // ASCII: check if header line isn't too long and use folding
                 $value = preg_replace('/\r?\n[\s\t]*/', $eol . ' ', $value);
-                $tmp = wordwrap($name.': '.$value, 78, $eol . ' ');
-                $value = preg_replace('/^'.$name.':\s*/', '', $tmp);
+                $tmp = wordwrap($name . ': ' . $value, 78, $eol . ' ');
+                $value = preg_replace('/^' . $name . ':\s*/', '', $tmp);
                 // hard limit 998 (RFC2822)
                 $value = wordwrap($value, 998, $eol . ' ', true);
             }
@@ -950,9 +963,10 @@ class Mail_mimePart
         $result = array();
         $strlen = strlen($string);
 
-        for ($q=$p=$i=0; $i < $strlen; $i++) {
-            if ($string[$i] == "\""
-                && (empty($string[$i-1]) || $string[$i-1] != "\\")
+        for ($q = $p = $i = 0; $i < $strlen; $i++) {
+            if (
+                $string[$i] == "\""
+                && (empty($string[$i - 1]) || $string[$i - 1] != "\\")
             ) {
                 $q = $q ? false : true;
             } else if (!$q && preg_match("/$delimiter/", $string[$i])) {
@@ -978,7 +992,7 @@ class Mail_mimePart
      * @access public
      * @since 1.6.1
      */
-    function encodeHeaderValue($value, $charset, $encoding, $prefix_len=0, $eol="\r\n")
+    function encodeHeaderValue($value, $charset, $encoding, $prefix_len = 0, $eol = "\r\n")
     {
         // #17311: Use multibyte aware method (requires mbstring extension)
         if ($result = Mail_mimePart::encodeMB($value, $charset, $encoding, $prefix_len, $eol)) {
@@ -989,7 +1003,7 @@ class Mail_mimePart
         // determine the maximum length of such strings.
         // 75 is the value specified in the RFC.
         $encoding = $encoding == 'base64' ? 'B' : 'Q';
-        $prefix = '=?' . $charset . '?' . $encoding .'?';
+        $prefix = '=?' . $charset . '?' . $encoding . '?';
         $suffix = '?=';
         $maxLength = 75 - strlen($prefix . $suffix);
         $maxLength1stLine = $maxLength - $prefix_len;
@@ -1108,7 +1122,7 @@ class Mail_mimePart
      * @access public
      * @since 1.8.0
      */
-    function encodeMB($str, $charset, $encoding, $prefix_len=0, $eol="\r\n")
+    function encodeMB($str, $charset, $encoding, $prefix_len = 0, $eol = "\r\n")
     {
         if (!function_exists('mb_substr') || !function_exists('mb_strlen')) {
             return;
@@ -1116,7 +1130,7 @@ class Mail_mimePart
 
         $encoding = $encoding == 'base64' ? 'B' : 'Q';
         // 75 is the value specified in the RFC
-        $prefix = '=?' . $charset . '?'.$encoding.'?';
+        $prefix = '=?' . $charset . '?' . $encoding . '?';
         $suffix = '?=';
         $maxLength = 75 - strlen($prefix . $suffix);
 
@@ -1132,9 +1146,9 @@ class Mail_mimePart
             $start = 0;
             $prev  = '';
 
-            for ($i=1; $i<=$length; $i++) {
+            for ($i = 1; $i <= $length; $i++) {
                 // See #17311
-                $chunk = mb_substr($str, $start, $i-$start, $charset);
+                $chunk = mb_substr($str, $start, $i - $start, $charset);
                 $chunk = base64_encode($chunk);
                 $chunk_len = strlen($chunk);
 
@@ -1163,7 +1177,7 @@ class Mail_mimePart
             // see encodeQP()
             $regexp = '/([\x22-\x29\x2C\x2E\x3A-\x40\x5B-\x60\x7B-\x7E\x80-\xFF])/';
 
-            for ($i=0; $i<=$length; $i++) {
+            for ($i = 0; $i <= $length; $i++) {
                 $char = mb_substr($str, $i, 1, $charset);
                 // RFC recommends underline (instead of =20) in place of the space
                 // that's one of the reasons why we're not using iconv_mime_encode()
@@ -1191,7 +1205,7 @@ class Mail_mimePart
 
         if ($result) {
             $result = $prefix
-                .str_replace("\n", $suffix.$eol.' '.$prefix, $result).$suffix;
+                . str_replace("\n", $suffix . $eol . ' ' . $prefix, $result) . $suffix;
         }
 
         return $result;
@@ -1256,5 +1270,4 @@ class Mail_mimePart
         // PEAR::raiseError() is not PHP 5.4 compatible
         return new PEAR_Error($message);
     }
-
 } // End of class

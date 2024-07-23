@@ -104,7 +104,7 @@ abstract class AbstractBasic implements BackendInterface
             return [false, 'Username or password was incorrect'];
         }
 
-        return [true, $this->principalPrefix.$userpass[0]];
+        return [true, $this->principalPrefix . $userpass[0]];
     }
 
     /**

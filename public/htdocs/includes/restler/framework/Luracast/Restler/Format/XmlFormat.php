@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\Format;
 
 use Luracast\Restler\Data\Obj;
@@ -108,7 +109,8 @@ class XmlFormat extends Format
             $xml->startElement(static::$rootName);
         if (static::$useNamespaces) {
             foreach (static::$namespaces as $prefix => $ns) {
-                if (isset(static::$namespacedProperties[static::$rootName])
+                if (
+                    isset(static::$namespacedProperties[static::$rootName])
                     && static::$namespacedProperties[static::$rootName] == $prefix
                 ) {
                     continue;
@@ -205,7 +207,8 @@ class XmlFormat extends Format
             }
             libxml_use_internal_errors(true);
             libxml_disable_entity_loader(true);
-            $xml = simplexml_load_string($data,
+            $xml = simplexml_load_string(
+                $data,
                 "SimpleXMLElement", LIBXML_NOBLANKS | LIBXML_NOCDATA | LIBXML_COMPACT);
             if (false === $xml) {
                 $error = libxml_get_last_error();
@@ -235,7 +238,8 @@ class XmlFormat extends Format
 
             return $data;
         } catch (\RuntimeException $e) {
-            throw new RestException(400,
+            throw new RestException(
+                400,
                 "Error decoding request. " . $e->getMessage());
         }
     }
@@ -248,7 +252,8 @@ class XmlFormat extends Format
         if (static::$parseAttributes) {
             $attributes = $xml->attributes();
             foreach ($attributes as $key => $value) {
-                if (static::$importSettingsFromXml
+                if (
+                    static::$importSettingsFromXml
                     && !in_array($key, static::$attributeNames)
                 ) {
                     static::$attributeNames[] = $key;
@@ -286,7 +291,8 @@ class XmlFormat extends Format
                         if (isset($r[$key])) {
                             $key = "{$prefix}:$key";
                         }
-                        if (static::$importSettingsFromXml
+                        if (
+                            static::$importSettingsFromXml
                             && !in_array($key, static::$attributeNames)
                         ) {
                             static::$namespacedProperties[$key] = $prefix;

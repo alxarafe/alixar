@@ -55,7 +55,7 @@ class File extends AbstractDigest
             if (!preg_match('/^[a-zA-Z0-9]{32}$/', $A1)) {
                 throw new DAV\Exception('Malformed htdigest file. Invalid md5 hash');
             }
-            $this->users[$realm.':'.$username] = $A1;
+            $this->users[$realm . ':' . $username] = $A1;
         }
     }
 
@@ -69,6 +69,6 @@ class File extends AbstractDigest
      */
     public function getDigestHash($realm, $username)
     {
-        return isset($this->users[$realm.':'.$username]) ? $this->users[$realm.':'.$username] : false;
+        return isset($this->users[$realm . ':' . $username]) ? $this->users[$realm . ':' . $username] : false;
     }
 }

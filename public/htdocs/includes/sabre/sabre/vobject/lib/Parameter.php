@@ -266,14 +266,14 @@ class Parameter extends Node
         $value = $this->getParts();
 
         if (0 === count($value)) {
-            return $this->name.'=';
+            return $this->name . '=';
         }
 
         if (Document::VCARD21 === $this->root->getDocumentType() && $this->noName) {
             return implode(';', $value);
         }
 
-        return $this->name.'='.array_reduce(
+        return $this->name . '=' . array_reduce(
             $value,
             function ($out, $item) {
                 if (!is_null($out)) {
@@ -297,18 +297,18 @@ class Parameter extends Node
                 // severely trips on + characters not being quoted, so we
                 // added + as well.
                 if (!preg_match('#(?: [\n":;\^,\+] )#x', $item)) {
-                    return $out.$item;
+                    return $out . $item;
                 } else {
                     // Enclosing in double-quotes, and using RFC6868 for encoding any
                     // special characters
-                    $out .= '"'.strtr(
+                    $out .= '"' . strtr(
                         $item,
                         [
                             '^' => '^^',
                             "\n" => '^n',
                             '"' => '^\'',
                         ]
-                    ).'"';
+                    ) . '"';
 
                     return $out;
                 }

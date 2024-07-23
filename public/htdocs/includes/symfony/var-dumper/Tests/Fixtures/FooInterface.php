@@ -4,8 +4,8 @@ namespace Symfony\Component\VarDumper\Tests\Fixtures;
 
 interface FooInterface
 {
-	/**
-	 * Hello.
-	 */
-	public function foo();
+    /**
+     * Hello.
+     */
+    public function foo();
 }

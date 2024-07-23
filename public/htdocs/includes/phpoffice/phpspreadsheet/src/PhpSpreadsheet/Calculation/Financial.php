@@ -50,8 +50,10 @@ class Financial
         if (($frequency == 1) || ($frequency == 2) || ($frequency == 4)) {
             return true;
         }
-        if ((Functions::getCompatibilityMode() == Functions::COMPATIBILITY_GNUMERIC) &&
-            (($frequency == 6) || ($frequency == 12))) {
+        if (
+            (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_GNUMERIC) &&
+            (($frequency == 6) || ($frequency == 12))
+        ) {
             return true;
         }
 
@@ -417,9 +419,11 @@ class Financial
             return Functions::VALUE();
         }
 
-        if (($settlement >= $maturity) ||
+        if (
+            ($settlement >= $maturity) ||
             (!self::isValidFrequency($frequency)) ||
-            (($basis < 0) || ($basis > 4))) {
+            (($basis < 0) || ($basis > 4))
+        ) {
             return Functions::NAN();
         }
 
@@ -476,9 +480,11 @@ class Financial
             return Functions::VALUE();
         }
 
-        if (($settlement >= $maturity) ||
+        if (
+            ($settlement >= $maturity) ||
             (!self::isValidFrequency($frequency)) ||
-            (($basis < 0) || ($basis > 4))) {
+            (($basis < 0) || ($basis > 4))
+        ) {
             return Functions::NAN();
         }
 
@@ -550,9 +556,11 @@ class Financial
             return Functions::VALUE();
         }
 
-        if (($settlement >= $maturity) ||
+        if (
+            ($settlement >= $maturity) ||
             (!self::isValidFrequency($frequency)) ||
-            (($basis < 0) || ($basis > 4))) {
+            (($basis < 0) || ($basis > 4))
+        ) {
             return Functions::NAN();
         }
 
@@ -610,9 +618,11 @@ class Financial
             return Functions::VALUE();
         }
 
-        if (($settlement >= $maturity) ||
+        if (
+            ($settlement >= $maturity) ||
             (!self::isValidFrequency($frequency)) ||
-            (($basis < 0) || ($basis > 4))) {
+            (($basis < 0) || ($basis > 4))
+        ) {
             return Functions::NAN();
         }
 
@@ -667,9 +677,11 @@ class Financial
             return Functions::VALUE();
         }
 
-        if (($settlement >= $maturity) ||
+        if (
+            ($settlement >= $maturity) ||
             (!self::isValidFrequency($frequency)) ||
-            (($basis < 0) || ($basis > 4))) {
+            (($basis < 0) || ($basis > 4))
+        ) {
             return Functions::NAN();
         }
 
@@ -736,9 +748,11 @@ class Financial
             return Functions::VALUE();
         }
 
-        if (($settlement >= $maturity) ||
+        if (
+            ($settlement >= $maturity) ||
             (!self::isValidFrequency($frequency)) ||
-            (($basis < 0) || ($basis > 4))) {
+            (($basis < 0) || ($basis > 4))
+        ) {
             return Functions::NAN();
         }
 
@@ -1667,9 +1681,11 @@ class Financial
             return Functions::VALUE();
         }
 
-        if (($settlement > $maturity) ||
+        if (
+            ($settlement > $maturity) ||
             (!self::isValidFrequency($frequency)) ||
-            (($basis < 0) || ($basis > 4))) {
+            (($basis < 0) || ($basis > 4))
+        ) {
             return Functions::NAN();
         }
 

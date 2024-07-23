@@ -1,5 +1,7 @@
 <?php
+
 /* Copyright (C) 2022 Florian HENRY <florian.henry@scopen.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,18 +23,18 @@
  */
 
 if (!defined('NOTOKENRENEWAL')) {
-	define('NOTOKENRENEWAL', '1'); // Disables token renewal
+    define('NOTOKENRENEWAL', '1'); // Disables token renewal
 }
 if (!defined('NOREQUIREMENU')) {
-	define('NOREQUIREMENU', '1');
+    define('NOREQUIREMENU', '1');
 }
 if (!defined('NOREQUIREAJAX')) {
-	define('NOREQUIREAJAX', '1');
+    define('NOREQUIREAJAX', '1');
 }
 
 // Load Dolibarr environment
-require '../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/core/class/html.formprojet.class.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 
 $invoice_id = GETPOSTINT('id'); // id of thirdparty
 $action = GETPOST('action', 'aZ09');
@@ -55,12 +57,12 @@ $return = array();
 
 // Load original field value
 if (!empty($invoice_id) && !empty($action) && !empty($htmlname)) {
-	$formProject = new FormProjets($db);
+    $formProject = new FormProjets($db);
 
 
-	$return['value']	= $formProject->selectInvoiceAndLine($invoice_id, 0, 'invoiceid', 'invoicelineid', 'maxwidth500', array(), 1);
-	//$return['num'] = $form->num;
-	//$return['error']	= $form->error;
+    $return['value']    = $formProject->selectInvoiceAndLine($invoice_id, 0, 'invoiceid', 'invoicelineid', 'maxwidth500', array(), 1);
+    //$return['num'] = $form->num;
+    //$return['error']  = $form->error;
 }
 
 echo json_encode($return);

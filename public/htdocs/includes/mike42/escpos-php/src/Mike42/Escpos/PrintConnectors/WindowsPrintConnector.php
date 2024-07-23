@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of escpos-php: PHP receipt printer library for use with
  * ESC/POS-compatible thermal and impact printers.
@@ -118,7 +119,7 @@ class WindowsPrintConnector implements PrintConnector
             // Straight to LPT1, COM1 or other local port. Allowed only if we are actually on windows.
             if ($this -> platform !== self::PLATFORM_WIN) {
                 throw new BadMethodCallException("WindowsPrintConnector can only be " .
-                    "used to print to a local printer ('".$dest."') on a Windows computer.");
+                    "used to print to a local printer ('" . $dest . "') on a Windows computer.");
             }
             $this -> isLocal = true;
             $this -> hostname = null;

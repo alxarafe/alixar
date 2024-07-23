@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\UI;
 
 use Luracast\Restler\CommentParser;
@@ -7,7 +8,6 @@ use Luracast\Restler\Restler;
 use Luracast\Restler\Routes;
 use Luracast\Restler\Scope;
 use Luracast\Restler\Util;
-
 
 /**
  * Utility class for automatically creating data to build an navigation interface
@@ -116,7 +116,7 @@ class Nav
         return array_filter($tree);
     }
 
-    protected static function & nested(array & $tree, array $parts)
+    protected static function & nested(array &$tree, array $parts)
     {
         if (!empty($parts)) {
             $part = array_shift($parts);
@@ -149,7 +149,6 @@ class Nav
                     $url = current(array_keys($label));
                     $label = current($label);
                 }
-
             }
             if (is_numeric($url)) {
                 $url = $label;

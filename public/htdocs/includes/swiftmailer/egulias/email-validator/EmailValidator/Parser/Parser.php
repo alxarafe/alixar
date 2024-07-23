@@ -65,8 +65,10 @@ abstract class Parser
      */
     protected function validateQuotedPair()
     {
-        if (!($this->lexer->token['type'] === EmailLexer::INVALID
-            || $this->lexer->token['type'] === EmailLexer::C_DEL)) {
+        if (
+            !($this->lexer->token['type'] === EmailLexer::INVALID
+            || $this->lexer->token['type'] === EmailLexer::C_DEL)
+        ) {
             throw new ExpectingQPair();
         }
 
@@ -151,7 +153,8 @@ abstract class Parser
             return false;
         }
 
-        if ($this->lexer->token['type'] === EmailLexer::S_SP ||
+        if (
+            $this->lexer->token['type'] === EmailLexer::S_SP ||
             $this->lexer->token['type'] === EmailLexer::S_HTAB ||
             $this->lexer->token['type'] === EmailLexer::S_CR ||
             $this->lexer->token['type'] === EmailLexer::S_LF ||
@@ -170,7 +173,8 @@ abstract class Parser
     {
         $previous = $this->lexer->getPrevious();
 
-        if ($previous && $previous['type'] === EmailLexer::S_BACKSLASH
+        if (
+            $previous && $previous['type'] === EmailLexer::S_BACKSLASH
             &&
             $this->lexer->token['type'] !== EmailLexer::GENERIC
         ) {
@@ -200,7 +204,6 @@ abstract class Parser
         $this->warnings[QuotedPart::CODE] =
             new QuotedPart($this->lexer->getPrevious()['type'], $this->lexer->token['type']);
         return true;
-
     }
 
     /**

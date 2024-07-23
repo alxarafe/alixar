@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\Format;
 
 use ZendAmf\Parser\Amf3\Deserializer;
@@ -45,4 +46,3 @@ class AmfFormat extends DependentFormat
         return $deserializer->readTypeMarker();
     }
 }
-

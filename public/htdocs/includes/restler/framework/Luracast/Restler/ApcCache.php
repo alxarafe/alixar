@@ -22,7 +22,7 @@ class ApcCache implements iCache
      *
      * @var string
      */
-    static public $namespace = 'restler';
+    public static $namespace = 'restler';
 
     /**
      * store data in the cache
@@ -110,5 +110,4 @@ class ApcCache implements iCache
         function_exists('apc_exists') || $this->apcNotAvailable();
         return apc_exists(self::$namespace . "-" . $name);
     }
-
 }

@@ -43,10 +43,10 @@ class StreamClient extends AbstractClient
             $extraHeaders['Content-Type'] = 'Content-Type: application/x-www-form-urlencoded';
         }
 
-        $host = 'Host: '.$endpoint->getHost();
+        $host = 'Host: ' . $endpoint->getHost();
         // Append port to Host if it has been specified
         if ($endpoint->hasExplicitPortSpecified()) {
-            $host .= ':'.$endpoint->getPort();
+            $host .= ':' . $endpoint->getPort();
         }
 
         $extraHeaders['Host']       = $host;
@@ -55,7 +55,7 @@ class StreamClient extends AbstractClient
         if (is_array($requestBody)) {
             $requestBody = http_build_query($requestBody, '', '&');
         }
-        $extraHeaders['Content-length'] = 'Content-length: '.strlen($requestBody);
+        $extraHeaders['Content-length'] = 'Content-length: ' . strlen($requestBody);
 
         //var_dump($requestBody); var_dump($extraHeaders);var_dump($method);exit;
         $context = $this->generateStreamContext($requestBody, $extraHeaders, $method);
@@ -68,7 +68,7 @@ class StreamClient extends AbstractClient
             if (is_null($lastError)) {
                 throw new TokenResponseException(
                     'Failed to request resource. HTTP Code: ' .
-                    ((isset($http_response_header[0]))?$http_response_header[0]:'No response')
+                    ((isset($http_response_header[0])) ? $http_response_header[0] : 'No response')
                 );
             }
             throw new TokenResponseException($lastError['message']);

@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     FolderCollection.php
 * Category: Collection
@@ -17,6 +18,6 @@ namespace Webklex\PHPIMAP\Support;
  *
  * @package Webklex\PHPIMAP\Support
  */
-class FolderCollection extends PaginatedCollection {
-
+class FolderCollection extends PaginatedCollection
+{
 }

@@ -471,8 +471,10 @@ class Gnumeric extends BaseReader
             }
             foreach ($sheet->Styles->StyleRegion as $styleRegion) {
                 $styleAttributes = $styleRegion->attributes();
-                if (($styleAttributes['startRow'] <= $maxRow) &&
-                    ($styleAttributes['startCol'] <= $maxCol)) {
+                if (
+                    ($styleAttributes['startRow'] <= $maxRow) &&
+                    ($styleAttributes['startCol'] <= $maxCol)
+                ) {
                     $startColumn = Coordinate::stringFromColumnIndex((int) $styleAttributes['startCol'] + 1);
                     $startRow = $styleAttributes['startRow'] + 1;
 
@@ -485,8 +487,10 @@ class Gnumeric extends BaseReader
                     $styleAttributes = $styleRegion->Style->attributes();
 
                     //    We still set the number format mask for date/time values, even if readDataOnly is true
-                    if ((!$this->readDataOnly) ||
-                        (Date::isDateTimeFormatCode((string) $styleAttributes['Format']))) {
+                    if (
+                        (!$this->readDataOnly) ||
+                        (Date::isDateTimeFormatCode((string) $styleAttributes['Format']))
+                    ) {
                         $styleArray = [];
                         $styleArray['numberFormat']['formatCode'] = (string) $styleAttributes['Format'];
                         //    If readDataOnly is false, we set all formatting information

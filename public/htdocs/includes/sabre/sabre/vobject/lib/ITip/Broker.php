@@ -894,7 +894,8 @@ class Broker
             }
             if (isset($vevent->ATTENDEE)) {
                 foreach ($vevent->ATTENDEE as $attendee) {
-                    if ($this->scheduleAgentServerRules &&
+                    if (
+                        $this->scheduleAgentServerRules &&
                         isset($attendee['SCHEDULE-AGENT']) &&
                         'CLIENT' === strtoupper($attendee['SCHEDULE-AGENT']->getValue())
                     ) {
@@ -937,15 +938,15 @@ class Broker
                 if (isset($vevent->$prop)) {
                     $propertyValues = $vevent->select($prop);
 
-                    $eventSignificantChangeHash .= $prop.':';
+                    $eventSignificantChangeHash .= $prop . ':';
 
                     if ('EXDATE' === $prop) {
-                        $eventSignificantChangeHash .= implode(',', $exdate).';';
+                        $eventSignificantChangeHash .= implode(',', $exdate) . ';';
                     } elseif ('RRULE' === $prop) {
-                        $eventSignificantChangeHash .= implode(',', $rrule).';';
+                        $eventSignificantChangeHash .= implode(',', $rrule) . ';';
                     } else {
                         foreach ($propertyValues as $val) {
-                            $eventSignificantChangeHash .= $val->getValue().';';
+                            $eventSignificantChangeHash .= $val->getValue() . ';';
                         }
                     }
                 }

@@ -73,18 +73,18 @@ class Plugin extends DAV\ServerPlugin
 
         $server->xml->namespaceMap[self::NS_CARDDAV] = 'card';
 
-        $server->xml->elementMap['{'.self::NS_CARDDAV.'}addressbook-query'] = 'Sabre\\CardDAV\\Xml\\Request\\AddressBookQueryReport';
-        $server->xml->elementMap['{'.self::NS_CARDDAV.'}addressbook-multiget'] = 'Sabre\\CardDAV\\Xml\\Request\\AddressBookMultiGetReport';
+        $server->xml->elementMap['{' . self::NS_CARDDAV . '}addressbook-query'] = 'Sabre\\CardDAV\\Xml\\Request\\AddressBookQueryReport';
+        $server->xml->elementMap['{' . self::NS_CARDDAV . '}addressbook-multiget'] = 'Sabre\\CardDAV\\Xml\\Request\\AddressBookMultiGetReport';
 
         /* Mapping Interfaces to {DAV:}resourcetype values */
-        $server->resourceTypeMapping['Sabre\\CardDAV\\IAddressBook'] = '{'.self::NS_CARDDAV.'}addressbook';
-        $server->resourceTypeMapping['Sabre\\CardDAV\\IDirectory'] = '{'.self::NS_CARDDAV.'}directory';
+        $server->resourceTypeMapping['Sabre\\CardDAV\\IAddressBook'] = '{' . self::NS_CARDDAV . '}addressbook';
+        $server->resourceTypeMapping['Sabre\\CardDAV\\IDirectory'] = '{' . self::NS_CARDDAV . '}directory';
 
         /* Adding properties that may never be changed */
-        $server->protectedProperties[] = '{'.self::NS_CARDDAV.'}supported-address-data';
-        $server->protectedProperties[] = '{'.self::NS_CARDDAV.'}max-resource-size';
-        $server->protectedProperties[] = '{'.self::NS_CARDDAV.'}addressbook-home-set';
-        $server->protectedProperties[] = '{'.self::NS_CARDDAV.'}supported-collation-set';
+        $server->protectedProperties[] = '{' . self::NS_CARDDAV . '}supported-address-data';
+        $server->protectedProperties[] = '{' . self::NS_CARDDAV . '}max-resource-size';
+        $server->protectedProperties[] = '{' . self::NS_CARDDAV . '}addressbook-home-set';
+        $server->protectedProperties[] = '{' . self::NS_CARDDAV . '}supported-collation-set';
 
         $server->xml->elementMap['{http://calendarserver.org/ns/}me-card'] = 'Sabre\\DAV\\Xml\\Property\\Href';
 
@@ -119,8 +119,8 @@ class Plugin extends DAV\ServerPlugin
         $node = $this->server->tree->getNodeForPath($uri);
         if ($node instanceof IAddressBook || $node instanceof ICard) {
             return [
-                 '{'.self::NS_CARDDAV.'}addressbook-multiget',
-                 '{'.self::NS_CARDDAV.'}addressbook-query',
+                 '{' . self::NS_CARDDAV . '}addressbook-multiget',
+                 '{' . self::NS_CARDDAV . '}addressbook-query',
             ];
         }
 
@@ -132,26 +132,26 @@ class Plugin extends DAV\ServerPlugin
      */
     public function propFindEarly(DAV\PropFind $propFind, DAV\INode $node)
     {
-        $ns = '{'.self::NS_CARDDAV.'}';
+        $ns = '{' . self::NS_CARDDAV . '}';
 
         if ($node instanceof IAddressBook) {
-            $propFind->handle($ns.'max-resource-size', $this->maxResourceSize);
-            $propFind->handle($ns.'supported-address-data', function () {
+            $propFind->handle($ns . 'max-resource-size', $this->maxResourceSize);
+            $propFind->handle($ns . 'supported-address-data', function () {
                 return new Xml\Property\SupportedAddressData();
             });
-            $propFind->handle($ns.'supported-collation-set', function () {
+            $propFind->handle($ns . 'supported-collation-set', function () {
                 return new Xml\Property\SupportedCollationSet();
             });
         }
         if ($node instanceof DAVACL\IPrincipal) {
             $path = $propFind->getPath();
 
-            $propFind->handle('{'.self::NS_CARDDAV.'}addressbook-home-set', function () use ($path) {
-                return new LocalHref($this->getAddressBookHomeForPrincipal($path).'/');
+            $propFind->handle('{' . self::NS_CARDDAV . '}addressbook-home-set', function () use ($path) {
+                return new LocalHref($this->getAddressBookHomeForPrincipal($path) . '/');
             });
 
             if ($this->directories) {
-                $propFind->handle('{'.self::NS_CARDDAV.'}directory-gateway', function () {
+                $propFind->handle('{' . self::NS_CARDDAV . '}directory-gateway', function () {
                     return new LocalHref($this->directories);
                 });
             }
@@ -161,7 +161,7 @@ class Plugin extends DAV\ServerPlugin
             // The address-data property is not supposed to be a 'real'
             // property, but in large chunks of the spec it does act as such.
             // Therefore we simply expose it as a property.
-            $propFind->handle('{'.self::NS_CARDDAV.'}address-data', function () use ($node) {
+            $propFind->handle('{' . self::NS_CARDDAV . '}address-data', function () use ($node) {
                 $val = $node->get();
                 if (is_resource($val)) {
                     $val = stream_get_contents($val);
@@ -184,12 +184,12 @@ class Plugin extends DAV\ServerPlugin
     public function report($reportName, $dom, $path)
     {
         switch ($reportName) {
-            case '{'.self::NS_CARDDAV.'}addressbook-multiget':
+            case '{' . self::NS_CARDDAV . '}addressbook-multiget':
                 $this->server->transactionType = 'report-addressbook-multiget';
                 $this->addressbookMultiGetReport($dom);
 
                 return false;
-            case '{'.self::NS_CARDDAV.'}addressbook-query':
+            case '{' . self::NS_CARDDAV . '}addressbook-query':
                 $this->server->transactionType = 'report-addressbook-query';
                 $this->addressBookQueryReport($dom);
 
@@ -210,7 +210,7 @@ class Plugin extends DAV\ServerPlugin
     {
         list(, $principalId) = Uri\split($principal);
 
-        return self::ADDRESSBOOK_ROOT.'/'.$principalId;
+        return self::ADDRESSBOOK_ROOT . '/' . $principalId;
     }
 
     /**
@@ -226,7 +226,7 @@ class Plugin extends DAV\ServerPlugin
         $contentType = $report->contentType;
         $version = $report->version;
         if ($version) {
-            $contentType .= '; version='.$version;
+            $contentType .= '; version=' . $version;
         }
 
         $vcardType = $this->negotiateVCard(
@@ -239,9 +239,9 @@ class Plugin extends DAV\ServerPlugin
             $report->hrefs
         );
         foreach ($this->server->getPropertiesForMultiplePaths($paths, $report->properties) as $props) {
-            if (isset($props['200']['{'.self::NS_CARDDAV.'}address-data'])) {
-                $props['200']['{'.self::NS_CARDDAV.'}address-data'] = $this->convertVCard(
-                    $props[200]['{'.self::NS_CARDDAV.'}address-data'],
+            if (isset($props['200']['{' . self::NS_CARDDAV . '}address-data'])) {
+                $props['200']['{' . self::NS_CARDDAV . '}address-data'] = $this->convertVCard(
+                    $props[200]['{' . self::NS_CARDDAV . '}address-data'],
                     $vcardType
                 );
             }
@@ -328,7 +328,7 @@ class Plugin extends DAV\ServerPlugin
                 $vobj = VObject\Reader::read($data);
             }
         } catch (VObject\ParseException $e) {
-            throw new DAV\Exception\UnsupportedMediaType('This resource only supports valid vCard or jCard data. Parse error: '.$e->getMessage());
+            throw new DAV\Exception\UnsupportedMediaType('This resource only supports valid vCard or jCard data. Parse error: ' . $e->getMessage());
         }
 
         if ('VCARD' !== $vobj->name) {
@@ -366,13 +366,13 @@ class Plugin extends DAV\ServerPlugin
                     break;
                 case 3:
                     // Level 3 means a critical error
-                    throw new DAV\Exception\UnsupportedMediaType('Validation error in vCard: '.$message['message']);
+                    throw new DAV\Exception\UnsupportedMediaType('Validation error in vCard: ' . $message['message']);
             }
         }
         if ($warningMessage) {
             $this->server->httpResponse->setHeader(
                 'X-Sabre-Ew-Gross',
-                'vCard validation warning: '.$warningMessage
+                'vCard validation warning: ' . $warningMessage
             );
 
             // Re-serializing object.
@@ -412,7 +412,7 @@ class Plugin extends DAV\ServerPlugin
 
         $contentType = $report->contentType;
         if ($report->version) {
-            $contentType .= '; version='.$report->version;
+            $contentType .= '; version=' . $report->version;
         }
 
         $vcardType = $this->negotiateVCard(
@@ -447,14 +447,14 @@ class Plugin extends DAV\ServerPlugin
             if (0 == $depth) {
                 $href = $this->server->getRequestUri();
             } else {
-                $href = $this->server->getRequestUri().'/'.$validNode->getName();
+                $href = $this->server->getRequestUri() . '/' . $validNode->getName();
             }
 
             list($props) = $this->server->getPropertiesForPath($href, $report->properties, 0);
 
-            if (isset($props[200]['{'.self::NS_CARDDAV.'}address-data'])) {
-                $props[200]['{'.self::NS_CARDDAV.'}address-data'] = $this->convertVCard(
-                    $props[200]['{'.self::NS_CARDDAV.'}address-data'],
+            if (isset($props[200]['{' . self::NS_CARDDAV . '}address-data'])) {
+                $props[200]['{' . self::NS_CARDDAV . '}address-data'] = $this->convertVCard(
+                    $props[200]['{' . self::NS_CARDDAV . '}address-data'],
                     $vcardType,
                     $report->addressDataProperties
                 );
@@ -704,7 +704,7 @@ class Plugin extends DAV\ServerPlugin
         $output .= '<tr><td colspan="2"><form method="post" action="">
             <h3>Create new address book</h3>
             <input type="hidden" name="sabreAction" value="mkcol" />
-            <input type="hidden" name="resourceType" value="{DAV:}collection,{'.self::NS_CARDDAV.'}addressbook" />
+            <input type="hidden" name="resourceType" value="{DAV:}collection,{' . self::NS_CARDDAV . '}addressbook" />
             <label>Name (uri):</label> <input type="text" name="name" /><br />
             <label>Display name:</label> <input type="text" name="{DAV:}displayname" /><br />
             <input type="submit" value="create" />
@@ -734,7 +734,7 @@ class Plugin extends DAV\ServerPlugin
         );
 
         $response->setBody($newBody);
-        $response->setHeader('Content-Type', $mimeType.'; charset=utf-8');
+        $response->setHeader('Content-Type', $mimeType . '; charset=utf-8');
         $response->setHeader('Content-Length', strlen($newBody));
     }
 

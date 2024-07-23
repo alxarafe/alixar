@@ -73,7 +73,7 @@ class Swift_Mime_ContentEncoder_PlainContentEncoder implements Swift_Mime_Conten
     {
         $leftOver = '';
         while (false !== $bytes = $os->read(8192)) {
-            $toencode = $leftOver.$bytes;
+            $toencode = $leftOver . $bytes;
             if ($this->canonical) {
                 $toencode = $this->canonicalize($toencode);
             }
@@ -134,8 +134,10 @@ class Swift_Mime_ContentEncoder_PlainContentEncoder implements Swift_Mime_Conten
             $chunks = preg_split('/(?<=\s)/', $originalLine);
 
             foreach ($chunks as $chunk) {
-                if (0 != \strlen($currentLine)
-                    && \strlen($currentLine.$chunk) > $length) {
+                if (
+                    0 != \strlen($currentLine)
+                    && \strlen($currentLine . $chunk) > $length
+                ) {
                     $lines[] = '';
                     $currentLine = &$lines[$lineCount++];
                 }

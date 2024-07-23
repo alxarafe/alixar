@@ -265,7 +265,7 @@ class Component extends Node
      */
     public function serialize()
     {
-        $str = 'BEGIN:'.$this->name."\r\n";
+        $str = 'BEGIN:' . $this->name . "\r\n";
 
         /**
          * Gives a component a 'score' for sorting purposes.
@@ -328,7 +328,7 @@ class Component extends Node
         foreach ($children as $child) {
             $str .= $child->serialize();
         }
-        $str .= 'END:'.$this->name."\r\n";
+        $str .= 'END:' . $this->name . "\r\n";
 
         return $str;
     }
@@ -593,7 +593,7 @@ class Component extends Node
                     if (isset($propertyCounters[$propName])) {
                         $messages[] = [
                             'level' => 3,
-                            'message' => $propName.' MUST NOT appear in a '.$this->name.' component',
+                            'message' => $propName . ' MUST NOT appear in a ' . $this->name . ' component',
                             'node' => $this,
                         ];
                     }
@@ -607,7 +607,7 @@ class Component extends Node
                         }
                         $messages[] = [
                             'level' => $repaired ? 1 : 3,
-                            'message' => $propName.' MUST appear exactly once in a '.$this->name.' component',
+                            'message' => $propName . ' MUST appear exactly once in a ' . $this->name . ' component',
                             'node' => $this,
                         ];
                     }
@@ -616,7 +616,7 @@ class Component extends Node
                     if (!isset($propertyCounters[$propName]) || $propertyCounters[$propName] < 1) {
                         $messages[] = [
                             'level' => 3,
-                            'message' => $propName.' MUST appear at least once in a '.$this->name.' component',
+                            'message' => $propName . ' MUST appear at least once in a ' . $this->name . ' component',
                             'node' => $this,
                         ];
                     }
@@ -642,7 +642,7 @@ class Component extends Node
 
                         $messages[] = [
                             'level' => $level,
-                            'message' => $propName.' MUST NOT appear more than once in a '.$this->name.' component',
+                            'message' => $propName . ' MUST NOT appear more than once in a ' . $this->name . ' component',
                             'node' => $this,
                         ];
                     }

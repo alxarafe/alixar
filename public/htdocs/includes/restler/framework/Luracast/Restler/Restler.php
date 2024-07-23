@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler;
 
 use Exception;
@@ -110,7 +111,7 @@ class Restler extends EventDispatcher
      *
      * @var int|null when specified it will override @status comment
      */
-    public $responseCode=null;
+    public $responseCode = null;
     /**
      * @var string base url of the api service
      */
@@ -398,7 +399,6 @@ class Restler extends EventDispatcher
         $throwException = $this->requestFormatDiffered;
         $this->writableMimeTypes = $this->readableMimeTypes = array();
         foreach ($args as $className) {
-
             $obj = Scope::get($className);
 
             if (!$obj instanceof iFormat)
@@ -410,11 +410,11 @@ class Restler extends EventDispatcher
 
             foreach ($obj->getMIMEMap() as $mime => $extension) {
                 if($obj->isWritable()){
-                    $this->writableMimeTypes[]=$mime;
+                    $this->writableMimeTypes[] = $mime;
                     $extensions[".$extension"] = true;
                 }
                 if($obj->isReadable())
-                    $this->readableMimeTypes[]=$mime;
+                    $this->readableMimeTypes[] = $mime;
                 if (!isset($this->formatMap[$extension]))
                     $this->formatMap[$extension] = $className;
                 if (!isset($this->formatMap[$mime]))
@@ -446,7 +446,6 @@ class Restler extends EventDispatcher
         $args = func_get_args();
         $extensions = array();
         foreach ($args as $className) {
-
             $obj = Scope::get($className);
 
             if (!$obj instanceof iFormat)
@@ -510,9 +509,9 @@ class Restler extends EventDispatcher
         if (!$this->baseUrl) {
             // Fix port number retrieval if port is specified in HOST header.
             $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-            $portPos = strpos($host,":");
+            $portPos = strpos($host, ":");
             if ($portPos){
-               $port = substr($host,$portPos+1);
+               $port = substr($host, $portPos + 1);
             } else {
                $port = isset($_SERVER['SERVER_PORT']) ? $_SERVER['SERVER_PORT'] : '80';
                $port = isset($_SERVER['HTTP_X_FORWARDED_PORT']) ? $_SERVER['HTTP_X_FORWARDED_PORT'] : $port; // Amazon ELB
@@ -619,7 +618,8 @@ class Restler extends EventDispatcher
     public function getRequestData($includeQueryParameters = true)
     {
         $get = UrlEncodedFormat::decoderTypeFix($_GET);
-        if ($this->requestMethod == 'PUT'
+        if (
+            $this->requestMethod == 'PUT'
             || $this->requestMethod == 'PATCH'
             || $this->requestMethod == 'POST'
         ) {
@@ -797,15 +797,18 @@ class Restler extends EventDispatcher
                     return $format;
                 } elseif (false !== ($index = strrpos($accept, '+'))) {
                     $mime = substr($accept, 0, $index);
-                    if (is_string(Defaults::$apiVendor)
-                        && 0 === stripos($mime,
+                    if (
+                        is_string(Defaults::$apiVendor)
+                        && 0 === stripos(
+                            $mime,
                             'application/vnd.'
                             . Defaults::$apiVendor . '-v')
                     ) {
                         $extension = substr($accept, $index + 1);
                         if (isset($this->formatMap[$extension])) {
                             //check the MIME and extract version
-                            $version = intval(substr($mime,
+                            $version = intval(substr(
+                                $mime,
                                 18 + strlen(Defaults::$apiVendor)));
                             if ($version > 0 && $version <= $this->apiVersion) {
                                 $this->requestedApiVersion = $version;
@@ -819,7 +822,6 @@ class Restler extends EventDispatcher
                             }
                         }
                     }
-
                 }
             }
         } else {
@@ -922,11 +924,12 @@ class Restler extends EventDispatcher
             $filterObj = Scope::get($filterClass);
 
             if (!$filterObj instanceof iFilter) {
-                throw new RestException (
+                throw new RestException(
                     500, 'Filter Class ' .
                     'should implement iFilter');
             } else if (!($ok = $filterObj->__isAllowed())) {
-                if (is_null($ok)
+                if (
+                    is_null($ok)
                     && $filterObj instanceof iUseAuthentication
                 ) {
                     //handle at authentication stage
@@ -955,11 +958,11 @@ class Restler extends EventDispatcher
                 try {
                     $authObj = Scope::get($authClass);
                     if (!method_exists($authObj, Defaults::$authenticationMethod)) {
-                        throw new RestException (
+                        throw new RestException(
                             500, 'Authentication Class ' .
                             'should implement iAuthenticate');
                     } elseif (
-                    !$authObj->{Defaults::$authenticationMethod}()
+                        !$authObj->{Defaults::$authenticationMethod}()
                     ) {
                         throw new RestException(401);
                     }
@@ -1011,7 +1014,8 @@ class Restler extends EventDispatcher
         $o = & $this->apiMethodInfo;
         foreach ($o->metadata['param'] as $index => $param) {
             $info = & $param [CommentParser::$embeddedDataName];
-            if (!isset ($info['validate'])
+            if (
+                !isset($info['validate'])
                 || $info['validate'] != false
             ) {
                 if (isset($info['method'])) {
@@ -1047,13 +1051,14 @@ class Restler extends EventDispatcher
     {
         $this->dispatch('call');
         $o = & $this->apiMethodInfo;
-        $accessLevel = max(Defaults::$apiAccessLevel,
+        $accessLevel = max(
+            Defaults::$apiAccessLevel,
             $o->accessLevel);
         if (function_exists('newrelic_name_transaction'))
             newrelic_name_transaction("{$o->className}/{$o->methodName}");
         $object =  Scope::get($o->className);
         switch ($accessLevel) {
-            case 3 : //protected method
+            case 3: //protected method
                 $reflectionMethod = new \ReflectionMethod(
                     $object,
                     $o->methodName
@@ -1064,7 +1069,7 @@ class Restler extends EventDispatcher
                     $o->parameters
                 );
                 break;
-            default :
+            default:
                 $result = call_user_func_array(array(
                     $object,
                     $o->methodName
@@ -1108,14 +1113,14 @@ class Restler extends EventDispatcher
         @header('Expires: ' . $expires);
         @header('X-Powered-By: Luracast Restler v' . Restler::VERSION);
 
-        if (Defaults::$crossOriginResourceSharing
+        if (
+            Defaults::$crossOriginResourceSharing
             && isset($_SERVER['HTTP_ORIGIN'])
         ) {
             header('Access-Control-Allow-Origin: ' .
                 (Defaults::$accessControlAllowOrigin == '*'
                     ? $_SERVER['HTTP_ORIGIN']
-                    : Defaults::$accessControlAllowOrigin)
-            );
+                    : Defaults::$accessControlAllowOrigin));
             header('Access-Control-Allow-Credentials: true');
             header('Access-Control-Max-Age: 86400');
         }
@@ -1131,8 +1136,7 @@ class Restler extends EventDispatcher
                 . "-v{$this->requestedApiVersion}"
                 . '+' . $this->responseFormat->getExtension()
                 : $this->responseFormat->getMIME())
-            . '; charset=' . $charset
-        );
+            . '; charset=' . $charset);
 
         @header('Content-Language: ' . Defaults::$language);
 
@@ -1237,7 +1241,7 @@ class Restler extends EventDispatcher
     public function setCompatibilityMode($version = 2)
     {
         if ($version <= intval(self::VERSION) && $version > 0) {
-            require __DIR__."/compatibility/restler{$version}.php";
+            require __DIR__ . "/compatibility/restler{$version}.php";
             return;
         }
         throw new \OutOfRangeException();
@@ -1255,8 +1259,7 @@ class Restler extends EventDispatcher
     public function setAPIVersion($version = 1, $minimum = 1)
     {
         if (!is_int($version) && $version < 1) {
-            throw new InvalidArgumentException
-            ('version should be an integer greater than 0');
+            throw new InvalidArgumentException('version should be an integer greater than 0');
         }
         $this->apiVersion = $version;
         if (is_int($minimum)) {
@@ -1349,14 +1352,17 @@ class Restler extends EventDispatcher
                     $name = 'v{$version}\\' . $className;
                 }
 
-                for ($version = $this->apiMinimumVersion;
+                for (
+                    $version = $this->apiMinimumVersion;
                      $version <= $this->apiVersion;
-                     $version++) {
-
-                    $versionedClassName = str_replace('{$version}', $version,
+                     $version++
+                ) {
+                    $versionedClassName = str_replace(
+                        '{$version}', $version,
                         $name);
                     if (class_exists($versionedClassName)) {
-                        Routes::addAPIClass($versionedClassName,
+                        Routes::addAPIClass(
+                            $versionedClassName,
                             Util::getResourcePath(
                                 $className,
                                 $resourcePath
@@ -1372,7 +1378,8 @@ class Restler extends EventDispatcher
                             $this->apiVersionMap[$className][$version] = $versionedClassName;
                         }
                     } elseif (isset($this->apiVersionMap[$className][$version])) {
-                        Routes::addAPIClass($this->apiVersionMap[$className][$version],
+                        Routes::addAPIClass(
+                            $this->apiVersionMap[$className][$version],
                             Util::getResourcePath(
                                 $className,
                                 $resourcePath
@@ -1381,11 +1388,10 @@ class Restler extends EventDispatcher
                         );
                     }
                 }
-
             }
         } catch (Exception $e) {
             $e = new Exception(
-                "addAPIClass('$className') failed. ".$e->getMessage(),
+                "addAPIClass('$className') failed. " . $e->getMessage(),
                 $e->getCode(),
                 $e
             );
@@ -1488,14 +1494,17 @@ class Restler extends EventDispatcher
                         }
                     }
 
-                    for ($version = $this->apiMinimumVersion;
+                    for (
+                        $version = $this->apiMinimumVersion;
                          $version <= $this->apiVersion;
-                         $version++) {
-
-                        $versionedClassName = str_replace('{$version}', $version,
+                         $version++
+                    ) {
+                        $versionedClassName = str_replace(
+                            '{$version}', $version,
                             $name);
                         if (class_exists($versionedClassName)) {
-                            Routes::addAPIClass($versionedClassName,
+                            Routes::addAPIClass(
+                                $versionedClassName,
                                 Util::getResourcePath(
                                     $className,
                                     $resourcePath
@@ -1511,7 +1520,8 @@ class Restler extends EventDispatcher
                                 $this->apiVersionMap[$className][$version] = $versionedClassName;
                             }
                         } elseif (isset($this->apiVersionMap[$className][$version])) {
-                            Routes::addAPIClass($this->apiVersionMap[$className][$version],
+                            Routes::addAPIClass(
+                                $this->apiVersionMap[$className][$version],
                                 Util::getResourcePath(
                                     $className,
                                     $resourcePath

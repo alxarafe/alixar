@@ -39,7 +39,7 @@ class Util
             }
             return false;
         }
-        return !(boolean)strpos('|bool|boolean|int|float|string|', $type);
+        return !(bool)strpos('|bool|boolean|int|float|string|', $type);
     }
 
     /**
@@ -190,7 +190,8 @@ class Util
         ) {
             // support for exceptional clients who can't set the header
             $m = strtoupper($_REQUEST[Defaults::$httpMethodOverrideProperty]);
-            if ($m == 'PUT' || $m == 'DELETE' ||
+            if (
+                $m == 'PUT' || $m == 'DELETE' ||
                 $m == 'POST' || $m == 'PATCH'
             ) {
                 $method = $m;
@@ -242,11 +243,10 @@ class Util
 
     public static function getShortName($className)
     {
-    	// @CHANGE LDR
-    	if (!is_string($className)) return;
-    	
-    	$className = explode('\\', $className);
+        // @CHANGE LDR
+        if (!is_string($className)) return;
+        
+        $className = explode('\\', $className);
         return end($className);
     }
 }
-

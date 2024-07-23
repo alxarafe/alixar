@@ -63,10 +63,10 @@ function valueObject(Writer $writer, $valueObject, string $namespace)
             // If $val is an array, it has a special meaning. We need to
             // generate one child element for each item in $val
             foreach ($val as $child) {
-                $writer->writeElement('{'.$namespace.'}'.$key, $child);
+                $writer->writeElement('{' . $namespace . '}' . $key, $child);
             }
         } elseif (null !== $val) {
-            $writer->writeElement('{'.$namespace.'}'.$key, $val);
+            $writer->writeElement('{' . $namespace . '}' . $key, $val);
         }
     }
 }
@@ -197,12 +197,12 @@ function standardSerializer(Writer $writer, $value)
                 $writer->write($item);
                 $writer->endElement();
             } else {
-                throw new InvalidArgumentException('The writer does not know how to serialize arrays with keys of type: '.gettype($name));
+                throw new InvalidArgumentException('The writer does not know how to serialize arrays with keys of type: ' . gettype($name));
             }
         }
     } elseif (is_object($value)) {
-        throw new InvalidArgumentException('The writer cannot serialize objects of class: '.get_class($value));
+        throw new InvalidArgumentException('The writer cannot serialize objects of class: ' . get_class($value));
     } elseif (!is_null($value)) {
-        throw new InvalidArgumentException('The writer cannot serialize values of type: '.gettype($value));
+        throw new InvalidArgumentException('The writer cannot serialize values of type: ' . gettype($value));
     }
 }

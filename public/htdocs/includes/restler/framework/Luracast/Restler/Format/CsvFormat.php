@@ -1,6 +1,6 @@
 <?php
-namespace Luracast\Restler\Format;
 
+namespace Luracast\Restler\Format;
 
 use Luracast\Restler\Data\Obj;
 use Luracast\Restler\RestException;
@@ -19,7 +19,6 @@ use Luracast\Restler\RestException;
  */
 class CsvFormat extends Format implements iDecodeStream
 {
-
     const MIME = 'text/csv';
     const EXTENSION = 'csv';
     public static $delimiter = ',';

@@ -59,7 +59,7 @@ class CalendarData implements XmlDeserializable
         $elems = (array) $reader->parseInnerTree();
         foreach ($elems as $elem) {
             switch ($elem['name']) {
-                case '{'.Plugin::NS_CALDAV.'}expand':
+                case '{' . Plugin::NS_CALDAV . '}expand':
                     $result['expand'] = [
                         'start' => isset($elem['attributes']['start']) ? DateTimeParser::parseDateTime($elem['attributes']['start']) : null,
                         'end' => isset($elem['attributes']['end']) ? DateTimeParser::parseDateTime($elem['attributes']['end']) : null,

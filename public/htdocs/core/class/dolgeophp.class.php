@@ -1,6 +1,8 @@
 <?php
+
 /* Copyright (C) 2024 Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,98 +24,98 @@
  *       \brief      Absctraction class to manage a WYSIWYG editor
  */
 
-require_once DOL_DOCUMENT_ROOT.'/includes/geoPHP/geoPHP.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/includes/geoPHP/geoPHP.inc.php';
 
 
 /**
  *      Class to manage Geo processing
- *		Usage: $dolgeophp=new DolGeoPHP($db);
+ *      Usage: $dolgeophp=new DolGeoPHP($db);
  */
 class DolGeoPHP
 {
-	/**
-	 * @var DoliDB	$db		Database handler
-	 */
-	public $db;
+    /**
+     * @var DoliDB  $db     Database handler
+     */
+    public $db;
 
-	/**
-	 *  Create an object to build an HTML area to edit a large string content
-	 *
-	 *  @param	DoliDB	$db		Database handler
-	 */
-	public function __construct($db)
-	{
-		$this->db = $db;
-	}
+    /**
+     *  Create an object to build an HTML area to edit a large string content
+     *
+     *  @param  DoliDB  $db     Database handler
+     */
+    public function __construct($db)
+    {
+        $this->db = $db;
+    }
 
-	/**
-	 * Return data from a value
-	 *
-	 * @param	string	$value		Value
-	 * @return	array				Centroid
-	 */
-	public function parseGeoString($value)
-	{
-		$geom = geoPHP::load($value, 'wkt');
-		if ($geom) {
-			$geojson = $geom->out('json');
-			$centroid = $geom->getCentroid();
-			$centroidjson = $centroid->out('json');
+    /**
+     * Return data from a value
+     *
+     * @param   string  $value      Value
+     * @return  array               Centroid
+     */
+    public function parseGeoString($value)
+    {
+        $geom = geoPHP::load($value, 'wkt');
+        if ($geom) {
+            $geojson = $geom->out('json');
+            $centroid = $geom->getCentroid();
+            $centroidjson = $centroid->out('json');
 
-			return array('geojson' => $geojson, 'centroid' => $centroid, 'centroidjson' => $centroidjson);
-		} else {
-			return array();
-		}
-	}
+            return array('geojson' => $geojson, 'centroid' => $centroid, 'centroidjson' => $centroidjson);
+        } else {
+            return array();
+        }
+    }
 
-	/**
-	 * Return a string with x and y
-	 *
-	 * @param	mixed	$value		Value
-	 * @return	string				X space Y
-	 */
-	public function getXYString($value)
-	{
-		$value = '';
+    /**
+     * Return a string with x and y
+     *
+     * @param   mixed   $value      Value
+     * @return  string              X space Y
+     */
+    public function getXYString($value)
+    {
+        $value = '';
 
-		$geom = geoPHP::load($value, 'wkt');
-		if ($geom) {
-			$value = $geom->x().' '.$geom->y();
-		}
-		return $value;
-	}
+        $geom = geoPHP::load($value, 'wkt');
+        if ($geom) {
+            $value = $geom->x() . ' ' . $geom->y();
+        }
+        return $value;
+    }
 
-	/**
-	 * Return a string with x and y
-	 *
-	 * @param	mixed	$value		Value
-	 * @return	string				Class : num points
-	 */
-	public function getPointString($value)
-	{
-		$value = '';
+    /**
+     * Return a string with x and y
+     *
+     * @param   mixed   $value      Value
+     * @return  string              Class : num points
+     */
+    public function getPointString($value)
+    {
+        $value = '';
 
-		$geom = geoPHP::load($value, 'wkt');
-		if ($geom) {
-			$value = get_class($geom) . ' : '. $geom->numPoints() . ' Points';
-		}
-		return $value;
-	}
+        $geom = geoPHP::load($value, 'wkt');
+        if ($geom) {
+            $value = get_class($geom) . ' : ' . $geom->numPoints() . ' Points';
+        }
+        return $value;
+    }
 
-	/**
-	 * Return wkt
-	 *
-	 * @param	string	$geojson	A json string
-	 * @return	mixed				Value key
-	 */
-	public function getWkt($geojson)
-	{
-		$value_key = '';
+    /**
+     * Return wkt
+     *
+     * @param   string  $geojson    A json string
+     * @return  mixed               Value key
+     */
+    public function getWkt($geojson)
+    {
+        $value_key = '';
 
-		$geom = geoPHP::load($geojson, 'json');
-		if ($geom) {
-			$value_key = $geom->out('wkt');
-		}
-		return $value_key;
-	}
+        $geom = geoPHP::load($geojson, 'json');
+        if ($geom) {
+            $value_key = $geom->out('wkt');
+        }
+        return $value_key;
+    }
 }

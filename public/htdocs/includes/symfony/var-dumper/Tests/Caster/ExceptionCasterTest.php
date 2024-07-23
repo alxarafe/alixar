@@ -20,25 +20,25 @@ use Symfony\Component\VarDumper\Test\VarDumperTestTrait;
 
 class ExceptionCasterTest extends TestCase
 {
-	use VarDumperTestTrait;
+    use VarDumperTestTrait;
 
-	private function getTestException($msg, &$ref = null)
-	{
-		return new \Exception(''.$msg);
-	}
+    private function getTestException($msg, &$ref = null)
+    {
+        return new \Exception('' . $msg);
+    }
 
-	protected function tearDown()
-	{
-		ExceptionCaster::$srcContext = 1;
-		ExceptionCaster::$traceArgs = true;
-	}
+    protected function tearDown()
+    {
+        ExceptionCaster::$srcContext = 1;
+        ExceptionCaster::$traceArgs = true;
+    }
 
-	public function testDefaultSettings()
-	{
-		$ref = array('foo');
-		$e = $this->getTestException('foo', $ref);
+    public function testDefaultSettings()
+    {
+        $ref = array('foo');
+        $e = $this->getTestException('foo', $ref);
 
-		$expectedDump = <<<'EODUMP'
+        $expectedDump = <<<'EODUMP'
 Exception {
   #message: "foo"
   #code: 0
@@ -62,15 +62,15 @@ Exception {
 %A
 EODUMP;
 
-		$this->assertDumpMatchesFormat($expectedDump, $e);
-		$this->assertSame(array('foo'), $ref);
-	}
+        $this->assertDumpMatchesFormat($expectedDump, $e);
+        $this->assertSame(array('foo'), $ref);
+    }
 
-	public function testSeek()
-	{
-		$e = $this->getTestException(2);
+    public function testSeek()
+    {
+        $e = $this->getTestException(2);
 
-		$expectedDump = <<<'EODUMP'
+        $expectedDump = <<<'EODUMP'
 {
   %sExceptionCasterTest.php:27: {
     : {
@@ -88,15 +88,15 @@ EODUMP;
 %A
 EODUMP;
 
-		$this->assertStringMatchesFormat($expectedDump, $this->getDump($e, 'trace'));
-	}
+        $this->assertStringMatchesFormat($expectedDump, $this->getDump($e, 'trace'));
+    }
 
-	public function testNoArgs()
-	{
-		$e = $this->getTestException(1);
-		ExceptionCaster::$traceArgs = false;
+    public function testNoArgs()
+    {
+        $e = $this->getTestException(1);
+        ExceptionCaster::$traceArgs = false;
 
-		$expectedDump = <<<'EODUMP'
+        $expectedDump = <<<'EODUMP'
 Exception {
   #message: "1"
   #code: 0
@@ -116,15 +116,15 @@ Exception {
 %A
 EODUMP;
 
-		$this->assertDumpMatchesFormat($expectedDump, $e);
-	}
+        $this->assertDumpMatchesFormat($expectedDump, $e);
+    }
 
-	public function testNoSrcContext()
-	{
-		$e = $this->getTestException(1);
-		ExceptionCaster::$srcContext = -1;
+    public function testNoSrcContext()
+    {
+        $e = $this->getTestException(1);
+        ExceptionCaster::$srcContext = -1;
 
-		$expectedDump = <<<'EODUMP'
+        $expectedDump = <<<'EODUMP'
 Exception {
   #message: "1"
   #code: 0
@@ -136,22 +136,22 @@ Exception {
 %A
 EODUMP;
 
-		$this->assertDumpMatchesFormat($expectedDump, $e);
-	}
+        $this->assertDumpMatchesFormat($expectedDump, $e);
+    }
 
-	public function testHtmlDump()
-	{
-		$e = $this->getTestException(1);
-		ExceptionCaster::$srcContext = -1;
+    public function testHtmlDump()
+    {
+        $e = $this->getTestException(1);
+        ExceptionCaster::$srcContext = -1;
 
-		$cloner = new VarCloner();
-		$cloner->setMaxItems(1);
-		$dumper = new HtmlDumper();
-		$dumper->setDumpHeader('<foo></foo>');
-		$dumper->setDumpBoundaries('<bar>', '</bar>');
-		$dump = $dumper->dump($cloner->cloneVar($e)->withRefHandles(false), true);
+        $cloner = new VarCloner();
+        $cloner->setMaxItems(1);
+        $dumper = new HtmlDumper();
+        $dumper->setDumpHeader('<foo></foo>');
+        $dumper->setDumpBoundaries('<bar>', '</bar>');
+        $dump = $dumper->dump($cloner->cloneVar($e)->withRefHandles(false), true);
 
-		$expectedDump = <<<'EODUMP'
+        $expectedDump = <<<'EODUMP'
 <foo></foo><bar><span class=sf-dump-note>Exception</span> {<samp>
   #<span class=sf-dump-protected title="Protected property">message</span>: "<span class=sf-dump-str>1</span>"
   #<span class=sf-dump-protected title="Protected property">code</span>: <span class=sf-dump-num>0</span>
@@ -167,31 +167,31 @@ Stack level %d."><span class=sf-dump-ellipsis>%sVarDumper%eTests</span>%eCaster%
 </bar>
 EODUMP;
 
-		$this->assertStringMatchesFormat($expectedDump, $dump);
-	}
+        $this->assertStringMatchesFormat($expectedDump, $dump);
+    }
 
-	/**
-	 * @requires function Twig\Template::getSourceContext
-	 */
-	public function testFrameWithTwig()
-	{
-		require_once dirname(__DIR__).'/Fixtures/Twig.php';
+    /**
+     * @requires function Twig\Template::getSourceContext
+     */
+    public function testFrameWithTwig()
+    {
+        require_once dirname(__DIR__) . '/Fixtures/Twig.php';
 
-		$f = array(
-			new FrameStub(array(
-				'file' => dirname(__DIR__).'/Fixtures/Twig.php',
-				'line' => 20,
-				'class' => '__TwigTemplate_VarDumperFixture_u75a09',
-			)),
-			new FrameStub(array(
-				'file' => dirname(__DIR__).'/Fixtures/Twig.php',
-				'line' => 21,
-				'class' => '__TwigTemplate_VarDumperFixture_u75a09',
-				'object' => new \__TwigTemplate_VarDumperFixture_u75a09(null, __FILE__),
-			)),
-		);
+        $f = array(
+            new FrameStub(array(
+                'file' => dirname(__DIR__) . '/Fixtures/Twig.php',
+                'line' => 20,
+                'class' => '__TwigTemplate_VarDumperFixture_u75a09',
+            )),
+            new FrameStub(array(
+                'file' => dirname(__DIR__) . '/Fixtures/Twig.php',
+                'line' => 21,
+                'class' => '__TwigTemplate_VarDumperFixture_u75a09',
+                'object' => new \__TwigTemplate_VarDumperFixture_u75a09(null, __FILE__),
+            )),
+        );
 
-		$expectedDump = <<<'EODUMP'
+        $expectedDump = <<<'EODUMP'
 array:2 [
   0 => {
     class: "__TwigTemplate_VarDumperFixture_u75a09"
@@ -220,6 +220,6 @@ array:2 [
 
 EODUMP;
 
-		$this->assertDumpMatchesFormat($expectedDump, $f);
-	}
+        $this->assertDumpMatchesFormat($expectedDump, $f);
+    }
 }

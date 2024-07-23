@@ -42,7 +42,7 @@ class NeedPrivileges extends DAV\Exception\Forbidden
         $this->uri = $uri;
         $this->privileges = $privileges;
 
-        parent::__construct('User did not have the required privileges ('.implode(',', $privileges).') for path "'.$uri.'"');
+        parent::__construct('User did not have the required privileges (' . implode(',', $privileges) . ') for path "' . $uri . '"');
     }
 
     /**
@@ -61,13 +61,13 @@ class NeedPrivileges extends DAV\Exception\Forbidden
             $resource = $doc->createElementNS('DAV:', 'd:resource');
             $np->appendChild($resource);
 
-            $resource->appendChild($doc->createElementNS('DAV:', 'd:href', $server->getBaseUri().$this->uri));
+            $resource->appendChild($doc->createElementNS('DAV:', 'd:href', $server->getBaseUri() . $this->uri));
 
             $priv = $doc->createElementNS('DAV:', 'd:privilege');
             $resource->appendChild($priv);
 
             preg_match('/^{([^}]*)}(.*)$/', $privilege, $privilegeParts);
-            $priv->appendChild($doc->createElementNS($privilegeParts[1], 'd:'.$privilegeParts[2]));
+            $priv->appendChild($doc->createElementNS($privilegeParts[1], 'd:' . $privilegeParts[2]));
         }
     }
 }

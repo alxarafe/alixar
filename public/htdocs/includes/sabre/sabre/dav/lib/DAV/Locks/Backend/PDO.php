@@ -59,7 +59,7 @@ class PDO extends AbstractBackend
         // NOTE: the following 10 lines or so could be easily replaced by
         // pure sql. MySQL's non-standard string concatenation prevents us
         // from doing this though.
-        $query = 'SELECT owner, token, timeout, created, scope, depth, uri FROM '.$this->tableName.' WHERE (created > (? - timeout)) AND ((uri = ?)';
+        $query = 'SELECT owner, token, timeout, created, scope, depth, uri FROM ' . $this->tableName . ' WHERE (created > (? - timeout)) AND ((uri = ?)';
         $params = [time(), $uri];
 
         // We need to check locks for every part in the uri.
@@ -82,7 +82,7 @@ class PDO extends AbstractBackend
 
         if ($returnChildLocks) {
             $query .= ' OR (uri LIKE ?)';
-            $params[] = $uri.'/%';
+            $params[] = $uri . '/%';
         }
         $query .= ')';
 
@@ -129,7 +129,7 @@ class PDO extends AbstractBackend
         }
 
         if ($exists) {
-            $stmt = $this->pdo->prepare('UPDATE '.$this->tableName.' SET owner = ?, timeout = ?, scope = ?, depth = ?, uri = ?, created = ? WHERE token = ?');
+            $stmt = $this->pdo->prepare('UPDATE ' . $this->tableName . ' SET owner = ?, timeout = ?, scope = ?, depth = ?, uri = ?, created = ? WHERE token = ?');
             $stmt->execute([
                 $lockInfo->owner,
                 $lockInfo->timeout,
@@ -140,7 +140,7 @@ class PDO extends AbstractBackend
                 $lockInfo->token,
             ]);
         } else {
-            $stmt = $this->pdo->prepare('INSERT INTO '.$this->tableName.' (owner,timeout,scope,depth,uri,created,token) VALUES (?,?,?,?,?,?,?)');
+            $stmt = $this->pdo->prepare('INSERT INTO ' . $this->tableName . ' (owner,timeout,scope,depth,uri,created,token) VALUES (?,?,?,?,?,?,?)');
             $stmt->execute([
                 $lockInfo->owner,
                 $lockInfo->timeout,
@@ -164,7 +164,7 @@ class PDO extends AbstractBackend
      */
     public function unlock($uri, LockInfo $lockInfo)
     {
-        $stmt = $this->pdo->prepare('DELETE FROM '.$this->tableName.' WHERE uri = ? AND token = ?');
+        $stmt = $this->pdo->prepare('DELETE FROM ' . $this->tableName . ' WHERE uri = ? AND token = ?');
         $stmt->execute([$uri, $lockInfo->token]);
 
         return 1 === $stmt->rowCount();

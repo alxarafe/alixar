@@ -156,10 +156,10 @@ class CorePlugin extends ServerPlugin
                 $start = $range[0];
                 $end = $range[1] ? $range[1] : $nodeSize - 1;
                 if ($start >= $nodeSize) {
-                    throw new Exception\RequestedRangeNotSatisfiable('The start offset ('.$range[0].') exceeded the size of the entity ('.$nodeSize.')');
+                    throw new Exception\RequestedRangeNotSatisfiable('The start offset (' . $range[0] . ') exceeded the size of the entity (' . $nodeSize . ')');
                 }
                 if ($end < $start) {
-                    throw new Exception\RequestedRangeNotSatisfiable('The end offset ('.$range[1].') is lower than the start offset ('.$range[0].')');
+                    throw new Exception\RequestedRangeNotSatisfiable('The end offset (' . $range[1] . ') is lower than the start offset (' . $range[0] . ')');
                 }
                 if ($end >= $nodeSize) {
                     $end = $nodeSize - 1;
@@ -180,14 +180,14 @@ class CorePlugin extends ServerPlugin
                 $consumeBlock = 8192;
                 for ($consumed = 0; $start - $consumed > 0;) {
                     if (feof($body)) {
-                        throw new Exception\RequestedRangeNotSatisfiable('The start offset ('.$start.') exceeded the size of the entity ('.$consumed.')');
+                        throw new Exception\RequestedRangeNotSatisfiable('The start offset (' . $start . ') exceeded the size of the entity (' . $consumed . ')');
                     }
                     $consumed += strlen(fread($body, min($start - $consumed, $consumeBlock)));
                 }
             }
 
             $response->setHeader('Content-Length', $end - $start + 1);
-            $response->setHeader('Content-Range', 'bytes '.$start.'-'.$end.'/'.$nodeSize);
+            $response->setHeader('Content-Range', 'bytes ' . $start . '-' . $end . '/' . $nodeSize);
             $response->setStatus(206);
             $response->setBody($body);
         } else {

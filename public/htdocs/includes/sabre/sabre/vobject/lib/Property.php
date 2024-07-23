@@ -221,14 +221,14 @@ abstract class Property extends Node
     {
         $str = $this->name;
         if ($this->group) {
-            $str = $this->group.'.'.$this->name;
+            $str = $this->group . '.' . $this->name;
         }
 
         foreach ($this->parameters() as $param) {
-            $str .= ';'.$param->serialize();
+            $str .= ';' . $param->serialize();
         }
 
-        $str .= ':'.$this->getRawMimeDirValue();
+        $str .= ':' . $this->getRawMimeDirValue();
 
         $str = \preg_replace(
             '/(
@@ -521,9 +521,9 @@ abstract class Property extends Node
             }
 
             if (preg_match('%([\x00-\x08\x0B-\x0C\x0E-\x1F\x7F])%', $oldValue, $matches)) {
-                $message = 'Property contained a control character (0x'.bin2hex($matches[1]).')';
+                $message = 'Property contained a control character (0x' . bin2hex($matches[1]) . ')';
             } else {
-                $message = 'Property is not valid UTF-8! '.$oldValue;
+                $message = 'Property is not valid UTF-8! ' . $oldValue;
             }
 
             $warnings[] = [
@@ -537,7 +537,7 @@ abstract class Property extends Node
         if (!preg_match('/^([A-Z0-9-]+)$/', $this->name)) {
             $warnings[] = [
                 'level' => $options & self::REPAIR ? 1 : 3,
-                'message' => 'The propertyname: '.$this->name.' contains invalid characters. Only A-Z, 0-9 and - are allowed',
+                'message' => 'The propertyname: ' . $this->name . ' contains invalid characters. Only A-Z, 0-9 and - are allowed',
                 'node' => $this,
             ];
             if ($options & self::REPAIR) {
@@ -588,7 +588,7 @@ abstract class Property extends Node
                 if ($allowedEncoding && !in_array(strtoupper($encoding), $allowedEncoding)) {
                     $warnings[] = [
                         'level' => 3,
-                        'message' => 'ENCODING='.strtoupper($encoding).' is not valid for this document type.',
+                        'message' => 'ENCODING=' . strtoupper($encoding) . ' is not valid for this document type.',
                         'node' => $this,
                     ];
                 }

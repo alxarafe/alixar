@@ -1,5 +1,6 @@
 <?php
 /* Copyright (C) 2024  Laurent Destailleur  <eldy@users.sourceforge.net>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +28,8 @@
 
 // Protection to avoid direct call of template
 if (empty($conf) || !is_object($conf)) {
-	print "Error, template page can't be called as URL";
-	exit(1);
+    print "Error, template page can't be called as URL";
+    exit(1);
 }
 
 ?>
@@ -37,12 +38,12 @@ if (empty($conf) || !is_object($conf)) {
 
 // Add link to add layout
 if ($showlinktolayout) {
-	$out .= '<a href="#" id="linkforlayouttemplates" class="reposition notasortlink inline-block alink marginrightonly">';
-	$out .= img_picto($showlinktolayoutlabel, 'layout', 'class="paddingrightonly"');
-	$out .= $showlinktolayoutlabel.'...';
-	$out .= '</a> &nbsp; &nbsp; ';
+    $out .= '<a href="#" id="linkforlayouttemplates" class="reposition notasortlink inline-block alink marginrightonly">';
+    $out .= img_picto($showlinktolayoutlabel, 'layout', 'class="paddingrightonly"');
+    $out .= $showlinktolayoutlabel . '...';
+    $out .= '</a> &nbsp; &nbsp; ';
 
-	$out .= '<script>
+    $out .= '<script>
 						$(document).ready(function() {
   							$("#linkforlayouttemplates").click(function() {
 								console.log("We click on linkforlayouttemplates");
@@ -57,12 +58,12 @@ if ($showlinktolayout) {
 }
 // Add link to add AI content
 if ($showlinktoai) {
-	$out .= '<a href="#" id="linkforaiprompt" class="reposition notasortlink inline-block alink marginrightonly">';
-	$out .= img_picto($showlinktoailabel, 'ai', 'class="paddingrightonly"');
-	$out .= $showlinktoailabel.'...';
-	$out .= '</a>';
+    $out .= '<a href="#" id="linkforaiprompt" class="reposition notasortlink inline-block alink marginrightonly">';
+    $out .= img_picto($showlinktoailabel, 'ai', 'class="paddingrightonly"');
+    $out .= $showlinktoailabel . '...';
+    $out .= '</a>';
 
-	$out .= '<script>
+    $out .= '<script>
 						$(document).ready(function() {
   							$("#linkforaiprompt").click(function() {
 								console.log("We click on linkforaiprompt");
@@ -82,14 +83,14 @@ if ($showlinktoai) {
 					';
 }
 if ($showlinktolayout) {
-	if (!empty($formwebsite) && is_object($formwebsite)) {
-		$out .= $formwebsite->getContentPageTemplate($htmlname);
-	} else {
-		$out .= $formmail->getModelEmailTemplate($htmlname);
-	}
+    if (!empty($formwebsite) && is_object($formwebsite)) {
+        $out .= $formwebsite->getContentPageTemplate($htmlname);
+    } else {
+        $out .= $formmail->getModelEmailTemplate($htmlname);
+    }
 }
 if ($showlinktoai) {
-	$out .= $formmail->getSectionForAIPrompt($showlinktoai, $formmail->withaiprompt, $htmlname);
+    $out .= $formmail->getSectionForAIPrompt($showlinktoai, $formmail->withaiprompt, $htmlname);
 }
 
 ?>

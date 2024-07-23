@@ -71,7 +71,7 @@ class SupportedCalendarComponentSet implements Element
     public function xmlSerialize(Writer $writer)
     {
         foreach ($this->components as $component) {
-            $writer->startElement('{'.Plugin::NS_CALDAV.'}comp');
+            $writer->startElement('{' . Plugin::NS_CALDAV . '}comp');
             $writer->writeAttributes(['name' => $component]);
             $writer->endElement();
         }
@@ -104,7 +104,7 @@ class SupportedCalendarComponentSet implements Element
         $components = [];
 
         foreach ((array) $elems as $elem) {
-            if ($elem['name'] === '{'.Plugin::NS_CALDAV.'}comp') {
+            if ($elem['name'] === '{' . Plugin::NS_CALDAV . '}comp') {
                 $components[] = $elem['attributes']['name'];
             }
         }

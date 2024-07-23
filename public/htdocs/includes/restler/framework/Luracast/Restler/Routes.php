@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler;
 
 use Luracast\Restler\Data\ApiMethodInfo;
@@ -98,7 +99,8 @@ class Routes
                 throw new RestException(500, "Error while parsing comments of `{$className}::{$method->getName()}` method. " . $e->getMessage());
             }
             //@access should not be private
-            if (isset($metadata['access'])
+            if (
+                isset($metadata['access'])
                 && $metadata['access'] == 'private'
             ) {
                 continue;
@@ -157,7 +159,7 @@ class Routes
                 }
                 $m ['default'] = $defaults [$position];
                 $m ['required'] = !$param->isOptional();
-                $contentType = Util::nestedValue($p,'type');
+                $contentType = Util::nestedValue($p, 'type');
                 if ($type == 'array' && $contentType && $qualified = Scope::resolve($contentType, $scope)) {
                     list($p['type'], $children, $modelName) = static::getTypeAndModel(
                         new ReflectionClass($qualified), $scope,
@@ -165,11 +167,13 @@ class Routes
                     );
                 }
                 if ($type instanceof ReflectionClass) {
-                    list($type, $children, $modelName) = static::getTypeAndModel($type, $scope,
+                    list($type, $children, $modelName) = static::getTypeAndModel(
+                        $type, $scope,
                         $className . Text::title($methodUrl), $p);
                 } elseif ($type && is_string($type) && $qualified = Scope::resolve($type, $scope)) {
                     list($type, $children, $modelName)
-                        = static::getTypeAndModel(new ReflectionClass($qualified), $scope,
+                        = static::getTypeAndModel(
+                            new ReflectionClass($qualified), $scope,
                         $className . Text::title($methodUrl), $p);
                 }
                 if (isset($type)) {
@@ -185,11 +189,11 @@ class Routes
                     if (!isset($m['type'])) {
                         $type = $m['type'] = 'array';
                     }
-
                 } elseif (isset($p['from'])) {
                     $from = $p['from'];
                 } else {
-                    if ((isset($type) && Util::isObjectOrArray($type))
+                    if (
+                        (isset($type) && Util::isObjectOrArray($type))
                     ) {
                         $from = 'body';
                         if (!isset($type)) {
@@ -240,11 +244,12 @@ class Routes
                 'accessLevel' => $accessLevel,
             );
             // if manual route
-            if (preg_match_all(
+            if (
+                preg_match_all(
                 '/@url\s+(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)'
                 . '[ \t]*\/?(\S*)/s',
                 $doc, $matches, PREG_SET_ORDER
-            )
+                )
             ) {
                 foreach ($matches as $match) {
                     $httpMethod = $match[1];
@@ -263,7 +268,8 @@ class Routes
                             $copy['metadata']['param'][$i][$dataName]['from'] = 'body';
                         }
                     }
-                    $url = preg_replace_callback('/{[^}]+}|:[^\/]+/',
+                    $url = preg_replace_callback(
+                        '/{[^}]+}|:[^\/]+/',
                         function ($matches) use ($copy) {
                             $match = trim($matches[0], '{}:');
                             $index = $copy['arguments'][$match];
@@ -279,7 +285,8 @@ class Routes
                 //if auto route enabled, do so
             } elseif (Defaults::$autoRoutingEnabled) {
                 // no configuration found so use convention
-                if (preg_match_all(
+                if (
+                    preg_match_all(
                     '/^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)/i',
                     $methodUrl, $matches)
                 ) {
@@ -295,7 +302,8 @@ class Routes
                     : $resourcePath . $methodUrl;
                 for ($position = 0; $position < count($params); $position++) {
                     $from = $metadata['param'][$position][$dataName]['from'];
-                    if ($from == 'body' && ($httpMethod == 'GET' ||
+                    if (
+                        $from == 'body' && ($httpMethod == 'GET' ||
                             $httpMethod == 'DELETE')
                     ) {
                         $call['metadata']['param'][$position][$dataName]['from']
@@ -338,9 +346,12 @@ class Routes
         return 's';
     }
 
-    protected static function addPath($path, array $call,
-        $httpMethod = 'GET', $version = 1)
-    {
+    protected static function addPath(
+        $path,
+        array $call,
+        $httpMethod = 'GET',
+        $version = 1
+) {
         $call['url'] = preg_replace_callback(
             "/\{\S(\d+)\}/",
             function ($matches) use ($call) {
@@ -372,9 +383,12 @@ class Routes
      * @throws RestException
      * @return ApiMethodInfo
      */
-    public static function find($path, $httpMethod,
-        $version = 1, array $data = array())
-    {
+    public static function find(
+        $path,
+        $httpMethod,
+        $version = 1,
+        array $data = array()
+) {
         $p = Util::nestedValue(static::$routes, "v$version");
         if (!$p) {
             throw new RestException(
@@ -416,7 +430,8 @@ class Routes
             if (!isset($value[$httpMethod])) {
                 continue;
             }
-            $regex = str_replace(array('{', '}'),
+            $regex = str_replace(
+                array('{', '}'),
                 array('(?P<', '>[^/]+)'), $key);
             if (preg_match_all(":^$regex$:i", $path, $matches, PREG_SET_ORDER)) {
                 $matches = $matches[0];
@@ -635,12 +650,12 @@ class Routes
      *
      * @access protected
      */
-    protected static function getTypeAndModel(ReflectionClass $class, array $scope, $prefix='', array $rules=array())
+    protected static function getTypeAndModel(ReflectionClass $class, array $scope, $prefix = '', array $rules = array())
     {
         $className = $class->getName();
         $dataName = CommentParser::$embeddedDataName;
-        if (isset(static::$models[$prefix.$className])) {
-            return static::$models[$prefix.$className];
+        if (isset(static::$models[$prefix . $className])) {
+            return static::$models[$prefix . $className];
         }
         $children = array();
         try {
@@ -732,8 +747,8 @@ class Routes
                 $children[$name][$dataName]['required'] = isset($required[$name]);
             }
         }
-        static::$models[$prefix.$className] = array($className, $children, $prefix.$className);
-        return static::$models[$prefix.$className];
+        static::$models[$prefix . $className] = array($className, $children, $prefix . $className);
+        return static::$models[$prefix . $className];
     }
 
     /**

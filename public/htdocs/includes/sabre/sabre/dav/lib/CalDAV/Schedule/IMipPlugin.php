@@ -101,33 +101,33 @@ class IMipPlugin extends DAV\ServerPlugin
         $recipient = substr($iTipMessage->recipient, 7);
 
         if ($iTipMessage->senderName) {
-            $sender = $iTipMessage->senderName.' <'.$sender.'>';
+            $sender = $iTipMessage->senderName . ' <' . $sender . '>';
         }
         if ($iTipMessage->recipientName && $iTipMessage->recipientName != $recipient) {
-            $recipient = $iTipMessage->recipientName.' <'.$recipient.'>';
+            $recipient = $iTipMessage->recipientName . ' <' . $recipient . '>';
         }
 
         $subject = 'SabreDAV iTIP message';
         switch (strtoupper($iTipMessage->method)) {
             case 'REPLY':
-                $subject = 'Re: '.$summary;
+                $subject = 'Re: ' . $summary;
                 break;
             case 'REQUEST':
-                $subject = 'Invitation: '.$summary;
+                $subject = 'Invitation: ' . $summary;
                 break;
             case 'CANCEL':
-                $subject = 'Cancelled: '.$summary;
+                $subject = 'Cancelled: ' . $summary;
                 break;
         }
 
         $headers = [
-            'Reply-To: '.$sender,
-            'From: '.$iTipMessage->senderName.' <'.$this->senderEmail.'>',
+            'Reply-To: ' . $sender,
+            'From: ' . $iTipMessage->senderName . ' <' . $this->senderEmail . '>',
             'MIME-Version: 1.0',
-            'Content-Type: text/calendar; charset=UTF-8; method='.$iTipMessage->method,
+            'Content-Type: text/calendar; charset=UTF-8; method=' . $iTipMessage->method,
         ];
         if (DAV\Server::$exposeVersion) {
-            $headers[] = 'X-Sabre-Version: '.DAV\Version::VERSION;
+            $headers[] = 'X-Sabre-Version: ' . DAV\Version::VERSION;
         }
         $this->mail(
             $recipient,

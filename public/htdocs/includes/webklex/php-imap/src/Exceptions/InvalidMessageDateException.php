@@ -1,4 +1,5 @@
 <?php
+
 /*
 * File:     InvalidMessageDateException.php
 * Category: Exception
@@ -12,13 +13,13 @@
 
 namespace Webklex\PHPIMAP\Exceptions;
 
-use \Exception;
+use Exception;
 
 /**
  * Class InvalidMessageDateException
  *
  * @package Webklex\PHPIMAP\Exceptions
  */
-class InvalidMessageDateException extends Exception {
-
+class InvalidMessageDateException extends Exception
+{
 }

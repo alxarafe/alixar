@@ -66,7 +66,7 @@ class ICSExportPlugin extends DAV\ServerPlugin
         $server->on('method:GET', [$this, 'httpGet'], 90);
         $server->on('browserButtonActions', function ($path, $node, &$actions) {
             if ($node instanceof ICalendar) {
-                $actions .= '<a href="'.htmlspecialchars($path, ENT_QUOTES, 'UTF-8').'?export"><span class="oi" data-glyph="calendar"></span></a>';
+                $actions .= '<a href="' . htmlspecialchars($path, ENT_QUOTES, 'UTF-8') . '?export"><span class="oi" data-glyph="calendar"></span></a>';
             }
         });
     }
@@ -97,7 +97,7 @@ class ICSExportPlugin extends DAV\ServerPlugin
             '{http://apple.com/ns/ical/}calendar-color',
         ]);
 
-        if (!isset($node['{DAV:}resourcetype']) || !$node['{DAV:}resourcetype']->is('{'.Plugin::NS_CALDAV.'}calendar')) {
+        if (!isset($node['{DAV:}resourcetype']) || !$node['{DAV:}resourcetype']->is('{' . Plugin::NS_CALDAV . '}calendar')) {
             return;
         }
         // Marking the transactionType, for logging purposes.
@@ -130,7 +130,7 @@ class ICSExportPlugin extends DAV\ServerPlugin
         }
         if (isset($queryParams['componentType'])) {
             if (!in_array($queryParams['componentType'], ['VEVENT', 'VTODO', 'VJOURNAL'])) {
-                throw new BadRequest('You are not allowed to search for components of type: '.$queryParams['componentType'].' here');
+                throw new BadRequest('You are not allowed to search for components of type: ' . $queryParams['componentType'] . ' here');
             }
             $componentType = $queryParams['componentType'];
         }
@@ -174,7 +174,7 @@ class ICSExportPlugin extends DAV\ServerPlugin
      */
     protected function generateResponse($path, $start, $end, $expand, $componentType, $format, $properties, ResponseInterface $response)
     {
-        $calDataProp = '{'.Plugin::NS_CALDAV.'}calendar-data';
+        $calDataProp = '{' . Plugin::NS_CALDAV . '}calendar-data';
         $calendarNode = $this->server->tree->getNodeForPath($path);
 
         $blobs = [];
@@ -204,7 +204,7 @@ class ICSExportPlugin extends DAV\ServerPlugin
             // calendar path.
             $queryResult = array_map(
                 function ($item) use ($path) {
-                    return $path.'/'.$item;
+                    return $path . '/' . $item;
                 },
                 $queryResult
             );
@@ -231,7 +231,7 @@ class ICSExportPlugin extends DAV\ServerPlugin
             $calendarTimeZone = null;
             // We're expanding, and for that we need to figure out the
             // calendar's timezone.
-            $tzProp = '{'.Plugin::NS_CALDAV.'}calendar-timezone';
+            $tzProp = '{' . Plugin::NS_CALDAV . '}calendar-timezone';
             $tzResult = $this->server->getProperties($path, [$tzProp]);
             if (isset($tzResult[$tzProp])) {
                 // This property contains a VCALENDAR with a single
@@ -267,9 +267,9 @@ class ICSExportPlugin extends DAV\ServerPlugin
             '',
             $calendarNode->getName()
         );
-        $filename .= '-'.date('Y-m-d').$filenameExtension;
+        $filename .= '-' . date('Y-m-d') . $filenameExtension;
 
-        $response->setHeader('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
         $response->setHeader('Content-Type', $format);
 
         $response->setStatus(200);
@@ -288,7 +288,7 @@ class ICSExportPlugin extends DAV\ServerPlugin
         $calendar = new VObject\Component\VCalendar();
         $calendar->VERSION = '2.0';
         if (DAV\Server::$exposeVersion) {
-            $calendar->PRODID = '-//SabreDAV//SabreDAV '.DAV\Version::VERSION.'//EN';
+            $calendar->PRODID = '-//SabreDAV//SabreDAV ' . DAV\Version::VERSION . '//EN';
         } else {
             $calendar->PRODID = '-//SabreDAV//SabreDAV//EN';
         }

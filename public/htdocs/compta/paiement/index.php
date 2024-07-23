@@ -1,5 +1,7 @@
 <?php
+
 /* Copyright (C) 2003 Rodolphe Quiedeville <rodolphe@quiedeville.org>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,11 +19,11 @@
  */
 
 // Load Dolibarr environment
-require '../../main.inc.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Security check
 if (!$user->admin && $user->socid > 0) {
-	accessforbidden();
+    accessforbidden();
 }
 
 

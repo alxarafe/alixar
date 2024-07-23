@@ -263,7 +263,7 @@ class DateTime extends Property
         return array_map(
             function (DateTimeInterface $dt) use ($hasTime, $isUtc) {
                 if ($hasTime) {
-                    return $dt->format('Y-m-d\\TH:i:s').($isUtc ? 'Z' : '');
+                    return $dt->format('Y-m-d\\TH:i:s') . ($isUtc ? 'Z' : '');
                 } else {
                     return $dt->format('Y-m-d');
                 }
@@ -352,7 +352,7 @@ class DateTime extends Property
             } catch (InvalidDataException $e) {
                 $messages[] = [
                     'level' => 3,
-                    'message' => 'The supplied value ('.$value.') is not a correct '.$valueType,
+                    'message' => 'The supplied value (' . $value . ') is not a correct ' . $valueType,
                     'node' => $this,
                 ];
                 break;

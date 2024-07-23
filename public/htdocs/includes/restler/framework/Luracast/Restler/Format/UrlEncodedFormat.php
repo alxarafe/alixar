@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\Format;
 
 /**
@@ -55,4 +56,3 @@ class UrlEncodedFormat extends Format
         return $data;
     }
 }
-

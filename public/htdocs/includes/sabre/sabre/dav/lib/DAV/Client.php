@@ -147,7 +147,7 @@ class Client extends HTTP\Client
             }
 
             $this->addCurlSetting(CURLOPT_HTTPAUTH, $curlType);
-            $this->addCurlSetting(CURLOPT_USERPWD, $userName.':'.$password);
+            $this->addCurlSetting(CURLOPT_USERPWD, $userName . ':' . $password);
         }
 
         if (isset($settings['encoding'])) {
@@ -166,7 +166,7 @@ class Client extends HTTP\Client
             $this->addCurlSetting(CURLOPT_ENCODING, implode(',', $encodings));
         }
 
-        $this->addCurlSetting(CURLOPT_USERAGENT, 'sabre-dav/'.Version::VERSION.' (http://sabre.io/)');
+        $this->addCurlSetting(CURLOPT_USERAGENT, 'sabre-dav/' . Version::VERSION . ' (http://sabre.io/)');
 
         $this->xml = new Xml\Service();
         // BC
@@ -279,9 +279,9 @@ class Client extends HTTP\Client
             ) = \Sabre\Xml\Service::parseClarkNotation($property);
 
             if ('DAV:' === $namespace) {
-                $element = $dom->createElement('d:'.$elementName);
+                $element = $dom->createElement('d:' . $elementName);
             } else {
-                $element = $dom->createElementNS($namespace, 'x:'.$elementName);
+                $element = $dom->createElementNS($namespace, 'x:' . $elementName);
             }
 
             $prop->appendChild($element);
@@ -346,13 +346,13 @@ class Client extends HTTP\Client
                 foreach ($statusList as $status => $properties) {
                     if ($status >= 400) {
                         foreach ($properties as $propName => $propValue) {
-                            $errorProperties[] = $propName.' ('.$status.')';
+                            $errorProperties[] = $propName . ' (' . $status . ')';
                         }
                     }
                 }
             }
             if ($errorProperties) {
-                throw new HTTP\ClientException('PROPPATCH failed. The following properties errored: '.implode(', ', $errorProperties));
+                throw new HTTP\ClientException('PROPPATCH failed. The following properties errored: ' . implode(', ', $errorProperties));
             }
         }
 

@@ -42,7 +42,7 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota
      */
     public function createFile($name, $data = null)
     {
-        $newPath = $this->path.'/'.$name;
+        $newPath = $this->path . '/' . $name;
         file_put_contents($newPath, $data);
         clearstatcache(true, $newPath);
     }
@@ -54,7 +54,7 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota
      */
     public function createDirectory($name)
     {
-        $newPath = $this->path.'/'.$name;
+        $newPath = $this->path . '/' . $name;
         mkdir($newPath);
         clearstatcache(true, $newPath);
     }
@@ -73,10 +73,10 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota
      */
     public function getChild($name)
     {
-        $path = $this->path.'/'.$name;
+        $path = $this->path . '/' . $name;
 
         if (!file_exists($path)) {
-            throw new DAV\Exception\NotFound('File with name '.$path.' could not be located');
+            throw new DAV\Exception\NotFound('File with name ' . $path . ' could not be located');
         }
         if (is_dir($path)) {
             return new self($path);
@@ -114,7 +114,7 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota
      */
     public function childExists($name)
     {
-        $path = $this->path.'/'.$name;
+        $path = $this->path . '/' . $name;
 
         return file_exists($path);
     }

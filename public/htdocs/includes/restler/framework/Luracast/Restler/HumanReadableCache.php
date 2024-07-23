@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler;
 
 /**
@@ -51,7 +52,8 @@ class HumanReadableCache implements iCache
                         $s .= PHP_EOL . PHP_EOL . "//==== $key $ke ===="
                             . PHP_EOL . PHP_EOL;
                         $s .= '$o[\'' . $key . '\'][\'' . $ke . '\'] = ' .
-                            str_replace('  ', '    ',
+                            str_replace(
+                                '  ', '    ',
                                 var_export($va, true)) . ';';
                     }
                 } else {
@@ -126,4 +128,3 @@ class HumanReadableCache implements iCache
         );
     }
 }
-

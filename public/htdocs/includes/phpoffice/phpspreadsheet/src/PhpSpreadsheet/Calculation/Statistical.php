@@ -530,9 +530,11 @@ class Statistical
      */
     private static function testAcceptedBoolean($arg, $k)
     {
-        if ((is_bool($arg)) &&
+        if (
+            (is_bool($arg)) &&
             ((!Functions::isCellValue($k) && (Functions::getCompatibilityMode() === Functions::COMPATIBILITY_EXCEL)) ||
-                (Functions::getCompatibilityMode() === Functions::COMPATIBILITY_OPENOFFICE))) {
+                (Functions::getCompatibilityMode() === Functions::COMPATIBILITY_OPENOFFICE))
+        ) {
             $arg = (int) $arg;
         }
 
@@ -547,9 +549,11 @@ class Statistical
      */
     private static function isAcceptedCountable($arg, $k)
     {
-        if (((is_numeric($arg)) && (!is_string($arg))) ||
+        if (
+            ((is_numeric($arg)) && (!is_string($arg))) ||
                 ((is_numeric($arg)) && (!Functions::isCellValue($k)) &&
-                    (Functions::getCompatibilityMode() !== Functions::COMPATIBILITY_GNUMERIC))) {
+                    (Functions::getCompatibilityMode() !== Functions::COMPATIBILITY_GNUMERIC))
+        ) {
             return true;
         }
 
@@ -670,8 +674,10 @@ class Statistical
         $aCount = 0;
         // Loop through arguments
         foreach (Functions::flattenArrayIndexed($args) as $k => $arg) {
-            if ((is_bool($arg)) &&
-                (!Functions::isMatrixValue($k))) {
+            if (
+                (is_bool($arg)) &&
+                (!Functions::isMatrixValue($k))
+            ) {
             } else {
                 if ((is_numeric($arg)) || (is_bool($arg)) || ((is_string($arg) && ($arg != '')))) {
                     if (is_bool($arg)) {
@@ -1434,9 +1440,11 @@ class Statistical
             $aCount = -1;
             foreach ($aArgs as $k => $arg) {
                 // Is it a numeric value?
-                if ((is_bool($arg)) &&
+                if (
+                    (is_bool($arg)) &&
                     ((!Functions::isCellValue($k)) ||
-                    (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE))) {
+                    (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE))
+                ) {
                     $arg = (int) $arg;
                 }
                 if ((is_numeric($arg)) && (!is_string($arg))) {
@@ -1895,8 +1903,10 @@ class Statistical
             $count = $summer = 0;
             // Loop through arguments
             foreach ($aArgs as $k => $arg) {
-                if ((is_bool($arg)) &&
-                    (!Functions::isMatrixValue($k))) {
+                if (
+                    (is_bool($arg)) &&
+                    (!Functions::isMatrixValue($k))
+                ) {
                 } else {
                     // Is it a numeric value?
                     if ((is_numeric($arg)) && (!is_string($arg))) {
@@ -2963,8 +2973,10 @@ class Statistical
         $count = $summer = 0;
         // Loop through arguments
         foreach ($aArgs as $k => $arg) {
-            if ((is_bool($arg)) &&
-                (!Functions::isMatrixValue($k))) {
+            if (
+                (is_bool($arg)) &&
+                (!Functions::isMatrixValue($k))
+            ) {
             } else {
                 // Is it a numeric value?
                 if ((is_numeric($arg)) && (!is_string($arg))) {
@@ -3108,8 +3120,10 @@ class Statistical
         if ($aMean !== null) {
             $aCount = -1;
             foreach ($aArgs as $k => $arg) {
-                if ((is_bool($arg)) &&
-                    ((!Functions::isCellValue($k)) || (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE))) {
+                if (
+                    (is_bool($arg)) &&
+                    ((!Functions::isCellValue($k)) || (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE))
+                ) {
                     $arg = (int) $arg;
                 }
                 // Is it a numeric value?
@@ -3156,8 +3170,10 @@ class Statistical
         if ($aMean !== null) {
             $aCount = -1;
             foreach ($aArgs as $k => $arg) {
-                if ((is_bool($arg)) &&
-                    (!Functions::isMatrixValue($k))) {
+                if (
+                    (is_bool($arg)) &&
+                    (!Functions::isMatrixValue($k))
+                ) {
                 } else {
                     // Is it a numeric value?
                     if ((is_numeric($arg)) || (is_bool($arg)) || ((is_string($arg) & ($arg != '')))) {
@@ -3208,8 +3224,10 @@ class Statistical
         if ($aMean !== null) {
             $aCount = 0;
             foreach ($aArgs as $k => $arg) {
-                if ((is_bool($arg)) &&
-                    ((!Functions::isCellValue($k)) || (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE))) {
+                if (
+                    (is_bool($arg)) &&
+                    ((!Functions::isCellValue($k)) || (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE))
+                ) {
                     $arg = (int) $arg;
                 }
                 // Is it a numeric value?
@@ -3255,8 +3273,10 @@ class Statistical
         if ($aMean !== null) {
             $aCount = 0;
             foreach ($aArgs as $k => $arg) {
-                if ((is_bool($arg)) &&
-                    (!Functions::isMatrixValue($k))) {
+                if (
+                    (is_bool($arg)) &&
+                    (!Functions::isMatrixValue($k))
+                ) {
                 } else {
                     // Is it a numeric value?
                     if ((is_numeric($arg)) || (is_bool($arg)) || ((is_string($arg) & ($arg != '')))) {
@@ -3583,11 +3603,15 @@ class Statistical
         $aArgs = Functions::flattenArrayIndexed($args);
         $aCount = 0;
         foreach ($aArgs as $k => $arg) {
-            if ((is_string($arg)) &&
-                (Functions::isValue($k))) {
+            if (
+                (is_string($arg)) &&
+                (Functions::isValue($k))
+            ) {
                 return Functions::VALUE();
-            } elseif ((is_string($arg)) &&
-                (!Functions::isMatrixValue($k))) {
+            } elseif (
+                (is_string($arg)) &&
+                (!Functions::isMatrixValue($k))
+            ) {
             } else {
                 // Is it a numeric value?
                 if ((is_numeric($arg)) || (is_bool($arg)) || ((is_string($arg) & ($arg != '')))) {
@@ -3681,11 +3705,15 @@ class Statistical
         $aArgs = Functions::flattenArrayIndexed($args);
         $aCount = 0;
         foreach ($aArgs as $k => $arg) {
-            if ((is_string($arg)) &&
-                (Functions::isValue($k))) {
+            if (
+                (is_string($arg)) &&
+                (Functions::isValue($k))
+            ) {
                 return Functions::VALUE();
-            } elseif ((is_string($arg)) &&
-                (!Functions::isMatrixValue($k))) {
+            } elseif (
+                (is_string($arg)) &&
+                (!Functions::isMatrixValue($k))
+            ) {
             } else {
                 // Is it a numeric value?
                 if ((is_numeric($arg)) || (is_bool($arg)) || ((is_string($arg) & ($arg != '')))) {

@@ -1,5 +1,7 @@
 <?php
+
 /* Copyright (C) 2006-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +18,12 @@
  */
 
 /**
- *	\file       htdocs/core/class/genericobject.class.php
- *	\ingroup    core
- *	\brief      File of class of generic business class
+ *  \file       htdocs/core/class/genericobject.class.php
+ *  \ingroup    core
+ *  \brief      File of class of generic business class
  */
-require_once DOL_DOCUMENT_ROOT.'/core/class/commonobject.class.php';
+
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
 
 
 /**
@@ -29,13 +32,13 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/commonobject.class.php';
 
 class GenericObject extends CommonObject
 {
-	/**
-	 * Constructor
-	 *
-	 * @param       DoliDB      $db     Database handler
-	 */
-	public function __construct($db)
-	{
-		$this->db = $db;
-	}
+    /**
+     * Constructor
+     *
+     * @param       DoliDB      $db     Database handler
+     */
+    public function __construct($db)
+    {
+        $this->db = $db;
+    }
 }

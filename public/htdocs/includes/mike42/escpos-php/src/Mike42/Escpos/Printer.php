@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of escpos-php: PHP receipt printer library for use with
  * ESC/POS-compatible thermal and impact printers.
@@ -777,7 +778,7 @@ class Printer
      */
     public function selectUserDefinedCharacterSet($on = true)
     {
-        $this -> connector -> write(self::ESC . "%". ($on ? chr(1) : chr(0)));
+        $this -> connector -> write(self::ESC . "%" . ($on ? chr(1) : chr(0)));
     }
 
     /**
@@ -824,7 +825,7 @@ class Printer
     public function setDoubleStrike(bool $on = true)
     {
         self::validateBoolean($on, __FUNCTION__);
-        $this -> connector -> write(self::ESC . "G". ($on ? chr(1) : chr(0)));
+        $this -> connector -> write(self::ESC . "G" . ($on ? chr(1) : chr(0)));
     }
 
     /**
@@ -846,7 +847,7 @@ class Printer
     public function setEmphasis(bool $on = true)
     {
         self::validateBoolean($on, __FUNCTION__);
-        $this -> connector -> write(self::ESC . "E". ($on ? chr(1) : chr(0)));
+        $this -> connector -> write(self::ESC . "E" . ($on ? chr(1) : chr(0)));
     }
     
     /**

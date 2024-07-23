@@ -60,8 +60,8 @@ trait PHPUnitAssertions
 
         foreach ($matches as $match) {
             $actual = preg_replace(
-                '|^'.preg_quote($match[1], '|').':(.*)\r$|m',
-                $match[1].':**ANY**'."\r",
+                '|^' . preg_quote($match[1], '|') . ':(.*)\r$|m',
+                $match[1] . ':**ANY**' . "\r",
                 $actual
             );
         }

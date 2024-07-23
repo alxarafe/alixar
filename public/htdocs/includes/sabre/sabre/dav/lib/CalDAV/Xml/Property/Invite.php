@@ -70,36 +70,36 @@ class Invite implements XmlSerializable
      */
     public function xmlSerialize(Writer $writer)
     {
-        $cs = '{'.Plugin::NS_CALENDARSERVER.'}';
+        $cs = '{' . Plugin::NS_CALENDARSERVER . '}';
 
         foreach ($this->sharees as $sharee) {
             if (DAV\Sharing\Plugin::ACCESS_SHAREDOWNER === $sharee->access) {
-                $writer->startElement($cs.'organizer');
+                $writer->startElement($cs . 'organizer');
             } else {
-                $writer->startElement($cs.'user');
+                $writer->startElement($cs . 'user');
 
                 switch ($sharee->inviteStatus) {
                     case DAV\Sharing\Plugin::INVITE_ACCEPTED:
-                        $writer->writeElement($cs.'invite-accepted');
+                        $writer->writeElement($cs . 'invite-accepted');
                         break;
                     case DAV\Sharing\Plugin::INVITE_DECLINED:
-                        $writer->writeElement($cs.'invite-declined');
+                        $writer->writeElement($cs . 'invite-declined');
                         break;
                     case DAV\Sharing\Plugin::INVITE_NORESPONSE:
-                        $writer->writeElement($cs.'invite-noresponse');
+                        $writer->writeElement($cs . 'invite-noresponse');
                         break;
                     case DAV\Sharing\Plugin::INVITE_INVALID:
-                        $writer->writeElement($cs.'invite-invalid');
+                        $writer->writeElement($cs . 'invite-invalid');
                         break;
                 }
 
-                $writer->startElement($cs.'access');
+                $writer->startElement($cs . 'access');
                 switch ($sharee->access) {
                     case DAV\Sharing\Plugin::ACCESS_READWRITE:
-                        $writer->writeElement($cs.'read-write');
+                        $writer->writeElement($cs . 'read-write');
                         break;
                     case DAV\Sharing\Plugin::ACCESS_READ:
-                        $writer->writeElement($cs.'read');
+                        $writer->writeElement($cs . 'read');
                         break;
                 }
                 $writer->endElement(); // access
@@ -109,10 +109,10 @@ class Invite implements XmlSerializable
             $href->xmlSerialize($writer);
 
             if (isset($sharee->properties['{DAV:}displayname'])) {
-                $writer->writeElement($cs.'common-name', $sharee->properties['{DAV:}displayname']);
+                $writer->writeElement($cs . 'common-name', $sharee->properties['{DAV:}displayname']);
             }
             if ($sharee->comment) {
-                $writer->writeElement($cs.'summary', $sharee->comment);
+                $writer->writeElement($cs . 'summary', $sharee->comment);
             }
             $writer->endElement(); // organizer or user
         }

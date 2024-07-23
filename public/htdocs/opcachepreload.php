@@ -1,5 +1,7 @@
 <?php
+
 /* Copyright (C) 2019  Laurent Destailleur     <eldy@users.sourceforge.net>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +19,9 @@
 
 
 /**
- *	\file       htdocs/opcachepreload.php
- *	\ingroup	core
- *	\brief      File that preload PHP files. Used for performance purposes if PHP >= 7.4
+ *  \file       htdocs/opcachepreload.php
+ *  \ingroup    core
+ *  \brief      File that preload PHP files. Used for performance purposes if PHP >= 7.4
  */
 
 // Preload some PHP files.
@@ -28,5 +30,5 @@
 $files = array(); /* An array of files you want to preload */
 
 foreach ($files as $file) {
-	opcache_compile_file($file);
+    opcache_compile_file($file);
 }

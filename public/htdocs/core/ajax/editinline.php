@@ -1,5 +1,7 @@
 <?php
+
 /* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,25 +22,24 @@
  *      \brief      Save edit inline changes
  */
 
-
 if (!defined('NOTOKENRENEWAL')) {
-	define('NOTOKENRENEWAL', '1'); // Disables token renewal
+    define('NOTOKENRENEWAL', '1'); // Disables token renewal
 }
 if (!defined('NOREQUIREMENU')) {
-	define('NOREQUIREMENU', '1');
+    define('NOREQUIREMENU', '1');
 }
 if (!defined('NOREQUIREAJAX')) {
-	define('NOREQUIREAJAX', '1');
+    define('NOREQUIREAJAX', '1');
 }
 if (!defined('NOREQUIRESOC')) {
-	define('NOREQUIRESOC', '1');
+    define('NOREQUIRESOC', '1');
 }
 
 // Load Dolibarr environment
-require '../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/website/class/website.class.php';
-require_once DOL_DOCUMENT_ROOT.'/website/class/websitepage.class.php';
-require_once DOL_DOCUMENT_ROOT.'/core/lib/website2.lib.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/website.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/websitepage.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/website2.lib.php';
 
 
 $action = GETPOST('action', 'alpha');
@@ -50,8 +51,8 @@ $element_type = GETPOST('element_type');
 
 $usercanmodify = $user->hasRight('website', 'write');
 if (!$usercanmodify) {
-	print "You don't have permission for this action.";
-	exit;
+    print "You don't have permission for this action.";
+    exit;
 }
 
 
@@ -62,49 +63,49 @@ if (!$usercanmodify) {
 top_httphead();
 
 if (!empty($action) && $action === 'updatedElementContent' && $usercanmodify && !empty($content) && !empty($element_id) && !empty($website_ref) && !empty($page_id)) {
-	// Page object
-	$objectpage = new WebsitePage($db);
-	$res = $objectpage->fetch($page_id);
-	if (!$res) {
-		print "Cannot find page with ID = " . $page_id . ".";
-		exit;
-	}
+    // Page object
+    $objectpage = new WebsitePage($db);
+    $res = $objectpage->fetch($page_id);
+    if (!$res) {
+        print "Cannot find page with ID = " . $page_id . ".";
+        exit;
+    }
 
-	// Website object
-	$objectwebsite = new Website($db);
-	$res = $objectwebsite->fetch($objectpage->fk_website);
-	if (!$res) {
-		print "Cannot find website with REF " . $objectpage->fk_website . ".";
-		exit;
-	}
+    // Website object
+    $objectwebsite = new Website($db);
+    $res = $objectwebsite->fetch($objectpage->fk_website);
+    if (!$res) {
+        print "Cannot find website with REF " . $objectpage->fk_website . ".";
+        exit;
+    }
 
-	$db->begin();
-	$error = 0;
+    $db->begin();
+    $error = 0;
 
-	// Replace element content into database and tpl file
-	$objectpage->content = preg_replace('/<' . $element_type . '[^>]*id="' . $element_id . '"[^>]*>\K(.*?)(?=<\/' . $element_type . '>)/s', $content, $objectpage->content, 1);
-	$res = $objectpage->update($user);
-	if ($res) {
-		global $dolibarr_main_data_root;
-		$pathofwebsite = $dolibarr_main_data_root.($conf->entity > 1 ? '/'.$conf->entity : '').'/website/'.$website_ref;
-		$filetpl = $pathofwebsite.'/page'.$objectpage->id.'.tpl.php';
+    // Replace element content into database and tpl file
+    $objectpage->content = preg_replace('/<' . $element_type . '[^>]*id="' . $element_id . '"[^>]*>\K(.*?)(?=<\/' . $element_type . '>)/s', $content, $objectpage->content, 1);
+    $res = $objectpage->update($user);
+    if ($res) {
+        global $dolibarr_main_data_root;
+        $pathofwebsite = $dolibarr_main_data_root . ($conf->entity > 1 ? '/' . $conf->entity : '') . '/website/' . $website_ref;
+        $filetpl = $pathofwebsite . '/page' . $objectpage->id . '.tpl.php';
 
-		$result = dolSavePageContent($filetpl, $objectwebsite, $objectpage, 1);
-		if (!$result) {
-			print "Failed to write file " . $filetpl . ".";
-			$error++;
-		}
-	} else {
-		print "Failed to save changes error " . $objectpage->error . ".";
-		$error++;
-	}
+        $result = dolSavePageContent($filetpl, $objectwebsite, $objectpage, 1);
+        if (!$result) {
+            print "Failed to write file " . $filetpl . ".";
+            $error++;
+        }
+    } else {
+        print "Failed to save changes error " . $objectpage->error . ".";
+        $error++;
+    }
 
-	if (!$error) {
-		$db->commit();
-		print "Changes are saved for " . $element_type . " with id " . $element_id;
-	} else {
-		$db->rollback();
-	}
+    if (!$error) {
+        $db->commit();
+        print "Changes are saved for " . $element_type . " with id " . $element_id;
+    } else {
+        $db->rollback();
+    }
 
-	$db->close();
+    $db->close();
 }

@@ -189,7 +189,7 @@ class Plugin extends ServerPlugin
                 return false;
 
             default:
-                throw new BadRequest('Unexpected document type: '.$documentType.' for this Content-Type');
+                throw new BadRequest('Unexpected document type: ' . $documentType . ' for this Content-Type');
         }
     }
 

@@ -91,7 +91,7 @@ class Sharee implements Element
             if (property_exists($this, $k)) {
                 $this->$k = $v;
             } else {
-                throw new \InvalidArgumentException('Unknown property: '.$k);
+                throw new \InvalidArgumentException('Unknown property: ' . $k);
             }
         }
     }

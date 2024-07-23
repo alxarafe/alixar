@@ -136,7 +136,7 @@ class EventIterator implements \Iterator
             // event and use that instead. This may not always give the
             // desired result.
             if (!count($this->overriddenEvents)) {
-                throw new InvalidArgumentException('This VCALENDAR did not have an event with UID: '.$uid);
+                throw new InvalidArgumentException('This VCALENDAR did not have an event with UID: ' . $uid);
             }
             $this->masterEvent = array_shift($this->overriddenEvents);
         }
@@ -235,7 +235,7 @@ class EventIterator implements \Iterator
         } else {
             $end = clone $this->currentDate;
 
-            return $end->modify('+'.$this->eventDuration.' seconds');
+            return $end->modify('+' . $this->eventDuration . ' seconds');
         }
     }
 
@@ -303,7 +303,7 @@ class EventIterator implements \Iterator
     public function valid()
     {
         if ($this->counter > Settings::$maxRecurrences && -1 !== Settings::$maxRecurrences) {
-            throw new MaxInstancesExceededException('Recurring events are only allowed to generate '.Settings::$maxRecurrences);
+            throw new MaxInstancesExceededException('Recurring events are only allowed to generate ' . Settings::$maxRecurrences);
         }
 
         return (bool) $this->currentDate;

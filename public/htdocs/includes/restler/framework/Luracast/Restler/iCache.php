@@ -1,5 +1,7 @@
 <?php
+
 namespace Luracast\Restler;
+
 /**
  * Interface for the cache system that manages caching of given data
  *
@@ -60,4 +62,3 @@ interface iCache
      */
     public function isCached($name);
 }
-

@@ -1,4 +1,5 @@
 <?php
+
 //
 //  FPDF_TPL - Version 1.2.3
 //
@@ -17,7 +18,8 @@
 //  limitations under the License.
 //
 
-class FPDF_TPL extends FPDF {
+class FPDF_TPL extends FPDF
+{
     /**
      * Array of Tpl-Data
      * @var array
@@ -73,7 +75,8 @@ class FPDF_TPL extends FPDF {
      * @param int $h The height given in user-unit
      * @return int The ID of new created Template
      */
-    function beginTemplate($x = null, $y = null, $w = null, $h = null) {
+    function beginTemplate($x = null, $y = null, $w = null, $h = null)
+    {
         if (is_subclass_of($this, 'TCPDF')) {
             $this->Error('This method is only usable with FPDF. Use TCPDF methods startTemplate() instead.');
             return;
@@ -142,7 +145,8 @@ class FPDF_TPL extends FPDF {
      *
      * @return mixed If a template is opened, the ID is returned. If not a false is returned.
      */
-    function endTemplate() {
+    function endTemplate()
+    {
         if (is_subclass_of($this, 'TCPDF')) {
             $args = func_get_args();
             return call_user_func_array(array($this, 'TCPDF::endTemplate'), $args);
@@ -191,7 +195,8 @@ class FPDF_TPL extends FPDF {
      * @param int $_h The new height of the template
      * @retrun array The height and width of the template
      */
-    function useTemplate($tplidx, $_x = null, $_y = null, $_w = 0, $_h = 0) {
+    function useTemplate($tplidx, $_x = null, $_y = null, $_w = 0, $_h = 0)
+    {
         if ($this->page <= 0)
             $this->error('You have to add a page first!');
         
@@ -248,7 +253,8 @@ class FPDF_TPL extends FPDF {
      * @param int $_h The height of the template
      * @return array The height and width of the template
      */
-    function getTemplateSize($tplidx, $_w = 0, $_h = 0) {
+    function getTemplateSize($tplidx, $_w = 0, $_h = 0)
+    {
         if (!isset($this->tpls[$tplidx]))
             return false;
 
@@ -272,7 +278,8 @@ class FPDF_TPL extends FPDF {
     /**
      * See FPDF/TCPDF-Documentation ;-)
      */
-    public function SetFont($family, $style = '', $size = 0, $fontfile='', $subset='default', $out=true) {
+    public function SetFont($family, $style = '', $size = 0, $fontfile = '', $subset = 'default', $out = true)
+    {
         if (is_subclass_of($this, 'TCPDF')) {
             $args = func_get_args();
             return call_user_func_array(array($this, 'TCPDF::SetFont'), $args);
@@ -293,9 +300,25 @@ class FPDF_TPL extends FPDF {
      * See FPDF/TCPDF-Documentation ;-)
      */
     function Image(
-        $file, $x = '', $y = '', $w = 0, $h = 0, $type = '', $link = '', $align = '', $resize = false,
-        $dpi = 300, $palign = '', $ismask = false, $imgmask = false, $border = 0, $fitbox = false,
-        $hidden = false, $fitonpage = false, $alt = false, $altimgs = array()
+        $file,
+        $x = '',
+        $y = '',
+        $w = 0,
+        $h = 0,
+        $type = '',
+        $link = '',
+        $align = '',
+        $resize = false,
+        $dpi = 300,
+        $palign = '',
+        $ismask = false,
+        $imgmask = false,
+        $border = 0,
+        $fitbox = false,
+        $hidden = false,
+        $fitonpage = false,
+        $alt = false,
+        $altimgs = array()
     ) {
         if (is_subclass_of($this, 'TCPDF')) {
             $args = func_get_args();
@@ -317,7 +340,8 @@ class FPDF_TPL extends FPDF {
      *
      * AddPage is not available when you're "in" a template.
      */
-    function AddPage($orientation = '', $format = '', $keepmargins = false, $tocpage = false) {
+    function AddPage($orientation = '', $format = '', $keepmargins = false, $tocpage = false)
+    {
         if (is_subclass_of($this, 'TCPDF')) {
             $args = func_get_args();
             return call_user_func_array(array($this, 'TCPDF::AddPage'), $args);
@@ -332,7 +356,8 @@ class FPDF_TPL extends FPDF {
     /**
      * Preserve adding Links in Templates ...won't work
      */
-    function Link($x, $y, $w, $h, $link, $spaces = 0) {
+    function Link($x, $y, $w, $h, $link, $spaces = 0)
+    {
         if (is_subclass_of($this, 'TCPDF')) {
             $args = func_get_args();
             return call_user_func_array(array($this, 'TCPDF::Link'), $args);
@@ -344,7 +369,8 @@ class FPDF_TPL extends FPDF {
         parent::Link($x, $y, $w, $h, $link);
     }
     
-    function AddLink() {
+    function AddLink()
+    {
         if (is_subclass_of($this, 'TCPDF')) {
             $args = func_get_args();
             return call_user_func_array(array($this, 'TCPDF::AddLink'), $args);
@@ -355,7 +381,8 @@ class FPDF_TPL extends FPDF {
         return parent::AddLink();
     }
     
-    function SetLink($link, $y = 0, $page = -1) {
+    function SetLink($link, $y = 0, $page = -1)
+    {
         if (is_subclass_of($this, 'TCPDF')) {
             $args = func_get_args();
             return call_user_func_array(array($this, 'TCPDF::SetLink'), $args);
@@ -369,18 +396,19 @@ class FPDF_TPL extends FPDF {
     /**
      * Private Method that writes the form xobjects
      */
-    function _putformxobjects() {
-        $filter=($this->compress) ? '/Filter /FlateDecode ' : '';
+    function _putformxobjects()
+    {
+        $filter = ($this->compress) ? '/Filter /FlateDecode ' : '';
         reset($this->tpls);
-        foreach($this->tpls AS $tplidx => $tpl) {
-
-            $p=($this->compress) ? gzcompress($tpl['buffer']) : $tpl['buffer'];
+        foreach($this->tpls as $tplidx => $tpl) {
+            $p = ($this->compress) ? gzcompress($tpl['buffer']) : $tpl['buffer'];
             $this->_newobj();
             $this->tpls[$tplidx]['n'] = $this->n;
-            $this->_out('<<'.$filter.'/Type /XObject');
+            $this->_out('<<' . $filter . '/Type /XObject');
             $this->_out('/Subtype /Form');
             $this->_out('/FormType 1');
-            $this->_out(sprintf('/BBox [%.2F %.2F %.2F %.2F]',
+            $this->_out(sprintf(
+                '/BBox [%.2F %.2F %.2F %.2F]',
                 // llx
                 $tpl['x'] * $this->k,
                 // lly
@@ -392,7 +420,8 @@ class FPDF_TPL extends FPDF {
             ));
             
             if ($tpl['x'] != 0 || $tpl['y'] != 0) {
-                $this->_out(sprintf('/Matrix [1 0 0 1 %.5F %.5F]',
+                $this->_out(sprintf(
+                    '/Matrix [1 0 0 1 %.5F %.5F]',
                      -$tpl['x'] * $this->k * 2, $tpl['y'] * $this->k * 2
                 ));
             }
@@ -406,8 +435,10 @@ class FPDF_TPL extends FPDF {
                     $this->_out('/F' . $font['i'] . ' ' . $font['n'] . ' 0 R');
                 $this->_out('>>');
             }
-            if(isset($this->_res['tpl'][$tplidx]['images']) && count($this->_res['tpl'][$tplidx]['images']) || 
-               isset($this->_res['tpl'][$tplidx]['tpls']) && count($this->_res['tpl'][$tplidx]['tpls']))
+            if(
+                isset($this->_res['tpl'][$tplidx]['images']) && count($this->_res['tpl'][$tplidx]['images']) || 
+                isset($this->_res['tpl'][$tplidx]['tpls']) && count($this->_res['tpl'][$tplidx]['tpls'])
+            )
             {
                 $this->_out('/XObject <<');
                 if (isset($this->_res['tpl'][$tplidx]['images']) && count($this->_res['tpl'][$tplidx]['images'])) {
@@ -432,12 +463,14 @@ class FPDF_TPL extends FPDF {
      * Overwritten to add _putformxobjects() after _putimages()
      *
      */
-    function _putimages() {
+    function _putimages()
+    {
         parent::_putimages();
         $this->_putformxobjects();
     }
     
-    function _putxobjectdict() {
+    function _putxobjectdict()
+    {
         parent::_putxobjectdict();
         
         if (count($this->tpls)) {
@@ -450,7 +483,8 @@ class FPDF_TPL extends FPDF {
     /**
      * Private Method
      */
-    function _out($s) {
+    function _out($s)
+    {
         if ($this->state == 2 && $this->_intpl) {
             $this->tpls[$this->tpl]['buffer'] .= $s . "\n";
         } else {

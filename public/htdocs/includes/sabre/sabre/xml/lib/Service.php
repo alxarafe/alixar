@@ -174,13 +174,13 @@ class Service
 
         foreach ($rootElementName as &$rEl) {
             if ('{' !== $rEl[0]) {
-                $rEl = '{}'.$rEl;
+                $rEl = '{}' . $rEl;
             }
         }
 
         $result = $r->parse();
         if (!in_array($result['name'], $rootElementName, true)) {
-            throw new ParseException('Expected '.implode(' or ', $rootElementName).' but received '.$result['name'].' as the root element');
+            throw new ParseException('Expected ' . implode(' or ', $rootElementName) . ' but received ' . $result['name'] . ' as the root element');
         }
 
         return $result['value'];
@@ -269,7 +269,7 @@ class Service
     public function writeValueObject($object, string $contextUri = null)
     {
         if (!isset($this->valueObjectMap[get_class($object)])) {
-            throw new \InvalidArgumentException('"'.get_class($object).'" is not a registered value object class. Register your class with mapValueObject.');
+            throw new \InvalidArgumentException('"' . get_class($object) . '" is not a registered value object class. Register your class with mapValueObject.');
         }
 
         return $this->write(
@@ -293,7 +293,7 @@ class Service
 
         if (!isset($cache[$str])) {
             if (!preg_match('/^{([^}]*)}(.*)$/', $str, $matches)) {
-                throw new \InvalidArgumentException('\''.$str.'\' is not a valid clark-notation formatted string');
+                throw new \InvalidArgumentException('\'' . $str . '\' is not a valid clark-notation formatted string');
             }
 
             $cache[$str] = [

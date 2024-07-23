@@ -63,13 +63,13 @@ class Sapi
      */
     public static function sendResponse(ResponseInterface $response)
     {
-        header('HTTP/'.$response->getHttpVersion().' '.$response->getStatus().' '.$response->getStatusText());
+        header('HTTP/' . $response->getHttpVersion() . ' ' . $response->getStatus() . ' ' . $response->getStatusText());
         foreach ($response->getHeaders() as $key => $value) {
             foreach ($value as $k => $v) {
                 if (0 === $k) {
-                    header($key.': '.$v);
+                    header($key . ': ' . $v);
                 } else {
-                    header($key.': '.$v, false);
+                    header($key . ': ' . $v, false);
                 }
             }
         }
@@ -180,13 +180,13 @@ class Sapi
                 // (fast)cgi does not usually do this, however.
                 case 'PHP_AUTH_USER':
                     if (isset($serverArray['PHP_AUTH_PW'])) {
-                        $headers['Authorization'] = 'Basic '.base64_encode($value.':'.$serverArray['PHP_AUTH_PW']);
+                        $headers['Authorization'] = 'Basic ' . base64_encode($value . ':' . $serverArray['PHP_AUTH_PW']);
                     }
                     break;
 
                 // Similarly, mod_php may also screw around with digest auth.
                 case 'PHP_AUTH_DIGEST':
-                    $headers['Authorization'] = 'Digest '.$value;
+                    $headers['Authorization'] = 'Digest ' . $value;
                     break;
 
                 // Apache may prefix the HTTP_AUTHORIZATION header with
@@ -235,7 +235,7 @@ class Sapi
         $r = new Request($method, $url, $headers);
         $r->setHttpVersion($httpVersion);
         $r->setRawServerData($serverArray);
-        $r->setAbsoluteUrl($protocol.'://'.$hostName.$url);
+        $r->setAbsoluteUrl($protocol . '://' . $hostName . $url);
 
         return $r;
     }
