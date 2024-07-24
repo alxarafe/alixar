@@ -230,7 +230,7 @@ $i = 0;
 
 if ($num == 1 && (GETPOST("mode") == 'search')) {
     $objp = $db->fetch_object($resql);
-    header("Location: " . DOL_URL_ROOT . "/product/card.php?id=" . $objp->rowid);
+    header("Location: " . constant('BASE_URL') . "/product/card.php?id=" . $objp->rowid);
     exit;
 }
 

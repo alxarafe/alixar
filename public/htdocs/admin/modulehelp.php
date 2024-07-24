@@ -354,7 +354,7 @@ if ($mode == 'desc') {
         global $dolibarr_allow_download_external_modules;
         if (!empty($dolibarr_allow_download_external_modules) && preg_match('/\/custom\//', $dirofmodule)) {
             // Add a link to download a zip of the module
-            $textexternal .= ' <a href="' . constant('BASE_URL') . 'admin/tools/export_files.php?export_type=externalmodule&what=' . urlencode($moduledir) . '&compression=zip&zipfilename_template=module_' . $moduledir . '-' . $version . '.notorig" target="_blank" rel="noopener">' . img_picto('', 'download') . '</a>';
+            $textexternal .= ' <a href="' . constant('BASE_URL') . '/admin/tools/export_files.php?export_type=externalmodule&what=' . urlencode($moduledir) . '&compression=zip&zipfilename_template=module_' . $moduledir . '-' . $version . '.notorig" target="_blank" rel="noopener">' . img_picto('', 'download') . '</a>';
         }
 
         if ($objMod->editor_name != 'dolibarr') {

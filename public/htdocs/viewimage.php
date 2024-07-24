@@ -130,7 +130,7 @@ function llxFooter()
 {
 }
 
-require 'main.inc.php'; // Load $user and permissions
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
 $action = GETPOST('action', 'aZ09');

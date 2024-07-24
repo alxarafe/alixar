@@ -151,7 +151,7 @@ if ($object->id > 0) {
     $titre = $langs->trans("ResourceSingular");
     print dol_get_fiche_head($head, 'agenda', $titre, -1, $picto);
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'resource/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/resource/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
     $morehtmlref = '<div class="refidno">';
     $morehtmlref .= '</div>';

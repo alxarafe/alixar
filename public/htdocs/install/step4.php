@@ -27,9 +27,9 @@
  *  \brief      Ask login and password of Dolibarr admin user
  */
 
-include_once 'inc.php';
-require_once $dolibarr_main_document_root . '/core/class/conf.class.php';
-require_once $dolibarr_main_document_root . '/core/lib/admin.lib.php';
+include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/conf.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 
 global $langs;
 

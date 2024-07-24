@@ -788,7 +788,7 @@ if ($action == 'create' && $user->hasRight('projet', 'creer')) {
                 $tmpbacktopagejsfields = 'addthirdparty:socid,search_socid';
                 print dolButtonToOpenUrlInDialogPopup('addthirdparty', $langs->transnoentitiesnoconv('AddThirdParty'), $newbutton, $url, '', '', '', $tmpbacktopagejsfields);
             } else {
-                print ' <a href="' . DOL_URL_ROOT . $url . '">' . $newbutton . '</a>';
+                print ' <a href="' . constant('DOL_URL_ROOT') . $url . '">' . $newbutton . '</a>';
             }
         }
         print '</td></tr>';

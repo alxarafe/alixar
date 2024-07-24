@@ -71,7 +71,7 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('tax', '
     $result = $object->delete($user);
     if ($result > 0) {
         $db->commit();
-        header("Location: " . DOL_URL_ROOT . "/compta/tva/payments.php?mode=tvaonly");
+        header("Location: " . constant('BASE_URL') . "/compta/tva/payments.php?mode=tvaonly");
         exit;
     } else {
         setEventMessages($object->error, $object->errors, 'errors');

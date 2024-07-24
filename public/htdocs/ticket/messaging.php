@@ -229,7 +229,7 @@ if (isModEnabled('project')) {
 
 $morehtmlref .= '</div>';
 
-$linkback = '<a href="' . constant('BASE_URL') . 'ticket/list.php"><strong>' . $langs->trans("BackToList") . '</strong></a> ';
+$linkback = '<a href="' . constant('BASE_URL') . '/ticket/list.php"><strong>' . $langs->trans("BackToList") . '</strong></a> ';
 
 dol_banner_tab($object, 'ref', $linkback, ($user->socid ? 0 : 1), 'ref', 'ref', $morehtmlref, '', 0, '', '', 1);
 

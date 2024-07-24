@@ -1140,7 +1140,7 @@ if (empty($reshook)) {
                     $object->fk_unit
                 );
                 if ($result > 0) {
-                    header("Location: " . DOL_URL_ROOT . "/comm/propal/card.php?id=" . $propal->id);
+                    header("Location: " . constant('BASE_URL') . "/comm/propal/card.php?id=" . $propal->id);
                     return;
                 }
 
@@ -1182,7 +1182,7 @@ if (empty($reshook)) {
                 );
 
                 if ($result > 0) {
-                    header("Location: " . DOL_URL_ROOT . "/commande/card.php?id=" . urlencode((string) ($commande->id)));
+                    header("Location: " . constant('BASE_URL') . "/commande/card.php?id=" . urlencode((string) ($commande->id)));
                     exit;
                 }
             } elseif (GETPOST('factureid') > 0) {
@@ -1227,7 +1227,7 @@ if (empty($reshook)) {
                 );
 
                 if ($result > 0) {
-                    header("Location: " . DOL_URL_ROOT . "/compta/facture/card.php?facid=" . $facture->id);
+                    header("Location: " . constant('BASE_URL') . "/compta/facture/card.php?facid=" . $facture->id);
                     exit;
                 }
             }

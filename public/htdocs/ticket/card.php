@@ -475,7 +475,7 @@ if (empty($reshook)) {
         if ($object->fetch(GETPOSTINT('id'), '', GETPOST('track_id', 'alpha')) >= 0) {
             if ($object->delete($user) > 0) {
                 setEventMessages('<div class="confirm">' . $langs->trans('TicketDeletedSuccess') . '</div>', null, 'mesgs');
-                header("Location: " . DOL_URL_ROOT . "/ticket/list.php");
+                header("Location: " . constant('BASE_URL') . "/ticket/list.php");
                 exit;
             } else {
                 $langs->load("errors");

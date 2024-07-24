@@ -337,7 +337,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     if (is_object($object->thirdparty)) {
         $morehtmlref .= $object->thirdparty->getNomUrl(1, 'customer');
         if (!getDolGlobalString('MAIN_DISABLE_OTHER_LINK') && $object->thirdparty->id > 0) {
-            $morehtmlref .= ' (<a href="' . constant('BASE_URL') . 'commande/list.php?socid=' . $object->thirdparty->id . '&search_societe=' . urlencode($object->thirdparty->name) . '">' . $langs->trans("OtherOrders") . '</a>)';
+            $morehtmlref .= ' (<a href="' . constant('BASE_URL') . '/commande/list.php?socid=' . $object->thirdparty->id . '&search_societe=' . urlencode($object->thirdparty->name) . '">' . $langs->trans("OtherOrders") . '</a>)';
         }
     }
     // Project
@@ -972,7 +972,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         // Inventory code
         if (!empty($arrayfields['m.inventorycode']['checked'])) {
             print '<td class="tdoverflowmax150" title="' . dol_escape_htmltag($objp->inventorycode) . '">';
-            //print '<a href="' . constant('BASE_URL') . 'product/stock/movement_card.php' . '?id=' . $objp->entrepot_id . '&amp;search_inventorycode=' . $objp->inventorycode . '&amp;search_type_mouvement=' . $objp->type_mouvement . '">';
+            //print '<a href="' . constant('BASE_URL') . '/product/stock/movement_card.php' . '?id=' . $objp->entrepot_id . '&amp;search_inventorycode=' . $objp->inventorycode . '&amp;search_type_mouvement=' . $objp->type_mouvement . '">';
             print dol_escape_htmltag($objp->inventorycode);
             //print '</a>';
             print '</td>';

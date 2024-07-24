@@ -474,7 +474,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
     // Object card
     // ------------------------------------------------------------
-    $linkback = '<a href="' . constant('BASE_URL') . 'product/stock/productlot_list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/product/stock/productlot_list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
     $shownav = 1;
     if ($user->socid && !in_array('batch', explode(',', getDolGlobalString('MAIN_MODULES_FOR_EXTERNAL')))) {
@@ -554,9 +554,9 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     print dol_get_fiche_end();
 
     // Link to other lists
-    print '<a href="' . constant('BASE_URL') . 'product/reassortlot.php?sref=' . urlencode($producttmp->ref) . '&search_batch=' . urlencode($object->batch) . '">' . img_object('', 'stock', 'class="pictofixedwidth"') . $langs->trans("ShowCurrentStockOfLot") . '</a><br>';
+    print '<a href="' . constant('BASE_URL') . '/product/reassortlot.php?sref=' . urlencode($producttmp->ref) . '&search_batch=' . urlencode($object->batch) . '">' . img_object('', 'stock', 'class="pictofixedwidth"') . $langs->trans("ShowCurrentStockOfLot") . '</a><br>';
     print '<br>';
-    print '<a href="' . constant('BASE_URL') . 'product/stock/movement_list.php?search_product_ref=' . urlencode($producttmp->ref) . '&search_batch=' . urlencode($object->batch) . '">' . img_object('', 'movement', 'class="pictofixedwidth"') . $langs->trans("ShowLogOfMovementIfLot") . '</a><br>';
+    print '<a href="' . constant('BASE_URL') . '/product/stock/movement_list.php?search_product_ref=' . urlencode($producttmp->ref) . '&search_batch=' . urlencode($object->batch) . '">' . img_object('', 'movement', 'class="pictofixedwidth"') . $langs->trans("ShowLogOfMovementIfLot") . '</a><br>';
 
     print '<br>';
 

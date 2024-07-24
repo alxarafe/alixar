@@ -57,7 +57,7 @@ $head = subscription_prepare_head($object);
 
 print dol_get_fiche_head($head, 'info', $langs->trans("Subscription"), -1, 'payment');
 
-$linkback = '<a href="' . constant('BASE_URL') . 'adherents/subscription/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/adherents/subscription/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
 dol_banner_tab($object, 'rowid', $linkback, 1);
 

@@ -450,7 +450,7 @@ if ($modecompta == 'BOOKKEEPING') {
 
             print '<tr class="oddeven">';
             print '<td>&nbsp;</td>';
-            print "<td>" . $langs->trans("Bills") . ' <a href="' . constant('BASE_URL') . 'compta/facture/list.php?socid=' . $objp->socid . '">' . $objp->name . "</td>\n";
+            print "<td>" . $langs->trans("Bills") . ' <a href="' . constant('BASE_URL') . '/compta/facture/list.php?socid=' . $objp->socid . '">' . $objp->name . "</td>\n";
 
             print '<td class="right">';
             if ($modecompta == 'CREANCES-DETTES') {
@@ -598,7 +598,7 @@ if ($modecompta == 'BOOKKEEPING') {
                     print '<tr class="oddeven">';
                     print '<td>&nbsp;</td>';
 
-                    print "<td>" . $langs->trans("Donation") . " <a href=\"" . DOL_URL_ROOT . "/don/list.php?search_company=" . $obj->name . "&search_name=" . $obj->firstname . " " . $obj->lastname . "\">" . $obj->name . " " . $obj->firstname . " " . $obj->lastname . "</a></td>\n";
+                    print "<td>" . $langs->trans("Donation") . " <a href=\"" . constant('DOL_URL_ROOT') . "/don/list.php?search_company=" . $obj->name . "&search_name=" . $obj->firstname . " " . $obj->lastname . "\">" . $obj->name . " " . $obj->firstname . " " . $obj->lastname . "</a></td>\n";
 
                     print '<td class="right">';
                     if ($modecompta == 'CREANCES-DETTES') {
@@ -686,7 +686,7 @@ if ($modecompta == 'BOOKKEEPING') {
 
                 print '<tr class="oddeven">';
                 print '<td>&nbsp;</td>';
-                print "<td>" . $langs->trans("Bills") . ' <a href="' . DOL_URL_ROOT . "/fourn/facture/list.php?socid=" . $objp->socid . '">' . $objp->name . '</a></td>' . "\n";
+                print "<td>" . $langs->trans("Bills") . ' <a href="' . constant('DOL_URL_ROOT') . "/fourn/facture/list.php?socid=" . $objp->socid . '">' . $objp->name . '</a></td>' . "\n";
 
                 print '<td class="right">';
                 if ($modecompta == 'CREANCES-DETTES') {
@@ -1003,7 +1003,7 @@ if ($modecompta == 'BOOKKEEPING') {
                     $userstatic = new User($db);
                     $userstatic->fetch($obj->fk_user);
 
-                    print "<td>" . $langs->trans("Salary") . " <a href=\"" . DOL_URL_ROOT . "/salaries/list.php?search_user=" . urlencode($userstatic->getFullName($langs)) . "\">" . $obj->firstname . " " . $obj->lastname . "</a></td>\n";
+                    print "<td>" . $langs->trans("Salary") . " <a href=\"" . constant('DOL_URL_ROOT') . "/salaries/list.php?search_user=" . urlencode($userstatic->getFullName($langs)) . "\">" . $obj->firstname . " " . $obj->lastname . "</a></td>\n";
                     print '<td class="right">';
                     if ($modecompta == 'CREANCES-DETTES') {
                         print '<span class="amount">' . price(-$obj->amount) . '</span>';
@@ -1099,7 +1099,7 @@ if ($modecompta == 'BOOKKEEPING') {
 
                     print '<tr class="oddeven">';
                     print '<td>&nbsp;</td>';
-                    print "<td>" . $langs->trans("ExpenseReport") . " <a href=\"" . DOL_URL_ROOT . "/expensereport/list.php?search_user=" . $obj->userid . "\">" . $obj->firstname . " " . $obj->lastname . "</a></td>\n";
+                    print "<td>" . $langs->trans("ExpenseReport") . " <a href=\"" . constant('DOL_URL_ROOT') . "/expensereport/list.php?search_user=" . $obj->userid . "\">" . $obj->firstname . " " . $obj->lastname . "</a></td>\n";
                     print '<td class="right">';
                     if ($modecompta == 'CREANCES-DETTES') {
                         print '<span class="amount">' . price(-$obj->amount_ht) . '</span>';

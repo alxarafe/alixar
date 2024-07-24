@@ -73,7 +73,7 @@ if ($resql) {
 
 llxHeader('', $langs->trans("CashDeskSetup"), '', '', 0, 0, '', '', '', 'mod-takepos page-admin_other');
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("CashDeskSetup") . ' (TakePOS)', $linkback, 'title_setup');
 $head = takepos_admin_prepare_head();
 print dol_get_fiche_head($head, 'other', 'TakePOS', -1, 'cash-register');

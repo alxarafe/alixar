@@ -681,10 +681,10 @@ if (isModEnabled("societe") && $user->hasRight('societe', 'lire')) {
                 $obj = $companystatic;
                 $s = '';
                 if (($obj->client == 2 || $obj->client == 3) && !getDolGlobalString('SOCIETE_DISABLE_PROSPECTS')) {
-                    $s .= '<a class="customer-back opacitymedium" title="' . $langs->trans("Prospect") . '" href="' . constant('BASE_URL') . 'comm/card.php?socid=' . $companystatic->id . '">' . dol_substr($langs->trans("Prospect"), 0, 1) . '</a>';
+                    $s .= '<a class="customer-back opacitymedium" title="' . $langs->trans("Prospect") . '" href="' . constant('BASE_URL') . '/comm/card.php?socid=' . $companystatic->id . '">' . dol_substr($langs->trans("Prospect"), 0, 1) . '</a>';
                 }
                 if (($obj->client == 1 || $obj->client == 3) && !getDolGlobalString('SOCIETE_DISABLE_CUSTOMERS')) {
-                    $s .= '<a class="customer-back" title="' . $langs->trans("Customer") . '" href="' . constant('BASE_URL') . 'comm/card.php?socid=' . $companystatic->id . '">' . dol_substr($langs->trans("Customer"), 0, 1) . '</a>';
+                    $s .= '<a class="customer-back" title="' . $langs->trans("Customer") . '" href="' . constant('BASE_URL') . '/comm/card.php?socid=' . $companystatic->id . '">' . dol_substr($langs->trans("Customer"), 0, 1) . '</a>';
                 }
                 /*
                 if ((isModEnabled("supplier_order") || isModEnabled("supplier_invoice")) && $obj->fournisseur)
@@ -967,7 +967,7 @@ if ((isModEnabled("supplier_order") || isModEnabled("supplier_invoice")) && $use
                     $s .= '<a class="customer-back" title="'.$langs->trans("Customer").'" href="'.DOL_URL_ROOT.'/comm/card.php?socid='.$companystatic->id.'">'.dol_substr($langs->trans("Customer"), 0, 1).'</a>';
                 }*/
                 if ((isModEnabled("supplier_order") || isModEnabled("supplier_invoice")) && $obj->fournisseur) {
-                    $s .= '<a class="vendor-back" title="' . $langs->trans("Supplier") . '" href="' . constant('BASE_URL') . 'fourn/card.php?socid=' . $companystatic->id . '">' . dol_substr($langs->trans("Supplier"), 0, 1) . '</a>';
+                    $s .= '<a class="vendor-back" title="' . $langs->trans("Supplier") . '" href="' . constant('BASE_URL') . '/fourn/card.php?socid=' . $companystatic->id . '">' . dol_substr($langs->trans("Supplier"), 0, 1) . '</a>';
                 }
                 print $s;
 

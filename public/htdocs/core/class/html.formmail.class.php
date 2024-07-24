@@ -1469,7 +1469,7 @@ class FormMail extends Form
 
 
 					$.ajax({
-						url: '" . DOL_URL_ROOT . "/ai/ajax/generate_content.php?token=" . currentToken() . "',
+						url: '" . constant('DOL_URL_ROOT') . "/ai/ajax/generate_content.php?token=" . currentToken() . "',
 						type: 'POST',
 						contentType: 'application/json',
 						data: JSON.stringify({

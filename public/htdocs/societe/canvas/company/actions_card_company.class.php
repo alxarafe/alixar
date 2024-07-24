@@ -108,7 +108,7 @@ class ActionsCardCompany extends ActionsCardCommon
             $js = "\n";
             $js .= '<script type="text/javascript">';
             $js .= "function CheckVAT(a) {\n";
-            $js .= "newpopup('" . DOL_URL_ROOT . "/societe/checkvat/checkVatPopup.php?vatNumber='+a,'" . dol_escape_js($langs->trans("VATIntraCheckableOnEUSite")) . "',500,230);\n";
+            $js .= "newpopup('" . constant('DOL_URL_ROOT') . "/societe/checkvat/checkVatPopup.php?vatNumber='+a,'" . dol_escape_js($langs->trans("VATIntraCheckableOnEUSite")) . "',500,230);\n";
             $js .= "}\n";
             $js .= '</script>';
             $js .= "\n";

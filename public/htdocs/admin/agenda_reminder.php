@@ -105,7 +105,7 @@ if ($action == 'set') {
         '@phan-var-force pdf_standard_actions $module';
 
         if ($module->write_file($commande, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=action&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=action&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($module->error, $module->errors, 'errors');

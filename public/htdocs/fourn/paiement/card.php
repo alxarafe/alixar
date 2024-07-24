@@ -190,7 +190,7 @@ if ($result > 0) {
         print $form->formconfirm($_SERVER['PHP_SELF'] . '?id=' . $object->id, $langs->trans("ValidatePayment"), $langs->trans("ConfirmValidatePayment"), 'confirm_validate');
     }
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'fourn/paiement/list.php' . (!empty($socid) ? '?socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/fourn/paiement/list.php' . (!empty($socid) ? '?socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
 
 
     dol_banner_tab($object, 'id', $linkback, 1, 'rowid', 'ref');
@@ -327,7 +327,7 @@ if ($result > 0) {
                 // Ref supplier
                 print '<td>' . $objp->ref_supplier . "</td>\n";
                 // Third party
-                print '<td><a href="' . constant('BASE_URL') . 'fourn/card.php?socid=' . $objp->socid . '">' . img_object($langs->trans('ShowCompany'), 'company') . ' ' . $objp->name . '</a></td>';
+                print '<td><a href="' . constant('BASE_URL') . '/fourn/card.php?socid=' . $objp->socid . '">' . img_object($langs->trans('ShowCompany'), 'company') . ' ' . $objp->name . '</a></td>';
                 // Expected to pay
                 print '<td class="right">' . price($objp->total_ttc) . '</td>';
                 // Paid

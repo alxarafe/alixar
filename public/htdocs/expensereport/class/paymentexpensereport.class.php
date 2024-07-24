@@ -686,7 +686,7 @@ class PaymentExpenseReport extends CommonObject
         }
 
         if (!empty($this->id)) {
-            $link = '<a href="' . constant('BASE_URL') . 'expensereport/payment/card.php?id=' . $this->id . '" title="' . dol_escape_htmltag($label, 1) . '" class="classfortooltip">';
+            $link = '<a href="' . constant('BASE_URL') . '/expensereport/payment/card.php?id=' . $this->id . '" title="' . dol_escape_htmltag($label, 1) . '" class="classfortooltip">';
             $linkend = '</a>';
 
             if ($withpicto) {

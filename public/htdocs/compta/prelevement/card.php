@@ -207,7 +207,7 @@ if ($id > 0 || $ref) {
         print '<div class="error">' . $object->getErrorString(GETPOST('error', 'alpha')) . '</div>';
     }
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'compta/prelevement/orders_list.php?restore_lastsearch_values=1' . ($object->type != 'bank-transfer' ? '' : '&type=bank-transfer') . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/compta/prelevement/orders_list.php?restore_lastsearch_values=1' . ($object->type != 'bank-transfer' ? '' : '&type=bank-transfer') . '">' . $langs->trans("BackToList") . '</a>';
 
     dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref');
 
@@ -344,7 +344,7 @@ if ($id > 0 || $ref) {
         $relativepath = 'receipts/' . $object->ref . '.xml';
     }
 
-    print '<a data-ajax="false" href="' . constant('BASE_URL') . 'document.php?type=text/plain&amp;modulepart=' . $modulepart . '&amp;file=' . urlencode($relativepath) . '">' . $relativepath;
+    print '<a data-ajax="false" href="' . constant('BASE_URL') . '/document.php?type=text/plain&amp;modulepart=' . $modulepart . '&amp;file=' . urlencode($relativepath) . '">' . $relativepath;
     print img_picto('', 'download', 'class="paddingleft"');
     print '</a>';
     print '</td></tr>';
@@ -551,7 +551,7 @@ if ($id > 0 || $ref) {
 
             // Status of line
             print "<td>";
-            print '<a class="valignmiddle" href="' . constant('BASE_URL') . 'compta/prelevement/line.php?id=' . $obj->rowid . '&type=' . $object->type . '&token=' . newToken() . '">';
+            print '<a class="valignmiddle" href="' . constant('BASE_URL') . '/compta/prelevement/line.php?id=' . $obj->rowid . '&type=' . $object->type . '&token=' . newToken() . '">';
             print $ligne->LibStatut($obj->statut, 2);
             print '<span class="paddingleft">' . $obj->rowid . '</span>';
             print '</a></td>';

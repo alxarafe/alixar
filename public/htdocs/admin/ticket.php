@@ -246,7 +246,7 @@ $page_name = 'TicketSetup';
 llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-ticket');
 
 // Subheader
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 
 print load_fiche_titre($langs->trans($page_name), $linkback, 'title_setup');
 
@@ -255,7 +255,7 @@ $head = ticketAdminPrepareHead();
 
 print dol_get_fiche_head($head, 'settings', $langs->trans("Module56000Name"), -1, "ticket");
 
-print '<span class="opacitymedium">' . $langs->trans("TicketSetupDictionaries") . '</span> : <a href="' . constant('BASE_URL') . 'admin/dict.php">' . $langs->trans("ClickHereToGoTo", $langs->transnoentitiesnoconv("DictionarySetup")) . '</a><br>';
+print '<span class="opacitymedium">' . $langs->trans("TicketSetupDictionaries") . '</span> : <a href="' . constant('BASE_URL') . '/admin/dict.php">' . $langs->trans("ClickHereToGoTo", $langs->transnoentitiesnoconv("DictionarySetup")) . '</a><br>';
 
 print dol_get_fiche_end();
 

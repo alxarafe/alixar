@@ -183,7 +183,7 @@ function dolWebsiteReplacementOfLinks($website, $content, $removephppart = 0, $c
     $content = str_replace('src="' . constant('BASE_URL') . '/viewimage.php', 'src="!~!~!~' . constant('BASE_URL') . '/viewimage.php', $content);
     $content = str_replace('href="document.php', 'href="!~!~!~/document.php', $content);
     $content = str_replace('href="/document.php', 'href="!~!~!~/document.php', $content);
-    $content = str_replace('href="' . constant('BASE_URL') . 'document.php', 'href="!~!~!~' . constant('BASE_URL') . '/document.php', $content);
+    $content = str_replace('href="' . constant('BASE_URL') . '/document.php', 'href="!~!~!~' . constant('BASE_URL') . '/document.php', $content);
 
     // Replace relative link '/' with dolibarr URL
     $content = preg_replace('/(href=")\/(#[^\"<>]*)?\"/', '\1!~!~!~' . constant('BASE_URL') . '/website/index.php?website=' . $website->ref . '&pageid=' . $website->fk_default_home . '\2"', $content, -1, $nbrep);
@@ -208,11 +208,11 @@ function dolWebsiteReplacementOfLinks($website, $content, $removephppart = 0, $c
     $content = preg_replace('/(action=")\/?([^:\"]*)(\.php\")/', '\1!~!~!~' . constant('BASE_URL') . '/website/index.php?website=' . $website->ref . '&pageref=\2"', $content, -1, $nbrep);
 
     // Fix relative link /document.php with correct URL after the DOL_URL_ROOT:  ...href="/document.php?modulepart="
-    $content = preg_replace('/(href=")(\/?document\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . DOL_URL_ROOT . '\2\3', $content, -1, $nbrep);
-    $content = preg_replace('/(src=")(\/?document\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . DOL_URL_ROOT . '\2\3', $content, -1, $nbrep);
+    $content = preg_replace('/(href=")(\/?document\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . constant('DOL_URL_ROOT') . '\2\3', $content, -1, $nbrep);
+    $content = preg_replace('/(src=")(\/?document\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . constant('DOL_URL_ROOT') . '\2\3', $content, -1, $nbrep);
 
     // Fix relative link /viewimage.php with correct URL after the DOL_URL_ROOT:  ...href="/viewimage.php?modulepart="
-    $content = preg_replace('/(url\(")(\/?viewimage\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . DOL_URL_ROOT . '\2\3', $content, -1, $nbrep);
+    $content = preg_replace('/(url\(")(\/?viewimage\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . constant('DOL_URL_ROOT') . '\2\3', $content, -1, $nbrep);
 
     // Fix relative URL
     $content = str_replace('src="!~!~!~/viewimage.php', 'src="!~!~!~' . constant('BASE_URL') . '/viewimage.php', $content);
@@ -322,7 +322,7 @@ function dolWebsiteOutput($content, $contenttype = 'html', $containerid = 0)
         $content = str_replace(array('src="viewimage.php', 'src="/viewimage.php'), 'src="!~!~!~/viewimage.php', $content);
         $content = str_replace('src="' . constant('BASE_URL') . '/viewimage.php', 'src="!~!~!~' . constant('BASE_URL') . '/viewimage.php', $content);
         $content = str_replace(array('href="document.php', 'href="/document.php'), 'href="!~!~!~/document.php', $content);
-        $content = str_replace('href="' . constant('BASE_URL') . 'document.php', 'href="!~!~!~' . constant('BASE_URL') . '/document.php', $content);
+        $content = str_replace('href="' . constant('BASE_URL') . '/document.php', 'href="!~!~!~' . constant('BASE_URL') . '/document.php', $content);
 
         // Replace relative link / with dolibarr URL:  ...href="/"...
         $content = preg_replace('/(href=")\/\"/', '\1!~!~!~' . constant('BASE_URL') . '/public/website/index.php?website=' . $website->ref . '"', $content, -1, $nbrep);
@@ -340,13 +340,13 @@ function dolWebsiteOutput($content, $contenttype = 'html', $containerid = 0)
         $content = preg_replace('/(href=")\/?([a-zA-Z0-9\-_#]+)(\"|\?)/', '\1!~!~!~' . constant('BASE_URL') . '/public/website/index.php?website=' . $website->ref . '&pageref=\2\3', $content, -1, $nbrep);
 
         // Fix relative link /document.php with correct URL after the DOL_URL_ROOT:  href="/document.php?modulepart=" => href="/dolibarr/document.php?modulepart="
-        $content = preg_replace('/(href=")(\/?document\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . DOL_URL_ROOT . '\2\3', $content, -1, $nbrep);
-        $content = preg_replace('/(src=")(\/?document\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . DOL_URL_ROOT . '\2\3', $content, -1, $nbrep);
+        $content = preg_replace('/(href=")(\/?document\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . constant('DOL_URL_ROOT') . '\2\3', $content, -1, $nbrep);
+        $content = preg_replace('/(src=")(\/?document\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . constant('DOL_URL_ROOT') . '\2\3', $content, -1, $nbrep);
 
         // Fix relative link /viewimage.php with correct URL after the DOL_URL_ROOT: href="/viewimage.php?modulepart=" => href="/dolibarr/viewimage.php?modulepart="
-        $content = preg_replace('/(href=")(\/?viewimage\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . DOL_URL_ROOT . '\2\3', $content, -1, $nbrep);
-        $content = preg_replace('/(src=")(\/?viewimage\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . DOL_URL_ROOT . '\2\3', $content, -1, $nbrep);
-        $content = preg_replace('/(url\(")(\/?viewimage\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . DOL_URL_ROOT . '\2\3', $content, -1, $nbrep);
+        $content = preg_replace('/(href=")(\/?viewimage\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . constant('DOL_URL_ROOT') . '\2\3', $content, -1, $nbrep);
+        $content = preg_replace('/(src=")(\/?viewimage\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . constant('DOL_URL_ROOT') . '\2\3', $content, -1, $nbrep);
+        $content = preg_replace('/(url\(")(\/?viewimage\.php\?[^\"]*modulepart=[^\"]*)(\")/', '\1!~!~!~' . constant('DOL_URL_ROOT') . '\2\3', $content, -1, $nbrep);
 
         // Fix relative link into medias with correct URL after the DOL_URL_ROOT: ../url("medias/
         $content = preg_replace('/url\((["\']?)\/?medias\//', 'url(\1!~!~!~' . constant('BASE_URL') . '/viewimage.php?modulepart=medias&file=', $content, -1, $nbrep);

@@ -81,7 +81,7 @@ if ($test) {
     print img_picto('', 'tick.png', 'class="pictofixedwidth"') . ' ' . $langs->trans("NotInstalled") . '  <span class="opacitymedium">' . $langs->trans("NotSlowedDownByThis") . '</span>';
 } else {
     print img_picto('', 'warning', 'class="pictofixedwidth"') . ' ' . $langs->trans("ModuleActivated", $langs->transnoentities("XDebug"));
-    print ' - ' . $langs->trans("MoreInformation") . ' <a href="' . constant('BASE_URL') . 'admin/system/xdebug.php">XDebug admin page</a>';
+    print ' - ' . $langs->trans("MoreInformation") . ' <a href="' . constant('BASE_URL') . '/admin/system/xdebug.php">XDebug admin page</a>';
 }
 print '<br>';
 print '</div>';
@@ -146,7 +146,7 @@ $test = function_exists('xcache_info');
 if (!$foundcache && $test) {
     $foundcache++;
     print img_picto('', 'tick.png', 'class="pictofixedwidth"') . ' ' . $langs->trans("PHPModuleLoaded", "XCache");
-    print ' ' . $langs->trans("MoreInformation") . ' <a href="' . constant('BASE_URL') . 'admin/system/xcache.php">Xcache admin page</a>';
+    print ' ' . $langs->trans("MoreInformation") . ' <a href="' . constant('BASE_URL') . '/admin/system/xcache.php">Xcache admin page</a>';
 }
 $test = function_exists('eaccelerator_info');
 if (!$foundcache && $test) {

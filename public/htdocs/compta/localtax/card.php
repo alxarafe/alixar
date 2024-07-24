@@ -225,7 +225,7 @@ if ($id) {
 
     print dol_get_fiche_head($head, 'card', $langs->transcountry("LT" . $object->ltt, $mysoc->country_code), -1, 'payment');
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'compta/localtax/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/compta/localtax/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
     dol_banner_tab($object, 'id', $linkback, 1, 'rowid', 'ref', $morehtmlref, '', 0, '', '');
 

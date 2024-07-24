@@ -1962,7 +1962,7 @@ if ($action == 'create') {
 				});
 				</script>';
             }
-            print ' <a href="' . constant('BASE_URL') . 'societe/card.php?action=create&client=3&fournisseur=0&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
+            print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&client=3&fournisseur=0&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
             print '</td>';
         }
         print '</tr>' . "\n";
@@ -2074,7 +2074,7 @@ if ($action == 'create') {
             print '<tr class="field_projectid">';
             print '<td class="titlefieldcreate">' . $langs->trans("Project") . '</td><td class="valuefieldcreate">';
             print img_picto('', 'project', 'class="pictofixedwidth"') . $formproject->select_projects(($soc->id > 0 ? $soc->id : -1), $projectid, 'projectid', 0, 0, 1, 1, 0, 0, 0, '', 1, 0, 'maxwidth500 widthcentpercentminusxx');
-            print ' <a href="' . constant('BASE_URL') . 'projet/card.php?socid=' . $soc->id . '&action=create&status=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create&socid=' . $soc->id) . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddProject") . '"></span></a>';
+            print ' <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $soc->id . '&action=create&status=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create&socid=' . $soc->id) . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddProject") . '"></span></a>';
             print '</td>';
             print '</tr>';
         }
@@ -2515,7 +2515,7 @@ if ($action == 'create') {
 
     // Proposal card
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'comm/propal/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/comm/propal/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
 
     $morehtmlref = '<div class="refidno">';
     // Ref customer
@@ -2524,7 +2524,7 @@ if ($action == 'create') {
     // Thirdparty
     $morehtmlref .= '<br><span class="hideonsmartphone">' . $langs->trans('ThirdParty') . ' : </span>' . $soc->getNomUrl(1, 'customer');
     if (!getDolGlobalString('MAIN_DISABLE_OTHER_LINK') && $soc->id > 0) {
-        $morehtmlref .= ' (<a href="' . constant('BASE_URL') . 'comm/propal/list.php?socid=' . $soc->id . '&search_societe=' . urlencode($soc->name) . '">' . $langs->trans("OtherProposals") . '</a>)';
+        $morehtmlref .= ' (<a href="' . constant('BASE_URL') . '/comm/propal/list.php?socid=' . $soc->id . '&search_societe=' . urlencode($soc->name) . '">' . $langs->trans("OtherProposals") . '</a>)';
     }
     // Project
     if (isModEnabled('project')) {
@@ -2881,7 +2881,7 @@ if ($action == 'create') {
             print $langs->trans('IncotermLabel');
             print '<td><td class="right">';
             if ($action != 'editincoterm' && $usercancreate && $caneditfield) {
-                print '<a class="editfielda" href="' . constant('BASE_URL') . 'comm/propal/card.php?id=' . $object->id . '&action=editincoterm&token=' . newToken() . '">' . img_edit() . '</a>';
+                print '<a class="editfielda" href="' . constant('BASE_URL') . '/comm/propal/card.php?id=' . $object->id . '&action=editincoterm&token=' . newToken() . '">' . img_edit() . '</a>';
             } else {
                 print '&nbsp;';
             }
@@ -3067,7 +3067,7 @@ if ($action == 'create') {
                 // Create event
                 /*if (isModEnabled('agenda') && !empty($conf->global->MAIN_ADD_EVENT_ON_ELEMENT_CARD))  // Add hidden condition because this is not a "workflow" action so should appears somewhere else on page.
                 {
-                    print '<a class="butAction" href="' . constant('BASE_URL') . 'comm/action/card.php?action=create&amp;origin=' . $object->element . '&amp;originid=' . $object->id . '&amp;socid=' . $object->socid . '">' . $langs->trans("AddAction") . '</a></div>';
+                    print '<a class="butAction" href="' . constant('BASE_URL') . '/comm/action/card.php?action=create&amp;origin=' . $object->element . '&amp;originid=' . $object->id . '&amp;socid=' . $object->socid . '">' . $langs->trans("AddAction") . '</a></div>';
                 }*/
                 // Edit
                 if ($object->statut == Propal::STATUS_VALIDATED && $usercancreate) {
@@ -3090,7 +3090,7 @@ if ($action == 'create') {
                 // Create a sale order
                 if (isModEnabled('order') && $object->statut == Propal::STATUS_SIGNED) {
                     if ($usercancreateorder) {
-                        print '<a class="butAction" href="' . constant('BASE_URL') . 'commande/card.php?action=create&origin=' . $object->element . '&originid=' . $object->id . '&socid=' . $object->socid . '">' . $langs->trans("AddOrder") . '</a>';
+                        print '<a class="butAction" href="' . constant('BASE_URL') . '/commande/card.php?action=create&origin=' . $object->element . '&originid=' . $object->id . '&socid=' . $object->socid . '">' . $langs->trans("AddOrder") . '</a>';
                     }
                 }
 
@@ -3098,7 +3098,7 @@ if ($action == 'create') {
                 if (getDolGlobalString('WORKFLOW_CAN_CREATE_PURCHASE_ORDER_FROM_PROPOSAL')) {
                     if ($object->statut == Propal::STATUS_SIGNED && isModEnabled("supplier_order")) {
                         if ($usercancreatepurchaseorder) {
-                            print '<a class="butAction" href="' . constant('BASE_URL') . 'fourn/commande/card.php?action=create&origin=' . $object->element . '&originid=' . $object->id . '&socid=' . $object->socid . '">' . $langs->trans("AddPurchaseOrder") . '</a>';
+                            print '<a class="butAction" href="' . constant('BASE_URL') . '/fourn/commande/card.php?action=create&origin=' . $object->element . '&originid=' . $object->id . '&socid=' . $object->socid . '">' . $langs->trans("AddPurchaseOrder") . '</a>';
                         }
                     }
                 }
@@ -3107,7 +3107,7 @@ if ($action == 'create') {
                 if (isModEnabled("service") && isModEnabled('intervention') && $object->statut == Propal::STATUS_SIGNED) {
                     if ($usercancreateintervention) {
                         $langs->load("interventions");
-                        print '<a class="butAction" href="' . constant('BASE_URL') . 'fichinter/card.php?action=create&origin=' . $object->element . '&originid=' . $object->id . '&socid=' . $object->socid . '">' . $langs->trans("AddIntervention") . '</a>';
+                        print '<a class="butAction" href="' . constant('BASE_URL') . '/fichinter/card.php?action=create&origin=' . $object->element . '&originid=' . $object->id . '&socid=' . $object->socid . '">' . $langs->trans("AddIntervention") . '</a>';
                     }
                 }
 
@@ -3116,14 +3116,14 @@ if ($action == 'create') {
                     $langs->load("contracts");
 
                     if ($usercancreatecontract) {
-                        print '<a class="butAction" href="' . constant('BASE_URL') . 'contrat/card.php?action=create&origin=' . $object->element . '&originid=' . $object->id . '&socid=' . $object->socid . '">' . $langs->trans('AddContract') . '</a>';
+                        print '<a class="butAction" href="' . constant('BASE_URL') . '/contrat/card.php?action=create&origin=' . $object->element . '&originid=' . $object->id . '&socid=' . $object->socid . '">' . $langs->trans('AddContract') . '</a>';
                     }
                 }
 
                 // Create an invoice and classify billed
                 if ($object->statut == Propal::STATUS_SIGNED && !getDolGlobalString('PROPOSAL_ARE_NOT_BILLABLE')) {
                     if (isModEnabled('invoice') && $usercancreateinvoice) {
-                        print '<a class="butAction" href="' . constant('BASE_URL') . 'compta/facture/card.php?action=create&origin=' . $object->element . '&originid=' . $object->id . '&socid=' . $object->socid . '">' . $langs->trans("CreateBill") . '</a>';
+                        print '<a class="butAction" href="' . constant('BASE_URL') . '/compta/facture/card.php?action=create&origin=' . $object->element . '&originid=' . $object->id . '&socid=' . $object->socid . '">' . $langs->trans("CreateBill") . '</a>';
                     }
 
                     $arrayofinvoiceforpropal = $object->getInvoiceArrayList();

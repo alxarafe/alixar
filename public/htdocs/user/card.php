@@ -230,7 +230,7 @@ if (empty($reshook)) {
                 setEventMessages($langs->trans("ErrorUserCannotBeDelete"), null, 'errors');
             } else {
                 setEventMessages($langs->trans("RecordDeleted"), null);
-                header("Location: " . DOL_URL_ROOT . "/user/list.php?restore_lastsearch_values=1");
+                header("Location: " . constant('BASE_URL') . "/user/list.php?restore_lastsearch_values=1");
                 exit;
             }
         }

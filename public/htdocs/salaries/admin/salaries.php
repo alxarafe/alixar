@@ -90,7 +90,7 @@ if (isModEnabled('accounting')) {
     $formaccounting = new FormAccounting($db);
 }
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans('SalariesSetup'), $linkback, 'title_setup');
 
 $head = salaries_admin_prepare_head();

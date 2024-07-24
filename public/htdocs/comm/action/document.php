@@ -150,31 +150,31 @@ if ($object->id > 0) {
     print dol_get_fiche_head($head, 'documents', $langs->trans("Action"), -1, 'action');
 
     // Link to other agenda views
-    $linkback = '<a href="' . constant('BASE_URL') . 'comm/action/list.php?mode=show_list&restore_lastsearch_values=1">';
+    $linkback = '<a href="' . constant('BASE_URL') . '/comm/action/list.php?mode=show_list&restore_lastsearch_values=1">';
     $linkback .= img_picto($langs->trans("BackToList"), 'object_calendarlist', 'class="pictoactionview pictofixedwidth"');
     $linkback .= '<span class="hideonsmartphone">' . $langs->trans("BackToList") . '</span>';
     $linkback .= '</a>';
     $linkback .= '</li>';
     $linkback .= '<li class="noborder litext">';
-    $linkback .= '<a href="' . constant('BASE_URL') . 'comm/action/index.php?mode=show_month&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
+    $linkback .= '<a href="' . constant('BASE_URL') . '/comm/action/index.php?mode=show_month&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
     $linkback .= img_picto($langs->trans("ViewCal"), 'object_calendar', 'class="pictoactionview pictofixedwidth"');
     $linkback .= '<span class="hideonsmartphone">' . $langs->trans("ViewCal") . '</span>';
     $linkback .= '</a>';
     $linkback .= '</li>';
     $linkback .= '<li class="noborder litext">';
-    $linkback .= '<a href="' . constant('BASE_URL') . 'comm/action/index.php?mode=show_week&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
+    $linkback .= '<a href="' . constant('BASE_URL') . '/comm/action/index.php?mode=show_week&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
     $linkback .= img_picto($langs->trans("ViewWeek"), 'object_calendarweek', 'class="pictoactionview pictofixedwidth"');
     $linkback .= '<span class="hideonsmartphone">' . $langs->trans("ViewWeek") . '</span>';
     $linkback .= '</a>';
     $linkback .= '</li>';
     $linkback .= '<li class="noborder litext">';
-    $linkback .= '<a href="' . constant('BASE_URL') . 'comm/action/index.php?mode=show_day&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
+    $linkback .= '<a href="' . constant('BASE_URL') . '/comm/action/index.php?mode=show_day&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
     $linkback .= img_picto($langs->trans("ViewDay"), 'object_calendarday', 'class="pictoactionview pictofixedwidth"');
     $linkback .= '<span class="hideonsmartphone">' . $langs->trans("ViewDay") . '</span>';
     $linkback .= '</a>';
     $linkback .= '</li>';
     $linkback .= '<li class="noborder litext">';
-    $linkback .= '<a href="' . constant('BASE_URL') . 'comm/action/peruser.php?mode=show_peruser&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
+    $linkback .= '<a href="' . constant('BASE_URL') . '/comm/action/peruser.php?mode=show_peruser&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
     $linkback .= img_picto($langs->trans("ViewPerUser"), 'object_calendarperuser', 'class="pictoactionview pictofixedwidth"');
     $linkback .= '<span class="hideonsmartphone">' . $langs->trans("ViewPerUser") . '</span>';
     $linkback .= '</a>';

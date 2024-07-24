@@ -822,7 +822,7 @@ if ($id > 0 || !empty($ref)) {
                                 if ($value['stock'] < $value['stock_alert']) {
                                     $img = img_warning($langs->trans("StockTooLow"));
                                 }
-                                print '<tr class="oddeven"><td>&nbsp; &nbsp; &nbsp; -> <a href="' . DOL_URL_ROOT . "/product/card.php?id=" . $value['id'] . '">' . $value['fullpath'] . '</a> (' . $value['nb'] . ')</td>';
+                                print '<tr class="oddeven"><td>&nbsp; &nbsp; &nbsp; -> <a href="' . constant('DOL_URL_ROOT') . "/product/card.php?id=" . $value['id'] . '">' . $value['fullpath'] . '</a> (' . $value['nb'] . ')</td>';
                                 print '<td class="center"> ' . $value['nb_total'] . '</td>';
                                 print '<td>&nbsp;</td>';
                                 print '<td>&nbsp;</td>';

@@ -76,7 +76,7 @@ class box_commandes extends ModeleBoxes
 
         $text = $langs->trans("BoxTitleLast" . (getDolGlobalString('MAIN_LASTBOX_ON_OBJECT_DATE') ? "" : "Modified") . "CustomerOrders", $max);
         $this->info_box_head = array(
-            'text' => $text . '<a class="paddingleft" href="' . constant('BASE_URL') . 'commande/list.php?sortfield=c.tms&sortorder=DESC"><span class="badge">...</span></a>'
+            'text' => $text . '<a class="paddingleft" href="' . constant('BASE_URL') . '/commande/list.php?sortfield=c.tms&sortorder=DESC"><span class="badge">...</span></a>'
         );
 
         if ($user->hasRight('commande', 'lire')) {

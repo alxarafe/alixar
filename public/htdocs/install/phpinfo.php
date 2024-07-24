@@ -23,6 +23,6 @@
  *     \brief      Show page phpinfo
  */
 
-include_once 'inc.php';
+include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
 
 phpinfo();

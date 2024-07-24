@@ -383,7 +383,7 @@ class Deplacement extends CommonObject
         $result = '';
         $label = $langs->trans("Show") . ': ' . $this->ref;
 
-        $link = '<a href="' . constant('BASE_URL') . 'compta/deplacement/card.php?id=' . $this->id . '" title="' . dol_escape_htmltag($label, 1) . '" class="classfortooltip">';
+        $link = '<a href="' . constant('BASE_URL') . '/compta/deplacement/card.php?id=' . $this->id . '" title="' . dol_escape_htmltag($label, 1) . '" class="classfortooltip">';
         $linkend = '</a>';
 
         $picto = 'trip';

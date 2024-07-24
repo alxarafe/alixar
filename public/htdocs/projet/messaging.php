@@ -135,7 +135,7 @@ if (!empty($_SESSION['pageforbacktolist']) && !empty($_SESSION['pageforbacktolis
     $tmpurl = preg_replace('/__SOCID__/', (string) $object->socid, $tmpurl);
     $linkback = '<a href="' . $tmpurl . (preg_match('/\?/', $tmpurl) ? '&' : '?') . 'restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 } else {
-    $linkback = '<a href="' . constant('BASE_URL') . 'projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 }
 
 $morehtmlref = '<div class="refidno">';

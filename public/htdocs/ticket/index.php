@@ -370,7 +370,7 @@ if ($user->hasRight('ticket', 'read')) {
         print '<div class="div-table-responsive-no-min">';
         print '<table class="noborder centpercent">';
         print '<tr class="liste_titre"><th colspan="5">' . $transRecordedType;
-        print '<a href="' . constant('BASE_URL') . 'ticket/list.php?search_fk_statut[]=' . Ticket::STATUS_NOT_READ . '" title="' . $langs->trans("FullList") . '">';
+        print '<a href="' . constant('BASE_URL') . '/ticket/list.php?search_fk_statut[]=' . Ticket::STATUS_NOT_READ . '" title="' . $langs->trans("FullList") . '">';
         print '<span class="badge marginleftonlyshort">...</span>';
         //print $langs->trans("FullList")
         print '</a>';

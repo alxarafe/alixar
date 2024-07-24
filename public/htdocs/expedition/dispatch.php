@@ -435,7 +435,7 @@ if ($object->id > 0 || !empty($object->ref)) {
     }
 
     // Shipment card
-    $linkback = '<a href="' . constant('BASE_URL') . 'expedition/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/expedition/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
     $morehtmlref = '<div class="refidno">';
 
     // Ref customer shipment

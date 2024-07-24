@@ -66,7 +66,7 @@ $help_url = 'EN:Module Categories|FR:Module Catégories|ES:Módulo Categorías|D
 llxHeader('', $langs->trans("Categories"), $help_url);
 
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("CategoriesSetup"), $linkback, 'title_setup');
 
 $head = categoriesadmin_prepare_head();

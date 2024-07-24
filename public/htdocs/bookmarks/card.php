@@ -220,7 +220,7 @@ if ($id > 0 && !preg_match('/^add/i', $action)) {
 
     print dol_get_fiche_head($head, $hselected, $langs->trans("Bookmark"), -1, 'bookmark');
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'bookmarks/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/bookmarks/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
     dol_banner_tab($object, 'id', $linkback, 1, 'rowid', 'ref', '', '', 0, '', '', 0);
 

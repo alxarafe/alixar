@@ -286,7 +286,7 @@ function displayPositionCard(&$object)
 
         // Object card
         // ------------------------------------------------------------
-        $linkback = '<a href="' . constant('BASE_URL') . 'hrm/position_list.php">' . $langs->trans("BackToList") . '</a>';
+        $linkback = '<a href="' . constant('BASE_URL') . '/hrm/position_list.php">' . $langs->trans("BackToList") . '</a>';
 
         $morehtmlref = '<div class="refidno">';
         $u_position = new User(($db));

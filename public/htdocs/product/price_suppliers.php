@@ -394,7 +394,7 @@ if ($id > 0 || $ref) {
 
             print dol_get_fiche_head($head, 'suppliers', $titre, -1, $picto);
 
-            $linkback = '<a href="' . constant('BASE_URL') . 'product/list.php?restore_lastsearch_values=1&type=' . $object->type . '">' . $langs->trans("BackToList") . '</a>';
+            $linkback = '<a href="' . constant('BASE_URL') . '/product/list.php?restore_lastsearch_values=1&type=' . $object->type . '">' . $langs->trans("BackToList") . '</a>';
             $object->next_prev_filter = "fk_product_type = " . ((int) $object->type);
 
             $shownav = 1;
@@ -515,7 +515,7 @@ if ($id > 0 || $ref) {
                     $reshook = $hookmanager->executeHooks('formCreateThirdpartyOptions', $parameters, $object, $action);
                     if (empty($reshook)) {
                         if (empty($form->result)) {
-                            print '<a href="' . constant('BASE_URL') . 'societe/card.php?action=create&type=f&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . ((int) $object->id) . '&action=' . urlencode($action) . ($action == 'create_price' ? '&token=' . newToken() : '')) . '">';
+                            print '<a href="' . constant('BASE_URL') . '/societe/card.php?action=create&type=f&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . ((int) $object->id) . '&action=' . urlencode($action) . ($action == 'create_price' ? '&token=' . newToken() : '')) . '">';
                             print img_picto($langs->trans("CreateDolibarrThirdPartySupplier"), 'add', 'class="marginleftonly"');
                             print '</a>';
                         }
@@ -915,7 +915,7 @@ if ($id > 0 || $ref) {
                 $reshook = $hookmanager->executeHooks('addMoreActionsButtons', $parameters, $object, $action); // Note that $action and $object may have been modified by hook
                 if (empty($reshook)) {
                     if ($usercancreate) {
-                        print '<a class="butAction" href="' . constant('BASE_URL') . 'product/price_suppliers.php?id=' . ((int) $object->id) . '&action=create_price&token=' . newToken() . '">';
+                        print '<a class="butAction" href="' . constant('BASE_URL') . '/product/price_suppliers.php?id=' . ((int) $object->id) . '&action=create_price&token=' . newToken() . '">';
                         print $langs->trans("AddSupplierPrice") . '</a>';
                     }
                 }

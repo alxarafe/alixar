@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2004  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2020	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2017	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2011-2012	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2015		Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2021		Frédéric France			<frederic.france@netlogic.fr>
- * Copyright (C) 2024		MDW						<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Alexandre Spangaro		<alexandre@inovea-conseil.com>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2020	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2017	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2012	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2015		Marcos García			    <marcosgdf@gmail.com>
+ * Copyright (C) 2021		Frédéric France			    <frederic.france@netlogic.fr>
+ * Copyright (C) 2024		MDW						    <mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024		Alexandre Spangaro		    <alexandre@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@
 
 define('CSRFCHECK_WITH_TOKEN', 1); // We force need to use a token to login when making a POST
 
-require 'main.inc.php';
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 
 // If not defined, we select menu "home"
@@ -39,7 +39,6 @@ $_GET['mainmenu'] = GETPOST('mainmenu', 'aZ09') ? GETPOST('mainmenu', 'aZ09') : 
 $action = GETPOST('action', 'aZ09');
 
 $hookmanager->initHooks(array('index'));
-
 
 /*
  * Actions
@@ -56,11 +55,11 @@ foreach ($listofmodulesautoenabled as $moduleautoenable) {
 
 // Check if company name is defined (first install)
 if (!getDolGlobalString('MAIN_INFO_SOCIETE_NOM') || !getDolGlobalString('MAIN_INFO_SOCIETE_COUNTRY')) {
-    header("Location: " . DOL_URL_ROOT . "/admin/index.php?mainmenu=home&leftmenu=setup&mesg=setupnotcomplete");
+    header("Location: " . constant('BASE_URL') . "/admin/index.php?mainmenu=home&leftmenu=setup&mesg=setupnotcomplete");
     exit;
 }
 if ($nbmodulesnotautoenabled <= getDolGlobalInt('MAIN_MIN_NB_ENABLED_MODULE_FOR_WARNING', 1)) { // If only autoenabled modules (property ->enabled_bydefault in modules) are activated
-    header("Location: " . DOL_URL_ROOT . "/admin/index.php?mainmenu=home&leftmenu=setup&mesg=setupnotcomplete");
+    header("Location: " . constant('BASE_URL') . "/admin/index.php?mainmenu=home&leftmenu=setup&mesg=setupnotcomplete");
     exit;
 }
 if (GETPOST('addbox')) {    // Add box (when submit is done from a form when ajax disabled)

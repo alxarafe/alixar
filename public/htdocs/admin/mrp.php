@@ -97,7 +97,7 @@ if ($action == 'updateMask') {
         '@phan-var-force CommonDocGenerator $module';
 
         if ($module->write_file($mo, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=mrp&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=mrp&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($module->error, null, 'errors');
@@ -175,7 +175,7 @@ $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
 
 llxHeader("", $langs->trans("MrpSetupPage"), '', '', 0, 0, '', '', '', 'mod-admin page-mrp');
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("MrpSetupPage"), $linkback, 'title_setup');
 
 $head = mrpAdminPrepareHead();

@@ -957,7 +957,7 @@ if ($action == 'create') {
                 */
             $numprojet = $formproject->select_projects($soc->id, $projectid, 'projectid');
             if ($numprojet == 0) {
-                print ' &nbsp; <a href="' . constant('BASE_URL') . 'projet/card.php?socid=' . $soc->id . '&action=create"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddProject") . '"></span></a>';
+                print ' &nbsp; <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $soc->id . '&action=create"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddProject") . '"></span></a>';
             }
             print '</td></tr>';
         }
@@ -968,7 +968,7 @@ if ($action == 'create') {
             print '<tr><td>' . $langs->trans("Contract") . '</td><td>';
             $numcontrat = $formcontract->select_contract($soc->id, GETPOSTINT('contratid'), 'contratid', 0, 1, 1);
             if ($numcontrat == 0) {
-                print ' &nbsp; <a href="' . constant('BASE_URL') . 'contrat/card.php?socid=' . $soc->id . '&action=create"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddContract") . '"></span></a>';
+                print ' &nbsp; <a href="' . constant('BASE_URL') . '/contrat/card.php?socid=' . $soc->id . '&action=create"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddContract") . '"></span></a>';
             }
             print '</td></tr>';
         }
@@ -1087,7 +1087,7 @@ if ($action == 'create') {
         print '<table class="border centpercent">';
         print '<tr><td class="fieldrequired">' . $langs->trans("ThirdParty") . '</td><td>';
         print $form->select_company('', 'socid', '', 'SelectThirdParty', 1, 0, null, 0, 'minwidth300');
-        print ' <a href="' . constant('BASE_URL') . 'societe/card.php?action=create&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
+        print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
         print '</td></tr>';
         print '</table>';
 
@@ -1203,7 +1203,7 @@ if ($action == 'create') {
 
 
     // Intervention card
-    $linkback = '<a href="' . constant('BASE_URL') . 'fichinter/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/fichinter/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
 
 
     $morehtmlref = '<div class="refidno">';
@@ -1688,7 +1688,7 @@ if ($action == 'create') {
                 // Create intervention model
                 if (getDolGlobalInt('MAIN_FEATURES_LEVEL') >= 1 && $object->statut == Fichinter::STATUS_DRAFT && $user->hasRight('ficheinter', 'creer') && (count($object->lines) > 0)) {
                     print '<div class="inline-block divButAction">';
-                    print '<a class="butAction" href="' . constant('BASE_URL') . 'fichinter/card-rec.php?id=' . $object->id . '&action=create&backtopage=' . urlencode($_SERVER['PHP_SELF'] . '?id=' . $object->id) . '">' . $langs->trans("ChangeIntoRepeatableIntervention") . '</a>';
+                    print '<a class="butAction" href="' . constant('BASE_URL') . '/fichinter/card-rec.php?id=' . $object->id . '&action=create&backtopage=' . urlencode($_SERVER['PHP_SELF'] . '?id=' . $object->id) . '">' . $langs->trans("ChangeIntoRepeatableIntervention") . '</a>';
                     print '</div>';
                 }
 
@@ -1697,7 +1697,7 @@ if ($action == 'create') {
                     $langs->load("propal");
                     if ($object->statut < Fichinter::STATUS_BILLED) {
                         if ($user->hasRight('propal', 'creer')) {
-                            print '<div class="inline-block divButAction"><a class="butAction" href="' . constant('BASE_URL') . 'comm/propal/card.php?action=create&amp;origin=' . $object->element . '&amp;originid=' . $object->id . '&amp;socid=' . $object->socid . '">' . $langs->trans("AddProp") . '</a></div>';
+                            print '<div class="inline-block divButAction"><a class="butAction" href="' . constant('BASE_URL') . '/comm/propal/card.php?action=create&amp;origin=' . $object->element . '&amp;originid=' . $object->id . '&amp;socid=' . $object->socid . '">' . $langs->trans("AddProp") . '</a></div>';
                         } else {
                             print '<div class="inline-block divButAction"><a class="butActionRefused classfortooltip" href="#" title="' . $langs->trans("NotEnoughPermissions") . '">' . $langs->trans("AddProp") . '</a></div>';
                         }
@@ -1709,7 +1709,7 @@ if ($action == 'create') {
                     $langs->load("bills");
                     if ($object->statut < Fichinter::STATUS_BILLED) {
                         if ($user->hasRight('facture', 'creer')) {
-                            print '<div class="inline-block divButAction"><a class="butAction" href="' . constant('BASE_URL') . 'compta/facture/card.php?action=create&amp;origin=' . $object->element . '&amp;originid=' . $object->id . '&amp;socid=' . $object->socid . '">' . $langs->trans("AddBill") . '</a></div>';
+                            print '<div class="inline-block divButAction"><a class="butAction" href="' . constant('BASE_URL') . '/compta/facture/card.php?action=create&amp;origin=' . $object->element . '&amp;originid=' . $object->id . '&amp;socid=' . $object->socid . '">' . $langs->trans("AddBill") . '</a></div>';
                         } else {
                             print '<div class="inline-block divButAction"><a class="butActionRefused classfortooltip" href="#" title="' . $langs->trans("NotEnoughPermissions") . '">' . $langs->trans("AddBill") . '</a></div>';
                         }

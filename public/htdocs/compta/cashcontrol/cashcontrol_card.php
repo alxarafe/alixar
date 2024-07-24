@@ -614,7 +614,7 @@ if (empty($action) || $action == "view" || $action == "close") {
 
         print dol_get_fiche_head($head, 'cashcontrol', $langs->trans("CashControl"), -1, 'account');
 
-        $linkback = '<a href="' . constant('BASE_URL') . 'compta/cashcontrol/cashcontrol_list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+        $linkback = '<a href="' . constant('BASE_URL') . '/compta/cashcontrol/cashcontrol_list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
         $morehtmlref = '<div class="refidno">';
         $morehtmlref .= '</div>';

@@ -35,7 +35,7 @@ if (empty($conf) || !is_object($conf)) {
 $size = (empty($_SERVER['CONTENT_LENGTH']) ? 0 : (int) $_SERVER['CONTENT_LENGTH']);
 if ($size > 10000) {
     $langs->loadLangs(array("errors", "install"));
-    httponly_accessforbidden('<center>' . $langs->trans("ErrorRequestTooLarge") . '.<br><a href="' . DOL_URL_ROOT . '">' . $langs->trans("ClickHereToGoToApp") . '</a></center>', 413, 1);
+    httponly_accessforbidden('<center>' . $langs->trans("ErrorRequestTooLarge") . '.<br><a href="' . constant('DOL_URL_ROOT') . '">' . $langs->trans("ClickHereToGoToApp") . '</a></center>', 413, 1);
 }
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';

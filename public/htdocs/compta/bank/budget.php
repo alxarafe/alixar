@@ -84,7 +84,7 @@ if ($result) {
         $objp = $db->fetch_object($result);
 
         print '<tr class="oddeven">';
-        print "<td><a href=\"" . DOL_URL_ROOT . "/compta/bank/bankentries_list.php?bid=$objp->rowid\">$objp->label</a></td>";
+        print "<td><a href=\"" . constant('DOL_URL_ROOT') . "/compta/bank/bankentries_list.php?bid=$objp->rowid\">$objp->label</a></td>";
         print '<td class="right">' . $objp->nombre . '</td>';
         print '<td class="right"><span class="amount">' . price(abs($objp->somme)) . "</span></td>";
         print '<td class="right"><span class="amount">' . price(price2num(abs($objp->somme / $objp->nombre), 'MT')) . "</span></td>";

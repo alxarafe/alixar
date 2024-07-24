@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Cedric GROSS            <c.gross@kreiz-it.fr>
- * Copyright (C) 2015-2016  Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Cedric GROSS                <c.gross@kreiz-it.fr>
+ * Copyright (C) 2015-2016  Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -28,9 +28,9 @@
  */
 
 include 'inc.php';
-require_once $dolibarr_main_document_root . '/core/class/conf.class.php';
-require_once $dolibarr_main_document_root . '/core/lib/admin.lib.php';
-require_once $dolibarr_main_document_root . '/core/lib/security.lib.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/conf.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
 
 global $langs;
 
@@ -114,7 +114,7 @@ if ($action == "set") {
     print '<table cellspacing="0" style="padding: 4px 4px 4px 0" border="0" width="100%">';
     $error = 0;
 
-    $db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int) $conf->db->port);
+    $db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int)$conf->db->port);
 
     if ($db->connected) {
         print "<tr><td>";
@@ -171,7 +171,7 @@ if ($action == "set") {
      ***************************************************************************************/
     if ($ok && $createtables) {
         // We always choose in mysql directory (Conversion is done by driver to translate SQL syntax)
-        $dir = "mysql/tables/";
+        $dir = constant('DOL_DOCUMENT_ROOT') . '/install/mysql/tables/';
 
         $ok = 0;
         $handle = opendir($dir);
@@ -271,7 +271,7 @@ if ($action == "set") {
      ***************************************************************************************/
     if ($ok && $createkeys) {
         // We always choose in mysql directory (Conversion is done by driver to translate SQL syntax)
-        $dir = "mysql/tables/";
+        $dir = constant('DOL_DOCUMENT_ROOT') . '/install/mysql/tables/';
 
         $okkeys = 0;
         $handle = opendir($dir);
@@ -477,7 +477,7 @@ if ($action == "set") {
      ***************************************************************************************/
     if ($ok && $createdata) {
         // We always choose in mysql directory (Conversion is done by driver to translate SQL syntax)
-        $dir = "mysql/data/";
+        $dir = constant('DOL_DOCUMENT_ROOT') . '/install/mysql/data/';
 
         // Insert data
         $handle = opendir($dir);
@@ -601,7 +601,7 @@ $conf->file->instance_unique_id = (empty($dolibarr_main_instance_unique_id) ? (e
 
 $hash_unique_id = dol_hash('dolibarr' . $conf->file->instance_unique_id, 'sha256');   // Note: if the global salt changes, this hash changes too so ping may be counted twice. We don't mind. It is for statistics purpose only.
 
-$out  = '<input type="checkbox" name="dolibarrpingno" id="dolibarrpingno"' . ((getDolGlobalString('MAIN_FIRST_PING_OK_ID') == 'disabled') ? '' : ' value="checked" checked="true"') . '> ';
+$out = '<input type="checkbox" name="dolibarrpingno" id="dolibarrpingno"' . ((getDolGlobalString('MAIN_FIRST_PING_OK_ID') == 'disabled') ? '' : ' value="checked" checked="true"') . '> ';
 $out .= '<label for="dolibarrpingno">' . $langs->trans("MakeAnonymousPing") . '</label>';
 
 $out .= '<!-- Add js script to manage the uncheck of option to not send the ping -->';

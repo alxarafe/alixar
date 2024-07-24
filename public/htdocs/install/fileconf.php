@@ -30,7 +30,7 @@
  *       \brief      Ask all information required to build Dolibarr htdocs/conf/conf.php file (will be written to disk on next page step1)
  */
 
-include_once 'inc.php';
+include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
 
 global $langs;
 
@@ -145,9 +145,7 @@ if (!empty($force_install_message)) {
     <tr>
         <td class="label"><label for="main_dir"><b><?php print $langs->trans("WebPagesDirectory"); ?></b></label></td>
 <?php
-if (empty($dolibarr_main_document_root)) {
-    $dolibarr_main_document_root = GETPOSTISSET('main_dir') ? GETPOST('main_dir') : detect_dolibarr_main_document_root();
-}
+$dolibarr_main_document_root = constant('DOL_DOCUMENT_ROOT');
 ?>
         <td class="label">
             <input type="text"
@@ -155,6 +153,7 @@ if (empty($dolibarr_main_document_root)) {
                    id="main_dir"
                    name="main_dir"
                    value="<?php print $dolibarr_main_document_root ?>"
+                   readonly
 <?php
 if (!empty($force_install_noedit)) {
     print ' disabled';
@@ -209,9 +208,12 @@ if (!empty($force_install_noedit)) {
 
     <!-- Root URL $dolibarr_main_url_root -->
     <?php
+    /*
     if (empty($dolibarr_main_url_root)) {
         $dolibarr_main_url_root = GETPOSTISSET('main_url') ? GETPOST('main_url') : detect_dolibarr_main_url_root();
     }
+    */
+    $dolibarr_main_url_root = constant('BASE_URL');
     ?>
     <tr>
         <td class="label"><label for="main_url"><b><?php echo $langs->trans("URLRoot"); ?></b></label>

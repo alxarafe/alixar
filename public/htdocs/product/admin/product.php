@@ -186,7 +186,7 @@ if ($action == 'specimen') { // For products
         $module = new $classname($db);
 
         if ($module->write_file($product, $langs, '') > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=product&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=product&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($obj->error, $obj->errors, 'errors');

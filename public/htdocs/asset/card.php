@@ -321,7 +321,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
     // Object card
     // ------------------------------------------------------------
-    $linkback = '<a href="' . constant('BASE_URL') . 'asset/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/asset/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
 
     $morehtmlref = '<div class="refidno">';
     $morehtmlref .= '</div>';

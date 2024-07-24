@@ -103,7 +103,7 @@ if ($id > 0 || !empty($ref)) {
 
     print dol_get_fiche_head($head, 'note', $langs->trans("Donation"), -1, 'donation');
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'don/list.php' . (!empty($socid) ? '?socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/don/list.php' . (!empty($socid) ? '?socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
 
     $morehtmlref = '<div class="refidno">';
     // Project

@@ -368,20 +368,20 @@ if ($id) {
 
             print '<tr class="oddeven"><td>';
 
-            print '<a href="' . constant('BASE_URL') . 'compta/facture/card.php?facid=' . $obj->facid . '">';
+            print '<a href="' . constant('BASE_URL') . '/compta/facture/card.php?facid=' . $obj->facid . '">';
             print img_object($langs->trans("ShowBill"), "bill");
             print '</a>&nbsp;';
 
             if ($type == 'bank-transfer') {
-                print '<a href="' . constant('BASE_URL') . 'fourn/facture/card.php?facid=' . $obj->facid . '">' . $obj->ref . "</a></td>\n";
+                print '<a href="' . constant('BASE_URL') . '/fourn/facture/card.php?facid=' . $obj->facid . '">' . $obj->ref . "</a></td>\n";
             } else {
-                print '<a href="' . constant('BASE_URL') . 'compta/facture/card.php?facid=' . $obj->facid . '">' . $obj->ref . "</a></td>\n";
+                print '<a href="' . constant('BASE_URL') . '/compta/facture/card.php?facid=' . $obj->facid . '">' . $obj->ref . "</a></td>\n";
             }
 
             if ($type == 'bank-transfer') {
-                print '<td><a href="' . constant('BASE_URL') . 'fourn/card.php?socid=' . $obj->socid . '">';
+                print '<td><a href="' . constant('BASE_URL') . '/fourn/card.php?socid=' . $obj->socid . '">';
             } else {
-                print '<td><a href="' . constant('BASE_URL') . 'comm/card.php?socid=' . $obj->socid . '">';
+                print '<td><a href="' . constant('BASE_URL') . '/comm/card.php?socid=' . $obj->socid . '">';
             }
             print img_object($langs->trans("ShowCompany"), "company") . ' ' . $obj->name . "</a></td>\n";
 

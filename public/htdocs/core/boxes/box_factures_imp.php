@@ -79,7 +79,7 @@ class box_factures_imp extends ModeleBoxes
 
         $textHead = $langs->trans("BoxTitleOldestUnpaidCustomerBills");
         $this->info_box_head = array(
-            'text' => $langs->trans("BoxTitleOldestUnpaidCustomerBills", $this->max) . '<a class="paddingleft valignmiddle" href="' . constant('BASE_URL') . 'fourn/facture/list.php?sortfield=f.tms&sortorder=DESC"><span class="badge">...</span></a>',
+            'text' => $langs->trans("BoxTitleOldestUnpaidCustomerBills", $this->max) . '<a class="paddingleft valignmiddle" href="' . constant('BASE_URL') . '/fourn/facture/list.php?sortfield=f.tms&sortorder=DESC"><span class="badge">...</span></a>',
             'limit' => dol_strlen($textHead));
 
         if ($user->hasRight('facture', 'lire')) {

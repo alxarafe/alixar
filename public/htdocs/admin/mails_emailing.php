@@ -417,9 +417,9 @@ if ($action == 'edit') {
             print '<input type="radio" id="radio_oauth" name="' . $vartosmtpstype . '" value="XOAUTH2"' . (getDolGlobalString($vartosmtpstype) == 'XOAUTH2' ? ' checked' : '') . (isModEnabled('oauth') ? '' : ' disabled') . '> ';
             print '<label for="radio_oauth" >' . $form->textwithpicto($langs->trans("UseOauth"), $langs->trans("OauthNotAvailableForAllAndHadToBeCreatedBefore")) . '</label>';
             if (!isModEnabled('oauth')) {
-                print ' &nbsp; <a href="' . constant('BASE_URL') . 'admin/modules.php?search_keyword=oauth">' . $langs->trans("EnableModuleX", "OAuth") . '</a>';
+                print ' &nbsp; <a href="' . constant('BASE_URL') . '/admin/modules.php?search_keyword=oauth">' . $langs->trans("EnableModuleX", "OAuth") . '</a>';
             } else {
-                print ' &nbsp; <a href="' . constant('BASE_URL') . 'admin/oauth.php">' . $langs->trans("SetupModuleX", " OAuth") . '</a>';
+                print ' &nbsp; <a href="' . constant('BASE_URL') . '/admin/oauth.php">' . $langs->trans("SetupModuleX", " OAuth") . '</a>';
             }
         } else {
             $value = getDolGlobalString($vartosmtpstype, 'LOGIN');

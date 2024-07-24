@@ -1383,7 +1383,7 @@ if ($action == 'create') {
                                             $img = img_warning($langs->trans("StockTooLow"));
                                         }
                                         print "<tr class=\"oddeven\"><td>&nbsp; &nbsp; &nbsp; ->
-											<a href=\"" . DOL_URL_ROOT . "/product/card.php?id=" . $value['id'] . "\">" . $value['fullpath'] . "
+											<a href=\"" . constant('DOL_URL_ROOT') . "/product/card.php?id=" . $value['id'] . "\">" . $value['fullpath'] . "
 											</a> (" . $value['nb'] . ")</td><td class=\"center\"> " . $value['nb_total'] . "</td><td>&nbsp;</td><td>&nbsp;</td>
 											<td class=\"center\">" . $value['stock'] . " " . $img . "</td>";
                                         if (getDolGlobalString('SHIPPING_DISPLAY_STOCK_ENTRY_DATE')) {
@@ -1617,7 +1617,7 @@ if ($action == 'create') {
                                         }
                                         print '<tr class"oddeven"><td>';
                                         print "&nbsp; &nbsp; &nbsp; ->
-										<a href=\"" . DOL_URL_ROOT . "/product/card.php?id=" . $value['id'] . "\">" . $value['fullpath'] . "
+										<a href=\"" . constant('DOL_URL_ROOT') . "/product/card.php?id=" . $value['id'] . "\">" . $value['fullpath'] . "
 										</a> (" . $value['nb'] . ")</td><td class=\"center\"> " . $value['nb_total'] . "</td><td>&nbsp;</td><td>&nbsp;</td>
 										<td class=\"center\">" . $value['stock'] . " " . $img . "</td>";
                                         if (getDolGlobalString('SHIPPING_DISPLAY_STOCK_ENTRY_DATE')) {

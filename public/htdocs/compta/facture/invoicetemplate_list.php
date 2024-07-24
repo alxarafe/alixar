@@ -862,7 +862,7 @@ while ($i < $imaxinloop) {
             if ($invoicerectmp->isMaxNbGenReached()) {
                 print $langs->trans("MaxNumberOfGenerationReached");
             } elseif (empty($objp->frequency) || $db->jdate($objp->date_when) <= $today) {
-                print '<a href="' . constant('BASE_URL') . 'compta/facture/card.php?action=create&amp;socid=' . $objp->socid . '&amp;fac_rec=' . $objp->facid . '">';
+                print '<a href="' . constant('BASE_URL') . '/compta/facture/card.php?action=create&amp;socid=' . $objp->socid . '&amp;fac_rec=' . $objp->facid . '">';
                 print img_picto($langs->trans("CreateBill"), 'add', 'class="paddingrightonly"');
                 //print $langs->trans("CreateBill");
                 print '</a>';
@@ -1062,7 +1062,7 @@ while ($i < $imaxinloop) {
             if ($invoicerectmp->isMaxNbGenReached()) {
                 print $langs->trans("MaxNumberOfGenerationReached");
             } elseif (empty($objp->frequency) || $db->jdate($objp->date_when) <= $today) {
-                print '<a href="' . constant('BASE_URL') . 'compta/facture/card.php?action=create&amp;socid=' . $objp->socid . '&amp;fac_rec=' . $objp->facid . '">';
+                print '<a href="' . constant('BASE_URL') . '/compta/facture/card.php?action=create&amp;socid=' . $objp->socid . '&amp;fac_rec=' . $objp->facid . '">';
                 print img_picto($langs->trans("CreateBill"), 'add', 'class="paddingrightonly"');
                 //print $langs->trans("CreateBill");
                 print '</a>';

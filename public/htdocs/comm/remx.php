@@ -870,7 +870,7 @@ if ($socid > 0) {
                     }
                     print '<td class="left nowrap">';
                     if ($obj->invoiceid) {
-                        print '<a href="' . constant('BASE_URL') . 'compta/facture/card.php?facid=' . $obj->invoiceid . '">' . img_object($langs->trans("ShowBill"), 'bill') . ' ' . $obj->ref . '</a>';
+                        print '<a href="' . constant('BASE_URL') . '/compta/facture/card.php?facid=' . $obj->invoiceid . '">' . img_object($langs->trans("ShowBill"), 'bill') . ' ' . $obj->ref . '</a>';
                     }
                     print '</td>';
                     print '<td class="right nowraponall amount">' . price($obj->amount_ht) . '</td>';
@@ -1040,7 +1040,7 @@ if ($socid > 0) {
                     }
                     print '<td class="left nowrap">';
                     if ($obj->invoiceid) {
-                        print '<a href="' . constant('BASE_URL') . 'fourn/facture/card.php?facid=' . $obj->invoiceid . '">' . img_object($langs->trans("ShowBill"), 'bill') . ' ' . $obj->ref . '</a>';
+                        print '<a href="' . constant('BASE_URL') . '/fourn/facture/card.php?facid=' . $obj->invoiceid . '">' . img_object($langs->trans("ShowBill"), 'bill') . ' ' . $obj->ref . '</a>';
                     }
                     print '</td>';
                     print '<td class="right nowraponall amount">' . price($obj->amount_ht) . '</td>';

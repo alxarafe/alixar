@@ -280,7 +280,7 @@ class mailing_partnership extends MailingTargets
             return '<a href="' . constant('BASE_URL') . 'societe/card.php?socid=' . ((int) $id) . '">' . img_object('', "societe") . '</a>';
         }
         if ($sourcetype == 'member') {
-            return '<a href="' . constant('BASE_URL') . 'adherent/card.php?id=' . ((int) $id) . '">' . img_object('', "member") . '</a>';
+            return '<a href="' . constant('BASE_URL') . '/adherent/card.php?id=' . ((int) $id) . '">' . img_object('', "member") . '</a>';
         }
 
         return '';

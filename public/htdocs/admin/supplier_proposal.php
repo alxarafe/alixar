@@ -101,7 +101,7 @@ if ($action == 'specimen') {
         '@phan-var-force CommonDocGenerator $module';
 
         if ($module->write_file($supplier_proposal, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=supplier_proposal&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=supplier_proposal&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($module->error, null, 'errors');
@@ -230,7 +230,7 @@ $form = new Form($db);
 
 //if ($mesg) print $mesg;
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("SupplierProposalSetup"), $linkback, 'title_setup');
 
 $head = supplier_proposal_admin_prepare_head();

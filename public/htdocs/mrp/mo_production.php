@@ -626,7 +626,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
     // MO file
     // ------------------------------------------------------------
-    $linkback = '<a href="' . constant('BASE_URL') . 'mrp/mo_list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/mrp/mo_list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
 
     $morehtmlref = '<div class="refidno">';
 
@@ -640,7 +640,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     if (is_object($object->thirdparty)) {
         $morehtmlref .= $object->thirdparty->getNomUrl(1, 'customer');
         if (!getDolGlobalString('MAIN_DISABLE_OTHER_LINK') && $object->thirdparty->id > 0) {
-            $morehtmlref .= ' (<a href="' . constant('BASE_URL') . 'commande/list.php?socid=' . $object->thirdparty->id . '&search_societe=' . urlencode($object->thirdparty->name) . '">' . $langs->trans("OtherOrders") . '</a>)';
+            $morehtmlref .= ' (<a href="' . constant('BASE_URL') . '/commande/list.php?socid=' . $object->thirdparty->id . '&search_societe=' . urlencode($object->thirdparty->name) . '">' . $langs->trans("OtherOrders") . '</a>)';
         }
     }
 
@@ -1261,7 +1261,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
                         // Date
                         print '<td>';
                         $tmpstockmovement->id = $line2['fk_stock_movement'];
-                        print '<a href="' . constant('BASE_URL') . 'product/stock/movement_list.php?search_ref=' . $tmpstockmovement->id . '">' . img_picto($langs->trans("StockMovement"), 'movement', 'class="paddingright"') . '</a>';
+                        print '<a href="' . constant('BASE_URL') . '/product/stock/movement_list.php?search_ref=' . $tmpstockmovement->id . '">' . img_picto($langs->trans("StockMovement"), 'movement', 'class="paddingright"') . '</a>';
                         print dol_print_date($line2['date'], 'dayhour', 'tzuserrel');
                         print '</td>';
 
@@ -1695,7 +1695,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
                         // Product
                         print '<td>';
                         $tmpstockmovement->id = $line2['fk_stock_movement'];
-                        print '<a href="' . constant('BASE_URL') . 'product/stock/movement_list.php?search_ref=' . $tmpstockmovement->id . '">' . img_picto($langs->trans("StockMovement"), 'movement', 'class="paddingright"') . '</a>';
+                        print '<a href="' . constant('BASE_URL') . '/product/stock/movement_list.php?search_ref=' . $tmpstockmovement->id . '">' . img_picto($langs->trans("StockMovement"), 'movement', 'class="paddingright"') . '</a>';
                         print dol_print_date($line2['date'], 'dayhour', 'tzuserrel');
                         print '</td>';
                         // Qty

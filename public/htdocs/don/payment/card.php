@@ -67,7 +67,7 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('don', '
     $result = $object->delete($user);
     if ($result > 0) {
         $db->commit();
-        header("Location: " . DOL_URL_ROOT . "/don/index.php");
+        header("Location: " . constant('BASE_URL') . "/don/index.php");
         exit;
     } else {
         setEventMessages($object->error, $object->errors, 'errors');

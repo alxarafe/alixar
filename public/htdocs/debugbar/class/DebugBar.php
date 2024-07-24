@@ -79,7 +79,7 @@ class DolibarrDebugBar extends DebugBar
     public function getJavascriptRenderer($baseUrl = null, $basePath = null)
     {
         if ($baseUrl === null) {
-            $baseUrl = constant('BASE_URL') . '/includes/maximebf/debugbar/src/DebugBar/Resources';
+            $baseUrl = constant('DOL_URL_ROOT') . '/includes/maximebf/debugbar/src/DebugBar/Resources';
         }
         $renderer = parent::getJavascriptRenderer($baseUrl, $basePath);
         $renderer->disableVendor('jquery');         // We already have jquery loaded globally by the main.inc.php

@@ -348,7 +348,7 @@ if (empty($reshook)) {
 
         if ($result > 0) {
             setEventMessages($langs->trans("RecordDeleted"), null, 'mesgs');
-            header("Location: " . DOL_URL_ROOT . "/compta/bank/list.php");
+            header("Location: " . constant('BASE_URL') . "/compta/bank/list.php");
             exit;
         } else {
             setEventMessages($object->error, $object->errors, 'errors');

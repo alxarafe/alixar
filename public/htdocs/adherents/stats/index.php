@@ -205,7 +205,7 @@ foreach ($data as $val) {
     }
     print '<tr class="oddeven" height="24">';
     print '<td class="center">';
-    print '<a href="' . constant('BASE_URL') . 'adherents/subscription/list.php?date_select=' . ((int) $year) . '">' . $year . '</a>';
+    print '<a href="' . constant('BASE_URL') . '/adherents/subscription/list.php?date_select=' . ((int) $year) . '">' . $year . '</a>';
     print '</td>';
     print '<td class="right">' . $val['nb'] . '</td>';
     print '<td class="right amount nowraponall"><span class="amount">' . price(price2num($val['total'], 'MT'), 1) . '</span></td>';

@@ -790,7 +790,7 @@ if (empty($reshook)) {
         $result = $object->delete($socid, $user);
 
         if ($result > 0) {
-            header("Location: " . DOL_URL_ROOT . "/societe/list.php?restore_lastsearch_values=1&delsoc=" . urlencode($object->name));
+            header("Location: " . constant('BASE_URL') . "/societe/list.php?restore_lastsearch_values=1&delsoc=" . urlencode($object->name));
             exit;
         } else {
             $langs->load("errors");
@@ -1602,7 +1602,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                     if ($mysoc->country_code == 'GR' && $object->country_code == 'GR' && !empty($u)) {
                         print "GRVAT(a,'{$u}','{$p}','{$myafm}');\n";
                     } else {
-                        print "newpopup('" . DOL_URL_ROOT . "/societe/checkvat/checkVatPopup.php?vatNumber='+a, '" . dol_escape_js($langs->trans("VATIntraCheckableOnEUSite")) . "', " . $widthpopup . ", " . $heightpopup . ");\n";
+                        print "newpopup('" . constant('DOL_URL_ROOT') . "/societe/checkvat/checkVatPopup.php?vatNumber='+a, '" . dol_escape_js($langs->trans("VATIntraCheckableOnEUSite")) . "', " . $widthpopup . ", " . $heightpopup . ");\n";
                     }
                     print "}\n";
                     print '</script>';
@@ -2393,7 +2393,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                         if ($mysoc->country_code == 'GR' && $object->country_code == 'GR' && !empty($u)) {
                             print "GRVAT(a,'{$u}','{$p}','{$myafm}');\n";
                         } else {
-                            print "newpopup('" . DOL_URL_ROOT . "/societe/checkvat/checkVatPopup.php?vatNumber='+a, '" . dol_escape_js($langs->trans("VATIntraCheckableOnEUSite")) . "', " . $widthpopup . ", " . $heightpopup . ");\n";
+                            print "newpopup('" . constant('DOL_URL_ROOT') . "/societe/checkvat/checkVatPopup.php?vatNumber='+a, '" . dol_escape_js($langs->trans("VATIntraCheckableOnEUSite")) . "', " . $widthpopup . ", " . $heightpopup . ");\n";
                         }
                         print "}\n";
                         print '</script>';
@@ -2870,7 +2870,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                         if ($mysoc->country_code == 'GR' && $object->country_code == 'GR' && !empty($u)) {
                             print "GRVAT(a,'{$u}','{$p}','{$myafm}');\n";
                         } else {
-                            print "newpopup('" . DOL_URL_ROOT . "/societe/checkvat/checkVatPopup.php?vatNumber='+a, '" . dol_escape_js($langs->trans("VATIntraCheckableOnEUSite")) . "', " . $widthpopup . ", " . $heightpopup . ");\n";
+                            print "newpopup('" . constant('DOL_URL_ROOT') . "/societe/checkvat/checkVatPopup.php?vatNumber='+a, '" . dol_escape_js($langs->trans("VATIntraCheckableOnEUSite")) . "', " . $widthpopup . ", " . $heightpopup . ");\n";
                         }
                         print "}\n";
                         print '</script>';

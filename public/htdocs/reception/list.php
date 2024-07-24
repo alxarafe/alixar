@@ -567,7 +567,7 @@ if (empty($reshook)) {
 
             if ($nb_bills_created == 1) {
                 $texttoshow = $langs->trans('BillXCreated', '{s1}');
-                $texttoshow = str_replace('{s1}', '<a href="' . constant('BASE_URL') . 'fourn/facture/card.php?id=' . urlencode((string) ($lastid)) . '">' . $lastref . '</a>', $texttoshow);
+                $texttoshow = str_replace('{s1}', '<a href="' . constant('BASE_URL') . '/fourn/facture/card.php?id=' . urlencode((string) ($lastid)) . '">' . $lastref . '</a>', $texttoshow);
                 setEventMessages($texttoshow, null, 'mesgs');
             } else {
                 setEventMessages($langs->trans('BillCreated', $nb_bills_created), null, 'mesgs');

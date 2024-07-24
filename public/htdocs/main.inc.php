@@ -335,10 +335,13 @@ if (defined('NOREQUIREUSER') && !defined('NOREQUIREMENU')) {
 }
 
 // Sanity check on URL
+/*
 if (!defined('NOSCANPHPSELFFORINJECTION') && !empty($_SERVER["PHP_SELF"])) {
     $morevaltochecklikepost = array($_SERVER["PHP_SELF"]);
     analyseVarsForSqlAndScriptsInjection($morevaltochecklikepost, 2);
 }
+*/
+
 // Sanity check on GET parameters
 if (!defined('NOSCANGETFORINJECTION') && !empty($_SERVER["QUERY_STRING"])) {
     // Note: QUERY_STRING is url encoded, but $_GET and $_POST are already decoded
@@ -478,6 +481,7 @@ register_shutdown_function('dol_shutdown');
 if (isModEnabled('debugbar') && !GETPOST('dol_use_jmobile') && empty($_SESSION['dol_use_jmobile'])) {
     global $debugbar;
     include_once DOL_DOCUMENT_ROOT . '/debugbar/class/DebugBar.php';
+
     $debugbar = new DolibarrDebugBar();
     $renderer = $debugbar->getJavascriptRenderer();
     if (!getDolGlobalString('MAIN_HTML_HEADER')) {
@@ -570,7 +574,7 @@ if (!defined('NOREQUIREAJAX')) {
 // If install or upgrade process not done or not completely finished, we call the install page.
 if (getDolGlobalString('MAIN_NOT_INSTALLED') || getDolGlobalString('MAIN_NOT_UPGRADED')) {
     dol_syslog("main.inc: A previous install or upgrade was not complete. Redirect to install page.", LOG_WARNING);
-    header("Location: " . DOL_URL_ROOT . "/install/index.php");
+    header("Location: " . constant('BASE_URL') . "/install/index.php");
     exit;
 }
 // If an upgrade process is required, we call the install page.
@@ -594,7 +598,7 @@ if ($checkifupgraderequired) {
             if (php_sapi_name() === "cli") {
                 print "main.inc: database version " . $versiontocompare . " is lower than programs version " . DOL_VERSION . ". Try to run upgrade process.\n";
             } else {
-                header("Location: " . DOL_URL_ROOT . "/install/index.php");
+                header("Location: " . constant('BASE_URL') . "/install/index.php");
             }
             exit;
         }
@@ -1943,21 +1947,21 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
             if (constant('JS_JQUERY_UI')) {
                 print '<link rel="stylesheet" type="text/css" href="' . JS_JQUERY_UI . 'css/' . $jquerytheme . '/jquery-ui.min.css' . ($ext ? '?' . $ext : '') . '">' . "\n"; // Forced JQuery
             } else {
-                print '<link rel="stylesheet" type="text/css" href="' . constant('BASE_URL') . 'includes/jquery/css/' . $jquerytheme . '/jquery-ui.css' . ($ext ? '?' . $ext : '') . '">' . "\n"; // JQuery
+                print '<link rel="stylesheet" type="text/css" href="' . constant('DOL_URL_ROOT') . '/includes/jquery/css/' . $jquerytheme . '/jquery-ui.css' . ($ext ? '?' . $ext : '') . '">' . "\n"; // JQuery
             }
             if (!defined('DISABLE_JQUERY_JNOTIFY')) {
-                print '<link rel="stylesheet" type="text/css" href="' . constant('BASE_URL') . 'includes/jquery/plugins/jnotify/jquery.jnotify-alt.min.css' . ($ext ? '?' . $ext : '') . '">' . "\n"; // JNotify
+                print '<link rel="stylesheet" type="text/css" href="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/jnotify/jquery.jnotify-alt.min.css' . ($ext ? '?' . $ext : '') . '">' . "\n"; // JNotify
             }
             if (!defined('DISABLE_SELECT2') && (getDolGlobalString('MAIN_USE_JQUERY_MULTISELECT') || defined('REQUIRE_JQUERY_MULTISELECT'))) {     // jQuery plugin "mutiselect", "multiple-select", "select2"...
                 $tmpplugin = !getDolGlobalString('MAIN_USE_JQUERY_MULTISELECT') ? constant('REQUIRE_JQUERY_MULTISELECT') : $conf->global->MAIN_USE_JQUERY_MULTISELECT;
-                print '<link rel="stylesheet" type="text/css" href="' . constant('BASE_URL') . 'includes/jquery/plugins/' . $tmpplugin . '/dist/css/' . $tmpplugin . '.css' . ($ext ? '?' . $ext : '') . '">' . "\n";
+                print '<link rel="stylesheet" type="text/css" href="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/' . $tmpplugin . '/dist/css/' . $tmpplugin . '.css' . ($ext ? '?' . $ext : '') . '">' . "\n";
             }
         }
 
         if (!defined('DISABLE_FONT_AWSOME')) {
             print '<!-- Includes CSS for font awesome -->' . "\n";
             $fontawesome_directory = getDolGlobalString('MAIN_FONTAWESOME_DIRECTORY', '/theme/common/fontawesome-5');
-            print '<link rel="stylesheet" type="text/css" href="' . DOL_URL_ROOT . $fontawesome_directory . '/css/all.min.css' . ($ext ? '?' . $ext : '') . '">' . "\n";
+            print '<link rel="stylesheet" type="text/css" href="' . constant('DOL_URL_ROOT') . $fontawesome_directory . '/css/all.min.css' . ($ext ? '?' . $ext : '') . '">' . "\n";
         }
 
         print '<!-- Includes CSS for Dolibarr theme -->' . "\n";
@@ -1982,8 +1986,8 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
 
         // LEAFLET AND GEOMAN
         if (getDolGlobalString('MAIN_USE_GEOPHP')) {
-            print '<link rel="stylesheet" href="' . constant('BASE_URL') . 'includes/leaflet/leaflet.css' . ($ext ? '?' . $ext : '') . "\">\n";
-            print '<link rel="stylesheet" href="' . constant('BASE_URL') . 'includes/leaflet/leaflet-geoman.css' . ($ext ? '?' . $ext : '') . "\">\n";
+            print '<link rel="stylesheet" href="' . constant('BASE_URL') . '/includes/leaflet/leaflet.css' . ($ext ? '?' . $ext : '') . "\">\n";
+            print '<link rel="stylesheet" href="' . constant('BASE_URL') . '/includes/leaflet/leaflet-geoman.css' . ($ext ? '?' . $ext : '') . "\">\n";
         }
 
         // CSS forced by modules (relative url starting with /)
@@ -2031,7 +2035,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
         // Custom CSS
         if (getDolGlobalString('MAIN_IHM_CUSTOM_CSS')) {
             // If a custom CSS was set, we add link to the custom css php file
-            print '<link rel="stylesheet" type="text/css" href="' . constant('BASE_URL') . 'theme/custom.css.php' . ($ext ? '?' . $ext : '') . '&amp;revision=' . getDolGlobalInt("MAIN_IHM_PARAMS_REV") . '">' . "\n";
+            print '<link rel="stylesheet" type="text/css" href="' . constant('BASE_URL') . '/theme/custom.css.php' . ($ext ? '?' . $ext : '') . '&amp;revision=' . getDolGlobalInt("MAIN_IHM_PARAMS_REV") . '">' . "\n";
         }
 
         // Output standard javascript links
@@ -2041,57 +2045,58 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
             if (defined('JS_JQUERY') && constant('JS_JQUERY')) {
                 print '<script nonce="' . getNonce() . '" src="' . JS_JQUERY . 'jquery.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             } else {
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/js/jquery.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/js/jquery.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             }
             if (defined('JS_JQUERY_UI') && constant('JS_JQUERY_UI')) {
+                dump(['JS_JQUERY_UI' => JS_JQUERY_UI]);
                 print '<script nonce="' . getNonce() . '" src="' . JS_JQUERY_UI . 'jquery-ui.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             } else {
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/js/jquery-ui.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/js/jquery-ui.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             }
             // jQuery jnotify
             if (!getDolGlobalString('MAIN_DISABLE_JQUERY_JNOTIFY') && !defined('DISABLE_JQUERY_JNOTIFY')) {
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/plugins/jnotify/jquery.jnotify.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/jnotify/jquery.jnotify.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             }
             // Table drag and drop lines
             if (empty($disableforlogin) && !defined('DISABLE_JQUERY_TABLEDND')) {
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/plugins/tablednd/jquery.tablednd.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/tablednd/jquery.tablednd.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             }
             // Chart
             if (empty($disableforlogin) && (!getDolGlobalString('MAIN_JS_GRAPH') || getDolGlobalString('MAIN_JS_GRAPH') == 'chart') && !defined('DISABLE_JS_GRAPH')) {
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/nnnick/chartjs/dist/chart.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/nnnick/chartjs/dist/chart.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             }
 
             // jQuery jeditable for Edit In Place features
             if (getDolGlobalString('MAIN_USE_JQUERY_JEDITABLE') && !defined('DISABLE_JQUERY_JEDITABLE')) {
                 print '<!-- JS to manage editInPlace feature -->' . "\n";
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/plugins/jeditable/jquery.jeditable.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/plugins/jeditable/jquery.jeditable.ui-datepicker.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/plugins/jeditable/jquery.jeditable.ui-autocomplete.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/jeditable/jquery.jeditable.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/jeditable/jquery.jeditable.ui-datepicker.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/jeditable/jquery.jeditable.ui-autocomplete.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
                 print '<script>' . "\n";
-                print 'var urlSaveInPlace = \'' . constant('BASE_URL') . '/core/ajax/saveinplace.php\';' . "\n";
-                print 'var urlLoadInPlace = \'' . constant('BASE_URL') . '/core/ajax/loadinplace.php\';' . "\n";
+                print 'var urlSaveInPlace = \'' . constant('DOL_URL_ROOT') . '/core/ajax/saveinplace.php\';' . "\n";
+                print 'var urlLoadInPlace = \'' . constant('DOL_URL_ROOT') . '/core/ajax/loadinplace.php\';' . "\n";
                 print 'var tooltipInPlace = \'' . $langs->transnoentities('ClickToEdit') . '\';' . "\n"; // Added in title attribute of span
                 print 'var placeholderInPlace = \'&nbsp;\';' . "\n"; // If we put another string than $langs->trans("ClickToEdit") here, nothing is shown. If we put empty string, there is error, Why ?
                 print 'var cancelInPlace = \'' . $langs->trans("Cancel") . '\';' . "\n";
                 print 'var submitInPlace = \'' . $langs->trans('Ok') . '\';' . "\n";
-                print 'var indicatorInPlace = \'<img src="' . DOL_URL_ROOT . "/theme/" . $conf->theme . "/img/working.gif" . '">\';' . "\n";
+                print 'var indicatorInPlace = \'<img src="' . constant('DOL_URL_ROOT') . "/theme/" . $conf->theme . "/img/working.gif" . '">\';' . "\n";
                 print 'var withInPlace = 300;'; // width in pixel for default string edit
                 print '</script>' . "\n";
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/core/js/editinplace.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/plugins/jeditable/jquery.jeditable.ckeditor.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/core/js/editinplace.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/jeditable/jquery.jeditable.ckeditor.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             }
             // jQuery Timepicker
             if (getDolGlobalString('MAIN_USE_JQUERY_TIMEPICKER') || defined('REQUIRE_JQUERY_TIMEPICKER')) {
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/plugins/timepicker/jquery-ui-timepicker-addon.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/core/js/timepicker.js.php?lang=' . $langs->defaultlang . ($ext ? '&amp;' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/timepicker/jquery-ui-timepicker-addon.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/core/js/timepicker.js.php?lang=' . $langs->defaultlang . ($ext ? '&amp;' . $ext : '') . '"></script>' . "\n";
             }
             if (!defined('DISABLE_SELECT2') && (getDolGlobalString('MAIN_USE_JQUERY_MULTISELECT') || defined('REQUIRE_JQUERY_MULTISELECT'))) {
                 // jQuery plugin "mutiselect", "multiple-select", "select2", ...
                 $tmpplugin = !getDolGlobalString('MAIN_USE_JQUERY_MULTISELECT') ? constant('REQUIRE_JQUERY_MULTISELECT') : $conf->global->MAIN_USE_JQUERY_MULTISELECT;
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/plugins/' . $tmpplugin . '/dist/js/' . $tmpplugin . '.full.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n"; // We include full because we need the support of containerCssClass
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/' . $tmpplugin . '/dist/js/' . $tmpplugin . '.full.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n"; // We include full because we need the support of containerCssClass
             }
             if (!defined('DISABLE_MULTISELECT')) {     // jQuery plugin "mutiselect" to select with checkboxes. Can be removed once we have an enhanced search tool
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/plugins/multiselect/jquery.multi-select.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/multiselect/jquery.multi-select.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             }
         }
 
@@ -2099,7 +2104,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
             // CKEditor
             if (empty($disableforlogin) && (isModEnabled('fckeditor') && (!getDolGlobalString('FCKEDITOR_EDITORNAME') || getDolGlobalString('FCKEDITOR_EDITORNAME') == 'ckeditor') && !defined('DISABLE_CKEDITOR')) || defined('FORCE_CKEDITOR')) {
                 print '<!-- Includes JS for CKEditor -->' . "\n";
-                $pathckeditor = constant('BASE_URL') . '/includes/ckeditor/ckeditor/';
+                $pathckeditor = constant('DOL_URL_ROOT') . '/includes/ckeditor/ckeditor/';
                 $jsckeditor = 'ckeditor.js';
                 if (constant('JS_CKEDITOR')) {
                     // To use external ckeditor 4 js lib
@@ -2109,8 +2114,8 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
                 print '/* enable ckeditor by main.inc.php */';
                 print 'var CKEDITOR_BASEPATH = \'' . dol_escape_js($pathckeditor) . '\';' . "\n";
                 print 'var ckeditorConfig = \'' . dol_escape_js(dol_buildpath('/htdocs' . $themesubdir . '/theme/' . $conf->theme . '/ckeditor/config.js' . ($ext ? '?' . $ext : ''), 1)) . '\';' . "\n"; // $themesubdir='' in standard usage
-                print 'var ckeditorFilebrowserBrowseUrl = \'' . constant('BASE_URL') . '/core/filemanagerdol/browser/default/browser.php?Connector=' . constant('BASE_URL') . '/core/filemanagerdol/connectors/php/connector.php\';' . "\n";
-                print 'var ckeditorFilebrowserImageBrowseUrl = \'' . constant('BASE_URL') . '/core/filemanagerdol/browser/default/browser.php?Type=Image&Connector=' . constant('BASE_URL') . '/core/filemanagerdol/connectors/php/connector.php\';' . "\n";
+                print 'var ckeditorFilebrowserBrowseUrl = \'' . constant('DOL_URL_ROOT') . '/core/filemanagerdol/browser/default/browser.php?Connector=' . constant('BASE_URL') . '/core/filemanagerdol/connectors/php/connector.php\';' . "\n";
+                print 'var ckeditorFilebrowserImageBrowseUrl = \'' . constant('DOL_URL_ROOT') . '/core/filemanagerdol/browser/default/browser.php?Type=Image&Connector=' . constant('BASE_URL') . '/core/filemanagerdol/connectors/php/connector.php\';' . "\n";
                 print '</script>' . "\n";
                 print '<script src="' . $pathckeditor . $jsckeditor . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
                 print '<script>';
@@ -2133,7 +2138,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
                 }
                 if ($enablebrowsernotif) {
                     print '<!-- Includes JS of Dolibarr (browser layout = ' . $conf->browser->layout . ')-->' . "\n";
-                    print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/core/js/lib_notification.js.php' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                    print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/core/js/lib_notification.js.php' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
                 }
             }
 
@@ -2143,8 +2148,8 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
 
             // Leaflet TODO use dolibarr files
             if (getDolGlobalString('MAIN_USE_GEOPHP')) {
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/leaflet/leaflet.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/leaflet/leaflet-geoman.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/leaflet/leaflet.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/leaflet/leaflet-geoman.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             }
 
             // JS forced by modules (relative url starting with /)
@@ -2182,7 +2187,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
         if (getDolGlobalString('ALLOW_THEME_JS')) {
             $theme_js = dol_buildpath('/theme/' . $conf->theme . '/' . $conf->theme . '.js', 0);
             if (file_exists($theme_js)) {
-                print '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/theme/' . $conf->theme . '/' . $conf->theme . '.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
+                print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/' . $conf->theme . '.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             }
         }
 
@@ -2292,7 +2297,7 @@ function top_menu($head, $title = '', $target = '', $disablejs = 0, $disablehead
             }
             if ($_SESSION["dol_authmode"] != 'forceuser' && $_SESSION["dol_authmode"] != 'http') {
                 $logouthtmltext .= $langs->trans("Logout") . '<br>';
-                $logouttext .= '<a accesskey="l" href="' . constant('BASE_URL') . 'user/logout.php?token=' . newToken() . '">';
+                $logouttext .= '<a accesskey="l" href="' . constant('BASE_URL') . '/user/logout.php?token=' . newToken() . '">';
                 $logouttext .= img_picto($langs->trans('Logout') . ' (' . $stringforfirstkey . ' l)', 'sign-out', '', false, 0, 0, '', 'atoplogin valignmiddle');
                 $logouttext .= '</a>';
             } else {
@@ -2320,7 +2325,7 @@ function top_menu($head, $title = '', $target = '', $disablejs = 0, $disablehead
 
         // Link to module builder
         if (isModEnabled('modulebuilder')) {
-            $text = '<a href="' . constant('BASE_URL') . 'modulebuilder/index.php?mainmenu=home&leftmenu=admintools" target="modulebuilder">';
+            $text = '<a href="' . constant('BASE_URL') . '/modulebuilder/index.php?mainmenu=home&leftmenu=admintools" target="modulebuilder">';
             //$text.= img_picto(":".$langs->trans("ModuleBuilder"), 'printer_top.png', 'class="printer"');
             $text .= '<span class="fa fa-bug atoplogin valignmiddle"></span>';
             $text .= '</a>';
@@ -2501,8 +2506,8 @@ function top_menu_user($hideloginname = 0, $urllogout = '')
             $nophoto = '/public/theme/common/user_woman.png';
         }
 
-        $userImage = '<img class="photo photouserphoto userphoto" alt="" src="' . DOL_URL_ROOT . $nophoto . '">';
-        $userDropDownImage = '<img class="photo dropdown-user-image" alt="" src="' . DOL_URL_ROOT . $nophoto . '">';
+        $userImage = '<img class="photo photouserphoto userphoto" alt="" src="' . constant('DOL_URL_ROOT') . $nophoto . '">';
+        $userDropDownImage = '<img class="photo dropdown-user-image" alt="" src="' . constant('DOL_URL_ROOT') . $nophoto . '">';
     }
 
     $dropdownBody = '';
@@ -2640,7 +2645,7 @@ function top_menu_user($hideloginname = 0, $urllogout = '')
     if (!getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER')) {
         $btnUser = '<!-- div for user link -->
 	    <div id="topmenu-login-dropdown" class="userimg atoplogin dropdown user user-menu inline-block">
-	        <a href="' . constant('BASE_URL') . 'user/card.php?id=' . $user->id . '" class="dropdown-toggle login-dropdown-a valignmiddle" data-toggle="dropdown">
+	        <a href="' . constant('BASE_URL') . '/user/card.php?id=' . $user->id . '" class="dropdown-toggle login-dropdown-a valignmiddle" data-toggle="dropdown">
 	            ' . $userImage . (empty($user->photo) ? '<!-- no photo so show also the login --><span class="hidden-xs maxwidth200 atoploginusername hideonsmartphone paddingleft valignmiddle small">' . dol_trunc($user->firstname ? $user->firstname : $user->login, 10) . '</span>' : '') . '
 	        </a>
 	        <div class="dropdown-menu">
@@ -2687,7 +2692,7 @@ function top_menu_user($hideloginname = 0, $urllogout = '')
     } else {
         $btnUser = '<!-- div for user link text browser -->
 	    <div id="topmenu-login-dropdown" class="userimg atoplogin dropdown user user-menu inline-block">
-	    	<a href="' . constant('BASE_URL') . 'user/card.php?id=' . $user->id . '" class="valignmiddle" alt="' . $langs->trans("MyUserCard") . '">
+	    	<a href="' . constant('BASE_URL') . '/user/card.php?id=' . $user->id . '" class="valignmiddle" alt="' . $langs->trans("MyUserCard") . '">
 	    	' . $userImage . (empty($user->photo) ? '<span class="hidden-xs maxwidth200 atoploginusername hideonsmartphone paddingleft small">' . dol_trunc($user->firstname ? $user->firstname : $user->login, 10) . '</span>' : '') . '
 	    	</a>
 		</div>';
@@ -2991,7 +2996,7 @@ function printDropdownQuickadd()
         $langs->load(explode('@', $item['title'])[1]);
         $langs->load(explode('@', $item['name'])[1]);
         $dropDownQuickAddHtml .= '
-			<a class="dropdown-item quickadd-item" href="' . DOL_URL_ROOT . $item['url'] . '" title="' . $langs->trans(explode('@', $item['title'])[0]) . '">
+			<a class="dropdown-item quickadd-item" href="' . constant('DOL_URL_ROOT') . $item['url'] . '" title="' . $langs->trans(explode('@', $item['title'])[0]) . '">
 			' . img_picto('', $item['picto'], 'style="width:18px;"') . ' ' . $langs->trans(explode('@', $item['name'])[0]) . '</a>
 		';
     }

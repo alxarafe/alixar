@@ -519,15 +519,15 @@ if ($action != 'export_csv') {
         //var_dump($accounting_account);
         //var_dump($accountingaccountstatic);
         if (empty($accountingaccountstatic->label) && $accountingaccountstatic->id > 0) {
-            $link = '<a class="editfielda reposition" href="' . constant('BASE_URL') . 'accountancy/admin/card.php?action=update&token=' . newToken() . '&id=' . $accountingaccountstatic->id . '">' . img_edit() . '</a>';
+            $link = '<a class="editfielda reposition" href="' . constant('BASE_URL') . '/accountancy/admin/card.php?action=update&token=' . newToken() . '&id=' . $accountingaccountstatic->id . '">' . img_edit() . '</a>';
         } elseif ($accounting_account == 'NotDefined') {
-            $link = '<a href="' . constant('BASE_URL') . 'accountancy/admin/card.php?action=create&token=' . newToken() . '&accountingaccount=' . length_accountg($line->numero_compte) . '">' . img_edit_add() . '</a>';
+            $link = '<a href="' . constant('BASE_URL') . '/accountancy/admin/card.php?action=create&token=' . newToken() . '&accountingaccount=' . length_accountg($line->numero_compte) . '">' . img_edit_add() . '</a>';
         } /* elseif (empty($tmparrayforrootaccount['label'])) {
             // $tmparrayforrootaccount['label'] not defined = the account has not parent with a parent.
             // This is useless, we should not create a new account when an account has no parent, we must edit it to fix its parent.
             // BUG 1: Accounts on level root or level 1 must not have a parent 2 level higher, so should not show a link to create another account.
             // BUG 2: Adding a link to create a new accounting account here is useless because it is not add as parent of the orphelin.
-            //$link = '<a href="' . constant('BASE_URL') . 'accountancy/admin/card.php?action=create&token=' . newToken() . '&accountingaccount=' . length_accountg($line->numero_compte) . '">' . img_edit_add() . '</a>';
+            //$link = '<a href="' . constant('BASE_URL') . '/accountancy/admin/card.php?action=create&token=' . newToken() . '&accountingaccount=' . length_accountg($line->numero_compte) . '">' . img_edit_add() . '</a>';
         } */
 
         if (!empty($show_subgroup)) {

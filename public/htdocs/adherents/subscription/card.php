@@ -151,7 +151,7 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('adheren
     $result = $object->fetch($rowid);
     $result = $object->delete($user);
     if ($result > 0) {
-        header("Location: " . DOL_URL_ROOT . "/adherents/card.php?rowid=" . $object->fk_adherent);
+        header("Location: " . constant('BASE_URL') . "/adherents/card.php?rowid=" . $object->fk_adherent);
         exit;
     } else {
         $errmesg = $adh->error;

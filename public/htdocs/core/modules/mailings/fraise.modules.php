@@ -221,7 +221,7 @@ class mailing_fraise extends MailingTargets
      */
     public function url($id)
     {
-        return '<a href="' . constant('BASE_URL') . 'adherents/card.php?rowid=' . $id . '">' . img_object('', "user") . '</a>';
+        return '<a href="' . constant('BASE_URL') . '/adherents/card.php?rowid=' . $id . '">' . img_object('', "user") . '</a>';
     }
 
 

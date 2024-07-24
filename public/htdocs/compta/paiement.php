@@ -980,7 +980,7 @@ if (!GETPOST('action', 'aZ09')) {
             $objp = $db->fetch_object($resql);
 
             print '<tr class="oddeven">';
-            print '<td><a href="' . constant('BASE_URL') . 'compta/facture/card.php?facid=' . $objp->facid . '">' . $objp->ref . "</a></td>\n";
+            print '<td><a href="' . constant('BASE_URL') . '/compta/facture/card.php?facid=' . $objp->facid . '">' . $objp->ref . "</a></td>\n";
             print '<td>' . dol_print_date($db->jdate($objp->dp)) . "</td>\n";
             print '<td>' . $objp->paiement_type . ' ' . $objp->num_payment . "</td>\n";
             print '<td class="right"><span class="amount">' . price($objp->amount) . '</span></td>';

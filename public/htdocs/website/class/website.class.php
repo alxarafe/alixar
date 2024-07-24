@@ -840,7 +840,7 @@ class Website extends CommonObject
         $label .= '<b>' . $langs->trans('Ref') . ':</b> ' . $this->ref . '<br>';
         $label .= '<b>' . $langs->trans('MainLanguage') . ':</b> ' . $this->lang;
 
-        $linkstart = '<a href="' . constant('BASE_URL') . 'website/card.php?id=' . $this->id . '"';
+        $linkstart = '<a href="' . constant('BASE_URL') . '/website/card.php?id=' . $this->id . '"';
         $linkstart .= ($notooltip ? '' : ' title="' . dol_escape_htmltag($label, 1) . '" class="classfortooltip' . ($morecss ? ' ' . $morecss : '') . '"');
         $linkstart .= '>';
         $linkend = '</a>';

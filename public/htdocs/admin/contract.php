@@ -102,7 +102,7 @@ if ($action == 'updateMask') {
         '@phan-var-force ModelePDFContract $module';
 
         if ($module->write_file($contract, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=contract&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=contract&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($obj->error, $obj->errors, 'errors');

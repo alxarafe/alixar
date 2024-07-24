@@ -9462,7 +9462,7 @@ abstract class CommonObject
                             if ($urladvanced) {
                                 $return .= '<a href="' . $urladvanced . '">';
                             } else {
-                                $return .= '<a href="' . constant('BASE_URL') . 'viewimage.php?modulepart=' . $modulepart . '&entity=' . $this->entity . '&file=' . urlencode($pdir . $photo) . '" class="aphoto" target="_blank" rel="noopener noreferrer">';
+                                $return .= '<a href="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $modulepart . '&entity=' . $this->entity . '&file=' . urlencode($pdir . $photo) . '" class="aphoto" target="_blank" rel="noopener noreferrer">';
                             }
                         }
 
@@ -9521,7 +9521,7 @@ abstract class CommonObject
                             // Special case for product
                             if ($modulepart == 'product' && ($user->hasRight('produit', 'creer') || $user->hasRight('service', 'creer'))) {
                                 // Link to resize
-                                $return .= '<a href="' . constant('BASE_URL') . 'core/photos_resize.php?modulepart=' . urlencode('produit|service') . '&id=' . $this->id . '&file=' . urlencode($pdir . $viewfilename) . '" title="' . dol_escape_htmltag($langs->trans("Resize")) . '">' . img_picto($langs->trans("Resize"), 'resize', '') . '</a> &nbsp; ';
+                                $return .= '<a href="' . constant('BASE_URL') . '/core/photos_resize.php?modulepart=' . urlencode('produit|service') . '&id=' . $this->id . '&file=' . urlencode($pdir . $viewfilename) . '" title="' . dol_escape_htmltag($langs->trans("Resize")) . '">' . img_picto($langs->trans("Resize"), 'resize', '') . '</a> &nbsp; ';
 
                                 // Link to delete
                                 $return .= '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&action=delete&token=' . newToken() . '&file=' . urlencode($pdir . $viewfilename) . '">';
@@ -9550,7 +9550,7 @@ abstract class CommonObject
                             // Special case for product
                             if ($modulepart == 'product' && ($user->hasRight('produit', 'creer') || $user->hasRight('service', 'creer'))) {
                                 // Link to resize
-                                $return .= '<a href="' . constant('BASE_URL') . 'core/photos_resize.php?modulepart=' . urlencode('produit|service') . '&id=' . $this->id . '&file=' . urlencode($pdir . $viewfilename) . '" title="' . dol_escape_htmltag($langs->trans("Resize")) . '">' . img_picto($langs->trans("Resize"), 'resize', '') . '</a> &nbsp; ';
+                                $return .= '<a href="' . constant('BASE_URL') . '/core/photos_resize.php?modulepart=' . urlencode('produit|service') . '&id=' . $this->id . '&file=' . urlencode($pdir . $viewfilename) . '" title="' . dol_escape_htmltag($langs->trans("Resize")) . '">' . img_picto($langs->trans("Resize"), 'resize', '') . '</a> &nbsp; ';
 
                                 // Link to delete
                                 $return .= '<a href="' . $_SERVER["PHP_SELF"] . '?id=' . $this->id . '&action=delete&token=' . newToken() . '&file=' . urlencode($pdir . $viewfilename) . '">';

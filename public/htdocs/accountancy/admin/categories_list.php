@@ -891,7 +891,7 @@ if ($resql) {
                     $listofaccountintogroup = $accountingcategory->getCptsCat($obj->rowid);
                     $nbofaccountintogroup = count($listofaccountintogroup);
 
-                    print '<a href="' . constant('BASE_URL') . 'accountancy/admin/categories.php?action=display&save_lastsearch_values=1&account_category=' . $obj->rowid . '">';
+                    print '<a href="' . constant('BASE_URL') . '/accountancy/admin/categories.php?action=display&save_lastsearch_values=1&account_category=' . $obj->rowid . '">';
                     print $langs->trans("NAccounts", $nbofaccountintogroup);
                     print '</a>';
                 } else {

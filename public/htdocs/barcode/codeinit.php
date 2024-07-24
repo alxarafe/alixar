@@ -356,7 +356,7 @@ if (isModEnabled('societe')) {
         $disabledthirdparty = 1;
         $titleno = $langs->trans("NoBarcodeNumberingTemplateDefined");
         print '<div class="warning">' . $langs->trans("NoBarcodeNumberingTemplateDefined");
-        print '<br><a href="' . constant('BASE_URL') . 'admin/barcode.php">' . $langs->trans("ToGenerateCodeDefineAutomaticRuleFirst") . '</a>';
+        print '<br><a href="' . constant('BASE_URL') . '/admin/barcode.php">' . $langs->trans("ToGenerateCodeDefineAutomaticRuleFirst") . '</a>';
         print '</div>';
     }
     if (empty($nbthirdpartyno)) {
@@ -430,7 +430,7 @@ if (isModEnabled('product') || isModEnabled('service')) {
         $disabledproduct = 1;
         $titleno = $langs->trans("NoBarcodeNumberingTemplateDefined");
         print '<br><div class="warning">' . $langs->trans("NoBarcodeNumberingTemplateDefined");
-        print '<br><a href="' . constant('BASE_URL') . 'admin/barcode.php">' . $langs->trans("ToGenerateCodeDefineAutomaticRuleFirst") . '</a>';
+        print '<br><a href="' . constant('BASE_URL') . '/admin/barcode.php">' . $langs->trans("ToGenerateCodeDefineAutomaticRuleFirst") . '</a>';
         print '</div>';
     }
     if (empty($nbproductno)) {

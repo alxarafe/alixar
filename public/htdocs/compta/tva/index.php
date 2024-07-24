@@ -400,7 +400,7 @@ if ($refresh === true) {
 
 
         print '<tr class="oddeven">';
-        print '<td class="nowrap"><a href="' . constant('BASE_URL') . 'compta/tva/quadri_detail.php?leftmenu=tax_vat&month=' . $m . '&year=' . $y . '">' . dol_print_date(dol_mktime(0, 0, 0, $m, 1, $y), "%b %Y") . '</a></td>';
+        print '<td class="nowrap"><a href="' . constant('BASE_URL') . '/compta/tva/quadri_detail.php?leftmenu=tax_vat&month=' . $m . '&year=' . $y . '">' . dol_print_date(dol_mktime(0, 0, 0, $m, 1, $y), "%b %Y") . '</a></td>';
 
         $x_coll_sum = 0;
         foreach (array_keys($x_coll) as $rate) {

@@ -138,7 +138,7 @@ if ($object->id > 0) {
         $param = (isset($mode) && $mode == 'mine' ? '&mode=mine' : '');
         // Project card
 
-        $linkback = '<a href="' . constant('BASE_URL') . 'projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+        $linkback = '<a href="' . constant('BASE_URL') . '/projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
         $morehtmlref = '<div class="refidno">';
         // Title
@@ -266,7 +266,7 @@ if ($object->id > 0) {
 
 
     $param = (GETPOST('withproject') ? '&withproject=1' : '');
-    $linkback = GETPOST('withproject') ? '<a href="' . constant('BASE_URL') . 'projet/tasks.php?id=' . $projectstatic->id . '">' . $langs->trans("BackToList") . '</a>' : '';
+    $linkback = GETPOST('withproject') ? '<a href="' . constant('BASE_URL') . '/projet/tasks.php?id=' . $projectstatic->id . '">' . $langs->trans("BackToList") . '</a>' : '';
 
     if (!GETPOST('withproject') || empty($projectstatic->id)) {
         $projectsListId = $projectstatic->getProjectsAuthorizedForUser($user, 0, 1);

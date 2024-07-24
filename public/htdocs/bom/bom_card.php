@@ -516,7 +516,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
     // Object card
     // ------------------------------------------------------------
-    $linkback = '<a href="' . constant('BASE_URL') . 'bom/bom_list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/bom/bom_list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
 
     $morehtmlref = '<div class="refidno">';
     /*
@@ -755,7 +755,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
             // Create MO
             if (isModEnabled('mrp')) {
                 if ($object->status == $object::STATUS_VALIDATED && $user->hasRight('mrp', 'write')) {
-                    print '<a class="butAction" href="' . constant('BASE_URL') . 'mrp/mo_card.php?action=create&fk_bom=' . $object->id . '&token=' . newToken() . '&backtopageforcancel=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id) . '">' . $langs->trans("CreateMO") . '</a>' . "\n";
+                    print '<a class="butAction" href="' . constant('BASE_URL') . '/mrp/mo_card.php?action=create&fk_bom=' . $object->id . '&token=' . newToken() . '&backtopageforcancel=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id) . '">' . $langs->trans("CreateMO") . '</a>' . "\n";
                 }
             }
 

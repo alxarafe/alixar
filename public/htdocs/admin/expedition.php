@@ -122,7 +122,7 @@ if ($action == 'updateMask') {
         '@phan-var-force ModelePdfExpedition $module';
 
         if ($module->write_file($exp, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=expedition&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=expedition&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($module->error, $module->errors, 'errors');
@@ -170,7 +170,7 @@ $form = new Form($db);
 
 llxHeader("", $langs->trans("SendingsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-expedition');
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("SendingsSetup"), $linkback, 'title_setup');
 print '<br>';
 $head = expedition_admin_prepare_head();

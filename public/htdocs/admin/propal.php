@@ -102,7 +102,7 @@ if ($action == 'updateMask') {
         '@phan-var-force CommonDocGenerator $module';
 
         if ($module->write_file($propal, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=propal&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=propal&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($module->error, $module->errors, 'errors');

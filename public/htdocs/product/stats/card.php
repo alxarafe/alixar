@@ -151,7 +151,7 @@ if ($result && ($id > 0 || !empty($ref)) && empty($notab)) {
 
     print dol_get_fiche_head($head, 'stats', $titre, -1, $picto);
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'product/list.php?restore_lastsearch_values=1&type=' . $object->type . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/product/list.php?restore_lastsearch_values=1&type=' . $object->type . '">' . $langs->trans("BackToList") . '</a>';
 
     dol_banner_tab($object, 'ref', $linkback, ($user->socid ? 0 : 1), 'ref', '', '', '', 0, '', '', 1);
 

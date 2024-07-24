@@ -224,7 +224,7 @@ if ($action == 'delete') {
 }
 
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($title, $linkback, 'title_setup');
 
 print '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';

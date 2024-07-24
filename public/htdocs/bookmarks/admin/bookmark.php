@@ -61,7 +61,7 @@ if ($action == 'setvalue') {
 
 llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-bookmarks page-admin_bookmark');
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("BookmarkSetup"), $linkback, 'title_setup');
 
 print $langs->trans("BookmarkDesc") . "<br>\n";

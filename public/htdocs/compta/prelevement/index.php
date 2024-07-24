@@ -87,7 +87,7 @@ print '<tr class="liste_titre"><th colspan="2">' . $langs->trans("Statistics") .
 
 print '<tr class="oddeven"><td>' . $langs->trans("NbOfInvoiceToWithdraw") . '</td>';
 print '<td class="right">';
-print '<a class="badge badge-info" href="' . constant('BASE_URL') . 'compta/prelevement/demandes.php?status=0">';
+print '<a class="badge badge-info" href="' . constant('BASE_URL') . '/compta/prelevement/demandes.php?status=0">';
 print $bprev->nbOfInvoiceToPay('direct-debit');
 print '</a>';
 print '</td></tr>';

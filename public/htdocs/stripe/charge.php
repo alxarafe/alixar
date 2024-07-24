@@ -255,7 +255,7 @@ if (!$rowid) {
                 $object = new Commande($db);
                 $object->fetch($charge->metadata->dol_id);
                 if ($object->id > 0) {
-                    print "<a href='" . DOL_URL_ROOT . "/commande/card.php?id=" . $object->id . "'>" . img_picto('', 'order') . " " . $object->ref . "</a>";
+                    print "<a href='" . constant('DOL_URL_ROOT') . "/commande/card.php?id=" . $object->id . "'>" . img_picto('', 'order') . " " . $object->ref . "</a>";
                 } else {
                     print $FULLTAG;
                 }
@@ -263,7 +263,7 @@ if (!$rowid) {
                 $object = new Facture($db);
                 $object->fetch($charge->metadata->dol_id);
                 if ($object->id > 0) {
-                    print "<a href='" . DOL_URL_ROOT . "/compta/facture/card.php?facid=" . $charge->metadata->dol_id . "'>" . img_picto('', 'bill') . " " . $object->ref . "</a>";
+                    print "<a href='" . constant('DOL_URL_ROOT') . "/compta/facture/card.php?facid=" . $charge->metadata->dol_id . "'>" . img_picto('', 'bill') . " " . $object->ref . "</a>";
                 } else {
                     print $FULLTAG;
                 }

@@ -77,7 +77,7 @@ if ((getDolGlobalString('TAKEPOS_PHONE_BASIC_LAYOUT') == 1 && $conf->browser->la
         if (getDolGlobalString('TAKEPOS_NUM_TERMINALS') == "1") {
             $_SESSION["takeposterminal"] = 1;
         } else {
-            header("Location: " . DOL_URL_ROOT . "/takepos/index.php");
+            header("Location: " . constant('BASE_URL') . "/takepos/index.php");
             exit;
         }
     }
@@ -846,9 +846,9 @@ if (empty($reshook)) {
             $invoice->delete($user);
 
             if (defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
-                header("Location: " . DOL_URL_ROOT . "/takepos/public/auto_order.php");
+                header("Location: " . constant('BASE_URL') . "/takepos/public/auto_order.php");
             } else {
-                header("Location: " . DOL_URL_ROOT . "/takepos/invoice.php");
+                header("Location: " . constant('BASE_URL') . "/takepos/invoice.php");
             }
             exit;
         }
@@ -1155,7 +1155,7 @@ if (empty($reshook)) {
 
         $sectionwithinvoicelink .= '</span><br>';
         if (getDolGlobalInt('TAKEPOS_PRINT_INVOICE_DOC_INSTEAD_OF_RECEIPT')) {
-            $sectionwithinvoicelink .= ' <a target="_blank" class="button" href="' . constant('BASE_URL') . 'document.php?token=' . newToken() . '&modulepart=facture&file=' . $invoice->ref . '/' . $invoice->ref . '.pdf">Invoice</a>';
+            $sectionwithinvoicelink .= ' <a target="_blank" class="button" href="' . constant('BASE_URL') . '/document.php?token=' . newToken() . '&modulepart=facture&file=' . $invoice->ref . '/' . $invoice->ref . '.pdf">Invoice</a>';
         } elseif (getDolGlobalString('TAKEPOS_PRINT_METHOD') == "takeposconnector") {
             if (getDolGlobalString('TAKEPOS_PRINT_SERVER') && filter_var($conf->global->TAKEPOS_PRINT_SERVER, FILTER_VALIDATE_URL) == true) {
                 $sectionwithinvoicelink .= ' <button id="buttonprint" type="button" onclick="TakeposConnector(' . $placeid . ')">' . $langs->trans('PrintTicket') . '</button>';
@@ -2017,7 +2017,7 @@ if ($usediv) {
 if (($action == "valid" || $action == "history") && $invoice->type != Facture::TYPE_CREDIT_NOTE && !getDolGlobalString('TAKEPOS_NO_CREDITNOTE')) {
     print '<button id="buttonprint" type="button" onclick="ModalBox(\'ModalCreditNote\')">' . $langs->trans('CreateCreditNote') . '</button>';
     if (getDolGlobalInt('TAKEPOS_PRINT_INVOICE_DOC_INSTEAD_OF_RECEIPT')) {
-        print ' <a target="_blank" class="button" href="' . constant('BASE_URL') . 'document.php?token=' . newToken() . '&modulepart=facture&file=' . $invoice->ref . '/' . $invoice->ref . '.pdf">Invoice</a>';
+        print ' <a target="_blank" class="button" href="' . constant('BASE_URL') . '/document.php?token=' . newToken() . '&modulepart=facture&file=' . $invoice->ref . '/' . $invoice->ref . '.pdf">Invoice</a>';
     }
 }
 

@@ -131,10 +131,10 @@ print dol_get_fiche_head($head, 'info', $title, -1, 'user');
 $linkback = '';
 
 if ($user->hasRight('user', 'user', 'lire') || $user->admin) {
-    $linkback = '<a href="' . constant('BASE_URL') . 'user/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/user/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 }
 
-$morehtmlref = '<a href="' . constant('BASE_URL') . 'user/vcard.php?id=' . $object->id . '&output=file&file=' . urlencode(dol_sanitizeFileName($object->getFullName($langs) . '.vcf')) . '" class="refid" rel="noopener">';
+$morehtmlref = '<a href="' . constant('BASE_URL') . '/user/vcard.php?id=' . $object->id . '&output=file&file=' . urlencode(dol_sanitizeFileName($object->getFullName($langs) . '.vcf')) . '" class="refid" rel="noopener">';
 $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
 $morehtmlref .= '</a>';
 

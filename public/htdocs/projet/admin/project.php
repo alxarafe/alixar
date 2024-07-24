@@ -120,7 +120,7 @@ if ($action == 'updateMaskTask') {
         $module = new $classname($db);
 
         if ($module->write_file($project, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=project&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=project&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($obj->error, $obj->errors, 'errors');
@@ -154,7 +154,7 @@ if ($action == 'updateMaskTask') {
         $module = new $classname($db);
 
         if ($module->write_file($project, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=project_task&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=project_task&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($obj->error, $obj->errors, 'errors');

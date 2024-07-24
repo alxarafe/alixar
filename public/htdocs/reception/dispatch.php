@@ -352,7 +352,7 @@ if ($id > 0 || !empty($ref)) {
     print $formconfirm;
 
     // Reception card
-    $linkback = '<a href="' . constant('BASE_URL') . 'reception/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/reception/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
     $morehtmlref = '<div class="refidno">';
     // Ref customer reception
 

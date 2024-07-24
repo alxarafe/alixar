@@ -73,7 +73,7 @@ if ($action == 'specimen') {
         $obj = new $classname($db);
 
         if ($obj->write_file($don, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=donation&file=SPECIMEN.html");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=donation&file=SPECIMEN.html");
             return;
         } else {
             setEventMessages($obj->error, $obj->errors, 'errors');

@@ -635,7 +635,7 @@ function showWebsiteTemplates(Website $website)
                             if (!empty($urladvanced)) {
                                 $ret .= '<a class="' . $urladvanced['css'] . '" target="' . $urladvanced['target'] . '" mime="' . $urladvanced['mime'] . '" href="' . $urladvanced['url'] . '">';
                             } else {
-                                $ret .= '<a href="' . constant('BASE_URL') . 'viewimage.php?modulepart=' . urlencode($modulepart) . '&entity=' . ((int) $entity) . '&file=' . urlencode($originalfile) . '&cache=' . ((int) $cache) . '">';
+                                $ret .= '<a href="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . urlencode($modulepart) . '&entity=' . ((int) $entity) . '&file=' . urlencode($originalfile) . '&cache=' . ((int) $cache) . '">';
                             }
                             print $ret;
                             print '<img class="img-skinthumb shadow" src="' . $url . '" border="0" alt="' . $title . '" title="' . $title . '" style="margin-bottom: 5px;">';

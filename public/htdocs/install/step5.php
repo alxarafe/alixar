@@ -39,13 +39,13 @@
  */
 
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
-include_once 'inc.php';
+include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
 if (file_exists($conffile)) {
     include_once $conffile;
 }
-require_once $dolibarr_main_document_root . '/core/lib/admin.lib.php';
-require_once $dolibarr_main_document_root . '/core/lib/security.lib.php'; // for dol_hash
-require_once $dolibarr_main_document_root . '/core/lib/functions2.lib.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php'; // for dol_hash
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 global $langs;
 
@@ -148,7 +148,7 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
 
     // If password is encoded, we decode it
     if ((!empty($dolibarr_main_db_pass) && preg_match('/crypted:/i', $dolibarr_main_db_pass)) || !empty($dolibarr_main_db_encrypted_pass)) {
-        require_once $dolibarr_main_document_root . '/core/lib/security.lib.php';
+        require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
         if (!empty($dolibarr_main_db_pass) && preg_match('/crypted:/i', $dolibarr_main_db_pass)) {
             $dolibarr_main_db_pass = preg_replace('/crypted:/i', '', $dolibarr_main_db_pass);
             $dolibarr_main_db_pass = dol_decode($dolibarr_main_db_pass);

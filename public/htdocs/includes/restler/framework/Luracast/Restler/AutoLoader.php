@@ -302,8 +302,8 @@ namespace Luracast\Restler {
                     //in case of multiple autoloader systems
                     if (property_exists($b, $loader[1])) {
                     if (
-                        false !== $file = $b::$loader[1]($className)
-                    && $this->exists($className, $b::$loader[1])
+                    false !== $file = $b::$loader[1]($className)
+                        && $this->exists($className, $b::$loader[1])
                     ) {
                             return $file;
                         }

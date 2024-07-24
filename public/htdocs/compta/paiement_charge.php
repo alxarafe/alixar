@@ -184,7 +184,7 @@ if ($action == 'create') {
 
     print '<table class="border centpercent">';
 
-    print '<tr><td class="titlefieldcreate">' . $langs->trans("Ref") . '</td><td><a href="' . constant('BASE_URL') . 'compta/sociales/card.php?id=' . $chid . '">' . $chid . '</a></td></tr>';
+    print '<tr><td class="titlefieldcreate">' . $langs->trans("Ref") . '</td><td><a href="' . constant('BASE_URL') . '/compta/sociales/card.php?id=' . $chid . '">' . $chid . '</a></td></tr>';
     print '<tr><td>' . $langs->trans("Label") . '</td><td>' . $charge->label . "</td></tr>\n";
     print '<tr><td>' . $langs->trans("Type") . "</td><td>" . $charge->type_label . "</td></tr>\n";
     print '<tr><td>' . $langs->trans("Period") . "</td><td>" . dol_print_date($charge->periode, 'day') . "</td></tr>\n";

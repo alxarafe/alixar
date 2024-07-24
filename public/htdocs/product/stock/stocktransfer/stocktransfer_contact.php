@@ -127,14 +127,14 @@ if ($object->id > 0) {
 
     // Proposal card
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'comm/propal/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/comm/propal/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
 
 
     $morehtmlref = '<div class="refidno">';
     // Thirdparty
     $morehtmlref .= empty($object->thirdparty) ? '' : $object->thirdparty->getNomUrl(1, 'customer');
     if (!getDolGlobalInt('MAIN_DISABLE_OTHER_LINK') && $object->thirdparty->id > 0) {
-        $morehtmlref .= ' (<a href="' . constant('BASE_URL') . 'commande/list.php?socid=' . $object->thirdparty->id . '&search_societe=' . urlencode($object->thirdparty->name) . '">' . $langs->trans("OtherOrders") . '</a>)';
+        $morehtmlref .= ' (<a href="' . constant('BASE_URL') . '/commande/list.php?socid=' . $object->thirdparty->id . '&search_societe=' . urlencode($object->thirdparty->name) . '">' . $langs->trans("OtherOrders") . '</a>)';
     }
     // Project
     if (isModEnabled('project')) {

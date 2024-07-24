@@ -1561,7 +1561,7 @@ if ($action == 'create') {
         print img_picto('', 'project', 'class="pictofixedwidth"');
         print $formproject->select_projects(($object->socid > 0 ? $object->socid : -1), $projectid, 'projectid', 0, 0, 1, 1, 0, 0, 0, '', 1, 0, 'maxwidth500 widthcentpercentminusxx maxwidth500');
 
-        print '&nbsp;<a href="' . constant('BASE_URL') . 'projet/card.php?socid=' . (empty($societe->id) ? '' : $societe->id) . '&action=create&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '">';
+        print '&nbsp;<a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . (empty($societe->id) ? '' : $societe->id) . '&action=create&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '">';
         print '<span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddProject") . '"></span></a>';
         $urloption = '?action=create&donotclearsession=1';
         $url = dol_buildpath('comm/action/card.php', 2) . $urloption;
@@ -2069,7 +2069,7 @@ if ($id > 0) {
             print img_picto('', 'project', 'class="pictofixedwidth"');
             $numprojet = $formproject->select_projects(($object->socid > 0 ? $object->socid : -1), $object->fk_project, 'projectid', 0, 0, 1, 0, 0, 0, 0, '', 0, 0, 'maxwidth500 widthcentpercentminusxx');
             if ($numprojet == 0) {
-                print ' &nbsp; <a href="' . constant('BASE_URL') . 'projet/card.php?socid=' . $object->socid . '&action=create&token=' . newToken() . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=edit') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddProject") . '"></span></a>';
+                print ' &nbsp; <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $object->socid . '&action=create&token=' . newToken() . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=edit') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddProject") . '"></span></a>';
             }
             print '</td></tr>';
         }
@@ -2254,31 +2254,31 @@ if ($id > 0) {
 
         $linkback = '';
         // Link to other agenda views
-        $linkback .= '<a href="' . constant('BASE_URL') . 'comm/action/list.php?mode=show_list&restore_lastsearch_values=1">';
+        $linkback .= '<a href="' . constant('BASE_URL') . '/comm/action/list.php?mode=show_list&restore_lastsearch_values=1">';
         $linkback .= img_picto($langs->trans("BackToList"), 'object_calendarlist', 'class="pictoactionview pictofixedwidth"');
         $linkback .= '<span class="hideonsmartphone">' . $langs->trans("BackToList") . '</span>';
         $linkback .= '</a>';
         $linkback .= '</li>';
         $linkback .= '<li class="noborder litext">';
-        $linkback .= '<a href="' . constant('BASE_URL') . 'comm/action/index.php?mode=show_month&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
+        $linkback .= '<a href="' . constant('BASE_URL') . '/comm/action/index.php?mode=show_month&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
         $linkback .= img_picto($langs->trans("ViewCal"), 'object_calendar', 'class="pictoactionview pictofixedwidth"');
         $linkback .= '<span class="hideonsmartphone">' . $langs->trans("ViewCal") . '</span>';
         $linkback .= '</a>';
         $linkback .= '</li>';
         $linkback .= '<li class="noborder litext">';
-        $linkback .= '<a href="' . constant('BASE_URL') . 'comm/action/index.php?mode=show_week&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
+        $linkback .= '<a href="' . constant('BASE_URL') . '/comm/action/index.php?mode=show_week&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
         $linkback .= img_picto($langs->trans("ViewWeek"), 'object_calendarweek', 'class="pictoactionview pictofixedwidth"');
         $linkback .= '<span class="hideonsmartphone">' . $langs->trans("ViewWeek") . '</span>';
         $linkback .= '</a>';
         $linkback .= '</li>';
         $linkback .= '<li class="noborder litext">';
-        $linkback .= '<a href="' . constant('BASE_URL') . 'comm/action/index.php?mode=show_day&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
+        $linkback .= '<a href="' . constant('BASE_URL') . '/comm/action/index.php?mode=show_day&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
         $linkback .= img_picto($langs->trans("ViewDay"), 'object_calendarday', 'class="pictoactionview pictofixedwidth"');
         $linkback .= '<span class="hideonsmartphone">' . $langs->trans("ViewDay") . '</span>';
         $linkback .= '</a>';
         $linkback .= '</li>';
         $linkback .= '<li class="noborder litext">';
-        $linkback .= '<a href="' . constant('BASE_URL') . 'comm/action/peruser.php?mode=show_peruser&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
+        $linkback .= '<a href="' . constant('BASE_URL') . '/comm/action/peruser.php?mode=show_peruser&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . '">';
         $linkback .= img_picto($langs->trans("ViewPerUser"), 'object_calendarperuser', 'class="pictoactionview pictofixedwidth"');
         $linkback .= '<span class="hideonsmartphone">' . $langs->trans("ViewPerUser") . '</span>';
         $linkback .= '</a>';

@@ -174,7 +174,7 @@ $notify = new Notify($db);
 
 llxHeader('', $langs->trans("NotificationSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-notification');
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("NotificationSetup"), $linkback, 'title_setup');
 
 print '<span class="opacitymedium">';

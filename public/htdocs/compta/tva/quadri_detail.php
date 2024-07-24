@@ -419,7 +419,7 @@ if (!is_array($x_coll) || !is_array($x_paye)) {
             print "<tr>";
             print '<td class="tax_rate" colspan="' . ($span + 1) . '">';
             print $langs->trans('Rate') . ' : ' . vatrate($rate) . '%';
-            print ' - <a href="' . constant('BASE_URL') . 'compta/tva/quadri_detail.php?invoice_type=customer';
+            print ' - <a href="' . constant('BASE_URL') . '/compta/tva/quadri_detail.php?invoice_type=customer';
             if ($invoice_type != 'customer' || !GETPOSTISSET('vat_rate_show') || GETPOST('vat_rate_show') != $rate) {
                 print '&amp;vat_rate_show=' . urlencode($rate);
             }
@@ -663,7 +663,7 @@ if (!is_array($x_coll) || !is_array($x_paye)) {
             print "<tr>";
             print '<td class="tax_rate" colspan="' . ($span + 1) . '">';
             print $langs->trans('Rate') . ' : ' . vatrate($rate) . '%';
-            print ' - <a href="' . constant('BASE_URL') . 'compta/tva/quadri_detail.php?invoice_type=supplier';
+            print ' - <a href="' . constant('BASE_URL') . '/compta/tva/quadri_detail.php?invoice_type=supplier';
             if ($invoice_type != 'supplier' || !GETPOSTISSET('vat_rate_show') || GETPOST('vat_rate_show') != $rate) {
                 print '&amp;vat_rate_show=' . urlencode($rate);
             }

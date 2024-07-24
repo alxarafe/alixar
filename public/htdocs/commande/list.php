@@ -607,7 +607,7 @@ if (empty($reshook)) {
                     exit;
                 }
                 $texttoshow = $langs->trans('BillXCreated', '{s1}');
-                $texttoshow = str_replace('{s1}', '<a href="' . constant('BASE_URL') . 'compta/facture/card.php?id=' . urlencode((string) ($lastid)) . '">' . $lastref . '</a>', $texttoshow);
+                $texttoshow = str_replace('{s1}', '<a href="' . constant('BASE_URL') . '/compta/facture/card.php?id=' . urlencode((string) ($lastid)) . '">' . $lastref . '</a>', $texttoshow);
                 setEventMessages($texttoshow, null, 'mesgs');
             } else {
                 if (getDolGlobalInt('MAIN_MASSACTION_CREATEBILLS_REDIRECT_IF_MANY') == 1) {
@@ -2259,7 +2259,7 @@ while ($i < $imaxinloop) {
             if (isModEnabled('invoice') && getDolGlobalString('ORDER_BILLING_ALL_CUSTOMER')) {
                 if ($user->hasRight('facture', 'creer')) {
                     if (($obj->fk_statut > 0 && $obj->fk_statut < 3) || ($obj->fk_statut == 3 && $obj->billed == 0)) {
-                        print '&nbsp;<a href="' . constant('BASE_URL') . 'commande/list.php?socid=' . $companystatic->id . '&search_billed=0&autoselectall=1">';
+                        print '&nbsp;<a href="' . constant('BASE_URL') . '/commande/list.php?socid=' . $companystatic->id . '&search_billed=0&autoselectall=1">';
                         print img_picto($langs->trans("CreateInvoiceForThisCustomer") . ' : ' . $companystatic->name, 'object_bill', 'hideonsmartphone') . '</a>';
                     }
                 }

@@ -117,7 +117,7 @@ if (empty($reshook)) {
         if ($caneditperms) {
             $object->fetch($id);
             $object->delete($user);
-            header("Location: " . DOL_URL_ROOT . "/user/group/list.php?restore_lastsearch_values=1");
+            header("Location: " . constant('BASE_URL') . "/user/group/list.php?restore_lastsearch_values=1");
             exit;
         } else {
             $langs->load("errors");
@@ -333,7 +333,7 @@ if ($action == 'create') {
         if ($action != 'edit') {
             print dol_get_fiche_head($head, 'group', $title, -1, 'group');
 
-            $linkback = '<a href="' . constant('BASE_URL') . 'user/group/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+            $linkback = '<a href="' . constant('BASE_URL') . '/user/group/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
             dol_banner_tab($object, 'id', $linkback, $user->hasRight("user", "user", "read") || $user->admin);
 

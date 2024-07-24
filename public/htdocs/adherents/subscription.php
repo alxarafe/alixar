@@ -497,9 +497,9 @@ print '<input type="hidden" name="rowid" value="' . $object->id . '">';
 
 print dol_get_fiche_head($head, 'subscription', $langs->trans("Member"), -1, 'user');
 
-$linkback = '<a href="' . constant('BASE_URL') . 'adherents/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/adherents/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
-$morehtmlref = '<a href="' . constant('BASE_URL') . 'adherents/vcard.php?id=' . $object->id . '" class="refid">';
+$morehtmlref = '<a href="' . constant('BASE_URL') . '/adherents/vcard.php?id=' . $object->id . '" class="refid">';
 $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
 $morehtmlref .= '</a>';
 

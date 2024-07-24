@@ -525,7 +525,7 @@ if ($rowid > 0) {
 
         print dol_get_fiche_head($head, 'card', $langs->trans("MemberType"), -1, 'group');
 
-        $linkback = '<a href="' . constant('BASE_URL') . 'adherents/type.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+        $linkback = '<a href="' . constant('BASE_URL') . '/adherents/type.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
         dol_banner_tab($object, 'rowid', $linkback);
 

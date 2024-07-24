@@ -1691,7 +1691,7 @@ if ($resql) {
             if (isModEnabled('invoice') && getDolGlobalString('ORDER_BILLING_ALL_CUSTOMER')) {
                 if ($user->hasRight('facture', 'creer')) {
                     if (($obj->fk_statut > 0 && $obj->fk_statut < 3) || ($obj->fk_statut == 3 && $obj->billed == 0)) {
-                        print '&nbsp;<a href="' . constant('BASE_URL') . 'commande/list.php?socid=' . $companystatic->id . '&search_billed=0&autoselectall=1">';
+                        print '&nbsp;<a href="' . constant('BASE_URL') . '/commande/list.php?socid=' . $companystatic->id . '&search_billed=0&autoselectall=1">';
                         print img_picto($langs->trans("CreateInvoiceForThisCustomer") . ' : ' . $companystatic->name, 'object_bill', 'hideonsmartphone') . '</a>';
                     }
                 }

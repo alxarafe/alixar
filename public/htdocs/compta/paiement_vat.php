@@ -183,7 +183,7 @@ if ($action == 'create') {
 
     print '<table class="border centpercent">';
 
-    print '<tr><td class="titlefieldcreate">' . $langs->trans("Ref") . '</td><td><a href="' . constant('BASE_URL') . 'compta/tva/card.php?id=' . $chid . '">' . $chid . '</a></td></tr>';
+    print '<tr><td class="titlefieldcreate">' . $langs->trans("Ref") . '</td><td><a href="' . constant('BASE_URL') . '/compta/tva/card.php?id=' . $chid . '">' . $chid . '</a></td></tr>';
     //print '<tr><td>'.$langs->trans("Type")."</td><td>".$tva->type_label."</td></tr>\n";
     print '<tr><td>' . $langs->trans("Period") . "</td><td>" . dol_print_date($tva->datev, 'day') . "</td></tr>\n";
     print '<tr><td>' . $langs->trans("Label") . '</td><td>' . $tva->label . "</td></tr>\n";

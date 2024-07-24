@@ -8,39 +8,33 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        '60799491728b879e74601d83e38b2cad' => __DIR__ . '/..' . '/illuminate/collections/helpers.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
-        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
-        'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
-        '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
-        'ef65a1626449d89d0811cf9befce46f0' => __DIR__ . '/..' . '/illuminate/events/functions.php',
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
-        '06a34129a50df3d9257ee706cf3c875b' => __DIR__ . '/..' . '/illuminate/filesystem/functions.php',
-        'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
-        '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
-        '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
+        'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
+        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
+        '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
+        '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
+        'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '2b9d0f43f9552984cfa82fee95491826' => __DIR__ . '/..' . '/sabre/event/lib/coroutine.php',
         'd81bab31d3feb45bfe2f283ea3c8fdf7' => __DIR__ . '/..' . '/sabre/event/lib/Loop/functions.php',
         'a1cce3d26cc15c00fcd0b3354bd72c88' => __DIR__ . '/..' . '/sabre/event/lib/Promise/functions.php',
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '6714be961f4a45ae8b9a99d5d55c5d07' => __DIR__ . '/..' . '/tysonandre/var_representation_polyfill/src/var_representation.php',
         '241d2bc730dc592f76425fee315639b6' => __DIR__ . '/..' . '/globalcitizen/php-iban/oophp-iban.php',
         'ac2da84b5f360a33c0c760ac23936bfb' => __DIR__ . '/..' . '/globalcitizen/php-iban/php-iban.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
-        '4752b72edf6ee8e23e6b761c6574e1ee' => __DIR__ . '/..' . '/rsanjoseo/alxarafe/src/Core/Lib/Functions.php',
+        '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '592a3801c4e05a5e25d3d2590557a274' => __DIR__ . '/../..' . '/Dolibarr/Lib/Functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'v' => 
-        array (
-            'voku\\' => 5,
-        ),
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
@@ -71,22 +65,17 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
             'Symfony\\Contracts\\Translation\\' => 30,
             'Symfony\\Contracts\\Service\\' => 26,
             'Symfony\\Contracts\\EventDispatcher\\' => 34,
-            'Symfony\\Component\\Yaml\\' => 23,
             'Symfony\\Component\\VarDumper\\' => 28,
             'Symfony\\Component\\Translation\\' => 30,
             'Symfony\\Component\\String\\' => 25,
             'Symfony\\Component\\Mime\\' => 23,
             'Symfony\\Component\\Mailer\\' => 25,
             'Symfony\\Component\\HttpFoundation\\' => 33,
-            'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\Console\\' => 26,
+            'Symfony\\Component\\Clock\\' => 24,
             'Stripe\\' => 7,
             'Sabre\\Event\\' => 12,
-        ),
-        'R' => 
-        array (
-            'Rsanjoseo\\Alxarafe\\' => 19,
         ),
         'P' => 
         array (
@@ -109,27 +98,11 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
             'Microsoft\\PhpParser\\' => 20,
             'Matrix\\' => 7,
         ),
-        'L' => 
-        array (
-            'Luracast\\Restler\\' => 17,
-        ),
-        'J' => 
-        array (
-            'Jenssegers\\Blade\\' => 17,
-        ),
         'I' => 
         array (
-            'Illuminate\\View\\' => 16,
             'Illuminate\\Support\\' => 19,
-            'Illuminate\\Pipeline\\' => 20,
             'Illuminate\\Pagination\\' => 22,
-            'Illuminate\\Filesystem\\' => 22,
-            'Illuminate\\Events\\' => 18,
-            'Illuminate\\Database\\' => 20,
             'Illuminate\\Contracts\\' => 21,
-            'Illuminate\\Container\\' => 21,
-            'Illuminate\\Config\\' => 18,
-            'Illuminate\\Bus\\' => 15,
         ),
         'E' => 
         array (
@@ -142,12 +115,11 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
             'Doctrine\\Inflector\\' => 19,
             'Doctrine\\Deprecations\\' => 22,
             'Doctrine\\Common\\Lexer\\' => 22,
+            'Doctrine\\Common\\Inflector\\' => 26,
             'DeepCopy\\' => 9,
-            'DebugBar\\' => 9,
         ),
         'C' => 
         array (
-            'CoreModules\\' => 12,
             'Composer\\XdebugHandler\\' => 23,
             'Composer\\Semver\\' => 16,
             'Composer\\Pcre\\' => 14,
@@ -155,22 +127,13 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
             'Carbon\\Doctrine\\' => 16,
             'Carbon\\' => 7,
         ),
-        'B' => 
-        array (
-            'Brick\\Math\\' => 11,
-        ),
         'A' => 
         array (
-            'Alxarafe\\' => 9,
             'AdvancedJsonRpc\\' => 16,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'voku\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
-        ),
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
@@ -237,10 +200,6 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher-contracts',
         ),
-        'Symfony\\Component\\Yaml\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/yaml',
-        ),
         'Symfony\\Component\\VarDumper\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/var-dumper',
@@ -265,10 +224,6 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
         array (
             0 => __DIR__ . '/..' . '/symfony/http-foundation',
         ),
-        'Symfony\\Component\\Finder\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/finder',
-        ),
         'Symfony\\Component\\EventDispatcher\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
@@ -277,6 +232,10 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
         ),
+        'Symfony\\Component\\Clock\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/clock',
+        ),
         'Stripe\\' => 
         array (
             0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
@@ -284,10 +243,6 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
         'Sabre\\Event\\' => 
         array (
             0 => __DIR__ . '/..' . '/sabre/event/lib',
-        ),
-        'Rsanjoseo\\Alxarafe\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rsanjoseo/alxarafe/src/Scripts',
         ),
         'Psr\\SimpleCache\\' => 
         array (
@@ -351,60 +306,17 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
         ),
-        'Luracast\\Restler\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/restler/framework',
-        ),
-        'Jenssegers\\Blade\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/jenssegers/blade/src',
-        ),
-        'Illuminate\\View\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/illuminate/view',
-        ),
         'Illuminate\\Support\\' => 
         array (
-            0 => __DIR__ . '/..' . '/illuminate/collections',
-            1 => __DIR__ . '/..' . '/illuminate/conditionable',
-            2 => __DIR__ . '/..' . '/illuminate/macroable',
-            3 => __DIR__ . '/..' . '/illuminate/support',
-        ),
-        'Illuminate\\Pipeline\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/illuminate/pipeline',
+            0 => __DIR__ . '/..' . '/illuminate/support',
         ),
         'Illuminate\\Pagination\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/pagination',
         ),
-        'Illuminate\\Filesystem\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/illuminate/filesystem',
-        ),
-        'Illuminate\\Events\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/illuminate/events',
-        ),
-        'Illuminate\\Database\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/illuminate/database',
-        ),
         'Illuminate\\Contracts\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/contracts',
-        ),
-        'Illuminate\\Container\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/illuminate/container',
-        ),
-        'Illuminate\\Config\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/illuminate/config',
-        ),
-        'Illuminate\\Bus\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/illuminate/bus',
         ),
         'Egulias\\EmailValidator\\' => 
         array (
@@ -430,17 +342,13 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
         array (
             0 => __DIR__ . '/..' . '/doctrine/lexer/src',
         ),
+        'Doctrine\\Common\\Inflector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
+        ),
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
-        ),
-        'DebugBar\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/maximebf/debugbar/src/DebugBar',
-        ),
-        'CoreModules\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rsanjoseo/alxarafe/src/Modules',
         ),
         'Composer\\XdebugHandler\\' => 
         array (
@@ -465,14 +373,6 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
         'Carbon\\' => 
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
-        ),
-        'Brick\\Math\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/brick/math/src',
-        ),
-        'Alxarafe\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rsanjoseo/alxarafe/src/Core',
         ),
         'AdvancedJsonRpc\\' => 
         array (

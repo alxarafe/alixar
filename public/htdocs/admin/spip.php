@@ -109,7 +109,7 @@ $help_url = '';
 llxHeader('', $langs->trans("MailmanSpipSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-spip');
 
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("MailmanSpipSetup"), $linkback, 'title_setup');
 
 

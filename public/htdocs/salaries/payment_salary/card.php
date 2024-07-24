@@ -70,7 +70,7 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('salarie
     $result = $object->delete($user);
     if ($result > 0) {
         $db->commit();
-        header("Location: " . DOL_URL_ROOT . "/salaries/payments.php");
+        header("Location: " . constant('BASE_URL') . "/salaries/payments.php");
         exit;
     } else {
         setEventMessages($object->error, $object->errors, 'errors');
@@ -135,7 +135,7 @@ if ($action == 'valide')
 */
 
 
-$linkback = '<a href="' . constant('BASE_URL') . 'salaries/payments.php">' . $langs->trans("BackToList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/salaries/payments.php">' . $langs->trans("BackToList") . '</a>';
 
 dol_banner_tab($object, 'id', $linkback, 1, 'rowid', 'id', '');
 

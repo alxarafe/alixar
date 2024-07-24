@@ -206,7 +206,7 @@ if ($test) {
     print img_picto('', 'tick') . ' ' . $langs->trans("NotInstalled") . ' - ' . $langs->trans("NotRiskOfLeakWithThis");
 } else {
     print img_picto('', 'warning') . ' ' . $langs->trans("ModuleActivatedMayExposeInformation", $langs->transnoentities("XDebug"));
-    print ' - ' . $langs->trans("MoreInformation") . ' <a href="' . constant('BASE_URL') . 'admin/system/xdebug.php">XDebug admin page</a>';
+    print ' - ' . $langs->trans("MoreInformation") . ' <a href="' . constant('BASE_URL') . '/admin/system/xdebug.php">XDebug admin page</a>';
 }
 
 print '</div>';
@@ -535,7 +535,7 @@ if (empty($out)) {
     print img_warning() . ' ' . $langs->trans("NoSecurityEventsAreAduited", $langs->transnoentities("Home") . ' - ' . $langs->transnoentities("Setup") . ' - ' . $langs->transnoentities("Security") . ' - ' . $langs->transnoentities("Audit")) . '<br>';
 } else {
     $s = $langs->trans("SeeSetupPage", '{s1}' . $langs->transnoentities("Home") . ' - ' . $langs->transnoentities("Setup") . ' - ' . $langs->transnoentities("Security") . ' - ' . $langs->transnoentities("Audit") . '{s2}');
-    print ' - ' . str_replace('{s2}', '</a>', str_replace('{s1}', '<a href="' . constant('BASE_URL') . 'admin/events.php" target="_blank">', $s));
+    print ' - ' . str_replace('{s2}', '</a>', str_replace('{s1}', '<a href="' . constant('BASE_URL') . '/admin/events.php" target="_blank">', $s));
 }
 
 print '</div>';

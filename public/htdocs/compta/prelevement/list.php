@@ -496,7 +496,7 @@ while ($i < $imaxinloop) {
                 $link_picto = 'supplier_invoice';
             }
         }
-        print '<a href="' . DOL_URL_ROOT . $link_to_bill . $obj->facid . '">';
+        print '<a href="' . constant('DOL_URL_ROOT') . $link_to_bill . $obj->facid . '">';
         print img_object($langs->trans($link_title), $link_picto);
         if (!$bon->checkIfSalaryBonPrelevement()) {
             print '&nbsp;' . $obj->invoiceref . "</td>\n";
@@ -518,7 +518,7 @@ while ($i < $imaxinloop) {
             $link_to_tab = '/fourn/card.php?socid=';
             $link_code = $obj->code_fournisseur;
         }
-        print '<a href="' . DOL_URL_ROOT . $link_to_tab . $company->id . '">' . $link_code . "</a>";
+        print '<a href="' . constant('DOL_URL_ROOT') . $link_to_tab . $company->id . '">' . $link_code . "</a>";
         print "</td>\n";
 
         print '<td class="center">' . dol_print_date($db->jdate($obj->datec), 'day') . "</td>\n";

@@ -3182,7 +3182,7 @@ if (is_array($listofmodules) && count($listofmodules) > 0) {
         $param .= '&tabobj=' . urlencode($tabobj);
     }
 
-    $urltomodulesetup = '<a href="' . constant('BASE_URL') . 'admin/modules.php?search_keyword=' . urlencode($module) . '">' . $langs->trans('Home') . '-' . $langs->trans("Setup") . '-' . $langs->trans("Modules") . '</a>';
+    $urltomodulesetup = '<a href="' . constant('BASE_URL') . '/admin/modules.php?search_keyword=' . urlencode($module) . '">' . $langs->trans('Home') . '-' . $langs->trans("Setup") . '-' . $langs->trans("Modules") . '</a>';
 
     // Define $linktoenabledisable to show after module title
     if (isModEnabled($modulelowercase)) {   // If module is already activated
@@ -4225,7 +4225,7 @@ if ($module == 'initmodule') {
                                 if ($modulelowercase !== null && !isModEnabled($modulelowercase)) { // If module is not activated
                                     print '<a href="#" class="classfortooltip" target="apiexplorer" title="' . $langs->trans("ModuleMustBeEnabled", $module) . '"><strike>' . $langs->trans("ApiExplorer") . '</strike></a>';
                                 } else {
-                                    print '<a href="' . constant('BASE_URL') . 'api/index.php/explorer/" target="apiexplorer">' . $langs->trans("ApiExplorer") . '</a>';
+                                    print '<a href="' . constant('BASE_URL') . '/api/index.php/explorer/" target="apiexplorer">' . $langs->trans("ApiExplorer") . '</a>';
                                 }
                             } else {
                                 print '<a class="editfielda" href="' . $_SERVER['PHP_SELF'] . '?tab=' . urlencode($tab) . '&tabobj=' . $tabobj . '&module=' . $module . ($forceddirread ? '@' . $dirread : '') . '&action=initapi&token=' . newToken() . '&format=php&file=' . urlencode($pathtoapi) . '">' . img_picto($langs->trans('AddAPIsForThisObject'), 'generate', 'class="paddingleft"') . '</a>';
@@ -4740,7 +4740,7 @@ if ($module == 'initmodule') {
             if ($action != 'editfile' || empty($file)) {
                 print '<span class="opacitymedium">';
                 $htmlhelp = $langs->trans("DictionariesDefDescTooltip", '{s1}');
-                $htmlhelp = str_replace('{s1}', '<a target="adminbis" class="nofocusvisible" href="' . constant('BASE_URL') . 'admin/dict.php">' . $langs->trans('Setup') . ' - ' . $langs->trans('Dictionaries') . '</a>', $htmlhelp);
+                $htmlhelp = str_replace('{s1}', '<a target="adminbis" class="nofocusvisible" href="' . constant('BASE_URL') . '/admin/dict.php">' . $langs->trans('Setup') . ' - ' . $langs->trans('Dictionaries') . '</a>', $htmlhelp);
                 print $form->textwithpicto($langs->trans("DictionariesDefDesc"), $htmlhelp, 1, 'help', '', 0, 2, 'helpondesc') . '<br>';
                 print '</span>';
                 print '<br>';
@@ -5108,7 +5108,7 @@ if ($module == 'initmodule') {
             if ($action != 'editfile' || empty($file)) {
                 print '<span class="opacitymedium">';
                 $htmlhelp = $langs->trans("MenusDefDescTooltip", '{s1}');
-                $htmlhelp = str_replace('{s1}', '<a target="adminbis" class="nofocusvisible" href="' . constant('BASE_URL') . 'admin/menus/index.php">' . $langs->trans('Setup') . ' - ' . $langs->trans('Menus') . '</a>', $htmlhelp);
+                $htmlhelp = str_replace('{s1}', '<a target="adminbis" class="nofocusvisible" href="' . constant('BASE_URL') . '/admin/menus/index.php">' . $langs->trans('Setup') . ' - ' . $langs->trans('Menus') . '</a>', $htmlhelp);
                 print $form->textwithpicto($langs->trans("MenusDefDesc"), $htmlhelp, 1, 'help', '', 0, 2, 'helpondesc') . '<br>';
                 print '</span>';
                 print '<br>';
@@ -5543,7 +5543,7 @@ if ($module == 'initmodule') {
                 print '<!-- Tab to manage permissions -->' . "\n";
                 print '<span class="opacitymedium">';
                 $htmlhelp = $langs->trans("PermissionsDefDescTooltip", '{s1}');
-                $htmlhelp = str_replace('{s1}', '<a target="adminbis" class="nofocusvisible" href="' . constant('BASE_URL') . 'admin/perms.php">' . $langs->trans('DefaultRights') . '</a>', $htmlhelp);
+                $htmlhelp = str_replace('{s1}', '<a target="adminbis" class="nofocusvisible" href="' . constant('BASE_URL') . '/admin/perms.php">' . $langs->trans('DefaultRights') . '</a>', $htmlhelp);
                 print $form->textwithpicto($langs->trans("PermissionsDefDesc"), $htmlhelp, 1, 'help', '', 0, 2, 'helpondesc') . '<br>';
                 print '</span>';
                 print '<br>';
@@ -6203,7 +6203,7 @@ if ($module == 'initmodule') {
             $cronjobs = $moduleobj->cronjobs;
 
             if ($action != 'editfile' || empty($file)) {
-                print '<span class="opacitymedium">' . str_replace('{s1}', '<a target="adminbis" class="nofocusvisible" href="' . constant('BASE_URL') . 'cron/list.php">' . $langs->transnoentities('CronList') . '</a>', $langs->trans("CronJobDefDesc", '{s1}')) . '</span><br>';
+                print '<span class="opacitymedium">' . str_replace('{s1}', '<a target="adminbis" class="nofocusvisible" href="' . constant('BASE_URL') . '/cron/list.php">' . $langs->transnoentities('CronList') . '</a>', $langs->trans("CronJobDefDesc", '{s1}')) . '</span><br>';
                 print '<br>';
 
                 print '<span class="fa fa-file-o"></span> ' . $langs->trans("DescriptorFile") . ' : <strong class="wordbreak">' . $pathtofile . '</strong>';
@@ -6480,7 +6480,7 @@ if ($module == 'initmodule') {
                 print '<span class="opacitymedium">' . $langs->trans("FileNotYetGenerated") . '</span>';
             } else {
                 $relativepath = $modulelowercase . '/bin/' . $FILENAMEZIP;
-                print '<strong><a href="' . constant('BASE_URL') . 'document.php?modulepart=packages&file=' . urlencode($relativepath) . '">' . $outputfilezip . '</a></strong>';
+                print '<strong><a href="' . constant('BASE_URL') . '/document.php?modulepart=packages&file=' . urlencode($relativepath) . '">' . $outputfilezip . '</a></strong>';
                 print ' <span class="opacitymedium">(' . $langs->trans("GeneratedOn") . ' ' . dol_print_date(dol_filemtime($outputfilezip), 'dayhour') . ')</span>';
                 print ' <a class="editfielda" href="' . $_SERVER['PHP_SELF'] . '?tab=' . urlencode($tab) . '&module=' . $module . ($forceddirread ? '@' . $dirread : '') . '&action=confirm_removefile&token=' . newToken() . '&file=' . urlencode($relativepath) . '">' . img_picto($langs->trans("Delete"), 'delete') . '</a>';
             }
@@ -6507,7 +6507,7 @@ if ($module == 'initmodule') {
             if ($action != 'editfile' || empty($file)) {
                 print '<span class="opacitymedium">';
                 $htmlhelp = $langs->trans("TabsDefDescTooltip", '{s1}');
-                $htmlhelp = str_replace('{s1}', '<a target="adminbis" class="nofocusvisible" href="' . constant('BASE_URL') . 'admin/menus/index.php">' . $langs->trans('Setup') . ' - ' . $langs->trans('Tabs') . '</a>', $htmlhelp);
+                $htmlhelp = str_replace('{s1}', '<a target="adminbis" class="nofocusvisible" href="' . constant('BASE_URL') . '/admin/menus/index.php">' . $langs->trans('Setup') . ' - ' . $langs->trans('Tabs') . '</a>', $htmlhelp);
                 print $form->textwithpicto($langs->trans("TabsDefDesc"), $htmlhelp, 1, 'help', '', 0, 2, 'helpondesc') . '<br>';
                 print '</span>';
                 print '<br>';

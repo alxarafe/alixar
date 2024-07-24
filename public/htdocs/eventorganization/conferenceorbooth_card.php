@@ -203,7 +203,7 @@ if (!empty($withproject)) {
 
     // Project card
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
     $morehtmlref = '<div class="refidno">';
     // Title

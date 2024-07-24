@@ -1556,21 +1556,21 @@ function show_contacts($conf, $langs, $db, $object, $backtopage = '', $showuserl
 
                 // Add to agenda
                 if (isModEnabled('agenda') && $user->hasRight('agenda', 'myactions', 'create')) {
-                    print '<a href="' . constant('BASE_URL') . 'comm/action/card.php?action=create&actioncode=&contactid=' . $obj->rowid . '&socid=' . $object->id . '&backtopage=' . urlencode($backtopage) . '">';
+                    print '<a href="' . constant('BASE_URL') . '/comm/action/card.php?action=create&actioncode=&contactid=' . $obj->rowid . '&socid=' . $object->id . '&backtopage=' . urlencode($backtopage) . '">';
                     print img_object($langs->trans("Event"), "action");
                     print '</a> &nbsp; ';
                 }
 
                 // Edit
                 if ($user->hasRight('societe', 'contact', 'creer')) {
-                    print '<a class="editfielda paddingleft" href="' . constant('BASE_URL') . 'contact/card.php?action=edit&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . urlencode($backtopage) . '">';
+                    print '<a class="editfielda paddingleft" href="' . constant('BASE_URL') . '/contact/card.php?action=edit&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . urlencode($backtopage) . '">';
                     print img_edit();
                     print '</a>';
                 }
 
                 // Delete
                 if ($user->hasRight('societe', 'contact', 'delete')) {
-                    print '<a class="marginleftonly right" href="' . constant('BASE_URL') . 'societe/contact.php?action=delete&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . urlencode($backtopage) . '">';
+                    print '<a class="marginleftonly right" href="' . constant('BASE_URL') . '/societe/contact.php?action=delete&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . urlencode($backtopage) . '">';
                     print img_delete();
                     print '</a>';
                 }
@@ -1657,21 +1657,21 @@ function show_contacts($conf, $langs, $db, $object, $backtopage = '', $showuserl
 
                 // Add to agenda
                 if (isModEnabled('agenda') && $user->hasRight('agenda', 'myactions', 'create')) {
-                    print '<a href="' . constant('BASE_URL') . 'comm/action/card.php?action=create&actioncode=&contactid=' . $obj->rowid . '&socid=' . $object->id . '&backtopage=' . urlencode($backtopage) . '">';
+                    print '<a href="' . constant('BASE_URL') . '/comm/action/card.php?action=create&actioncode=&contactid=' . $obj->rowid . '&socid=' . $object->id . '&backtopage=' . urlencode($backtopage) . '">';
                     print img_object($langs->trans("Event"), "action");
                     print '</a> &nbsp; ';
                 }
 
                 // Edit
                 if ($user->hasRight('societe', 'contact', 'creer')) {
-                    print '<a class="editfielda paddingleft" href="' . constant('BASE_URL') . 'contact/card.php?action=edit&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . urlencode($backtopage) . '">';
+                    print '<a class="editfielda paddingleft" href="' . constant('BASE_URL') . '/contact/card.php?action=edit&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . urlencode($backtopage) . '">';
                     print img_edit();
                     print '</a>';
                 }
 
                 // Delete
                 if ($user->hasRight('societe', 'contact', 'delete')) {
-                    print '<a class="marginleftonly right" href="' . constant('BASE_URL') . 'societe/contact.php?action=delete&token=' . newToken() . '&id=' . $obj->rowid . '&socid=' . urlencode($obj->fk_soc) . '">';
+                    print '<a class="marginleftonly right" href="' . constant('BASE_URL') . '/societe/contact.php?action=delete&token=' . newToken() . '&id=' . $obj->rowid . '&socid=' . urlencode($obj->fk_soc) . '">';
                     print img_delete();
                     print '</a>';
                 }
@@ -2198,10 +2198,10 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
         if ($donetodo) {
             $tmp = '';
             if (get_class($filterobj) == 'Societe') {
-                $tmp .= '<a href="' . constant('BASE_URL') . 'comm/action/list.php?mode=show_list&socid=' . $filterobj->id . '&status=done">';
+                $tmp .= '<a href="' . constant('BASE_URL') . '/comm/action/list.php?mode=show_list&socid=' . $filterobj->id . '&status=done">';
             }
             if (get_class($filterobj) == 'User') {
-                $tmp .= '<a href="' . constant('BASE_URL') . 'comm/action/list.php?mode=show_list&userid=' . $filterobj->id . '&status=done">';
+                $tmp .= '<a href="' . constant('BASE_URL') . '/comm/action/list.php?mode=show_list&userid=' . $filterobj->id . '&status=done">';
             }
             $tmp .= ($donetodo != 'done' ? $langs->trans("ActionsToDoShort") : '');
             $tmp .= ($donetodo != 'done' && $donetodo != 'todo' ? ' / ' : '');
@@ -2255,7 +2255,7 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
             // Ref
             $out .= '<td class="nowraponall">';
             if (isset($histo[$key]['type']) && $histo[$key]['type'] == 'mailing') {
-                $out .= '<a href="' . constant('BASE_URL') . 'comm/mailing/card.php?id=' . $histo[$key]['id'] . '">' . img_object($langs->trans("ShowEMailing"), "email") . ' ';
+                $out .= '<a href="' . constant('BASE_URL') . '/comm/mailing/card.php?id=' . $histo[$key]['id'] . '">' . img_object($langs->trans("ShowEMailing"), "email") . ' ';
                 $out .= $histo[$key]['id'];
                 $out .= '</a>';
             } else {
@@ -2340,7 +2340,7 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
                 $out .= dol_trunc($libelle, 120);
             }
             if (isset($histo[$key]['type']) && $histo[$key]['type'] == 'mailing') {
-                $out .= '<a href="' . constant('BASE_URL') . 'comm/mailing/card.php?id=' . $histo[$key]['id'] . '">' . img_object($langs->trans("ShowEMailing"), "email") . ' ';
+                $out .= '<a href="' . constant('BASE_URL') . '/comm/mailing/card.php?id=' . $histo[$key]['id'] . '">' . img_object($langs->trans("ShowEMailing"), "email") . ' ';
                 $transcode = $langs->trans("Action" . $histo[$key]['acode']);
                 $libelle = ($transcode != "Action" . $histo[$key]['acode'] ? $transcode : 'Send mass mailing');
                 $out .= ' title="' . dol_escape_htmltag($libelle) . '">';
@@ -2492,7 +2492,7 @@ function show_subsidiaries($conf, $langs, $db, $object)
             print '<td class="tdoverflowmax200" title="' . dol_escape_htmltag($obj->code_client) . '">' . $obj->code_client . '</td>';
 
             print '<td class="center">';
-            print '<a class="editfielda" href="' . constant('BASE_URL') . 'societe/card.php?socid=' . ((int) $obj->rowid) . '&action=edit&token=' . newToken() . '">';
+            print '<a class="editfielda" href="' . constant('BASE_URL') . '/societe/card.php?socid=' . ((int) $obj->rowid) . '&action=edit&token=' . newToken() . '">';
             print img_edit();
             print '</a></td>';
 

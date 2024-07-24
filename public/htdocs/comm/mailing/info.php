@@ -58,7 +58,7 @@ if ($object->fetch($id) >= 0) {
 
     print dol_get_fiche_head($head, 'info', $langs->trans("Mailing"), -1, 'email');
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'comm/mailing/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/comm/mailing/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
     $morehtmlref = '<div class="refidno">';
     // Ref customer

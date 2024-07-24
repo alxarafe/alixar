@@ -68,7 +68,7 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('expense
     $result = $object->delete($user);
     if ($result > 0) {
         $db->commit();
-        header("Location: " . DOL_URL_ROOT . "/expensereport/index.php");
+        header("Location: " . constant('BASE_URL') . "/expensereport/index.php");
         exit;
     } else {
         setEventMessages($object->error, $object->errors, 'errors');

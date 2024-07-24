@@ -133,7 +133,7 @@ if ($action == 'updateMaskLot') {
         $module = new $classname($db);
 
         if ($module->write_file($product_batch, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=product_batch&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=product_batch&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($module->error, $module->errors, 'errors');
@@ -168,7 +168,7 @@ $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
 
 llxHeader("", $langs->trans("ProductLotSetup"), '', '', 0, 0, '', '', '', 'mod-product page-admin_product_lot');
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("ProductLotSetup"), $linkback, 'title_setup');
 
 $head = product_lot_admin_prepare_head();

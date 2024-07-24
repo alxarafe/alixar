@@ -123,7 +123,7 @@ if ($action == 'updateMask') {
         '@phan-var-force CommonDocGenerator $module';
 
         if ($module->write_file($paiementFourn, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=supplier_payment&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=supplier_payment&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($module->error, $module->errors, 'errors');
@@ -158,7 +158,7 @@ llxHeader('', $langs->trans("SupplierPaymentSetup"), 'EN:Supplier_Payment_Config
 $form = new Form($db);
 
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("SupplierPaymentSetup"), $linkback, 'title_setup');
 
 print "<br>";

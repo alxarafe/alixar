@@ -65,7 +65,7 @@ if ($action) {
 $title = $langs->trans('ModuleSetup') . ' ' . $langs->trans('Module610Name');
 llxHeader('', $title);
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($title, $linkback, 'title_setup');
 
 print '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';

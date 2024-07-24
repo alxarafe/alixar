@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2004-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005       Marc Barilley / Ocebo   <marc@ocebo.com>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2013-2014  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2014       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2015-2016  Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
+/* Copyright (C) 2004-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2014  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015-2016  Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -30,7 +30,8 @@
  */
 
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
-include_once 'inc.php';
+
+include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
 
 global $langs;
 
@@ -57,7 +58,6 @@ if (@file_exists($forcedfile)) {
 
 dolibarr_install_syslog("- check: Dolibarr install/upgrade process started");
 
-
 /*
  *	View
  */
@@ -81,7 +81,6 @@ if (!empty($useragent)) {
         print '<img src="' . constant('DOL_URL_ROOT') . '/theme/eldy/img/warning.png" alt="Error" class="valignmiddle"> ' . $langs->trans("WarningBrowserTooOld") . "<br>\n";
     }
 }
-
 
 // Check PHP version min
 $arrayphpminversionerror = array(7, 0, 0);
@@ -246,7 +245,6 @@ if ($memmaxorig != '') {
     }
 }
 
-
 // If that config file is present and filled
 clearstatcache();
 if (is_readable($conffile) && filesize($conffile) > 8) {
@@ -287,7 +285,6 @@ if (is_readable($conffile) && filesize($conffile) > 8) {
     // First install: no upgrade necessary/required
     $allowupgrade = false;
 }
-
 
 
 // File is missing and cannot be created
@@ -343,11 +340,11 @@ if (!file_exists($conffile)) {
                     print '<span class="error">A ' . $conffiletoshow . ' file exists with a dolibarr_main_document_root to ' . $dolibarr_main_document_root . ' that seems wrong. Try to fix or remove the ' . $conffiletoshow . ' file.</span><br>' . "\n";
                     dol_syslog("A '" . $conffiletoshow . "' file exists with a dolibarr_main_document_root to " . $dolibarr_main_document_root . " that seems wrong. Try to fix or remove the '" . $conffiletoshow . "' file.", LOG_WARNING);
                 } else {
-                    require_once $dolibarr_main_document_root . '/core/lib/admin.lib.php';
+                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 
                     // If password is encoded, we decode it
                     if (preg_match('/crypted:/i', $dolibarr_main_db_pass) || !empty($dolibarr_main_db_encrypted_pass)) {
-                        require_once $dolibarr_main_document_root . '/core/lib/security.lib.php';
+                        require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
                         if (preg_match('/crypted:/i', $dolibarr_main_db_pass)) {
                             $dolibarr_main_db_encrypted_pass = preg_replace('/crypted:/i', '', $dolibarr_main_db_pass); // We need to set this as it is used to know the password was initially encrypted
                             $dolibarr_main_db_pass = dol_decode($dolibarr_main_db_encrypted_pass);
@@ -363,7 +360,7 @@ if (!file_exists($conffile)) {
                     $conf->db->name = $dolibarr_main_db_name;
                     $conf->db->user = $dolibarr_main_db_user;
                     $conf->db->pass = $dolibarr_main_db_pass;
-                    $db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int) $conf->db->port);
+                    $db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int)$conf->db->port);
                     if ($db->connected && $db->database_selected) {
                         $ok = true;
                     }
@@ -419,7 +416,7 @@ if (!file_exists($conffile)) {
         }
 
         // Show line of first install choice
-        $choice  = '<tr class="trlineforchoice' . ($foundrecommandedchoice ? ' choiceselected' : '') . '">' . "\n";
+        $choice = '<tr class="trlineforchoice' . ($foundrecommandedchoice ? ' choiceselected' : '') . '">' . "\n";
         $choice .= '<td class="nowrap center"><b>' . $langs->trans("FreshInstall") . '</b>';
         $choice .= '</td>';
         $choice .= '<td class="listofchoicesdesc">';

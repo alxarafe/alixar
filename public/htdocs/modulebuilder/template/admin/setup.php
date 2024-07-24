@@ -237,7 +237,7 @@ if ($action == 'updateMask') {
         $module = new $className($db);
 
         if ($module->write_file($tmpobject, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=mymodule-" . strtolower($tmpobjectkey) . "&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=mymodule-" . strtolower($tmpobjectkey) . "&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($module->error, null, 'errors');

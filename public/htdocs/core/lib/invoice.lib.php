@@ -550,7 +550,7 @@ function getCustomerInvoiceDraftTable($maxCount = 500, $socid = 0)
             $result .= '<tr class="liste_titre">';
             $result .= '<th colspan="3">';
             $result .= $langs->trans("CustomersDraftInvoices");
-            $result .= '<a href="' . constant('BASE_URL') . 'compta/facture/list.php?search_status=' . Facture::STATUS_DRAFT . '">';
+            $result .= '<a href="' . constant('BASE_URL') . '/compta/facture/list.php?search_status=' . Facture::STATUS_DRAFT . '">';
             $result .= '<span class="badge marginleftonly">' . $num . '</span>';
             $result .= '</a>';
             $result .= '</th>';
@@ -683,7 +683,7 @@ function getDraftSupplierTable($maxCount = 500, $socid = 0)
             $result .= '<tr class="liste_titre">';
             $result .= '<th colspan="3">';
             $result .= $langs->trans("SuppliersDraftInvoices");
-            $result .= '<a href="' . constant('BASE_URL') . 'fourn/facture/list.php?search_status=' . FactureFournisseur::STATUS_DRAFT . '">';
+            $result .= '<a href="' . constant('BASE_URL') . '/fourn/facture/list.php?search_status=' . FactureFournisseur::STATUS_DRAFT . '">';
             $result .= '<span class="badge marginleftonly">' . $num . '</span>';
             $result .= '</a>';
             $result .= '</th>';
@@ -915,7 +915,7 @@ function getPurchaseInvoiceLatestEditTable($maxCount = 5, $socid = 0)
     $result .= '<table class="noborder centpercent">';
     $result .= '<tr class="liste_titre">';
     $result .= '<th colspan="3">' . $langs->trans("BoxTitleLastSupplierBills", $maxCount) . ' ';
-    $result .= '<a href="' . constant('BASE_URL') . 'fourn/facture/list.php?sortfield=f.tms&sortorder=DESC">';
+    $result .= '<a href="' . constant('BASE_URL') . '/fourn/facture/list.php?sortfield=f.tms&sortorder=DESC">';
     $result .= '<span class="badge">...</span>';
     $result .= '</a>';
     $result .= '</th>';
@@ -1049,7 +1049,7 @@ function getCustomerInvoiceUnpaidOpenTable($maxCount = 500, $socid = 0)
             print '<tr class="liste_titre">';
             print '<th colspan="2">';
             print $langs->trans("BillsCustomersUnpaid", $num) . ' ';
-            print '<a href="' . constant('BASE_URL') . 'compta/facture/list.php?search_status=' . Facture::STATUS_VALIDATED . '">';
+            print '<a href="' . constant('BASE_URL') . '/compta/facture/list.php?search_status=' . Facture::STATUS_VALIDATED . '">';
             print '<span class="badge">' . $num . '</span>';
             print '</a>';
             print '</th>';
@@ -1236,7 +1236,7 @@ function getPurchaseInvoiceUnpaidOpenTable($maxCount = 500, $socid = 0)
             print '<tr class="liste_titre">';
             print '<th colspan="2">';
             print $langs->trans("BillsSuppliersUnpaid", $num) . ' ';
-            print '<a href="' . constant('BASE_URL') . 'fourn/facture/list.php?search_status=' . FactureFournisseur::STATUS_VALIDATED . '">';
+            print '<a href="' . constant('BASE_URL') . '/fourn/facture/list.php?search_status=' . FactureFournisseur::STATUS_VALIDATED . '">';
             print '<span class="badge">' . $num . '</span>';
             print '</a>';
             print '</th>';

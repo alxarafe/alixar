@@ -95,7 +95,7 @@ if (isModEnabled('supplier_invoice')) {
     print '<tr class="oddeven"><td>' . $langs->trans("NbOfInvoiceToPayByBankTransfer") . '</td>';
     print '<td class="right">';
     $amounttoshow = $bprev->SommeAPrelever('bank-transfer');
-    print '<a class="badge badge-info" href="' . constant('BASE_URL') . 'compta/prelevement/demandes.php?status=0&type=bank-transfer" title="' . price($amounttoshow) . '">';
+    print '<a class="badge badge-info" href="' . constant('BASE_URL') . '/compta/prelevement/demandes.php?status=0&type=bank-transfer" title="' . price($amounttoshow) . '">';
     print $bprev->nbOfInvoiceToPay('bank-transfer');
     print '</a>';
     print '</td></tr>';
@@ -106,7 +106,7 @@ if (isModEnabled('salaries')) {
     print '<tr class="oddeven"><td>' . $langs->trans("NbOfInvoiceToPayByBankTransferForSalaries") . '</td>';
     print '<td class="right">';
     $amounttoshow = $bprev->SommeAPrelever('bank-transfer', 'salary');
-    print '<a class="badge badge-info" href="' . constant('BASE_URL') . 'compta/prelevement/demandes.php?status=0&type=bank-transfer&sourcetype=salary" title="' . price($amounttoshow) . '">';
+    print '<a class="badge badge-info" href="' . constant('BASE_URL') . '/compta/prelevement/demandes.php?status=0&type=bank-transfer&sourcetype=salary" title="' . price($amounttoshow) . '">';
     print $bprev->nbOfInvoiceToPay('bank-transfer', 'salary');
     print '</a>';
     print '</td></tr>';

@@ -568,7 +568,7 @@ if ($resql) {
         print dol_get_fiche_head($head, 'movements', $langs->trans("Warehouse"), -1, 'stock');
 
 
-        $linkback = '<a href="' . constant('BASE_URL') . 'product/stock/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+        $linkback = '<a href="' . constant('BASE_URL') . '/product/stock/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
         $morehtmlref = '<div class="refidno">';
         $morehtmlref .= $langs->trans("LocationSummary") . ' : ' . $object->lieu;

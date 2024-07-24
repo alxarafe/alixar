@@ -168,7 +168,7 @@ if ($action == 'specimen') {
         '@phan-var-force ModeleBankAccountDoc $module';
 
         if ($module->write_file($object, $langs) > 0) {
-            header("Location: " . DOL_URL_ROOT . "/document.php?modulepart=bank&file=SPECIMEN.pdf");
+            header("Location: " . constant('BASE_URL') . "/document.php?modulepart=bank&file=SPECIMEN.pdf");
             return;
         } else {
             setEventMessages($module->error, null, 'errors');

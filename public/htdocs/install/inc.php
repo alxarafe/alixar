@@ -34,14 +34,7 @@
 if (!defined('DOL_INC_FOR_VERSION_ERROR')) {
     define('DOL_INC_FOR_VERSION_ERROR', '1');
 }
-require_once constant('DOL_DOCUMENT_ROOT') . '/htdocs/filefunc.inc.php';
-
-
-// Define DOL_DOCUMENT_ROOT used for install/upgrade process
-if (!defined('DOL_DOCUMENT_ROOT')) {
-    define('DOL_DOCUMENT_ROOT', constant('BASE_PATH') . '/htdocs');
-}
-
+require_once constant('DOL_DOCUMENT_ROOT') . '/filefunc.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/conf.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/translate.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
@@ -66,8 +59,8 @@ $includeconferror = '';
 // Define vars
 $conffiletoshowshort = "conf.php";
 // Define localization of conf file
-$conffile = "../conf/conf.php";
-$conffiletoshow = "htdocs/conf/conf.php";
+$conffile = constant('DOL_DOCUMENT_ROOT') . '/conf/conf.php';
+$conffiletoshow = "conf/conf.php";
 // For debian/redhat like systems
 //$conffile = "/etc/dolibarr/conf.php";
 //$conffiletoshow = "/etc/dolibarr/conf.php";
@@ -268,13 +261,6 @@ define('MAIN_DB_PREFIX', (isset($dolibarr_main_db_prefix) ? $dolibarr_main_db_pr
 define('DOL_CLASS_PATH', 'class/'); // Filesystem path to class dir
 define('DOL_DATA_ROOT', (isset($dolibarr_main_data_root) ? $dolibarr_main_data_root : DOL_DOCUMENT_ROOT . '/../documents'));
 define('DOL_MAIN_URL_ROOT', (isset($dolibarr_main_url_root) ? $dolibarr_main_url_root : '')); // URL relative root
-$uri = preg_replace('/^http(s?):\/\//i', '', constant('DOL_MAIN_URL_ROOT')); // $uri contains url without http*
-$suburi = strstr($uri, '/'); // $suburi contains url without domain
-if ($suburi == '/') {
-    $suburi = ''; // If $suburi is /, it is now ''
-}
-define('DOL_URL_ROOT', $suburi); // URL relative root ('', '/dolibarr', ...)
-
 
 if (empty($conf->file->character_set_client)) {
     $conf->file->character_set_client = "utf-8";
@@ -729,7 +715,7 @@ function detect_dolibarr_main_document_root()
  */
 function detect_dolibarr_main_data_root($dolibarr_main_document_root)
 {
-    $dolibarr_main_data_root = preg_replace("/\/htdocs$/", "", $dolibarr_main_document_root);
+    $dolibarr_main_data_root = preg_replace("/\/public\/htdocs$/", "", $dolibarr_main_document_root);
     $dolibarr_main_data_root .= "/documents";
     return $dolibarr_main_data_root;
 }

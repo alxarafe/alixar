@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2016       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
+/* Copyright (C) 2004-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2016       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,9 +27,10 @@
  */
 
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
-include_once 'inc.php';
-include_once constant('BASE_PATH') . '/htdocs/core/class/html.form.class.php';
-include_once constant('BASE_PATH') . '/htdocs/core/class/html.formadmin.class.php';
+
+include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
+include_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
+include_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
 
 global $langs;
 
@@ -42,7 +43,6 @@ if (file_exists($conffile) && isset($dolibarr_main_url_root)) {
 }
 
 $langs->load("admin");
-
 
 /*
  * View

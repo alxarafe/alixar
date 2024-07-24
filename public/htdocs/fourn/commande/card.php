@@ -1776,7 +1776,7 @@ if ($action == 'create') {
 				});
 				</script>';
             }
-            print ' <a href="' . constant('BASE_URL') . 'societe/card.php?action=create&client=0&fournisseur=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
+            print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&client=0&fournisseur=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
         }
         print '</td>';
 
@@ -1839,7 +1839,7 @@ if ($action == 'create') {
             $langs->load('projects');
             print '<tr><td>' . $langs->trans('Project') . '</td><td>';
             print img_picto('', 'project', 'class="pictofixedwidth"') . $formproject->select_projects((!getDolGlobalString('PROJECT_CAN_ALWAYS_LINK_TO_ALL_SUPPLIERS') ? $societe->id : -1), $projectid, 'projectid', 0, 0, 1, 1, 0, 0, 0, '', 1, 0, 'maxwidth500');
-            print ' &nbsp; <a href="' . constant('BASE_URL') . 'projet/card.php?action=create&status=1' . (!empty($societe->id) ? '&socid=' . $societe->id : "") . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create' . (!empty($societe->id) ? '&socid=' . $societe->id : "")) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
+            print ' &nbsp; <a href="' . constant('BASE_URL') . '/projet/card.php?action=create&status=1' . (!empty($societe->id) ? '&socid=' . $societe->id : "") . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create' . (!empty($societe->id) ? '&socid=' . $societe->id : "")) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
             print '</td></tr>';
         }
 
@@ -2105,7 +2105,7 @@ if ($action == 'create') {
 
     // Supplier order card
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'fourn/commande/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/fourn/commande/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
 
     $morehtmlref = '<div class="refidno">';
     // Ref supplier
@@ -2128,7 +2128,7 @@ if ($action == 'create') {
         }
         $morehtmlref .= $object->thirdparty->getNomUrl(1, 'supplier');
         if (!getDolGlobalString('MAIN_DISABLE_OTHER_LINK') && $object->thirdparty->id > 0) {
-            $morehtmlref .= ' (<a href="' . constant('BASE_URL') . 'fourn/commande/list.php?socid=' . $object->thirdparty->id . '&search_company=' . urlencode($object->thirdparty->name) . '">' . $langs->trans("OtherOrders") . '</a>)';
+            $morehtmlref .= ' (<a href="' . constant('BASE_URL') . '/fourn/commande/list.php?socid=' . $object->thirdparty->id . '&search_company=' . urlencode($object->thirdparty->name) . '">' . $langs->trans("OtherOrders") . '</a>)';
         }
     }
 
@@ -2368,7 +2368,7 @@ if ($action == 'create') {
             print $langs->trans('IncotermLabel');
             print '<td><td class="right">';
             if ($usercancreate) {
-                print '<a class="editfielda" href="' . constant('BASE_URL') . 'fourn/commande/card.php?id=' . $object->id . '&action=editincoterm&token=' . newToken() . '">' . img_edit() . '</a>';
+                print '<a class="editfielda" href="' . constant('BASE_URL') . '/fourn/commande/card.php?id=' . $object->id . '&action=editincoterm&token=' . newToken() . '">' . img_edit() . '</a>';
             } else {
                 print '&nbsp;';
             }
@@ -2566,7 +2566,7 @@ if ($action == 'create') {
                 // Create event
                 /*if (isModEnabled('agenda') && getDolGlobalString('MAIN_ADD_EVENT_ON_ELEMENT_CARD'))   // Add hidden condition because this is not a "workflow" action so should appears somewhere else on page.
                 {
-                    print '<div class="inline-block divButAction"><a class="butAction" href="' . constant('BASE_URL') . 'comm/action/card.php?action=create&amp;origin=' . $object->element . '&amp;originid=' . $object->id . '&amp;socid=' . $object->socid . '">' . $langs->trans("AddAction") . '</a></div>';
+                    print '<div class="inline-block divButAction"><a class="butAction" href="' . constant('BASE_URL') . '/comm/action/card.php?action=create&amp;origin=' . $object->element . '&amp;originid=' . $object->id . '&amp;socid=' . $object->socid . '">' . $langs->trans("AddAction") . '</a></div>';
                 }*/
 
                 // Modify
@@ -2667,7 +2667,7 @@ if ($action == 'create') {
 
                     if (in_array($object->statut, array(3, 4, 5))) {
                         if (isModEnabled("supplier_order") && $usercanreceive) {
-                            print '<div class="inline-block divButAction"><a class="butAction" href="' . constant('BASE_URL') . 'fourn/commande/dispatch.php?id=' . $object->id . '">' . $labelofbutton . '</a></div>';
+                            print '<div class="inline-block divButAction"><a class="butAction" href="' . constant('BASE_URL') . '/fourn/commande/dispatch.php?id=' . $object->id . '">' . $labelofbutton . '</a></div>';
                         } else {
                             print '<div class="inline-block divButAction"><a class="butActionRefused classfortooltip" href="#" title="' . dol_escape_htmltag($langs->trans("NotAllowed")) . '">' . $labelofbutton . '</a></div>';
                         }
@@ -2694,7 +2694,7 @@ if ($action == 'create') {
                 //{
                 if (isModEnabled("supplier_invoice") && ($object->statut >= 2 && $object->statut != 7 && $object->billed != 1)) {  // statut 2 means approved, 7 means canceled
                     if ($user->hasRight('fournisseur', 'facture', 'creer') || $user->hasRight("supplier_invoice", "creer")) {
-                        print '<a class="butAction" href="' . constant('BASE_URL') . 'fourn/facture/card.php?action=create&amp;origin=' . $object->element . '&amp;originid=' . $object->id . '&amp;socid=' . $object->socid . '">' . $langs->trans("SupplierOrderCreateBill") . '</a>';
+                        print '<a class="butAction" href="' . constant('BASE_URL') . '/fourn/facture/card.php?action=create&amp;origin=' . $object->element . '&amp;originid=' . $object->id . '&amp;socid=' . $object->socid . '">' . $langs->trans("SupplierOrderCreateBill") . '</a>';
                     }
                 }
                 //}

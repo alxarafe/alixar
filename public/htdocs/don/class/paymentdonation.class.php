@@ -682,7 +682,7 @@ class PaymentDonation extends CommonObject
         $label .= '<b>' . $langs->trans('Ref') . ':</b> ' . $this->ref;
 
         if (!empty($this->id)) {
-            $link = '<a href="' . constant('BASE_URL') . 'don/payment/card.php?id=' . $this->id . '" title="' . dol_escape_htmltag($label, 1) . '" class="classfortooltip">';
+            $link = '<a href="' . constant('BASE_URL') . '/don/payment/card.php?id=' . $this->id . '" title="' . dol_escape_htmltag($label, 1) . '" class="classfortooltip">';
             $linkend = '</a>';
 
             if ($withpicto) {

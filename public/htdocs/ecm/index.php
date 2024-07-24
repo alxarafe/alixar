@@ -330,7 +330,7 @@ if (!getDolGlobalString('MAIN_ECM_DISABLE_JS')) {
 }
 
 $moreheadjs .= '<script type="text/javascript">' . "\n";
-$moreheadjs .= 'var indicatorBlockUI = \'' . DOL_URL_ROOT . "/theme/" . $conf->theme . "/img/working.gif" . '\';' . "\n";
+$moreheadjs .= 'var indicatorBlockUI = \'' . constant('DOL_URL_ROOT') . "/theme/" . $conf->theme . "/img/working.gif" . '\';' . "\n";
 $moreheadjs .= '</script>' . "\n";
 
 llxHeader($moreheadcss . $moreheadjs, $langs->trans("ECMArea"), '', '', '', '', $morejs, '', 0, 0);

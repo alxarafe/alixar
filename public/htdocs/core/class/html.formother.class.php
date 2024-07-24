@@ -873,7 +873,7 @@ class FormOther
             // Case of selection of any color
             $langs->load("other");
             if (empty($conf->dol_use_jmobile) && !empty($conf->use_javascript_ajax) && !getDolGlobalInt('MAIN_USE_HTML5_COLOR_SELECTOR')) {
-                $out .= '<link rel="stylesheet" media="screen" type="text/css" href="' . constant('BASE_URL') . 'includes/jquery/plugins/jpicker/css/jPicker-1.1.6.css" />';
+                $out .= '<link rel="stylesheet" media="screen" type="text/css" href="' . constant('BASE_URL') . '/includes/jquery/plugins/jpicker/css/jPicker-1.1.6.css" />';
                 $out .= '<script nonce="' . getNonce() . '" type="text/javascript" src="' . constant('BASE_URL') . '/includes/jquery/plugins/jpicker/jpicker-1.1.6.js"></script>';
                 $out .= '<script nonce="' . getNonce() . '" type="text/javascript">
 	             jQuery(document).ready(function(){
@@ -964,7 +964,7 @@ class FormOther
         } else {
             // In most cases, this is not used. We used instead function with no specific list of colors
             if (empty($conf->dol_use_jmobile) && !empty($conf->use_javascript_ajax)) {
-                $out .= '<link rel="stylesheet" href="' . constant('BASE_URL') . 'includes/jquery/plugins/colorpicker/jquery.colorpicker.css" type="text/css" media="screen" />';
+                $out .= '<link rel="stylesheet" href="' . constant('BASE_URL') . '/includes/jquery/plugins/colorpicker/jquery.colorpicker.css" type="text/css" media="screen" />';
                 $out .= '<script nonce="' . getNonce() . '" src="' . constant('BASE_URL') . '/includes/jquery/plugins/colorpicker/jquery.colorpicker.js" type="text/javascript"></script>';
                 $out .= '<script nonce="' . getNonce() . '" type="text/javascript">
 	             jQuery(document).ready(function(){

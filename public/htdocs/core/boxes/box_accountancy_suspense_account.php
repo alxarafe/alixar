@@ -91,7 +91,7 @@ class box_accountancy_suspense_account extends ModeleBoxes
 
                 $this->info_box_contents[0][1] = array(
                     'td' => 'class="right"',
-                    'text' => '<a href="' . constant('BASE_URL') . 'accountancy/bookkeeping/list.php?search_accountancy_code_start=' . urlencode($suspenseAccount) . '&search_accountancy_code_end=' . urlencode($suspenseAccount) . '">' . $nbSuspenseAccount . '</a>',
+                    'text' => '<a href="' . constant('BASE_URL') . '/accountancy/bookkeeping/list.php?search_accountancy_code_start=' . urlencode($suspenseAccount) . '&search_accountancy_code_end=' . urlencode($suspenseAccount) . '">' . $nbSuspenseAccount . '</a>',
                     'asis' => 1
                 );
             } else {

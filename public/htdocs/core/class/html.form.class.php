@@ -7117,7 +7117,7 @@ class Form
                         if (!getDolGlobalString('MAIN_POPUP_CALENDAR_ON_FOCUS')) {
                             $retstring .= "
 								showOn: 'button',	/* both has problem with autocompletion */
-								buttonImage: '" . DOL_URL_ROOT . "/theme/" . dol_escape_js($conf->theme) . "/img/object_calendarday.png',
+								buttonImage: '" . constant('DOL_URL_ROOT') . "/theme/" . dol_escape_js($conf->theme) . "/img/object_calendarday.png',
 								buttonImageOnly: true";
                         }
                         $retstring .= "
@@ -10216,7 +10216,7 @@ class Form
                         $ret .= '<div class="divforspanimg valignmiddle center photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . '" alt="" ' . ($width ? ' width="' . $width . '"' : '') . ($height ? ' height="' . $height . '"' : '') . '>' . img_picto('', 'company') . '</div>';
                         //$ret .= '<div class="difforspanimgright"></div>';
                     } else {
-                        $ret .= '<img class="photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . '" alt="" ' . ($width ? ' width="' . $width . '"' : '') . ($height ? ' height="' . $height . '"' : '') . ' src="' . DOL_URL_ROOT . $nophoto . '">';
+                        $ret .= '<img class="photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . '" alt="" ' . ($width ? ' width="' . $width . '"' : '') . ($height ? ' height="' . $height . '"' : '') . ' src="' . constant('DOL_URL_ROOT') . $nophoto . '">';
                     }
                 }
             }

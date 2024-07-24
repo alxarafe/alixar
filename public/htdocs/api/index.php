@@ -83,11 +83,8 @@ if (preg_match('/\/api\/index\.php/', $_SERVER["PHP_SELF"])) {
 }
 header('X-Frame-Options: SAMEORIGIN');
 
-
 $res = 0;
-if (!$res && file_exists("../main.inc.php")) {
-    $res = include '../main.inc.php';
-}
+$res = include constant('DOL_DOCUMENT_ROOT') . "/main.inc.php";
 if (!$res) {
     die("Include of main fails");
 }
@@ -220,14 +217,12 @@ if (getDolGlobalString('API_RESTRICT_ON_IP')) {
     }
 }
 
-
 // Call Explorer file for all APIs definitions (this part is slow)
 if (!empty($reg[1]) && $reg[1] == 'explorer' && ($reg[2] == '/swagger.json' || $reg[2] == '/swagger.json/root' || $reg[2] == '/resources.json' || $reg[2] == '/resources.json/root')) {
     // Scan all API files to load them
 
     $listofapis = array();
 
-    $modulesdir = dolGetModulesDirs();
     foreach ($modulesdir as $dir) {
         // Search available module
         dol_syslog("Scan directory " . $dir . " for module descriptor files, then search for API files");
@@ -390,7 +385,6 @@ if (!empty($reg[1]) && ($reg[1] != 'explorer' || ($reg[2] != '/swagger.json' && 
         $api->r->addAPIClass($classname);
     }
 }
-
 
 //var_dump($api->r->apiVersionMap);
 //exit;

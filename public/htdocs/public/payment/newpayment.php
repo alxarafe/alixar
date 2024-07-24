@@ -273,15 +273,15 @@ if ((empty($paymentmethod) || $paymentmethod == 'paypal') && isModEnabled('paypa
         $PAYPAL_API_KO = $urlko;
     }
     if (empty($PAYPAL_API_USER)) {
-        print 'Paypal parameter PAYPAL_API_USER is not defined. Please <a href="' . constant('BASE_URL') . 'paypal/admin/paypal.php">complete the setup of module PayPal first</a>.';
+        print 'Paypal parameter PAYPAL_API_USER is not defined. Please <a href="' . constant('BASE_URL') . '/paypal/admin/paypal.php">complete the setup of module PayPal first</a>.';
         exit;
     }
     if (empty($PAYPAL_API_PASSWORD)) {
-        print 'Paypal parameter PAYPAL_API_PASSWORD is not defined. Please <a href="' . constant('BASE_URL') . 'paypal/admin/paypal.php">complete the setup of module PayPal first</a>.';
+        print 'Paypal parameter PAYPAL_API_PASSWORD is not defined. Please <a href="' . constant('BASE_URL') . '/paypal/admin/paypal.php">complete the setup of module PayPal first</a>.';
         exit;
     }
     if (empty($PAYPAL_API_SIGNATURE)) {
-        print 'Paypal parameter PAYPAL_API_SIGNATURE is not defined. Please <a href="' . constant('BASE_URL') . 'paypal/admin/paypal.php">complete the setup of module PayPal first</a>.';
+        print 'Paypal parameter PAYPAL_API_SIGNATURE is not defined. Please <a href="' . constant('BASE_URL') . '/paypal/admin/paypal.php">complete the setup of module PayPal first</a>.';
         exit;
     }
 }

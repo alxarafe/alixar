@@ -29,13 +29,13 @@
  *      \brief      Run repair script
  */
 
-include_once 'inc.php';
+include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
 if (file_exists($conffile)) {
     include_once $conffile;
 }
-require_once $dolibarr_main_document_root . '/core/lib/admin.lib.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 include_once $dolibarr_main_document_root . '/core/lib/images.lib.php';
-require_once $dolibarr_main_document_root . '/core/class/extrafields.class.php';
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 require_once 'lib/repair.lib.php';
 
 $step = 2;
@@ -127,7 +127,7 @@ $error = 0;
 
 // If password is encoded, we decode it
 if (preg_match('/crypted:/i', $dolibarr_main_db_pass) || !empty($dolibarr_main_db_encrypted_pass)) {
-    require_once $dolibarr_main_document_root . '/core/lib/security.lib.php';
+    require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
     if (preg_match('/crypted:/i', $dolibarr_main_db_pass)) {
         $dolibarr_main_db_pass = preg_replace('/crypted:/i', '', $dolibarr_main_db_pass);
         $dolibarr_main_db_pass = dol_decode($dolibarr_main_db_pass);

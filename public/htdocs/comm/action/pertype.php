@@ -434,31 +434,31 @@ $massactionbutton = '';
 
 $viewmode = '<div class="navmode inline-block">';
 
-$viewmode .= '<a class="btnTitle reposition" href="' . constant('BASE_URL') . 'comm/action/list.php?mode=show_list&restore_lastsearch_values=1' . $paramnoactionodate . '">';
+$viewmode .= '<a class="btnTitle reposition" href="' . constant('BASE_URL') . '/comm/action/list.php?mode=show_list&restore_lastsearch_values=1' . $paramnoactionodate . '">';
 //$viewmode .= '<span class="fa paddingleft imgforviewmode valignmiddle btnTitle-icon">';
 $viewmode .= img_picto($langs->trans("List"), 'object_calendarlist', 'class="imgforviewmode pictoactionview block"');
 //$viewmode .= '</span>';
 $viewmode .= '<span class="valignmiddle text-plus-circle btnTitle-label hideonsmartphone inline-block width75 divoverflow">' . $langs->trans("ViewList") . '</span></a>';
 
-$viewmode .= '<a class="btnTitle reposition" href="' . constant('BASE_URL') . 'comm/action/index.php?mode=show_month&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . $paramnoactionodate . '">';
+$viewmode .= '<a class="btnTitle reposition" href="' . constant('BASE_URL') . '/comm/action/index.php?mode=show_month&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . $paramnoactionodate . '">';
 //$viewmode .= '<span class="fa paddingleft imgforviewmode valignmiddle btnTitle-icon">';
 $viewmode .= img_picto($langs->trans("ViewCal"), 'object_calendarmonth', 'class="pictoactionview block"');
 //$viewmode .= '</span>';
 $viewmode .= '<span class="valignmiddle text-plus-circle btnTitle-label hideonsmartphone inline-block width75 divoverflow">' . $langs->trans("ViewCal") . '</span></a>';
 
-$viewmode .= '<a class="btnTitle reposition" href="' . constant('BASE_URL') . 'comm/action/index.php?mode=show_week&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . $paramnoactionodate . '">';
+$viewmode .= '<a class="btnTitle reposition" href="' . constant('BASE_URL') . '/comm/action/index.php?mode=show_week&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . $paramnoactionodate . '">';
 //$viewmode .= '<span class="fa paddingleft imgforviewmode valignmiddle btnTitle-icon">';
 $viewmode .= img_picto($langs->trans("ViewWeek"), 'object_calendarweek', 'class="pictoactionview block"');
 //$viewmode .= '</span>';
 $viewmode .= '<span class="valignmiddle text-plus-circle btnTitle-label hideonsmartphone inline-block width75 divoverflow">' . $langs->trans("ViewWeek") . '</span></a>';
 
-$viewmode .= '<a class="btnTitle reposition" href="' . constant('BASE_URL') . 'comm/action/index.php?mode=show_day&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . $paramnoactionodate . '">';
+$viewmode .= '<a class="btnTitle reposition" href="' . constant('BASE_URL') . '/comm/action/index.php?mode=show_day&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . $paramnoactionodate . '">';
 //$viewmode .= '<span class="fa paddingleft imgforviewmode valignmiddle btnTitle-icon">';
 $viewmode .= img_picto($langs->trans("ViewDay"), 'object_calendarday', 'class="pictoactionview block"');
 //$viewmode .= '</span>';
 $viewmode .= '<span class="valignmiddle text-plus-circle btnTitle-label hideonsmartphone inline-block width75 divoverflow">' . $langs->trans("ViewDay") . '</span></a>';
 
-$viewmode .= '<a class="btnTitle btnTitleSelected reposition marginrightonly" href="' . constant('BASE_URL') . 'comm/action/peruser.php?mode=show_peruser&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . $paramnoactionodate . '">';
+$viewmode .= '<a class="btnTitle btnTitleSelected reposition marginrightonly" href="' . constant('BASE_URL') . '/comm/action/peruser.php?mode=show_peruser&year=' . dol_print_date($object->datep, '%Y') . '&month=' . dol_print_date($object->datep, '%m') . '&day=' . dol_print_date($object->datep, '%d') . $paramnoactionodate . '">';
 //$viewmode .= '<span class="fa paddingleft imgforviewmode valignmiddle btnTitle-icon">';
 $viewmode .= img_picto($langs->trans("ViewPerUser"), 'object_calendarperuser', 'class="pictoactionview block"');
 //$viewmode .= '</span>';

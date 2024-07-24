@@ -2355,7 +2355,7 @@ function dolButtonToOpenUrlInDialogPopup($name, $label, $buttonstring, $url, $di
     $out .= '<!-- a link for button to open url into a dialog popup with backtopagejsfields = ' . $backtopagejsfields . ' -->';
     $out .= '<a ' . ($accesskey ? ' accesskey="' . $accesskey . '"' : '') . ' class="cursorpointer reposition button_' . $name . ($morecss ? ' ' . $morecss : '') . '"' . $disabled . ' title="' . dol_escape_htmltag($label) . '"';
     if (empty($conf->use_javascript_ajax)) {
-        $out .= ' href="' . DOL_URL_ROOT . $url . '" target="_blank"';
+        $out .= ' href="' . constant('DOL_URL_ROOT') . $url . '" target="_blank"';
     } elseif ($jsonopen) {
         $out .= ' href="#" onclick="' . $jsonopen . '"';
     } else {
@@ -2376,7 +2376,7 @@ function dolButtonToOpenUrlInDialogPopup($name, $label, $buttonstring, $url, $di
 						jQuery(".button_' . $name . '").click(function () {
 							console.log(\'Open popup with jQuery(...).dialog() on URL ' . dol_escape_js(DOL_URL_ROOT . $url) . '\');
 							var $tmpdialog = $(\'#idfordialog' . $name . '\');
-							$tmpdialog.html(\'<iframe class="iframedialog" id="iframedialog' . $name . '" style="border: 0px;" src="' . DOL_URL_ROOT . $url . '" width="100%" height="98%"></iframe>\');
+							$tmpdialog.html(\'<iframe class="iframedialog" id="iframedialog' . $name . '" style="border: 0px;" src="' . constant('DOL_URL_ROOT') . $url . '" width="100%" height="98%"></iframe>\');
 							$tmpdialog.dialog({
 								autoOpen: false,
 							 	modal: true,
@@ -2731,7 +2731,7 @@ function dol_banner_tab($object, $paramid, $morehtml = '', $shownav = 1, $fieldi
                 $morehtmlleft .= '<div class="floatleft inline-block valignmiddle divphotoref"></div>';
             } else {    // Show no photo link
                 $nophoto = '/public/theme/common/nophoto.png';
-                $morehtmlleft .= '<div class="floatleft inline-block valignmiddle divphotoref"><img class="photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . '" title="' . dol_escape_htmltag($langs->trans("UploadAnImageToSeeAPhotoHere", $langs->transnoentitiesnoconv("Documents"))) . '" alt="No photo"' . ($width ? ' style="width: ' . $width . 'px"' : '') . ' src="' . DOL_URL_ROOT . $nophoto . '"></div>';
+                $morehtmlleft .= '<div class="floatleft inline-block valignmiddle divphotoref"><img class="photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . '" title="' . dol_escape_htmltag($langs->trans("UploadAnImageToSeeAPhotoHere", $langs->transnoentitiesnoconv("Documents"))) . '" alt="No photo"' . ($width ? ' style="width: ' . $width . 'px"' : '') . ' src="' . constant('DOL_URL_ROOT') . $nophoto . '"></div>';
             }
         }
     } elseif ($object->element == 'category') {
@@ -2752,7 +2752,7 @@ function dol_banner_tab($object, $paramid, $morehtml = '', $shownav = 1, $fieldi
                 $morehtmlleft .= '<div class="floatleft inline-block valignmiddle divphotoref"></div>';
             } else {    // Show no photo link
                 $nophoto = '/public/theme/common/nophoto.png';
-                $morehtmlleft .= '<div class="floatleft inline-block valignmiddle divphotoref"><img class="photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . '" title="' . dol_escape_htmltag($langs->trans("UploadAnImageToSeeAPhotoHere", $langs->transnoentitiesnoconv("Documents"))) . '" alt="No photo"' . ($width ? ' style="width: ' . $width . 'px"' : '') . ' src="' . DOL_URL_ROOT . $nophoto . '"></div>';
+                $morehtmlleft .= '<div class="floatleft inline-block valignmiddle divphotoref"><img class="photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . '" title="' . dol_escape_htmltag($langs->trans("UploadAnImageToSeeAPhotoHere", $langs->transnoentitiesnoconv("Documents"))) . '" alt="No photo"' . ($width ? ' style="width: ' . $width . 'px"' : '') . ' src="' . constant('DOL_URL_ROOT') . $nophoto . '"></div>';
             }
         }
     } elseif ($object->element == 'bom') {
@@ -2773,7 +2773,7 @@ function dol_banner_tab($object, $paramid, $morehtml = '', $shownav = 1, $fieldi
                 $morehtmlleft .= '<div class="floatleft inline-block valignmiddle divphotoref"></div>';
             } else {    // Show no photo link
                 $nophoto = '/public/theme/common/nophoto.png';
-                $morehtmlleft .= '<div class="floatleft inline-block valignmiddle divphotoref"><img class="photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . '" title="' . dol_escape_htmltag($langs->trans("UploadAnImageToSeeAPhotoHere", $langs->transnoentitiesnoconv("Documents"))) . '" alt="No photo"' . ($width ? ' style="width: ' . $width . 'px"' : '') . ' src="' . DOL_URL_ROOT . $nophoto . '"></div>';
+                $morehtmlleft .= '<div class="floatleft inline-block valignmiddle divphotoref"><img class="photo' . $modulepart . ($cssclass ? ' ' . $cssclass : '') . '" title="' . dol_escape_htmltag($langs->trans("UploadAnImageToSeeAPhotoHere", $langs->transnoentitiesnoconv("Documents"))) . '" alt="No photo"' . ($width ? ' style="width: ' . $width . 'px"' : '') . ' src="' . constant('DOL_URL_ROOT') . $nophoto . '"></div>';
             }
         }
     } elseif ($object->element == 'ticket') {
@@ -3752,7 +3752,7 @@ function dol_print_email($email, $cid = 0, $socid = 0, $addlink = 0, $max = 64, 
             $type = 'AC_EMAIL';
             $linktoaddaction = '';
             if (getDolGlobalString('AGENDA_ADDACTIONFOREMAIL')) {
-                $linktoaddaction = '<a href="' . constant('BASE_URL') . 'comm/action/card.php?action=create&amp;backtopage=1&amp;actioncode=' . urlencode($type) . '&amp;contactid=' . ((int) $cid) . '&amp;socid=' . ((int) $socid) . '">' . img_object($langs->trans("AddAction"), "calendar") . '</a>';
+                $linktoaddaction = '<a href="' . constant('BASE_URL') . '/comm/action/card.php?action=create&amp;backtopage=1&amp;actioncode=' . urlencode($type) . '&amp;contactid=' . ((int) $cid) . '&amp;socid=' . ((int) $socid) . '">' . img_object($langs->trans("AddAction"), "calendar") . '</a>';
             }
             if ($linktoaddaction) {
                 $newemail = '<div>' . $newemail . ' ' . $linktoaddaction . '</div>';
@@ -3860,7 +3860,7 @@ function dol_print_socialnetworks($value, $cid, $socid, $type, $dictsocialnetwor
                 $addlink = 'AC_SKYPE';
                 $link = '';
                 if (getDolGlobalString('AGENDA_ADDACTIONFORSKYPE')) {
-                    $link = '<a href="' . constant('BASE_URL') . 'comm/action/card.php?action=create&amp;backtopage=1&amp;actioncode=' . $addlink . '&amp;contactid=' . $cid . '&amp;socid=' . $socid . '">' . img_object($langs->trans("AddAction"), "calendar") . '</a>';
+                    $link = '<a href="' . constant('BASE_URL') . '/comm/action/card.php?action=create&amp;backtopage=1&amp;actioncode=' . $addlink . '&amp;contactid=' . $cid . '&amp;socid=' . $socid . '">' . img_object($langs->trans("AddAction"), "calendar") . '</a>';
                 }
                 $htmllink .= ($link ? ' ' . $link : '');
             }
@@ -4240,7 +4240,7 @@ function dol_print_phone($phone, $countrycode = '', $cid = 0, $socid = 0, $addli
                 $type = 'AC_FAX';
             }
             if (getDolGlobalString('AGENDA_ADDACTIONFORPHONE')) {
-                $addlinktoagenda = '<a href="' . constant('BASE_URL') . 'comm/action/card.php?action=create&amp;backtopage=' . urlencode($_SERVER['REQUEST_URI']) . '&amp;actioncode=' . $type . ($cid ? '&amp;contactid=' . $cid : '') . ($socid ? '&amp;socid=' . $socid : '') . '">' . img_object($langs->trans("AddAction"), "calendar") . '</a>';
+                $addlinktoagenda = '<a href="' . constant('BASE_URL') . '/comm/action/card.php?action=create&amp;backtopage=' . urlencode($_SERVER['REQUEST_URI']) . '&amp;actioncode=' . $type . ($cid ? '&amp;contactid=' . $cid : '') . ($socid ? '&amp;socid=' . $socid : '') . '">' . img_object($langs->trans("AddAction"), "calendar") . '</a>';
             }
             if ($addlinktoagenda) {
                 $newphone = '<span>' . $newphone . ' ' . $addlinktoagenda . '</span>';
@@ -13007,9 +13007,9 @@ function startSimpleTable($header, $link = "", $arguments = "", $emptyColumns = 
 
     if (!empty($link)) {
         if (!empty($arguments)) {
-            print '<a href="' . constant('BASE_URL') . '' . $link . '?' . $arguments . '">';
+            print '<a href="' . constant('BASE_URL') . '/' . $link . '?' . $arguments . '">';
         } else {
-            print '<a href="' . constant('BASE_URL') . '' . $link . '">';
+            print '<a href="' . constant('BASE_URL') . '/' . $link . '">';
         }
     }
 
@@ -14004,10 +14004,10 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
         if ($donetodo) {
             $tmp = '';
             if ($filterobj instanceof Societe) {
-                $tmp .= '<a href="' . constant('BASE_URL') . 'comm/action/list.php?mode=show_list&socid=' . $filterobj->id . '&status=done">';
+                $tmp .= '<a href="' . constant('BASE_URL') . '/comm/action/list.php?mode=show_list&socid=' . $filterobj->id . '&status=done">';
             }
             if ($filterobj instanceof User) {
-                $tmp .= '<a href="' . constant('BASE_URL') . 'comm/action/list.php?mode=show_list&socid=' . $filterobj->id . '&status=done">';
+                $tmp .= '<a href="' . constant('BASE_URL') . '/comm/action/list.php?mode=show_list&socid=' . $filterobj->id . '&status=done">';
             }
             $tmp .= ($donetodo != 'done' ? $langs->trans("ActionsToDoShort") : '');
             $tmp .= ($donetodo != 'done' && $donetodo != 'todo' ? ' / ' : '');
@@ -14080,7 +14080,7 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
             $out .= '<span class="time timeline-header-action2">';
 
             if (isset($histo[$key]['type']) && $histo[$key]['type'] == 'mailing') {
-                $out .= '<a class="paddingleft paddingright timeline-btn2 editfielda" href="' . constant('BASE_URL') . 'comm/mailing/card.php?id=' . $histo[$key]['id'] . '">' . img_object($langs->trans("ShowEMailing"), "email") . ' ';
+                $out .= '<a class="paddingleft paddingright timeline-btn2 editfielda" href="' . constant('BASE_URL') . '/comm/mailing/card.php?id=' . $histo[$key]['id'] . '">' . img_object($langs->trans("ShowEMailing"), "email") . ' ';
                 $out .= $histo[$key]['id'];
                 $out .= '</a> ';
             } else {
@@ -14172,7 +14172,7 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
                     $actionstatic->id = $histo[$key]['id'];
                     $out .= dol_escape_htmltag(dol_trunc($libelle, 120));
                 } elseif ($histo[$key]['type'] == 'mailing') {
-                    $out .= '<a href="' . constant('BASE_URL') . 'comm/mailing/card.php?id=' . $histo[$key]['id'] . '">' . img_object($langs->trans("ShowEMailing"), "email") . ' ';
+                    $out .= '<a href="' . constant('BASE_URL') . '/comm/mailing/card.php?id=' . $histo[$key]['id'] . '">' . img_object($langs->trans("ShowEMailing"), "email") . ' ';
                     $transcode = $langs->transnoentitiesnoconv("Action" . $histo[$key]['acode']);
                     $libelle = ($transcode != "Action" . $histo[$key]['acode'] ? $transcode : 'Send mass mailing');
                     $out .= dol_escape_htmltag(dol_trunc($libelle, 120));

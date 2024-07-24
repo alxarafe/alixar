@@ -97,7 +97,7 @@ print $langs->trans("SetupDescription3b");
 if (!empty($setupcompanynotcomplete)) {
     $langs->load("errors");
     $warnpicto = img_warning($langs->trans("WarningMandatorySetupNotComplete"), 'style="padding-right: 6px;"');
-    print '<br><div class="warning"><a href="' . constant('BASE_URL') . 'admin/company.php?mainmenu=home' . (empty($setupcompanynotcomplete) ? '' : '&action=edit') . '">' . $warnpicto . $langs->trans("WarningMandatorySetupNotComplete") . '</a></div>';
+    print '<br><div class="warning"><a href="' . constant('BASE_URL') . '/admin/company.php?mainmenu=home' . (empty($setupcompanynotcomplete) ? '' : '&action=edit') . '">' . $warnpicto . $langs->trans("WarningMandatorySetupNotComplete") . '</a></div>';
 }
 
 print '</section>';
@@ -122,7 +122,7 @@ print '<br><br>' . $langs->trans("SetupDescription4b");
 if ($nbmodulesnotautoenabled <= getDolGlobalInt('MAIN_MIN_NB_ENABLED_MODULE_FOR_WARNING', 1)) { // If only minimal initial modules enabled
     $langs->load("errors");
     $warnpicto = img_warning($langs->trans("WarningEnableYourModulesApplications"), 'style="padding-right: 6px;"');
-    print '<br><div class="warning"><a href="' . constant('BASE_URL') . 'admin/modules.php?mainmenu=home">' . $warnpicto . $langs->trans("WarningEnableYourModulesApplications") . '</a></div>';
+    print '<br><div class="warning"><a href="' . constant('BASE_URL') . '/admin/modules.php?mainmenu=home">' . $warnpicto . $langs->trans("WarningEnableYourModulesApplications") . '</a></div>';
 }
 
 print '</section>';

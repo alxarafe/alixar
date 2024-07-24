@@ -75,7 +75,7 @@ if (GETPOST("menu_handler")) {
 
 if ($action == 'add') {
     if ($cancel) {
-        header("Location: " . DOL_URL_ROOT . "/admin/menus/index.php?menu_handler=" . $menu_handler);
+        header("Location: " . constant('BASE_URL') . "/admin/menus/index.php?menu_handler=" . $menu_handler);
         exit;
     }
 
@@ -155,7 +155,7 @@ if ($action == 'add') {
 
         $result = $menu->create($user);
         if ($result > 0) {
-            header("Location: " . DOL_URL_ROOT . "/admin/menus/index.php?menu_handler=" . GETPOST('menu_handler', 'aZ09'));
+            header("Location: " . constant('BASE_URL') . "/admin/menus/index.php?menu_handler=" . GETPOST('menu_handler', 'aZ09'));
             exit;
         } else {
             $action = 'create';
@@ -226,13 +226,13 @@ if ($action == 'update') {
 
             $action = "edit";
 
-            header("Location: " . DOL_URL_ROOT . "/admin/menus/index.php?menu_handler=" . $menu_handler);
+            header("Location: " . constant('BASE_URL') . "/admin/menus/index.php?menu_handler=" . $menu_handler);
             exit;
         } else {
             $action = 'edit';
         }
     } else {
-        header("Location: " . DOL_URL_ROOT . "/admin/menus/index.php?menu_handler=" . $menu_handler);
+        header("Location: " . constant('BASE_URL') . "/admin/menus/index.php?menu_handler=" . $menu_handler);
         exit;
     }
 }

@@ -135,7 +135,7 @@ $help_url = 'EN:Module_Point_of_sale_(TakePOS)';
 
 llxHeader('', $langs->trans("CashDeskSetup"), $help_url, '', 0, 0, '', '', '', 'mod-takepos page-admin_setup');
 
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("CashDeskSetup") . ' (TakePOS)', $linkback, 'title_setup');
 $head = takepos_admin_prepare_head();
 print dol_get_fiche_head($head, 'setup', 'TakePOS', -1, 'cash-register');

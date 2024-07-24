@@ -21,6 +21,33 @@
 use Alxarafe\Lib\Dispatcher;
 use Alxarafe\Lib\Functions;
 
+/**
+ * Obtains the main url
+ *
+ * TODO: This function is defined in Alxarafe.
+ *       As soon as the Alxarafe code is brought in, it will be removed and
+ *       Functions::getUrl() will be used instead.
+ *
+ * @return string
+ */
+function getUrl()
+{
+    $ssl = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
+    $proto = strtolower($_SERVER['SERVER_PROTOCOL']);
+    $proto = substr($proto, 0, strpos($proto, '/')) . ($ssl ? 's' : '');
+    if (isset($_SERVER['HTTP_HOST'])) {
+        $host = $_SERVER['HTTP_HOST'];
+    } else {
+        $port = $_SERVER['SERVER_PORT'];
+        $port = ((!$ssl && $port == '80') || ($ssl && $port == '443')) ? '' : ':' . $port;
+        $host = $_SERVER['SERVER_NAME'] . $port;
+    }
+
+    $script = $_SERVER['SCRIPT_NAME'];
+
+    $script = substr($script, 0, strlen($script) - strlen('/index.php'));
+    return $proto . '://' . $host . $script;
+}
 const BASE_PATH = __DIR__;
 
 $autoload_filename = realpath(BASE_PATH . '/../vendor/autoload.php');
@@ -30,7 +57,7 @@ if (!file_exists($autoload_filename)) {
 
 require_once $autoload_filename;
 
-define('BASE_URL', Functions::getUrl());
+define('BASE_URL', getUrl());
 
 // Define Dolibarr Constants
 define('DOL_DOCUMENT_ROOT', constant('BASE_PATH') . '/htdocs');
@@ -43,17 +70,23 @@ if (!empty($path)) {
     $path .= '/';
 }
 
+if (!empty($api)) {
+    $_SERVER['SCRIPT_NAME'] = '/api/index.php';
+    $_SERVER['PHP_SELF'] = constant('BASE_URL') . DIRECTORY_SEPARATOR . $path . $file . '.php' . DIRECTORY_SEPARATOR . $api;
+    $filename = constant('DOL_DOCUMENT_ROOT') . $path . '/api/index.php';
+    require_once $filename;
+    die('');
+}
+
 /**
  * Dolibarr uses the $_SERVER['PHP_SELF'] variable in much of the code to know how it
  * has been invoked. Now it doesn't work because the entry point is unique.
  * Here we put a temporary patch while it is migrating.
  */
-$_SERVER['PHP_SELF'] = DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $file . '.php';
-if (!empty($api)) {
-    $_SERVER['PHP_SELF'] = DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $file . '.php' . DIRECTORY_SEPARATOR . $api;
-}
+$_SERVER['PHP_SELF'] = constant('BASE_URL') . DIRECTORY_SEPARATOR . $path . $file . '.php';
 
-$filename = BASE_PATH . '/htdocs/' . $path . $file . '.php';
+$filename = constant('DOL_DOCUMENT_ROOT') . DIRECTORY_SEPARATOR . $path . $file . '.php';
+dump($filename);
 
 // Loads Dolibarr codefile
 require_once $filename;

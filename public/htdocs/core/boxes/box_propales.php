@@ -74,7 +74,7 @@ class box_propales extends ModeleBoxes
 
         $text = $langs->trans("BoxTitleLast" . (getDolGlobalString('MAIN_LASTBOX_ON_OBJECT_DATE') ? "" : "Modified") . "Propals", $max);
         $this->info_box_head = array(
-            'text' => $text . '<a class="paddingleft" href="' . constant('BASE_URL') . 'comm/propal/list.php?sortfield=p.tms&sortorder=DESC"><span class="badge">...</span></a>'
+            'text' => $text . '<a class="paddingleft" href="' . constant('BASE_URL') . '/comm/propal/list.php?sortfield=p.tms&sortorder=DESC"><span class="badge">...</span></a>'
         );
 
         if ($user->hasRight('propal', 'lire')) {

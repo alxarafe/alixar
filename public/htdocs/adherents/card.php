@@ -682,7 +682,7 @@ if (empty($reshook)) {
                 if (empty($labeltouse) || (int) $labeltouse === -1) {
                     //fallback on the old configuration.
                     $langs->load("errors");
-                    setEventMessages('<a href="' . constant('BASE_URL') . 'adherents/admin/member_emails.php">' . $langs->trans('WarningMandatorySetupNotComplete') . '</a>', null, 'errors');
+                    setEventMessages('<a href="' . constant('BASE_URL') . '/adherents/admin/member_emails.php">' . $langs->trans('WarningMandatorySetupNotComplete') . '</a>', null, 'errors');
                     $error++;
                 } else {
                     $substitutionarray = getCommonSubstitutionArray($outputlangs, 0, null, $object);
@@ -1007,7 +1007,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
             print '<span class="error">' . $langs->trans("NoTypeDefinedGoToSetup") . '</span>';
         }
         if ($user->hasRight('member', 'configurer')) {
-            print ' <a href="' . constant('BASE_URL') . 'adherents/type.php?action=create&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create&typeid=--IDFORBACKTOPAGE--') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("NewMemberType") . '"></span></a>';
+            print ' <a href="' . constant('BASE_URL') . '/adherents/type.php?action=create&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create&typeid=--IDFORBACKTOPAGE--') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("NewMemberType") . '"></span></a>';
         }
         print "</td>\n";
 
@@ -1722,9 +1722,9 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
             $rowspan++;
         }
 
-        $linkback = '<a href="' . constant('BASE_URL') . 'adherents/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+        $linkback = '<a href="' . constant('BASE_URL') . '/adherents/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
-        $morehtmlref = '<a href="' . constant('BASE_URL') . 'adherents/vcard.php?id=' . $object->id . '" class="refid">';
+        $morehtmlref = '<a href="' . constant('BASE_URL') . '/adherents/vcard.php?id=' . $object->id . '" class="refid">';
         $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
         $morehtmlref .= '</a>';
 
@@ -1870,7 +1870,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
                     // Show link to invoices
                     $tmparray = $company->getOutstandingBills('customer');
                     if (!empty($tmparray['refs'])) {
-                        print ' - ' . img_picto($langs->trans("Invoices"), 'bill', 'class="paddingright"') . '<a href="' . constant('BASE_URL') . 'compta/facture/list.php?socid=' . $object->socid . '">' . $langs->trans("Invoices") . ' (' . count($tmparray['refs']) . ')';
+                        print ' - ' . img_picto($langs->trans("Invoices"), 'bill', 'class="paddingright"') . '<a href="' . constant('BASE_URL') . '/compta/facture/list.php?socid=' . $object->socid . '">' . $langs->trans("Invoices") . ' (' . count($tmparray['refs']) . ')';
                         // TODO Add alert if warning on at least one invoice late
                         print '</a>';
                     }

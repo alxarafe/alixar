@@ -1077,7 +1077,7 @@ class CommandeFournisseur extends CommonOrder
             if ($txttoshow) {
                 $notetoshow = $langs->trans("ViewPrivateNote") . ':<br>' . dol_string_nohtmltag($txttoshow, 1);
                 $result .= ' <span class="note inline-block">';
-                $result .= '<a href="' . constant('BASE_URL') . 'fourn/commande/note.php?id=' . $this->id . '" class="classfortooltip" title="' . dol_escape_htmltag($notetoshow) . '">';
+                $result .= '<a href="' . constant('BASE_URL') . '/fourn/commande/note.php?id=' . $this->id . '" class="classfortooltip" title="' . dol_escape_htmltag($notetoshow) . '">';
                 $result .= img_picto('', 'note');
                 $result .= '</a>';
                 //$result.=img_picto($langs->trans("ViewNote"),'object_generic');

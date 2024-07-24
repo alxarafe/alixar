@@ -71,7 +71,7 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('tax', '
     $result = $object->delete($user);
     if ($result > 0) {
         $db->commit();
-        header("Location: " . DOL_URL_ROOT . "/compta/sociales/payments.php");
+        header("Location: " . constant('BASE_URL') . "/compta/sociales/payments.php");
         exit;
     } else {
         setEventMessages($object->error, $object->errors, 'errors');

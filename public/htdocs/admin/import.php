@@ -64,7 +64,7 @@ $page_name = "ImportSetup";
 llxHeader('', $langs->trans($page_name), '', '', 0, 0, '', '', '', 'mod-admin page-import');
 
 // Subheader
-$linkback = '<a href="' . constant('BASE_URL') . 'admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
 
 print load_fiche_titre($langs->trans($page_name), $linkback);
 

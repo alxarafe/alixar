@@ -116,9 +116,9 @@ if ($id) {
     print '<form method="POST" action="' . $_SERVER['PHP_SELF'] . '">';
     print '<input type="hidden" name="token" value="' . newToken() . '">';
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'adherents/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/adherents/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
-    $morehtmlref = '<a href="' . constant('BASE_URL') . 'adherents/vcard.php?id=' . $object->id . '" class="refid">';
+    $morehtmlref = '<a href="' . constant('BASE_URL') . '/adherents/vcard.php?id=' . $object->id . '" class="refid">';
     $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
     $morehtmlref .= '</a>';
 

@@ -1282,7 +1282,7 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 
                 print dol_get_fiche_head($head, 'card', $langs->trans("CPTitreMenu"), -1, 'holiday');
 
-                $linkback = '<a href="' . constant('BASE_URL') . 'holiday/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+                $linkback = '<a href="' . constant('BASE_URL') . '/holiday/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
                 dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref');
 

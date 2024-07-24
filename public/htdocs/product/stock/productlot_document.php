@@ -175,7 +175,7 @@ if ($object->id) {
     }
 
 
-    $linkback = '<a href="' . constant('BASE_URL') . 'product/stock/productlot_list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
+    $linkback = '<a href="' . constant('BASE_URL') . '/product/stock/productlot_list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
     $shownav = 1;
     if ($user->socid && !in_array('batch', explode(',', getDolGlobalString('MAIN_MODULES_FOR_EXTERNAL')))) {
