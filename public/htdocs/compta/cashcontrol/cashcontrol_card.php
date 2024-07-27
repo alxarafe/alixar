@@ -111,7 +111,7 @@ if (!$user->hasRight("cashdesk", "run") && !$user->hasRight("takepos", "run")) {
 $permissiontoadd = ($user->hasRight("cashdesk", "run") || $user->hasRight("takepos", "run"));
 $permissiontodelete = ($user->hasRight("cashdesk", "run") || $user->hasRight("takepos", "run")) || ($permissiontoadd && $object->status == 0);
 if (empty($backtopage)) {
-    $backtopage = constant('BASE_URL') . '/compta/cashcontrol/cashcontrol_card.php?id=' . (!empty($id) && $id > 0 ? $id : '__ID__');
+    $backtopage = '/compta/cashcontrol/cashcontrol_card.php?id=' . (!empty($id) && $id > 0 ? $id : '__ID__');
 }
 $backurlforlist = constant('BASE_URL') . '/compta/cashcontrol/cashcontrol_list.php';
 $triggermodname = 'CACHCONTROL_MODIFY'; // Name of trigger action code to execute when we modify record

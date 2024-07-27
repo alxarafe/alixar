@@ -160,7 +160,7 @@ if (empty($reshook)) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = constant('BASE_URL') . '/fourn/facture/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = '/fourn/facture/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }

@@ -115,7 +115,7 @@ if (empty($reshook)) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = constant('BASE_URL') . '/asset/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = '/asset/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }

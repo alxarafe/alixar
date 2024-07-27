@@ -108,7 +108,7 @@ if (empty($reshook)) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = constant('BASE_URL') . '/recruitment/recruitmentjobposition_card.php?id=' . ($id > 0 ? $id : '__ID__');
+                $backtopage = '/recruitment/recruitmentjobposition_card.php?id=' . ($id > 0 ? $id : '__ID__');
             }
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Luracast\Restler\UI;
 
 use Luracast\Restler\UI\Tags as T;
@@ -17,7 +18,7 @@ class Emmet
     /**
      * Create the needed tag hierarchy from emmet string
      *
-     * @param string       $string
+     * @param string $string
      *
      * @param array|string $data
      *
@@ -29,7 +30,7 @@ class Emmet
             return array();
 
         $implicitTag =
-            function () use (& $tag) {
+            function () use (&$tag) {
                 if (empty($tag->tag)) {
                     switch ($tag->parent->tag) {
                         case 'ul':
@@ -132,8 +133,8 @@ class Emmet
             };
 
         $parseAttributes =
-            function (Callable $self, $round, $total, $data)
-            use (& $tokens, & $tag, $parseText) {
+            function (callable $self, $round, $total, $data)
+            use (&$tokens, &$tag, $parseText) {
                 $a = $parseText(
                     '', $round, $total, $data
                 );
@@ -174,10 +175,10 @@ class Emmet
 
         $parse =
             function (
-                Callable $self, $round = 1, $total = 1
+                callable $self, $round = 1, $total = 1
             )
             use (
-                & $tokens, & $parent, & $tag, & $data,
+                &$tokens, &$parent, &$tag, &$data,
                 $parseAttributes, $implicitTag, $parseText
             ) {
                 $offsetTokens = null;
@@ -295,7 +296,7 @@ class Emmet
                                 if (is_string($times)) {
                                     if (!isset($delimiter[$times])) {
                                         $data = Util::nestedValue($data, $times)
-                                            ? : $data;
+                                            ?: $data;
                                     } else {
                                         array_unshift($tokens, $times);
                                         $removeCount = 1;

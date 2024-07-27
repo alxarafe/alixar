@@ -873,8 +873,8 @@ class FormOther
             // Case of selection of any color
             $langs->load("other");
             if (empty($conf->dol_use_jmobile) && !empty($conf->use_javascript_ajax) && !getDolGlobalInt('MAIN_USE_HTML5_COLOR_SELECTOR')) {
-                $out .= '<link rel="stylesheet" media="screen" type="text/css" href="' . constant('BASE_URL') . '/includes/jquery/plugins/jpicker/css/jPicker-1.1.6.css" />';
-                $out .= '<script nonce="' . getNonce() . '" type="text/javascript" src="' . constant('BASE_URL') . '/includes/jquery/plugins/jpicker/jpicker-1.1.6.js"></script>';
+                $out .= '<link rel="stylesheet" media="screen" type="text/css" href="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/jpicker/css/jPicker-1.1.6.css" />';
+                $out .= '<script nonce="' . getNonce() . '" type="text/javascript" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/jpicker/jpicker-1.1.6.js"></script>';
                 $out .= '<script nonce="' . getNonce() . '" type="text/javascript">
 	             jQuery(document).ready(function(){
 					var originalhex = null;
@@ -897,7 +897,7 @@ class FormOther
 		                    },
 		                },
 		                images: {
-		                    clientPath: \'' . constant('BASE_URL') . '/includes/jquery/plugins/jpicker/images/\',
+		                    clientPath: \'' . constant('DOL_URL_ROOT') . '/includes/jquery/plugins/jpicker/images/\',
 		                    picker: { file: \'../../../../../theme/common/colorpicker.png\', width: 14, height: 14 }
 		          		},
 		                localization: // alter these to change the text presented by the picker (e.g. different language)

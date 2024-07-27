@@ -146,7 +146,7 @@ if (empty($reshook)) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = constant('BASE_URL') . '/eventorganization/conferenceorboothattendee_card.php?fk_project=' . ((int) $fk_project) . '&id=' . ($id > 0 ? $id : '__ID__');
+                $backtopage = '/eventorganization/conferenceorboothattendee_card.php?fk_project=' . ((int) $fk_project) . '&id=' . ($id > 0 ? $id : '__ID__');
             }
         }
     }

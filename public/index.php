@@ -86,7 +86,6 @@ if (!empty($api)) {
 $_SERVER['PHP_SELF'] = constant('BASE_URL') . DIRECTORY_SEPARATOR . $path . $file . '.php';
 
 $filename = constant('DOL_DOCUMENT_ROOT') . DIRECTORY_SEPARATOR . $path . $file . '.php';
-dump($filename);
 
 // Loads Dolibarr codefile
 require_once $filename;

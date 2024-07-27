@@ -125,7 +125,7 @@ if (empty($reshook)) {
     $permissiontoadd = 1;
     $permissiontodelete = 1;
     if (empty($backtopage)) {
-        $backtopage = constant('BASE_URL') . '/admin/emailcollector_card.php?id=' . ($id > 0 ? $id : '__ID__');
+        $backtopage = '/admin/emailcollector_card.php?id=' . ($id > 0 ? $id : '__ID__');
     }
     $backurlforlist = constant('BASE_URL') . '/admin/emailcollector_list.php';
 

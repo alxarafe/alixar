@@ -344,7 +344,7 @@ if (empty($reshook)) {
     }
 
     $backurlforlist = constant('BASE_URL') . '/product/inventory/list.php';
-    $backtopage = constant('BASE_URL') . '/product/inventory/inventory.php?id=' . $object->id . '&page=' . $page . $paramwithsearch;
+    $backtopage = '/product/inventory/inventory.php?id=' . $object->id . '&page=' . $page . $paramwithsearch;
 
     // Actions cancel, add, update, delete or clone
     include DOL_DOCUMENT_ROOT . '/core/actions_addupdatedelete.inc.php';

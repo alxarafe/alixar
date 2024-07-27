@@ -5187,13 +5187,13 @@ div.divphotoref > img.photowithmargin, div.divphotoref > a > .photowithmargin { 
 
 .logo_setup
 {
-    content:url(<?php echo dol_buildpath($path . '/theme/' . $theme . '/img/logo_setup.svg', 1) ?>);  /* content is used to best fit the container */
+    content:url(<?php echo dol_buildpath($path . '/theme/' . $theme . '/img/logo_setup.svg', 3) ?>);  /* content is used to best fit the container */
     display: inline-block;
     opacity: 0.2;
 }
 .nographyet
 {
-    content:url(<?php echo dol_buildpath($path . '/theme/' . $theme . '/img/nographyet.svg', 1) ?>);
+    content:url(<?php echo dol_buildpath($path . '/theme/' . $theme . '/img/nographyet.svg', 3) ?>);
     display: inline-block;
     opacity: 0.1;
     background-repeat: no-repeat;

@@ -104,7 +104,7 @@ if (empty($reshook)) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = constant('BASE_URL') . '/compta/bank/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = '/compta/bank/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }

@@ -223,6 +223,7 @@ if (!empty($reg[1]) && $reg[1] == 'explorer' && ($reg[2] == '/swagger.json' || $
 
     $listofapis = array();
 
+    $modulesdir = dolGetModulesDirs();
     foreach ($modulesdir as $dir) {
         // Search available module
         dol_syslog("Scan directory " . $dir . " for module descriptor files, then search for API files");

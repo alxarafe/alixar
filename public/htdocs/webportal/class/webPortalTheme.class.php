@@ -72,7 +72,7 @@ class WebPortalTheme
         } elseif (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output . '/logos/' . $mysoc->logo)) {
             $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/' . $mysoc->logo);
         } elseif (is_readable(DOL_DOCUMENT_ROOT . '/theme/dolibarr_logo.svg')) {
-            $urllogo = constant('BASE_URL') . '/theme/dolibarr_logo.svg';
+            $urllogo = constant('DOL_URL_ROOT') . '/theme/dolibarr_logo.svg';
         }
 
         $this->loginLogoUrl = getDolGlobalString('WEBPORTAL_LOGIN_LOGO_URL', $urllogo);

@@ -52,7 +52,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.ph
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "bills", "members", "users", "other", "paypal"));
 
-
 // Get parameters
 $action = GETPOST('action', 'aZ09');
 $cancel = GETPOST('cancel', 'alpha');
@@ -146,7 +145,7 @@ if (empty($reshook)) {
             if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
                 $backtopage = $backurlforlist;
             } else {
-                $backtopage = constant('BASE_URL') . '/adherents/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
+                $backtopage = '/adherents/card.php?id=' . ((!empty($id) && $id > 0) ? $id : '__ID__');
             }
         }
     }
@@ -156,6 +155,7 @@ if (empty($reshook)) {
             header("Location: " . $backtopageforcancel);
             exit;
         } elseif (!empty($backtopage)) {
+            //header("Location: " . $backtopage);
             header("Location: " . $backtopage);
             exit;
         }
@@ -187,7 +187,7 @@ if (empty($reshook)) {
         if (!$error) {
             if ($socid != $object->socid) { // If link differs from currently in database
                 $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "adherent";
-                $sql .= " WHERE socid = " . ((int) $socid);
+                $sql .= " WHERE socid = " . ((int)$socid);
                 $sql .= " AND entity = " . $conf->entity;
                 $resql = $db->query($sql);
                 if ($resql) {
@@ -295,24 +295,24 @@ if (empty($reshook)) {
 
             // Change values
             $object->civility_id = trim(GETPOST("civility_id", 'alphanohtml'));
-            $object->firstname   = trim(GETPOST("firstname", 'alphanohtml'));
-            $object->lastname    = trim(GETPOST("lastname", 'alphanohtml'));
-            $object->gender      = trim(GETPOST("gender", 'alphanohtml'));
-            $object->login       = trim(GETPOST("login", 'alphanohtml'));
+            $object->firstname = trim(GETPOST("firstname", 'alphanohtml'));
+            $object->lastname = trim(GETPOST("lastname", 'alphanohtml'));
+            $object->gender = trim(GETPOST("gender", 'alphanohtml'));
+            $object->login = trim(GETPOST("login", 'alphanohtml'));
             if (GETPOSTISSET('pass')) {
-                $object->pass        = trim(GETPOST("pass", 'none'));   // For password, we must use 'none'
+                $object->pass = trim(GETPOST("pass", 'none'));   // For password, we must use 'none'
             }
 
-            $object->societe     = trim(GETPOST("societe", 'alphanohtml')); // deprecated
-            $object->company     = trim(GETPOST("societe", 'alphanohtml'));
+            $object->societe = trim(GETPOST("societe", 'alphanohtml')); // deprecated
+            $object->company = trim(GETPOST("societe", 'alphanohtml'));
 
-            $object->address     = trim(GETPOST("address", 'alphanohtml'));
-            $object->zip         = trim(GETPOST("zipcode", 'alphanohtml'));
-            $object->town        = trim(GETPOST("town", 'alphanohtml'));
-            $object->state_id    = GETPOSTINT("state_id");
-            $object->country_id  = GETPOSTINT("country_id");
+            $object->address = trim(GETPOST("address", 'alphanohtml'));
+            $object->zip = trim(GETPOST("zipcode", 'alphanohtml'));
+            $object->town = trim(GETPOST("town", 'alphanohtml'));
+            $object->state_id = GETPOSTINT("state_id");
+            $object->country_id = GETPOSTINT("country_id");
 
-            $object->phone       = trim(GETPOST("phone", 'alpha'));
+            $object->phone = trim(GETPOST("phone", 'alpha'));
             $object->phone_perso = trim(GETPOST("phone_perso", 'alpha'));
             $object->phone_mobile = trim(GETPOST("phone_mobile", 'alpha'));
             $object->email = preg_replace('/\s+/', '', GETPOST("member_email", 'alpha'));
@@ -478,17 +478,17 @@ if (empty($reshook)) {
         $default_lang = GETPOST('default_lang', 'alpha');
 
         $object->civility_id = $civility_id;
-        $object->firstname   = $firstname;
-        $object->lastname    = $lastname;
-        $object->gender      = $gender;
-        $object->societe     = $societe; // deprecated
-        $object->company     = $societe;
-        $object->address     = $address;
-        $object->zip         = $zip;
-        $object->town        = $town;
-        $object->state_id    = $state_id;
-        $object->country_id  = $country_id;
-        $object->phone       = $phone;
+        $object->firstname = $firstname;
+        $object->lastname = $lastname;
+        $object->gender = $gender;
+        $object->societe = $societe; // deprecated
+        $object->company = $societe;
+        $object->address = $address;
+        $object->zip = $zip;
+        $object->town = $town;
+        $object->state_id = $state_id;
+        $object->country_id = $country_id;
+        $object->phone = $phone;
         $object->phone_perso = $phone_perso;
         $object->phone_mobile = $phone_mobile;
         $object->socialnetworks = array();
@@ -500,18 +500,18 @@ if (empty($reshook)) {
             }
         }
 
-        $object->email       = $email;
-        $object->url         = $url;
-        $object->login       = $login;
-        $object->pass        = $pass;
-        $object->birth       = $birthdate;
-        $object->photo       = $photo;
-        $object->typeid      = $typeid;
+        $object->email = $email;
+        $object->url = $url;
+        $object->login = $login;
+        $object->pass = $pass;
+        $object->birth = $birthdate;
+        $object->photo = $photo;
+        $object->typeid = $typeid;
         //$object->note        = $comment;
-        $object->morphy      = $morphy;
-        $object->user_id     = $userid;
+        $object->morphy = $morphy;
+        $object->user_id = $userid;
         $object->socid = $socid;
-        $object->public      = $public;
+        $object->public = $public;
         $object->default_lang = $default_lang;
         // Fill array 'array_options' with data from add form
         $ret = $extrafields->setOptionalsFromPost(null, $object);
@@ -594,7 +594,7 @@ if (empty($reshook)) {
                 $rowid = $object->id;
                 $id = $object->id;
 
-                $backtopage = preg_replace('/__ID__/', (string) $id, $backtopage);
+                $backtopage = preg_replace('/__ID__/', (string)$id, $backtopage);
             } else {
                 $db->rollback();
 
@@ -676,10 +676,10 @@ if (empty($reshook)) {
 
                 if (!empty($labeltouse) && is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
                     $subject = $arraydefaultmessage->topic;
-                    $msg     = $arraydefaultmessage->content;
+                    $msg = $arraydefaultmessage->content;
                 }
 
-                if (empty($labeltouse) || (int) $labeltouse === -1) {
+                if (empty($labeltouse) || (int)$labeltouse === -1) {
                     //fallback on the old configuration.
                     $langs->load("errors");
                     setEventMessages('<a href="' . constant('BASE_URL') . '/adherents/admin/member_emails.php">' . $langs->trans('WarningMandatorySetupNotComplete') . '</a>', null, 'errors');
@@ -744,10 +744,10 @@ if (empty($reshook)) {
 
                     if (!empty($labeltouse) && is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
                         $subject = $arraydefaultmessage->topic;
-                        $msg     = $arraydefaultmessage->content;
+                        $msg = $arraydefaultmessage->content;
                     }
 
-                    if (empty($labeltouse) || (int) $labeltouse === -1) {
+                    if (empty($labeltouse) || (int)$labeltouse === -1) {
                         //fallback on the old configuration.
                         setEventMessages('WarningMandatorySetupNotComplete', null, 'errors');
                         $error++;
@@ -811,10 +811,10 @@ if (empty($reshook)) {
 
                     if (!empty($labeltouse) && is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
                         $subject = $arraydefaultmessage->topic;
-                        $msg     = $arraydefaultmessage->content;
+                        $msg = $arraydefaultmessage->content;
                     }
 
-                    if (empty($labeltouse) || (int) $labeltouse === -1) {
+                    if (empty($labeltouse) || (int)$labeltouse === -1) {
                         //fallback on the old configuration.
                         setEventMessages('WarningMandatorySetupNotComplete', null, 'errors');
                         $error++;
@@ -1164,7 +1164,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
         $country = GETPOSTINT('country');
         if (!empty($country) || $object->country_id) {
             $sql = "SELECT rowid, code, label from " . MAIN_DB_PREFIX . "c_country";
-            $sql .= " WHERE rowid = " . (int) (!empty($country) ? $country : $object->country_id);
+            $sql .= " WHERE rowid = " . (int)(!empty($country) ? $country : $object->country_id);
             $resql = $db->query($sql);
             if ($resql) {
                 $obj = $db->fetch_object($resql);
@@ -1470,7 +1470,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
 
             // Create a form array
             $formquestion = array(
-                    array('label' => $langs->trans("LoginToCreate"), 'type' => 'text', 'name' => 'login', 'value' => $login)
+                array('label' => $langs->trans("LoginToCreate"), 'type' => 'text', 'name' => 'login', 'value' => $login)
             );
             if (isModEnabled('societe') && $object->socid > 0) {
                 $object->fetch_thirdparty();
@@ -1602,7 +1602,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
 
             if (!empty($labeltouse) && is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
                 $subject = $arraydefaultmessage->topic;
-                $msg     = $arraydefaultmessage->content;
+                $msg = $arraydefaultmessage->content;
             }
 
             $substitutionarray = getCommonSubstitutionArray($outputlangs, 0, null, $object);
@@ -1663,7 +1663,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
 
             if (!empty($labeltouse) && is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
                 $subject = $arraydefaultmessage->topic;
-                $msg     = $arraydefaultmessage->content;
+                $msg = $arraydefaultmessage->content;
             }
 
             $substitutionarray = getCommonSubstitutionArray($outputlangs, 0, null, $object);
@@ -1920,7 +1920,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
                 // Send
                 if (empty($user->socid)) {
                     if (Adherent::STATUS_VALIDATED == $object->status) {
-                        print '<a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . ((int) $object->id) . '&action=presend&mode=init#formmailbeforetitle">' . $langs->trans('SendMail') . '</a>' . "\n";
+                        print '<a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . ((int)$object->id) . '&action=presend&mode=init#formmailbeforetitle">' . $langs->trans('SendMail') . '</a>' . "\n";
                     }
                 }
 
@@ -1940,7 +1940,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
 
                 // Modify
                 if ($user->hasRight('adherent', 'creer')) {
-                    print '<a class="butAction" href="card.php?rowid=' . ((int) $object->id) . '&action=edit&token=' . newToken() . '">' . $langs->trans("Modify") . '</a>' . "\n";
+                    print '<a class="butAction" href="card.php?rowid=' . ((int)$object->id) . '&action=edit&token=' . newToken() . '">' . $langs->trans("Modify") . '</a>' . "\n";
                 } else {
                     print '<span class="butActionRefused classfortooltip" title="' . dol_escape_htmltag($langs->trans("NotEnoughPermissions")) . '">' . $langs->trans("Modify") . '</span>' . "\n";
                 }
@@ -1948,7 +1948,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
                 // Validate
                 if (Adherent::STATUS_DRAFT == $object->status) {
                     if ($user->hasRight('adherent', 'creer')) {
-                        print '<a class="butAction" href="card.php?rowid=' . ((int) $object->id) . '&action=valid&token=' . newToken() . '">' . $langs->trans("Validate") . '</a>' . "\n";
+                        print '<a class="butAction" href="card.php?rowid=' . ((int)$object->id) . '&action=valid&token=' . newToken() . '">' . $langs->trans("Validate") . '</a>' . "\n";
                     } else {
                         print '<span class="butActionRefused classfortooltip" title="' . dol_escape_htmltag($langs->trans("NotEnoughPermissions")) . '">' . $langs->trans("Validate") . '</span>' . "\n";
                     }
@@ -1957,7 +1957,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
                 // Reactivate
                 if (Adherent::STATUS_RESILIATED == $object->status || Adherent::STATUS_EXCLUDED == $object->status) {
                     if ($user->hasRight('adherent', 'creer')) {
-                        print '<a class="butAction" href="card.php?rowid=' . ((int) $object->id) . '&action=valid&token=' . newToken() . '">' . $langs->trans("Reenable") . "</a>\n";
+                        print '<a class="butAction" href="card.php?rowid=' . ((int)$object->id) . '&action=valid&token=' . newToken() . '">' . $langs->trans("Reenable") . "</a>\n";
                     } else {
                         print '<span class="butActionRefused classfortooltip" title="' . dol_escape_htmltag($langs->trans("NotEnoughPermissions")) . '">' . $langs->trans("Reenable") . '</span>' . "\n";
                     }
@@ -1966,7 +1966,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
                 // Resiliate
                 if (Adherent::STATUS_VALIDATED == $object->status) {
                     if ($user->hasRight('adherent', 'supprimer')) {
-                        print '<a class="butAction" href="card.php?rowid=' . ((int) $object->id) . '&action=resiliate&token=' . newToken() . '">' . $langs->trans("Resiliate") . "</a></span>\n";
+                        print '<a class="butAction" href="card.php?rowid=' . ((int)$object->id) . '&action=resiliate&token=' . newToken() . '">' . $langs->trans("Resiliate") . "</a></span>\n";
                     } else {
                         print '<span class="butActionRefused classfortooltip" title="' . dol_escape_htmltag($langs->trans("NotEnoughPermissions")) . '">' . $langs->trans("Resiliate") . '</span>' . "\n";
                     }
@@ -1975,7 +1975,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
                 // Exclude
                 if (Adherent::STATUS_VALIDATED == $object->status) {
                     if ($user->hasRight('adherent', 'supprimer')) {
-                        print '<a class="butAction" href="card.php?rowid=' . ((int) $object->id) . '&action=exclude&token=' . newToken() . '">' . $langs->trans("Exclude") . "</a></span>\n";
+                        print '<a class="butAction" href="card.php?rowid=' . ((int)$object->id) . '&action=exclude&token=' . newToken() . '">' . $langs->trans("Exclude") . "</a></span>\n";
                     } else {
                         print '<span class="butActionRefused classfortooltip" title="' . dol_escape_htmltag($langs->trans("NotEnoughPermissions")) . '">' . $langs->trans("Exclude") . '</span>' . "\n";
                     }
@@ -1985,7 +1985,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
                 if (isModEnabled('societe') && !$object->socid) {
                     if ($user->hasRight('societe', 'creer')) {
                         if (Adherent::STATUS_DRAFT != $object->status) {
-                            print '<a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?rowid=' . ((int) $object->id) . '&action=create_thirdparty&token=' . newToken() . '" title="' . dol_escape_htmltag($langs->trans("CreateDolibarrThirdPartyDesc")) . '">' . $langs->trans("CreateDolibarrThirdParty") . '</a>' . "\n";
+                            print '<a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?rowid=' . ((int)$object->id) . '&action=create_thirdparty&token=' . newToken() . '" title="' . dol_escape_htmltag($langs->trans("CreateDolibarrThirdPartyDesc")) . '">' . $langs->trans("CreateDolibarrThirdParty") . '</a>' . "\n";
                         } else {
                             print '<a class="butActionRefused classfortooltip" href="#" title="' . dol_escape_htmltag($langs->trans("ValidateBefore")) . '">' . $langs->trans("CreateDolibarrThirdParty") . '</a>' . "\n";
                         }
@@ -1998,7 +1998,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
                 if (!$user->socid && !$object->user_id) {
                     if ($user->hasRight('user', 'user', 'creer')) {
                         if (Adherent::STATUS_DRAFT != $object->status) {
-                            print '<a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?rowid=' . ((int) $object->id) . '&action=create_user&token=' . newToken() . '" title="' . dol_escape_htmltag($langs->trans("CreateDolibarrLoginDesc")) . '">' . $langs->trans("CreateDolibarrLogin") . '</a>' . "\n";
+                            print '<a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?rowid=' . ((int)$object->id) . '&action=create_user&token=' . newToken() . '" title="' . dol_escape_htmltag($langs->trans("CreateDolibarrLoginDesc")) . '">' . $langs->trans("CreateDolibarrLogin") . '</a>' . "\n";
                         } else {
                             print '<a class="butActionRefused classfortooltip" href="#" title="' . dol_escape_htmltag($langs->trans("ValidateBefore")) . '">' . $langs->trans("CreateDolibarrLogin") . '</a>' . "\n";
                         }
@@ -2012,16 +2012,16 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
                     $isinspip = $mailmanspip->is_in_spip($object);
 
                     if ($isinspip == 1) {
-                        print '<a class="butAction" href="card.php?rowid=' . ((int) $object->id) . '&action=del_spip&token=' . newToken() . '">' . $langs->trans("DeleteIntoSpip") . '</a>' . "\n";
+                        print '<a class="butAction" href="card.php?rowid=' . ((int)$object->id) . '&action=del_spip&token=' . newToken() . '">' . $langs->trans("DeleteIntoSpip") . '</a>' . "\n";
                     }
                     if ($isinspip == 0) {
-                        print '<a class="butAction" href="card.php?rowid=' . ((int) $object->id) . '&action=add_spip&token=' . newToken() . '">' . $langs->trans("AddIntoSpip") . '</a>' . "\n";
+                        print '<a class="butAction" href="card.php?rowid=' . ((int)$object->id) . '&action=add_spip&token=' . newToken() . '">' . $langs->trans("AddIntoSpip") . '</a>' . "\n";
                     }
                 }
 
                 // Delete
                 if ($user->hasRight('adherent', 'supprimer')) {
-                    print '<a class="butActionDelete" href="card.php?rowid=' . ((int) $object->id) . '&action=delete&token=' . newToken() . '">' . $langs->trans("Delete") . '</a>' . "\n";
+                    print '<a class="butActionDelete" href="card.php?rowid=' . ((int)$object->id) . '&action=delete&token=' . newToken() . '">' . $langs->trans("Delete") . '</a>' . "\n";
                 } else {
                     print '<span class="butActionRefused classfortooltip" title="' . dol_escape_htmltag($langs->trans("NotEnoughPermissions")) . '">' . $langs->trans("Delete") . '</span>' . "\n";
                 }

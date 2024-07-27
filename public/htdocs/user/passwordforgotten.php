@@ -221,7 +221,7 @@ if (!empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output . '/l
 } elseif (is_readable(DOL_DOCUMENT_ROOT . '/theme/' . $conf->theme . '/img/dolibarr_logo.svg')) {
     $urllogo = constant('BASE_URL') . '/theme/' . $conf->theme . '/img/dolibarr_logo.svg';
 } elseif (is_readable(DOL_DOCUMENT_ROOT . '/theme/dolibarr_logo.svg')) {
-    $urllogo = constant('BASE_URL') . '/theme/dolibarr_logo.svg';
+    $urllogo = constant('DOL_URL_ROOT') . '/theme/dolibarr_logo.svg';
 }
 
 // Security graphical code

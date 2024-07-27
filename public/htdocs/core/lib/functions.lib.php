@@ -1380,7 +1380,7 @@ function dol_buildpath($path, $type = 0, $returnemptyifnotfound = 0)
             $res = DOL_MAIN_URL_ROOT . '/' . $path; // Standard value
         }
         if ($type == 3) {
-            $res = BASE_URL . '/' . $path;
+            $res = constant('DOL_URL_ROOT') . '/' . $path;
         }
 
         foreach ($conf->file->dol_document_root as $key => $dirroot) {  // ex: array(["main"]=>"/home/main/htdocs", ["alt0"]=>"/home/dirmod/htdocs", ...)

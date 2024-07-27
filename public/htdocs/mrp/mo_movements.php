@@ -216,7 +216,7 @@ if (empty($reshook)) {
         if (empty($id) && (($action != 'add' && $action != 'create') || $cancel)) {
             $backtopage = $backurlforlist;
         } else {
-            $backtopage = constant('BASE_URL') . '/mrp/mo_production.php?id=' . ($id > 0 ? $id : '__ID__');
+            $backtopage = '/mrp/mo_production.php?id=' . ($id > 0 ? $id : '__ID__');
         }
     }
     $triggermodname = 'MO_MODIFY'; // Name of trigger action code to execute when we modify record

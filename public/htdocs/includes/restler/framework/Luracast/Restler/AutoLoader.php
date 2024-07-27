@@ -18,70 +18,80 @@ namespace Luracast\Restler {
     class AutoLoader
     {
         protected static $instance, // the singleton instance reference
-                     $perfectLoaders, // used to keep the ideal list of loaders
-                     $rogueLoaders = array(), // other auto loaders now unregistered
-                     $classMap = array(), // the class to include file mapping
-                     $aliases = array( // aliases and prefixes instead of null list aliases
-                         'Luracast\\Restler' => null,
-                         'Luracast\\Restler\\Format' => null,
-                         'Luracast\\Restler\\Data' => null,
-                         'Luracast\\Restler\\Filter' => null,
-                     );
+            $perfectLoaders, // used to keep the ideal list of loaders
+            $rogueLoaders = array(), // other auto loaders now unregistered
+            $classMap = array(), // the class to include file mapping
+            $aliases = array( // aliases and prefixes instead of null list aliases
+            'Luracast\\Restler' => null,
+            'Luracast\\Restler\\Format' => null,
+            'Luracast\\Restler\\Data' => null,
+            'Luracast\\Restler\\Filter' => null,
+        );
 
         /**
-         * Singleton instance facility.
-         *
-         * @static
-         * @return AutoLoader the current instance or new instance if none exists.
+         * Protected constructor to enforce singleton pattern.
+         * Populate a default include path.
+         * All possible includes cant possibly be catered for and if you
+         * require another path then simply add it calling set_include_path.
          */
-        public static function instance()
+        protected function __construct()
         {
-            static::$instance = static::$instance ?: new static();
-            return static::thereCanBeOnlyOne();
-        }
+            static::$perfectLoaders = array($this);
 
-        /**
-         * Helper function to add a path to the include path.
-         * AutoLoader uses the include path to discover classes.
-         *
-         * @static
-         *
-         * @param $path string absolute or relative path.
-         *
-         * @return bool false if the path cannot be resolved
-         *              or the resolved absolute path.
-         */
-        public static function addPath($path)
-        {
-            if (false === $path = stream_resolve_include_path($path))
-            return false;
-            else set_include_path($path . PATH_SEPARATOR . get_include_path());
-            return $path;
-        }
+            if (false === static::seen('__include_path')) {
+                $paths = explode(PATH_SEPARATOR, get_include_path());
+                $slash = DIRECTORY_SEPARATOR;
+                $dir = dirname(__DIR__);
+                $source_dir = dirname($dir);
+                $dir = dirname($source_dir);
 
-        /**
-         * Other autoLoaders interfere and cause duplicate class loading.
-         * AutoLoader is capable enough to handle all standards so no need
-         * for others stumbling about.
-         *
-         * @return callable the one true auto loader.
-         */
-        public static function thereCanBeOnlyOne()
-        {
-            if (static::$perfectLoaders === spl_autoload_functions())
-            return static::$instance;
-
-            if (false !== $loaders = spl_autoload_functions())
-            if (0 < $count = count($loaders))
-                for (
-                    $i = 0, static::$rogueLoaders += $loaders;
-                     $i < $count && false != ($loader = $loaders[$i]);
-                     $i++
+                foreach (
+                    array(
+                        array($source_dir),
+                        array($dir, '..', '..', 'composer'),
+                        array($dir, 'vendor', 'composer'),
+                        array($dir, '..', '..', '..', 'php'),
+                        array($dir, 'vendor', 'php'))
+                    as $includePath
                 )
-                    if ($loader !== static::$perfectLoaders[0])
-                        spl_autoload_unregister($loader);
+                    if (
+                        false !== $path = stream_resolve_include_path(
+                            implode($slash, $includePath)
+                        )
+                    )
+                        if (
+                            'composer' == end($includePath) &&
+                            false !== $classmapPath = stream_resolve_include_path(
+                                "$path{$slash}autoload_classmap.php"
+                            )
+                        ) {
+                            static::seen(static::loadFile(
+                                $classmapPath
+                            ));
+                            $paths = array_merge(
+                                $paths,
+                                array_values(static::loadFile(
+                                    "$path{$slash}autoload_namespaces.php"
+                                ))
+                            );
+                        } else $paths[] = $path;
 
-            return static::$instance;
+                $paths = array_filter(array_map(
+                    function ($path) {
+                        if (false == $realPath = @realpath($path))
+                            return null;
+                        return $realPath . DIRECTORY_SEPARATOR;
+                    },
+                    $paths
+                ));
+                natsort($paths);
+                static::seen(
+                    '__include_path',
+                    implode(PATH_SEPARATOR, array_unique($paths))
+                );
+            }
+
+            set_include_path(static::seen('__include_path'));
         }
 
         /**
@@ -109,79 +119,13 @@ namespace Luracast\Restler {
             }
 
             if (empty(static::$classMap[$key]))
-            static::$classMap[$key] = $value;
+                static::$classMap[$key] = $value;
 
             if (is_string($alias = static::$classMap[$key]))
-            if (isset(static::$classMap[$alias]))
-                return static::$classMap[$alias];
+                if (isset(static::$classMap[$alias]))
+                    return static::$classMap[$alias];
 
             return static::$classMap[$key];
-        }
-
-        /**
-         * Protected constructor to enforce singleton pattern.
-         * Populate a default include path.
-         * All possible includes cant possibly be catered for and if you
-         * require another path then simply add it calling set_include_path.
-         */
-        protected function __construct()
-        {
-            static::$perfectLoaders = array($this);
-
-            if (false === static::seen('__include_path')) {
-                $paths = explode(PATH_SEPARATOR, get_include_path());
-                $slash = DIRECTORY_SEPARATOR;
-                $dir = dirname(__DIR__);
-                $source_dir = dirname($dir);
-                $dir = dirname($source_dir);
-
-                foreach (
-                    array(
-                    array($source_dir),
-                    array($dir, '..', '..', 'composer'),
-                    array($dir, 'vendor', 'composer'),
-                    array($dir, '..', '..', '..', 'php'),
-                    array($dir, 'vendor', 'php'))
-                    as $includePath
-                )
-                if (
-                    false !== $path = stream_resolve_include_path(
-                        implode($slash, $includePath)
-                    )
-                )
-                if (
-'composer' == end($includePath) &&
-                        false !== $classmapPath = stream_resolve_include_path(
-                            "$path{$slash}autoload_classmap.php"
-                        )
-                ) {
-                    static::seen(static::loadFile(
-                        $classmapPath
-                    ));
-                    $paths = array_merge(
-                        $paths,
-                        array_values(static::loadFile(
-                            "$path{$slash}autoload_namespaces.php"
-                        ))
-                    );
-                } else $paths[] = $path;
-
-                $paths = array_filter(array_map(
-                function ($path) {
-                    if (false == $realPath = @realpath($path))
-                        return null;
-                    return $realPath . DIRECTORY_SEPARATOR;
-                },
-                $paths
-                ));
-                natsort($paths);
-                static::seen(
-                    '__include_path',
-                    implode(PATH_SEPARATOR, array_unique($paths))
-                );
-            }
-
-            set_include_path(static::seen('__include_path'));
         }
 
         /**
@@ -199,60 +143,173 @@ namespace Luracast\Restler {
         }
 
         /**
-         * Attempt to load class with namespace prefixes.
+         * Singleton instance facility.
          *
-         * @param $className string class name
-         *
-         * @return bool|mixed reference to discovered include or false
+         * @static
+         * @return AutoLoader the current instance or new instance if none exists.
          */
-        private function loadPrefixes($className)
+        public static function instance()
         {
-            $currentClass = $className;
-            if (false !== $pos = strrpos($className, '\\'))
-            $className = substr($className, $pos);
-            else $className = "\\$className";
-
-            for (
-                $i = 0,
-                $file = false,
-                $count = count(static::$aliases),
-                $prefixes = array_keys(static::$aliases);
-                $i < $count
-                && false === $file
-                && false === $file = $this->discover(
-                    $variant = $prefixes[$i++] . $className,
-                    $currentClass
-                );
-                $file = $this->loadAliases($variant)
-            );
-
-            return $file;
+            static::$instance = static::$instance ?: new static();
+            return static::thereCanBeOnlyOne();
         }
 
         /**
-         * Attempt to load configured aliases based on namespace part of class name.
+         * Other autoLoaders interfere and cause duplicate class loading.
+         * AutoLoader is capable enough to handle all standards so no need
+         * for others stumbling about.
          *
-         * @param $className string fully qualified class name.
-         *
-         * @return bool|mixed reference to discovered include or false
+         * @return callable the one true auto loader.
          */
-        private function loadAliases($className)
+        public static function thereCanBeOnlyOne()
         {
-            $file = false;
-            if (preg_match('/(.+)(\\\\\w+$)/U', $className, $parts))
-            for (
-                $i = 0,
-                $aliases = isset(static::$aliases[$parts[1]])
-                    ? static::$aliases[$parts[1]] : array(),
-                $count = count($aliases);
-                $i < $count && false === $file;
-                $file = $this->discover(
-                    "{$aliases[$i++]}$parts[2]",
-                    $className
-                )
-            ) ;
+            if (static::$perfectLoaders === spl_autoload_functions())
+                return static::$instance;
 
-            return $file;
+            if (false !== $loaders = spl_autoload_functions())
+                if (0 < $count = count($loaders))
+                    for (
+                        $i = 0, static::$rogueLoaders += $loaders;
+                        $i < $count && false != ($loader = $loaders[$i]);
+                        $i++
+                    )
+                        if ($loader !== static::$perfectLoaders[0])
+                            spl_autoload_unregister($loader);
+
+            return static::$instance;
+        }
+
+        /**
+         * Helper function to add a path to the include path.
+         * AutoLoader uses the include path to discover classes.
+         *
+         * @static
+         *
+         * @param $path string absolute or relative path.
+         *
+         * @return bool false if the path cannot be resolved
+         *              or the resolved absolute path.
+         */
+        public static function addPath($path)
+        {
+            if (false === $path = stream_resolve_include_path($path))
+                return false;
+            else set_include_path($path . PATH_SEPARATOR . get_include_path());
+            return $path;
+        }
+
+        /**
+         * Auto loader callback through __invoke object as function.
+         *
+         * @param $className string class/interface name to auto load
+         *
+         * @return mixed|null the reference from the include or null
+         */
+        public function __invoke($className)
+        {
+            if (empty($className))
+                return false;
+
+            if (false !== $includeReference = $this->discover($className))
+                return $includeReference;
+
+            //static::thereCanBeOnlyOne();
+
+            if (false !== $includeReference = $this->loadAliases($className))
+                return $includeReference;
+
+            if (false !== $includeReference = $this->loadPrefixes($className))
+                return $includeReference;
+
+            if (false !== $includeReference = $this->loadLastResort($className))
+                return $includeReference;
+
+            static::seen($className, true);
+            return null;
+        }
+
+        /**
+         * Discovery process.
+         *
+         * @param $className    string class name to discover
+         * @param $currentClass string optional name of current class when
+         *                      looking up an alias
+         *
+         * @return bool|mixed resolved include reference or false
+         */
+        private function discover($className, $currentClass = null)
+        {
+            $currentClass = $currentClass ?: $className;
+
+            /** The short version we've done this before and found it in cache */
+            if (false !== $file = static::seen($className)) {
+                if (!$this->exists($className))
+                    if (is_callable($file))
+                        $file = $this->loadLastResort($className, $file);
+                    elseif ($file = stream_resolve_include_path($file))
+                        $file = static::loadFile($file);
+
+                $this->alias($className, $currentClass);
+                return $file;
+            }
+
+            /** We did not find it in cache, lets look for it shall we */
+
+            /** replace \ with / and _ in CLASS NAME with / = PSR-0 in 3 lines */
+            $file = preg_replace("/\\\|_(?=\w+$)/", DIRECTORY_SEPARATOR, $className);
+            if (false === $file = stream_resolve_include_path("$file.php"))
+                return false;
+
+            /** have we loaded this file before could this be an alias */
+            if (in_array($file, get_included_files())) {
+                if (false !== $sameFile = array_search($file, static::$classMap))
+                    if (!$this->exists($className, $file))
+                        if (false !== strpos($sameFile, $className))
+                            $this->alias($sameFile, $className);
+
+                return $file;
+            }
+
+            $state = array_merge(get_declared_classes(), get_declared_interfaces());
+
+            if (false !== $result = static::loadFile($file)) {
+                if ($this->exists($className, $file))
+                    $this->alias($className, $currentClass);
+                elseif (
+                    false != $diff = array_diff(
+                        array_merge(get_declared_classes(), get_declared_interfaces()), $state)
+                )
+                    foreach ($diff as $autoLoaded)
+                        if ($this->exists($autoLoaded, $file))
+                            if (false !== strpos($autoLoaded, $className))
+                                $this->alias($autoLoaded, $className);
+
+                if (!$this->exists($currentClass))
+                    $result = false;
+            }
+
+            return $result;
+        }
+
+        /**
+         * Checks whether supplied string exists in a loaded class or interface.
+         * As a convenience the supplied $mapping can be the value for seen.
+         *
+         * @param $className string The class or interface to verify
+         * @param $mapping   string (optional) value for map/seen if found to exist
+         *
+         * @return bool whether the class/interface exists without calling auto loader
+         */
+        private function exists($className, $mapping = null)
+        {
+            if (
+                class_exists($className, false)
+                || interface_exists($className, false)
+            )
+                if (isset($mapping))
+                    return static::seen($className, $mapping);
+                else return true;
+            return false;
         }
 
         /**
@@ -272,7 +329,7 @@ namespace Luracast\Restler {
             $loaders = array_unique(static::$rogueLoaders, SORT_REGULAR);
             if (isset($loader)) {
                 if (false === array_search($loader, $loaders))
-                static::$rogueLoaders[] = $loader;
+                    static::$rogueLoaders[] = $loader;
                 return $this->loadThisLoader($className, $loader);
             }
             foreach ($loaders as $loader)
@@ -297,25 +354,25 @@ namespace Luracast\Restler {
                 is_array($loader)
                 && is_callable($loader)
             ) {
-                    $b = new $loader[0]();
-                    //avoid PHP Fatal error:  Uncaught Error: Access to undeclared static property: Composer\\Autoload\\ClassLoader::$loader
-                    //in case of multiple autoloader systems
-                    if (property_exists($b, $loader[1])) {
+                $b = new $loader[0]();
+                //avoid PHP Fatal error:  Uncaught Error: Access to undeclared static property: Composer\\Autoload\\ClassLoader::$loader
+                //in case of multiple autoloader systems
+                if (property_exists($b, $loader[1])) {
                     if (
-                    false !== $file = $b::$loader[1]($className)
-                        && $this->exists($className, $b::$loader[1])
+                        false !== $file = $b::$loader[1]($className)
+                            && $this->exists($className, $b::$loader[1])
                     ) {
-                            return $file;
-                        }
+                        return $file;
                     }
-                } elseif (
-                    is_callable($loader)
-                    && false !== $file = $loader($className)
-                    && $this->exists($className, $loader)
-                ) {
-                return $file;
                 }
-                return false;
+            } elseif (
+                is_callable($loader)
+                && false !== $file = $loader($className)
+                    && $this->exists($className, $loader)
+            ) {
+                return $file;
+            }
+            return false;
 
             /* other code tested to reduce autoload conflict
             $s = '';
@@ -366,121 +423,64 @@ namespace Luracast\Restler {
                     !class_exists($currentClass, false)
                     && class_alias($className, $currentClass)
                 )
-                        static::seen($currentClass, $className);
+                    static::seen($currentClass, $className);
         }
 
         /**
-         * Discovery process.
+         * Attempt to load configured aliases based on namespace part of class name.
          *
-         * @param $className    string class name to discover
-         * @param $currentClass string optional name of current class when
-         *                      looking up an alias
+         * @param $className string fully qualified class name.
          *
-         * @return bool|mixed resolved include reference or false
+         * @return bool|mixed reference to discovered include or false
          */
-        private function discover($className, $currentClass = null)
+        private function loadAliases($className)
         {
-            $currentClass = $currentClass ?: $className;
+            $file = false;
+            if (preg_match('/(.+)(\\\\\w+$)/U', $className, $parts))
+                for (
+                    $i = 0,
+                    $aliases = isset(static::$aliases[$parts[1]])
+                        ? static::$aliases[$parts[1]] : array(),
+                    $count = count($aliases);
+                    $i < $count && false === $file;
+                    $file = $this->discover(
+                        "{$aliases[$i++]}$parts[2]",
+                        $className
+                    )
+                ) ;
 
-            /** The short version we've done this before and found it in cache */
-            if (false !== $file = static::seen($className)) {
-                if (!$this->exists($className))
-                if (is_callable($file))
-                    $file = $this->loadLastResort($className, $file);
-                elseif ($file = stream_resolve_include_path($file))
-                    $file = static::loadFile($file);
-
-                $this->alias($className, $currentClass);
-                return $file;
-            }
-
-            /** We did not find it in cache, lets look for it shall we */
-
-            /** replace \ with / and _ in CLASS NAME with / = PSR-0 in 3 lines */
-            $file = preg_replace("/\\\|_(?=\w+$)/", DIRECTORY_SEPARATOR, $className);
-            if (false === $file = stream_resolve_include_path("$file.php"))
-            return false;
-
-            /** have we loaded this file before could this be an alias */
-            if (in_array($file, get_included_files())) {
-                if (false !== $sameFile = array_search($file, static::$classMap))
-                if (!$this->exists($className, $file))
-                    if (false !== strpos($sameFile, $className))
-                        $this->alias($sameFile, $className);
-
-                return $file;
-            }
-
-            $state = array_merge(get_declared_classes(), get_declared_interfaces());
-
-            if (false !== $result = static::loadFile($file)) {
-                if ($this->exists($className, $file))
-                $this->alias($className, $currentClass);
-                elseif (
-                    false != $diff = array_diff(
-                    array_merge(get_declared_classes(), get_declared_interfaces()), $state)
-                )
-                foreach ($diff as $autoLoaded)
-                    if ($this->exists($autoLoaded, $file))
-                        if (false !== strpos($autoLoaded, $className))
-                            $this->alias($autoLoaded, $className);
-
-                if (!$this->exists($currentClass))
-                $result = false;
-            }
-
-            return $result;
+            return $file;
         }
 
         /**
-         * Checks whether supplied string exists in a loaded class or interface.
-         * As a convenience the supplied $mapping can be the value for seen.
+         * Attempt to load class with namespace prefixes.
          *
-         * @param $className string The class or interface to verify
-         * @param $mapping   string (optional) value for map/seen if found to exist
+         * @param $className string class name
          *
-         * @return bool whether the class/interface exists without calling auto loader
+         * @return bool|mixed reference to discovered include or false
          */
-        private function exists($className, $mapping = null)
+        private function loadPrefixes($className)
         {
-            if (
-                class_exists($className, false)
-                || interface_exists($className, false)
-            )
-            if (isset($mapping))
-                return static::seen($className, $mapping);
-            else return true;
-            return false;
-        }
+            $currentClass = $className;
+            if (false !== $pos = strrpos($className, '\\'))
+                $className = substr($className, $pos);
+            else $className = "\\$className";
 
-        /**
-         * Auto loader callback through __invoke object as function.
-         *
-         * @param $className string class/interface name to auto load
-         *
-         * @return mixed|null the reference from the include or null
-         */
-        public function __invoke($className)
-        {
-            if (empty($className))
-            return false;
+            for (
+                $i = 0,
+                $file = false,
+                $count = count(static::$aliases),
+                $prefixes = array_keys(static::$aliases);
+                $i < $count
+                && false === $file
+                && false === $file = $this->discover(
+                    $variant = $prefixes[$i++] . $className,
+                    $currentClass
+                );
+                $file = $this->loadAliases($variant)
+            ) ;
 
-            if (false !== $includeReference = $this->discover($className))
-            return $includeReference;
-
-            //static::thereCanBeOnlyOne();
-
-            if (false !== $includeReference = $this->loadAliases($className))
-            return $includeReference;
-
-            if (false !== $includeReference = $this->loadPrefixes($className))
-            return $includeReference;
-
-            if (false !== $includeReference = $this->loadLastResort($className))
-                return $includeReference;
-
-            static::seen($className, true);
-            return null;
+            return $file;
         }
     }
 }

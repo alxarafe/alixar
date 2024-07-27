@@ -356,7 +356,7 @@ function showSkins($fuser, $edit = 0, $foruserprofile = false)
 
     $formother = new FormOther($db);
 
-    $dirthemes = array('/theme');
+    $dirthemes = array('/htdocs/theme');
     if (!empty($conf->modules_parts['theme'])) {        // Using this feature slow down application
         foreach ($conf->modules_parts['theme'] as $reldir) {
             $dirthemes = array_merge($dirthemes, (array) ($reldir . 'theme'));
@@ -437,7 +437,7 @@ function showSkins($fuser, $edit = 0, $foruserprofile = false)
     $i = 0;
     foreach ($dirthemes as $dir) {
         //print $dirroot.$dir;exit;
-        $dirtheme = dol_buildpath($dir, 0); // This include loop on $conf->file->dol_document_root
+        $dirtheme = dol_buildpath($dir); // This include loop on $conf->file->dol_document_root
         $urltheme = dol_buildpath($dir, 1);
 
         if (is_dir($dirtheme)) {
@@ -460,7 +460,7 @@ function showSkins($fuser, $edit = 0, $foruserprofile = false)
                         $file = $dirtheme . "/" . $subdir . "/thumb.png";
                         $url = $urltheme . "/" . $subdir . "/thumb.png";
                         if (!file_exists($file)) {
-                            $url = constant('BASE_URL') . '/public/theme/common/nophoto.png';
+                            $url = constant('DOL_URL_ROOT') . '/public/theme/common/nophoto.png';
                         }
                         print '<a href="' . $_SERVER["PHP_SELF"] . ($edit ? '?action=edit&token=' . newToken() . '&mode=template&theme=' : '?theme=') . $subdir . (GETPOST('optioncss', 'alpha', 1) ? '&optioncss=' . GETPOST('optioncss', 'alpha', 1) : '') . ($fuser ? '&id=' . $fuser->id : '') . '" style="font-weight: normal;" alt="' . $langs->trans("Preview") . '">';
                         if ($subdir == $conf->global->MAIN_THEME) {

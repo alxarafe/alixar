@@ -306,9 +306,9 @@ if (empty($reshook) && $action == 'add') {
 
     if (empty($backtopage)) {
         if ($socid > 0) {
-            $backtopage = constant('BASE_URL') . '/societe/agenda.php?socid=' . $socid;
+            $backtopage = '/societe/agenda.php?socid=' . $socid;
         } else {
-            $backtopage = constant('BASE_URL') . '/comm/action/index.php';
+            $backtopage = '/comm/action/index.php';
         }
     }
 

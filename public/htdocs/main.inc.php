@@ -1812,7 +1812,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
     //print '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">'."\n";
     if (empty($disablehead)) {
         if (!is_object($hookmanager)) {
-            include_once BASE_URL . '/core/class/hookmanager.class.php';
+            include_once constant('BASE_URL') . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($db);
         }
         $hookmanager->initHooks(array("main"));
@@ -1836,9 +1836,9 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
             print '<meta name="MAIN_FEATURES_LEVEL" content="' . getDolGlobalInt('MAIN_FEATURES_LEVEL') . '">' . "\n";
         }
         // Favicon
-        $favicon = constant('BASE_URL') . '/theme/dolibarr_256x256_color.png';
+        $favicon = constant('DOL_URL_ROOT') . '/theme/dolibarr_256x256_color.png';
         if (!empty($mysoc->logo_squarred_mini)) {
-            $favicon = constant('BASE_URL') . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_mini);
+            $favicon = constant('DOL_URL_ROOT') . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_mini);
         }
         if (getDolGlobalString('MAIN_FAVICON_URL')) {
             $favicon = getDolGlobalString('MAIN_FAVICON_URL');
@@ -1848,7 +1848,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
         }
 
         // Mobile appli like icon
-        $manifest = BASE_URL . '/theme/' . $conf->theme . '/manifest.json.php';
+        $manifest = constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/manifest.json.php';
         $parameters = array('manifest' => $manifest);
         $resHook = $hookmanager->executeHooks('hookSetManifest', $parameters); // Note that $action and $object may have been modified by some hooks
         if ($resHook > 0) {
@@ -2048,7 +2048,6 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
                 print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/js/jquery.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             }
             if (defined('JS_JQUERY_UI') && constant('JS_JQUERY_UI')) {
-                dump(['JS_JQUERY_UI' => JS_JQUERY_UI]);
                 print '<script nonce="' . getNonce() . '" src="' . JS_JQUERY_UI . 'jquery-ui.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
             } else {
                 print '<script nonce="' . getNonce() . '" src="' . constant('DOL_URL_ROOT') . '/includes/jquery/js/jquery-ui.min.js' . ($ext ? '?' . $ext : '') . '"></script>' . "\n";
@@ -2159,7 +2158,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
                     $filesjs = (array)$filesjs; // To be sure filejs is an array
                     foreach ($filesjs as $jsfile) {
                         // jsfile is a relative path
-                        $urlforjs = dol_buildpath($jsfile, 1);
+                        $urlforjs = dol_buildpath($jsfile, 3);
                         if ($urlforjs && $urlforjs != '/') {
                             print '<!-- Include JS added by module ' . $modjs . '-->' . "\n";
                             print '<script nonce="' . getNonce() . '" src="' . $urlforjs . ((strpos($jsfile, '?') === false) ? '?' : '&amp;') . 'lang=' . $langs->defaultlang . '"></script>' . "\n";

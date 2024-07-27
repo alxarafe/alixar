@@ -386,7 +386,6 @@ if (!defined('DOL_URL_ROOT')) {
 // Define prefix MAIN_DB_PREFIX
 define('MAIN_DB_PREFIX', $dolibarr_main_db_prefix);
 
-
 /*
  * Define PATH to external libraries
  * To use other version than embedded libraries, define here constant to path. Use '' to use include class path autodetect.

@@ -52,12 +52,10 @@ $formadmin = new FormAdmin(null); // Note: $db does not exist yet but we don't n
 
 pHeader("", "check"); // Next step = check
 
-
 if (!is_readable($conffile)) {
     print '<br>';
     print '<span class="opacitymedium">' . $langs->trans("NoReadableConfFileSoStartInstall") . '</span>';
 }
-
 
 // Ask installation language
 print '<br><br><div class="center">';
@@ -70,8 +68,6 @@ print '</td>';
 print '</tr>';
 
 print '</table></div>';
-
-
 
 //print '<br><br><span class="opacitymedium">'.$langs->trans("SomeTranslationAreUncomplete").'</span>';
 
