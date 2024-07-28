@@ -1393,7 +1393,9 @@ function dol_buildpath($path, $type = 0, $returnemptyifnotfound = 0)
                     $urlwithroot = $urlwithouturlroot . DOL_URL_ROOT; // This is to use external domain name found into config file
                     //$urlwithroot=DOL_MAIN_URL_ROOT;                   // This is to use same domain name than current
 
-                    $res = (preg_match('/^http/i', $conf->file->dol_url_root[$key]) ? '' : $urlwithroot) . '/' . $path; // Test on start with http is for old conf syntax
+                    $res2 = (preg_match('/^http/i', $conf->file->dol_url_root[$key]) ? '' : $urlwithroot) . '/' . $path; // Test on start with http is for old conf syntax
+
+                    $res = constant('DOL_URL_ROOT') . '/' . $path;
                 }
                 continue;
             }

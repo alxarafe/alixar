@@ -1838,7 +1838,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
         // Favicon
         $favicon = constant('DOL_URL_ROOT') . '/theme/dolibarr_256x256_color.png';
         if (!empty($mysoc->logo_squarred_mini)) {
-            $favicon = constant('DOL_URL_ROOT') . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_mini);
+            $favicon = constant('BASE_URL') . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_mini);
         }
         if (getDolGlobalString('MAIN_FAVICON_URL')) {
             $favicon = getDolGlobalString('MAIN_FAVICON_URL');
@@ -1848,7 +1848,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
         }
 
         // Mobile appli like icon
-        $manifest = constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/manifest.json.php';
+        $manifest = constant('BASE_URL') . '/theme/' . $conf->theme . '/manifest.json.php';
         $parameters = array('manifest' => $manifest);
         $resHook = $hookmanager->executeHooks('hookSetManifest', $parameters); // Note that $action and $object may have been modified by some hooks
         if ($resHook > 0) {
@@ -1966,7 +1966,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
 
         print '<!-- Includes CSS for Dolibarr theme -->' . "\n";
         // Output style sheets (optioncss='print' or ''). Note: $conf->css looks like '/theme/eldy/style.css.php'
-        $themepath = dol_buildpath($conf->css, 3);
+        $themepath = dol_buildpath($conf->css, 1);
         $themesubdir = '';
         if (!empty($conf->modules_parts['theme'])) {    // This slow down
             foreach ($conf->modules_parts['theme'] as $reldir) {

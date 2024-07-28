@@ -998,7 +998,7 @@ function print_left_eldy_menu($db, $menu_array_before, $menu_array_after, &$tabM
                     $param .= ($param ? '&' : '') . 'leftmenu=';
                 }
                 //$url.="idmenu=".$menu_array[$i]['rowid'];    // Already done by menuLoad
-                $url = dol_buildpath($url, 3) . ($param ? '?' . $param : '');
+                $url = dol_buildpath($url, 1) . ($param ? '?' . $param : '');
                 $shorturlwithoutparam = $shorturl;
                 $shorturl = $shorturl . ($param ? '?' . $param : '');
             }
