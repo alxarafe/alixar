@@ -404,34 +404,34 @@ function agenda_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/agenda_other.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/agenda_other.php";
     $head[$h][1] = $langs->trans("Miscellaneous");
     $head[$h][2] = 'other';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/agenda.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/agenda.php";
     $head[$h][1] = $langs->trans("AutoActions");
     $head[$h][2] = 'autoactions';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/agenda_reminder.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/agenda_reminder.php";
     $head[$h][1] = $langs->trans("Reminders");
     $head[$h][2] = 'reminders';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/agenda_xcal.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/agenda_xcal.php";
     $head[$h][1] = $langs->trans("ExportCal");
     $head[$h][2] = 'xcal';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/agenda_extsites.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/agenda_extsites.php";
     $head[$h][1] = $langs->trans("ExtSites");
     $head[$h][2] = 'extsites';
     $h++;
 
     complete_head_from_modules($conf, $langs, null, $head, $h, 'agenda_admin');
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/agenda_extrafields.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/agenda_extrafields.php";
     $head[$h][1] = $langs->trans("ExtraFields");
     $nbExtrafields = $extrafields->attributes['actioncomm']['count'];
     if ($nbExtrafields > 0) {

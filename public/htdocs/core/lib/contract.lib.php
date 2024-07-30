@@ -156,7 +156,7 @@ function contract_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/contract.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/contract.php";
     $head[$h][1] = $langs->trans("Contracts");
     $head[$h][2] = 'contract';
     $h++;

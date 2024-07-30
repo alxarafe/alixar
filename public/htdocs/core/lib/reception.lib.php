@@ -43,13 +43,13 @@ function reception_prepare_head(Reception $object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/reception/card.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/reception/card.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("ReceptionCard");
     $head[$h][2] = 'reception';
     $h++;
 
     if ($object->statut ==  Reception::STATUS_DRAFT || ($object->statut == Reception::STATUS_VALIDATED && !getDolGlobalString('STOCK_CALCULATE_ON_RECEPTION'))) {
-        $head[$h][0] = DOL_URL_ROOT . "/reception/dispatch.php?id=" . $object->id;
+        $head[$h][0] = constant('BASE_URL') . "/reception/dispatch.php?id=" . $object->id;
         $head[$h][1] = $langs->trans("ReceptionDistribution");
         $head[$h][2] = 'dispatch';
         $h++;
@@ -62,7 +62,7 @@ function reception_prepare_head(Reception $object)
             $objectsrc->fetch($object->origin_id);
         }
         $nbContact = count($objectsrc->liste_contact(-1, 'internal')) + count($objectsrc->liste_contact(-1, 'external'));
-        $head[$h][0] = DOL_URL_ROOT . "/reception/contact.php?id=" . $object->id;
+        $head[$h][0] = constant('BASE_URL') . "/reception/contact.php?id=" . $object->id;
         $head[$h][1] = $langs->trans("ContactsAddresses");
         if ($nbContact > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbContact . '</span>';
@@ -97,7 +97,7 @@ function reception_prepare_head(Reception $object)
     if (!empty($object->note_public)) {
         $nbNote++;
     }
-    $head[$h][0] = DOL_URL_ROOT . "/reception/note.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/reception/note.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("Notes");
     if ($nbNote > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';
@@ -129,7 +129,7 @@ function reception_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/reception_setup.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/reception_setup.php";
     $head[$h][1] = $langs->trans("Reception");
     $head[$h][2] = 'reception';
     $h++;

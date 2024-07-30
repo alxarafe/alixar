@@ -134,12 +134,12 @@ print load_fiche_titre($langs->trans("Menus"), '', 'title_setup');
 $h = 0;
 
 $head = array();
-$head[$h][0] = DOL_URL_ROOT . "/admin/menus.php";
+$head[$h][0] = constant('BASE_URL') . "/admin/menus.php";
 $head[$h][1] = $langs->trans("MenuHandlers");
 $head[$h][2] = 'handler';
 $h++;
 
-$head[$h][0] = DOL_URL_ROOT . "/admin/menus/index.php";
+$head[$h][0] = constant('BASE_URL') . "/admin/menus/index.php";
 $head[$h][1] = $langs->trans("MenuAdmin");
 $head[$h][2] = 'editor';
 $h++;

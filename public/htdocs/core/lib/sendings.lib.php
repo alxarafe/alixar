@@ -45,13 +45,13 @@ function shipping_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/expedition/card.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/expedition/card.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("SendingCard");
     $head[$h][2] = 'shipping';
     $h++;
 
     if ($object->statut == Expedition::STATUS_DRAFT) {
-        $head[$h][0] = DOL_URL_ROOT . "/expedition/dispatch.php?id=" . $object->id;
+        $head[$h][0] = constant('BASE_URL') . "/expedition/dispatch.php?id=" . $object->id;
         $head[$h][1] = $langs->trans("ShipmentDistribution");
         $head[$h][2] = 'dispatch';
         $h++;
@@ -64,7 +64,7 @@ function shipping_prepare_head($object)
             // Take first element of array
             $tmp = reset($object->linkedObjectsIds['delivery']);
 
-            $head[$h][0] = DOL_URL_ROOT . "/delivery/card.php?id=" . ((int) $tmp);
+            $head[$h][0] = constant('BASE_URL') . "/delivery/card.php?id=" . ((int) $tmp);
             $head[$h][1] = $langs->trans("DeliveryCard");
             $head[$h][2] = 'delivery';
             $h++;
@@ -78,7 +78,7 @@ function shipping_prepare_head($object)
             $objectsrc->fetch($object->origin_id);
         }
         $nbContact = count($objectsrc->liste_contact(-1, 'internal')) + count($objectsrc->liste_contact(-1, 'external'));
-        $head[$h][0] = DOL_URL_ROOT . "/expedition/contact.php?id=" . ((int) $object->id);
+        $head[$h][0] = constant('BASE_URL') . "/expedition/contact.php?id=" . ((int) $object->id);
         $head[$h][1] = $langs->trans("ContactsAddresses");
         if ($nbContact > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbContact . '</span>';
@@ -107,7 +107,7 @@ function shipping_prepare_head($object)
     if (!empty($object->note_public)) {
         $nbNote++;
     }
-    $head[$h][0] = DOL_URL_ROOT . "/expedition/note.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/expedition/note.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("Notes");
     if ($nbNote > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';
@@ -144,13 +144,13 @@ function delivery_prepare_head($object)
     $head = array();
 
     if (getDolGlobalInt('MAIN_SUBMODULE_EXPEDITION') && $user->hasRight('expedition', 'lire')) {
-        $head[$h][0] = DOL_URL_ROOT . "/expedition/card.php?id=" . $object->origin_id;
+        $head[$h][0] = constant('BASE_URL') . "/expedition/card.php?id=" . $object->origin_id;
         $head[$h][1] = $langs->trans("SendingCard");
         $head[$h][2] = 'shipping';
         $h++;
     }
 
-    $head[$h][0] = DOL_URL_ROOT . "/delivery/card.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/delivery/card.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("DeliveryCard");
     $head[$h][2] = 'delivery';
     $h++;
@@ -179,7 +179,7 @@ function delivery_prepare_head($object)
             $objectsrc->fetch($tmpobject->origin_id);
         }
         $nbContact = count($objectsrc->liste_contact(-1, 'internal')) + count($objectsrc->liste_contact(-1, 'external'));
-        $head[$h][0] = DOL_URL_ROOT . "/expedition/contact.php?id=" . $tmpobject->id;
+        $head[$h][0] = constant('BASE_URL') . "/expedition/contact.php?id=" . $tmpobject->id;
         $head[$h][1] = $langs->trans("ContactsAddresses");
         if ($nbContact > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbContact . '</span>';
@@ -208,7 +208,7 @@ function delivery_prepare_head($object)
     if (!empty($tmpobject->note_public)) {
         $nbNote++;
     }
-    $head[$h][0] = DOL_URL_ROOT . "/expedition/note.php?id=" . $tmpobject->id;
+    $head[$h][0] = constant('BASE_URL') . "/expedition/note.php?id=" . $tmpobject->id;
     $head[$h][1] = $langs->trans("Notes");
     if ($nbNote > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';

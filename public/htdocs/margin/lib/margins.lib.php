@@ -38,7 +38,7 @@ function marges_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/margin/admin/margin.php";
+    $head[$h][0] = constant('BASE_URL') . "/margin/admin/margin.php";
     $head[$h][1] = $langs->trans("Parameters");
     $head[$h][2] = 'parameters';
     $h++;
@@ -68,14 +68,14 @@ function marges_prepare_head()
     $head = array();
 
     if ($user->hasRight('produit', 'lire')) {
-        $head[$h][0] = DOL_URL_ROOT . "/margin/productMargins.php";
+        $head[$h][0] = constant('BASE_URL') . "/margin/productMargins.php";
         $head[$h][1] = $langs->trans("ProductMargins");
         $head[$h][2] = 'productMargins';
         $h++;
     }
 
     if ($user->hasRight('societe', 'lire')) {
-        $head[$h][0] = DOL_URL_ROOT . "/margin/customerMargins.php";
+        $head[$h][0] = constant('BASE_URL') . "/margin/customerMargins.php";
         $head[$h][1] = $langs->trans("CustomerMargins");
         $head[$h][2] = 'customerMargins';
         $h++;
@@ -87,14 +87,14 @@ function marges_prepare_head()
         $title = 'SalesRepresentativeMargins';
     }
 
-    $head[$h][0] = DOL_URL_ROOT . "/margin/agentMargins.php";
+    $head[$h][0] = constant('BASE_URL') . "/margin/agentMargins.php";
     $head[$h][1] = $langs->trans($title);
     $head[$h][2] = 'agentMargins';
 
 
     if ($user->hasRight('margins', 'creer')) {
         $h++;
-        $head[$h][0] = DOL_URL_ROOT . "/margin/checkMargins.php";
+        $head[$h][0] = constant('BASE_URL') . "/margin/checkMargins.php";
         $head[$h][1] = $langs->trans('CheckMargins');
         $head[$h][2] = 'checkMargins';
     }

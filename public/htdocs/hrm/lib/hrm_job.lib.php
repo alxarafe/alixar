@@ -40,12 +40,12 @@ function jobPrepareHead($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/hrm/job_card.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/hrm/job_card.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("JobProfile");
     $head[$h][2] = 'job_card';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/hrm/skill_tab.php?id=" . $object->id . '&objecttype=job';
+    $head[$h][0] = constant('BASE_URL') . "/hrm/skill_tab.php?id=" . $object->id . '&objecttype=job';
     $head[$h][1] = $langs->trans("RequiredSkills");
     $nbResources = 0;
     $sql = "SELECT COUNT(rowid) as nb FROM " . MAIN_DB_PREFIX . "hrm_skillrank WHERE objecttype = 'job' AND fk_object = " . ((int) $object->id);
@@ -62,7 +62,7 @@ function jobPrepareHead($object)
     $head[$h][2] = 'skill_tab';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/hrm/position.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/hrm/position.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("PositionsWithThisProfile");
     $nbResources = 0;
     $sql = "SELECT COUNT(rowid) as nb FROM " . MAIN_DB_PREFIX . "hrm_job_user WHERE fk_job = " . ((int) $object->id);

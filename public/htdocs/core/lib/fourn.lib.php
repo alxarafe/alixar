@@ -267,17 +267,17 @@ function supplierorder_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/supplier_order.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/supplier_order.php";
     $head[$h][1] = $langs->trans("SupplierOrder");
     $head[$h][2] = 'order';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/supplier_invoice.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/supplier_invoice.php";
     $head[$h][1] = $langs->trans("SuppliersInvoice");
     $head[$h][2] = 'invoice';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/supplier_payment.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/supplier_payment.php";
     $head[$h][1] = $langs->trans("SuppliersPayment");
     $head[$h][2] = 'supplierpayment';
     $h++;

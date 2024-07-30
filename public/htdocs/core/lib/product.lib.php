@@ -52,14 +52,14 @@ function product_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/product/card.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/product/card.php?id=" . $object->id;
     $head[$h][1] = $label;
     $head[$h][2] = 'card';
     $h++;
 
     // if (!empty($object->status)) {
     if ($usercancreadprice) {
-        $head[$h][0] = DOL_URL_ROOT . "/product/price.php?id=" . $object->id;
+        $head[$h][0] = constant('BASE_URL') . "/product/price.php?id=" . $object->id;
         $head[$h][1] = $langs->trans("SellingPrices");
         $head[$h][2] = 'price';
         $h++;
@@ -78,7 +78,7 @@ function product_prepare_head($object)
         || (isModEnabled('margin') && $user->hasRight("margin", "liretous"))
     ) {
         if ($usercancreadprice) {
-            $head[$h][0] = DOL_URL_ROOT . "/product/price_suppliers.php?id=" . $object->id;
+            $head[$h][0] = constant('BASE_URL') . "/product/price_suppliers.php?id=" . $object->id;
             $head[$h][1] = $langs->trans("BuyingPrices");
             $head[$h][2] = 'suppliers';
             $h++;
@@ -94,7 +94,7 @@ function product_prepare_head($object)
 
     // Multilangs
     if (getDolGlobalInt('MAIN_MULTILANGS')) {
-        $head[$h][0] = DOL_URL_ROOT . "/product/traduction.php?id=" . $object->id;
+        $head[$h][0] = constant('BASE_URL') . "/product/traduction.php?id=" . $object->id;
         $head[$h][1] = $langs->trans("Translations");
         $head[$h][2] = 'translation';
         $h++;
@@ -102,7 +102,7 @@ function product_prepare_head($object)
 
     // Sub products
     if (getDolGlobalString('PRODUIT_SOUSPRODUITS')) {
-        $head[$h][0] = DOL_URL_ROOT . "/product/composition/card.php?id=" . $object->id;
+        $head[$h][0] = constant('BASE_URL') . "/product/composition/card.php?id=" . $object->id;
         $head[$h][1] = $langs->trans('AssociatedProducts');
 
         $nbFatherAndChild = $object->hasFatherOrChild();
@@ -121,7 +121,7 @@ function product_prepare_head($object)
         $prodcomb = new ProductCombination($db);
 
         if ($prodcomb->fetchByFkProductChild($object->id) <= 0) {
-            $head[$h][0] = DOL_URL_ROOT . "/variants/combinations.php?id=" . $object->id;
+            $head[$h][0] = constant('BASE_URL') . "/variants/combinations.php?id=" . $object->id;
             $head[$h][1] = $langs->trans('ProductCombinations');
             $head[$h][2] = 'combinations';
             $nbVariant = $prodcomb->countNbOfCombinationForFkProductParent($object->id);
@@ -135,7 +135,7 @@ function product_prepare_head($object)
 
     if ($object->isProduct() || ($object->isService() && getDolGlobalString('STOCK_SUPPORTS_SERVICES'))) {    // If physical product we can stock (or service with option)
         if (isModEnabled('stock') && $user->hasRight('stock', 'lire')) {
-            $head[$h][0] = DOL_URL_ROOT . "/product/stock/product.php?id=" . $object->id;
+            $head[$h][0] = constant('BASE_URL') . "/product/stock/product.php?id=" . $object->id;
             $head[$h][1] = $langs->trans("Stock");
             $head[$h][2] = 'stock';
             $h++;
@@ -158,12 +158,12 @@ function product_prepare_head($object)
         }
     }
 
-    $head[$h][0] = DOL_URL_ROOT . "/product/stats/facture.php?showmessage=1&id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/product/stats/facture.php?showmessage=1&id=" . $object->id;
     $head[$h][1] = $langs->trans('Referers');
     $head[$h][2] = 'referers';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/product/stats/card.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/product/stats/card.php?id=" . $object->id;
     $head[$h][1] = $langs->trans('Statistics');
     $head[$h][2] = 'stats';
     $h++;
@@ -253,12 +253,12 @@ function productlot_prepare_head($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/product/stock/productlot_card.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/product/stock/productlot_card.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("Lot");
     $head[$h][2] = 'card';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/product/stock/stats/expedition.php?showmessage=1&id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/product/stock/stats/expedition.php?showmessage=1&id=" . $object->id;
     $head[$h][1] = $langs->trans('Referers');
     $head[$h][2] = 'referers';
     $h++;
@@ -269,7 +269,7 @@ function productlot_prepare_head($object)
     $upload_dir = $conf->productbatch->multidir_output[$object->entity] . '/' . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
-    $head[$h][0] = DOL_URL_ROOT . "/product/stock/productlot_document.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/product/stock/productlot_document.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("Documents");
     if (($nbFiles + $nbLinks) > 0) {
         $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbFiles + $nbLinks) . '</span>';
@@ -332,7 +332,7 @@ function product_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/product/admin/product.php";
+    $head[$h][0] = constant('BASE_URL') . "/product/admin/product.php";
     $head[$h][1] = $langs->trans('Parameters');
     $head[$h][2] = 'general';
     $h++;
@@ -392,7 +392,7 @@ function product_lot_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/product/admin/product_lot.php";
+    $head[$h][0] = constant('BASE_URL') . "/product/admin/product_lot.php";
     $head[$h][1] = $langs->trans('Parameters');
     $head[$h][2] = 'settings';
     $h++;

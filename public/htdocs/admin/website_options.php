@@ -101,12 +101,12 @@ print load_fiche_titre($titre, $linkback, 'title_setup');
 $head = array();
 $h = 0;
 
-$head[$h][0] = DOL_URL_ROOT . "/admin/website.php";
+$head[$h][0] = constant('BASE_URL') . "/admin/website.php";
 $head[$h][1] = $langs->trans("WebSites");
 $head[$h][2] = 'website';
 $h++;
 
-$head[$h][0] = DOL_URL_ROOT . "/admin/website_options.php";
+$head[$h][0] = constant('BASE_URL') . "/admin/website_options.php";
 $head[$h][1] = $langs->trans("Options");
 $head[$h][2] = 'options';
 $h++;

@@ -190,7 +190,7 @@ function ecm_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/ecm.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/ecm.php";
     $head[$h][1] = $langs->trans("Setup");
     $head[$h][2] = 'ecm';
     $h++;

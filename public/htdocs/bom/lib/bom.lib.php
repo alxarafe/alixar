@@ -36,17 +36,17 @@ function bomAdminPrepareHead()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/bom.php";
+    $head[$h][0] = dol_buildpath("/admin/bom.php",1);
     $head[$h][1] = $langs->trans("Settings");
     $head[$h][2] = 'settings';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/bom_extrafields.php";
+    $head[$h][0] = dol_buildpath("/admin/bom_extrafields.php",1);
     $head[$h][1] = $langs->trans("ExtraFields");
     $head[$h][2] = 'bom_extrafields';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/bomline_extrafields.php";
+    $head[$h][0] = dol_buildpath("/admin/bomline_extrafields.php",1);
     $head[$h][1] = $langs->trans("ExtraFieldsLines");
     $head[$h][2] = 'bomline_extrafields';
     $h++;
@@ -84,12 +84,12 @@ function bomPrepareHead($object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/bom/bom_card.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/bom/bom_card.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("BOM");
     $head[$h][2] = 'card';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/bom/bom_net_needs.php?id=" . $object->id;
+    $head[$h][0] = constant('BASE_URL') . "/bom/bom_net_needs.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("BOMNetNeeds");
     $head[$h][2] = 'net_needs';
     $h++;

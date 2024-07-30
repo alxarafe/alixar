@@ -19,16 +19,17 @@ build:
 # https://scrutinizer-ci.com/docs/reviews/excluding_files_from_analysis
 filter:
   paths:
-    - 'public/**'
-    - 'Core/**'
-    - 'Modules/**'
-    - 'Dolibarr/**'
+    - 'public/'
+    - 'Core/'
+    - 'Modules/'
+    - 'Dolibarr/'
   excluded_paths:
-    - 'test/**'
-    - 'vendor/**'
-    - 'public/htdocs/includes/**'
+    - 'test/'
+    - 'vendor/'
+    - 'public/htdocs/includes/'
   dependency_paths:
-    - 'vendor/**'
+    - 'vendor/'
+    - 'public/htdocs/includes/'
 
 # Configure code duplication scans, if relevant
 #  checks:

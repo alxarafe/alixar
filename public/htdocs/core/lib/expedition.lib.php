@@ -46,17 +46,17 @@ function expedition_prepare_head(Expedition $object)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/confexped.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/confexped.php";
     $head[$h][1] = $langs->trans("Setup");
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/expedition.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/expedition.php";
     $head[$h][1] = $langs->trans("Shipment");
     $hselected = $h;
     $h++;
 
     if (getDolGlobalInt('MAIN_SUBMODULE_DELIVERY')) {
-        $head[$h][0] = DOL_URL_ROOT . "/admin/delivery.php";
+        $head[$h][0] = constant('BASE_URL') . "/admin/delivery.php";
         $head[$h][1] = $langs->trans("Receivings");
         $h++;
     }
@@ -94,7 +94,7 @@ function expedition_admin_prepare_head()
         $extrafields->fetch_name_optionals_label('expedition');
         $extrafields->fetch_name_optionals_label('expeditiondet');
 
-        $head[$h][0] = DOL_URL_ROOT . "/admin/expedition.php";
+        $head[$h][0] = constant('BASE_URL') . "/admin/expedition.php";
         $head[$h][1] = $langs->trans("Shipment");
         $head[$h][2] = 'shipment';
         $h++;
@@ -118,7 +118,7 @@ function expedition_admin_prepare_head()
         $h++;
     }
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/delivery.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/delivery.php";
     $head[$h][1] = $langs->trans("Receivings");
     $head[$h][2] = 'receivings';
     $h++;

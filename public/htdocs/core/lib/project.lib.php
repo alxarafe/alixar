@@ -496,21 +496,21 @@ function project_timesheet_prepare_head($mode, $fuser = null)
     }
 
     if (!getDolGlobalString('PROJECT_DISABLE_TIMESHEET_PERMONTH')) {
-        $head[$h][0] = DOL_URL_ROOT . "/projet/activity/permonth.php" . ($param ? '?' . $param : '');
+        $head[$h][0] = constant('BASE_URL') . "/projet/activity/permonth.php" . ($param ? '?' . $param : '');
         $head[$h][1] = $langs->trans("InputPerMonth");
         $head[$h][2] = 'inputpermonth';
         $h++;
     }
 
     if (!getDolGlobalString('PROJECT_DISABLE_TIMESHEET_PERWEEK')) {
-        $head[$h][0] = DOL_URL_ROOT . "/projet/activity/perweek.php" . ($param ? '?' . $param : '');
+        $head[$h][0] = constant('BASE_URL') . "/projet/activity/perweek.php" . ($param ? '?' . $param : '');
         $head[$h][1] = $langs->trans("InputPerWeek");
         $head[$h][2] = 'inputperweek';
         $h++;
     }
 
     if (!getDolGlobalString('PROJECT_DISABLE_TIMESHEET_PERTIME')) {
-        $head[$h][0] = DOL_URL_ROOT . "/projet/activity/perday.php" . ($param ? '?' . $param : '');
+        $head[$h][0] = constant('BASE_URL') . "/projet/activity/perday.php" . ($param ? '?' . $param : '');
         $head[$h][1] = $langs->trans("InputPerDay");
         $head[$h][2] = 'inputperday';
         $h++;
@@ -540,14 +540,14 @@ function project_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/projet/admin/project.php";
+    $head[$h][0] = constant('BASE_URL') . "/projet/admin/project.php";
     $head[$h][1] = $langs->trans("Projects");
     $head[$h][2] = 'project';
     $h++;
 
     complete_head_from_modules($conf, $langs, null, $head, $h, 'project_admin');
 
-    $head[$h][0] = DOL_URL_ROOT . "/projet/admin/project_extrafields.php";
+    $head[$h][0] = constant('BASE_URL') . "/projet/admin/project_extrafields.php";
     $head[$h][1] = $langs->trans("ExtraFieldsProject");
     $nbExtrafields = $extrafields->attributes['projet']['count'];
     if ($nbExtrafields > 0) {

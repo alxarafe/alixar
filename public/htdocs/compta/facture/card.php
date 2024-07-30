@@ -5877,7 +5877,7 @@ if ($action == 'create') {
             // POS Ticket
             if (isModEnabled('takepos') && $object->module_source == 'takepos') {
                 $langs->load("cashdesk");
-                $receipt_url = DOL_URL_ROOT . "/takepos/receipt.php";
+                $receipt_url = constant('BASE_URL') . "/takepos/receipt.php";
                 print '<a target="_blank" rel="noopener noreferrer" class="butAction" href="' . $receipt_url . '?facid=' . ((int) $object->id) . '">' . $langs->trans('POSTicket') . '</a>';
             }
 

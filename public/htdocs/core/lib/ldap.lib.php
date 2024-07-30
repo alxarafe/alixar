@@ -40,41 +40,41 @@ function ldap_prepare_head()
     $head = array();
     $h = 0;
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/ldap.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/ldap.php";
     $head[$h][1] = $langs->trans("LDAPGlobalParameters");
     $head[$h][2] = 'ldap';
     $h++;
 
     if (getDolGlobalString('LDAP_SYNCHRO_ACTIVE')) {
-        $head[$h][0] = DOL_URL_ROOT . "/admin/ldap_users.php";
+        $head[$h][0] = constant('BASE_URL') . "/admin/ldap_users.php";
         $head[$h][1] = $langs->trans("LDAPUsersSynchro");
         $head[$h][2] = 'users';
         $h++;
     }
 
     if (getDolGlobalString('LDAP_SYNCHRO_ACTIVE')) {
-        $head[$h][0] = DOL_URL_ROOT . "/admin/ldap_groups.php";
+        $head[$h][0] = constant('BASE_URL') . "/admin/ldap_groups.php";
         $head[$h][1] = $langs->trans("LDAPGroupsSynchro");
         $head[$h][2] = 'groups';
         $h++;
     }
 
     if (isModEnabled("societe") && getDolGlobalString('LDAP_CONTACT_ACTIVE')) {
-        $head[$h][0] = DOL_URL_ROOT . "/admin/ldap_contacts.php";
+        $head[$h][0] = constant('BASE_URL') . "/admin/ldap_contacts.php";
         $head[$h][1] = $langs->trans("LDAPContactsSynchro");
         $head[$h][2] = 'contacts';
         $h++;
     }
 
     if (isModEnabled('member') && getDolGlobalString('LDAP_MEMBER_ACTIVE')) {
-        $head[$h][0] = DOL_URL_ROOT . "/admin/ldap_members.php";
+        $head[$h][0] = constant('BASE_URL') . "/admin/ldap_members.php";
         $head[$h][1] = $langs->trans("LDAPMembersSynchro");
         $head[$h][2] = 'members';
         $h++;
     }
 
     if (isModEnabled('member') && getDolGlobalString('LDAP_MEMBER_TYPE_ACTIVE')) {
-        $head[$h][0] = DOL_URL_ROOT . "/admin/ldap_members_types.php";
+        $head[$h][0] = constant('BASE_URL') . "/admin/ldap_members_types.php";
         $head[$h][1] = $langs->trans("LDAPMembersTypesSynchro");
         $head[$h][2] = 'memberstypes';
         $h++;

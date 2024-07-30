@@ -39,20 +39,20 @@ function printingAdminPrepareHead($mode)
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/printing/admin/printing.php?mode=config";
+    $head[$h][0] = constant('BASE_URL') . "/printing/admin/printing.php?mode=config";
     $head[$h][1] = $langs->trans("ListDrivers");
     $head[$h][2] = 'config';
     $h++;
 
     if ($mode == 'setup') {
-        $head[$h][0] = DOL_URL_ROOT . "/printing/admin/printing.php?mode=setup&driver=" . GETPOST('driver', 'alpha');
+        $head[$h][0] = constant('BASE_URL') . "/printing/admin/printing.php?mode=setup&driver=" . GETPOST('driver', 'alpha');
         $head[$h][1] = $langs->trans("SetupDriver");
         $head[$h][2] = 'setup';
         $h++;
     }
 
     if ($mode == 'test') {
-        $head[$h][0] = DOL_URL_ROOT . "/printing/admin/printing.php?mode=test&driver=" . GETPOST('driver', 'alpha');
+        $head[$h][0] = constant('BASE_URL') . "/printing/admin/printing.php?mode=test&driver=" . GETPOST('driver', 'alpha');
         $head[$h][1] = $langs->trans("TargetedPrinter");
         $head[$h][2] = 'test';
         $h++;

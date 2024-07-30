@@ -37,7 +37,7 @@ function inventoryAdminPrepareHead()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/inventory.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/inventory.php";
     $head[$h][1] = $langs->trans("Parameters");
     $head[$h][2] = 'settings';
     $h++;

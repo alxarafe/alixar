@@ -140,7 +140,7 @@ function bon_prelevement_prepare_head(BonPrelevement $object, $nbOfInvoices, $nb
 
     // Salaries
 
-    $head[$h][0] = DOL_URL_ROOT . "/compta/prelevement/create.php?type=bank-transfer&sourcetype=salary";
+    $head[$h][0] = constant('BASE_URL') . "/compta/prelevement/create.php?type=bank-transfer&sourcetype=salary";
     $head[$h][1] = ($nbOfSalaryInvoice <= 0 ? $langs->trans("Salaries") : $langs->trans("Salaries") . '<span class="badge marginleftonlyshort">' . $nbOfSalaryInvoice . '</span>');
     $head[$h][2] = 'salary';
     $h++;

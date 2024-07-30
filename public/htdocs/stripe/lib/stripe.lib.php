@@ -37,7 +37,7 @@ function stripeadmin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/stripe/admin/stripe.php";
+    $head[$h][0] = constant('BASE_URL') . "/stripe/admin/stripe.php";
     $head[$h][1] = $langs->trans("Stripe");
     $head[$h][2] = 'stripeaccount';
     $h++;

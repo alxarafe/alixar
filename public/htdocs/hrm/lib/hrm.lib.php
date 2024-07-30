@@ -45,7 +45,7 @@ function hrmAdminPrepareHead()
 
     $h = 0;
     $head = array();
-    $head[$h][0] = DOL_URL_ROOT . "/admin/hrm.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/hrm.php";
     $head[$h][1] = $langs->trans("Settings");
     $head[$h][2] = 'settings';
     $h++;

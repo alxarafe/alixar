@@ -322,7 +322,7 @@ print load_fiche_titre($title, $linkback, 'title_setup');
 
 $head = array();
 $h = 0;
-$head[$h][0] = DOL_URL_ROOT . "/admin/emailcollector_list.php";
+$head[$h][0] = constant('BASE_URL') . "/admin/emailcollector_list.php";
 $head[$h][1] = $langs->trans("Setup");
 $head[$h][2] = 'common';
 $h++;

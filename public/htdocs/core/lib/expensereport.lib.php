@@ -141,18 +141,18 @@ function expensereport_admin_prepare_head()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/expensereport.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/expensereport.php";
     $head[$h][1] = $langs->trans("ExpenseReports");
     $head[$h][2] = 'expensereport';
     $h++;
 
-    $head[$h][0] = DOL_URL_ROOT . "/admin/expensereport_rules.php";
+    $head[$h][0] = constant('BASE_URL') . "/admin/expensereport_rules.php";
     $head[$h][1] = $langs->trans("ExpenseReportsRules");
     $head[$h][2] = 'expenserules';
     $h++;
 
     if (getDolGlobalString('MAIN_USE_EXPENSE_IK')) {
-        $head[$h][0] = DOL_URL_ROOT . "/admin/expensereport_ik.php";
+        $head[$h][0] = constant('BASE_URL') . "/admin/expensereport_ik.php";
         $head[$h][1] = $langs->trans("ExpenseReportsIk");
         $head[$h][2] = 'expenseik';
         $h++;

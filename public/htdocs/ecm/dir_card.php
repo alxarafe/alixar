@@ -154,9 +154,9 @@ if ($action == 'confirm_deletefile' && $confirm == 'yes' && $permissiontoupload)
 
 // Remove dir
 if ($action == 'confirm_deletedir' && $confirm == 'yes' && $permissiontoupload) {
-    $backtourl = DOL_URL_ROOT . "/ecm/index.php";
+    $backtourl = constant('BASE_URL') . "/ecm/index.php";
     if ($module == 'medias') {
-        $backtourl = DOL_URL_ROOT . "/website/index.php?file_manager=1";
+        $backtourl = constant('BASE_URL') . "/website/index.php?file_manager=1";
     }
 
     $deletedirrecursive = (GETPOST('deletedirrecursive', 'alpha') == 'on' ? 1 : 0);

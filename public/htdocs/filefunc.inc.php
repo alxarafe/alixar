@@ -123,12 +123,11 @@ function dol_session_rotate($sessionname = '')
 }
 
 
-
 // Define vars
 $conffiletoshowshort = "conf.php";
 // Define localization of conf file
 // --- Start of part replaced by Dolibarr packager makepack-dolibarr
-$conffile = "conf/conf.php";
+$conffile = DOL_DOCUMENT_ROOT . "/conf/conf.php";
 $conffiletoshow = "htdocs/conf/conf.php";
 // For debian/redhat like systems
 //$conffile = "/etc/dolibarr/conf.php";
@@ -193,7 +192,7 @@ if (!$result && !empty($_SERVER["GATEWAY_INTERFACE"])) {    // If install not do
         }
     }
 
-    header("Location: " . $path . "install/index.php");
+    header("Location: " . BASE_URL . "/install/index.php");
 
     /*
     print '<br><center>';
