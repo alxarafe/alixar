@@ -36,17 +36,17 @@ function bomAdminPrepareHead()
     $h = 0;
     $head = array();
 
-    $head[$h][0] = dol_buildpath("/admin/bom.php",1);
+    $head[$h][0] = dol_buildpath("/admin/bom.php", 1);
     $head[$h][1] = $langs->trans("Settings");
     $head[$h][2] = 'settings';
     $h++;
 
-    $head[$h][0] = dol_buildpath("/admin/bom_extrafields.php",1);
+    $head[$h][0] = dol_buildpath("/admin/bom_extrafields.php", 1);
     $head[$h][1] = $langs->trans("ExtraFields");
     $head[$h][2] = 'bom_extrafields';
     $h++;
 
-    $head[$h][0] = dol_buildpath("/admin/bomline_extrafields.php",1);
+    $head[$h][0] = dol_buildpath("/admin/bomline_extrafields.php", 1);
     $head[$h][1] = $langs->trans("ExtraFieldsLines");
     $head[$h][2] = 'bomline_extrafields';
     $h++;

@@ -1,7 +1,0 @@
-node_modules
-vendor
-tmp
-*.md
-.git
-.vscode
-.env

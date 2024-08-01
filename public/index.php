@@ -22,6 +22,32 @@ use Alxarafe\Lib\Dispatcher;
 use Alxarafe\Lib\Functions;
 
 /**
+ * Gets the URL segment corresponding to the controller route.
+ *
+ * @return string
+ */
+function getControllerRoute(): string
+{
+    $full = $_SERVER['REQUEST_URI'] ?? '/index.php';
+    $interrogation_position = strpos($full, '?');
+    if ($interrogation_position !== false) {
+        $full = substr($full, 0, $interrogation_position);
+    }
+    /**
+     * If the URL is formed as a subdirectory, it will have to be accessed through
+     * the public subdirectory.
+     * In that case, the path is from the public folder, since up to public, it
+     * will be part of BASE_URL.
+     */
+    $public_cad = '/public/';
+    $public_pos = strpos($full, $public_cad);
+    if ($public_pos !== false) {
+        $full = substr($full, $public_pos + strlen($public_cad) - 1);
+    }
+    return $full;
+}
+
+/**
  * Obtains the main url
  *
  * TODO: This function is defined in Alxarafe.
@@ -63,29 +89,33 @@ define('BASE_URL', getUrl());
 define('DOL_DOCUMENT_ROOT', constant('BASE_PATH') . '/htdocs');
 define('DOL_URL_ROOT', constant('BASE_URL') . '/htdocs');
 
-$path = $_GET['url_route'] ?? '';
-$file = $_GET['url_filename'] ?? 'index';
-$api = $_GET['api_route'] ?? '';
-if (!empty($path)) {
-    $path .= '/';
+/**
+ * Here we would have to check if the variables that determine the use of a
+ * modern controller have been received via GET.
+ *
+ * For the moment, we are taking Dolibarr style routes.
+ */
+
+$route = getControllerRoute();
+if (!isset($route) || $route === '/') {
+    $route = '/index.php';
 }
 
-if (!empty($api)) {
-    $_SERVER['SCRIPT_NAME'] = '/api/index.php';
-    $_SERVER['PHP_SELF'] = constant('BASE_URL') . DIRECTORY_SEPARATOR . $path . $file . '.php' . DIRECTORY_SEPARATOR . $api;
-    $filename = constant('DOL_DOCUMENT_ROOT') . $path . '/api/index.php';
-    require_once $filename;
-    die('');
+$fullname = DOL_DOCUMENT_ROOT . $route;
+$last_slash_pos = strrpos($fullname, '/');
+$fullpath = $fullname;
+if ($last_slash_pos !== false) {
+    $fullpath = substr($fullpath, 0, $last_slash_pos);
 }
+$relative_path = substr($fullpath, strlen(DOL_DOCUMENT_ROOT));
 
 /**
  * Dolibarr uses the $_SERVER['PHP_SELF'] variable in much of the code to know how it
  * has been invoked. Now it doesn't work because the entry point is unique.
  * Here we put a temporary patch while it is migrating.
  */
-$_SERVER['PHP_SELF'] = constant('BASE_URL') . DIRECTORY_SEPARATOR . $path . $file . '.php';
+$_SERVER['PHP_SELF'] = constant('BASE_URL') . DIRECTORY_SEPARATOR . $route;
 
-$filename = constant('DOL_DOCUMENT_ROOT') . DIRECTORY_SEPARATOR . $path . $file . '.php';
+chdir($fullpath);
 
-// Loads Dolibarr codefile
-require_once $filename;
+require_once $fullname;

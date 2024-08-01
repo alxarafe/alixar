@@ -1,33 +1,90 @@
+version: '3'
 services:
-  web:
+  alixar_httpd:
     image: nginx:alpine
-    container_name: alixar_httpd
+    container_name: ${HTTPD_CONTAINER}
+    env_file:
+      - ".env"
     ports:
-      - "8080:80"
-    volumes:
-      - ../:/var/www/html
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - php
-
-  php:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-    container_name: alixar_php
-    volumes:
-      - ../:/var/www/html
-
-  db:
-    image: mysql:5.7
-    restart: always
+      - ${HTTPD_PORT}:80
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: alixar_db
-      MYSQL_USER: alixar_user
-      MYSQL_PASSWORD: alixar_password
+      - PROJECT_NAME=${PROJECT_NAME}
+      - HTTPD_HOST=${HTTPD_HOST}
+      - XDEBUG_MODE=${PHP_XDEBUG_MODE}
+    command:
+      - /bin/sh
+      - -c
+      - |
+        envsubst '$$HTTPD_HOST $$PROJECT_NAME' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf
+        nginx -g 'daemon off;'
+        find ./storage -exec chown www-data:www-data {} \;
+        find ./storage -type f -exec chmod 777 {} \;
+        find ./storage -type d -exec chmod 777 {} \;
+        find ./bootstrap/cache -exec chown www-data:www-data {} \;
+        find ./bootstrap/cache -type f -exec chmod 777 {} \;
+        find ./bootstrap/cache -type d -exec chmod 777 {} \;
+        composer install
+        composer dump-autoload
+    networks:
+      - ${NETWORK}
     volumes:
-      - db_data:/var/lib/mysql
+      - ${HTTPD_CONFIG_DIRECTORY}/default.conf:/etc/nginx/conf.d/default.conf
+      - ${HTTPD_CONFIG_DIRECTORY}/default.template.conf:/etc/nginx/conf.d/default.template
+      - ${HTTPD_CONFIG_DIRECTORY}/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf:ro
+      - ${CODE_DIRECTORY}:/var/www/${PROJECT_NAME}
+      - ${HTTPD_LOG_DIRECTORY}:/var/log/nginx
+    depends_on:
+      - alixar_php
+      - alixar_db
 
-volumes:
-  db_data:
+  alixar_php:
+    container_name: ${PHP_CONTAINER}
+    env_file:
+      - ".env"
+    build:
+      dockerfile: ${PHP_DIRECTORY}/Dockerfile
+      context: .
+      args:
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
+    environment:
+      - XDEBUG_CONFIG:client_host=172.17.0.1 client_port=9003
+    networks:
+      - ${NETWORK}
+    volumes:
+      - ${PHP_CONFIG_DIRECTORY}/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ${CODE_DIRECTORY}:/var/www/${PROJECT_NAME}
+
+  alixar_composer:
+    image: composer:lts
+    container_name: ${COMPOSER_CONTAINER}
+    volumes:
+      - ${CODE_DIRECTORY}:/app
+    command: install
+
+  alixar_db:
+    image: mysql:${MYSQL_VERSION}
+    container_name: ${MYSQL_CONTAINER}
+    env_file:
+      - ".env"
+    build:
+      dockerfile: ${MYSQL_DOCKERFILE_DIRECTORY}/Dockerfile
+      context: .
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - ${MYSQL_PORT}:3306
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_LOG_CONSOLE=${MYSQL_LOG_ENABLED}
+    networks:
+      - ${NETWORK}
+    volumes:
+      - ${MYSQL_INIT_DB_DIRECTORY}:/docker-entrypoint-initdb.d
+      - ${MYSQL_CONFIG_DB_DIRECTORY}/my.cnf:/etc/mysql/conf.d/my.cnf
+
+networks:
+  alixar_network:
