@@ -7,6 +7,10 @@ build:
       version: "8.1"
       ini:
         memory_limit: "-1"
+  dependencies:
+    before:
+      - composer install
+
 #  tests:
 #    override:
 #      - command: php-scrutinizer-run

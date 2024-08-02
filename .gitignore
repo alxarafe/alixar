@@ -62,11 +62,3 @@ phpstan_custom.neon
 /.php-cs-fixer.cache
 /.php_cs.cache
 /.github/tmp/
-
-/docker_
-!.gitignore
-!docker_/conf/conf.php
-!docker_/nginx/default.conf
-!docker_/Dockerfile
-!docker_/docker-compose.yml
-!docker_/README.md
