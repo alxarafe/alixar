@@ -7,9 +7,9 @@ build:
       version: "8.1"
       ini:
         memory_limit: "-1"
-  build:
-    tests:
-      override:
+#  build:
+#    tests:
+#      override:
 # tests:
 #  override:
 #    - phpunit --configuration phpunit.xml --exclude-group vendor,public/htdocs/includes
