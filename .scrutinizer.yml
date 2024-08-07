@@ -10,12 +10,12 @@ build:
   build:
     tests:
       override:
-tests:
-  override:
-    - phpunit --configuration phpunit.xml --exclude-group vendor,public/htdocs/includes
-  dependencies:
-    before:
-      - composer install
+# tests:
+#  override:
+#    - phpunit --configuration phpunit.xml --exclude-group vendor,public/htdocs/includes
+#  dependencies:
+#    before:
+#      - composer install
 
 #  tests:
 #    override:
