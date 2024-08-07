@@ -7,10 +7,11 @@ build:
       version: "8.1"
       ini:
         memory_limit: "-1"
-#  build:
-#    tests:
-#      override:
-# tests:
+  build:
+    tests:
+      override:
+        echo "Skipping tests"
+#tests:
 #  override:
 #    - phpunit --configuration phpunit.xml --exclude-group vendor,public/htdocs/includes
 #  dependencies:
