@@ -23,6 +23,10 @@ Other licenses apply for some included dependencies. See [COPYRIGHT](https://git
 
 ## INSTALLING
 
+### Try with Docker
+
+You can follow the instructions in the [README.md](https://github.com/alxarafe/alixar/tree/main/docker) file in the docker folder to directly use the program on your computer.
+
 ### Simple setup
 
 Releases can be downloaded from [official website](https://alxarafe.com/).

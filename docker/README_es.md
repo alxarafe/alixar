@@ -12,14 +12,14 @@ Asegúrate de tener instalado Docker en tu sistema:
 
 En primer lugar, necesita descargar o clonar una copia del proyecto desde GitHub.
 
-### Download as ZIP
+### Descargar el archivo ZIP
 
 1. Vaya al repositorio de [Alixar](https://github.com/rsanjoseo/alixar) en GitHub.
 2. Pulse en el botón "Code".
 3. Pulse en "Download ZIP".
 4. Descomprima el archivo que ha descargado en una carpeta de su ordenador.
 
-### Clone the Repository
+### Clonar el repositorio
 
 Para clonar el repositorio, cree y acceda a la carpeta donde desea clonar el proyecto y escriba el siguiente comando:
 

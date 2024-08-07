@@ -10,7 +10,7 @@ build:
   build:
     tests:
       override:
-        echo "Skipping tests"
+        - command: echo "Skipping tests"
 #tests:
 #  override:
 #    - phpunit --configuration phpunit.xml --exclude-group vendor,public/htdocs/includes
