@@ -7,7 +7,6 @@ build:
       version: "8.1"
       ini:
         memory_limit: "-1"
-  timeout: 7200
   tests:
     override:
       - echo "Skipping tests"
