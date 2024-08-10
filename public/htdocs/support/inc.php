@@ -128,7 +128,7 @@ $conf->global->MAIN_LOGTOHTML = 1;
 
 // Define prefix
 if (!isset($dolibarr_main_db_prefix) || !$dolibarr_main_db_prefix) {
-    $dolibarr_main_db_prefix = 'llx_';
+    $dolibarr_main_db_prefix = constant('DEFAULT_DB_PREFIX');
 }
 define('MAIN_DB_PREFIX', (isset($dolibarr_main_db_prefix) ? $dolibarr_main_db_prefix : ''));
 

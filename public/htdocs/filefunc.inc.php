@@ -39,6 +39,9 @@ if (!defined('DOL_APPLICATION_TITLE')) {
 if (!defined('DOL_VERSION')) {
     define('DOL_VERSION', '21.0.0-alpha'); // a.b.c-alpha, a.b.c-beta, a.b.c-rcX or a.b.c
 }
+if (!defined('DEFAULT_DB_PREFIX')) {
+    define('DEFAULT_DB_PREFIX', 'alx_');
+}
 
 if (!defined('EURO')) {
     define('EURO', chr(128));
@@ -234,7 +237,7 @@ if ($dolibarr_main_db_type == 'mysql') {
     $dolibarr_main_db_type = 'mysqli';
 }
 if (empty($dolibarr_main_db_prefix)) {
-    $dolibarr_main_db_prefix = 'llx_';
+    $dolibarr_main_db_prefix = constant('DEFAULT_DB_PREFIX');
 }
 if (empty($dolibarr_main_db_character_set)) {
     $dolibarr_main_db_character_set = ($dolibarr_main_db_type == 'mysqli' ? 'utf8' : ''); // Old installation

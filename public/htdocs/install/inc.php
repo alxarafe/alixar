@@ -254,7 +254,7 @@ $conf->global->MAIN_ENABLE_LOG_TO_HTML = 1;
 
 // Define prefix
 if (!isset($dolibarr_main_db_prefix) || !$dolibarr_main_db_prefix) {
-    $dolibarr_main_db_prefix = 'llx_';
+    $dolibarr_main_db_prefix = constant('DEFAULT_DB_PREFIX');
 }
 define('MAIN_DB_PREFIX', (isset($dolibarr_main_db_prefix) ? $dolibarr_main_db_prefix : ''));
 
@@ -542,7 +542,7 @@ function pHeader($subtitle, $next, $action = 'set', $param = '', $forcejqueryurl
     header("X-Frame-Options: SAMEORIGIN"); // Frames allowed only if on same domain (stop some XSS attacks)
 
     $defaultcss = constant('DOL_URL_ROOT') . '/install/default.css';
-    $logo = constant('DOL_URL_ROOT') . '/theme/dolibarr_logo.svg';
+    $logo = constant('DOL_URL_ROOT') . '/theme/alixar_rectangular_logo.svg';
 
     print '<!DOCTYPE HTML>' . "\n";
     print '<html>' . "\n";
