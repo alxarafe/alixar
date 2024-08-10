@@ -114,7 +114,7 @@ $relative_path = substr($fullpath, strlen(DOL_DOCUMENT_ROOT));
  * has been invoked. Now it doesn't work because the entry point is unique.
  * Here we put a temporary patch while it is migrating.
  */
-$_SERVER['PHP_SELF'] = constant('BASE_URL') . DIRECTORY_SEPARATOR . $route;
+$_SERVER['PHP_SELF'] = constant('BASE_URL') . $route;
 
 chdir($fullpath);
 

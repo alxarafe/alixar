@@ -45,7 +45,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['e']) ? (int) $_GET['e'] : (!empty($_POST['e']) ? (int) $_POST['e'] : 1));
+$entity = (!empty($_GET['e']) ? (int)$_GET['e'] : (!empty($_POST['e']) ? (int)$_POST['e'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -86,12 +86,12 @@ if (empty($conf->eventorganization->enabled)) {
 /**
  * Show header for new member
  *
- * @param   string      $title              Title
- * @param   string      $head               Head array
- * @param   int         $disablejs          More content into html header
- * @param   int         $disablehead        More content into html header
- * @param   array       $arrayofjs          Array of complementary js files
- * @param   array       $arrayofcss         Array of complementary css files
+ * @param string $title Title
+ * @param string $head Head array
+ * @param int $disablejs More content into html header
+ * @param int $disablehead More content into html header
+ * @param array $arrayofjs Array of complementary js files
+ * @param array $arrayofcss Array of complementary css files
  * @return  void
  */
 function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $arrayofjs = [], $arrayofcss = [])
@@ -103,15 +103,8 @@ function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $
     print '<body id="mainbody" class="publicnewmemberform">';
 
     // Define urllogo
-    $urllogo = constant('BASE_URL') . '/theme/common/login_logo.png';
-
-    if (!empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $mysoc->logo_small)) {
-        $urllogo = constant('BASE_URL') . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
-    } elseif (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output . '/logos/' . $mysoc->logo)) {
-        $urllogo = constant('BASE_URL') . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/' . $mysoc->logo);
-    } elseif (is_readable(DOL_DOCUMENT_ROOT . '/theme/dolibarr_logo.svg')) {
-        $urllogo = constant('DOL_URL_ROOT') . '/theme/dolibarr_logo.svg';
-    }
+    $width = 0;
+    $urllogo = Images::getLogo($conf->theme, $width, $mysoc->logo_small, $mysoc->logo);
 
     print '<div class="center">';
     // Output html code for logo
@@ -142,7 +135,6 @@ function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $
 /*
  * Actions
  */
-
 
 
 /*
@@ -186,6 +178,10 @@ if (!empty($conf->global->$paramlogo)) {
     $logosmall = getDolGlobalString('ONLINE_PAYMENT_LOGO');
 }
 //print '<!-- Show logo (logosmall='.$logosmall.' logo='.$logo.') -->'."\n";
+/**
+ * TODO: See if the getUrl function can be used.
+ *       Analyze the use of urllogo and urllogofull
+ */
 // Define urllogo
 $urllogo = '';
 $urllogofull = '';

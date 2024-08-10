@@ -72,7 +72,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Dolibarr\\": "public/htdocs"
+      "Dolibarr\\": "Dolibarr",
+      "Public\\": "public/htdocs"
     },
     "files": [
       "Dolibarr/Lib/Functions.php"

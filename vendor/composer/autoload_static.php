@@ -79,6 +79,7 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
         ),
         'P' => 
         array (
+            'Public\\' => 7,
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
@@ -244,6 +245,10 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
         array (
             0 => __DIR__ . '/..' . '/sabre/event/lib',
         ),
+        'Public\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/public/htdocs',
+        ),
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
@@ -324,7 +329,7 @@ class ComposerStaticInit5edffa392673cd269fc8a967ef95df00
         ),
         'Dolibarr\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/public/htdocs',
+            0 => __DIR__ . '/../..' . '/Dolibarr',
         ),
         'Doctrine\\Instantiator\\' => 
         array (

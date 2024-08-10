@@ -24,6 +24,8 @@
  *  \brief      Functions for module
  */
 
+use Dolibarr\Lib\Images;
+
 /**
  * Returns an array with the tabs for the "Opensurvey poll" section
  * It loads tabs from modules looking for the entity Opensurveyso
@@ -66,13 +68,13 @@ function opensurvey_prepare_head(Opensurveysondage $object)
 /**
  * Show header for new member
  *
- * @param   string      $title              Title
- * @param   string      $head               Head array
- * @param   int         $disablejs          More content into html header
- * @param   int         $disablehead        More content into html header
- * @param   array       $arrayofjs          Array of complementary js files
- * @param   array       $arrayofcss         Array of complementary css files
- * @param   string      $numsondage         Num survey
+ * @param string $title Title
+ * @param string $head Head array
+ * @param int $disablejs More content into html header
+ * @param int $disablehead More content into html header
+ * @param array $arrayofjs Array of complementary js files
+ * @param array $arrayofcss Array of complementary css files
+ * @param string $numsondage Num survey
  * @return  void
  */
 function llxHeaderSurvey($title, $head = "", $disablejs = 0, $disablehead = 0, $arrayofjs = [], $arrayofcss = [], $numsondage = '')
@@ -101,13 +103,9 @@ function llxHeaderSurvey($title, $head = "", $disablejs = 0, $disablehead = 0, $
     // Define urllogo
     $urllogo = '';
     $urllogofull = '';
-    if (!empty($logosmall) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $logosmall)) {
-        $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/thumbs/' . $logosmall);
-        $urllogofull = $dolibarr_main_url_root . '/viewimage.php?modulepart=mycompany&entity=' . $conf->entity . '&file=' . urlencode('logos/thumbs/' . $logosmall);
-    } elseif (!empty($logo) && is_readable($conf->mycompany->dir_output . '/logos/' . $logo)) {
-        $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/' . $logo);
-        $urllogofull = $dolibarr_main_url_root . '/viewimage.php?modulepart=mycompany&entity=' . $conf->entity . '&file=' . urlencode('logos/' . $logo);
-    }
+
+    $width = 0;
+    $urllogo = Images::getLogo($conf->theme, $width, $mysoc->logo_small, $mysoc->logo, true);
 
     // Output html code for logo
     if ($urllogo) {
@@ -176,8 +174,8 @@ function get_server_name()
 /**
  * Fonction vérifiant l'existance et la valeur non vide d'une clé d'un tableau
  *
- * @param   string  $name       Key to test
- * @param   array   $tableau    Array in which searching key ($_POST by default)
+ * @param string $name Key to test
+ * @param array $tableau Array in which searching key ($_POST by default)
  * @return  bool                True if key exists and return a non empty value
  */
 function issetAndNoEmpty($name, $tableau = null)
@@ -193,8 +191,8 @@ function issetAndNoEmpty($name, $tableau = null)
 /**
  * Fonction permettant de générer les URL pour les sondage
  *
- * @param   string    $id     L'identifiant du sondage
- * @param   bool      $admin  True pour générer une URL pour l'administration d'un sondage, False pour un URL publique
+ * @param string $id L'identifiant du sondage
+ * @param bool $admin True pour générer une URL pour l'administration d'un sondage, False pour un URL publique
  * @return  string            L'url pour le sondage
  */
 function getUrlSondage($id, $admin = false)
@@ -212,14 +210,14 @@ function getUrlSondage($id, $admin = false)
 /**
  *  Generate a random id
  *
- *  @param  int     $car    Length of string to generate key
- *  @return string
+ * @param int $car Length of string to generate key
+ * @return string
  */
 function dol_survey_random($car)
 {
     $string = "";
     $chaine = "abcdefghijklmnopqrstuvwxyz123456789";
-    mt_srand((int) ((float) microtime() * 1000000));
+    mt_srand((int)((float)microtime() * 1000000));
     for ($i = 0; $i < $car; $i++) {
         $string .= $chaine[mt_rand() % strlen($chaine)];
     }

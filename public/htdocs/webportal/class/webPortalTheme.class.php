@@ -66,14 +66,8 @@ class WebPortalTheme
 
         $this->loadPrimaryColor();
 
-        $urllogo = constant('BASE_URL') . '/theme/common/login_logo.png';
-        if (!empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $mysoc->logo_small)) {
-            $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
-        } elseif (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output . '/logos/' . $mysoc->logo)) {
-            $urllogo = constant('BASE_URL') . '/viewimage.php?modulepart=mycompany&amp;entity=' . $conf->entity . '&amp;file=' . urlencode('logos/' . $mysoc->logo);
-        } elseif (is_readable(DOL_DOCUMENT_ROOT . '/theme/dolibarr_logo.svg')) {
-            $urllogo = constant('DOL_URL_ROOT') . '/theme/dolibarr_logo.svg';
-        }
+        $width = 0;
+        $urllogo = Images::getLogo($conf->theme, $width, $mysoc->logo_small, $mysoc->logo);
 
         $this->loginLogoUrl = getDolGlobalString('WEBPORTAL_LOGIN_LOGO_URL', $urllogo);
         $this->menuLogoUrl = getDolGlobalString('WEBPORTAL_MENU_LOGO_URL', $this->loginLogoUrl);

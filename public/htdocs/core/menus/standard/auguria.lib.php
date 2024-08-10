@@ -152,6 +152,9 @@ function print_auguria_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout
             $logoContainerAdditionalClass = '';
         }
 
+        /**
+         * TODO: See if the getUrl function can be used, or a new function.
+         */
         if (!empty($mysoc->logo_squarred_mini) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $mysoc->logo_squarred_mini)) {
             $urllogo = constant('BASE_URL') . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_mini);
             /*} elseif (!empty($mysoc->logo_mini) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_mini))

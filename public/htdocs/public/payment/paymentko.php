@@ -43,7 +43,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and this test must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['e']) ? (int) $_GET['e'] : (!empty($_POST['e']) ? (int) $_POST['e'] : 1));
+$entity = (!empty($_GET['e']) ? (int)$_GET['e'] : (!empty($_POST['e']) ? (int)$_POST['e'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -123,7 +123,6 @@ $object = new stdClass(); // For triggers
 // None
 
 
-
 /*
  * View
  */
@@ -151,16 +150,16 @@ $appli = $mysoc->name;
 
 if (!empty($_SESSION['ipaddress'])) {      // To avoid to make action twice
     // Get on url call
-    $fulltag            = $FULLTAG;
-    $onlinetoken        = empty($PAYPALTOKEN) ? $_SESSION['onlinetoken'] : $PAYPALTOKEN;
-    $payerID            = empty($PAYPALPAYERID) ? $_SESSION['payerID'] : $PAYPALPAYERID;
+    $fulltag = $FULLTAG;
+    $onlinetoken = empty($PAYPALTOKEN) ? $_SESSION['onlinetoken'] : $PAYPALTOKEN;
+    $payerID = empty($PAYPALPAYERID) ? $_SESSION['payerID'] : $PAYPALPAYERID;
     // Set by newpayment.php
-    $paymentType        = $_SESSION['PaymentType'];
-    $currencyCodeType   = $_SESSION['currencyCodeType'];
-    $FinalPaymentAmt    = $_SESSION['FinalPaymentAmt'];
+    $paymentType = $_SESSION['PaymentType'];
+    $currencyCodeType = $_SESSION['currencyCodeType'];
+    $FinalPaymentAmt = $_SESSION['FinalPaymentAmt'];
     // From env
-    $ipaddress          = $_SESSION['ipaddress'];
-    $errormessage       = $_SESSION['errormessage'];
+    $ipaddress = $_SESSION['ipaddress'];
+    $errormessage = $_SESSION['errormessage'];
 
     if (is_object($object) && method_exists($object, 'call_trigger')) {
         // Call trigger
@@ -241,6 +240,10 @@ if (empty($doactionsthenredirect)) {
         $logosmall = getDolGlobalString('ONLINE_PAYMENT_LOGO');
     }
     //print '<!-- Show logo (logosmall='.$logosmall.' logo='.$logo.') -->'."\n";
+    /**
+     * TODO: See if the getUrl function can be used.
+     *       Analyze the use of urllogo and urllogofull
+     */
     // Define urllogo
     $urllogo = '';
     $urllogofull = '';

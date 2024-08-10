@@ -112,6 +112,12 @@ if (!empty($object->photo)) {
     }
 }
 //print '<!-- Show logo (logosmall='.$logosmall.' logo='.$logo.') -->'."\n";
+
+/**
+ * TODO: See if the getUrl function can be used.
+ *       Analyze the use of urllogo and urllogofull
+ */
+
 // Define urllogo
 $urllogo = '';
 $urllogofull = '';
@@ -423,6 +429,10 @@ if (!getDolUserInt('USER_PUBLIC_HIDE_COMPANY', 0, $object)) {
         $logosmall = getDolGlobalString('ONLINE_USER_LOGO');
     }
     //print '<!-- Show logo (logosmall='.$logosmall.' logo='.$logo.') -->'."\n";
+    /**
+     * TODO: See if the getUrl function can be used.
+     *       Analyze the use of urllogo and urllogofull
+     */
     // Define urllogo
     $urllogo = '';
     $urllogofull = '';

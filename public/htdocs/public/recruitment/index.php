@@ -144,6 +144,10 @@ if (!empty($conf->global->$paramlogo)) {
     $logosmall = getDolGlobalString('ONLINE_RECRUITMENT_LOGO_');
 }
 //print '<!-- Show logo (logosmall='.$logosmall.' logo='.$logo.') -->'."\n";
+/**
+ * TODO: See if the getUrl function can be used.
+ *       Analyze the use of urllogo and urllogofull
+ */
 // Define urllogo
 $urllogo = '';
 $urllogofull = '';

@@ -28,6 +28,7 @@
  *              because it is used at low code level.
  */
 
+use Dolibarr\Lib\Images;
 
 /**
  *  Return user/group account of web server
@@ -257,18 +258,7 @@ if (!function_exists('dol_loginfunction')) {
 
         // Show logo (search in order: small company logo, large company logo, theme logo, common logo)
         $width = 0;
-        $urllogo = constant('BASE_URL') . '/theme/common/login_logo.png';
-
-        if (!empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $mysoc->logo_small)) {
-            $urllogo = constant('BASE_URL') . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_small);
-        } elseif (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output . '/logos/' . $mysoc->logo)) {
-            $urllogo = constant('BASE_URL') . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/' . $mysoc->logo);
-            $width = 128;
-        } elseif (!empty($mysoc->logo_squarred_small) && is_readable($conf->mycompany->dir_output . '/logos/thumbs/' . $mysoc->logo_squarred_small)) {
-            $urllogo = constant('BASE_URL') . '/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_small);
-        } elseif (is_readable(DOL_DOCUMENT_ROOT . '/theme/dolibarr_logo.svg')) {
-            $urllogo = constant('DOL_URL_ROOT') . '/theme/dolibarr_logo.svg';
-        }
+        $urllogo = Images::getLogo($conf->theme, $width, $mysoc->logo_small, $mysoc->logo);
 
         // Security graphical code
         $captcha = 0;
@@ -307,7 +297,7 @@ if (!function_exists('dol_loginfunction')) {
         // Set jquery theme
         $dol_loginmesg = (!empty($_SESSION["dol_loginmesg"]) ? $_SESSION["dol_loginmesg"] : '');
 
-        $favicon = constant('BASE_URL') . '/theme/dolibarr_256x256_color.png';
+        $favicon = constant('BASE_URL') . '/theme/alixar_square_logo_256x256_color.png';
         if (!empty($mysoc->logo_squarred_mini)) {
             $favicon = constant('BASE_URL') . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_mini);
         }
