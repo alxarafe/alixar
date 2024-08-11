@@ -1561,7 +1561,7 @@ if ($action == 'create') {
         print img_picto('', 'project', 'class="pictofixedwidth"');
         print $formproject->select_projects(($object->socid > 0 ? $object->socid : -1), $projectid, 'projectid', 0, 0, 1, 1, 0, 0, 0, '', 1, 0, 'maxwidth500 widthcentpercentminusxx maxwidth500');
 
-        print '&nbsp;<a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . (empty($societe->id) ? '' : $societe->id) . '&action=create&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '">';
+        print '&nbsp;<a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . (empty($societe->id) ? '' : $societe->id) . '&action=create&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create') . '">';
         print '<span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddProject") . '"></span></a>';
         $urloption = '?action=create&donotclearsession=1';
         $url = dol_buildpath('comm/action/card.php', 2) . $urloption;
@@ -2069,7 +2069,7 @@ if ($id > 0) {
             print img_picto('', 'project', 'class="pictofixedwidth"');
             $numprojet = $formproject->select_projects(($object->socid > 0 ? $object->socid : -1), $object->fk_project, 'projectid', 0, 0, 1, 0, 0, 0, 0, '', 0, 0, 'maxwidth500 widthcentpercentminusxx');
             if ($numprojet == 0) {
-                print ' &nbsp; <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $object->socid . '&action=create&token=' . newToken() . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=edit') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddProject") . '"></span></a>';
+                print ' &nbsp; <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $object->socid . '&action=create&token=' . newToken() . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?id=' . $object->id . '&action=edit') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddProject") . '"></span></a>';
             }
             print '</td></tr>';
         }

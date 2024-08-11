@@ -1292,7 +1292,7 @@ if ($action == 'create') {
 				});
 				</script>';
             }
-            print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&client=0&fournisseur=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
+            print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&client=0&fournisseur=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
             print '</td>';
         }
         print '</tr>' . "\n";
@@ -1305,7 +1305,7 @@ if ($action == 'create') {
 
             $thirdparty = $soc;
             $discount_type = 1;
-            $backtopage = urlencode($_SERVER["PHP_SELF"] . '?socid=' . $thirdparty->id . '&action=' . $action . '&origin=' . GETPOST('origin') . '&originid=' . GETPOST('originid'));
+            $backtopage = $_SERVER["PHP_SELF"] . ('?socid=' . $thirdparty->id . '&action=' . $action . '&origin=' . GETPOST('origin') . '&originid=' . GETPOST('originid'));
             include DOL_DOCUMENT_ROOT . '/core/tpl/object_discounts.tpl.php';
 
             print '</td></tr>';
@@ -1379,7 +1379,7 @@ if ($action == 'create') {
             print '<tr>';
             print '<td>' . $langs->trans("Project") . '</td><td colspan="2">';
             print img_picto('', 'project', 'class="pictofixedwidth"') . $formproject->select_projects(($soc->id > 0 ? $soc->id : -1), $projectid, 'projectid', 0, 0, 1, 1, 0, 0, 0, '', 1, 0, 'maxwidth500');
-            print ' &nbsp; <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $soc->id . '&action=create&status=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create&socid=' . $soc->id) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
+            print ' &nbsp; <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $soc->id . '&action=create&status=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create&socid=' . $soc->id) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
 
             print '</td>';
             print '</tr>';
@@ -1667,7 +1667,7 @@ if ($action == 'create') {
 
         $thirdparty = $soc;
         $discount_type = 1;
-        $backtopage = urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id);
+        $backtopage = $_SERVER["PHP_SELF"] . ('?id=' . $object->id);
         include DOL_DOCUMENT_ROOT . '/core/tpl/object_discounts.tpl.php';
 
         print '</td></tr>';

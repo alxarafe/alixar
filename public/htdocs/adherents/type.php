@@ -602,7 +602,7 @@ if ($rowid > 0) {
         }
 
         if ($user->hasRight('adherent', 'configurer') && !empty($object->status)) {
-            print '<div class="inline-block divButAction"><a class="butAction" href="card.php?action=create&token=' . newToken() . '&typeid=' . $object->id . ($morphy ? '&morphy=' . urlencode($morphy) : '') . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?rowid=' . $object->id) . '">' . $langs->trans("AddMember") . '</a></div>';
+            print '<div class="inline-block divButAction"><a class="butAction" href="card.php?action=create&token=' . newToken() . '&typeid=' . $object->id . ($morphy ? '&morphy=' . urlencode($morphy) : '') . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?rowid=' . $object->id) . '">' . $langs->trans("AddMember") . '</a></div>';
         } else {
             print '<div class="inline-block divButAction"><a class="butActionRefused classfortooltip" href="#" title="' . dol_escape_htmltag($langs->trans("NoAddMember")) . '">' . $langs->trans("AddMember") . '</a></div>';
         }
@@ -847,7 +847,7 @@ if ($rowid > 0) {
                 if (getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
                     print '<td class="center">';
                     if ($user->hasRight('adherent', 'creer')) {
-                        print '<a class="editfielda marginleftonly" href="card.php?rowid=' . $objp->rowid . '&action=edit&token=' . newToken() . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?rowid=' . $object->id) . '">' . img_edit() . '</a>';
+                        print '<a class="editfielda marginleftonly" href="card.php?rowid=' . $objp->rowid . '&action=edit&token=' . newToken() . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?rowid=' . $object->id) . '">' . img_edit() . '</a>';
                     }
                     if ($user->hasRight('adherent', 'supprimer')) {
                         print '<a class="marginleftonly" href="card.php?rowid=' . $objp->rowid . '&action=resiliate&token=' . newToken() . '">' . img_picto($langs->trans("Resiliate"), 'disable.png') . '</a>';
@@ -915,7 +915,7 @@ if ($rowid > 0) {
                 if (!getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
                     print '<td class="center">';
                     if ($user->hasRight('adherent', 'creer')) {
-                        print '<a class="editfielda marginleftonly" href="card.php?rowid=' . $objp->rowid . '&action=edit&token=' . newToken() . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?rowid=' . $object->id) . '">' . img_edit() . '</a>';
+                        print '<a class="editfielda marginleftonly" href="card.php?rowid=' . $objp->rowid . '&action=edit&token=' . newToken() . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?rowid=' . $object->id) . '">' . img_edit() . '</a>';
                     }
                     if ($user->hasRight('adherent', 'supprimer')) {
                         print '<a class="marginleftonly" href="card.php?rowid=' . $objp->rowid . '&action=resiliate&token=' . newToken() . '">' . img_picto($langs->trans("Resiliate"), 'disable.png') . '</a>';

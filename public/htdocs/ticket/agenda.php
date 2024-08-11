@@ -260,17 +260,17 @@ if (!empty($object->id)) {
 
     // Show link to send an email (if read and not closed)
     $btnstatus = $object->status < Ticket::STATUS_CLOSED && $action != "presend" && $action != "presend_addmessage";
-    $url = 'card.php?track_id=' . $object->track_id . '&action=presend_addmessage&mode=init&private_message=0&send_email=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?track_id=' . $object->track_id) . '#formmailbeforetitle';
+    $url = 'card.php?track_id=' . $object->track_id . '&action=presend_addmessage&mode=init&private_message=0&send_email=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?track_id=' . $object->track_id) . '#formmailbeforetitle';
     $morehtmlright .= dolGetButtonTitle($langs->trans('SendMail'), '', 'fa fa-paper-plane', $url, 'email-title-button', $btnstatus);
 
     // Show link to add a message (if read and not closed)
     $btnstatus = $object->status < Ticket::STATUS_CLOSED && $action != "presend" && $action != "presend_addmessage";
-    $url = 'card.php?track_id=' . $object->track_id . '&action=presend_addmessage&mode=init&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?track_id=' . $object->track_id) . '#formmailbeforetitle';
+    $url = 'card.php?track_id=' . $object->track_id . '&action=presend_addmessage&mode=init&backtopage=' . $_SERVER["PHP_SELF"] . ('?track_id=' . $object->track_id) . '#formmailbeforetitle';
     $morehtmlright .= dolGetButtonTitle($langs->trans('TicketAddMessage'), '', 'fa fa-comment-dots', $url, 'add-new-ticket-title-button', $btnstatus);
 
     // Show link to add event (if read and not closed)
     $btnstatus = $object->status < Ticket::STATUS_CLOSED && $action != "presend" && $action != "presend_addmessage";
-    $url = constant('BASE_URL') . '/comm/action/card.php?action=create&datep=now&origin=ticket&originid=' . $object->id . '&projectid=' . $object->fk_project . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id);
+    $url = constant('BASE_URL') . '/comm/action/card.php?action=create&datep=now&origin=ticket&originid=' . $object->id . '&projectid=' . $object->fk_project . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?id=' . $object->id);
     $morehtmlright .= dolGetButtonTitle($langs->trans('AddAction'), '', 'fa fa-plus-circle', $url, 'add-new-ticket-even-button', $btnstatus);
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/memory.lib.php';

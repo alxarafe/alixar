@@ -199,7 +199,7 @@ print '<div class="tabsAction">';
 
 if (isModEnabled('agenda')) {
     if ($user->hasRight('agenda', 'myactions', 'create') || $user->hasRight('agenda', 'allactions', 'create')) {
-        print '<a class="butAction" href="' . constant('BASE_URL') . 'comm/action/card.php?action=create' . $out . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id) . '">' . $langs->trans("AddAction") . '</a>';
+        print '<a class="butAction" href="' . constant('BASE_URL') . 'comm/action/card.php?action=create' . $out . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?id=' . $object->id) . '">' . $langs->trans("AddAction") . '</a>';
     } else {
         print '<a class="butActionRefused classfortooltip" href="#">' . $langs->trans("AddAction") . '</a>';
     }

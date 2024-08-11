@@ -3457,7 +3457,7 @@ if ($action == 'create') {
 				</script>';
             }
             if (!GETPOSTINT('fac_rec')) {
-                print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&client=3&fournisseur=0&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
+                print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&client=3&fournisseur=0&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
             }
             print '</td>';
             print '</tr>' . "\n";
@@ -3999,7 +3999,7 @@ if ($action == 'create') {
             $langs->load('projects');
             print '<tr><td>' . $langs->trans('Project') . '</td><td colspan="2">';
             print img_picto('', 'project', 'class="pictofixedwidth"') . $formproject->select_projects(($socid > 0 ? $socid : -1), $projectid, 'projectid', 0, 0, 1, 1, 0, 0, 0, '', 1, 0, 'maxwidth500 widthcentpercentminusxx');
-            print ' <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $soc->id . '&action=create&status=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create&socid=' . $soc->id . ($fac_rec ? '&fac_rec=' . $fac_rec : '')) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
+            print ' <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $soc->id . '&action=create&status=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create&socid=' . $soc->id . ($fac_rec ? '&fac_rec=' . $fac_rec : '')) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
             print '</td></tr>';
         }
 

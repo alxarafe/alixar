@@ -515,7 +515,7 @@ if ($id > 0 || $ref) {
                     $reshook = $hookmanager->executeHooks('formCreateThirdpartyOptions', $parameters, $object, $action);
                     if (empty($reshook)) {
                         if (empty($form->result)) {
-                            print '<a href="' . constant('BASE_URL') . '/societe/card.php?action=create&type=f&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . ((int) $object->id) . '&action=' . urlencode($action) . ($action == 'create_price' ? '&token=' . newToken() : '')) . '">';
+                            print '<a href="' . constant('BASE_URL') . '/societe/card.php?action=create&type=f&backtopage=' . $_SERVER["PHP_SELF"] . ('?id=' . ((int) $object->id) . '&action=' . urlencode($action) . ($action == 'create_price' ? '&token=' . newToken() : '')) . '">';
                             print img_picto($langs->trans("CreateDolibarrThirdPartySupplier"), 'add', 'class="marginleftonly"');
                             print '</a>';
                         }

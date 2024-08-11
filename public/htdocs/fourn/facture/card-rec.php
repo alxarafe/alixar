@@ -995,7 +995,7 @@ if ($action == 'create') {
             $langs->load('projects');
             print '<tr><td>' . $langs->trans('Project') . '</td><td>';
             $numprojet = $formproject->select_projects($object->thirdparty->id, $projectid, 'projectid', 0, 0, 1, 0, 0, 0, 0, '', 0, 0, '');
-            print ' &nbsp; <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $object->thirdparty->id . '&action=create&status=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create&socid=' . $object->thirdparty->id . (!empty($id) ? '&id=' . $id : '')) . '">' . $langs->trans("AddProject") . '</a>';
+            print ' &nbsp; <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $object->thirdparty->id . '&action=create&status=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create&socid=' . $object->thirdparty->id . (!empty($id) ? '&id=' . $id : '')) . '">' . $langs->trans("AddProject") . '</a>';
             print '</td></tr>';
         }
 

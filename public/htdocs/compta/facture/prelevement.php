@@ -484,7 +484,7 @@ if ($object->id > 0) {
         $thirdparty = $object->thirdparty;
         $discount_type = 0;
     }
-    $backtopage = urlencode($_SERVER["PHP_SELF"] . '?facid=' . $object->id);
+    $backtopage = $_SERVER["PHP_SELF"] . ('?facid=' . $object->id);
     $cannotApplyDiscount = 1;
     include DOL_DOCUMENT_ROOT . '/core/tpl/object_discounts.tpl.php';
 

@@ -554,7 +554,7 @@ if ($user->hasRight('agenda', 'myactions', 'create') || $user->hasRight('agenda'
 
     $urltocreateaction = constant('BASE_URL') . '/comm/action/card.php?action=create';
     $urltocreateaction .= '&apyear=' . $tmpforcreatebutton['year'] . '&apmonth=' . $tmpforcreatebutton['mon'] . '&apday=' . $tmpforcreatebutton['mday'] . '&aphour=' . $tmpforcreatebutton['hours'] . '&apmin=' . $tmpforcreatebutton['minutes'];
-    $urltocreateaction .= '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . ($newparam ? '?' . $newparam : ''));
+    $urltocreateaction .= '&backtopage=' . $_SERVER["PHP_SELF"] . (($newparam ? '?' . $newparam : ''));
 
     $newcardbutton .= dolGetButtonTitle($langs->trans("AddAction"), '', 'fa fa-plus-circle', $urltocreateaction);
 }
@@ -1834,7 +1834,7 @@ function show_day_events($db, $day, $month, $year, $monthshown, $style, &$eventa
     if ($user->hasRight('agenda', 'myactions', 'create') || $user->hasRight('agenda', 'allactions', 'create')) {
         $newparam .= '&month=' . str_pad((string) $month, 2, "0", STR_PAD_LEFT) . '&year=' . $year;
         $hourminsec = '100000';
-        $urltocreate = constant('BASE_URL') . '/comm/action/card.php?action=create&datep=' . sprintf("%04d%02d%02d", $year, $month, $day) . $hourminsec . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . ($newparam ? '?' . $newparam : ''));
+        $urltocreate = constant('BASE_URL') . '/comm/action/card.php?action=create&datep=' . sprintf("%04d%02d%02d", $year, $month, $day) . $hourminsec . '&backtopage=' . $_SERVER["PHP_SELF"] . (($newparam ? '?' . $newparam : ''));
     }
 
     // Line with title of day

@@ -721,7 +721,7 @@ if ($num > 0) {
 
         print '<td class="nowraponall right">';
 
-        $backtopage = urlencode($_SERVER["PHP_SELF"] . '?' . $param . ($sortfield ? '&sortfield=' . $sortfield : '') . ($sortorder ? '&sortorder=' . $sortorder : ''));
+        $backtopage = $_SERVER["PHP_SELF"] . ('?' . $param . ($sortfield ? '&sortfield=' . $sortfield : '') . ($sortorder ? '&sortorder=' . $sortorder : ''));
         if ($user->hasRight('cron', 'create')) {
             print '<a class="editfielda" href="' . constant('DOL_URL_ROOT') . "/cron/card.php?id=" . $obj->rowid . '&action=edit&token=' . newToken() . ($sortfield ? '&sortfield=' . $sortfield : '') . ($sortorder ? '&sortorder=' . $sortorder : '') . $param;
             print "&backtopage=" . $backtopage . "\" title=\"" . dol_escape_htmltag($langs->trans('Edit')) . "\">" . img_picto($langs->trans('Edit'), 'edit') . "</a> &nbsp;";

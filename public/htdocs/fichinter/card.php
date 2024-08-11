@@ -1087,7 +1087,7 @@ if ($action == 'create') {
         print '<table class="border centpercent">';
         print '<tr><td class="fieldrequired">' . $langs->trans("ThirdParty") . '</td><td>';
         print $form->select_company('', 'socid', '', 'SelectThirdParty', 1, 0, null, 0, 'minwidth300');
-        print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
+        print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
         print '</td></tr>';
         print '</table>';
 

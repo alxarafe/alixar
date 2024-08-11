@@ -564,7 +564,7 @@ if ($result) {
         print '<td class="tdoverflowmax80" title="' . dol_escape_htmltag($objp->tva_intra) . '">' . dol_escape_htmltag($objp->tva_intra) . '</td>';
 
         print '<td class="tdoverflowmax200" title="' . dol_escape_htmltag($accountingaccountstatic->label) . '">';
-        print '<a class="editfielda" href="./card.php?id=' . $objp->rowid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . ($param ? '?' . $param : '')) . '">';
+        print '<a class="editfielda" href="./card.php?id=' . $objp->rowid . '&backtopage=' . $_SERVER["PHP_SELF"] . (($param ? '?' . $param : '')) . '">';
         print img_edit();
         print '</a> ';
         print $accountingaccountstatic->getNomUrl(0, 1, 1, '', 1);

@@ -975,7 +975,7 @@ $newcardbutton .= dolGetButtonTitleSeparator();
 if ($contextpage != 'poslist') {
     $newcardbutton .= dolGetButtonTitle($langs->trans('NewContactAddress'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/contact/card.php?action=create', '', $permissiontoadd);
 } elseif ($user->hasRight('societe', 'contact', 'creer')) {
-    $url = constant('BASE_URL') . '/contact/card.php?action=create&type=t&contextpage=poslist&optioncss=print&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?token=' . newToken() . 'type=t&contextpage=poslist&nomassaction=1&optioncss=print&place=' . $place);
+    $url = constant('BASE_URL') . '/contact/card.php?action=create&type=t&contextpage=poslist&optioncss=print&backtopage=' . $_SERVER["PHP_SELF"] . ('?token=' . newToken() . 'type=t&contextpage=poslist&nomassaction=1&optioncss=print&place=' . $place);
     $label = 'MenuNewCustomer';
     $newcardbutton .= dolGetButtonTitle($langs->trans($label), '', 'fa fa-plus-circle', $url);
 }

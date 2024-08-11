@@ -177,7 +177,7 @@ if ($permission) {
 
             $newcardbutton = '';
             if (!empty($object->socid) && $object->socid > 1 && $user->hasRight('societe', 'creer')) {
-                $newcardbutton .= '<a href="' . constant('BASE_URL') . 'contact/card.php?socid=' . $selectedCompany . '&action=create&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id) . '" title="' . $langs->trans('NewContact') . '"><span class="fa fa-plus-circle valignmiddle paddingleft"></span></a>';
+                $newcardbutton .= '<a href="' . constant('BASE_URL') . 'contact/card.php?socid=' . $selectedCompany . '&action=create&backtopage=' . $_SERVER["PHP_SELF"] . ('?id=' . $object->id) . '" title="' . $langs->trans('NewContact') . '"><span class="fa fa-plus-circle valignmiddle paddingleft"></span></a>';
             }
             print $newcardbutton; ?>
         </div>

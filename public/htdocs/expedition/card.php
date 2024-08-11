@@ -1011,7 +1011,7 @@ if ($action == 'create') {
                 print '<td>' . $langs->trans("Project") . '</td><td colspan="2">';
                 print img_picto('', 'project', 'class="pictofixedwidth"');
                 $numprojet = $formproject->select_projects($soc->id, $projectid, 'projectid', 0);
-                print ' <a class="paddingleft" href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $soc->id . '&action=create&status=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create&socid=' . $soc->id) . '"><span class="fa fa-plus-circle valignmiddle"></span></a>';
+                print ' <a class="paddingleft" href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $soc->id . '&action=create&status=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create&socid=' . $soc->id) . '"><span class="fa fa-plus-circle valignmiddle"></span></a>';
                 print '</td>';
                 print '</tr>';
             }

@@ -487,7 +487,7 @@ if ($action == 'create') {
 				});
 				</script>';
             }
-            print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&client=3&fournisseur=0&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
+            print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&client=3&fournisseur=0&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
             print '</td>';
         }
         print '</tr>' . "\n";

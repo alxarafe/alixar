@@ -5211,7 +5211,7 @@ if ($mode == 'replacesite' || $massaction == 'replace') {
                     // Edit properties, HTML sources, status
                     print '<td class="tdwebsitesearchresult right nowraponall">';
                     $disabled = '';
-                    $urltoedithtmlsource = $_SERVER["PHP_SELF"] . '?action=editmeta&token=' . newToken() . '&websiteid=' . $website->id . '&pageid=' . $answerrecord->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . $param);
+                    $urltoedithtmlsource = $_SERVER["PHP_SELF"] . '?action=editmeta&token=' . newToken() . '&websiteid=' . $website->id . '&pageid=' . $answerrecord->id . '&backtopage=' . $_SERVER["PHP_SELF"] . ($param);
                     if (!$user->hasRight('website', 'write')) {
                         $disabled = ' disabled';
                         $urltoedithtmlsource = '';
@@ -5219,7 +5219,7 @@ if ($mode == 'replacesite' || $massaction == 'replace') {
                     print '<a class="editfielda marginleftonly marginrightonly ' . $disabled . '" href="' . $urltoedithtmlsource . '" title="' . $langs->trans("EditPageMeta") . '">' . img_picto($langs->trans("EditPageMeta"), 'pencil-ruler') . '</a>';
 
                     $disabled = '';
-                    $urltoedithtmlsource = $_SERVER["PHP_SELF"] . '?action=editsource&token=' . newToken() . '&websiteid=' . $website->id . '&pageid=' . $answerrecord->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . $param);
+                    $urltoedithtmlsource = $_SERVER["PHP_SELF"] . '?action=editsource&token=' . newToken() . '&websiteid=' . $website->id . '&pageid=' . $answerrecord->id . '&backtopage=' . $_SERVER["PHP_SELF"] . ($param);
                     if (!$user->hasRight('website', 'write')) {
                         $disabled = ' disabled';
                         $urltoedithtmlsource = '';

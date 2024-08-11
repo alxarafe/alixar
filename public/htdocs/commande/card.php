@@ -1905,7 +1905,7 @@ if ($action == 'create' && $usercancreate) {
 				});
 				</script>';
             }
-            print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&client=3&fournisseur=0&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
+            print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&client=3&fournisseur=0&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
             print '</td>';
         }
         print '</tr>' . "\n";
@@ -2003,7 +2003,7 @@ if ($action == 'create' && $usercancreate) {
             print '<tr>';
             print '<td>' . $langs->trans("Project") . '</td><td>';
             print img_picto('', 'project', 'class="pictofixedwidth"') . $formproject->select_projects(($soc->id > 0 ? $soc->id : -1), (GETPOSTISSET('projectid') ? GETPOST('projectid') : $projectid), 'projectid', 0, 0, 1, 1, 0, 0, 0, '', 1, 0, 'maxwidth500 widthcentpercentminusxx');
-            print ' <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $soc->id . '&action=create&status=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create&socid=' . $soc->id) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
+            print ' <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $soc->id . '&action=create&status=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create&socid=' . $soc->id) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
             print '</td>';
             print '</tr>';
         }
@@ -2543,9 +2543,9 @@ if ($action == 'create' && $usercancreate) {
                 $filtercreditnote = "fk_facture_source IS NOT NULL AND (description NOT LIKE '(DEPOSIT)%' OR description LIKE '(EXCESS RECEIVED)%')";
             }
 
-            $addrelativediscount = '<a href="' . constant('BASE_URL') . '/comm/remise.php?id=' . $soc->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"]) . '?facid=' . $object->id . '">' . $langs->trans("EditRelativeDiscounts") . '</a>';
-            $addabsolutediscount = '<a href="' . constant('BASE_URL') . '/comm/remx.php?id=' . $soc->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"]) . '?facid=' . $object->id . '">' . $langs->trans("EditGlobalDiscounts") . '</a>';
-            $addcreditnote = '<a href="' . constant('BASE_URL') . '/compta/facture/card.php?action=create&socid=' . $soc->id . '&type=2&backtopage=' . urlencode($_SERVER["PHP_SELF"]) . '?facid=' . $object->id . '">' . $langs->trans("AddCreditNote") . '</a>';
+            $addrelativediscount = '<a href="' . constant('BASE_URL') . '/comm/remise.php?id=' . $soc->id . '&backtopage=' . $_SERVER["PHP_SELF"] . '?facid=' . $object->id . '">' . $langs->trans("EditRelativeDiscounts") . '</a>';
+            $addabsolutediscount = '<a href="' . constant('BASE_URL') . '/comm/remx.php?id=' . $soc->id . '&backtopage=' . $_SERVER["PHP_SELF"] . '?facid=' . $object->id . '">' . $langs->trans("EditGlobalDiscounts") . '</a>';
+            $addcreditnote = '<a href="' . constant('BASE_URL') . '/compta/facture/card.php?action=create&socid=' . $soc->id . '&type=2&backtopage=' . $_SERVER["PHP_SELF"] . '?facid=' . $object->id . '">' . $langs->trans("AddCreditNote") . '</a>';
 
             print '<tr><td class="titlefield">' . $langs->trans('Discounts') . '</td><td class="valuefield">';
 

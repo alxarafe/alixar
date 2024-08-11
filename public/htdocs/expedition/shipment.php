@@ -340,7 +340,7 @@ if ($id > 0 || !empty($ref)) {
 
         $thirdparty = $soc;
         $discount_type = 0;
-        $backtopage = urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id);
+        $backtopage = $_SERVER["PHP_SELF"] . ('?id=' . $object->id);
         $cannotApplyDiscount = 1;
         include DOL_DOCUMENT_ROOT . '/core/tpl/object_discounts.tpl.php';
         print '</td></tr>';

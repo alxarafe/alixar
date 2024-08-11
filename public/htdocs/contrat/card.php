@@ -1214,7 +1214,7 @@ if ($action == 'create') {
         print '<td>';
         print img_picto('', 'company', 'class="pictofixedwidth"');
         print $form->select_company('', 'socid', '', 'SelectThirdParty', 1, 0, null, 0, 'minwidth300 widthcentpercentminusxx maxwidth500');
-        print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
+        print ' <a href="' . constant('BASE_URL') . '/societe/card.php?action=create&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create') . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddThirdParty") . '"></span></a>';
         print '</td>';
     }
     print '</tr>' . "\n";
@@ -1262,7 +1262,7 @@ if ($action == 'create') {
         print '<tr><td>' . $langs->trans("Project") . '</td><td>';
         print img_picto('', 'project', 'class="pictofixedwidth"');
         $formproject->select_projects(($soc->id > 0 ? $soc->id : -1), $projectid, "projectid", 0, 0, 1, 1);
-        print ' &nbsp; <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $soc->id . '&action=create&status=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create&socid=' . $soc->id) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
+        print ' &nbsp; <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $soc->id . '&action=create&status=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create&socid=' . $soc->id) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
         print "</td></tr>";
     }
 

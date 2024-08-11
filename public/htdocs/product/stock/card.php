@@ -327,7 +327,7 @@ if ($action == 'create') {
         $langs->load('projects');
         print '<tr><td>' . $langs->trans('Project') . '</td><td colspan="2">';
         print img_picto('', 'project') . $formproject->select_projects(($socid > 0 ? $socid : -1), $projectid, 'projectid', 0, 0, 1, 1, 0, 0, 0, '', 1, 0, 'maxwidth500');
-        print ' <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $socid . '&action=create&status=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create&socid=' . $socid) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
+        print ' <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . $socid . '&action=create&status=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create&socid=' . $socid) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
         print '</td></tr>';
     }
 
@@ -830,7 +830,7 @@ if ($action == 'create') {
 
                     // Link to transfer
                     if ($user->hasRight('stock', 'mouvement', 'creer')) {
-                        print '<td class="center"><a href="' . constant('BASE_URL') . '/product/stock/product.php?dwid=' . $object->id . '&id=' . $objp->rowid . '&action=transfert&token=' . newToken() . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $id) . '">';
+                        print '<td class="center"><a href="' . constant('BASE_URL') . '/product/stock/product.php?dwid=' . $object->id . '&id=' . $objp->rowid . '&action=transfert&token=' . newToken() . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?id=' . $id) . '">';
                         print img_picto($langs->trans("TransferStock"), 'add', 'class="hideonsmartphone pictofixedwidth" style="color: #a69944"');
                         print $langs->trans("TransferStock");
                         print "</a></td>";
@@ -838,7 +838,7 @@ if ($action == 'create') {
 
                     // Link to stock
                     if ($user->hasRight('stock', 'creer')) {
-                        print '<td class="center"><a href="' . constant('BASE_URL') . '/product/stock/product.php?dwid=' . $object->id . '&id=' . $objp->rowid . '&action=correction&token=' . newToken() . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $id) . '">';
+                        print '<td class="center"><a href="' . constant('BASE_URL') . '/product/stock/product.php?dwid=' . $object->id . '&id=' . $objp->rowid . '&action=correction&token=' . newToken() . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?id=' . $id) . '">';
                         print img_picto($langs->trans("CorrectStock"), 'add', 'class="hideonsmartphone pictofixedwidth" style="color: #a69944"');
                         print $langs->trans("CorrectStock");
                         print "</a></td>";
@@ -912,7 +912,7 @@ if ($action == 'create') {
                 $langs->load('projects');
                 print '<tr><td>' . $langs->trans('Project') . '</td><td colspan="2">';
                 print img_picto('', 'project') . $formproject->select_projects(($socid > 0 ? $socid : -1), $projectid, 'projectid', 0, 0, 1, 1, 0, 0, 0, '', 1, 0, 'maxwidth500');
-                print ' <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . ($socid > 0 ? $socid : "") . '&action=create&status=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?action=create' . ($socid > 0 ? '&socid=' . $socid : "")) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
+                print ' <a href="' . constant('BASE_URL') . '/projet/card.php?socid=' . ($socid > 0 ? $socid : "") . '&action=create&status=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?action=create' . ($socid > 0 ? '&socid=' . $socid : "")) . '"><span class="fa fa-plus-circle valignmiddle" title="' . $langs->trans("AddProject") . '"></span></a>';
                 print '</td></tr>';
             }
 

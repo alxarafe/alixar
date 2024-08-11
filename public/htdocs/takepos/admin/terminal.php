@@ -214,7 +214,7 @@ if (isModEnabled("bank")) {
     print '<td>';
     print img_picto('', 'bank_account', 'class="pictofixedwidth"');
     print $form->select_comptes(getDolGlobalInt('CASHDESK_ID_BANKACCOUNT_CASH' . $terminaltouse), 'CASHDESK_ID_BANKACCOUNT_CASH' . $terminaltouse, 0, "courant=2", 1, '', 0, 'maxwidth500 widthcentpercentminusxx', 1);
-    print ' <a href="' . constant('BASE_URL') . '/compta/bank/card.php?action=create&type=2&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?terminal=' . $terminal) . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("NewBankAccount") . '"></span></a>';
+    print ' <a href="' . constant('BASE_URL') . '/compta/bank/card.php?action=create&type=2&backtopage=' . $_SERVER["PHP_SELF"] . ('?terminal=' . $terminal) . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("NewBankAccount") . '"></span></a>';
     if (getDolGlobalInt('CASHDESK_ID_BANKACCOUNT_CASH' . $terminaltouse)) {
         $atleastonefound++;
     }
@@ -223,7 +223,7 @@ if (isModEnabled("bank")) {
     print '<td>';
     print img_picto('', 'bank_account', 'class="pictofixedwidth"');
     print $form->select_comptes(getDolGlobalInt('CASHDESK_ID_BANKACCOUNT_CHEQUE' . $terminaltouse), 'CASHDESK_ID_BANKACCOUNT_CHEQUE' . $terminaltouse, 0, "courant=1", 1, '', 0, 'maxwidth500 widthcentpercentminusxx', 1);
-    print ' <a href="' . constant('BASE_URL') . '/compta/bank/card.php?action=create&type=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?terminal=' . $terminal) . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("NewBankAccount") . '"></span></a>';
+    print ' <a href="' . constant('BASE_URL') . '/compta/bank/card.php?action=create&type=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?terminal=' . $terminal) . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("NewBankAccount") . '"></span></a>';
     if (getDolGlobalInt('CASHDESK_ID_BANKACCOUNT_CHEQUE' . $terminaltouse)) {
         $atleastonefound++;
     }
@@ -232,7 +232,7 @@ if (isModEnabled("bank")) {
     print '<td>';
     print img_picto('', 'bank_account', 'class="pictofixedwidth"');
     print $form->select_comptes(getDolGlobalInt('CASHDESK_ID_BANKACCOUNT_CB' . $terminaltouse), 'CASHDESK_ID_BANKACCOUNT_CB' . $terminaltouse, 0, "courant=1", 1, '', 0, 'maxwidth500 widthcentpercentminusxx', 1);
-    print ' <a href="' . constant('BASE_URL') . '/compta/bank/card.php?action=create&type=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?terminal=' . $terminal) . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("NewBankAccount") . '"></span></a>';
+    print ' <a href="' . constant('BASE_URL') . '/compta/bank/card.php?action=create&type=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?terminal=' . $terminal) . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("NewBankAccount") . '"></span></a>';
     if (getDolGlobalInt('CASHDESK_ID_BANKACCOUNT_CB' . $terminaltouse)) {
         $atleastonefound++;
     }
@@ -280,7 +280,7 @@ if (isModEnabled("bank")) {
         print '<td>';
         print img_picto('', 'bank_account', 'class="pictofixedwidth"');
         print $form->select_comptes(getDolGlobalInt('CASHDESK_ID_BANKACCOUNT_SUMUP' . $terminaltouse), 'CASHDESK_ID_BANKACCOUNT_SUMUP' . $terminaltouse, 0, "courant=1", 1, '', 0, 'maxwidth500 widthcentpercentminusxx', 1);
-        print ' <a href="' . constant('BASE_URL') . '/compta/bank/card.php?action=create&type=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?terminal=' . $terminal) . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("NewBankAccount") . '"></span></a>';
+        print ' <a href="' . constant('BASE_URL') . '/compta/bank/card.php?action=create&type=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?terminal=' . $terminal) . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("NewBankAccount") . '"></span></a>';
         if (getDolGlobalInt('CASHDESK_ID_BANKACCOUNT_SUMUP' . $terminaltouse)) {
             $atleastonefound++;
         }
@@ -300,7 +300,7 @@ if (isModEnabled("bank")) {
         $cour = preg_match('/^LIQ.*/', $modep->code) ? 2 : 1;
         print img_picto('', 'bank_account', 'class="pictofixedwidth"');
         print $form->select_comptes(getDolGlobalInt($name), $name, 0, "courant=" . $cour, 1, '', 0, 'maxwidth500 widthcentpercentminusxx', 1);
-        print ' <a href="' . constant('BASE_URL') . '/compta/bank/card.php?action=create&type=1&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?terminal=' . $terminal) . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("NewBankAccount") . '"></span></a>';
+        print ' <a href="' . constant('BASE_URL') . '/compta/bank/card.php?action=create&type=1&backtopage=' . $_SERVER["PHP_SELF"] . ('?terminal=' . $terminal) . '"><span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("NewBankAccount") . '"></span></a>';
         print '</td></tr>';
     }
 }
@@ -334,7 +334,7 @@ if (isModEnabled('stock')) {
     if (!$disabled) {
         print img_picto('', 'stock', 'class="pictofixedwidth"');
         print $formproduct->selectWarehouses(getDolGlobalString('CASHDESK_ID_WAREHOUSE' . $terminal), 'CASHDESK_ID_WAREHOUSE' . $terminal, '', 1, $disabled, 0, '', 0, 0, array(), 'maxwidth500 widthcentpercentminusxx');
-        print ' <a href="' . constant('BASE_URL') . '/product/stock/card.php?action=create&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?&terminal=' . $terminal) . '"><span class="fa fa-plus-circle valignmiddle"></span></a>';
+        print ' <a href="' . constant('BASE_URL') . '/product/stock/card.php?action=create&backtopage=' . $_SERVER["PHP_SELF"] . ('?&terminal=' . $terminal) . '"><span class="fa fa-plus-circle valignmiddle"></span></a>';
     } else {
         print '<span class="opacitymedium">' . $langs->trans("StockDecreaseForPointOfSaleDisabled") . '</span>';
     }

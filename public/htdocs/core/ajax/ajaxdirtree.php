@@ -470,7 +470,7 @@ function treeOutputForAbsoluteDir($sqltree, $selecteddir, $fullpathselecteddir, 
                         print '<!-- edit link -->';
                         print '<td class="right" width="18"><a class="editfielda" href="';
                         print constant('BASE_URL') . '/ecm/dir_card.php?module=' . urlencode($modulepart) . '&section=' . $val['id'] . '&relativedir=' . urlencode($val['fullrelativename']);
-                        print '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?file_manager=1&website=' . $websitekey . '&pageid=' . $pageid);
+                        print '&backtopage=' . $_SERVER["PHP_SELF"] . ('?file_manager=1&website=' . $websitekey . '&pageid=' . $pageid);
                         print '">' . img_edit($langs->trans("Edit") . ' - ' . $langs->trans("View"), 0, 'class="valignmiddle opacitymedium"') . '</a></td>';
 
                         // Add link

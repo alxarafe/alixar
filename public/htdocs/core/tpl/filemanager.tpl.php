@@ -79,7 +79,7 @@ print '<div class="inline-block toolbarbutton centpercent">';
 // Toolbar
 if ($permtoadd) {
     $websitekeyandpageid = (!empty($websitekey) ? '&website=' . urlencode($websitekey) : '') . (!empty($pageid) ? '&pageid=' . urlencode((string) $pageid) : '');
-    print '<a id="acreatedir" href="' . constant('BASE_URL') . '/ecm/dir_add_card.php?action=create&module=' . urlencode($module) . $websitekeyandpageid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?file_manager=1' . $websitekeyandpageid) . '" class="inline-block valignmiddle toolbarbutton paddingtop" title="' . dol_escape_htmltag($langs->trans('ECMAddSection')) . '">';
+    print '<a id="acreatedir" href="' . constant('BASE_URL') . '/ecm/dir_add_card.php?action=create&module=' . urlencode($module) . $websitekeyandpageid . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?file_manager=1' . $websitekeyandpageid) . '" class="inline-block valignmiddle toolbarbutton paddingtop" title="' . dol_escape_htmltag($langs->trans('ECMAddSection')) . '">';
     print img_picto('', 'folder-plus', '', false, 0, 0, '', 'size15x marginrightonly');
     print '</a>';
 } else {

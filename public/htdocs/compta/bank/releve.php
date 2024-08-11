@@ -700,7 +700,7 @@ if (empty($numref)) {
             print '<td class="nowrap right">' . price(price2num($total, 'MT')) . "</td>\n";
 
             if ($user->hasRight('banque', 'modifier') || $user->hasRight('banque', 'consolidate')) {
-                print '<td class="center"><a class="editfielda reposition" href="' . constant('BASE_URL') . '/compta/bank/line.php?rowid=' . $objp->rowid . '&account=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?account=' . $object->id . '&num=' . urlencode($numref)) . '">';
+                print '<td class="center"><a class="editfielda reposition" href="' . constant('BASE_URL') . '/compta/bank/line.php?rowid=' . $objp->rowid . '&account=' . $object->id . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?account=' . $object->id . '&num=' . urlencode($numref)) . '">';
                 print img_edit();
                 print "</a></td>";
             } else {

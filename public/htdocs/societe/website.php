@@ -415,9 +415,9 @@ print dol_get_fiche_end();
 $newcardbutton = '';
 if (isModEnabled('website') || isModEnabled('webportal')) {
     if ($user->hasRight('societe', 'lire')) {
-        $newcardbutton .= dolGetButtonTitle($langs->trans("AddWebsiteAccount"), '', 'fa fa-plus-circle', constant('BASE_URL') . '/website/websiteaccount_card.php?action=create&fk_soc=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id));
+        $newcardbutton .= dolGetButtonTitle($langs->trans("AddWebsiteAccount"), '', 'fa fa-plus-circle', constant('BASE_URL') . '/website/websiteaccount_card.php?action=create&fk_soc=' . $object->id . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?id=' . $object->id));
     } else {
-        $newcardbutton .= dolGetButtonTitle($langs->trans("AddAction"), '', 'fa fa-plus-circle', constant('BASE_URL') . '/website/websiteaccount_card.php?action=create&fk_soc=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?id=' . $object->id), '', 0);
+        $newcardbutton .= dolGetButtonTitle($langs->trans("AddAction"), '', 'fa fa-plus-circle', constant('BASE_URL') . '/website/websiteaccount_card.php?action=create&fk_soc=' . $object->id . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?id=' . $object->id), '', 0);
     }
 }
 

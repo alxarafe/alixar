@@ -1157,7 +1157,7 @@ if ($contextpage != 'poslist') {
     $newcardbutton .= dolGetButtonTitle($langs->trans('ViewKanban'), '', 'fa fa-th-list imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=kanban' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ($mode == 'kanban' ? 2 : 1), array('morecss' => 'reposition'));
     $newcardbutton .= dolGetButtonTitle($langs->trans($label), '', 'fa fa-plus-circle', $url, '', $user->hasRight('societe', 'creer'));
 } elseif ($user->hasRight('societe', 'creer')) {
-    $url = constant('BASE_URL') . '/societe/card.php?action=create&type=t&contextpage=poslist&optioncss=print&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?type=t&contextpage=poslist&nomassaction=1&optioncss=print&place=' . $place);
+    $url = constant('BASE_URL') . '/societe/card.php?action=create&type=t&contextpage=poslist&optioncss=print&backtopage=' . $_SERVER["PHP_SELF"] . ('?type=t&contextpage=poslist&nomassaction=1&optioncss=print&place=' . $place);
     $label = 'MenuNewCustomer';
     $newcardbutton = dolGetButtonTitle($langs->trans($label), '', 'fa fa-plus-circle', $url);
 }

@@ -618,11 +618,11 @@ if ($resql) {
         if (getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
             print '<td class="center nowraponall">';
             if ($user->hasRight('accounting', 'chartofaccount')) {
-                print '<a class="editfielda" href="./card.php?action=update&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?' . $param) . '">';
+                print '<a class="editfielda" href="./card.php?action=update&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?' . $param) . '">';
                 print img_edit();
                 print '</a>';
                 print '&nbsp;';
-                print '<a class="marginleftonly" href="./card.php?action=delete&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?' . $param) . '">';
+                print '<a class="marginleftonly" href="./card.php?action=delete&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?' . $param) . '">';
                 print img_delete();
                 print '</a>';
                 print '&nbsp;';
@@ -774,11 +774,11 @@ if ($resql) {
         if (!getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
             print '<td class="center nowraponall">';
             if ($user->hasRight('accounting', 'chartofaccount')) {
-                print '<a class="editfielda" href="./card.php?action=update&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?' . $param) . '">';
+                print '<a class="editfielda" href="./card.php?action=update&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?' . $param) . '">';
                 print img_edit();
                 print '</a>';
                 print '&nbsp;';
-                print '<a class="marginleftonly" href="./card.php?action=delete&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?' . $param) . '">';
+                print '<a class="marginleftonly" href="./card.php?action=delete&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?' . $param) . '">';
                 print img_delete();
                 print '</a>';
                 print '&nbsp;';

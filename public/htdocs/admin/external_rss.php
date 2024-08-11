@@ -228,7 +228,7 @@ print '</form>';
 print '<br><br>';
 print '<span class="opacitymedium">' . $langs->trans('RssNote') . '</span>';
 print ' - ';
-print '<a href="' . constant('BASE_URL') . '/admin/boxes.php?backtopage=' . urlencode($_SERVER["PHP_SELF"]) . '">' . $langs->trans('JumpToBoxes') . '</a>';
+print '<a href="' . constant('BASE_URL') . '/admin/boxes.php?backtopage=' . $_SERVER["PHP_SELF"] . '">' . $langs->trans('JumpToBoxes') . '</a>';
 print '<br><br>';
 
 $sql = "SELECT rowid, file, note FROM " . MAIN_DB_PREFIX . "boxes_def";
@@ -326,7 +326,7 @@ if ($resql) {
         print '<tr class="oddeven">';
         print '<td>' . $langs->trans('WidgetAvailable') . '</td>';
         print '<td>' . yn($active);
-        print ' &nbsp; - &nbsp; <a href="' . constant('BASE_URL') . '/admin/boxes.php?backtopage=' . urlencode($_SERVER["PHP_SELF"]) . '">';
+        print ' &nbsp; - &nbsp; <a href="' . constant('BASE_URL') . '/admin/boxes.php?backtopage=' . $_SERVER["PHP_SELF"] . '">';
         print $langs->trans("JumpToBoxes");
         print '</a>';
         print '</td>';

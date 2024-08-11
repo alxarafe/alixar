@@ -14093,7 +14093,7 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
                 $user->hasRight('agenda', 'allactions', 'create') ||
                 (($actionstatic->authorid == $user->id || $actionstatic->userownerid == $user->id) && $user->hasRight('agenda', 'myactions', 'create'))
             ) {
-                $out .= '<a class="paddingleft paddingright timeline-btn2 editfielda" href="' . DOL_MAIN_URL_ROOT . '/comm/action/card.php?action=edit&token=' . newToken() . '&id=' . $actionstatic->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?' . $param) . '">';
+                $out .= '<a class="paddingleft paddingright timeline-btn2 editfielda" href="' . DOL_MAIN_URL_ROOT . '/comm/action/card.php?action=edit&token=' . newToken() . '&id=' . $actionstatic->id . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?' . $param) . '">';
                 //$out .= '<i class="fa fa-pencil" title="'.$langs->trans("Modify").'" ></i>';
                 $out .= img_picto($langs->trans("Modify"), 'edit', 'class="edita"');
                 $out .= '</a>';
@@ -14216,7 +14216,7 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
                     $out .= '<div class="readmore-block --closed" >';
                     $out .= '	<div class="readmore-block__excerpt" >';
                     $out .=     dolPrintHTML($truncatedText);
-                    $out .= ' 	<br><a class="read-more-link" data-read-more-action="open" href="' . DOL_MAIN_URL_ROOT . '/comm/action/card.php?id=' . $actionstatic->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?' . $param) . '" >' . $langs->trans("ReadMore") . ' <span class="fa fa-chevron-right" aria-hidden="true"></span></a>';
+                    $out .= ' 	<br><a class="read-more-link" data-read-more-action="open" href="' . DOL_MAIN_URL_ROOT . '/comm/action/card.php?id=' . $actionstatic->id . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?' . $param) . '" >' . $langs->trans("ReadMore") . ' <span class="fa fa-chevron-right" aria-hidden="true"></span></a>';
                     $out .= '	</div>';
                     $out .= '	<div class="readmore-block__full-text" >';
                     $out .=  dolPrintHTML($histo[$key]['message']);

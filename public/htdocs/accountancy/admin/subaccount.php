@@ -417,13 +417,13 @@ if ($resql) {
 
             // Customer
             if ($obj->type == 1) {
-                $e .= '<a class="editfielda" title="' . $langs->trans("Customer") . '" href="' . constant('BASE_URL') . 'societe/card.php?action=edit&token=' . newToken() . '&socid=' . $obj->rowid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"]) . '">' . img_edit() . '</a>';
+                $e .= '<a class="editfielda" title="' . $langs->trans("Customer") . '" href="' . constant('BASE_URL') . 'societe/card.php?action=edit&token=' . newToken() . '&socid=' . $obj->rowid . '&backtopage=' . $_SERVER["PHP_SELF"] . '">' . img_edit() . '</a>';
             } elseif ($obj->type == 2) {
                 // Supplier
-                $e .= '<a class="editfielda" title="' . $langs->trans("Supplier") . '" href="' . constant('BASE_URL') . 'societe/card.php?action=edit&token=' . newToken() . '&socid=' . $obj->rowid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"]) . '">' . img_edit() . '</a>';
+                $e .= '<a class="editfielda" title="' . $langs->trans("Supplier") . '" href="' . constant('BASE_URL') . 'societe/card.php?action=edit&token=' . newToken() . '&socid=' . $obj->rowid . '&backtopage=' . $_SERVER["PHP_SELF"] . '">' . img_edit() . '</a>';
             } elseif ($obj->type == 3) {
                 // User - Employee
-                $e .= '<a class="editfielda" title="' . $langs->trans("Employee") . '" href="' . constant('BASE_URL') . 'user/card.php?action=edit&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"]) . '">' . img_edit() . '</a>';
+                $e .= '<a class="editfielda" title="' . $langs->trans("Employee") . '" href="' . constant('BASE_URL') . 'user/card.php?action=edit&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . $_SERVER["PHP_SELF"] . '">' . img_edit() . '</a>';
             }
             print $e;
             print '</td>' . "\n";
@@ -504,13 +504,13 @@ if ($resql) {
 
             // Customer
             if ($obj->type == 1) {
-                $e .= '<a class="editfielda" title="' . $langs->trans("Customer") . '" href="' . constant('BASE_URL') . 'societe/card.php?action=edit&token=' . newToken() . '&socid=' . $obj->rowid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"]) . '">' . img_edit() . '</a>';
+                $e .= '<a class="editfielda" title="' . $langs->trans("Customer") . '" href="' . constant('BASE_URL') . 'societe/card.php?action=edit&token=' . newToken() . '&socid=' . $obj->rowid . '&backtopage=' . $_SERVER["PHP_SELF"] . '">' . img_edit() . '</a>';
             } elseif ($obj->type == 2) {
                 // Supplier
-                $e .= '<a class="editfielda" title="' . $langs->trans("Supplier") . '" href="' . constant('BASE_URL') . 'societe/card.php?action=edit&token=' . newToken() . '&socid=' . $obj->rowid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"]) . '">' . img_edit() . '</a>';
+                $e .= '<a class="editfielda" title="' . $langs->trans("Supplier") . '" href="' . constant('BASE_URL') . 'societe/card.php?action=edit&token=' . newToken() . '&socid=' . $obj->rowid . '&backtopage=' . $_SERVER["PHP_SELF"] . '">' . img_edit() . '</a>';
             } elseif ($obj->type == 3) {
                 // User - Employee
-                $e .= '<a class="editfielda" title="' . $langs->trans("Employee") . '" href="' . constant('BASE_URL') . 'user/card.php?action=edit&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . urlencode($_SERVER["PHP_SELF"]) . '">' . img_edit() . '</a>';
+                $e .= '<a class="editfielda" title="' . $langs->trans("Employee") . '" href="' . constant('BASE_URL') . 'user/card.php?action=edit&token=' . newToken() . '&id=' . $obj->rowid . '&backtopage=' . $_SERVER["PHP_SELF"] . '">' . img_edit() . '</a>';
             }
             print $e;
             print '</td>' . "\n";

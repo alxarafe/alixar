@@ -815,7 +815,7 @@ if ($object->format == "D") {
         print '<td class="sujet">' . dol_htmlentities($tmp[0]) . '</td>' . "\n";
     }
 
-    print '<td class="sujet"><a href="' . $_SERVER["PHP_SELF"] . '?id=' . $numsondage . '&ajoutsujet=1&backtopage=' . urlencode($_SERVER["PHP_SELF"]) . '"><span class="fa fa-plus-circle valignmiddle btnTitle-icon"></span></a></td>' . "\n";
+    print '<td class="sujet"><a href="' . $_SERVER["PHP_SELF"] . '?id=' . $numsondage . '&ajoutsujet=1&backtopage=' . $_SERVER["PHP_SELF"] . '"><span class="fa fa-plus-circle valignmiddle btnTitle-icon"></span></a></td>' . "\n";
     print '</tr>' . "\n";
 }
 

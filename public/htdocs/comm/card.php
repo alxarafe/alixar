@@ -471,7 +471,7 @@ if ($object->id > 0) {
         print $langs->trans("CustomerRelativeDiscountShort");
         print '<td><td class="right">';
         if ($user->hasRight('societe', 'creer') && !$user->socid > 0) {
-            print '<a class="editfielda" href="' . constant('BASE_URL') . '/comm/remise.php?id=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?socid=' . $object->id) . '&action=create&token=' . newToken() . '">' . img_edit($langs->trans("Modify")) . '</a>';
+            print '<a class="editfielda" href="' . constant('BASE_URL') . '/comm/remise.php?id=' . $object->id . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?socid=' . $object->id) . '&action=create&token=' . newToken() . '">' . img_edit($langs->trans("Modify")) . '</a>';
         }
         print '</td></tr></table>';
         print '</td><td>' . ($object->remise_percent ? '<a href="' . constant('BASE_URL') . '/comm/remise.php?id=' . $object->id . '">' . $object->remise_percent . '%</a>' : '') . '</td>';
@@ -484,7 +484,7 @@ if ($object->id > 0) {
         print $langs->trans("CustomerAbsoluteDiscountShort");
         print '<td><td class="right">';
         if ($user->hasRight('societe', 'creer') && !$user->socid > 0) {
-            print '<a class="editfielda" href="' . constant('BASE_URL') . '/comm/remx.php?id=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?socid=' . $object->id) . '&action=create_remise&token=' . newToken() . '">' . img_edit($langs->trans("Modify")) . '</a>';
+            print '<a class="editfielda" href="' . constant('BASE_URL') . '/comm/remx.php?id=' . $object->id . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?socid=' . $object->id) . '&action=create_remise&token=' . newToken() . '">' . img_edit($langs->trans("Modify")) . '</a>';
         }
         print '</td></tr></table>';
         print '</td>';
@@ -494,7 +494,7 @@ if ($object->id > 0) {
             dol_print_error($db, $object->error);
         }
         if ($amount_discount > 0) {
-            print '<a href="' . constant('BASE_URL') . '/comm/remx.php?id=' . $object->id . '&backtopage=' . urlencode($_SERVER["PHP_SELF"] . '?socid=' . $object->id) . '&action=create&token=' . newToken() . '">' . price($amount_discount, 1, $langs, 1, -1, -1, $conf->currency) . '</a>';
+            print '<a href="' . constant('BASE_URL') . '/comm/remx.php?id=' . $object->id . '&backtopage=' . $_SERVER["PHP_SELF"] . ('?socid=' . $object->id) . '&action=create&token=' . newToken() . '">' . price($amount_discount, 1, $langs, 1, -1, -1, $conf->currency) . '</a>';
         }
         //else print $langs->trans("DiscountNone");
         print '</td>';
