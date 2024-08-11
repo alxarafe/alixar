@@ -458,6 +458,8 @@ class modBom extends DolibarrModules
     {
         global $conf, $langs;
 
+        $result = $this->_load_tables('/install/mysql/', 'bom');
+
         // Create extrafields
         //include_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
         //$extrafields = new ExtraFields($this->db);

@@ -1183,7 +1183,11 @@ class DolibarrModules // Can not be abstract, because we need to instantiate it 
                 foreach ($listofsubdir as $subdir) {
                     $dir = $dirsql . $subdir;
 
-                    $handle = @opendir($dir); // Dir may not exists
+                    if (!is_dir($dir)) {
+                        continue;
+                    }
+                    $handle = opendir($dir); // Dir may not exists
+
                     if (is_resource($handle)) {
                         $dirfound++;
 
