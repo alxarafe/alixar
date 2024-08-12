@@ -1139,7 +1139,7 @@ if ($mode == 'marketplace') {
 
     print '<tr class="oddeven">' . "\n";
     $url = 'https://www.dolistore.com';
-    print '<td class="hideonsmartphone"><a href="' . $url . '" target="_blank" rel="noopener noreferrer external"><img border="0" class="imgautosize imgmaxwidth180" src="' . constant('BASE_URL') . '/theme/dolistore_logo.png"></a></td>';
+    print '<td class="hideonsmartphone"><a href="' . $url . '" target="_blank" rel="noopener noreferrer external"><img border="0" class="imgautosize imgmaxwidth180" src="' . constant('BASE_URL') . '/theme/alxarafe_shop.png"></a></td>';
     print '<td><span class="opacitymedium">' . $langs->trans("DoliStoreDesc") . '</span></td>';
     print '<td><a href="' . $url . '" target="_blank" rel="noopener noreferrer external">' . $url . '</a></td>';
     print '</tr>';
