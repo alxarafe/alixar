@@ -188,7 +188,7 @@ if (!$defaultsyslogfacility) {
     $defaultsyslogfacility = 'LOG_USER';
 }
 if (!$defaultsyslogfile) {
-    $defaultsyslogfile = 'dolibarr.log';
+    $defaultsyslogfile = 'alixar.log';
 }
 $optionmc = '';
 if (isModEnabled('multicompany') && $user->entity) {

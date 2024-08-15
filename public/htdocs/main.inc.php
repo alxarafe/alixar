@@ -3478,7 +3478,7 @@ function left_menu($menu_array_before, $helppagename = '', $notused = '', $menu_
                 $bugbaseurl .= urlencode("## Steps to reproduce the behavior\n");
                 $bugbaseurl .= urlencode("[*Verbose description*]\n");
                 $bugbaseurl .= urlencode("\n");
-                $bugbaseurl .= urlencode("## [Attached files](https://help.github.com/articles/issue-attachments) (Screenshots, screencasts, dolibarr.log, debugging information…)\n");
+                $bugbaseurl .= urlencode("## [Attached files](https://help.github.com/articles/issue-attachments) (Screenshots, screencasts, alixar.log, debugging information…)\n");
                 $bugbaseurl .= urlencode("[*Files*]\n");
                 $bugbaseurl .= urlencode("\n");
 

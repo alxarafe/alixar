@@ -63,7 +63,7 @@ class Utils
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db     Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -75,9 +75,9 @@ class Utils
      *  Purge files into directory of data files.
      *  CAN BE A CRON TASK
      *
-     *  @param  string      $choices       Choice of purge mode ('tempfiles', 'tempfilesold' to purge temp older than $nbsecondsold seconds, 'logfiles', or mix of this). Note that 'allfiles' is also possible but very dangerous.
-     *  @param  int         $nbsecondsold  Nb of seconds old to accept deletion of a directory if $choice is 'tempfilesold', or deletion of file if $choice is 'allfiles'
-     *  @return int                        0 if OK, < 0 if KO (this function is used also by cron so only 0 is OK)
+     * @param string $choices Choice of purge mode ('tempfiles', 'tempfilesold' to purge temp older than $nbsecondsold seconds, 'logfiles', or mix of this). Note that 'allfiles' is also possible but very dangerous.
+     * @param int $nbsecondsold Nb of seconds old to accept deletion of a directory if $choice is 'tempfilesold', or deletion of file if $choice is 'allfiles'
+     * @return int                        0 if OK, < 0 if KO (this function is used also by cron so only 0 is OK)
      */
     public function purgeFiles($choices = 'tempfilesold+logfiles', $nbsecondsold = 86400)
     {
@@ -235,14 +235,14 @@ class Utils
      *  Make a backup of database
      *  CAN BE A CRON TASK
      *
-     *  @param  string      $compression       'gz' or 'bz' or 'none'
-     *  @param  string      $type              'mysql', 'postgresql', ...
-     *  @param  int         $usedefault        1=Use default backup profile (Set this to 1 when used as cron)
-     *  @param  string      $file              'auto' or filename to build
-     *  @param  int         $keeplastnfiles    Keep only last n files (not used yet)
-     *  @param  int         $execmethod        0=Use default method (that is 1 by default), 1=Use the PHP 'exec' - need size of dump in memory, but low memory method is used if GETPOST('lowmemorydump') is set, 2=Use the 'popen' method (low memory method)
-     *  @param  int         $lowmemorydump     1=Use the low memory method. If $lowmemorydump is set, it means we want to make the compression using an external pipe instead retrieving the content of the dump in PHP memory array $output_arr and then print it into the PHP pipe open with xopen().
-     *  @return int                            0 if OK, < 0 if KO (this function is used also by cron so only 0 is OK)
+     * @param string $compression 'gz' or 'bz' or 'none'
+     * @param string $type 'mysql', 'postgresql', ...
+     * @param int $usedefault 1=Use default backup profile (Set this to 1 when used as cron)
+     * @param string $file 'auto' or filename to build
+     * @param int $keeplastnfiles Keep only last n files (not used yet)
+     * @param int $execmethod 0=Use default method (that is 1 by default), 1=Use the PHP 'exec' - need size of dump in memory, but low memory method is used if GETPOST('lowmemorydump') is set, 2=Use the 'popen' method (low memory method)
+     * @param int $lowmemorydump 1=Use the low memory method. If $lowmemorydump is set, it means we want to make the compression using an external pipe instead retrieving the content of the dump in PHP memory array $output_arr and then print it into the PHP pipe open with xopen().
+     * @return int                            0 if OK, < 0 if KO (this function is used also by cron so only 0 is OK)
      */
     public function dumpDatabase($compression = 'none', $type = 'auto', $usedefault = 1, $file = 'auto', $keeplastnfiles = 0, $execmethod = 0, $lowmemorydump = 0)
     {
@@ -702,96 +702,194 @@ class Utils
         return ($errormsg ? -1 : 0);
     }
 
-
-
-    /**
-     * Execute a CLI command.
+    /** Backup the db OR just a table without mysqldump binary, with PHP only (does not require any exec permission)
+     *  Author: David Walsh (http://davidwalsh.name/backup-mysql-database-php)
+     *  Updated and enhanced by Stephen Larroque (lrq3000) and by the many commentators from the blog
+     *  Note about foreign keys constraints: for Dolibarr, since there are a lot of constraints and when imported the tables will be inserted in the dumped order, not in constraints order, then we ABSOLUTELY need to use SET FOREIGN_KEY_CHECKS=0; when importing the sql dump.
+     *  Note2: db2SQL by Howard Yeend can be an alternative, by using SHOW FIELDS FROM and SHOW KEYS FROM we could generate a more precise dump (eg: by getting the type of the field and then precisely outputting the right formatting - in quotes, numeric or null - instead of trying to guess like we are doing now).
      *
-     * @param   string  $command            Command line to execute.
-     *                                      Warning: The command line is sanitize by escapeshellcmd(), except if $noescapecommand set, so can't contains any redirection char '>'. Use param $redirectionfile if you need it.
-     * @param   string  $outputfile         A path for an output file (used only when method is 2). For example: $conf->admin->dir_temp.'/out.tmp';
-     * @param   int     $execmethod         0=Use default method (that is 1 by default), 1=Use the PHP 'exec', 2=Use the 'popen' method
-     * @param   string  $redirectionfile    If defined, a redirection of output to this file is added.
-     * @param   int     $noescapecommand    1=Do not escape command. Warning: Using this parameter needs you already have sanitized the $command parameter. If not, it will lead to security vulnerability.
-     *                                      This parameter is provided for backward compatibility with external modules. Always use 0 in core.
-     * @param   string  $redirectionfileerr If defined, a redirection of error is added to this file instead of to channel 1.
-     * @return  array                       array('result'=>...,'output'=>...,'error'=>...). result = 0 means OK.
+     * @param string $outputfile Output file name
+     * @param string $tables Table name or '*' for all
+     * @return int                     Return integer <0 if KO, >0 if OK
      */
-    public function executeCLI($command, $outputfile, $execmethod = 0, $redirectionfile = null, $noescapecommand = 0, $redirectionfileerr = null)
+    public function backupTables($outputfile, $tables = '*')
     {
-        global $conf, $langs;
+        global $db, $langs;
+        global $errormsg;
 
-        $result = 0;
-        $output = '';
-        $error = '';
-
-        if (empty($noescapecommand)) {
-            $command = escapeshellcmd($command);
-        }
-
-        if ($redirectionfile) {
-            $command .= " > " . dol_sanitizePathName($redirectionfile);
-        }
-
-        if ($redirectionfileerr && ($redirectionfileerr != $redirectionfile)) {
-            // If we ask a redirect of stderr on a given file not already used for stdout
-            $command .= " 2> " . dol_sanitizePathName($redirectionfileerr);
+        // Set to UTF-8
+        if (is_a($db, 'DoliDBMysqli')) {
+            /** @var DoliDBMysqli $db */
+            $db->db->set_charset('utf8');
         } else {
-            $command .= " 2>&1";
+            /** @var DoliDB $db */
+            $db->query('SET NAMES utf8');
+            $db->query('SET CHARACTER SET utf8');
         }
 
-        if (getDolGlobalString('MAIN_EXEC_USE_POPEN')) {
-            $execmethod = getDolGlobalString('MAIN_EXEC_USE_POPEN');
-        }
-        if (empty($execmethod)) {
-            $execmethod = 1;
-        }
-        //$execmethod=1;
-        dol_syslog("Utils::executeCLI execmethod=" . $execmethod . " command=" . $command, LOG_DEBUG);
-        $output_arr = array();
-
-        if ($execmethod == 1) {
-            $retval = null;
-            exec($command, $output_arr, $retval);
-            $result = $retval;
-            if ($retval != 0) {
-                $langs->load("errors");
-                dol_syslog("Utils::executeCLI retval after exec=" . $retval, LOG_ERR);
-                $error = 'Error ' . $retval;
+        //get all of the tables
+        if ($tables == '*') {
+            $tables = array();
+            $result = $db->query('SHOW FULL TABLES WHERE Table_type = \'BASE TABLE\'');
+            while ($row = $db->fetch_row($result)) {
+                $tables[] = $row[0];
             }
+        } else {
+            $tables = is_array($tables) ? $tables : explode(',', $tables);
         }
-        if ($execmethod == 2) { // With this method, there is no way to get the return code, only output
-            $handle = fopen($outputfile, 'w+b');
-            if ($handle) {
-                dol_syslog("Utils::executeCLI run command " . $command);
-                $handlein = popen($command, 'r');
-                while (!feof($handlein)) {
-                    $read = fgets($handlein);
-                    fwrite($handle, $read);
-                    $output_arr[] = $read;
+
+        //cycle through
+        $handle = fopen($outputfile, 'w+');
+        if (fwrite($handle, '') === false) {
+            $langs->load("errors");
+            dol_syslog("Failed to open file " . $outputfile, LOG_ERR);
+            $errormsg = $langs->trans("ErrorFailedToWriteInDir");
+            return -1;
+        }
+
+        // Print headers and global mysql config vars
+        $sqlhead = '';
+        $sqlhead .= "-- " . $db::LABEL . " dump via php with Dolibarr " . DOL_VERSION . "
+--
+-- Host: " . $db->db->host_info . "    Database: " . $db->database_name . "
+-- ------------------------------------------------------
+-- Server version	" . $db->db->server_info . "
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+";
+
+        if (GETPOST("nobin_disable_fk")) {
+            $sqlhead .= "SET FOREIGN_KEY_CHECKS=0;\n";
+        }
+        //$sqlhead .= "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n";
+        if (GETPOST("nobin_use_transaction")) {
+            $sqlhead .= "SET AUTOCOMMIT=0;\nSTART TRANSACTION;\n";
+        }
+
+        fwrite($handle, $sqlhead);
+
+        $ignore = '';
+        if (GETPOST("nobin_sql_ignore")) {
+            $ignore = 'IGNORE ';
+        }
+        $delayed = '';
+        if (GETPOST("nobin_delayed")) {
+            $delayed = 'DELAYED ';
+        }
+
+        // Process each table and print their definition + their datas
+        foreach ($tables as $table) {
+            // Saving the table structure
+            fwrite($handle, "\n--\n-- Table structure for table `" . $table . "`\n--\n");
+
+            if (GETPOST("nobin_drop")) {
+                fwrite($handle, "DROP TABLE IF EXISTS `" . $table . "`;\n"); // Dropping table if exists prior to re create it
+            }
+            fwrite($handle, "/*!40101 SET @saved_cs_client     = @@character_set_client */;\n");
+            fwrite($handle, "/*!40101 SET character_set_client = utf8 */;\n");
+            $resqldrop = $db->query('SHOW CREATE TABLE ' . $table);
+            $row2 = $db->fetch_row($resqldrop);
+            if (empty($row2[1])) {
+                fwrite($handle, "\n-- WARNING: Show create table " . $table . " return empty string when it should not.\n");
+            } else {
+                fwrite($handle, $row2[1] . ";\n");
+                //fwrite($handle,"/*!40101 SET character_set_client = @saved_cs_client */;\n\n");
+
+                // Dumping the data (locking the table and disabling the keys check while doing the process)
+                fwrite($handle, "\n--\n-- Dumping data for table `" . $table . "`\n--\n");
+                if (!GETPOST("nobin_nolocks")) {
+                    fwrite($handle, "LOCK TABLES `" . $table . "` WRITE;\n"); // Lock the table before inserting data (when the data will be imported back)
                 }
-                pclose($handlein);
-                fclose($handle);
+                if (GETPOST("nobin_disable_fk")) {
+                    fwrite($handle, "ALTER TABLE `" . $table . "` DISABLE KEYS;\n");
+                } else {
+                    fwrite($handle, "/*!40000 ALTER TABLE `" . $table . "` DISABLE KEYS */;\n");
+                }
+
+                $sql = "SELECT * FROM " . $table; // Here SELECT * is allowed because we don't have definition of columns to take
+                $result = $db->query($sql);
+                while ($row = $db->fetch_row($result)) {
+                    // For each row of data we print a line of INSERT
+                    fwrite($handle, "INSERT " . $delayed . $ignore . "INTO " . $table . " VALUES (");
+                    $columns = count($row);
+                    for ($j = 0; $j < $columns; $j++) {
+                        // Processing each columns of the row to ensure that we correctly save the value (eg: add quotes for string - in fact we add quotes for everything, it's easier)
+                        if ($row[$j] == null && !is_string($row[$j])) {
+                            // IMPORTANT: if the field is NULL we set it NULL
+                            $row[$j] = 'NULL';
+                        } elseif (is_string($row[$j]) && $row[$j] == '') {
+                            // if it's an empty string, we set it as an empty string
+                            $row[$j] = "''";
+                        } elseif (is_numeric($row[$j]) && !strcmp((string)$row[$j], (string)((float)$row[$j] + 0))) { // test if it's a numeric type and the numeric version ($nb+0) == string version (eg: if we have 01, it's probably not a number but rather a string, else it would not have any leading 0)
+                            // if it's a number, we return it as-is
+                            //                      $row[$j] = $row[$j];
+                        } else { // else for all other cases we escape the value and put quotes around
+                            $row[$j] = addslashes($row[$j]);
+                            $row[$j] = preg_replace("#\n#", "\\n", $row[$j]);
+                            $row[$j] = "'" . $row[$j] . "'";
+                        }
+                    }
+                    fwrite($handle, implode(',', $row) . ");\n");
+                }
+                if (GETPOST("nobin_disable_fk")) {
+                    fwrite($handle, "ALTER TABLE `" . $table . "` ENABLE KEYS;\n"); // Enabling back the keys/index checking
+                }
+                if (!GETPOST("nobin_nolocks")) {
+                    fwrite($handle, "UNLOCK TABLES;\n"); // Unlocking the table
+                }
+                fwrite($handle, "\n\n\n");
             }
-            dolChmod($outputfile);
         }
 
-        // Update with result
-        if (is_array($output_arr) && count($output_arr) > 0) {
-            foreach ($output_arr as $val) {
-                $output .= $val . ($execmethod == 2 ? '' : "\n");
-            }
+        /* Backup Procedure structure*/
+        /*
+         $result = $db->query('SHOW PROCEDURE STATUS');
+         if ($db->num_rows($result) > 0)
+         {
+         while ($row = $db->fetch_row($result)) { $procedures[] = $row[1]; }
+         foreach($procedures as $proc)
+         {
+         fwrite($handle,"DELIMITER $$\n\n");
+         fwrite($handle,"DROP PROCEDURE IF EXISTS '$name'.'$proc'$$\n");
+         $resqlcreateproc=$db->query("SHOW CREATE PROCEDURE '$proc'");
+         $row2 = $db->fetch_row($resqlcreateproc);
+         fwrite($handle,"\n".$row2[2]."$$\n\n");
+         fwrite($handle,"DELIMITER ;\n\n");
+         }
+         }
+         */
+        /* Backup Procedure structure*/
+
+        // Write the footer (restore the previous database settings)
+        $sqlfooter = "\n\n";
+        if (GETPOST("nobin_use_transaction")) {
+            $sqlfooter .= "COMMIT;\n";
         }
+        if (GETPOST("nobin_disable_fk")) {
+            $sqlfooter .= "SET FOREIGN_KEY_CHECKS=1;\n";
+        }
+        $sqlfooter .= "\n\n-- Dump completed on " . date('Y-m-d G-i-s');
+        fwrite($handle, $sqlfooter);
 
-        dol_syslog("Utils::executeCLI result=" . $result . " output=" . $output . " error=" . $error, LOG_DEBUG);
+        fclose($handle);
 
-        return array('result' => $result, 'output' => $output, 'error' => $error);
+        return 1;
     }
 
     /**
      * Generate documentation of a Module
      *
-     * @param   string  $module     Module name
+     * @param string $module Module name
      * @return  int                 Return integer <0 if KO, >0 if OK
      */
     public function generateDoc($module)
@@ -990,6 +1088,90 @@ class Utils
     }
 
     /**
+     * Execute a CLI command.
+     *
+     * @param string $command Command line to execute.
+     *                                      Warning: The command line is sanitize by escapeshellcmd(), except if $noescapecommand set, so can't contains any redirection char '>'. Use param $redirectionfile if you need it.
+     * @param string $outputfile A path for an output file (used only when method is 2). For example: $conf->admin->dir_temp.'/out.tmp';
+     * @param int $execmethod 0=Use default method (that is 1 by default), 1=Use the PHP 'exec', 2=Use the 'popen' method
+     * @param string $redirectionfile If defined, a redirection of output to this file is added.
+     * @param int $noescapecommand 1=Do not escape command. Warning: Using this parameter needs you already have sanitized the $command parameter. If not, it will lead to security vulnerability.
+     *                                      This parameter is provided for backward compatibility with external modules. Always use 0 in core.
+     * @param string $redirectionfileerr If defined, a redirection of error is added to this file instead of to channel 1.
+     * @return  array                       array('result'=>...,'output'=>...,'error'=>...). result = 0 means OK.
+     */
+    public function executeCLI($command, $outputfile, $execmethod = 0, $redirectionfile = null, $noescapecommand = 0, $redirectionfileerr = null)
+    {
+        global $conf, $langs;
+
+        $result = 0;
+        $output = '';
+        $error = '';
+
+        if (empty($noescapecommand)) {
+            $command = escapeshellcmd($command);
+        }
+
+        if ($redirectionfile) {
+            $command .= " > " . dol_sanitizePathName($redirectionfile);
+        }
+
+        if ($redirectionfileerr && ($redirectionfileerr != $redirectionfile)) {
+            // If we ask a redirect of stderr on a given file not already used for stdout
+            $command .= " 2> " . dol_sanitizePathName($redirectionfileerr);
+        } else {
+            $command .= " 2>&1";
+        }
+
+        if (getDolGlobalString('MAIN_EXEC_USE_POPEN')) {
+            $execmethod = getDolGlobalString('MAIN_EXEC_USE_POPEN');
+        }
+        if (empty($execmethod)) {
+            $execmethod = 1;
+        }
+        //$execmethod=1;
+        dol_syslog("Utils::executeCLI execmethod=" . $execmethod . " command=" . $command, LOG_DEBUG);
+        $output_arr = array();
+
+        if ($execmethod == 1) {
+            $retval = null;
+            exec($command, $output_arr, $retval);
+            $result = $retval;
+            if ($retval != 0) {
+                $langs->load("errors");
+                dol_syslog("Utils::executeCLI retval after exec=" . $retval, LOG_ERR);
+                $error = 'Error ' . $retval;
+            }
+        }
+        if ($execmethod == 2) { // With this method, there is no way to get the return code, only output
+            $handle = fopen($outputfile, 'w+b');
+            if ($handle) {
+                dol_syslog("Utils::executeCLI run command " . $command);
+                $handlein = popen($command, 'r');
+                while (!feof($handlein)) {
+                    $read = fgets($handlein);
+                    fwrite($handle, $read);
+                    $output_arr[] = $read;
+                }
+                pclose($handlein);
+                fclose($handle);
+            }
+            dolChmod($outputfile);
+        }
+
+        // Update with result
+        if (is_array($output_arr) && count($output_arr) > 0) {
+            foreach ($output_arr as $val) {
+                $output .= $val . ($execmethod == 2 ? '' : "\n");
+            }
+        }
+
+        dol_syslog("Utils::executeCLI result=" . $result . " output=" . $output . " error=" . $error, LOG_DEBUG);
+
+        return array('result' => $result, 'output' => $output, 'error' => $error);
+    }
+
+    /**
      * This saves syslog files and compresses older ones.
      * Nb of archive to keep is defined into $conf->global->SYSLOG_FILE_SAVES
      * CAN BE A CRON TASK
@@ -1015,7 +1197,7 @@ class Utils
 
         if (!getDolGlobalString('SYSLOG_FILE')) {
             $mainlogdir = DOL_DATA_ROOT;
-            $mainlog = 'dolibarr.log';
+            $mainlog = 'alixar.log';
         } else {
             $mainlogfull = str_replace('DOL_DATA_ROOT', DOL_DATA_ROOT, $conf->global->SYSLOG_FILE);
             $mainlogdir = dirname($mainlogfull);
@@ -1102,202 +1284,18 @@ class Utils
         return 0;
     }
 
-    /** Backup the db OR just a table without mysqldump binary, with PHP only (does not require any exec permission)
-     *  Author: David Walsh (http://davidwalsh.name/backup-mysql-database-php)
-     *  Updated and enhanced by Stephen Larroque (lrq3000) and by the many commentators from the blog
-     *  Note about foreign keys constraints: for Dolibarr, since there are a lot of constraints and when imported the tables will be inserted in the dumped order, not in constraints order, then we ABSOLUTELY need to use SET FOREIGN_KEY_CHECKS=0; when importing the sql dump.
-     *  Note2: db2SQL by Howard Yeend can be an alternative, by using SHOW FIELDS FROM and SHOW KEYS FROM we could generate a more precise dump (eg: by getting the type of the field and then precisely outputting the right formatting - in quotes, numeric or null - instead of trying to guess like we are doing now).
-     *
-     *  @param  string  $outputfile     Output file name
-     *  @param  string  $tables         Table name or '*' for all
-     *  @return int                     Return integer <0 if KO, >0 if OK
-     */
-    public function backupTables($outputfile, $tables = '*')
-    {
-        global $db, $langs;
-        global $errormsg;
-
-        // Set to UTF-8
-        if (is_a($db, 'DoliDBMysqli')) {
-            /** @var DoliDBMysqli $db */
-            $db->db->set_charset('utf8');
-        } else {
-            /** @var DoliDB $db */
-            $db->query('SET NAMES utf8');
-            $db->query('SET CHARACTER SET utf8');
-        }
-
-        //get all of the tables
-        if ($tables == '*') {
-            $tables = array();
-            $result = $db->query('SHOW FULL TABLES WHERE Table_type = \'BASE TABLE\'');
-            while ($row = $db->fetch_row($result)) {
-                $tables[] = $row[0];
-            }
-        } else {
-            $tables = is_array($tables) ? $tables : explode(',', $tables);
-        }
-
-        //cycle through
-        $handle = fopen($outputfile, 'w+');
-        if (fwrite($handle, '') === false) {
-            $langs->load("errors");
-            dol_syslog("Failed to open file " . $outputfile, LOG_ERR);
-            $errormsg = $langs->trans("ErrorFailedToWriteInDir");
-            return -1;
-        }
-
-        // Print headers and global mysql config vars
-        $sqlhead = '';
-        $sqlhead .= "-- " . $db::LABEL . " dump via php with Dolibarr " . DOL_VERSION . "
---
--- Host: " . $db->db->host_info . "    Database: " . $db->database_name . "
--- ------------------------------------------------------
--- Server version	" . $db->db->server_info . "
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-";
-
-        if (GETPOST("nobin_disable_fk")) {
-            $sqlhead .= "SET FOREIGN_KEY_CHECKS=0;\n";
-        }
-        //$sqlhead .= "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n";
-        if (GETPOST("nobin_use_transaction")) {
-            $sqlhead .= "SET AUTOCOMMIT=0;\nSTART TRANSACTION;\n";
-        }
-
-        fwrite($handle, $sqlhead);
-
-        $ignore = '';
-        if (GETPOST("nobin_sql_ignore")) {
-            $ignore = 'IGNORE ';
-        }
-        $delayed = '';
-        if (GETPOST("nobin_delayed")) {
-            $delayed = 'DELAYED ';
-        }
-
-        // Process each table and print their definition + their datas
-        foreach ($tables as $table) {
-            // Saving the table structure
-            fwrite($handle, "\n--\n-- Table structure for table `" . $table . "`\n--\n");
-
-            if (GETPOST("nobin_drop")) {
-                fwrite($handle, "DROP TABLE IF EXISTS `" . $table . "`;\n"); // Dropping table if exists prior to re create it
-            }
-            fwrite($handle, "/*!40101 SET @saved_cs_client     = @@character_set_client */;\n");
-            fwrite($handle, "/*!40101 SET character_set_client = utf8 */;\n");
-            $resqldrop = $db->query('SHOW CREATE TABLE ' . $table);
-            $row2 = $db->fetch_row($resqldrop);
-            if (empty($row2[1])) {
-                fwrite($handle, "\n-- WARNING: Show create table " . $table . " return empty string when it should not.\n");
-            } else {
-                fwrite($handle, $row2[1] . ";\n");
-                //fwrite($handle,"/*!40101 SET character_set_client = @saved_cs_client */;\n\n");
-
-                // Dumping the data (locking the table and disabling the keys check while doing the process)
-                fwrite($handle, "\n--\n-- Dumping data for table `" . $table . "`\n--\n");
-                if (!GETPOST("nobin_nolocks")) {
-                    fwrite($handle, "LOCK TABLES `" . $table . "` WRITE;\n"); // Lock the table before inserting data (when the data will be imported back)
-                }
-                if (GETPOST("nobin_disable_fk")) {
-                    fwrite($handle, "ALTER TABLE `" . $table . "` DISABLE KEYS;\n");
-                } else {
-                    fwrite($handle, "/*!40000 ALTER TABLE `" . $table . "` DISABLE KEYS */;\n");
-                }
-
-                $sql = "SELECT * FROM " . $table; // Here SELECT * is allowed because we don't have definition of columns to take
-                $result = $db->query($sql);
-                while ($row = $db->fetch_row($result)) {
-                    // For each row of data we print a line of INSERT
-                    fwrite($handle, "INSERT " . $delayed . $ignore . "INTO " . $table . " VALUES (");
-                    $columns = count($row);
-                    for ($j = 0; $j < $columns; $j++) {
-                        // Processing each columns of the row to ensure that we correctly save the value (eg: add quotes for string - in fact we add quotes for everything, it's easier)
-                        if ($row[$j] == null && !is_string($row[$j])) {
-                            // IMPORTANT: if the field is NULL we set it NULL
-                            $row[$j] = 'NULL';
-                        } elseif (is_string($row[$j]) && $row[$j] == '') {
-                            // if it's an empty string, we set it as an empty string
-                            $row[$j] = "''";
-                        } elseif (is_numeric($row[$j]) && !strcmp((string) $row[$j], (string) ((float) $row[$j] + 0))) { // test if it's a numeric type and the numeric version ($nb+0) == string version (eg: if we have 01, it's probably not a number but rather a string, else it would not have any leading 0)
-                            // if it's a number, we return it as-is
-                            //                      $row[$j] = $row[$j];
-                        } else { // else for all other cases we escape the value and put quotes around
-                            $row[$j] = addslashes($row[$j]);
-                            $row[$j] = preg_replace("#\n#", "\\n", $row[$j]);
-                            $row[$j] = "'" . $row[$j] . "'";
-                        }
-                    }
-                    fwrite($handle, implode(',', $row) . ");\n");
-                }
-                if (GETPOST("nobin_disable_fk")) {
-                    fwrite($handle, "ALTER TABLE `" . $table . "` ENABLE KEYS;\n"); // Enabling back the keys/index checking
-                }
-                if (!GETPOST("nobin_nolocks")) {
-                    fwrite($handle, "UNLOCK TABLES;\n"); // Unlocking the table
-                }
-                fwrite($handle, "\n\n\n");
-            }
-        }
-
-        /* Backup Procedure structure*/
-        /*
-         $result = $db->query('SHOW PROCEDURE STATUS');
-         if ($db->num_rows($result) > 0)
-         {
-         while ($row = $db->fetch_row($result)) { $procedures[] = $row[1]; }
-         foreach($procedures as $proc)
-         {
-         fwrite($handle,"DELIMITER $$\n\n");
-         fwrite($handle,"DROP PROCEDURE IF EXISTS '$name'.'$proc'$$\n");
-         $resqlcreateproc=$db->query("SHOW CREATE PROCEDURE '$proc'");
-         $row2 = $db->fetch_row($resqlcreateproc);
-         fwrite($handle,"\n".$row2[2]."$$\n\n");
-         fwrite($handle,"DELIMITER ;\n\n");
-         }
-         }
-         */
-        /* Backup Procedure structure*/
-
-        // Write the footer (restore the previous database settings)
-        $sqlfooter = "\n\n";
-        if (GETPOST("nobin_use_transaction")) {
-            $sqlfooter .= "COMMIT;\n";
-        }
-        if (GETPOST("nobin_disable_fk")) {
-            $sqlfooter .= "SET FOREIGN_KEY_CHECKS=1;\n";
-        }
-        $sqlfooter .= "\n\n-- Dump completed on " . date('Y-m-d G-i-s');
-        fwrite($handle, $sqlfooter);
-
-        fclose($handle);
-
-        return 1;
-    }
-
     /**
      *  Make a send last backup of database or fil in param
      *  CAN BE A CRON TASK
      *
-     *  @param  string  $sendto              Recipients emails
-     *  @param  string  $from                Sender email
-     *  @param  string  $subject             Topic/Subject of mail
-     *  @param  string  $message             Message
-     *  @param  string  $filename            List of files to attach (full path of filename on file system)
-     *  @param  string  $filter              Filter file send
-     *  @param  int     $sizelimit           Limit size to send file
-     *  @return int                          0 if OK, < 0 if KO (this function is used also by cron so only 0 is OK)
+     * @param string $sendto Recipients emails
+     * @param string $from Sender email
+     * @param string $subject Topic/Subject of mail
+     * @param string $message Message
+     * @param string $filename List of files to attach (full path of filename on file system)
+     * @param string $filter Filter file send
+     * @param int $sizelimit Limit size to send file
+     * @return int                          0 if OK, < 0 if KO (this function is used also by cron so only 0 is OK)
      */
     public function sendBackup($sendto = '', $from = '', $subject = '', $message = '', $filename = '', $filter = '', $sizelimit = 100000000)
     {
@@ -1345,14 +1343,14 @@ class Utils
         }
         if ($tmpfiles && is_array($tmpfiles)) {
             foreach ($tmpfiles as $key => $val) {
-                if ($key  == 'fullname') {
+                if ($key == 'fullname') {
                     $filepath = array($val);
                     $filesize = dol_filesize($val);
                 }
-                if ($key  == 'type') {
+                if ($key == 'type') {
                     $mimetype = array($val);
                 }
-                if ($key  == 'relativename') {
+                if ($key == 'relativename') {
                     $filename = array($val);
                 }
             }
@@ -1361,7 +1359,7 @@ class Utils
         if ($filepath) {
             if ($filesize > $sizelimit) {
                 $message .= '<br>' . $langs->trans("BackupIsTooLargeSend");
-                $documenturl =  $dolibarr_main_url_root . '/document.php?modulepart=systemtools&atachement=1&file=backup/' . urlencode($filename[0]);
+                $documenturl = $dolibarr_main_url_root . '/document.php?modulepart=systemtools&atachement=1&file=backup/' . urlencode($filename[0]);
                 $message .= '<br><a href=' . $documenturl . '>Lien de téléchargement</a>';
                 $filepath = '';
                 $mimetype = '';
@@ -1392,7 +1390,7 @@ class Utils
 
         dol_syslog(__METHOD__, LOG_DEBUG);
 
-        $this->error = "Error sending backp file " . ((string) $error);
+        $this->error = "Error sending backp file " . ((string)$error);
         $this->output = $output;
 
         if ($result) {
@@ -1451,7 +1449,7 @@ class Utils
             }
 
             // Calling posix_kill with the 0 kill signal will return true if the process is running, false otherwise.
-            if (! posix_kill($job->pid, 0)) {
+            if (!posix_kill($job->pid, 0)) {
                 // Clean processing and pid values
                 $job->processing = 0;
                 $job->pid = null;
