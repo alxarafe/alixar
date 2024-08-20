@@ -25,6 +25,8 @@
  *  \brief      Page to activate/disable all modules
  */
 
+use Dolibarr\Lib\Modules;
+
 if (!defined('NOREQUIREMENU')) {
     define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
 }
@@ -52,7 +54,6 @@ if (empty($mode)) {
 if (empty($user->admin)) {
     accessforbidden();
 }
-
 
 
 /*
@@ -85,7 +86,6 @@ $arrayofnatures = array('core' => $langs->transnoentitiesnoconv("Core"), 'extern
 // Search modules dirs
 $modulesdir = dolGetModulesDirs();
 
-
 $filename = array();
 $modules = array();
 $orders = array();
@@ -95,129 +95,113 @@ $i = 0; // is a sequencer of modules found
 $j = 0; // j is module number. Automatically affected if module number not defined.
 $modNameLoaded = array();
 
-foreach ($modulesdir as $dir) {
-    // Load modules attributes in arrays (name, numero, orders) from dir directory
-    //print $dir."\n<br>";
-    dol_syslog("Scan directory " . $dir . " for module descriptor files (modXXX.class.php)");
-    $handle = @opendir($dir);
-    if (is_resource($handle)) {
-        while (($file = readdir($handle)) !== false) {
-            //print "$i ".$file."\n<br>";
-            if (is_readable($dir . $file) && substr($file, 0, 3) == 'mod' && substr($file, dol_strlen($file) - 10) == '.class.php') {
-                $modName = substr($file, 0, dol_strlen($file) - 10);
+$allModules =DolibarrModules::getModules($modulesdir);
+foreach ($allModules as $modName => $filename) {
+    if (str_starts_with($modName, 'mod')) {
+        include_once $filename;
+        $objMod = new $modName($db);
+    } else {
+        $className = "\\Dolibarr\\Modules\\" . $modName;
+        $objMod = new $className($db);
+    }
 
-                if ($modName) {
-                    if (!empty($modNameLoaded[$modName])) {
-                        $mesg = "Error: Module " . $modName . " was found twice: Into " . $modNameLoaded[$modName] . " and " . $dir . ". You probably have an old file on your disk.<br>";
-                        setEventMessages($mesg, null, 'warnings');
-                        dol_syslog($mesg, LOG_ERR);
-                        continue;
-                    }
+    if (isset($modNameLoaded[$modName])) {
+        $mesg = "Error: Module " . $modName . " was found twice: Into " . $modNameLoaded[$modName] . " and " . $dir . ". You probably have an old file on your disk.<br>";
+        setEventMessages($mesg, null, 'warnings');
+        dol_syslog($mesg, LOG_ERR);
+        continue;
+    }
 
-                    try {
-                        $res = include_once $dir . $file;
-                        if (class_exists($modName)) {
-                            try {
-                                $objMod = new $modName($db);
-                                '@phan-var-force DolibarrModules $objMod';
-                                $modNameLoaded[$modName] = $dir;
+    try {
+        $modNameLoaded[$modName] = $filename;
 
-                                if (!$objMod->numero > 0 && $modName != 'modUser') {
-                                    dol_syslog('The module descriptor ' . $modName . ' must have a numero property', LOG_ERR);
-                                }
-                                $j = $objMod->numero;
+        if (!$objMod->numero > 0 && $modName != 'modUser') {
+            dol_syslog('The module descriptor ' . $modName . ' must have a numero property', LOG_ERR);
+        }
+        $j = $objMod->numero;
 
-                                $modulequalified = 1;
+        /**
+         * TODO: See modules use of $objMod->isDevelopment(), etc
+         */
 
-                                // We discard modules according to features level (PS: if module is activated we always show it)
-                                $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_class($objMod)));
-                                if ($objMod->version == 'development' && (!getDolGlobalString($const_name) && (getDolGlobalInt('MAIN_FEATURES_LEVEL') < 2))) {
-                                    $modulequalified = 0;
-                                }
-                                if ($objMod->version == 'experimental' && (!getDolGlobalString($const_name) && (getDolGlobalInt('MAIN_FEATURES_LEVEL') < 1))) {
-                                    $modulequalified = 0;
-                                }
-                                if (preg_match('/deprecated/', $objMod->version) && (!getDolGlobalString($const_name) && (getDolGlobalInt('MAIN_FEATURES_LEVEL') >= 0))) {
-                                    $modulequalified = 0;
-                                }
+        $modulequalified = 1;
 
-                                // We discard modules according to property disabled
-                                //if (!empty($objMod->hidden)) $modulequalified=0;
+        // We discard modules according to features level (PS: if module is activated we always show it)
+        $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_class($objMod)));
+        if ($objMod->version == 'development' && (!getDolGlobalString($const_name) && (getDolGlobalInt('MAIN_FEATURES_LEVEL') < 2))) {
+            $modulequalified = 0;
+        }
+        if ($objMod->version == 'experimental' && (!getDolGlobalString($const_name) && (getDolGlobalInt('MAIN_FEATURES_LEVEL') < 1))) {
+            $modulequalified = 0;
+        }
+        if (preg_match('/deprecated/', $objMod->version) && (!getDolGlobalString($const_name) && (getDolGlobalInt('MAIN_FEATURES_LEVEL') >= 0))) {
+            $modulequalified = 0;
+        }
 
-                                if ($modulequalified > 0) {
-                                    $publisher = dol_escape_htmltag($objMod->getPublisher());
-                                    $external = ($objMod->isCoreOrExternalModule() == 'external');
-                                    if ($external) {
-                                        if ($publisher) {
-                                            $arrayofnatures['external_' . $publisher] = $langs->trans("External") . ' - ' . $publisher;
-                                        } else {
-                                            $arrayofnatures['external_'] = $langs->trans("External") . ' - ' . $langs->trans("UnknownPublishers");
-                                        }
-                                    }
-                                    ksort($arrayofnatures);
-                                }
+        // We discard modules according to property disabled
+        //if (!empty($objMod->hidden)) $modulequalified=0;
 
-                                // Define array $categ with categ with at least one qualified module
-                                if ($modulequalified > 0) {
-                                    $modules[$i] = $objMod;
-                                    $filename[$i] = $modName;
-
-                                    // Gives the possibility to the module, to provide his own family info and position of this family
-                                    if (is_array($objMod->familyinfo) && !empty($objMod->familyinfo)) {
-                                        if (!is_array($familyinfo)) {
-                                            $familyinfo = array();
-                                        }
-                                        $familyinfo = array_merge($familyinfo, $objMod->familyinfo);
-                                        $familykey = key($objMod->familyinfo);
-                                    } else {
-                                        $familykey = $objMod->family;
-                                    }
-                                    if (empty($familykey) || $familykey === null) {
-                                        $familykey = 'other';
-                                    }
-
-                                    $moduleposition = ($objMod->module_position ? $objMod->module_position : '50');
-                                    if ($moduleposition == '50' && ($objMod->isCoreOrExternalModule() == 'external')) {
-                                        $moduleposition = '80'; // External modules at end by default
-                                    }
-
-                                    if (empty($familyinfo[$familykey]['position'])) {
-                                        $familyinfo[$familykey]['position'] = '0';
-                                    }
-
-                                    $orders[$i] = $familyinfo[$familykey]['position'] . "_" . $familykey . "_" . $moduleposition . "_" . $j; // Sort by family, then by module position then number
-                                    $dirmod[$i] = $dir;
-                                    //print $i.'-'.$dirmod[$i].'<br>';
-                                    // Set categ[$i]
-                                    $specialstring = 'unknown';
-                                    if ($objMod->version == 'development' || $objMod->version == 'experimental') {
-                                        $specialstring = 'expdev';
-                                    }
-                                    if (isset($categ[$specialstring])) {
-                                        $categ[$specialstring]++; // Array of all different modules categories
-                                    } else {
-                                        $categ[$specialstring] = 1;
-                                    }
-                                    $j++;
-                                    $i++;
-                                } else {
-                                    dol_syslog("Module " . get_class($objMod) . " not qualified");
-                                }
-                            } catch (Exception $e) {
-                                dol_syslog("Failed to load " . $dir . $file . " " . $e->getMessage(), LOG_ERR);
-                            }
-                        } else {
-                            print info_admin("Warning bad descriptor file : " . $dir . $file . " (Class " . $modName . " not found into file)", 0, 0, '1', 'warning');
-                        }
-                    } catch (Exception $e) {
-                        dol_syslog("Failed to load " . $dir . $file . " " . $e->getMessage(), LOG_ERR);
-                    }
+        if ($modulequalified > 0) {
+            $publisher = dol_escape_htmltag($objMod->getPublisher());
+            $external = ($objMod->isCoreOrExternalModule() == 'external');
+            if ($external) {
+                if ($publisher) {
+                    $arrayofnatures['external_' . $publisher] = $langs->trans("External") . ' - ' . $publisher;
+                } else {
+                    $arrayofnatures['external_'] = $langs->trans("External") . ' - ' . $langs->trans("UnknownPublishers");
                 }
             }
+            ksort($arrayofnatures);
         }
-        closedir($handle);
-    } else {
-        dol_syslog("htdocs/admin/modulehelp.php: Failed to open directory " . $dir . ". See permission and open_basedir option.", LOG_WARNING);
+
+        // Define array $categ with categ with at least one qualified module
+        if ($modulequalified > 0) {
+            $modules[$i] = $objMod;
+            $filename[$i] = $modName;
+
+            // Gives the possibility to the module, to provide his own family info and position of this family
+            if (is_array($objMod->familyinfo) && !empty($objMod->familyinfo)) {
+                if (!is_array($familyinfo)) {
+                    $familyinfo = array();
+                }
+                $familyinfo = array_merge($familyinfo, $objMod->familyinfo);
+                $familykey = key($objMod->familyinfo);
+            } else {
+                $familykey = $objMod->family;
+            }
+            if (empty($familykey) || $familykey === null) {
+                $familykey = 'other';
+            }
+
+            $moduleposition = ($objMod->module_position ? $objMod->module_position : '50');
+            if ($moduleposition == '50' && ($objMod->isCoreOrExternalModule() == 'external')) {
+                $moduleposition = '80'; // External modules at end by default
+            }
+
+            if (empty($familyinfo[$familykey]['position'])) {
+                $familyinfo[$familykey]['position'] = '0';
+            }
+
+            $orders[$i] = $familyinfo[$familykey]['position'] . "_" . $familykey . "_" . $moduleposition . "_" . $j; // Sort by family, then by module position then number
+            $dirmod[$i] = $dir;
+            //print $i.'-'.$dirmod[$i].'<br>';
+            // Set categ[$i]
+            $specialstring = 'unknown';
+            if ($objMod->version == 'development' || $objMod->version == 'experimental') {
+                $specialstring = 'expdev';
+            }
+            if (isset($categ[$specialstring])) {
+                $categ[$specialstring]++; // Array of all different modules categories
+            } else {
+                $categ[$specialstring] = 1;
+            }
+            $j++;
+            $i++;
+        } else {
+            dol_syslog("Module " . get_class($objMod) . " not qualified");
+        }
+    } catch (Exception $e) {
+
     }
 }
 
@@ -246,7 +230,6 @@ $familyposition = $tab[0];
 $familykey = $tab[1];
 $module_position = $tab[2];
 $numero = $tab[3];
-
 
 
 $head = modulehelp_prepare_head($objMod);
@@ -307,8 +290,6 @@ if (isset($objMod->langfiles) && is_array($objMod->langfiles)) {
         $langs->load($domain);
     }
 }
-
-
 
 
 // Version (with picto warning or not)

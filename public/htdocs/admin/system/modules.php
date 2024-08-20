@@ -37,15 +37,15 @@ if (empty($user->admin)) {
 $langs->loadLangs(array("install", "other", "admin"));
 
 $optioncss = GETPOST('optioncss', 'alpha');
-$contextpage        = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'moduleoverview';
+$contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'moduleoverview';
 
-$search_name        = GETPOST("search_name", 'alpha');
+$search_name = GETPOST("search_name", 'alpha');
 $search_id = GETPOST("search_id", 'alpha');
 $search_version = GETPOST("search_version", 'alpha');
 $search_permission = GETPOST("search_permission", 'alpha');
 
-$sortfield          = GETPOST('sortfield', 'aZ09comma');
-$sortorder          = GETPOST('sortorder', 'aZ09comma');
+$sortfield = GETPOST('sortfield', 'aZ09comma');
+$sortorder = GETPOST('sortorder', 'aZ09comma');
 
 if (!$sortfield) {
     $sortfield = "id";
@@ -94,46 +94,23 @@ if (empty($reshook)) {
 $moduleList = array();
 $modules = array();
 $modules_files = array();
-$modules_fullpath = array();
 $modulesdir = dolGetModulesDirs();
 $rights_ids = array();
 $arrayofpermissions = array();
 
-foreach ($modulesdir as $dir) {
-    $handle = @opendir(dol_osencode($dir));
-    if (is_resource($handle)) {
-        while (($file = readdir($handle)) !== false) {
-            if (is_readable($dir . $file) && substr($file, 0, 3) == 'mod' && substr($file, dol_strlen($file) - 10) == '.class.php') {
-                $modName = substr($file, 0, dol_strlen($file) - 10);
+$allModules = DolibarrModules::getModules($modulesdir);
+foreach ($allModules as $modName => $filename) {
+    $objMod = DolibarrModules::getObj($db, $modName, $filename);
 
-                if ($modName) {
-                    //print 'xx'.$dir.$file.'<br>';
-                    if (in_array($file, $modules_files)) {
-                        // File duplicate
-                        print "Warning duplicate file found : " . $file . " (Found " . $dir . $file . ", already found " . $modules_fullpath[$file] . ")<br>";
-                    } else {
-                        // File to load
-                        $res = include_once $dir . $file;
-                        if (class_exists($modName)) {
-                            try {
-                                $objMod = new $modName($db);
-                                '@phan-var-force DolibarrModules $objMod';
-
-                                $modules[$objMod->numero] = $objMod;
-                                $modules_files[$objMod->numero] = $file;
-                                $modules_fullpath[$file] = $dir . $file;
-                            } catch (Exception $e) {
-                                dol_syslog("Failed to load " . $dir . $file . " " . $e->getMessage(), LOG_ERR);
-                            }
-                        } else {
-                            $info_admin .= info_admin("Warning bad descriptor file : " . $dir . $file . " (Class " . $modName . " not found into file)", 0, 0, '1', 'warning');
-                        }
-                    }
-                }
-            }
-        }
-        closedir($handle);
+    if (!isset($objMod)) {
+        print info_admin("admin/modules.php Warning bad descriptor file : " . $filename . " (Class " . $modName . " not found into file)", 0, 0, '1', 'warning');
+        continue;
     }
+    '@phan-var-force DolibarrModules $objMod';
+
+    $modules[$objMod->numero] = $objMod;
+    dd($objMod);
+    $modules_files[$objMod->numero] = $file;
 }
 '@phan-var-force array<string,DolibarrModules> $modules';
 
@@ -202,7 +179,6 @@ foreach ($modules as $key => $module) {
 
     $moduleList[] = $newModule;
 }
-
 
 
 /*
@@ -436,40 +412,40 @@ $db->close();
 /**
  * Compare two modules by their ID for a ascending order
  *
- * @param   stdClass    $a      First module
- * @param   stdClass    $b      Second module
+ * @param stdClass $a First module
+ * @param stdClass $b Second module
  * @return  int                 Compare result (-1, 0, 1)
  */
 function compareIdAsc(stdClass $a, stdClass $b)
 {
-    if ((int) $a->id == (int) $b->id) {
+    if ((int)$a->id == (int)$b->id) {
         return 0;
     }
 
-    return ((int) $a->id < (int) $b->id) ? -1 : 1;
+    return ((int)$a->id < (int)$b->id) ? -1 : 1;
 }
 
 /**
  * Compare two modules by their ID for a descending order
  *
- * @param   stdClass    $a      First module
- * @param   stdClass    $b      Second module
+ * @param stdClass $a First module
+ * @param stdClass $b Second module
  * @return  int                 Compare result (-1, 0, 1)
  */
 function compareIdDesc(stdClass $a, stdClass $b)
 {
-    if ((int) $a->id == (int) $b->id) {
+    if ((int)$a->id == (int)$b->id) {
         return 0;
     }
 
-    return ((int) $b->id < (int) $a->id) ? -1 : 1;
+    return ((int)$b->id < (int)$a->id) ? -1 : 1;
 }
 
 /**
  * Compare two modules by their ID for a ascending order
  *
- * @param   stdClass    $a      First module
- * @param   stdClass    $b      Second module
+ * @param stdClass $a First module
+ * @param stdClass $b Second module
  * @return  int                 Compare result (-1, 0, 1)
  */
 function comparePermissionIdsAsc(stdClass $a, stdClass $b)
@@ -495,8 +471,8 @@ function comparePermissionIdsAsc(stdClass $a, stdClass $b)
 /**
  * Compare two modules by their permissions for a descending order
  *
- * @param   stdClass    $a      First module
- * @param   stdClass    $b      Second module
+ * @param stdClass $a First module
+ * @param stdClass $b Second module
  * @return  int                 Compare result (-1, 0, 1)
  */
 function comparePermissionIdsDesc(stdClass $a, stdClass $b)

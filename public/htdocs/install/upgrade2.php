@@ -42,6 +42,8 @@
  *  \brief      Upgrade some data
  */
 
+use Dolibarr\Classes\BlockedLog;
+
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
 if (!file_exists($conffile)) {
@@ -3648,8 +3650,6 @@ function migrate_event_assignement_contact($db, $langs, $conf)
 function migrate_reset_blocked_log($db, $langs, $conf)
 {
     global $user;
-
-    require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/blockedlog.class.php';
 
     print '<tr><td colspan="4">';
 

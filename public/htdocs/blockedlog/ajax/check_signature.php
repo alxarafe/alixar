@@ -27,6 +27,8 @@
 // This script is called with a POST method.
 // Directory to scan (full path) is inside POST['dir'].
 
+use Dolibarr\Classes\BlockedLog;
+
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', 1); // Disables token renewal
 }
@@ -41,7 +43,6 @@ if (!defined('NOREQUIREHTML')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/geturl.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/blockedlog.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/authority.class.php';
 
 

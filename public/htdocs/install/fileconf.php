@@ -284,7 +284,7 @@ if (!empty($force_install_message)) {
                     <input type="text"
                            id="db_name"
                            name="db_name"
-                           value="<?php echo (!empty($dolibarr_main_db_name)) ? $dolibarr_main_db_name : ($force_install_database ? $force_install_database : 'dolibarr'); ?>"
+                           value="<?php echo (!empty($dolibarr_main_db_name)) ? $dolibarr_main_db_name : ($force_install_database ? $force_install_database : 'alixar'); ?>"
                         <?php if (($force_install_noedit == 2 || $force_install_noedit == 3) && $force_install_database !== null) {
                             print ' disabled';
                         } ?>

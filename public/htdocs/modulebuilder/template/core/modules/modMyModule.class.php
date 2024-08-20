@@ -29,8 +29,7 @@
  *  \brief      Description and activation file for module MyModule
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/modules/DolibarrModules.class.php';
-
+use Dolibarr\Core\Base\DolibarrModules;
 
 /**
  *  Description and activation class for module MyModule
@@ -84,7 +83,7 @@ class modMyModule extends DolibarrModules
         //$this->url_last_version = 'http://www.example.com/versionmodule.txt';
 
         // Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
-        $this->const_name = 'MAIN_MODULE_' . strtoupper($this->name);
+        $this->const_name = 'MAIN_MODULE_' . static::getNameOf($this->name); // strtoupper($this->name);
 
         // Name of image file used for this module.
         // If file is in theme/yourtheme/img directory under name object_pictovalue.png, use this->picto='pictovalue'

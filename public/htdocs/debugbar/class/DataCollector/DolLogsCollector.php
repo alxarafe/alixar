@@ -130,7 +130,7 @@ class DolLogsCollector extends MessagesCollector
     public function getLogsFile()
     {
         // default dolibarr log file
-        $path = DOL_DATA_ROOT . '/dolibarr.log';
+        $path = DOL_DATA_ROOT . '/alixar.log';
         return $path;
     }
 

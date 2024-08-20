@@ -27,9 +27,10 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Classes\BlockedLog;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/lib/blockedlog.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/blockedlog.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/authority.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';

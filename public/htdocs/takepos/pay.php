@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2018       Andreu Bisquerra    <jove@bisquerra.com>
- * Copyright (C) 2021-2022	Thibault FOUCART	<support@ptibogxiv.net>
+/* Copyright (C) 2018       Andreu Bisquerra            <jove@bisquerra.com>
+ * Copyright (C) 2021-2022	Thibault FOUCART	        <support@ptibogxiv.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -29,6 +29,8 @@
 // if (! defined('NOREQUIREDB'))        define('NOREQUIREDB', '1');         // Not disabled cause need to load personalized language
 // if (! defined('NOREQUIRESOC'))       define('NOREQUIRESOC', '1');
 // if (! defined('NOREQUIRETRAN'))      define('NOREQUIRETRAN', '1');
+
+use Dolibarr\Classes\MultiCurrency;
 
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1');
@@ -535,7 +537,6 @@ $sessioncurrency = $_SESSION["takeposcustomercurrency"] ?? '';
 if (isModEnabled('multicurrency') && $sessioncurrency != "" && $conf->currency != $sessioncurrency) {
     // Only show customer currency if multicurrency module is enabled, if currency selected and if this currency selected is not the same as main currency
     $showothercurrency = 1;
-    include_once DOL_DOCUMENT_ROOT . '/multicurrency/class/multicurrency.class.php';
     $multicurrency = new MultiCurrency($db);
     $multicurrency->fetch(0, $sessioncurrency);
 }

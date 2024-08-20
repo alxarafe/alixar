@@ -161,40 +161,7 @@ print dol_get_fiche_head($head, 'rights', $title, -1, 'user');
 
 $db->begin();
 
-// Search all modules with permission and reload permissions def.
-$modules = array();
-$modulesdir = dolGetModulesDirs();
-
-foreach ($modulesdir as $dir) {
-    $handle = @opendir(dol_osencode($dir));
-    if (is_resource($handle)) {
-        while (($file = readdir($handle)) !== false) {
-            if (is_readable($dir . $file) && substr($file, 0, 3) == 'mod' && substr($file, dol_strlen($file) - 10) == '.class.php') {
-                $modName = substr($file, 0, dol_strlen($file) - 10);
-
-                if ($modName) {
-                    include_once $dir . $file;
-                    $objMod = new $modName($db);
-
-                    // Load all lang files of module
-                    if (isset($objMod->langfiles) && is_array($objMod->langfiles)) {
-                        foreach ($objMod->langfiles as $domain) {
-                            $langs->load($domain);
-                        }
-                    }
-                    // Load all permissions
-                    if ($objMod->rights_class) {
-                        $ret = $objMod->insert_permissions(0, $entity);
-                        $modules[$objMod->rights_class] = $objMod;
-                        //print "modules[".$objMod->rights_class."]=$objMod;";
-                    }
-                }
-            }
-        }
-    }
-}
-
-$db->commit();
+$modules = DolibarrModules::setPerms($db, $langs, $entity);
 
 '@phan-var-force DolibarrModules[] $modules';
 

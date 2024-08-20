@@ -28,6 +28,8 @@
  *  \brief      Page to show a receipt.
  */
 
+use Dolibarr\Classes\MultiCurrency;
+
 // Include main (when fie in included into send.php, $action is set and main was already loaded)
 if (!isset($action)) {
     //if (! defined('NOREQUIREUSER'))   define('NOREQUIREUSER', '1');   // Not disabled cause need to load personalized language
@@ -282,7 +284,6 @@ if (price2num($object->total_localtax1, 'MU') || $mysoc->useLocalTax(1)) { ?>
 <?php
 if (isModEnabled('multicurrency') && !empty($_SESSION["takeposcustomercurrency"]) && $_SESSION["takeposcustomercurrency"] != "" && $conf->currency != $_SESSION["takeposcustomercurrency"]) {
     //Only show customer currency if multicurrency module is enabled, if currency selected and if this currency selected is not the same as main currency
-    include_once DOL_DOCUMENT_ROOT . '/multicurrency/class/multicurrency.class.php';
     $multicurrency = new MultiCurrency($db);
     $multicurrency->fetch(0, $_SESSION["takeposcustomercurrency"]);
     echo '<tr><th class="right">';

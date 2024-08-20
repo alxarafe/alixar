@@ -24,6 +24,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Modules\modPartnership;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once '../lib/partnership.lib.php';

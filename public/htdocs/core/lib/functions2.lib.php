@@ -87,13 +87,16 @@ function dolGetModulesDirs($subdir = '')
 {
     global $conf;
 
+    $main_dir = realpath(constant('BASE_PATH') . '/../Dolibarr/Modules');
+
     $modulesdir = array();
+    $modulesdir[$main_dir.'/'] = $main_dir.'/';
 
     foreach ($conf->file->dol_document_root as $type => $dirroot) {
         // Default core/modules dir
-        if ($type === 'main') {
-            $modulesdir[$dirroot . '/core/modules' . $subdir . '/'] = $dirroot . '/core/modules' . $subdir . '/';
-        }
+        // if ($type === 'main') {
+        //     $modulesdir[$dirroot . '/core/modules' . $subdir . '/'] = $dirroot . '/core/modules' . $subdir . '/';
+        // }
 
         // Scan dir from external modules
         $handle = @opendir($dirroot);

@@ -71,7 +71,7 @@ class mod_syslog_file extends LogHandler
             array(
                 'name' => $langs->trans('SyslogFilename'),
                 'constant' => 'SYSLOG_FILE',
-                'default' => 'DOL_DATA_ROOT/dolibarr.log',
+                'default' => 'DOL_DATA_ROOT/alixar.log',
                 'css' => 'minwidth300 maxwidth500'
             )
         );
@@ -108,7 +108,7 @@ class mod_syslog_file extends LogHandler
         global $conf;
 
         if (!getDolGlobalString('SYSLOG_FILE')) {
-            $tmp = DOL_DATA_ROOT . '/dolibarr.log';
+            $tmp = DOL_DATA_ROOT . '/alixar.log';
         } else {
             $tmp = str_replace('DOL_DATA_ROOT', DOL_DATA_ROOT, $conf->global->SYSLOG_FILE);
         }

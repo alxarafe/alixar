@@ -28,6 +28,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Modules\modZapier;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Libraries

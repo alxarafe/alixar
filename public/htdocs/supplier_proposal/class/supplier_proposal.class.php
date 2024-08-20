@@ -39,12 +39,13 @@
  *  \brief      File of class to manage supplier proposals
  */
 
+use Dolibarr\Classes\MultiCurrency;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/multicurrency/class/multicurrency.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonincoterm.class.php';
 
 /**
@@ -1845,7 +1846,6 @@ class SupplierProposal extends CommonObject
         );
         if (isModEnabled("multicurrency")) {
             if (!empty($product->multicurrency_code)) {
-                include_once DOL_DOCUMENT_ROOT . '/multicurrency/class/multicurrency.class.php';
                 $multicurrency = new MultiCurrency($this->db); //need to fetch because empty fk_multicurrency and rate
                 $multicurrency->fetch(0, $product->multicurrency_code);
                 if (!empty($multicurrency->id)) {

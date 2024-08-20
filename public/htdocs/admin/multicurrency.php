@@ -23,11 +23,12 @@
  *  \brief      Page to setup multicurrency module
  */
 
+use Dolibarr\Classes\MultiCurrency;
+
 // Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/multicurrency.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/multicurrency/class/multicurrency.class.php';
 
 
 // Load translation files required by the page

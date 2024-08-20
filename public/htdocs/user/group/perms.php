@@ -144,40 +144,7 @@ if ($object->id > 0) {
     $title = $langs->trans("Group");
     print dol_get_fiche_head($head, 'rights', $title, -1, 'group');
 
-    // Charge les modules soumis a permissions
-    $modules = array();
-    $modulesdir = dolGetModulesDirs();
-
-    $db->begin();
-
-    foreach ($modulesdir as $dir) {
-        $handle = @opendir(dol_osencode($dir));
-        if (is_resource($handle)) {
-            while (($file = readdir($handle)) !== false) {
-                if (is_readable($dir . $file) && substr($file, 0, 3) == 'mod' && substr($file, dol_strlen($file) - 10) == '.class.php') {
-                    $modName = substr($file, 0, dol_strlen($file) - 10);
-
-                    if ($modName) {
-                        include_once $dir . $file;
-                        $objMod = new $modName($db);
-                        // Load all lang files of module
-                        if (isset($objMod->langfiles) && is_array($objMod->langfiles)) {
-                            foreach ($objMod->langfiles as $domain) {
-                                $langs->load($domain);
-                            }
-                        }
-                        // Load all permissions
-                        if ($objMod->rights_class) {
-                            $ret = $objMod->insert_permissions(0, $entity);
-                            $modules[$objMod->rights_class] = $objMod;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    $db->commit();
+    $modules = DolibarrModules::setPerms($db, $langs, $entity);
 
     // Read permissions of group
     $permsgroupbyentity = array();
@@ -186,8 +153,8 @@ if ($object->id > 0) {
     $sql .= " FROM " . MAIN_DB_PREFIX . "rights_def as r,";
     $sql .= " " . MAIN_DB_PREFIX . "usergroup_rights as gr";
     $sql .= " WHERE gr.fk_id = r.id";
-    $sql .= " AND gr.entity = " . ((int) $entity);
-    $sql .= " AND gr.fk_usergroup = " . ((int) $object->id);
+    $sql .= " AND gr.entity = " . ((int)$entity);
+    $sql .= " AND gr.fk_usergroup = " . ((int)$object->id);
 
     dol_syslog("get user perms", LOG_DEBUG);
     $result = $db->query($sql);
@@ -293,7 +260,7 @@ if ($object->id > 0) {
     $sql = "SELECT r.id, r.libelle as label, r.module, r.perms, r.subperms, r.module_position, r.bydefault";
     $sql .= " FROM " . MAIN_DB_PREFIX . "rights_def as r";
     $sql .= " WHERE r.libelle NOT LIKE 'tou%'"; // On ignore droits "tous"
-    $sql .= " AND r.entity = " . ((int) $entity);
+    $sql .= " AND r.entity = " . ((int)$entity);
     if (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) {
         $sql .= " AND r.perms NOT LIKE '%_advance'"; // Hide advanced perms if option is disable
     }
@@ -327,7 +294,7 @@ if ($object->id > 0) {
             } else {
                 $ishidden = 0;
             }
-            $isexpanded = ! $ishidden;
+            $isexpanded = !$ishidden;
 
             // Break found, it's a new module to catch
             if (isset($obj->module) && ($oldmod != $obj->module)) {
@@ -341,7 +308,7 @@ if ($object->id > 0) {
                 } else {
                     $ishidden = 0;
                 }
-                $isexpanded = ! $ishidden;
+                $isexpanded = !$ishidden;
                 // Break detected, we get objMod
                 $objMod = $modules[$obj->module];
                 $picto = ($objMod->picto ? $objMod->picto : 'generic');
