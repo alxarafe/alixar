@@ -45,6 +45,8 @@
  *  \brief      File of class to manage invoices
  */
 
+use Dolibarr\Classes\MultiCurrency;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commoninvoice.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';

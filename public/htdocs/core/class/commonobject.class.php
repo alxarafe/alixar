@@ -41,6 +41,8 @@
  *  \brief      File of parent class of all other business classes (invoices, contracts, proposals, orders, ...)
  */
 
+use Dolibarr\Classes\MultiCurrency;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doldeprecationhandler.class.php';
 
 /**

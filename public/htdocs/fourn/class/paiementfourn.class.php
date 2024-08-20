@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2002-2004 Rodolphe Quiedeville   <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2007 Laurent Destailleur    <eldy@users.sourceforge.net>
- * Copyright (C) 2005      Marc Barilley / Ocebo  <marc@ocebo.com>
- * Copyright (C) 2005-2009 Regis Houssin          <regis.houssin@inodbox.com>
- * Copyright (C) 2010-2011 Juanjo Menent          <jmenent@2byte.es>
- * Copyright (C) 2014      Marcos García          <marcosgdf@gmail.com>
- * Copyright (C) 2018      Nicolas ZABOURI	  <info@inovea-conseil.com>
- * Copyright (C) 2018       Frédéric France         <frederic.francenetlogic.fr>
- * Copyright (C) 2023      Joachim Kueter		  <git-jk@bloxera.com>
- * Copyright (C) 2023      Sylvain Legrand		  <technique@infras.fr>
+/* Copyright (C) 2002-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2007  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2011  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018       Nicolas ZABOURI	            <info@inovea-conseil.com>
+ * Copyright (C) 2018       Frédéric France             <frederic.francenetlogic.fr>
+ * Copyright (C) 2023       Joachim Kueter		        <git-jk@bloxera.com>
+ * Copyright (C) 2023       Sylvain Legrand		        <technique@infras.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -33,6 +33,8 @@
  *      \ingroup    fournisseur, facture
  *      \brief      File of class to manage payments of suppliers invoices
  */
+
+use Dolibarr\Classes\MultiCurrency;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';

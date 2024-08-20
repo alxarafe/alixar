@@ -1,17 +1,17 @@
 <?php
 
-/* Copyright (C) 2002-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2013       Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2013       Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2012       Cedric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2015       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2016       Meziane Sof             <virtualsof@yahoo.fr>
- * Copyright (C) 2017-2018  Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2002-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2012       Cedric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2016       Meziane Sof                 <virtualsof@yahoo.fr>
+ * Copyright (C) 2017-2018  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2023-2024  Nick Fragoulis
- * Copyright (C) 2024		MDW						<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024		MDW						    <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -35,6 +35,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Classes\MultiCurrency;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture-rec.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';

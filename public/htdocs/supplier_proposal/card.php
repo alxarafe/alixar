@@ -1,19 +1,19 @@
 <?php
 
-/* Copyright (C) 2001-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2004       Eric Seigne             <eric.seigne@ryxeo.com>
- * Copyright (C) 2005       Marc Barilley / Ocebo   <marc@ocebo.com>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2006       Andre Cianfarani        <acianfa@free.fr>
- * Copyright (C) 2010-2014  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2010-2019  Philippe Grand          <philippe.grand@atoo-net.com>
- * Copyright (C) 2012-2013  Christophe Battarel     <christophe.battarel@altairis.fr>
- * Copyright (C) 2013-2014  Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2014       Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2020		Tobias Sekan			<tobias.sekan@startmail.com>
- * Copyright (C) 2022       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2010-2014  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2010-2019  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2012-2013  Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2013-2014  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2014       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2020		Tobias Sekan			    <tobias.sekan@startmail.com>
+ * Copyright (C) 2022       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -35,6 +35,8 @@
  *  \ingroup    supplier_proposal
  *  \brief      Card supplier proposal
  */
+
+use Dolibarr\Classes\MultiCurrency;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
