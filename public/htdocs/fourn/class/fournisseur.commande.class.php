@@ -40,7 +40,6 @@
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonorder.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/multicurrency/class/multicurrency.class.php';
 if (isModEnabled('productbatch')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productbatch.class.php';
 }

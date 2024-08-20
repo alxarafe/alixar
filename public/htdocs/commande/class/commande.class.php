@@ -37,11 +37,12 @@
  *  \brief      class for orders
  */
 
+use Dolibarr\Classes\MultiCurrency;
+
 include_once DOL_DOCUMENT_ROOT . '/core/class/commonorder.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/multicurrency/class/multicurrency.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
 
 
@@ -1301,7 +1302,6 @@ class Commande extends CommonOrder
     {
         global $conf, $hookmanager;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/multicurrency/class/multicurrency.class.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
         $error = 0;

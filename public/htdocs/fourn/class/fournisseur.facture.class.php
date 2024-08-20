@@ -41,7 +41,6 @@
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commoninvoice.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/multicurrency/class/multicurrency.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
 
 if (isModEnabled('accounting')) {

@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Classes\BlockedLog;
+
 /**
  *  Class to manage certif authority
  */
@@ -300,8 +302,6 @@ class BlockedLogAuthority
             $this->error = $langs->trans('NoAuthorityURLDefined');
             return -2;
         }
-
-        require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/blockedlog.class.php';
 
         $block_static = new BlockedLog($this->db);
 

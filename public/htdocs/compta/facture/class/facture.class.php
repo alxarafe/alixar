@@ -50,12 +50,9 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/multicurrency/class/multicurrency.class.php';
 
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-}
-if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
 }
 

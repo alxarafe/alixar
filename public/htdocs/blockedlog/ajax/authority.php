@@ -39,7 +39,6 @@ if (!defined('NOREQUIREHTML')) {
 
 $res = require '../../master.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/blockedlog.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/authority.class.php';
 
 $user = new User($db);

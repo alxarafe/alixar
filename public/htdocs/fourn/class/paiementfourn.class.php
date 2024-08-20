@@ -36,7 +36,6 @@
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/multicurrency/class/multicurrency.class.php';
 
 /**
  *  Class to manage payments for supplier invoices

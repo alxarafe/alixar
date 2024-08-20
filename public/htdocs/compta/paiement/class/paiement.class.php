@@ -38,8 +38,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/multicurrency/class/multicurrency.class.php';
-
 
 /**
  *  Class to manage payments of customer invoices
