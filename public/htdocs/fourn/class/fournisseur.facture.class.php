@@ -39,7 +39,7 @@
  *  \brief      File of class to manage suppliers invoices
  */
 
-use Dolibarr\Classes\MultiCurrency;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commoninvoice.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';

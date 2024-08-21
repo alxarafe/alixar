@@ -25,7 +25,7 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Classes\BlockedLog;
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/lib/blockedlog.lib.php';

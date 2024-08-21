@@ -851,7 +851,7 @@ $tagidfortablednd = (empty($tagidfortablednd) ? 'tableattributes' : $tagidfortab
             $(".imgupforline, .imgdownforline").hide();
             $(".lineupdown").removeAttr('href');
             $(".tdlineupdown")
-                .css("background-image", 'url(<?php echo constant('BASE_URL') . '/theme/' . $conf->theme . '/img/grip.png'; ?>)')
+                .css("background-image", 'url(<?php echo constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/img/grip.png'; ?>)')
                 .css("background-repeat", "no-repeat")
                 .css("background-position", "center center")
                 .hover(

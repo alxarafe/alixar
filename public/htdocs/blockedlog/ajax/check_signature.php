@@ -27,7 +27,7 @@
 // This script is called with a POST method.
 // Directory to scan (full path) is inside POST['dir'].
 
-use Dolibarr\Classes\BlockedLog;
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
 
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', 1); // Disables token renewal

@@ -32,8 +32,9 @@ namespace Dolibarr\Modules;
 
 namespace Dolibarr\Modules;
 
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency as MultiCurrencyClass;
 use Dolibarr\Core\Base\DolibarrModules;
-use Dolibarr\Classes\MultiCurrency as MultiCurrencyClass;
+use DoliDB;
 use stdClass;
 
 /**

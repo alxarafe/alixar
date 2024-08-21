@@ -37,7 +37,7 @@
  *  \brief      class for orders
  */
 
-use Dolibarr\Classes\MultiCurrency;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 include_once DOL_DOCUMENT_ROOT . '/core/class/commonorder.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';

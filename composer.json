@@ -35,7 +35,6 @@
   },
   "require": {
     "php": ">=8.1.0",
-    "rsanjoseo/alxarafe": "^0.0.34",
     "ckeditor/ckeditor": "4.12.1",
     "erusev/parsedown": "^1.7",
     "globalcitizen/php-iban": "^4.2",

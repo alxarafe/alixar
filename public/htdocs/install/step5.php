@@ -38,6 +38,8 @@
  *         It (re)creates the install.lock and shows the final message.
  */
 
+use Dolibarr\Core\Base\DolibarrModules;
+
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
 if (file_exists($conffile)) {
@@ -181,8 +183,9 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
         $modName = 'modUser';
         $file = $modName . ".class.php";
         dolibarr_install_syslog('step5: load module user ' . DOL_DOCUMENT_ROOT . "/core/modules/" . $file, LOG_INFO);
-        include_once DOL_DOCUMENT_ROOT . "/core/modules/" . $file;
-        $objMod = new $modName($db);
+        // include_once DOL_DOCUMENT_ROOT . "/core/modules/" . $file;
+        // $objMod = new $modName($db);
+        $objMod = DolibarrModules::getModule($modName);
         $result = $objMod->init();
         if (!$result) {
             print "ERROR: failed to init module file = " . $file;

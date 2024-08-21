@@ -28,7 +28,7 @@
  *  \brief      Page to show a receipt.
  */
 
-use Dolibarr\Classes\MultiCurrency;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 // Include main (when fie in included into send.php, $action is set and main was already loaded)
 if (!isset($action)) {

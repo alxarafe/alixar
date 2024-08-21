@@ -25,6 +25,7 @@
  *  \brief      Page to activate/disable all modules
  */
 
+use Dolibarr\Core\Base\DolibarrModules;
 use Dolibarr\Lib\Modules;
 
 if (!defined('NOREQUIREMENU')) {
@@ -95,7 +96,7 @@ $i = 0; // is a sequencer of modules found
 $j = 0; // j is module number. Automatically affected if module number not defined.
 $modNameLoaded = array();
 
-$allModules =DolibarrModules::getModules($modulesdir);
+$allModules = DolibarrModules::getModules($modulesdir);
 foreach ($allModules as $modName => $filename) {
     if (str_starts_with($modName, 'mod')) {
         include_once $filename;

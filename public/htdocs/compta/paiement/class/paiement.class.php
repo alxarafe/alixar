@@ -37,7 +37,7 @@
  *  \brief      File of class to manage payments of customers invoices
  */
 
-use Dolibarr\Classes\MultiCurrency;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
 

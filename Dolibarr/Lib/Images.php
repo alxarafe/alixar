@@ -37,15 +37,15 @@ abstract class Images
 
         // Check for theme specific logo
         if (is_readable(constant('DOL_DOCUMENT_ROOT') . '/theme/' . $theme . '/img/alixar_rectangular_logo.svg')) {
-            return constant('BASE_URL') . '/theme/' . $theme . '/img/alixar_rectangular_logo.svg';
+            return constant('DOL_URL_ROOT') . '/theme/' . $theme . '/img/alixar_rectangular_logo.svg';
         }
 
         // Check for default logo
         if (is_readable(constant('DOL_DOCUMENT_ROOT') . '/theme/common/alixar_rectangular_logo.svg')) {
-            return constant('BASE_URL') . '/theme/common/alixar_rectangular_logo.svg';
+            return constant('DOL_URL_ROOT') . '/theme/common/alixar_rectangular_logo.svg';
         }
 
         // Return default padlock logo if no other logo is found
-        return constant('BASE_URL') . '/theme/common/login_logo.png';
+        return constant('DOL_URL_ROOT') . '/theme/common/login_logo.png';
     }
 }

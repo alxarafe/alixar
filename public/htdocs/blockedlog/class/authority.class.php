@@ -17,7 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Classes\BlockedLog;
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
 
 /**
  *  Class to manage certif authority

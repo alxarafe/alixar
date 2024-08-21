@@ -38,7 +38,7 @@
  *  \brief      File of class to manage suppliers orders
  */
 
-use Dolibarr\Classes\MultiCurrency;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonorder.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';

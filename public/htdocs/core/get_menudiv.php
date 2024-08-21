@@ -150,7 +150,7 @@ print '
 	}
 
     a.alilevel0, span.spanlilevel0 {
-        background-image: url(\'' . constant('BASE_URL') . '/theme/' . urlencode($conf->theme) . '/img/next.png\') !important;
+        background-image: url(\'' . constant('DOL_URL_ROOT') . '/theme/' . urlencode($conf->theme) . '/img/next.png\') !important;
         background-repeat: no-repeat !important;';
 if ($langs->trans("DIRECTION") == 'rtl') {
     print 'background-position: right;';
@@ -186,7 +186,7 @@ if ($langs->trans("DIRECTION") == 'rtl') {
         padding-bottom: 5px;
     }
 	li.lilevel1 > a, li.lilevel1 > i {
-        /* background-image: url(\'' . constant('BASE_URL') . '/theme/' . urlencode($conf->theme) . '/img/puce.png\') !important; */
+        /* background-image: url(\'' . constant('DOL_URL_ROOT') . '/theme/' . urlencode($conf->theme) . '/img/puce.png\') !important; */
         background-repeat: no-repeat !important;';
 if ($langs->trans("DIRECTION") == 'rtl') {
     print 'background-position: right;';

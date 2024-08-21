@@ -42,7 +42,7 @@
  *  \brief      Upgrade some data
  */
 
-use Dolibarr\Classes\BlockedLog;
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
 
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';

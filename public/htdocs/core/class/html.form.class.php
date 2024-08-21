@@ -9074,7 +9074,7 @@ class Form
                 $out .= '}' . "\n";
                 $out .= 'function formatSelection(record) {' . "\n";
                 if ($elemtype == 'category') {
-                    $out .= 'return \'<span><img src="' . constant('BASE_URL') . '/theme/eldy/img/object_category.png"> \'+record.text+\'</span>\';';
+                    $out .= 'return \'<span><img src="' . constant('DOL_URL_ROOT') . '/theme/eldy/img/object_category.png"> \'+record.text+\'</span>\';';
                 } else {
                     $out .= 'return record.text;';
                 }

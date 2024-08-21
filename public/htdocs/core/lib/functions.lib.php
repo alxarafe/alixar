@@ -3851,11 +3851,11 @@ function dol_print_socialnetworks($value, $cid, $socid, $type, $dictsocialnetwor
             $htmllink .= '&nbsp; <a href="skype:';
             $htmllink .= dol_string_nospecial($value, '_', '', array('@'));
             $htmllink .= '?call" alt="' . $langs->trans("Call") . '&nbsp;' . $value . '" title="' . dol_escape_htmltag($langs->trans("Call") . ' ' . $value) . '">';
-            $htmllink .= '<img src="' . constant('BASE_URL') . '/theme/common/skype_callbutton.png" border="0">';
+            $htmllink .= '<img src="' . constant('DOL_URL_ROOT') . '/theme/common/skype_callbutton.png" border="0">';
             $htmllink .= '</a><a href="skype:';
             $htmllink .= dol_string_nospecial($value, '_', '', array('@'));
             $htmllink .= '?chat" alt="' . $langs->trans("Chat") . '&nbsp;' . $value . '" title="' . dol_escape_htmltag($langs->trans("Chat") . ' ' . $value) . '">';
-            $htmllink .= '<img class="paddingleft" src="' . constant('BASE_URL') . '/theme/common/skype_chatbutton.png" border="0">';
+            $htmllink .= '<img class="paddingleft" src="' . constant('DOL_URL_ROOT') . '/theme/common/skype_chatbutton.png" border="0">';
             $htmllink .= '</a>';
             if (($cid || $socid) && isModEnabled('agenda') && $user->hasRight('agenda', 'myactions', 'create')) {
                 $addlink = 'AC_SKYPE';
@@ -4322,7 +4322,7 @@ function dol_print_ip($ip, $mode = 0)
         $countrycode = dolGetCountryCodeFromIp($ip);
         if ($countrycode) { // If success, countrycode is us, fr, ...
             if (file_exists(DOL_DOCUMENT_ROOT . '/theme/common/flags/' . $countrycode . '.png')) {
-                $ret .= ' ' . img_picto($countrycode . ' ' . $langs->trans("AccordingToGeoIPDatabase"), constant('BASE_URL') . '/theme/common/flags/' . $countrycode . '.png', '', 1);
+                $ret .= ' ' . img_picto($countrycode . ' ' . $langs->trans("AccordingToGeoIPDatabase"), constant('DOL_URL_ROOT') . '/theme/common/flags/' . $countrycode . '.png', '', 1);
             } else {
                 $ret .= ' (' . $countrycode . ')';
             }
@@ -4489,11 +4489,11 @@ function dol_print_address($address, $htmlid, $element, $id, $noprint = 0, $char
             }
             if ($showgmap) {
                 $url = dol_buildpath('/google/gmaps.php?mode=' . $element . '&id=' . $id, 1);
-                $out .= ' <a href="' . $url . '" target="_gmaps"><img id="' . $htmlid . '" class="valigntextbottom" src="' . constant('BASE_URL') . '/theme/common/gmap.png"></a>';
+                $out .= ' <a href="' . $url . '" target="_gmaps"><img id="' . $htmlid . '" class="valigntextbottom" src="' . constant('DOL_URL_ROOT') . '/theme/common/gmap.png"></a>';
             }
             if ($showomap) {
                 $url = dol_buildpath('/openstreetmap/maps.php?mode=' . $element . '&id=' . $id, 1);
-                $out .= ' <a href="' . $url . '" target="_gmaps"><img id="' . $htmlid . '_openstreetmap" class="valigntextbottom" src="' . constant('BASE_URL') . '/theme/common/gmap.png"></a>';
+                $out .= ' <a href="' . $url . '" target="_gmaps"><img id="' . $htmlid . '_openstreetmap" class="valigntextbottom" src="' . constant('DOL_URL_ROOT') . '/theme/common/gmap.png"></a>';
             }
         }
     }
@@ -5188,7 +5188,7 @@ function img_weather($titlealt, $picto, $moreatt = '', $pictoisfullpath = 0, $mo
         $picto .= '.png';
     }
 
-    $path = constant('BASE_URL') . '/theme/' . $conf->theme . '/img/weather/' . $picto;
+    $path = constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/img/weather/' . $picto;
 
     return img_picto($titlealt, $path, $moreatt, 1, 0, 0, '', $morecss);
 }
@@ -5215,7 +5215,7 @@ function img_picto_common($titlealt, $picto, $moreatt = '', $pictoisfullpath = 0
     if ($pictoisfullpath) {
         $path = $picto;
     } else {
-        $path = constant('BASE_URL') . '/theme/common/' . $picto;
+        $path = constant('DOL_URL_ROOT') . '/theme/common/' . $picto;
 
         if (getDolGlobalInt('MAIN_MODULE_CAN_OVERWRITE_COMMONICONS')) {
             $themepath = DOL_DOCUMENT_ROOT . '/theme/' . $conf->theme . '/img/' . $picto;

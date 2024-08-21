@@ -24,7 +24,7 @@
  *  \brief      Trigger file for blockedlog module
  */
 
-use Dolibarr\Classes\BlockedLog;
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/dolibarrtriggers.class.php';
 

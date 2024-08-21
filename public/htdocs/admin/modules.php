@@ -1141,7 +1141,7 @@ if ($mode == 'marketplace') {
 
     print '<tr class="oddeven">' . "\n";
     $url = 'https://www.dolistore.com';
-    print '<td class="hideonsmartphone"><a href="' . $url . '" target="_blank" rel="noopener noreferrer external"><img border="0" class="imgautosize imgmaxwidth180" src="' . constant('BASE_URL') . '/theme/alxarafe_shop.png"></a></td>';
+    print '<td class="hideonsmartphone"><a href="' . $url . '" target="_blank" rel="noopener noreferrer external"><img border="0" class="imgautosize imgmaxwidth180" src="' . constant('DOL_URL_ROOT') . '/theme/alxarafe_shop.png"></a></td>';
     print '<td><span class="opacitymedium">' . $langs->trans("DoliStoreDesc") . '</span></td>';
     print '<td><a href="' . $url . '" target="_blank" rel="noopener noreferrer external">' . $url . '</a></td>';
     print '</tr>';
@@ -1411,7 +1411,8 @@ if ($mode == 'develop') {
     print '<tr class="oddeven" height="80">' . "\n";
     $url = 'https://partners.dolibarr.org';
     print '<td class="center">';
-    print'<a href="' . $url . '" target="_blank" rel="noopener noreferrer external"><img border="0" class="imgautosize imgmaxwidth180" src="' . constant('BASE_URL') . '/theme/dolibarr_preferred_partner.png"></a>';
+    // TODO: Design logo for preferred partner (Gold partner, perhaps?)
+    print'<a href="' . $url . '" target="_blank" rel="noopener noreferrer external"><img border="0" class="imgautosize imgmaxwidth180" src="' . constant('DOL_URL_ROOT') . '/theme/alxarafe_shop.png"></a>';
     print '</td>';
     print '<td>' . $langs->trans("DoliPartnersDesc") . '</td>';
     print '<td><a href="' . $url . '" target="_blank" rel="noopener noreferrer external">';

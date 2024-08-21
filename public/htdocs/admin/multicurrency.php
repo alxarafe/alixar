@@ -23,7 +23,7 @@
  *  \brief      Page to setup multicurrency module
  */
 
-use Dolibarr\Classes\MultiCurrency;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 // Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

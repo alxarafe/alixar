@@ -22,7 +22,7 @@
  * See https://medium.com/@lhartikk/a-blockchain-in-200-lines-of-code-963cc1cc0e54
  */
 
-namespace Dolibarr\Classes;
+namespace Dolibarr\Code\BloquedLog\Classes;
 
 use DoliDB;
 use stdClass;

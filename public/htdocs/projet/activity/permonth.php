@@ -625,7 +625,7 @@ if (!empty($arrayfields['t.progress']['checked'])) {
 if (!empty($arrayfields['timeconsumed']['checked'])) {
     print '<td class="right maxwidth100">' . $langs->trans("TimeSpentSmall") . '<br>';
     print '<span class="nowraponall">';
-    print '<span class="opacitymedium nopadding userimg"><img alt="Photo" class="photouserphoto userphoto" src="' . constant('BASE_URL') . '/theme/common/everybody.png"></span>';
+    print '<span class="opacitymedium nopadding userimg"><img alt="Photo" class="photouserphoto userphoto" src="' . constant('DOL_URL_ROOT') . '/theme/common/everybody.png"></span>';
     print '<span class="opacitymedium paddingleft">' . $langs->trans("EverybodySmall") . '</span>';
     print '</span>';
     print '</td>';

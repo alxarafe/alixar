@@ -1848,7 +1848,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
         }
 
         // Mobile appli like icon
-        $manifest = constant('BASE_URL') . '/theme/' . $conf->theme . '/manifest.json.php';
+        $manifest = constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/manifest.json.php';
         $parameters = array('manifest' => $manifest);
         $resHook = $hookmanager->executeHooks('hookSetManifest', $parameters); // Note that $action and $object may have been modified by some hooks
         if ($resHook > 0) {
@@ -2035,7 +2035,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
         // Custom CSS
         if (getDolGlobalString('MAIN_IHM_CUSTOM_CSS')) {
             // If a custom CSS was set, we add link to the custom css php file
-            print '<link rel="stylesheet" type="text/css" href="' . constant('BASE_URL') . '/theme/custom.css.php' . ($ext ? '?' . $ext : '') . '&amp;revision=' . getDolGlobalInt("MAIN_IHM_PARAMS_REV") . '">' . "\n";
+            print '<link rel="stylesheet" type="text/css" href="' . constant('DOL_URL_ROOT') . '/theme/custom.css.php' . ($ext ? '?' . $ext : '') . '&amp;revision=' . getDolGlobalInt("MAIN_IHM_PARAMS_REV") . '">' . "\n";
         }
 
         // Output standard javascript links

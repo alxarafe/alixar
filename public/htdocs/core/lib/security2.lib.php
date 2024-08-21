@@ -297,7 +297,7 @@ if (!function_exists('dol_loginfunction')) {
         // Set jquery theme
         $dol_loginmesg = (!empty($_SESSION["dol_loginmesg"]) ? $_SESSION["dol_loginmesg"] : '');
 
-        $favicon = constant('BASE_URL') . '/theme/alixar_square_logo_256x256_color.png';
+        $favicon = constant('DOL_URL_ROOT') . '/theme/alixar_square_logo_256x256_color.png';
         if (!empty($mysoc->logo_squarred_mini)) {
             $favicon = constant('BASE_URL') . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_mini);
         }

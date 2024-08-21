@@ -878,7 +878,7 @@ class FormMail extends Form
 
                             $out .= ' ' . $formfile->showPreview(array(), $formfile_params[2], $formfile_params[4]);
                             if (!$this->withfilereadonly) {
-                                $out .= ' <input type="image" style="border: 0px;" src="' . constant('BASE_URL') . '/theme/' . $conf->theme . '/img/delete.png" value="' . ($key + 1) . '" class="removedfile input-nobottom" id="removedfile_' . $key . '" name="removedfile_' . $key . '" />';
+                                $out .= ' <input type="image" style="border: 0px;" src="' . constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/img/delete.png" value="' . ($key + 1) . '" class="removedfile input-nobottom" id="removedfile_' . $key . '" name="removedfile_' . $key . '" />';
                                 //$out.= ' <a href="'.$_SERVER["PHP_SELF"].'?removedfile='.($key+1).'&id=removedfile_'.$key.'">'.img_delete($langs->trans("Remove"), 'id="removedfile_'.$key.'" name="removedfile_'.$key.'"', 'removedfile input-nobottom').'</a>';
                             }
                             $out .= '<br></div>';
@@ -1542,7 +1542,7 @@ class FormMail extends Form
             $contentHtml = getHtmlOfLayout($template);
 
             $out .= '<div class="template-option" data-template="' . $template . '" data-content="' . htmlentities($contentHtml) . '">';
-            $out .= '<img class="maillayout" alt="' . $template . '" src="' . constant('BASE_URL') . '/theme/common/maillayout/' . $template . '.png" />';
+            $out .= '<img class="maillayout" alt="' . $template . '" src="' . constant('DOL_URL_ROOT') . '/theme/common/maillayout/' . $template . '.png" />';
             $out .= '<span class="template-option-text">' . ucfirst($template) . '</span>';
             $out .= '</div>';
         }

@@ -1238,7 +1238,7 @@ function activateModule($value, $withdeps = 1, $noconfverification = 0)
                             }
                         }
                         */
-                        $resArray = activateModule($modulestring);
+                        $resarray = activateModule($modulestring);
                         $activate = empty($resArray['errors']);
 
                         if ($activate) {

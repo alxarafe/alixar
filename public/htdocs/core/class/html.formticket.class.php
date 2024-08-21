@@ -554,7 +554,7 @@ class FormTicket
                     $out .= '<div id="attachfile_' . $key . '">';
                     $out .= img_mime($listofnames[$key]) . ' ' . $listofnames[$key];
                     if (!$this->withfilereadonly) {
-                        $out .= ' <input type="image" style="border: 0px;" src="' . constant('BASE_URL') . '/theme/' . $conf->theme . '/img/delete.png" value="' . ($key + 1) . '" class="removedfile" id="removedfile_' . $key . '" name="removedfile_' . $key . '" />';
+                        $out .= ' <input type="image" style="border: 0px;" src="' . constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/img/delete.png" value="' . ($key + 1) . '" class="removedfile" id="removedfile_' . $key . '" name="removedfile_' . $key . '" />';
                     }
                     $out .= '<br></div>';
                 }
@@ -1672,7 +1672,7 @@ class FormTicket
                     $out .= '<div id="attachfile_' . $key . '">';
                     $out .= img_mime($listofnames[$key]) . ' ' . $listofnames[$key];
                     if (!$this->withfilereadonly) {
-                        $out .= ' <input type="image" style="border: 0px;" src="' . constant('BASE_URL') . '/theme/' . $conf->theme . '/img/delete.png" value="' . ($key + 1) . '" class="removedfile reposition" id="removedfile_' . $key . '" name="removedfile_' . $key . '" />';
+                        $out .= ' <input type="image" style="border: 0px;" src="' . constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/img/delete.png" value="' . ($key + 1) . '" class="removedfile reposition" id="removedfile_' . $key . '" name="removedfile_' . $key . '" />';
                     }
                     $out .= '<br></div>';
                 }

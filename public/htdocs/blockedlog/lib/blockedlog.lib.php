@@ -23,7 +23,7 @@
  *    \brief      Library for common blockedlog functions
  */
 
-use Dolibarr\Classes\BlockedLog;
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
 
 /**
  *  Define head array for tabs of blockedlog tools setup pages

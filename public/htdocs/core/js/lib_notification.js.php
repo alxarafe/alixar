@@ -141,7 +141,7 @@ function check_events() {
                     var audio = null;
                     <?php
                     if (getDolGlobalString('AGENDA_REMINDER_BROWSER_SOUND')) {
-                        print 'audio = new Audio(\'' . constant('BASE_URL') . '/theme/common/sound/notification_agenda.wav\');';
+                        print 'audio = new Audio(\'' . constant('DOL_URL_ROOT') . '/theme/common/sound/notification_agenda.wav\');';
                     }
                     ?>
                     var listofreminderids = '';
@@ -152,8 +152,8 @@ function check_events() {
                         var url = "notdefined";
                         var title = "Not defined";
                         var body = value.label;
-                        var icon = '<?php print constant('BASE_URL') . '/theme/common/octicons/build/svg/bell.svg'; ?>';
-                        var image = '<?php print constant('BASE_URL') . '/theme/common/octicons/build/svg/bell.svg'; ?>';
+                        var icon = '<?php print constant('DOL_URL_ROOT') . '/theme/common/octicons/build/svg/bell.svg'; ?>';
+                        var image = '<?php print constant('DOL_URL_ROOT') . '/theme/common/octicons/build/svg/bell.svg'; ?>';
                         if (value.type == 'agenda' && value.location != null && value.location != '') {
                             body += '\n' + value.location;
                         }

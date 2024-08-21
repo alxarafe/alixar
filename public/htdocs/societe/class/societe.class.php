@@ -44,7 +44,7 @@
  *  \brief      File for third party class
  */
 
-use Dolibarr\Classes\MultiCurrency;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonincoterm.class.php';

@@ -30,7 +30,7 @@ namespace Dolibarr\Modules;
 use Dolibarr\Core\Base\DolibarrModules;
 use DoliDB;
 use stdClass;
-use Dolibarr\Classes\BlockedLog as BlockedLogClass;
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog as BlockedLogClass;
 
 /**
  *  Class to describe a BlockedLog module
