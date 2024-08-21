@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2015   Jean-François Ferry        <jfefe@aternatik.fr>
- * Copyright (C) 2016	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2017	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2021	Alexis LAURIER			<contact@alexislaurier.fr>
+/* Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2016	    Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2017	    Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2021	    Alexis LAURIER			    <contact@alexislaurier.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -28,7 +28,24 @@
  *  \file       htdocs/api/index.php
  */
 
+use Luracast\Restler\AutoLoader;
 use Luracast\Restler\Format\UploadFormat;
+
+$api_route = $_GET['api_route'];
+unset($_GET['api_route']);
+$_SERVER['SCRIPT_NAME'] = '/api/index.php';
+
+/*
+var_dump([
+    'SCRIPT_NAME' => $_SERVER['SCRIPT_NAME'],
+    'SCRIPT_FILENAME' => $_SERVER['SCRIPT_FILENAME'],
+    'REQUEST_URI' => $_SERVER['REQUEST_URI'],
+    'HTTP_HOST' => $_SERVER['HTTP_HOST'],
+    'HTTP_X_FORWARDED_PORT' => $_SERVER['HTTP_X_FORWARDED_PORT'],
+    'HTTP_X_FORWARDED_PROTO' => $_SERVER['HTTP_X_FORWARDED_PROTO'],
+]);
+die('checkit');
+*/
 
 if (!defined('NOCSRFCHECK')) {
     define('NOCSRFCHECK', '1'); // Do not check anti CSRF attack test
@@ -57,7 +74,7 @@ if (!defined("NODEFAULTVALUES")) {
 
 // Force entity if a value is provided into HTTP header. Otherwise, will use the entity of user of token used.
 if (!empty($_SERVER['HTTP_DOLAPIENTITY'])) {
-    define("DOLENTITY", (int) $_SERVER['HTTP_DOLAPIENTITY']);
+    define("DOLENTITY", (int)$_SERVER['HTTP_DOLAPIENTITY']);
 }
 
 // Response for preflight requests (used by browser when into a CORS context)
@@ -75,6 +92,7 @@ if (preg_match('/\/explorer\/swagger\.json/', $_SERVER["PHP_SELF"])) {
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
     header('Access-Control-Allow-Headers: Content-Type, Authorization, api_key, DOLAPIKEY');
 }
+
 // When we request url to get an API, we accept Cross site so we can make js API call inside another website
 if (preg_match('/\/api\/index\.php/', $_SERVER["PHP_SELF"])) {
     header('Access-Control-Allow-Origin: *');
@@ -91,21 +109,12 @@ if (!$res) {
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/restler/framework/Luracast/Restler/AutoLoader.php';
 
-call_user_func(
-    /**
-     * @return Luracast\Restler\AutoLoader
-     */
-    static function () {
-        $loader = Luracast\Restler\AutoLoader::instance();
-        spl_autoload_register($loader);
-        return $loader;
-    }
-);
+$loader = AutoLoader::instance();
+spl_autoload_register($loader);
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/api/class/api.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/api/class/api_access.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-
 
 $url = $_SERVER['PHP_SELF'];
 if (preg_match('/api\/index\.php$/', $url)) {   // sometimes $_SERVER['PHP_SELF'] is 'api\/index\.php' instead of 'api\/index\.php/explorer.php' or 'api\/index\.php/method'
@@ -135,7 +144,6 @@ if (preg_match('/api\/index\.php\/explorer/', $url) && getDolGlobalString('API_E
     exit(0);
 }
 
-
 // This 2 lines are useful only if we want to exclude some Urls from the explorer
 //use Luracast\Restler\Explorer;
 //Explorer::$excludedPaths = array('/categories');
@@ -149,11 +157,9 @@ if (preg_match('/api\/index\.php\/explorer/', $url) && getDolGlobalString('API_E
 // index.php/explorer/resources.json/xxx        called by swagger to get detail of services xxx
 // index.php/xxx                                called by any REST client to run API
 
-
 $reg = array();
 preg_match('/index\.php\/([^\/]+)(.*)$/', $url, $reg);
 // .../index.php/categories?sortfield=t.rowid&sortorder=ASC
-
 
 $hookmanager->initHooks(array('api'));
 
@@ -202,7 +208,6 @@ $api->r->addAuthenticationClass('DolibarrApiAccess', '');
 
 // Define accepted mime types
 UploadFormat::$allowedMimeTypes = array('image/jpeg', 'image/png', 'text/plain', 'application/octet-stream');
-
 
 // Restrict API to some IPs
 if (getDolGlobalString('API_RESTRICT_ON_IP')) {
@@ -359,7 +364,7 @@ if (!empty($reg[1]) && ($reg[1] != 'explorer' || ($reg[2] != '/swagger.json' && 
             }
         }
 
-        if (! $endpointisallowed) {
+        if (!$endpointisallowed) {
             dol_syslog('The API with endpoint /' . $classfile . ' is forbidden by config API_ENDPOINT_RULES', LOG_WARNING);
             print 'The API with endpoint /' . $classfile . ' is forbidden by config API_ENDPOINT_RULES';
             header('HTTP/1.1 501 API is forbidden by API_ENDPOINT_RULES');
@@ -386,9 +391,6 @@ if (!empty($reg[1]) && ($reg[1] != 'explorer' || ($reg[2] != '/swagger.json' && 
         $api->r->addAPIClass($classname);
     }
 }
-
-//var_dump($api->r->apiVersionMap);
-//exit;
 
 // We do not want that restler outputs data if we use native compression (default behaviour) but we want to have it returned into a string.
 // If API_DISABLE_COMPRESSION is set, returnResponse is false => It use default handling so output result directly.
@@ -446,8 +448,8 @@ if (getDolGlobalInt("API_ENABLE_COUNT_CALLS") && $api->r->responseCode == 200) {
     $sql = "SELECT up.value";
     $sql .= " FROM " . MAIN_DB_PREFIX . "user_param as up";
     $sql .= " WHERE up.param = 'API_COUNT_CALL'";
-    $sql .= " AND up.fk_user = " . ((int) $userid);
-    $sql .= " AND up.entity = " . ((int) $conf->entity);
+    $sql .= " AND up.fk_user = " . ((int)$userid);
+    $sql .= " AND up.entity = " . ((int)$conf->entity);
 
     $result = $db->query($sql);
     if ($result) {
@@ -456,14 +458,14 @@ if (getDolGlobalInt("API_ENABLE_COUNT_CALLS") && $api->r->responseCode == 200) {
         if ($nbrows == 0) {
             $sql2 = "INSERT INTO " . MAIN_DB_PREFIX . "user_param";
             $sql2 .= " (fk_user, entity, param, value)";
-            $sql2 .= " VALUES (" . ((int) $userid) . ", " . ((int) $conf->entity) . ", 'API_COUNT_CALL', 1)";
+            $sql2 .= " VALUES (" . ((int)$userid) . ", " . ((int)$conf->entity) . ", 'API_COUNT_CALL', 1)";
         } else {
             $updateapi = true;
             $sql2 = "UPDATE " . MAIN_DB_PREFIX . "user_param as up";
             $sql2 .= " SET up.value = up.value + 1";
             $sql2 .= " WHERE up.param = 'API_COUNT_CALL'";
-            $sql2 .= " AND up.fk_user = " . ((int) $userid);
-            $sql2 .= " AND up.entity = " . ((int) $conf->entity);
+            $sql2 .= " AND up.fk_user = " . ((int)$userid);
+            $sql2 .= " AND up.entity = " . ((int)$conf->entity);
         }
 
         $result2 = $db->query($sql2);

@@ -1,5 +1,7 @@
 RewriteEngine On
 
+RewriteRule ^api/index.php/(.+)$ index.php?api_route=$1 [QSA,L]
+RewriteRule ^api/index.php/(.+)$/ index.php?api_route=$1 [QSA,L]
 RewriteRule ^(.+)\.php$ index.php/?/$1_php= [QSA,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f

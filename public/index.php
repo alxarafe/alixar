@@ -18,9 +18,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Alxarafe\Lib\Dispatcher;
-use Alxarafe\Lib\Functions;
-
 /**
  * Gets the URL segment corresponding to the controller route.
  *
@@ -108,6 +105,13 @@ if ($last_slash_pos !== false) {
     $fullpath = substr($fullpath, 0, $last_slash_pos);
 }
 $relative_path = substr($fullpath, strlen(DOL_DOCUMENT_ROOT));
+
+if (isset($_GET['api_route'])) {
+    $route = '/' . trim($route, '/') . '/';
+    $_SERVER['PHP_SELF'] = $route;
+    require_once constant('DOL_DOCUMENT_ROOT') . '/api/index.php';
+    die();
+}
 
 /**
  * Dolibarr uses the $_SERVER['PHP_SELF'] variable in much of the code to know how it
