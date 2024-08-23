@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2002-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2002-2003  Jean-Louis Bergamo      <jlb@j1b.org>
- * Copyright (C) 2004-2013  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2004       Sebastien Di Cintio     <sdicintio@ressource-toi.org>
- * Copyright (C) 2004       Benoit Mortier          <benoit.mortier@opensides.be>
- * Copyright (C) 2009       Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2012       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2002-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2002-2003  Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2004-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Sebastien Di Cintio         <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2009       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,13 +24,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\MailmanSpip\Classes;
+
+use DoliDB;
+
 /**
  *  \file       htdocs/mailmanspip/class/mailmanspip.class.php
  *  \ingroup    member
  *  \brief      File of class to manage mailman and spip actions
  */
 
-use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';

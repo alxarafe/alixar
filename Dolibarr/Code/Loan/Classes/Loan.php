@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2014-2018  Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2015-2024  Frédéric France      <frederic.france@free.fr>
+/* Copyright (C) 2014-2018  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,14 +18,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Loan\Classes;
+
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/loan/class/loan.class.php
  *  \ingroup    loan
  *  \brief      Class for loan module
  */
-
-use Dolibarr\Core\Base\CommonObject;
-
 
 /**
  *  Loan

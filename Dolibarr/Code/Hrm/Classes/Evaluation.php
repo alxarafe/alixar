@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2017   Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2021 	Gauthier VERDOL     <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 	Greg Rastklan       <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 	Jean-Pascal BOUDET  <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 	Grégory BLEMAND     <gregory.blemand@atm-consulting.fr>
- * Copyright (C) 2024	Frédéric France     <frederic.france@free.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
+ * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,20 +23,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * \file        class/job.class.php
- * \ingroup     hrm
- * \brief       This file is a CRUD class file for Job (Create/Read/Update/Delete)
- */
+namespace Dolibarr\Code\Hrm\Classes;
 
-// Put here all includes required by your class file
 use Dolibarr\Core\Base\CommonObject;
 
+/**
+ *    \file        htdocs/hrm/class/evaluation.class.php
+ *    \ingroup     hrm
+ *    \brief       This file is a CRUD class file for Evaluation (Create/Read/Update/Delete)
+ */
+
+require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/evaluationdet.class.php';
 
 /**
- * Class for Job
+ * Class for Evaluation
  */
-class Job extends CommonObject
+class Evaluation extends CommonObject
 {
     /**
      * @var string ID of module.
@@ -46,26 +48,27 @@ class Job extends CommonObject
     /**
      * @var string ID to identify managed object.
      */
-    public $element = 'job';
+    public $element = 'evaluation';
 
     /**
      * @var string Name of table without prefix where object is stored. This is also the key used for extrafields management.
      */
-    public $table_element = 'hrm_job';
+    public $table_element = 'hrm_evaluation';
 
     /**
-     * @var string String with name of icon for job. Must be the part after the 'object_' into object_job.png
+     * @var string String with name of icon for evaluation. Must be the part after the 'object_' into object_evaluation.png
      */
-    public $picto = 'technic';
+    public $picto = 'label';
 
 
     const STATUS_DRAFT = 0;
     const STATUS_VALIDATED = 1;
     const STATUS_CANCELED = 9;
+    const STATUS_CLOSED = 6;
 
 
     /**
-     *  'type' field format ('integer', 'integer:ObjectClass:PathToClass[:AddCreateButtonOrNot[:Filter]]', 'sellist:TableName:LabelFieldName[:KeyFieldName[:KeyFieldParent[:Filter]]]', 'varchar(x)', 'double(24,8)', 'real', 'price', 'text', 'text:none', 'html', 'date', 'datetime', 'timestamp', 'duration', 'mail', 'phone', 'url', 'password')
+     *  'type' field format ('integer', 'integer:ObjectClass:PathToClass[:AddCreateButtonOrNot[:Filter[:Sortfield]]]', 'sellist:TableName:LabelFieldName[:KeyFieldName[:KeyFieldParent[:Filter]]]', 'varchar(x)', 'double(24,8)', 'real', 'price', 'text', 'text:none', 'html', 'date', 'datetime', 'timestamp', 'duration', 'mail', 'phone', 'url', 'password')
      *         Note: Filter can be a string like "(t.ref:like:'SO-%') or (t.date_creation:<:'20160101') or (t.nature:is:NULL)"
      *  'label' the translation key.
      *  'picto' is code of a picto to show before value in forms
@@ -96,64 +99,71 @@ class Job extends CommonObject
      */
     public $fields = array(
         'rowid' => array('type' => 'integer', 'label' => 'TechnicalID', 'enabled' => 1, 'position' => 1, 'notnull' => 1, 'visible' => 0, 'noteditable' => 1, 'index' => 1, 'css' => 'left', 'comment' => "Id"),
-        'label' => array('type' => 'varchar(128)', 'label' => 'Label', 'enabled' => 1, 'position' => 20, 'notnull' => 1, 'visible' => 1, 'index' => 1, 'searchall' => 1, 'showoncombobox' => 1, 'comment' => "Label of object"),
-        'description' => array('type' => 'text', 'label' => 'Description', 'enabled' => 1, 'position' => 21, 'notnull' => 0, 'visible' => 1,),
-        'date_creation' => array('type' => 'datetime', 'label' => 'DateCreation', 'enabled' => 1, 'position' => 500, 'notnull' => 1, 'visible' => 2,),
-        'tms' => array('type' => 'timestamp', 'label' => 'DateModification', 'enabled' => 1, 'position' => 501, 'notnull' => 0, 'visible' => 2,),
-        'deplacement' => array('type' => 'select', 'required' => 1,'label' => 'NeedBusinessTravels', 'enabled' => 1, 'position' => 90, 'notnull' => 1, 'visible' => 1, 'arrayofkeyval' => array(0 => "No", 1 => "Yes"), 'default' => '0'),
-        'note_public' => array('type' => 'html', 'label' => 'NotePublic', 'enabled' => 1, 'position' => 70, 'notnull' => 0, 'visible' => 0,),
-        'note_private' => array('type' => 'html', 'label' => 'NotePrivate', 'enabled' => 1, 'position' => 71, 'notnull' => 0, 'visible' => 0,),
-        'fk_user_creat' => array('type' => 'integer:User:user/class/user.class.php', 'label' => 'UserAuthor', 'enabled' => 1, 'position' => 510, 'notnull' => 1, 'visible' => -2, 'foreignkey' => 'user.rowid',),
-        'fk_user_modif' => array('type' => 'integer:User:user/class/user.class.php', 'label' => 'UserModif', 'enabled' => 1, 'position' => 511, 'notnull' => -1, 'visible' => -2,),
+        'ref' => array('type' => 'varchar(128)', 'label' => 'Ref', 'enabled' => 1, 'position' => 20, 'notnull' => 1, 'visible' => 4, 'noteditable' => 1, 'default' => '(PROV)', 'index' => 1, 'searchall' => 1, 'showoncombobox' => 1, 'comment' => "Reference of object"),
+        'label' => array('type' => 'varchar(255)', 'label' => 'Label', 'enabled' => 1, 'position' => 30, 'notnull' => 0, 'visible' => 1, 'searchall' => 1, 'css' => 'minwidth300', 'cssview' => 'wordbreak', 'showoncombobox' => '2',),
+        'description' => array('type' => 'text', 'label' => 'Description', 'enabled' => 1, 'position' => 60, 'notnull' => 0, 'visible' => 3,),
+        'note_public' => array('type' => 'html', 'label' => 'NotePublic', 'enabled' => 1, 'position' => 61, 'notnull' => 0, 'visible' => 0,),
+        'note_private' => array('type' => 'html', 'label' => 'NotePrivate', 'enabled' => 1, 'position' => 62, 'notnull' => 0, 'visible' => 0,),
+        'date_creation' => array('type' => 'datetime', 'label' => 'DateCreation', 'enabled' => 1, 'position' => 500, 'notnull' => 1, 'visible' => -2,),
+        'tms' => array('type' => 'timestamp', 'label' => 'DateModification', 'enabled' => 1, 'position' => 501, 'notnull' => 0, 'visible' => -2,),
+        'fk_user_creat' => array('type' => 'integer:User:user/class/user.class.php:0', 'label' => 'UserAuthor', 'enabled' => 1, 'position' => 510, 'notnull' => 1, 'visible' => -2, 'foreignkey' => 'user.rowid',),
+        'fk_user_modif' => array('type' => 'integer:User:user/class/user.class.php:0', 'label' => 'UserModif', 'enabled' => 1, 'position' => 511, 'notnull' => -1, 'visible' => -2,),
+        'import_key' => array('type' => 'varchar(14)', 'label' => 'ImportId', 'enabled' => 1, 'position' => 1000, 'notnull' => -1, 'visible' => -2,),
+        'status' => array('type' => 'smallint', 'label' => 'Status', 'enabled' => 1, 'position' => 1000, 'notnull' => 1, 'default' => '0', 'visible' => 5, 'index' => 1, 'arrayofkeyval' => array('0' => 'Draft', '1' => 'Validated', '6' => 'Closed'),),
+        'date_eval' => array('type' => 'date', 'label' => 'DateEval', 'enabled' => 1, 'position' => 502, 'notnull' => 1, 'visible' => 1,),
+        'fk_user' => array('type' => 'integer:User:user/class/user.class.php:0', 'label' => 'Employee', 'enabled' => 1, 'position' => 504, 'notnull' => 1, 'visible' => 1, 'picto' => 'user', 'css' => 'maxwidth300 widthcentpercentminusxx', 'csslist' => 'tdoverflowmax150'),
+        'fk_job' => array('type' => 'integer:Job:/hrm/class/job.class.php', 'label' => 'JobProfile', 'enabled' => 1, 'position' => 505, 'notnull' => 1, 'visible' => 1, 'picto' => 'jobprofile', 'css' => 'maxwidth300 widthcentpercentminusxx', 'csslist' => 'tdoverflowmax150'),
     );
     public $rowid;
     public $ref;
     public $label;
     public $description;
+    public $note_public;
+    public $note_private;
     public $date_creation;
-
-    public $deplacement;
     public $fk_user_creat;
     public $fk_user_modif;
+    public $import_key;
+    public $status;
+    public $date_eval;
+    public $fk_user;
+    public $fk_job;
     // END MODULEBUILDER PROPERTIES
 
 
     // If this object has a subtable with lines
 
-    // /**
-    //  * @var string    Name of subtable line
-    //  */
-    // public $table_element_line = 'hrm_jobline';
+    /**
+     * @var string    Name of subtable line
+     */
+    public $table_element_line = 'hrm_evaluationdet';
 
     /**
      * @var string    Field with ID of parent key if this object has a parent
      */
-    public $fk_element = 'fk_job';
+    public $fk_element = 'fk_evaluation';
+
+    /**
+     * @var string    Name of subtable class that manage subtable lines
+     */
+    public $class_element_line = 'EvaluationLine';
 
     // /**
-    //  * @var string    Name of subtable class that manage subtable lines
+    //  * @var array    List of child tables. To test if we can delete object.
     //  */
-    // public $class_element_line = 'Jobline';
+    // protected $childtables = array();
 
     /**
-     * @var array<string,string[]>  List of child tables. To test if we can delete object.
-     */
-    protected $childtables = array(
-        'hrm_evaluation' => ['name' => 'Evaluation'],
-        'hrm_job_user' => ['name' => 'Job'],
-    );
-
-    /**
-     * @var string[]    List of child tables. To know object to delete on cascade.
-     *               If name matches '@ClassNAme:FilePathClass:ParentFkFieldName' it will
+     * @var string[] List of child tables. To know object to delete on cascade.
+     *               If name matches '@ClassNAme:FilePathClass;ParentFkFieldName' it will
      *               call method deleteByParentField(parentId, ParentFkFieldName) to fetch and delete child object
      */
-    protected $childtablesoncascade = array("@SkillRank:hrm/class/skillrank.class.php:fk_object:(objecttype:=:'job')");
+    protected $childtablesoncascade = array('@EvaluationLine:hrm/class/evaluationdet.class.php:fk_evaluation');
 
-    // /**
-    //  * @var JobLine[]     Array of subtable lines
-    //  */
-    // public $lines = array();
+    /**
+     * @var EvaluationLine[]     Array of subtable lines
+     */
+    public $lines = array();
 
 
 
@@ -164,7 +174,7 @@ class Job extends CommonObject
      */
     public function __construct(DoliDB $db)
     {
-        global $conf, $langs;
+        global $conf, $langs, $user;
 
         $this->db = $db;
 
@@ -178,11 +188,11 @@ class Job extends CommonObject
             $this->fields['entity']['enabled'] = 0;
         }
 
-        // Example to show how to set values of fields definition dynamically
-        /*if ($user->rights->hrm->job->read) {
-            $this->fields['myfield']['visible'] = 1;
-            $this->fields['myfield']['noteditable'] = 0;
-        }*/
+        if (!$user->hasRight('hrm', 'evaluation', 'readall')) {
+            $this->fields['fk_user']['type'] .= ':rowid IN(' . $this->db->sanitize(implode(", ", $user->getAllChildIds(1))) . ')';
+        }
+
+        $this->date_eval = dol_now();
 
         // Unset fields that are disabled
         foreach ($this->fields as $key => $val) {
@@ -214,7 +224,27 @@ class Job extends CommonObject
     {
         $resultcreate = $this->createCommon($user, $notrigger);
 
-        //$resultvalidate = $this->validate($user, $notrigger);
+        if ($resultcreate > 0) {
+            require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skillrank.class.php';
+            $skillRank = new SkillRank($this->db);
+            $TRequiredRanks = $skillRank->fetchAll('ASC', 't.rowid', 0, 0, '(fk_object:=:' . ((int) $this->fk_job) . ") AND (objecttype:=:'job')");
+
+            if (is_array($TRequiredRanks) && !empty($TRequiredRanks)) {
+                $this->lines = array();
+                foreach ($TRequiredRanks as $required) {
+                    $line = new EvaluationLine($this->db);
+                    $line->fk_evaluation = $resultcreate;
+                    $line->fk_skill = $required->fk_skill;
+                    $line->required_rank = $required->rankorder;
+                    $line->fk_rank = 0;
+
+                    $res = $line->create($user, $notrigger);
+                    if ($res > 0) {
+                        $this->lines[] = $line;
+                    }
+                }
+            }
+        }
 
         return $resultcreate;
     }
@@ -480,13 +510,7 @@ class Job extends CommonObject
             return 0;
         }
 
-        /*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->job->write))
-         || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->job->job_advance->validate))))
-         {
-         $this->error='NotEnoughPermissions';
-         dol_syslog(get_class($this)."::valid ".$this->error, LOG_ERR);
-         return -1;
-         }*/
+
 
         $now = dol_now();
 
@@ -523,7 +547,7 @@ class Job extends CommonObject
 
             if (!$error && !$notrigger) {
                 // Call trigger
-                $result = $this->call_trigger('HRM_JOB_VALIDATE', $user);
+                $result = $this->call_trigger('HRM_EVALUATION_VALIDATE', $user);
                 if ($result < 0) {
                     $error++;
                 }
@@ -537,15 +561,15 @@ class Job extends CommonObject
             // Rename directory if dir was a temporary ref
             if (preg_match('/^[\(]?PROV/i', $this->ref)) {
                 // Now we rename also files into index
-                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filename = CONCAT('" . $this->db->escape($this->newref) . "', SUBSTR(filename, " . (strlen($this->ref) + 1) . ")), filepath = 'job/" . $this->db->escape($this->newref) . "'";
-                $sql .= " WHERE filename LIKE '" . $this->db->escape($this->ref) . "%' AND filepath = 'job/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
+                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filename = CONCAT('" . $this->db->escape($this->newref) . "', SUBSTR(filename, " . (strlen($this->ref) + 1) . ")), filepath = 'evaluation/" . $this->db->escape($this->newref) . "'";
+                $sql .= " WHERE filename LIKE '" . $this->db->escape($this->ref) . "%' AND filepath = 'evaluation/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $error++;
                     $this->error = $this->db->lasterror();
                 }
-                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filepath = 'job/" . $this->db->escape($this->newref) . "'";
-                $sql .= " WHERE filepath = 'job/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
+                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filepath = 'evaluation/" . $this->db->escape($this->newref) . "'";
+                $sql .= " WHERE filepath = 'evaluation/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $error++;
@@ -555,15 +579,15 @@ class Job extends CommonObject
                 // We rename directory ($this->ref = old ref, $num = new ref) in order not to lose the attachments
                 $oldref = dol_sanitizeFileName($this->ref);
                 $newref = dol_sanitizeFileName($num);
-                $dirsource = $conf->hrm->dir_output . '/job/' . $oldref;
-                $dirdest = $conf->hrm->dir_output . '/job/' . $newref;
+                $dirsource = $conf->hrm->dir_output . '/evaluation/' . $oldref;
+                $dirdest = $conf->hrm->dir_output . '/evaluation/' . $newref;
                 if (!$error && file_exists($dirsource)) {
                     dol_syslog(get_class($this) . "::validate() rename dir " . $dirsource . " into " . $dirdest);
 
                     if (@rename($dirsource, $dirdest)) {
                         dol_syslog("Rename ok");
                         // Rename docs starting with $oldref with $newref
-                        $listoffiles = dol_dir_list($conf->hrm->dir_output . '/job/' . $newref, 'files', 1, '^' . preg_quote($oldref, '/'));
+                        $listoffiles = dol_dir_list($conf->hrm->dir_output . '/evaluation/' . $newref, 'files', 1, '^' . preg_quote($oldref, '/'));
                         foreach ($listoffiles as $fileentry) {
                             $dirsource = $fileentry['name'];
                             $dirdest = preg_replace('/^' . preg_quote($oldref, '/') . '/', $newref, $dirsource);
@@ -592,42 +616,35 @@ class Job extends CommonObject
     }
 
     /**
-     * Get the last occupied position for a user
+     *      Get the last evaluation by date for the user assigned
      *
-     * @param   int                 $fk_user    Id of user we need to get last job
-     * @return  Position|string                 Last occupied position
+     *       @param int $fk_user ID of user we need to get last eval
+     *       @return Evaluation|null
      */
-    public function getLastJobForUser($fk_user)
+    public function getLastEvaluationForUser($fk_user)
     {
-        $Tab = $this->getForUser($fk_user);
+        $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "hrm_evaluation ";
+        $sql .= "WHERE fk_user=" . ((int) $fk_user) . " ";
+        $sql .= "ORDER BY date_eval DESC ";
+        $sql .= "LIMIT 1 ";
+
+        $res = $this->db->query($sql);
+        if (!$res) {
+            dol_print_error($this->db);
+        }
+
+        $Tab = $this->db->fetch_object($res);
 
         if (empty($Tab)) {
-            return '';
+            return null;
+        } else {
+            $evaluation = new Evaluation($this->db);
+            $evaluation->fetch($Tab->rowid);
+
+            return $evaluation;
         }
-
-        $lastpos = array_shift($Tab);
-
-        return $lastpos;
     }
 
-    /**
-     *  Get array of occupied positions for a user
-     *
-     * @param   int         $userid     Id of user we need to get job list
-     * @return  Position[]              Array of occupied positions
-     */
-    public function getForUser($userid)
-    {
-        global $db;
-
-        $TReturn = array();
-        $position = new Position($db);
-        $TPosition = $position->getForUser($userid);
-        foreach ($TPosition as $UPosition) {
-            $TReturn[$UPosition->Job->rowid] = $UPosition->Job->ref;
-        }
-        return $TReturn;
-    }
 
     /**
      *  Set draft status
@@ -643,14 +660,7 @@ class Job extends CommonObject
             return 0;
         }
 
-        /*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->write))
-         || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->hrm_advance->validate))))
-         {
-         $this->error='Permission denied';
-         return -1;
-         }*/
-
-        return $this->setStatusCommon($user, self::STATUS_DRAFT, $notrigger, 'JOB_UNVALIDATE');
+        return $this->setStatusCommon($user, self::STATUS_DRAFT, $notrigger, 'HRM_EVALUATION_UNVALIDATE');
     }
 
     /**
@@ -667,14 +677,7 @@ class Job extends CommonObject
             return 0;
         }
 
-        /*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->write))
-         || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->hrm_advance->validate))))
-         {
-         $this->error='Permission denied';
-         return -1;
-         }*/
-
-        return $this->setStatusCommon($user, self::STATUS_CANCELED, $notrigger, 'JOB_CANCEL');
+        return $this->setStatusCommon($user, self::STATUS_CANCELED, $notrigger, 'HRM_EVALUATION_CANCEL');
     }
 
     /**
@@ -691,14 +694,7 @@ class Job extends CommonObject
             return 0;
         }
 
-        /*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->write))
-         || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->hrm_advance->validate))))
-         {
-         $this->error='Permission denied';
-         return -1;
-         }*/
-
-        return $this->setStatusCommon($user, self::STATUS_VALIDATED, $notrigger, 'JOB_REOPEN');
+        return $this->setStatusCommon($user, self::STATUS_VALIDATED, $notrigger, 'HRM_EVALUATION_REOPEN');
     }
 
     /**
@@ -721,14 +717,14 @@ class Job extends CommonObject
 
         $result = '';
 
-        $label = img_picto('', $this->picto) . ' <u>' . $langs->trans("JobProfile") . '</u>';
+        $label = img_picto('', $this->picto) . ' <u>' . $langs->trans("Evaluation") . '</u>';
         if (isset($this->status)) {
             $label .= ' ' . $this->getLibStatut(5);
         }
         $label .= '<br>';
-        $label .= '<b>' . $langs->trans('Label') . ':</b> ' . $this->label;
+        $label .= '<b>' . $langs->trans('Ref') . ':</b> ' . $this->ref;
 
-        $url = dol_buildpath('/hrm/job_card.php', 1) . '?id=' . $this->id;
+        $url = dol_buildpath('/hrm/evaluation_card.php', 1) . '?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not
@@ -744,7 +740,7 @@ class Job extends CommonObject
         $linkclose = '';
         if (empty($notooltip)) {
             if (getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER')) {
-                $label = $langs->trans("ShowJob");
+                $label = $langs->trans("ShowEvaluation");
                 $linkclose .= ' alt="' . dol_escape_htmltag($label, 1) . '"';
             }
             $linkclose .= ' title="' . dol_escape_htmltag($label, 1) . '"';
@@ -776,13 +772,13 @@ class Job extends CommonObject
                 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
                 list($class, $module) = explode('@', $this->picto);
-                $upload_dir = $conf->$module->multidir_output[$conf->entity] . "/$class/" . dol_sanitizeFileName($this->label);
+                $upload_dir = $conf->$module->multidir_output[$conf->entity] . "/$class/" . dol_sanitizeFileName($this->ref);
                 $filearray = dol_dir_list($upload_dir, "files");
                 $filename = $filearray[0]['name'];
                 if (!empty($filename)) {
                     $pospoint = strpos($filearray[0]['name'], '.');
 
-                    $pathtophoto = $class . '/' . $this->label . '/thumbs/' . substr($filename, 0, $pospoint) . '_mini' . substr($filename, $pospoint);
+                    $pathtophoto = $class . '/' . $this->ref . '/thumbs/' . substr($filename, 0, $pospoint) . '_mini' . substr($filename, $pospoint);
                     if (!getDolGlobalString(strtoupper($module . '_' . $class) . '_FORMATLISTPHOTOSASUSERS')) {
                         $result .= '<div class="floatleft inline-block valignmiddle divphotoref"><div class="photoref"><img class="photo' . $module . '" alt="No photo" border="0" src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $module . '&entity=' . $conf->entity . '&file=' . urlencode($pathtophoto) . '"></div></div>';
                     } else {
@@ -797,14 +793,14 @@ class Job extends CommonObject
         }
 
         if ($withpicto != 2) {
-            $result .= $this->label;
+            $result .= $this->ref;
         }
 
         $result .= $linkend;
         //if ($withpicto != 2) $result.=(($addlabel && $this->label) ? $sep . dol_trunc($this->label, ($addlabel > 1 ? $addlabel : 0)) : '');
 
         global $action, $hookmanager;
-        $hookmanager->initHooks(array('jobdao'));
+        $hookmanager->initHooks(array('evaluationdao'));
         $parameters = array('id' => $this->id, 'getnomurl' => &$result);
         $reshook = $hookmanager->executeHooks('getNomUrl', $parameters, $this, $action); // Note that $action and $object may have been modified by some hooks
         if ($reshook > 0) {
@@ -838,28 +834,24 @@ class Job extends CommonObject
     public function LibStatut($status, $mode = 0)
     {
 		// phpcs:enable
-        return '';      // There is no status on job profile for the moment
-
-        /*
         if (empty($this->labelStatus) || empty($this->labelStatusShort)) {
             global $langs;
             //$langs->load("hrm");
             $this->labelStatus[self::STATUS_DRAFT] = $langs->transnoentitiesnoconv('Draft');
-            $this->labelStatus[self::STATUS_VALIDATED] = $langs->transnoentitiesnoconv('Enabled');
-            $this->labelStatus[self::STATUS_CANCELED] = $langs->transnoentitiesnoconv('Disabled');
+            $this->labelStatus[self::STATUS_VALIDATED] = $langs->transnoentitiesnoconv('Validated');
+            $this->labelStatus[self::STATUS_CLOSED] = $langs->transnoentitiesnoconv('Closed');
             $this->labelStatusShort[self::STATUS_DRAFT] = $langs->transnoentitiesnoconv('Draft');
-            $this->labelStatusShort[self::STATUS_VALIDATED] = $langs->transnoentitiesnoconv('Enabled');
-            $this->labelStatusShort[self::STATUS_CANCELED] = $langs->transnoentitiesnoconv('Disabled');
+            $this->labelStatusShort[self::STATUS_VALIDATED] = $langs->transnoentitiesnoconv('Validated');
+            $this->labelStatusShort[self::STATUS_CLOSED] = $langs->transnoentitiesnoconv('Closed');
         }
 
-        $statusType = 'status'.$status;
+        $statusType = 'status' . $status;
         //if ($status == self::STATUS_VALIDATED) $statusType = 'status1';
         if ($status == self::STATUS_CANCELED) {
             $statusType = 'status6';
         }
 
         return dolGetStatus($this->labelStatus[$status], $this->labelStatusShort[$status], '', $statusType, $mode);
-        */
     }
 
     /**
@@ -917,8 +909,8 @@ class Job extends CommonObject
     {
         $this->lines = array();
 
-        $objectline = new JobLine($this->db);
-        $result = $objectline->fetchAll('ASC', 'position', 0, 0, '(fk_job:=:' . ((int) $this->id) . ')');
+        $objectline = new EvaluationLine($this->db);
+        $result = $objectline->fetchAll('ASC', '', 0, 0, '(fk_evaluation:=:' . ((int) $this->id) . ')');
 
         if (is_numeric($result)) {
             $this->setErrorsFromObject($objectline);
@@ -939,15 +931,15 @@ class Job extends CommonObject
         global $langs, $conf;
         $langs->load("hrm");
 
-        if (!getDolGlobalString('hrm_JOB_ADDON')) {
-            $conf->global->hrm_JOB_ADDON = 'mod_job_standard';
+        if (!getDolGlobalString('HRMTEST_EVALUATION_ADDON')) {
+            $conf->global->HRMTEST_EVALUATION_ADDON = 'mod_evaluation_standard';
         }
 
-        if (getDolGlobalString('hrm_JOB_ADDON')) {
+        if (getDolGlobalString('HRMTEST_EVALUATION_ADDON')) {
             $mybool = false;
 
-            $file = getDolGlobalString('hrm_JOB_ADDON') . ".php";
-            $classname = getDolGlobalString('hrm_JOB_ADDON');
+            $file = getDolGlobalString('HRMTEST_EVALUATION_ADDON') . ".php";
+            $classname = getDolGlobalString('HRMTEST_EVALUATION_ADDON');
 
             // Include file with class
             $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
@@ -1000,23 +992,22 @@ class Job extends CommonObject
         global $conf, $langs;
 
         $result = 0;
-        $includedocgeneration = 0;
 
         $langs->load("hrm");
 
         if (!dol_strlen($modele)) {
-            $modele = 'standard_job';
+            $modele = 'standard';
 
             if (!empty($this->model_pdf)) {
                 $modele = $this->model_pdf;
-            } elseif (getDolGlobalString('JOB_ADDON_PDF')) {
-                $modele = getDolGlobalString('JOB_ADDON_PDF');
+            } elseif (getDolGlobalString('EVALUATION_ADDON_PDF')) {
+                $modele = getDolGlobalString('EVALUATION_ADDON_PDF');
             }
         }
 
         $modelpath = "core/modules/hrm/doc/";
 
-        if ($includedocgeneration && !empty($modele)) {
+        if (!empty($modele)) {
             $result = $this->commonGenerateDocument($modelpath, $modele, $outputlangs, $hidedetails, $hidedesc, $hideref, $moreparams);
         }
 
@@ -1042,76 +1033,20 @@ class Job extends CommonObject
         $return .= img_picto('', $this->picto);
         $return .= '</span>';
         $return .= '<div class="info-box-content">';
-        $return .= '<span class="info-box-ref inline-block tdoverflowmax150 valignmiddle">' . (method_exists($this, 'getNomUrl') ? $this->getNomUrl(0) : $this->ref) . '</span>';
-        if ($selected >= 0) {
-            $return .= '<input id="cb' . $this->id . '" class="flat checkforselect fright" type="checkbox" name="toselect[]" value="' . $this->id . '"' . ($selected ? ' checked="checked"' : '') . '>';
+        $return .= '<span class="info-box-ref inline-block tdoverflowmax150 valignmiddle">' . (method_exists($this, 'getNomUrl') ? $this->getNomUrl(1) : $this->ref) . '</span>';
+        $return .= '<input class="fright" id="cb' . $this->id . '" class="flat checkforselect" type="checkbox" name="toselect[]" value="' . $this->id . '"' . ($selected ? ' checked="checked"' : '') . '>';
+        if (!empty($arraydata['user'])) {
+            $return .= '<br><span class="info-box-label ">' . $arraydata['user'] . '</span>';
         }
-        /*if (property_exists($this, 'deplacement')) {
-            $return .= '<br><span class="opacitymedium">'.$langs->trans("Type").'</span>';
-            $return .= ' : <span class="info-box-label ">'.$this->fields['deplacement']['arrayofkeyval'][$this->deplacement].'</span>';
-        }*/
-        if (property_exists($this, 'description') && !(empty($this->description))) {
-            //$return .= '<br><span class="info-box-label opacitymedium">'.$langs->trans("Description").'</span> : ';
-            $return .= '<br><span class="info-box-label ">' . (strlen($this->description) > 30 ? dol_substr($this->description, 0, 25) . '...' : $this->description) . '</span>';
+        if (!empty($arraydata['job'])) {
+            $return .= '<br><span class="info-box-label ">' . $arraydata['job'] . '</span>';
+        }
+        if (method_exists($this, 'getLibStatut')) {
+            $return .= '<br><div class="info-box-status">' . $this->getLibStatut(3) . '</div>';
         }
         $return .= '</div>';
         $return .= '</div>';
         $return .= '</div>';
         return $return;
-    }
-
-    /**
-     * function for get required skills associate to job object
-     * @param int  $id  Id of object
-     * @return array|int     list of ids skillranks
-     */
-    public function getSkillRankForJob($id)
-    {
-        if (empty($id)) {
-            return -1;
-        }
-        $skillranks = array();
-        $sql = "SELECT rowid";
-        $sql .= " FROM " . MAIN_DB_PREFIX . "hrm_skillrank";
-        $sql .= " WHERE fk_object = " . ((int) $id);
-
-        $resql = $this->db->query($sql);
-        if ($resql) {
-            $num = $this->db->num_rows($resql);
-            $i = 0;
-            while ($i < $num) {
-                $obj = $this->db->fetch_object($resql);
-                $skillranks[] = $obj;
-                $i++;
-            }
-            $this->db->free($resql);
-        } else {
-            dol_print_error($this->db);
-        }
-        return $skillranks;
-    }
-}
-
-
-use Dolibarr\Core\Base\CommonObjectLine;
-
-/**
- * Class JobLine. You can also remove this and generate a CRUD class for lines objects.
- */
-class JobLine extends CommonObjectLine
-{
-    // To complete with content of an object JobLine
-    // We should have a field rowid, fk_job and position
-
-    /**
-     * Constructor
-     *
-     * @param DoliDB $db Database handler
-     */
-    public function __construct(DoliDB $db)
-    {
-        $this->db = $db;
-
-        $this->isextrafieldmanaged = 0;
     }
 }

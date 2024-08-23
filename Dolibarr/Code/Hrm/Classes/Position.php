@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2017  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -23,19 +23,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Hrm\Classes;
+
+use Dolibarr\Core\Base\CommonObject;
+
 /**
- * \file        class/skilldet.class.php
+ * \file        class/position.class.php
  * \ingroup     hrm
- * \brief       This file is a CRUD class file for Skilldet (Create/Read/Update/Delete)
+ * \brief       This file is a CRUD class file for Position (Create/Read/Update/Delete)
  */
 
 // Put here all includes required by your class file
-use Dolibarr\Core\Base\CommonObjectLine;
 
 /**
- * Class for Skilldet
+ * Class for Position
  */
-class Skilldet extends CommonObjectLine
+class Position extends CommonObject
 {
     /**
      * @var string ID of module.
@@ -45,27 +48,17 @@ class Skilldet extends CommonObjectLine
     /**
      * @var string ID to identify managed object.
      */
-    public $element = 'skilldet';
+    public $element = 'position';
 
     /**
      * @var string Name of table without prefix where object is stored. This is also the key used for extrafields management.
      */
-    public $table_element = 'hrm_skilldet';
+    public $table_element = 'hrm_job_user';
 
     /**
-     * @see CommonObjectLine
+     * @var string String with name of icon for position. Must be the part after the 'object_' into object_position.png
      */
-    public $parent_element = 'skill';
-
-    /**
-     * @see CommonObjectLine
-     */
-    public $fk_parent_attribute = 'fk_skill';
-
-    /**
-     * @var string String with name of icon for skilldet. Must be the part after the 'object_' into object_skilldet.png
-     */
-    public $picto = 'skilldet@hrm';
+    public $picto = 'user-cog';
 
 
     const STATUS_DRAFT = 0;
@@ -104,19 +97,38 @@ class Skilldet extends CommonObjectLine
      * @var array<string,array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string}>  Array with all fields and their property. Do not use it as a static var. It may be modified by constructor.
      */
     public $fields = array(
-        'rowid' => array('type' => 'integer', 'label' => 'TechnicalID', 'enabled' => 1, 'position' => 1, 'notnull' => 1, 'visible' => 0, 'noteditable' => 1, 'index' => 1, 'css' => 'left', 'comment' => "Id"),
-        'fk_skill' => array('type' => 'integer:Skill:/hrm/class/skill.class.php', 'label' => 'fk_skill', 'enabled' => 1, 'position' => 5, 'notnull' => 1, 'visible' => 0,),
-        'rankorder' => array('type' => 'integer', 'label' => 'rank', 'enabled' => 1, 'position' => 10, 'notnull' => 0, 'visible' => 2,),
-        'description' => array('type' => 'text', 'label' => 'Description', 'enabled' => 1, 'position' => 60, 'notnull' => 0, 'visible' => 1,),
+        'rowid' => array('type' => 'integer', 'label' => 'TechnicalID', 'enabled' => 1, 'position' => 1, 'notnull' => 1, 'visible' => 2, 'index' => 1, 'css' => 'left', 'comment' => "Id"),
+        //'ref' => array('type'=>'varchar(128)', 'label'=>'Ref', 'enabled'=>'1', 'position'=>20, 'notnull'=>1, 'visible'=>1, 'index'=>1, 'searchall'=>1, 'showoncombobox'=>'1', 'comment'=>"Reference of object"),
+        'date_creation' => array('type' => 'datetime', 'label' => 'DateCreation', 'enabled' => 1, 'position' => 500, 'notnull' => 1, 'visible' => -2,),
+        'tms' => array('type' => 'timestamp', 'label' => 'DateModification', 'enabled' => 1, 'position' => 501, 'notnull' => 0, 'visible' => -2,),
+        'fk_contrat' => array('type' => 'integer:Contrat:contrat/class/contrat.class.php', 'label' => 'fk_contrat', 'enabled' => 'isModEnabled("contract")', 'position' => 50, 'notnull' => 0, 'visible' => 0,),
+        'fk_user' => array('type' => 'integer:User:user/class/user.class.php:0:(t.statut:=:1)', 'label' => 'Employee', 'enabled' => 1, 'position' => 55, 'notnull' => 1, 'visible' => 1, 'default' => '0', 'picto' => 'user', 'css' => 'maxwidth300 widthcentpercentminusxx', 'csslist' => 'tdoverflowmax150'),
+        'fk_job' => array('type' => 'integer:Job:/hrm/class/job.class.php', 'label' => 'JobProfile', 'enabled' => 1, 'position' => 56, 'notnull' => 1, 'visible' => 1, 'picto' => 'jobprofile', 'css' => 'maxwidth300 widthcentpercentminusxx', 'csslist' => 'tdoverflowmax150'),
+        'date_start' => array('type' => 'date', 'label' => 'DateStart', 'enabled' => 1, 'position' => 101, 'notnull' => 1, 'visible' => 1,),
+        'date_end' => array('type' => 'date', 'label' => 'DateEnd', 'enabled' => 1, 'position' => 102, 'notnull' => 0, 'visible' => 1,),
+        'description' => array('type' => 'text', 'label' => 'Description', 'enabled' => 1, 'position' => 120, 'notnull' => 0, 'visible' => 3,),
+        'abort_comment' => array('type' => 'varchar(255)', 'label' => 'AbandonmentComment', 'enabled' => 'getDolGlobalInt("HRM_JOB_POSITON_ENDING_COMMENT")', 'position' => 502, 'notnull' => 0, 'visible' => 1,),
+        'note_public' => array('type' => 'html', 'label' => 'NotePublic', 'enabled' => 1, 'position' => 151, 'notnull' => 0, 'visible' => 0,),
+        'note_private' => array('type' => 'html', 'label' => 'NotePrivate', 'enabled' => 1, 'position' => 152, 'notnull' => 0, 'visible' => 0,),
         'fk_user_creat' => array('type' => 'integer:User:user/class/user.class.php', 'label' => 'UserAuthor', 'enabled' => 1, 'position' => 510, 'notnull' => 1, 'visible' => -2, 'foreignkey' => 'user.rowid',),
-        'fk_user_modif' => array('type' => 'integer:User:user/class/user.class.php', 'label' => 'UserModif', 'enabled' => 1, 'position' => 511, 'notnull' => -1, 'visible' => 0,),
+        'fk_user_modif' => array('type' => 'integer:User:user/class/user.class.php', 'label' => 'UserModif', 'enabled' => 1, 'position' => 511, 'notnull' => -1, 'visible' => -2,),
     );
     public $rowid;
-    public $fk_skill;
-    public $rankorder;
+    public $ref;
     public $description;
+    public $date_creation;
+    public $fk_contrat;
+    public $fk_user;
+    public $fk_job;
+    public $date_start;
+    public $date_end;
+    public $abort_comment;
+    public $note_public;
+    public $note_private;
     public $fk_user_creat;
     public $fk_user_modif;
+
+
     // END MODULEBUILDER PROPERTIES
 
 
@@ -125,17 +137,17 @@ class Skilldet extends CommonObjectLine
     // /**
     //  * @var string    Name of subtable line
     //  */
-    // public $table_element_line = 'hrm_skilldetline';
+    // public $table_element_line = 'hrm_job_userline';
 
     // /**
     //  * @var string    Field with ID of parent key if this object has a parent
     //  */
-    // public $fk_element = 'fk_skilldet';
+    // public $fk_element = 'fk_position';
 
     // /**
     //  * @var string    Name of subtable class that manage subtable lines
     //  */
-    // public $class_element_line = 'Skilldetline';
+    // public $class_element_line = 'Positionline';
 
     // /**
     //  * @var array    List of child tables. To test if we can delete object.
@@ -147,13 +159,12 @@ class Skilldet extends CommonObjectLine
     //  *               If name matches '@ClassNAme:FilePathClass;ParentFkFieldName' it will
     //  *               call method deleteByParentField(parentId, ParentFkFieldName) to fetch and delete child object
     //  */
-    // protected $childtablesoncascade = array('hrm_skilldetdet');
+    // protected $childtablesoncascade = array('hrm_job_userdet');
 
     // /**
-    //  * @var SkilldetLine[]     Array of subtable lines
+    //  * @var PositionLine[]     Array of subtable lines
     //  */
     // public $lines = array();
-
 
 
     /**
@@ -168,17 +179,17 @@ class Skilldet extends CommonObjectLine
         $this->db = $db;
 
         $this->ismultientitymanaged = 0;
-        $this->isextrafieldmanaged = 1;
+        $this->isextrafieldmanaged = 0;
 
         if (!getDolGlobalString('MAIN_SHOW_TECHNICAL_ID') && isset($this->fields['rowid'])) {
-            $this->fields['rowid']['visible'] = 0;
+            //$this->fields['rowid']['visible'] = 0;
         }
         if (!isModEnabled('multicompany') && isset($this->fields['entity'])) {
             $this->fields['entity']['enabled'] = 0;
         }
 
         // Example to show how to set values of fields definition dynamically
-        /*if ($user->rights->hrm->skilldet->read) {
+        /*if ($user->rights->hrm->position->read) {
             $this->fields['myfield']['visible'] = 1;
             $this->fields['myfield']['noteditable'] = 0;
         }*/
@@ -205,9 +216,9 @@ class Skilldet extends CommonObjectLine
     /**
      * Create object into database
      *
-     * @param  User $user      User that creates
-     * @param  int  $notrigger 0=launch triggers after, 1=disable triggers
-     * @return int             Return integer <0 if KO, Id of created object if OK
+     * @param User  $user       User that creates
+     * @param int   $notrigger  0=launch triggers after, 1=disable triggers
+     * @return int              Return integer <0 if KO, Id of created object if OK
      */
     public function create(User $user, $notrigger = 0)
     {
@@ -221,9 +232,9 @@ class Skilldet extends CommonObjectLine
     /**
      * Clone an object into another one
      *
-     * @param   User    $user       User that creates
-     * @param   int     $fromid     Id of object to clone
-     * @return  mixed               New object created, <0 if KO
+     * @param User $user User that creates
+     * @param int $fromid Id of object to clone
+     * @return    mixed                New object created, <0 if KO
      */
     public function createFromClone(User $user, $fromid)
     {
@@ -319,8 +330,8 @@ class Skilldet extends CommonObjectLine
     /**
      * Load object in memory from the database
      *
-     * @param int    $id   Id object
-     * @param string $ref  Ref
+     * @param int $id Id object
+     * @param string $ref Ref
      * @return int         Return integer <0 if KO, 0 if not found, >0 if OK
      */
     public function fetch($id, $ref = null)
@@ -349,14 +360,14 @@ class Skilldet extends CommonObjectLine
     /**
      * Load list of objects in memory from the database.
      *
-     * @param  string       $sortorder      Sort Order
-     * @param  string       $sortfield      Sort field
-     * @param  int          $limit          limit
-     * @param  int          $offset         Offset
-     * @param  string       $filter         Filter as an Universal Search string.
+     * @param   string      $sortorder      Sort Order
+     * @param   string      $sortfield      Sort field
+     * @param   int         $limit          limit
+     * @param   int         $offset         Offset
+     * @param   string      $filter         Filter as an Universal Search string.
      *                                      Example: '((client:=:1) OR ((client:>=:2) AND (client:<=:3))) AND (client:!=:8) AND (nom:like:'a%')'
-     * @param  string       $filtermode     No more used
-     * @return array|int                    int <0 if KO, array of pages if OK
+     * @param   string      $filtermode     No more used
+     * @return  array|int                   int <0 if KO, array of pages if OK
      */
     public function fetchAll($sortorder = '', $sortfield = '', $limit = 0, $offset = 0, $filter = '', $filtermode = 'AND')
     {
@@ -386,7 +397,7 @@ class Skilldet extends CommonObjectLine
             $sql .= $this->db->order($sortfield, $sortorder);
         }
         if (!empty($limit)) {
-            $sql .= " " . $this->db->plimit($limit, $offset);
+            $sql .= ' ' . $this->db->plimit($limit, $offset);
         }
 
         $resql = $this->db->query($sql);
@@ -417,9 +428,9 @@ class Skilldet extends CommonObjectLine
     /**
      * Update object into database
      *
-     * @param  User $user      User that modifies
-     * @param  int  $notrigger 0=launch triggers after, 1=disable triggers
-     * @return int             Return integer <0 if KO, >0 if OK
+     * @param User  $user       User that modifies
+     * @param int   $notrigger  0=launch triggers after, 1=disable triggers
+     * @return int              Return integer <0 if KO, >0 if OK
      */
     public function update(User $user, $notrigger = 0)
     {
@@ -442,10 +453,10 @@ class Skilldet extends CommonObjectLine
     /**
      *  Delete a line of object in database
      *
-     *  @param  User    $user       User that delete
-     *  @param  int     $idline     Id of line to delete
-     *  @param  int     $notrigger  0=launch triggers after, 1=disable triggers
-     *  @return int                 Return >0 if OK, <0 if KO
+     * @param User  $user       User that delete
+     * @param int   $idline     Id of line to delete
+     * @param int   $notrigger  0=launch triggers after, 1=disable triggers
+     * @return int              Return >0 if OK, <0 if KO
      */
     public function deleteLine(User $user, $idline, $notrigger = 0)
     {
@@ -459,11 +470,11 @@ class Skilldet extends CommonObjectLine
 
 
     /**
-     *  Validate object
+     *    Validate object
      *
-     *  @param      User    $user           User making status change
-     *  @param      int     $notrigger      1=Does not execute triggers, 0= execute triggers
-     *  @return     int                     Return integer <=0 if OK, 0=Nothing done, >0 if KO
+     * @param User $user User making status change
+     * @param int $notrigger 1=Does not execute triggers, 0= execute triggers
+     * @return    int                        Return integer <=0 if OK, 0=Nothing done, >0 if KO
      */
     public function validate($user, $notrigger = 0)
     {
@@ -479,8 +490,8 @@ class Skilldet extends CommonObjectLine
             return 0;
         }
 
-        /*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->skilldet->write))
-         || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->skilldet->skilldet_advance->validate))))
+        /*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->position->write))
+         || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->position->position_advance->validate))))
          {
          $this->error='NotEnoughPermissions';
          dol_syslog(get_class($this)."::valid ".$this->error, LOG_ERR);
@@ -522,7 +533,7 @@ class Skilldet extends CommonObjectLine
 
             if (!$error && !$notrigger) {
                 // Call trigger
-                $result = $this->call_trigger('HRM_SKILLDET_VALIDATE', $user);
+                $result = $this->call_trigger('HRM_POSITION_VALIDATE', $user);
                 if ($result < 0) {
                     $error++;
                 }
@@ -536,15 +547,15 @@ class Skilldet extends CommonObjectLine
             // Rename directory if dir was a temporary ref
             if (preg_match('/^[\(]?PROV/i', $this->ref)) {
                 // Now we rename also files into index
-                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filename = CONCAT('" . $this->db->escape($this->newref) . "', SUBSTR(filename, " . (strlen($this->ref) + 1) . ")), filepath = 'skilldet/" . $this->db->escape($this->newref) . "'";
-                $sql .= " WHERE filename LIKE '" . $this->db->escape($this->ref) . "%' AND filepath = 'skilldet/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
+                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filename = CONCAT('" . $this->db->escape($this->newref) . "', SUBSTR(filename, " . (strlen($this->ref) + 1) . ")), filepath = 'position/" . $this->db->escape($this->newref) . "'";
+                $sql .= " WHERE filename LIKE '" . $this->db->escape($this->ref) . "%' AND filepath = 'position/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $error++;
                     $this->error = $this->db->lasterror();
                 }
-                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filepath = 'skilldet/" . $this->db->escape($this->newref) . "'";
-                $sql .= " WHERE filepath = 'skilldet/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
+                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filepath = 'position/" . $this->db->escape($this->newref) . "'";
+                $sql .= " WHERE filepath = 'position/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $error++;
@@ -554,15 +565,15 @@ class Skilldet extends CommonObjectLine
                 // We rename directory ($this->ref = old ref, $num = new ref) in order not to lose the attachments
                 $oldref = dol_sanitizeFileName($this->ref);
                 $newref = dol_sanitizeFileName($num);
-                $dirsource = $conf->hrm->dir_output . '/skilldet/' . $oldref;
-                $dirdest = $conf->hrm->dir_output . '/skilldet/' . $newref;
+                $dirsource = $conf->hrm->dir_output . '/position/' . $oldref;
+                $dirdest = $conf->hrm->dir_output . '/position/' . $newref;
                 if (!$error && file_exists($dirsource)) {
                     dol_syslog(get_class($this) . "::validate() rename dir " . $dirsource . " into " . $dirdest);
 
                     if (@rename($dirsource, $dirdest)) {
                         dol_syslog("Rename ok");
                         // Rename docs starting with $oldref with $newref
-                        $listoffiles = dol_dir_list($conf->hrm->dir_output . '/skilldet/' . $newref, 'files', 1, '^' . preg_quote($oldref, '/'));
+                        $listoffiles = dol_dir_list($conf->hrm->dir_output . '/position/' . $newref, 'files', 1, '^' . preg_quote($oldref, '/'));
                         foreach ($listoffiles as $fileentry) {
                             $dirsource = $fileentry['name'];
                             $dirdest = preg_replace('/^' . preg_quote($oldref, '/') . '/', $newref, $dirsource);
@@ -592,11 +603,11 @@ class Skilldet extends CommonObjectLine
 
 
     /**
-     *  Set draft status
+     *    Set draft status
      *
-     *  @param  User    $user           Object user that modify
-     *  @param  int     $notrigger      1=Does not execute triggers, 0=Execute triggers
-     *  @return int                     Return integer <0 if KO, >0 if OK
+     * @param User $user Object user that modify
+     * @param int $notrigger 1=Does not execute triggers, 0=Execute triggers
+     * @return    int                        Return integer <0 if KO, >0 if OK
      */
     public function setDraft($user, $notrigger = 0)
     {
@@ -612,15 +623,15 @@ class Skilldet extends CommonObjectLine
          return -1;
          }*/
 
-        return $this->setStatusCommon($user, self::STATUS_DRAFT, $notrigger, 'SKILLDET_UNVALIDATE');
+        return $this->setStatusCommon($user, self::STATUS_DRAFT, $notrigger, 'POSITION_UNVALIDATE');
     }
 
     /**
-     *  Set cancel status
+     *    Set cancel status
      *
-     *  @param  User    $user           Object user that modify
-     *  @param  int     $notrigger      1=Does not execute triggers, 0=Execute triggers
-     *  @return int                     Return integer <0 if KO, 0=Nothing done, >0 if OK
+     * @param User $user Object user that modify
+     * @param int $notrigger 1=Does not execute triggers, 0=Execute triggers
+     * @return    int                        Return integer <0 if KO, 0=Nothing done, >0 if OK
      */
     public function cancel($user, $notrigger = 0)
     {
@@ -636,15 +647,15 @@ class Skilldet extends CommonObjectLine
          return -1;
          }*/
 
-        return $this->setStatusCommon($user, self::STATUS_CANCELED, $notrigger, 'SKILLDET_CANCEL');
+        return $this->setStatusCommon($user, self::STATUS_CANCELED, $notrigger, 'POSITION_CANCEL');
     }
 
     /**
-     *  Set back to validated status
+     *    Set back to validated status
      *
-     *  @param  User    $user           Object user that modify
-     *  @param  int     $notrigger      1=Does not execute triggers, 0=Execute triggers
-     *  @return int                     Return integer <0 if KO, 0=Nothing done, >0 if OK
+     * @param User $user Object user that modify
+     * @param int $notrigger 1=Does not execute triggers, 0=Execute triggers
+     * @return    int                        Return integer <0 if KO, 0=Nothing done, >0 if OK
      */
     public function reopen($user, $notrigger = 0)
     {
@@ -660,18 +671,18 @@ class Skilldet extends CommonObjectLine
          return -1;
          }*/
 
-        return $this->setStatusCommon($user, self::STATUS_VALIDATED, $notrigger, 'SKILLDET_REOPEN');
+        return $this->setStatusCommon($user, self::STATUS_VALIDATED, $notrigger, 'POSITION_REOPEN');
     }
 
     /**
      *  Return a link to the object card (with optionally the picto)
      *
-     *  @param  int     $withpicto                  Include picto in link (0=No picto, 1=Include picto into link, 2=Only picto)
-     *  @param  string  $option                     On what the link point to ('nolink', ...)
-     *  @param  int     $notooltip                  1=Disable tooltip
-     *  @param  string  $morecss                    Add more css on link
-     *  @param  int     $save_lastsearch_value      -1=Auto, 0=No save of lastsearch_values when clicking, 1=Save lastsearch_values whenclicking
-     *  @return string                              String with URL
+     * @param   int         $withpicto              Include picto in link (0=No picto, 1=Include picto into link, 2=Only picto)
+     * @param   string      $option                 On what the link point to ('nolink', ...)
+     * @param   int         $notooltip              1=Disable tooltip
+     * @param   string      $morecss                Add more css on link
+     * @param   int         $save_lastsearch_value  -1=Auto, 0=No save of lastsearch_values when clicking, 1=Save lastsearch_values whenclicking
+     * @return  string                              String with URL
      */
     public function getNomUrl($withpicto = 0, $option = '', $notooltip = 0, $morecss = '', $save_lastsearch_value = -1)
     {
@@ -683,14 +694,14 @@ class Skilldet extends CommonObjectLine
 
         $result = '';
 
-        $label = img_picto('', $this->picto) . ' <u>' . $langs->trans("Skilldet") . '</u>';
+        $label = img_picto('', $this->picto) . ' <u>' . $langs->trans("Position") . '</u>';
         if (isset($this->status)) {
             $label .= ' ' . $this->getLibStatut(5);
         }
         $label .= '<br>';
         $label .= '<b>' . $langs->trans('Ref') . ':</b> ' . $this->ref;
 
-        $url = dol_buildpath('/hrm/skilldet_card.php', 1) . '?id=' . $this->id;
+        $url = dol_buildpath('/hrm/position_card.php', 1) . '?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not
@@ -706,7 +717,7 @@ class Skilldet extends CommonObjectLine
         $linkclose = '';
         if (empty($notooltip)) {
             if (getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER')) {
-                $label = $langs->trans("ShowSkilldet");
+                $label = $langs->trans("ShowPosition");
                 $linkclose .= ' alt="' . dol_escape_htmltag($label, 1) . '"';
             }
             $linkclose .= ' title="' . dol_escape_htmltag($label, 1) . '"';
@@ -766,7 +777,7 @@ class Skilldet extends CommonObjectLine
         //if ($withpicto != 2) $result.=(($addlabel && $this->label) ? $sep . dol_trunc($this->label, ($addlabel > 1 ? $addlabel : 0)) : '');
 
         global $action, $hookmanager;
-        $hookmanager->initHooks(array('skilldetdao'));
+        $hookmanager->initHooks(array('positiondao'));
         $parameters = array('id' => $this->id, 'getnomurl' => &$result);
         $reshook = $hookmanager->executeHooks('getNomUrl', $parameters, $this, $action); // Note that $action and $object may have been modified by some hooks
         if ($reshook > 0) {
@@ -781,8 +792,8 @@ class Skilldet extends CommonObjectLine
     /**
      *  Return the label of the status
      *
-     *  @param  int     $mode          0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
-     *  @return string                 Label of status
+     * @param int $mode 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
+     * @return    string                   Label of status
      */
     public function getLibStatut($mode = 0)
     {
@@ -790,16 +801,21 @@ class Skilldet extends CommonObjectLine
     }
 
 	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return the status
      *
-     *  @param  int     $status        Id status
-     *  @param  int     $mode          0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
-     *  @return string                 Label of status
+     * @param int $status Id status
+     * @param int $mode 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
+     * @return string                   Label of status
      */
     public function LibStatut($status, $mode = 0)
     {
 		// phpcs:enable
+        if (is_null($status)) {
+            return '';
+        }
+
         if (empty($this->labelStatus) || empty($this->labelStatusShort)) {
             global $langs;
             //$langs->load("hrm");
@@ -821,10 +837,79 @@ class Skilldet extends CommonObjectLine
     }
 
     /**
-     *  Load the info information in the object
+     * Return HTML string to put an input field into a page
+     * Code very similar with showInputField of extra fields
      *
-     *  @param  int     $id       Id of object
-     *  @return void
+     * @param ?array{type:string,label:string,enabled:int|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string}   $val    Array of properties for field to show
+     * @param  string       $key           Key of attribute
+     * @param  string       $value         Preselected value to show (for date type it must be in timestamp format, for amount or price it must be a php numeric value)
+     * @param  string       $moreparam     To add more parameters on html input tag
+     * @param  string       $keysuffix     Prefix string to add into name and id of field (can be used to avoid duplicate names)
+     * @param  string       $keyprefix     Suffix string to add into name and id of field (can be used to avoid duplicate names)
+     * @param  string|int   $morecss       Value for css to define style/length of field. May also be a numeric.
+     * @param  int<0,1>     $nonewbutton   Do not show new button
+     * @return string
+     */
+    public function showInputField($val, $key, $value, $moreparam = '', $keysuffix = '', $keyprefix = '', $morecss = 0, $nonewbutton = 0)
+    {
+        global $langs;
+
+        if ($key == 'fk_user') {
+            $vacantId = $keyprefix . $key . 'vacant' . $keysuffix;
+
+            $out = parent::showInputField($val, $key, $value, $moreparam, $keysuffix, $keyprefix, $morecss);
+            $out .= '<label class="nowrap position-fk-user classfortooltip" title="' . dol_escape_js($langs->trans('VacantCheckboxHelper')) . '"><input type="checkbox" id="' . $vacantId . '" name="' . $vacantId . '">&nbsp;' . $langs->trans("Vacant") . '</label>'; ?>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    var checkbox = $('#<?php print $vacantId; ?>');
+                    var searchfkuser = $('#<?php print $keyprefix . $key . $keysuffix; ?>');
+                    checkbox.click(function () {
+                        if (checkbox.prop('checked')) {
+                            searchfkuser.val(0).trigger('change');
+                            searchfkuser.prop('disabled', 1);
+                        } else {
+                            searchfkuser.prop('disabled', 0);
+                        }
+                    });
+                });
+            </script>
+            <?php
+        } else {
+            $out = parent::showInputField($val, $key, $value, $moreparam, $keysuffix, $keyprefix, $morecss);
+        }
+
+        return $out;
+    }
+
+    /**
+     * Return HTML string to show a field into a page
+     * Code very similar with showOutputField of extra fields
+     *
+     * @param  array   $val            Array of properties of field to show
+     * @param  string  $key            Key of attribute
+     * @param  string  $value          Preselected value to show (for date type it must be in timestamp format, for amount or price it must be a php numeric value)
+     * @param  string  $moreparam      To add more parameters on html input tag
+     * @param  string  $keysuffix      Prefix string to add into name and id of field (can be used to avoid duplicate names)
+     * @param  string  $keyprefix      Suffix string to add into name and id of field (can be used to avoid duplicate names)
+     * @param  mixed   $morecss        Value for css to define size. May also be a numeric.
+     * @return string
+     */
+    public function showOutputField($val, $key, $value, $moreparam = '', $keysuffix = '', $keyprefix = '', $morecss = '')
+    {
+        global $langs;
+
+        if ($key == 'fk_user' && $this->fk_user == 0) {
+            return $langs->trans("VacantPosition");
+        }
+        return parent::showOutputField($val, $key, $value, $moreparam, $keysuffix, $keyprefix, $morecss);
+    }
+
+
+    /**
+     *    Load the info information in the object
+     *
+     * @param int $id Id of object
+     * @return    void
      */
     public function info($id)
     {
@@ -866,26 +951,46 @@ class Skilldet extends CommonObjectLine
         return $this->initAsSpecimenCommon();
     }
 
+    /**
+     *    Create an array of lines
+     *
+     * @return array|int        array of lines if OK, <0 if KO
+     */
+    public function getLinesArray()
+    {
+        $this->lines = array();
+
+        $objectline = new PositionLine($this->db);
+        $result = $objectline->fetchAll('ASC', 'position', 0, 0, '(fk_position:=:' . ((int) $this->id) . ')');
+
+        if (is_numeric($result)) {
+            $this->setErrorsFromObject($objectline);
+            return $result;
+        } else {
+            $this->lines = $result;
+            return $this->lines;
+        }
+    }
 
     /**
      *  Returns the reference to the following non used object depending on the active numbering module.
      *
-     *  @return string              Object free reference
+     * @return string            Object free reference
      */
     public function getNextNumRef()
     {
         global $langs, $conf;
         $langs->load("hrm");
 
-        if (!getDolGlobalString('hrm_SKILLDET_ADDON')) {
-            $conf->global->hrm_SKILLDET_ADDON = 'mod_skilldet_standard';
+        if (!getDolGlobalString('hrm_POSITION_ADDON')) {
+            $conf->global->hrm_POSITION_ADDON = 'mod_position_standard';
         }
 
-        if (getDolGlobalString('hrm_SKILLDET_ADDON')) {
+        if (getDolGlobalString('hrm_POSITION_ADDON')) {
             $mybool = false;
 
-            $file = getDolGlobalString('hrm_SKILLDET_ADDON') . ".php";
-            $classname = getDolGlobalString('hrm_SKILLDET_ADDON');
+            $file = getDolGlobalString('hrm_POSITION_ADDON') . ".php";
+            $classname = getDolGlobalString('hrm_POSITION_ADDON');
 
             // Include file with class
             $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
@@ -923,15 +1028,30 @@ class Skilldet extends CommonObjectLine
     }
 
     /**
-     *  Create a document onto disk according to template module.
+     * getForUser
      *
-     *  @param      string      $modele         Force template to use ('' to not force)
-     *  @param      Translate   $outputlangs    object lang a utiliser pour traduction
-     *  @param      int         $hidedetails    Hide details of lines
-     *  @param      int         $hidedesc       Hide description
-     *  @param      int         $hideref        Hide ref
-     *  @param      null|array  $moreparams     Array to provide more information
-     *  @return     int                         0 if KO, 1 if OK
+     * @param int $userid id of user we need to get position list
+     * @return array|int of positions of user with for each of them the job fetched into that array
+     */
+    public function getForUser($userid)
+    {
+        $TPosition = array();
+
+        $TPosition = $this->fetchAll('ASC', 't.rowid', 0, 0, '(fk_user:=:' . ((int) $userid) . ')');
+
+        return $TPosition;
+    }
+
+    /**
+     * Create a document onto disk according to template module.
+     *
+     * @param string $modele Force template to use ('' to not force)
+     * @param Translate $outputlangs object lang a utiliser pour traduction
+     * @param int $hidedetails Hide details of lines
+     * @param int $hidedesc Hide description
+     * @param int $hideref Hide ref
+     * @param null|array $moreparams Array to provide more information
+     * @return     int                        0 if KO, 1 if OK
      */
     public function generateDocument($modele, $outputlangs, $hidedetails = 0, $hidedesc = 0, $hideref = 0, $moreparams = null)
     {
@@ -943,12 +1063,12 @@ class Skilldet extends CommonObjectLine
         $langs->load("hrm");
 
         if (!dol_strlen($modele)) {
-            $modele = 'standard_skilldet';
+            $modele = 'standard_position';
 
             if (!empty($this->model_pdf)) {
                 $modele = $this->model_pdf;
-            } elseif (getDolGlobalString('SKILLDET_ADDON_PDF')) {
-                $modele = getDolGlobalString('SKILLDET_ADDON_PDF');
+            } elseif (getDolGlobalString('POSITION_ADDON_PDF')) {
+                $modele = getDolGlobalString('POSITION_ADDON_PDF');
             }
         }
 
@@ -959,5 +1079,43 @@ class Skilldet extends CommonObjectLine
         }
 
         return $result;
+    }
+
+    /**
+     *  Return clicable link of object (with eventually picto)
+     *
+     *  @param      string      $option                 Where point the link (0=> main card, 1,2 => shipment, 'nolink'=>No link)
+     *  @param      array       $arraydata              Array of data
+     *  @return     string      HTML Code for Kanban thumb.
+     */
+    public function getKanbanView($option = '', $arraydata = null)
+    {
+        global $selected, $langs;
+
+        $selected = (empty($arraydata['selected']) ? 0 : $arraydata['selected']);
+
+        $return = '<div class="box-flex-item box-flex-grow-zero">';
+        $return .= '<div class="info-box info-box-sm">';
+        $return .= '<span class="info-box-icon bg-infobox-action">';
+        $return .= img_picto('', $this->picto);
+        $return .= '</span>';
+        $return .= '<div class="info-box-content">';
+        $return .= '<span class="info-box-ref inline-block tdoverflowmax150 valignmiddle">' . (method_exists($this, 'getNomUrl') ? $this->getNomUrl(1) : $this->ref) . '</span>';
+        $return .= '<input class="fright" id="cb' . $this->id . '" class="flat checkforselect" type="checkbox" name="toselect[]" value="' . $this->id . '"' . ($selected ? ' checked="checked"' : '') . '>';
+        if (!empty($arraydata['user'])) {
+            $return .= '<br><span class="info-box-label ">' . $arraydata['user'] . '</span>';
+        }
+        if (!empty($arraydata['job'])) {
+            //$return .= '<br><span class="info-box-label opacitymedium">'.$langs->trans("JobProfile").'</span> : ';
+            $return .= '<br><span class="info-box-label ">' . $arraydata['job'] . '</span>';
+        }
+        if (property_exists($this, 'date_start') && property_exists($this, 'date_end')) {
+            $return .= '<br><div class ="nothing"><span class="info-box-label ">' . dol_print_date($this->db->jdate($this->date_start), 'day') . '</span>';
+            $return .= ' - <span class="info-box-label ">' . dol_print_date($this->db->jdate($this->date_end), 'day') . '</span></div>';
+        }
+        $return .= '</div>';
+        $return .= '</div>';
+        $return .= '</div>';
+        return $return;
     }
 }

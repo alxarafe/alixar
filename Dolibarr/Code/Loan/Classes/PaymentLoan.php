@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2014-2018  Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2015-2024  Frédéric France      <frederic.france@free.fr>
- * Copyright (C) 2020       Maxime DEMAREST      <maxime@indelog.fr>
+/* Copyright (C) 2014-2018  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2020       Maxime DEMAREST             <maxime@indelog.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,14 +20,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Loan\Classes;
+
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/loan/class/paymentloan.class.php
  *  \ingroup    loan
  *  \brief      File of class to manage payment of loans
  */
-
-use Dolibarr\Core\Base\CommonObject;
-
 
 /**
  * Class to manage payments of loans

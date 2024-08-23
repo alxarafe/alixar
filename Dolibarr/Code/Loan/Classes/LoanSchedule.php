@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017       Florian HENRY           <florian.henry@atm-consulting.fr>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2017       Florian HENRY               <florian.henry@atm-consulting.fr>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,14 +19,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Loan\Classes;
+
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *      \file       htdocs/loan/class/loanschedule.class.php
  *      \ingroup    loan
  *      \brief      File of class to manage schedule of loans
  */
-
-use Dolibarr\Core\Base\CommonObject;
-
 
 /**
  *      Class to manage Schedule of loans

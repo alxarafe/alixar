@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2015   Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2019 Maxime Kohlhaas <maxime@atm-consulting.fr>
+/* Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2019       Maxime Kohlhaas             <maxime@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,10 +19,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Mrp\Api;
+
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
-
 
 /**
  * \file    htdocs/mrp/class/api_mos.class.php

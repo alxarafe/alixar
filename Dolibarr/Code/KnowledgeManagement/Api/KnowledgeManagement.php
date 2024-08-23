@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2015   Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2021 SuperAdmin <test@dolibarr.com>
+/* Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2021       SuperAdmin                  <test@dolibarr.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,12 +18,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\KnowledgeManagement\Api;
+
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
 dol_include_once('/knowledgemanagement/class/knowledgerecord.class.php');
 dol_include_once('/categories/class/categorie.class.php');
-
-
 
 /**
  * \file    knowledgemanagement/class/api_knowledgemanagement.class.php

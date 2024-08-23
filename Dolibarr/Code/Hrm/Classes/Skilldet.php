@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2017  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -23,19 +23,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Hrm\Classes;
+
+use Dolibarr\Core\Base\CommonObjectLine;
+
 /**
- * \file        htdocs/hrm/class/skill.class.php
+ * \file        class/skilldet.class.php
  * \ingroup     hrm
- * \brief       This file is a CRUD class file for Skill (Create/Read/Update/Delete)
+ * \brief       This file is a CRUD class file for Skilldet (Create/Read/Update/Delete)
  */
-
-// Put here all includes required by your class file
-use Dolibarr\Core\Base\CommonObject;
 
 /**
- * Class for Skill
+ * Class for Skilldet
  */
-class Skill extends CommonObject
+class Skilldet extends CommonObjectLine
 {
     /**
      * @var string ID of module.
@@ -45,29 +46,33 @@ class Skill extends CommonObject
     /**
      * @var string ID to identify managed object.
      */
-    public $element = 'skill';
+    public $element = 'skilldet';
 
     /**
      * @var string Name of table without prefix where object is stored. This is also the key used for extrafields management.
      */
-    public $table_element = 'hrm_skill';
-
-
-    /**
-     * @var string Name of subtable line
-     */
-    public $table_element_line = 'skilldet';
+    public $table_element = 'hrm_skilldet';
 
     /**
-     * @var string String with name of icon for skill. Must be the part after the 'object_' into object_skill.png
+     * @see CommonObjectLine
      */
-    public $picto = 'shapes';
+    public $parent_element = 'skill';
+
+    /**
+     * @see CommonObjectLine
+     */
+    public $fk_parent_attribute = 'fk_skill';
+
+    /**
+     * @var string String with name of icon for skilldet. Must be the part after the 'object_' into object_skilldet.png
+     */
+    public $picto = 'skilldet@hrm';
 
 
     const STATUS_DRAFT = 0;
     const STATUS_VALIDATED = 1;
     const STATUS_CANCELED = 9;
-    const DEFAULT_MAX_RANK_PER_SKILL = 3;
+
 
     /**
      *  'type' field format ('integer', 'integer:ObjectClass:PathToClass[:AddCreateButtonOrNot[:Filter]]', 'sellist:TableName:LabelFieldName[:KeyFieldName[:KeyFieldParent[:Filter]]]', 'varchar(x)', 'double(24,8)', 'real', 'price', 'text', 'text:none', 'html', 'date', 'datetime', 'timestamp', 'duration', 'mail', 'phone', 'url', 'password')
@@ -101,29 +106,18 @@ class Skill extends CommonObject
      */
     public $fields = array(
         'rowid' => array('type' => 'integer', 'label' => 'TechnicalID', 'enabled' => 1, 'position' => 1, 'notnull' => 1, 'visible' => 0, 'noteditable' => 1, 'index' => 1, 'css' => 'left', 'comment' => "Id"),
-        'label' => array('type' => 'varchar(255)', 'label' => 'Label', 'enabled' => 1, 'position' => 30, 'notnull' => 1, 'visible' => 1, 'searchall' => 1, 'css' => 'minwidth300', 'cssview' => 'wordbreak', 'showoncombobox' => 2,),
-        'description' => array('type' => 'text', 'label' => 'Description', 'enabled' => 1, 'position' => 60, 'notnull' => 0, 'visible' => 3,),
-        'date_creation' => array('type' => 'datetime', 'label' => 'DateCreation', 'enabled' => 1, 'position' => 500, 'notnull' => 1, 'visible' => -2,),
-        'tms' => array('type' => 'timestamp', 'label' => 'DateModification', 'enabled' => 1, 'position' => 501, 'notnull' => 0, 'visible' => -2,),
-        'fk_user_creat' => array('type' => 'integer:User:user/class/user.class.php:0', 'label' => 'UserAuthor', 'enabled' => 1, 'position' => 510, 'notnull' => 1, 'visible' => -2, 'foreignkey' => 'user.rowid',),
-        'fk_user_modif' => array('type' => 'integer:User:user/class/user.class.php:0', 'label' => 'UserModif', 'enabled' => 1, 'position' => 511, 'notnull' => -1, 'visible' => -2,),
-        'required_level' => array('type' => 'integer', 'label' => 'requiredLevel', 'enabled' => 1, 'position' => 50, 'notnull' => 1, 'visible' => 0,),
-        'date_validite' => array('type' => 'integer', 'label' => 'date_validite', 'enabled' => 1, 'position' => 52, 'notnull' => 1, 'visible' => 0,),
-        'temps_theorique' => array('type' => 'double(24,8)', 'label' => 'temps_theorique', 'enabled' => 1, 'position' => 54, 'notnull' => 1, 'visible' => 0,),
-        'skill_type' => array('type' => 'integer', 'label' => 'SkillType', 'enabled' => 1, 'position' => 55, 'notnull' => 1, 'visible' => 1, 'index' => 1, 'css' => 'minwidth200', 'arrayofkeyval' => array('0' => 'TypeKnowHow', '1' => 'TypeHowToBe', '9' => 'TypeKnowledge'), 'default' => '0'),
-        'note_public' => array('type' => 'html', 'label' => 'NotePublic', 'enabled' => 1, 'position' => 70, 'notnull' => 0, 'visible' => 0,),
-        'note_private' => array('type' => 'html', 'label' => 'NotePrivate', 'enabled' => 1, 'position' => 71, 'notnull' => 0, 'visible' => 0,),
+        'fk_skill' => array('type' => 'integer:Skill:/hrm/class/skill.class.php', 'label' => 'fk_skill', 'enabled' => 1, 'position' => 5, 'notnull' => 1, 'visible' => 0,),
+        'rankorder' => array('type' => 'integer', 'label' => 'rank', 'enabled' => 1, 'position' => 10, 'notnull' => 0, 'visible' => 2,),
+        'description' => array('type' => 'text', 'label' => 'Description', 'enabled' => 1, 'position' => 60, 'notnull' => 0, 'visible' => 1,),
+        'fk_user_creat' => array('type' => 'integer:User:user/class/user.class.php', 'label' => 'UserAuthor', 'enabled' => 1, 'position' => 510, 'notnull' => 1, 'visible' => -2, 'foreignkey' => 'user.rowid',),
+        'fk_user_modif' => array('type' => 'integer:User:user/class/user.class.php', 'label' => 'UserModif', 'enabled' => 1, 'position' => 511, 'notnull' => -1, 'visible' => 0,),
     );
     public $rowid;
-    public $label;
+    public $fk_skill;
+    public $rankorder;
     public $description;
-    public $date_creation;
     public $fk_user_creat;
     public $fk_user_modif;
-    public $required_level;
-    public $date_validite;
-    public $temps_theorique;
-    public $skill_type;
     // END MODULEBUILDER PROPERTIES
 
 
@@ -132,35 +126,32 @@ class Skill extends CommonObject
     // /**
     //  * @var string    Name of subtable line
     //  */
-    // public $table_element_line = 'hrm_skillline';
+    // public $table_element_line = 'hrm_skilldetline';
 
-    /**
-     * @var string    Field with ID of parent key if this object has a parent
-     */
-    public $fk_element = 'fk_skill';
+    // /**
+    //  * @var string    Field with ID of parent key if this object has a parent
+    //  */
+    // public $fk_element = 'fk_skilldet';
 
     // /**
     //  * @var string    Name of subtable class that manage subtable lines
     //  */
-    // public $class_element_line = 'Skillline';
-
-    /**
-     * @var array<string,string[]>  List of child tables. To test if we can delete object.
-     */
-    protected $childtables = array(
-        'hrm_skillrank' => ['name' => 'SkillRank'],
-        'hrm_evaluationdet' => ['name' => 'EvaluationDet'],
-    );
-
-    /**
-     * @var string[]    List of child tables. To know object to delete on cascade.
-     *                  If name matches '@ClassNAme:FilePathClass;ParentFkFieldName' it will
-     *                  call method deleteByParentField(parentId, ParentFkFieldName) to fetch and delete child object
-     */
-    protected $childtablesoncascade = array('hrm_skilldet');
+    // public $class_element_line = 'Skilldetline';
 
     // /**
-    //  * @var SkillLine[]     Array of subtable lines
+    //  * @var array    List of child tables. To test if we can delete object.
+    //  */
+    // protected $childtables = array();
+
+    // /**
+    //  * @var array    List of child tables. To know object to delete on cascade.
+    //  *               If name matches '@ClassNAme:FilePathClass;ParentFkFieldName' it will
+    //  *               call method deleteByParentField(parentId, ParentFkFieldName) to fetch and delete child object
+    //  */
+    // protected $childtablesoncascade = array('hrm_skilldetdet');
+
+    // /**
+    //  * @var SkilldetLine[]     Array of subtable lines
     //  */
     // public $lines = array();
 
@@ -188,7 +179,7 @@ class Skill extends CommonObject
         }
 
         // Example to show how to set values of fields definition dynamically
-        /*if ($user->rights->hrm->skill->read) {
+        /*if ($user->rights->hrm->skilldet->read) {
             $this->fields['myfield']['visible'] = 1;
             $this->fields['myfield']['noteditable'] = 0;
         }*/
@@ -221,61 +212,11 @@ class Skill extends CommonObject
      */
     public function create(User $user, $notrigger = 0)
     {
-        global $langs,$conf;
-
         $resultcreate = $this->createCommon($user, $notrigger);
 
-
-        if ($resultcreate > 0) {
-            // skillDet create
-            $this->createSkills();
-        }
+        //$resultvalidate = $this->validate($user, $notrigger);
 
         return $resultcreate;
-    }
-
-    /**
-     * createSkills
-     *
-     * @param int   $i      Rank from which we want to create skilldets (level $i to HRM_MAXRANK will be created)
-     * @return int          Return integer <0 if KO, Id of created object if OK
-     */
-    public function createSkills($i = 1)
-    {
-        global $conf, $user, $langs;
-
-        $MaxNumberSkill = getDolGlobalInt('HRM_MAXRANK', self::DEFAULT_MAX_RANK_PER_SKILL);
-        $defaultSkillDesc = getDolGlobalString('HRM_DEFAULT_SKILL_DESCRIPTION', $langs->trans("NoDescription"));
-
-        $error = 0;
-
-        require_once __DIR__ . '/skilldet.class.php';
-
-        $this->db->begin();
-
-        // Create level of skills
-        while ($i <= $MaxNumberSkill) {
-            $skilldet = new Skilldet($this->db);
-            $skilldet->description = $defaultSkillDesc . " " . $i;
-            $skilldet->rankorder = $i;
-            $skilldet->fk_skill = $this->id;
-
-            $result =  $skilldet->create($user);
-            if ($result <= 0) {
-                $error++;
-            }
-            $i++;
-        }
-
-        if (!$error) {
-            $this->db->commit();
-
-            setEventMessage($langs->trans('SkillCreated'), $i);
-            return 1;
-        } else {
-            $this->db->rollback();
-            return -1;
-        }
     }
 
     /**
@@ -395,22 +336,14 @@ class Skill extends CommonObject
     /**
      * Load object lines in memory from the database
      *
-     * @return array|int         Return integer <0 if KO, array of skill level found
+     * @return int         Return integer <0 if KO, 0 if not found, >0 if OK
      */
     public function fetchLines()
     {
         $this->lines = array();
-        require_once __DIR__ . '/skilldet.class.php';
-        $skilldet = new Skilldet($this->db);
-        $this->lines = $skilldet->fetchAll('ASC', '', 0, 0, '(fk_skill:=:' . $this->id . ')');
 
-        if (is_array($this->lines)) {
-            return (count($this->lines) > 0) ? $this->lines : array();
-        } elseif ($this->lines < 0) {
-            $this->setErrorsFromObject($skilldet);
-            return $this->lines;
-        }
-        return [];
+        $result = $this->fetchLinesCommon();
+        return $result;
     }
 
 
@@ -454,7 +387,7 @@ class Skill extends CommonObject
             $sql .= $this->db->order($sortfield, $sortorder);
         }
         if (!empty($limit)) {
-            $sql .= ' ' . $this->db->plimit($limit, $offset);
+            $sql .= " " . $this->db->plimit($limit, $offset);
         }
 
         $resql = $this->db->query($sql);
@@ -504,6 +437,7 @@ class Skill extends CommonObject
     public function delete(User $user, $notrigger = 0)
     {
         return $this->deleteCommon($user, $notrigger);
+        //return $this->deleteCommon($user, $notrigger, 1);
     }
 
     /**
@@ -534,7 +468,7 @@ class Skill extends CommonObject
      */
     public function validate($user, $notrigger = 0)
     {
-        global $conf;
+        global $conf, $langs;
 
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
@@ -546,8 +480,8 @@ class Skill extends CommonObject
             return 0;
         }
 
-        /*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->skill->write))
-         || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->skill->skill_advance->validate))))
+        /*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->skilldet->write))
+         || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->skilldet->skilldet_advance->validate))))
          {
          $this->error='NotEnoughPermissions';
          dol_syslog(get_class($this)."::valid ".$this->error, LOG_ERR);
@@ -589,7 +523,7 @@ class Skill extends CommonObject
 
             if (!$error && !$notrigger) {
                 // Call trigger
-                $result = $this->call_trigger('HRM_SKILL_VALIDATE', $user);
+                $result = $this->call_trigger('HRM_SKILLDET_VALIDATE', $user);
                 if ($result < 0) {
                     $error++;
                 }
@@ -603,15 +537,15 @@ class Skill extends CommonObject
             // Rename directory if dir was a temporary ref
             if (preg_match('/^[\(]?PROV/i', $this->ref)) {
                 // Now we rename also files into index
-                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filename = CONCAT('" . $this->db->escape($this->newref) . "', SUBSTR(filename, " . (strlen($this->ref) + 1) . ")), filepath = 'skill/" . $this->db->escape($this->newref) . "'";
-                $sql .= " WHERE filename LIKE '" . $this->db->escape($this->ref) . "%' AND filepath = 'skill/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
+                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filename = CONCAT('" . $this->db->escape($this->newref) . "', SUBSTR(filename, " . (strlen($this->ref) + 1) . ")), filepath = 'skilldet/" . $this->db->escape($this->newref) . "'";
+                $sql .= " WHERE filename LIKE '" . $this->db->escape($this->ref) . "%' AND filepath = 'skilldet/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $error++;
                     $this->error = $this->db->lasterror();
                 }
-                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filepath = 'skill/" . $this->db->escape($this->newref) . "'";
-                $sql .= " WHERE filepath = 'skill/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
+                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filepath = 'skilldet/" . $this->db->escape($this->newref) . "'";
+                $sql .= " WHERE filepath = 'skilldet/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $error++;
@@ -621,15 +555,15 @@ class Skill extends CommonObject
                 // We rename directory ($this->ref = old ref, $num = new ref) in order not to lose the attachments
                 $oldref = dol_sanitizeFileName($this->ref);
                 $newref = dol_sanitizeFileName($num);
-                $dirsource = $conf->hrm->dir_output . '/skill/' . $oldref;
-                $dirdest = $conf->hrm->dir_output . '/skill/' . $newref;
+                $dirsource = $conf->hrm->dir_output . '/skilldet/' . $oldref;
+                $dirdest = $conf->hrm->dir_output . '/skilldet/' . $newref;
                 if (!$error && file_exists($dirsource)) {
                     dol_syslog(get_class($this) . "::validate() rename dir " . $dirsource . " into " . $dirdest);
 
                     if (@rename($dirsource, $dirdest)) {
                         dol_syslog("Rename ok");
                         // Rename docs starting with $oldref with $newref
-                        $listoffiles = dol_dir_list($conf->hrm->dir_output . '/skill/' . $newref, 'files', 1, '^' . preg_quote($oldref, '/'));
+                        $listoffiles = dol_dir_list($conf->hrm->dir_output . '/skilldet/' . $newref, 'files', 1, '^' . preg_quote($oldref, '/'));
                         foreach ($listoffiles as $fileentry) {
                             $dirsource = $fileentry['name'];
                             $dirdest = preg_replace('/^' . preg_quote($oldref, '/') . '/', $newref, $dirsource);
@@ -679,7 +613,7 @@ class Skill extends CommonObject
          return -1;
          }*/
 
-        return $this->setStatusCommon($user, self::STATUS_DRAFT, $notrigger, 'SKILL_UNVALIDATE');
+        return $this->setStatusCommon($user, self::STATUS_DRAFT, $notrigger, 'SKILLDET_UNVALIDATE');
     }
 
     /**
@@ -703,7 +637,7 @@ class Skill extends CommonObject
          return -1;
          }*/
 
-        return $this->setStatusCommon($user, self::STATUS_CANCELED, $notrigger, 'SKILL_CANCEL');
+        return $this->setStatusCommon($user, self::STATUS_CANCELED, $notrigger, 'SKILLDET_CANCEL');
     }
 
     /**
@@ -727,19 +661,9 @@ class Skill extends CommonObject
          return -1;
          }*/
 
-        return $this->setStatusCommon($user, self::STATUS_VALIDATED, $notrigger, 'SKILL_REOPEN');
+        return $this->setStatusCommon($user, self::STATUS_VALIDATED, $notrigger, 'SKILLDET_REOPEN');
     }
 
-    /**
-     *  Return a link to the object card (with optionally the picto)
-     *
-     *  @param  int     $withpicto                  Include picto in link (0=No picto, 1=Include picto into link, 2=Only picto)
-     *  @param  string  $option                     On what the link point to ('nolink', ...)
-     *  @param  int     $notooltip                  1=Disable tooltip
-     *  @param  string  $morecss                    Add more css on link
-     *  @param  int     $save_lastsearch_value      -1=Auto, 0=No save of lastsearch_values when clicking, 1=Save lastsearch_values whenclicking
-     *  @return string                              String with URL
-     */
     /**
      *  Return a link to the object card (with optionally the picto)
      *
@@ -760,15 +684,14 @@ class Skill extends CommonObject
 
         $result = '';
 
-        $label = img_picto('', $this->picto) . ' <u>' . $langs->trans("Skill") . '</u>';
+        $label = img_picto('', $this->picto) . ' <u>' . $langs->trans("Skilldet") . '</u>';
         if (isset($this->status)) {
             $label .= ' ' . $this->getLibStatut(5);
         }
         $label .= '<br>';
-        $label .= '<b>' . $langs->trans('Label') . ':</b> ' . $this->label;
-        $label .= '<br><b>' . $langs->trans('Description') . ':</b> ' . dol_htmlentitiesbr(dolGetFirstLineOfText($this->description, 10), 1);
+        $label .= '<b>' . $langs->trans('Ref') . ':</b> ' . $this->ref;
 
-        $url = dol_buildpath('/hrm/skill_card.php', 1) . '?id=' . $this->id;
+        $url = dol_buildpath('/hrm/skilldet_card.php', 1) . '?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not
@@ -784,7 +707,7 @@ class Skill extends CommonObject
         $linkclose = '';
         if (empty($notooltip)) {
             if (getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER')) {
-                $label = $langs->trans("ShowSkill");
+                $label = $langs->trans("ShowSkilldet");
                 $linkclose .= ' alt="' . dol_escape_htmltag($label, 1) . '"';
             }
             $linkclose .= ' title="' . dol_escape_htmltag($label, 1) . '"';
@@ -837,14 +760,14 @@ class Skill extends CommonObject
         }
 
         if ($withpicto != 2) {
-            $result .= $this->label;
+            $result .= $this->ref;
         }
 
         $result .= $linkend;
         //if ($withpicto != 2) $result.=(($addlabel && $this->label) ? $sep . dol_trunc($this->label, ($addlabel > 1 ? $addlabel : 0)) : '');
 
         global $action, $hookmanager;
-        $hookmanager->initHooks(array('skilldao'));
+        $hookmanager->initHooks(array('skilldetdao'));
         $parameters = array('id' => $this->id, 'getnomurl' => &$result);
         $reshook = $hookmanager->executeHooks('getNomUrl', $parameters, $this, $action); // Note that $action and $object may have been modified by some hooks
         if ($reshook > 0) {
@@ -877,10 +800,6 @@ class Skill extends CommonObject
      */
     public function LibStatut($status, $mode = 0)
     {
-        if (empty($status)) {
-            $status = 0;
-        }
-
 		// phpcs:enable
         if (empty($this->labelStatus) || empty($this->labelStatusShort)) {
             global $langs;
@@ -948,26 +867,6 @@ class Skill extends CommonObject
         return $this->initAsSpecimenCommon();
     }
 
-    /**
-     *  Create an array of lines
-     *
-     *  @return array|int       array of lines if OK, <0 if KO
-     */
-    public function getLinesArray()
-    {
-        $this->lines = array();
-
-        $objectline = new Skilldet($this->db);
-        $result = $objectline->fetchAll('ASC', 'rankorder', 0, 0, '(fk_skill:=:' . ((int) $this->id) . ')');
-
-        if (is_numeric($result)) {
-            $this->setErrorsFromObject($objectline);
-            return $result;
-        } else {
-            $this->lines = $result;
-            return $this->lines;
-        }
-    }
 
     /**
      *  Returns the reference to the following non used object depending on the active numbering module.
@@ -979,15 +878,15 @@ class Skill extends CommonObject
         global $langs, $conf;
         $langs->load("hrm");
 
-        if (!getDolGlobalString('hrm_SKILL_ADDON')) {
-            $conf->global->hrm_SKILL_ADDON = 'mod_skill_standard';
+        if (!getDolGlobalString('hrm_SKILLDET_ADDON')) {
+            $conf->global->hrm_SKILLDET_ADDON = 'mod_skilldet_standard';
         }
 
-        if (getDolGlobalString('hrm_SKILL_ADDON')) {
+        if (getDolGlobalString('hrm_SKILLDET_ADDON')) {
             $mybool = false;
 
-            $file = getDolGlobalString('hrm_SKILL_ADDON') . ".php";
-            $classname = getDolGlobalString('hrm_SKILL_ADDON');
+            $file = getDolGlobalString('hrm_SKILLDET_ADDON') . ".php";
+            $classname = getDolGlobalString('hrm_SKILLDET_ADDON');
 
             // Include file with class
             $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
@@ -1045,12 +944,12 @@ class Skill extends CommonObject
         $langs->load("hrm");
 
         if (!dol_strlen($modele)) {
-            $modele = 'standard_skill';
+            $modele = 'standard_skilldet';
 
             if (!empty($this->model_pdf)) {
                 $modele = $this->model_pdf;
-            } elseif (getDolGlobalString('SKILL_ADDON_PDF')) {
-                $modele = getDolGlobalString('SKILL_ADDON_PDF');
+            } elseif (getDolGlobalString('SKILLDET_ADDON_PDF')) {
+                $modele = getDolGlobalString('SKILLDET_ADDON_PDF');
             }
         }
 
@@ -1061,64 +960,5 @@ class Skill extends CommonObject
         }
 
         return $result;
-    }
-
-    /**
-     * @param int $code number of code label
-     * @return int|string
-     */
-    public static function typeCodeToLabel($code)
-    {
-        global $langs;
-        $result = '';
-        switch ($code) {
-            case 0: 
-                $result = $langs->trans("TypeKnowHow");
-                break; //"Savoir Faire"
-            case 1: 
-                $result = $langs->trans("TypeHowToBe");
-                break; // "Savoir être"
-            case 9: 
-                $result = $langs->trans("TypeKnowledge");
-                break; //"Savoir"
-        }
-        return $result;
-    }
-
-    /**
-     *  Return clicable link of object (with eventually picto)
-     *
-     *  @param      string      $option                 Where point the link (0=> main card, 1,2 => shipment, 'nolink'=>No link)
-     *  @param      array       $arraydata              Array of data
-     *  @return     string                              HTML Code for Kanban thumb.
-     */
-    public function getKanbanView($option = '', $arraydata = null)
-    {
-        global $selected, $langs;
-
-        $selected = (empty($arraydata['selected']) ? 0 : $arraydata['selected']);
-
-        $return = '<div class="box-flex-item box-flex-grow-zero">';
-        $return .= '<div class="info-box info-box-sm">';
-        $return .= '<span class="info-box-icon bg-infobox-action">';
-        $return .= img_picto('', $this->picto);
-        $return .= '</span>';
-        $return .= '<div class="info-box-content">';
-        $return .= '<span class="info-box-ref inline-block tdoverflowmax150 valignmiddle">' . (method_exists($this, 'getNomUrl') ? $this->getNomUrl() : $this->ref) . '</span>';
-        if ($selected >= 0) {
-            $return .= '<input id="cb' . $this->id . '" class="flat checkforselect fright" type="checkbox" name="toselect[]" value="' . $this->id . '"' . ($selected ? ' checked="checked"' : '') . '>';
-        }
-        if (property_exists($this, 'skill_type')) {
-            $return .= '<br><span class="opacitymedium">' . $langs->trans("Type") . '</span>';
-            $return .= ' : <span class="info-box-label ">' . $this->fields['skill_type']['arrayofkeyval'][$this->skill_type] . '</span>';
-        }
-        if (property_exists($this, 'description')) {
-            $return .= '<br><span class="info-box-label opacitymedium">' . $langs->trans("Description") . '</span> : ';
-            $return .= '<br><span class="info-box-label ">' . (strlen($this->description) > 30 ? dol_substr($this->description, 0, 25) . '...' : $this->description) . '</span>';
-        }
-        $return .= '</div>';
-        $return .= '</div>';
-        $return .= '</div>';
-        return $return;
     }
 }

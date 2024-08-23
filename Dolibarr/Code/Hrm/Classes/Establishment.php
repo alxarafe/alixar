@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2015       Alexandre Spangaro  <aspangaro@open-dsi.fr>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
+/* Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,13 +19,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Hrm\Classes;
+
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *    \file       htdocs/hrm/class/establishment.class.php
  *    \ingroup    HRM
  *    \brief      File of class to manage establishments
  */
-
-use Dolibarr\Core\Base\CommonObject;
 
 /**
  * Class to manage establishments

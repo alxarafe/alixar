@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2015       ATM Consulting          <support@atm-consulting.fr>
- * Copyright (C) 2019-2020  Open-DSI                <support@open-dsi.fr>
- * Copyright (C) 2020-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2015       ATM Consulting              <support@atm-consulting.fr>
+ * Copyright (C) 2019-2020  Open-DSI                    <support@open-dsi.fr>
+ * Copyright (C) 2020-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,14 +20,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\IntracommReport\Classes;
+
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *    \file       htdocs/intracommreport/class/intracommreport.class.php
  *    \ingroup    Intracomm report
  *    \brief      File of class to manage intracomm report
  */
-
-use Dolibarr\Core\Base\CommonObject;
-
 
 /**
  * Class to manage intracomm report

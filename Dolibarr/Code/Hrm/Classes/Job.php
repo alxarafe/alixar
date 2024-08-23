@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2017  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
- * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021 	    Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021 	    Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021 	    Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021 	    Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
+ * Copyright (C) 2024	    Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,20 +23,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * \file        class/skillrank.class.php
- * \ingroup     hrm
- * \brief       This file is a CRUD class file for SkillRank (Create/Read/Update/Delete)
- */
+namespace Dolibarr\Code\Hrm\Classes;
 
-// Put here all includes required by your class file
 use Dolibarr\Core\Base\CommonObject;
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_skillrank.lib.php';
+use DoliDB;
 
 /**
- * Class for SkillRank
+ * \file        class/job.class.php
+ * \ingroup     hrm
+ * \brief       This file is a CRUD class file for Job (Create/Read/Update/Delete)
  */
-class SkillRank extends CommonObject
+
+/**
+ * Class for Job
+ */
+class Job extends CommonObject
 {
     /**
      * @var string ID of module.
@@ -46,26 +47,23 @@ class SkillRank extends CommonObject
     /**
      * @var string ID to identify managed object.
      */
-    public $element = 'skillrank';
+    public $element = 'job';
 
     /**
      * @var string Name of table without prefix where object is stored. This is also the key used for extrafields management.
      */
-    public $table_element = 'hrm_skillrank';
+    public $table_element = 'hrm_job';
 
     /**
-     * @var string String with name of icon for skillrank. Must be the part after the 'object_' into object_skillrank.png
+     * @var string String with name of icon for job. Must be the part after the 'object_' into object_job.png
      */
-    public $picto = 'skillrank@hrm';
+    public $picto = 'technic';
 
 
     const STATUS_DRAFT = 0;
     const STATUS_VALIDATED = 1;
     const STATUS_CANCELED = 9;
 
-    const SKILLRANK_TYPE_JOB = "job";
-    const SKILLRANK_TYPE_USER = "user";
-    const SKILLRANK_TYPE_EVALDET = "evaluationdet";
 
     /**
      *  'type' field format ('integer', 'integer:ObjectClass:PathToClass[:AddCreateButtonOrNot[:Filter]]', 'sellist:TableName:LabelFieldName[:KeyFieldName[:KeyFieldParent[:Filter]]]', 'varchar(x)', 'double(24,8)', 'real', 'price', 'text', 'text:none', 'html', 'date', 'datetime', 'timestamp', 'duration', 'mail', 'phone', 'url', 'password')
@@ -99,25 +97,26 @@ class SkillRank extends CommonObject
      */
     public $fields = array(
         'rowid' => array('type' => 'integer', 'label' => 'TechnicalID', 'enabled' => 1, 'position' => 1, 'notnull' => 1, 'visible' => 0, 'noteditable' => 1, 'index' => 1, 'css' => 'left', 'comment' => "Id"),
-        'fk_skill' => array('type' => 'integer:Skill:hrm/class/skill.class.php:1', 'label' => 'Skill', 'enabled' => 1, 'position' => 3, 'notnull' => 1, 'visible' => 1, 'index' => 1,),
-        'rankorder' => array('type' => 'integer', 'label' => 'Rank', 'enabled' => 1, 'position' => 4, 'notnull' => 1, 'visible' => 1, 'default' => '0'),
-        'fk_object' => array('type' => 'integer', 'label' => 'object', 'enabled' => 1, 'position' => 5, 'notnull' => 1, 'visible' => 0,),
-        'date_creation' => array('type' => 'datetime', 'label' => 'DateCreation', 'enabled' => 1, 'position' => 500, 'notnull' => 1, 'visible' => -2,),
-        'tms' => array('type' => 'timestamp', 'label' => 'DateModification', 'enabled' => 1, 'position' => 501, 'notnull' => 0, 'visible' => -2,),
+        'label' => array('type' => 'varchar(128)', 'label' => 'Label', 'enabled' => 1, 'position' => 20, 'notnull' => 1, 'visible' => 1, 'index' => 1, 'searchall' => 1, 'showoncombobox' => 1, 'comment' => "Label of object"),
+        'description' => array('type' => 'text', 'label' => 'Description', 'enabled' => 1, 'position' => 21, 'notnull' => 0, 'visible' => 1,),
+        'date_creation' => array('type' => 'datetime', 'label' => 'DateCreation', 'enabled' => 1, 'position' => 500, 'notnull' => 1, 'visible' => 2,),
+        'tms' => array('type' => 'timestamp', 'label' => 'DateModification', 'enabled' => 1, 'position' => 501, 'notnull' => 0, 'visible' => 2,),
+        'deplacement' => array('type' => 'select', 'required' => 1,'label' => 'NeedBusinessTravels', 'enabled' => 1, 'position' => 90, 'notnull' => 1, 'visible' => 1, 'arrayofkeyval' => array(0 => "No", 1 => "Yes"), 'default' => '0'),
+        'note_public' => array('type' => 'html', 'label' => 'NotePublic', 'enabled' => 1, 'position' => 70, 'notnull' => 0, 'visible' => 0,),
+        'note_private' => array('type' => 'html', 'label' => 'NotePrivate', 'enabled' => 1, 'position' => 71, 'notnull' => 0, 'visible' => 0,),
         'fk_user_creat' => array('type' => 'integer:User:user/class/user.class.php', 'label' => 'UserAuthor', 'enabled' => 1, 'position' => 510, 'notnull' => 1, 'visible' => -2, 'foreignkey' => 'user.rowid',),
         'fk_user_modif' => array('type' => 'integer:User:user/class/user.class.php', 'label' => 'UserModif', 'enabled' => 1, 'position' => 511, 'notnull' => -1, 'visible' => -2,),
-        'objecttype' => array('type' => 'varchar(128)', 'label' => 'objecttype', 'enabled' => 1, 'position' => 6, 'notnull' => 1, 'visible' => 0,),
     );
     public $rowid;
-    public $fk_skill;
-    public $rank;
-    public $fk_object;
+    public $ref;
+    public $label;
+    public $description;
     public $date_creation;
+
+    public $deplacement;
     public $fk_user_creat;
     public $fk_user_modif;
-    public $objecttype;
     // END MODULEBUILDER PROPERTIES
-    public $rankorder;
 
 
     // If this object has a subtable with lines
@@ -125,32 +124,35 @@ class SkillRank extends CommonObject
     // /**
     //  * @var string    Name of subtable line
     //  */
-    // public $table_element_line = 'hrm_skillrankline';
+    // public $table_element_line = 'hrm_jobline';
 
-    // /**
-    //  * @var string    Field with ID of parent key if this object has a parent
-    //  */
-    // public $fk_element = 'fk_skillrank';
+    /**
+     * @var string    Field with ID of parent key if this object has a parent
+     */
+    public $fk_element = 'fk_job';
 
     // /**
     //  * @var string    Name of subtable class that manage subtable lines
     //  */
-    // public $class_element_line = 'SkillRankline';
+    // public $class_element_line = 'Jobline';
+
+    /**
+     * @var array<string,string[]>  List of child tables. To test if we can delete object.
+     */
+    protected $childtables = array(
+        'hrm_evaluation' => ['name' => 'Evaluation'],
+        'hrm_job_user' => ['name' => 'Job'],
+    );
+
+    /**
+     * @var string[]    List of child tables. To know object to delete on cascade.
+     *               If name matches '@ClassNAme:FilePathClass:ParentFkFieldName' it will
+     *               call method deleteByParentField(parentId, ParentFkFieldName) to fetch and delete child object
+     */
+    protected $childtablesoncascade = array("@SkillRank:hrm/class/skillrank.class.php:fk_object:(objecttype:=:'job')");
 
     // /**
-    //  * @var array    List of child tables. To test if we can delete object.
-    //  */
-    // protected $childtables = array();
-
-    // /**
-    //  * @var array    List of child tables. To know object to delete on cascade.
-    //  *               If name matches '@ClassNAme:FilePathClass;ParentFkFieldName' it will
-    //  *               call method deleteByParentField(parentId, ParentFkFieldName) to fetch and delete child object
-    //  */
-    // protected $childtablesoncascade = array('hrm_skillrankdet');
-
-    // /**
-    //  * @var SkillRankLine[]     Array of subtable lines
+    //  * @var JobLine[]     Array of subtable lines
     //  */
     // public $lines = array();
 
@@ -168,7 +170,7 @@ class SkillRank extends CommonObject
         $this->db = $db;
 
         $this->ismultientitymanaged = 0;
-        $this->isextrafieldmanaged = 0;
+        $this->isextrafieldmanaged = 1;
 
         if (!getDolGlobalString('MAIN_SHOW_TECHNICAL_ID') && isset($this->fields['rowid'])) {
             $this->fields['rowid']['visible'] = 0;
@@ -178,7 +180,7 @@ class SkillRank extends CommonObject
         }
 
         // Example to show how to set values of fields definition dynamically
-        /*if ($user->rights->hrm->skillrank->read) {
+        /*if ($user->rights->hrm->job->read) {
             $this->fields['myfield']['visible'] = 1;
             $this->fields['myfield']['noteditable'] = 0;
         }*/
@@ -211,17 +213,9 @@ class SkillRank extends CommonObject
      */
     public function create(User $user, $notrigger = 0)
     {
-        global $langs;
-
-        $filter = '(fk_object:=:' . ((int) $this->fk_object) . ") AND (objecttype:=:'" . $this->db->escape($this->objecttype) . "') AND (fk_skill:=:" . ((int) $this->fk_skill) . ")";
-
-        $alreadyLinked = $this->fetchAll('ASC', 'rowid', 0, 0, $filter);
-        if (!empty($alreadyLinked)) {
-            $this->error = $langs->trans('ErrSkillAlreadyAdded');
-            return -1;
-        }
-
         $resultcreate = $this->createCommon($user, $notrigger);
+
+        //$resultvalidate = $this->validate($user, $notrigger);
 
         return $resultcreate;
     }
@@ -231,10 +225,9 @@ class SkillRank extends CommonObject
      *
      * @param   User    $user       User that creates
      * @param   int     $fromid     Id of object to clone
-     * @param   int     $fk_object  id of Job object (if new job object)
      * @return  mixed               New object created, <0 if KO
      */
-    public function createFromClone(User $user, $fromid, $fk_object = 0)
+    public function createFromClone(User $user, $fromid)
     {
         global $langs, $extrafields;
         $error = 0;
@@ -259,10 +252,6 @@ class SkillRank extends CommonObject
         unset($object->id);
         unset($object->fk_user_creat);
         unset($object->import_key);
-        if (!empty($fk_object) && $fk_object > 0) {
-            unset($object->fk_object);
-        }
-
 
         // Clear fields
         if (property_exists($object, 'ref')) {
@@ -279,11 +268,6 @@ class SkillRank extends CommonObject
         }
         if (property_exists($object, 'date_modification')) {
             $object->date_modification = null;
-        }
-        if (!empty($fk_object) && $fk_object > 0) {
-            if (property_exists($object, 'fk_object')) {
-                $object->fk_object = ($fk_object = 0 ? $this->fk_object : $fk_object);
-            }
         }
         // ...
         // Clear extrafields that are unique
@@ -363,29 +347,6 @@ class SkillRank extends CommonObject
         return $result;
     }
 
-    /**
-     *  Clone skillrank Object linked to job with user id
-     *  The skillrank table is a join table that is marked for multiple objects
-     *
-     * @param SkillRank $currentSkill line of evaluation (skill) we need to clone and add to user skills list
-     * @param int $fk_user id of user linked to skillrank
-     * @return int > 0 if ok, < 0 if ko
-     */
-    public function cloneFromCurrentSkill($currentSkill, $fk_user)
-    {
-        global $user;
-
-        $this->fk_skill         = $currentSkill->fk_skill;
-        $this->rankorder            = $currentSkill->rankorder;
-        $this->fk_object        = $fk_user;
-        $this->date_creation    = dol_now();
-        $this->fk_user_creat    = $user->id;
-        $this->fk_user_modif    = $user->id;
-        $this->objecttype       = self::SKILLRANK_TYPE_USER;
-        $result =  $this->create($user);
-
-        return $result;
-    }
 
     /**
      * Load list of objects in memory from the database.
@@ -486,7 +447,7 @@ class SkillRank extends CommonObject
      *  @param  User    $user       User that delete
      *  @param  int     $idline     Id of line to delete
      *  @param  int     $notrigger  0=launch triggers after, 1=disable triggers
-     *  @return int                 Return >0 if OK, <0 if KO
+     *  @return int                 >0 if OK, <0 if KO
      */
     public function deleteLine(User $user, $idline, $notrigger = 0)
     {
@@ -520,8 +481,8 @@ class SkillRank extends CommonObject
             return 0;
         }
 
-        /*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->skillrank->write))
-         || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->skillrank->skillrank_advance->validate))))
+        /*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->job->write))
+         || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->job->job_advance->validate))))
          {
          $this->error='NotEnoughPermissions';
          dol_syslog(get_class($this)."::valid ".$this->error, LOG_ERR);
@@ -563,7 +524,7 @@ class SkillRank extends CommonObject
 
             if (!$error && !$notrigger) {
                 // Call trigger
-                $result = $this->call_trigger('HRM_SKILLRANK_VALIDATE', $user);
+                $result = $this->call_trigger('HRM_JOB_VALIDATE', $user);
                 if ($result < 0) {
                     $error++;
                 }
@@ -577,15 +538,15 @@ class SkillRank extends CommonObject
             // Rename directory if dir was a temporary ref
             if (preg_match('/^[\(]?PROV/i', $this->ref)) {
                 // Now we rename also files into index
-                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filename = CONCAT('" . $this->db->escape($this->newref) . "', SUBSTR(filename, " . (strlen($this->ref) + 1) . ")), filepath = 'skillrank/" . $this->db->escape($this->newref) . "'";
-                $sql .= " WHERE filename LIKE '" . $this->db->escape($this->ref) . "%' AND filepath = 'skillrank/" . $this->db->escape($this->ref) . "' and entity = " . ((int) $conf->entity);
+                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filename = CONCAT('" . $this->db->escape($this->newref) . "', SUBSTR(filename, " . (strlen($this->ref) + 1) . ")), filepath = 'job/" . $this->db->escape($this->newref) . "'";
+                $sql .= " WHERE filename LIKE '" . $this->db->escape($this->ref) . "%' AND filepath = 'job/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $error++;
                     $this->error = $this->db->lasterror();
                 }
-                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filepath = 'skillrank/" . $this->db->escape($this->newref) . "'";
-                $sql .= " WHERE filepath = 'skillrank/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
+                $sql = 'UPDATE ' . MAIN_DB_PREFIX . "ecm_files set filepath = 'job/" . $this->db->escape($this->newref) . "'";
+                $sql .= " WHERE filepath = 'job/" . $this->db->escape($this->ref) . "' and entity = " . $conf->entity;
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $error++;
@@ -595,15 +556,15 @@ class SkillRank extends CommonObject
                 // We rename directory ($this->ref = old ref, $num = new ref) in order not to lose the attachments
                 $oldref = dol_sanitizeFileName($this->ref);
                 $newref = dol_sanitizeFileName($num);
-                $dirsource = $conf->hrm->dir_output . '/skillrank/' . $oldref;
-                $dirdest = $conf->hrm->dir_output . '/skillrank/' . $newref;
+                $dirsource = $conf->hrm->dir_output . '/job/' . $oldref;
+                $dirdest = $conf->hrm->dir_output . '/job/' . $newref;
                 if (!$error && file_exists($dirsource)) {
                     dol_syslog(get_class($this) . "::validate() rename dir " . $dirsource . " into " . $dirdest);
 
                     if (@rename($dirsource, $dirdest)) {
                         dol_syslog("Rename ok");
                         // Rename docs starting with $oldref with $newref
-                        $listoffiles = dol_dir_list($conf->hrm->dir_output . '/skillrank/' . $newref, 'files', 1, '^' . preg_quote($oldref, '/'));
+                        $listoffiles = dol_dir_list($conf->hrm->dir_output . '/job/' . $newref, 'files', 1, '^' . preg_quote($oldref, '/'));
                         foreach ($listoffiles as $fileentry) {
                             $dirsource = $fileentry['name'];
                             $dirdest = preg_replace('/^' . preg_quote($oldref, '/') . '/', $newref, $dirsource);
@@ -631,6 +592,43 @@ class SkillRank extends CommonObject
         }
     }
 
+    /**
+     * Get the last occupied position for a user
+     *
+     * @param   int                 $fk_user    Id of user we need to get last job
+     * @return  Position|string                 Last occupied position
+     */
+    public function getLastJobForUser($fk_user)
+    {
+        $Tab = $this->getForUser($fk_user);
+
+        if (empty($Tab)) {
+            return '';
+        }
+
+        $lastpos = array_shift($Tab);
+
+        return $lastpos;
+    }
+
+    /**
+     *  Get array of occupied positions for a user
+     *
+     * @param   int         $userid     Id of user we need to get job list
+     * @return  Position[]              Array of occupied positions
+     */
+    public function getForUser($userid)
+    {
+        global $db;
+
+        $TReturn = array();
+        $position = new Position($db);
+        $TPosition = $position->getForUser($userid);
+        foreach ($TPosition as $UPosition) {
+            $TReturn[$UPosition->Job->rowid] = $UPosition->Job->ref;
+        }
+        return $TReturn;
+    }
 
     /**
      *  Set draft status
@@ -653,7 +651,7 @@ class SkillRank extends CommonObject
          return -1;
          }*/
 
-        return $this->setStatusCommon($user, self::STATUS_DRAFT, $notrigger, 'SKILLRANK_UNVALIDATE');
+        return $this->setStatusCommon($user, self::STATUS_DRAFT, $notrigger, 'JOB_UNVALIDATE');
     }
 
     /**
@@ -677,7 +675,7 @@ class SkillRank extends CommonObject
          return -1;
          }*/
 
-        return $this->setStatusCommon($user, self::STATUS_CANCELED, $notrigger, 'SKILLRANK_CANCEL');
+        return $this->setStatusCommon($user, self::STATUS_CANCELED, $notrigger, 'JOB_CANCEL');
     }
 
     /**
@@ -701,7 +699,7 @@ class SkillRank extends CommonObject
          return -1;
          }*/
 
-        return $this->setStatusCommon($user, self::STATUS_VALIDATED, $notrigger, 'SKILLRANK_REOPEN');
+        return $this->setStatusCommon($user, self::STATUS_VALIDATED, $notrigger, 'JOB_REOPEN');
     }
 
     /**
@@ -724,14 +722,14 @@ class SkillRank extends CommonObject
 
         $result = '';
 
-        $label = img_picto('', $this->picto) . ' <u>' . $langs->trans("SkillRank") . '</u>';
+        $label = img_picto('', $this->picto) . ' <u>' . $langs->trans("JobProfile") . '</u>';
         if (isset($this->status)) {
             $label .= ' ' . $this->getLibStatut(5);
         }
         $label .= '<br>';
-        $label .= '<b>' . $langs->trans('Ref') . ':</b> ' . $this->ref;
+        $label .= '<b>' . $langs->trans('Label') . ':</b> ' . $this->label;
 
-        $url = dol_buildpath('/hrm/skillrank_card.php', 1) . '?id=' . $this->id;
+        $url = dol_buildpath('/hrm/job_card.php', 1) . '?id=' . $this->id;
 
         if ($option != 'nolink') {
             // Add param to save lastsearch_values or not
@@ -747,7 +745,7 @@ class SkillRank extends CommonObject
         $linkclose = '';
         if (empty($notooltip)) {
             if (getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER')) {
-                $label = $langs->trans("ShowSkillRank");
+                $label = $langs->trans("ShowJob");
                 $linkclose .= ' alt="' . dol_escape_htmltag($label, 1) . '"';
             }
             $linkclose .= ' title="' . dol_escape_htmltag($label, 1) . '"';
@@ -779,13 +777,13 @@ class SkillRank extends CommonObject
                 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
                 list($class, $module) = explode('@', $this->picto);
-                $upload_dir = $conf->$module->multidir_output[$conf->entity] . "/$class/" . dol_sanitizeFileName($this->ref);
+                $upload_dir = $conf->$module->multidir_output[$conf->entity] . "/$class/" . dol_sanitizeFileName($this->label);
                 $filearray = dol_dir_list($upload_dir, "files");
                 $filename = $filearray[0]['name'];
                 if (!empty($filename)) {
                     $pospoint = strpos($filearray[0]['name'], '.');
 
-                    $pathtophoto = $class . '/' . $this->ref . '/thumbs/' . substr($filename, 0, $pospoint) . '_mini' . substr($filename, $pospoint);
+                    $pathtophoto = $class . '/' . $this->label . '/thumbs/' . substr($filename, 0, $pospoint) . '_mini' . substr($filename, $pospoint);
                     if (!getDolGlobalString(strtoupper($module . '_' . $class) . '_FORMATLISTPHOTOSASUSERS')) {
                         $result .= '<div class="floatleft inline-block valignmiddle divphotoref"><div class="photoref"><img class="photo' . $module . '" alt="No photo" border="0" src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . $module . '&entity=' . $conf->entity . '&file=' . urlencode($pathtophoto) . '"></div></div>';
                     } else {
@@ -800,14 +798,14 @@ class SkillRank extends CommonObject
         }
 
         if ($withpicto != 2) {
-            $result .= $this->ref;
+            $result .= $this->label;
         }
 
         $result .= $linkend;
         //if ($withpicto != 2) $result.=(($addlabel && $this->label) ? $sep . dol_trunc($this->label, ($addlabel > 1 ? $addlabel : 0)) : '');
 
         global $action, $hookmanager;
-        $hookmanager->initHooks(array('skillrankdao'));
+        $hookmanager->initHooks(array('jobdao'));
         $parameters = array('id' => $this->id, 'getnomurl' => &$result);
         $reshook = $hookmanager->executeHooks('getNomUrl', $parameters, $this, $action); // Note that $action and $object may have been modified by some hooks
         if ($reshook > 0) {
@@ -841,6 +839,9 @@ class SkillRank extends CommonObject
     public function LibStatut($status, $mode = 0)
     {
 		// phpcs:enable
+        return '';      // There is no status on job profile for the moment
+
+        /*
         if (empty($this->labelStatus) || empty($this->labelStatusShort)) {
             global $langs;
             //$langs->load("hrm");
@@ -852,13 +853,14 @@ class SkillRank extends CommonObject
             $this->labelStatusShort[self::STATUS_CANCELED] = $langs->transnoentitiesnoconv('Disabled');
         }
 
-        $statusType = 'status' . $status;
+        $statusType = 'status'.$status;
         //if ($status == self::STATUS_VALIDATED) $statusType = 'status1';
         if ($status == self::STATUS_CANCELED) {
             $statusType = 'status6';
         }
 
         return dolGetStatus($this->labelStatus[$status], $this->labelStatusShort[$status], '', $statusType, $mode);
+        */
     }
 
     /**
@@ -916,21 +918,16 @@ class SkillRank extends CommonObject
     {
         $this->lines = array();
 
-        /*
-        $objectline = new SkillRankLine($this->db);
-        $result = $objectline->fetchAll('ASC', 'position', 0, 0, '(fk_skillrank:=:'.((int) $this->id).')');
+        $objectline = new JobLine($this->db);
+        $result = $objectline->fetchAll('ASC', 'position', 0, 0, '(fk_job:=:' . ((int) $this->id) . ')');
 
         if (is_numeric($result)) {
-            $this->error = $objectline->error;
-            $this->errors = $objectline->errors;
+            $this->setErrorsFromObject($objectline);
             return $result;
         } else {
             $this->lines = $result;
             return $this->lines;
         }
-        */
-
-        return $this->lines;
     }
 
     /**
@@ -943,15 +940,15 @@ class SkillRank extends CommonObject
         global $langs, $conf;
         $langs->load("hrm");
 
-        if (!getDolGlobalString('hrm_SKILLRANK_ADDON')) {
-            $conf->global->hrm_SKILLRANK_ADDON = 'mod_skillrank_standard';
+        if (!getDolGlobalString('hrm_JOB_ADDON')) {
+            $conf->global->hrm_JOB_ADDON = 'mod_job_standard';
         }
 
-        if (getDolGlobalString('hrm_SKILLRANK_ADDON')) {
+        if (getDolGlobalString('hrm_JOB_ADDON')) {
             $mybool = false;
 
-            $file = getDolGlobalString('hrm_SKILLRANK_ADDON') . ".php";
-            $classname = getDolGlobalString('hrm_SKILLRANK_ADDON');
+            $file = getDolGlobalString('hrm_JOB_ADDON') . ".php";
+            $classname = getDolGlobalString('hrm_JOB_ADDON');
 
             // Include file with class
             $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
@@ -1009,12 +1006,12 @@ class SkillRank extends CommonObject
         $langs->load("hrm");
 
         if (!dol_strlen($modele)) {
-            $modele = 'standard_skillrank';
+            $modele = 'standard_job';
 
             if (!empty($this->model_pdf)) {
                 $modele = $this->model_pdf;
-            } elseif (getDolGlobalString('SKILLRANK_ADDON_PDF')) {
-                $modele = getDolGlobalString('SKILLRANK_ADDON_PDF');
+            } elseif (getDolGlobalString('JOB_ADDON_PDF')) {
+                $modele = getDolGlobalString('JOB_ADDON_PDF');
             }
         }
 
@@ -1025,5 +1022,73 @@ class SkillRank extends CommonObject
         }
 
         return $result;
+    }
+
+    /**
+     *  Return clicable link of object (with eventually picto)
+     *
+     *  @param      string      $option                 Where point the link (0=> main card, 1,2 => shipment, 'nolink'=>No link)
+     *  @param      array       $arraydata              Array of data
+     *  @return     string                              HTML Code for Kanban thumb.
+     */
+    public function getKanbanView($option = '', $arraydata = null)
+    {
+        global $selected, $langs;
+
+        $selected = (empty($arraydata['selected']) ? 0 : $arraydata['selected']);
+
+        $return = '<div class="box-flex-item box-flex-grow-zero">';
+        $return .= '<div class="info-box info-box-sm">';
+        $return .= '<span class="info-box-icon bg-infobox-action">';
+        $return .= img_picto('', $this->picto);
+        $return .= '</span>';
+        $return .= '<div class="info-box-content">';
+        $return .= '<span class="info-box-ref inline-block tdoverflowmax150 valignmiddle">' . (method_exists($this, 'getNomUrl') ? $this->getNomUrl(0) : $this->ref) . '</span>';
+        if ($selected >= 0) {
+            $return .= '<input id="cb' . $this->id . '" class="flat checkforselect fright" type="checkbox" name="toselect[]" value="' . $this->id . '"' . ($selected ? ' checked="checked"' : '') . '>';
+        }
+        /*if (property_exists($this, 'deplacement')) {
+            $return .= '<br><span class="opacitymedium">'.$langs->trans("Type").'</span>';
+            $return .= ' : <span class="info-box-label ">'.$this->fields['deplacement']['arrayofkeyval'][$this->deplacement].'</span>';
+        }*/
+        if (property_exists($this, 'description') && !(empty($this->description))) {
+            //$return .= '<br><span class="info-box-label opacitymedium">'.$langs->trans("Description").'</span> : ';
+            $return .= '<br><span class="info-box-label ">' . (strlen($this->description) > 30 ? dol_substr($this->description, 0, 25) . '...' : $this->description) . '</span>';
+        }
+        $return .= '</div>';
+        $return .= '</div>';
+        $return .= '</div>';
+        return $return;
+    }
+
+    /**
+     * function for get required skills associate to job object
+     * @param int  $id  Id of object
+     * @return array|int     list of ids skillranks
+     */
+    public function getSkillRankForJob($id)
+    {
+        if (empty($id)) {
+            return -1;
+        }
+        $skillranks = array();
+        $sql = "SELECT rowid";
+        $sql .= " FROM " . MAIN_DB_PREFIX . "hrm_skillrank";
+        $sql .= " WHERE fk_object = " . ((int) $id);
+
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            $num = $this->db->num_rows($resql);
+            $i = 0;
+            while ($i < $num) {
+                $obj = $this->db->fetch_object($resql);
+                $skillranks[] = $obj;
+                $i++;
+            }
+            $this->db->free($resql);
+        } else {
+            dol_print_error($this->db);
+        }
+        return $skillranks;
     }
 }
