@@ -20,16 +20,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/opensurvey/class/opensurveysondage.class.php
  *  \ingroup    opensurvey
  *  \brief      This file is an example for a CRUD class file (Create/Read/Update/Delete)
  *              Initially built by build_class_from_table on 2013-03-10 00:32
  */
-
-// Put here all includes required by your class file
-require_once DOL_DOCUMENT_ROOT . "/core/class/commonobject.class.php";
-
 
 /**
  *  Put here description of your class

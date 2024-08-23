@@ -39,6 +39,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+
 /**
  *  \file       htdocs/compta/facture/class/facture.class.php
  *  \ingroup    invoice
@@ -48,14 +50,13 @@
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commoninvoice.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
+use Dolibarr\Core\Base\CommonObjectLine;
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
 }
 
 /**

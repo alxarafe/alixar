@@ -29,7 +29,7 @@
  *    \brief      Class file of the module paid holiday.
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 
 
 /**

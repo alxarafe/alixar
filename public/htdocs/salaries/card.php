@@ -25,6 +25,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+
 /**
  *  \file       htdocs/salaries/card.php
  *  \ingroup    salaries
@@ -40,7 +42,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/paymentsalary.clas
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/salaries.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 if (isModEnabled('project')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';

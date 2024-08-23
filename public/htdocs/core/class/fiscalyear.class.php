@@ -26,7 +26,7 @@
  *      \brief      File of class to manage fiscal years
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  * Class to manage fiscal year

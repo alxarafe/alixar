@@ -20,12 +20,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  * \file        htdocs/workstation/class/workstationresource.class.php
  * \ingroup     workstation
  * \brief       This file is a CRUD class file for WorkstationResource (Create/Read/Update/Delete)
  */
-
 
 /**
  * Class to link resource with Workstations

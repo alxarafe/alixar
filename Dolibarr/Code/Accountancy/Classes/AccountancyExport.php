@@ -1,20 +1,20 @@
 <?php
 
 /*
- * Copyright (C) 2007-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2014       Juanjo Menent       <jmenent@2byte.es>
- * Copyright (C) 2015       Florian Henry       <florian.henry@open-concept.pro>
- * Copyright (C) 2015       Raphaël Doursenaud  <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2016       Pierre-Henry Favre  <phf@atm-consulting.fr>
- * Copyright (C) 2016-2024  Alexandre Spangaro  <aspangaro@open-dsi.fr>
- * Copyright (C) 2022  		Lionel Vessiller    <lvessiller@open-dsi.fr>
- * Copyright (C) 2013-2017  Olivier Geffroy     <jeff@jeffinfo.com>
- * Copyright (C) 2017       Elarifr. Ari Elbaz  <github@accedinfo.com>
- * Copyright (C) 2017-2019  Frédéric France     <frederic.france@netlogic.fr>
- * Copyright (C) 2017       André Schild        <a.schild@aarboard.ch>
- * Copyright (C) 2020       Guillaume Alexandre <guillaume@tag-info.fr>
- * Copyright (C) 2022		Joachim Kueter		<jkueter@gmx.de>
- * Copyright (C) 2022  		Progiseize         	<a.bisotti@progiseize.fr>
+ * Copyright (C) 2007-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2016       Pierre-Henry Favre          <phf@atm-consulting.fr>
+ * Copyright (C) 2016-2024  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2022  		Lionel Vessiller            <lvessiller@open-dsi.fr>
+ * Copyright (C) 2013-2017  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2017       Elarifr. Ari Elbaz          <github@accedinfo.com>
+ * Copyright (C) 2017-2019  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2017       André Schild                <a.schild@aarboard.ch>
+ * Copyright (C) 2020       Guillaume Alexandre         <guillaume@tag-info.fr>
+ * Copyright (C) 2022		Joachim Kueter		        <jkueter@gmx.de>
+ * Copyright (C) 2022  		Progiseize         	        <a.bisotti@progiseize.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -31,6 +31,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+namespace Dolibarr\Code\Accountancy\Classes;
+
+use DoliDB;
 
 /**
  * \file        htdocs/accountancy/class/accountancyexport.class.php

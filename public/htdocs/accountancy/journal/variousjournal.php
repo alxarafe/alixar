@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+
 /**
  * \file        htdocs/accountancy/journal/variousjournal.php
  * \ingroup     Accountancy (Double entries)
@@ -27,7 +29,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("banks", "accountancy", "compta", "other", "errors"));

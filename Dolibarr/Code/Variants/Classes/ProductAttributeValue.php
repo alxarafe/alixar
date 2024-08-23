@@ -20,7 +20,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
+use Dolibarr\Core\Base\CommonObjectLine;
 /**
  * Class ProductAttributeValue
  * Used to represent a product attribute value

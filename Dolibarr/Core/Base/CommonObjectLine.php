@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2012      Cedric Salvador      <csalvador@gpcsolutions.fr>
+/* Copyright (C) 2006-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       Cedric Salvador             <csalvador@gpcsolutions.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -19,6 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+namespace Dolibarr\Core\Base;
+
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  \file       htdocs/core/class/commonobjectline.class.php

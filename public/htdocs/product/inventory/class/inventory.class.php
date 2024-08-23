@@ -29,8 +29,8 @@
  */
 
 // Put here all includes required by your class file
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
+use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Core\Base\CommonObjectLine;
 //require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
 //require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 

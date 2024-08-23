@@ -23,6 +23,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+
 /**
  *       \file       htdocs/compta/bank/list.php
  *       \ingroup    banque
@@ -36,12 +39,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
-}
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
-}
 if (isModEnabled('category')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 }

@@ -21,15 +21,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       product/class/productbatch.class.php
  *  \ingroup    productbatch
  *  \brief      Manage record and specific data for batch number management.
  *              Manage table llx_product_batch (should have been named product_stock_batch)
  */
-
-require_once DOL_DOCUMENT_ROOT . "/core/class/commonobject.class.php";
-
 
 /**
  *  Manage record for batch number management

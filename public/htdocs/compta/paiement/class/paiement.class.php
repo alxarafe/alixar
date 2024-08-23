@@ -39,7 +39,7 @@
 
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  Class to manage payments of customer invoices

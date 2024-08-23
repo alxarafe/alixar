@@ -26,6 +26,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+
 /**
  *      \file       htdocs/compta/bank/card.php
  *      \ingroup    bank
@@ -45,12 +48,6 @@ if (isModEnabled('category')) {
 }
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-}
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
-}
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
 }
 
 // Load translation files required by the page

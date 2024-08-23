@@ -20,6 +20,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';

@@ -34,6 +34,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+
 /**
  *  \file       htdocs/societe/card.php
  *  \ingroup    societe
@@ -60,9 +62,6 @@ if (isModEnabled('accounting')) {
 }
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-}
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
 }
 if (isModEnabled('eventorganization')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';

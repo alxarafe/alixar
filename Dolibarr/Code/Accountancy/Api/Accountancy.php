@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2015   Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2019   Cedric Ancelin          <icedo.anc@gmail.com>
- * Copyright (C) 2023   Lionel Vessiller		<lvessiller@open-dsi.fr>
+/* Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2019       Cedric Ancelin              <icedo.anc@gmail.com>
+ * Copyright (C) 2023       Lionel Vessiller		    <lvessiller@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Accountancy\Api;
+
+use Dolibarr\Code\Accountancy\Classes\AccountancyExport;
+use Dolibarr\Code\Accountancy\Classes\BookKeeping;
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
 /**
@@ -53,9 +58,6 @@ class Accountancy extends DolibarrApi
     {
         global $db, $langs;
         $this->db = $db;
-
-        require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/bookkeeping.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountancyexport.class.php';
 
         $langs->load('accountancy');
 

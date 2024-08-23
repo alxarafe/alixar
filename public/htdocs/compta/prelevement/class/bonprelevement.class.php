@@ -31,7 +31,7 @@
  * \brief      File of withdrawal receipts class
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';

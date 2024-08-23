@@ -38,6 +38,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
@@ -2405,7 +2407,6 @@ if ($id > 0) {
                                 $class = "center";
                             } elseif ($value == 'accountancy_code' || $value == 'accountancy_code_sell' || $value == 'accountancy_code_buy') {
                                 if (isModEnabled('accounting')) {
-                                    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
                                     $tmpaccountingaccount = new AccountingAccount($db);
                                     $tmpaccountingaccount->fetch(0, $valuetoshow, 1);
                                     $titletoshow = $langs->transnoentitiesnoconv("Pcgtype") . ': ' . $tmpaccountingaccount->pcg_type;

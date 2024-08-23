@@ -29,7 +29,7 @@
  *  \brief      File with class to manage cheque delivery receipts
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
 

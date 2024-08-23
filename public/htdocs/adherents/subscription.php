@@ -24,6 +24,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+
 /**
  *       \file       htdocs/adherents/subscription.php
  *       \ingroup    member
@@ -40,7 +42,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.clas
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
 
 $langs->loadLangs(array("companies", "bills", "members", "users", "mails", 'other'));
 

@@ -30,7 +30,7 @@
  *  \brief      File of class to manage mailman and spip actions
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';

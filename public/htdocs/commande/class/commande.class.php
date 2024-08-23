@@ -40,7 +40,7 @@
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 include_once DOL_DOCUMENT_ROOT . '/core/class/commonorder.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
+use Dolibarr\Core\Base\CommonObjectLine;
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';

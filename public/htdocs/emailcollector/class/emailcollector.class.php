@@ -28,7 +28,7 @@
 // Put here all includes required by your class file
 include_once DOL_DOCUMENT_ROOT . '/emailcollector/lib/emailcollector.lib.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 

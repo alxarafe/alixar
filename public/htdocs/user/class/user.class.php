@@ -40,7 +40,7 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonpeople.class.php';
 

@@ -27,7 +27,7 @@
  *      \brief      File of class to manage payment of social contributions
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
 
 

@@ -34,7 +34,7 @@
  *  \brief      File of class to manage bank accounts
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 
 
 /**
@@ -1990,7 +1990,7 @@ class Account extends CommonObject
 }
 
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
+use Dolibarr\Core\Base\CommonObjectLine;
 
 /**
  *  Class to manage bank transaction lines

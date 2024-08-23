@@ -28,7 +28,7 @@
  *      \brief      File for the ChargesSociales class
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 
 
 /**

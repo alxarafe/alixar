@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2014-2017  Olivier Geffroy     <jeff@jeffinfo.com>
- * Copyright (C) 2015-2022  Alexandre Spangaro  <aspangaro@open-dsi.fr>
- * Copyright (C) 2015-2020  Florian Henry       <florian.henry@open-concept.pro>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
+/* Copyright (C) 2014-2017  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2015-2022  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015-2020  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Accountancy\Classes;
+
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Accountancy\Classes\BookKeepingLine;
+use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Core\Base\CommonObjectLine;
+use DoliDB;
+
 /**
  * \file        htdocs/accountancy/class/bookkeeping.class.php
  * \ingroup     Accountancy (Double entries)
@@ -28,11 +37,7 @@
  */
 
 // Class
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/fiscalyear.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
 
 /**
  * Class to manage Ledger (General Ledger and Subledger)
@@ -3090,104 +3095,4 @@ class BookKeeping extends CommonObject
             return 1;
         }
     }
-}
-
-/**
- * Class BookKeepingLine
- */
-class BookKeepingLine extends CommonObjectLine
-{
-    /**
-     * @var int ID
-     */
-    public $id;
-
-    public $doc_date = null;
-    public $doc_type;
-    public $doc_ref;
-
-    /**
-     * @var int ID
-     */
-    public $fk_doc;
-
-    /**
-     * @var int ID
-     */
-    public $fk_docdet;
-
-    public $thirdparty_code;
-    public $subledger_account;
-    public $subledger_label;
-    public $numero_compte;
-    public $label_compte;
-    public $label_operation;
-    public $debit;
-    public $credit;
-
-    /**
-     * @var float Amount
-     * @deprecated see $amount
-     */
-    public $montant;
-
-    /**
-     * @var float   Amount
-     */
-    public $amount;
-
-    /**
-     * @var float   Multicurrency amount
-     */
-    public $multicurrency_amount;
-
-    /**
-     * @var string  Multicurrency code
-     */
-    public $multicurrency_code;
-
-    /**
-     * @var string Sens
-     */
-    public $sens;
-    public $lettering_code;
-    public $date_lettering;
-
-    /**
-     * @var int ID
-     */
-    public $fk_user_author;
-
-    public $import_key;
-    public $code_journal;
-    public $journal_label;
-    /**
-     * @var int accounting transaction id
-     */
-    public $piece_num;
-
-    /**
-     * @var integer|string date_creation
-     */
-    public $date_creation;
-
-    /**
-     * @var integer|string $date_modification;
-     */
-    public $date_modification;
-
-    /**
-     * @var integer|string $date_export;
-     */
-    public $date_export;
-
-    /**
-     * @var integer|string $date_validation;
-     */
-    public $date_validation;
-
-    /**
-     * @var integer|string $date_lim_reglement;
-     */
-    public $date_lim_reglement;
 }

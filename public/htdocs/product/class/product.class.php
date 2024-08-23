@@ -41,7 +41,7 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productbatch.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';

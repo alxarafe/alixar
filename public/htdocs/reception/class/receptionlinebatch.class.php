@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/fourn/class/fournisseur.commande.dispatch.class.php
  *  \ingroup    fournisseur stock
@@ -25,8 +27,6 @@
  *              Initially built by build_class_from_table on 2015-02-24 10:38
  */
 
-// Put here all includes required by your class file
-require_once DOL_DOCUMENT_ROOT . "/core/class/commonobject.class.php";
 require_once DOL_DOCUMENT_ROOT . "/reception/class/reception.class.php";
 
 

@@ -21,13 +21,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       cron/class/cronjob.class.php
  *  \ingroup    cron
  */
 
 // Put here all includes required by your class file
-require_once DOL_DOCUMENT_ROOT . "/core/class/commonobject.class.php";
+
 require_once DOL_DOCUMENT_ROOT . "/core/lib/date.lib.php";
 
 

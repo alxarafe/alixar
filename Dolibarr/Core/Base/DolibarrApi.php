@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2015   Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2016	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2020		Frédéric France		<frederic.france@netlogic.fr>
+/* Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2016	    Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2020		Frédéric France		        <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,8 +20,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Luracast\Restler\Restler;
+namespace Dolibarr\Core\Base;
+
 use Luracast\Restler\Defaults;
+use Luracast\Restler\Restler;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
 
@@ -31,21 +33,20 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
 class DolibarrApi
 {
     /**
-     * @var DoliDB        $db Database object
+     * @var Restler $r Restler object
+     */
+    public $r;
+    /**
+     * @var DoliDB $db Database object
      */
     protected $db;
 
     /**
-     * @var Restler     $r  Restler object
-     */
-    public $r;
-
-    /**
      * Constructor
      *
-     * @param   DoliDB  $db             Database handler
-     * @param   string  $cachedir       Cache dir
-     * @param   boolean $refreshCache   Update cache
+     * @param DoliDB $db Database handler
+     * @param string $cachedir Cache dir
+     * @param boolean $refreshCache Update cache
      */
     public function __construct($db, $cachedir = '', $refreshCache = false)
     {
@@ -72,18 +73,67 @@ class DolibarrApi
         //$this->r->setSupportedFormats('jsonFormat');
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
+    /**
+     * Check access by user to a given resource
+     *
+     * @param string $resource element to check
+     * @param int $resource_id Object ID if we want to check a particular record (optional) is linked to a owned thirdparty (optional).
+     * @param string $dbtablename 'TableName&SharedElement' with Tablename is table where object is stored. SharedElement is an optional key to define where to check entity. Not used if objectid is null (optional)
+     * @param string $feature2 Feature to check, second level of permission (optional). Can be or check with 'level1|level2'.
+     * @param string $dbt_keyfield Field name for socid foreign key if not fk_soc. Not used if objectid is null (optional)
+     * @param string $dbt_select Field name for select if not rowid. Not used if objectid is null (optional)
+     * @return bool
+     */
+    protected static function _checkAccessToResource($resource, $resource_id = 0, $dbtablename = '', $feature2 = '', $dbt_keyfield = 'fk_soc', $dbt_select = 'rowid')
+    {
+        // phpcs:enable
+        // Features/modules to check
+        $featuresarray = array($resource);
+        if (preg_match('/&/', $resource)) {
+            $featuresarray = explode("&", $resource);
+        } elseif (preg_match('/\|/', $resource)) {
+            $featuresarray = explode("|", $resource);
+        }
+
+        // More subfeatures to check
+        if (!empty($feature2)) {
+            $feature2 = explode("|", $feature2);
+        }
+
+        return checkUserAccessToObject(DolibarrApiAccess::$user, $featuresarray, $resource_id, $dbtablename, $feature2, $dbt_keyfield, $dbt_select);
+    }
+
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
+    /**
+     * Function to forge a SQL criteria from a Generic filter string.
+     * Function no more used. Kept for backward compatibility with old APIs of modules
+     *
+     * @param array $matches Array of found string by regex search.
+     *                              Each entry is 1 and only 1 criteria.
+     *                              Example: "t.ref:like:'SO-%'", "t.date_creation:<:'20160101'", "t.date_creation:<:'2016-01-01 12:30:00'", "t.nature:is:NULL", "t.field2:isnot:NULL"
+     * @return string               Forged criteria. Example: "t.field like 'abc%'"
+     */
+    protected static function _forge_criteria_callback($matches)
+    {
+        return dolForgeCriteriaCallback($matches);
+    }
+
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      * Check and convert a string depending on its type/name.
      *
-     * @param   string          $field      Field name
-     * @param   string|array    $value      Value to check/clean
-     * @param   Object          $object     Object
+     * @param string $field Field name
+     * @param string|array $value Value to check/clean
+     * @param Object $object Object
      * @return  string|array                Value cleaned
      */
     protected function _checkValForAPI($field, $value, $object)
     {
-		// phpcs:enable
+        // phpcs:enable
         if (!is_array($value)) {
             // Sanitize the value using its type declared into ->fields of $object
             if (!empty($object->fields) && !empty($object->fields[$field]) && !empty($object->fields[$field]['type'])) {
@@ -127,17 +177,18 @@ class DolibarrApi
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      * Filter properties that will be returned on object
      *
-     * @param   Object  $object         Object to clean
-     * @param   String  $properties     Comma separated list of properties names
+     * @param Object $object Object to clean
+     * @param String $properties Comma separated list of properties names
      * @return  Object                  Object with cleaned properties
      */
     protected function _filterObjectProperties($object, $properties)
     {
-		// phpcs:enable
+        // phpcs:enable
         // If properties is empty, we return all properties
         if (empty($properties)) {
             return $object;
@@ -175,16 +226,17 @@ class DolibarrApi
         return $object;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      * Clean sensible object datas
      *
-     * @param   Object  $object     Object to clean
+     * @param Object $object Object to clean
      * @return  Object              Object with cleaned properties
      */
     protected function _cleanObjectDatas($object)
     {
-		// phpcs:enable
+        // phpcs:enable
         // Remove $db object property for object
         unset($object->db);
         unset($object->isextrafieldmanaged);
@@ -356,66 +408,21 @@ class DolibarrApi
         return $object;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-    /**
-     * Check access by user to a given resource
-     *
-     * @param string    $resource       element to check
-     * @param int       $resource_id    Object ID if we want to check a particular record (optional) is linked to a owned thirdparty (optional).
-     * @param string    $dbtablename    'TableName&SharedElement' with Tablename is table where object is stored. SharedElement is an optional key to define where to check entity. Not used if objectid is null (optional)
-     * @param string    $feature2       Feature to check, second level of permission (optional). Can be or check with 'level1|level2'.
-     * @param string    $dbt_keyfield   Field name for socid foreign key if not fk_soc. Not used if objectid is null (optional)
-     * @param string    $dbt_select     Field name for select if not rowid. Not used if objectid is null (optional)
-     * @return bool
-     */
-    protected static function _checkAccessToResource($resource, $resource_id = 0, $dbtablename = '', $feature2 = '', $dbt_keyfield = 'fk_soc', $dbt_select = 'rowid')
-    {
-		// phpcs:enable
-        // Features/modules to check
-        $featuresarray = array($resource);
-        if (preg_match('/&/', $resource)) {
-            $featuresarray = explode("&", $resource);
-        } elseif (preg_match('/\|/', $resource)) {
-            $featuresarray = explode("|", $resource);
-        }
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
 
-        // More subfeatures to check
-        if (!empty($feature2)) {
-            $feature2 = explode("|", $feature2);
-        }
-
-        return checkUserAccessToObject(DolibarrApiAccess::$user, $featuresarray, $resource_id, $dbtablename, $feature2, $dbt_keyfield, $dbt_select);
-    }
-
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
     /**
      * Return if a $sqlfilters parameter is valid
      * Function no more used. Kept for backward compatibility with old APIs of modules
      *
-     * @param   string          $sqlfilters     sqlfilter string
-     * @param   string          $error          Error message
+     * @param string $sqlfilters sqlfilter string
+     * @param string $error Error message
      * @return  boolean|string                  True if valid, False if not valid
      */
     protected function _checkFilters($sqlfilters, &$error = '')
     {
-		// phpcs:enable
+        // phpcs:enable
         $firstandlastparenthesis = 0;
         return dolCheckFilters($sqlfilters, $error, $firstandlastparenthesis);
-    }
-
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-    /**
-     * Function to forge a SQL criteria from a Generic filter string.
-     * Function no more used. Kept for backward compatibility with old APIs of modules
-     *
-     * @param  array    $matches    Array of found string by regex search.
-     *                              Each entry is 1 and only 1 criteria.
-     *                              Example: "t.ref:like:'SO-%'", "t.date_creation:<:'20160101'", "t.date_creation:<:'2016-01-01 12:30:00'", "t.nature:is:NULL", "t.field2:isnot:NULL"
-     * @return string               Forged criteria. Example: "t.field like 'abc%'"
-     */
-    protected static function _forge_criteria_callback($matches)
-    {
-        return dolForgeCriteriaCallback($matches);
     }
 }

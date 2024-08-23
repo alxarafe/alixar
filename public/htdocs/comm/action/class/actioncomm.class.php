@@ -32,7 +32,7 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/cactioncomm.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncommreminder.class.php';
 

@@ -30,7 +30,7 @@
  */
 
 // Put here all includes required by your class file
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 
 
 /**
@@ -1093,7 +1093,7 @@ class Job extends CommonObject
 }
 
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
+use Dolibarr\Core\Base\CommonObjectLine;
 
 /**
  * Class JobLine. You can also remove this and generate a CRUD class for lines objects.

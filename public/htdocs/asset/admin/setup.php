@@ -19,6 +19,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountancySystem;
+
 /**
  * \file    htdocs/asset/admin/setup.php
  * \ingroup asset
@@ -26,6 +28,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/asset.lib.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
@@ -549,7 +553,6 @@ if ($action == 'edit') {
                     print '<input type="text" name="' . $constname . '" list="pcg_type_datalist" value="' . $selected . '">';
                     // autosuggest from existing account types if found
                     print '<datalist id="pcg_type_datalist">';
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountancysystem.class.php';
                     $accountsystem = new AccountancySystem($db);
                     $accountsystem->fetch(getDolGlobalInt('CHARTOFACCOUNTS'));
                     $sql = 'SELECT DISTINCT pcg_type FROM ' . MAIN_DB_PREFIX . 'accounting_account';
@@ -643,7 +646,6 @@ if ($action == 'edit') {
                     }
                 } elseif ($val['type'] == 'accountancy_code') {
                     if (isModEnabled('accounting')) {
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
                         $accountingaccount = new AccountingAccount($db);
                         $accountingaccount->fetch('', getDolGlobalString($constname), 1);
 

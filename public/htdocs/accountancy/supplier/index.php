@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+
 /**
  * \file        htdocs/accountancy/supplier/index.php
  * \ingroup     Accountancy (Double entries)
@@ -32,7 +34,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("compta", "bills", "other", "accountancy"));

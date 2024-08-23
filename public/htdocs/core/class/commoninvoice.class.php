@@ -28,7 +28,7 @@
  *       \brief      File of the superclass of invoices classes (customer and supplier)
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonincoterm.class.php';
 
 /**
@@ -1875,7 +1875,7 @@ abstract class CommonInvoice extends CommonObject
 
 
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
+use Dolibarr\Core\Base\CommonObjectLine;
 
 /**
  *  Parent class of all other business classes for details of elements (invoices, contracts, proposals, orders, ...)

@@ -23,7 +23,7 @@
  * \brief       This file is a class file for AssetAccountancyCodes
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  * Class for AssetAccountancyCodes

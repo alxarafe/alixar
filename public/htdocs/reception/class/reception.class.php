@@ -30,14 +30,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Core\Base\CommonObjectLine;
+
 /**
  *  \file       htdocs/reception/class/reception.class.php
  *  \ingroup    reception
  *  \brief      File for class to manage receptions
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
-require_once DOL_DOCUMENT_ROOT . "/core/class/commonobjectline.class.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonincoterm.class.php';
 if (isModEnabled("propal")) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';

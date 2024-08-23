@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2015 Marcos García       <marcosgdf@gmail.com>
+/* Copyright (C) 2005       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,11 +19,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *      \file       htdocs/bookmarks/class/bookmark.class.php
  *      \ingroup    bookmark
  *      \brief      File of class to manage bookmarks
  */
+
 
 
 /**

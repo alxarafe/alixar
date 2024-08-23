@@ -37,6 +37,7 @@
  *  \brief      Page for supplier invoice card (view, edit, validate)
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 // Load Dolibarr environment
@@ -64,10 +65,6 @@ if (isModEnabled('project')) {
 if (isModEnabled('variants')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';
 }
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
-}
-
 
 $langs->loadLangs(array('bills', 'compta', 'suppliers', 'companies', 'products', 'banks', 'admin'));
 if (isModEnabled('incoterm')) {

@@ -36,7 +36,7 @@
  *  \brief      File of contacts class
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonsocialnetworks.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonpeople.class.php';
 

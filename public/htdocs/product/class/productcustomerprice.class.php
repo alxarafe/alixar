@@ -26,8 +26,8 @@
  * \brief File of class to manage predefined price products or services by customer
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
+use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Core\Base\CommonObjectLine;
 
 /**
  * File of class to manage predefined price products or services by customer

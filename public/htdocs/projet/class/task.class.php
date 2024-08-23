@@ -30,8 +30,8 @@
  *      \brief      This file is a CRUD class file for Task (Create/Read/Update/Delete)
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
+use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Core\Base\CommonObjectLine;
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/timespent.class.php';
 

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2016       Jamal Elbaz         <jamelbaz@gmail.pro>
- * Copyright (C) 2016-2017	Alexandre Spangaro	<aspangaro@open-dsi.fr>
- * Copyright (C) 2018-2023  Frédéric France     <frederic.france@netlogic.fr>
+/* Copyright (C) 2016       Jamal Elbaz                 <jamelbaz@gmail.pro>
+ * Copyright (C) 2016-2017	Alexandre Spangaro	        <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018-2023  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+namespace Dolibarr\Code\Accountancy\Classes;
 
 /**
  * \file    htdocs/accountancy/class/accountancycategory.class.php

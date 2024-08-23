@@ -24,14 +24,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       ticket/class/ticket.class.php
  *  \ingroup    ticket
  *  \brief      Class file for object ticket
  */
 
-// Put here all includes required by your class file
-require_once DOL_DOCUMENT_ROOT . "/core/class/commonobject.class.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
 

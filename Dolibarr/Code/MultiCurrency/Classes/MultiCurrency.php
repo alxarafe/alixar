@@ -25,8 +25,8 @@
 
 namespace Dolibarr\Code\MultiCurrency\Classes;
 
-use CommonObject;
 use Dolibarr\Classes\stdClass;
+use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
 /**
@@ -35,8 +35,6 @@ use DoliDB;
  * \brief   This file is a CRUD class file (Create/Read/Update/Delete) for multicurrency
  */
 
-// Put here all includes required by your class file
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
 
 /**
  * Class Currency

@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+
 /**
  * \file        htdocs/accountancy/supplier/lines.php
  * \ingroup     Accountancy (Double entries)
@@ -34,7 +36,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.p
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';

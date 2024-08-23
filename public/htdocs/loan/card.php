@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+
 /**
  *   \file       htdocs/loan/card.php
  *   \ingroup    loan
@@ -37,7 +39,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
 
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
 }
 
 if (isModEnabled('project')) {

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017-2022  OpenDSI     <support@open-dsi.fr>
+/* Copyright (C) 2017-2022  OpenDSI                     <support@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -18,6 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+namespace Dolibarr\Code\Accountancy\Classes;
+
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Accountancy\Classes\BookKeeping;
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  * \file        htdocs/accountancy/class/accountingjournal.class.php
@@ -715,7 +721,6 @@ class AccountingJournal extends CommonObject
     public function writeIntoBookkeeping(User $user, &$journal_data = array(), $max_nb_errors = 10)
     {
         global $conf, $langs, $hookmanager;
-        require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/bookkeeping.class.php';
 
         $error = 0;
 
@@ -935,7 +940,6 @@ class AccountingJournal extends CommonObject
     {
         if (!isset(self::$accounting_account_cached[$account])) {
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-            require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
             $accountingaccount = new AccountingAccount($this->db);
             $result = $accountingaccount->fetch(null, $account, true);
             if ($result > 0) {

@@ -24,6 +24,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Accountancy\Classes\BookKeeping;
+use Dolibarr\Code\Accountancy\Classes\BookKeepingLine;
+use Dolibarr\Code\Accountancy\Classes\Lettering;
+
 /**
  * \file        htdocs/accountancy/bookkeeping/list.php
  * \ingroup     Accountancy (Double entries)
@@ -38,9 +43,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.p
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/bookkeeping.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/lettering.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("accountancy", "compta"));

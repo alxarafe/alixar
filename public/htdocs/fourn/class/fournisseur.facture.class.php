@@ -33,6 +33,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+
 /**
  *  \file       htdocs/fourn/class/fournisseur.facture.class.php
  *  \ingroup    fournisseur,facture
@@ -42,12 +44,11 @@
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commoninvoice.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
+use Dolibarr\Core\Base\CommonObjectLine;
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
 
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
 }
 
 /**

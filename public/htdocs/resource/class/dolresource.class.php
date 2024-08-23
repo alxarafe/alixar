@@ -20,13 +20,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/resource/class/dolresource.class.php
  *  \ingroup    resource
  *  \brief      Class file for resource object
  */
 
-require_once DOL_DOCUMENT_ROOT . "/core/class/commonobject.class.php";
 require_once DOL_DOCUMENT_ROOT . "/core/lib/functions2.lib.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonpeople.class.php';
 

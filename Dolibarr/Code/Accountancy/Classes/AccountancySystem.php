@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2013-2014 Olivier Geffroy       <jeff@jeffinfo.com>
- * Copyright (C) 2013-2014 Alexandre Spangaro    <aspangaro@open-dsi.fr>
- * Copyright (C) 2013-2014 Florian Henry		<florian.henry@open-concept.pro>
- * Copyright (C) 2023      Frédéric France       <frederic.france@netlogic.fr>
+/* Copyright (C) 2013-2014  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2014  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2013-2014  Florian Henry		        <florian.henry@open-concept.pro>
+ * Copyright (C) 2023       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+namespace Dolibarr\Code\Accountancy\Classes;
 
 /**
  * \file        htdocs/accountancy/class/accountancysystem.class.php

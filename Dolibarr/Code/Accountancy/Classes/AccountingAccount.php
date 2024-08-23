@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2013-2014  Olivier Geffroy      <jeff@jeffinfo.com>
- * Copyright (C) 2013-2024  Alexandre Spangaro   <aspangaro@easya.solutions>
- * Copyright (C) 2013-2021  Florian Henry        <florian.henry@open-concept.pro>
- * Copyright (C) 2014       Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015       Ari Elbaz (elarifr)  <github@accedinfo.com>
- * Copyright (C) 2018-2024  Frédéric France      <frederic.france@free.fr>
+/* Copyright (C) 2013-2014  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2013-2021  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2014       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Ari Elbaz (elarifr)         <github@accedinfo.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+namespace Dolibarr\Code\Accountancy\Classes;
+
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  \file       htdocs/accountancy/class/accountingaccount.class.php

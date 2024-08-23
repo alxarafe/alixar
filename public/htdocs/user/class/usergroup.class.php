@@ -31,7 +31,7 @@
  *   \brief      File of class to manage user groups
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 if (isModEnabled('ldap')) {
     require_once constant('DOL_DOCUMENT_ROOT') . "/core/class/ldap.class.php";
 }

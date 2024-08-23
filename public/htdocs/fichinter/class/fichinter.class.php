@@ -26,15 +26,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Core\Base\CommonObjectLine;
+
 /**
  *  \file       htdocs/fichinter/class/fichinter.class.php
  *  \ingroup    fichinter
  *  \brief      File for class to manage interventions
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
-
 
 /**
  *  Class to manage interventions

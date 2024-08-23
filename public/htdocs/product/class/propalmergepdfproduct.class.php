@@ -19,14 +19,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/product/class/propalmergepdfproduct.class.php
  *  \ingroup    product
  *  \brief      This file is an CRUD class file (Create/Read/Update/Delete)
  */
 
-require_once DOL_DOCUMENT_ROOT . "/core/class/commonobject.class.php";
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
+use Dolibarr\Core\Base\CommonObjectLine;
 
 
 /**

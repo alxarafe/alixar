@@ -25,7 +25,7 @@
  *    \brief      File of class to manage establishments
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobject.class.php';
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  * Class to manage establishments
