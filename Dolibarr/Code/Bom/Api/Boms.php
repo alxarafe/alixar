@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2015   Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2019 Maxime Kohlhaas <maxime@atm-consulting.fr>
- * Copyright (C) 2020-2024  Frédéric France		<frederic.france@free.fr>
- * Copyright (C) 2022		Christian Humpel		<christian.humpel@live.com>
+/* Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2019       Maxime Kohlhaas             <maxime@atm-consulting.fr>
+ * Copyright (C) 2020-2024  Frédéric France		        <frederic.france@free.fr>
+ * Copyright (C) 2022		Christian Humpel		    <christian.humpel@live.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+namespace Dolibarr\Code\Bom\Api;
 
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;

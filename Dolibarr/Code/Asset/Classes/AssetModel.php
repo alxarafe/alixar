@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021  Open-Dsi  			<support@open-dsi.fr>
+/* Copyright (C) 2017       Laurent Destailleur  <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Open-Dsi  			<support@open-dsi.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Asset\Classes;
+
 /**
  * \file        htdocs/asset/class/assetmodel.class.php
  * \ingroup     asset
@@ -28,6 +30,8 @@
 
 // Put here all includes required by your class file
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+
 //require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
 //require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 

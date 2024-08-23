@@ -1,9 +1,10 @@
 <?php
 
-/* Copyright (C) 2016   Xebax Christy           <xebax@wanadoo.fr>
- * Copyright (C) 2016	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2016   Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2023   Romain Neil             <contact@romain-neil.fr>
+/* Copyright (C) 2016       Xebax Christy               <xebax@wanadoo.fr>
+ * Copyright (C) 2016	    Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2016       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2023       Romain Neil                 <contact@romain-neil.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+namespace Dolibarr\Code\Api\Api;
 
 use Luracast\Restler\RestException;
 

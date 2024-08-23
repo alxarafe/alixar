@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2002       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2008	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2009-2017	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2016		Charlie Benke			<charlie@patas-monkey.com>
- * Copyright (C) 2018-2019  Thibault Foucart		<support@ptibogxiv.net>
- * Copyright (C) 2021     	Waël Almoman            <info@almoman.com>
+/* Copyright (C) 2002       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2008	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2017	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2016		Charlie Benke			    <charlie@patas-monkey.com>
+ * Copyright (C) 2018-2019  Thibault Foucart		    <support@ptibogxiv.net>
+ * Copyright (C) 2021     	Waël Almoman                <info@almoman.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+namespace Dolibarr\Code\Adherents\Classes;
 
 /**
  *  \file       htdocs/adherents/class/adherent_type.class.php

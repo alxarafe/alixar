@@ -1,13 +1,12 @@
 <?php
 
-/* Copyright (C) 2016   Xebax Christy           <xebax@wanadoo.fr>
- * Copyright (C) 2016	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2017	Regis Houssin	        <regis.houssin@inodbox.com>
- * Copyright (C) 2017	Neil Orley	            <neil.orley@oeris.fr>
- * Copyright (C) 2018-2021   Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2018-2022   Thibault FOUCART        <support@ptibogxiv.net>
- * Copyright (C) 2024        Jon Bendtsen            <jon.bendtsen.github@jonb.dk>
- *
+/* Copyright (C) 2016       Xebax Christy               <xebax@wanadoo.fr>
+ * Copyright (C) 2016	    Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2017	    Regis Houssin	            <regis.houssin@inodbox.com>
+ * Copyright (C) 2017	    Neil Orley	                <neil.orley@oeris.fr>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2018-2022  Thibault FOUCART            <support@ptibogxiv.net>
+ * Copyright (C) 2024       Jon Bendtsen                <jon.bendtsen.github@jonb.dk>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +22,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+namespace Dolibarr\Code\Api\Api;
 
 use Luracast\Restler\RestException;
 

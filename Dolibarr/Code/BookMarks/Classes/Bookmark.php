@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\BookMarks\Classes;
+
 use Dolibarr\Core\Base\CommonObject;
 
 /**
@@ -26,8 +28,6 @@ use Dolibarr\Core\Base\CommonObject;
  *      \ingroup    bookmark
  *      \brief      File of class to manage bookmarks
  */
-
-
 
 /**
  *      Class to manage bookmarks
