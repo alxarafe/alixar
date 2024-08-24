@@ -154,8 +154,7 @@ $coldisplay++;
 
     if (!$situationinvoicelinewithparent) {
         // editor wysiwyg
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-        $nbrows = ROWS_2;
+            $nbrows = ROWS_2;
         if (getDolGlobalString('MAIN_INPUT_DESC_HEIGHT')) {
             $nbrows = getDolGlobalString('MAIN_INPUT_DESC_HEIGHT');
         }

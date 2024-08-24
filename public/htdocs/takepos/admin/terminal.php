@@ -352,8 +352,7 @@ if (isModEnabled('stock')) {
 }
 
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-    $formproject = new FormProjets($db);
+        $formproject = new FormProjets($db);
     print '<tr class="oddeven"><td>' . $langs->trans("CashDeskDefaultProject") . '</td><td>';
     print img_picto('', 'project', 'class="pictofixedwidth"');
     // select_projects($socid = -1, $selected = '', $htmlname = 'projectid', $maxlength = 16, $option_only = 0, $show_empty = 1, $discard_closed = 0, $forcefocus = 0, $disabled = 0, $mode = 0, $filterkey = '', $nooutput = 0, $forceaddid = 0, $morecss = '', $htmlid = '', $morefilter = '')

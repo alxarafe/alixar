@@ -1089,8 +1089,7 @@ class BOM extends CommonObject
             $datas['label'] = '<br><b>' . $langs->trans('Label') . ':</b> ' . $this->label;
         }
         if (!empty($this->fk_product) && $this->fk_product > 0) {
-            include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-            $product = new Product($this->db);
+                        $product = new Product($this->db);
             $resultFetch = $product->fetch($this->fk_product);
             if ($resultFetch > 0) {
                 $datas['product'] = "<br><b>" . $langs->trans("Product") . '</b>: ' . $product->ref . ' - ' . $product->label;
@@ -1403,8 +1402,7 @@ class BOM extends CommonObject
     {
         global $conf, $hookmanager;
 
-        include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-        $this->unit_cost = 0;
+                $this->unit_cost = 0;
         $this->total_cost = 0;
 
         $parameters = array();

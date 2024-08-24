@@ -1417,8 +1417,7 @@ class Utils
         dol_syslog("Utils::cleanUnfinishedCronjob Starting cleaning");
 
         // Import Cronjob class if not present
-        require_once constant('DOL_DOCUMENT_ROOT') . '/cron/class/cronjob.class.php';
-
+        
         // Get this job object
         $this_job = new Cronjob($db);
         $this_job->fetch(-1, 'Utils', 'cleanUnfinishedCronjob');

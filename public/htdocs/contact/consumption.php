@@ -287,7 +287,6 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $doc_number = 'c.ref';
     $thirdTypeSelect = 'supplier';
 } elseif ($type_element == 'contract') {    // Order
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
     $documentstatic = new Contrat($db);
     $documentstaticline = new ContratLigne($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_contrat as dateprint, d.statut as status, tc.libelle as type_contact_label, ';

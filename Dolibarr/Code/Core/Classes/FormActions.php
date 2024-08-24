@@ -21,6 +21,9 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Comm\Classes\CActionComm;
+use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
 /**
@@ -180,8 +183,7 @@ class FormActions
     {
         global $langs, $conf, $user, $hookmanager;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-
+        
         $sortfield = 'a.datep,a.id';
         $sortorder = 'DESC,DESC';
 

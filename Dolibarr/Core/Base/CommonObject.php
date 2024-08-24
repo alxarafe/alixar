@@ -39,6 +39,7 @@ namespace Dolibarr\Core\Base;
 
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Interfaces;
@@ -145,7 +146,7 @@ abstract class CommonObject
      * @var array<string,array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string}>  Array with all fields and their property. Do not use it as a static var. It may be modified by constructor.
      */
     public $fields = array();
-/**
+    /**
      * @var array<string,array<string,string>>  Array to store alternative languages values of object
      *                                          Note: call fetchValuesForExtraLanguages() before using this
      */
@@ -416,15 +417,15 @@ abstract class CommonObject
      * @var float       Multicurrency total VAT amount (TVA = "Taxe sur la Valeur Ajoutée" in French)
      */
     public $multicurrency_total_tva;  // Private to call DolDeprecationHandler
-        /**
+    /**
      * @var float       Multicurrency total amount including taxes (TTC = "Toutes Taxes Comprises" in French)
      */
     public $multicurrency_total_ttc;  // Internal value for deprecation
-/**
+    /**
      * @var float Multicurrency total localta1
      */
     public $multicurrency_total_localtax1;
-/**
+    /**
      * @var float Multicurrency total localtax2
      */
     public $multicurrency_total_localtax2;
@@ -674,7 +675,7 @@ abstract class CommonObject
      * @var string      Column name of the ref field.
      */
     protected $table_ref_field = '';
-/**
+    /**
      * @var int|string Internal to detect deprecated access
      */
     protected $depr_cond_reglement;
@@ -723,7 +724,7 @@ abstract class CommonObject
      * @see $origin_object
      */
     private $commandeFournisseur;
-/**
+    /**
      * @var int|string      Payment terms ID
      * @deprecated  Use $cond_reglement_id instead - Kept for compatibility
      * @see $cond_reglement_id
@@ -6201,8 +6202,7 @@ abstract class CommonObject
     public function fetch_product()
     {
         // phpcs:enable
-        include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-
+        
         // @phan-suppress-next-line PhanUndeclaredProperty
         if (empty($this->fk_product)) {
             return 0;
@@ -8211,7 +8211,6 @@ abstract class CommonObject
 					})';
                     $out .= "</script>";
                 }
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
                 $doleditor = new DolEditor($keyprefix . $key . $keysuffix, $value, '', 200, 'dolibarr_notes', 'In', false, false, false, ROWS_5, '90%');
                 $out .= (string)$doleditor->Create(1, '', true, '', '', '', $morecss);
             } else {
@@ -8219,7 +8218,6 @@ abstract class CommonObject
             }
         } elseif (preg_match('/^html/', (string)$type)) {
             if (!preg_match('/search_/', $keyprefix)) {     // If keyprefix is search_ or search_options_, we must just use a simple text field
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
                 $doleditor = new DolEditor($keyprefix . $key . $keysuffix, $value, '', 200, 'dolibarr_notes', 'In', false, false, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_5, '90%');
                 $out = (string)$doleditor->Create(1, '', true, '', '', $moreparam, $morecss);
             } else {
@@ -9956,7 +9954,6 @@ abstract class CommonObject
                     break;
                 case 'task':
                 case 'project_task':
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 
                     $project_result = $this->fetch_projet();
                     if ($project_result >= 0) {

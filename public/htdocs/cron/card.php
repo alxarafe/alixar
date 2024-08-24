@@ -33,7 +33,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
 // Cron job libraries
-require_once DOL_DOCUMENT_ROOT . "/cron/class/cronjob.class.php";
 require_once DOL_DOCUMENT_ROOT . "/core/class/html.formcron.class.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/cron.lib.php';
 

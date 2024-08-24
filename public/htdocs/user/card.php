@@ -1320,7 +1320,6 @@ if ($action == 'create' || $action == 'adduserldap') {
     // Signature
     print '<tr><td class="tdtop">' . $langs->trans("Signature") . '</td>';
     print '<td class="wordbreak">';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
     $doleditor = new DolEditor('signature', GETPOST('signature', 'restricthtml'), '', 138, 'dolibarr_notes', 'In', true, $acceptlocallinktomedia, !getDolGlobalString('FCKEDITOR_ENABLE_USERSIGN') ? 0 : 1, ROWS_4, '90%');
     print $doleditor->Create(1);
@@ -1330,7 +1329,6 @@ if ($action == 'create' || $action == 'adduserldap') {
     print '<tr><td class="tdtop">';
     print $langs->trans("NotePublic");
     print '</td><td>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('note_public', GETPOSTISSET('note_public') ? GETPOST('note_public', 'restricthtml') : '', '', 100, 'dolibarr_notes', '', false, true, getDolGlobalString('FCKEDITOR_ENABLE_NOTE_PUBLIC'), ROWS_3, '90%');
     $doleditor->Create();
     print "</td></tr>\n";
@@ -1339,7 +1337,6 @@ if ($action == 'create' || $action == 'adduserldap') {
     print '<tr><td class="tdtop">';
     print $langs->trans("NotePrivate");
     print '</td><td>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('note_private', GETPOSTISSET('note_private') ? GETPOST('note_private', 'restricthtml') : '', '', 100, 'dolibarr_notes', '', false, true, getDolGlobalString('FCKEDITOR_ENABLE_NOTE_PRIVATE'), ROWS_3, '90%');
     $doleditor->Create();
     print "</td></tr>\n";
@@ -2846,8 +2843,7 @@ if ($action == 'create' || $action == 'adduserldap') {
             print '<tr><td class="tdtop">' . $langs->trans("Signature") . '</td>';
             print '<td>';
             if ($caneditfield) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
+            
                 $doleditor = new DolEditor('signature', $object->signature, '', 138, 'dolibarr_notes', 'In', false, $acceptlocallinktomedia, !getDolGlobalString('FCKEDITOR_ENABLE_USERSIGN') ? 0 : 1, ROWS_4, '90%');
                 print $doleditor->Create(1);
             } else {

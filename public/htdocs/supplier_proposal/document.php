@@ -30,7 +30,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/supplier_proposal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';

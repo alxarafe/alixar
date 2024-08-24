@@ -274,7 +274,6 @@ class ExpenseReportRule extends CommonObject
      */
     public function getUserName()
     {
-        include_once DOL_DOCUMENT_ROOT . '/user/class/user.class.php';
 
         if ($this->fk_user > 0) {
             $u = new User($this->db);

@@ -31,10 +31,6 @@ use DoliDB;
  *       \brief      Class file to manage forms into resource module
  */
 
-require_once DOL_DOCUMENT_ROOT . "/core/class/html.form.class.php";
-require_once DOL_DOCUMENT_ROOT . "/resource/class/dolresource.class.php";
-
-
 /**
  * Class to manage forms for the module resource
  *

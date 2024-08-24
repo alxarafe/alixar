@@ -498,7 +498,6 @@ if ($action == 'create') {
     print '<tr><td>' . $langs->trans("Comment") . '</td>';
     print '<td>';
     // Editor wysiwyg
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('account_comment', (GETPOST("account_comment") ? GETPOST("account_comment") : $object->comment), '', 90, 'dolibarr_notes', '', false, true, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_4, '90%');
     $doleditor->Create();
     print '</td></tr>';
@@ -1058,8 +1057,7 @@ if ($action == 'create') {
         print '<tr><td class="tdtop">' . $langs->trans("Comment") . '</td>';
         print '<td>';
         // Editor wysiwyg
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-        $doleditor = new DolEditor('account_comment', (GETPOST("account_comment") ? GETPOST("account_comment") : $object->comment), '', 90, 'dolibarr_notes', '', false, true, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_4, '95%');
+            $doleditor = new DolEditor('account_comment', (GETPOST("account_comment") ? GETPOST("account_comment") : $object->comment), '', 90, 'dolibarr_notes', '', false, true, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_4, '95%');
         $doleditor->Create();
         print '</td></tr>';
 

@@ -165,8 +165,7 @@ if ($action == 'confirm_deletefile' && $confirm == 'yes' && !empty($permissionto
             setEventMessages($langs->trans("ErrorFailToDeleteFile", $urlfile), null, 'errors');
         }
     } elseif ($linkid) {    // delete of external link
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
-        $link = new Link($db);
+            $link = new Link($db);
         $link->fetch($linkid);
         $res = $link->delete($user);
 
@@ -193,7 +192,6 @@ if ($action == 'confirm_deletefile' && $confirm == 'yes' && !empty($permissionto
         }
     }
 } elseif ($action == 'confirm_updateline' && GETPOST('save', 'alpha') && GETPOST('link', 'alpha') && !empty($permissiontoadd)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
 
     $link = new Link($db);
     $f = $link->fetch(GETPOSTINT('linkid'));

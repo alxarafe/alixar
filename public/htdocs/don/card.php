@@ -37,8 +37,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
 $langs->loadLangs(array('bills', 'companies', 'donations', 'users'));

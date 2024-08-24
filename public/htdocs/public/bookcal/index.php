@@ -49,11 +49,9 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bookcal/class/calendar.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/bookcal/class/availabilities.class.php';
 
 use Dolibarr\Code\Contact\Classes\Contact;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 
 // Security check
 if (!isModEnabled('bookcal')) {

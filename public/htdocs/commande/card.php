@@ -48,7 +48,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/commande/modules_com
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
 
 if (isModEnabled("propal")) {
@@ -56,8 +55,7 @@ if (isModEnabled("propal")) {
 }
 
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 if (isModEnabled('variants')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';

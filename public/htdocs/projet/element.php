@@ -34,14 +34,11 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 if (isModEnabled('agenda')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-}
+    }
 if (isModEnabled('bank')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
 }
@@ -53,7 +50,6 @@ if (isModEnabled('order')) {
     use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 if (isModEnabled('contract')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 }
 if (isModEnabled('deplacement')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
@@ -92,8 +88,7 @@ if (isModEnabled('supplier_invoice')) {
 if (isModEnabled('supplier_order')) {
 }
 if (isModEnabled('supplier_proposal')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
-}
+    }
 if (isModEnabled('tax')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
 }

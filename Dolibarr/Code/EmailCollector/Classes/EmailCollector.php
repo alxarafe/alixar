@@ -22,6 +22,11 @@
 namespace Dolibarr\Code\EmailCollector\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
+use OAuth\Common\Consumer\Credentials;
+use OAuth\Common\Storage\DoliStorage;
+use Webklex\PHPIMAP\ClientManager;
+use Webklex\PHPIMAP\Exceptions\ConnectionFailedException;
+use Webklex\PHPIMAP\Exceptions\InvalidWhereQueryCriteriaException;
 
 /**
  *    \file        htdocs/emailcollector/class/emailcollector.class.php
@@ -33,68 +38,31 @@ use Dolibarr\Core\Base\CommonObject;
 include_once constant('DOL_DOCUMENT_ROOT') . '/emailcollector/lib/emailcollector.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';                   // Customer Proposal
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';                    // Sale Order
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';               // Customer Invoice
-use Dolibarr\Code\Contact\Classes\Contact;
 
-// Contact / Address
-require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';                // Shipping / Delivery
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';           // Purchase Order
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';            // Purchase Invoice
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';                       // Project
-require_once constant('DOL_DOCUMENT_ROOT') . '/reception/class/reception.class.php';                  // Reception
-require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentcandidature.class.php';   // Recruiting
-use Dolibarr\Code\Societe\Classes\Societe;
-
-// Third-Party
-require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';  // Supplier Proposal
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';                        // Ticket
-//require_once DOL_DOCUMENT_ROOT .'/expensereport/class/expensereport.class.php';        // Expense Report
-//require_once DOL_DOCUMENT_ROOT .'/holiday/class/holiday.class.php';                    // Holidays (leave request)
-
-
-use Webklex\PHPIMAP\ClientManager;
-use Webklex\PHPIMAP\Exceptions\ConnectionFailedException;
-use Webklex\PHPIMAP\Exceptions\InvalidWhereQueryCriteriaException;
-
-use OAuth\Common\Storage\DoliStorage;
-use OAuth\Common\Consumer\Credentials;
 
 /**
  * Class for EmailCollector
  */
 class EmailCollector extends CommonObject
 {
+    const STATUS_DISABLED = 0;
+    const STATUS_ENABLED = 1;
     /**
      * @var string ID to identify managed object
      */
     public $element = 'emailcollector';
-
     /**
      * @var string Name of table without prefix where object is stored
      */
     public $table_element = 'emailcollector_emailcollector';
-
     /**
      * @var string String with name of icon for emailcollector. Must be the part after the 'object_' into object_emailcollector.png
      */
     public $picto = 'email';
-
     /**
      * @var string    Field with ID of parent key if this field has a parent
      */
     public $fk_element = 'fk_emailcollector';
-
-    /**
-     * @var array<string, array<string>>    List of child tables. To test if we can delete object.
-     */
-    protected $childtables = array();
-
-    /**
-     * @var string[]    List of child tables. To know object to delete on cascade.
-     */
-    protected $childtablesoncascade = array('emailcollector_emailcollectorfilter', 'emailcollector_emailcollectoraction');
 
 
     /**
@@ -121,19 +89,19 @@ class EmailCollector extends CommonObject
      * @var array<string,array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string}>  Array with all fields and their property. Do not use it as a static var. It may be modified by constructor.
      */
     public $fields = array(
-        'rowid'         => array('type' => 'integer', 'label' => 'TechnicalID', 'visible' => 2, 'enabled' => 1, 'position' => 1, 'notnull' => 1, 'index' => 1),
-        'entity'        => array('type' => 'integer', 'label' => 'Entity', 'enabled' => 1, 'visible' => 0, 'default' => 1, 'notnull' => 1, 'index' => 1, 'position' => 20),
-        'ref'           => array('type' => 'varchar(128)', 'label' => 'Ref', 'enabled' => 1, 'visible' => 1, 'notnull' => 1, 'showoncombobox' => 1, 'index' => 1, 'position' => 10, 'searchall' => 1, 'help' => 'Example: MyCollector1', 'csslist' => 'tdoverflowmax200'),
-        'label'         => array('type' => 'varchar(255)', 'label' => 'Label', 'visible' => 1, 'enabled' => 1, 'position' => 30, 'notnull' => -1, 'searchall' => 1, 'help' => 'Example: My Email collector', 'csslist' => 'tdoverflowmax150', 'tdcss' => 'titlefieldmiddle'),
-        'description'   => array('type' => 'text', 'label' => 'Description', 'visible' => -1, 'enabled' => 1, 'position' => 60, 'notnull' => -1, 'cssview' => 'small', 'csslist' => 'small tdoverflowmax200'),
-        'host'          => array('type' => 'varchar(255)', 'label' => 'EMailHost', 'visible' => 1, 'enabled' => 1, 'position' => 90, 'notnull' => 1, 'searchall' => 1, 'comment' => "IMAP server", 'help' => 'Example: imap.gmail.com', 'csslist' => 'tdoverflowmax125'),
-        'port'          => array('type' => 'varchar(10)', 'label' => 'EMailHostPort', 'visible' => 1, 'enabled' => 1, 'position' => 91, 'notnull' => 1, 'searchall' => 0, 'comment' => "IMAP server port", 'help' => 'Example: 993', 'csslist' => 'tdoverflowmax50', 'default' => '993'),
-        'imap_encryption'  => array('type' => 'varchar(16)', 'label' => 'ImapEncryption', 'visible' => -1, 'enabled' => 1, 'position' => 92, 'searchall' => 0, 'comment' => "IMAP encryption", 'help' => 'ImapEncryptionHelp', 'arrayofkeyval' => array('ssl' => 'SSL', 'tls' => 'TLS', 'notls' => 'NOTLS'), 'default' => 'ssl'),
-        'hostcharset'   => array('type' => 'varchar(16)', 'label' => 'HostCharset', 'visible' => -1, 'enabled' => 1, 'position' => 93, 'notnull' => 0, 'searchall' => 0, 'comment' => "IMAP server charset", 'help' => 'Example: "UTF-8" (May be "US-ASCII" with some Office365)', 'default' => 'UTF-8'),
-        'norsh'  => array('type' => 'integer', 'label' => 'NoRSH', 'visible' => -1, 'enabled' => "!getDolGlobalInt('MAIN_IMAP_USE_PHPIMAP')", 'position' => 94, 'searchall' => 0, 'help' => 'NoRSHHelp', 'arrayofkeyval' => array(0 => 'No', 1 => 'Yes'), 'default' => 0),
-        'acces_type'     => array('type' => 'integer', 'label' => 'AuthenticationMethod', 'visible' => -1, 'enabled' => "getDolGlobalInt('MAIN_IMAP_USE_PHPIMAP')", 'position' => 101, 'notnull' => 1, 'index' => 1, 'comment' => "IMAP login type", 'arrayofkeyval' => array('0' => 'loginPassword', '1' => 'oauthToken'), 'default' => '0', 'help' => ''),
-        'login'         => array('type' => 'varchar(128)', 'label' => 'Login', 'visible' => -1, 'enabled' => 1, 'position' => 102, 'notnull' => -1, 'index' => 1, 'comment' => "IMAP login", 'help' => 'Example: myaccount@gmail.com'),
-        'password'      => array('type' => 'password', 'label' => 'Password', 'visible' => -1, 'enabled' => "1", 'position' => 103, 'notnull' => -1, 'comment' => "IMAP password", 'help' => 'WithGMailYouCanCreateADedicatedPassword'),
+        'rowid' => array('type' => 'integer', 'label' => 'TechnicalID', 'visible' => 2, 'enabled' => 1, 'position' => 1, 'notnull' => 1, 'index' => 1),
+        'entity' => array('type' => 'integer', 'label' => 'Entity', 'enabled' => 1, 'visible' => 0, 'default' => 1, 'notnull' => 1, 'index' => 1, 'position' => 20),
+        'ref' => array('type' => 'varchar(128)', 'label' => 'Ref', 'enabled' => 1, 'visible' => 1, 'notnull' => 1, 'showoncombobox' => 1, 'index' => 1, 'position' => 10, 'searchall' => 1, 'help' => 'Example: MyCollector1', 'csslist' => 'tdoverflowmax200'),
+        'label' => array('type' => 'varchar(255)', 'label' => 'Label', 'visible' => 1, 'enabled' => 1, 'position' => 30, 'notnull' => -1, 'searchall' => 1, 'help' => 'Example: My Email collector', 'csslist' => 'tdoverflowmax150', 'tdcss' => 'titlefieldmiddle'),
+        'description' => array('type' => 'text', 'label' => 'Description', 'visible' => -1, 'enabled' => 1, 'position' => 60, 'notnull' => -1, 'cssview' => 'small', 'csslist' => 'small tdoverflowmax200'),
+        'host' => array('type' => 'varchar(255)', 'label' => 'EMailHost', 'visible' => 1, 'enabled' => 1, 'position' => 90, 'notnull' => 1, 'searchall' => 1, 'comment' => "IMAP server", 'help' => 'Example: imap.gmail.com', 'csslist' => 'tdoverflowmax125'),
+        'port' => array('type' => 'varchar(10)', 'label' => 'EMailHostPort', 'visible' => 1, 'enabled' => 1, 'position' => 91, 'notnull' => 1, 'searchall' => 0, 'comment' => "IMAP server port", 'help' => 'Example: 993', 'csslist' => 'tdoverflowmax50', 'default' => '993'),
+        'imap_encryption' => array('type' => 'varchar(16)', 'label' => 'ImapEncryption', 'visible' => -1, 'enabled' => 1, 'position' => 92, 'searchall' => 0, 'comment' => "IMAP encryption", 'help' => 'ImapEncryptionHelp', 'arrayofkeyval' => array('ssl' => 'SSL', 'tls' => 'TLS', 'notls' => 'NOTLS'), 'default' => 'ssl'),
+        'hostcharset' => array('type' => 'varchar(16)', 'label' => 'HostCharset', 'visible' => -1, 'enabled' => 1, 'position' => 93, 'notnull' => 0, 'searchall' => 0, 'comment' => "IMAP server charset", 'help' => 'Example: "UTF-8" (May be "US-ASCII" with some Office365)', 'default' => 'UTF-8'),
+        'norsh' => array('type' => 'integer', 'label' => 'NoRSH', 'visible' => -1, 'enabled' => "!getDolGlobalInt('MAIN_IMAP_USE_PHPIMAP')", 'position' => 94, 'searchall' => 0, 'help' => 'NoRSHHelp', 'arrayofkeyval' => array(0 => 'No', 1 => 'Yes'), 'default' => 0),
+        'acces_type' => array('type' => 'integer', 'label' => 'AuthenticationMethod', 'visible' => -1, 'enabled' => "getDolGlobalInt('MAIN_IMAP_USE_PHPIMAP')", 'position' => 101, 'notnull' => 1, 'index' => 1, 'comment' => "IMAP login type", 'arrayofkeyval' => array('0' => 'loginPassword', '1' => 'oauthToken'), 'default' => '0', 'help' => ''),
+        'login' => array('type' => 'varchar(128)', 'label' => 'Login', 'visible' => -1, 'enabled' => 1, 'position' => 102, 'notnull' => -1, 'index' => 1, 'comment' => "IMAP login", 'help' => 'Example: myaccount@gmail.com'),
+        'password' => array('type' => 'password', 'label' => 'Password', 'visible' => -1, 'enabled' => "1", 'position' => 103, 'notnull' => -1, 'comment' => "IMAP password", 'help' => 'WithGMailYouCanCreateADedicatedPassword'),
         'oauth_service' => array('type' => 'varchar(128)', 'label' => 'oauthService', 'visible' => -1, 'enabled' => "getDolGlobalInt('MAIN_IMAP_USE_PHPIMAP')", 'position' => 104, 'notnull' => 0, 'index' => 1, 'comment' => "IMAP login oauthService", 'arrayofkeyval' => array(), 'help' => 'TokenMustHaveBeenCreated'),
         'source_directory' => array('type' => 'varchar(255)', 'label' => 'MailboxSourceDirectory', 'visible' => -1, 'enabled' => 1, 'position' => 109, 'notnull' => 1, 'default' => 'Inbox', 'csslist' => 'tdoverflowmax100', 'help' => 'Example: INBOX, [Gmail]/Spam, [Gmail]/Draft, [Gmail]/Brouillons, [Gmail]/Sent Mail, [Gmail]/Messages envoyés, ...'),
         'target_directory' => array('type' => 'varchar(255)', 'label' => 'MailboxTargetDirectory', 'visible' => 1, 'enabled' => 1, 'position' => 110, 'notnull' => 0, 'csslist' => 'tdoverflowmax100', 'help' => "EmailCollectorTargetDir"),
@@ -232,10 +200,14 @@ class EmailCollector extends CommonObject
     public $actions;
 
     public $debuginfo;
-
-    const STATUS_DISABLED = 0;
-    const STATUS_ENABLED = 1;
-
+    /**
+     * @var array<string, array<string>>    List of child tables. To test if we can delete object.
+     */
+    protected $childtables = array();
+    /**
+     * @var string[]    List of child tables. To know object to delete on cascade.
+     */
+    protected $childtablesoncascade = array('emailcollector_emailcollectorfilter', 'emailcollector_emailcollectoraction');
 
     /**
      * Constructor
@@ -297,65 +269,10 @@ class EmailCollector extends CommonObject
     }
 
     /**
-     * Create object into database
-     *
-     * @param  User $user      User that creates
-     * @param  int  $notrigger 0=launch triggers after, 1=disable triggers
-     * @return int             Return integer <0 if KO, Id of created object if OK
-     */
-    public function create(User $user, $notrigger = 0)
-    {
-        global $langs;
-
-        // Check parameters
-        if ($this->host && preg_match('/^http:/i', trim($this->host))) {
-            $langs->load("errors");
-            $this->error = $langs->trans("ErrorHostMustNotStartWithHttp", $this->host);
-            return -1;
-        }
-
-        include_once DOL_DOCUMENT_ROOT . '/core/lib/security.lib.php';
-        $this->password = dolEncrypt($this->password);
-
-        $id = $this->createCommon($user, $notrigger);
-
-        $this->password = dolDecrypt($this->password);
-
-        if (is_array($this->filters) && count($this->filters)) {
-            $emailcollectorfilter = new EmailCollectorFilter($this->db);
-
-            foreach ($this->filters as $filter) {
-                $emailcollectorfilter->type = $filter['type'];
-                $emailcollectorfilter->rulevalue = $filter['rulevalue'];
-                $emailcollectorfilter->fk_emailcollector = $this->id;
-                $emailcollectorfilter->status = $filter['status'];
-
-                $emailcollectorfilter->create($user);
-            }
-        }
-
-        if (is_array($this->actions) && count($this->actions)) {
-            $emailcollectoroperation = new EmailCollectorAction($this->db);
-
-            foreach ($this->actions as $operation) {
-                $emailcollectoroperation->type = $operation['type'];
-                $emailcollectoroperation->actionparam = $operation['actionparam'];
-                $emailcollectoroperation->fk_emailcollector = $this->id;
-                $emailcollectoroperation->status = $operation['status'];
-                $emailcollectoroperation->position = $operation['position'];
-
-                $emailcollectoroperation->create($user);
-            }
-        }
-
-        return $id;
-    }
-
-    /**
      * Clone and object into another one
      *
-     * @param   User    $user       User that creates
-     * @param   int     $fromid     Id of object to clone
+     * @param User $user User that creates
+     * @param int $fromid Id of object to clone
      * @return  mixed               New object created, <0 if KO
      */
     public function createFromClone(User $user, $fromid)
@@ -426,21 +343,69 @@ class EmailCollector extends CommonObject
     }
 
     /**
-     * Load object in memory from the database
+     * Fetch filters
      *
-     * @param int    $id   Id object
-     * @param string $ref  Ref
-     * @return int         Return integer <0 if KO, 0 if not found, >0 if OK
+     * @return  int     Return integer <0 if KO, >0 if OK
+     * @see fetchActions()
      */
-    public function fetch($id, $ref = null)
+    public function fetchFilters()
     {
-        $result = $this->fetchCommon($id, $ref);
+        $this->filters = array();
 
-        include_once DOL_DOCUMENT_ROOT . '/core/lib/security.lib.php';
-        $this->password = dolDecrypt($this->password);
+        $sql = 'SELECT rowid, type, rulevalue, status';
+        $sql .= ' FROM ' . MAIN_DB_PREFIX . 'emailcollector_emailcollectorfilter';
+        $sql .= ' WHERE fk_emailcollector = ' . ((int)$this->id);
+        //$sql.= ' ORDER BY position';
 
-        //if ($result > 0 && !empty($this->table_element_line)) $this->fetchLines();
-        return $result;
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            $num = $this->db->num_rows($resql);
+            $i = 0;
+            while ($i < $num) {
+                $obj = $this->db->fetch_object($resql);
+                $this->filters[$obj->rowid] = array('id' => $obj->rowid, 'type' => $obj->type, 'rulevalue' => $obj->rulevalue, 'status' => $obj->status);
+                $i++;
+            }
+            $this->db->free($resql);
+        } else {
+            dol_print_error($this->db);
+        }
+
+        return 1;
+    }
+
+    /**
+     * Fetch actions
+     *
+     * @return  int     Return integer <0 if KO, >0 if OK
+     * @see fetchFilters()
+     */
+    public function fetchActions()
+    {
+        $this->actions = array();
+
+        $sql = 'SELECT rowid, type, actionparam, status';
+        $sql .= ' FROM ' . MAIN_DB_PREFIX . 'emailcollector_emailcollectoraction';
+        $sql .= ' WHERE fk_emailcollector = ' . ((int)$this->id);
+        $sql .= ' ORDER BY position';
+
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            $num = $this->db->num_rows($resql);
+            $i = 0;
+            while ($i < $num) {
+                $obj = $this->db->fetch_object($resql);
+                $this->actions[$obj->rowid] = array('id' => $obj->rowid, 'type' => $obj->type, 'actionparam' => $obj->actionparam, 'status' => $obj->status);
+                $i++;
+            }
+            $this->db->free($resql);
+
+            return 1;
+        } else {
+            dol_print_error($this->db);
+
+            return -1;
+        }
     }
 
     /**
@@ -460,70 +425,13 @@ class EmailCollector extends CommonObject
      */
 
     /**
-     * Fetch all account and load objects into an array
+     * Create object into database
      *
-     * @param   User    $user           User
-     * @param   int     $activeOnly     filter if active
-     * @param   string  $sortfield      field for sorting
-     * @param   string  $sortorder      sorting order
-     * @param   int     $limit          sort limit
-     * @param   int     $page           page to start on
-     * @return  array   Array with key => EmailCollector object
+     * @param User $user User that creates
+     * @param int $notrigger 0=launch triggers after, 1=disable triggers
+     * @return int             Return integer <0 if KO, Id of created object if OK
      */
-    public function fetchAll(User $user, $activeOnly = 0, $sortfield = 's.rowid', $sortorder = 'ASC', $limit = 100, $page = 0)
-    {
-        global $langs;
-
-        $obj_ret = array();
-
-        $sql = "SELECT s.rowid";
-        $sql .= " FROM " . MAIN_DB_PREFIX . "emailcollector_emailcollector as s";
-        $sql .= ' WHERE s.entity IN (' . getEntity('emailcollector') . ')';
-        if ($activeOnly) {
-            $sql .= " AND s.status = 1";
-        }
-        $sql .= $this->db->order($sortfield, $sortorder);
-        if ($limit) {
-            if ($page < 0) {
-                $page = 0;
-            }
-            $offset = $limit * $page;
-
-            $sql .= $this->db->plimit($limit + 1, $offset);
-        }
-
-        $result = $this->db->query($sql);
-        if ($result) {
-            $num = $this->db->num_rows($result);
-            $i = 0;
-            while ($i < $num) {
-                $obj = $this->db->fetch_object($result);
-                $emailcollector_static = new EmailCollector($this->db);
-                if ($emailcollector_static->fetch($obj->rowid)) {
-                    $obj_ret[] = $emailcollector_static;
-                }
-                $i++;
-            }
-        } else {
-            $this->errors[] = 'EmailCollector::fetchAll Error when retrieve emailcollector list';
-            dol_syslog('EmailCollector::fetchAll Error when retrieve emailcollector list', LOG_ERR);
-            $ret = -1;
-        }
-        if (!count($obj_ret)) {
-            dol_syslog('EmailCollector::fetchAll No emailcollector found', LOG_DEBUG);
-        }
-
-        return $obj_ret;
-    }
-
-    /**
-     * Update object into database
-     *
-     * @param  User $user      User that modifies
-     * @param  int  $notrigger 0=launch triggers after, 1=disable triggers
-     * @return int             Return integer <0 if KO, >0 if OK
-     */
-    public function update(User $user, $notrigger = 0)
+    public function create(User $user, $notrigger = 0)
     {
         global $langs;
 
@@ -537,18 +445,45 @@ class EmailCollector extends CommonObject
         include_once DOL_DOCUMENT_ROOT . '/core/lib/security.lib.php';
         $this->password = dolEncrypt($this->password);
 
-        $result = $this->updateCommon($user, $notrigger);
+        $id = $this->createCommon($user, $notrigger);
 
         $this->password = dolDecrypt($this->password);
 
-        return $result;
+        if (is_array($this->filters) && count($this->filters)) {
+            $emailcollectorfilter = new EmailCollectorFilter($this->db);
+
+            foreach ($this->filters as $filter) {
+                $emailcollectorfilter->type = $filter['type'];
+                $emailcollectorfilter->rulevalue = $filter['rulevalue'];
+                $emailcollectorfilter->fk_emailcollector = $this->id;
+                $emailcollectorfilter->status = $filter['status'];
+
+                $emailcollectorfilter->create($user);
+            }
+        }
+
+        if (is_array($this->actions) && count($this->actions)) {
+            $emailcollectoroperation = new EmailCollectorAction($this->db);
+
+            foreach ($this->actions as $operation) {
+                $emailcollectoroperation->type = $operation['type'];
+                $emailcollectoroperation->actionparam = $operation['actionparam'];
+                $emailcollectoroperation->fk_emailcollector = $this->id;
+                $emailcollectoroperation->status = $operation['status'];
+                $emailcollectoroperation->position = $operation['position'];
+
+                $emailcollectoroperation->create($user);
+            }
+        }
+
+        return $id;
     }
 
     /**
      * Delete object in database
      *
-     * @param User  $user       User that deletes
-     * @param int   $notrigger  0=launch triggers after, 1=disable triggers
+     * @param User $user User that deletes
+     * @param int $notrigger 0=launch triggers after, 1=disable triggers
      * @return int              Return integer <0 if KO, >0 if OK
      */
     public function delete(User $user, $notrigger = 0)
@@ -559,12 +494,12 @@ class EmailCollector extends CommonObject
     /**
      *  Return a link to the object card (with optionally the picto)
      *
-     *  @param  int     $withpicto                  Include picto in link (0=No picto, 1=Include picto into link, 2=Only picto)
-     *  @param  string  $option                     On what the link point to ('nolink', ...)
-     *  @param  int     $notooltip                  1=Disable tooltip
-     *  @param  string  $morecss                    Add more css on link
-     *  @param  int     $save_lastsearch_value      -1=Auto, 0=No save of lastsearch_values when clicking, 1=Save lastsearch_values whenclicking
-     *  @return string                              String with URL
+     * @param int $withpicto Include picto in link (0=No picto, 1=Include picto into link, 2=Only picto)
+     * @param string $option On what the link point to ('nolink', ...)
+     * @param int $notooltip 1=Disable tooltip
+     * @param string $morecss Add more css on link
+     * @param int $save_lastsearch_value -1=Auto, 0=No save of lastsearch_values when clicking, 1=Save lastsearch_values whenclicking
+     * @return string                              String with URL
      */
     public function getNomUrl($withpicto = 0, $option = '', $notooltip = 0, $morecss = '', $save_lastsearch_value = -1)
     {
@@ -634,25 +569,24 @@ class EmailCollector extends CommonObject
     /**
      *  Return label of the status
      *
-     *  @param  int     $mode          0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
-     *  @return string                 Label of status
+     * @param int $mode 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
+     * @return string                 Label of status
      */
     public function getLibStatut($mode = 0)
     {
         return $this->LibStatut($this->status, $mode);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *  Return the status
      *
-     *  @param  int     $status        Id status
-     *  @param  int     $mode          0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
-     *  @return string                 Label of status
+     * @param int $status Id status
+     * @param int $mode 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
+     * @return string                 Label of status
      */
     public function LibStatut($status, $mode = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         if (empty($this->labelStatus) || empty($this->labelStatusShort)) {
             global $langs;
             //$langs->load("mymodule");
@@ -670,18 +604,20 @@ class EmailCollector extends CommonObject
         return dolGetStatus($this->labelStatus[$status], $this->labelStatusShort[$status], '', $statusType, $mode);
     }
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Charge les information d'ordre info dans l'objet commande
      *
-     *  @param  int     $id       Id of order
-     *  @return void
+     * @param int $id Id of order
+     * @return void
      */
     public function info($id)
     {
         $sql = 'SELECT rowid, date_creation as datec, tms as datem,';
         $sql .= ' fk_user_creat, fk_user_modif';
         $sql .= ' FROM ' . MAIN_DB_PREFIX . $this->table_element . ' as t';
-        $sql .= ' WHERE t.rowid = ' . ((int) $id);
+        $sql .= ' WHERE t.rowid = ' . ((int)$id);
         $result = $this->db->query($sql);
         if ($result) {
             if ($this->db->num_rows($result)) {
@@ -691,7 +627,7 @@ class EmailCollector extends CommonObject
 
                 $this->user_creation_id = $obj->fk_user_creat;
                 $this->user_modification_id = $obj->fk_user_modif;
-                $this->date_creation     = $this->db->jdate($obj->datec);
+                $this->date_creation = $this->db->jdate($obj->datec);
                 $this->date_modification = empty($obj->datem) ? '' : $this->db->jdate($obj->datem);
             }
 
@@ -713,138 +649,6 @@ class EmailCollector extends CommonObject
         $this->login = 'alogin';
 
         return $this->initAsSpecimenCommon();
-    }
-
-    /**
-     * Fetch filters
-     *
-     * @return  int     Return integer <0 if KO, >0 if OK
-     * @see fetchActions()
-     */
-    public function fetchFilters()
-    {
-        $this->filters = array();
-
-        $sql = 'SELECT rowid, type, rulevalue, status';
-        $sql .= ' FROM ' . MAIN_DB_PREFIX . 'emailcollector_emailcollectorfilter';
-        $sql .= ' WHERE fk_emailcollector = ' . ((int) $this->id);
-        //$sql.= ' ORDER BY position';
-
-        $resql = $this->db->query($sql);
-        if ($resql) {
-            $num = $this->db->num_rows($resql);
-            $i = 0;
-            while ($i < $num) {
-                $obj = $this->db->fetch_object($resql);
-                $this->filters[$obj->rowid] = array('id' => $obj->rowid, 'type' => $obj->type, 'rulevalue' => $obj->rulevalue, 'status' => $obj->status);
-                $i++;
-            }
-            $this->db->free($resql);
-        } else {
-            dol_print_error($this->db);
-        }
-
-        return 1;
-    }
-
-    /**
-     * Fetch actions
-     *
-     * @return  int     Return integer <0 if KO, >0 if OK
-     * @see fetchFilters()
-     */
-    public function fetchActions()
-    {
-        $this->actions = array();
-
-        $sql = 'SELECT rowid, type, actionparam, status';
-        $sql .= ' FROM ' . MAIN_DB_PREFIX . 'emailcollector_emailcollectoraction';
-        $sql .= ' WHERE fk_emailcollector = ' . ((int) $this->id);
-        $sql .= ' ORDER BY position';
-
-        $resql = $this->db->query($sql);
-        if ($resql) {
-            $num = $this->db->num_rows($resql);
-            $i = 0;
-            while ($i < $num) {
-                $obj = $this->db->fetch_object($resql);
-                $this->actions[$obj->rowid] = array('id' => $obj->rowid, 'type' => $obj->type, 'actionparam' => $obj->actionparam, 'status' => $obj->status);
-                $i++;
-            }
-            $this->db->free($resql);
-
-            return 1;
-        } else {
-            dol_print_error($this->db);
-
-            return -1;
-        }
-    }
-
-
-    /**
-     * Return the connectstring to use with IMAP connection function
-     *
-     * @return string
-     */
-    public function getConnectStringIMAP()
-    {
-        // Connect to IMAP
-        $flags = '/service=imap'; // IMAP
-        if (getDolGlobalString('IMAP_FORCE_TLS')) {
-            $flags .= '/tls';
-        } elseif (empty($this->imap_encryption) || ($this->imap_encryption == 'ssl' && getDolGlobalString('IMAP_FORCE_NOSSL'))) {
-            $flags .= '';
-        } else {
-            $flags .= '/' . $this->imap_encryption;
-        }
-
-        $flags .= '/novalidate-cert';
-        //$flags.='/readonly';
-        //$flags.='/debug';
-        if (!empty($this->norsh) || getDolGlobalString('IMAP_FORCE_NORSH')) {
-            $flags .= '/norsh';
-        }
-        //Used in shared mailbox from Office365
-        if (!empty($this->login) && strpos($this->login, '/') != false) {
-            $partofauth = explode('/', $this->login);
-            $flags .= '/authuser=' . $partofauth[0] . '/user=' . $partofauth[1];
-        }
-
-        $connectstringserver = '{' . $this->host . ':' . $this->port . $flags . '}';
-
-        return $connectstringserver;
-    }
-
-    /**
-     * Convert str to UTF-7 imap. Used to forge mailbox names.
-     *
-     * @param   string $str         String to encode
-     * @return  string|false        Encoded string, or false if error
-     */
-    public function getEncodedUtf7($str)
-    {
-        if (function_exists('mb_convert_encoding')) {
-            // change spaces by entropy because mb_convert fail with spaces
-            $str = preg_replace("/ /", "xxxSPACExxx", $str);        // the replacement string must be valid in utf7 so _ can't be used
-            $str = preg_replace("/\[Gmail\]/", "xxxGMAILxxx", $str);    // the replacement string must be valid in utf7 so _ can't be used
-            // if mb_convert work
-            if ($str = mb_convert_encoding($str, "UTF-7")) {
-                // change characters
-                $str = preg_replace("/\+A/", "&A", $str);
-                // change to spaces again
-                $str = preg_replace("/xxxSPACExxx/", " ", $str);
-                // change to [Gmail] again
-                $str = preg_replace("/xxxGMAILxxx/", "[Gmail]", $str);
-                return $str;
-            } else {
-                // print error and return false
-                $this->error = "error: is not possible to encode this string '" . $str . "'";
-                return false;
-            }
-        } else {
-            return $str;
-        }
     }
 
     /**
@@ -877,211 +681,84 @@ class EmailCollector extends CommonObject
     }
 
     /**
-     * overwitePropertiesOfObject
+     * Fetch all account and load objects into an array
      *
-     * @param   object  $object         Current object we will set ->properties
-     * @param   string  $actionparam    Action parameters
-     * @param   string  $messagetext    Body
-     * @param   string  $subject        Subject
-     * @param   string  $header         Header
-     * @param   string  $operationslog  String with logs of operations done
-     * @return  int                     0=OK, Nb of error if error
+     * @param User $user User
+     * @param int $activeOnly filter if active
+     * @param string $sortfield field for sorting
+     * @param string $sortorder sorting order
+     * @param int $limit sort limit
+     * @param int $page page to start on
+     * @return  array   Array with key => EmailCollector object
      */
-    private function overwritePropertiesOfObject(&$object, $actionparam, $messagetext, $subject, $header, &$operationslog)
+    public function fetchAll(User $user, $activeOnly = 0, $sortfield = 's.rowid', $sortorder = 'ASC', $limit = 100, $page = 0)
     {
-        global $conf, $langs;
+        global $langs;
 
-        $errorforthisaction = 0;
+        $obj_ret = array();
 
-        // set output lang
-        $outputlangs = $langs;
-        $newlang = '';
-        if (getDolGlobalInt('MAIN_MULTILANGS') && empty($newlang) && GETPOST('lang_id', 'aZ09')) {
-            $newlang = GETPOST('lang_id', 'aZ09');
+        $sql = "SELECT s.rowid";
+        $sql .= " FROM " . MAIN_DB_PREFIX . "emailcollector_emailcollector as s";
+        $sql .= ' WHERE s.entity IN (' . getEntity('emailcollector') . ')';
+        if ($activeOnly) {
+            $sql .= " AND s.status = 1";
         }
-        if (getDolGlobalInt('MAIN_MULTILANGS') && empty($newlang)) {
-            $newlang = !empty($object->thirdparty->default_lang) ? $object->thirdparty->default_lang : $newlang;
-        }
-        if (!empty($newlang)) {
-            $outputlangs = new Translate('', $conf);
-            $outputlangs->setDefaultLang($newlang);
-        }
-
-        // Overwrite values with values extracted from source email
-        // $this->actionparam = 'opportunity_status=123;abc=EXTRACT:BODY:....'
-        $arrayvaluetouse = dolExplodeIntoArray($actionparam, '(\n\r|\r|\n|;)', '=');
-
-        $tmp = array();
-
-        // Loop on each property set into actionparam
-        foreach ($arrayvaluetouse as $propertytooverwrite => $valueforproperty) {
-            $tmpclass = '';
-            $tmpproperty = '';
-            $tmparray = explode('.', $propertytooverwrite);
-            if (count($tmparray) == 2) {
-                $tmpclass = $tmparray[0];
-                $tmpproperty = $tmparray[1];
-            } else {
-                $tmpproperty = $tmparray[0];
+        $sql .= $this->db->order($sortfield, $sortorder);
+        if ($limit) {
+            if ($page < 0) {
+                $page = 0;
             }
-            if ($tmpclass && ($tmpclass != $object->element)) {
-                continue; // Property is for another type of object
-            }
+            $offset = $limit * $page;
 
-            //if (property_exists($object, $tmpproperty) || preg_match('/^options_/', $tmpproperty))
-            if ($tmpproperty) {
-                $sourcestring = '';
-                $sourcefield = '';
-                $regexstring = '';
-                //$transformationstring='';
-                $regforregex = array();
-                if (preg_match('/^EXTRACT:([a-zA-Z0-9_]+):(.*):([^:])$/', $valueforproperty, $regforregex)) {
-                    $sourcefield = $regforregex[1];
-                    $regexstring = $regforregex[2];
-                    //$transofrmationstring=$regforregex[3];
-                } elseif (preg_match('/^EXTRACT:([a-zA-Z0-9_]+):(.*)$/', $valueforproperty, $regforregex)) {
-                    $sourcefield = $regforregex[1];
-                    $regexstring = $regforregex[2];
+            $sql .= $this->db->plimit($limit + 1, $offset);
+        }
+
+        $result = $this->db->query($sql);
+        if ($result) {
+            $num = $this->db->num_rows($result);
+            $i = 0;
+            while ($i < $num) {
+                $obj = $this->db->fetch_object($result);
+                $emailcollector_static = new EmailCollector($this->db);
+                if ($emailcollector_static->fetch($obj->rowid)) {
+                    $obj_ret[] = $emailcollector_static;
                 }
-
-                if (!empty($sourcefield) && !empty($regexstring)) {
-                    if (strtolower($sourcefield) == 'body') {
-                        $sourcestring = $messagetext;
-                    } elseif (strtolower($sourcefield) == 'subject') {
-                        $sourcestring = $subject;
-                    } elseif (strtolower($sourcefield) == 'header') {
-                        $sourcestring = $header;
-                    }
-
-                    if ($sourcestring) {
-                        $regforval = array();
-                        $regexoptions = '';
-                        if (strtolower($sourcefield) == 'body') {
-                            $regexoptions = 'ms'; // The m means ^ and $ char is valid at each new line. The s means the char '.' is valid for new lines char too
-                        }
-                        if (strtolower($sourcefield) == 'header') {
-                            $regexoptions = 'm'; // The m means ^ and $ char is valid at each new line.
-                        }
-
-                        //var_dump($tmpproperty.' - '.$regexstring.' - '.$regexoptions.' - '.$sourcestring);
-                        if (preg_match('/' . $regexstring . '/' . $regexoptions, $sourcestring, $regforval)) {
-                            // Overwrite param $tmpproperty
-                            $valueextracted = isset($regforval[count($regforval) - 1]) ? trim($regforval[count($regforval) - 1]) : null;
-                            if (strtolower($sourcefield) == 'header') {     // extract from HEADER
-                                if (preg_match('/^options_/', $tmpproperty)) {
-                                    $object->array_options[preg_replace('/^options_/', '', $tmpproperty)] = $this->decodeSMTPSubject($valueextracted);
-                                } else {
-                                    if (property_exists($object, $tmpproperty)) {
-                                        $object->$tmpproperty = $this->decodeSMTPSubject($valueextracted);
-                                    } else {
-                                        $tmp[$tmpproperty] = $this->decodeSMTPSubject($valueextracted);
-                                    }
-                                }
-                            } else {    // extract from BODY
-                                if (preg_match('/^options_/', $tmpproperty)) {
-                                    $object->array_options[preg_replace('/^options_/', '', $tmpproperty)] = $this->decodeSMTPSubject($valueextracted);
-                                } else {
-                                    if (property_exists($object, $tmpproperty)) {
-                                        $object->$tmpproperty = $this->decodeSMTPSubject($valueextracted);
-                                    } else {
-                                        $tmp[$tmpproperty] = $this->decodeSMTPSubject($valueextracted);
-                                    }
-                                }
-                            }
-                            if (preg_match('/^options_/', $tmpproperty)) {
-                                $operationslog .= '<br>Regex /' . dol_escape_htmltag($regexstring) . '/' . dol_escape_htmltag($regexoptions) . ' into ' . strtolower($sourcefield) . ' -> found ' . dol_escape_htmltag(dol_trunc($object->array_options[preg_replace('/^options_/', '', $tmpproperty)], 128));
-                            } else {
-                                if (property_exists($object, $tmpproperty)) {
-                                    $operationslog .= '<br>Regex /' . dol_escape_htmltag($regexstring) . '/' . dol_escape_htmltag($regexoptions) . ' into ' . strtolower($sourcefield) . ' -> found ' . dol_escape_htmltag(dol_trunc($object->$tmpproperty, 128));
-                                } else {
-                                    $operationslog .= '<br>Regex /' . dol_escape_htmltag($regexstring) . '/' . dol_escape_htmltag($regexoptions) . ' into ' . strtolower($sourcefield) . ' -> found ' . dol_escape_htmltag(dol_trunc($tmp[$tmpproperty], 128));
-                                }
-                            }
-                        } else {
-                            // Regex not found
-                            if (property_exists($object, $tmpproperty)) {
-                                $object->$tmpproperty = null;
-                            } else {
-                                $tmp[$tmpproperty] = null;
-                            }
-
-                            $operationslog .= '<br>Regex /' . dol_escape_htmltag($regexstring) . '/' . dol_escape_htmltag($regexoptions) . ' into ' . strtolower($sourcefield) . ' -> not found, so property ' . dol_escape_htmltag($tmpproperty) . ' is set to null.';
-                        }
-                    } else {
-                        // Nothing can be done for this param
-                        $errorforthisaction++;
-                        $this->error = 'The extract rule to use to overwrite properties has on an unknown source (must be HEADER, SUBJECT or BODY)';
-                        $this->errors[] = $this->error;
-
-                        $operationslog .= '<br>' . $this->error;
-                    }
-                } elseif (preg_match('/^(SET|SETIFEMPTY):(.*)$/', $valueforproperty, $regforregex)) {
-                    $valuecurrent = '';
-                    if (preg_match('/^options_/', $tmpproperty)) {
-                        $valuecurrent = $object->array_options[preg_replace('/^options_/', '', $tmpproperty)];
-                    } else {
-                        if (property_exists($object, $tmpproperty)) {
-                            $valuecurrent = $object->$tmpproperty;
-                        } else {
-                            $valuecurrent = $tmp[$tmpproperty];
-                        }
-                    }
-
-                    if ($regforregex[1] == 'SET' || empty($valuecurrent)) {
-                        $valuetouse = $regforregex[2];
-                        $substitutionarray = getCommonSubstitutionArray($outputlangs, 0, null, $object);
-                        complete_substitutions_array($substitutionarray, $outputlangs, $object);
-                        $matcharray = array();
-                        preg_match_all('/__([a-z0-9]+(?:_[a-z0-9]+)?)__/i', $valuetouse, $matcharray);
-                        //var_dump($tmpproperty.' - '.$object->$tmpproperty.' - '.$valuetouse); var_dump($matcharray);
-                        if (is_array($matcharray[1])) {    // $matcharray[1] is an array with the list of substitution key found without the __X__ syntax into the SET entry
-                            foreach ($matcharray[1] as $keytoreplace) {
-                                if ($keytoreplace) {
-                                    if (preg_match('/^options_/', $keytoreplace)) {
-                                        $substitutionarray['__' . $keytoreplace . '__'] = $object->array_options[preg_replace('/^options_/', '', $keytoreplace)];
-                                    } else {
-                                        if (property_exists($object, $keytoreplace)) {
-                                            $substitutionarray['__' . $keytoreplace . '__'] = $object->$keytoreplace;
-                                        } else {
-                                            $substitutionarray['__' . $keytoreplace . '__'] = $tmp[$keytoreplace];
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        //var_dump($substitutionarray);
-                        //dol_syslog('substitutionarray='.var_export($substitutionarray, true));
-
-                        $valuetouse = make_substitutions($valuetouse, $substitutionarray);
-                        if (preg_match('/^options_/', $tmpproperty)) {
-                            $object->array_options[preg_replace('/^options_/', '', $tmpproperty)] = $valuetouse;
-
-                            $operationslog .= '<br>Set value ' . dol_escape_htmltag($valuetouse) . ' into object->array_options[' . dol_escape_htmltag(preg_replace('/^options_/', '', $tmpproperty)) . ']';
-                        } else {
-                            if (property_exists($object, $tmpproperty)) {
-                                $object->$tmpproperty = $valuetouse;
-                            } else {
-                                $tmp[$tmpproperty] = $valuetouse;
-                            }
-
-                            $operationslog .= '<br>Set value ' . dol_escape_htmltag($valuetouse) . ' into object->' . dol_escape_htmltag($tmpproperty);
-                        }
-                    }
-                } else {
-                    $errorforthisaction++;
-                    $this->error = 'Bad syntax for description of action parameters: ' . $actionparam;
-                    $this->errors[] = $this->error;
-                }
+                $i++;
             }
+        } else {
+            $this->errors[] = 'EmailCollector::fetchAll Error when retrieve emailcollector list';
+            dol_syslog('EmailCollector::fetchAll Error when retrieve emailcollector list', LOG_ERR);
+            $ret = -1;
+        }
+        if (!count($obj_ret)) {
+            dol_syslog('EmailCollector::fetchAll No emailcollector found', LOG_DEBUG);
         }
 
-        return $errorforthisaction;
+        return $obj_ret;
+    }
+
+    /**
+     * Load object in memory from the database
+     *
+     * @param int $id Id object
+     * @param string $ref Ref
+     * @return int         Return integer <0 if KO, 0 if not found, >0 if OK
+     */
+    public function fetch($id, $ref = null)
+    {
+        $result = $this->fetchCommon($id, $ref);
+
+        include_once DOL_DOCUMENT_ROOT . '/core/lib/security.lib.php';
+        $this->password = dolDecrypt($this->password);
+
+        //if ($result > 0 && !empty($this->table_element_line)) $this->fetchLines();
+        return $result;
     }
 
     /**
      * Execute collect for current collector loaded previously with fetch.
      *
-     * @param   int     $mode       0=Mode production, 1=Mode test (read IMAP and try SQL update then rollback), 2=Mode test with no SQL updates
+     * @param int $mode 0=Mode production, 1=Mode test (read IMAP and try SQL update then rollback), 2=Mode test with no SQL updates
      * @return  int                 Return integer <0 if KO, >0 if OK
      */
     public function doCollectOneCollector($mode = 0)
@@ -1091,7 +768,6 @@ class EmailCollector extends CommonObject
 
         //$conf->global->SYSLOG_FILE = 'DOL_DATA_ROOT/dolibarr_mydedicatedlofile.log';
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
         if (getDolGlobalString('MAIN_IMAP_USE_PHPIMAP')) {
             require_once constant('DOL_DOCUMENT_ROOT') . '/includes/webklex/php-imap/vendor/autoload.php';
         }
@@ -1165,16 +841,16 @@ class EmailCollector extends CommonObject
                     && array_key_exists('name', $supportedoauth2array[$keyforsupportedoauth2array])
                     && !empty($supportedoauth2array[$keyforsupportedoauth2array]['name'])
                 ) {
-                        $OAUTH_SERVICENAME = $supportedoauth2array[$keyforsupportedoauth2array]['name'] . (!empty($keyforprovider) ? '-' . $keyforprovider : '');
+                    $OAUTH_SERVICENAME = $supportedoauth2array[$keyforsupportedoauth2array]['name'] . (!empty($keyforprovider) ? '-' . $keyforprovider : '');
                 }
 
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/includes/OAuth/bootstrap.php';
-                    //$debugtext = "Host: ".$this->host."<br>Port: ".$this->port."<br>Login: ".$this->login."<br>Password: ".$this->password."<br>access type: ".$this->acces_type."<br>oauth service: ".$this->oauth_service."<br>Max email per collect: ".$this->maxemailpercollect;
-                    //dol_syslog($debugtext);
+                require_once constant('DOL_DOCUMENT_ROOT') . '/includes/OAuth/bootstrap.php';
+                //$debugtext = "Host: ".$this->host."<br>Port: ".$this->port."<br>Login: ".$this->login."<br>Password: ".$this->password."<br>access type: ".$this->acces_type."<br>oauth service: ".$this->oauth_service."<br>Max email per collect: ".$this->maxemailpercollect;
+                //dol_syslog($debugtext);
 
-                    $token = '';
+                $token = '';
 
-                    $storage = new DoliStorage($db, $conf, $keyforprovider);
+                $storage = new DoliStorage($db, $conf, $keyforprovider);
 
                 try {
                     $tokenobj = $storage->retrieveAccessToken($OAUTH_SERVICENAME);
@@ -1192,7 +868,7 @@ class EmailCollector extends CommonObject
                             getDolGlobalString('OAUTH_' . $this->oauth_service . '_ID'),
                             getDolGlobalString('OAUTH_' . $this->oauth_service . '_SECRET'),
                             getDolGlobalString('OAUTH_' . $this->oauth_service . '_URLAUTHORIZE')
-                            );
+                        );
                         $serviceFactory = new \OAuth\ServiceFactory();
                         $oauthname = explode('-', $OAUTH_SERVICENAME);
                         // ex service is Google-Emails we need only the first part Google
@@ -1217,30 +893,30 @@ class EmailCollector extends CommonObject
                     return -1;
                 }
 
-                    $cm = new ClientManager();
-                    $client = $cm->make([
-                        'host'           => $this->host,
-                        'port'           => $this->port,
-                        'encryption'     => !empty($this->imap_encryption) ? $this->imap_encryption : false,
-                        'validate_cert'  => true,
-                        'protocol'       => 'imap',
-                        'username'       => $this->login,
-                        'password'       => $token,
-                        'authentication' => "oauth",
-                    ]);
+                $cm = new ClientManager();
+                $client = $cm->make([
+                    'host' => $this->host,
+                    'port' => $this->port,
+                    'encryption' => !empty($this->imap_encryption) ? $this->imap_encryption : false,
+                    'validate_cert' => true,
+                    'protocol' => 'imap',
+                    'username' => $this->login,
+                    'password' => $token,
+                    'authentication' => "oauth",
+                ]);
             } else {
                 // Mode LOGIN (login/pass) with PHP-IMAP
                 $this->debuginfo .= 'doCollectOneCollector is using method MAIN_IMAP_USE_PHPIMAP=1, access_type=0 (LOGIN)<br>';
 
                 $cm = new ClientManager();
                 $client = $cm->make([
-                    'host'           => $this->host,
-                    'port'           => $this->port,
-                    'encryption'     => !empty($this->imap_encryption) ? $this->imap_encryption : false,
-                    'validate_cert'  => true,
-                    'protocol'       => 'imap',
-                    'username'       => $this->login,
-                    'password'       => $this->password,
+                    'host' => $this->host,
+                    'port' => $this->port,
+                    'encryption' => !empty($this->imap_encryption) ? $this->imap_encryption : false,
+                    'validate_cert' => true,
+                    'protocol' => 'imap',
+                    'username' => $this->login,
+                    'password' => $this->password,
                     'authentication' => "login",
                 ]);
             }
@@ -1716,7 +1392,7 @@ class EmailCollector extends CommonObject
                     // $operationslog .= " - ".dol_escape_htmltag((string) $imapemail);
                     $msgid = str_replace(array('<', '>'), '', $overview['message_id']);
                 } else {
-                    $operationslog .= " - " . dol_escape_htmltag((string) $imapemail);
+                    $operationslog .= " - " . dol_escape_htmltag((string)$imapemail);
                     $msgid = str_replace(array('<', '>'), '', $overview[0]->message_id);
                 }
                 $operationslog .= " - MsgId: " . $msgid . " - References: " . dol_escape_htmltag($headers['References'] ?? '') . " - Subject: " . dol_escape_htmltag($headers['Subject']);
@@ -1978,27 +1654,27 @@ class EmailCollector extends CommonObject
                     $tmpdate = $overview['date']->toDate();
                     $tmptimezone = $tmpdate->getTimezone()->getName();
 
-                    $dateemail = dol_stringtotime((string) $overview['date'], 'gmt');    // if $overview['timezone'] is "+00:00"
+                    $dateemail = dol_stringtotime((string)$overview['date'], 'gmt');    // if $overview['timezone'] is "+00:00"
                     if (preg_match('/^([+\-])(\d\d):(\d\d)/', $tmptimezone, $reg)) {
                         if ($reg[1] == '+' && ($reg[2] != '00' || $reg[3] != '00')) {
-                            $dateemail -= (3600 * (int) $reg[2]);
-                            $dateemail -= (60 * (int) $reg[3]);
+                            $dateemail -= (3600 * (int)$reg[2]);
+                            $dateemail -= (60 * (int)$reg[3]);
                         }
                         if ($reg[1] == '-' && ($reg[2] != '00' || $reg[3] != '00')) {
-                            $dateemail += (3600 * (int) $reg[2]);
-                            $dateemail += (60 * (int) $reg[3]);
+                            $dateemail += (3600 * (int)$reg[2]);
+                            $dateemail += (60 * (int)$reg[3]);
                         }
                     }
                     $subject = $overview['subject'];
                 } else {
                     $fromstring = $overview[0]->from;
-                    $replytostring = (!empty($overview['in_reply-to']) ? $overview['in_reply-to'] : (!empty($headers['Reply-To']) ? $headers['Reply-To'] : "")) ;
+                    $replytostring = (!empty($overview['in_reply-to']) ? $overview['in_reply-to'] : (!empty($headers['Reply-To']) ? $headers['Reply-To'] : ""));
 
                     $sender = !empty($overview[0]->sender) ? $overview[0]->sender : '';
                     $to = $overview[0]->to;
                     $sendtocc = !empty($overview[0]->cc) ? $overview[0]->cc : '';
                     $sendtobcc = !empty($overview[0]->bcc) ? $overview[0]->bcc : '';
-                    $dateemail = dol_stringtotime((string) $overview[0]->udate, 'gmt');
+                    $dateemail = dol_stringtotime((string)$overview[0]->udate, 'gmt');
                     $subject = $overview[0]->subject;
                     //var_dump($msgid);exit;
                 }
@@ -2791,31 +2467,31 @@ class EmailCollector extends CommonObject
                                 }
 
                                 // Insert record of emails sent
-                                $actioncomm->type_code   = 'AC_OTH_AUTO'; // Type of event ('AC_OTH', 'AC_OTH_AUTO', 'AC_XXX'...)
-                                $actioncomm->code        = 'AC_' . $actioncode;
-                                $actioncomm->label       = $langs->trans("ActionAC_" . $actioncode) . ' - ' . $langs->trans("MailFrom") . ' ' . $from;
+                                $actioncomm->type_code = 'AC_OTH_AUTO'; // Type of event ('AC_OTH', 'AC_OTH_AUTO', 'AC_XXX'...)
+                                $actioncomm->code = 'AC_' . $actioncode;
+                                $actioncomm->label = $langs->trans("ActionAC_" . $actioncode) . ' - ' . $langs->trans("MailFrom") . ' ' . $from;
                                 $actioncomm->note_private = $descriptionfull;
-                                $actioncomm->fk_project  = $projectstatic->id;
-                                $actioncomm->datep       = $dateemail;  // date of email
-                                $actioncomm->datef       = $dateemail;  // date of email
-                                $actioncomm->percentage  = -1; // Not applicable
-                                $actioncomm->socid       = $thirdpartystatic->id;
+                                $actioncomm->fk_project = $projectstatic->id;
+                                $actioncomm->datep = $dateemail;  // date of email
+                                $actioncomm->datef = $dateemail;  // date of email
+                                $actioncomm->percentage = -1; // Not applicable
+                                $actioncomm->socid = $thirdpartystatic->id;
                                 $actioncomm->contact_id = $contactstatic->id;
                                 $actioncomm->socpeopleassigned = (!empty($contactstatic->id) ? array($contactstatic->id) : array());
-                                $actioncomm->authorid    = $user->id; // User saving action
+                                $actioncomm->authorid = $user->id; // User saving action
                                 $actioncomm->userownerid = $user->id; // Owner of action
                                 // Fields when action is an email (content should be added into note)
                                 $actioncomm->email_msgid = $msgid;
-                                $actioncomm->email_from  = $fromstring;
+                                $actioncomm->email_from = $fromstring;
                                 $actioncomm->email_sender = $sender;
-                                $actioncomm->email_to    = $to;
-                                $actioncomm->email_tocc  = $sendtocc;
+                                $actioncomm->email_to = $to;
+                                $actioncomm->email_tocc = $sendtocc;
                                 $actioncomm->email_tobcc = $sendtobcc;
                                 $actioncomm->email_subject = $subject;
-                                $actioncomm->errors_to   = '';
+                                $actioncomm->errors_to = '';
 
                                 if (!in_array($fk_element_type, array('societe', 'contact', 'project', 'user'))) {
-                                    $actioncomm->fk_element  = $fk_element_id;
+                                    $actioncomm->fk_element = $fk_element_id;
                                     $actioncomm->elementid = $fk_element_id;
                                     $actioncomm->elementtype = $fk_element_type;
                                     if (is_object($objectemail) && $objectemail->module) {
@@ -3109,7 +2785,7 @@ class EmailCollector extends CommonObject
                                     $file = '';
                                     $classname = '';
                                     $reldir = '';
-                                    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+                                    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
                                     foreach ($dirmodels as $reldir) {
                                         $file = dol_buildpath($reldir . "core/modules/project/" . $modele . '.php', 0);
                                         if (file_exists($file)) {
@@ -3164,7 +2840,7 @@ class EmailCollector extends CommonObject
                                                 if (getDolGlobalString('MAIN_IMAP_USE_PHPIMAP')) {
                                                     foreach ($attachments as $attachment) {
                                                         // $attachment->save($destdir.'/');
-                                                        $typeattachment = (string) $attachment->getDisposition();
+                                                        $typeattachment = (string)$attachment->getDisposition();
                                                         $filename = $attachment->getFilename();
                                                         $content = $attachment->getContent();
                                                         $this->saveAttachment($destdir, $filename, $content);
@@ -3249,7 +2925,7 @@ class EmailCollector extends CommonObject
                                     $file = '';
                                     $classname = '';
                                     $reldir = '';
-                                    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+                                    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
                                     foreach ($dirmodels as $reldir) {
                                         $file = dol_buildpath($reldir . "core/modules/ticket/" . $modele . '.php', 0);
                                         if (file_exists($file)) {
@@ -3299,7 +2975,7 @@ class EmailCollector extends CommonObject
                                                 if (getDolGlobalString('MAIN_IMAP_USE_PHPIMAP')) {
                                                     foreach ($attachments as $attachment) {
                                                         // $attachment->save($destdir.'/');
-                                                        $typeattachment = (string) $attachment->getDisposition();
+                                                        $typeattachment = (string)$attachment->getDisposition();
                                                         $filename = $attachment->getFilename();
                                                         $content = $attachment->getContent();
                                                         $this->saveAttachment($destdir, $filename, $content);
@@ -3417,14 +3093,14 @@ class EmailCollector extends CommonObject
                             }
 
                             $parameters = array(
-                                'connection' =>  $connection,
+                                'connection' => $connection,
                                 'imapemail' => $imapemail,
                                 'overview' => $overview,
 
                                 'from' => $from,
                                 'fromtext' => $fromtext,
 
-                                'actionparam' =>  $operation['actionparam'],
+                                'actionparam' => $operation['actionparam'],
 
                                 'thirdpartyid' => $thirdpartyid,
                                 'objectid' => $objectid,
@@ -3604,16 +3280,113 @@ class EmailCollector extends CommonObject
         return $error ? -1 : 1;
     }
 
+    /**
+     * Return the connectstring to use with IMAP connection function
+     *
+     * @return string
+     */
+    public function getConnectStringIMAP()
+    {
+        // Connect to IMAP
+        $flags = '/service=imap'; // IMAP
+        if (getDolGlobalString('IMAP_FORCE_TLS')) {
+            $flags .= '/tls';
+        } elseif (empty($this->imap_encryption) || ($this->imap_encryption == 'ssl' && getDolGlobalString('IMAP_FORCE_NOSSL'))) {
+            $flags .= '';
+        } else {
+            $flags .= '/' . $this->imap_encryption;
+        }
 
+        $flags .= '/novalidate-cert';
+        //$flags.='/readonly';
+        //$flags.='/debug';
+        if (!empty($this->norsh) || getDolGlobalString('IMAP_FORCE_NORSH')) {
+            $flags .= '/norsh';
+        }
+        //Used in shared mailbox from Office365
+        if (!empty($this->login) && strpos($this->login, '/') != false) {
+            $partofauth = explode('/', $this->login);
+            $flags .= '/authuser=' . $partofauth[0] . '/user=' . $partofauth[1];
+        }
 
-    // Loop to get part html and plain. Code found on PHP imap_fetchstructure documentation
+        $connectstringserver = '{' . $this->host . ':' . $this->port . $flags . '}';
+
+        return $connectstringserver;
+    }
+
+    /**
+     * Convert str to UTF-7 imap. Used to forge mailbox names.
+     *
+     * @param string $str String to encode
+     * @return  string|false        Encoded string, or false if error
+     */
+    public function getEncodedUtf7($str)
+    {
+        if (function_exists('mb_convert_encoding')) {
+            // change spaces by entropy because mb_convert fail with spaces
+            $str = preg_replace("/ /", "xxxSPACExxx", $str);        // the replacement string must be valid in utf7 so _ can't be used
+            $str = preg_replace("/\[Gmail\]/", "xxxGMAILxxx", $str);    // the replacement string must be valid in utf7 so _ can't be used
+            // if mb_convert work
+            if ($str = mb_convert_encoding($str, "UTF-7")) {
+                // change characters
+                $str = preg_replace("/\+A/", "&A", $str);
+                // change to spaces again
+                $str = preg_replace("/xxxSPACExxx/", " ", $str);
+                // change to [Gmail] again
+                $str = preg_replace("/xxxGMAILxxx/", "[Gmail]", $str);
+                return $str;
+            } else {
+                // print error and return false
+                $this->error = "error: is not possible to encode this string '" . $str . "'";
+                return false;
+            }
+        } else {
+            return $str;
+        }
+    }
+
+    /**
+     * Decode a subject string according to RFC2047
+     * Example: '=?Windows-1252?Q?RE=A0:_ABC?=' => 'RE : ABC...'
+     * Example: '=?UTF-8?Q?A=C3=A9B?=' => 'AéB'
+     * Example: '=?UTF-8?B?2KLYstmF2KfbjNi0?=' =>
+     * Example: '=?utf-8?B?UkU6IG1vZHVsZSBkb2xpYmFyciBnZXN0aW9ubmFpcmUgZGUgZmljaGllcnMg?= =?utf-8?B?UsOpZsOpcmVuY2UgZGUgbGEgY29tbWFuZGUgVFVHRURJSklSIOKAkyBwYXNz?= =?utf-8?B?w6llIGxlIDIyLzA0LzIwMjA=?='
+     *
+     * @param string $subject Subject
+     * @return  string                  Decoded subject (in UTF-8)
+     */
+    protected function decodeSMTPSubject($subject)
+    {
+        // Decode $overview[0]->subject according to RFC2047
+        // Can use also imap_mime_header_decode($str)
+        // Can use also mb_decode_mimeheader($str)
+        // Can use also iconv_mime_decode($str, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8')
+        if (function_exists('imap_mime_header_decode') && function_exists('iconv_mime_decode')) {
+            $elements = imap_mime_header_decode($subject);
+            $newstring = '';
+            if (!empty($elements)) {
+                $num = count($elements);
+                for ($i = 0; $i < $num; $i++) {
+                    $stringinutf8 = (in_array(strtoupper($elements[$i]->charset), array('DEFAULT', 'UTF-8')) ? $elements[$i]->text : iconv_mime_decode($elements[$i]->text, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, $elements[$i]->charset));
+                    $newstring .= $stringinutf8;
+                }
+                $subject = $newstring;
+            }
+        } elseif (!function_exists('mb_decode_mimeheader')) {
+            $subject = mb_decode_mimeheader($subject);
+        } elseif (function_exists('iconv_mime_decode')) {
+            $subject = iconv_mime_decode($subject, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+        }
+
+        return $subject;
+    }
 
     /**
      * getmsg
      *
-     * @param   Object $mbox        Structure
-     * @param   string $mid         UID email
-     * @param   string $destdir     Target dir for attachments. Leave blank to parse without writing to disk.
+     * @param Object $mbox Structure
+     * @param string $mid UID email
+     * @param string $destdir Target dir for attachments. Leave blank to parse without writing to disk.
      * @return  void
      */
     private function getmsg($mbox, $mid, $destdir = '')
@@ -3643,30 +3416,18 @@ class EmailCollector extends CommonObject
         }
     }
 
-    /* partno string
-     0 multipart/mixed
-     1 multipart/alternative
-     1.1 text/plain
-     1.2 text/html
-     2 message/rfc822
-     2 multipart/mixed
-     2.1 multipart/alternative
-     2.1.1 text/plain
-     2.1.2 text/html
-     2.2 message/rfc822
-     2.2 multipart/alternative
-     2.2.1 text/plain
-     2.2.2 text/html
-     */
+
+
+    // Loop to get part html and plain. Code found on PHP imap_fetchstructure documentation
 
     /**
      * Sub function for getpart(). Only called by createPartArray() and itself.
      *
-     * @param   Object      $mbox           Structure
-     * @param   string      $mid            Part no
-     * @param   Object      $p              Object p
-     * @param   string      $partno         Partno
-     * @param   string      $destdir        Target dir for attachments. Leave blank to parse without writing to disk.
+     * @param Object $mbox Structure
+     * @param string $mid Part no
+     * @param Object $p Object p
+     * @param string $partno Partno
+     * @param string $destdir Target dir for attachments. Leave blank to parse without writing to disk.
      * @return  void
      */
     private function getpart($mbox, $mid, $p, $partno, $destdir = '')
@@ -3676,8 +3437,8 @@ class EmailCollector extends CommonObject
 
         // DECODE DATA
         $data = ($partno) ?
-        imap_fetchbody($mbox, $mid, $partno, FT_UID) : // multipart @phan-suppress-current-line PhanTypeMismatchArgumentInternal
-        imap_body($mbox, $mid, FT_UID); // simple @phan-suppress-current-line PhanTypeMismatchArgumentInternal
+            imap_fetchbody($mbox, $mid, $partno, FT_UID) : // multipart @phan-suppress-current-line PhanTypeMismatchArgumentInternal
+            imap_body($mbox, $mid, FT_UID); // simple @phan-suppress-current-line PhanTypeMismatchArgumentInternal
         // Any part may be encoded, even plain text messages, so check everything.
         if ($p->encoding == 4) {
             $data = quoted_printable_decode($data);
@@ -3780,12 +3541,28 @@ class EmailCollector extends CommonObject
         }
     }
 
+    /* partno string
+     0 multipart/mixed
+     1 multipart/alternative
+     1.1 text/plain
+     1.2 text/html
+     2 message/rfc822
+     2 multipart/mixed
+     2.1 multipart/alternative
+     2.1.1 text/plain
+     2.1.2 text/html
+     2.2 message/rfc822
+     2.2 multipart/alternative
+     2.2.1 text/plain
+     2.2.2 text/html
+     */
+
     /**
      * Converts a string from one encoding to another.
      *
-     * @param  string   $string         String to convert
-     * @param  string   $fromEncoding   String encoding
-     * @param  string   $toEncoding     String return encoding
+     * @param string $string String to convert
+     * @param string $fromEncoding String encoding
+     * @param string $toEncoding String return encoding
      * @return string                   Converted string if conversion was successful, or the original string if not
      * @throws Exception
      */
@@ -3805,47 +3582,241 @@ class EmailCollector extends CommonObject
     }
 
     /**
-     * Decode a subject string according to RFC2047
-     * Example: '=?Windows-1252?Q?RE=A0:_ABC?=' => 'RE : ABC...'
-     * Example: '=?UTF-8?Q?A=C3=A9B?=' => 'AéB'
-     * Example: '=?UTF-8?B?2KLYstmF2KfbjNi0?=' =>
-     * Example: '=?utf-8?B?UkU6IG1vZHVsZSBkb2xpYmFyciBnZXN0aW9ubmFpcmUgZGUgZmljaGllcnMg?= =?utf-8?B?UsOpZsOpcmVuY2UgZGUgbGEgY29tbWFuZGUgVFVHRURJSklSIOKAkyBwYXNz?= =?utf-8?B?w6llIGxlIDIyLzA0LzIwMjA=?='
+     * Update object into database
      *
-     * @param   string  $subject        Subject
-     * @return  string                  Decoded subject (in UTF-8)
+     * @param User $user User that modifies
+     * @param int $notrigger 0=launch triggers after, 1=disable triggers
+     * @return int             Return integer <0 if KO, >0 if OK
      */
-    protected function decodeSMTPSubject($subject)
+    public function update(User $user, $notrigger = 0)
     {
-        // Decode $overview[0]->subject according to RFC2047
-        // Can use also imap_mime_header_decode($str)
-        // Can use also mb_decode_mimeheader($str)
-        // Can use also iconv_mime_decode($str, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8')
-        if (function_exists('imap_mime_header_decode') && function_exists('iconv_mime_decode')) {
-            $elements = imap_mime_header_decode($subject);
-            $newstring = '';
-            if (!empty($elements)) {
-                $num = count($elements);
-                for ($i = 0; $i < $num; $i++) {
-                    $stringinutf8 = (in_array(strtoupper($elements[$i]->charset), array('DEFAULT', 'UTF-8')) ? $elements[$i]->text : iconv_mime_decode($elements[$i]->text, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, $elements[$i]->charset));
-                    $newstring .= $stringinutf8;
-                }
-                $subject = $newstring;
-            }
-        } elseif (!function_exists('mb_decode_mimeheader')) {
-            $subject = mb_decode_mimeheader($subject);
-        } elseif (function_exists('iconv_mime_decode')) {
-            $subject = iconv_mime_decode($subject, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+        global $langs;
+
+        // Check parameters
+        if ($this->host && preg_match('/^http:/i', trim($this->host))) {
+            $langs->load("errors");
+            $this->error = $langs->trans("ErrorHostMustNotStartWithHttp", $this->host);
+            return -1;
         }
 
-        return $subject;
+        include_once DOL_DOCUMENT_ROOT . '/core/lib/security.lib.php';
+        $this->password = dolEncrypt($this->password);
+
+        $result = $this->updateCommon($user, $notrigger);
+
+        $this->password = dolDecrypt($this->password);
+
+        return $result;
+    }
+
+    /**
+     * overwitePropertiesOfObject
+     *
+     * @param object $object Current object we will set ->properties
+     * @param string $actionparam Action parameters
+     * @param string $messagetext Body
+     * @param string $subject Subject
+     * @param string $header Header
+     * @param string $operationslog String with logs of operations done
+     * @return  int                     0=OK, Nb of error if error
+     */
+    private function overwritePropertiesOfObject(&$object, $actionparam, $messagetext, $subject, $header, &$operationslog)
+    {
+        global $conf, $langs;
+
+        $errorforthisaction = 0;
+
+        // set output lang
+        $outputlangs = $langs;
+        $newlang = '';
+        if (getDolGlobalInt('MAIN_MULTILANGS') && empty($newlang) && GETPOST('lang_id', 'aZ09')) {
+            $newlang = GETPOST('lang_id', 'aZ09');
+        }
+        if (getDolGlobalInt('MAIN_MULTILANGS') && empty($newlang)) {
+            $newlang = !empty($object->thirdparty->default_lang) ? $object->thirdparty->default_lang : $newlang;
+        }
+        if (!empty($newlang)) {
+            $outputlangs = new Translate('', $conf);
+            $outputlangs->setDefaultLang($newlang);
+        }
+
+        // Overwrite values with values extracted from source email
+        // $this->actionparam = 'opportunity_status=123;abc=EXTRACT:BODY:....'
+        $arrayvaluetouse = dolExplodeIntoArray($actionparam, '(\n\r|\r|\n|;)', '=');
+
+        $tmp = array();
+
+        // Loop on each property set into actionparam
+        foreach ($arrayvaluetouse as $propertytooverwrite => $valueforproperty) {
+            $tmpclass = '';
+            $tmpproperty = '';
+            $tmparray = explode('.', $propertytooverwrite);
+            if (count($tmparray) == 2) {
+                $tmpclass = $tmparray[0];
+                $tmpproperty = $tmparray[1];
+            } else {
+                $tmpproperty = $tmparray[0];
+            }
+            if ($tmpclass && ($tmpclass != $object->element)) {
+                continue; // Property is for another type of object
+            }
+
+            //if (property_exists($object, $tmpproperty) || preg_match('/^options_/', $tmpproperty))
+            if ($tmpproperty) {
+                $sourcestring = '';
+                $sourcefield = '';
+                $regexstring = '';
+                //$transformationstring='';
+                $regforregex = array();
+                if (preg_match('/^EXTRACT:([a-zA-Z0-9_]+):(.*):([^:])$/', $valueforproperty, $regforregex)) {
+                    $sourcefield = $regforregex[1];
+                    $regexstring = $regforregex[2];
+                    //$transofrmationstring=$regforregex[3];
+                } elseif (preg_match('/^EXTRACT:([a-zA-Z0-9_]+):(.*)$/', $valueforproperty, $regforregex)) {
+                    $sourcefield = $regforregex[1];
+                    $regexstring = $regforregex[2];
+                }
+
+                if (!empty($sourcefield) && !empty($regexstring)) {
+                    if (strtolower($sourcefield) == 'body') {
+                        $sourcestring = $messagetext;
+                    } elseif (strtolower($sourcefield) == 'subject') {
+                        $sourcestring = $subject;
+                    } elseif (strtolower($sourcefield) == 'header') {
+                        $sourcestring = $header;
+                    }
+
+                    if ($sourcestring) {
+                        $regforval = array();
+                        $regexoptions = '';
+                        if (strtolower($sourcefield) == 'body') {
+                            $regexoptions = 'ms'; // The m means ^ and $ char is valid at each new line. The s means the char '.' is valid for new lines char too
+                        }
+                        if (strtolower($sourcefield) == 'header') {
+                            $regexoptions = 'm'; // The m means ^ and $ char is valid at each new line.
+                        }
+
+                        //var_dump($tmpproperty.' - '.$regexstring.' - '.$regexoptions.' - '.$sourcestring);
+                        if (preg_match('/' . $regexstring . '/' . $regexoptions, $sourcestring, $regforval)) {
+                            // Overwrite param $tmpproperty
+                            $valueextracted = isset($regforval[count($regforval) - 1]) ? trim($regforval[count($regforval) - 1]) : null;
+                            if (strtolower($sourcefield) == 'header') {     // extract from HEADER
+                                if (preg_match('/^options_/', $tmpproperty)) {
+                                    $object->array_options[preg_replace('/^options_/', '', $tmpproperty)] = $this->decodeSMTPSubject($valueextracted);
+                                } else {
+                                    if (property_exists($object, $tmpproperty)) {
+                                        $object->$tmpproperty = $this->decodeSMTPSubject($valueextracted);
+                                    } else {
+                                        $tmp[$tmpproperty] = $this->decodeSMTPSubject($valueextracted);
+                                    }
+                                }
+                            } else {    // extract from BODY
+                                if (preg_match('/^options_/', $tmpproperty)) {
+                                    $object->array_options[preg_replace('/^options_/', '', $tmpproperty)] = $this->decodeSMTPSubject($valueextracted);
+                                } else {
+                                    if (property_exists($object, $tmpproperty)) {
+                                        $object->$tmpproperty = $this->decodeSMTPSubject($valueextracted);
+                                    } else {
+                                        $tmp[$tmpproperty] = $this->decodeSMTPSubject($valueextracted);
+                                    }
+                                }
+                            }
+                            if (preg_match('/^options_/', $tmpproperty)) {
+                                $operationslog .= '<br>Regex /' . dol_escape_htmltag($regexstring) . '/' . dol_escape_htmltag($regexoptions) . ' into ' . strtolower($sourcefield) . ' -> found ' . dol_escape_htmltag(dol_trunc($object->array_options[preg_replace('/^options_/', '', $tmpproperty)], 128));
+                            } else {
+                                if (property_exists($object, $tmpproperty)) {
+                                    $operationslog .= '<br>Regex /' . dol_escape_htmltag($regexstring) . '/' . dol_escape_htmltag($regexoptions) . ' into ' . strtolower($sourcefield) . ' -> found ' . dol_escape_htmltag(dol_trunc($object->$tmpproperty, 128));
+                                } else {
+                                    $operationslog .= '<br>Regex /' . dol_escape_htmltag($regexstring) . '/' . dol_escape_htmltag($regexoptions) . ' into ' . strtolower($sourcefield) . ' -> found ' . dol_escape_htmltag(dol_trunc($tmp[$tmpproperty], 128));
+                                }
+                            }
+                        } else {
+                            // Regex not found
+                            if (property_exists($object, $tmpproperty)) {
+                                $object->$tmpproperty = null;
+                            } else {
+                                $tmp[$tmpproperty] = null;
+                            }
+
+                            $operationslog .= '<br>Regex /' . dol_escape_htmltag($regexstring) . '/' . dol_escape_htmltag($regexoptions) . ' into ' . strtolower($sourcefield) . ' -> not found, so property ' . dol_escape_htmltag($tmpproperty) . ' is set to null.';
+                        }
+                    } else {
+                        // Nothing can be done for this param
+                        $errorforthisaction++;
+                        $this->error = 'The extract rule to use to overwrite properties has on an unknown source (must be HEADER, SUBJECT or BODY)';
+                        $this->errors[] = $this->error;
+
+                        $operationslog .= '<br>' . $this->error;
+                    }
+                } elseif (preg_match('/^(SET|SETIFEMPTY):(.*)$/', $valueforproperty, $regforregex)) {
+                    $valuecurrent = '';
+                    if (preg_match('/^options_/', $tmpproperty)) {
+                        $valuecurrent = $object->array_options[preg_replace('/^options_/', '', $tmpproperty)];
+                    } else {
+                        if (property_exists($object, $tmpproperty)) {
+                            $valuecurrent = $object->$tmpproperty;
+                        } else {
+                            $valuecurrent = $tmp[$tmpproperty];
+                        }
+                    }
+
+                    if ($regforregex[1] == 'SET' || empty($valuecurrent)) {
+                        $valuetouse = $regforregex[2];
+                        $substitutionarray = getCommonSubstitutionArray($outputlangs, 0, null, $object);
+                        complete_substitutions_array($substitutionarray, $outputlangs, $object);
+                        $matcharray = array();
+                        preg_match_all('/__([a-z0-9]+(?:_[a-z0-9]+)?)__/i', $valuetouse, $matcharray);
+                        //var_dump($tmpproperty.' - '.$object->$tmpproperty.' - '.$valuetouse); var_dump($matcharray);
+                        if (is_array($matcharray[1])) {    // $matcharray[1] is an array with the list of substitution key found without the __X__ syntax into the SET entry
+                            foreach ($matcharray[1] as $keytoreplace) {
+                                if ($keytoreplace) {
+                                    if (preg_match('/^options_/', $keytoreplace)) {
+                                        $substitutionarray['__' . $keytoreplace . '__'] = $object->array_options[preg_replace('/^options_/', '', $keytoreplace)];
+                                    } else {
+                                        if (property_exists($object, $keytoreplace)) {
+                                            $substitutionarray['__' . $keytoreplace . '__'] = $object->$keytoreplace;
+                                        } else {
+                                            $substitutionarray['__' . $keytoreplace . '__'] = $tmp[$keytoreplace];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        //var_dump($substitutionarray);
+                        //dol_syslog('substitutionarray='.var_export($substitutionarray, true));
+
+                        $valuetouse = make_substitutions($valuetouse, $substitutionarray);
+                        if (preg_match('/^options_/', $tmpproperty)) {
+                            $object->array_options[preg_replace('/^options_/', '', $tmpproperty)] = $valuetouse;
+
+                            $operationslog .= '<br>Set value ' . dol_escape_htmltag($valuetouse) . ' into object->array_options[' . dol_escape_htmltag(preg_replace('/^options_/', '', $tmpproperty)) . ']';
+                        } else {
+                            if (property_exists($object, $tmpproperty)) {
+                                $object->$tmpproperty = $valuetouse;
+                            } else {
+                                $tmp[$tmpproperty] = $valuetouse;
+                            }
+
+                            $operationslog .= '<br>Set value ' . dol_escape_htmltag($valuetouse) . ' into object->' . dol_escape_htmltag($tmpproperty);
+                        }
+                    }
+                } else {
+                    $errorforthisaction++;
+                    $this->error = 'Bad syntax for description of action parameters: ' . $actionparam;
+                    $this->errors[] = $this->error;
+                }
+            }
+        }
+
+        return $errorforthisaction;
     }
 
     /**
      * saveAttachment
      *
-     * @param  string $destdir  destination
-     * @param  string $filename filename
-     * @param  string $content  content
+     * @param string $destdir destination
+     * @param string $filename filename
+     * @param string $content content
      * @return void
      */
     private function saveAttachment($destdir, $filename, $content)
@@ -3872,7 +3843,7 @@ class EmailCollector extends CommonObject
     /**
      * Get UID of message as a string
      *
-     * @param int|Webklex\PHPIMAP\Message   $imapemail      UID as int (if native IMAP) or as object (if external library)
+     * @param int|Webklex\PHPIMAP\Message $imapemail UID as int (if native IMAP) or as object (if external library)
      * @return string                       UID as string
      */
     protected function uidAsString($imapemail)
@@ -3880,7 +3851,7 @@ class EmailCollector extends CommonObject
         if (is_object($imapemail)) {
             return $imapemail->getAttributes()["uid"];
         } else {
-            return (string) $imapemail;
+            return (string)$imapemail;
         }
     }
 }

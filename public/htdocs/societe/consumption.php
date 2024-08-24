@@ -319,8 +319,7 @@ if ($type_element == 'supplier_invoice') {  // Supplier : Show products from inv
     $thirdTypeSelect = 'supplier';
 }
 if ($type_element == 'supplier_proposal') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
-    $documentstatic = new SupplierProposal($db);
+        $documentstatic = new SupplierProposal($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_valid as dateprint, c.fk_statut as status, NULL as paid, ';
     $tables_from = MAIN_DB_PREFIX . "supplier_proposal as c," . MAIN_DB_PREFIX . "supplier_proposaldet as d";
     $where = " WHERE c.fk_soc = s.rowid AND s.rowid = " . ((int) $socid);
@@ -357,7 +356,6 @@ if ($type_element == 'reception') {     // Supplier : Show products from orders.
     $thirdTypeSelect = 'supplier';
 }
 if ($type_element == 'contract') {  // Order
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
     $documentstatic = new Contrat($db);
     $documentstaticline = new ContratLigne($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_contrat as dateprint, d.statut as status, NULL as paid,';

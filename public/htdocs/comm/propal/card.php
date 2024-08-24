@@ -49,14 +49,12 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formpropal.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 use Dolibarr\Code\Comm\Classes\Propal;
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/propale/modules_propale.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/propal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 if (isModEnabled('variants')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';
@@ -3213,8 +3211,7 @@ if ($action == 'create') {
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/comm/propal/agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-        $formactions = new FormActions($db);
+                $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, 'propal', $socid, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for thirdparty
 
         print '</div></div>';

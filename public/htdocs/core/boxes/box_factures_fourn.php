@@ -70,7 +70,6 @@ class box_factures_fourn extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.class.php';
 
         $facturestatic = new FactureFournisseur($this->db);
         $thirdpartystatic = new Fournisseur($this->db);

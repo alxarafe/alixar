@@ -1501,8 +1501,7 @@ class InterfaceActionsAuto extends DolibarrTriggers
         //var_dump($societeforaction);var_dump($contactforaction);var_dump($elementid);var_dump($elementtype);exit;
 
         // Insertion action
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-        $actioncomm = new ActionComm($this->db);
+                $actioncomm = new ActionComm($this->db);
         $actioncomm->type_code   = $object->actiontypecode; // Type of event ('AC_OTH', 'AC_OTH_AUTO', 'AC_XXX'...)
         $actioncomm->code        = 'AC_' . $action;
         $actioncomm->label       = $object->actionmsg2;     // Label of event

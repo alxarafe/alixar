@@ -31,10 +31,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 use Dolibarr\Code\Contact\Classes\Contact;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 // Load translation files required by the page
 $langs->load("commercial");

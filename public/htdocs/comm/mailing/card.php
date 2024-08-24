@@ -874,7 +874,6 @@ if ($action == 'create') {
 
     print '<div style="padding-top: 10px">';
     // wysiwyg editor
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('bodyemail', GETPOST('bodyemail', 'restricthtmlallowunvalid'), '', 600, 'dolibarr_mailings', '', true, true, getDolGlobalInt('FCKEDITOR_ENABLE_MAILING'), 20, '90%');
     $doleditor->Create();
     print '</div>';
@@ -1316,8 +1315,7 @@ if ($action == 'create') {
             if (empty($object->bgcolor) || strtolower($object->bgcolor) == 'ffffff') {  // CKEditor does not apply the color of the div into its content area
                 $readonly = 1;
                 // wysiwyg editor
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                $doleditor = new DolEditor('bodyemail', $object->body, '', 600, 'dolibarr_mailings', '', false, true, !getDolGlobalString('FCKEDITOR_ENABLE_MAILING') ? 0 : 1, 20, '90%', $readonly);
+                            $doleditor = new DolEditor('bodyemail', $object->body, '', 600, 'dolibarr_mailings', '', false, true, !getDolGlobalString('FCKEDITOR_ENABLE_MAILING') ? 0 : 1, 20, '90%', $readonly);
                 $doleditor->Create();
             } else {
                 print dol_htmlentitiesbr($object->body);
@@ -1534,20 +1532,17 @@ if ($action == 'create') {
 
             if ($action == 'edit') {
                 // wysiwyg editor
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                $doleditor = new DolEditor('bodyemail', $object->body, '', 600, 'dolibarr_mailings', '', true, true, getDolGlobalInt('FCKEDITOR_ENABLE_MAILING'), 20, '90%');
+                            $doleditor = new DolEditor('bodyemail', $object->body, '', 600, 'dolibarr_mailings', '', true, true, getDolGlobalInt('FCKEDITOR_ENABLE_MAILING'), 20, '90%');
                 $doleditor->Create();
             }
             if ($action == 'edittxt') {
                 // wysiwyg editor
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                $doleditor = new DolEditor('bodyemail', $object->body, '', 600, 'dolibarr_mailings', '', true, true, 0, 20, '90%');
+                            $doleditor = new DolEditor('bodyemail', $object->body, '', 600, 'dolibarr_mailings', '', true, true, 0, 20, '90%');
                 $doleditor->Create();
             }
             if ($action == 'edithtml') {
                 // HTML source editor
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                $doleditor = new DolEditor('bodyemail', $object->body, '', 600, 'dolibarr_mailings', '', true, true, 'ace', 20, '90%');
+                            $doleditor = new DolEditor('bodyemail', $object->body, '', 600, 'dolibarr_mailings', '', true, true, 'ace', 20, '90%');
                 $doleditor->Create(0, '', false, 'HTML Source', 'php');
             }
 

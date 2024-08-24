@@ -76,8 +76,7 @@ class box_clients extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/societe/class/client.class.php';
-        $thirdpartystatic = new Client($this->db);
+            $thirdpartystatic = new Client($this->db);
 
         $this->info_box_head = array(
             'text' => $langs->trans("BoxTitleLastModifiedCustomers", $max) . '<a class="paddingleft" href="' . constant('BASE_URL') . '/societe/list.php?type=c&sortfield=s.tms&sortorder=DESC"><span class="badge">...</span></a>',

@@ -26,7 +26,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 use Dolibarr\Code\Partnerships\Classes\Partnership;
 require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/lib/partnership.lib.php';
 
@@ -664,8 +663,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/partnership/partnership_agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-        $formactions = new FormActions($db);
+                $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element . '@' . $object->module, (is_object($object->thirdparty) ? $object->thirdparty->id : 0), 1, '', $MAXEVENT, '', $morehtmlcenter);
 
         print '</div></div>';

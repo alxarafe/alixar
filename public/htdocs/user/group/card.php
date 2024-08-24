@@ -507,8 +507,7 @@ if ($action == 'create') {
             print '</div><div class="fichehalfright">';
 
             // List of actions on element
-            /*include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-            $formactions = new FormActions($db);
+            /*            $formactions = new FormActions($db);
             $somethingshown = $formactions->showactions($object, 'usergroup', $socid, 1);*/
 
             print '</div></div>';

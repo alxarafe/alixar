@@ -37,8 +37,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 // Load translation files required by the page
 $langs->loadLangs(array("compta", "banks", "bills", "users", "accountancy", "categories"));

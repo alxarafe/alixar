@@ -29,7 +29,6 @@
  *              and parent class for interventions numbering models
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commondocgenerator.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
 
 

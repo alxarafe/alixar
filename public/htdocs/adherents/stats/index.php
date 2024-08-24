@@ -30,7 +30,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
 require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherentstats.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');

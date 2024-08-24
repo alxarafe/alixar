@@ -1308,8 +1308,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
     // -----------------------------------------
     if ($action == 'create' && $usercancreate) {
         //WYSIWYG Editor
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
+    
         if (!empty($conf->use_javascript_ajax)) {
             print '<script type="text/javascript">';
             print '$(document).ready(function () {
@@ -1879,8 +1878,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
         // Card in edit mode
         if ($action == 'edit' && $usercancreate) {
             //WYSIWYG Editor
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
+        
             if (!empty($conf->use_javascript_ajax)) {
                 print '<script type="text/javascript">';
                 print '$(document).ready(function () {
@@ -3091,8 +3089,7 @@ if ($action != 'create' && $action != 'edit' && $action != 'delete') {
     $morehtmlcenter .= '</div>';
 
     // List of actions on element
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-    $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
     $somethingshown = $formactions->showactions($object, 'product', 0, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for product
 
     print '</div></div>';

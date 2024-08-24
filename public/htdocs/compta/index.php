@@ -39,7 +39,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 
 // L'espace compta/treso doit toujours etre actif car c'est un espace partage

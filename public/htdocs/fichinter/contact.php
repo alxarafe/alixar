@@ -31,7 +31,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 use Dolibarr\Code\Contact\Classes\Contact;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fichinter.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('interventions', 'sendings', 'companies'));

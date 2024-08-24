@@ -30,7 +30,6 @@ use Dolibarr\Code\Comm\Classes\ActionComm;
  */
 
 // Put here all includes required by your class file
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 //
 /**
  * Class for ConferenceOrBooth

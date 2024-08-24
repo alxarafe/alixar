@@ -29,6 +29,33 @@
 namespace Dolibarr\Code\Core\Classes;
 
 use DoliDB;
+use ModeleAction;
+use ModeleChequeReceipts;
+use ModeleDon;
+use ModeleExpenseReport;
+use ModelePDFCards;
+use ModelePDFCommandes;
+use ModelePDFContract;
+use ModelePDFDeliveryOrder;
+use ModelePDFEvaluation;
+use ModelePdfExpedition;
+use ModelePDFFactures;
+use ModelePDFFicheinter;
+use ModelePDFMovement;
+use ModelePDFProduct;
+use ModelePDFProductBatch;
+use ModelePDFProjects;
+use ModelePDFPropales;
+use ModelePdfReception;
+use ModelePDFStock;
+use ModelePDFSupplierProposal;
+use ModelePDFSuppliersInvoices;
+use ModelePDFSuppliersOrders;
+use ModelePDFSuppliersPayments;
+use ModelePDFTask;
+use ModelePDFUser;
+use ModelePDFUserGroup;
+use ModeleThirdPartyDoc;
 
 /**
  *  \file       htdocs/core/class/html.formfile.class.php
@@ -1765,8 +1792,7 @@ class FormFile
         } elseif ($modulepart == 'contract') {
             $object_instance = new Contrat($this->db);
         } elseif ($modulepart == 'product') {
-            include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-            $object_instance = new Product($this->db);
+                        $object_instance = new Product($this->db);
         } elseif ($modulepart == 'tax') {
             include_once DOL_DOCUMENT_ROOT . '/compta/sociales/class/chargesociales.class.php';
             $object_instance = new ChargeSociales($this->db);
@@ -1782,7 +1808,6 @@ class FormFile
         } elseif ($modulepart == 'fichinter') {
             $object_instance = new Fichinter($this->db);
         } elseif ($modulepart == 'user') {
-            include_once DOL_DOCUMENT_ROOT . '/user/class/user.class.php';
             $object_instance = new User($this->db);
         } elseif ($modulepart == 'expensereport') {
             $object_instance = new ExpenseReport($this->db);
@@ -1796,8 +1821,7 @@ class FormFile
         } elseif ($modulepart == 'chequereceipt') {
             $object_instance = new RemiseCheque($this->db);
         } elseif ($modulepart == 'mrp-mo') {
-            include_once DOL_DOCUMENT_ROOT . '/mrp/class/mo.class.php';
-            $object_instance = new Mo($this->db);
+                $object_instance = new Mo($this->db);
         } else {
             $parameters = array('modulepart' => $modulepart);
             $reshook = $hookmanager->executeHooks('addSectionECMAuto', $parameters);
@@ -2074,8 +2098,7 @@ class FormFile
 
         $langs->load("link");
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
-        $link = new Link($this->db);
+            $link = new Link($this->db);
         $links = array();
         if ($sortfield == "name") {
             $sortfield = "label";

@@ -22,9 +22,12 @@
 
 namespace Dolibarr\Code\Resource\Classes;
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Traits\CommonPeople;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
+use Exception;
 
 /**
  *  \file       htdocs/resource/class/dolresource.class.php

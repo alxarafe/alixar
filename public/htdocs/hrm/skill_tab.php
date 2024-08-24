@@ -32,7 +32,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 
 use Dolibarr\Code\User\Classes\User;
 

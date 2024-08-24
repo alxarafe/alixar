@@ -101,8 +101,7 @@ if (isModEnabled('stripe')) {
     $stripe = new Stripe($db);
     $stripeacc = $stripe->getStripeAccount($service); // Get Stripe OAuth connect account (no remote access to Stripe here)
 
-    include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
-    $invoicetmp = new Facture($db);
+        $invoicetmp = new Facture($db);
     $invoicetmp->fetch($invoiceid);
     $stripecu = $stripe->getStripeCustomerAccount($invoicetmp->socid, $servicestatus, $site_account); // Get remote Stripe customer 'cus_...' (no remote access to Stripe here)
     $keyforstripeterminalbank = "CASHDESK_ID_BANKACCOUNT_STRIPETERMINAL" . (empty($_SESSION['takeposterminal']) ? '' : $_SESSION['takeposterminal']);

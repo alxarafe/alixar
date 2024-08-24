@@ -1039,8 +1039,7 @@ class FormMail extends Form
                     }
 
                     // Editor wysiwyg
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                    if ($this->withfckeditor == -1) {
+                                    if ($this->withfckeditor == -1) {
                         if (getDolGlobalString('FCKEDITOR_ENABLE_MAIL')) {
                             $this->withfckeditor = 1;
                         } else {

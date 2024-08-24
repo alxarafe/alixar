@@ -32,7 +32,6 @@ use Dolibarr\Code\Societe\Classes\Societe;
  */
 
 include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-include_once DOL_DOCUMENT_ROOT . '/contact/class/contact.class.php';
 
 
 /**

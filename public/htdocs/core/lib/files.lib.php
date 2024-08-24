@@ -2019,8 +2019,7 @@ function dol_add_file_process($upload_dir, $allowoverwrite = 0, $updatesessionor
             setEventMessages($langs->trans("ErrorFailedToCreateDir", $upload_dir), null, 'errors');
         }
     } elseif ($link) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
-        $linkObject = new Link($db);
+            $linkObject = new Link($db);
         $linkObject->entity = $conf->entity;
         $linkObject->url = $link;
         $linkObject->objecttype = GETPOST('objecttype', 'alpha');

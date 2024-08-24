@@ -23,7 +23,6 @@ namespace Dolibarr\Code\SupplierProposal\Api;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
 
 /**
  * API class for supplier proposal

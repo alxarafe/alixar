@@ -28,8 +28,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -42,7 +40,6 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
 require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 
 
 

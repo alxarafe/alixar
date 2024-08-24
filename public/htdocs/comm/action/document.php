@@ -34,7 +34,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
 
 use Dolibarr\Code\Contact\Classes\Contact;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 if (isModEnabled('project')) {

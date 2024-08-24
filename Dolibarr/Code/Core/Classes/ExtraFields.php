@@ -1217,16 +1217,14 @@ class ExtraFields
             }
         } elseif ($type == 'text') {
             if (!preg_match('/search_/', $keyprefix)) {     // If keyprefix is search_ or search_options_, we must just use a simple text field
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                $doleditor = new DolEditor($keyprefix . $key . $keysuffix, $value, '', 200, 'dolibarr_notes', 'In', false, false, false, ROWS_5, '90%');
+                            $doleditor = new DolEditor($keyprefix . $key . $keysuffix, $value, '', 200, 'dolibarr_notes', 'In', false, false, false, ROWS_5, '90%');
                 $out = (string) $doleditor->Create(1);
             } else {
                 $out = '<input type="text" class="flat ' . $morecss . ' maxwidthonsmartphone" name="' . $keyprefix . $key . $keysuffix . '" id="' . $keyprefix . $key . $keysuffix . '" value="' . dol_escape_htmltag($value) . '" ' . ($moreparam ? $moreparam : '') . '>';
             }
         } elseif ($type == 'html') {
             if (!preg_match('/search_/', $keyprefix)) {     // If keyprefix is search_ or search_options_, we must just use a simple text field
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                $doleditor = new DolEditor($keyprefix . $key . $keysuffix, $value, '', 200, 'dolibarr_notes', 'In', false, false, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_5, '90%');
+                            $doleditor = new DolEditor($keyprefix . $key . $keysuffix, $value, '', 200, 'dolibarr_notes', 'In', false, false, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_5, '90%');
                 $out = (string) $doleditor->Create(1);
             } else {
                 $out = '<input type="text" class="flat ' . $morecss . ' maxwidthonsmartphone" name="' . $keyprefix . $key . $keysuffix . '" id="' . $keyprefix . $key . $keysuffix . '" value="' . dol_escape_htmltag($value) . '" ' . ($moreparam ? $moreparam : '') . '>';

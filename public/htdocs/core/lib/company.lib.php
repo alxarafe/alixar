@@ -1778,8 +1778,7 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
         $tms_start = '';
         $tms_end = '';
     }
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-
+    
     // Check parameters
     if (!is_object($filterobj) && !is_object($objcon)) {
         dol_print_error(null, 'BadParameter');
@@ -2117,10 +2116,8 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
     if (isModEnabled('agenda') || (isModEnabled('mailing') && !empty($objcon->email))) {
         $delay_warning = $conf->global->MAIN_DELAY_ACTIONS_TODO * 24 * 60 * 60;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formactions.class.php';
-
+                include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
+        
         $formactions = new FormActions($db);
 
         $actionstatic = new ActionComm($db);

@@ -42,7 +42,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture-r
 if (isModEnabled('project')) {
     include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
 }
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 

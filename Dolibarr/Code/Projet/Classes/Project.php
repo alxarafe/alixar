@@ -1861,8 +1861,7 @@ class Project extends CommonObject
 
             //Duplicate task
             if ($clone_task) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-
+                
                 $taskstatic = new Task($this->db);
 
                 // Security check
@@ -2422,8 +2421,7 @@ class Project extends CommonObject
      */
     public function getLinesArray($user, $loadRoleMode = 1)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-        $taskstatic = new Task($this->db);
+                $taskstatic = new Task($this->db);
 
         $this->lines = $taskstatic->getTasksArray(0, $user, $this->id, 0, 0, '', '-1', '', 0, 0, array(), 0, array(), 0, $loadRoleMode);
         return 1;
@@ -2665,8 +2663,7 @@ class Project extends CommonObject
                     $nbMailSend++;
 
                     // Add a line into event table
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-
+                    
                     // Insert record of emails sent
                     $actioncomm = new ActionComm($this->db);
 
@@ -2700,8 +2697,7 @@ class Project extends CommonObject
                     $error++;
 
                     // Add a line into event table
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-
+                    
                     // Insert record of emails sent
                     $actioncomm = new ActionComm($this->db);
 

@@ -41,7 +41,6 @@ namespace Dolibarr\Code\Commande\Classes;
 
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
-include_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonorder.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 
 use Dolibarr\Code\Societe\Classes\Societe;

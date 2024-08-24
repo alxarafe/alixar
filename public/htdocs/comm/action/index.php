@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2001-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2003      Eric Seigne          <erics@rycks.com>
- * Copyright (C) 2004-2018 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2014      Cedric GROSS         <c.gross@kreiz-it.fr>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2017      Open-DSI             <support@open-dsi.fr>
- * Copyright (C) 2018-2021 Frédéric France      <frederic.france@netlogic.fr>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003       Eric Seigne                 <erics@rycks.com>
+ * Copyright (C) 2004-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2014       Cedric GROSS                <c.gross@kreiz-it.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2017       Open-DSI                    <support@open-dsi.fr>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -26,6 +26,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Comm\Classes\ICal;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/comm/action/index.php
@@ -35,16 +42,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Code\Contact\Classes\Contact;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
-if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
 
 if (!isset($conf->global->AGENDA_MAX_EVENTS_DAY_VIEW)) {
     $conf->global->AGENDA_MAX_EVENTS_DAY_VIEW = 3;
@@ -1883,7 +1882,6 @@ function show_day_events($db, $day, $month, $year, $monthshown, $style, &$eventa
     $nextindextouse = is_array($colorindexused) ? count($colorindexused) : 0; // At first run this is 0, so fist user has 0, next 1, ...
     //var_dump($colorindexused);
 
-    include_once DOL_DOCUMENT_ROOT . '/holiday/class/holiday.class.php';
     $tmpholiday = new Holiday($db);
 
     foreach ($eventarray as $daykey => $notused) {      // daykey is the 'YYYYMMDD' to show according to user

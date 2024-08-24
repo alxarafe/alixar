@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2013-2014  Jean-François Ferry    <jfefe@aternatik.fr>
- * Copyright (C) 2023-2024	William Mead		<william.mead@manchenumerique.fr>
+/* Copyright (C) 2013-2014  Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2023-2024	William Mead		        <william.mead@manchenumerique.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Resource\Classes\Dolresource;
+use Dolibarr\Code\Resource\Classes\FormResource;
+
 /**
  *      \file       resource/card.php
  *      \ingroup    resource
@@ -27,11 +33,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/resource/class/dolresource.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/resource/class/html.formresource.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/resource.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
@@ -39,22 +40,22 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 $langs->loadLangs(array('resource', 'companies', 'other', 'main'));
 
 // Get parameters
-$id                     = GETPOSTINT('id');
-$action                 = GETPOST('action', 'aZ09');
-$cancel                 = GETPOST('cancel', 'alpha');
-$ref                    = GETPOST('ref', 'alpha');
-$address                = GETPOST('address', 'alpha');
-$zip                    = GETPOST('zipcode', 'alpha');
-$town                   = GETPOST('town', 'alpha');
-$country_id             = GETPOSTINT('country_id');
-$state_id               = GETPOSTINT('state_id');
-$description            = GETPOST('description', 'restricthtml');
-$phone                  = GETPOST('phone', 'alpha');
-$email                  = GETPOST('email', 'alpha');
-$max_users              = GETPOSTINT('max_users');
-$url                    = GETPOST('url', 'alpha');
-$confirm                = GETPOST('confirm', 'aZ09');
-$fk_code_type_resource  = GETPOST('fk_code_type_resource', 'aZ09');
+$id = GETPOSTINT('id');
+$action = GETPOST('action', 'aZ09');
+$cancel = GETPOST('cancel', 'alpha');
+$ref = GETPOST('ref', 'alpha');
+$address = GETPOST('address', 'alpha');
+$zip = GETPOST('zipcode', 'alpha');
+$town = GETPOST('town', 'alpha');
+$country_id = GETPOSTINT('country_id');
+$state_id = GETPOSTINT('state_id');
+$description = GETPOST('description', 'restricthtml');
+$phone = GETPOST('phone', 'alpha');
+$email = GETPOST('email', 'alpha');
+$max_users = GETPOSTINT('max_users');
+$url = GETPOST('url', 'alpha');
+$confirm = GETPOST('confirm', 'aZ09');
+$fk_code_type_resource = GETPOST('fk_code_type_resource', 'aZ09');
 
 // Protection if external user
 if ($user->socid > 0) {
@@ -109,18 +110,18 @@ if (empty($reshook)) {
                 setEventMessages($langs->trans("ErrorFieldRequired", $langs->transnoentities("Ref")), null, 'errors');
                 $action = 'create';
             } else {
-                $object->ref                    = $ref;
-                $object->address                = $address;
-                $object->zip                    = $zip;
-                $object->town                   = $town;
-                $object->country_id             = $country_id;
-                $object->state_id               = $state_id;
-                $object->description            = $description;
-                $object->phone                  = $phone;
-                $object->email                  = $email;
-                $object->max_users              = $max_users;
-                $object->url                    = $url;
-                $object->fk_code_type_resource  = $fk_code_type_resource;
+                $object->ref = $ref;
+                $object->address = $address;
+                $object->zip = $zip;
+                $object->town = $town;
+                $object->country_id = $country_id;
+                $object->state_id = $state_id;
+                $object->description = $description;
+                $object->phone = $phone;
+                $object->email = $email;
+                $object->max_users = $max_users;
+                $object->url = $url;
+                $object->fk_code_type_resource = $fk_code_type_resource;
 
                 // Fill array 'array_options' with data from add form
                 $ret = $extrafields->setOptionalsFromPost(null, $object);
@@ -157,18 +158,18 @@ if (empty($reshook)) {
         if (!$error) {
             $res = $object->fetch($id);
             if ($res > 0) {
-                $object->ref                    = $ref;
-                $object->address                = $address;
-                $object->zip                    = $zip;
-                $object->town                   = $town;
-                $object->country_id             = $country_id;
-                $object->state_id               = $state_id;
-                $object->description            = $description;
-                $object->phone                  = $phone;
-                $object->email                  = $email;
-                $object->max_users              = $max_users;
-                $object->url                    = $url;
-                $object->fk_code_type_resource  = $fk_code_type_resource;
+                $object->ref = $ref;
+                $object->address = $address;
+                $object->zip = $zip;
+                $object->town = $town;
+                $object->country_id = $country_id;
+                $object->state_id = $state_id;
+                $object->description = $description;
+                $object->phone = $phone;
+                $object->email = $email;
+                $object->max_users = $max_users;
+                $object->url = $url;
+                $object->fk_code_type_resource = $fk_code_type_resource;
 
                 // Fill array 'array_options' with data from add form
                 $ret = $extrafields->setOptionalsFromPost(null, $object, '@GETPOSTISSET');
@@ -305,7 +306,6 @@ if ($action == 'create' || $object->fetch($id, $ref) > 0) {
         // Description
         print '<tr><td class="tdtop">' . $langs->trans("Description") . '</td>';
         print '<td>';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
         $doleditor = new DolEditor('description', ($description ?: $object->description), '', '200', 'dolibarr_notes', false);
         $doleditor->Create();
         print '</td></tr>';

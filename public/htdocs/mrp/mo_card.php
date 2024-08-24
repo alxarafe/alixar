@@ -26,7 +26,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp_mo.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
@@ -863,8 +862,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/mrp/mo_agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-        $formactions = new FormActions($db);
+                $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element, $socid, 1, '', $MAXEVENT, '', $morehtmlcenter);
 
         print '</div></div>';

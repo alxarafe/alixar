@@ -647,8 +647,7 @@ if ($event->type == 'payout.created') {
     if ($objpaymentmodetype == 'sepa_debit') {
         $db->begin();
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-        $actioncomm = new ActionComm($db);
+                $actioncomm = new ActionComm($db);
 
         if ($objinvoiceid > 0) {
             $invoice = new Facture($db);

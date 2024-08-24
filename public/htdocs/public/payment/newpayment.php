@@ -1318,7 +1318,6 @@ if ($source == 'contractline') {
     $found = true;
     $langs->load("contracts");
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 
     $contract = new Contrat($db);
     $contractline = new ContratLigne($db);

@@ -37,8 +37,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/vat.lib.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 // Load translation files required by the page
 $langs->loadLangs(array('other', 'companies', 'compta', 'bills'));

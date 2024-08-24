@@ -70,7 +70,6 @@ class box_supplier_orders_awaiting_reception extends ModeleBoxes
         $this->max = $max;
 
         $supplierorderstatic = new CommandeFournisseur($this->db);
-        include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.class.php';
         $thirdpartystatic = new Fournisseur($this->db);
 
         $this->info_box_head = array('text' => $langs->trans("BoxTitleSupplierOrdersAwaitingReception", $max));

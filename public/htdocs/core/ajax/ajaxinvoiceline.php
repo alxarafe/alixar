@@ -34,7 +34,6 @@ if (!defined('NOREQUIREAJAX')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 
 $invoice_id = GETPOSTINT('id'); // id of thirdparty
 $action = GETPOST('action', 'aZ09');

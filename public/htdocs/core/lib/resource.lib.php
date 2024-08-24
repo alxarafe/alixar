@@ -1,9 +1,10 @@
 <?php
 
 /* Module to manage locations, buildings, floors and rooms into Dolibarr ERP/CRM
- * Copyright (C) 2013       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2016       Gilles Poirier          <gilles.poirier@netlogic.fr>
- * Copyright (C) 2023       Frédéric France         <frederic.france@netlogic.fr>
+ * Copyright (C) 2013       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2016       Gilles Poirier              <gilles.poirier@netlogic.fr>
+ * Copyright (C) 2023       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Resource\Classes\Dolresource;
 
 /**
  *  \file       htdocs/core/lib/resource.lib.php

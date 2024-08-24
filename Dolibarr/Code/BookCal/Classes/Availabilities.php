@@ -22,6 +22,11 @@
 
 namespace Dolibarr\Code\BookCal\Classes;
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+
 /**
  * \file        htdocs/bookcal/class/availabilities.class.php
  * \ingroup     bookcal
@@ -29,7 +34,6 @@ namespace Dolibarr\Code\BookCal\Classes;
  */
 
 // Put here all includes required by your class file
-use Dolibarr\Core\Base\CommonObject;
 
 //use Dolibarr\Code\Societe\Classes\Societe;
 //
@@ -1067,28 +1071,5 @@ class Availabilities extends CommonObject
         $this->db->commit();
 
         return $error;
-    }
-}
-
-
-use Dolibarr\Core\Base\CommonObjectLine;
-
-/**
- * Class AvailabilitiesLine. You can also remove this and generate a CRUD class for lines objects.
- */
-class AvailabilitiesLine extends CommonObjectLine
-{
-    // To complete with content of an object AvailabilitiesLine
-    // We should have a field rowid, fk_availabilities and position
-
-    /**
-     * Constructor
-     *
-     * @param DoliDB $db Database handler
-     */
-    public function __construct(DoliDB $db)
-    {
-        $this->db = $db;
-        $this->isextrafieldmanaged = 0;
     }
 }

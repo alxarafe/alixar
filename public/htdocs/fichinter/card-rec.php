@@ -41,10 +41,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fichinter.lib.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 if (isModEnabled('contract')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcontract.class.php';
 }
 

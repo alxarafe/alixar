@@ -1521,8 +1521,7 @@ abstract class CommonInvoice extends CommonObject
 
                                 if ($description) {
                                     dol_syslog("* Record event for credit transfer or direct debit request result - " . $description);
-                                    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-
+                                    
                                     // Insert record of payment (success or error)
                                     $actioncomm = new ActionComm($this->db);
 

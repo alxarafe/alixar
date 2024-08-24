@@ -47,8 +47,7 @@ if (isModEnabled("propal")) {
     use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 // Load translation files required by the page
 $langs->loadLangs(array("contracts", "orders", "companies", "bills", "products", 'compta'));
@@ -1761,8 +1760,7 @@ if ($action == 'create') {
                     }
 
                     // editeur wysiwyg
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                    $nbrows = ROWS_2;
+                                    $nbrows = ROWS_2;
                     if (getDolGlobalString('MAIN_INPUT_DESC_HEIGHT')) {
                         $nbrows = getDolGlobalString('MAIN_INPUT_DESC_HEIGHT');
                     }

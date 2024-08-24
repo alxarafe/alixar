@@ -246,9 +246,9 @@ class box_dolibarr_state_board extends ModeleBoxes
             foreach ($keys as $val) {
                 if ($conditions[$val]) {
                     $boxstatItem = '';
-                    // $class = $classes[$val];
+                    $class = $classes[$val];
                     // Search in cache if load_state_board is already realized
-                    $classkeyforcache = $class;
+                    $classkeyforcache = $val;
                     if ($classkeyforcache == 'ProductService') {
                         $classkeyforcache = 'Product'; // ProductService use same load_state_board than Product
                     }
@@ -257,7 +257,7 @@ class box_dolibarr_state_board extends ModeleBoxes
                         // include_once $includes[$val]; // Loading a class cost around 1Mb
                         // $board = new $class($this->db);
 
-                        $board = $classes[$val];
+                        $board = $class;
                         if (method_exists($board, 'load_state_board')) {
                             // @phan-suppress-next-line PhanUndeclaredMethod  (Legacy, not present in core).
                             $board->load_state_board();
@@ -266,9 +266,9 @@ class box_dolibarr_state_board extends ModeleBoxes
                         } else {
                             $board = -1;
                         }
-                        $boardloaded[$class] = $board;
+                        $boardloaded[$val] = $board;
                     } else {
-                        $board = $boardloaded[$classkeyforcache];
+                        $board = $boardloaded[$val];
                     }
 
                     $langs->load(empty($langfile[$val]) ? $val : $langfile[$val]);

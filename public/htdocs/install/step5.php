@@ -200,7 +200,6 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
             $conf->global->MAIN_ENABLE_LOG_TO_HTML = 1;
 
             // Create admin user
-            include_once DOL_DOCUMENT_ROOT . '/user/class/user.class.php';
 
             // Set default encryption to yes, generate a salt and set default encryption algorithm (but only if there is no user yet into database)
             $sql = "SELECT u.rowid, u.pass, u.pass_crypted";

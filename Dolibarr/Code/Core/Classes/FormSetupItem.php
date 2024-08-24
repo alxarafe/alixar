@@ -406,8 +406,7 @@ class FormSetupItem
     public function generateInputFieldHtml()
     {
         global $conf;
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-        $doleditor = new DolEditor($this->confKey, $this->fieldValue, '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
+            $doleditor = new DolEditor($this->confKey, $this->fieldValue, '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
         return $doleditor->Create(1);
     }
 

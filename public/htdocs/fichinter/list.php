@@ -43,7 +43,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 if (isModEnabled('project')) {
 }
 if (isModEnabled('contract')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 }
 
 // Load translation files required by the page

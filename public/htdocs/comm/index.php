@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2015		Jean-François Ferry		<jfefe@aternatik.fr>
- * Copyright (C) 2019		Nicolas ZABOURI			<info@inovea-conseil.com>
- * Copyright (C) 2020		Pierre Ardoin			<mapiolca@me.com>
- * Copyright (C) 2020		Tobias Sekan			<tobias.sekan@startmail.com>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2015		Jean-François Ferry		    <jfefe@aternatik.fr>
+ * Copyright (C) 2019		Nicolas ZABOURI			    <info@inovea-conseil.com>
+ * Copyright (C) 2020		Pierre Ardoin			    <mapiolca@me.com>
+ * Copyright (C) 2020		Tobias Sekan			    <tobias.sekan@startmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+
 /**
  *  \file       htdocs/comm/index.php
  *  \ingroup    commercial
@@ -32,17 +42,8 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-use Dolibarr\Code\Comm\Classes\Propal;
-use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/propal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
-if (isModEnabled('contract')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-}
-if (isModEnabled('intervention')) {
-}
 
 // Initialize technical object to manage hooks. Note that conf->hooks_modules contains array
 $hookmanager = new HookManager($db);

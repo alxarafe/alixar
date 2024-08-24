@@ -29,8 +29,6 @@ use Dolibarr\Code\Product\Classes\Product;
  */
 
 include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-
 
 /**
  * Class to manage the box to show last products
@@ -72,8 +70,7 @@ class box_produits extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-        $productstatic = new Product($this->db);
+                $productstatic = new Product($this->db);
 
         $this->info_box_head = array(
             'text' => $langs->trans("BoxTitleLastProducts", $max) . '<a class="paddingleft" href="' . constant('BASE_URL') . 'product/list.php?sortfield=p.tms&sortorder=DESC"><span class="badge">...</span></a>',

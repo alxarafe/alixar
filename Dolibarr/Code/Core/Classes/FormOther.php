@@ -675,8 +675,7 @@ class FormOther
     {
         global $user, $langs;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-
+        
         //print $modeproject.'-'.$modetask;
         $task = new Task($this->db);
         $tasksarray = $task->getTasksArray($modetask ? $user : 0, $modeproject ? $user : 0, $projectid, 0, $mode, '', $filteronprojstatus);
@@ -1228,8 +1227,6 @@ class FormOther
     public static function getBoxesArea($user, $areacode)
     {
         global $conf, $langs, $db;
-
-        include_once DOL_DOCUMENT_ROOT . '/core/class/infobox.class.php';
 
         $confuserzone = 'MAIN_BOXES_' . $areacode;
 

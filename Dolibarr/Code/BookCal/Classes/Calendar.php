@@ -22,6 +22,8 @@
 
 namespace Dolibarr\Code\BookCal\Classes;
 
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  * \file        htdocs/bookcal/class/calendar.class.php
  * \ingroup     bookcal
@@ -29,7 +31,6 @@ namespace Dolibarr\Code\BookCal\Classes;
  */
 
 // Put here all includes required by your class file
-use Dolibarr\Core\Base\CommonObject;
 
 //use Dolibarr\Code\Societe\Classes\Societe;
 //
@@ -1058,30 +1059,5 @@ class Calendar extends CommonObject
         $this->db->commit();
 
         return $error;
-    }
-}
-
-
-use Dolibarr\Core\Base\CommonObjectLine;
-
-/**
- * Class CalendarLine. You can also remove this and generate a CRUD class for lines objects.
- */
-class CalendarLine extends CommonObjectLine
-{
-    // To complete with content of an object CalendarLine
-    // We should have a field rowid, fk_calendar and position
-
-
-    /**
-     * Constructor
-     *
-     * @param DoliDB $db Database handler
-     */
-    public function __construct(DoliDB $db)
-    {
-        $this->db = $db;
-
-        $this->isextrafieldmanaged = 0;
     }
 }

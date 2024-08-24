@@ -337,7 +337,6 @@ if ($action == 'create_updater' || $action == 'edit_updater') {
     print '<tr>';
     $help = $langs->trans("GlobalVariableUpdaterHelp" . $type) . '<br><b>' . $langs->trans("GlobalVariableUpdaterHelpFormat" . $type) . '</b>';
     print '<td class="fieldrequired">' . $form->textwithpicto($langs->trans("Parameters"), $help, 1) . '</td><td>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('parameters', empty($price_updaters->parameters) ? '' : $price_updaters->parameters, '', 300, '', '', false, false, false, ROWS_8, '90%');
     $doleditor->Create();
     print '</td></tr>';

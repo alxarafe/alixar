@@ -1,10 +1,11 @@
 <?php
 
-/* Copyright (C) 2013-2018  Jean-François Ferry    <hello+jf@librethic.io>
- * Copyright (C) 2016		Gilles Poirier 		<glgpoirier@gmail.com>
- * Copyright (C) 2019		Josep Lluís Amador	<joseplluis@lliuretic.cat>
- * Copyright (C) 2021		Frédéric France		<frederic.france@netlogic.fr>
- * Copyright (C) 2023		William Mead			<william.mead@manchenumerique.fr>
+/* Copyright (C) 2013-2018  Jean-François Ferry         <hello+jf@librethic.io>
+ * Copyright (C) 2016		Gilles Poirier 		        <glgpoirier@gmail.com>
+ * Copyright (C) 2019		Josep Lluís Amador	        <joseplluis@lliuretic.cat>
+ * Copyright (C) 2021		Frédéric France		        <frederic.france@netlogic.fr>
+ * Copyright (C) 2023		William Mead			    <william.mead@manchenumerique.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +21,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Resource\Classes\Dolresource;
+
 /**
  *      \file       resource/element_resource.php
  *      \ingroup    resource
@@ -27,14 +34,9 @@
  */
 
 // Load Dolibarr environment
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/resource/class/dolresource.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
-if (isModEnabled("product") || isModEnabled("service")) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('resource', 'other', 'interventions'));

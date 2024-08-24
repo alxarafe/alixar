@@ -31,7 +31,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 
 use Dolibarr\Code\Contact\Classes\Contact;
 
@@ -59,7 +58,6 @@ if (isModEnabled("supplier_invoice")) {
 if (isModEnabled("supplier_order")) {
 }
 if (isModEnabled('contract')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 }
 if (isModEnabled('intervention')) {
 }
@@ -67,8 +65,7 @@ if (isModEnabled('deplacement')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 }
 if (isModEnabled('agenda')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-}
+    }
 if (isModEnabled('shipping')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 }

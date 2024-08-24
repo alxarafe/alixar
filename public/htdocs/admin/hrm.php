@@ -519,8 +519,7 @@ if ($action == 'edit') {
             } elseif ($val['type'] == 'integer') {
                 print '<input  class="flat" name="' . $constname . '" id="' . $constname . '" value="' . getDolGlobalString($constname) . '" type="number" step="1" min="0" max="50" >' . "\n";
             } elseif ($val['type'] == 'html') {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
+                            $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
                 $doleditor->Create();
             } elseif ($val['type'] == 'yesno') {
                 print $form->selectyesno($constname, getDolGlobalString($constname), 1);

@@ -41,8 +41,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.cl
 use Dolibarr\Code\Categories\Classes\Categorie;
 
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'stocks', 'companies', 'categories'));
@@ -330,7 +329,6 @@ if ($action == 'create') {
     // Description
     print '<tr><td class="tdtop">' . $langs->trans("Description") . '</td><td>';
     // Editeur wysiwyg
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('desc', (!empty($object->description) ? $object->description : ''), '', 180, 'dolibarr_notes', 'In', false, true, isModEnabled('fckeditor'), ROWS_5, '90%');
     $doleditor->Create();
     print '</td></tr>';
@@ -915,8 +913,7 @@ if ($action == 'create') {
             // Description
             print '<tr><td class="tdtop">' . $langs->trans("Description") . '</td><td>';
             // Editeur wysiwyg
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-            $doleditor = new DolEditor('desc', $object->description, '', 180, 'dolibarr_notes', 'In', false, true, isModEnabled('fckeditor'), ROWS_5, '90%');
+                    $doleditor = new DolEditor('desc', $object->description, '', 180, 'dolibarr_notes', 'In', false, true, isModEnabled('fckeditor'), ROWS_5, '90%');
             $doleditor->Create();
             print '</td></tr>';
 
@@ -1028,8 +1025,7 @@ if ($action != 'create' && $action != 'edit' && $action != 'delete') {
     //$morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT.'/product/stock/agenda.php?id='.$object->id);
 
     // List of actions on element
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-    $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
     $somethingshown = $formactions->showactions($object, 'stock', 0, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for product
 
     print '</div></div>';

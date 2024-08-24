@@ -28,7 +28,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 
 use Dolibarr\Code\Contact\Classes\Contact;
 
@@ -229,8 +228,7 @@ if (empty($reshook)) {
 
                 $affecttotask = GETPOST('tasksavailable', 'intcomma');
                 if (!empty($affecttotask)) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-                    $task_to_affect = explode(',', $affecttotask);
+                                        $task_to_affect = explode(',', $affecttotask);
                     if (!empty($task_to_affect)) {
                         foreach ($task_to_affect as $task_id) {
                             if (GETPOSTISSET('person_' . $task_id) && GETPOST('person_' . $task_id, 'san_alpha')) {

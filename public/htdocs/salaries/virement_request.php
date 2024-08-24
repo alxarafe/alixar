@@ -45,8 +45,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprele
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 // Load translation files required by the page
 $langs->loadLangs(array("compta", "bills", "users", "salaries", "hrm", "withdrawals"));

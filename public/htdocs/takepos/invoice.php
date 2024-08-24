@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Copyright (C) 2018       Andreu Bisquerra    <jove@bisquerra.com>
- * Copyright (C) 2021       Nicolas ZABOURI     <info@inovea-conseil.com>
- * Copyright (C) 2022-2023  Christophe Battarel <christophe.battarel@altairis.fr>
+ * Copyright (C) 2018       Andreu Bisquerra            <jove@bisquerra.com>
+ * Copyright (C) 2021       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2022-2023  Christophe Battarel         <christophe.battarel@altairis.fr>
  * Copyright (C) 2024       MDW                         <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productbatch;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *    \file       htdocs/takepos/invoice.php
  *    \ingroup    takepos
@@ -32,7 +45,6 @@
 // if (! defined('NOREQUIRESOC'))       define('NOREQUIRESOC', '1');
 // if (! defined('NOREQUIRETRAN'))      define('NOREQUIRETRAN', '1');
 
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1');
@@ -51,10 +63,6 @@ if (!defined('NOREQUIREAJAX')) {
 if (!defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
     require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 }
-
-use Dolibarr\Code\Core\Classes\HookManager;
-use Dolibarr\Code\Contact\Classes\Contact;
-
 
 $hookmanager->initHooks(array('takeposinvoice'));
 
@@ -675,8 +683,6 @@ if (empty($reshook)) {
 
 
         if (getDolGlobalString('TAKEPOS_SUPPLEMENTS')) {
-            use Dolibarr\Code\Categories\Classes\Categorie;
-
             $cat = new Categorie($db);
             $categories = $cat->containing($idproduct, 'product');
             $found = (array_search(getDolGlobalInt('TAKEPOS_SUPPLEMENTS_CATEGORY'), array_column($categories, 'id')));
@@ -1518,7 +1524,6 @@ $( document ).ready(function() {
     $s = '';
     if (isModEnabled('member') && $invoice->socid > 0 && $invoice->socid != getDolGlobalInt($constforcompanyid)) {
         $s = '<span class="small">';
-        use Dolibarr\Code\Adherents\Classes\Adherent;
         $langs->load("members");
         $s .= $langs->trans("Member") . ': ';
         $adh = new Adherent($db);
@@ -1679,8 +1684,6 @@ if (!$usediv) {
 
 if (!empty($_SESSION["basiclayout"]) && $_SESSION["basiclayout"] == 1) {
     if ($mobilepage == "cats") {
-        use Dolibarr\Code\Categories\Classes\Categorie;
-
         $categorie = new Categorie($db);
         $categories = $categorie->get_full_arbo('product');
         $htmlforlines = '';
@@ -1707,8 +1710,6 @@ if (!empty($_SESSION["basiclayout"]) && $_SESSION["basiclayout"] == 1) {
     }
 
     if ($mobilepage == "products") {
-        use Dolibarr\Code\Categories\Classes\Categorie;
-
         $object = new Categorie($db);
         $catid = GETPOSTINT('catid');
         $result = $object->fetch($catid);

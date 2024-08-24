@@ -605,8 +605,7 @@ if ($action != 'presend') {
 
     $MAXEVENT = 10;
 
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-    $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
     $somethingshown = $formactions->showactions($object, 'productlot', 0, 1, '', $MAXEVENT);
 
     print '</div></div>';

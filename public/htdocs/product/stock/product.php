@@ -41,8 +41,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productstocke
 if (isModEnabled('productbatch')) {
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 if (isModEnabled('variants')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttribute.class.php';

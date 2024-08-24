@@ -33,7 +33,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 use Dolibarr\Code\Contact\Classes\Contact;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 
 $action = GETPOST('action', 'aZ09');
 

@@ -197,7 +197,6 @@ $form = new Form($db);
 */
 if ($action == 'create') {
     //WYSIWYG Editor
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
     print load_fiche_titre($langs->trans("NewTrip"));
 
@@ -278,8 +277,7 @@ if ($action == 'create') {
 
         if ($action == 'edit' && $user->hasRight('deplacement', 'creer')) {
             //WYSIWYG Editor
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
+        
             $soc = new Societe($db);
             if ($object->socid) {
                 $soc->fetch($object->socid);

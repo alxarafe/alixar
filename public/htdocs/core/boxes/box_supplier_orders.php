@@ -70,7 +70,6 @@ class box_supplier_orders extends ModeleBoxes
         $this->max = $max;
 
         $supplierorderstatic = new CommandeFournisseur($this->db);
-        include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.class.php';
         $thirdpartystatic = new Fournisseur($this->db);
 
         $text = $langs->trans("BoxTitleLatest" . (getDolGlobalString('MAIN_LASTBOX_ON_OBJECT_DATE') ? "" : "Modified") . "SupplierOrders", $max);

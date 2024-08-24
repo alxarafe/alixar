@@ -43,7 +43,21 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\PriceParser;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Resource\Classes\Dolresource;
+use Dolibarr\Code\Resource\Classes\FormResource;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 use stdClass;
 
@@ -324,8 +338,7 @@ class Form
                     // TODO Not yet implemented. See code for extrafields
                 } elseif (preg_match('/^ckeditor/', $typeofdata)) {
                     $tmp = explode(':', $typeofdata); // Example: ckeditor:dolibarr_zzz:width:height:savemethod:toolbarstartexpanded:rows:cols:uselocalbrowser
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                    $doleditor = new DolEditor($htmlname, ($editvalue ? $editvalue : $value), (empty($tmp[2]) ? '' : $tmp[2]), (empty($tmp[3]) ? '100' : $tmp[3]), (empty($tmp[1]) ? 'dolibarr_notes' : $tmp[1]), 'In', (empty($tmp[5]) ? 0 : $tmp[5]), (isset($tmp[8]) ? ($tmp[8] ? true : false) : true), true, (empty($tmp[6]) ? '20' : $tmp[6]), (empty($tmp[7]) ? '100' : $tmp[7]));
+                                    $doleditor = new DolEditor($htmlname, ($editvalue ? $editvalue : $value), (empty($tmp[2]) ? '' : $tmp[2]), (empty($tmp[3]) ? '100' : $tmp[3]), (empty($tmp[1]) ? 'dolibarr_notes' : $tmp[1]), 'In', (empty($tmp[5]) ? 0 : $tmp[5]), (isset($tmp[8]) ? ($tmp[8] ? true : false) : true), true, (empty($tmp[6]) ? '20' : $tmp[6]), (empty($tmp[7]) ? '100' : $tmp[7]));
                     $ret .= $doleditor->Create(1);
                 } elseif ($typeofdata == 'asis') {
                     $ret .= ($editvalue ? $editvalue : $value);
@@ -1860,8 +1873,7 @@ class Form
 
             $i = 0;
             if ($num) {
-                include_once DOL_DOCUMENT_ROOT . '/contact/class/contact.class.php';
-                $contactstatic = new Contact($this->db);
+                    $contactstatic = new Contact($this->db);
 
                 while ($i < $num) {
                     $obj = $this->db->fetch_object($resql);
@@ -2532,8 +2544,6 @@ class Form
 		// phpcs:enable
         global $langs;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/resource/class/html.formresource.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/resource/class/dolresource.class.php';
         $formresources = new FormResource($this->db);
         $resourcestatic = new Dolresource($this->db);
 
@@ -5270,8 +5280,6 @@ class Form
         global $conf, $langs;
         $langs->load("categories");
 
-        include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
-
         // For backward compatibility
         if (is_numeric($type)) {
             dol_syslog(__METHOD__ . ': using numeric value for parameter type is deprecated. Use string code instead.', LOG_WARNING);
@@ -5830,7 +5838,6 @@ class Form
         global $langs;
 
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 
         $out = '';
 
@@ -9246,8 +9253,6 @@ class Form
      */
     public function showCategories($id, $type, $rendermode = 0, $nolink = 0)
     {
-        include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
-
         $cat = new Categorie($this->db);
         $categories = $cat->containing($id, $type);
 

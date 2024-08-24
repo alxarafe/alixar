@@ -68,7 +68,6 @@ class box_fournisseurs extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.class.php';
         $thirdpartystatic = new Fournisseur($this->db);
 
         $this->info_box_head = array(

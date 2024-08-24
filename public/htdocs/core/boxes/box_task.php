@@ -74,7 +74,6 @@ class box_task extends ModeleBoxes
         global $conf, $user, $langs;
 
         $this->max = $max;
-        include_once DOL_DOCUMENT_ROOT . "/projet/class/task.class.php";
         require_once DOL_DOCUMENT_ROOT . "/core/lib/project.lib.php";
         $projectstatic = new Project($this->db);
         $taskstatic = new Task($this->db);

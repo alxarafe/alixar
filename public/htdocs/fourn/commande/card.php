@@ -47,13 +47,11 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_order/modules_commandefournisseur.php';
 
 if (isModEnabled('supplier_proposal')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
-}
+    }
 if (isModEnabled("product")) {
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
 
 if (isModEnabled('variants')) {

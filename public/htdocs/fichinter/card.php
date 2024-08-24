@@ -41,8 +41,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/fichinter/modules_fi
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fichinter.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 if (isModEnabled('contract')) {
     require_once DOL_DOCUMENT_ROOT . "/core/class/html.formcontract.class.php";
     require_once DOL_DOCUMENT_ROOT . "/contrat/class/contrat.class.php";
@@ -1472,8 +1471,7 @@ if ($action == 'create') {
                     print '<a name="' . $objp->rowid . '"></a>'; // ancre pour retourner sur la ligne
 
                     // Editeur wysiwyg
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                    $doleditor = new DolEditor('np_desc', $objp->description, '', 164, 'dolibarr_details', '', false, true, getDolGlobalInt('FCKEDITOR_ENABLE_DETAILS'), ROWS_2, '90%');
+                                    $doleditor = new DolEditor('np_desc', $objp->description, '', 164, 'dolibarr_details', '', false, true, getDolGlobalInt('FCKEDITOR_ENABLE_DETAILS'), ROWS_2, '90%');
                     $doleditor->Create();
 
                     $objectline = new FichinterLigne($db);
@@ -1555,8 +1553,7 @@ if ($action == 'create') {
                 print '<td>';
                 // editeur wysiwyg
                 if (!getDolGlobalString('FICHINTER_EMPTY_LINE_DESC')) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                    $doleditor = new DolEditor('np_desc', GETPOST('np_desc', 'restricthtml'), '', 100, 'dolibarr_details', '', false, true, getDolGlobalString('FCKEDITOR_ENABLE_DETAILS'), ROWS_2, '90%');
+                                    $doleditor = new DolEditor('np_desc', GETPOST('np_desc', 'restricthtml'), '', 100, 'dolibarr_details', '', false, true, getDolGlobalString('FCKEDITOR_ENABLE_DETAILS'), ROWS_2, '90%');
                     $doleditor->Create();
                 }
 
@@ -1776,8 +1773,7 @@ if ($action == 'create') {
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/fichinter/agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-        $formactions = new FormActions($db);
+                $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, 'fichinter', $socid, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for thirdparty
 
         print '</div></div>';

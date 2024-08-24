@@ -22,7 +22,6 @@ namespace Dolibarr\Code\Comm\Api;
 
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 
 
 /**

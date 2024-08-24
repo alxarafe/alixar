@@ -53,8 +53,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.
 if (isModEnabled('productbatch')) {
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 $langs->loadLangs(array("receptions", "companies", "bills", 'deliveries', 'orders', 'stocks', 'other', 'propal', 'sendings'));
 

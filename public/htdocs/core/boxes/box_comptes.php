@@ -22,7 +22,6 @@
  */
 
 use Dolibarr\Code\Compta\Classes\Account;
-use DoliDB;
 
 /**
  *      \file       htdocs/core/boxes/box_comptes.php
@@ -31,7 +30,6 @@ use DoliDB;
  */
 
 include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-include_once DOL_DOCUMENT_ROOT . '/compta/bank/class/account.class.php';
 
 /**
  * Class to manage the box to show bank accounts

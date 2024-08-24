@@ -817,8 +817,7 @@ if ($id > 0 || $ref) {
                 // Product description of the supplier
                 if (getDolGlobalString('PRODUIT_FOURN_TEXTS')) {
                     //WYSIWYG Editor
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
+                
                     print '<tr>';
                     print '<td>' . $langs->trans('ProductSupplierDescription') . '</td>';
                     print '<td>';

@@ -1611,8 +1611,7 @@ if ($ok && GETPOST('repair_link_dispatch_lines_supplier_order_lines')) {
 
 // Repair llx_commande_fournisseur to eliminate duplicate reference
 if ($ok && GETPOST('repair_supplier_order_duplicate_ref')) {
-    include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
-
+    
     $db->begin();
 
     $err = 0;

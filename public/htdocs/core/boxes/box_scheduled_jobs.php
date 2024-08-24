@@ -69,7 +69,6 @@ class box_scheduled_jobs extends ModeleBoxes
         $this->info_box_head = array('text' => $langs->trans("BoxScheduledJobs", $max));
 
         if ($user->hasRight('cron', 'read')) {
-            include_once DOL_DOCUMENT_ROOT . '/cron/class/cronjob.class.php';
             $cronstatic = new Cronjob($this->db);
             $resultarray = array();
 

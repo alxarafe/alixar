@@ -4887,7 +4887,6 @@ if ($action == 'editsource') {
     }
 
     $poscursor = array('x' => GETPOST('PAGE_CONTENT_x'), 'y' => GETPOST('PAGE_CONTENT_y'));
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('PAGE_CONTENT', $contentforedit, '', $maxheightwin, 'Full', '', true, true, 'ace', ROWS_5, '40%', 0, $poscursor);
     $doleditor->Create(0, '', false, 'HTML Source', 'php');
 }
@@ -4904,7 +4903,6 @@ if ($action == 'editcontent') {
     $nbrep = array();
     $contentforedit = preg_replace('/(<img.*src=")(?!http)/', '\1' . constant('BASE_URL') . '/viewimage.php?modulepart=medias&file=', $contentforedit, -1, $nbrep);
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $poscursor = array('x' => GETPOST('PAGE_CONTENT_x'), 'y' => GETPOST('PAGE_CONTENT_y'));
     $doleditor = new DolEditor('PAGE_CONTENT', $contentforedit, '', 500, 'Full', '', true, true, true, ROWS_5, '90%', 0, $poscursor);
     $doleditor->Create(0, '', false);

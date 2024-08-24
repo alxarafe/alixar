@@ -35,7 +35,6 @@ use DoliDB;
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 
 if (!class_exists('FormCompany')) {
     include DOL_DOCUMENT_ROOT . '/core/class/html.formcompany.class.php';

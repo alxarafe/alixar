@@ -24,7 +24,6 @@ use Luracast\Restler\RestException;
 
 use Dolibarr\Code\Categories\Classes\Categorie;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/api_members.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/api_products.class.php';

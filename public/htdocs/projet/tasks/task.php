@@ -28,11 +28,9 @@
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/task/modules_task.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 
 // Load translation files required by the page
 $langs->loadlangs(array('projects', 'companies'));
@@ -748,8 +746,7 @@ if ($id > 0 || !empty($ref)) {
         print '</div><div class="fichehalfright">';
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-        $formactions = new FormActions($db);
+                $formactions = new FormActions($db);
         $formactions->showactions($object, 'project_task', 0, 1, '', 10, 'withproject=' . $withproject);
 
         print '</div></div>';

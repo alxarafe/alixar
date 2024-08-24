@@ -299,8 +299,7 @@ class Mo extends CommonObject
 
         // If kits feature is enabled and we don't allow kits into BOM and MO, we check that the product is not a kit/virtual product
         if (getDolGlobalString('PRODUIT_SOUSPRODUITS') && !getDolGlobalString('ALLOW_USE_KITS_INTO_BOM_AND_MO') && $this->fk_product > 0) {
-            include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-            $tmpproduct = new Product($this->db);
+                        $tmpproduct = new Product($this->db);
             $tmpproduct->fetch($this->fk_product);
             if ($tmpproduct->hasFatherOrChild(1) > 0) {
                 $this->error = 'ErrorAVirtualProductCantBeUsedIntoABomOrMo';
@@ -313,8 +312,7 @@ class Mo extends CommonObject
 
         if ($this->fk_bom > 0) {
             // If there is a known BOM, we force the type of MO to the type of BOM
-            include_once DOL_DOCUMENT_ROOT . '/bom/class/bom.class.php';
-            $tmpbom = new BOM($this->db);
+                $tmpbom = new BOM($this->db);
             $tmpbom->fetch($this->fk_bom);
 
             $this->mrptype = $tmpbom->bomtype;
@@ -717,14 +715,12 @@ class Mo extends CommonObject
             $moline->qty = $this->qty;
             $moline->fk_product = $this->fk_product;
             $moline->position = 1;
-            include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-            $tmpproduct = new Product($this->db);
+                        $tmpproduct = new Product($this->db);
             $tmpproduct->fetch($this->fk_product);
             $moline->fk_unit = $tmpproduct->fk_unit;
 
             if ($this->fk_bom > 0) {    // If a BOM is defined, we know what to produce.
-                include_once DOL_DOCUMENT_ROOT . '/bom/class/bom.class.php';
-                $bom = new BOM($this->db);
+                        $bom = new BOM($this->db);
                 $bom->fetch($this->fk_bom);
                 if ($bom->bomtype == 1) {
                     $role = 'toproduce';

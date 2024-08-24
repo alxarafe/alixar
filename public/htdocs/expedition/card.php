@@ -55,8 +55,7 @@ if (isModEnabled("propal")) {
 if (isModEnabled('productbatch')) {
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 // Load translation files required by the page
 $langs->loadLangs(array("sendings", "companies", "bills", 'deliveries', 'orders', 'stocks', 'other', 'propal', 'productbatch'));
@@ -2791,8 +2790,7 @@ if ($action == 'create') {
         print '</div><div class="fichehalfright">';
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-        $formactions = new FormActions($db);
+                $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, 'shipping', $socid, 1);
 
         print '</div></div>';

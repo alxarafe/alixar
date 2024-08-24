@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2012      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2015      Jean-François Ferry	<jfefe@aternatik.fr>
- * Copyright (C) 2020      Maxime DEMAREST      <maxime@indelog.fr>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Jean-François Ferry	        <jfefe@aternatik.fr>
+ * Copyright (C) 2020       Maxime DEMAREST             <maxime@indelog.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *      \file       htdocs/comm/propal/stats/index.php
  *      \ingroup    propale
@@ -30,11 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propalestats.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formpropal.class.php';
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');

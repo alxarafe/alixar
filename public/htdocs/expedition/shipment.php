@@ -36,8 +36,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/sendings.lib.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 if (isModEnabled('stock')) {
 }
 if (isModEnabled("propal")) {

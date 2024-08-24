@@ -81,8 +81,7 @@ function project_prepare_head(Project $project, $moreparam = '')
         if (!is_null($dataretrieved)) {
             $nbTasks = $dataretrieved;
         } else {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-            $taskstatic = new Task($db);
+                        $taskstatic = new Task($db);
             $nbTasks = count($taskstatic->getTasksArray(0, 0, $project->id, 0, 0));
             dol_setcache($cachekey, $nbTasks, 120); // If setting cache fails, this is not a problem, so we do not test result.
         }
@@ -314,8 +313,7 @@ function project_prepare_head(Project $project, $moreparam = '')
         $totalAttached = $dataretrieved;
     } else {
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
-        $upload_dir = $conf->project->multidir_output[empty($project->entity) ? 1 : $project->entity] . "/" . dol_sanitizeFileName($project->ref);
+            $upload_dir = $conf->project->multidir_output[empty($project->entity) ? 1 : $project->entity] . "/" . dol_sanitizeFileName($project->ref);
         $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
         $nbLinks = Link::count($db, $project->element, $project->id);
         $totalAttached = $nbFiles + $nbLinks;

@@ -53,8 +53,7 @@ if (isModEnabled("product")) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 if (isModEnabled('variants')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';

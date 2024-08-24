@@ -38,16 +38,16 @@ include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
  */
 class box_mos extends ModeleBoxes
 {
-    public $boxcode  = "lastmos";
-    public $boximg   = "object_mrp";
+    public $boxcode = "lastmos";
+    public $boximg = "object_mrp";
     public $boxlabel = "BoxTitleLatestModifiedMos";
-    public $depends  = array("mrp");
+    public $depends = array("mrp");
 
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -61,17 +61,14 @@ class box_mos extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
         global $user, $langs, $conf;
 
         $this->max = $max;
-
-        include_once DOL_DOCUMENT_ROOT . '/mrp/class/mo.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 
         $mostatic = new Mo($this->db);
         $productstatic = new Product($this->db);
@@ -153,8 +150,8 @@ class box_mos extends ModeleBoxes
 
                 if ($num == 0) {
                     $this->info_box_contents[$line][0] = array(
-                    'td' => 'class="center"',
-                    'text' => '<span class="opacitymedium">' . $langs->trans("NoRecordedOrders") . '</span>'
+                        'td' => 'class="center"',
+                        'text' => '<span class="opacitymedium">' . $langs->trans("NoRecordedOrders") . '</span>'
                     );
                 }
 
@@ -177,10 +174,10 @@ class box_mos extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

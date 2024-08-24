@@ -287,7 +287,6 @@ if (getDolUserInt('USER_ENABLE_PUBLIC', 0, $object)) {
     print '<tr class="oddeven" id="tredit"><td>';
     print $langs->trans("Text");
     print '</td><td>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $extendededitor = 0;    // We force no WYSIWYG editor
     $doleditor = new DolEditor('USER_PUBLIC_MORE', getDolUserString('USER_PUBLIC_MORE', '', $object), '', 160, 'dolibarr_notes', '', false, false, $extendededitor, ROWS_5, '90%');
     $doleditor->Create();

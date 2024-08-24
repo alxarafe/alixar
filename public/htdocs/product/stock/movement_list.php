@@ -40,8 +40,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 use Dolibarr\Code\Categories\Classes\Categorie;
 
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'stocks', 'orders'));

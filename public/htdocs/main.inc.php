@@ -44,6 +44,8 @@
 //@ini_set('memory_limit', '128M'); // This may be useless if memory is hard limited by your PHP
 
 // For optional tuning. Enabled if environment variable MAIN_SHOW_TUNING_INFO is defined.
+use Dolibarr\Code\Core\Classes\Form;
+
 $micro_start_time = 0;
 if (!empty($_SERVER['MAIN_SHOW_TUNING_INFO'])) {
     list($usec, $sec) = explode(" ", microtime());
@@ -2244,7 +2246,6 @@ function top_menu($head, $title = '', $target = '', $disablejs = 0, $disablehead
      */
     if ((empty($conf->dol_hide_topmenu) || GETPOSTINT('dol_invisible_topmenu')) && (!defined('NOREQUIREMENU') || !constant('NOREQUIREMENU'))) {
         if (!isset($form) || !is_object($form)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.form.class.php';
             $form = new Form($db);
         }
 

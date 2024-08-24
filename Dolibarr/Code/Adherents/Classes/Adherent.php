@@ -3134,8 +3134,7 @@ class Adherent extends CommonObject
                                     $actionmsg = dol_concatdesc($actionmsg, $message);
                                 }
 
-                                require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-
+                                
                                 // Insert record of emails sent
                                 $actioncomm = new ActionComm($this->db);
 

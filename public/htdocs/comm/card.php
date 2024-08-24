@@ -57,7 +57,6 @@ if (isModEnabled("shipping")) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 }
 if (isModEnabled('contract')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 }
 if (isModEnabled('member')) {
     use Dolibarr\Code\Adherents\Classes\Adherent;

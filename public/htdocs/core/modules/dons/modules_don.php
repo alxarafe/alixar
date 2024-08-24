@@ -27,7 +27,6 @@
  *      \brief      File of class to manage donation document generation
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commondocgenerator.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 

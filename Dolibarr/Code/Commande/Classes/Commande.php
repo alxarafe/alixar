@@ -33,18 +33,17 @@
 
 namespace Dolibarr\Code\Commande\Classes;
 
+use Dolibarr\Code\Core\Classes\CommonOrder;
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/commande/class/commande.class.php
  *  \ingroup    order
  *  \brief      class for orders
  */
 
-use Dolibarr\Code\Core\Classes\CommonOrder;
-use Dolibarr\Code\Core\Classes\WorkboardResponse;
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
-use Dolibarr\Code\Societe\Classes\Societe;
-
-include_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonorder.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 
 /**

@@ -304,8 +304,7 @@ if ($action == "importSignature") {
                 }
             }
         } elseif ($mode == 'contract') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
+                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
             $object = new Contrat($db);
             $object->fetch(0, $ref);
 

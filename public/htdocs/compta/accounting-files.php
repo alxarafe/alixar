@@ -47,8 +47,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.
 require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/paymentloan.class.php';
 
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 // Constant to define payment sens
 const PAY_DEBIT = 0;

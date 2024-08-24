@@ -43,8 +43,7 @@ if (isModEnabled('shipping')) {
 if (isModEnabled('stock')) {
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 // Load translation files required by the page
 $langs->loadLangs(array('bills', 'deliveries', 'orders', 'sendings'));

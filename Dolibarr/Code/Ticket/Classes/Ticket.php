@@ -2147,8 +2147,7 @@ class Ticket extends CommonObject
         $res = $this->db->query($sql);
         if ($res) {
             while ($rec = $this->db->fetch_object($res)) {
-                include_once DOL_DOCUMENT_ROOT . '/contact/class/contact.class.php';
-                $contactstatic = new Contact($this->db);
+                    $contactstatic = new Contact($this->db);
                 $contactstatic->fetch($rec->rowid);
                 $contacts[] = $contactstatic;
             }
@@ -3032,8 +3031,7 @@ class Ticket extends CommonObject
 
         $langs->load("mails");
 
-        include_once DOL_DOCUMENT_ROOT . '/contact/class/contact.class.php';
-        //$contactstatic = new Contact($this->db);
+                //$contactstatic = new Contact($this->db);
 
         // If no receiver defined, load all ticket linked contacts
         if (!is_array($array_receiver) || !count($array_receiver) > 0) {

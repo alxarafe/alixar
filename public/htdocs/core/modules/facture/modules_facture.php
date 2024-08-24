@@ -29,7 +29,6 @@
  *              and parent class for invoices numbering models
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commondocgenerator.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php'; // Required because used in classes that inherit
 

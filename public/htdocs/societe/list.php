@@ -41,7 +41,6 @@
 
 // Load Dolibarr environment
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-include_once DOL_DOCUMENT_ROOT . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 if (isModEnabled('category')) {

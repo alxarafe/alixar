@@ -34,8 +34,7 @@ use Dolibarr\Code\Contact\Classes\Contact;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/sendings.lib.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 // Load translation files required by the page
 $langs->loadLangs(array('orders', 'sendings', 'companies'));

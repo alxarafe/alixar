@@ -30,7 +30,6 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/loan.lib.php';
@@ -272,7 +271,6 @@ llxHeader("", $title, $help_url);
 // Create mode
 if ($action == 'create') {
     //WYSIWYG Editor
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
     print load_fiche_titre($langs->trans("NewLoan"), '', 'money-bill-alt');
 

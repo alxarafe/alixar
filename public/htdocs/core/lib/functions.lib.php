@@ -49,6 +49,7 @@
 
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
 
 include_once DOL_DOCUMENT_ROOT . '/core/lib/json.lib.php';
 
@@ -13616,8 +13617,7 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
 
     global $param, $massactionbutton;
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-
+    
     // Check parameters
     if (!is_object($filterobj) && !is_object($objcon)) {
         dol_print_error(null, 'BadParameter');
@@ -13919,10 +13919,8 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
     if (isModEnabled('agenda') || (isModEnabled('mailing') && !empty($objcon->email))) {
         $delay_warning = $conf->global->MAIN_DELAY_ACTIONS_TODO * 24 * 60 * 60;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formactions.class.php';
-
+                include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
+        
         $formactions = new FormActions($db);
 
         $actionstatic = new ActionComm($db);

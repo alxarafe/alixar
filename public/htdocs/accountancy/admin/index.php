@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2013-2014  Olivier Geffroy         <jeff@jeffinfo.com>
- * Copyright (C) 2013-2014  Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2013-2024  Alexandre Spangaro      <aspangaro@easya.solutions>
- * Copyright (C) 2014-2015  Ari Elbaz (elarifr)     <github@accedinfo.com>
- * Copyright (C) 2014       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2014       Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2017       Laurent Destailleur     <eldy@destailleur.fr>
- * Copyright (C) 2021       Ferran Marcet           <fmarcet@2byte.es>
+/* Copyright (C) 2013-2014  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2014  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2014-2015  Ari Elbaz (elarifr)         <github@accedinfo.com>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2014       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2017       Laurent Destailleur         <eldy@destailleur.fr>
+ * Copyright (C) 2021       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  * \file        htdocs/accountancy/admin/index.php
@@ -61,7 +63,6 @@ $list_binding = array(
 );
 
 $error = 0;
-
 
 /*
  * Actions
