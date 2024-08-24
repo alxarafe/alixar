@@ -982,7 +982,7 @@ class MouvementStock extends CommonObject
 
         switch ($origin_type) {
             case 'commande':
-                require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+                use Dolibarr\Code\Adherents\Classes\Adherent;
                 $origin = new Commande($this->db);
                 break;
             case 'shipping':

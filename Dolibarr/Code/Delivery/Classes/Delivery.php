@@ -38,13 +38,12 @@ use DoliDB;
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonincoterm.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+    use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled('order')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+    use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 
 

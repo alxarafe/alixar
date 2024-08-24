@@ -41,12 +41,11 @@ use Dolibarr\Core\Base\CommonObjectLine;
  *  \brief      File of class managing the shipments
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonincoterm.class.php';
 if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+    use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled('order')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+    use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expeditionlinebatch.class.php';
 

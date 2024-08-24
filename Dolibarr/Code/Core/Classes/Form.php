@@ -8022,7 +8022,7 @@ class Form
             $placeholder = '';
 
             if ($selected && empty($selected_input_value)) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+                use Dolibarr\Code\Adherents\Classes\Adherent;
                 $adherenttmpselect = new Adherent($this->db);
                 $adherenttmpselect->fetch($selected);
                 $selected_input_value = $adherenttmpselect->ref;
@@ -8121,7 +8121,7 @@ class Form
         dol_syslog(get_class($this) . "::selectMembersList search adherents", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+            use Dolibarr\Code\Adherents\Classes\Adherent;
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 
             $num = $this->db->num_rows($result);

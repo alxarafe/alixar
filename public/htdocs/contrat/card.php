@@ -48,7 +48,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+    use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled('project')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';

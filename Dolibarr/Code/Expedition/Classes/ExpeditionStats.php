@@ -30,7 +30,6 @@ use Dolibarr\Code\Core\Classes\Stats;
  *  \brief      File of class to manage shipment statistics
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/class/stats.class.php';
 include_once DOL_DOCUMENT_ROOT . '/expedition/class/expedition.class.php';
 include_once DOL_DOCUMENT_ROOT . '/core/lib/date.lib.php';
 

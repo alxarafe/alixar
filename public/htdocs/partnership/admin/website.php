@@ -32,7 +32,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/lib/partnership.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/class/partnership.class.php';
+use Dolibarr\Code\Partnerships\Classes\Partnership;
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "partnership"));

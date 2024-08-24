@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2016   Marcos García  <marcosgdf@gmail.com>
- * Copyright (C) 2022   Open-Dsi		<support@open-dsi.fr>
+/* Copyright (C) 2016       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2022       Open-Dsi		            <support@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,12 +18,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Variants\Classes;
+
+use DoliDB;
+
 /**
  *  \file       htdocs/variants/class/ProductCombination2ValuePair.class.php
  *  \ingroup    variants
  *  \brief      File of the ProductCombination2ValuePair class
  */
-
 
 /**
  * Class ProductCombination2ValuePair

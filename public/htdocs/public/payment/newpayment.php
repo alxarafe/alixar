@@ -1049,7 +1049,7 @@ if ($source == 'order') {
     $found = true;
     $langs->load("orders");
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+    use Dolibarr\Code\Adherents\Classes\Adherent;
 
     $order = new Commande($db);
     $result = $order->fetch('', $ref);
@@ -1522,7 +1522,7 @@ if ($source == 'member' || $source == 'membersubscription') {
     $found = true;
     $langs->load("members");
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+    use Dolibarr\Code\Adherents\Classes\Adherent;
     require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
 

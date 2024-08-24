@@ -1521,7 +1521,7 @@ $( document ).ready(function() {
     $s = '';
     if (isModEnabled('member') && $invoice->socid > 0 && $invoice->socid != getDolGlobalInt($constforcompanyid)) {
         $s = '<span class="small">';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+        use Dolibarr\Code\Adherents\Classes\Adherent;
         $langs->load("members");
         $s .= $langs->trans("Member") . ': ';
         $adh = new Adherent($db);

@@ -413,7 +413,7 @@ class InterfaceWorkflowManager extends DolibarrTriggers
                 // Find all shipments on sale order origin
 
                 if (in_array($object->origin, array('order', 'commande')) && $object->origin_id > 0) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+                    use Dolibarr\Code\Adherents\Classes\Adherent;
                     $order = new Commande($this->db);
                     $ret = $order->fetch($object->origin_id);
                     if ($ret < 0) {

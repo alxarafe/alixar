@@ -29,7 +29,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+use Dolibarr\Code\Adherents\Classes\Adherent;
 require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 
 $hookmanager = new HookManager($db);

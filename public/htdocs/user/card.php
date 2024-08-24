@@ -57,7 +57,7 @@ if (isModEnabled('ldap')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ldap.class.php';
 }
 if (isModEnabled('member')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+    use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 if (isModEnabled('category')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';

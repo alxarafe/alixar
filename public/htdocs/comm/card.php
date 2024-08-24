@@ -49,10 +49,10 @@ if (isModEnabled('invoice')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
 }
 if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+    use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled('order')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+    use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 if (isModEnabled("shipping")) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
@@ -61,7 +61,7 @@ if (isModEnabled('contract')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 }
 if (isModEnabled('member')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+    use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 if (isModEnabled('intervention')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';

@@ -150,7 +150,7 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->project->multidir_output[$object->entity]; // By default
     }
 } elseif ($modulepart == 'propal') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+    use Dolibarr\Code\Comm\Classes\Propal;
     $object = new Propal($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -170,7 +170,7 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'member') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+    use Dolibarr\Code\Adherents\Classes\Adherent;
     $object = new Adherent($db);
     if ($id > 0) {
         $result = $object->fetch($id);

@@ -30,7 +30,6 @@ namespace Dolibarr\Code\Adherents\Classes;
  *  \brief      File for class managing statistics of members
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/class/stats.class.php';
 include_once DOL_DOCUMENT_ROOT . '/adherents/class/subscription.class.php';
 
 

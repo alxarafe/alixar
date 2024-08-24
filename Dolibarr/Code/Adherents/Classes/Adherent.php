@@ -44,7 +44,6 @@ namespace Dolibarr\Code\Adherents\Classes;
 use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonpeople.class.php';
 
 
 /**
@@ -1613,7 +1612,7 @@ class Adherent extends CommonObject
     {
         global $langs;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/class/partnership.class.php';
+        use Dolibarr\Code\Partnerships\Classes\Partnership;
 
 
         $this->partnerships[] = array();

@@ -163,7 +163,7 @@ $fulltree = $cate_arbo;
 // Load possible missing includes
 if (getDolGlobalString('CATEGORY_SHOW_COUNTS')) {
     if ($type == Categorie::TYPE_MEMBER) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+        use Dolibarr\Code\Adherents\Classes\Adherent;
     }
     if ($type == Categorie::TYPE_ACCOUNT) {
         require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';

@@ -29,7 +29,7 @@ use CommandeFournisseur;
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+use Dolibarr\Code\Adherents\Classes\Adherent;
 
 /**
  *  Class to manage HTML output components for orders

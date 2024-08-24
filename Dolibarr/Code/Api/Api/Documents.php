@@ -210,7 +210,7 @@ class Documents extends DolibarrApi
                 throw new RestException(500, 'Error generating document');
             }
         } elseif ($modulepart == 'commande' || $modulepart == 'order') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+            use Dolibarr\Code\Adherents\Classes\Adherent;
             $tmpobject = new Commande($this->db);
             $result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
             if (!$result) {
@@ -222,7 +222,7 @@ class Documents extends DolibarrApi
                 throw new RestException(500, 'Error generating document');
             }
         } elseif ($modulepart == 'propal' || $modulepart == 'proposal') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+            use Dolibarr\Code\Comm\Classes\Propal;
             $tmpobject = new Propal($this->db);
             $result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
             if (!$result) {
@@ -346,7 +346,7 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->user->dir_output . '/' . get_exdir(0, 0, 0, 0, $object, 'user') . '/' . $object->id;
         } elseif ($modulepart == 'adherent' || $modulepart == 'member') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+            use Dolibarr\Code\Adherents\Classes\Adherent;
 
             if (!DolibarrApiAccess::$user->hasRight('adherent', 'lire')) {
                 throw new RestException(403);
@@ -360,7 +360,7 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->adherent->dir_output . "/" . get_exdir(0, 0, 0, 1, $object, 'member');
         } elseif ($modulepart == 'propal' || $modulepart == 'proposal') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+            use Dolibarr\Code\Comm\Classes\Propal;
 
             if (!DolibarrApiAccess::$user->hasRight('propal', 'lire')) {
                 throw new RestException(403);
@@ -388,7 +388,7 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->propal->multidir_output[$object->entity] . "/" . get_exdir(0, 0, 0, 1, $object, 'propal');
         } elseif ($modulepart == 'commande' || $modulepart == 'order') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+            use Dolibarr\Code\Adherents\Classes\Adherent;
 
             if (!DolibarrApiAccess::$user->hasRight('commande', 'lire')) {
                 throw new RestException(403);
@@ -695,7 +695,7 @@ class Documents extends DolibarrApi
             } elseif ($modulepart == 'commande' || $modulepart == 'order') {
                 $modulepart = 'commande';
 
-                require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+                use Dolibarr\Code\Adherents\Classes\Adherent;
                 $object = new Commande($this->db);
             } elseif ($modulepart == 'commande_fournisseur' || $modulepart == 'supplier_order') {
                 $modulepart = 'supplier_order';
@@ -734,11 +734,11 @@ class Documents extends DolibarrApi
                 $object = new Fichinter($this->db);
             } elseif ($modulepart == 'adherent' || $modulepart == 'member') {
                 $modulepart = 'adherent';
-                require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+                use Dolibarr\Code\Adherents\Classes\Adherent;
                 $object = new Adherent($this->db);
             } elseif ($modulepart == 'proposal' || $modulepart == 'propal' || $modulepart == 'propale') {
                 $modulepart = 'propale';
-                require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+                use Dolibarr\Code\Comm\Classes\Propal;
                 $object = new Propal($this->db);
             } elseif ($modulepart == 'agenda' || $modulepart == 'action' || $modulepart == 'event') {
                 $modulepart = 'agenda';

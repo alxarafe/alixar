@@ -36,7 +36,6 @@ use Dolibarr\Core\Base\CommonObject;
  *      \brief      File of class to manage donations
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonpeople.class.php';
 
 
 /**

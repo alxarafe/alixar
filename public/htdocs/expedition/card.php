@@ -50,12 +50,12 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+use Dolibarr\Code\Adherents\Classes\Adherent;
 if (isModEnabled("product") || isModEnabled("service")) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 }
 if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+    use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled('productbatch')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productbatch.class.php';

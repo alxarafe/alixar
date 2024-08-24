@@ -341,7 +341,7 @@ class Invoices extends DolibarrApi
      */
     public function createInvoiceFromOrder($orderid)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+        use Dolibarr\Code\Adherents\Classes\Adherent;
 
         if (!DolibarrApiAccess::$user->hasRight('commande', 'lire')) {
             throw new RestException(403);

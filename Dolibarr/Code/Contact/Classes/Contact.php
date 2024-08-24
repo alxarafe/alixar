@@ -39,8 +39,6 @@ namespace Dolibarr\Code\Contact\Classes;
  */
 
 use Dolibarr\Core\Base\CommonObject;
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonsocialnetworks.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonpeople.class.php';
 
 
 /**

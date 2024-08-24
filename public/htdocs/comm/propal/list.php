@@ -52,7 +52,7 @@ if (isModEnabled('margin')) {
 }
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+use Dolibarr\Code\Comm\Classes\Propal;
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 if (isModEnabled('category')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';

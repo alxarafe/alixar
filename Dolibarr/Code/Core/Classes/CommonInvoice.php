@@ -32,7 +32,6 @@ use Dolibarr\Core\Base\CommonObject;
  *       \brief      File of the superclass of invoices classes (customer and supplier)
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonincoterm.class.php';
 
 /**
  *  Superclass for invoices classes

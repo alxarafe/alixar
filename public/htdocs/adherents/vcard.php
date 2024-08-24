@@ -30,7 +30,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+use Dolibarr\Code\Adherents\Classes\Adherent;
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/vcard.class.php';
 

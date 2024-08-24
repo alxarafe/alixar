@@ -161,7 +161,7 @@ class Subscription extends CommonObject
 
         $sql = "INSERT INTO " . MAIN_DB_PREFIX . "subscription (fk_adherent, fk_type, datec, dateadh, datef, subscription, note)";
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+        use Dolibarr\Code\Adherents\Classes\Adherent;
         $member = new Adherent($this->db);
         $result = $member->fetch($this->fk_adherent);
 
@@ -316,7 +316,7 @@ class Subscription extends CommonObject
         dol_syslog(get_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+            use Dolibarr\Code\Adherents\Classes\Adherent;
             $member = new Adherent($this->db);
             $result = $member->fetch($this->fk_adherent);
             $result = $member->update_end_date($user);
@@ -383,7 +383,7 @@ class Subscription extends CommonObject
             if ($resql) {
                 $num = $this->db->affected_rows($resql);
                 if ($num) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+                    use Dolibarr\Code\Adherents\Classes\Adherent;
                     $member = new Adherent($this->db);
                     $result = $member->fetch($this->fk_adherent);
                     $result = $member->update_end_date($user);

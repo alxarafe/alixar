@@ -617,7 +617,7 @@ class Receptions extends DolibarrApi
     public function createShipmentFromOrder($orderid)
     {
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+        use Dolibarr\Code\Adherents\Classes\Adherent;
 
         if (!DolibarrApiAccess::$user->hasRight('reception', 'lire')) {
                 throw new RestException(403);

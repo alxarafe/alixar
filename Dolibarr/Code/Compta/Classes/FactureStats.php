@@ -26,7 +26,6 @@
  *       \brief      File with class for managing the invoice statistics
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/class/stats.class.php';
 include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
 include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.facture.class.php';
 include_once DOL_DOCUMENT_ROOT . '/core/lib/date.lib.php';

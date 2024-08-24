@@ -47,7 +47,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php'
 require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 if (isModEnabled('member')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+    use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 
 // Load translation files required by the page

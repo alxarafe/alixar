@@ -147,7 +147,7 @@ if (!dol_verifyHash($securekeyseed . $type . $ref . (isModEnabled('multicompany'
 }
 
 if ($source == 'proposal') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+    use Dolibarr\Code\Comm\Classes\Propal;
     $object = new Propal($db);
     $result = $object->fetch(0, $ref, '', $entity);
 } elseif ($source == 'contract') {

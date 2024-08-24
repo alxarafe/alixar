@@ -51,7 +51,7 @@ if (isModEnabled('category')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 }
 if (isModEnabled('order')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+    use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 if (isModEnabled('contract')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
@@ -83,7 +83,7 @@ if (isModEnabled('mrp')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
 }
 if (isModEnabled('propal')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+    use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled('salaries')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/salary.class.php';

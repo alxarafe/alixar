@@ -35,7 +35,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/sendings.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+use Dolibarr\Code\Adherents\Classes\Adherent;
 if (isModEnabled('project')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
@@ -44,7 +44,7 @@ if (isModEnabled('stock')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
 }
 if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+    use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled("product") || isModEnabled("service")) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';

@@ -28,7 +28,6 @@ use Dolibarr\Core\Base\CommonObjectLine;
  *       \brief      File of the superclass of orders classes (customer and supplier)
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonincoterm.class.php';
 
 /**
  *      Superclass for orders classes

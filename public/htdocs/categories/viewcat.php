@@ -123,7 +123,7 @@ if ($id > 0 && $removeelem > 0 && $action == 'unlink') {
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'customer';
     } elseif ($type == Categorie::TYPE_MEMBER && $user->hasRight('adherent', 'creer')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+        use Dolibarr\Code\Adherents\Classes\Adherent;
         $tmpobject = new Adherent($db);
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'member';
@@ -209,7 +209,7 @@ if (
         $newobject = new Project($db);
         $elementtype = 'project';
     } elseif ($type == Categorie::TYPE_MEMBER) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+        use Dolibarr\Code\Adherents\Classes\Adherent;
         $newobject = new Adherent($db);
         $elementtype = 'member';
     } elseif ($type == Categorie::TYPE_CONTACT) {
@@ -399,7 +399,7 @@ if ($cats < 0) {
     // Load possible missing includes
     if (getDolGlobalString('CATEGORY_SHOW_COUNTS')) {
         if ($type == Categorie::TYPE_MEMBER) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+            use Dolibarr\Code\Adherents\Classes\Adherent;
         }
         if ($type == Categorie::TYPE_ACCOUNT) {
             require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
@@ -768,7 +768,7 @@ if ($type == Categorie::TYPE_SUPPLIER) {
 // List of members
 if ($type == Categorie::TYPE_MEMBER) {
     if ($user->hasRight("adherent", "read")) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+        use Dolibarr\Code\Adherents\Classes\Adherent;
 
         $permission = $user->hasRight('adherent', 'creer');
 

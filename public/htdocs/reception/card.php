@@ -52,7 +52,7 @@ if (isModEnabled("product") || isModEnabled("service")) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 }
 if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+    use Dolibarr\Code\Comm\Classes\Propal;
 }
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';

@@ -26,7 +26,7 @@ namespace Dolibarr\Code\Comm\Api;
 
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+use Dolibarr\Code\Comm\Classes\Propal;
 
 
 /**

@@ -208,7 +208,7 @@ if ($id > 0 || !empty($ref)) {
 
         // additional list with adherents of company
         if (isModEnabled('member') && $user->hasRight('adherent', 'lire')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
+            use Dolibarr\Code\Adherents\Classes\Adherent;
             require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
 
             $membertypestatic = new AdherentType($db);

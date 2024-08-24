@@ -22,7 +22,7 @@ namespace Dolibarr\Code\Commande\Api;
 
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+use Dolibarr\Code\Adherents\Classes\Adherent;
 
 /**
  * API class for orders
@@ -998,7 +998,7 @@ class Orders extends DolibarrApi
      */
     public function createOrderFromProposal($proposalid)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
+        use Dolibarr\Code\Comm\Classes\Propal;
 
         if (!DolibarrApiAccess::$user->hasRight('propal', 'lire')) {
             throw new RestException(403);
