@@ -184,7 +184,6 @@ class Documents extends DolibarrApi
         $templateused = '';
 
         if ($modulepart == 'facture' || $modulepart == 'invoice') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
             $tmpobject = new Facture($this->db);
             $result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
             if (!$result) {
@@ -197,7 +196,6 @@ class Documents extends DolibarrApi
                 throw new RestException(500, 'Error generating document');
             }
         } elseif ($modulepart == 'facture_fournisseur' || $modulepart == 'invoice_supplier') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
             $tmpobject = new FactureFournisseur($this->db);
             $result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
             if (!$result) {
@@ -317,7 +315,7 @@ class Documents extends DolibarrApi
         $type = 'files';
 
         if ($modulepart == 'societe' || $modulepart == 'thirdparty') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+            use Dolibarr\Code\Societe\Classes\Societe;
 
             if (!DolibarrApiAccess::$user->hasRight('societe', 'lire')) {
                 throw new RestException(403);
@@ -331,7 +329,8 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->societe->multidir_output[$object->entity] . "/" . $object->id;
         } elseif ($modulepart == 'user') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+            use Dolibarr\Code\User\Classes\User;
+
 
             // Can get doc if has permission to read all user or if it is user itself
             if (!DolibarrApiAccess::$user->hasRight('user', 'user', 'lire') && DolibarrApiAccess::$user->id != $id) {
@@ -404,7 +403,6 @@ class Documents extends DolibarrApi
         } elseif ($modulepart == 'commande_fournisseur' || $modulepart == 'supplier_order') {
             $modulepart = 'supplier_order';
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
 
             if (!DolibarrApiAccess::$user->hasRight('fournisseur', 'commande', 'lire') && !DolibarrApiAccess::$user->hasRight('supplier_order', 'lire')) {
                 throw new RestException(403);
@@ -432,7 +430,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->expedition->dir_output . "/sending/" . get_exdir(0, 0, 0, 1, $object, 'shipment');
         } elseif ($modulepart == 'facture' || $modulepart == 'invoice') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
             if (!DolibarrApiAccess::$user->hasRight('facture', 'lire')) {
                 throw new RestException(403);
@@ -448,7 +445,6 @@ class Documents extends DolibarrApi
         } elseif ($modulepart == 'facture_fournisseur' || $modulepart == 'supplier_invoice') {
             $modulepart = 'supplier_invoice';
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 
             if (!DolibarrApiAccess::$user->hasRight('fournisseur', 'facture', 'lire') && !DolibarrApiAccess::$user->hasRight('supplier_invoice', 'lire')) {
                 throw new RestException(403);
@@ -462,7 +458,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->fournisseur->dir_output . "/facture/" . get_exdir($object->id, 2, 0, 0, $object, 'invoice_supplier') . dol_sanitizeFileName($object->ref);
         } elseif ($modulepart == 'produit' || $modulepart == 'product') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
             if (!DolibarrApiAccess::$user->hasRight('produit', 'lire')) {
                 throw new RestException(403);
@@ -506,7 +501,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->expensereport->dir_output . '/' . dol_sanitizeFileName($object->ref);
         } elseif ($modulepart == 'knowledgemanagement') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/knowledgemanagement/class/knowledgerecord.class.php';
 
             if (!DolibarrApiAccess::$user->hasRight('knowledgemanagement', 'knowledgerecord', 'read') && !DolibarrApiAccess::$user->hasRight('knowledgemanagement', 'knowledgerecord', 'read')) {
                 throw new RestException(403);
@@ -520,7 +514,8 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->knowledgemanagement->dir_output . '/knowledgerecord/' . dol_sanitizeFileName($object->ref);
         } elseif ($modulepart == 'categorie' || $modulepart == 'category') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+            use Dolibarr\Code\Categories\Classes\Categorie;
+
 
             if (!DolibarrApiAccess::$user->hasRight('categorie', 'lire')) {
                 throw new RestException(403);
@@ -562,7 +557,6 @@ class Documents extends DolibarrApi
             $upload_dir = $conf->contrat->dir_output . "/" . get_exdir(0, 0, 0, 1, $object, 'contract');
         } elseif ($modulepart == 'projet' || $modulepart == 'project') {
             $modulepart = 'project';
-            require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
             $object = new Project($this->db);
             $result = $object->fetch($id, $ref);
@@ -685,12 +679,10 @@ class Documents extends DolibarrApi
             if ($modulepart == 'facture' || $modulepart == 'invoice') {
                 $modulepart = 'facture';
 
-                require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
                 $object = new Facture($this->db);
             } elseif ($modulepart == 'facture_fournisseur' || $modulepart == 'supplier_invoice') {
                 $modulepart = 'supplier_invoice';
 
-                require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
                 $object = new FactureFournisseur($this->db);
             } elseif ($modulepart == 'commande' || $modulepart == 'order') {
                 $modulepart = 'commande';
@@ -700,10 +692,8 @@ class Documents extends DolibarrApi
             } elseif ($modulepart == 'commande_fournisseur' || $modulepart == 'supplier_order') {
                 $modulepart = 'supplier_order';
 
-                require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
                 $object = new CommandeFournisseur($this->db);
             } elseif ($modulepart == 'projet' || $modulepart == 'project') {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
                 $object = new Project($this->db);
             } elseif ($modulepart == 'task' || $modulepart == 'project_task') {
                 $modulepart = 'project_task';
@@ -724,13 +714,11 @@ class Documents extends DolibarrApi
                     throw new RestException(500, 'Error while fetching Task ' . $ref);
                 }
             } elseif ($modulepart == 'product' || $modulepart == 'produit' || $modulepart == 'service' || $modulepart == 'produit|service') {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
                 $object = new Product($this->db);
             } elseif ($modulepart == 'expensereport') {
                 require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
                 $object = new ExpenseReport($this->db);
             } elseif ($modulepart == 'fichinter') {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
                 $object = new Fichinter($this->db);
             } elseif ($modulepart == 'adherent' || $modulepart == 'member') {
                 $modulepart = 'adherent';
@@ -746,7 +734,9 @@ class Documents extends DolibarrApi
                 $object = new ActionComm($this->db);
             } elseif ($modulepart == 'contact' || $modulepart == 'socpeople') {
                 $modulepart = 'contact';
-                require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+
+                use Dolibarr\Code\Contact\Classes\Contact;
+
                 $object = new Contact($this->db);
                 $fetchbyid = true;
             } elseif ($modulepart == 'contrat' || $modulepart == 'contract') {

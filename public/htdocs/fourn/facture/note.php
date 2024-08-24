@@ -31,10 +31,7 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 }
 
 $langs->loadLangs(array("bills", "companies"));

@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2006      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2007-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2016 Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
+/* Copyright (C) 2006       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2007-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2016  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -23,15 +23,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Compta\Classes;
+
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/compta/paiement/cheque/class/remisecheque.class.php
  *  \ingroup    compta
  *  \brief      File with class to manage cheque delivery receipts
  */
-
-use Dolibarr\Core\Base\CommonObject;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-
 
 /**
  *  Class to manage cheque delivery receipts
@@ -79,7 +80,7 @@ class RemiseCheque extends CommonObject
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -89,9 +90,9 @@ class RemiseCheque extends CommonObject
     /**
      *  Load record
      *
-     *  @param  int     $id             Id record
-     *  @param  string  $ref            Ref record
-     *  @return int                     Return integer <0 if KO, > 0 if OK
+     * @param int $id Id record
+     * @param string $ref Ref record
+     * @return int                     Return integer <0 if KO, > 0 if OK
      */
     public function fetch($id, $ref = '')
     {
@@ -104,7 +105,7 @@ class RemiseCheque extends CommonObject
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "bank_account as ba ON bc.fk_bank_account = ba.rowid";
         $sql .= " WHERE bc.entity = " . $conf->entity;
         if ($id) {
-            $sql .= " AND bc.rowid = " . ((int) $id);
+            $sql .= " AND bc.rowid = " . ((int)$id);
         }
         if ($ref) {
             $sql .= " AND bc.ref = '" . $this->db->escape($ref) . "'";
@@ -114,16 +115,16 @@ class RemiseCheque extends CommonObject
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($obj = $this->db->fetch_object($resql)) {
-                $this->id             = $obj->rowid;
-                $this->amount         = $obj->amount;
+                $this->id = $obj->rowid;
+                $this->amount = $obj->amount;
                 $this->date_bordereau = $this->db->jdate($obj->date_bordereau);
-                $this->account_id     = $obj->fk_bank_account;
-                $this->account_label  = $obj->account_label;
-                $this->author_id      = $obj->fk_user_author;
-                $this->nbcheque       = $obj->nbcheque;
-                $this->statut         = $obj->statut;
-                $this->ref_ext        = $obj->ref_ext;
-                $this->type           = $obj->type;
+                $this->account_id = $obj->fk_bank_account;
+                $this->account_label = $obj->account_label;
+                $this->author_id = $obj->fk_user_author;
+                $this->nbcheque = $obj->nbcheque;
+                $this->statut = $obj->statut;
+                $this->ref_ext = $obj->ref_ext;
+                $this->type = $obj->type;
 
                 if ($this->statut == 0) {
                     $this->ref = "(PROV" . $this->id . ")";
@@ -143,11 +144,11 @@ class RemiseCheque extends CommonObject
     /**
      *  Create a receipt to send cheques
      *
-     *  @param  User    $user           User making creation
-     *  @param  int     $account_id     Bank account for cheque receipt
-     *  @param  int     $limit          Limit ref of cheque to this
-     *  @param  array   $toRemise       array with cheques to remise
-     *  @return int                     Return integer <0 if KO, >0 if OK
+     * @param User $user User making creation
+     * @param int $account_id Bank account for cheque receipt
+     * @param int $limit Limit ref of cheque to this
+     * @param array $toRemise array with cheques to remise
+     * @return int                     Return integer <0 if KO, >0 if OK
      */
     public function create($user, $account_id, $limit, $toRemise)
     {
@@ -182,12 +183,12 @@ class RemiseCheque extends CommonObject
         $sql .= ") VALUES (";
         $sql .= "'" . $this->db->idate($now) . "'";
         $sql .= ", '" . $this->db->idate($now) . "'";
-        $sql .= ", " . ((int) $user->id);
-        $sql .= ", " . ((int) $account_id);
+        $sql .= ", " . ((int)$user->id);
+        $sql .= ", " . ((int)$account_id);
         $sql .= ", 0";
         $sql .= ", 0";
         $sql .= ", 0";
-        $sql .= ", " . ((int) $conf->entity);
+        $sql .= ", " . ((int)$conf->entity);
         $sql .= ", 0";
         $sql .= ", ''";
         $sql .= ", '" . $this->db->escape($this->type) . "'";
@@ -204,7 +205,7 @@ class RemiseCheque extends CommonObject
             if ($this->id > 0 && $this->errno == 0) {
                 $sql = "UPDATE " . MAIN_DB_PREFIX . "bordereau_cheque";
                 $sql .= " SET ref = '(PROV" . $this->id . ")'";
-                $sql .= " WHERE rowid=" . ((int) $this->id);
+                $sql .= " WHERE rowid=" . ((int)$this->id);
 
                 $resql = $this->db->query($sql);
                 if (!$resql) {
@@ -221,7 +222,7 @@ class RemiseCheque extends CommonObject
                 $sql .= " WHERE b.fk_type = '" . $this->db->escape($this->type) . "'";
                 $sql .= " AND b.amount > 0";
                 $sql .= " AND b.fk_bordereau = 0";
-                $sql .= " AND b.fk_account = " . ((int) $account_id);
+                $sql .= " AND b.fk_account = " . ((int)$account_id);
                 if ($limit) {
                     $sql .= $this->db->plimit($limit);
                 }
@@ -250,8 +251,8 @@ class RemiseCheque extends CommonObject
 
                     if ($checkremise) {
                         $sql = "UPDATE " . MAIN_DB_PREFIX . "bank";
-                        $sql .= " SET fk_bordereau = " . ((int) $this->id);
-                        $sql .= " WHERE rowid = " . ((int) $lineid);
+                        $sql .= " SET fk_bordereau = " . ((int)$this->id);
+                        $sql .= " WHERE rowid = " . ((int)$lineid);
 
                         $resql = $this->db->query($sql);
                         if (!$resql) {
@@ -293,8 +294,8 @@ class RemiseCheque extends CommonObject
     /**
      *  Delete deposit from database
      *
-     *  @param  User    $user       User that delete
-     *  @return int
+     * @param User $user User that delete
+     * @return int
      */
     public function delete($user)
     {
@@ -305,7 +306,7 @@ class RemiseCheque extends CommonObject
         $this->db->begin();
 
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bordereau_cheque";
-        $sql .= " WHERE rowid = " . ((int) $this->id);
+        $sql .= " WHERE rowid = " . ((int)$this->id);
         $sql .= " AND entity = " . $conf->entity;
 
         $resql = $this->db->query($sql);
@@ -320,7 +321,7 @@ class RemiseCheque extends CommonObject
             if ($this->errno === 0) {
                 $sql = "UPDATE " . MAIN_DB_PREFIX . "bank";
                 $sql .= " SET fk_bordereau = 0";
-                $sql .= " WHERE fk_bordereau = " . ((int) $this->id);
+                $sql .= " WHERE fk_bordereau = " . ((int)$this->id);
 
                 $resql = $this->db->query($sql);
                 if (!$resql) {
@@ -343,8 +344,8 @@ class RemiseCheque extends CommonObject
     /**
      *  Validate a receipt
      *
-     *  @param  User    $user       User
-     *  @return int                 Return integer <0 if KO, >0 if OK
+     * @param User $user User
+     * @return int                 Return integer <0 if KO, >0 if OK
      */
     public function validate($user)
     {
@@ -359,7 +360,7 @@ class RemiseCheque extends CommonObject
         if ($this->errno == 0 && $numref) {
             $sql = "UPDATE " . MAIN_DB_PREFIX . "bordereau_cheque";
             $sql .= " SET statut = 1, ref = '" . $this->db->escape($numref) . "'";
-            $sql .= " WHERE rowid = " . ((int) $this->id);
+            $sql .= " WHERE rowid = " . ((int)$this->id);
             $sql .= " AND entity = " . $conf->entity;
             $sql .= " AND statut = 0";
 
@@ -396,8 +397,8 @@ class RemiseCheque extends CommonObject
      *      Return next reference of cheque receipts not already used (or last reference)
      *      according to numbering module defined into constant FACTURE_ADDON
      *
-     *      @param     string       $mode       'next' for next value or 'last' for last value
-     *      @return    string                   free ref or last ref
+     * @param string $mode 'next' for next value or 'last' for last value
+     * @return    string                   free ref or last ref
      */
     public function getNextNumRef($mode = 'next')
     {
@@ -420,7 +421,7 @@ class RemiseCheque extends CommonObject
             $classname = getDolGlobalString('CHEQUERECEIPTS_ADDON');
 
             // Include file with class
-            $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+            $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
             foreach ($dirmodels as $reldir) {
                 $dir = dol_buildpath($reldir . "core/modules/cheque/");
@@ -475,17 +476,18 @@ class RemiseCheque extends CommonObject
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *      Load indicators for dashboard (this->nbtodo and this->nbtodolate)
      *
-     *      @param  User    $user       Object user
-     *      @param  string  $type       Type of payment mode deposit ('CHQ', 'TRA', ...)
-     *      @return WorkboardResponse|int Return integer <0 if KO, WorkboardResponse if OK
+     * @param User $user Object user
+     * @param string $type Type of payment mode deposit ('CHQ', 'TRA', ...)
+     * @return WorkboardResponse|int Return integer <0 if KO, WorkboardResponse if OK
      */
     public function load_board($user, $type = 'CHQ')
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs;
 
         if ($user->socid) {
@@ -533,8 +535,8 @@ class RemiseCheque extends CommonObject
     /**
      *      Load indicators this->nb for the state board
      *
-     *      @param  string  $type       Type of payment mode deposit ('CHQ', 'TRA', ...)
-     *      @return int                 Return integer <0 if ko, >0 if ok
+     * @param string $type Type of payment mode deposit ('CHQ', 'TRA', ...)
+     * @return int                 Return integer <0 if ko, >0 if ok
      */
     public function loadStateBoard($type = 'CHQ')
     {
@@ -570,9 +572,9 @@ class RemiseCheque extends CommonObject
     /**
      *  Build document
      *
-     *  @param  string      $model          Model name
-     *  @param  Translate   $outputlangs    Object langs
-     *  @return int                         Return integer <0 if KO, >0 if OK
+     * @param string $model Model name
+     * @param Translate $outputlangs Object langs
+     * @return int                         Return integer <0 if KO, >0 if OK
      */
     public function generatePdf($model, $outputlangs)
     {
@@ -589,7 +591,6 @@ class RemiseCheque extends CommonObject
         // Charge le modele
         $file = "pdf_" . $model . ".class.php";
         if (file_exists($dir . $file)) {
-            include_once DOL_DOCUMENT_ROOT . '/compta/bank/class/account.class.php';
             include_once $dir . $file;
 
             $classname = 'BordereauCheque' . ucfirst($model);
@@ -602,7 +603,7 @@ class RemiseCheque extends CommonObject
             $sql .= ", " . MAIN_DB_PREFIX . "bordereau_cheque as bc";
             $sql .= " WHERE b.fk_account = ba.rowid";
             $sql .= " AND b.fk_bordereau = bc.rowid";
-            $sql .= " AND bc.rowid = " . ((int) $this->id);
+            $sql .= " AND bc.rowid = " . ((int)$this->id);
             $sql .= " AND bc.entity = " . $conf->entity;
             $sql .= " ORDER BY b.dateo ASC, b.rowid ASC";
 
@@ -622,7 +623,7 @@ class RemiseCheque extends CommonObject
             $docmodel->nbcheque = $this->nbcheque;
             $docmodel->ref = $this->ref;
             $docmodel->amount = $this->amount;
-            $docmodel->date   = $this->date_bordereau;
+            $docmodel->date = $this->date_bordereau;
 
             $account = new Account($this->db);
             $account->fetch($this->account_id);
@@ -652,7 +653,7 @@ class RemiseCheque extends CommonObject
     /**
      *  Mets a jour le montant total
      *
-     *  @return     int     0 en cas de success
+     * @return     int     0 en cas de success
      */
     public function updateAmount()
     {
@@ -665,7 +666,7 @@ class RemiseCheque extends CommonObject
         $nb = 0;
         $sql = "SELECT amount ";
         $sql .= " FROM " . MAIN_DB_PREFIX . "bank";
-        $sql .= " WHERE fk_bordereau = " . ((int) $this->id);
+        $sql .= " WHERE fk_bordereau = " . ((int)$this->id);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -678,9 +679,9 @@ class RemiseCheque extends CommonObject
 
             $sql = "UPDATE " . MAIN_DB_PREFIX . "bordereau_cheque";
             $sql .= " SET amount = " . price2num($total);
-            $sql .= ", nbcheque = " . ((int) $nb);
-            $sql .= " WHERE rowid = " . ((int) $this->id);
-            $sql .= " AND entity = " . ((int) $conf->entity);
+            $sql .= ", nbcheque = " . ((int)$nb);
+            $sql .= " WHERE rowid = " . ((int)$this->id);
+            $sql .= " AND entity = " . ((int)$conf->entity);
 
             $resql = $this->db->query($sql);
             if (!$resql) {
@@ -705,8 +706,8 @@ class RemiseCheque extends CommonObject
     /**
      *  Insere la remise en base
      *
-     *  @param  int     $account_id         Compte bancaire concerne
-     *  @return int
+     * @param int $account_id Compte bancaire concerne
+     * @return int
      */
     public function removeCheck($account_id)
     {
@@ -715,8 +716,8 @@ class RemiseCheque extends CommonObject
         if ($this->id > 0) {
             $sql = "UPDATE " . MAIN_DB_PREFIX . "bank";
             $sql .= " SET fk_bordereau = 0";
-            $sql .= " WHERE rowid = " . ((int) $account_id);
-            $sql .= " AND fk_bordereau = " . ((int) $this->id);
+            $sql .= " WHERE rowid = " . ((int)$account_id);
+            $sql .= " AND fk_bordereau = " . ((int)$this->id);
 
             $resql = $this->db->query($sql);
             if ($resql) {
@@ -733,9 +734,9 @@ class RemiseCheque extends CommonObject
      *  Check return management
      *  Reopen linked invoices and create a new negative payment.
      *
-     *  @param  int     $bank_id           Id of bank transaction line concerned
-     *  @param  integer $rejection_date    Date to use on the negative payment
-     *  @return int                        Id of negative payment line created
+     * @param int $bank_id Id of bank transaction line concerned
+     * @param integer $rejection_date Date to use on the negative payment
+     * @return int                        Id of negative payment line created
      */
     public function rejectCheck($bank_id, $rejection_date)
     {
@@ -764,7 +765,7 @@ class RemiseCheque extends CommonObject
         // Get invoices list to reopen them
         $sql = 'SELECT pf.fk_facture, pf.amount';
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'paiement_facture as pf';
-        $sql .= ' WHERE pf.fk_paiement = ' . ((int) $payment->id);
+        $sql .= ' WHERE pf.fk_paiement = ' . ((int)$payment->id);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -814,21 +815,22 @@ class RemiseCheque extends CommonObject
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *      Set the creation date
      *
-     *      @param  User        $user           Object user
-     *      @param  int   $date           Date creation
-     *      @return int                         Return integer <0 if KO, >0 if OK
+     * @param User $user Object user
+     * @param int $date Date creation
+     * @return int                         Return integer <0 if KO, >0 if OK
      */
     public function set_date($user, $date)
     {
-		// phpcs:enable
+        // phpcs:enable
         if ($user->hasRight('banque', 'cheque')) {
             $sql = "UPDATE " . MAIN_DB_PREFIX . "bordereau_cheque";
             $sql .= " SET date_bordereau = " . ($date ? "'" . $this->db->idate($date) . "'" : 'null');
-            $sql .= " WHERE rowid = " . ((int) $this->id);
+            $sql .= " WHERE rowid = " . ((int)$this->id);
 
             dol_syslog("RemiseCheque::set_date", LOG_DEBUG);
             $resql = $this->db->query($sql);
@@ -844,21 +846,22 @@ class RemiseCheque extends CommonObject
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *      Set the ref of bordereau
      *
-     *      @param  User        $user           Object user
-     *      @param  int   $ref         ref of bordereau
-     *      @return int                         Return integer <0 if KO, >0 if OK
+     * @param User $user Object user
+     * @param int $ref ref of bordereau
+     * @return int                         Return integer <0 if KO, >0 if OK
      */
     public function set_number($user, $ref)
     {
-		// phpcs:enable
+        // phpcs:enable
         if ($user->hasRight('banque', 'cheque')) {
             $sql = "UPDATE " . MAIN_DB_PREFIX . "bordereau_cheque";
             $sql .= " SET ref = '" . $this->db->escape($ref) . "'";
-            $sql .= " WHERE rowid = " . ((int) $this->id);
+            $sql .= " WHERE rowid = " . ((int)$this->id);
 
             dol_syslog("RemiseCheque::set_number", LOG_DEBUG);
             $resql = $this->db->query($sql);
@@ -878,8 +881,8 @@ class RemiseCheque extends CommonObject
      *  Used to build previews or test instances.
      *  id must be 0 if object instance is a specimen.
      *
-     *  @param  string      $option     ''=Create a specimen invoice with lines, 'nolines'=No lines
-     *  @return int
+     * @param string $option ''=Create a specimen invoice with lines, 'nolines'=No lines
+     * @return int
      */
     public function initAsSpecimen($option = '')
     {
@@ -901,12 +904,12 @@ class RemiseCheque extends CommonObject
     /**
      *  Return clicable name (with picto eventually)
      *
-     *  @param  int     $withpicto                  0=No picto, 1=Include picto into link, 2=Only picto
-     *  @param  string  $option                     Sur quoi pointe le lien
-     *  @param  int     $notooltip                  1=Disable tooltip
-     *  @param  string  $morecss                    Add more css on link
-     *  @param  int     $save_lastsearch_value      -1=Auto, 0=No save of lastsearch_values when clicking, 1=Save lastsearch_values whenclicking
-     *  @return string                              Chaine avec URL
+     * @param int $withpicto 0=No picto, 1=Include picto into link, 2=Only picto
+     * @param string $option Sur quoi pointe le lien
+     * @param int $notooltip 1=Disable tooltip
+     * @param string $morecss Add more css on link
+     * @param int $save_lastsearch_value -1=Auto, 0=No save of lastsearch_values when clicking, 1=Save lastsearch_values whenclicking
+     * @return string                              Chaine avec URL
      */
     public function getNomUrl($withpicto = 0, $option = '', $notooltip = 0, $morecss = '', $save_lastsearch_value = -1)
     {
@@ -962,25 +965,26 @@ class RemiseCheque extends CommonObject
     /**
      *  Return the label of the status
      *
-     *  @param  int     $mode          0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
-     *  @return string                 Label of status
+     * @param int $mode 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
+     * @return string                 Label of status
      */
     public function getLibStatut($mode = 0)
     {
         return $this->LibStatut($this->statut, $mode);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return the label of a given status
      *
-     *  @param  int     $status        Id status
-     *  @param  int     $mode          0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
-     *  @return string                 Label of status
+     * @param int $status Id status
+     * @param int $mode 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
+     * @return string                 Label of status
      */
     public function LibStatut($status, $mode = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         if (empty($this->labelStatus) || empty($this->labelStatusShort)) {
             global $langs;
             $langs->load('compta');
@@ -1001,9 +1005,9 @@ class RemiseCheque extends CommonObject
     /**
      *  Return clicable link of object (with eventually picto)
      *
-     *  @param      string      $option                 Where point the link (0=> main card, 1,2 => shipment, 'nolink'=>No link)
-     *  @param      array       $arraydata              Array of data
-     *  @return     string                              HTML Code for Kanban thumb.
+     * @param string $option Where point the link (0=> main card, 1,2 => shipment, 'nolink'=>No link)
+     * @param array $arraydata Array of data
+     * @return     string                              HTML Code for Kanban thumb.
      */
     public function getKanbanView($option = '', $arraydata = null)
     {

@@ -29,7 +29,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "members", "bills", "users"));

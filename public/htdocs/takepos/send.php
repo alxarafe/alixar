@@ -44,7 +44,6 @@ if (!defined('NOREQUIREAJAX')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
 $facid = GETPOSTINT('facid');
 $action = GETPOST('action', 'aZ09');

@@ -34,6 +34,8 @@
 
 namespace Dolibarr\Code\Fourn\Classes;
 
+use Dolibarr\Code\Core\Classes\CommonOrder;
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 /**
@@ -41,13 +43,6 @@ use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
  *  \ingroup    fournisseur,commande
  *  \brief      File of class to manage suppliers orders
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonorder.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
-if (isModEnabled('productbatch')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productbatch.class.php';
-}
-
 
 /**
  *  Class to manage predefined suppliers products
@@ -3545,7 +3540,6 @@ class CommandeFournisseur extends CommonOrder
                 return $ret;
             } else {
                 if (is_array($supplierorderdispatch->lines) && count($supplierorderdispatch->lines) > 0) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
                     $date_liv = dol_now();
 
                     // Build array with quantity deliverd by product

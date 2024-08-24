@@ -23,9 +23,8 @@ namespace Dolibarr\Code\Product\Api;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttribute.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttributeValue.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';

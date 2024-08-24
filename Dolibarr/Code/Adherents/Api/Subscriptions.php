@@ -21,7 +21,6 @@ namespace Dolibarr\Code\Adherents\Api;
 
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
 
 /**
  * API class for subscriptions

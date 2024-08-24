@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2010      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015      Frederic France      <frederic.france@free.fr>
- * Copyright (C) 2016-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
+ * Copyright (C) 2016-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *      \file       htdocs/core/boxes/box_contracts.php
@@ -65,7 +68,6 @@ class box_contracts extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/contrat/class/contrat.class.php';
 
         $this->info_box_head = array(
             'text' => '<span class="valignmiddle">' . $langs->trans("BoxTitleLastContracts", $max) . '</span><a class="paddingleft valignmiddle" href="' . constant('BASE_URL') . '/contrat/list.php?sortfield=c.tms&sortorder=DESC"><span class="badge">...</span></a>'

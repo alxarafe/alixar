@@ -31,7 +31,6 @@ namespace Dolibarr\Code\User\Classes;
  *      \brief      File of class to manage bank accounts description of users
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
 use DoliDB;
 

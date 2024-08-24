@@ -29,6 +29,8 @@
 
 namespace Dolibarr\Code\Projet\Classes;
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Core\Base\CommonObject;
 
 /**
@@ -2407,7 +2409,6 @@ class Project extends CommonObject
      */
     public function setCategories($categories)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
         return parent::setCategoriesCommon($categories, Categorie::TYPE_PROJECT);
     }
 
@@ -2646,7 +2647,6 @@ class Project extends CommonObject
 
                 $reportContent .= '</table>';
 
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
 
                 // PREPARE EMAIL
                 $errormesg = '';

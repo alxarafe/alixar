@@ -28,13 +28,14 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+
+use Dolibarr\Code\Contact\Classes\Contact;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
 }
 
 // Load translation files required by the page
@@ -175,7 +176,7 @@ if (empty($reshook)) {
         $errorgrouparray = array();
 
         if ($groupid > 0) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
+            use Dolibarr\Code\User\Classes\UserGroup;
             $usergroup = new UserGroup($db);
             $result = $usergroup->fetch($groupid);
             if ($result > 0) {

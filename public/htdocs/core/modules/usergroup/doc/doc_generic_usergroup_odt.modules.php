@@ -26,8 +26,10 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/usergroup/modules_usergroup.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
+
+use Dolibarr\Code\User\Classes\User;
+
+use Dolibarr\Code\User\Classes\UserGroup;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -240,7 +242,6 @@ class doc_generic_usergroup_odt extends ModelePDFUserGroup
 
         // Add odtgeneration hook
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('odtgeneration'));

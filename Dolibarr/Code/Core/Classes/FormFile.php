@@ -834,7 +834,6 @@ class FormFile
         if (!empty($filedir)) {
             $link_list = array();
             if (is_object($object)) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
                 $link = new Link($this->db);
                 $sortfield = $sortorder = null;
                 $res = $link->fetchAll($link_list, $object->element, $object->id, $sortfield, $sortorder);
@@ -1750,28 +1749,20 @@ class FormFile
         // To show ref or specific information according to view to show (defined by $module)
         $object_instance = null;
         if ($modulepart == 'company') {
-            include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
             $object_instance = new Societe($this->db);
         } elseif ($modulepart == 'invoice') {
-            include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
             $object_instance = new Facture($this->db);
         } elseif ($modulepart == 'invoice_supplier') {
-            include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.facture.class.php';
             $object_instance = new FactureFournisseur($this->db);
         } elseif ($modulepart == 'propal') {
-            include_once DOL_DOCUMENT_ROOT . '/comm/propal/class/propal.class.php';
             $object_instance = new Propal($this->db);
         } elseif ($modulepart == 'supplier_proposal') {
-            include_once DOL_DOCUMENT_ROOT . '/supplier_proposal/class/supplier_proposal.class.php';
             $object_instance = new SupplierProposal($this->db);
         } elseif ($modulepart == 'order') {
-            include_once DOL_DOCUMENT_ROOT . '/commande/class/commande.class.php';
             $object_instance = new Commande($this->db);
         } elseif ($modulepart == 'order_supplier') {
-            include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.commande.class.php';
             $object_instance = new CommandeFournisseur($this->db);
         } elseif ($modulepart == 'contract') {
-            include_once DOL_DOCUMENT_ROOT . '/contrat/class/contrat.class.php';
             $object_instance = new Contrat($this->db);
         } elseif ($modulepart == 'product') {
             include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
@@ -1785,31 +1776,24 @@ class FormFile
         } elseif ($modulepart == 'salaries') {
                         $object_instance = new Salary($this->db);
         } elseif ($modulepart == 'project') {
-            include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
             $object_instance = new Project($this->db);
         } elseif ($modulepart == 'project_task') {
-            include_once DOL_DOCUMENT_ROOT . '/projet/class/task.class.php';
             $object_instance = new Task($this->db);
         } elseif ($modulepart == 'fichinter') {
-            include_once DOL_DOCUMENT_ROOT . '/fichinter/class/fichinter.class.php';
             $object_instance = new Fichinter($this->db);
         } elseif ($modulepart == 'user') {
             include_once DOL_DOCUMENT_ROOT . '/user/class/user.class.php';
             $object_instance = new User($this->db);
         } elseif ($modulepart == 'expensereport') {
-            include_once DOL_DOCUMENT_ROOT . '/expensereport/class/expensereport.class.php';
             $object_instance = new ExpenseReport($this->db);
         } elseif ($modulepart == 'holiday') {
-            include_once DOL_DOCUMENT_ROOT . '/holiday/class/holiday.class.php';
             $object_instance = new Holiday($this->db);
         } elseif ($modulepart == 'recruitment-recruitmentcandidature') {
             include_once DOL_DOCUMENT_ROOT . '/recruitment/class/recruitmentcandidature.class.php';
             $object_instance = new RecruitmentCandidature($this->db);
         } elseif ($modulepart == 'banque') {
-            include_once DOL_DOCUMENT_ROOT . '/compta/bank/class/account.class.php';
             $object_instance = new Account($this->db);
         } elseif ($modulepart == 'chequereceipt') {
-            include_once DOL_DOCUMENT_ROOT . '/compta/paiement/cheque/class/remisecheque.class.php';
             $object_instance = new RemiseCheque($this->db);
         } elseif ($modulepart == 'mrp-mo') {
             include_once DOL_DOCUMENT_ROOT . '/mrp/class/mo.class.php';

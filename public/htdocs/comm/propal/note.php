@@ -33,7 +33,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 use Dolibarr\Code\Comm\Classes\Propal;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/propal.lib.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 }
 
 // Load translation files required by the page

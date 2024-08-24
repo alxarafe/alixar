@@ -36,14 +36,18 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';                   // Customer Proposal
 require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';                    // Sale Order
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';               // Customer Invoice
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';                      // Contact / Address
+use Dolibarr\Code\Contact\Classes\Contact;
+
+// Contact / Address
 require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';                // Shipping / Delivery
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';           // Purchase Order
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';            // Purchase Invoice
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';                       // Project
 require_once constant('DOL_DOCUMENT_ROOT') . '/reception/class/reception.class.php';                  // Reception
 require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentcandidature.class.php';   // Recruiting
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';                      // Third-Party
+use Dolibarr\Code\Societe\Classes\Societe;
+
+// Third-Party
 require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';  // Supplier Proposal
 require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';                        // Ticket
 //require_once DOL_DOCUMENT_ROOT .'/expensereport/class/expensereport.class.php';        // Expense Report
@@ -2987,7 +2991,6 @@ class EmailCollector extends CommonObject
                                 );
 
                                 if (!is_object($hookmanager)) {
-                                    include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                                     $hookmanager = new HookManager($this->db);
                                 }
                                 $hookmanager->initHooks(array('emailcolector'));
@@ -3409,7 +3412,6 @@ class EmailCollector extends CommonObject
                             // Create event specific on hook
                             // this code action is hook..... for support this call
                             if (!is_object($hookmanager)) {
-                                include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                                 $hookmanager = new HookManager($this->db);
                                 $hookmanager->initHooks(['emailcolector']);
                             }

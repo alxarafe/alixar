@@ -28,7 +28,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
 
 $hookmanager = new HookManager($db);
@@ -141,7 +140,6 @@ if ($resql) {
     if ($conf->use_javascript_ajax) {
         print '<tr><td class="center" colspan="2">';
 
-        include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
         $dolgraph = new DolGraph();
         $dolgraph->SetData($dataseries);
         $dolgraph->SetDataColor(array_values($colorseries));

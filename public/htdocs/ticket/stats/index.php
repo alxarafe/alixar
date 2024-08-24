@@ -27,7 +27,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticketstats.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');

@@ -28,7 +28,9 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+
+use Dolibarr\Code\User\Classes\User;
+
 
 // Get parameters
 $id = GETPOSTINT('id');

@@ -27,7 +27,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+
+use Dolibarr\Code\Contact\Classes\Contact;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 
 $action = GETPOST('action', 'aZ09');

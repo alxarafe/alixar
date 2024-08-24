@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2017 	   Nicolas Zabouri      <info@inovea-conseil.com>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2017 	    Nicolas Zabouri             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ContratLigne;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/core/boxes/box_services_contracts.php
  *      \ingroup    produits,services
@@ -27,7 +33,6 @@
  */
 
 include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 
 /**
  * Class to manage the box to show last contracted products/services lines
@@ -66,7 +71,6 @@ class box_services_contracts extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/contrat/class/contrat.class.php';
 
         $form = new Form($this->db);
 

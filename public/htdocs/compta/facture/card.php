@@ -46,15 +46,9 @@ use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 
 // Libraries
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/facture/modules_facture.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
@@ -63,7 +57,6 @@ if (isModEnabled('order')) {
     use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 }
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
@@ -4395,7 +4388,6 @@ if ($action == 'create') {
             if ($qualified_for_stock_change) {
                 $langs->load("stocks");
                 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
                 $formproduct = new FormProduct($db);
                 $warehouse = new Entrepot($db);
                 $warehouse_array = $warehouse->list_array();
@@ -4460,7 +4452,6 @@ if ($action == 'create') {
             if ($qualified_for_stock_change) {
                 $langs->load("stocks");
                 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
                 $formproduct = new FormProduct($db);
                 $warehouse = new Entrepot($db);
                 $warehouse_array = $warehouse->list_array();

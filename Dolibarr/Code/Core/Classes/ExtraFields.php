@@ -31,6 +31,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Categories\Classes\Categorie;
 use DoliDB;
 
 /**
@@ -1058,7 +1059,6 @@ class ExtraFields
         global $conf, $langs, $form;
 
         if (!is_object($form)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
             $form = new Form($this->db);
         }
 
@@ -1463,7 +1463,6 @@ class ExtraFields
                         print 'Error in request ' . $sql . ' ' . $this->db->lasterror() . '. Check setup of extra parameters.<br>';
                     }
                 } else {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
                     $data = $form->select_all_categories(Categorie::$MAP_ID_TO_CODE[$InfoFieldList[5]], '', 'parent', 64, $InfoFieldList[6], 1, 1);
                     $out .= '<option value="0">&nbsp;</option>';
                     if (is_array($data)) {
@@ -1694,7 +1693,6 @@ class ExtraFields
                         print 'Error in request ' . $sql . ' ' . $this->db->lasterror() . '. Check setup of extra parameters.<br>';
                     }
                 } else {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
                     $data = $form->select_all_categories(Categorie::$MAP_ID_TO_CODE[$InfoFieldList[5]], '', 'parent', 64, $InfoFieldList[6], 1, 1);
                     $out = $form->multiselectarray($keyprefix . $key . $keysuffix, $data, $value_arr, '', 0, '', 0, '100%');
                 }
@@ -1955,7 +1953,6 @@ class ExtraFields
                     $toprint = array();
                     $obj = $this->db->fetch_object($resql);
                     if ($obj->rowid) {
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
                         $c = new Categorie($this->db);
                         $result = $c->fetch($obj->rowid);
                         if ($result > 0) {
@@ -2063,8 +2060,6 @@ class ExtraFields
                         }
                     }
                 } else {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-
                     $toprint = array();
                     while ($obj = $this->db->fetch_object($resql)) {
                         if (is_array($value_arr) && in_array($obj->rowid, $value_arr)) {

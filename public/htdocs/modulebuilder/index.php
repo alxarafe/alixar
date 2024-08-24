@@ -40,7 +40,6 @@ if (!defined('NOSCANPOSTFORINJECTION')) {
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/modulebuilder.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/utils.class.php';

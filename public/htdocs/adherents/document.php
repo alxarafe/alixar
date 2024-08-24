@@ -32,9 +32,7 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "members", "other"));

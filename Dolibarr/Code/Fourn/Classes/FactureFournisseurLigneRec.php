@@ -37,8 +37,6 @@ use Dolibarr\Code\Core\Classes\CommonInvoiceLine;
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 /**

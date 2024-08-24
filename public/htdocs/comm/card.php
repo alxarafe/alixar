@@ -39,13 +39,12 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
+
+use Dolibarr\Code\Contact\Classes\Contact;
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 if (isModEnabled('invoice')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
 }
 if (isModEnabled("propal")) {
@@ -64,7 +63,6 @@ if (isModEnabled('member')) {
     use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 if (isModEnabled('intervention')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 }
 
 // Load translation files required by the page

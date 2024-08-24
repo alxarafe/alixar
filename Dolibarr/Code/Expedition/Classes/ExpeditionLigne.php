@@ -33,22 +33,16 @@
 
 namespace Dolibarr\Code\Expedition\Classes;
 
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObjectLine;
+use DoliDB;
 
 /**
  *  \file       htdocs/expedition/class/expedition.class.php
  *  \ingroup    expedition
  *  \brief      File of class managing the shipments
  */
-
-if (isModEnabled("propal")) {
-    use Dolibarr\Code\Comm\Classes\Propal;
-}
-if (isModEnabled('order')) {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
-}
-require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expeditionlinebatch.class.php';
-
 
 /**
  * Class to manage lines of shipment
@@ -203,43 +197,43 @@ class ExpeditionLigne extends CommonObjectLine
     public $product_type = 0;
 
     /**
-    * @var int rang of line
-    */
+     * @var int rang of line
+     */
     public $rang;
 
     /**
-    * @var float weight
-    */
+     * @var float weight
+     */
     public $weight;
     public $weight_units;
 
     /**
-    * @var float length
-    */
+     * @var float length
+     */
     public $length;
     public $length_units;
 
     /**
-    * @var float width
-    */
+     * @var float width
+     */
     public $width;
     public $width_units;
 
     /**
-    * @var float height
-    */
+     * @var float height
+     */
     public $height;
     public $height_units;
 
     /**
-    * @var float surface
-    */
+     * @var float surface
+     */
     public $surface;
     public $surface_units;
 
     /**
-    * @var float volume
-    */
+     * @var float volume
+     */
     public $volume;
     public $volume_units;
 
@@ -276,7 +270,7 @@ class ExpeditionLigne extends CommonObjectLine
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -284,43 +278,11 @@ class ExpeditionLigne extends CommonObjectLine
     }
 
     /**
-     *  Load line expedition
-     *
-     *  @param  int     $rowid          Id line order
-     *  @return int                     Return integer <0 if KO, >0 if OK
-     */
-    public function fetch($rowid)
-    {
-        $sql = 'SELECT ed.rowid, ed.fk_expedition, ed.fk_entrepot, ed.fk_elementdet, ed.element_type, ed.qty, ed.rang';
-        $sql .= ' FROM ' . MAIN_DB_PREFIX . $this->table_element . ' as ed';
-        $sql .= ' WHERE ed.rowid = ' . ((int) $rowid);
-        $result = $this->db->query($sql);
-        if ($result) {
-            $objp = $this->db->fetch_object($result);
-            $this->id = $objp->rowid;
-            $this->fk_expedition = $objp->fk_expedition;
-            $this->entrepot_id = $objp->fk_entrepot;
-            $this->fk_elementdet = $objp->fk_elementdet;
-            $this->element_type = $objp->element_type;
-            $this->qty = $objp->qty;
-            $this->rang = $objp->rang;
-
-            $this->db->free($result);
-
-            return 1;
-        } else {
-            $this->errors[] = $this->db->lasterror();
-            $this->error = $this->db->lasterror();
-            return -1;
-        }
-    }
-
-    /**
      *  Insert line into database
      *
-     *  @param      User    $user           User that modify
-     *  @param      int     $notrigger      1 = disable triggers
-     *  @return     int                     Return integer <0 if KO, line id >0 if OK
+     * @param User $user User that modify
+     * @param int $notrigger 1 = disable triggers
+     * @return     int                     Return integer <0 if KO, line id >0 if OK
      */
     public function insert($user, $notrigger = 0)
     {
@@ -355,10 +317,10 @@ class ExpeditionLigne extends CommonObjectLine
         $sql .= ") VALUES (";
         $sql .= $this->fk_expedition;
         $sql .= ", " . (empty($this->entrepot_id) ? 'NULL' : $this->entrepot_id);
-        $sql .= ", " . ((int) $this->fk_elementdet);
+        $sql .= ", " . ((int)$this->fk_elementdet);
         $sql .= ", '" . (empty($this->element_type) ? 'order' : $this->db->escape($this->element_type)) . "'";
         $sql .= ", " . price2num($this->qty, 'MS');
-        $sql .= ", " . ((int) $ranktouse);
+        $sql .= ", " . ((int)$ranktouse);
         $sql .= ")";
 
         dol_syslog(get_class($this) . "::insert", LOG_DEBUG);
@@ -404,9 +366,9 @@ class ExpeditionLigne extends CommonObjectLine
     /**
      *  Delete shipment line.
      *
-     *  @param      User    $user           User that modify
-     *  @param      int     $notrigger      0=launch triggers after, 1=disable triggers
-     *  @return     int     >0 if OK, <0 if KO
+     * @param User $user User that modify
+     * @param int $notrigger 0=launch triggers after, 1=disable triggers
+     * @return     int     >0 if OK, <0 if KO
      */
     public function delete($user = null, $notrigger = 0)
     {
@@ -417,7 +379,7 @@ class ExpeditionLigne extends CommonObjectLine
         // delete batch expedition line
         if (isModEnabled('productbatch')) {
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "expeditiondet_batch";
-            $sql .= " WHERE fk_expeditiondet = " . ((int) $this->id);
+            $sql .= " WHERE fk_expeditiondet = " . ((int)$this->id);
 
             if (!$this->db->query($sql)) {
                 $this->errors[] = $this->db->lasterror() . " - sql=$sql";
@@ -426,7 +388,7 @@ class ExpeditionLigne extends CommonObjectLine
         }
 
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "expeditiondet";
-        $sql .= " WHERE rowid = " . ((int) $this->id);
+        $sql .= " WHERE rowid = " . ((int)$this->id);
 
         if (!$error && $this->db->query($sql)) {
             // Remove extrafields
@@ -467,9 +429,9 @@ class ExpeditionLigne extends CommonObjectLine
     /**
      *  Update a line in database
      *
-     *  @param      User    $user           User that modify
-     *  @param      int     $notrigger      1 = disable triggers
-     *  @return     int                 Return integer < 0 if KO, > 0 if OK
+     * @param User $user User that modify
+     * @param int $notrigger 1 = disable triggers
+     * @return     int                 Return integer < 0 if KO, > 0 if OK
      */
     public function update($user = null, $notrigger = 0)
     {
@@ -554,7 +516,6 @@ class ExpeditionLigne extends CommonObjectLine
                 //fetch lot details
 
                 // fetch from product_lot
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
                 $lot = new Productlot($this->db);
                 if ($lot->fetch(0, $this->fk_product, $batch) < 0) {
                     $this->errors[] = $lot->errors;
@@ -563,8 +524,8 @@ class ExpeditionLigne extends CommonObjectLine
                 if (!$error && !empty($expedition_batch_id)) {
                     // delete lot expedition line
                     $sql = "DELETE FROM " . MAIN_DB_PREFIX . "expeditiondet_batch";
-                    $sql .= " WHERE fk_expeditiondet = " . ((int) $this->id);
-                    $sql .= " AND rowid = " . ((int) $expedition_batch_id);
+                    $sql .= " WHERE fk_expeditiondet = " . ((int)$this->id);
+                    $sql .= " AND rowid = " . ((int)$expedition_batch_id);
 
                     if (!$this->db->query($sql)) {
                         $this->errors[] = $this->db->lasterror() . " - sql=$sql";
@@ -593,8 +554,8 @@ class ExpeditionLigne extends CommonObjectLine
             // update line
             $sql = "UPDATE " . MAIN_DB_PREFIX . $this->table_element . " SET";
             $sql .= " fk_entrepot = " . ($this->entrepot_id > 0 ? $this->entrepot_id : 'null');
-            $sql .= " , qty = " . ((float) price2num($qty, 'MS'));
-            $sql .= " WHERE rowid = " . ((int) $this->id);
+            $sql .= " , qty = " . ((float)price2num($qty, 'MS'));
+            $sql .= " WHERE rowid = " . ((int)$this->id);
 
             if (!$this->db->query($sql)) {
                 $this->errors[] = $this->db->lasterror() . " - sql=$sql";
@@ -629,6 +590,38 @@ class ExpeditionLigne extends CommonObjectLine
             }
             $this->db->rollback();
             return -1 * $error;
+        }
+    }
+
+    /**
+     *  Load line expedition
+     *
+     * @param int $rowid Id line order
+     * @return int                     Return integer <0 if KO, >0 if OK
+     */
+    public function fetch($rowid)
+    {
+        $sql = 'SELECT ed.rowid, ed.fk_expedition, ed.fk_entrepot, ed.fk_elementdet, ed.element_type, ed.qty, ed.rang';
+        $sql .= ' FROM ' . MAIN_DB_PREFIX . $this->table_element . ' as ed';
+        $sql .= ' WHERE ed.rowid = ' . ((int)$rowid);
+        $result = $this->db->query($sql);
+        if ($result) {
+            $objp = $this->db->fetch_object($result);
+            $this->id = $objp->rowid;
+            $this->fk_expedition = $objp->fk_expedition;
+            $this->entrepot_id = $objp->fk_entrepot;
+            $this->fk_elementdet = $objp->fk_elementdet;
+            $this->element_type = $objp->element_type;
+            $this->qty = $objp->qty;
+            $this->rang = $objp->rang;
+
+            $this->db->free($result);
+
+            return 1;
+        } else {
+            $this->errors[] = $this->db->lasterror();
+            $this->error = $this->db->lasterror();
+            return -1;
         }
     }
 }

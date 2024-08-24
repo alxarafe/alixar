@@ -23,7 +23,6 @@ namespace Dolibarr\Code\Fourn\Api;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
 
 /**
  * API class for supplier orders

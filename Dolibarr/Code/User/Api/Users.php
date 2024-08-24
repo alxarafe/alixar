@@ -27,7 +27,7 @@ use Luracast\Restler\RestException;
 
 use Dolibarr\Code\User\Classes\User;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
+use Dolibarr\Code\User\Classes\UserGroup;
 
 /**
  * API class for users

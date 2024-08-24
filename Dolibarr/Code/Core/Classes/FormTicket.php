@@ -34,7 +34,6 @@ use DoliDB;
  *    \brief      File of class to generate the form for creating a new ticket.
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 

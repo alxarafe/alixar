@@ -55,7 +55,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 
 // Load translation files
@@ -155,7 +154,6 @@ if ($source == 'proposal') {
     $object = new Contrat($db);
     $result = $object->fetch(0, $ref);
 } elseif ($source == 'fichinter') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
     $object = new Fichinter($db);
     $result = $object->fetch(0, $ref);
 } elseif ($source == 'societe_rib') {

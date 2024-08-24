@@ -26,6 +26,7 @@
 
 namespace Dolibarr\Code\Projet\Classes;
 
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Core\Base\CommonObjectLine;
 
 /**
@@ -33,9 +34,6 @@ use Dolibarr\Core\Base\CommonObjectLine;
  *      \ingroup    project
  *      \brief      This file is a CRUD class file for Task (Create/Read/Update/Delete)
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/timespent.class.php';
 
 /**
  *  Class to manage tasks

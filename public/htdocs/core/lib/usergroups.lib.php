@@ -352,7 +352,6 @@ function showSkins($fuser, $edit = 0, $foruserprofile = false)
 {
     global $conf, $langs, $db, $form;
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 
     $formother = new FormOther($db);
 

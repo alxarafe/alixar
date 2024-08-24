@@ -271,7 +271,6 @@ class RejetPrelevement
             $soc = new Societe($this->db);
             $soc->fetch($fac->socid);
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
 
             $subject = $langs->transnoentities("InfoRejectSubject");
             $sendto = $emuser->getFullName($langs) . " <" . $emuser->email . ">";

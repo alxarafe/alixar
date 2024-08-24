@@ -44,11 +44,11 @@ namespace Dolibarr\Code\Comm\Classes;
  *  \brief      File of class to manage proposals
  */
 
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
+use Dolibarr\Code\Core\Traits\CommonIncoterm;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 use Dolibarr\Core\Base\CommonObject;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 
 /**
@@ -666,7 +666,6 @@ public $demand_reason;
         dol_syslog(get_class($this) . "::fetch_lines", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
             $num = $this->db->num_rows($result);
 

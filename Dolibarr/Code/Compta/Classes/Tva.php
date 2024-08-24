@@ -655,7 +655,6 @@ class Tva extends CommonObject
                 $ok = 1;
                 if (isModEnabled("bank") && !empty($this->amount)) {
                     // Insert into llx_bank
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
                     $acc = new Account($this->db);
                     $result = $acc->fetch($this->accountid);

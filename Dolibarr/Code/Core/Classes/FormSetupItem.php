@@ -347,7 +347,6 @@ class FormSetupItem
         } elseif (preg_match('/category:/', $this->type)) {
             $out .= $this->generateInputFieldCategories();
         } elseif (preg_match('/thirdparty_type/', $this->type)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
             $formcompany = new FormCompany($this->db);
             $out .= $formcompany->selectProspectCustomerType($this->fieldValue, $this->confKey);
         } elseif ($this->type == 'securekey') {
@@ -419,8 +418,8 @@ class FormSetupItem
      */
     public function generateInputFieldCategories()
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
         $formother = new FormOther($this->db);
 
         $tmp = explode(':', $this->type);
@@ -673,7 +672,8 @@ class FormSetupItem
                 $out .= $this->langs->trans($template->label);
             }
         } elseif (preg_match('/category:/', $this->type)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+            use Dolibarr\Code\Categories\Classes\Categorie;
+
             $c = new Categorie($this->db);
             $result = $c->fetch($this->fieldValue);
             if ($result < 0) {
@@ -696,7 +696,6 @@ class FormSetupItem
                 $out .= $this->langs->trans("NorProspectNorCustomer");
             }
         } elseif ($this->type == 'product') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
             $product = new Product($this->db);
             $resprod = $product->fetch($this->fieldValue);
@@ -706,7 +705,6 @@ class FormSetupItem
                 $this->setErrors($product->errors);
             }
         } elseif ($this->type == 'selectBankAccount') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
             $bankaccount = new Account($this->db);
             $resbank = $bankaccount->fetch($this->fieldValue);

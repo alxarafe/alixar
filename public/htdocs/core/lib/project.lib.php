@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2006-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2010      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2018-2024 Frédéric France      <frederic.france@netlogic.fr>
- * Copyright (C) 2022      Charlene Benke       <charlene@patas-monkey.com>
- * Copyright (C) 2023      Gauthier VERDOL      <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2006-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2022       Charlene Benke              <charlene@patas-monkey.com>
+ * Copyright (C) 2023       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,14 +24,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  * \file       htdocs/core/lib/project.lib.php
  * \brief      Functions used by project module
  * \ingroup    project
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-
 
 /**
  * Prepare array with list of tabs
@@ -218,7 +217,6 @@ function project_prepare_head(Project $project, $moreparam = '')
     }
 
     if (isModEnabled('ticket') && $user->hasRight('ticket', 'read')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
         $Tickettatic = new Ticket($db);
         $nbTicket = $Tickettatic->getCountOfItemsLinkedByObjectID($project->id, 'fk_project', 'ticket');
         $head[$h][0] = constant('BASE_URL') . '/ticket/list.php?projectid=' . ((int) $project->id);
@@ -2521,7 +2519,6 @@ function print_projecttasks_array($db, $form, $socid, $projectsListId, $mytasks 
 
     $maxofloop = (!getDolGlobalString('MAIN_MAXLIST_OVERLOAD') ? 500 : $conf->global->MAIN_MAXLIST_OVERLOAD);
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
     $listofstatus = array_keys($listofoppstatus);
 

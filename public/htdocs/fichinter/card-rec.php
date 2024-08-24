@@ -36,14 +36,11 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinterrec.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fichinter.lib.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 }
 if (isModEnabled('contract')) {

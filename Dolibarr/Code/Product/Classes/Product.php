@@ -37,6 +37,7 @@
 namespace Dolibarr\Code\Product\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *    \file       htdocs/product/class/product.class.php
@@ -45,9 +46,6 @@ use Dolibarr\Core\Base\CommonObject;
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productbatch.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
 
 /**
  * Class to manage products or services
@@ -3338,7 +3336,6 @@ class Product extends CommonObject
                     $this->stats_commande['qty'] -= $adeduire;
                 } else {
                     // If option DECREASE_ONLY_UNINVOICEDPRODUCTS is off, we make a compensation with lines of invoices linked to the order
-                    include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
 
                     // For every order having invoice already validated we need to decrease stock cause it's in physical stock
                     $adeduire = 0;
@@ -5442,13 +5439,13 @@ class Product extends CommonObject
         }
         // show categories for this record only in ajax to not overload lists
         if (isModEnabled('category') && !$nofetch) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
             $form = new Form($this->db);
             $datas['categories'] = '<br>' . $form->showCategories($this->id, Categorie::TYPE_PRODUCT, 1);
         }
 
         return $datas;
     }
+
 
     /**
      *    Return clickable link of object (with eventually picto)
@@ -6542,7 +6539,6 @@ class Product extends CommonObject
      */
     public function setCategories($categories)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
         return parent::setCategoriesCommon($categories, Categorie::TYPE_PRODUCT);
     }
 

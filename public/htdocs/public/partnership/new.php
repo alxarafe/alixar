@@ -58,8 +58,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 use Dolibarr\Code\Partnerships\Classes\Partnership;
 require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/class/partnership_type.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 // Init vars

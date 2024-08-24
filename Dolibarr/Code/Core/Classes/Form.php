@@ -43,7 +43,9 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Categories\Classes\Categorie;
 use DoliDB;
+use stdClass;
 
 /**
  * \file       htdocs/core/class/html.form.class.php
@@ -97,7 +99,7 @@ class Form
      *
      * @param DoliDB $db Database handler
      */
-    public function __construct($db)
+    public function __construct(DoliDB $db)
     {
         $this->db = $db;
     }
@@ -1356,7 +1358,6 @@ class Form
             // No immediate load of all database
             $placeholder = '';
             if ($selected && empty($selected_input_value)) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
                 $societetmp = new Societe($this->db);
                 $societetmp->fetch($selected);
                 $selected_input_value = $societetmp->name;
@@ -1442,7 +1443,6 @@ class Form
             // No immediate load of all database
             $placeholder = '';
             if ($selected && empty($selected_input_value)) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
                 $contacttmp = new Contact($this->db);
                 $contacttmp->fetch($selected);
                 $selected_input_value = $contacttmp->getFullName($langs);
@@ -1807,7 +1807,6 @@ class Form
         }
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
 
@@ -2657,7 +2656,6 @@ class Form
             $placeholder = '';
 
             if ($selected && empty($selected_input_value)) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
                 $producttmpselect = new Product($this->db);
                 $producttmpselect->fetch($selected);
                 $selected_input_value = $producttmpselect->ref;
@@ -2796,7 +2794,6 @@ class Form
 		// phpcs:enable
         global $db;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
         $error = 0;
         $out = '';
@@ -2897,7 +2894,6 @@ class Form
 
         $warehouseStatusArray = array();
         if (!empty($warehouseStatus)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
             if (preg_match('/warehouseclosed/', $warehouseStatus)) {
                 $warehouseStatusArray[] = Entrepot::STATUS_CLOSED;
             }
@@ -3006,7 +3002,6 @@ class Form
         if (getDolGlobalInt('MAIN_MULTILANGS')) {
             $sql .= " LEFT JOIN " . $this->db->prefix() . "product_lang as pl ON pl.fk_product = p.rowid ";
             if (getDolGlobalString('PRODUIT_TEXTS_IN_THIRDPARTY_LANGUAGE') && !empty($socid)) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
                 $soc = new Societe($this->db);
                 $result = $soc->fetch($socid);
                 if ($result > 0 && !empty($soc->default_lang)) {
@@ -3112,7 +3107,6 @@ class Form
         dol_syslog(get_class($this) . "::select_produits_list search products", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 
@@ -3602,7 +3596,6 @@ class Form
         $selected_input_value = '';
         if (!empty($conf->use_javascript_ajax) && getDolGlobalString('PRODUIT_USE_SEARCH_TO_SELECT')) {
             if ($selected > 0) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
                 $producttmpselect = new Product($this->db);
                 $producttmpselect->fetch($selected);
                 $selected_input_value = $producttmpselect->ref;
@@ -5239,7 +5232,6 @@ class Form
             $langs->load('banks');
 
             if ($selected) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
                 $bankstatic = new Account($this->db);
                 $result = $bankstatic->fetch($selected);
                 if ($result) {
@@ -6076,7 +6068,6 @@ class Form
             print '</form>';
         } else {
             if ($selected) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
                 $theuser = new User($this->db);
                 $theuser->fetch($selected);
                 print $theuser->getNomUrl(1);
@@ -6367,7 +6358,6 @@ class Form
             print '</tr></table></form>';
         } else {
             if ($selected) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
                 $contact = new Contact($this->db);
                 $contact->fetch($selected);
                 print $contact->getFullName($langs);
@@ -6410,7 +6400,6 @@ class Form
             $out .= '</form>';
         } else {
             if ($selected) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
                 $soc = new Societe($this->db);
                 $soc->fetch($selected);
                 $out .= $soc->getNomUrl(0, '');
@@ -7567,7 +7556,6 @@ class Form
             $placeholder = '';
 
             if ($selected && empty($selected_input_value)) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
                 $tickettmpselect = new Ticket($this->db);
                 $tickettmpselect->fetch($selected);
                 $selected_input_value = $tickettmpselect->ref;
@@ -7662,7 +7650,6 @@ class Form
         dol_syslog(get_class($this) . "::selectTicketsList search tickets", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
 
             $num = $this->db->num_rows($result);
@@ -7793,7 +7780,6 @@ class Form
             $placeholder = '';
 
             if ($selected && empty($selected_input_value)) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
                 $projecttmpselect = new Project($this->db);
                 $projecttmpselect->fetch($selected);
                 $selected_input_value = $projecttmpselect->ref;
@@ -7887,7 +7873,6 @@ class Form
         dol_syslog(get_class($this) . "::selectProjectsList search projects", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 
             $num = $this->db->num_rows($result);
@@ -8022,7 +8007,6 @@ class Form
             $placeholder = '';
 
             if ($selected && empty($selected_input_value)) {
-                use Dolibarr\Code\Adherents\Classes\Adherent;
                 $adherenttmpselect = new Adherent($this->db);
                 $adherenttmpselect->fetch($selected);
                 $selected_input_value = $adherenttmpselect->ref;
@@ -8121,7 +8105,6 @@ class Form
         dol_syslog(get_class($this) . "::selectMembersList search adherents", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
-            use Dolibarr\Code\Adherents\Classes\Adherent;
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 
             $num = $this->db->num_rows($result);
@@ -9479,7 +9462,6 @@ class Form
                 $listofidcompanytoscan .= ',' . $object->thirdparty->parent;
             }
             if (($object->fk_project > 0) && getDolGlobalString('THIRDPARTY_INCLUDE_PROJECT_THIRDPARY_IN_LINKTO')) {
-                include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
                 $tmpproject = new Project($this->db);
                 $tmpproject->fetch($object->fk_project);
                 if ($tmpproject->socid > 0 && ($tmpproject->socid != $object->thirdparty->id)) {
@@ -10649,7 +10631,6 @@ class Form
     {
         global $user, $conf, $langs;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
         if (is_null($usertofilter)) {
             $usertofilter = $user;

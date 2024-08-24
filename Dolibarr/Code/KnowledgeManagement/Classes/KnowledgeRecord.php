@@ -30,9 +30,8 @@ use Dolibarr\Core\Base\CommonObject;
  */
 
 // Put here all includes required by your class file
-//require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-//require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-
+//use Dolibarr\Code\Societe\Classes\Societe;
+//
 /**
  * Class for KnowledgeRecord
  */
@@ -750,7 +749,8 @@ class KnowledgeRecord extends CommonObject
         $datas['lang'] = '<br><b>' . $langs->trans('Language') . ':</b> ' . picto_from_langcode($this->lang, 'class="paddingrightonly saturatemedium opacitylow"') . $labellang;
         // show categories for this record only in ajax to not overload lists
         if (isModEnabled('category') && !$nofetch) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+            use Dolibarr\Code\Categories\Classes\Categorie;
+
             $form = new Form($this->db);
             $datas['categories'] = '<br>' . $form->showCategories($this->id, Categorie::TYPE_KNOWLEDGEMANAGEMENT, 1);
         }
@@ -1128,7 +1128,8 @@ class KnowledgeRecord extends CommonObject
      */
     public function setCategories($categories)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
         return parent::setCategoriesCommon($categories, Categorie::TYPE_KNOWLEDGEMANAGEMENT);
     }
 

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2012-2018  Charlene BENKE  <charlie@patas-monkey.com>
- * Copyright (C) 2015-2024  Frédéric France      <frederic.france@free.fr>
+/* Copyright (C) 2012-2018  Charlene BENKE              <charlie@patas-monkey.com>
+ * Copyright (C) 2015-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,10 @@
  *  \ingroup    Projet
  *  \brief      Module to Task activity of the current year
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
 
 include_once DOL_DOCUMENT_ROOT . "/core/boxes/modules_boxes.php";
 require_once DOL_DOCUMENT_ROOT . "/core/lib/date.lib.php";
@@ -71,7 +75,6 @@ class box_task extends ModeleBoxes
 
         $this->max = $max;
         include_once DOL_DOCUMENT_ROOT . "/projet/class/task.class.php";
-        include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
         require_once DOL_DOCUMENT_ROOT . "/core/lib/project.lib.php";
         $projectstatic = new Project($this->db);
         $taskstatic = new Task($this->db);

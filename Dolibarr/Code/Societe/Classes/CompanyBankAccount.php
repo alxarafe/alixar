@@ -33,7 +33,6 @@ use DoliDB;
  *  \brief      File of class to manage bank accounts description of third parties
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
 
 /**

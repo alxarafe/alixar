@@ -20,6 +20,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Core\Traits\CommonIncoterm;
 use Dolibarr\Core\Base\CommonObject;
 
 /**
@@ -28,14 +29,12 @@ use Dolibarr\Core\Base\CommonObject;
  *       \brief      File of the superclass of orders classes (customer and supplier)
  */
 
-
 /**
  *      Superclass for orders classes
  */
 abstract class CommonOrder extends CommonObject
 {
     use CommonIncoterm;
-
 
     /**
      *  Return clicable link of object (with eventually picto)
@@ -82,7 +81,6 @@ abstract class CommonOrder extends CommonObject
      */
     public function getNbLinesProductOrServiceOnBuy($ignoreFree = false)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
         $product = new Product($this->db);
         $return = 0;
         foreach ($this->lines as $line) {

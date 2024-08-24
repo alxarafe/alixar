@@ -30,24 +30,20 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/sendings.lib.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 }
 if (isModEnabled('stock')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
 }
 if (isModEnabled("propal")) {
     use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled("product") || isModEnabled("service")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 }
 
 // Load translation files required by the page

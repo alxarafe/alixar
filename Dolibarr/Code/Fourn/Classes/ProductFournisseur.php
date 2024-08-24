@@ -36,8 +36,6 @@ use DoliDB;
  *  \brief      File of class to manage predefined suppliers products
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productfournisseurprice.class.php';
 
 

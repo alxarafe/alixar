@@ -49,36 +49,31 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/genericobject.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product/modules_product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
 
 if (isModEnabled('propal')) {
     use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled('invoice')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 }
 if (isModEnabled('order')) {
     use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 }
 if (isModEnabled('bom')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
 }
 if (isModEnabled('workstation')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/class/workstation.class.php';
 }
 
 // Load translation files required by the page

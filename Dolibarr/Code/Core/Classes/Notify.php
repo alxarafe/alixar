@@ -35,7 +35,6 @@ use DoliDB;
  *      \brief      File of class to manage notifications
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
 
 
 /**
@@ -622,7 +621,6 @@ class Notify
 
         // Complete the array Notify::$arrayofnotifsupported
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('notification'));

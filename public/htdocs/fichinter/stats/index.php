@@ -25,7 +25,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinterstats.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
 

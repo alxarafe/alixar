@@ -51,8 +51,6 @@ if (is_numeric($entity)) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
 // Security check
 if (!isModEnabled('member')) {

@@ -47,13 +47,12 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/website.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/website2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formwebsite.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/website.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/websitepage.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
 
 
@@ -5098,7 +5097,8 @@ if ($mode == 'replacesite' || $massaction == 'replace') {
             }
             print '</tr>';
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+            use Dolibarr\Code\Categories\Classes\Categorie;
+
             $c = new Categorie($db);
 
             $totalnbwords = 0;

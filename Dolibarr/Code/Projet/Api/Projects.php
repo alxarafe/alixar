@@ -23,7 +23,6 @@ namespace Dolibarr\Code\Projet\Api;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 
 /**

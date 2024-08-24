@@ -34,8 +34,6 @@ use Dolibarr\Core\Base\CommonObjectLine;
  *       \brief      File to manage Expense Reports
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport_ik.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport_rule.class.php';
 
 /**
  * Class of expense report details lines

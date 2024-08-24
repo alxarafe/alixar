@@ -28,10 +28,7 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
 if (isModEnabled("bank")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 }
 
 // Load translation files required by the page

@@ -38,18 +38,19 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+
+use Dolibarr\Code\Contact\Classes\Contact;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contact.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\User\Classes\User;
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'users', 'other', 'commercial'));
@@ -1574,7 +1575,6 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
             $morehtmlright = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/contact/agenda.php?id=' . $object->id);
 
             // List of actions on element
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
             $formactions = new FormActions($db);
             $somethingshown = $formactions->showactions($object, 'contact', $object->socid, 1, '', $MAXEVENT, '', $morehtmlright); // Show all action for thirdparty
 

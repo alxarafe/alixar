@@ -26,7 +26,6 @@ use Dolibarr\Core\Base\CommonObject;
 // Put here all includes required by your class file
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/config.php'; // This set stripe global env
 
 

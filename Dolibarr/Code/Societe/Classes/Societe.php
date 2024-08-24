@@ -40,11 +40,17 @@
 
 namespace Dolibarr\Code\Societe\Classes;
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Conf;
 use Dolibarr\Code\Core\Traits\CommonIncoterm;
 use Dolibarr\Code\Core\Traits\CommonPeople;
 use Dolibarr\Code\Core\Traits\CommonSocialNetworks;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *  \file       htdocs/societe/class/societe.class.php
@@ -1116,8 +1122,6 @@ class Societe extends CommonObject
 
         $this->db->begin();
 
-		// phpcs:enable
-        require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
         $contact = new Contact($this->db);
 
         $contact->name              = $this->name_bis;
@@ -1669,8 +1673,6 @@ class Societe extends CommonObject
                 if (!$error && $nbrowsaffected) {
                     // Update information on linked member if it is an update
                     if (!$nosyncmember && isModEnabled('member')) {
-                        use Dolibarr\Code\Adherents\Classes\Adherent;
-
                         dol_syslog(get_class($this) . "::update update linked member");
 
                         $lmember = new Adherent($this->db);
@@ -2143,7 +2145,6 @@ class Societe extends CommonObject
             }
 
             if (!$error) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
                 $static_cat = new Categorie($this->db);
                 $toute_categs = array();
 
@@ -2846,7 +2847,6 @@ class Societe extends CommonObject
         }
         // show categories for this record only in ajax to not overload lists
         if (!$nofetch && isModEnabled('category') && $this->client) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
             $form = new Form($this->db);
             $datas['categories_customer'] = '<br>' . $form->showCategories($this->id, Categorie::TYPE_CUSTOMER, 1, 1);
         }
@@ -2859,7 +2859,6 @@ class Societe extends CommonObject
         }
         // show categories for this record only in ajax to not overload lists
         if (!$nofetch && isModEnabled('category') && $this->fournisseur) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
             $form = new Form($this->db);
             $datas['categories_supplier'] = '<br>' . $form->showCategories($this->id, Categorie::TYPE_SUPPLIER, 1, 1);
         }
@@ -3260,8 +3259,6 @@ class Societe extends CommonObject
      */
     public function contact_array_objects()
     {
-		// phpcs:enable
-        require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
         $contacts = array();
 
         $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "socpeople WHERE fk_soc = " . ((int) $this->id);
@@ -4856,10 +4853,8 @@ class Societe extends CommonObject
             $arrayofref = array();
             $arrayofrefopened = array();
             if ($mode == 'supplier') {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
                 $tmpobject = new FactureFournisseur($this->db);
             } else {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
                 $tmpobject = new Facture($this->db);
             }
             while ($obj = $this->db->fetch_object($resql)) {
@@ -5019,8 +5014,6 @@ class Societe extends CommonObject
      */
     public function setCategories($categories, $type_categ)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-
         // Decode type
         if (!in_array($type_categ, array(Categorie::TYPE_CUSTOMER, Categorie::TYPE_SUPPLIER))) {
             dol_syslog(__METHOD__ . ': Type ' . $type_categ . 'is an unknown company category type. Done nothing.', LOG_ERR);
@@ -5207,9 +5200,6 @@ class Societe extends CommonObject
     public function fetchPartnerships($mode)
     {
         global $langs;
-
-        use Dolibarr\Code\Partnerships\Classes\Partnership;
-
 
         $this->partnerships[] = array();
 

@@ -32,9 +32,8 @@ namespace Dolibarr\Code\Asset\Classes;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-//require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-//require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-
+//use Dolibarr\Code\Societe\Classes\Societe;
+//
 /**
  * Class for AssetModel
  */

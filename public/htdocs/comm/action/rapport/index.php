@@ -29,8 +29,9 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+
+use Dolibarr\Code\Contact\Classes\Contact;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 
 // Load translation files required by the page

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2024 Frederic France      <frederic.france@netlogic.fr>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2024  Frederic France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\HookManager;
+
 /**
  *  \file       htdocs/core/boxes/box_dolibarr_state_board.php
  *  \ingroup    core
@@ -28,7 +30,6 @@
  */
 
 include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 
 /**
  * Class to manage the box to show last thirdparties
@@ -45,8 +46,8 @@ class box_dolibarr_state_board extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param = '')
     {
@@ -56,8 +57,8 @@ class box_dolibarr_state_board extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -109,11 +110,11 @@ class box_dolibarr_state_board extends ModeleBoxes
                 'customers' => isModEnabled('societe') && $user->hasRight('societe', 'lire') && !getDolGlobalString('SOCIETE_DISABLE_CUSTOMERS') && !getDolGlobalString('SOCIETE_DISABLE_CUSTOMERS_STATS'),
                 'prospects' => isModEnabled('societe') && $user->hasRight('societe', 'lire') && !getDolGlobalString('SOCIETE_DISABLE_PROSPECTS') && !getDolGlobalString('SOCIETE_DISABLE_PROSPECTS_STATS'),
                 'suppliers' => (
-                    (isModEnabled("fournisseur") && !getDolGlobalString('MAIN_USE_NEW_SUPPLIERMOD') && $user->hasRight('fournisseur', 'lire'))
-                                 || (isModEnabled("supplier_order") && $user->hasRight('supplier_order', 'lire'))
-                                 || (isModEnabled("supplier_invoice") && $user->hasRight('supplier_invoice', 'lire'))
-                )
-                                 && !getDolGlobalString('SOCIETE_DISABLE_SUPPLIERS_STATS'),
+                        (isModEnabled("fournisseur") && !getDolGlobalString('MAIN_USE_NEW_SUPPLIERMOD') && $user->hasRight('fournisseur', 'lire'))
+                        || (isModEnabled("supplier_order") && $user->hasRight('supplier_order', 'lire'))
+                        || (isModEnabled("supplier_invoice") && $user->hasRight('supplier_invoice', 'lire'))
+                    )
+                    && !getDolGlobalString('SOCIETE_DISABLE_SUPPLIERS_STATS'),
                 'contacts' => isModEnabled('societe') && $user->hasRight('societe', 'contact', 'lire'),
                 'products' => isModEnabled('product') && $user->hasRight('product', 'read'),
                 'services' => isModEnabled('service') && $user->hasRight('service', 'read'),
@@ -133,28 +134,28 @@ class box_dolibarr_state_board extends ModeleBoxes
                 'dolresource' => isModEnabled('resource') && $user->hasRight('resource', 'read')
             );
             $classes = array(
-                'users' => 'User',
-                'members' => 'Adherent',
-                'customers' => 'Client',
-                'prospects' => 'Client',
-                'suppliers' => 'Fournisseur',
-                'contacts' => 'Contact',
-                'products' => 'Product',
-                'services' => 'ProductService',
-                'proposals' => 'Propal',
-                'orders' => 'Commande',
-                'invoices' => 'Facture',
-                'donations' => 'Don',
-                'contracts' => 'Contrat',
-                'interventions' => 'Fichinter',
-                'supplier_orders' => 'CommandeFournisseur',
-                'supplier_invoices' => 'FactureFournisseur',
-                'supplier_proposals' => 'SupplierProposal',
-                'projects' => 'Project',
-                'expensereports' => 'ExpenseReport',
-                'holidays' => 'Holiday',
-                'ticket' => 'Ticket',
-                'dolresource' => 'Dolresource'
+                'users' => new \Dolibarr\Code\User\Classes\User($this->db),
+                'members' => new \Dolibarr\Code\Adherents\Classes\Adherent($this->db),
+                'customers' => new \Dolibarr\Code\Societe\Classes\Client($this->db),
+                'prospects' => new \Dolibarr\Code\Societe\Classes\Client($this->db),
+                'suppliers' => new \Dolibarr\Code\Fourn\Classes\Fournisseur($this->db),
+                'contacts' => new \Dolibarr\Code\Contact\Classes\Contact($this->db),
+                'products' => new \Dolibarr\Code\Product\Classes\Product($this->db),
+                'services' => new \Dolibarr\Code\Product\Classes\ProductService($this->db),
+                'proposals' => new \Dolibarr\Code\Comm\Classes\Propal($this->db),
+                'orders' => new \Dolibarr\Code\Commande\Classes\Commande($this->db),
+                'invoices' => new \Dolibarr\Code\Compta\Classes\Facture($this->db),
+                'donations' => new \Dolibarr\Code\Don\Classes\Don($this->db),
+                'contracts' => new \Dolibarr\Code\Contrat\Classes\Contrat($this->db),
+                'interventions' => new \Dolibarr\Code\FichInter\Classes\Fichinter($this->db),
+                'supplier_orders' => new \Dolibarr\Code\Fourn\Classes\CommandeFournisseur($this->db),
+                'supplier_invoices' => new \Dolibarr\Code\Fourn\Classes\FactureFournisseur($this->db),
+                'supplier_proposals' => new \Dolibarr\Code\SupplierProposal\Classes\SupplierProposal($this->db),
+                'projects' => new \Dolibarr\Code\Projet\Classes\Project($this->db),
+                'expensereports' => new \Dolibarr\Code\ExpenseReport\Classes\ExpenseReport($this->db),
+                'holidays' => new \Dolibarr\Code\Holiday\Classes\Holiday($this->db),
+                'ticket' => new \Dolibarr\Code\Ticket\Classes\Ticket($this->db),
+                'dolresource' => new \Dolibarr\Code\Resource\Classes\Dolresource($this->db)
             );
             $includes = array(
                 'users' => DOL_DOCUMENT_ROOT . "/user/class/user.class.php",
@@ -245,7 +246,7 @@ class box_dolibarr_state_board extends ModeleBoxes
             foreach ($keys as $val) {
                 if ($conditions[$val]) {
                     $boxstatItem = '';
-                    $class = $classes[$val];
+                    // $class = $classes[$val];
                     // Search in cache if load_state_board is already realized
                     $classkeyforcache = $class;
                     if ($classkeyforcache == 'ProductService') {
@@ -253,9 +254,10 @@ class box_dolibarr_state_board extends ModeleBoxes
                     }
 
                     if (!isset($boardloaded[$classkeyforcache]) || !is_object($boardloaded[$classkeyforcache])) {
-                        include_once $includes[$val]; // Loading a class cost around 1Mb
+                        // include_once $includes[$val]; // Loading a class cost around 1Mb
+                        // $board = new $class($this->db);
 
-                        $board = new $class($this->db);
+                        $board = $classes[$val];
                         if (method_exists($board, 'load_state_board')) {
                             // @phan-suppress-next-line PhanUndeclaredMethod  (Legacy, not present in core).
                             $board->load_state_board();
@@ -317,10 +319,10 @@ class box_dolibarr_state_board extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

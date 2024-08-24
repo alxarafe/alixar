@@ -45,12 +45,9 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commoninvoice.class.php';
 use Dolibarr\Core\Base\CommonObjectLine;
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
 
 if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 }
 
 /**

@@ -32,10 +32,10 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/categories.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("categories", "compta"));
@@ -110,7 +110,6 @@ $reshook = $hookmanager->executeHooks('doActions', $parameters, $object, $action
 // Remove element from category
 if ($id > 0 && $removeelem > 0 && $action == 'unlink') {
     if ($type == Categorie::TYPE_PRODUCT && ($user->hasRight('produit', 'creer') || $user->hasRight('service', 'creer'))) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
         $tmpobject = new Product($db);
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'product';
@@ -128,27 +127,26 @@ if ($id > 0 && $removeelem > 0 && $action == 'unlink') {
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'member';
     } elseif ($type == Categorie::TYPE_CONTACT && $user->hasRight('societe', 'creer')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+        use Dolibarr\Code\Contact\Classes\Contact;
+
         $tmpobject = new Contact($db);
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'contact';
     } elseif ($type == Categorie::TYPE_ACCOUNT && $user->hasRight('banque', 'configurer')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
         $tmpobject = new Account($db);
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'account';
     } elseif ($type == Categorie::TYPE_PROJECT && $user->hasRight('projet', 'creer')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
         $tmpobject = new Project($db);
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'project';
     } elseif ($type == Categorie::TYPE_USER && $user->hasRight('user', 'user', 'creer')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+        use Dolibarr\Code\User\Classes\User;
+
         $tmpobject = new User($db);
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'user';
     } elseif ($type == Categorie::TYPE_TICKET && $user->hasRight('ticket', 'write')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
         $tmpobject = new Ticket($db);
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'ticket';
@@ -189,23 +187,20 @@ if (
     )
 ) {
     if ($type == Categorie::TYPE_PRODUCT) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
         $newobject = new Product($db);
         $elementtype = 'product';
     } elseif ($type == Categorie::TYPE_CUSTOMER) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+        use Dolibarr\Code\Societe\Classes\Societe;
         $newobject = new Societe($db);
         $elementtype = 'customer';
     } elseif ($type == Categorie::TYPE_SUPPLIER) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+        use Dolibarr\Code\Societe\Classes\Societe;
         $newobject = new Societe($db);
         $elementtype = 'supplier';
     } elseif ($type == Categorie::TYPE_TICKET) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
         $newobject = new Ticket($db);
         $elementtype = 'ticket';
     } elseif ($type == Categorie::TYPE_PROJECT) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
         $newobject = new Project($db);
         $elementtype = 'project';
     } elseif ($type == Categorie::TYPE_MEMBER) {
@@ -213,15 +208,16 @@ if (
         $newobject = new Adherent($db);
         $elementtype = 'member';
     } elseif ($type == Categorie::TYPE_CONTACT) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+        use Dolibarr\Code\Contact\Classes\Contact;
+
         $newobject = new Contact($db);
         $elementtype = 'contact';
     } elseif ($type == Categorie::TYPE_USER) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+        use Dolibarr\Code\User\Classes\User;
+
         $newobject = new User($db);
         $elementtype = 'user';
     } elseif ($type == Categorie::TYPE_ACCOUNT) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
         $newobject = new Account($db);
         $elementtype = 'bank_account';
     } else {
@@ -402,13 +398,12 @@ if ($cats < 0) {
             use Dolibarr\Code\Adherents\Classes\Adherent;
         }
         if ($type == Categorie::TYPE_ACCOUNT) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
         }
         if ($type == Categorie::TYPE_PROJECT) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
         }
         if ($type == Categorie::TYPE_USER) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+            use Dolibarr\Code\User\Classes\User;
+
         }
     }
 
@@ -952,7 +947,6 @@ if ($type == Categorie::TYPE_CONTACT) {
 // List of bank accounts
 if ($type == Categorie::TYPE_ACCOUNT) {
     if ($user->hasRight("banque", "read")) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
         $permission = $user->hasRight('banque', 'creer');
 
@@ -1042,7 +1036,6 @@ if ($type == Categorie::TYPE_ACCOUNT) {
 // List of Project
 if ($type == Categorie::TYPE_PROJECT) {
     if ($user->hasRight("project", "read")) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
         $permission = $user->hasRight('projet', 'creer');
 
@@ -1132,7 +1125,8 @@ if ($type == Categorie::TYPE_PROJECT) {
 // List of users
 if ($type == Categorie::TYPE_USER) {
     if ($user->hasRight("user", "user", "read")) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+        use Dolibarr\Code\User\Classes\User;
+
 
         $users = $object->getObjectsInCateg($type);
         if ($users < 0) {
@@ -1219,7 +1213,6 @@ if ($type == Categorie::TYPE_WAREHOUSE) {
     if ($user->hasRight("stock", "read")) {
         $permission = $user->hasRight('stock', 'creer');
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
 
         $objects = $object->getObjectsInCateg($type, 0, $limit, $offset);
         if ($objects < 0) {

@@ -32,7 +32,6 @@ use DoliDB;
  *      \brief      Class file for html component project
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
 
 /**
  *      Class to manage building of HTML components
@@ -105,7 +104,6 @@ class FormProjets extends Form
             $placeholder = '';
 
             if ($selected && empty($selected_input_value)) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
                 $project = new Project($this->db);
                 $project->fetch($selected);
                 $selected_input_value = $project->ref;
@@ -162,7 +160,6 @@ class FormProjets extends Form
 		// phpcs:enable
         global $user, $conf, $langs;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
         if (empty($htmlid)) {
             $htmlid = $htmlname;
@@ -352,7 +349,6 @@ class FormProjets extends Form
     {
         global $user, $conf, $langs;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
         if (is_null($usertofilter)) {
             $usertofilter = $user;
@@ -834,7 +830,6 @@ class FormProjets extends Form
     {
         global $user, $conf, $langs;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
         $out = '';
         if (empty($lineOnly)) {

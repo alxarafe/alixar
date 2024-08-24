@@ -21,7 +21,8 @@
  */
 
 if (isModEnabled('category') && $user->hasRight('categorie', 'lire')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
 }
 
 print '<script>
@@ -290,7 +291,6 @@ if (!getDolGlobalString('MAIN_EXTRAFIELDS_DISABLED')) {
     $socstatic = new Societe($db);
     $elementtype = $socstatic->table_element;
     // fetch optionals attributes and labels
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
     $extrafields = new ExtraFields($db);
     $extrafields->fetch_name_optionals_label($elementtype);
     foreach ($extrafields->attributes[$elementtype]['label'] as $key => $val) {

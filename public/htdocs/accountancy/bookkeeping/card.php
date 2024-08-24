@@ -37,8 +37,6 @@ use Dolibarr\Code\Accountancy\Classes\BookKeepingLine;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("accountancy", "bills", "compta"));

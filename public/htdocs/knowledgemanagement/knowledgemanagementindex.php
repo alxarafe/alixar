@@ -29,7 +29,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("knowledgemanagement"));

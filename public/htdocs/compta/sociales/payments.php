@@ -34,12 +34,12 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+
+use Dolibarr\Code\User\Classes\User;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/paymentsocialcontribution.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/salary.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formsocialcontrib.class.php';
 if (isModEnabled('accounting')) {
     include_once DOL_DOCUMENT_ROOT . '/accountancy/class/accountingjournal.class.php';

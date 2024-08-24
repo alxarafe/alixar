@@ -218,7 +218,6 @@ function show_contacts_projects($conf, $langs, $db, $object, $backtopage = '', $
             print '</tr>';
 
             if ($num > 0) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
                 $projecttmp = new Project($db);
 

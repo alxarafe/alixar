@@ -43,13 +43,12 @@ if (!defined('NOREQUIREAJAX')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/hookmanager.class.php';
+use Dolibarr\Code\Core\Classes\HookManager;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
+use Dolibarr\Code\Societe\Classes\Societe;
 
 
 $place = (GETPOST('place', 'aZ09') ? GETPOST('place', 'aZ09') : 0); // $place is id of table for Bar or Restaurant or multiple sales

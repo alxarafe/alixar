@@ -25,7 +25,8 @@ namespace Dolibarr\Core\Base;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Restler;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+use Dolibarr\Code\User\Classes\User;
+
 
 /**
  * Class for API REST v1

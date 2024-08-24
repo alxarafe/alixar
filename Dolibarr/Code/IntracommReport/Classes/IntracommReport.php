@@ -248,7 +248,8 @@ class IntracommReport extends CommonObject
     {
         global $conf;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
 
         $sql = $this->getSQLFactLines($type, $period_reference, $exporttype);
 

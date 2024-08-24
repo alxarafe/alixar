@@ -31,13 +31,10 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 use Dolibarr\Code\Comm\Classes\Propal;
 use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/propal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
@@ -45,7 +42,6 @@ if (isModEnabled('contract')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 }
 if (isModEnabled('intervention')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 }
 
 // Initialize technical object to manage hooks. Note that conf->hooks_modules contains array

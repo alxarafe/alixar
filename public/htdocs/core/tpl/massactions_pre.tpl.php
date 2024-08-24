@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C)    2013      Cédric Salvador     <csalvador@gpcsolutions.fr>
- * Copyright (C)    2013-2014 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C)	2015	  Marcos García		  <marcosgdf@gmail.com>
+/* Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C)2015	    Marcos García		        <marcosgdf@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -33,6 +33,8 @@
 // $object = Object fetched;
 // $sendto
 // $withmaindocfilemail
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 '@phan-var-force CommonObject $objecttmp';
 
 if (!empty($sall) || !empty($search_all)) {
@@ -62,7 +64,6 @@ if ($massaction == 'preclonetasks') {
 }
 
 if ($massaction == 'preaffecttag' && isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
     $categ = new Categorie($db);
     $categ_types = array();
     $categ_type_array = $categ->getMapList();
@@ -325,7 +326,6 @@ if ($massaction == 'presend') {
 }
 
 if ($massaction == 'edit_extrafields') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
     $elementtype = $objecttmp->element;
     /** @var CommonObject $objecttmp */
     $extrafields = new ExtraFields($db);

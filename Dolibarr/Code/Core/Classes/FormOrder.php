@@ -28,7 +28,6 @@ use CommandeFournisseur;
  *  \brief      File of predefined functions for HTML forms for order module
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
 
 /**

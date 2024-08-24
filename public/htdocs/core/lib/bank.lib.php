@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2006-2016  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2012		Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2015		Alexandre Spangaro	<aspangaro@open-dsi.fr>
- * Copyright (C) 2016		Juanjo Menent   	<jmenent@2byte.es>
- * Copyright (C) 2019	    Nicolas ZABOURI     <info@inovea-conseil.com>
- * Copyright (C) 2021		Ferran Marcet		<fmarcet@2byte.es>
+/* Copyright (C) 2006-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2015		Alexandre Spangaro	        <aspangaro@open-dsi.fr>
+ * Copyright (C) 2016		Juanjo Menent   	        <jmenent@2byte.es>
+ * Copyright (C) 2019	    Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2021		Ferran Marcet		        <fmarcet@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -30,6 +30,8 @@
  * \ingroup    bank
  * \brief      Ensemble de functions de base pour le module banque
  */
+
+use Dolibarr\Code\Compta\Classes\Account;
 
 
 /**

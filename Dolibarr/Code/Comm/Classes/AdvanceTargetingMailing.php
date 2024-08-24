@@ -119,7 +119,6 @@ class AdvanceTargetingMailing extends CommonObject
             '4' => $langs->trans('ContactsWithThirdpartyFilter')
         );
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
         $customerStatic = new Client($this->db);
         $customerStatic->loadCacheOfProspStatus();
         if (!empty($customerStatic->cacheprospectstatus)) {

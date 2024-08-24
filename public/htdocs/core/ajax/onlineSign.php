@@ -433,7 +433,6 @@ if ($action == "importSignature") {
                 }
             }
         } elseif ($mode == 'fichinter') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
             $object = new Fichinter($db);
             $object->fetch(0, $ref);

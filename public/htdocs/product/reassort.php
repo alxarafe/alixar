@@ -31,9 +31,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 
 // Load translation files required by the page

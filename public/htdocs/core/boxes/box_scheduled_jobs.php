@@ -26,8 +26,9 @@
  *      \brief      Widget of scheduled jobs
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
+use Dolibarr\Code\Cron\Classes\Cronjob;
 
+include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
 
 /**
  * Class to manage the box to show last contracted products/services lines

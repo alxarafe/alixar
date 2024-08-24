@@ -27,14 +27,15 @@
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
+
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Contact\Classes\Contact;
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 
 $id = GETPOST('id', 'intcomma');
 $ref = GETPOST('ref', 'alpha');

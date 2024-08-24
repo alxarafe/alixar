@@ -31,7 +31,9 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Categories\Classes\Categorie;
 use DoliDB;
+use ModeleBoxes;
 
 /**
  *  \file       htdocs/core/class/html.formother.class.php
@@ -416,7 +418,6 @@ class FormOther
     {
 		// phpcs:enable
         global $conf, $langs;
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 
         // For backward compatibility
         if (is_numeric($type)) {

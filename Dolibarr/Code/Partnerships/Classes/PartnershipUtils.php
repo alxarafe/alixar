@@ -36,7 +36,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/geturl.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/lib/partnership.lib.php';
 use Dolibarr\Code\Partnerships\Classes\Partnership;
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Adherents\Classes\Adherent;
 
 /**

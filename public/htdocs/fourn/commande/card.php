@@ -40,23 +40,18 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formorder.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_order/modules_commandefournisseur.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
 
 if (isModEnabled('supplier_proposal')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
 }
 if (isModEnabled("product")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 }
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
@@ -2844,7 +2839,6 @@ if ($action == 'create') {
             }
 
             // List of actions on element
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
             $formactions = new FormActions($db);
             $somethingshown = $formactions->showactions($object, 'order_supplier', $socid, 1, 'listaction' . ($genallowed ? 'largetitle' : ''));
 

@@ -152,7 +152,6 @@ class FormSetup
     {
         global $hookmanager, $action;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
 
         $parameters = array(
             'editMode' => $editMode
@@ -220,7 +219,6 @@ class FormSetup
     public function generateTableOutput($editMode = false, $hideTitle = false)
     {
         global $hookmanager, $action;
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
 
         $parameters = array(
             'editMode' => $editMode

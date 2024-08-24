@@ -41,9 +41,18 @@ namespace Dolibarr\Code\Adherents\Classes;
  *  \brief      File of class to manage members of a foundation
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
+use Dolibarr\Code\Core\Traits\CommonPeople;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+use DoliDB;
+use Exception;
 
 
 /**
@@ -889,8 +898,6 @@ class Adherent extends CommonObject
             if (!$error && $nbrowsaffected) { // If something has change in main data
                 // Update information on linked user if it is an update
                 if (!$error && $this->user_id > 0 && !$nosyncuser) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-
                     dol_syslog(get_class($this) . "::update update linked user");
 
                     $luser = new User($this->db);
@@ -944,8 +951,6 @@ class Adherent extends CommonObject
 
                 // Update information on linked thirdparty if it is an update
                 if (!$error && $this->fk_soc > 0 && !$nosyncthirdparty) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-
                     dol_syslog(get_class($this) . "::update update linked thirdparty");
 
                     // This member is linked with a thirdparty, so we also update thirdparty information
@@ -1202,8 +1207,6 @@ class Adherent extends CommonObject
                 $this->pass_indatabase_crypted = $password_crypted;
 
                 if ($this->user_id && !$nosyncuser) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-
                     // This member is linked with a user, so we also update users information
                     // if this is an update.
                     $luser = new User($this->db);
@@ -1548,7 +1551,6 @@ class Adherent extends CommonObject
 		// phpcs:enable
         global $langs;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
 
         $sql = "SELECT c.rowid, c.fk_adherent, c.fk_type, c.subscription, c.note as note_public, c.fk_bank,";
         $sql .= " c.tms as datem,";
@@ -1612,9 +1614,6 @@ class Adherent extends CommonObject
     {
         global $langs;
 
-        use Dolibarr\Code\Partnerships\Classes\Partnership;
-
-
         $this->partnerships[] = array();
 
         return 1;
@@ -1640,7 +1639,6 @@ class Adherent extends CommonObject
     {
         global $conf, $langs, $user;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
 
         $error = 0;
 
@@ -1729,7 +1727,6 @@ class Adherent extends CommonObject
 
         // Insert into bank account directlty (if option chosen for) + link to llx_subscription if option is 'bankdirect'
         if ($option == 'bankdirect' && $accountid) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
             $acct = new Account($this->db);
             $result = $acct->fetch($accountid);
@@ -1763,7 +1760,6 @@ class Adherent extends CommonObject
 
         // If option chosen, we create invoice
         if (($option == 'bankviainvoice' && $accountid) || $option == 'invoiceonly') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/paymentterm.class.php';
 
             $invoice = new Facture($this->db);
@@ -1883,8 +1879,6 @@ class Adherent extends CommonObject
 
             // Add payment onto invoice
             if (!$error && $option == 'bankviainvoice' && $accountid) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-                require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
                 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 
                 $amounts = array();
@@ -2285,7 +2279,6 @@ class Adherent extends CommonObject
         $datas['address'] = '<br><b>' . $langs->trans("Address") . ':</b> ' . dol_format_address($this, 1, ' ', $langs);
         // show categories for this record only in ajax to not overload lists
         if (isModEnabled('category') && !$nofetch) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
             $form = new Form($this->db);
             $datas['categories'] = '<br>' . $form->showCategories($this->id, Categorie::TYPE_MEMBER, 1);
         }
@@ -2960,7 +2953,6 @@ class Adherent extends CommonObject
      */
     public function setCategories($categories)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
         return parent::setCategoriesCommon($categories, Categorie::TYPE_MEMBER);
     }
 

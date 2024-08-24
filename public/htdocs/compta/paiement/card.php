@@ -31,12 +31,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/facture/modules_facture.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 if (isModEnabled("bank")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 }
 if (isModEnabled('margin')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
@@ -365,7 +362,6 @@ print '</td></tr>';
 if (isModEnabled("bank")) {
     if ($object->fk_account > 0) {
         if ($object->type_code == 'CHQ' && $bankline->fk_bordereau > 0) {
-            include_once DOL_DOCUMENT_ROOT . '/compta/paiement/cheque/class/remisecheque.class.php';
             $bordereau = new RemiseCheque($db);
             $bordereau->fetch($bankline->fk_bordereau);
 

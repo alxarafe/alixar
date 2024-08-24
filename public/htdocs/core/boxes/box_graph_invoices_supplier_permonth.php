@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2013 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2013       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\FactureStats;
+use Dolibarr\Code\Core\Classes\DolGraph;
+
 /**
  *  \file       htdocs/core/boxes/box_graph_invoices_supplier_permonth.php
  *  \ingroup    fournisseur
@@ -25,7 +28,6 @@
  */
 
 include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 
 /**
  * Class to manage the box to show last invoices
@@ -68,7 +70,6 @@ class box_graph_invoices_supplier_permonth extends ModeleBoxes
 
         $refreshaction = 'refresh_' . $this->boxcode;
 
-        include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.facture.class.php';
 
         $startmonth = getDolGlobalInt('SOCIETE_FISCAL_MONTH_START', 1);
         if (!getDolGlobalString('GRAPH_USE_FISCAL_YEAR')) {
@@ -102,7 +103,6 @@ class box_graph_invoices_supplier_permonth extends ModeleBoxes
             $param_shownb = 'DOLUSERCOOKIE_box_' . $this->boxcode . '_shownb';
             $param_showtot = 'DOLUSERCOOKIE_box_' . $this->boxcode . '_showtot';
 
-            include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
             include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facturestats.class.php';
             $autosetarray = preg_split("/[,;:]+/", GETPOST('DOL_AUTOSET_COOKIE'));
             if (in_array('DOLUSERCOOKIE_box_' . $this->boxcode, $autosetarray)) {

@@ -23,6 +23,9 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use DoliDB;
+use Exception;
+use LogHandler;
 use stdClass;
 
 /**
@@ -280,7 +283,7 @@ class Conf extends stdClass
      * @param   int     $entity     Entity to get
      * @return  int                 Return integer < 0 if KO, >= 0 if OK
      */
-    public function setEntityValues($db, $entity)
+    public function setEntityValues(DoliDB $db, $entity)
     {
         if ($this->entity != $entity) {
             // If we ask to reload setup for a new entity

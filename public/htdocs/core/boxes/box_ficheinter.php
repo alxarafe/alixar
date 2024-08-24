@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2013 Florian Henry     <florian.henry@open-concept.pro>
- * Copyright (C) 2013 Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2015 Frederic France	<frederic.france@free.fr>
+/* Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013       Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2015       Frederic France	            <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *      \file       htdocs/core/boxes/box_ficheinter.php
@@ -65,7 +68,6 @@ class box_ficheinter extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/fichinter/class/fichinter.class.php';
         $ficheinterstatic = new Fichinter($this->db);
         $thirdpartystatic = new Societe($this->db);
 

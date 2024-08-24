@@ -28,11 +28,9 @@ use DoliDB;
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/evalmath.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_expression.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_global_variable.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_global_variable_updater.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
 /**
  * Class to parse product price expressions

@@ -27,7 +27,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/propale/modules_propale.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -250,7 +249,6 @@ class doc_generic_proposal_odt extends ModelePDFPropales
 
         // Add odtgeneration hook
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('odtgeneration'));

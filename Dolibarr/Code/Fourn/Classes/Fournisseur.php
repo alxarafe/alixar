@@ -22,6 +22,7 @@
 
 namespace Dolibarr\Code\Fourn\Classes;
 
+use Dolibarr\Code\Societe\Classes\Societe;
 use DoliDB;
 
 /**
@@ -29,11 +30,6 @@ use DoliDB;
  *  \ingroup    fournisseur,societe
  *  \brief      File of class to manage suppliers
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
-
 
 /**
  *  Class to manage suppliers

@@ -33,7 +33,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/supplier_proposal.lib.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 }
 // Load translation files required by the page
 $langs->loadLangs(array('supplier_proposal', 'compta', 'bills'));

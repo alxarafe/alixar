@@ -29,9 +29,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 
 if (!$user->hasRight('ficheinter', 'lire')) {
     accessforbidden();
@@ -138,7 +136,6 @@ if ($resql) {
     if ($conf->use_javascript_ajax) {
         print '<tr class="impair"><td class="center" colspan="2">';
 
-        include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
         $dolgraph = new DolGraph();
         $dolgraph->SetData($dataseries);
         $dolgraph->SetDataColor(array_values($colorseries));

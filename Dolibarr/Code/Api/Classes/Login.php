@@ -24,7 +24,9 @@ namespace Dolibarr\Code\Api\Classes;
 use Luracast\Restler\RestException;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+
+use Dolibarr\Code\User\Classes\User;
+
 
 /**
  * API that allows to log in with an user account.

@@ -46,27 +46,20 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/report.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 use Dolibarr\Code\Adherents\Classes\Adherent;
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/paymentdonation.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/paymentsalary.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/paiementfourn.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/paymentexpensereport.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/paymentloan.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "other", "compta", "banks", "bills", "donations", "loan", "accountancy", "trips", "salaries", "hrm", "members"));

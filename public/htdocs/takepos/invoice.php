@@ -51,11 +51,10 @@ if (!defined('NOREQUIREAJAX')) {
 if (!defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
     require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 }
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/hookmanager.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Contact\Classes\Contact;
+
 
 $hookmanager->initHooks(array('takeposinvoice'));
 
@@ -268,7 +267,6 @@ if (empty($reshook)) {
 
             $batch_rule = 0;
             if (isModEnabled('productbatch') && getDolGlobalString('CASHDESK_FORCE_DECREASE_STOCK')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productbatch.class.php';
                 $batch_rule = Productbatch::BATCH_RULE_SELLBY_EATBY_DATES_FIRST;
             }
             $res = $invoice->validate($user, '', getDolGlobalInt($constantforkey), 0, $batch_rule);
@@ -509,7 +507,6 @@ if (empty($reshook)) {
             dol_syslog("Validate invoice with stock change into warehouse defined into constant " . $constantforkey . " = " . getDolGlobalString($constantforkey));
             $batch_rule = 0;
             if (isModEnabled('productbatch') && getDolGlobalString('CASHDESK_FORCE_DECREASE_STOCK')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productbatch.class.php';
                 $batch_rule = Productbatch::BATCH_RULE_SELLBY_EATBY_DATES_FIRST;
             }
             $res = $creditnote->validate($user, '', getDolGlobalString($constantforkey), 0, $batch_rule);
@@ -678,7 +675,8 @@ if (empty($reshook)) {
 
 
         if (getDolGlobalString('TAKEPOS_SUPPLEMENTS')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+            use Dolibarr\Code\Categories\Classes\Categorie;
+
             $cat = new Categorie($db);
             $categories = $cat->containing($idproduct, 'product');
             $found = (array_search(getDolGlobalInt('TAKEPOS_SUPPLEMENTS_CATEGORY'), array_column($categories, 'id')));
@@ -736,7 +734,6 @@ if (empty($reshook)) {
                     $line['pa_ht'] = $prod->cost_price;
                 } else {
                     // default is fournprice
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
                     $pf = new ProductFournisseur($db);
                     if ($pf->find_min_price_product_fournisseur($idproduct, $qty) > 0) {
                         $line['fk_fournprice'] = $pf->product_fourn_price_id;
@@ -1682,7 +1679,8 @@ if (!$usediv) {
 
 if (!empty($_SESSION["basiclayout"]) && $_SESSION["basiclayout"] == 1) {
     if ($mobilepage == "cats") {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+        use Dolibarr\Code\Categories\Classes\Categorie;
+
         $categorie = new Categorie($db);
         $categories = $categorie->get_full_arbo('product');
         $htmlforlines = '';
@@ -1709,7 +1707,8 @@ if (!empty($_SESSION["basiclayout"]) && $_SESSION["basiclayout"] == 1) {
     }
 
     if ($mobilepage == "products") {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+        use Dolibarr\Code\Categories\Classes\Categorie;
+
         $object = new Categorie($db);
         $catid = GETPOSTINT('catid');
         $result = $object->fetch($catid);

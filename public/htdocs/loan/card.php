@@ -30,7 +30,6 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -38,11 +37,9 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/loan.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
 
 if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 }
 
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 }
 
 

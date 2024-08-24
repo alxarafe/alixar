@@ -26,6 +26,7 @@
 
 namespace Dolibarr\Code\ExpenseReport\Classes;
 
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Core\Base\CommonObject;
 
 /**
@@ -33,10 +34,6 @@ use Dolibarr\Core\Base\CommonObject;
  *       \ingroup    expensereport
  *       \brief      File to manage Expense Reports
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport_ik.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport_rule.class.php';
-
 
 /**
  * Class to manage Trips and Expenses

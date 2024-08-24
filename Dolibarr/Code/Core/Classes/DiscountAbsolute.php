@@ -271,7 +271,6 @@ class DiscountAbsolute extends CommonObject
 
         $userid = $user->id;
         if (!($userid > 0)) {       // For example when record is saved into an anonymous context with a not loaded object $user.
-            include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
             $tmpinvoice = new Facture($this->db);
             $tmpinvoice->fetch($this->fk_facture_source);
             $userid = $tmpinvoice->fk_user_author; // We use the author of invoice
@@ -376,7 +375,6 @@ class DiscountAbsolute extends CommonObject
         $sql .= " AND fk_invoice_supplier IS NULL)"; // Not used as credit note and not used as deposit
 
         dol_syslog(get_class($this) . "::delete Delete discount", LOG_DEBUG);
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commoninvoice.class.php';
         $result = $this->db->query($sql);
         if ($result) {
             // If source of discount was a credit note or deposit, we change source statut.

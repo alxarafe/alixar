@@ -23,7 +23,9 @@
 
 namespace Dolibarr\Code\Cron\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *  \file       cron/class/cronjob.class.php
@@ -1192,7 +1194,6 @@ class Cronjob extends CommonObject
         $conf->setEntityValues($this->db, $this->entity);
         dol_syslog(get_class($this) . "::run_jobs entity for running job is " . $conf->entity);
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
         $user = new User($this->db);
         $result = $user->fetch('', $userlogin);
         if ($result < 0) {
@@ -1459,7 +1460,6 @@ class Cronjob extends CommonObject
 		// phpcs:enable
         dol_syslog(get_class($this) . "::reprogram_jobs userlogin:$userlogin", LOG_DEBUG);
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
         $user = new User($this->db);
         $result = $user->fetch('', $userlogin);
         if ($result < 0) {

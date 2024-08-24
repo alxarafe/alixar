@@ -191,7 +191,6 @@ class FormActions
             dol_print_error($this->db, 'FailedToGetActions');
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/cactioncomm.class.php';
         $caction = new CActionComm($this->db);
         $arraylist = $caction->liste_array(1, 'code', '', (!getDolGlobalString('AGENDA_USE_EVENT_TYPE') ? 1 : 0), '', 1);
 
@@ -392,8 +391,6 @@ class FormActions
             $form = new Form($this->db);
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/cactioncomm.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
         $caction = new CActionComm($this->db);
 
         // Suggest a list with manual events or all auto events

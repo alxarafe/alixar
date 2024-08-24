@@ -29,7 +29,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/paymentdonation.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
 $langs->load("bills");
 

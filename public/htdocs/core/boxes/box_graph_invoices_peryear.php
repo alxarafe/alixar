@@ -102,7 +102,6 @@ class box_graph_invoices_peryear extends ModeleBoxes
             $param_year = 'DOLUSERCOOKIE_box_' . $this->boxcode . '_year';
             $param_showtot = 'DOLUSERCOOKIE_box_' . $this->boxcode . '_showtot';
 
-            include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
             include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facturestats.class.php';
             $autosetarray = preg_split("/[,;:]+/", GETPOST('DOL_AUTOSET_COOKIE'));
             if (in_array('DOLUSERCOOKIE_box_' . $this->boxcode, $autosetarray)) {

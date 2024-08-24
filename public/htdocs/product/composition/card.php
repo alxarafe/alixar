@@ -34,8 +34,9 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 
 // Load translation files required by the page
 $langs->loadLangs(array('bills', 'products', 'stocks'));
@@ -641,7 +642,8 @@ if ($id > 0 || !empty($ref)) {
             print '<input type="text" name="key" value="' . $key . '"> &nbsp; ';
             print '</div>';
             if (isModEnabled('category')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+                use Dolibarr\Code\Categories\Classes\Categorie;
+
                 print '<div class="inline-block">' . $langs->trans("CategoryFilter") . ': ';
                 print $form->select_all_categories(Categorie::TYPE_PRODUCT, $parent, 'parent') . ' &nbsp; </div>';
                 print ajax_combobox('parent');

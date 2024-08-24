@@ -28,7 +28,9 @@
 
 namespace Dolibarr\Code\Don\Classes;
 
+use Dolibarr\Code\Core\Traits\CommonPeople;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *      \file       htdocs/don/class/don.class.php

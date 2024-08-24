@@ -81,7 +81,6 @@ if ($action == 'getContacts') {
     );
 
     if (!empty($email)) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
 
         $ticket = new Ticket($db);
         $arrayofcontacts = $ticket->searchContactByEmail($email);

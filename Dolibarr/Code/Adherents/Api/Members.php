@@ -25,11 +25,10 @@ namespace Dolibarr\Code\Adherents\Api;
 
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 
 
 /**

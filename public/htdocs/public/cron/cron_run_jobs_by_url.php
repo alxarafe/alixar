@@ -106,7 +106,9 @@ if (empty($userlogin)) {
     echo 'Userlogin is required.';
     exit;
 }
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+
+use Dolibarr\Code\User\Classes\User;
+
 $user = new User($db);
 $result = $user->fetch('', $userlogin);
 if ($result < 0) {

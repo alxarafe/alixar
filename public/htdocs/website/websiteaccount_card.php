@@ -26,8 +26,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/website/lib/websiteaccount.lib.php';
 

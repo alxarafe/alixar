@@ -36,6 +36,11 @@
  *  \ingroup    societe
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Societe\Classes\SocieteAccount;
+
 /**
  * Return array of tabs to used on pages for third parties cards.
  *
@@ -208,7 +213,6 @@ function societe_prepare_head(Societe $object)
                 $servicestatus = 1;
             }
 
-            include_once DOL_DOCUMENT_ROOT . '/societe/class/societeaccount.class.php';
             $societeaccount = new SocieteAccount($db);
             $stripecu = $societeaccount->getCustomerAccount($object->id, 'stripe', $servicestatus); // Get thirdparty cu_...
             if ($stripecu) {
@@ -414,7 +418,6 @@ function societe_prepare_head(Societe $object)
             $totalAttached = $dataretrieved;
         } else {
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
             $upload_dir = $conf->societe->multidir_output[$object->entity] . "/" . $object->id;
             $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
             $nbLinks = Link::count($db, $object->element, $object->id);
@@ -929,7 +932,6 @@ function show_projects($conf, $langs, $db, $object, $backtopage = '', $nocreatel
             print '</tr>';
 
             if ($num > 0) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
                 $projecttmp = new Project($db);
 
@@ -1049,7 +1051,6 @@ function show_projects($conf, $langs, $db, $object, $backtopage = '', $nocreatel
                 print '</tr>';
 
                 if ($num > 0) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
                     $projecttmp = new Project($db);
 
@@ -1140,7 +1141,6 @@ function show_contacts($conf, $langs, $db, $object, $backtopage = '', $showuserl
     global $user, $conf, $extrafields, $hookmanager;
     global $contextpage;
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
     $formcompany = new FormCompany($db);
     $form = new Form($db);
 
@@ -2120,7 +2120,6 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
         require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
         include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formactions.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 
         $formactions = new FormActions($db);
 
@@ -2229,7 +2228,6 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
         }
         $out .= '</tr>';
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/cactioncomm.class.php';
         $caction = new CActionComm($db);
         $arraylist = $caction->liste_array(1, 'code', '', (!getDolGlobalString('AGENDA_USE_EVENT_TYPE') ? 1 : 0), '', 1);
 

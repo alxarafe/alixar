@@ -30,7 +30,9 @@ namespace Dolibarr\Code\Adherents\Classes;
 
 //namespace DolibarrMember;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 
 /**
@@ -161,7 +163,6 @@ class Subscription extends CommonObject
 
         $sql = "INSERT INTO " . MAIN_DB_PREFIX . "subscription (fk_adherent, fk_type, datec, dateadh, datef, subscription, note)";
 
-        use Dolibarr\Code\Adherents\Classes\Adherent;
         $member = new Adherent($this->db);
         $result = $member->fetch($this->fk_adherent);
 
@@ -316,7 +317,6 @@ class Subscription extends CommonObject
         dol_syslog(get_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
-            use Dolibarr\Code\Adherents\Classes\Adherent;
             $member = new Adherent($this->db);
             $result = $member->fetch($this->fk_adherent);
             $result = $member->update_end_date($user);
@@ -358,7 +358,6 @@ class Subscription extends CommonObject
 
         // It subscription is linked to a bank transaction, we get it
         if ($this->fk_bank > 0) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
             $accountline = new AccountLine($this->db);
             $result = $accountline->fetch($this->fk_bank);
         }
@@ -383,7 +382,6 @@ class Subscription extends CommonObject
             if ($resql) {
                 $num = $this->db->affected_rows($resql);
                 if ($num) {
-                    use Dolibarr\Code\Adherents\Classes\Adherent;
                     $member = new Adherent($this->db);
                     $result = $member->fetch($this->fk_adherent);
                     $result = $member->update_end_date($user);

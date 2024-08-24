@@ -35,7 +35,8 @@ use FormMail;
 use stdClass;
 use User;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 
 /**
  *  Description and activation class for module EventOrganization

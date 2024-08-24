@@ -26,11 +26,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
 use Dolibarr\Code\Partnerships\Classes\Partnership;
 require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/lib/partnership.lib.php';
 

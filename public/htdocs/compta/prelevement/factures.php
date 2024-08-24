@@ -32,9 +32,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/prelevement.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/rejetprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/salary.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories', 'bills', 'companies', 'withdrawals', 'salaries', 'suppliers'));

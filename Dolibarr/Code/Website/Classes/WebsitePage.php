@@ -36,8 +36,7 @@ use Dolibarr\Core\Base\CommonObject;
 // Put here all includes required by your class file
 
 //use Dolibarr\Code\Societe\Classes\Societe;
-//require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-
+//
 /**
  * Class Websitepage
  */
@@ -865,7 +864,8 @@ public $fk_page;
      */
     public function setCategories($categories)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
         return $this->setCategoriesCommon($categories, Categorie::TYPE_WEBSITE_PAGE);
     }
 

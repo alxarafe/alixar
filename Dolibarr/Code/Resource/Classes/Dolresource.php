@@ -24,6 +24,7 @@ namespace Dolibarr\Code\Resource\Classes;
 
 use Dolibarr\Code\Core\Traits\CommonPeople;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *  \file       htdocs/resource/class/dolresource.class.php
@@ -615,7 +616,6 @@ class Dolresource extends CommonObject
      */
     public function fetchAll(string $sortorder, string $sortfield, int $limit, int $offset, $filter = '')
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
         $extrafields = new ExtraFields($this->db);
 
         $sql = "SELECT ";

@@ -42,23 +42,17 @@ use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_invoice/modules_facturefournisseur.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture-rec.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/paiementfourn.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 if (isModEnabled("product")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 }
 
@@ -4224,7 +4218,6 @@ if ($action == 'create') {
                     print '</div><div class="fichehalfright">';
 
                     // List of actions on element
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
                     $formactions = new FormActions($db);
                     $somethingshown = $formactions->showactions($object, 'invoice_supplier', $socid, 1, 'listaction' . ($genallowed ? 'largetitle' : ''));
 

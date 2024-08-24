@@ -537,7 +537,6 @@ class PaymentVarious extends CommonObject
             if ($this->id > 0) {
                 if (isModEnabled("bank") && !empty($this->amount)) {
                     // Insert into llx_bank
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
                     $acc = new Account($this->db);
                     $result = $acc->fetch($this->fk_account);

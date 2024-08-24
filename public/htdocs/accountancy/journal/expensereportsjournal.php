@@ -40,7 +40,9 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/report.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+
+use Dolibarr\Code\User\Classes\User;
+
 
 // Load translation files required by the page
 $langs->loadLangs(array("commercial", "compta", "bills", "other", "accountancy", "trips", "errors"));

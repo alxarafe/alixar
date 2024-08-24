@@ -30,8 +30,8 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
+use Dolibarr\Code\Contact\Classes\Contact;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/evaluation.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_evaluation.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';

@@ -35,13 +35,14 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\Contact\Classes\Contact;
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 
 if (isModEnabled('project')) {
     include_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
@@ -1607,7 +1608,6 @@ if ($action == 'create' || $action == 'presend') {
                 $morehtmlcenter .= '</div>';
 
                 // List of actions on element
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
                 $formactions = new FormActions($db);
                 $somethingshown = $formactions->showactions($object, 'ticket', $socid, 1, 'listactions', $MAXEVENT, '', $morehtmlcenter);
 

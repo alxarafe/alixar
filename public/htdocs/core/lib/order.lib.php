@@ -322,7 +322,6 @@ function getCustomerOrderPieChart($socid = 0)
         if (!empty($conf->use_javascript_ajax)) {
             $result .= '<tr class="impair"><td align="center" colspan="2">';
 
-            include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
             $dolgraph = new DolGraph();
             $dolgraph->SetData($dataseries);
             $dolgraph->SetDataColor(array_values($colorseries));

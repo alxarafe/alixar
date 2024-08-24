@@ -32,7 +32,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "members"));

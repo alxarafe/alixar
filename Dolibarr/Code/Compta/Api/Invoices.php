@@ -23,7 +23,6 @@
 
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
 
 
@@ -1447,7 +1446,6 @@ class Invoices extends DolibarrApi
      */
     public function addPayment($id, $datepaye, $paymentid, $closepaidinvoices, $accountid, $num_payment = '', $comment = '', $chqemetteur = '', $chqbank = '')
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
 
         if (!DolibarrApiAccess::$user->hasRight('facture', 'creer')) {
             throw new RestException(403);
@@ -1567,7 +1565,6 @@ class Invoices extends DolibarrApi
      */
     public function addPaymentDistributed($arrayofamounts, $datepaye, $paymentid, $closepaidinvoices, $accountid, $num_payment = '', $comment = '', $chqemetteur = '', $chqbank = '', $ref_ext = '', $accepthigherpayment = false)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
 
         if (!DolibarrApiAccess::$user->hasRight('facture', 'creer')) {
             throw new RestException(403);
@@ -1701,7 +1698,6 @@ class Invoices extends DolibarrApi
      */
     public function putPayment($id, $num_payment = '')
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
 
         if (!DolibarrApiAccess::$user->hasRight('facture', 'creer')) {
             throw new RestException(403);

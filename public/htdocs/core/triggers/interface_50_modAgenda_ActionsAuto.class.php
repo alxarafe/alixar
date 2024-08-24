@@ -1045,7 +1045,6 @@ class InterfaceActionsAuto extends DolibarrTriggers
             $member = (isset($object->context['member']) ? $object->context['member'] : null);
             if (!is_object($member)) {  // This should not happen
                 dol_syslog("Execute a trigger MEMBER_SUBSCRIPTION_CREATE with context key 'member' not an object");
-                include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent.class.php';
                 $member = new Adherent($this->db);
                 $member->fetch($object->fk_adherent);
             }
@@ -1075,7 +1074,6 @@ class InterfaceActionsAuto extends DolibarrTriggers
 
             $member = $object->context['member'];
             if (!is_object($member)) {  // This should not happen
-                include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent.class.php';
                 $member = new Adherent($this->db);
                 $member->fetch($object->fk_adherent);
             }
@@ -1106,7 +1104,6 @@ class InterfaceActionsAuto extends DolibarrTriggers
             $member = $object->context['member'];
             if (!is_object($member)) {  // This should not happen but it happen when deleting a subscription from adherents/subscription/card.php
                 dol_syslog("Execute a trigger MEMBER_SUBSCRIPTION_CREATE with context key 'member' not an object");
-                include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent.class.php';
                 $member = new Adherent($this->db);
                 $member->fetch($object->fk_adherent);
             }

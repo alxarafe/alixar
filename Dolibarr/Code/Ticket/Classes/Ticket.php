@@ -26,7 +26,9 @@
 
 namespace Dolibarr\Code\Ticket\Classes;
 
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *  \file       ticket/class/ticket.class.php
@@ -34,9 +36,7 @@ use Dolibarr\Core\Base\CommonObject;
  *  \brief      Class file for object ticket
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
-
 
 /**
  *    Class to manage ticket
@@ -1601,7 +1601,6 @@ class Ticket extends CommonObject
         }
         // show categories for this record only in ajax to not overload lists
         if (isModEnabled('category') && !$nofetch) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
             $form = new Form($this->db);
             $datas['categories'] = '<br>' . $form->showCategories($this->id, Categorie::TYPE_TICKET, 1);
         }
@@ -1840,7 +1839,6 @@ class Ticket extends CommonObject
         $this->db->begin();
 
         // Insert entry into agenda with code 'TICKET_MSG'
-        include_once DOL_DOCUMENT_ROOT . '/comm/action/class/actioncomm.class.php';
         $actioncomm = new ActionComm($this->db);
         $actioncomm->type_code = 'AC_OTH_AUTO'; // This is not an entry that must appears into manual calendar but only into CRM calendar
         $actioncomm->code = 'TICKET_MSG';

@@ -32,8 +32,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/ligneprelevement.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/rejetprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
 // Load translation files required by the page
 $langs->loadlangs(array('banks', 'categories', 'bills', 'companies', 'withdrawals'));
@@ -134,10 +132,8 @@ if ($action == 'confirm_rejet' && $permissiontoadd) {
 $form = new Form($db);
 
 if ($type == 'bank-transfer') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
     $invoicestatic = new FactureFournisseur($db);
 } else {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
     $invoicestatic = new Facture($db);
 }
 

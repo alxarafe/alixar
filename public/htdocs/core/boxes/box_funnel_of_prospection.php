@@ -229,7 +229,6 @@ class box_funnel_of_prospection extends ModeleBoxes
 
                 $dataseries[] = $data;
                 if ($conf->use_javascript_ajax) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
                     $dolgraph = new DolGraph();
                     $dolgraph->SetMinValue(0);
                     $dolgraph->SetData($dataseries);

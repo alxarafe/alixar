@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005      Christophe
- * Copyright (C) 2005-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015      Frederic France      <frederic.france@free.fr>
+/* Copyright (C) 2005       Christophe
+ * Copyright (C) 2005-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use DoliDB;
+
 /**
  *      \file       htdocs/core/boxes/box_comptes.php
  *      \ingroup    banque
@@ -29,7 +32,6 @@
 
 include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
 include_once DOL_DOCUMENT_ROOT . '/compta/bank/class/account.class.php';
-
 
 /**
  * Class to manage the box to show bank accounts

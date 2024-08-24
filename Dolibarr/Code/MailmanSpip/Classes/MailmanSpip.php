@@ -34,7 +34,8 @@ use DoliDB;
  *  \brief      File of class to manage mailman and spip actions
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/geturl.lib.php';

@@ -31,7 +31,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/treeview.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
@@ -166,13 +168,12 @@ if (getDolGlobalString('CATEGORY_SHOW_COUNTS')) {
         use Dolibarr\Code\Adherents\Classes\Adherent;
     }
     if ($type == Categorie::TYPE_ACCOUNT) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
     }
     if ($type == Categorie::TYPE_PROJECT) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
     }
     if ($type == Categorie::TYPE_USER) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+        use Dolibarr\Code\User\Classes\User;
+
     }
 }
 

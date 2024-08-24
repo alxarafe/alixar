@@ -23,6 +23,12 @@
 
 namespace Dolibarr\Code\Bom\Classes;
 
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Core\Base\CommonObjectLine;
+use DoliDB;
+
 /**
  * \file        htdocs/bom/class/bom.class.php
  * \ingroup     bom
@@ -30,17 +36,7 @@ namespace Dolibarr\Code\Bom\Classes;
  */
 
 // Put here all includes required by your class file
-use Dolibarr\Core\Base\CommonObject;
-use Dolibarr\Core\Base\CommonObjectLine;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-
-if (isModEnabled('workstation')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/class/workstation.class.php';
-}
-
-//require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-//require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-
 
 /**
  * Class for BOM
@@ -1419,7 +1415,6 @@ class BOM extends CommonObject
         }
 
         if (is_array($this->lines) && count($this->lines)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
             $productFournisseur = new ProductFournisseur($this->db);
             $tmpproduct = new Product($this->db);
 

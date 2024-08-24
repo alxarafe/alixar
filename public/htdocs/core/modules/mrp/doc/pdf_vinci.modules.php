@@ -32,7 +32,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/mrp/modules_mo.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
@@ -199,7 +198,6 @@ class pdf_vinci extends ModelePDFMo
             if (file_exists($dir)) {
                 // Add pdfgeneration hook
                 if (!is_object($hookmanager)) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                     $hookmanager = new HookManager($this->db);
                 }
                 $hookmanager->initHooks(array('pdfgeneration'));

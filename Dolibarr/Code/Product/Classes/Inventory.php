@@ -33,9 +33,8 @@ use DoliDB;
  * \brief       This file is a CRUD class file for Inventory (Create/Read/Update/Delete)
  */
 
-//require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-//require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-
+//use Dolibarr\Code\Societe\Classes\Societe;
+//
 /**
  * Class for Inventory
  */

@@ -30,7 +30,6 @@ use Dolibarr\Core\Base\DolibarrApi;
 
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 
 /**
  * API class for Interventions

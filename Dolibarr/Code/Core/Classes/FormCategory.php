@@ -26,7 +26,6 @@ namespace Dolibarr\Code\Core\Classes;
  *  \brief      File of class to build HTML component for category filtering
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
 
 
 /**
@@ -75,7 +74,6 @@ class FormCategory extends Form
         } else {
             $htmlName = "search_" . $type . "_category";
             $htmlName2 = "";
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
             $formother = new FormOther($db);
 
             $filter .= $formother->select_categories($type, $preSelected[0], $htmlName, $nocateg, $tmptitle, $morecss);

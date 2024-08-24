@@ -38,8 +38,6 @@ use Dolibarr\Code\Accountancy\Classes\Lettering;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -1221,7 +1219,6 @@ while ($i < min($num, $limit)) {
         if ($line->doc_type === 'customer_invoice') {
             $langs->loadLangs(array('bills'));
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
             $objectstatic = new Facture($db);
             $objectstatic->fetch($line->fk_doc);
             //$modulepart = 'facture';
@@ -1233,7 +1230,6 @@ while ($i < min($num, $limit)) {
         } elseif ($line->doc_type === 'supplier_invoice') {
             $langs->loadLangs(array('bills'));
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
             $objectstatic = new FactureFournisseur($db);
             $objectstatic->fetch($line->fk_doc);
 
@@ -1264,7 +1260,6 @@ while ($i < min($num, $limit)) {
             $urlsource = $_SERVER['PHP_SELF'] . '?id=' . $objectstatic->id;
             $documentlink = $formfile->getDocumentsLink($objectstatic->element, $filename, $filedir);
         } elseif ($line->doc_type === 'bank') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
             $objectstatic = new AccountLine($db);
             $objectstatic->fetch($line->fk_doc);
         } else {

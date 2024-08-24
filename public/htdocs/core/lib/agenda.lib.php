@@ -144,8 +144,8 @@ function print_actions_filter(
     }
 
     if (isModEnabled('category') && $user->hasRight('categorie', 'lire')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
+        use Dolibarr\Code\Categories\Classes\Categorie;
+
         $formother = new FormOther($db);
         $langs->load('categories');
 

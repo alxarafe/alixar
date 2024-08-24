@@ -26,13 +26,11 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/knowledgemanagement/class/knowledgerecord.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/knowledgemanagement/lib/knowledgemanagement_knowledgerecord.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 
 // Load translation files required by the page
 $langs->loadLangs(array("knowledgemanagement", "ticket", "other"));

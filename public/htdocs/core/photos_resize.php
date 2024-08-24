@@ -124,7 +124,6 @@ if (!$accessallowed) {
 // Define dir according to modulepart
 $dir = '';
 if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'service' || $modulepart == 'produit|service') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
     $object = new Product($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -140,7 +139,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         }
     }
 } elseif ($modulepart == 'project') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
     $object = new Project($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -180,7 +178,8 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->adherent->dir_output; // By default
     }
 } elseif ($modulepart == 'societe') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+    use Dolibarr\Code\User\Classes\User;
+
     $object = new Societe($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -190,7 +189,8 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output;
     }
 } elseif ($modulepart == 'user') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+    use Dolibarr\Code\User\Classes\User;
+
     $object = new User($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -220,7 +220,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'ticket') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
     $object = new Ticket($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -250,7 +249,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'bank') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
     $object = new Account($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -260,7 +258,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->bank->dir_output; // By default
     }
 } elseif ($modulepart == 'facture') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
     $object = new Facture($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -270,7 +267,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'facture_fourn' || $modulepart == 'facture_fournisseur') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
     $object = new FactureFournisseur($db);
     if ($id > 0) {
         $result = $object->fetch($id);

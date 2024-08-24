@@ -23,6 +23,8 @@
 
 namespace Dolibarr\Code\Commande\Classes;
 
+use Dolibarr\Code\Core\Classes\Stats;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use DoliDB;
 
 /**

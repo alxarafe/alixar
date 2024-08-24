@@ -80,7 +80,8 @@ if (!function_exists('dol_getprefix')) {
 
 include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+use Dolibarr\Code\User\Classes\User;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/public/webportal/lib/webportal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/webportal/class/context.class.php';

@@ -25,8 +25,6 @@ namespace Dolibarr\Code\Fourn\Api;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/paiementfourn.class.php';
 
 /**
  * API class for supplier invoices

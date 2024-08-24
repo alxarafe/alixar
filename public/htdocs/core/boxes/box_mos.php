@@ -20,6 +20,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       htdocs/core/boxes/box_mos.php
  *      \ingroup    mrp

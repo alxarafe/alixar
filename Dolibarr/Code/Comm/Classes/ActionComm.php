@@ -27,17 +27,22 @@
 
 namespace Dolibarr\Code\Comm\Classes;
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+
 /**
  *       \file       htdocs/comm/action/class/actioncomm.class.php
  *       \ingroup    agenda
  *       \brief      File of class to manage agenda events (actions)
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/cactioncomm.class.php';
-use Dolibarr\Core\Base\CommonObject;
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncommreminder.class.php';
-
 
 /**
  *      Class to manage agenda events (actions)
@@ -1328,7 +1333,6 @@ class ActionComm extends CommonObject
 
         // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('agendadao'));
@@ -1650,7 +1654,6 @@ class ActionComm extends CommonObject
         }
         // show categories for this record only in ajax to not overload lists
         if (isModEnabled('category') && !$nofetch) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
             $form = new Form($this->db);
             $datas['categories'] = '<br>' . $form->showCategories($this->id, Categorie::TYPE_ACTIONCOMM, 1);
         }

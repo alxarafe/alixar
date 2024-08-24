@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2013-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2018       Frédéric France     <frederic.france@netlogic.fr>
+/* Copyright (C) 2013-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Commande\Classes\CommandeStats;
+use Dolibarr\Code\Compta\Classes\FactureStats;
+use Dolibarr\Code\Core\Classes\DolGraph;
 
 /**
  *  \file       htdocs/core/boxes/box_graph_product_distribution.php
@@ -73,9 +77,6 @@ class box_graph_product_distribution extends ModeleBoxes
 
         $refreshaction = 'refresh_' . $this->boxcode;
 
-        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/comm/propal/class/propal.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/commande/class/commande.class.php';
 
         $param_year = 'DOLUSERCOOKIE_box_' . $this->boxcode . '_year';
         $param_showinvoicenb = 'DOLUSERCOOKIE_box_' . $this->boxcode . '_showinvoicenb';

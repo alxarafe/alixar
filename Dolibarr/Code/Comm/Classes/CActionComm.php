@@ -20,6 +20,8 @@
 
 namespace Dolibarr\Code\Comm\Classes;
 
+use DoliDB;
+
 /**
  *       \file       htdocs/comm/action/class/cactioncomm.class.php
  *       \ingroup    agenda

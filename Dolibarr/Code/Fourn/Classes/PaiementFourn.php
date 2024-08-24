@@ -38,8 +38,6 @@ use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
  *      \brief      File of class to manage payments of suppliers invoices
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
 
 /**
  *  Class to manage payments for supplier invoices
@@ -906,7 +904,6 @@ class PaiementFourn extends Paiement
     public function fetch_thirdparty($force_thirdparty_id = 0)
     {
 		// phpcs:enable
-        require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 
         if (empty($force_thirdparty_id)) {
             $billsarray = $this->getBillsArray(); // From payment, the fk_soc isn't available, we should load the first supplier invoice to get him

@@ -31,7 +31,6 @@ use DoliDB;
  */
 
 // Put here all includes required by your class file
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
 /**
  * Class for WebPortalInvoice

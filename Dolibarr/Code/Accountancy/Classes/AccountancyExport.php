@@ -44,7 +44,8 @@ use DoliDB;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/hookmanager.class.php';
+
+use Dolibarr\Code\Core\Classes\HookManager;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -671,14 +672,12 @@ class AccountancyExport
             $refInvoice = '';
             if ($line->doc_type == 'customer_invoice') {
                 // Customer invoice
-                require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
                 $invoice = new Facture($this->db);
                 $invoice->fetch($line->fk_doc);
 
                 $refInvoice = $invoice->ref;
             } elseif ($line->doc_type == 'supplier_invoice') {
                 // Supplier invoice
-                require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
                 $invoice = new FactureFournisseur($this->db);
                 $invoice->fetch($line->fk_doc);
 
@@ -1022,7 +1021,6 @@ class AccountancyExport
                     } elseif ($line->doc_type == 'expense_report') {
                         $objectDirPath = !empty($conf->expensereport->multidir_output[$conf->entity]) ? $conf->expensereport->multidir_output[$conf->entity] : $conf->expensereport->dir_output;
                     } elseif ($line->doc_type == 'supplier_invoice') {
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
                         $invoice = new FactureFournisseur($this->db);
                         $invoice->fetch($line->fk_doc);
                         $objectDirPath = !empty($conf->fournisseur->facture->multidir_output[$conf->entity]) ? $conf->fournisseur->facture->multidir_output[$conf->entity] : $conf->fournisseur->facture->dir_output;
@@ -1394,14 +1392,12 @@ class AccountancyExport
                 $refInvoice = '';
                 if ($line->doc_type == 'customer_invoice') {
                     // Customer invoice
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
                     $invoice = new Facture($this->db);
                     $invoice->fetch($line->fk_doc);
 
                     $refInvoice = $invoice->ref;
                 } elseif ($line->doc_type == 'supplier_invoice') {
                     // Supplier invoice
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
                     $invoice = new FactureFournisseur($this->db);
                     $invoice->fetch($line->fk_doc);
 
@@ -1606,14 +1602,12 @@ class AccountancyExport
                 $refInvoice = '';
                 if ($line->doc_type == 'customer_invoice') {
                     // Customer invoice
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
                     $invoice = new Facture($this->db);
                     $invoice->fetch($line->fk_doc);
 
                     $refInvoice = $invoice->ref;
                 } elseif ($line->doc_type == 'supplier_invoice') {
                     // Supplier invoice
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
                     $invoice = new FactureFournisseur($this->db);
                     $invoice->fetch($line->fk_doc);
 

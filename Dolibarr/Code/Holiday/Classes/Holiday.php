@@ -25,7 +25,9 @@
 
 namespace Dolibarr\Code\Holiday\Classes;
 
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *    \file       holiday.class.php

@@ -30,16 +30,10 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp_mo.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/class/workstation.class.php';
 
@@ -983,7 +977,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
                         // add free consume line cost to $bomcostupdated
                         $costprice = price2num((!empty($tmpproduct->cost_price)) ? $tmpproduct->cost_price : $tmpproduct->pmp);
                         if (empty($costprice)) {
-                            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
                             $productFournisseur = new ProductFournisseur($db);
                             if ($productFournisseur->find_min_price_product_fournisseur($line->fk_product) > 0) {
                                 $costprice = $productFournisseur->fourn_unitprice;

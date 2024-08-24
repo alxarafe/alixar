@@ -32,7 +32,6 @@ use DoliDB;
  *  \brief      File of class with all html predefined components
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
 
 
 /**

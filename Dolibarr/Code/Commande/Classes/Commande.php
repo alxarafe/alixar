@@ -39,12 +39,13 @@ namespace Dolibarr\Code\Commande\Classes;
  *  \brief      class for orders
  */
 
+use Dolibarr\Code\Core\Classes\CommonOrder;
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 include_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonorder.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
 
 /**
  *  Class to manage customers orders
@@ -1302,7 +1303,6 @@ class Commande extends CommonOrder
     {
         global $conf, $hookmanager;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
         $error = 0;
 

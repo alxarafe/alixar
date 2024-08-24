@@ -36,17 +36,16 @@
 
 namespace Dolibarr\Code\SupplierProposal\Classes;
 
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
+use Dolibarr\Code\Core\Traits\CommonIncoterm;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *  \file       htdocs/supplier_proposal/class/supplier_proposal.class.php
  *  \brief      File of class to manage supplier proposals
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 
 /**
@@ -221,8 +220,6 @@ class SupplierProposal extends CommonObject
      * Billed or closed/processed quote
      */
     const STATUS_CLOSE = 4;
-
-
 
     /**
      *  Constructor

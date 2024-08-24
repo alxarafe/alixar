@@ -513,15 +513,14 @@ if ($action == 'edit') {
                 }
                 print $form->selectarray($constname, $arrayofmessagename, getDolGlobalString($constname), 'None', 0, 0, '', 0, 0, 0, '', '', 1);
             } elseif (preg_match('/category:/', $val['type'])) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
+                use Dolibarr\Code\Categories\Classes\Categorie;
+
                 $formother = new FormOther($db);
 
                 $tmp = explode(':', $val['type']);
                 print img_picto('', 'category', 'class="pictofixedwidth"');
                 print $formother->select_categories($tmp[1], getDolGlobalString($constname), $constname, 0, $langs->trans('CustomersProspectsCategoriesShort'));
             } elseif (preg_match('/thirdparty_type/', $val['type'])) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
                 $formcompany = new FormCompany($db);
                 print $formcompany->selectProspectCustomerType(getDolGlobalString($constname), $constname);
             } elseif ($val['type'] == 'securekey') {
@@ -541,7 +540,6 @@ if ($action == 'edit') {
             } elseif ($val['type'] == 'accountancy_code') {
                 $selected = getDolGlobalString($constname);
                 if (isModEnabled('accounting')) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
                     $formaccounting = new FormAccounting($db);
                     print $formaccounting->select_account($selected, $constname, 1, null, 1, 1, 'minwidth150 maxwidth300', 1);
                 } else {

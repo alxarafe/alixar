@@ -38,7 +38,11 @@ namespace Dolibarr\Code\Contact\Classes;
  *  \brief      File of contacts class
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Traits\CommonPeople;
+use Dolibarr\Code\Core\Traits\CommonSocialNetworks;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 
 /**
@@ -1756,7 +1760,6 @@ class Contact extends CommonObject
      */
     public function setCategories($categories)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
         return parent::setCategoriesCommon($categories, Categorie::TYPE_CONTACT);
     }
 

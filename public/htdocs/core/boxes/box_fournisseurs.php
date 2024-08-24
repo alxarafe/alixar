@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2004-2006 Destailleur Laurent  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2019 Frederic France      <frederic.france@free.fr>
- * Copyright (C) 2020      Pierre Ardoin      <mapiolca@me.com>
+/* Copyright (C) 2004-2006  Destailleur Laurent         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2019  Frederic France             <frederic.france@free.fr>
+ * Copyright (C) 2020       Pierre Ardoin               <mapiolca@me.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Fourn\Classes\Fournisseur;
+
 /**
  * \file       htdocs/core/boxes/box_fournisseurs.php
  * \ingroup    fournisseurs
@@ -27,7 +29,6 @@
  */
 
 include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 
 /**
  * Class to manage the box to show last suppliers

@@ -76,7 +76,6 @@ class InterfaceNotification extends DolibarrTriggers
         }
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('notification'));
@@ -113,7 +112,6 @@ class InterfaceNotification extends DolibarrTriggers
         global $hookmanager;
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('notification'));

@@ -35,8 +35,16 @@
 
 namespace Dolibarr\Code\User\Classes;
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\DefaultValues;
+use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Traits\CommonPeople;
+use Dolibarr\Code\User\Classes\UserGroup;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+use stdClass;
 
 /**
  *  \file       htdocs/user/class/user.class.php
@@ -45,8 +53,6 @@ use Dolibarr\Core\Base\CommonObject;
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
-
 
 /**
  *  Class to manage Dolibarr users
@@ -728,8 +734,6 @@ class User extends CommonObject
 
         if (getDolGlobalString('MAIN_ENABLE_DEFAULT_VALUES')) {
             // Load user->default_values for user. TODO Save this in memcached ?
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/defaultvalues.class.php';
-
             $defaultValues = new DefaultValues($this->db);
             $result = $defaultValues->fetchAll('', '', 0, 0, '(t.user_id:in:0,' . $this->id . ') AND (entity:in:' . (isset($this->entity) ? $this->entity : $conf->entity) . ',' . $conf->entity . ')');    // User 0 (all) + me (if defined)
             //$result = $defaultValues->fetchAll('', '', 0, 0, array('t.user_id'=>array(0, $this->id), 'entity'=>array((isset($this->entity) ? $this->entity : $conf->entity), $conf->entity)));    // User 0 (all) + me (if defined)
@@ -1529,7 +1533,6 @@ class User extends CommonObject
      */
     public function setCategories($categories)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
         return parent::setCategoriesCommon($categories, Categorie::TYPE_USER);
     }
 
@@ -1714,7 +1717,6 @@ class User extends CommonObject
             }
 
             if (getDolGlobalString('MAIN_DEFAULT_WAREHOUSE_USER') && getDolGlobalString('STOCK_USERSTOCK_AUTOCREATE')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
                 $langs->load("stocks");
 
                 $entrepot = new Entrepot($this->db);
@@ -2202,8 +2204,6 @@ class User extends CommonObject
                 if ($this->fk_member > 0 && !$nosyncmember) {
                     dol_syslog(get_class($this) . "::update user is linked with a member. We try to update member too.", LOG_DEBUG);
 
-                    use Dolibarr\Code\Adherents\Classes\Adherent;
-
                     // This user is linked with a member, so we also update member information
                     // if this is an update.
                     $adh = new Adherent($this->db);
@@ -2253,8 +2253,6 @@ class User extends CommonObject
 
                 if ($this->contact_id > 0 && !$nosynccontact) {
                     dol_syslog(get_class($this) . "::update user is linked with a contact. We try to update contact too.", LOG_DEBUG);
-
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 
                     // This user is linked with a contact, so we also update contact information if this is an update.
                     $tmpobj = new Contact($this->db);
@@ -2458,8 +2456,6 @@ class User extends CommonObject
                     $this->pass_indatabase_crypted = $password_crypted;
 
                     if ($this->fk_member && !$nosyncmember) {
-                        use Dolibarr\Code\Adherents\Classes\Adherent;
-
                         // This user is linked with a member, so we also update members information
                         // if this is an update.
                         $adh = new Adherent($this->db);
@@ -2535,7 +2531,6 @@ class User extends CommonObject
         global $conf, $langs, $mysoc;
         global $dolibarr_main_url_root;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
 
         $msgishtml = 0;
 

@@ -23,6 +23,8 @@
 
 namespace Dolibarr\Code\Comm\Classes;
 
+use Dolibarr\Code\Core\Classes\Stats;
+
 /**
  *  \file       htdocs/comm/propal/class/propalestats.class.php
  *  \ingroup    propales

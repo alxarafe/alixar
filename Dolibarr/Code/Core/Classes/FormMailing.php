@@ -28,7 +28,6 @@ use Dolibarr\Code\Comm\Classes\Mailing;
  *  \brief      File of predefined functions for HTML forms for mailing module
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
 
 /**
  *  Class to offer components to list and upload files

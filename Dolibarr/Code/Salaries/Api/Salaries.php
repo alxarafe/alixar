@@ -23,8 +23,6 @@ namespace Dolibarr\Code\Salaries\Api;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/salary.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/paymentsalary.class.php';
 
 /**
  * API class for salaries

@@ -28,7 +28,9 @@ namespace Dolibarr\Code\Comm\Classes;
  */
 
 // Put here all includes required by your class file
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 
 /**

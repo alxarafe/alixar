@@ -35,8 +35,8 @@ if (empty($preselectedtypeofcontact)) {
     $preselectedtypeofcontact = 0;
 }
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
+use Dolibarr\Code\Contact\Classes\Contact;
+
 
 $module = $object->element;
 

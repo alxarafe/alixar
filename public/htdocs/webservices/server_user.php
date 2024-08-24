@@ -49,10 +49,12 @@ if (!defined("NOSESSION")) {
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ws.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+
+use Dolibarr\Code\User\Classes\User;
+
+use Dolibarr\Code\Contact\Classes\Contact;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
 
 dol_syslog("Call User webservices interfaces");

@@ -234,7 +234,6 @@ class Expedition extends DolibarrModules
         //--------
         $r = 0;
 
-        include_once DOL_DOCUMENT_ROOT . '/commande/class/commande.class.php';
         $shipment = new Commande($this->db);
         $contact_arrays = $shipment->liste_type_contact('external', '', 0, 0, '');
         if (is_array($contact_arrays) && count($contact_arrays) > 0) {

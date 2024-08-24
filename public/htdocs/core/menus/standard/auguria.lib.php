@@ -25,7 +25,6 @@
  *  \brief      Library for file auguria menus
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/menubase.class.php';
 
 
 

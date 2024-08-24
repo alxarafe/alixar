@@ -30,7 +30,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 if (isModEnabled('project')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 }
 
 $langs->load('donations');

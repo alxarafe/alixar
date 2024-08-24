@@ -227,7 +227,6 @@ class DataPolicy
 
 
         // Send mail
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($subject, $sendto, $from, $message, $filepath, $mimetype, $filename, $sendtocc, $sendtobcc, $deliveryreceipt, -1);
 
         $resultmasssend = '';
@@ -302,7 +301,6 @@ class DataPolicy
         }
 
         // Send mail
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($subject, $sendto, $from, $message, $filepath, $mimetype, $filename, $sendtocc, $sendtobcc, $deliveryreceipt, -1);
 
         $resultmasssend = '';
@@ -378,7 +376,6 @@ class DataPolicy
 
 
         // Send mail
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($subject, $sendto, $from, $message, $filepath, $mimetype, $filename, $sendtocc, $sendtobcc, $deliveryreceipt, -1);
 
         $resultmasssend = '';

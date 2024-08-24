@@ -32,9 +32,7 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.class.php';
 
 
 // Load translation files required by the page
@@ -250,7 +248,6 @@ $documentstaticline = '';
     $doc_number='f.id';
 }*/
 if ($type_element == 'fichinter') {     // Customer : show products from invoices
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
     $documentstatic = new Fichinter($db);
     $sql_select = 'SELECT f.rowid as doc_id, f.ref as doc_number, \'1\' as doc_type, f.datec as dateprint, f.fk_statut as status, NULL as paid, ';
     $sql_select .= 'NULL as fk_product, NULL as info_bits, NULL as date_start, NULL as date_end, NULL as prod_qty, NULL as total_ht, ';
@@ -261,7 +258,6 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $doc_number = 'f.ref';
 }
 if ($type_element == 'invoice') {   // Customer : show products from invoices
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
     $documentstatic = new Facture($db);
     $sql_select = 'SELECT f.rowid as doc_id, f.ref as doc_number, f.type as doc_type, f.datef as dateprint, f.fk_statut as status, f.paye as paid, d.fk_remise_except, ';
     $tables_from = MAIN_DB_PREFIX . "facture as f," . MAIN_DB_PREFIX . "facturedet as d";
@@ -312,7 +308,6 @@ if ($type_element == 'shipment') {
     $thirdTypeSelect = 'customer';
 }
 if ($type_element == 'supplier_invoice') {  // Supplier : Show products from invoices.
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
     $documentstatic = new FactureFournisseur($db);
     $sql_select = 'SELECT f.rowid as doc_id, f.ref as doc_number, \'1\' as doc_type, f.datef as dateprint, f.fk_statut as status, f.paye as paid, ';
     $tables_from = MAIN_DB_PREFIX . "facture_fourn as f," . MAIN_DB_PREFIX . "facture_fourn_det as d";
@@ -336,7 +331,6 @@ if ($type_element == 'supplier_proposal') {
     $thirdTypeSelect = 'supplier';
 }
 if ($type_element == 'supplier_order') {    // Supplier : Show products from orders.
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
     $langs->load('sendings'); // delivery planned date
     $documentstatic = new CommandeFournisseur($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_valid as dateprint, c.fk_statut as status, NULL as paid, c.date_livraison as delivery_planned_date, ';

@@ -31,9 +31,10 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
+
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Contact\Classes\Contact;
+
 
 
 // Load translation files required by the page
@@ -169,7 +170,6 @@ if (!empty($conf->use_javascript_ajax) && ((round($third['prospect']) ? 1 : 0) +
     if (isModEnabled('societe')) {
         $dataseries[] = array($langs->transnoentitiesnoconv("Others"), round($third['other']));
     }
-    include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
     $dolgraph = new DolGraph();
     $dolgraph->SetData($dataseries);
     $dolgraph->setShowLegend(2);
@@ -208,7 +208,8 @@ $thirdpartygraph .= '</div>';
 
 $thirdpartycateggraph = '';
 if (isModEnabled('category') && getDolGlobalString('CATEGORY_GRAPHSTATS_ON_THIRDPARTIES')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
     $elementtype = 'societe';
 
     $thirdpartycateggraph = '<div class="div-table-responsive-no-min">';
@@ -247,7 +248,6 @@ if (isModEnabled('category') && getDolGlobalString('CATEGORY_GRAPHSTATS_ON_THIRD
             if ($i > $nbmax) {
                 $dataseries[] = array($langs->trans("Other"), round($rest));
             }
-            include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
             $dolgraph = new DolGraph();
             $dolgraph->SetData($dataseries);
             $dolgraph->setShowLegend(2);

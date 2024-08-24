@@ -32,10 +32,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
+
+use Dolibarr\Code\Contact\Classes\Contact;
+
 
 $form  = new Form($db);
 
@@ -113,7 +112,8 @@ $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 unset($_SESSION['pageforbacktolist']['project']);
 if ($socid) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+
+    use Dolibarr\Code\Societe\Classes\Societe;
 
     $langs->load("companies");
 

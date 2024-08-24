@@ -85,7 +85,6 @@ class InterfaceWorkflowManager extends DolibarrTriggers
                     return $ret;
                 }
 
-                include_once DOL_DOCUMENT_ROOT . '/commande/class/commande.class.php';
                 $newobject = new Commande($this->db);
 
                 $newobject->context['createfrompropal'] = 'createfrompropal';
@@ -107,7 +106,6 @@ class InterfaceWorkflowManager extends DolibarrTriggers
         if ($action == 'ORDER_CLOSE') {
             dol_syslog("Trigger '" . $this->name . "' for action '$action' launched by " . __FILE__ . ". id=" . $object->id);
             if (isModEnabled('invoice') && getDolGlobalString('WORKFLOW_ORDER_AUTOCREATE_INVOICE')) {
-                include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
                 $newobject = new Facture($this->db);
 
                 $newobject->context['createfromorder'] = 'createfromorder';
@@ -496,7 +494,6 @@ class InterfaceWorkflowManager extends DolibarrTriggers
                 // Find all reception on purchase order origin
 
                 if (in_array($object->origin, array('order_supplier', 'supplier_order', 'commandeFournisseur')) && $object->origin_id > 0) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
                     $order = new CommandeFournisseur($this->db);
                     $ret = $order->fetch($object->origin_id);
                     if ($ret < 0) {

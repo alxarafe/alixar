@@ -42,8 +42,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formorder.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/commande/modules_commande.php';
@@ -59,7 +57,6 @@ if (isModEnabled("propal")) {
 
 if (isModEnabled('project')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 }
 
 if (isModEnabled('variants')) {
@@ -1374,7 +1371,6 @@ if (empty($reshook)) {
                     GETPOST('generate_deposit', 'alpha') == 'on' && !empty($deposit_percent_from_payment_terms)
                     && isModEnabled('invoice') && $user->hasRight('facture', 'creer')
                 ) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
                     $date = dol_mktime(0, 0, 0, GETPOSTINT('datefmonth'), GETPOSTINT('datefday'), GETPOSTINT('datefyear'));
                     $forceFields = array();
@@ -2268,7 +2264,6 @@ if ($action == 'create' && $usercancreate) {
                 $deposit_percent_from_payment_terms = (float) getDictionaryValue('c_payment_term', 'deposit_percent', $object->cond_reglement_id);
 
                 if (!empty($deposit_percent_from_payment_terms) && isModEnabled('invoice') && $user->hasRight('facture', 'creer')) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
                     $object->fetchObjectLinked();
 
@@ -3165,7 +3160,6 @@ if ($action == 'create' && $usercancreate) {
             $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/commande/agenda.php?id=' . $object->id);
 
             // List of actions on element
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
             $formactions = new FormActions($db);
             $somethingshown = $formactions->showactions($object, 'order', $socid, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for thirdparty
 

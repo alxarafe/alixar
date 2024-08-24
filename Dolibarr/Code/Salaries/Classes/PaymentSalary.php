@@ -32,7 +32,6 @@ use Dolibarr\Core\Base\CommonObject;
  */
 
 // Put here all includes required by your class file
-require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/salary.class.php';
 
 
 /**
@@ -606,7 +605,6 @@ class PaymentSalary extends CommonObject
         $error = 0;
 
         if (isModEnabled("bank")) {
-            include_once DOL_DOCUMENT_ROOT . '/compta/bank/class/account.class.php';
 
             $acc = new Account($this->db);
             $acc->fetch($accountid);
@@ -993,7 +991,6 @@ class PaymentSalary extends CommonObject
             $return .= '<input id="cb' . $this->id . '" class="flat checkforselect fright" type="checkbox" name="toselect[]" value="' . $this->id . '"' . ($selected ? ' checked="checked"' : '') . '>';
         }
         if (property_exists($this, 'fk_bank') && is_numeric($this->fk_bank)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
             $account = new AccountLine($this->db);
             $account->fetch($this->fk_bank);
             $return .= ' |  <span class="info-box-label">' . $account->getNomUrl(1) . '</span>';

@@ -28,7 +28,6 @@ use DoliDB;
  *  \brief      File for class with methods for building product related HTML components
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
 
 /**
  *  Class with static methods for building HTML components related to products
@@ -518,7 +517,6 @@ class FormProduct
             print '</tr></table></form>';
         } else {
             if ($selected) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
                 $warehousestatic = new Entrepot($this->db);
                 $warehousestatic->fetch($selected);
                 print $warehousestatic->getNomUrl();
@@ -827,7 +825,6 @@ class FormProduct
         }
 
         if (empty($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('productdao'));
@@ -892,7 +889,6 @@ class FormProduct
             $batch_count = 0;
             global $hookmanager;
             if (empty($hookmanager)) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                 $hookmanager = new HookManager($this->db);
             }
             $hookmanager->initHooks(array('productdao'));

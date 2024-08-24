@@ -33,12 +33,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formintervention.class.php';
 
@@ -412,8 +409,6 @@ if ($action == 'confirm_generateinvoice') {
     if (!($projectstatic->thirdparty->id > 0)) {
         setEventMessages($langs->trans("ThirdPartyRequiredToGenerateInvoice"), null, 'errors');
     } else {
-        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
         include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 
         $tmpinvoice = new Facture($db);
@@ -797,12 +792,9 @@ if ($action == 'confirm_generateinter') {
     if (!($projectstatic->thirdparty->id > 0)) {
         setEventMessages($langs->trans("ThirdPartyRequiredToGenerateIntervention"), null, 'errors');
     } else {
-        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
         include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
         $tmpinter = new Fichinter($db);
         $tmptimespent = new Task($db);
         $fuser = new User($db);

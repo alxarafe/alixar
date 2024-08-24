@@ -29,9 +29,8 @@
 
 // Put here all includes required by your class file
 //use Dolibarr\Core\Base\CommonObject;
-//require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-//require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-
+//use Dolibarr\Code\Societe\Classes\Societe;
+//
 /**
  * Class Cchargesociales
  */

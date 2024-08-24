@@ -34,12 +34,10 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 
 if (isModEnabled('agenda')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
@@ -48,7 +46,8 @@ if (isModEnabled('bank')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
 }
 if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
 }
 if (isModEnabled('order')) {
     use Dolibarr\Code\Adherents\Classes\Adherent;
@@ -69,11 +68,9 @@ if (isModEnabled('expensereport')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
 }
 if (isModEnabled('invoice')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
 }
 if (isModEnabled('intervention')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 }
 if (isModEnabled('loan')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
@@ -86,17 +83,13 @@ if (isModEnabled('propal')) {
     use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled('salaries')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/salary.class.php';
 }
 if (isModEnabled('stock')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 }
 if (isModEnabled('supplier_invoice')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 }
 if (isModEnabled('supplier_order')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
 }
 if (isModEnabled('supplier_proposal')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';

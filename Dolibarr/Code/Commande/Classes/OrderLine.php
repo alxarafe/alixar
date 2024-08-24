@@ -42,9 +42,9 @@ namespace Dolibarr\Code\Commande\Classes;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 include_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonorder.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  Class to manage order lines

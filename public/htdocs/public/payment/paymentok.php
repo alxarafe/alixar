@@ -442,7 +442,6 @@ if ($ispaymentok) {
         // Send confirmation email
 
         // Record subscription
-        include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent.class.php';
         include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent_type.class.php';
         include_once DOL_DOCUMENT_ROOT . '/adherents/class/subscription.class.php';
         $adht = new AdherentType($db);
@@ -858,7 +857,6 @@ if ($ispaymentok) {
         }
     } elseif (array_key_exists('INV', $tmptag) && $tmptag['INV'] > 0) {
         // Record payment
-        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
         $object = new Facture($db);
         $result = $object->fetch((int) $tmptag['INV']);
         if ($result) {
@@ -984,7 +982,6 @@ if ($ispaymentok) {
             $ispostactionok = -1;
         }
     } elseif (array_key_exists('ORD', $tmptag) && $tmptag['ORD'] > 0) {
-        include_once DOL_DOCUMENT_ROOT . '/commande/class/commande.class.php';
         $object = new Commande($db);
         $result = $object->fetch((int) $tmptag['ORD']);
         if ($result) {
@@ -1019,7 +1016,6 @@ if ($ispaymentok) {
             // Do action only if $FinalPaymentAmt is set (session variable is cleaned after this page to avoid duplicate actions when page is POST a second time)
             if (isModEnabled('invoice')) {
                 if (!empty($FinalPaymentAmt) && $paymentTypeId > 0) {
-                    include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
                     $invoice = new Facture($db);
                     $result = $invoice->createFromOrder($object, $user);
                     if ($result > 0) {
@@ -1252,7 +1248,6 @@ if ($ispaymentok) {
         // Record payment for registration to an event for an attendee
         require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorbooth.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
         $object = new Facture($db);
         $result = $object->fetch($ref);
         if ($result) {
@@ -1397,7 +1392,6 @@ if ($ispaymentok) {
                         if ($resultthirdparty < 0) {
                             setEventMessages($resultthirdparty->error, $resultthirdparty->errors, "errors");
                         } else {
-                            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
                             include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                             $formmail = new FormMail($db);
                             // Set output language
@@ -1483,7 +1477,6 @@ if ($ispaymentok) {
         // Record payment for booth or conference
         require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorbooth.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
         $object = new Facture($db);
         $result = $object->fetch($ref);
         if ($result) {
@@ -1626,7 +1619,6 @@ if ($ispaymentok) {
                                         setEventMessages(null, $thirdparty->errors, "errors");
                                     } else {
                                         // Sending mail
-                                        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
                                         include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                                         $formmail = new FormMail($db);
                                         // Set output language
@@ -1693,7 +1685,6 @@ if ($ispaymentok) {
             $ispostactionok = -1;
         }
     } elseif (array_key_exists('CON', $tmptag) && $tmptag['CON'] > 0) {
-        include_once DOL_DOCUMENT_ROOT . '/contrat/class/contrat.class.php';
         $object = new Contrat($db);
         $result = $object->fetch((int) $tmptag['CON']);
         if ($result) {
@@ -1731,7 +1722,6 @@ if ($ispaymentok) {
             // Do action only if $FinalPaymentAmt is set (session variable is cleaned after this page to avoid duplicate actions when page is POST a second time)
             if (isModEnabled('invoice')) {
                 if (!empty($FinalPaymentAmt) && $paymentTypeId > 0) {
-                    include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
                     $invoice = new Facture($db);
                     $result = $invoice->createFromContract($object, $user, array((int) $contract_lines));
                     if ($result > 0) {
@@ -1984,7 +1974,6 @@ if ($ispaymentok) {
         $ishtml = dol_textishtml($content); // May contain urls
         $trackid = '';
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($topic, $sendto, $from, $content, array(), array(), array(), '', '', 0, $ishtml, '', '', $trackid, '', 'standard');
 
         $result = $mailfile->sendfile();
@@ -2045,7 +2034,6 @@ if ($ispaymentok) {
         $ishtml = dol_textishtml($content); // May contain urls
         $trackid = '';
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($topic, $sendto, $from, $content, array(), array(), array(), '', '', 0, $ishtml, '', '', $trackid, '', 'standard');
 
         $result = $mailfile->sendfile();

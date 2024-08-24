@@ -48,12 +48,11 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\Contact\Classes\Contact;
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 if (isModEnabled('member')) {
     use Dolibarr\Code\Adherents\Classes\Adherent;
 }
@@ -61,7 +60,6 @@ if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 }
 if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 }
 if (isModEnabled('eventorganization')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
@@ -3221,7 +3219,6 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
             $morehtmlcenter .= '</div>';
 
             // List of actions on element
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
             $formactions = new FormActions($db);
             $somethingshown = $formactions->showactions($object, '', $socid, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for thirdparty
 

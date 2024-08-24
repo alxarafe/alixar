@@ -29,7 +29,6 @@
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
@@ -38,13 +37,9 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 use Dolibarr\Code\Comm\Classes\Propal;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
@@ -213,7 +208,6 @@ class pdf_beluga extends ModelePDFProjects
             if (file_exists($dir)) {
                 // Add pdfgeneration hook
                 if (!is_object($hookmanager)) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                     $hookmanager = new HookManager($this->db);
                 }
                 $hookmanager->initHooks(array('pdfgeneration'));

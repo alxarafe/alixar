@@ -37,13 +37,10 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/fichinter/modules_fichinter.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fichinter.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 }
 if (isModEnabled('contract')) {
@@ -54,7 +51,6 @@ if (getDolGlobalString('FICHEINTER_ADDON') && is_readable(DOL_DOCUMENT_ROOT . "/
     require_once DOL_DOCUMENT_ROOT . "/core/modules/fichinter/mod_" . getDolGlobalString('FICHEINTER_ADDON') . '.php';
 }
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('bills', 'companies', 'interventions', 'stocks'));

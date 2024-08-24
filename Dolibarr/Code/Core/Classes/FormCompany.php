@@ -24,6 +24,9 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/core/class/html.formcompany.class.php
  *  \ingroup    core
@@ -35,7 +38,6 @@ namespace Dolibarr\Code\Core\Classes;
  *  Only common components are here.
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
 
 
 /**

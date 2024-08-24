@@ -22,8 +22,6 @@ namespace Dolibarr\Code\Product\Api;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
 /**
  * API class for warehouses

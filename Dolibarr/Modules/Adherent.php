@@ -26,6 +26,8 @@
 
 namespace Dolibarr\Modules;
 
+use Dolibarr\Core\Base\DolibarrModules;
+
 /**
  *      \defgroup   member     Module foundation
  *      \brief      Module to manage members of a foundation
@@ -34,13 +36,10 @@ namespace Dolibarr\Modules;
  *      \brief      Description and activation file for the module member
  */
 
-use Dolibarr\Core\Base\DolibarrModules;
-use Modules\Adherent\DoliDB;
-
 /**
  *  Class to describe and enable module Adherent
  */
-class  Adherent extends DolibarrModules
+class Adherent extends DolibarrModules
 {
     /**
      *   Constructor. Define names, constants, directories, boxes, permissions

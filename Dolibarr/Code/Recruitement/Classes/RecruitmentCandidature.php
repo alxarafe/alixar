@@ -32,8 +32,7 @@ use DoliDB;
 
 // Put here all includes required by your class file
 //use Dolibarr\Code\Societe\Classes\Societe;
-//require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-
+//
 /**
  * Class for RecruitmentCandidature
  */

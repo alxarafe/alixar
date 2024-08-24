@@ -564,9 +564,6 @@ if (!defined('NOLOGIN') && !defined('NOIPCHECK') && !empty($dolibarr_main_restri
 }
 
 // Loading of additional presentation includes
-if (!defined('NOREQUIREHTML')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php'; // Need 660ko memory (800ko in 2.2)
-}
 if (!defined('NOREQUIREAJAX')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ajax.lib.php'; // Need 22ko memory
 }
@@ -1705,7 +1702,6 @@ function top_httphead($contenttype = 'text/html', $forcenocache = 0)
         $contentsecuritypolicy = getDolGlobalString('MAIN_SECURITY_FORCECSPRO');
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($db);
         }
         $hookmanager->initHooks(array("main"));
@@ -1742,7 +1738,6 @@ function top_httphead($contenttype = 'text/html', $forcenocache = 0)
         $contentsecuritypolicy = getDolGlobalString('MAIN_SECURITY_FORCECSP');
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($db);
         }
         $hookmanager->initHooks(array("main"));

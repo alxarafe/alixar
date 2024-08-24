@@ -35,7 +35,10 @@
 
 namespace Dolibarr\Code\Fourn\Classes;
 
-use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Core\Classes\CommonInvoice;
+use Dolibarr\Code\Core\Classes\CommonInvoiceLine;
+use Dolibarr\Code\Core\Classes\WorkboardResponse;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 /**
  *  \file       htdocs/fourn/class/fournisseur.facture.class.php
@@ -43,14 +46,10 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
  *  \brief      File of class to manage suppliers invoices
  */
 
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commoninvoice.class.php';
 use Dolibarr\Core\Base\CommonObjectLine;
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
+use DoliDB;
 
 if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 }
 
 /**
@@ -758,7 +757,6 @@ class FactureFournisseur extends CommonInvoice
 
                     // If buyprice not defined from template invoice, we try to guess the best value
                     if (! $buyprice && $_facrec->lines[$i]->fk_product > 0) {
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
                         $producttmp = new ProductFournisseur($this->db);
                         $producttmp->fetch($_facrec->lines[$i]->fk_product);
 
@@ -3020,7 +3018,6 @@ class FactureFournisseur extends CommonInvoice
     public function initAsSpecimen($option = '')
     {
         global $langs, $conf;
-        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
 
         $now = dol_now();
 
@@ -3464,7 +3461,6 @@ class FactureFournisseur extends CommonInvoice
 
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
         $formmail = new FormMail($this->db);
 
         $now = dol_now();

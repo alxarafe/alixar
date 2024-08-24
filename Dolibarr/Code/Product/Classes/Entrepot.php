@@ -777,7 +777,8 @@ class Entrepot extends CommonObject
         }
         // show categories for this record only in ajax to not overload lists
         if (!$nofetch && isModEnabled('category')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+            use Dolibarr\Code\Categories\Classes\Categorie;
+
             $form = new Form($this->db);
             $datas['categories_warehouse'] = '<br>' . $form->showCategories($this->id, Categorie::TYPE_WAREHOUSE, 1, 1);
         }
@@ -1017,7 +1018,8 @@ class Entrepot extends CommonObject
      */
     public function setCategories($categories)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
         return parent::setCategoriesCommon($categories, Categorie::TYPE_WAREHOUSE);
     }
 

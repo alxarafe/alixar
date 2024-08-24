@@ -34,9 +34,7 @@ use Dolibarr\Code\Comm\Classes\Propal;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/propal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 }
 
 // Load translation files required by the page

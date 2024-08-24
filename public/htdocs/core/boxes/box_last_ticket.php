@@ -63,7 +63,6 @@ class box_last_ticket extends ModeleBoxes
 
         $this->max = $max;
 
-        require_once DOL_DOCUMENT_ROOT . "/ticket/class/ticket.class.php";
 
         $text = $langs->trans("BoxLastTicketDescription", $max);
         $this->info_box_head = array(

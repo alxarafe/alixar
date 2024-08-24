@@ -32,7 +32,6 @@ use DoliDB;
  * \brief      File of class with all html predefined components for WebPortal
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
 
 /**
  * Class to manage generation of HTML components
@@ -941,7 +940,8 @@ class FormWebPortal extends Form
                         $out .= 'Error in request ' . $sql . ' ' . $this->db->lasterror() . '. Check setup of extra parameters.<br>';
                     }
                 } else {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+                    use Dolibarr\Code\Categories\Classes\Categorie;
+
                     $categorytype = $InfoFieldList[5];
                     if (is_numeric($categorytype)) {
                         $categorytype = Categorie::$MAP_ID_TO_CODE[$categorytype]; // For backward compatibility
@@ -1203,7 +1203,8 @@ class FormWebPortal extends Form
                         }
                     }
                 } else {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+                    use Dolibarr\Code\Categories\Classes\Categorie;
+
 
                     $toprint = array();
                     $obj = $this->db->fetch_object($resql);
@@ -1305,7 +1306,8 @@ class FormWebPortal extends Form
                         }
                     }
                 } else {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+                    use Dolibarr\Code\Categories\Classes\Categorie;
+
 
                     $toprint = array();
                     while ($obj = $this->db->fetch_object($resql)) {

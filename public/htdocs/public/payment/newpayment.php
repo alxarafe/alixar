@@ -65,10 +65,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
 // Hook to be used by external payment modules (ie Payzen, ...)
 $hookmanager = new HookManager($db);
@@ -1180,7 +1177,6 @@ if ($source == 'invoice') {
     $langs->load("bills");
     $form->load_cache_types_paiements();
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
     $invoice = new Facture($db);
     $result = $invoice->fetch('', $ref);
@@ -1523,8 +1519,6 @@ if ($source == 'member' || $source == 'membersubscription') {
     $langs->load("members");
 
     use Dolibarr\Code\Adherents\Classes\Adherent;
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
 
     $member = new Adherent($db);
     $adht = new AdherentType($db);
@@ -1629,7 +1623,6 @@ if ($source == 'member' || $source == 'membersubscription') {
         $newtypeid = (int) (GETPOSTISSET("typeid") ? GETPOSTINT("typeid") : $member->typeid);
 
         if (getDolGlobalString('MEMBER_ALLOW_CHANGE_OF_TYPE')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
             $adht = new AdherentType($db);
             // Amount by member type
             $amountbytype = $adht->amountByType(1);

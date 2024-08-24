@@ -30,7 +30,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 // Class
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 }
 
 // Load translation files required by the page

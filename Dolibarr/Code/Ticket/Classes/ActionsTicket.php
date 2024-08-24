@@ -30,12 +30,11 @@ use Dolibarr\Code\Core\Classes\CommonHookActions;
  *    \brief      File Class ticket
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+
+use Dolibarr\Code\Contact\Classes\Contact;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonhookactions.class.php';
 
 // TODO Only the last method emailElementlist is a hook method. Other must be moved into standard ticket.class.php

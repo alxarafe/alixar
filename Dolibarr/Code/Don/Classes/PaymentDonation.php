@@ -582,7 +582,6 @@ class PaymentDonation extends CommonObject
         $error = 0;
 
         if (isModEnabled("bank")) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
             $acc = new Account($this->db);
             $acc->fetch($accountid);

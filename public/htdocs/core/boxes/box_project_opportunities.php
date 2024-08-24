@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2012-2014 Charles-François BENKE <charles.fr@benke.fr>
- * Copyright (C) 2014      Marcos García          <marcosgdf@gmail.com>
- * Copyright (C) 2015      Frederic France        <frederic.france@free.fr>
- * Copyright (C) 2016      Juan José Menent       <jmenent@2byte.es>
- * Copyright (C) 2020      Pierre Ardoin          <mapiolca@me.com>
+/* Copyright (C) 2012-2014  Charles-François BENKE      <charles.fr@benke.fr>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
+ * Copyright (C) 2016       Juan José Menent            <jmenent@2byte.es>
+ * Copyright (C) 2020       Pierre Ardoin               <mapiolca@me.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/core/boxes/box_project_opportunities.php
@@ -77,8 +80,6 @@ class box_project_opportunities extends ModeleBoxes
         $i = 0;
         // list the summary of the orders
         if ($user->hasRight('projet', 'lire')) {
-            include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
-            include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
             $projectstatic = new Project($this->db);
             $companystatic = new Societe($this->db);
 

@@ -23,6 +23,7 @@
 namespace Dolibarr\Code\Mrp\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        mrp/class/mo.class.php
@@ -1288,7 +1289,6 @@ class Mo extends CommonObject
             return 1;
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
         $error = 0;
         $langs->load('stocks');
@@ -1411,13 +1411,11 @@ class Mo extends CommonObject
             $datas['qty'] = '<br><b>' . $langs->trans('QtyToProduce') . ':</b> ' . $this->qty;
         }
         if (!$nofetch && isset($this->fk_product)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
             $product = new Product($this->db);
             $product->fetch($this->fk_product);
             $datas['product'] = '<br><b>' . $langs->trans('Product') . ':</b> ' . $product->getNomUrl(1, '', 0, -1, 1);
         }
         if (!$nofetch && isset($this->fk_warehouse)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
             $warehouse = new Entrepot($this->db);
             $warehouse->fetch($this->fk_warehouse);
             $datas['warehouse'] = '<br><b>' . $langs->trans('WarehouseForProduction') . ':</b> ' . $warehouse->getNomUrl(1, '', 0, 1);

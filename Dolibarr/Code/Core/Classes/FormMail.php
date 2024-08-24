@@ -35,7 +35,6 @@ use DoliDB;
  *       \brief      Fichier de la class permettant la generation du formulaire html d'envoi de mail unitaire
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
 
 
 /**
@@ -397,7 +396,6 @@ class FormMail extends Form
         global $conf, $langs, $user, $hookmanager, $form;
 
         // Required to show preview wof mail attachments
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
         $formfile = new FormFile($this->db);
 
         if (!is_object($form)) {

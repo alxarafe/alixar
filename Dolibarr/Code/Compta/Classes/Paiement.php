@@ -361,7 +361,6 @@ class Paiement extends CommonObject
 
         if (!empty($currencyofpayment)) {
             // We must check that the currency of invoices is the same than the currency of the bank
-            include_once DOL_DOCUMENT_ROOT . '/compta/bank/class/account.class.php';
             $bankaccount = new Account($this->db);
             $bankaccount->fetch($this->fk_account);
             $bankcurrencycode = empty($bankaccount->currency_code) ? $conf->currency : $bankaccount->currency_code;
@@ -721,7 +720,6 @@ class Paiement extends CommonObject
 
             dol_syslog("addPaymentToBank " . $user->id . ", " . $mode . ", " . $label . ", " . $this->fk_account . ", " . $emetteur_nom . ", " . $emetteur_banque);
 
-            include_once DOL_DOCUMENT_ROOT . '/compta/bank/class/account.class.php';
             $acc = new Account($this->db);
             $result = $acc->fetch($this->fk_account);
             if ($result < 0) {
@@ -1320,7 +1318,6 @@ class Paiement extends CommonObject
         if ($mode == 'withlistofinvoices') {
             $arraybill = $this->getBillsArray();
             if (is_array($arraybill) && count($arraybill) > 0) {
-                include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
                 $facturestatic = new Facture($this->db);
                 foreach ($arraybill as $billid) {
                     $facturestatic->fetch($billid);
@@ -1441,7 +1438,6 @@ class Paiement extends CommonObject
     public function fetch_thirdparty($force_thirdparty_id = 0)
     {
 		// phpcs:enable
-        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
 
         if (empty($force_thirdparty_id)) {
             $billsarray = $this->getBillsArray(); // From payment, the fk_soc isn't available, we should load the first supplier invoice to get him

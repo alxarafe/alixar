@@ -31,11 +31,9 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+
+use Dolibarr\Code\Societe\Classes\Societe;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/prelevement.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/salary.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories', 'withdrawals'));

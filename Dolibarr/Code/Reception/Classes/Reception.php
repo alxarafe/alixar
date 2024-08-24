@@ -461,7 +461,6 @@ class Reception extends CommonObject
 
                 // Retrieve all extrafields for reception
                 // fetch optionals attributes and labels
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
                 $extrafields = new ExtraFields($this->db);
                 $extrafields->fetch_name_optionals_label($this->table_element, true);
                 $this->fetch_optionals();
@@ -725,7 +724,6 @@ class Reception extends CommonObject
      */
     public function getStatusDispatch()
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 
         $status = CommandeFournisseur::STATUS_RECEIVED_PARTIALLY;
@@ -1430,7 +1428,6 @@ class Reception extends CommonObject
     {
         global $langs;
 
-        include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.commande.class.php';
         include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.commande.dispatch.class.php';
         $now = dol_now();
 

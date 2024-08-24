@@ -32,11 +32,13 @@
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/task/modules_task.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+
+use Dolibarr\Code\Contact\Classes\Contact;
+
+use Dolibarr\Code\User\Classes\User;
+
+use Dolibarr\Code\Societe\Classes\Societe;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -46,7 +48,6 @@ if (isModEnabled("propal")) {
     use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled('invoice')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 }
 if (isModEnabled('invoice')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
@@ -55,16 +56,13 @@ if (isModEnabled('order')) {
     use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 if (isModEnabled("supplier_invoice")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 }
 if (isModEnabled("supplier_order")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
 }
 if (isModEnabled('contract')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 }
 if (isModEnabled('intervention')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 }
 if (isModEnabled('deplacement')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';

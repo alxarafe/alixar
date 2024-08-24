@@ -33,9 +33,7 @@ use Dolibarr\Core\Base\CommonObject;
  *  \brief      File of class to manage accounting accounts
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  * Class to manage accounting accounts

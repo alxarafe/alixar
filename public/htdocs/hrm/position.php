@@ -29,8 +29,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/position.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';
@@ -755,7 +753,6 @@ if ($job->id > 0 && (empty($action) || ($action != 'edit' && $action != 'create'
             $hidegeneratedfilelistifempty = 0;
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
         $formfile = new FormFile($db);
 
         // Show list of available documents

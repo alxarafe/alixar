@@ -57,8 +57,10 @@ class Contacts extends DolibarrApi
         global $db, $conf;
         $this->db = $db;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Contact\Classes\Contact;
+
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
 
         $this->contact = new Contact($this->db);
     }

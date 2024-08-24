@@ -37,18 +37,27 @@
 
 namespace Dolibarr\Core\Base;
 
-use DolEditor;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Interfaces;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Ecm\Classes\EcmFiles;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Trait\DolDeprecationHandler;
-use ExtraFields;
+use DoliDB;
+use stdClass;
 
 /**
  *  \file       htdocs/core/class/commonobject.class.php
  *  \ingroup    core
  *  \brief      File of parent class of all other business classes (invoices, contracts, proposals, orders, ...)
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doldeprecationhandler.class.php';
 
 /**
  *  Parent class of all other business classes (invoices, contracts, proposals, orders, ...)
@@ -1063,7 +1072,6 @@ abstract class CommonObject
         global $conf, $langs, $form;
 
         if (!is_object($form)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
             $form = new Form($this->db);
         }
 
@@ -1292,8 +1300,6 @@ abstract class CommonObject
                         }
                     }
                 } else {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-
                     $toprint = array();
                     $obj = $this->db->fetch_object($resql);
                     $c = new Categorie($this->db);
@@ -1394,8 +1400,6 @@ abstract class CommonObject
                         }
                     }
                 } else {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-
                     $toprint = array();
                     while ($obj = $this->db->fetch_object($resql)) {
                         if (is_array($value_arr) && in_array($obj->rowid, $value_arr)) {
@@ -2350,7 +2354,6 @@ abstract class CommonObject
             return 0;
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
         $contact = new Contact($this->db);
         $result = $contact->fetch($contactid);
         $this->contact = $contact;
@@ -2372,8 +2375,6 @@ abstract class CommonObject
         if (empty($this->socid) && empty($this->fk_soc) && empty($force_thirdparty_id)) {
             return 0;
         }
-
-        require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
 
         $idtofetch = isset($this->socid) ? $this->socid : (isset($this->fk_soc) ? $this->fk_soc : 0);
         if ($force_thirdparty_id) {
@@ -2503,7 +2504,6 @@ abstract class CommonObject
     public function fetch_projet()
     {
         // phpcs:enable
-        include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
 
         if (empty($this->fk_project) && !empty($this->fk_projet)) {
             $this->fk_project = $this->fk_projet; // For backward compatibility
@@ -3022,7 +3022,6 @@ abstract class CommonObject
         if (!is_array($optionsArray)) {
             // If $extrafields is not a known object, we initialize it. Best practice is to have $extrafields defined into card.php or list.php page.
             if (!isset($extrafields) || !is_object($extrafields)) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
                 $extrafields = new ExtraFields($this->db);
             }
 
@@ -4858,7 +4857,6 @@ abstract class CommonObject
 
             // Situations totals
             if (!empty($this->situation_cycle_ref) && !empty($this->situation_counter) && $this->situation_counter > 1 && method_exists($this, 'get_prev_sits')) {
-                include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
                 if ($this->type != Facture::TYPE_CREDIT_NOTE) { // @phpstan-ignore-line
                     if (getDolGlobalInt('INVOICE_USE_SITUATION') != 2) {
                         $prev_sits = $this->get_prev_sits();
@@ -5717,7 +5715,6 @@ abstract class CommonObject
 
         // Line extrafield
         if (!is_object($extrafields)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
             $extrafields = new ExtraFields($this->db);
         }
         $extrafields->fetch_name_optionals_label($this->table_element_line);
@@ -5774,7 +5771,6 @@ abstract class CommonObject
 
         // Line extrafield
         if (!is_object($extrafields)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
             $extrafields = new ExtraFields($this->db);
         }
         $extrafields->fetch_name_optionals_label($this->table_element_line);
@@ -6734,7 +6730,6 @@ abstract class CommonObject
         if (!empty($this->array_options) && isset($this->array_options["options_" . $key])) {
             // Check parameters
             $langs->load('admin');
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
             $extrafields = new ExtraFields($this->db);
             $extrafields->fetch_name_optionals_label($this->table_element);
 
@@ -7044,7 +7039,6 @@ abstract class CommonObject
         if (!empty($this->array_options)) {
             // Check parameters
             $langs->load('admin');
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
             $extrafields = new ExtraFields($this->db);
             $target_extrafields = $extrafields->fetch_name_optionals_label($this->table_element);
 
@@ -8003,7 +7997,6 @@ abstract class CommonObject
         global $conf, $langs, $form;
 
         if (!is_object($form)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
             $form = new Form($this->db);
         }
 
@@ -8462,7 +8455,6 @@ abstract class CommonObject
                         print 'Error in request ' . $sql . ' ' . $this->db->lasterror() . '. Check setup of extra parameters.<br>';
                     }
                 } else {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
                     $data = $form->select_all_categories(Categorie::$MAP_ID_TO_CODE[$InfoFieldList[5]], '', 'parent', 64, $InfoFieldList[6], 1, 1);
                     $out .= '<option value="0">&nbsp;</option>';
                     foreach ($data as $data_key => $data_value) {
@@ -8638,7 +8630,6 @@ abstract class CommonObject
                         print 'Error in request ' . $sql . ' ' . $this->db->lasterror() . '. Check setup of extra parameters.<br>';
                     }
                 } else {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
                     $data = $form->select_all_categories(Categorie::$MAP_ID_TO_CODE[$InfoFieldList[5]], '', 'parent', 64, $InfoFieldList[6], 1, 1);
                     $out = $form->multiselectarray($keyprefix . $key . $keysuffix, $data, $value_arr, 0, 0, $morecss, 0, '100%');
                 }
@@ -8865,7 +8856,6 @@ abstract class CommonObject
             if (!empty($fk_product) && $fk_product > 0) {
                 $result = 0;
                 if (getDolGlobalString('MARGIN_TYPE') == 'costprice') {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
                     $product = new Product($this->db);
                     $result = $product->fetch($fk_product);
                     if ($result <= 0) {
@@ -8878,7 +8868,6 @@ abstract class CommonObject
                         $buyPrice = $product->pmp;
                     }
                 } elseif (getDolGlobalString('MARGIN_TYPE') == 'pmp') {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
                     $product = new Product($this->db);
                     $result = $product->fetch($fk_product);
                     if ($result <= 0) {
@@ -8891,7 +8880,6 @@ abstract class CommonObject
                 }
 
                 if (empty($buyPrice) && isset($conf->global->MARGIN_TYPE) && in_array($conf->global->MARGIN_TYPE, array('1', 'pmp', 'costprice'))) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
                     $productFournisseur = new ProductFournisseur($this->db);
                     if (($result = $productFournisseur->find_min_price_product_fournisseur($fk_product)) > 0) {
                         $buyPrice = $productFournisseur->fourn_unitprice;
@@ -10419,8 +10407,6 @@ abstract class CommonObject
      */
     public function getCategoriesCommon($type_categ)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-
         // Get current categories
         $c = new Categorie($this->db);
         $existing = $c->containing($this->id, $type_categ, 'id');
@@ -10448,8 +10434,6 @@ abstract class CommonObject
         }
 
         dol_syslog(get_class($this) . "::setCategoriesCommon Object Id:" . $this->id . ' type_categ:' . $type_categ . ' nb tag add:' . count($categories), LOG_DEBUG);
-
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 
         if (empty($type_categ)) {
             dol_syslog(__METHOD__ . ': Type ' . $type_categ . 'is an unknown category type. Done nothing.', LOG_ERR);
@@ -10526,7 +10510,6 @@ abstract class CommonObject
             $type = $this->table_element;
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
         $categorystatic = new Categorie($this->db);
 
         $sql = "INSERT INTO " . $this->db->prefix() . "categorie_" . (empty($categorystatic->MAP_CAT_TABLE[$type]) ? $type : $categorystatic->MAP_CAT_TABLE[$type]) . " (fk_categorie, fk_product)";

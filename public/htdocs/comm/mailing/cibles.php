@@ -33,7 +33,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/mailings/modules_mai
 require_once constant('DOL_DOCUMENT_ROOT') . '/comm/mailing/class/mailing.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmailing.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/emailing.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ajax.lib.php';
 
@@ -818,9 +817,7 @@ if ($object->fetch($id) >= 0) {
         $i = 0;
 
         if ($num) {
-            include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent.class.php';
             include_once DOL_DOCUMENT_ROOT . '/user/class/user.class.php';
-            include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
             include_once DOL_DOCUMENT_ROOT . '/contact/class/contact.class.php';
             include_once DOL_DOCUMENT_ROOT . '/eventorganization/class/conferenceorboothattendee.class.php';
 

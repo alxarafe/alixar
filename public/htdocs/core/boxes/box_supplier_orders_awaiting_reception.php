@@ -20,6 +20,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Fourn\Classes\Fournisseur;
+
 /**
  * \file       htdocs/core/boxes/box_supplier_orders_awaiting_reception.php
  * \ingroup    fournisseurs
@@ -66,7 +69,6 @@ class box_supplier_orders_awaiting_reception extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.commande.class.php';
         $supplierorderstatic = new CommandeFournisseur($this->db);
         include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.class.php';
         $thirdpartystatic = new Fournisseur($this->db);

@@ -24,6 +24,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Core\Traits\CommonIncoterm;
 use Dolibarr\Core\Base\CommonObject;
 
 /**
@@ -1679,7 +1680,6 @@ abstract class CommonInvoice extends CommonObject
         ];
 
         // Add the bank account information
-        include_once DOL_DOCUMENT_ROOT . '/compta/bank/class/account.class.php';
         $bankAccount = new Account($this->db);
         if ($this->fk_account > 0) {
             $bankAccount->fetch($this->fk_account);
@@ -1798,7 +1798,6 @@ abstract class CommonInvoice extends CommonObject
             $complementaryinfo .= '/30/' . $this->thirdparty->tva_intra;
         }
 
-        include_once DOL_DOCUMENT_ROOT . '/compta/bank/class/account.class.php';
         $bankaccount = new Account($this->db);
 
         // Header

@@ -43,10 +43,10 @@ if (!defined('NOREQUIREAJAX')) {
 if (!defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
     require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 }
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/hookmanager.class.php';
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
+use Dolibarr\Code\Core\Classes\HookManager;
 
 if (defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
     // Decode place if it is an order from a customer phone
@@ -126,7 +126,6 @@ if ($action == "productinfo") {
     if (GETPOSTISSET("payment")) {
         print '<h1>' . $langs->trans('Ordered') . '</h1>';
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolreceiptprinter.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
         $printer = new dolReceiptPrinter($db);
         $printer->initPrinter(getDolGlobalString('TAKEPOS_PRINTER_TO_USE' . $_SESSION["takeposterminal"]));
         if ($printer->getPrintConnector()) {

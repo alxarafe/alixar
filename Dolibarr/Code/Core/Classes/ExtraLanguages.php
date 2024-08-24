@@ -148,7 +148,6 @@ class ExtraLanguages
         global $conf, $langs, $form;
 
         if (!is_object($form)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
             $form = new Form($this->db);
         }
 

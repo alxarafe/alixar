@@ -33,6 +33,7 @@
 namespace Dolibarr\Code\Contrat\Classes;
 
 use Dolibarr\Core\Base\CommonObjectLine;
+use DoliDB;
 
 /**
  *  \file       htdocs/contrat/class/contrat.class.php

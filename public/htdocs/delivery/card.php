@@ -33,21 +33,16 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/delivery/class/delivery.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/delivery/modules_delivery.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/sendings.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 if (isModEnabled("product") || isModEnabled("service")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 }
 if (isModEnabled('shipping')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 }
 if (isModEnabled('stock')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 }
 

@@ -31,9 +31,8 @@ use DoliDB;
  */
 
 // Put here all includes required by your class file
-//require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-//require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-
+//use Dolibarr\Code\Societe\Classes\Societe;
+//
 /**
  * Class for ConferenceOrBoothAttendee
  */
@@ -644,7 +643,6 @@ class ConferenceOrBoothAttendee extends CommonObject
     public function fetch_projet()
     {
 		// phpcs:enable
-        include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
 
         if (empty($this->fk_project) && !empty($this->fk_projet)) {
             $this->fk_project = $this->fk_projet; // For backward compatibility

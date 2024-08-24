@@ -46,8 +46,6 @@ use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formpropal.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 use Dolibarr\Code\Comm\Classes\Propal;
@@ -55,10 +53,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.clas
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/propale/modules_propale.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/propal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 }
 
@@ -764,7 +760,6 @@ if (empty($reshook)) {
                     !$error && GETPOSTINT('statut') == $object::STATUS_SIGNED && GETPOSTINT('generate_deposit') == 'on'
                     && !empty($deposit_percent_from_payment_terms) && isModEnabled('invoice') && $user->hasRight('facture', 'creer')
                 ) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
                     $date = dol_mktime(0, 0, 0, GETPOSTINT('datefmonth'), GETPOSTINT('datefday'), GETPOSTINT('datefyear'));
                     $forceFields = array();
@@ -2307,7 +2302,6 @@ if ($action == 'create') {
             $deposit_percent_from_payment_terms = getDictionaryValue('c_payment_term', 'deposit_percent', $object->cond_reglement_id);
 
             if (!empty($deposit_percent_from_payment_terms) && isModEnabled('invoice') && $user->hasRight('facture', 'creer')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
                 $object->fetchObjectLinked();
 

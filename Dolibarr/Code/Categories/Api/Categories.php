@@ -22,8 +22,8 @@ namespace Dolibarr\Code\Categories\Api;
 
 use Luracast\Restler\RestException;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/api_members.class.php';

@@ -32,19 +32,15 @@
 
 namespace Dolibarr\Code\Categories\Classes;
 
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+
 /**
  *  \file       htdocs/categories/class/categorie.class.php
  *  \ingroup    categorie
  *  \brief      File of class to manage categories
  */
-
-use Dolibarr\Core\Base\CommonObject;
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/knowledgemanagement/class/knowledgerecord.class.php';
-
 
 /**
  *  Class to manage categories

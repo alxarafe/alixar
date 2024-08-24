@@ -33,14 +33,11 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expensereport/modules_expensereport.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/userbankaccount.class.php';
 
 /**
  *  Class to generate expense report based on standard model
@@ -226,7 +223,6 @@ class pdf_standard extends ModeleExpenseReport
             if (file_exists($dir)) {
                 // Add pdfgeneration hook
                 if (!is_object($hookmanager)) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                     $hookmanager = new HookManager($this->db);
                 }
                 $hookmanager->initHooks(array('pdfgeneration'));
