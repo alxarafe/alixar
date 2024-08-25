@@ -76,6 +76,34 @@ class DolibarrApi
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
 
     /**
+     * Obtains the namespace of an API module.
+     *
+     * @param $moduleName
+     * @param $className
+     * @return string
+     */
+    public static function getModuleNamespace($moduleName, $className): string
+    {
+        return '\\Dolibarr\\Code\\' . $moduleName . '\\Api\\' . $className;
+    }
+
+    /**
+     * Obtains an instance of $moduleName/$className, or null.
+     *
+     * @param $moduleName
+     * @param $className
+     * @return mixed
+     */
+    public static function getModule($moduleName, $className)
+    {
+        $namespace = static::getModuleNamespace($moduleName, $className);
+
+        return new $namespace();
+    }
+
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
+    /**
      * Check access by user to a given resource
      *
      * @param string $resource element to check
@@ -226,6 +254,7 @@ class DolibarrApi
         return $object;
     }
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
 
     /**
@@ -407,9 +436,6 @@ class DolibarrApi
 
         return $object;
     }
-
-    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
 
     /**
      * Return if a $sqlfilters parameter is valid

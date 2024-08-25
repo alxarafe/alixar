@@ -19,13 +19,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Dolibarr\Code\Api\Classes;
+namespace Dolibarr\Code\Api\Api;
 
+use Dolibarr\Code\Api\Classes\DoliDB;
+use Dolibarr\Code\User\Classes\User;
 use Luracast\Restler\RestException;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
-
-use Dolibarr\Code\User\Classes\User;
 
 
 /**
@@ -60,10 +60,10 @@ class Login
      * To use the APIs, you should instead set an API token to the user you want to allow to use API (This API token called DOLAPIKEY can be found/set on the user page) and use this token as credential for any API call.
      * From the API explorer, you can enter directly the "DOLAPIKEY" into the field at the top right of the page to get access to any allowed APIs.
      *
-     * @param   string  $login          User login
-     * @param   string  $password       User password
-     * @param   string  $entity         Entity (when multicompany module is used). '' means 1=first company.
-     * @param   int     $reset          Reset token (0=get current token, 1=ask a new token and canceled old token. This means access using current existing API token of user will fails: new token will be required for new access)
+     * @param string $login User login
+     * @param string $password User password
+     * @param string $entity Entity (when multicompany module is used). '' means 1=first company.
+     * @param int $reset Reset token (0=get current token, 1=ask a new token and canceled old token. This means access using current existing API token of user will fails: new token will be required for new access)
      * @return  array                   Response status and user token
      *
      * @throws RestException 403 Access denied
@@ -84,10 +84,10 @@ class Login
      * To use the APIs, you should instead set an API token to the user you want to allow to use API (This API token called DOLAPIKEY can be found/set on the user page) and use this token as credential for any API call.
      * From the API explorer, you can enter directly the "DOLAPIKEY" into the field at the top right of the page to get access to any allowed APIs.
      *
-     * @param   string  $login          User login
-     * @param   string  $password       User password
-     * @param   string  $entity         Entity (when multicompany module is used). '' means 1=first company.
-     * @param   int     $reset          Reset token (0=get current token, 1=ask a new token and canceled old token. This means access using current existing API token of user will fails: new token will be required for new access)
+     * @param string $login User login
+     * @param string $password User password
+     * @param string $entity Entity (when multicompany module is used). '' means 1=first company.
+     * @param int $reset Reset token (0=get current token, 1=ask a new token and canceled old token. This means access using current existing API token of user will fails: new token will be required for new access)
      * @return  array                   Response status and user token
      *
      * @throws RestException 403 Access denied

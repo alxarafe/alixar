@@ -23,24 +23,11 @@
 
 use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
 use Dolibarr\Core\Base\DolibarrApi;
-use Luracast\Restler\AutoLoader;
 use Luracast\Restler\Format\UploadFormat;
 
-$api_route = $_GET['api_route'];
+$api_route = $_GET['api_route'] ?? '/';
 unset($_GET['api_route']);
 $_SERVER['SCRIPT_NAME'] = '/api/index.php';
-
-/*
-var_dump([
-    'SCRIPT_NAME' => $_SERVER['SCRIPT_NAME'],
-    'SCRIPT_FILENAME' => $_SERVER['SCRIPT_FILENAME'],
-    'REQUEST_URI' => $_SERVER['REQUEST_URI'],
-    'HTTP_HOST' => $_SERVER['HTTP_HOST'],
-    'HTTP_X_FORWARDED_PORT' => $_SERVER['HTTP_X_FORWARDED_PORT'],
-    'HTTP_X_FORWARDED_PROTO' => $_SERVER['HTTP_X_FORWARDED_PROTO'],
-]);
-die('checkit');
-*/
 
 if (!defined('NOCSRFCHECK')) {
     define('NOCSRFCHECK', '1'); // Do not check anti CSRF attack test
@@ -82,14 +69,14 @@ if (!empty($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS
 }
 
 // When we request url to get the json file, we accept Cross site so we can include the descriptor into an external tool.
-if (preg_match('/\/explorer\/swagger\.json/', $_SERVER["PHP_SELF"])) {
+if (str_contains($_SERVER["PHP_SELF"], '/explorer/swagger.json')) {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
     header('Access-Control-Allow-Headers: Content-Type, Authorization, api_key, DOLAPIKEY');
 }
 
 // When we request url to get an API, we accept Cross site so we can make js API call inside another website
-if (preg_match('/\/api\/index\.php/', $_SERVER["PHP_SELF"])) {
+if (str_contains($_SERVER["PHP_SELF"], '/api/index.php')) {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
     header('Access-Control-Allow-Headers: Content-Type, Authorization, api_key, DOLAPIKEY');
@@ -102,17 +89,14 @@ if (!$res) {
     die("Include of main fails");
 }
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/includes/restler/framework/Luracast/Restler/AutoLoader.php';
-
-$loader = AutoLoader::instance();
-spl_autoload_register($loader);
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 $url = $_SERVER['PHP_SELF'];
-if (preg_match('/api\/index\.php$/', $url)) {   // sometimes $_SERVER['PHP_SELF'] is 'api\/index\.php' instead of 'api\/index\.php/explorer.php' or 'api\/index\.php/method'
-    $url = $_SERVER['PHP_SELF'] . (empty($_SERVER['PATH_INFO']) ? $_SERVER['ORIG_PATH_INFO'] : $_SERVER['PATH_INFO']);
+if (str_ends_with($_SERVER['PHP_SELF'], 'api/index.php')) {
+    $additionalPath = !empty($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : ($_SERVER['ORIG_PATH_INFO'] ?? '');
+    $url = $_SERVER['PHP_SELF'] . $additionalPath;
 }
+
 // Fix for some NGINX setups (this should not be required even with NGINX, however setup of NGINX are often mysterious and this may help is such cases)
 if (getDolGlobalString('MAIN_NGINX_FIX')) {
     $url = (isset($_SERVER['SCRIPT_URI']) && $_SERVER["SCRIPT_URI"] !== null) ? $_SERVER["SCRIPT_URI"] : $_SERVER['PHP_SELF'];
@@ -129,7 +113,7 @@ if (!isModEnabled('api')) {
 }
 
 // Test if explorer is not disabled
-if (preg_match('/api\/index\.php\/explorer/', $url) && getDolGlobalString('API_EXPLORER_DISABLED')) {
+if (str_contains($url, 'api/index.php/explorer') && getDolGlobalString('API_EXPLORER_DISABLED')) {
     $langs->load("admin");
     dol_syslog("Call Dolibarr API interfaces with module API REST disabled");
     print $langs->trans("WarningAPIExplorerDisabled") . '.<br><br>';
@@ -170,13 +154,8 @@ if (!empty($reg[1]) && $reg[1] == 'explorer' && ($reg[2] == '/swagger.json' || $
     }
 }
 
-/**
- * TODO: The problem is that Restler is not being loaded as usual.
- */
-require_once constant('BASE_PATH') . '/../Dolibarr/Core/Base/DolibarrApi.php';
-
 $api = new DolibarrApi($db, '', $refreshcache);
-//var_dump($api->r->apiVersionMap);
+// var_dump($api->r->apiVersionMap);
 
 // If MAIN_API_DEBUG is set to 1, we save logs into file "dolibarr_api.log"
 if (getDolGlobalString('MAIN_API_DEBUG')) {
@@ -196,13 +175,14 @@ if (getDolGlobalString('MAIN_API_DEBUG')) {
     });
 }
 
-
 // Enable the Restler API Explorer.
 // See https://github.com/Luracast/Restler-API-Explorer for more info.
 $api->r->addAPIClass('Luracast\\Restler\\Explorer');
+$api->r->addAPIClass('Luracast\\Restler\\Explorer\\v1\\Explorer');
+$api->r->addAPIClass('Luracast\\Restler\\Explorer\\v2\\Explorer');
 
 $api->r->setSupportedFormats('JsonFormat', 'XmlFormat', 'UploadFormat'); // 'YamlFormat'
-$api->r->addAuthenticationClass('DolibarrApiAccess', '');
+$api->r->addAuthenticationClass('Dolibarr\\Code\\Api\\Classes\\DolibarrApiAccess', '');
 
 // Define accepted mime types
 UploadFormat::$allowedMimeTypes = array('image/jpeg', 'image/png', 'text/plain', 'application/octet-stream');
@@ -344,9 +324,11 @@ if (!empty($reg[1]) && ($reg[1] != 'explorer' || ($reg[2] != '/swagger.json' && 
         $classfile = 'interventions';
     }
 
-    $dir_part_file = dol_buildpath('/' . $moduledirforclass . '/class/api_' . $classfile . '.class.php', 0, 2);
+    $filename = '/' . $moduledirforclass . '/class/api_' . $classfile . '.class.php';
+    $dir_part_file = dol_buildpath($filename, 0, 2);
 
     $classname = ucwords($moduleobject);
+    $modulename = ucwords($moduledirforclass);
 
     // Test rules on endpoints. For example:
     // $conf->global->API_ENDPOINT_RULES = 'endpoint1:1,endpoint2:1,...'
@@ -373,21 +355,17 @@ if (!empty($reg[1]) && ($reg[1] != 'explorer' || ($reg[2] != '/swagger.json' && 
 
     dol_syslog('Search api file /' . $moduledirforclass . '/class/api_' . $classfile . '.class.php => dir_part_file=' . $dir_part_file . ', classname=' . $classname);
 
-    $res = false;
-    if ($dir_part_file) {
-        $res = include_once $dir_part_file;
-    }
-    if (!$res) {
+    $namespace = DolibarrApi::getModule($modulename, $classname);
+    if (!class_exists($namespace)) {
         dol_syslog('Failed to make include_once ' . $dir_part_file, LOG_WARNING);
         print 'API not found (failed to include API file)';
         header('HTTP/1.1 501 API not found (failed to include API file)');
         //session_destroy();
         exit(0);
     }
+    dump('Exists: ' . $namespace);
 
-    if (class_exists($classname)) {
-        $api->r->addAPIClass($classname);
-    }
+    $api->r->addAPIClass($namespace);
 }
 
 // We do not want that restler outputs data if we use native compression (default behaviour) but we want to have it returned into a string.
