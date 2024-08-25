@@ -31,8 +31,8 @@
  *  \brief      Library for file eldy menus
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/menubase.class.php';
-
+use Dolibarr\Code\Core\Classes\Menu;
+use Dolibarr\Code\Core\Classes\Menubase;
 
 /**
  * Core function to output top menu eldy

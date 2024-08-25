@@ -37,8 +37,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companypaymentmode.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
@@ -1920,8 +1918,7 @@ if ($socid && $action != 'edit' && $action != 'create' && $action != 'editcard' 
             // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
             $result = $companypaymentmodetemp->fetch(0, null, $object->id, 'ban');
 
-            include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-            $ecmfile = new EcmFiles($db);
+                $ecmfile = new EcmFiles($db);
             // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
             $result = $ecmfile->fetch(0, '', '', '', '', $companybankaccounttemp->table_element, $companypaymentmodetemp->id);
             if ($result > 0) {

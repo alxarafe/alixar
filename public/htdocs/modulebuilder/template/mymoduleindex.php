@@ -58,7 +58,6 @@ if (!$res) {
     die("Include of main fails");
 }
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("mymodule@mymodule"));

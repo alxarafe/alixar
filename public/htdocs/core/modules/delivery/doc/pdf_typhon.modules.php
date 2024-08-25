@@ -184,7 +184,6 @@ class pdf_typhon extends ModelePDFDeliveryOrder
             if (file_exists($dir)) {
                 // Add pdfgeneration hook
                 if (!is_object($hookmanager)) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                     $hookmanager = new HookManager($this->db);
                 }
                 $hookmanager->initHooks(array('pdfgeneration'));
@@ -560,7 +559,6 @@ class pdf_typhon extends ModelePDFDeliveryOrder
 
                 // Add pdfgeneration hook
                 if (!is_object($hookmanager)) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                     $hookmanager = new HookManager($this->db);
                 }
                 $hookmanager->initHooks(array('pdfgeneration'));

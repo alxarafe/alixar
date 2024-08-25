@@ -539,8 +539,7 @@ abstract class DolibarrModules
             $obj = $this->db->fetch_object($resql);
 
             if ($obj !== null && !empty($obj->value) && !empty($this->rights)) {
-                include_once DOL_DOCUMENT_ROOT . '/user/class/user.class.php';
-
+    
                 // TODO rights parameters with integer indexes are deprecated
                 // $this->rights[$key][0] = $this->rights[$key][self::KEY_ID]
                 // $this->rights[$key][1] = $this->rights[$key][self::KEY_LABEL]
@@ -1961,7 +1960,6 @@ abstract class DolibarrModules
     public function insert_boxes($option = '')
     {
         // phpcs:enable
-        include_once DOL_DOCUMENT_ROOT . '/core/class/infobox.class.php';
 
         global $conf;
 
@@ -2059,7 +2057,6 @@ abstract class DolibarrModules
     public function insert_cronjobs()
     {
         // phpcs:enable
-        include_once DOL_DOCUMENT_ROOT . '/core/class/infobox.class.php';
 
         global $conf;
 

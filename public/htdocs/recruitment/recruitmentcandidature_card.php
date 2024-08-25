@@ -25,9 +25,6 @@
 
 // Load Dolibarr environment
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentjobposition.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentcandidature.class.php';
@@ -648,8 +645,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/recruitment/recruitmentcandidature_agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-        $formactions = new FormActions($db);
+                $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element . '@recruitment', (is_object($object->thirdparty) ? $object->thirdparty->id : 0), 1, '', $MAXEVENT, '', $morehtmlcenter);
 
         print '</div></div>';
@@ -670,7 +666,8 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     $job = new RecruitmentJobPosition($db);
     $job->fetch($object->fk_recruitmentjobposition);
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+    use Dolibarr\Code\User\Classes\User;
+
     $recruiter = new User($db);
     $recruiter->fetch($job->fk_user_recruiter);
 

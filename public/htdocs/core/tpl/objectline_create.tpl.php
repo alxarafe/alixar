@@ -399,8 +399,7 @@ if ($nolinesbefore) {
             }
         }
         // Editor wysiwyg
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-        $nbrows = ROWS_2;
+            $nbrows = ROWS_2;
         $enabled = (getDolGlobalString('FCKEDITOR_ENABLE_DETAILS') ? $conf->global->FCKEDITOR_ENABLE_DETAILS : 0);
         if (getDolGlobalString('MAIN_INPUT_DESC_HEIGHT')) {
             $nbrows = getDolGlobalString('MAIN_INPUT_DESC_HEIGHT');

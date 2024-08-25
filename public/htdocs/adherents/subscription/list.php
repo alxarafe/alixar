@@ -27,10 +27,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
+use Dolibarr\Code\Adherents\Classes\Adherent;
 
 $langs->loadLangs(array("members", "companies", "banks"));
 

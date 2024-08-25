@@ -19,6 +19,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *       \file       htdocs/webservices/server_thirdparty.php
  *       \brief      File that is entry point to call Dolibarr WebServices
@@ -49,11 +52,6 @@ if (!defined("NOSESSION")) {
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ws.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-
 
 dol_syslog("Call Dolibarr webservices interfaces");
 

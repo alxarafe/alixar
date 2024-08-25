@@ -30,7 +30,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/paymentexpens
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expensereport/modules_expensereport.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/expensereport.lib.php';
 if (isModEnabled("bank")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 }
 
 // Load translation files required by the page

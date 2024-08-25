@@ -33,6 +33,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *   \file      htdocs/commande/card.php
  *   \ingroup   commande
@@ -42,25 +45,18 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formorder.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/commande/modules_commande.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
 
 if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
 }
 
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-}
+    }
 
 if (isModEnabled('variants')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';
@@ -1374,7 +1370,6 @@ if (empty($reshook)) {
                     GETPOST('generate_deposit', 'alpha') == 'on' && !empty($deposit_percent_from_payment_terms)
                     && isModEnabled('invoice') && $user->hasRight('facture', 'creer')
                 ) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
                     $date = dol_mktime(0, 0, 0, GETPOSTINT('datefmonth'), GETPOSTINT('datefday'), GETPOSTINT('datefyear'));
                     $forceFields = array();
@@ -1982,8 +1977,7 @@ if ($action == 'create' && $usercancreate) {
 
         // Warehouse
         if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-            $formproduct = new FormProduct($db);
+                        $formproduct = new FormProduct($db);
             print '<tr><td>' . $langs->trans('Warehouse') . '</td><td>';
             print img_picto('', 'stock', 'class="pictofixedwidth"') . $formproduct->selectWarehouses((GETPOSTISSET('warehouse_id') ? GETPOST('warehouse_id') : $warehouse_id), 'warehouse_id', '', 1, 0, 0, '', 0, 0, array(), 'maxwidth500 widthcentpercentminusxx');
             print '</td></tr>';
@@ -2226,8 +2220,7 @@ if ($action == 'create' && $usercancreate) {
             $formquestion = array();
             if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_VALIDATE_ORDER') && $qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $forcecombo = 0;
                 if ($conf->browser->name == 'ie') {
                     $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -2268,7 +2261,6 @@ if ($action == 'create' && $usercancreate) {
                 $deposit_percent_from_payment_terms = (float) getDictionaryValue('c_payment_term', 'deposit_percent', $object->cond_reglement_id);
 
                 if (!empty($deposit_percent_from_payment_terms) && isModEnabled('invoice') && $user->hasRight('facture', 'creer')) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
                     $object->fetchObjectLinked();
 
@@ -2387,8 +2379,7 @@ if ($action == 'create' && $usercancreate) {
             $formquestion = array();
             if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_VALIDATE_ORDER') && $qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $forcecombo = 0;
                 if ($conf->browser->name == 'ie') {
                     $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -2426,8 +2417,7 @@ if ($action == 'create' && $usercancreate) {
             $formquestion = array();
             if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_VALIDATE_ORDER') && $qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $forcecombo = 0;
                 if ($conf->browser->name == 'ie') {
                     $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -2635,8 +2625,7 @@ if ($action == 'create' && $usercancreate) {
             // Warehouse
             if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER')) {
                 $langs->load('stocks');
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 print '<tr><td>';
                 $editenable = $usercancreate;
                 print $form->editfieldkey("Warehouse", 'warehouse', '', $object, $editenable);
@@ -3165,7 +3154,6 @@ if ($action == 'create' && $usercancreate) {
             $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/commande/agenda.php?id=' . $object->id);
 
             // List of actions on element
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
             $formactions = new FormActions($db);
             $somethingshown = $formactions->showactions($object, 'order', $socid, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for thirdparty
 

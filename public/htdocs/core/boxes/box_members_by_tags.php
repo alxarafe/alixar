@@ -76,7 +76,6 @@ class box_members_by_tags extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent.class.php';
         $staticmember = new Adherent($this->db);
 
         $now = dol_now();
@@ -86,8 +85,8 @@ class box_members_by_tags extends ModeleBoxes
         $this->info_box_head = array('text' => $langs->trans("BoxTitleMembersByTags") . ($numberyears ? ' (' . ($year - $numberyears) . ' - ' . $year . ')' : ''));
 
         if ($user->hasRight('adherent', 'lire')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherentstats.class.php';
-            require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+            use Dolibarr\Code\Categories\Classes\Categorie;
+
             $stats = new AdherentStats($this->db, $user->socid, $user->id);
 
             // Show array

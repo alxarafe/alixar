@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2006-2016  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2012		Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2015		Alexandre Spangaro	<aspangaro@open-dsi.fr>
- * Copyright (C) 2016		Juanjo Menent   	<jmenent@2byte.es>
- * Copyright (C) 2019	    Nicolas ZABOURI     <info@inovea-conseil.com>
- * Copyright (C) 2021		Ferran Marcet		<fmarcet@2byte.es>
+/* Copyright (C) 2006-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2015		Alexandre Spangaro	        <aspangaro@open-dsi.fr>
+ * Copyright (C) 2016		Juanjo Menent   	        <jmenent@2byte.es>
+ * Copyright (C) 2019	    Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2021		Ferran Marcet		        <fmarcet@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -30,6 +30,8 @@
  * \ingroup    bank
  * \brief      Ensemble de functions de base pour le module banque
  */
+
+use Dolibarr\Code\Compta\Classes\Account;
 
 
 /**
@@ -100,7 +102,6 @@ function bank_prepare_head(Account $object)
 
     // Attached files
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->bank->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
@@ -208,7 +209,6 @@ function account_statement_prepare_head($object, $num)
 
     // Attached files
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->bank->dir_output . "/" . $object->id . '/statement/' . dol_sanitizeFileName($num);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
@@ -254,7 +254,6 @@ function various_payment_prepare_head($object)
     complete_head_from_modules($conf, $langs, $object, $head, $h, 'various_payment');
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->bank->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);

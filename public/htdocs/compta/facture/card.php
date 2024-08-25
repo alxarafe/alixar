@@ -36,6 +36,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+
 /**
  * \file    htdocs/compta/facture/card.php
  * \ingroup facture
@@ -44,33 +46,22 @@
 
 // Libraries
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/facture/modules_facture.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 if (isModEnabled('order')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+    use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
 if (isModEnabled('variants')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';
-}
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
 }
 
 // Load translation files required by the page
@@ -4321,8 +4312,7 @@ if ($action == 'create') {
 
             if ($qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $label = $object->type == Facture::TYPE_CREDIT_NOTE ? $langs->trans("SelectWarehouseForStockDecrease") : $langs->trans("SelectWarehouseForStockIncrease");
                 $forcecombo = 0;
                 if ($conf->browser->name == 'ie') {
@@ -4395,9 +4385,7 @@ if ($action == 'create') {
 
             if ($qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $warehouse = new Entrepot($db);
                 $warehouse_array = $warehouse->list_array();
                 if (count($warehouse_array) == 1) {
@@ -4460,9 +4448,7 @@ if ($action == 'create') {
 
             if ($qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $warehouse = new Entrepot($db);
                 $warehouse_array = $warehouse->list_array();
                 if (count($warehouse_array) == 1) {
@@ -6141,8 +6127,7 @@ if ($action == 'create') {
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/compta/facture/agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-        $formactions = new FormActions($db);
+                $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, 'invoice', $socid, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for thirdparty
 
         print '</div></div>';

@@ -34,18 +34,11 @@
  *  \ingroup    ficheinter
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-}
-if (isModEnabled('contract')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'bills', 'interventions'));
@@ -1067,7 +1060,6 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
         $hidegeneratedfilelistifempty = 0;
     }
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
     $formfile = new FormFile($db);
 
     // Show list of available documents

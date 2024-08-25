@@ -36,7 +36,6 @@ if (!is_object($form)) {
 }
 
 if (!isset($formadmin) || !is_object($formadmin)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
     $formadmin = new FormAdmin($db);
 }
 

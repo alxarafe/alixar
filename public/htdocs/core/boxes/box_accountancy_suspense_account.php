@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\BookKeeping;
+
 /**
  *      \file       htdocs/core/boxes/box_accountancy_suspense_account.php
  *      \ingroup    Accountancy
@@ -62,8 +64,6 @@ class box_accountancy_suspense_account extends ModeleBoxes
     public function loadBox()
     {
         global $user, $langs, $conf;
-
-        include_once DOL_DOCUMENT_ROOT . '/accountancy/class/bookkeeping.class.php';
 
         //$bookkeepingstatic = new BookKeeping($this->db);
 

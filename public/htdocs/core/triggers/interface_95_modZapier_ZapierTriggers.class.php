@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2017-2020  Frédéric France     <frederic.france@netlogic.fr>
+/* Copyright (C) 2017-2020  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  * \file    core/triggers/interface_99_modZapier_ZapierTriggers.class.php
@@ -56,7 +62,7 @@ class InterfaceZapierTriggers extends DolibarrTriggers
      * @param CommonObject  $object     Object
      * @param User          $user       Object user
      * @param Translate     $langs      Object langs
-     * @param Conf          $conf       Object conf
+     * @param Conf         $conf       Object conf
      * @return int                      Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)

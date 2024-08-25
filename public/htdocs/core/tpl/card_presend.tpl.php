@@ -343,8 +343,9 @@ if ($action == 'presend') {
     $contactarr = $tmpobject->liste_contact(-1, 'external', 0, '', 1);
 
     if (is_array($contactarr) && count($contactarr) > 0) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+        use Dolibarr\Code\Contact\Classes\Contact;
+
+        use Dolibarr\Code\Societe\Classes\Societe;
         $contactstatic = new Contact($db);
         $tmpcompany = new Societe($db);
 

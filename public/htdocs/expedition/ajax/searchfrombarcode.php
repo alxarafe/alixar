@@ -36,7 +36,6 @@ if (!defined('NOREQUIRESOC')) {
     define('NOREQUIRESOC', '1');
 }
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 
 $action = GETPOST("action", "alpha");
 $barcode = GETPOST("barcode", "aZ09");

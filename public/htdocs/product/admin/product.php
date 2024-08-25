@@ -37,7 +37,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formbarcode.class.php';
 
 // Load translation files required by the page
@@ -746,7 +745,6 @@ if (getDolGlobalString('PRODUCT_CANVAS_ABILITY')) {
     print '</tr>' . "\n";
 
     if (is_dir($dir)) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
         $handle = opendir($dir);
         if (is_resource($handle)) {

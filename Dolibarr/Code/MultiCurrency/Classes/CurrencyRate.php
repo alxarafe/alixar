@@ -34,7 +34,7 @@ use DoliDB;
  * \brief   This file is a CRUD class file (Create/Read/Update/Delete) for multicurrency
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
+use Dolibarr\Core\Base\CommonObjectLine;
 
 /**
  * Class CurrencyRate

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2011 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2011       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/core/boxes/box_services_expired.php
  *      \ingroup    contracts
@@ -24,7 +27,6 @@
  */
 
 include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 
 /**
  * Class to manage the box to show expired services
@@ -62,8 +64,6 @@ class box_services_expired extends ModeleBoxes
         global $user, $langs, $conf;
 
         $this->max = $max;
-
-        include_once DOL_DOCUMENT_ROOT . '/contrat/class/contrat.class.php';
 
         $now = dol_now();
 

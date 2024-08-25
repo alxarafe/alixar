@@ -27,6 +27,7 @@
  *  \brief      Library of accountancy functions
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 
 /**
  *  Check if a value is empty with some options

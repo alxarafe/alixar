@@ -1772,8 +1772,7 @@ function form_constantes($tableau, $strictw3c = 2, $helptext = '', $text = 'Valu
                     print $obj->value;
                     print "</textarea>\n";
                 } elseif ($obj->type == 'html') {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                    $doleditor = new DolEditor('constvalue' . (empty($strictw3c) ? '' : ($strictw3c == 3 ? '_' . $const : '[]')), $obj->value, '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
+                                    $doleditor = new DolEditor('constvalue' . (empty($strictw3c) ? '' : ($strictw3c == 3 ? '_' . $const : '[]')), $obj->value, '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
                     $doleditor->Create();
                 } elseif ($obj->type == 'yesno') {
                     print $form->selectyesno('constvalue' . (empty($strictw3c) ? '' : ($strictw3c == 3 ? '_' . $const : '[]')), $obj->value, 1, false, 0, 1);

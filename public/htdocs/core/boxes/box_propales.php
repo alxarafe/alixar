@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2007 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2021 Frederic France      <frederic.france@netlogic.fr>
- * Copyright (C) 2020      Pierre Ardoin        <mapiolca@me.com>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2007  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2021  Frederic France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2020       Pierre Ardoin               <mapiolca@me.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  * \file       htdocs/core/boxes/box_propales.php
@@ -67,8 +70,6 @@ class box_propales extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/comm/propal/class/propal.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
         $propalstatic = new Propal($this->db);
         $societestatic = new Societe($this->db);
 

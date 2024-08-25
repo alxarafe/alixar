@@ -28,6 +28,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Contact\Classes\Contact;
+
 /**
  *       \file       htdocs/comm/card.php
  *       \ingroup    commercial compta
@@ -39,34 +44,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-if (isModEnabled('invoice')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
-}
-if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
-}
-if (isModEnabled('order')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
-}
-if (isModEnabled("shipping")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
-}
-if (isModEnabled('contract')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-}
-if (isModEnabled('member')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-}
-if (isModEnabled('intervention')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
-}
-
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'banks'));
 
@@ -550,8 +527,7 @@ if ($object->id > 0) {
     // Warehouse
     if (isModEnabled('stock') && getDolGlobalString('SOCIETE_ASK_FOR_WAREHOUSE')) {
         $langs->load('stocks');
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-        $formproduct = new FormProduct($db);
+                $formproduct = new FormProduct($db);
         print '<tr class="nowrap">';
         print '<td>';
         print $form->editfieldkey("Warehouse", 'warehouse', '', $object, $user->hasRight('societe', 'creer'));

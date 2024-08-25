@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+
 /**
  *  \file       htdocs/projet/tasks/contact.php
  *  \ingroup    project
@@ -27,11 +29,8 @@
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('projects', 'companies'));

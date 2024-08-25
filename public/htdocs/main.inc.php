@@ -44,6 +44,8 @@
 //@ini_set('memory_limit', '128M'); // This may be useless if memory is hard limited by your PHP
 
 // For optional tuning. Enabled if environment variable MAIN_SHOW_TUNING_INFO is defined.
+use Dolibarr\Code\Core\Classes\Form;
+
 $micro_start_time = 0;
 if (!empty($_SERVER['MAIN_SHOW_TUNING_INFO'])) {
     list($usec, $sec) = explode(" ", microtime());
@@ -564,9 +566,6 @@ if (!defined('NOLOGIN') && !defined('NOIPCHECK') && !empty($dolibarr_main_restri
 }
 
 // Loading of additional presentation includes
-if (!defined('NOREQUIREHTML')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php'; // Need 660ko memory (800ko in 2.2)
-}
 if (!defined('NOREQUIREAJAX')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ajax.lib.php'; // Need 22ko memory
 }
@@ -1705,7 +1704,6 @@ function top_httphead($contenttype = 'text/html', $forcenocache = 0)
         $contentsecuritypolicy = getDolGlobalString('MAIN_SECURITY_FORCECSPRO');
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($db);
         }
         $hookmanager->initHooks(array("main"));
@@ -1742,7 +1740,6 @@ function top_httphead($contenttype = 'text/html', $forcenocache = 0)
         $contentsecuritypolicy = getDolGlobalString('MAIN_SECURITY_FORCECSP');
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($db);
         }
         $hookmanager->initHooks(array("main"));
@@ -2249,7 +2246,6 @@ function top_menu($head, $title = '', $target = '', $disablejs = 0, $disablehead
      */
     if ((empty($conf->dol_hide_topmenu) || GETPOSTINT('dol_invisible_topmenu')) && (!defined('NOREQUIREMENU') || !constant('NOREQUIREMENU'))) {
         if (!isset($form) || !is_object($form)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.form.class.php';
             $form = new Form($db);
         }
 

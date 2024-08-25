@@ -29,7 +29,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
 
 /**

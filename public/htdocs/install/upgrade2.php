@@ -37,12 +37,15 @@
  * php upgrade2.php 0.0.0 0.0.0 [MAIN_MODULE_NAME1_TO_ENABLE,MAIN_MODULE_NAME2_TO_ENABLE]
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *  \file       htdocs/install/upgrade2.php
  *  \brief      Upgrade some data
  */
 
-use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
 
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
@@ -50,13 +53,8 @@ if (!file_exists($conffile)) {
     print 'Error: Dolibarr config file was not found. This may means that Dolibarr is not installed yet. Please call the page "/install/index.php" instead of "/install/upgrade.php").';
 }
 require_once $conffile;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/price.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/menubase.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
 global $langs;
@@ -4212,7 +4210,6 @@ function migrate_reload_modules($db, $langs, $conf, $listofmodule = array(), $fo
     }
 
     if (!is_object($user)) {
-        include_once DOL_DOCUMENT_ROOT . '/user/class/user.class.php';
         $user = new User($db);  // To avoid error during migration
     }
 

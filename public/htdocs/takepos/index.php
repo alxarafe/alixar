@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2018   Andreu Bisquerra    <jove@bisquerra.com>
- * Copyright (C) 2019	Josep Lluís Amador	<joseplluis@lliuretic.cat>
- * Copyright (C) 2020	Thibault FOUCART	<support@ptibogxiv.net>
+/* Copyright (C) 2018       Andreu Bisquerra            <jove@bisquerra.com>
+ * Copyright (C) 2019	    Josep Lluís Amador	        <joseplluis@lliuretic.cat>
+ * Copyright (C) 2020	    Thibault FOUCART	        <support@ptibogxiv.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *    \file       htdocs/takepos/index.php
@@ -43,14 +46,7 @@ if (!defined('NOREQUIREAJAX')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/hookmanager.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-
 
 $place = (GETPOST('place', 'aZ09') ? GETPOST('place', 'aZ09') : 0); // $place is id of table for Bar or Restaurant or multiple sales
 $action = GETPOST('action', 'aZ09');
@@ -75,7 +71,6 @@ if ($setcurrency != "") {
     $_SESSION["takeposcustomercurrency"] = $setcurrency;
     // We will recalculate amount for foreign currency at next call of invoice.php when $_SESSION["takeposcustomercurrency"] differs from invoice->multicurrency_code.
 }
-
 
 $langs->loadLangs(array("bills", "orders", "commercial", "cashdesk", "receiptprinter", "banks"));
 

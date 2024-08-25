@@ -26,6 +26,18 @@
  * \brief       Set of function for the agenda module
  */
 
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Resource\Classes\Dolresource;
+use Dolibarr\Code\Resource\Classes\FormResource;
+use Dolibarr\Code\Societe\Classes\Client;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 
 /**
  * Show filter form in agenda view
@@ -77,8 +89,7 @@ function print_actions_filter(
 
     $langs->load("companies");
 
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-    $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
 
     // Filters
     //print '<form name="listactionsfilter" class="listactionsfilter" action="' . $_SERVER["PHP_SELF"] . '" method="get">';
@@ -115,7 +126,6 @@ function print_actions_filter(
         print '</div>';
 
         if (isModEnabled('resource')) {
-            include_once DOL_DOCUMENT_ROOT . '/resource/class/html.formresource.class.php';
             $formresource = new FormResource($db);
 
             // Resource
@@ -134,7 +144,6 @@ function print_actions_filter(
     }
 
     if (isModEnabled('project') && $user->hasRight('projet', 'lire')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
         $formproject = new FormProjets($db);
 
         print '<div class="divsearchfield">';
@@ -144,8 +153,6 @@ function print_actions_filter(
     }
 
     if (isModEnabled('category') && $user->hasRight('categorie', 'lire')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
         $formother = new FormOther($db);
         $langs->load('categories');
 
@@ -185,7 +192,6 @@ function show_array_actions_to_do($max = 5)
     $now = dol_now();
 
     include_once DOL_DOCUMENT_ROOT . '/comm/action/class/actioncomm.class.php';
-    include_once DOL_DOCUMENT_ROOT . '/societe/class/client.class.php';
 
     $sql = "SELECT a.id, a.label, a.datep as dp, a.datep2 as dp2, a.fk_user_author, a.percent";
     $sql .= ", c.code, c.libelle as type_label";
@@ -466,7 +472,6 @@ function actions_prepare_head($object)
 
     // Tab to link resources
     if (isModEnabled('resource')) {
-        include_once DOL_DOCUMENT_ROOT . '/resource/class/dolresource.class.php';
         $resource = new Dolresource($db);
 
         $head[$h][0] = constant('BASE_URL') . '/resource/element_resource.php?element=action&element_id=' . $object->id;
@@ -482,7 +487,6 @@ function actions_prepare_head($object)
 
     // Attached files
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->agenda->dir_output . "/" . $object->id;
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);

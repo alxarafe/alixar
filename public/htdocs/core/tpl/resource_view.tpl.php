@@ -1,5 +1,8 @@
 <!-- BEGIN TEMPLATE resource_view.tpl.php -->
 <?php
+
+use Dolibarr\Code\Core\Classes\Form;
+
 // Protection to avoid direct call of template
 if (empty($conf) || !is_object($conf)) {
     print "Error, template page can't be called as URL";

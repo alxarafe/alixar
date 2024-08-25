@@ -30,26 +30,24 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
+
+use Dolibarr\Code\User\Classes\User;
+
+use Dolibarr\Code\User\Classes\UserGroup;
 
 if (isModEnabled('deplacement')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 }
 if (isModEnabled('expensereport')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
 }
 if (isModEnabled('recruitment')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentcandidature.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentjobposition.class.php';
 }
 if (isModEnabled('holiday')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
 }
 
 

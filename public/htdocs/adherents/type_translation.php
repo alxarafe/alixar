@@ -31,8 +31,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('members', 'languages'));
@@ -206,7 +204,6 @@ print "\n</div>\n";
 
 if ($action == 'edit') {
     //WYSIWYG Editor
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
     print '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';
     print '<input type="hidden" name="token" value="' . newToken() . '">';
@@ -275,7 +272,6 @@ if ($action == 'edit') {
 
 if ($action == 'create' && $user->hasRight('adherent', 'configurer')) {
     //WYSIWYG Editor
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
     print '<br>';
     print '<form action="' . $_SERVER["PHP_SELF"] . '" method="post">';

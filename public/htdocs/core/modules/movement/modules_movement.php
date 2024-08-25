@@ -24,7 +24,6 @@
  *  \brief      File with parent class for generating PDF of a stock movements
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commondocgenerator.class.php';
 
 
 /**

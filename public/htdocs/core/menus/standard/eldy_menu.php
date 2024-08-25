@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -24,6 +24,9 @@
  *  \file       htdocs/core/menus/standard/eldy_menu.php
  *  \brief      Menu eldy manager
  */
+
+use Dolibarr\Code\Core\Classes\Menu;
+use Dolibarr\Code\Core\Classes\Menubase;
 
 
 /**
@@ -127,7 +130,6 @@ class MenuManager
             $leftmenu = $forceleftmenu;
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/menubase.class.php';
         $tabMenu = array();
         $menuArbo = new Menubase($this->db, 'eldy');
         $menuArbo->menuLoad($mainmenu, $leftmenu, $this->type_user, 'eldy', $tabMenu);
@@ -154,7 +156,6 @@ class MenuManager
             $conf->global->MAIN_SEARCHFORM_CONTACT_DISABLED = 1;
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/menu.class.php';
         $this->menu = new Menu();
 
         if (!getDolGlobalString('MAIN_MENU_INVERT')) {

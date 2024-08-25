@@ -43,7 +43,6 @@ if (!defined('NOREQUIRESOC')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
 
 $idstatus = GETPOSTINT('id');
 $idprospect = GETPOSTINT('prospectid');

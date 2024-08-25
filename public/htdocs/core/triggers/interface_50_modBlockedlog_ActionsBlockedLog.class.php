@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017       ATM Consulting      <contact@atm-consulting.fr>
- * Copyright (C) 2017-2018  Laurent Destailleur	<eldy@users.sourceforge.net>
+/* Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
+ * Copyright (C) 2017-2018  Laurent Destailleur	        <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,9 +25,11 @@
  */
 
 use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/dolibarrtriggers.class.php';
-
 
 /**
  *  Class of triggered functions for agenda module
@@ -57,7 +59,7 @@ class InterfaceActionsBlockedLog extends DolibarrTriggers
      * @param Object        $object     Object
      * @param User          $user       Object user
      * @param Translate     $langs      Object langs
-     * @param conf          $conf       Object conf
+     * @param Conf         $conf       Object conf
      * @return int                      Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)

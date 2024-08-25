@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005-2009  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2017	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2014		Marcos García		<marcosgdf@gmail.com>
- * Copyright (C) 2023		Udo Tamm			<dev@dolibit.de>
- * Copyright (C) 2023		William Mead		<william.mead@manchenumerique.fr>
+/* Copyright (C) 2005-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2017	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2014		Marcos García		        <marcosgdf@gmail.com>
+ * Copyright (C) 2023		Udo Tamm			        <dev@dolibit.de>
+ * Copyright (C) 2023		William Mead		        <william.mead@manchenumerique.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Events;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/core/triggers/interface_20_all_Logevents.class.php
@@ -63,30 +68,46 @@ class InterfaceLogevents extends DolibarrTriggers
 
     /**
      * Constructor
-     * @param   DoliDB  $db Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct(DoliDB $db)
     {
         parent::__construct($db);
 
-        $this->family       = "core";
-        $this->description  = "Triggers of this module allows to add security event records inside Dolibarr.";
-        $this->version      = self::VERSIONS['prod'];
-        $this->picto        = 'technic';
-        $this->event_label  = '';
-        $this->event_desc   = '';
-        $this->event_date   = 0;
+        $this->family = "core";
+        $this->description = "Triggers of this module allows to add security event records inside Dolibarr.";
+        $this->version = self::VERSIONS['prod'];
+        $this->picto = 'technic';
+        $this->event_label = '';
+        $this->event_desc = '';
+        $this->event_date = 0;
+    }
+
+    /**
+     * Check if text contains an event action key. Used for dynamic localization on frontend events list.
+     *
+     * @param string $event_text Input event text
+     * @return  bool                    True if event text is a coded structured string
+     */
+    public static function isEventActionTextKey($event_text)
+    {
+        foreach (InterfaceLogevents::EVENT_ACTION_DICT as $value) {
+            if (str_contains($event_text, $value)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * Function called when a Dolibarr security audit event is done.
      * All functions "runTrigger" are triggered if file is inside directory htdocs/core/triggers or htdocs/module/code/triggers (and declared)
      *
-     * @param   string      $action Event action code
-     * @param   Object      $object Object
-     * @param   User        $user   Object user
-     * @param   Translate   $langs  Object langs
-     * @param   conf        $conf   Object conf
+     * @param string $action Event action code
+     * @param Object $object Object
+     * @param User $user Object user
+     * @param Translate $langs Object langs
+     * @param Conf $conf Object conf
      * @return  int                 if KO: <0, if no trigger ran: 0, if OK: >0
      * @throws  Exception           dol_syslog can throw Exceptions
      */
@@ -137,8 +158,8 @@ class InterfaceLogevents extends DolibarrTriggers
     /**
      * Method called by runTrigger to initialize date, label & description data for event
      *
-     * @param   string      $key_text           Action string
-     * @param   Object      $object             Object
+     * @param string $key_text Action string
+     * @param Object $object Object
      * @return  void
      */
     private function initEventData($key_text, $object)
@@ -156,21 +177,5 @@ class InterfaceLogevents extends DolibarrTriggers
         if (!empty($object->context['audit'])) {
             $this->event_desc .= (empty($this->event_desc) ? '' : ' - ') . $object->context['audit'];
         }
-    }
-
-    /**
-     * Check if text contains an event action key. Used for dynamic localization on frontend events list.
-     *
-     * @param   string  $event_text     Input event text
-     * @return  bool                    True if event text is a coded structured string
-     */
-    public static function isEventActionTextKey($event_text)
-    {
-        foreach (InterfaceLogevents::EVENT_ACTION_DICT as $value) {
-            if (str_contains($event_text, $value)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

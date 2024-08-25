@@ -47,6 +47,10 @@
  *                  This file contains all frequently used functions.
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
+
 include_once DOL_DOCUMENT_ROOT . '/core/lib/json.lib.php';
 
 // Function for better PHP x compatibility
@@ -5803,7 +5807,6 @@ function dol_print_error($db = null, $error = '', $errors = null)
 
     // If error occurs before the $lang object was loaded
     if (!$langs) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/translate.class.php';
         $langs = new Translate('', $conf);
         $langs->load("main");
     }
@@ -7173,7 +7176,6 @@ function get_product_vat_for_country($idprod, $thirdpartytouse, $idprodfournpric
 {
     global $db, $mysoc;
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
     $ret = 0;
     $found = 0;
@@ -7270,7 +7272,6 @@ function get_product_localtax_for_country($idprod, $local, $thirdpartytouse)
     global $db, $mysoc;
 
     if (!class_exists('Product')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
     }
 
     $ret = 0;
@@ -7460,14 +7461,12 @@ function get_default_npr(Societe $thirdparty_seller, Societe $thirdparty_buyer, 
 
     if ($idprodfournprice > 0) {
         if (!class_exists('ProductFournisseur')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
         }
         $prodprice = new ProductFournisseur($db);
         $prodprice->fetch_product_fournisseur_price($idprodfournprice);
         return $prodprice->fourn_tva_npr;
     } elseif ($idprod > 0) {
         if (!class_exists('Product')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
         }
         $prod = new Product($db);
         $prod->fetch($idprod);
@@ -13618,8 +13617,7 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
 
     global $param, $massactionbutton;
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-
+    
     // Check parameters
     if (!is_object($filterobj) && !is_object($objcon)) {
         dol_print_error(null, 'BadParameter');
@@ -13921,11 +13919,8 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
     if (isModEnabled('agenda') || (isModEnabled('mailing') && !empty($objcon->email))) {
         $delay_warning = $conf->global->MAIN_DELAY_ACTIONS_TODO * 24 * 60 * 60;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formactions.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-
+                include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
+        
         $formactions = new FormActions($db);
 
         $actionstatic = new ActionComm($db);
@@ -14023,7 +14018,6 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
             $out .= getTitleFieldOfList($tmp);
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/cactioncomm.class.php';
         $caction = new CActionComm($db);
         $arraylist = $caction->liste_array(1, 'code', '', (!getDolGlobalString('AGENDA_USE_EVENT_TYPE') ? 1 : 0), '', 1);
 
@@ -14466,7 +14460,6 @@ function recordNotFound($message = '', $printheader = 1, $printfooter = 1, $show
 
     if (empty($showonlymessage)) {
         if (empty($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($db);
             // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
             $hookmanager->initHooks(array('main'));

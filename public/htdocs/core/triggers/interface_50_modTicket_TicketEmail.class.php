@@ -1,9 +1,9 @@
 <?php
 
 /*
- * Copyright (C) 2014-2016  Jean-François Ferry	<hello@librethic.io>
- * 				 2016       Christophe Battarel <christophe@altairis.fr>
- * Copyright (C) 2023		Benjamin Falière	<benjamin.faliere@altairis.fr>
+ * Copyright (C) 2014-2016  Jean-François Ferry	        <hello@librethic.io>
+ * Copyright (C) 2016       Christophe Battarel         <christophe@altairis.fr>
+ * Copyright (C) 2023		Benjamin Falière	        <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/core/triggers/interface_50_modTicket_TicketEmail.class.php
  *  \ingroup    core
@@ -28,7 +36,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/dolibarrtriggers.class.php';
-
 
 /**
  *  Class of triggers for ticket module
@@ -59,7 +66,7 @@ class InterfaceTicketEmail extends DolibarrTriggers
      *      @param  Ticket    $object Object
      *      @param  User      $user   Object user
      *      @param  Translate $langs  Object langs
-     *      @param  conf      $conf   Object conf
+     *      @param  Conf      $conf   Object conf
      *      @return int                     Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)

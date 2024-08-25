@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+
 /**
  *    \file       htdocs/fourn/commande/index.php
  *    \ingroup    order fournisseur
@@ -30,10 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
-
 
 // Load translation files required by the page
 $langs->loadLangs(array("suppliers", "orders"));
@@ -154,7 +152,6 @@ if ($resql) {
     if ($conf->use_javascript_ajax) {
         print '<tr class="impair"><td class="center" colspan="2">';
 
-        include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
         $dolgraph = new DolGraph();
         $dolgraph->SetData($dataseries);
         $dolgraph->SetDataColor(array_values($colorseries));

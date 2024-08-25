@@ -43,16 +43,10 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 if (isModEnabled('margin')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 }
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
+use Dolibarr\Code\Adherents\Classes\Adherent;
 
 // Load translation files required by the page
 $langs->loadLangs(array('orders', 'sendings', 'deliveries', 'companies', 'compta', 'bills', 'stocks', 'products'));
@@ -1517,7 +1511,8 @@ if (isModEnabled('category') && $user->hasRight("categorie", "lire") && ($user->
 }
 // If Categories are enabled & user has rights to see
 if (isModEnabled('category') && $user->hasRight("categorie", "lire")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('CustomersProspectsCategoriesShort');
     $moreforfilter .= img_picto($tmptitle, 'category', 'class="pictofixedwidth"') . $formother->select_categories('customer', $search_categ_cus, 'search_categ_cus', 1, $tmptitle, 'maxwidth300 widthcentpercentminusx');
@@ -1525,8 +1520,7 @@ if (isModEnabled('category') && $user->hasRight("categorie", "lire")) {
 }
 // If Stock is enabled
 if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-    $formproduct = new FormProduct($db);
+        $formproduct = new FormProduct($db);
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('Warehouse');
     $moreforfilter .= img_picto($tmptitle, 'stock', 'class="pictofixedwidth"') . $formproduct->selectWarehouses($search_warehouse, 'search_warehouse', '', 1, 0, 0, $tmptitle, 0, 0, array(), 'maxwidth250 widthcentpercentminusx');

@@ -26,6 +26,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Accountancy\Classes\BookKeeping;
+use Dolibarr\Code\Accountancy\Classes\Lettering;
+
 /**
  * \file        htdocs/accountancy/journal/purchasesjournal.php
  * \ingroup     Accountancy (Double entries)
@@ -37,11 +42,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/report.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/bookkeeping.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("commercial", "compta", "bills", "other", "accountancy", "errors"));
@@ -498,7 +498,6 @@ if ($action == 'writebookkeeping' && !$error) {
                     }
                 } else {
                     if (getDolGlobalInt('ACCOUNTING_ENABLE_LETTERING') && getDolGlobalInt('ACCOUNTING_ENABLE_AUTOLETTERING')) {
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/lettering.class.php';
                         $lettering_static = new Lettering($db);
 
                         $nb_lettering = $lettering_static->bookkeepingLettering(array($bookkeeping->id));

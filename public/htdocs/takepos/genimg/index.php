@@ -58,7 +58,8 @@ if (!isModEnabled('takepos')) {
  */
 
 if ($query == "cat") {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/categories.lib.php';
 
     $object = new Categorie($db);

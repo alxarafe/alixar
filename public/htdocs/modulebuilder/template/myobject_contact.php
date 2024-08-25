@@ -56,8 +56,8 @@ if (!$res) {
     die("Include of main fails");
 }
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
+use Dolibarr\Code\Contact\Classes\Contact;
+
 dol_include_once('/mymodule/class/myobject.class.php');
 dol_include_once('/mymodule/lib/mymodule_myobject.lib.php');
 

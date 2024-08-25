@@ -24,6 +24,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountancyExport;
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Accountancy\Classes\BookKeeping;
+use Dolibarr\Code\Accountancy\Classes\BookKeepingLine;
+use Dolibarr\Code\Accountancy\Classes\Lettering;
+
 /**
  * \file        htdocs/accountancy/bookkeeping/export.php
  * \ingroup     Accountancy (Double entries)
@@ -32,13 +38,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountancyexport.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/lettering.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/bookkeeping.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
@@ -1270,7 +1270,6 @@ while ($i < min($num, $limit)) {
         if ($line->doc_type == 'customer_invoice') {
             $langs->loadLangs(array('bills'));
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
             $objectstatic = new Facture($db);
             $objectstatic->fetch($line->fk_doc);
             //$modulepart = 'facture';
@@ -1284,7 +1283,6 @@ while ($i < min($num, $limit)) {
         } elseif ($line->doc_type == 'supplier_invoice') {
             $langs->loadLangs(array('bills'));
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
             $objectstatic = new FactureFournisseur($db);
             $objectstatic->fetch($line->fk_doc);
             //$modulepart = 'invoice_supplier';
@@ -1299,8 +1297,7 @@ while ($i < min($num, $limit)) {
         } elseif ($line->doc_type == 'expense_report') {
             $langs->loadLangs(array('trips'));
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
-            $objectstatic = new ExpenseReport($db);
+                    $objectstatic = new ExpenseReport($db);
             $objectstatic->fetch($line->fk_doc);
             //$modulepart = 'expensereport';
 
@@ -1311,7 +1308,6 @@ while ($i < min($num, $limit)) {
                 $documentlink = $formfile->getDocumentsLink($objectstatic->element, $filename, $filedir);
             }
         } elseif ($line->doc_type == 'bank') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
             $objectstatic = new AccountLine($db);
             $objectstatic->fetch($line->fk_doc);
         } else {

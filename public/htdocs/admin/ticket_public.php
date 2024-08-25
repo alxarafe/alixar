@@ -455,7 +455,6 @@ if (getDolGlobalInt('TICKET_ENABLE_PUBLIC_INTERFACE')) {
     $public_text_home = getDolGlobalString('TICKET_PUBLIC_TEXT_HOME', '<span class="opacitymedium">' . $langs->trans("TicketPublicDesc") . '</span>');
     print '<tr><td>' . $langs->trans("TicketPublicInterfaceTextHomeLabelAdmin") . '</label>';
     print '</td><td>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('TICKET_PUBLIC_TEXT_HOME', $public_text_home, '100%', 180, 'dolibarr_notes', '', false, true, getDolGlobalInt('FCKEDITOR_ENABLE_TICKET'), ROWS_2, 70);
     $doleditor->Create();
     print '</td>';
@@ -467,7 +466,6 @@ if (getDolGlobalInt('TICKET_ENABLE_PUBLIC_INTERFACE')) {
     $public_text_help_message = getDolGlobalString("TICKET_PUBLIC_TEXT_HELP_MESSAGE", $langs->trans('TicketPublicPleaseBeAccuratelyDescribe'));
     print '<tr><td>' . $langs->trans("TicketPublicInterfaceTextHelpMessageLabelAdmin") . '</label>';
     print '</td><td>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('TICKET_PUBLIC_TEXT_HELP_MESSAGE', $public_text_help_message, '100%', 180, 'dolibarr_notes', '', false, true, getDolGlobalInt('FCKEDITOR_ENABLE_TICKET'), ROWS_2, 70);
     $doleditor->Create();
     print '</td>';
@@ -514,7 +512,6 @@ if (getDolGlobalInt('TICKET_ENABLE_PUBLIC_INTERFACE')) {
     print $form->textwithpicto($langs->trans("TicketNewEmailBodyLabel"), $langs->trans("TicketNewEmailBodyHelp"), 1, 'help');
     print '</label>';
     print '</td><td>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('TICKET_MESSAGE_MAIL_NEW', $mail_mesg_new, '100%', 120, 'dolibarr_mailings', '', false, true, getDolGlobalInt('FCKEDITOR_ENABLE_MAIL'), ROWS_2, 70);
     $doleditor->Create();
     print '</td>';

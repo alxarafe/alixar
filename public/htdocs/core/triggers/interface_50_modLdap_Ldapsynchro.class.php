@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2021	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2014		Marcos García		<marcosgdf@gmail.com>
+/* Copyright (C) 2005-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2021	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2014		Marcos García		        <marcosgdf@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Ldap;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\User\Classes\UserGroup;
 
 /**
  *  \file       htdocs/core/triggers/interface_50_modLdap_Ldapsynchro.class.php
@@ -58,7 +65,7 @@ class InterfaceLdapsynchro extends DolibarrTriggers
      * @param Object        $object     Object
      * @param User          $user       Object user
      * @param Translate     $langs      Object langs
-     * @param conf          $conf       Object conf
+     * @param Conf         $conf       Object conf
      * @return int                      Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
@@ -74,9 +81,6 @@ class InterfaceLdapsynchro extends DolibarrTriggers
             dol_syslog("Warning, module LDAP is enabled but LDAP functions not available in this PHP", LOG_WARNING);
             return 0;
         }
-
-        require_once DOL_DOCUMENT_ROOT . "/core/class/ldap.class.php";
-        require_once DOL_DOCUMENT_ROOT . "/user/class/usergroup.class.php";
 
         $result = 0;
 

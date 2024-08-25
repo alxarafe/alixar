@@ -25,6 +25,8 @@
  * $preselectedtypeofcontact may be defined or not
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+
 // Protection to avoid direct call of template
 if (empty($object) || !is_object($object)) {
     print "Error, template page can't be called as URL";
@@ -35,8 +37,6 @@ if (empty($preselectedtypeofcontact)) {
     $preselectedtypeofcontact = 0;
 }
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 
 $module = $object->element;
 

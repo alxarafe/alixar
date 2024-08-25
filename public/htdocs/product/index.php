@@ -32,8 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
 
@@ -222,7 +220,6 @@ if ((isModEnabled("product") || isModEnabled("service")) && ($user->hasRight("pr
             $dataseries[] = array($langs->transnoentitiesnoconv("ServicesOnPurchase"), round($SommeE));
             $dataseries[] = array($langs->transnoentitiesnoconv("ServicesNotOnSell"), round($SommeF));
         }
-        include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
         $dolgraph = new DolGraph();
         $dolgraph->SetData($dataseries);
         $dolgraph->setShowLegend(2);
@@ -241,7 +238,8 @@ if ((isModEnabled("product") || isModEnabled("service")) && ($user->hasRight("pr
 
 $graphcat = '';
 if (isModEnabled('category') && getDolGlobalString('CATEGORY_GRAPHSTATS_ON_PRODUCTS')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
     $graphcat .= '<br>';
     $graphcat .= '<div class="div-table-responsive-no-min">';
     $graphcat .= '<table class="noborder centpercent">';
@@ -277,7 +275,6 @@ if (isModEnabled('category') && getDolGlobalString('CATEGORY_GRAPHSTATS_ON_PRODU
             if ($i > $nbmax) {
                 $dataseries[] = array($langs->transnoentitiesnoconv("Other"), round($rest));
             }
-            include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
             $dolgraph = new DolGraph();
             $dolgraph->SetData($dataseries);
             $dolgraph->setShowLegend(2);

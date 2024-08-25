@@ -27,7 +27,6 @@
  *                  and parent class for bank numbering models
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commondocgenerator.class.php';
 
 
 /**

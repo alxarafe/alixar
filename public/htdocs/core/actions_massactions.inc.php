@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2015-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2021 Nicolas ZABOURI	<info@inovea-conseil.com>
- * Copyright (C) 2018 	   Juanjo Menent  <jmenent@2byte.es>
- * Copyright (C) 2019 	   Ferran Marcet  <fmarcet@2byte.es>
- * Copyright (C) 2019-2024 Frédéric France <frederic.france@netlogic.fr>
+/* Copyright (C) 2015-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2021  Nicolas ZABOURI	            <info@inovea-conseil.com>
+ * Copyright (C) 2018 	    Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2019 	    Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,19 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file           htdocs/core/actions_massactions.inc.php
  *  \brief          Code for actions done with massaction button (send by email, merge pdf, delete, ...)
@@ -39,6 +52,7 @@
 
 
 // Protection
+
 if (empty($objectclass) || empty($uploaddir)) {
     dol_print_error(null, 'include of actions_massactions.inc.php is done but var $objectclass or $uploaddir was not defined');
     exit;
@@ -561,7 +575,6 @@ if (!$error && $massaction == 'confirm_presend') {
                     $upload_dir_tmp = $vardir . '/temp'; // TODO Add $keytoavoidconflict in upload_dir path
 
                     // Send mail (substitutionarray must be done just before this)
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
                     $mailfile = new CMailFile($subjectreplaced, $sendto, $from, $messagereplaced, $filepath, $mimetype, $filename, $sendtocc, $sendtobcc, $deliveryreceipt, -1, '', '', $trackid, '', $sendcontext, '', $upload_dir_tmp);
                     if ($mailfile->error) {
                         $resaction .= '<div class="error">' . $mailfile->error . '</div>';
@@ -1214,7 +1227,6 @@ if (!$error && ($action == 'affecttag' && $confirm == 'yes') && $permissiontoadd
     }
     if (!empty($affecttag_type_array)) {
         //check if tag type submitted exists into Tag Map categorie class
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
         $categ = new Categorie($db);
         $to_affecttag_type_array = array();
         $categ_type_array = $categ->getMapList();
@@ -1673,7 +1685,6 @@ if (!$error && ($massaction == 'approveleave' || ($action == 'approveleave' && $
 
                         $trackid = 'leav' . $objecttmp->id;
 
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
                         $mail = new CMailFile($subject, $emailTo, $emailFrom, $message, array(), array(), array(), '', '', 0, 0, '', '', $trackid);
 
                         // Sending email

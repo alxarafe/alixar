@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2019      Alexandre Spangaro   <aspangaro@open-dsi.fr>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *      \file       htdocs/core/boxes/box_shipments.php
@@ -66,10 +70,6 @@ class box_shipments extends ModeleBoxes
         $langs->loadLangs(array('orders', 'sendings'));
 
         $this->max = $max;
-
-        include_once DOL_DOCUMENT_ROOT . '/expedition/class/expedition.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/commande/class/commande.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
 
         $shipmentstatic = new Expedition($this->db);
         $orderstatic = new Commande($this->db);

@@ -41,14 +41,11 @@
 
 // Load Dolibarr environment
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-include_once DOL_DOCUMENT_ROOT . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
 if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
 }
 
@@ -344,7 +341,6 @@ if ($action == "change" && $user->hasRight('takepos', 'run')) { // Change custom
     $result = $db->query($sql);
     $num_lines = $db->num_rows($result);
     if ($num_lines == 0) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
         $invoice = new Facture($db);
         $constforthirdpartyid = 'CASHDESK_ID_THIRDPARTY' . $_SESSION["takeposterminal"];
         $invoice->socid = getDolGlobalInt($constforthirdpartyid);

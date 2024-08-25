@@ -24,7 +24,6 @@
  *  \brief      File with class of actions for canvas product
  */
 
-include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 
 
 /**

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2018  ptibogxiv	<support@ptibogxiv.net>
+ * Copyright (C) 2018       ptibogxiv	                <support@ptibogxiv.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\CompanyPaymentMode;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Stripe\Classes\Stripe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  \file       htdocs/core/triggers/interface_80_modStripe_Stripe.class.php
@@ -77,7 +85,6 @@ class InterfaceStripe extends DolibarrTriggers
             return 0;
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
         $stripe = new Stripe($db);
 
         $ok = 1;

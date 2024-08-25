@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/core/boxes/box_factures_imp.php
  *  \ingroup    invoices
@@ -28,8 +31,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/boxes/modules_boxes.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-
 
 /**
  * Class to manage the box to show not paid sales invoices
@@ -69,8 +70,6 @@ class box_factures_imp extends ModeleBoxes
         $this->max = $max;
         //$this->max = 1000;
 
-        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
 
         $facturestatic = new Facture($this->db);
         $societestatic = new Societe($this->db);

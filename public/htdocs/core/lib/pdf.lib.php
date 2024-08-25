@@ -1501,8 +1501,7 @@ function pdf_getlinedesc($object, $i, $outputlangs, $hideref = 0, $hidedesc = 0,
         include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.product.class.php';
         $prodser = new ProductFournisseur($db);
     } else {
-        include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-        $prodser = new Product($db);
+                $prodser = new Product($db);
 
         if (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
             include_once DOL_DOCUMENT_ROOT . '/product/class/productcustomerprice.class.php';
@@ -2546,7 +2545,6 @@ function pdf_getLinkedObjects(&$object, $outputlangs)
                     if (empty($object->linkedObjects['commande']) && $object->element != 'commande') {    // There is not already a link to order and object is not the order, so we show also info with order
                         $elementobject->fetchObjectLinked(null, '', null, '', 'OR', 1, 'sourcetype', 0);
                         if (!empty($elementobject->linkedObjectsIds['commande'])) {
-                            include_once DOL_DOCUMENT_ROOT . '/commande/class/commande.class.php';
                             $order = new Commande($db);
                             $ret = $order->fetch(reset($elementobject->linkedObjectsIds['commande']));
                             if ($ret < 1) {
@@ -2569,7 +2567,6 @@ function pdf_getLinkedObjects(&$object, $outputlangs)
                 if (empty($object->linkedObjects['commande']) && $object->element != 'commande') {    // There is not already a link to order and object is not the order, so we show also info with order
                     $elementobject->fetchObjectLinked(null, '', null, '', 'OR', 1, 'sourcetype', 0);
                     if (!empty($elementobject->linkedObjectsIds['commande'])) {
-                        include_once DOL_DOCUMENT_ROOT . '/commande/class/commande.class.php';
                         $order = new Commande($db);
                         $ret = $order->fetch(reset($elementobject->linkedObjectsIds['commande']));
                         if ($ret < 1) {

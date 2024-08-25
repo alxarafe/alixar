@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2005-2012 Maxime Kohlhaas      <mko@atm-consulting.fr>
- * Copyright (C) 2015-2021 Frédéric France      <frederic.france@netlogic.fr>
- * Copyright (C) 2015      Juanjo Menent	    <jmenent@2byte.es>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2005-2012  Maxime Kohlhaas             <mko@atm-consulting.fr>
+ * Copyright (C) 2015-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2015       Juanjo Menent	            <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/core/boxes/box_produits_alerte_stock.php
  *  \ingroup    produits
@@ -29,8 +31,6 @@
  */
 
 include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-
 
 /**
  * Class to manage the box to show too low stocks products
@@ -72,8 +72,7 @@ class box_produits_alerte_stock extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-        $productstatic = new Product($this->db);
+                $productstatic = new Product($this->db);
 
         $this->info_box_head = array('text' => $langs->trans("BoxTitleProductsAlertStock", $max));
 

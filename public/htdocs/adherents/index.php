@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2003		Jean-Louis Bergamo		<jlb@j1b.org>
- * Copyright (C) 2004-2020	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2019       Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2021-2023	Frédéric France			<frederic.france@netlgic.fr>
- * Copyright (C) 2021-2023  Waël Almoman            <info@almoman.com>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003		Jean-Louis Bergamo		    <jlb@j1b.org>
+ * Copyright (C) 2004-2020	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2021-2023	Frédéric France			    <frederic.france@netlgic.fr>
+ * Copyright (C) 2021-2023  Waël Almoman                <info@almoman.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,6 +24,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Adherents\Classes\AdherentStats;
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Adherents\Classes\Subscription;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\InfoBox;
+
 /**
  *       \file       htdocs/adherents/index.php
  *       \ingroup    member
@@ -32,15 +42,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-
 
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "members"));
-
 
 $hookmanager = new HookManager($db);
 
@@ -68,7 +72,6 @@ if (GETPOST('addbox')) {
         setEventMessages($langs->trans("BoxAdded"), null);
     }
 }
-
 
 /*
  * View
@@ -101,7 +104,6 @@ if ($conf->use_javascript_ajax) {
     $boxgraph .= '<tr class="liste_titre"><th colspan="2">' . $langs->trans("Statistics") . ($numberyears ? ' (' . ($year - $numberyears) . ' - ' . $year . ')' : '') . '</th></tr>';
     $boxgraph .= '<tr><td class="center" colspan="2">';
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherentstats.class.php';
     $stats = new AdherentStats($db, 0, $userid);
 
     // Show array
@@ -127,7 +129,6 @@ if ($conf->use_javascript_ajax) {
 
     include DOL_DOCUMENT_ROOT . '/theme/' . $conf->theme . '/theme_vars.inc.php';
 
-    include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
     $dolgraph = new DolGraph();
     $dolgraph->SetData($dataseries);
     $dolgraph->SetDataColor(array('-' . $badgeStatus0, $badgeStatus1, $badgeStatus4, $badgeStatus8, '-' . $badgeStatus8, $badgeStatus6));

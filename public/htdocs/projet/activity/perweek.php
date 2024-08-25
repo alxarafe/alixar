@@ -29,13 +29,8 @@
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
 
 // Load translation files required by the page
@@ -550,7 +545,8 @@ $moreforfilter = '';
 // Filter on categories
 /*
  if (isModEnabled("categorie")) {
- require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+ use Dolibarr\Code\Categories\Classes\Categorie;
+
  $moreforfilter.='<div class="divsearchfield">';
  $moreforfilter.=$langs->trans('ProjectCategories'). ': ';
  $moreforfilter.=$formother->select_categories('project', $search_categ, 'search_categ', 1, 1, 'maxwidth300');

@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+
 /**
  *       \file       htdocs/expedition/index.php
  *       \ingroup    expedition
@@ -29,7 +31,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 
 $hookmanager = new HookManager($db);

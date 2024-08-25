@@ -407,8 +407,7 @@ function completeFileArrayWithDatabaseInfo(&$filearray, $relativedir)
 
             if (!preg_match('/([\\/]temp[\\/]|[\\/]thumbs|\.meta$)/', $rel_filename)) {     // If not a tmp file
                 dol_syslog("list_of_documents We found a file called '" . $filearray[$key]['name'] . "' not indexed into database. We add it");
-                include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-                $ecmfile = new EcmFiles($db);
+                        $ecmfile = new EcmFiles($db);
 
                 // Add entry into database
                 $filename = basename($rel_filename);
@@ -829,8 +828,7 @@ function dol_copy($srcfile, $destfile, $newmask = '0', $overwriteifexists = 1, $
             //var_dump($rel_filetorenamebefore.' - '.$rel_filetocopyafter);exit;
 
             dol_syslog("Try to copy also entries in database for: " . $rel_filetocopyafter, LOG_DEBUG);
-            include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-
+    
             $ecmfiletarget = new EcmFiles($db);
             $resultecmtarget = $ecmfiletarget->fetch(0, '', $rel_filetocopyafter);
             if ($resultecmtarget > 0) {   // An entry for target name already exists for target, we delete it, a new one will be created.
@@ -1081,8 +1079,7 @@ function dol_move($srcfile, $destfile, $newmask = '0', $overwriteifexists = 1, $
                 //var_dump($rel_filetorenamebefore.' - '.$rel_filetorenameafter);exit;
 
                 dol_syslog("Try to rename also entries in database for full relative path before = " . $rel_filetorenamebefore . " after = " . $rel_filetorenameafter, LOG_DEBUG);
-                include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-
+        
                 $ecmfiletarget = new EcmFiles($db);
                 $resultecmtarget = $ecmfiletarget->fetch(0, '', $rel_filetorenameafter);
                 if ($resultecmtarget > 0) {   // An entry for target name already exists for target, we delete it, a new one will be created.
@@ -1545,8 +1542,7 @@ function dol_delete_file($file, $disableglob = 0, $nophperrors = 0, $nohook = 0,
                                 $rel_filetodelete = preg_replace('/\.noexe$/', '', $rel_filetodelete);
 
                                 dol_syslog("Try to remove also entries in database for full relative path = " . $rel_filetodelete, LOG_DEBUG);
-                                include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-                                $ecmfile = new EcmFiles($db);
+                                                        $ecmfile = new EcmFiles($db);
                                 $result = $ecmfile->fetch(0, '', $rel_filetodelete);
                                 if ($result >= 0 && $ecmfile->id > 0) {
                                     $result = $ecmfile->delete($user);
@@ -2019,8 +2015,7 @@ function dol_add_file_process($upload_dir, $allowoverwrite = 0, $updatesessionor
             setEventMessages($langs->trans("ErrorFailedToCreateDir", $upload_dir), null, 'errors');
         }
     } elseif ($link) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
-        $linkObject = new Link($db);
+            $linkObject = new Link($db);
         $linkObject->entity = $conf->entity;
         $linkObject->url = $link;
         $linkObject->objecttype = GETPOST('objecttype', 'alpha');
@@ -2124,7 +2119,6 @@ function addFileIntoDatabaseIndex($dir, $file, $fullpathorig = '', $mode = 'uplo
         $rel_dir = preg_replace('/[\\/]$/', '', $rel_dir);
         $rel_dir = preg_replace('/^[\\/]/', '', $rel_dir);
 
-        include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
         $ecmfile = new EcmFiles($db);
         $ecmfile->filepath = $rel_dir;
         $ecmfile->filename = $filename;
@@ -2925,7 +2919,6 @@ function dol_check_secure_access_document($modulepart, $original_file, $entity, 
             $accessallowed = 1;
             // If we known $id of holiday, call checkUserAccessToObject to check permission on properties and hierarchy of leave request
             if ($refname && !$fuser->hasRight('holiday', 'readall') && !preg_match('/^specimen/i', $original_file)) {
-                include_once DOL_DOCUMENT_ROOT . '/holiday/class/holiday.class.php';
                 $tmpholiday = new Holiday($db);
                 $tmpholiday->fetch('', $refname);
                 $accessallowed = checkUserAccessToObject($user, array('holiday'), $tmpholiday, 'holiday', '', '', 'rowid', '');
@@ -2937,7 +2930,6 @@ function dol_check_secure_access_document($modulepart, $original_file, $entity, 
             $accessallowed = 1;
             // If we known $id of expensereport, call checkUserAccessToObject to check permission on properties and hierarchy of expense report
             if ($refname && !$fuser->hasRight('expensereport', 'readall') && !preg_match('/^specimen/i', $original_file)) {
-                include_once DOL_DOCUMENT_ROOT . '/expensereport/class/expensereport.class.php';
                 $tmpexpensereport = new ExpenseReport($db);
                 $tmpexpensereport->fetch('', $refname);
                 $accessallowed = checkUserAccessToObject($user, array('expensereport'), $tmpexpensereport, 'expensereport', '', '', 'rowid', '');
@@ -3015,7 +3007,6 @@ function dol_check_secure_access_document($modulepart, $original_file, $entity, 
             $accessallowed = 1;
             // If we known $id of project, call checkUserAccessToObject to check permission on the given agenda event on properties and assigned users
             if ($refname && !preg_match('/^specimen/i', $original_file)) {
-                include_once DOL_DOCUMENT_ROOT . '/comm/action/class/actioncomm.class.php';
                 $tmpobject = new ActionComm($db);
                 $tmpobject->fetch((int) $refname);
                 $accessallowed = checkUserAccessToObject($user, array('agenda'), $tmpobject->id, 'actioncomm&societe', 'myactions|allactions', 'fk_soc', 'id', '');
@@ -3196,7 +3187,6 @@ function dol_check_secure_access_document($modulepart, $original_file, $entity, 
             $accessallowed = 1;
             // If we known $id of project, call checkUserAccessToObject to check permission on properties and contact of project
             if ($refname && !preg_match('/^specimen/i', $original_file)) {
-                include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
                 $tmpproject = new Project($db);
                 $tmpproject->fetch('', $refname);
                 $accessallowed = checkUserAccessToObject($user, array('projet'), $tmpproject->id, 'projet&project', '', '', 'rowid', '');
@@ -3209,7 +3199,6 @@ function dol_check_secure_access_document($modulepart, $original_file, $entity, 
             $accessallowed = 1;
             // If we known $id of project, call checkUserAccessToObject to check permission on properties and contact of project
             if ($refname && !preg_match('/^specimen/i', $original_file)) {
-                include_once DOL_DOCUMENT_ROOT . '/projet/class/task.class.php';
                 $tmptask = new Task($db);
                 $tmptask->fetch('', $refname);
                 $accessallowed = checkUserAccessToObject($user, array('projet_task'), $tmptask->id, 'projet_task&project', '', '', 'rowid', '');

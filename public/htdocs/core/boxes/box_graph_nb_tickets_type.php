@@ -137,7 +137,6 @@ class box_graph_nb_tickets_type extends ModeleBoxes
             $stringtoprint = '';
             $stringtoprint .= '<div class="div-table-responsive-no-min ">';
             if (!empty($dataseries) && count($dataseries) > 0) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
                 $px1 = new DolGraph();
 
                 $mesg = $px1->isGraphKo();

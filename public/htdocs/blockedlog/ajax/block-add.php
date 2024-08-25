@@ -62,7 +62,6 @@ if (empty($action)) {
 }
 
 if ($element === 'facture') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
     $facture = new Facture($db);
     if ($facture->fetch($id) > 0) {

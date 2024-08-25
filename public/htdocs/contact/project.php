@@ -26,7 +26,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
 $langs->loadLangs(array("contacts", "companies", "projects"));
 
@@ -54,7 +53,8 @@ if ($reshook < 0) {
 $form = new Form($db);
 
 if ($id) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+    use Dolibarr\Code\Contact\Classes\Contact;
+
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contact.lib.php';
 
     $object = new Contact($db);

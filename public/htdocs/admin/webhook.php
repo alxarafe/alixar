@@ -189,8 +189,7 @@ if ($action == 'edit') {
                     print getDolGlobalString($constname);
                     print "</textarea>\n";
                 } elseif ($val['type'] == 'html') {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                    $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
+                                    $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
                     $doleditor->Create();
                 } elseif ($val['type'] == 'yesno') {
                     print $form->selectyesno($constname, getDolGlobalString($constname), 1);
@@ -215,15 +214,14 @@ if ($action == 'edit') {
                     }
                     print $form->selectarray($constname, $arrayofmessagename, getDolGlobalString($constname), 'None', 0, 0, '', 0, 0, 0, '', '', 1);
                 } elseif (preg_match('/category:/', $val['type'])) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
+                    use Dolibarr\Code\Categories\Classes\Categorie;
+
                     $formother = new FormOther($db);
 
                     $tmp = explode(':', $val['type']);
                     print img_picto('', 'category', 'class="pictofixedwidth"');
                     print $formother->select_categories($tmp[1], getDolGlobalString($constname), $constname, 0, $langs->trans('CustomersProspectsCategoriesShort'));
                 } elseif (preg_match('/thirdparty_type/', $val['type'])) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
                     $formcompany = new FormCompany($db);
                     print $formcompany->selectProspectCustomerType(getDolGlobalString($constname), $constname);
                 } elseif ($val['type'] == 'securekey') {

@@ -38,6 +38,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *  \file       htdocs/product/card.php
  *  \ingroup    product
@@ -47,37 +52,26 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/genericobject.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product/modules_product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
+
+
 
 
 if (isModEnabled('propal')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
 }
 if (isModEnabled('invoice')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 }
 if (isModEnabled('order')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
 }
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
 }
 if (isModEnabled('bom')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
 }
 if (isModEnabled('workstation')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/class/workstation.class.php';
 }
 
 // Load translation files required by the page
@@ -1312,8 +1306,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
     // -----------------------------------------
     if ($action == 'create' && $usercancreate) {
         //WYSIWYG Editor
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
+    
         if (!empty($conf->use_javascript_ajax)) {
             print '<script type="text/javascript">';
             print '$(document).ready(function () {
@@ -1883,8 +1876,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
         // Card in edit mode
         if ($action == 'edit' && $usercancreate) {
             //WYSIWYG Editor
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
+        
             if (!empty($conf->use_javascript_ajax)) {
                 print '<script type="text/javascript">';
                 print '$(document).ready(function () {
@@ -3095,8 +3087,7 @@ if ($action != 'create' && $action != 'edit' && $action != 'delete') {
     $morehtmlcenter .= '</div>';
 
     // List of actions on element
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-    $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
     $somethingshown = $formactions->showactions($object, 'product', 0, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for product
 
     print '</div></div>';

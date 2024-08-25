@@ -28,8 +28,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/exports/class/export.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/export/modules_export.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';

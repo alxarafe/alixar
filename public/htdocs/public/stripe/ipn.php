@@ -20,6 +20,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 if (!defined('NOLOGIN')) {
     define("NOLOGIN", 1); // This means this output page does not require to be logged.
 }
@@ -47,15 +51,8 @@ if (!defined('USESUFFIXINLOG')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ccountry.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/stripe/stripe-php/init.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 
@@ -228,7 +225,6 @@ if ($event->type == 'payout.created') {
         $label = $event->data->object->description;
         $amount = $event->data->object->amount / 100;
         $amount_to = $event->data->object->amount / 100;
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
         $accountfrom = new Account($db);
         $accountfrom->fetch(getDolGlobalString('STRIPE_BANK_ACCOUNT_FOR_PAYMENTS'));
@@ -649,11 +645,9 @@ if ($event->type == 'payout.created') {
     if ($objpaymentmodetype == 'sepa_debit') {
         $db->begin();
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-        $actioncomm = new ActionComm($db);
+                $actioncomm = new ActionComm($db);
 
         if ($objinvoiceid > 0) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
             $invoice = new Facture($db);
             $invoice->fetch($objinvoiceid);
 

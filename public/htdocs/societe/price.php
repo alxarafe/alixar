@@ -32,9 +32,9 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+
+use Dolibarr\Code\Societe\Classes\Societe;
 
 if (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productcustomerprice.class.php';

@@ -170,7 +170,6 @@ if ($filtertype != 1) {
     $coldisplay++;
 
     if (!empty($line->fk_unit)) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cunits.class.php';
         $unit = new CUnits($this->db);
         $unit->fetch($line->fk_unit);
         print(isset($unit->label) ? "&nbsp;" . $langs->trans(ucwords($unit->label)) . "&nbsp;" : '');

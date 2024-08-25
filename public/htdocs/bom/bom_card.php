@@ -28,8 +28,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bom/lib/bom.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp.lib.php';
@@ -471,8 +469,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $formquestion = array();
         if (isModEnabled('bom')) {
             $langs->load("mrp");
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-            $forcecombo = 0;
+                        $forcecombo = 0;
             if ($conf->browser->name == 'ie') {
                 $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
             }
@@ -816,8 +813,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/bom/bom_agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-        $formactions = new FormActions($db);
+                $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element, 0, 1, '', $MAXEVENT, '', $morehtmlcenter);
 
         print '</div></div>';

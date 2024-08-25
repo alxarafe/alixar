@@ -37,37 +37,27 @@
  *  \brief      Page for supplier invoice card (view, edit, validate)
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_invoice/modules_facturefournisseur.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture-rec.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/paiementfourn.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 if (isModEnabled("product")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 if (isModEnabled('variants')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';
 }
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
-}
-
 
 $langs->loadLangs(array('bills', 'compta', 'suppliers', 'companies', 'products', 'banks', 'admin'));
 if (isModEnabled('incoterm')) {
@@ -3032,8 +3022,7 @@ if ($action == 'create') {
 
                 if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_SUPPLIER_BILL') && $qualified_for_stock_change) {
                     $langs->load("stocks");
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                    $formproduct = new FormProduct($db);
+                                        $formproduct = new FormProduct($db);
                     $warehouse = new Entrepot($db);
                     $warehouse_array = $warehouse->list_array();
                     if (count($warehouse_array) == 1) {
@@ -3064,8 +3053,7 @@ if ($action == 'create') {
             }
             if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_SUPPLIER_BILL') && $qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $warehouse = new Entrepot($db);
                 $warehouse_array = $warehouse->list_array();
                 if (count($warehouse_array) == 1) {
@@ -3159,8 +3147,7 @@ if ($action == 'create') {
 
             if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_SUPPLIER_BILL') && $qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $warehouse = new Entrepot($db);
                 $warehouse_array = $warehouse->list_array();
 
@@ -4227,7 +4214,6 @@ if ($action == 'create') {
                     print '</div><div class="fichehalfright">';
 
                     // List of actions on element
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
                     $formactions = new FormActions($db);
                     $somethingshown = $formactions->showactions($object, 'invoice_supplier', $socid, 1, 'listaction' . ($genallowed ? 'largetitle' : ''));
 

@@ -26,16 +26,11 @@
  *       \brief      List of all contacts of a project
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-}
 
 // Load translation files required by the page
 $langsLoad = array('projects', 'companies');
@@ -175,7 +170,7 @@ if (empty($reshook)) {
         $errorgrouparray = array();
 
         if ($groupid > 0) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
+            use Dolibarr\Code\User\Classes\UserGroup;
             $usergroup = new UserGroup($db);
             $result = $usergroup->fetch($groupid);
             if ($result > 0) {
@@ -228,8 +223,7 @@ if (empty($reshook)) {
 
                 $affecttotask = GETPOST('tasksavailable', 'intcomma');
                 if (!empty($affecttotask)) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-                    $task_to_affect = explode(',', $affecttotask);
+                                        $task_to_affect = explode(',', $affecttotask);
                     if (!empty($task_to_affect)) {
                         foreach ($task_to_affect as $task_id) {
                             if (GETPOSTISSET('person_' . $task_id) && GETPOST('person_' . $task_id, 'san_alpha')) {

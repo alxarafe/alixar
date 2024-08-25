@@ -27,7 +27,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 include_once DOL_DOCUMENT_ROOT . '/core/class/html.formcompany.class.php';
 include_once DOL_DOCUMENT_ROOT . '/product/class/html.formproduct.class.php';
-include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 include_once DOL_DOCUMENT_ROOT . '/product/inventory/class/inventory.class.php';
 include_once DOL_DOCUMENT_ROOT . '/product/inventory/lib/inventory.lib.php';
 include_once DOL_DOCUMENT_ROOT . '/product/stock/class/mouvementstock.class.php';

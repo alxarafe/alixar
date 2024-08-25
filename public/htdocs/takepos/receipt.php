@@ -51,7 +51,6 @@ if (!isset($action)) {
 
     require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // If this file is called from send.php avoid load again
 }
-include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
 
 $langs->loadLangs(array("main", "bills", "cashdesk", "companies"));
 

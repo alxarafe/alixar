@@ -37,7 +37,6 @@ if (!is_object($form)) {
 
 global $formaccounting;
 if (isModEnabled('accounting') && !is_object($formaccounting)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
     $formaccounting = new FormAccounting($db);
 }
 

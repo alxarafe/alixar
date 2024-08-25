@@ -56,9 +56,6 @@ if (is_numeric($entity)) {
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/json.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 // Init vars
@@ -341,7 +338,6 @@ if (empty($reshook) && $action == 'add') {
         if (!$error) {
             $result = $proj->create($user);
             if ($result > 0) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
                 $object = $proj;
 
                 if ($object->email) {

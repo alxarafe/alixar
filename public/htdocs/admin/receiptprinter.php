@@ -206,7 +206,6 @@ if ($action == 'testtemplate' && $user->admin) {
 
     // if (! $error) {
     // test
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
     $object = new Facture($db);
     $object->initAsSpecimen();
     //$object->fetch(18);

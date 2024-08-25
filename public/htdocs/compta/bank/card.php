@@ -26,6 +26,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+
 /**
  *      \file       htdocs/compta/bank/card.php
  *      \ingroup    bank
@@ -36,21 +39,12 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formbank.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+    use Dolibarr\Code\Categories\Classes\Categorie;
+
 }
 if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-}
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
-}
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
 }
 
 // Load translation files required by the page
@@ -504,7 +498,6 @@ if ($action == 'create') {
     print '<tr><td>' . $langs->trans("Comment") . '</td>';
     print '<td>';
     // Editor wysiwyg
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('account_comment', (GETPOST("account_comment") ? GETPOST("account_comment") : $object->comment), '', 90, 'dolibarr_notes', '', false, true, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_4, '90%');
     $doleditor->Create();
     print '</td></tr>';
@@ -1064,8 +1057,7 @@ if ($action == 'create') {
         print '<tr><td class="tdtop">' . $langs->trans("Comment") . '</td>';
         print '<td>';
         // Editor wysiwyg
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-        $doleditor = new DolEditor('account_comment', (GETPOST("account_comment") ? GETPOST("account_comment") : $object->comment), '', 90, 'dolibarr_notes', '', false, true, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_4, '95%');
+            $doleditor = new DolEditor('account_comment', (GETPOST("account_comment") ? GETPOST("account_comment") : $object->comment), '', 90, 'dolibarr_notes', '', false, true, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_4, '95%');
         $doleditor->Create();
         print '</td></tr>';
 

@@ -30,10 +30,8 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contract.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 }
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once DOL_DOCUMENT_ROOT . "/ticket/class/ticket.class.php";
 
@@ -137,8 +135,7 @@ $morehtmlref .= $form->editfieldval(
 $morehtmlref .= '<br>' . $langs->trans('ThirdParty') . ' : ' . $object->thirdparty->getNomUrl(1);
 // Project
 if (! empty($conf->projet->enabled)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-
+    
     $langs->load("projects");
     $morehtmlref .= '<br>' . $langs->trans('Project') . ' : ';
     if (! empty($object->fk_project)) {

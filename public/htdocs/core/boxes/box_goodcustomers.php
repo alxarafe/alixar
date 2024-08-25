@@ -78,7 +78,6 @@ class box_goodcustomers extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
         $thirdpartystatic = new Societe($this->db);
 
         $this->info_box_head = array('text' => $langs->trans("BoxTitleGoodCustomers", $max));

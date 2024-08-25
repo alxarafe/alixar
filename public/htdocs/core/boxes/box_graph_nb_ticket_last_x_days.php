@@ -93,7 +93,6 @@ class box_graph_nb_ticket_last_x_days extends ModeleBoxes
         } else {
             $days = 7;
         }
-        require_once DOL_DOCUMENT_ROOT . "/ticket/class/ticket.class.php";
         $text = $langs->trans("BoxTicketLastXDays", $days) . '&nbsp;' . img_picto('', 'filter.png', 'id="idsubimgDOLUSERCOOKIE_ticket_last_days" class="linkobject"');
         $this->info_box_head = array(
             'text' => $text,
@@ -153,7 +152,6 @@ class box_graph_nb_ticket_last_x_days extends ModeleBoxes
             $stringtoshow .= '</form>';
             $stringtoshow .= '</div>';
 
-            include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
             $px1 = new DolGraph();
 
             $mesg = $px1->isGraphKo();

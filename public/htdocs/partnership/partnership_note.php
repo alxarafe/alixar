@@ -27,7 +27,7 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/class/partnership.class.php';
+use Dolibarr\Code\Partnerships\Classes\Partnership;
 require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/lib/partnership.lib.php';
 
 // Load translation files required by the page

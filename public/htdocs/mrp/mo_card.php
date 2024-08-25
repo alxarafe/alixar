@@ -26,17 +26,12 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp_mo.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bom/lib/bom.lib.php';
 
 if (isModEnabled('workstation')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/class/workstation.class.php';
 }
 
 
@@ -554,8 +549,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $formquestion = array();
         if (isModEnabled('mrp')) {
             $langs->load("mrp");
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-            $formproduct = new FormProduct($db);
+                        $formproduct = new FormProduct($db);
             $forcecombo = 0;
             if ($conf->browser->name == 'ie') {
                 $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -867,8 +861,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/mrp/mo_agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-        $formactions = new FormActions($db);
+                $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element, $socid, 1, '', $MAXEVENT, '', $morehtmlcenter);
 
         print '</div></div>';

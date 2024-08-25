@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2016-2020  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2016-2024  Alexandre Spangaro      <alexandre@inovea-conseil.com>
- * Copyright (C) 2019-2021  Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2016-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2016-2024  Alexandre Spangaro          <alexandre@inovea-conseil.com>
+ * Copyright (C) 2019-2021  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\InfoBox;
+
 /**
  * \file    htdocs/accountancy/index.php
  * \ingroup Accountancy (Double entries)
@@ -29,7 +32,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("compta", "bills", "other", "accountancy", "loans", "banks", "admin", "dict"));

@@ -197,7 +197,6 @@ if (!empty($_SESSION['ipaddress'])) {      // To avoid to make action twice
 
         $ishtml = dol_textishtml($content); // May contain urls
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($topic, $sendto, $from, $content, array(), array(), array(), '', '', 0, $ishtml);
 
         $result = $mailfile->sendfile();

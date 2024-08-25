@@ -35,7 +35,8 @@ use FormMail;
 use stdClass;
 use User;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 
 /**
  *  Description and activation class for module EventOrganization
@@ -486,7 +487,6 @@ class EventOrganization extends DolibarrModules
         include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
         $formmail = new FormMail($this->db);
 
-        include_once DOL_DOCUMENT_ROOT . '/user/class/user.class.php';
         if (!is_object($user)) {
             $user = new User($this->db); // To avoid error during migration
         }

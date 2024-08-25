@@ -29,9 +29,10 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 require_once DOL_DOCUMENT_ROOT . "/core/lib/takepos.lib.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 
@@ -350,8 +351,7 @@ if (isModEnabled('stock')) {
 }
 
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-    $formproject = new FormProjets($db);
+        $formproject = new FormProjets($db);
     print '<tr class="oddeven"><td>' . $langs->trans("CashDeskDefaultProject") . '</td><td>';
     print img_picto('', 'project', 'class="pictofixedwidth"');
     // select_projects($socid = -1, $selected = '', $htmlname = 'projectid', $maxlength = 16, $option_only = 0, $show_empty = 1, $discard_closed = 0, $forcefocus = 0, $disabled = 0, $mode = 0, $filterkey = '', $nooutput = 0, $forceaddid = 0, $morecss = '', $htmlid = '', $morefilter = '')

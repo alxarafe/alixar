@@ -25,8 +25,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
 
 
 /**
@@ -88,7 +86,6 @@ function shipping_prepare_head($object)
     }
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->expedition->dir_output . "/sending/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
@@ -189,7 +186,6 @@ function delivery_prepare_head($object)
     }
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->expedition->dir_output . "/sending/" . dol_sanitizeFileName($tmpobject->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $tmpobject->element, $tmpobject->id);

@@ -29,6 +29,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *  \file       htdocs/product/price_suppliers.php
  *  \ingroup    product
@@ -39,9 +41,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_expression.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
 if (isModEnabled('barcode')) {
@@ -819,8 +818,7 @@ if ($id > 0 || $ref) {
                 // Product description of the supplier
                 if (getDolGlobalString('PRODUIT_FOURN_TEXTS')) {
                     //WYSIWYG Editor
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
+                
                     print '<tr>';
                     print '<td>' . $langs->trans('ProductSupplierDescription') . '</td>';
                     print '<td>';

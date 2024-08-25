@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2017       ATM Consulting      <contact@atm-consulting.fr>
- * Copyright (C) 2017-2020  Laurent Destailleur <eldy@destailleur.fr>
- * Copyright (C) 2022 		charlene benke		<charlene@patas-monkey.com>
+/* Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
+ * Copyright (C) 2017-2020  Laurent Destailleur         <eldy@destailleur.fr>
+ * Copyright (C) 2022 		charlene benke		        <charlene@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,7 +24,20 @@
 
 namespace Dolibarr\Code\BloquedLog\Classes;
 
+use CashControl;
+use Dolibarr\Code\Adherents\Classes\Subscription;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\Don\Classes\PaymentDonation;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
+use Paiement;
+use PaymentVarious;
 use stdClass;
 
 /**
@@ -237,7 +250,6 @@ class BlockedLog
         global $langs;
 
         if ($this->element === 'facture') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
             $object = new Facture($this->db);
             if ($object->fetch($this->fk_object) > 0) {
@@ -247,7 +259,6 @@ class BlockedLog
             }
         }
         if ($this->element === 'invoice_supplier') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 
             $object = new FactureFournisseur($this->db);
             if ($object->fetch($this->fk_object) > 0) {
@@ -256,7 +267,6 @@ class BlockedLog
                 $this->error++;
             }
         } elseif ($this->element === 'payment') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
 
             $object = new Paiement($this->db);
             if ($object->fetch($this->fk_object) > 0) {
@@ -265,7 +275,6 @@ class BlockedLog
                 $this->error++;
             }
         } elseif ($this->element === 'payment_supplier') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/paiementfourn.class.php';
 
             $object = new PaiementFourn($this->db);
             if ($object->fetch($this->fk_object) > 0) {
@@ -301,7 +310,6 @@ class BlockedLog
                 $this->error++;
             }
         } elseif ($this->element === 'subscription') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
 
             $object = new Subscription($this->db);
             if ($object->fetch($this->fk_object) > 0) {
@@ -328,7 +336,6 @@ class BlockedLog
                 $this->error++;
             }
         } elseif ($this->element === 'project') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
             $object = new Project($this->db);
             if ($object->fetch($this->fk_object) > 0) {
@@ -600,10 +607,8 @@ class BlockedLog
 
                     $tmpobject = null;
                     if ($this->element == 'payment_supplier') {
-                        include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.facture.class.php';
                         $tmpobject = new FactureFournisseur($this->db);
                     } elseif ($this->element == 'payment') {
-                        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
                         $tmpobject = new Facture($this->db);
                     } elseif ($this->element == 'payment_donation') {
                         include_once DOL_DOCUMENT_ROOT . '/don/class/don.class.php';

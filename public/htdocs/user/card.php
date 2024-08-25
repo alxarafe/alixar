@@ -33,6 +33,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\User\Classes\UserGroup;
+
 /**
  *       \file       htdocs/user/card.php
  *       \brief      Tab of user card
@@ -40,31 +46,16 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security2.lib.php';
 if (isModEnabled('ldap')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ldap.class.php';
 }
-if (isModEnabled('member')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-}
-if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-}
 if (isModEnabled('stock')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-}
+    }
 
 // Load translation files required by page
 $langs->loadLangs(array('users', 'companies', 'ldap', 'admin', 'hrm', 'stocks', 'other'));
@@ -1321,7 +1312,6 @@ if ($action == 'create' || $action == 'adduserldap') {
     // Signature
     print '<tr><td class="tdtop">' . $langs->trans("Signature") . '</td>';
     print '<td class="wordbreak">';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
     $doleditor = new DolEditor('signature', GETPOST('signature', 'restricthtml'), '', 138, 'dolibarr_notes', 'In', true, $acceptlocallinktomedia, !getDolGlobalString('FCKEDITOR_ENABLE_USERSIGN') ? 0 : 1, ROWS_4, '90%');
     print $doleditor->Create(1);
@@ -1331,7 +1321,6 @@ if ($action == 'create' || $action == 'adduserldap') {
     print '<tr><td class="tdtop">';
     print $langs->trans("NotePublic");
     print '</td><td>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('note_public', GETPOSTISSET('note_public') ? GETPOST('note_public', 'restricthtml') : '', '', 100, 'dolibarr_notes', '', false, true, getDolGlobalString('FCKEDITOR_ENABLE_NOTE_PUBLIC'), ROWS_3, '90%');
     $doleditor->Create();
     print "</td></tr>\n";
@@ -1340,7 +1329,6 @@ if ($action == 'create' || $action == 'adduserldap') {
     print '<tr><td class="tdtop">';
     print $langs->trans("NotePrivate");
     print '</td><td>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('note_private', GETPOSTISSET('note_private') ? GETPOST('note_private', 'restricthtml') : '', '', 100, 'dolibarr_notes', '', false, true, getDolGlobalString('FCKEDITOR_ENABLE_NOTE_PRIVATE'), ROWS_3, '90%');
     $doleditor->Create();
     print "</td></tr>\n";
@@ -1732,7 +1720,6 @@ if ($action == 'create' || $action == 'adduserldap') {
 
             // Default warehouse
             if (isModEnabled('stock') && getDolGlobalString('MAIN_DEFAULT_WAREHOUSE_USER')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
                 print '<tr><td>' . $langs->trans("DefaultWarehouse") . '</td><td>';
                 if ($object->fk_warehouse > 0) {
                     $warehousestatic = new Entrepot($db);
@@ -2848,8 +2835,7 @@ if ($action == 'create' || $action == 'adduserldap') {
             print '<tr><td class="tdtop">' . $langs->trans("Signature") . '</td>';
             print '<td>';
             if ($caneditfield) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
+            
                 $doleditor = new DolEditor('signature', $object->signature, '', 138, 'dolibarr_notes', 'In', false, $acceptlocallinktomedia, !getDolGlobalString('FCKEDITOR_ENABLE_USERSIGN') ? 0 : 1, ROWS_4, '90%');
                 print $doleditor->Create(1);
             } else {
@@ -2999,7 +2985,6 @@ if ($action == 'create' || $action == 'adduserldap') {
             print '</div><div class="fichehalfright">';
 
             // List of actions on element
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
             $formactions = new FormActions($db);
             $somethingshown = $formactions->showactions($object, 'user', $socid, 1, 'listactions', 0, '', '', $object->id);
 

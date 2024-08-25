@@ -31,11 +31,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once './lib/replenishment.lib.php';
 
 // Load translation files required by the page
@@ -164,7 +159,6 @@ if ($action == 'order' && GETPOST('valid')) {
         $db->begin();
 
         $suppliers = array();
-        require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
         $productsupplier = new ProductFournisseur($db);
         for ($i = 0; $i < $linecount; $i++) {
             if (GETPOST('choose' . $i) === 'on' && GETPOSTINT('fourn' . $i) > 0) {

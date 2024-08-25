@@ -29,7 +29,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
+
+use Dolibarr\Code\User\Classes\UserGroup;
 
 // Load translation files required by page
 $langs->loadLangs(array("users"));

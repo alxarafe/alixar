@@ -30,10 +30,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
+
+use Dolibarr\Code\User\Classes\UserGroup;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 
 // Define if user can read permissions
 $canreadperms = ($user->admin || $user->hasRight("user", "user", "read"));
@@ -508,8 +507,7 @@ if ($action == 'create') {
             print '</div><div class="fichehalfright">';
 
             // List of actions on element
-            /*include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-            $formactions = new FormActions($db);
+            /*            $formactions = new FormActions($db);
             $somethingshown = $formactions->showactions($object, 'usergroup', $socid, 1);*/
 
             print '</div></div>';

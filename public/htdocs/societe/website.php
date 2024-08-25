@@ -24,6 +24,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/societe/website.php
  *  \ingroup    website
@@ -32,8 +35,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
@@ -536,7 +537,6 @@ foreach ($objectwebsiteaccount->fields as $key => $val) {
             print '</div>';
             */
         } elseif ($key == 'lang') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
             $formadmin = new FormAdmin($db);
             print $formadmin->select_language((isset($search[$key]) ? $search[$key] : ''), 'search_lang', 0, null, 1, 0, 0, 'minwidth100imp maxwidth125', 2);
         } else {
@@ -765,7 +765,6 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
         $hidegeneratedfilelistifempty = 0;
     }
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
     $formfile = new FormFile($db);
 
     // Show list of available documents

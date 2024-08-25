@@ -128,7 +128,6 @@ class MenuManager
             $leftmenu = $forceleftmenu;
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/menubase.class.php';
         $tabMenu = array();
         $menuArbo = new Menubase($this->db, 'auguria');
         $menuArbo->menuLoad($mainmenu, $leftmenu, $this->type_user, 'auguria', $tabMenu);

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2023 Frederic France      <frederic.france@netlogic.fr>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2023  Frederic France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/core/boxes/box_produits.php
  *  \ingroup    produits,services
@@ -27,8 +29,6 @@
  */
 
 include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-
 
 /**
  * Class to manage the box to show last products
@@ -70,8 +70,7 @@ class box_produits extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-        $productstatic = new Product($this->db);
+                $productstatic = new Product($this->db);
 
         $this->info_box_head = array(
             'text' => $langs->trans("BoxTitleLastProducts", $max) . '<a class="paddingleft" href="' . constant('BASE_URL') . 'product/list.php?sortfield=p.tms&sortorder=DESC"><span class="badge">...</span></a>',

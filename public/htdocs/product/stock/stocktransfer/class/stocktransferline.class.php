@@ -28,10 +28,10 @@
  */
 
 // Put here all includes required by your class file
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonobjectline.class.php';
-//require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-//require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
+use Dolibarr\Core\Base\CommonObjectLine;
 
+//use Dolibarr\Code\Societe\Classes\Societe;
+//
 /**
  * Class for StockTransferLine
  */
@@ -418,7 +418,6 @@ class StockTransferLine extends CommonObjectLine
     {
         global $user, $langs;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
         include_once DOL_DOCUMENT_ROOT . '/product/stock/class/mouvementstock.class.php';
         include_once DOL_DOCUMENT_ROOT . '/product/stock/stocktransfer/class/stocktransfer.class.php';
 

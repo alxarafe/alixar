@@ -30,6 +30,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *  \file       htdocs/reception/card.php
  *  \ingroup    reception
@@ -38,31 +40,20 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/reception/class/reception.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/reception.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/reception/modules_reception.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
 if (isModEnabled("product") || isModEnabled("service")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 }
 if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
 }
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 if (isModEnabled('productbatch')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productbatch.class.php';
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 $langs->loadLangs(array("receptions", "companies", "bills", 'deliveries', 'orders', 'stocks', 'other', 'propal', 'sendings'));
 
@@ -2028,7 +2019,6 @@ if ($action == 'create') {
                     print '<td class="linecolbatch nowrap">';
                     $detail = $langs->trans("NA");
                     if ($lines[$i]->product->status_batch > 0 && $lines[$i]->fk_product > 0) {
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
                         $productlot = new Productlot($db);
                         $reslot = $productlot->fetch(0, $lines[$i]->fk_product, $lines[$i]->batch);
                         if ($reslot > 0) {

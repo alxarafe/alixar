@@ -27,11 +27,8 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
+use Dolibarr\Code\Adherents\Classes\Adherent;
 if (isModEnabled("bank")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 }
 
 // Load translation files required by the page
@@ -406,8 +403,7 @@ if ($rowid && $action != 'edit') {
 
     // List of actions on element
     /*
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-    $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
     $somethingshown = $formactions->showactions($object, $object->element, $socid, 1);
     */
 

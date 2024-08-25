@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *  \file       htdocs/contact/consumption.php
  *  \ingroup    societe
@@ -30,10 +32,10 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contact.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+
+use Dolibarr\Code\Contact\Classes\Contact;
+
 
 $optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : str_replace('_', '', basename(dirname(__FILE__)) . basename(__FILE__, '.php')); // To manage different context of search
@@ -203,7 +205,6 @@ print '<input type="hidden" name="token" value="' . newToken() . '">';
 
 $sql_select = '';
 if ($type_element == 'fichinter') {     // Customer : show products from invoices
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
     $documentstatic = new Fichinter($db);
     $sql_select = 'SELECT f.rowid as doc_id, f.ref as doc_number, \'1\' as doc_type, f.datec as dateprint, f.fk_statut as status, tc.libelle as type_contact_label, ';
     $tables_from = MAIN_DB_PREFIX . 'fichinterdet d';
@@ -214,7 +215,6 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $dateprint = 'f.datec';
     $doc_number = 'f.ref';
 } elseif ($type_element == 'invoice') {     // Customer : show products from invoices
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
     $documentstatic = new Facture($db);
     $sql_select = 'SELECT f.rowid as doc_id, f.ref as doc_number, f.type as doc_type, f.datef as dateprint, f.fk_statut as status, f.paye as paid, tc.libelle as type_contact_label, ';
     $tables_from = MAIN_DB_PREFIX . 'facturedet d';
@@ -227,7 +227,6 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $doc_number = 'f.ref';
     $thirdTypeSelect = 'customer';
 } elseif ($type_element == 'propal') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
     $documentstatic = new Propal($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.datep as dateprint, c.fk_statut as status, tc.libelle as type_contact_label, ';
     $tables_from = MAIN_DB_PREFIX . 'propaldet d';
@@ -240,7 +239,7 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $doc_number = 'c.ref';
     $thirdTypeSelect = 'customer';
 } elseif ($type_element == 'order') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
+    use Dolibarr\Code\Adherents\Classes\Adherent;
     $documentstatic = new Commande($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_commande as dateprint, c.fk_statut as status, tc.libelle as type_contact_label, ';
     $tables_from = MAIN_DB_PREFIX . 'commandedet d';
@@ -253,7 +252,6 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $doc_number = 'c.ref';
     $thirdTypeSelect = 'customer';
 } elseif ($type_element == 'supplier_invoice') {    // Supplier : Show products from invoices.
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
     $documentstatic = new FactureFournisseur($db);
     $sql_select = 'SELECT f.rowid as doc_id, f.ref as doc_number, \'1\' as doc_type, f.datef as dateprint, f.fk_statut as status, f.paye as paid, tc.libelle as type_contact_label, ';
     $tables_from = MAIN_DB_PREFIX . 'facture_fourn_det d';
@@ -278,7 +276,6 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     //    $thirdTypeSelect='supplier';
     //}
 } elseif ($type_element == 'supplier_order') {  // Supplier : Show products from orders.
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
     $documentstatic = new CommandeFournisseur($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_valid as dateprint, c.fk_statut as status, tc.libelle as type_contact_label, ';
     $tables_from = MAIN_DB_PREFIX . 'commande_fournisseurdet d';
@@ -291,7 +288,6 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $doc_number = 'c.ref';
     $thirdTypeSelect = 'supplier';
 } elseif ($type_element == 'contract') {    // Order
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
     $documentstatic = new Contrat($db);
     $documentstaticline = new ContratLigne($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_contrat as dateprint, d.statut as status, tc.libelle as type_contact_label, ';

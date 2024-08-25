@@ -30,9 +30,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skill.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_skill.lib.php';
 
@@ -492,7 +489,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 //*---------------------------------------------------------------------------
 
 if ($action != "create" && $action != "edit") {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
@@ -836,8 +832,7 @@ if ($action != "create" && $action != "edit") {
     //          $hidegeneratedfilelistifempty = 0;
     //      }
     //
-    //      require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-    //      $formfile = new FormFile($db);
+    //          //      $formfile = new FormFile($db);
     //
     //      // Show list of available documents
     //      $urlsource = $_SERVER['PHP_SELF'] . '?sortfield=' . $sortfield . '&sortorder=' . $sortorder;
@@ -863,8 +858,7 @@ if ($action != "create" && $action != "edit") {
     $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/hrm/skill_agenda.php?id=' . $object->id);
 
     // List of actions on element
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-    $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
     $somethingshown = $formactions->showactions($object, $object->element . '@' . $object->module, (is_object($object->thirdparty) ? $object->thirdparty->id : 0), 1, '', $MAXEVENT, '', $morehtmlcenter);
 
     print '</div></div>';

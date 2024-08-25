@@ -28,7 +28,8 @@
  */
 
 include 'inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/conf.class.php';
+
+use Dolibarr\Code\Core\Classes\Conf;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
 

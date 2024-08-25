@@ -30,6 +30,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *       \file       htdocs/contrat/card.php
  *       \ingroup    contrat
@@ -43,18 +45,10 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contract.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/contract/modules_contract.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
 }
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
+    }
 
 // Load translation files required by the page
 $langs->loadLangs(array("contracts", "orders", "companies", "bills", "products", 'compta'));
@@ -1767,8 +1761,7 @@ if ($action == 'create') {
                     }
 
                     // editeur wysiwyg
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-                    $nbrows = ROWS_2;
+                                    $nbrows = ROWS_2;
                     if (getDolGlobalString('MAIN_INPUT_DESC_HEIGHT')) {
                         $nbrows = getDolGlobalString('MAIN_INPUT_DESC_HEIGHT');
                     }
@@ -2298,7 +2291,6 @@ if ($action == 'create') {
 
 
             // List of actions on element
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
             $formactions = new FormActions($db);
             $somethingshown = $formactions->showactions($object, 'contract', $socid, 1, 'listactions', $MAXEVENT, '', $morehtmlcenter);
 

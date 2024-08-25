@@ -24,6 +24,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+
 /**
  *  \file       htdocs/resource/agenda.php
  *  \ingroup    resource
@@ -32,11 +34,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/resource.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/resource/class/dolresource.class.php';
 
 // Load translation files required by the page
 $langs->load('companies');
@@ -130,7 +130,6 @@ $form = new Form($db);
 
 if ($object->id > 0) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
     $picto = 'resource';
 

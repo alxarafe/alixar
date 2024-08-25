@@ -34,13 +34,10 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/donation.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-}
+    }
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'other', 'donations'));

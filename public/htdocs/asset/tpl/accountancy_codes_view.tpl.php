@@ -27,6 +27,8 @@
  */
 
 // Protection to avoid direct call of template
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+
 if (empty($object) || !is_object($object)) {
     print "Error, template page can't be called as URL";
     exit(1);
@@ -52,10 +54,6 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    if (isModEnabled('accounting')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
-    }
-
     foreach ($assetaccountancycodes->accountancy_codes_fields as $mode_key => $mode_info) {
         if (empty($assetdepreciationoptions->deprecation_options[$mode_key]) && $mode_key == "accelerated_depreciation") {
             continue;

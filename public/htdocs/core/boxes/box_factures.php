@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/core/boxes/box_factures.php
  *  \ingroup    invoices
@@ -65,9 +68,6 @@ class box_factures extends ModeleBoxes
         global $conf, $user, $langs;
 
         $this->max = $max;
-
-        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
 
         $facturestatic = new Facture($this->db);
         $societestatic = new Societe($this->db);

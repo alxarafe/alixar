@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2005  Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010	Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004     	Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2012	Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2016		Charlie Benke		<charlie@patas-monkey.com>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010	Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004     	Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2012	Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2016		Charlie Benke		        <charlie@patas-monkey.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@
  * or see https://www.gnu.org/
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commondocgenerator.class.php';
+use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 
 /**
  *  \class      ModeleAction

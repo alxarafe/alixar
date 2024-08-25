@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *    \file       /htdocs/core/ajax/onlineSign.php
  *    \brief      File to make Ajax action to add the signature of a document
@@ -110,7 +112,6 @@ if ($action == "importSignature") {
         $data = base64_decode($signature);
 
         if ($mode == "propale" || $mode == 'proposal') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
             $object = new Propal($db);
             $object->fetch(0, $ref);
@@ -304,8 +305,7 @@ if ($action == "importSignature") {
                 }
             }
         } elseif ($mode == 'contract') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
+                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
             $object = new Contrat($db);
             $object->fetch(0, $ref);
 
@@ -433,7 +433,6 @@ if ($action == "importSignature") {
                 }
             }
         } elseif ($mode == 'fichinter') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
             $object = new Fichinter($db);
             $object->fetch(0, $ref);

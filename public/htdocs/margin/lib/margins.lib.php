@@ -126,7 +126,6 @@ function getMarginInfos($pv_ht, $remise_percent, $tva_tx, $localtax1_tx, $localt
     $marque_tx_ret = '';
 
     if ($fk_pa > 0 && empty($pa_ht)) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
         $product = new ProductFournisseur($db);
         if ($product->fetch_product_fournisseur_price($fk_pa)) {
             $pa_ht_ret = $product->fourn_unitprice * (1 - $product->fourn_remise_percent / 100);
