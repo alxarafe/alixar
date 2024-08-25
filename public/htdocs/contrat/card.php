@@ -30,6 +30,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *       \file       htdocs/contrat/card.php
  *       \ingroup    contrat
@@ -44,7 +46,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/contract/modules_contract.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 if (isModEnabled("propal")) {
-    use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled('project')) {
     }

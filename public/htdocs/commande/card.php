@@ -33,6 +33,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *   \file      htdocs/commande/card.php
  *   \ingroup   commande
@@ -48,10 +51,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/commande/modules_com
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
 
-use Dolibarr\Code\Adherents\Classes\Adherent;
 
 if (isModEnabled("propal")) {
-    use Dolibarr\Code\Comm\Classes\Propal;
 }
 
 if (isModEnabled('project')) {
@@ -1976,8 +1977,7 @@ if ($action == 'create' && $usercancreate) {
 
         // Warehouse
         if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-            $formproduct = new FormProduct($db);
+                        $formproduct = new FormProduct($db);
             print '<tr><td>' . $langs->trans('Warehouse') . '</td><td>';
             print img_picto('', 'stock', 'class="pictofixedwidth"') . $formproduct->selectWarehouses((GETPOSTISSET('warehouse_id') ? GETPOST('warehouse_id') : $warehouse_id), 'warehouse_id', '', 1, 0, 0, '', 0, 0, array(), 'maxwidth500 widthcentpercentminusxx');
             print '</td></tr>';
@@ -2220,8 +2220,7 @@ if ($action == 'create' && $usercancreate) {
             $formquestion = array();
             if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_VALIDATE_ORDER') && $qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $forcecombo = 0;
                 if ($conf->browser->name == 'ie') {
                     $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -2380,8 +2379,7 @@ if ($action == 'create' && $usercancreate) {
             $formquestion = array();
             if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_VALIDATE_ORDER') && $qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $forcecombo = 0;
                 if ($conf->browser->name == 'ie') {
                     $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -2419,8 +2417,7 @@ if ($action == 'create' && $usercancreate) {
             $formquestion = array();
             if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_VALIDATE_ORDER') && $qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $forcecombo = 0;
                 if ($conf->browser->name == 'ie') {
                     $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -2628,8 +2625,7 @@ if ($action == 'create' && $usercancreate) {
             // Warehouse
             if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER')) {
                 $langs->load('stocks');
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 print '<tr><td>';
                 $editenable = $usercancreate;
                 print $form->editfieldkey("Warehouse", 'warehouse', '', $object, $editenable);

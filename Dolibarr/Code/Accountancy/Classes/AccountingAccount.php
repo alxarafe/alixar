@@ -25,6 +25,7 @@
 
 namespace Dolibarr\Code\Accountancy\Classes;
 
+use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Core\Base\CommonObject;
 
 /**
@@ -32,8 +33,6 @@ use Dolibarr\Core\Base\CommonObject;
  *  \ingroup    Accountancy (Double entries)
  *  \brief      File of class to manage accounting accounts
  */
-
-use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  * Class to manage accounting accounts

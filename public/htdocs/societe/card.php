@@ -2882,8 +2882,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
             // Warehouse
             if (isModEnabled('stock') && getDolGlobalString('SOCIETE_ASK_FOR_WAREHOUSE')) {
                 $langs->load('stocks');
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 print '<tr class="nowrap">';
                 print '<td>';
                 print $form->editfieldkey("Warehouse", 'warehouse', '', $object, $user->hasRight('societe', 'creer'));

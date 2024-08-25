@@ -22,11 +22,10 @@
 
 namespace Dolibarr\Core\Base;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use DoliDB;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Restler;
-
-use Dolibarr\Code\User\Classes\User;
-
 
 /**
  * Class for API REST v1

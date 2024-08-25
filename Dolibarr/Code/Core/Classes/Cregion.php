@@ -28,7 +28,6 @@ namespace Dolibarr\Code\Core\Classes;
  */
 
 // Put here all includes required by your class file
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commondict.class.php';
 
 
 /**

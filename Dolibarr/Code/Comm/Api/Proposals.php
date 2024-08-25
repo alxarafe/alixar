@@ -24,9 +24,9 @@
 
 namespace Dolibarr\Code\Comm\Api;
 
+use Dolibarr\Code\Comm\Classes\Propal;
 use Luracast\Restler\RestException;
 
-use Dolibarr\Code\Comm\Classes\Propal;
 
 
 /**

@@ -4312,8 +4312,7 @@ if ($action == 'create') {
 
             if ($qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $label = $object->type == Facture::TYPE_CREDIT_NOTE ? $langs->trans("SelectWarehouseForStockDecrease") : $langs->trans("SelectWarehouseForStockIncrease");
                 $forcecombo = 0;
                 if ($conf->browser->name == 'ie') {
@@ -4386,8 +4385,7 @@ if ($action == 'create') {
 
             if ($qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $warehouse = new Entrepot($db);
                 $warehouse_array = $warehouse->list_array();
                 if (count($warehouse_array) == 1) {
@@ -4450,8 +4448,7 @@ if ($action == 'create') {
 
             if ($qualified_for_stock_change) {
                 $langs->load("stocks");
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-                $formproduct = new FormProduct($db);
+                                $formproduct = new FormProduct($db);
                 $warehouse = new Entrepot($db);
                 $warehouse_array = $warehouse->list_array();
                 if (count($warehouse_array) == 1) {

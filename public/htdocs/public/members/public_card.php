@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+
 /**
  *  \file       htdocs/public/members/public_card.php
  *  \ingroup    member
@@ -50,7 +52,6 @@ if (is_numeric($entity)) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
 
 // Security check
 if (!isModEnabled('member')) {

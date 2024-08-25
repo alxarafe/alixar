@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2010-2015  Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2009		Meos
- * Copyright (C) 2012		Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2016		Juanjo Menent		<jmenent@2byte.es>
+ * Copyright (C) 2012		Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2016		Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Ecm\Classes\EcmFiles;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *       \file      htdocs/core/photos_resize.php
@@ -148,7 +164,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->project->multidir_output[$object->entity]; // By default
     }
 } elseif ($modulepart == 'propal') {
-    use Dolibarr\Code\Comm\Classes\Propal;
     $object = new Propal($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -158,7 +173,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->propal->multidir_output[$object->entity]; // By default
     }
 } elseif ($modulepart == 'holiday') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
     $object = new Holiday($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -168,7 +182,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'member') {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
     $object = new Adherent($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -178,7 +191,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->adherent->dir_output; // By default
     }
 } elseif ($modulepart == 'societe') {
-    use Dolibarr\Code\User\Classes\User;
 
     $object = new Societe($db);
     if ($id > 0) {
@@ -189,8 +201,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output;
     }
 } elseif ($modulepart == 'user') {
-    use Dolibarr\Code\User\Classes\User;
-
     $object = new User($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -200,7 +210,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'expensereport') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
     $object = new ExpenseReport($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -210,7 +219,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->expensereport->dir_output; // By default
     }
 } elseif ($modulepart == 'tax') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
     $object = new ChargeSociales($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -229,7 +237,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'bom') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
     $object = new BOM($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -239,7 +246,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'mrp') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
     $object = new Mo($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -362,7 +368,6 @@ if ($action == 'confirm_resize' && GETPOSTISSET("file") && GETPOSTISSET("sizex")
         $rel_filename = preg_replace('/^' . preg_quote(DOL_DATA_ROOT, '/') . '/', '', $fullpath);
         $rel_filename = preg_replace('/^[\\/]/', '', $rel_filename);
 
-        include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
         $ecmfile = new EcmFiles($db);
         $result = $ecmfile->fetch(0, '', $rel_filename);
         if ($result > 0) {   // If found
@@ -425,7 +430,6 @@ if ($action == 'confirm_crop') {
         $rel_filename = preg_replace('/^' . preg_quote(DOL_DATA_ROOT, '/') . '/', '', $fullpath);
         $rel_filename = preg_replace('/^[\\/]/', '', $rel_filename);
 
-        include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
         $ecmfile = new EcmFiles($db);
         $result = $ecmfile->fetch(0, '', $rel_filename);
         if ($result > 0) {   // If found

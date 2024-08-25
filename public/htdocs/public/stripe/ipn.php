@@ -20,6 +20,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 if (!defined('NOLOGIN')) {
     define("NOLOGIN", 1); // This means this output page does not require to be logged.
 }
@@ -47,14 +51,8 @@ if (!defined('USESUFFIXINLOG')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-
-use Dolibarr\Code\User\Classes\User;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ccountry.class.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
-
-use Dolibarr\Code\Societe\Classes\Societe;
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/stripe/stripe-php/init.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 

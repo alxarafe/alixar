@@ -24,6 +24,10 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/core/modules/project/task/doc/doc_generic_task_odt.modules.php
  *  \ingroup    project
@@ -32,42 +36,11 @@
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/task/modules_task.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
-use Dolibarr\Code\User\Classes\User;
-
-use Dolibarr\Code\Societe\Classes\Societe;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/doc.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-if (isModEnabled("propal")) {
-    use Dolibarr\Code\Comm\Classes\Propal;
-}
-if (isModEnabled('invoice')) {
-}
-if (isModEnabled('invoice')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
-}
-if (isModEnabled('order')) {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
-}
-if (isModEnabled("supplier_invoice")) {
-}
-if (isModEnabled("supplier_order")) {
-}
-if (isModEnabled('contract')) {
-}
-if (isModEnabled('intervention')) {
-}
-if (isModEnabled('deplacement')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
-}
-if (isModEnabled('agenda')) {
-    }
-
 
 /**
  *  Class to build documents using ODF templates generator

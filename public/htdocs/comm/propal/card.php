@@ -42,20 +42,17 @@
  * \brief       Page of commercial proposals card and list
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formpropal.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
-use Dolibarr\Code\Comm\Classes\Propal;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/propale/modules_propale.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/propal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-if (isModEnabled('project')) {
-    }
-
 if (isModEnabled('variants')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';
 }
@@ -2031,8 +2028,7 @@ if ($action == 'create') {
 
         // Warehouse
         if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_PROPAL')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-            $formproduct = new FormProduct($db);
+                        $formproduct = new FormProduct($db);
             print '<tr class="field_warehouse_id"><td class="titlefieldcreate">' . $langs->trans('Warehouse') . '</td><td class="valuefieldcreate">';
             print img_picto('', 'stock', 'class="pictofixedwidth"') . $formproduct->selectWarehouses($warehouse_id, 'warehouse_id', '', 1, 0, 0, '', 0, 0, array(), 'maxwidth500 widthcentpercentminusxx');
             print '</td></tr>';
@@ -2736,8 +2732,7 @@ if ($action == 'create') {
         // Warehouse
         if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_PROPAL')) {
             $langs->load('stocks');
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-            $formproduct = new FormProduct($db);
+                        $formproduct = new FormProduct($db);
             print '<tr class="field_warehouse_id"><td class="titlefieldcreate">';
             $editenable = $usercancreate;
             print $form->editfieldkey("Warehouse", 'warehouse', '', $object, $editenable);

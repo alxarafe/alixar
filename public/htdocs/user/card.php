@@ -33,6 +33,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\User\Classes\UserGroup;
@@ -52,16 +54,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security2.lib.php';
 if (isModEnabled('ldap')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ldap.class.php';
 }
-if (isModEnabled('member')) {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
-}
-if (isModEnabled('category')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
-}
 if (isModEnabled('stock')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-}
+    }
 
 // Load translation files required by page
 $langs->loadLangs(array('users', 'companies', 'ldap', 'admin', 'hrm', 'stocks', 'other'));

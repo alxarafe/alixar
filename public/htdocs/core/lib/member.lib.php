@@ -27,6 +27,8 @@
  * \brief      Functions for module members
  */
 
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+
 /**
  *  Return array head with list of tabs to view object information
  *

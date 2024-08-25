@@ -26,6 +26,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *      \file       htdocs/admin/propal.php
  *      \ingroup    propale
@@ -36,7 +38,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-use Dolibarr\Code\Comm\Classes\Propal;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/propal.lib.php';
 
 // Load translation files required by the page

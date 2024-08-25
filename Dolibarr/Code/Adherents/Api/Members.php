@@ -23,13 +23,10 @@
 
 namespace Dolibarr\Code\Adherents\Api;
 
-use Luracast\Restler\RestException;
-
-use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Categories\Classes\Categorie;
-
-
+use Dolibarr\Code\Societe\Classes\Societe;
+use Luracast\Restler\RestException;
 
 /**
  * API class for members

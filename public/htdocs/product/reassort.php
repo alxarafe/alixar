@@ -34,7 +34,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 use Dolibarr\Code\Categories\Classes\Categorie;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'stocks'));

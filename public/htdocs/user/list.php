@@ -714,8 +714,7 @@ if (isModEnabled('category') && $user->hasRight("categorie", "read")) {
 }
 // Filter on warehouse
 if (isModEnabled('stock') && getDolGlobalString('MAIN_DEFAULT_WAREHOUSE_USER')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-    $formproduct = new FormProduct($db);
+        $formproduct = new FormProduct($db);
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('Warehouse');
     $moreforfilter .= img_picto($tmptitle, 'stock', 'class="pictofixedwidth"') . $formproduct->selectWarehouses($search_warehouse, 'search_warehouse', '', $tmptitle, 0, 0, $tmptitle);

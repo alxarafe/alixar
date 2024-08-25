@@ -32,6 +32,8 @@
  * - If no option set, we use old APIS (charge)
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+
 /**
  *      \file       htdocs/public/payment/newpayment.php
  *      \ingroup    core
@@ -1046,8 +1048,6 @@ if ($source == 'order') {
     $found = true;
     $langs->load("orders");
 
-    use Dolibarr\Code\Adherents\Classes\Adherent;
-
     $order = new Commande($db);
     $result = $order->fetch('', $ref);
     if ($result <= 0) {
@@ -1516,8 +1516,6 @@ if ($source == 'member' || $source == 'membersubscription') {
     $tag = "";
     $found = true;
     $langs->load("members");
-
-    use Dolibarr\Code\Adherents\Classes\Adherent;
 
     $member = new Adherent($db);
     $adht = new AdherentType($db);

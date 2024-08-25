@@ -311,7 +311,6 @@ if ($action == 'confirm_deletefile' && $confirm == 'yes' && !empty($permissionto
     if (GETPOSTINT('ecmfileid') > 0) {
         $shareenabled = GETPOST('shareenabled', 'alpha');
 
-        include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
         $ecmfile = new EcmFiles($db);
         $result = $ecmfile->fetch(GETPOSTINT('ecmfileid'));
         if ($result > 0) {

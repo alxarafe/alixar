@@ -22,10 +22,32 @@
 
 namespace Dolibarr\Code\Api\Api;
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Ecm\Classes\EcmFiles;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/api/class/api.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
 /**
@@ -52,8 +74,8 @@ class Documents extends DolibarrApi
      * Note that, this API is similar to using the wrapper link "documents.php" to download a file (used for
      * internal HTML links of documents into application), but with no need to have a session cookie (the token is used instead).
      *
-     * @param   string  $modulepart     Name of module or area concerned by file download ('facture', ...)
-     * @param   string  $original_file  Relative path with filename, relative to modulepart (for example: IN201701-999/IN201701-999.pdf)
+     * @param string $modulepart Name of module or area concerned by file download ('facture', ...)
+     * @param string $original_file Relative path with filename, relative to modulepart (for example: IN201701-999/IN201701-999.pdf)
      * @return  array                   List of documents
      *
      * @url GET /download
@@ -119,10 +141,10 @@ class Documents extends DolibarrApi
      *
      * Supported modules: invoice, order, proposal, contract, shipment
      *
-     * @param   string  $modulepart     Name of module or area concerned by file download ('thirdparty', 'member', 'proposal', 'supplier_proposal', 'order', 'supplier_order', 'invoice', 'supplier_invoice', 'shipment', 'project',  ...)
-     * @param   string  $original_file  Relative path with filename, relative to modulepart (for example: IN201701-999/IN201701-999.pdf).
-     * @param   string  $doctemplate    Set here the doc template to use for document generation (If not set, use the default template).
-     * @param   string  $langcode       Language code like 'en_US', 'fr_FR', 'es_ES', ... (If not set, use the default language).
+     * @param string $modulepart Name of module or area concerned by file download ('thirdparty', 'member', 'proposal', 'supplier_proposal', 'order', 'supplier_order', 'invoice', 'supplier_invoice', 'shipment', 'project',  ...)
+     * @param string $original_file Relative path with filename, relative to modulepart (for example: IN201701-999/IN201701-999.pdf).
+     * @param string $doctemplate Set here the doc template to use for document generation (If not set, use the default template).
+     * @param string $langcode Language code like 'en_US', 'fr_FR', 'es_ES', ... (If not set, use the default language).
      * @return  array                   List of documents
      *
      * @url PUT /builddoc
@@ -165,9 +187,9 @@ class Documents extends DolibarrApi
         $relativefile = $original_file;
 
         $check_access = dol_check_secure_access_document($modulepart, $relativefile, $entity, DolibarrApiAccess::$user, '', 'write');
-        $accessallowed              = $check_access['accessallowed'];
+        $accessallowed = $check_access['accessallowed'];
         $sqlprotectagainstexternals = $check_access['sqlprotectagainstexternals'];
-        $original_file              = $check_access['original_file'];
+        $original_file = $check_access['original_file'];
 
         if (preg_match('/\.\./', $original_file) || preg_match('/[<>|]/', $original_file)) {
             throw new RestException(403);
@@ -208,7 +230,6 @@ class Documents extends DolibarrApi
                 throw new RestException(500, 'Error generating document');
             }
         } elseif ($modulepart == 'commande' || $modulepart == 'order') {
-            use Dolibarr\Code\Adherents\Classes\Adherent;
             $tmpobject = new Commande($this->db);
             $result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
             if (!$result) {
@@ -220,7 +241,6 @@ class Documents extends DolibarrApi
                 throw new RestException(500, 'Error generating document');
             }
         } elseif ($modulepart == 'propal' || $modulepart == 'proposal') {
-            use Dolibarr\Code\Comm\Classes\Propal;
             $tmpobject = new Propal($this->db);
             $result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
             if (!$result) {
@@ -232,7 +252,7 @@ class Documents extends DolibarrApi
                 throw new RestException(500, 'Error generating document');
             }
         } elseif ($modulepart == 'contrat' || $modulepart == 'contract') {
-        
+
             $tmpobject = new Contrat($this->db);
             $result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
 
@@ -282,11 +302,11 @@ class Documents extends DolibarrApi
      *
      * Supported modules: thirdparty, user, member, proposal, order, supplier_order, shipment, invoice, supplier_invoice, product, event, expensereport, knowledgemanagement, category, contract
      *
-     * @param   string  $modulepart     Name of module or area concerned ('thirdparty', 'member', 'proposal', 'order', 'invoice', 'supplier_invoice', 'shipment', 'project',  ...)
-     * @param   int     $id             ID of element
-     * @param   string  $ref            Ref of element
-     * @param   string  $sortfield      Sort criteria ('','fullname','relativename','name','date','size')
-     * @param   string  $sortorder      Sort order ('asc' or 'desc')
+     * @param string $modulepart Name of module or area concerned ('thirdparty', 'member', 'proposal', 'order', 'invoice', 'supplier_invoice', 'shipment', 'project',  ...)
+     * @param int $id ID of element
+     * @param string $ref Ref of element
+     * @param string $sortfield Sort criteria ('','fullname','relativename','name','date','size')
+     * @param string $sortorder Sort order ('asc' or 'desc')
      * @return  array                   Array of documents with path
      *
      * @url GET /
@@ -314,8 +334,6 @@ class Documents extends DolibarrApi
         $type = 'files';
 
         if ($modulepart == 'societe' || $modulepart == 'thirdparty') {
-            use Dolibarr\Code\Societe\Classes\Societe;
-
             if (!DolibarrApiAccess::$user->hasRight('societe', 'lire')) {
                 throw new RestException(403);
             }
@@ -328,9 +346,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->societe->multidir_output[$object->entity] . "/" . $object->id;
         } elseif ($modulepart == 'user') {
-            use Dolibarr\Code\User\Classes\User;
-
-
             // Can get doc if has permission to read all user or if it is user itself
             if (!DolibarrApiAccess::$user->hasRight('user', 'user', 'lire') && DolibarrApiAccess::$user->id != $id) {
                 throw new RestException(403);
@@ -344,7 +359,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->user->dir_output . '/' . get_exdir(0, 0, 0, 0, $object, 'user') . '/' . $object->id;
         } elseif ($modulepart == 'adherent' || $modulepart == 'member') {
-            use Dolibarr\Code\Adherents\Classes\Adherent;
 
             if (!DolibarrApiAccess::$user->hasRight('adherent', 'lire')) {
                 throw new RestException(403);
@@ -358,8 +372,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->adherent->dir_output . "/" . get_exdir(0, 0, 0, 1, $object, 'member');
         } elseif ($modulepart == 'propal' || $modulepart == 'proposal') {
-            use Dolibarr\Code\Comm\Classes\Propal;
-
             if (!DolibarrApiAccess::$user->hasRight('propal', 'lire')) {
                 throw new RestException(403);
             }
@@ -372,7 +384,7 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->propal->multidir_output[$object->entity] . "/" . get_exdir(0, 0, 0, 1, $object, 'propal');
         } elseif ($modulepart == 'supplier_proposal') {
-            
+
             if (!DolibarrApiAccess::$user->hasRight('supplier_proposal', 'read')) {
                 throw new RestException(403);
             }
@@ -385,8 +397,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->propal->multidir_output[$object->entity] . "/" . get_exdir(0, 0, 0, 1, $object, 'propal');
         } elseif ($modulepart == 'commande' || $modulepart == 'order') {
-            use Dolibarr\Code\Adherents\Classes\Adherent;
-
             if (!DolibarrApiAccess::$user->hasRight('commande', 'lire')) {
                 throw new RestException(403);
             }
@@ -471,7 +481,7 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->product->multidir_output[$object->entity] . '/' . get_exdir(0, 0, 0, 1, $object, 'product');
         } elseif ($modulepart == 'agenda' || $modulepart == 'action' || $modulepart == 'event') {
-            
+
             if (!DolibarrApiAccess::$user->hasRight('agenda', 'myactions', 'read') && !DolibarrApiAccess::$user->hasRight('agenda', 'allactions', 'read')) {
                 throw new RestException(403);
             }
@@ -484,7 +494,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->agenda->dir_output . '/' . dol_sanitizeFileName($object->ref);
         } elseif ($modulepart == 'expensereport') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
 
             if (!DolibarrApiAccess::$user->hasRight('expensereport', 'read') && !DolibarrApiAccess::$user->hasRight('expensereport', 'read')) {
                 throw new RestException(403);
@@ -511,9 +520,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->knowledgemanagement->dir_output . '/knowledgerecord/' . dol_sanitizeFileName($object->ref);
         } elseif ($modulepart == 'categorie' || $modulepart == 'category') {
-            use Dolibarr\Code\Categories\Classes\Categorie;
-
-
             if (!DolibarrApiAccess::$user->hasRight('categorie', 'lire')) {
                 throw new RestException(403);
             }
@@ -543,7 +549,7 @@ class Documents extends DolibarrApi
             // $recursive = 0;
         } elseif ($modulepart == 'contrat' || $modulepart == 'contract') {
             $modulepart = 'contrat';
-        
+
             $object = new Contrat($this->db);
             $result = $object->fetch($id, $ref);
             if (!$result) {
@@ -566,7 +572,7 @@ class Documents extends DolibarrApi
         }
 
         $objectType = $modulepart;
-        if (! empty($object->id) && ! empty($object->table_element)) {
+        if (!empty($object->id) && !empty($object->table_element)) {
             $objectType = $object->table_element;
         }
 
@@ -582,10 +588,10 @@ class Documents extends DolibarrApi
                     throw new RestException(503, 'Error when retrieve ecm list : ' . $this->db->lasterror());
                 } elseif (is_array($ecmfile->lines) && count($ecmfile->lines) > 0) {
                     $count = count($filearray);
-                    for ($i = 0 ; $i < $count ; $i++) {
+                    for ($i = 0; $i < $count; $i++) {
                         foreach ($ecmfile->lines as $line) {
                             if ($filearray[$i]['name'] == $line->filename) {
-                                $filearray[$i] = array_merge($filearray[$i], (array) $line);
+                                $filearray[$i] = array_merge($filearray[$i], (array)$line);
                             }
                         }
                     }
@@ -600,7 +606,7 @@ class Documents extends DolibarrApi
     /**
      * Return a document.
      *
-     * @param   int         $id          ID of document
+     * @param int $id ID of document
      * @return  array                    Array with data of file
      *
      * @throws RestException
@@ -620,14 +626,14 @@ class Documents extends DolibarrApi
      *
      * Supported modules: invoice, order, supplier_order, task/project_task, product/service, expensereport, fichinter, member, propale, agenda, contact
      *
-     * @param   string  $filename               Name of file to create ('FA1705-0123.txt')
-     * @param   string  $modulepart             Name of module or area concerned by file upload ('product', 'service', 'invoice', 'proposal', 'project', 'project_task', 'supplier_invoice', 'expensereport', 'member', ...)
-     * @param   string  $ref                    Reference of object (This will define subdir automatically and store submitted file into it)
-     * @param   string  $subdir                 Subdirectory (Only if ref not provided)
-     * @param   string  $filecontent            File content (string with file content. An empty file will be created if this parameter is not provided)
-     * @param   string  $fileencoding           File encoding (''=no encoding, 'base64'=Base 64)
-     * @param   int     $overwriteifexists      Overwrite file if exists (1 by default)
-     * @param   int     $createdirifnotexists   Create subdirectories if the doesn't exists (1 by default)
+     * @param string $filename Name of file to create ('FA1705-0123.txt')
+     * @param string $modulepart Name of module or area concerned by file upload ('product', 'service', 'invoice', 'proposal', 'project', 'project_task', 'supplier_invoice', 'expensereport', 'member', ...)
+     * @param string $ref Reference of object (This will define subdir automatically and store submitted file into it)
+     * @param string $subdir Subdirectory (Only if ref not provided)
+     * @param string $filecontent File content (string with file content. An empty file will be created if this parameter is not provided)
+     * @param string $fileencoding File encoding (''=no encoding, 'base64'=Base 64)
+     * @param int $overwriteifexists Overwrite file if exists (1 by default)
+     * @param int $createdirifnotexists Create subdirectories if the doesn't exists (1 by default)
      * @return  string
      *
      * @url POST /upload
@@ -683,7 +689,6 @@ class Documents extends DolibarrApi
             } elseif ($modulepart == 'commande' || $modulepart == 'order') {
                 $modulepart = 'commande';
 
-                use Dolibarr\Code\Adherents\Classes\Adherent;
                 $object = new Commande($this->db);
             } elseif ($modulepart == 'commande_fournisseur' || $modulepart == 'supplier_order') {
                 $modulepart = 'supplier_order';
@@ -694,7 +699,7 @@ class Documents extends DolibarrApi
             } elseif ($modulepart == 'task' || $modulepart == 'project_task') {
                 $modulepart = 'project_task';
 
-                                $object = new Task($this->db);
+                $object = new Task($this->db);
 
                 $task_result = $object->fetch('', $ref);
 
@@ -711,31 +716,28 @@ class Documents extends DolibarrApi
             } elseif ($modulepart == 'product' || $modulepart == 'produit' || $modulepart == 'service' || $modulepart == 'produit|service') {
                 $object = new Product($this->db);
             } elseif ($modulepart == 'expensereport') {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
                 $object = new ExpenseReport($this->db);
             } elseif ($modulepart == 'fichinter') {
                 $object = new Fichinter($this->db);
             } elseif ($modulepart == 'adherent' || $modulepart == 'member') {
                 $modulepart = 'adherent';
-                use Dolibarr\Code\Adherents\Classes\Adherent;
+
                 $object = new Adherent($this->db);
             } elseif ($modulepart == 'proposal' || $modulepart == 'propal' || $modulepart == 'propale') {
                 $modulepart = 'propale';
-                use Dolibarr\Code\Comm\Classes\Propal;
+
                 $object = new Propal($this->db);
             } elseif ($modulepart == 'agenda' || $modulepart == 'action' || $modulepart == 'event') {
                 $modulepart = 'agenda';
-                                $object = new ActionComm($this->db);
+                $object = new ActionComm($this->db);
             } elseif ($modulepart == 'contact' || $modulepart == 'socpeople') {
                 $modulepart = 'contact';
-
-                use Dolibarr\Code\Contact\Classes\Contact;
 
                 $object = new Contact($this->db);
                 $fetchbyid = true;
             } elseif ($modulepart == 'contrat' || $modulepart == 'contract') {
                 $modulepart = 'contrat';
-                            $object = new Contrat($this->db);
+                $object = new Contrat($this->db);
             } else {
                 // TODO Implement additional moduleparts
                 throw new RestException(500, 'Modulepart ' . $modulepart . ' not implemented yet.');
@@ -907,8 +909,8 @@ class Documents extends DolibarrApi
     /**
      * Delete a document.
      *
-     * @param   string  $modulepart     Name of module or area concerned by file download ('product', ...)
-     * @param   string  $original_file  Relative path with filename, relative to modulepart (for example: PRODUCT-REF-999/IMAGE-999.jpg)
+     * @param string $modulepart Name of module or area concerned by file download ('product', ...)
+     * @param string $original_file Relative path with filename, relative to modulepart (for example: PRODUCT-REF-999/IMAGE-999.jpg)
      * @return  array                   List of documents
      *
      * @url DELETE /

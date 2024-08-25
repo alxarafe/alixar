@@ -39,6 +39,9 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\Propal;
 
 /**
  *  \file       htdocs/product/card.php
@@ -54,24 +57,19 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product/modules_product.class.php';
 
-use Dolibarr\Code\Categories\Classes\Categorie;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 
 
 if (isModEnabled('propal')) {
-    use Dolibarr\Code\Comm\Classes\Propal;
 }
 if (isModEnabled('invoice')) {
 }
 if (isModEnabled('order')) {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
 }
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 }
 if (isModEnabled('bom')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
 }
 if (isModEnabled('workstation')) {
 }

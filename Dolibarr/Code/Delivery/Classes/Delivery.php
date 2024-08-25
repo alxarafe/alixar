@@ -39,13 +39,6 @@ use DoliDB;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
-if (isModEnabled("propal")) {
-    use Dolibarr\Code\Comm\Classes\Propal;
-}
-if (isModEnabled('order')) {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
-}
-
 
 /**
  *  Class to manage receptions

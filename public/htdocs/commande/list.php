@@ -1520,8 +1520,7 @@ if (isModEnabled('category') && $user->hasRight("categorie", "lire")) {
 }
 // If Stock is enabled
 if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-    $formproduct = new FormProduct($db);
+        $formproduct = new FormProduct($db);
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('Warehouse');
     $moreforfilter .= img_picto($tmptitle, 'stock', 'class="pictofixedwidth"') . $formproduct->selectWarehouses($search_warehouse, 'search_warehouse', '', 1, 0, 0, $tmptitle, 0, 0, array(), 'maxwidth250 widthcentpercentminusx');

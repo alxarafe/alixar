@@ -23,6 +23,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *  \file       htdocs/societe/consumption.php
  *  \ingroup    societe
@@ -269,7 +271,6 @@ if ($type_element == 'invoice') {   // Customer : show products from invoices
     $thirdTypeSelect = 'customer';
 }
 if ($type_element == 'propal') {
-    use Dolibarr\Code\Comm\Classes\Propal;
     $documentstatic = new Propal($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.datep as dateprint, c.fk_statut as status, NULL as paid,';
     $tables_from = MAIN_DB_PREFIX . "propal as c," . MAIN_DB_PREFIX . "propaldet as d";
@@ -281,7 +282,6 @@ if ($type_element == 'propal') {
     $thirdTypeSelect = 'customer';
 }
 if ($type_element == 'order') {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
     $langs->load('sendings'); // delivery planned date
     $documentstatic = new Commande($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_commande as dateprint, c.fk_statut as status, NULL as paid, c.date_livraison as delivery_planned_date,';

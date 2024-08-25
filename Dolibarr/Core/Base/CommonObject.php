@@ -1610,7 +1610,6 @@ abstract class CommonObject
             return ''; // No way to known which document name to use
         }
 
-        include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
         $ecmfile = new EcmFiles($this->db);
         $result = $ecmfile->fetch(0, '', $this->last_main_doc);
         if ($result < 0) {
@@ -10765,8 +10764,7 @@ abstract class CommonObject
             $rel_dir = preg_replace('/[\\/]$/', '', $rel_dir);
             $rel_dir = preg_replace('/^[\\/]/', '', $rel_dir);
 
-            include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-            $ecmfile = new EcmFiles($this->db);
+                $ecmfile = new EcmFiles($this->db);
             $result = $ecmfile->fetch(0, '', ($rel_dir ? $rel_dir . '/' : '') . $filename);
 
             // Set the public "share" key

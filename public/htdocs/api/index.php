@@ -21,13 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *  \defgroup   api     Module DolibarrApi
- *  \brief      API loader
- *              Search files htdocs/<module>/class/api_<module>.class.php
- *  \file       htdocs/api/index.php
- */
-
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\AutoLoader;
 use Luracast\Restler\Format\UploadFormat;
 
@@ -112,8 +107,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/includes/restler/framework/Luraca
 $loader = AutoLoader::instance();
 spl_autoload_register($loader);
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/api/class/api.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/api/class/api_access.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 $url = $_SERVER['PHP_SELF'];
@@ -176,6 +169,11 @@ if (!empty($reg[1]) && $reg[1] == 'explorer' && ($reg[2] == '/swagger.json' || $
         exit(0);
     }
 }
+
+/**
+ * TODO: The problem is that Restler is not being loaded as usual.
+ */
+require_once constant('BASE_PATH') . '/../Dolibarr/Core/Base/DolibarrApi.php';
 
 $api = new DolibarrApi($db, '', $refreshcache);
 //var_dump($api->r->apiVersionMap);

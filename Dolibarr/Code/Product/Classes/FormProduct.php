@@ -21,7 +21,9 @@
 
 namespace Dolibarr\Code\Product\Classes;
 
+use Dolibarr\Code\Core\Classes\CUnits;
 use DoliDB;
+use Exception;
 
 /**
  *  \file       htdocs/product/class/html.formproduct.class.php
@@ -566,7 +568,6 @@ class FormProduct
         $return = '';
 
         // TODO Use a cache
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cunits.class.php';
         $measuringUnits = new CUnits($db);
 
         $filter = array();

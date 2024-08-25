@@ -301,8 +301,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
                 print '<td>';
                 $useunit = (($prod->type == Product::TYPE_PRODUCT && getDolGlobalInt('PRODUCT_USE_UNITS')) || (($prod->type == Product::TYPE_SERVICE) && ($elem['fk_unit'])));
                 if ($useunit) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cunits.class.php';
-                    $unit = new CUnits($db);
+                                $unit = new CUnits($db);
                     $unit->fetch($elem['fk_unit']);
                     print(isset($unit->label) ? "&nbsp;" . $langs->trans(ucwords($unit->label)) . "&nbsp;" : '');
                 }

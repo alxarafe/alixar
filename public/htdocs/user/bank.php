@@ -39,10 +39,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 if (isModEnabled('holiday')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
 }
 if (isModEnabled('expensereport')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
 }
 if (isModEnabled('salaries')) {
 }

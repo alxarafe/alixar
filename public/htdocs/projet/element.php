@@ -26,6 +26,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *      \file       htdocs/projet/element.php
  *      \ingroup    projet
@@ -42,15 +45,6 @@ if (isModEnabled('agenda')) {
 if (isModEnabled('bank')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
 }
-if (isModEnabled('category')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
-}
-if (isModEnabled('order')) {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
-}
-if (isModEnabled('contract')) {
-}
 if (isModEnabled('deplacement')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 }
@@ -61,7 +55,6 @@ if (isModEnabled('shipping')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 }
 if (isModEnabled('expensereport')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
 }
 if (isModEnabled('invoice')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
@@ -72,32 +65,13 @@ if (isModEnabled('loan')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loanschedule.class.php';
 }
-if (isModEnabled('mrp')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
-}
-if (isModEnabled('propal')) {
-    use Dolibarr\Code\Comm\Classes\Propal;
-}
-if (isModEnabled('salaries')) {
-}
 if (isModEnabled('stock')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
-}
-if (isModEnabled('supplier_invoice')) {
-}
-if (isModEnabled('supplier_order')) {
-}
-if (isModEnabled('supplier_proposal')) {
-    }
-if (isModEnabled('tax')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
 }
 if (isModEnabled('stocktransfer')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransfer.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransferline.class.php';
 }
-
-
 
 // Load translation files required by the page
 $langs->loadLangs(array('projects', 'companies', 'suppliers', 'compta'));

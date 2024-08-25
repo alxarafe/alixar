@@ -407,8 +407,7 @@ function completeFileArrayWithDatabaseInfo(&$filearray, $relativedir)
 
             if (!preg_match('/([\\/]temp[\\/]|[\\/]thumbs|\.meta$)/', $rel_filename)) {     // If not a tmp file
                 dol_syslog("list_of_documents We found a file called '" . $filearray[$key]['name'] . "' not indexed into database. We add it");
-                include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-                $ecmfile = new EcmFiles($db);
+                        $ecmfile = new EcmFiles($db);
 
                 // Add entry into database
                 $filename = basename($rel_filename);
@@ -829,8 +828,7 @@ function dol_copy($srcfile, $destfile, $newmask = '0', $overwriteifexists = 1, $
             //var_dump($rel_filetorenamebefore.' - '.$rel_filetocopyafter);exit;
 
             dol_syslog("Try to copy also entries in database for: " . $rel_filetocopyafter, LOG_DEBUG);
-            include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-
+    
             $ecmfiletarget = new EcmFiles($db);
             $resultecmtarget = $ecmfiletarget->fetch(0, '', $rel_filetocopyafter);
             if ($resultecmtarget > 0) {   // An entry for target name already exists for target, we delete it, a new one will be created.
@@ -1081,8 +1079,7 @@ function dol_move($srcfile, $destfile, $newmask = '0', $overwriteifexists = 1, $
                 //var_dump($rel_filetorenamebefore.' - '.$rel_filetorenameafter);exit;
 
                 dol_syslog("Try to rename also entries in database for full relative path before = " . $rel_filetorenamebefore . " after = " . $rel_filetorenameafter, LOG_DEBUG);
-                include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-
+        
                 $ecmfiletarget = new EcmFiles($db);
                 $resultecmtarget = $ecmfiletarget->fetch(0, '', $rel_filetorenameafter);
                 if ($resultecmtarget > 0) {   // An entry for target name already exists for target, we delete it, a new one will be created.
@@ -1545,8 +1542,7 @@ function dol_delete_file($file, $disableglob = 0, $nophperrors = 0, $nohook = 0,
                                 $rel_filetodelete = preg_replace('/\.noexe$/', '', $rel_filetodelete);
 
                                 dol_syslog("Try to remove also entries in database for full relative path = " . $rel_filetodelete, LOG_DEBUG);
-                                include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-                                $ecmfile = new EcmFiles($db);
+                                                        $ecmfile = new EcmFiles($db);
                                 $result = $ecmfile->fetch(0, '', $rel_filetodelete);
                                 if ($result >= 0 && $ecmfile->id > 0) {
                                     $result = $ecmfile->delete($user);
@@ -2123,7 +2119,6 @@ function addFileIntoDatabaseIndex($dir, $file, $fullpathorig = '', $mode = 'uplo
         $rel_dir = preg_replace('/[\\/]$/', '', $rel_dir);
         $rel_dir = preg_replace('/^[\\/]/', '', $rel_dir);
 
-        include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
         $ecmfile = new EcmFiles($db);
         $ecmfile->filepath = $rel_dir;
         $ecmfile->filename = $filename;

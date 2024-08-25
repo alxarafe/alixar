@@ -51,12 +51,6 @@ require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ws.lib.php';
 
-use Dolibarr\Code\User\Classes\User;
-
-
-use Dolibarr\Code\Adherents\Classes\Adherent;
-
-
 dol_syslog("Call Dolibarr webservices interfaces");
 
 $langs->load("main");

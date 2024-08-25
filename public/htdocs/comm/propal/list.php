@@ -35,6 +35,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *  \file           htdocs/comm/propal/list.php
  *  \ingroup        propal
@@ -49,10 +52,7 @@ if (isModEnabled('margin')) {
 }
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-use Dolibarr\Code\Comm\Classes\Propal;
 if (isModEnabled('category')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
 }
 
@@ -1172,8 +1172,7 @@ if (isModEnabled('category') && $user->hasRight('categorie', 'lire')) {
     $moreforfilter .= '</div>';
 }
 if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_PROPAL')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-    $formproduct = new FormProduct($db);
+        $formproduct = new FormProduct($db);
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('Warehouse');
     $moreforfilter .= img_picto($tmptitle, 'stock', 'class="pictofixedwidth"') . $formproduct->selectWarehouses($search_warehouse, 'search_warehouse', '', $tmptitle, 0, 0, $tmptitle);

@@ -18,6 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Partnerships\Classes\Partnership;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       partnership_list.php
  *      \ingroup    partnership
@@ -30,10 +34,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
-
-use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Code\Adherents\Classes\Adherent;
-use Dolibarr\Code\Partnerships\Classes\Partnership;
 
 // for other modules
 //dol_include_once('/othermodule/class/otherobject.class.php');

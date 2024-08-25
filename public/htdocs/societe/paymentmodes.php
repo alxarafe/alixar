@@ -1918,8 +1918,7 @@ if ($socid && $action != 'edit' && $action != 'create' && $action != 'editcard' 
             // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
             $result = $companypaymentmodetemp->fetch(0, null, $object->id, 'ban');
 
-            include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-            $ecmfile = new EcmFiles($db);
+                $ecmfile = new EcmFiles($db);
             // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
             $result = $ecmfile->fetch(0, '', '', '', '', $companybankaccounttemp->table_element, $companypaymentmodetemp->id);
             if ($result > 0) {

@@ -22,6 +22,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Contact\Classes\Contact;
 
 /**
@@ -207,8 +208,6 @@ if ($id > 0 || !empty($ref)) {
 
         // additional list with adherents of company
         if (isModEnabled('member') && $user->hasRight('adherent', 'lire')) {
-            use Dolibarr\Code\Adherents\Classes\Adherent;
-
             $membertypestatic = new AdherentType($db);
             $memberstatic = new Adherent($db);
 

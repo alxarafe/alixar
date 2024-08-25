@@ -37,12 +37,15 @@
  * php upgrade2.php 0.0.0 0.0.0 [MAIN_MODULE_NAME1_TO_ENABLE,MAIN_MODULE_NAME2_TO_ENABLE]
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *  \file       htdocs/install/upgrade2.php
  *  \brief      Upgrade some data
  */
 
-use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
 
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
@@ -50,9 +53,7 @@ if (!file_exists($conffile)) {
     print 'Error: Dolibarr config file was not found. This may means that Dolibarr is not installed yet. Please call the page "/install/index.php" instead of "/install/upgrade.php").';
 }
 require_once $conffile;
-use Dolibarr\Code\Comm\Classes\Propal;
 require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/price.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 

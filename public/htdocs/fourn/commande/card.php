@@ -2009,8 +2009,7 @@ if ($action == 'create') {
         $formquestion = array();
         if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_SUPPLIER_VALIDATE_ORDER') && $qualified_for_stock_change) {
             $langs->load("stocks");
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-            $formproduct = new FormProduct($db);
+                        $formproduct = new FormProduct($db);
             $forcecombo = 0;
             if ($conf->browser->name == 'ie') {
                 $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy

@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *      \file       htdocs/public/onlinesign/newonlinesign.php
  *      \ingroup    core
@@ -146,7 +148,6 @@ if (!dol_verifyHash($securekeyseed . $type . $ref . (isModEnabled('multicompany'
 }
 
 if ($source == 'proposal') {
-    use Dolibarr\Code\Comm\Classes\Propal;
     $object = new Propal($db);
     $result = $object->fetch(0, $ref, '', $entity);
 } elseif ($source == 'contract') {

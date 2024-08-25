@@ -20,9 +20,9 @@
 
 namespace Dolibarr\Code\Commande\Api;
 
-use Luracast\Restler\RestException;
-
 use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Comm\Classes\Propal;
+use Luracast\Restler\RestException;
 
 /**
  * API class for orders
@@ -998,8 +998,6 @@ class Orders extends DolibarrApi
      */
     public function createOrderFromProposal($proposalid)
     {
-        use Dolibarr\Code\Comm\Classes\Propal;
-
         if (!DolibarrApiAccess::$user->hasRight('propal', 'lire')) {
             throw new RestException(403);
         }

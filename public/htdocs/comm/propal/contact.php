@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Contact\Classes\Contact;
+
 /**
  *       \file       htdocs/comm/propal/contact.php
  *       \ingroup    propal
@@ -29,9 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-use Dolibarr\Code\Comm\Classes\Propal;
-use Dolibarr\Code\Contact\Classes\Contact;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/propal.lib.php';
 
 // Load translation files required by the page

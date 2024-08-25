@@ -99,8 +99,7 @@ class FormOther
         $stringaddbarcode = str_replace("tmphtml", $htmltoreplaceby, $stringaddbarcode);
         $out .= $stringaddbarcode . ': <input type="text" name="barcodeproductqty" class="width40 right" value="1"><br>';
         if ($warehouseselect > 0) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-            $formproduct = new FormProduct($this->db);
+                        $formproduct = new FormProduct($this->db);
             $formproduct->loadWarehouses();
             $out .= img_picto('', 'stock', 'class="pictofixedwidth"');
             $out .= $formproduct->selectWarehouses('', "warehousenew", '', 0, 0, 0, '', 0, 1);

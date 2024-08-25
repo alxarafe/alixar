@@ -32,22 +32,14 @@
 
 namespace Dolibarr\Code\Reception\Classes;
 
+use Dolibarr\Code\Core\Traits\CommonIncoterm;
 use Dolibarr\Core\Base\CommonObject;
-use Dolibarr\Core\Base\CommonObjectLine;
 
 /**
  *  \file       htdocs/reception/class/reception.class.php
  *  \ingroup    reception
  *  \brief      File for class to manage receptions
  */
-
-if (isModEnabled("propal")) {
-    use Dolibarr\Code\Comm\Classes\Propal;
-}
-if (isModEnabled('order')) {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
-}
-
 
 /**
  *  Class to manage receptions

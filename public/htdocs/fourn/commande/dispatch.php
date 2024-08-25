@@ -38,7 +38,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_order/modules_commandefournisseur.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 
 if (isModEnabled('project')) {
@@ -643,8 +642,7 @@ if ($id > 0 || !empty($ref)) {
         || $object->statut == CommandeFournisseur::STATUS_RECEIVED_PARTIALLY
         || $object->statut == CommandeFournisseur::STATUS_RECEIVED_COMPLETELY
     ) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-        $formproduct = new FormProduct($db);
+                $formproduct = new FormProduct($db);
         $formproduct->loadWarehouses();
         $entrepot = new Entrepot($db);
         $listwarehouses = $entrepot->list_array(1);

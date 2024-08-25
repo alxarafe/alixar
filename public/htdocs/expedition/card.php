@@ -32,6 +32,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *  \file       htdocs/expedition/card.php
  *  \ingroup    expedition
@@ -41,21 +44,10 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/sendings.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expedition/modules_expedition.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
-if (isModEnabled("product") || isModEnabled("service")) {
-}
-if (isModEnabled("propal")) {
-    use Dolibarr\Code\Comm\Classes\Propal;
-}
-if (isModEnabled('productbatch')) {
-}
-if (isModEnabled('project')) {
-    }
 
 // Load translation files required by the page
 $langs->loadLangs(array("sendings", "companies", "bills", 'deliveries', 'orders', 'stocks', 'other', 'propal', 'productbatch'));

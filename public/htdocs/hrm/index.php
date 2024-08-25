@@ -42,14 +42,12 @@ if (isModEnabled('deplacement')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 }
 if (isModEnabled('expensereport')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
 }
 if (isModEnabled('recruitment')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentcandidature.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentjobposition.class.php';
 }
 if (isModEnabled('holiday')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
 }
 
 

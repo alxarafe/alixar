@@ -1002,8 +1002,7 @@ class MouvementStock extends CommonObject
                 $origin = new Project($this->db);
                 break;
             case 'mo':
-                require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
-                $origin = new Mo($this->db);
+                            $origin = new Mo($this->db);
                 break;
             case 'user':
                 use Dolibarr\Code\User\Classes\User;

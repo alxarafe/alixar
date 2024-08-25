@@ -854,7 +854,6 @@ function measuringUnitString($unit, $measuring_style = '', $scale = '', $use_sho
     }
 
     if (empty($measuring_unit_cache[$unit . '_' . $measuring_style . '_' . $scale . '_' . $use_short_label])) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cunits.class.php';
         $measuringUnits = new CUnits($db);
 
         if ($measuring_style == '' && $scale == '') {

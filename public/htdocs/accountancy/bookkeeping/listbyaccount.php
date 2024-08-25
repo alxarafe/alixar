@@ -1243,8 +1243,7 @@ while ($i < min($num, $limit)) {
         } elseif ($line->doc_type == 'expense_report') {
             $langs->loadLangs(array('trips'));
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
-            $objectstatic = new ExpenseReport($db);
+                    $objectstatic = new ExpenseReport($db);
             $objectstatic->fetch($line->fk_doc);
             //$modulepart = 'expensereport';
 

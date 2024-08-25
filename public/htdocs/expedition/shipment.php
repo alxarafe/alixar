@@ -22,6 +22,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *  \file       htdocs/expedition/shipment.php
  *  \ingroup    expedition
@@ -31,19 +34,8 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/sendings.lib.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
-if (isModEnabled('project')) {
-    }
-if (isModEnabled('stock')) {
-}
-if (isModEnabled("propal")) {
-    use Dolibarr\Code\Comm\Classes\Propal;
-}
-if (isModEnabled("product") || isModEnabled("service")) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('orders', 'sendings', 'companies', 'bills', 'propal', 'deliveries', 'stocks', 'productbatch', 'incoterm', 'other'));
@@ -414,8 +406,7 @@ if ($id > 0 || !empty($ref)) {
 
         // Warehouse
         if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-            $formproduct = new FormProduct($db);
+                        $formproduct = new FormProduct($db);
             print '<tr><td>';
             print '<table width="100%" class="nobordernopadding"><tr><td>';
             print $langs->trans('Warehouse');

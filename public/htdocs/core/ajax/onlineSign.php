@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *    \file       /htdocs/core/ajax/onlineSign.php
  *    \brief      File to make Ajax action to add the signature of a document
@@ -110,7 +112,6 @@ if ($action == "importSignature") {
         $data = base64_decode($signature);
 
         if ($mode == "propale" || $mode == 'proposal') {
-            use Dolibarr\Code\Comm\Classes\Propal;
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
             $object = new Propal($db);
             $object->fetch(0, $ref);

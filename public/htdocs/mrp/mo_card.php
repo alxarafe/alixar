@@ -549,8 +549,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $formquestion = array();
         if (isModEnabled('mrp')) {
             $langs->load("mrp");
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-            $formproduct = new FormProduct($db);
+                        $formproduct = new FormProduct($db);
             $forcecombo = 0;
             if ($conf->browser->name == 'ie') {
                 $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
