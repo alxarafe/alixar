@@ -29,11 +29,10 @@
  *  \brief      Page of third party events
  */
 
-// Load Dolibarr environment
-require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
 use Dolibarr\Code\Contact\Classes\Contact;
 
+// Load Dolibarr environment
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 

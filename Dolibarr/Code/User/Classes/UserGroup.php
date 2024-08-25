@@ -28,7 +28,10 @@
 
 namespace Dolibarr\Code\User\Classes;
 
+use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+use stdClass;
 
 /**
  *   \file       htdocs/user/class/usergroup.class.php

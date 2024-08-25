@@ -34,6 +34,8 @@
 
 // Enable this line to trace path when function is called.
 //print xdebug_print_function_stack('Functions2.lib was called');exit;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  * Same function than javascript unescape() function but in PHP.

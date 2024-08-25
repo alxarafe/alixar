@@ -2287,8 +2287,7 @@ if (preg_match('/^dopayment/', $action)) {          // If we chose/clicked on th
         print '<input type="hidden" name="lang" value="' . $getpostlang . '">';
 
         if (getDolGlobalString('STRIPE_USE_INTENT_WITH_AUTOMATIC_CONFIRMATION') || getDolGlobalString('STRIPE_USE_NEW_CHECKOUT')) { // Use a SCA ready method
-            require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
-
+    
             $service = 'StripeLive';
             $servicestatus = 1;
             if (!getDolGlobalString('STRIPE_LIVE') || GETPOST('forcesandbox', 'alpha')) {

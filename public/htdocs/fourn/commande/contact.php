@@ -27,11 +27,10 @@
  *       \brief      Onglet de gestion des contacts de commande
  */
 
-// Load Dolibarr environment
-require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
 use Dolibarr\Code\Contact\Classes\Contact;
 
+// Load Dolibarr environment
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
 if (isModEnabled('project')) {
 }

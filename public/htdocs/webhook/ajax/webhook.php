@@ -51,7 +51,6 @@ if (!defined('NOBROWSERNOTIF')) {
     define('NOBROWSERNOTIF', '1');
 }
 include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/webhook/class/target.class.php';
 
 $action = GETPOST('action', 'aZ09');
 $triggercode = GETPOST('triggercode');

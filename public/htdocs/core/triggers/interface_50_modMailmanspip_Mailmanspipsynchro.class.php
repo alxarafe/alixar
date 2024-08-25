@@ -1,9 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2014       Marcos García       <marcosgdf@gmail.com>
- * Copyright (C) 2024		MDW					<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Rafael San José     <rsanjose@alxarafe.com>
+/* Copyright (C) 2005-2013 Laurent Destailleur          <eldy@users.sourceforge.net>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2024		MDW					        <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -58,7 +57,7 @@ class InterfaceMailmanSpipsynchro extends DolibarrTriggers
      * @param Object        $object     Object
      * @param User          $user       Object user
      * @param Translate     $langs      Object langs
-     * @param conf          $conf       Object conf
+     * @param Conf         $conf       Object conf
      * @return int                      Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
@@ -68,7 +67,6 @@ class InterfaceMailmanSpipsynchro extends DolibarrTriggers
         }
 
         require_once DOL_DOCUMENT_ROOT . "/mailmanspip/class/mailmanspip.class.php";
-        require_once DOL_DOCUMENT_ROOT . "/user/class/usergroup.class.php";
 
         if ($action == 'CATEGORY_LINK') {
             dol_syslog("Trigger '" . $this->name . "' for action '$action' launched by " . __FILE__ . ". id=" . $object->id);

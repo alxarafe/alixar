@@ -25,7 +25,9 @@
 
 namespace Dolibarr\Code\Ecm\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file    htdocs/ecm/class/ecmfiles.class.php

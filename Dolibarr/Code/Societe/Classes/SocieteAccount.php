@@ -24,7 +24,9 @@
 
 namespace Dolibarr\Code\Societe\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        societe/class/societeaccount.class.php

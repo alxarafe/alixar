@@ -25,6 +25,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+
 /**
  *   \file       htdocs/ticket/card.php
  *   \ingroup    ticket
@@ -38,12 +41,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formticket.class.
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
-
 if (isModEnabled('project')) {
     include_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
     include_once DOL_DOCUMENT_ROOT . '/core/lib/project.lib.php';

@@ -20,6 +20,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/projet/ganttview.php
  *  \ingroup    projet
@@ -29,12 +33,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-
-use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Code\Contact\Classes\Contact;
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
 
 $id = GETPOST('id', 'intcomma');
 $ref = GETPOST('ref', 'alpha');

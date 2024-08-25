@@ -26,7 +26,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/webhook/class/target.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/webhook/lib/webhook_target.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/geturl.lib.php';
 

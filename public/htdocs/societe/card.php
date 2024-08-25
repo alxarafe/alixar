@@ -35,6 +35,9 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
 
 /**
  *  \file       htdocs/societe/card.php
@@ -48,14 +51,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
-if (isModEnabled('member')) {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
-}
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 }

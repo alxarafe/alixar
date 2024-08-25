@@ -30,7 +30,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
 // load webhook libraries
-require_once constant('DOL_DOCUMENT_ROOT') . '/webhook/class/target.class.php';
 
 global $conf, $db, $hookmanager, $langs, $user;
 

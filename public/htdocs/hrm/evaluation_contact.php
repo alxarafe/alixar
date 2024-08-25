@@ -27,11 +27,10 @@
  *    \brief      Tab for contacts linked to Evaluation
  */
 
-// Load Dolibarr environment
-require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
 use Dolibarr\Code\Contact\Classes\Contact;
 
+// Load Dolibarr environment
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/evaluation.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_evaluation.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';

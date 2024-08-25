@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+
 /**
  *    \file       htdocs/fourn/commande/index.php
  *    \ingroup    order fournisseur
@@ -30,10 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
-
 
 // Load translation files required by the page
 $langs->loadLangs(array("suppliers", "orders"));

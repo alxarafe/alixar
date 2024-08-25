@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2017       ATM Consulting      <contact@atm-consulting.fr>
- * Copyright (C) 2017-2020  Laurent Destailleur <eldy@destailleur.fr>
- * Copyright (C) 2022 		charlene benke		<charlene@patas-monkey.com>
+/* Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
+ * Copyright (C) 2017-2020  Laurent Destailleur         <eldy@destailleur.fr>
+ * Copyright (C) 2022 		charlene benke		        <charlene@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,7 +24,20 @@
 
 namespace Dolibarr\Code\BloquedLog\Classes;
 
+use CashControl;
+use Dolibarr\Code\Adherents\Classes\Subscription;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\Don\Classes\PaymentDonation;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
+use Paiement;
+use PaymentVarious;
 use stdClass;
 
 /**

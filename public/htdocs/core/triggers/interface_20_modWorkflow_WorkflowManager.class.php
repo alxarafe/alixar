@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2010      Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2017 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2014      Marcos García       <marcosgdf@gmail.com>
- * Copyright (C) 2022      Ferran Marcet       <fmarcet@2byte.es>
- * Copyright (C) 2023      Alexandre Janniaux  <alexandre.janniaux@gmail.com>
+/* Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2022       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2023       Alexandre Janniaux          <alexandre.janniaux@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/triggers/interface_20_modWorkflow_WorkflowManager.class.php
  *  \ingroup    core
@@ -34,7 +40,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/dolibarrtriggers.cl
 /**
  *  Class of triggers for workflow module
  */
-
 class InterfaceWorkflowManager extends DolibarrTriggers
 {
     /**
@@ -57,11 +62,11 @@ class InterfaceWorkflowManager extends DolibarrTriggers
      * Function called when a Dolibarr business event is done.
      * All functions "runTrigger" are triggered if file is inside directory htdocs/core/triggers or htdocs/module/code/triggers (and declared)
      *
-     * @param string        $action     Event action code
-     * @param CommonObject  $object     Object
-     * @param User          $user       Object user
-     * @param Translate     $langs      Object langs
-     * @param conf          $conf       Object conf
+     * @param string $action Event action code
+     * @param CommonObject $object Object
+     * @param User $user Object user
+     * @param Translate $langs Object langs
+     * @param Conf $conf Object conf
      * @return int                      Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
@@ -98,7 +103,7 @@ class InterfaceWorkflowManager extends DolibarrTriggers
 
                 $object->clearObjectLinkedCache();
 
-                return (int) $ret;
+                return (int)$ret;
             }
         }
 
@@ -210,7 +215,7 @@ class InterfaceWorkflowManager extends DolibarrTriggers
                         foreach ($object->linkedObjects['shipping'] as $element) {
                             $ret = $element->setClosed();
                             if ($ret < 0) {
-                                return (int) $ret;
+                                return (int)$ret;
                             }
                         }
                     }
@@ -231,7 +236,7 @@ class InterfaceWorkflowManager extends DolibarrTriggers
                         foreach ($object->linkedObjects['shipping'] as $element) {
                             $ret = $element->setBilled();
                             if ($ret < 0) {
-                                return (int) $ret;
+                                return (int)$ret;
                             }
                         }
                     }
@@ -249,7 +254,7 @@ class InterfaceWorkflowManager extends DolibarrTriggers
                         $areAllInvoicesValidated = true;
                         foreach ($orderLinked->linkedObjects['facture'] as $key => $invoice) {
                             if ($invoice->statut == Facture::STATUS_VALIDATED || $object->id == $invoice->id) {
-                                $totalHTInvoices += (float) $invoice->total_ht;
+                                $totalHTInvoices += (float)$invoice->total_ht;
                             } else {
                                 $areAllInvoicesValidated = false;
                                 break;
@@ -257,7 +262,7 @@ class InterfaceWorkflowManager extends DolibarrTriggers
                         }
                         if ($areAllInvoicesValidated) {
                             $isSameTotal = (price2num($totalHTInvoices, 'MT') == price2num($orderLinked->total_ht, 'MT'));
-                            dol_syslog("Amount of linked invoices = " . $totalHTInvoices . ", of order = " . $orderLinked->total_ht . ", isSameTotal = " . (string) $isSameTotal, LOG_DEBUG);
+                            dol_syslog("Amount of linked invoices = " . $totalHTInvoices . ", of order = " . $orderLinked->total_ht . ", isSameTotal = " . (string)$isSameTotal, LOG_DEBUG);
                             if ($isSameTotal) {
                                 $ret = $orderLinked->classifyBilled($user);
                                 if ($ret < 0) {
@@ -411,7 +416,6 @@ class InterfaceWorkflowManager extends DolibarrTriggers
                 // Find all shipments on sale order origin
 
                 if (in_array($object->origin, array('order', 'commande')) && $object->origin_id > 0) {
-                    use Dolibarr\Code\Adherents\Classes\Adherent;
                     $order = new Commande($this->db);
                     $ret = $order->fetch($object->origin_id);
                     if ($ret < 0) {
@@ -588,9 +592,9 @@ class InterfaceWorkflowManager extends DolibarrTriggers
             // Automatically create intervention
             if (isModEnabled('intervention') && isModEnabled('ticket') && !empty($conf->workflow->enabled) && getDolGlobalString('WORKFLOW_TICKET_CREATE_INTERVENTION')) {
                 $fichinter = new Fichinter($this->db);
-                $fichinter->socid = (int) $object->fk_soc;
-                $fichinter->fk_project = (int) $object->fk_project;
-                $fichinter->fk_contrat = (int) $object->fk_contract;
+                $fichinter->socid = (int)$object->fk_soc;
+                $fichinter->fk_project = (int)$object->fk_project;
+                $fichinter->fk_contrat = (int)$object->fk_contract;
                 $fichinter->author = $user->id;
                 $fichinter->model_pdf = (getDolGlobalString('FICHEINTER_ADDON_PDF')) ? $conf->global->FICHEINTER_ADDON_PDF : 'soleil';
                 $fichinter->origin = $object->element;
@@ -612,10 +616,10 @@ class InterfaceWorkflowManager extends DolibarrTriggers
     }
 
     /**
-     * @param Object $conf                  Dolibarr settings object
-     * @param float $totalonlinkedelements  Sum of total amounts (excl VAT) of
+     * @param Object $conf Dolibarr settings object
+     * @param float $totalonlinkedelements Sum of total amounts (excl VAT) of
      *                                      invoices linked to $object
-     * @param float $object_total_ht        The total amount (excl VAT) of the object
+     * @param float $object_total_ht The total amount (excl VAT) of the object
      *                                      (an order, a proposal, a bill, etc.)
      * @return bool  True if the amounts are equal (rounded on total amount)
      *               True if the module is configured to skip the amount equality check

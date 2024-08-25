@@ -21,7 +21,10 @@
 
 namespace Dolibarr\Code\WebHook\Classes;
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        htdocs/webhook/class/target.class.php

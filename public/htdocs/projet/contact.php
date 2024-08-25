@@ -26,16 +26,11 @@
  *       \brief      List of all contacts of a project
  */
 
-// Load Dolibarr environment
-require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
+use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Contact\Classes\Contact;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
-if (isModEnabled('category')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
-}
+// Load Dolibarr environment
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Load translation files required by the page
 $langsLoad = array('projects', 'companies');

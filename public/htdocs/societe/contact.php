@@ -41,14 +41,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 
-use Dolibarr\Code\Contact\Classes\Contact;
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
-if (isModEnabled('member')) {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
-}
-
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "commercial", "bills", "banks", "users"));
 

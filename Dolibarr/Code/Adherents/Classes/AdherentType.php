@@ -32,6 +32,7 @@ namespace Dolibarr\Code\Adherents\Classes;
  */
 
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 
 /**

@@ -26,6 +26,7 @@
 namespace Dolibarr\Code\Product\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file    product/stock/class/productlot.class.php

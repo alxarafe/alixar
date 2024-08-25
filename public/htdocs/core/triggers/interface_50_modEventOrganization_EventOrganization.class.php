@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2021		Florian Henry		<florian.henry@scopen.fr>
+/* Copyright (C) 2005-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021		Florian Henry		        <florian.henry@scopen.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/core/triggers/interface_50_modEventOrganization_EventOrganization.class.php
@@ -68,7 +73,7 @@ class InterfaceEventOrganization extends DolibarrTriggers
      * @param Object        $object     Object
      * @param User          $user       Object user
      * @param Translate     $langs      Object langs
-     * @param conf          $conf       Object conf
+     * @param Conf         $conf       Object conf
      * @return int                      Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)

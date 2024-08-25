@@ -31,6 +31,7 @@
 namespace Dolibarr\Code\Fourn\Classes;
 
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use DoliDB;
 
 /**
  *      \file       htdocs/fourn/class/paiementfourn.class.php
