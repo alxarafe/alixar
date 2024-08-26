@@ -22,11 +22,10 @@
 
 namespace Dolibarr\Code\Bom\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Bom\Classes\BOM;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
-
 
 /**
  * \file    htdocs/bom/class/api_boms.class.php

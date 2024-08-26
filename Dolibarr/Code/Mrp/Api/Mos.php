@@ -21,10 +21,13 @@
 
 namespace Dolibarr\Code\Mrp\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Mrp\Classes\MoLine;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
 
 /**
  * \file    htdocs/mrp/class/api_mos.class.php
@@ -332,7 +335,6 @@ class Mos extends DolibarrApi
         }
 
         // Code for consume and produce...
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp_mo.lib.php';
 
         $stockmove = new MouvementStock($this->db);
@@ -703,7 +705,6 @@ class Mos extends DolibarrApi
         }
 
         // Code for consume and produce...
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp_mo.lib.php';
 
         $stockmove = new MouvementStock($this->db);

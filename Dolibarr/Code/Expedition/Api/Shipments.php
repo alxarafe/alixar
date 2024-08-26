@@ -20,10 +20,11 @@
 
 namespace Dolibarr\Code\Expedition\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Expedition\Classes\ExpeditionLigne;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 
 /**
  * API class for shipments
@@ -614,9 +615,6 @@ class Shipments extends DolibarrApi
     /*
     public function createShipmentFromOrder($orderid)
     {
-
-        use Dolibarr\Code\Adherents\Classes\Adherent;
-
         if(! DolibarrApiAccess::$user->hasRight('expedition', 'lire')) {
                 throw new RestException(403);
         }

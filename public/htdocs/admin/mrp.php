@@ -29,7 +29,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp_mo.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp.lib.php';
 

@@ -1414,7 +1414,6 @@ class pdf_octopus extends ModelePDFFactures
 
                 //#21654: add account number used for the debit
                 if ($object->mode_reglement_code == "PRE") {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
                     $bac = new CompanyBankAccount($this->db);
                     // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
                     $bac->fetch(0, $object->thirdparty->id);

@@ -25,13 +25,17 @@
 
 namespace Dolibarr\Code\Api\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Core\Classes\Ccountry;
+use Dolibarr\Code\Core\Classes\Cregion;
+use Dolibarr\Code\Core\Classes\Cstate;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Hrm\Classes\Establishment;
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cstate.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cregion.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ccountry.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/establishment.class.php';
 
 /**
  * API class for dictionaries
@@ -2665,7 +2669,7 @@ class Setup extends DolibarrApi
      *
      * @throws RestException 403 Forbidden
      */
-    public function getModules()
+    public function getModulesOld()
     {
         global $conf;
 

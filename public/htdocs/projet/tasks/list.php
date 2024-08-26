@@ -24,6 +24,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *  \file       htdocs/projet/tasks/list.php
  *  \ingroup    project
@@ -780,8 +782,6 @@ $moreforfilter = '';
 
 // Filter on categories
 if (isModEnabled('category') && $user->hasRight('categorie', 'lire')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('ProjectCategories');
     $moreforfilter .= img_picto($tmptitle, 'category', 'class="pictofixedwidth"') . $formother->select_categories('project', $search_categ, 'search_categ', 1, $tmptitle, 'maxwidth300');

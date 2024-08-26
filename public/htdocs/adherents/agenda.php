@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *    \file       htdocs/adherents/agenda.php
@@ -129,8 +130,6 @@ $form = new Form($db);
 
 if ($object->id > 0) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-
-    use Dolibarr\Code\Societe\Classes\Societe;
 
     $langs->load("companies");
 

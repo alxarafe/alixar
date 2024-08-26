@@ -1133,7 +1133,6 @@ if ($action == 'create') {
         }
         $text = $langs->trans('ConfirmValidateIntervention', $numref);
         if (isModEnabled('notification')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
             $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('FICHINTER_VALIDATE', $object->socid, $object);
@@ -1146,7 +1145,6 @@ if ($action == 'create') {
     if ($action == 'classifydone') {
         $text = $langs->trans('ConfirmCloseIntervention');
         if (isModEnabled('notification')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
             $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('FICHINTER_CLOSE', $object->socid, $object);

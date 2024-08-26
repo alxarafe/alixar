@@ -19,9 +19,10 @@
 
 namespace Dolibarr\Code\Product\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
 
 /**
  * API class for warehouses

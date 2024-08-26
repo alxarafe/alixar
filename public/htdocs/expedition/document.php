@@ -34,7 +34,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/sendings.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 if (isModEnabled('project')) {
 }
 

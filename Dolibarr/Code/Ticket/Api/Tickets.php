@@ -20,6 +20,9 @@
 
 namespace Dolibarr\Code\Ticket\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 

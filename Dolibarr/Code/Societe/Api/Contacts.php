@@ -21,12 +21,9 @@
 
 namespace Dolibarr\Code\Societe\Api;
 
+use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-//require_once DOL_DOCUMENT_ROOT.'/contact/class/contact.class.php';
-//require_once DOL_DOCUMENT_ROOT.'/categories/class/categorie.class.php';
-
 
 /**
  * API class for contacts
@@ -56,11 +53,6 @@ class Contacts extends DolibarrApi
     {
         global $db, $conf;
         $this->db = $db;
-
-    use Dolibarr\Code\Contact\Classes\Contact;
-
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
 
         $this->contact = new Contact($this->db);
     }

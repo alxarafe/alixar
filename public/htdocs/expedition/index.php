@@ -31,7 +31,6 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 
 $hookmanager = new HookManager($db);
 

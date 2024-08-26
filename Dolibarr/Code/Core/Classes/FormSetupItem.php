@@ -20,6 +20,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Categories\Classes\Categorie;
 use DoliDB;
 
 /**
@@ -417,8 +418,6 @@ class FormSetupItem
      */
     public function generateInputFieldCategories()
     {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
         $formother = new FormOther($this->db);
 
         $tmp = explode(':', $this->type);
@@ -671,8 +670,6 @@ class FormSetupItem
                 $out .= $this->langs->trans($template->label);
             }
         } elseif (preg_match('/category:/', $this->type)) {
-            use Dolibarr\Code\Categories\Classes\Categorie;
-
             $c = new Categorie($this->db);
             $result = $c->fetch($this->fieldValue);
             if ($result < 0) {

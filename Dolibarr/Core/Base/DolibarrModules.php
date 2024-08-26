@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2003-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004		Sebastien Di Cintio		<sdicintio@ressource-toi.org>
- * Copyright (C) 2004		Benoit Mortier			<benoit.mortier@opensides.be>
- * Copyright (C) 2004		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2013	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2024	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2014		Raphaël Doursenaud		<rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2018		Josep Lluís Amador		<joseplluis@lliuretic.cat>
- * Copyright (C) 2019-2024	Frédéric France			<frederic.france@free.fr>
- * Copyright (C) 2024		MDW						<mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004		Sebastien Di Cintio		    <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004		Benoit Mortier			    <benoit.mortier@opensides.be>
+ * Copyright (C) 2004		Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2013	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2024	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2014		Raphaël Doursenaud		    <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2018		Josep Lluís Amador		    <joseplluis@lliuretic.cat>
+ * Copyright (C) 2019-2024	Frédéric France			    <frederic.france@free.fr>
+ * Copyright (C) 2024		MDW						    <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -459,6 +459,22 @@ abstract class DolibarrModules
     // a try catch on Fatal error to manage this correctly.
     // We need constructor into function unActivateModule into admin.lib.php
 
+    public static function _getModuleName($file)
+    {
+        $new_type = !str_starts_with($file, 'mod') && str_ends_with($file, '.php');
+        $old_type = str_starts_with($file, 'mod') && str_ends_with($file, '.class.php');
+
+        if (!($new_type || $old_type)) {
+            return null;
+        }
+
+        if ($new_type) {
+            return substr($file, 0, strrpos($file, '.'));
+        }
+
+        return substr($file, 0, dol_strlen($file) - 10);
+    }
+
     /**
      * Obtiene un array con los módulos instalados.
      * TODO: Sustituir donde se use:
@@ -485,17 +501,10 @@ abstract class DolibarrModules
                     continue;
                 }
 
-                $new_type = !str_starts_with($file, 'mod') && str_ends_with($file, '.php');
-                $old_type = str_starts_with($file, 'mod') && str_ends_with($file, '.class.php');
+                $className = static::_getModuleName($file);
 
-                if (!($new_type || $old_type)) {
+                if (empty($className)) {
                     continue;
-                }
-
-                if ($new_type) {
-                    $className = substr($file, 0, strrpos($file, '.'));
-                } else {
-                    $className = substr($file, 0, dol_strlen($file) - 10);
                 }
 
                 if (isset($result[$className])) {

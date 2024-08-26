@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *  \file       htdocs/compta/facture/stats/index.php
  *  \ingroup    invoice
@@ -34,10 +36,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 use Dolibarr\Code\Categories\Classes\Categorie;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facturestats.class.php';
-if (isModEnabled('category')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
-}
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');
 $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height');

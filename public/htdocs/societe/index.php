@@ -23,6 +23,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Societe\Classes\Societe;
 
@@ -208,8 +209,6 @@ $thirdpartygraph .= '</div>';
 
 $thirdpartycateggraph = '';
 if (isModEnabled('category') && getDolGlobalString('CATEGORY_GRAPHSTATS_ON_THIRDPARTIES')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
     $elementtype = 'societe';
 
     $thirdpartycateggraph = '<div class="div-table-responsive-no-min">';

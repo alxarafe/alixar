@@ -363,8 +363,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmActionMyObject', $object->ref);
         /*if (isModEnabled('notification'))
         {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-            $notify = new Notify($db);
+                $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('MYOBJECT_CLOSE', $object->socid, $object);
         }*/

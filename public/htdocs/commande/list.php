@@ -32,6 +32,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *  \file       htdocs/commande/list.php
  *  \ingroup    order
@@ -46,7 +49,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 if (isModEnabled('margin')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 }
-use Dolibarr\Code\Adherents\Classes\Adherent;
 
 // Load translation files required by the page
 $langs->loadLangs(array('orders', 'sendings', 'deliveries', 'companies', 'compta', 'bills', 'stocks', 'products'));
@@ -1511,8 +1513,6 @@ if (isModEnabled('category') && $user->hasRight("categorie", "lire") && ($user->
 }
 // If Categories are enabled & user has rights to see
 if (isModEnabled('category') && $user->hasRight("categorie", "lire")) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('CustomersProspectsCategoriesShort');
     $moreforfilter .= img_picto($tmptitle, 'category', 'class="pictofixedwidth"') . $formother->select_categories('customer', $search_categ_cus, 'search_categ_cus', 1, $tmptitle, 'maxwidth300 widthcentpercentminusx');

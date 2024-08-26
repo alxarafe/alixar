@@ -25,6 +25,16 @@
 
 namespace Dolibarr\Code\Societe\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Notify;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\CompanyBankAccount;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Societe\Classes\SocieteAccount;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
@@ -57,14 +67,6 @@ class Thirdparties extends DolibarrApi
     {
         global $db;
         $this->db = $db;
-
-        use Dolibarr\Code\Societe\Classes\Societe;
-        require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
-
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
-        require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
 
         $this->company = new Societe($this->db);
 

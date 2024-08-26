@@ -19,10 +19,10 @@
 
 namespace Dolibarr\Code\Product\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Product\Classes\MouvementStock;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 
 /**
  * API class for stock movements

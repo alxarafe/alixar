@@ -201,19 +201,22 @@ if (getDolGlobalString('API_RESTRICT_ON_IP')) {
 }
 
 // Call Explorer file for all APIs definitions (this part is slow)
-if (!empty($reg[1]) && $reg[1] == 'explorer' && ($reg[2] == '/swagger.json' || $reg[2] == '/swagger.json/root' || $reg[2] == '/resources.json' || $reg[2] == '/resources.json/root')) {
+if (!empty($reg[1]) && $reg[1] == 'explorer' && ($reg[2] == '/swagger.json' || $reg[2] == '/swagger.json/' || $reg[2] == '/swagger.json/root' || $reg[2] == '/resources.json/' || $reg[2] == '/resources.json' || $reg[2] == '/resources.json/root')) {
     // Scan all API files to load them
 
+    /*
     $listofapis = array();
-
     $modulesdir = dolGetModulesDirs();
     foreach ($modulesdir as $dir) {
+        //dump(['dir' => $dir]);
         // Search available module
         dol_syslog("Scan directory " . $dir . " for module descriptor files, then search for API files");
 
         $handle = @opendir(dol_osencode($dir));
         if (is_resource($handle)) {
             while (($file = readdir($handle)) !== false) {
+                //dump(['file' => $file]);
+
                 $regmod = array();
                 if (is_readable($dir . $file) && preg_match("/^mod(.*)\.class\.php$/i", $file, $regmod)) {
                     $module = strtolower($regmod[1]);
@@ -244,6 +247,8 @@ if (!empty($reg[1]) && $reg[1] == 'explorer' && ($reg[2] == '/swagger.json' || $
                         $handle_part = @opendir(dol_osencode($dir_part));
                         if (is_resource($handle_part)) {
                             while (($file_searched = readdir($handle_part)) !== false) {
+
+
                                 if ($file_searched == 'api_access.class.php') {
                                     continue;
                                 }
@@ -280,12 +285,16 @@ if (!empty($reg[1]) && $reg[1] == 'explorer' && ($reg[2] == '/swagger.json' || $
 
     // Sort the classes before adding them to Restler.
     // The Restler API Explorer shows the classes in the order they are added and it's a mess if they are not sorted.
-    asort($listofapis);
+    */
+
+    $listofapis = DolibarrApi::getModules();
     foreach ($listofapis as $apiname => $classname) {
-        $api->r->addAPIClass($classname, $apiname);
+        new $classname();
+        $api->r->addAPIClass($classname);
     }
-    //var_dump($api->r);
 }
+
+dd([$listofapis, $api->r]);
 
 // Call one APIs or one definition of an API
 $regbis = array();
@@ -363,7 +372,6 @@ if (!empty($reg[1]) && ($reg[1] != 'explorer' || ($reg[2] != '/swagger.json' && 
         //session_destroy();
         exit(0);
     }
-    dump('Exists: ' . $namespace);
 
     $api->r->addAPIClass($namespace);
 }

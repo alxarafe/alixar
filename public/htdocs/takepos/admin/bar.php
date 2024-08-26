@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *  \file       htdocs/takepos/admin/bar.php
  *  \ingroup    takepos
@@ -29,9 +31,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
 require_once DOL_DOCUMENT_ROOT . "/core/lib/takepos.lib.php";
 
 // Security check

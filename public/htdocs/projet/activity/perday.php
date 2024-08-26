@@ -497,8 +497,6 @@ $moreforfilter = '';
 
 // Filter on categories
 /*if (isModEnabled("categorie")) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
     $moreforfilter.='<div class="divsearchfield">';
     $moreforfilter.=$langs->trans('ProjectCategories'). ': ';
     $moreforfilter.=$formother->select_categories('project', $search_categ, 'search_categ', 1, 1, 'maxwidth300');

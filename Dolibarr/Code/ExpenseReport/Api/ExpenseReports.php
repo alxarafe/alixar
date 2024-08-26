@@ -21,12 +21,11 @@
 
 namespace Dolibarr\Code\ExpenseReport\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/paymentexpensereport.class.php';
-
 
 /**
  * API class for Expense Reports

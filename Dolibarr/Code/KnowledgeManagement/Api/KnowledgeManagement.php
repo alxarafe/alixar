@@ -20,11 +20,11 @@
 
 namespace Dolibarr\Code\KnowledgeManagement\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-dol_include_once('/knowledgemanagement/class/knowledgerecord.class.php');
-dol_include_once('/categories/class/categorie.class.php');
 
 /**
  * \file    knowledgemanagement/class/api_knowledgemanagement.class.php

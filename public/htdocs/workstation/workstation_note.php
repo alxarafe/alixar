@@ -28,7 +28,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/class/workstation.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/lib/workstation_workstation.lib.php';
 
 global $conf, $db, $hookmanager, $langs, $user;

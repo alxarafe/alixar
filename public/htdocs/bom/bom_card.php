@@ -28,7 +28,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bom/lib/bom.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp.lib.php';
 
@@ -404,8 +403,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmValidateBom', $numref);
         /*if (isModEnabled('notification'))
          {
-         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-         $notify = new Notify($db);
+          $notify = new Notify($db);
          $text .= '<br>';
          $text .= $notify->confirmMessage('BOM_VALIDATE', $object->socid, $object);
          }*/
@@ -432,8 +430,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmCloseBom', $object->ref);
         /*if (isModEnabled('notification'))
          {
-         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-         $notify = new Notify($db);
+          $notify = new Notify($db);
          $text .= '<br>';
          $text .= $notify->confirmMessage('BOM_CLOSE', $object->socid, $object);
          }*/
@@ -460,8 +457,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmReopenBom', $object->ref);
         /*if (isModEnabled('notification'))
          {
-         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-         $notify = new Notify($db);
+          $notify = new Notify($db);
          $text .= '<br>';
          $text .= $notify->confirmMessage('BOM_CLOSE', $object->socid, $object);
          }*/

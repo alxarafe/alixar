@@ -1164,8 +1164,6 @@ if (isModEnabled('category') && $user->hasRight('categorie', 'read') && ($user->
     $moreforfilter .= $formcategory->getFilterBox(Categorie::TYPE_PRODUCT, array($search_product_category), 'maxwidth300', $searchCategoryProductOperator, 0, 0, $tmptitle);
 }
 if (isModEnabled('category') && $user->hasRight('categorie', 'lire')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('CustomersProspectsCategoriesShort');
     $moreforfilter .= img_picto($tmptitle, 'category', 'class="pictofixedwidth"') . $formother->select_categories('customer', $search_categ_cus, 'search_categ_cus', 1, $tmptitle, (empty($conf->dol_optimize_smallscreen) ? 'maxwidth300 widthcentpercentminusx' : 'maxwidth250 widthcentpercentminusx'));

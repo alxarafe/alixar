@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  * \file    htdocs/product/ajax/products.php
  * \brief   File to return Ajax response on product list request, with default VAT rate.
@@ -74,7 +76,6 @@ restrictedArea($user, 'produit|service|commande|propal|facture', 0, 'product&pro
 
 if ($action == 'fetch' && !empty($id)) {
     // action='fetch' is used to get product information on a product. So when action='fetch', id must be the product id.
-    use Dolibarr\Code\Societe\Classes\Societe;
 
     top_httphead('application/json');
 

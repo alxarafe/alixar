@@ -23,6 +23,7 @@
 
 namespace Dolibarr\Code\WebPortal\Classes;
 
+use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\Form;
 use DoliDB;
 
@@ -940,8 +941,6 @@ class FormWebPortal extends Form
                         $out .= 'Error in request ' . $sql . ' ' . $this->db->lasterror() . '. Check setup of extra parameters.<br>';
                     }
                 } else {
-                    use Dolibarr\Code\Categories\Classes\Categorie;
-
                     $categorytype = $InfoFieldList[5];
                     if (is_numeric($categorytype)) {
                         $categorytype = Categorie::$MAP_ID_TO_CODE[$categorytype]; // For backward compatibility
@@ -1203,9 +1202,6 @@ class FormWebPortal extends Form
                         }
                     }
                 } else {
-                    use Dolibarr\Code\Categories\Classes\Categorie;
-
-
                     $toprint = array();
                     $obj = $this->db->fetch_object($resql);
                     $c = new Categorie($this->db);
@@ -1306,9 +1302,6 @@ class FormWebPortal extends Form
                         }
                     }
                 } else {
-                    use Dolibarr\Code\Categories\Classes\Categorie;
-
-
                     $toprint = array();
                     while ($obj = $this->db->fetch_object($resql)) {
                         if (is_array($value_arr) && in_array($obj->rowid, $value_arr)) {

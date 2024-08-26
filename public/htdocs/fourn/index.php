@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *  \file       htdocs/fourn/index.php
  *  \ingroup    fournisseur
@@ -27,9 +29,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
 
 $langs->loadLangs(array("suppliers", "orders", "companies"));
 

@@ -353,8 +353,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmActionAvailabilities', $object->ref);
         /*if (! empty($conf->notification->enabled))
         {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-            $notify = new Notify($db);
+                $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('AVAILABILITIES_CLOSE', $object->socid, $object);
         }*/

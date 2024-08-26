@@ -301,7 +301,6 @@ class BlockedLog
                 $this->error++;
             }
         } elseif ($this->element === 'don' || $this->element === 'donation') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 
             $object = new Don($this->db);
             if ($object->fetch($this->fk_object) > 0) {
@@ -327,7 +326,6 @@ class BlockedLog
                 $this->error++;
             }
         } elseif ($this->element === 'stockmouvement') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 
             $object = new MouvementStock($this->db);
             if ($object->fetch($this->fk_object) > 0) {

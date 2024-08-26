@@ -267,7 +267,6 @@ class Documents extends DolibarrApi
                 throw new RestException(500, 'Error generating document missing doctemplate parameter');
             }
         } elseif ($modulepart == 'expedition' || $modulepart == 'shipment') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 
             $tmpobject = new Expedition($this->db);
             $result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
@@ -424,7 +423,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->fournisseur->dir_output . "/commande/" . dol_sanitizeFileName($object->ref);
         } elseif ($modulepart == 'shipment' || $modulepart == 'expedition') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 
             if (!DolibarrApiAccess::$user->hasRight('expedition', 'lire')) {
                 throw new RestException(403);

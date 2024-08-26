@@ -28,6 +28,11 @@
 
 namespace Dolibarr\Code\Fourn\Classes;
 
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\ProductFournisseurPrice;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
 /**
@@ -35,9 +40,6 @@ use DoliDB;
  *  \ingroup    produit
  *  \brief      File of class to manage predefined suppliers products
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productfournisseurprice.class.php';
-
 
 /**
  *  Class to manage predefined suppliers products

@@ -20,9 +20,10 @@
 
 namespace Dolibarr\Code\SupplierProposal\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
 
 /**
  * API class for supplier proposal

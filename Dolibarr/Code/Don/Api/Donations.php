@@ -20,10 +20,10 @@
 
 namespace Dolibarr\Code\Don\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Don\Classes\Don;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 
 /**
  * API class for donations

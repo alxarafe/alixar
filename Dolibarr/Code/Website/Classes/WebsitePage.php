@@ -25,6 +25,7 @@
 
 namespace Dolibarr\Code\Website\Classes;
 
+use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Core\Base\CommonObject;
 
 /**
@@ -864,8 +865,6 @@ public $fk_page;
      */
     public function setCategories($categories)
     {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
         return $this->setCategoriesCommon($categories, Categorie::TYPE_WEBSITE_PAGE);
     }
 

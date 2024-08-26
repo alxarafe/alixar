@@ -23,6 +23,7 @@
 namespace Dolibarr\Code\IntracommReport\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Code\Categories\Classes\Categorie;
 
 /**
  *    \file       htdocs/intracommreport/class/intracommreport.class.php
@@ -247,9 +248,6 @@ class IntracommReport extends CommonObject
     public function addItemsFact(&$declaration, $type, $period_reference, $exporttype = 'deb')
     {
         global $conf;
-
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
 
         $sql = $this->getSQLFactLines($type, $period_reference, $exporttype);
 

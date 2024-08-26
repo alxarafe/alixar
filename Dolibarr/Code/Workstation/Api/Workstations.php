@@ -21,17 +21,16 @@
 
 namespace Dolibarr\Code\Workstation\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Workstation\Classes\Workstation;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/class/workstation.class.php';
 
 /**
  * \file    htdocs/workstation/class/api_workstations.class.php
  * \ingroup workstation
  * \brief   File for API management of Workstations.
  */
-
 
 /**
  * API class for workstations

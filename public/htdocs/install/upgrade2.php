@@ -53,7 +53,6 @@ if (!file_exists($conffile)) {
     print 'Error: Dolibarr config file was not found. This may means that Dolibarr is not installed yet. Please call the page "/install/index.php" instead of "/install/upgrade.php").';
 }
 require_once $conffile;
-require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/price.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 

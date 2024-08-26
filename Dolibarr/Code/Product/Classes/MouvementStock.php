@@ -24,6 +24,7 @@
 
 namespace Dolibarr\Code\Product\Classes;
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
@@ -982,11 +983,9 @@ class MouvementStock extends CommonObject
 
         switch ($origin_type) {
             case 'commande':
-                use Dolibarr\Code\Adherents\Classes\Adherent;
                 $origin = new Commande($this->db);
                 break;
             case 'shipping':
-                require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
                 $origin = new Expedition($this->db);
                 break;
             case 'facture':
@@ -1005,12 +1004,9 @@ class MouvementStock extends CommonObject
                             $origin = new Mo($this->db);
                 break;
             case 'user':
-                use Dolibarr\Code\User\Classes\User;
-
                 $origin = new User($this->db);
                 break;
             case 'reception':
-                require_once constant('DOL_DOCUMENT_ROOT') . '/reception/class/reception.class.php';
                 $origin = new Reception($this->db);
                 break;
             case 'inventory':

@@ -30,7 +30,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/reception.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/reception/class/reception.class.php';
 
 $langs->loadLangs(array("admin", "receptions", 'other'));
 

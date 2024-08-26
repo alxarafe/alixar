@@ -20,9 +20,11 @@
 
 namespace Dolibarr\Code\Projet\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
 
 /**
  * API class for projects
@@ -551,7 +553,7 @@ class Projects extends DolibarrApi
             throw new RestException(403, 'Access not allowed for login ' . DolibarrApiAccess::$user->login);
         }
 
-                $taskstatic = new Task($this->db);
+        $taskstatic = new Task($this->db);
         $userp = DolibarrApiAccess::$user;
         if ($userid > 0) {
             $userp = new User($this->db);

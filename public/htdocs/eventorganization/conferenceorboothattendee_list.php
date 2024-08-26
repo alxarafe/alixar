@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *    \file       htdocs/eventorganization/conferenceorboothattendee_list.php
  *    \ingroup    eventorganization
@@ -34,10 +36,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorbooth.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/lib/eventorganization_conferenceorbooth.lib.php';
-if (isModEnabled('category')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
-}
 
 global $dolibarr_main_url_root;
 

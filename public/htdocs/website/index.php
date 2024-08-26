@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *      \file       htdocs/website/index.php
  *      \ingroup    website
@@ -50,8 +52,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formwebsite.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/website.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/websitepage.class.php';
-
-use Dolibarr\Code\Categories\Classes\Categorie;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
 
@@ -5094,8 +5094,6 @@ if ($mode == 'replacesite' || $massaction == 'replace') {
                 print getTitleFieldOfList($selectedfields, 0, $_SERVER["PHP_SELF"], '', '', '', '', $sortfield, $sortorder, 'center maxwidthsearch ') . "\n";
             }
             print '</tr>';
-
-            use Dolibarr\Code\Categories\Classes\Categorie;
 
             $c = new Categorie($db);
 

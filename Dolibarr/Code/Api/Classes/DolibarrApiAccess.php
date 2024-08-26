@@ -22,6 +22,7 @@
 
 namespace Dolibarr\Code\Api\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Luracast\Restler\iAuthenticate;
 use Luracast\Restler\Resources;
 use Luracast\Restler\Defaults;

@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *  \file       htdocs/core/boxes/box_members_by_tags.php
  *  \ingroup    adherent
@@ -85,8 +87,6 @@ class box_members_by_tags extends ModeleBoxes
         $this->info_box_head = array('text' => $langs->trans("BoxTitleMembersByTags") . ($numberyears ? ' (' . ($year - $numberyears) . ' - ' . $year . ')' : ''));
 
         if ($user->hasRight('adherent', 'lire')) {
-            use Dolibarr\Code\Categories\Classes\Categorie;
-
             $stats = new AdherentStats($this->db, $user->socid, $user->id);
 
             // Show array

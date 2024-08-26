@@ -24,6 +24,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *  \file       htdocs/product/composition/card.php
  *  \ingroup    product
@@ -33,8 +35,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-
-use Dolibarr\Code\Categories\Classes\Categorie;
 
 
 // Load translation files required by the page
@@ -641,8 +641,6 @@ if ($id > 0 || !empty($ref)) {
             print '<input type="text" name="key" value="' . $key . '"> &nbsp; ';
             print '</div>';
             if (isModEnabled('category')) {
-                use Dolibarr\Code\Categories\Classes\Categorie;
-
                 print '<div class="inline-block">' . $langs->trans("CategoryFilter") . ': ';
                 print $form->select_all_categories(Categorie::TYPE_PRODUCT, $parent, 'parent') . ' &nbsp; </div>';
                 print ajax_combobox('parent');

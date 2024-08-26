@@ -55,7 +55,6 @@ if (isModEnabled('project')) {
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
 
 if (isModEnabled('variants')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';
 }
 
 
@@ -1987,7 +1986,6 @@ if ($action == 'create') {
         } else {
             $text = $langs->trans('ConfirmValidateOrder', $newref);
             if (isModEnabled('notification')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
                 $notify = new   Notify($db);
                 $text .= '<br>';
                 $text .= $notify->confirmMessage('ORDER_SUPPLIER_VALIDATE', $object->socid, $object);
@@ -2023,7 +2021,6 @@ if ($action == 'create') {
         }
         $text = $langs->trans("ConfirmApproveThisOrder", $object->ref);
         if (isModEnabled('notification')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
             $notify = new   Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('ORDER_SUPPLIER_APPROVE', $object->socid, $object);
@@ -2058,7 +2055,6 @@ if ($action == 'create') {
             )
         );
         if (!empty($conf->notification->enabled)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
             $notify = new   Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('ORDER_SUPPLIER_CANCEL', $object->socid, $object);
@@ -2070,7 +2066,6 @@ if ($action == 'create') {
     if ($action == 'commande') {
         $date_com = dol_mktime(GETPOST('rehour'), GETPOST('remin'), GETPOST('resec'), GETPOST("remonth"), GETPOST("reday"), GETPOST("reyear"));
         if (!empty($conf->notification->enabled)) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
             $notify = new   Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('ORDER_SUPPLIER_SUBMIT', $object->socid, $object);

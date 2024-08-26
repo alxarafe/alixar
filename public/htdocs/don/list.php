@@ -30,7 +30,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 if (isModEnabled('project')) {
 }
 

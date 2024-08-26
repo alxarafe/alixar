@@ -294,7 +294,6 @@ if ($type_element == 'order') {
     $thirdTypeSelect = 'customer';
 }
 if ($type_element == 'shipment') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
     $langs->load('sendings');
     $documentstatic = new Expedition($db);
     $sql_select = 'SELECT e.rowid as doc_id, e.ref as doc_number, \'1\' as doc_type, e.date_creation as dateprint, e.fk_statut as status, NULL as paid, e.date_delivery as delivery_planned_date,';
@@ -342,7 +341,6 @@ if ($type_element == 'supplier_order') {    // Supplier : Show products from ord
     $thirdTypeSelect = 'supplier';
 }
 if ($type_element == 'reception') {     // Supplier : Show products from orders.
-    require_once constant('DOL_DOCUMENT_ROOT') . '/reception/class/reception.class.php';
     $langs->loadLangs(['sendings', 'receptions']); // delivery planned date
     $documentstatic = new Reception($db);
     $sql_select = 'SELECT r.rowid as doc_id, r.ref as doc_number, \'1\' as doc_type, r.date_creation as dateprint, r.fk_statut as status, NULL as paid, r.date_delivery as delivery_planned_date, ';

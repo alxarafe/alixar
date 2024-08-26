@@ -25,6 +25,7 @@
 
 namespace Dolibarr\Code\Product\Classes;
 
+use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Core\Base\CommonObject;
 
 /**
@@ -777,8 +778,6 @@ class Entrepot extends CommonObject
         }
         // show categories for this record only in ajax to not overload lists
         if (!$nofetch && isModEnabled('category')) {
-            use Dolibarr\Code\Categories\Classes\Categorie;
-
             $form = new Form($this->db);
             $datas['categories_warehouse'] = '<br>' . $form->showCategories($this->id, Categorie::TYPE_WAREHOUSE, 1, 1);
         }
@@ -1018,8 +1017,6 @@ class Entrepot extends CommonObject
      */
     public function setCategories($categories)
     {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
         return parent::setCategoriesCommon($categories, Categorie::TYPE_WAREHOUSE);
     }
 

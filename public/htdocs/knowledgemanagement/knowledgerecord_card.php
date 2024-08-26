@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *      \file       knowledgerecord_card.php
  *      \ingroup    knowledgemanagement
@@ -25,11 +27,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/knowledgemanagement/lib/knowledgemanagement_knowledgerecord.lib.php';
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
 
 // Load translation files required by the page
 $langs->loadLangs(array("knowledgemanagement", "ticket", "other"));
@@ -313,8 +311,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmCloseKM', $object->ref);
         /*if (isModEnabled('notification'))
          {
-         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-         $notify = new Notify($db);
+          $notify = new Notify($db);
          $text .= '<br>';
          $text .= $notify->confirmMessage('MYOBJECT_CLOSE', $object->socid, $object);
          }*/
@@ -338,8 +335,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmReopenKM', $object->ref);
         /*if (isModEnabled('notification'))
          {
-         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-         $notify = new Notify($db);
+          $notify = new Notify($db);
          $text .= '<br>';
          $text .= $notify->confirmMessage('MYOBJECT_CLOSE', $object->socid, $object);
          }*/

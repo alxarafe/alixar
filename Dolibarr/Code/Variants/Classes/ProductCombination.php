@@ -648,7 +648,6 @@ class ProductCombination
      */
     public function fetchByProductCombination2ValuePairs($prodid, array $features)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination2ValuePair.class.php';
 
         $actual_comp = array();
 
@@ -697,8 +696,6 @@ class ProductCombination
      */
     public function getUniqueAttributesAndValuesByFkProductParent($productid)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttribute.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttributeValue.class.php';
 
         // Attributes
         // Select all unique attributes of the variants (which are to sell) of a given parent product.
@@ -768,8 +765,6 @@ class ProductCombination
     {
         global $conf;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttribute.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttributeValue.class.php';
 
         $this->db->begin();
 
@@ -987,7 +982,6 @@ class ProductCombination
      */
     public function copyAll(User $user, $origProductId, Product $destProduct)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination2ValuePair.class.php';
 
         //To prevent a loop
         if ($origProductId == $destProduct->id) {

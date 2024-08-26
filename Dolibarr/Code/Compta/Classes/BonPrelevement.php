@@ -1106,7 +1106,6 @@ class BonPrelevement extends CommonObject
         }
 
         if (!$error) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 
             $tmpsoc = new Societe($this->db);

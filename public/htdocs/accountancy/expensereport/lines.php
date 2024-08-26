@@ -33,7 +33,6 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
 
 use Dolibarr\Code\User\Classes\User;
 

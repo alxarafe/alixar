@@ -56,7 +56,6 @@ if (isModEnabled('project')) {
     }
 
 if (isModEnabled('variants')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';
 }
 
 $langs->loadLangs(array('bills', 'compta', 'suppliers', 'companies', 'products', 'banks', 'admin'));

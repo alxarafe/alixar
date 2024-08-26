@@ -22,7 +22,8 @@
 
 namespace Dolibarr\Core\Base;
 
-use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Code\Product\Classes\Product;
+use DoliDB;
 
 /**
  *  \file       htdocs/core/class/commonobjectline.class.php

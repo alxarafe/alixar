@@ -48,7 +48,6 @@ if (isModEnabled('deplacement')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 }
 if (isModEnabled('shipping')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 }
 
 /**

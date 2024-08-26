@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *      \file       htdocs/product/stock/list.php
  *      \ingroup    stock
@@ -32,9 +34,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 if (isModEnabled('category')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
-
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
 }
 
 // Load translation files required by the page

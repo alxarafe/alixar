@@ -20,11 +20,11 @@
 
 namespace Dolibarr\Code\Reception\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Reception\Classes\Reception;
+use Dolibarr\Code\Reception\Classes\ReceptionLineBatch;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/reception/class/reception.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/reception/class/receptionlinebatch.class.php';
 
 /**
  * API class for receptions
@@ -616,9 +616,6 @@ class Receptions extends DolibarrApi
     /*
     public function createShipmentFromOrder($orderid)
     {
-
-        use Dolibarr\Code\Adherents\Classes\Adherent;
-
         if (!DolibarrApiAccess::$user->hasRight('reception', 'lire')) {
                 throw new RestException(403);
         }

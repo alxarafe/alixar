@@ -31,7 +31,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/dons/modules_don.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
 

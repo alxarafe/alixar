@@ -25,6 +25,7 @@
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Categories\Classes\Categorie;
 
 /**
  *       \file       htdocs/compta/bank/list.php
@@ -38,10 +39,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.clas
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
-if (isModEnabled('category')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories', 'accountancy', 'compta'));

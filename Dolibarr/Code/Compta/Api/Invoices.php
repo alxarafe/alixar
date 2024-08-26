@@ -21,6 +21,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
 use Luracast\Restler\RestException;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
@@ -340,8 +341,6 @@ class Invoices extends DolibarrApi
      */
     public function createInvoiceFromOrder($orderid)
     {
-        use Dolibarr\Code\Adherents\Classes\Adherent;
-
         if (!DolibarrApiAccess::$user->hasRight('commande', 'lire')) {
             throw new RestException(403);
         }

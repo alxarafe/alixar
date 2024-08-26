@@ -59,7 +59,6 @@ if (isModEnabled('project')) {
     }
 
 if (isModEnabled('variants')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';
 }
 
 
@@ -2204,7 +2203,6 @@ if ($action == 'create' && $usercancreate) {
 
             $text = $langs->trans('ConfirmValidateOrder', $numref);
             if (isModEnabled('notification')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
                 $notify = new Notify($db);
                 $text .= '<br>';
                 $text .= $notify->confirmMessage('ORDER_VALIDATE', $object->socid, $object);

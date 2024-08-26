@@ -19,8 +19,10 @@
 
 namespace Dolibarr\Code\Adherents\Api;
 
+use Dolibarr\Code\Adherents\Classes\Subscription;
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
 
 /**
  * API class for subscriptions

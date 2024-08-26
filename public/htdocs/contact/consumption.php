@@ -21,6 +21,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Comm\Classes\Propal;
 
 /**
@@ -239,7 +240,6 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $doc_number = 'c.ref';
     $thirdTypeSelect = 'customer';
 } elseif ($type_element == 'order') {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
     $documentstatic = new Commande($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_commande as dateprint, c.fk_statut as status, tc.libelle as type_contact_label, ';
     $tables_from = MAIN_DB_PREFIX . 'commandedet d';

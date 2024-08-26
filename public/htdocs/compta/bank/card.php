@@ -28,6 +28,7 @@
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Categories\Classes\Categorie;
 
 /**
  *      \file       htdocs/compta/bank/card.php
@@ -40,12 +41,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formbank.class.php';
-if (isModEnabled('category')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
-}
-if (isModEnabled('accounting')) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("banks", "bills", "categories", "companies", "compta", "withdrawals"));

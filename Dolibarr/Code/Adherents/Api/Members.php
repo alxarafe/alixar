@@ -24,8 +24,11 @@
 namespace Dolibarr\Code\Adherents\Api;
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
 /**

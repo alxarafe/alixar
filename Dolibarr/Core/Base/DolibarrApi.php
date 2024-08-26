@@ -75,6 +75,149 @@ class DolibarrApi
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
 
+    public static function getModules($modulesdir = null)
+    {
+        if (!isset($modulesdir)) {
+            $modulesdir = dolGetModulesDirs();
+        }
+        return static::_getModules($modulesdir);
+    }
+
+    private static function _getModules($modulesdir)
+    {
+        $result = [];
+        foreach ($modulesdir as $dir) {
+            // Search available module
+            dol_syslog("Scan directory " . $dir . " for module descriptor files, then search for API files");
+
+            $handle = @opendir(dol_osencode($dir));
+            if (is_resource($handle)) {
+                while (($file = readdir($handle)) !== false) {
+
+                    if (is_readable($dir . $file)) {
+                        $module = DolibarrModules::_getModuleName($file);
+                        if (!DolibarrModules::isActivated($module)) {
+                            continue;
+                        }
+
+                        $moduledirforclass = static::getFolderForModuleCode($module);
+                        $moduleClasses = DolibarrApi::getModuleApiClasses($moduledirforclass);
+
+                        if (empty($moduleClasses)) {
+                            continue;
+                        }
+
+                        foreach ($moduleClasses as $name => $module) {
+                            $result[$name] = $module;
+                        }
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Get name of directory where the api_...class.php file is stored
+     *
+     * @param string $moduleobject Module object name
+     * @return  string                    Directory name
+     */
+    public static function getFolderForModuleCode($moduleobject)
+    {
+        $mapping = [
+            'Accounting' => 'Accountancy',
+            'Adherent' => 'Adherents',
+            'Agenda' => null,
+            'Ai' => 'Ai',
+            'Api' => 'Api',
+            'Asset' => 'Asset',
+        ];
+
+        if (isset($mapping[$moduleobject])) {
+            return $mapping[$moduleobject];
+        }
+
+        $moduledirforclass = $moduleobject;
+        if ($moduledirforclass != 'api') {
+            $moduledirforclass = preg_replace('/api$/i', '', $moduledirforclass);
+        }
+
+        if ($moduleobject == 'contracts') {
+            $moduledirforclass = 'contrat';
+        } elseif (in_array($moduleobject, array('admin', 'login', 'setup', 'access', 'status', 'tools', 'documents'))) {
+            $moduledirforclass = 'api';
+        } elseif ($moduleobject == 'contact' || $moduleobject == 'contacts' || $moduleobject == 'customer' || $moduleobject == 'thirdparty' || $moduleobject == 'thirdparties') {
+            $moduledirforclass = 'societe';
+        } elseif ($moduleobject == 'propale' || $moduleobject == 'proposals') {
+            $moduledirforclass = 'comm/propal';
+        } elseif ($moduleobject == 'agenda' || $moduleobject == 'agendaevents') {
+            $moduledirforclass = 'comm/action';
+        } elseif ($moduleobject == 'adherent' || $moduleobject == 'members' || $moduleobject == 'memberstypes' || $moduleobject == 'subscriptions') {
+            $moduledirforclass = 'adherents';
+        } elseif ($moduleobject == 'don' || $moduleobject == 'donations') {
+            $moduledirforclass = 'don';
+        } elseif ($moduleobject == 'banque' || $moduleobject == 'bankaccounts') {
+            $moduledirforclass = 'compta/bank';
+        } elseif ($moduleobject == 'category' || $moduleobject == 'categorie') {
+            $moduledirforclass = 'categories';
+        } elseif ($moduleobject == 'order' || $moduleobject == 'orders') {
+            $moduledirforclass = 'commande';
+        } elseif ($moduleobject == 'shipments') {
+            $moduledirforclass = 'expedition';
+        } elseif ($moduleobject == 'multicurrencies') {
+            $moduledirforclass = 'multicurrency';
+        } elseif ($moduleobject == 'facture' || $moduleobject == 'invoice' || $moduleobject == 'invoices') {
+            $moduledirforclass = 'compta/facture';
+        } elseif ($moduleobject == 'project' || $moduleobject == 'projects' || $moduleobject == 'task' || $moduleobject == 'tasks') {
+            $moduledirforclass = 'projet';
+        } elseif ($moduleobject == 'stock' || $moduleobject == 'stockmovements' || $moduleobject == 'warehouses') {
+            $moduledirforclass = 'product/stock';
+        } elseif ($moduleobject == 'supplierproposals' || $moduleobject == 'supplierproposal' || $moduleobject == 'supplier_proposal') {
+            $moduledirforclass = 'supplier_proposal';
+        } elseif ($moduleobject == 'fournisseur' || $moduleobject == 'supplierinvoices' || $moduleobject == 'supplierorders') {
+            $moduledirforclass = 'fourn';
+        } elseif ($moduleobject == 'ficheinter' || $moduleobject == 'interventions') {
+            $moduledirforclass = 'fichinter';
+        } elseif ($moduleobject == 'mos') {
+            $moduledirforclass = 'mrp';
+        } elseif ($moduleobject == 'workstations') {
+            $moduledirforclass = 'workstation';
+        } elseif ($moduleobject == 'accounting') {
+            $moduledirforclass = 'accountancy';
+        } elseif (in_array($moduleobject, array('products', 'expensereports', 'users', 'tickets', 'boms', 'receptions', 'partnerships', 'recruitments'))) {
+            $moduledirforclass = preg_replace('/s$/', '', $moduleobject);
+        } elseif ($moduleobject == 'paymentsalaries') {
+            $moduledirforclass = 'salaries';
+        } elseif ($moduleobject == 'paymentexpensereports') {
+            $moduledirforclass = 'expensereport';
+        }
+
+        return $moduledirforclass;
+    }
+
+    public static function getModuleApiClasses($moduleName): array
+    {
+        $result = [];
+        $apiPath = realpath(constant('BASE_PATH') . '/../Dolibarr/Code/' . $moduleName . '/Api');
+        if ($apiPath === false) {
+            return $result;
+        }
+
+        $dir = opendir($apiPath);
+        while (($file = readdir($dir)) !== false) {
+            if (pathinfo($file, PATHINFO_EXTENSION) !== 'php') {
+                continue;
+            }
+            $className = pathinfo($file, PATHINFO_FILENAME);
+            $result[$className] = static::getModuleNamespace($moduleName, $className);
+        }
+        closedir($dir);
+        return $result;
+    }
+
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      * Obtains the namespace of an API module.
      *
@@ -84,7 +227,7 @@ class DolibarrApi
      */
     public static function getModuleNamespace($moduleName, $className): string
     {
-        return '\\Dolibarr\\Code\\' . $moduleName . '\\Api\\' . $className;
+        return 'Dolibarr\\Code\\' . $moduleName . '\\Api\\' . $className;
     }
 
     /**
@@ -97,6 +240,8 @@ class DolibarrApi
     public static function getModule($moduleName, $className)
     {
         $namespace = static::getModuleNamespace($moduleName, $className);
+        if (!is_dir)
+            dump(['namespace' => $namespace]);
 
         return new $namespace();
     }
@@ -205,6 +350,7 @@ class DolibarrApi
         }
     }
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
 
     /**
@@ -253,9 +399,6 @@ class DolibarrApi
 
         return $object;
     }
-
-    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
 
     /**
      * Clean sensible object datas

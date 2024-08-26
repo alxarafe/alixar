@@ -21,7 +21,12 @@
 
 namespace Dolibarr\Code\KnowledgeManagement\Classes;
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        htdocs/knowledgemanagement/class/knowledgerecord.class.php
@@ -749,8 +754,6 @@ class KnowledgeRecord extends CommonObject
         $datas['lang'] = '<br><b>' . $langs->trans('Language') . ':</b> ' . picto_from_langcode($this->lang, 'class="paddingrightonly saturatemedium opacitylow"') . $labellang;
         // show categories for this record only in ajax to not overload lists
         if (isModEnabled('category') && !$nofetch) {
-            use Dolibarr\Code\Categories\Classes\Categorie;
-
             $form = new Form($this->db);
             $datas['categories'] = '<br>' . $form->showCategories($this->id, Categorie::TYPE_KNOWLEDGEMANAGEMENT, 1);
         }
@@ -1128,8 +1131,6 @@ class KnowledgeRecord extends CommonObject
      */
     public function setCategories($categories)
     {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
         return parent::setCategoriesCommon($categories, Categorie::TYPE_KNOWLEDGEMANAGEMENT);
     }
 
@@ -1168,29 +1169,5 @@ class KnowledgeRecord extends CommonObject
         $return .= '</div>';
         $return .= '</div>';
         return $return;
-    }
-}
-
-
-use Dolibarr\Core\Base\CommonObjectLine;
-
-/**
- * Class KnowledgeRecordLine. You can also remove this and generate a CRUD class for lines objects.
- */
-class KnowledgeRecordLine extends CommonObjectLine
-{
-    // To complete with content of an object KnowledgeRecordLine
-    // We should have a field rowid, fk_knowledgerecord and position
-
-    /**
-     * Constructor
-     *
-     * @param DoliDB $db Database handler
-     */
-    public function __construct(DoliDB $db)
-    {
-        $this->db = $db;
-
-        $this->isextrafieldmanaged = 0;
     }
 }

@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *  \file       htdocs/takepos/ajax/ajax.php
  *  \brief      Ajax search component for TakePos. It search products of a category.
@@ -41,7 +43,6 @@ if (!defined('NOBROWSERNOTIF')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
-use Dolibarr\Code\Categories\Classes\Categorie;
 
 require_once DOL_DOCUMENT_ROOT . "/product/class/product.class.php";
 
