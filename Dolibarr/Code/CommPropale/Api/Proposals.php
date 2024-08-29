@@ -22,12 +22,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Dolibarr\Code\Comm\Api;
+namespace Dolibarr\Code\CommPropale\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-
 
 /**
  * API class for orders
@@ -66,7 +66,7 @@ class Proposals extends DolibarrApi
      *
      * @param   int         $id             ID of commercial proposal
      * @param   int         $contact_list   0: Returned array of contacts/addresses contains all properties, 1: Return array contains just id
-     * @return  Object                      Object with cleaned properties
+     * @return  array                      Object with cleaned properties
      *
      * @throws  RestException
      */
@@ -82,7 +82,7 @@ class Proposals extends DolibarrApi
      *
      * @param       string      $ref            Ref of object
      * @param       int         $contact_list   0: Returned array of contacts/addresses contains all properties, 1: Return array contains just id
-     * @return      Object                      Object with cleaned properties
+     * @return      array                      Object with cleaned properties
      *
      * @url GET    ref/{ref}
      *
@@ -100,7 +100,7 @@ class Proposals extends DolibarrApi
      *
      * @param       string      $ref_ext        External reference of object
      * @param       int         $contact_list   0: Returned array of contacts/addresses contains all properties, 1: Return array contains just id
-     * @return      Object                      Object with cleaned properties
+     * @return      array                      Object with cleaned properties
      *
      * @url GET    ref_ext/{ref_ext}
      *
@@ -549,7 +549,7 @@ class Proposals extends DolibarrApi
      *
      * @param   int             $id             Id of commercial proposal to update
      * @param   int             $lineid         Id of line to delete
-     * @return  Object|false                    Object with cleaned properties
+     * @return  array                    Object with cleaned properties
      *
      * @url DELETE {id}/lines/{lineid}
      *
@@ -632,7 +632,7 @@ class Proposals extends DolibarrApi
      * @param   int    $id              Id of commercial proposal to update
      * @param   int    $contactid       Row key of the contact in the array contact_ids.
      * @param   string $type            Type of the contact (BILLING, SHIPPING, CUSTOMER).
-     * @return Object                   Object with cleaned properties
+     * @return array                   Object with cleaned properties
      *
      * @url DELETE {id}/contact/{contactid}/{type}
      *
@@ -676,7 +676,7 @@ class Proposals extends DolibarrApi
      *
      * @param   int     $id             Id of commercial proposal to update
      * @param   array   $request_data   Datas
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      */
     public function put($id, $request_data = null)
     {
@@ -764,7 +764,7 @@ class Proposals extends DolibarrApi
      * Set a proposal to draft
      *
      * @param   int     $id             Order ID
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url POST    {id}/settodraft
      */
@@ -815,7 +815,7 @@ class Proposals extends DolibarrApi
      *
      * @param   int     $id             Commercial proposal ID
      * @param   int     $notrigger      1=Does not execute triggers, 0= execute triggers
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url POST    {id}/validate
      *
@@ -867,7 +867,7 @@ class Proposals extends DolibarrApi
      * @param   int     $status         Must be 2 (accepted) or 3 (refused)             {@min 2}{@max 3}
      * @param   string  $note_private   Add this mention at end of private note
      * @param   int     $notrigger      Disabled triggers
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url POST    {id}/close
      */
@@ -911,7 +911,7 @@ class Proposals extends DolibarrApi
      * Set a commercial proposal billed. Could be also called setbilled
      *
      * @param   int     $id             Commercial proposal ID
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url POST    {id}/setinvoiced
      */

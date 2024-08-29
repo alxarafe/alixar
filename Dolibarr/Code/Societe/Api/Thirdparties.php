@@ -81,7 +81,7 @@ class Thirdparties extends DolibarrApi
      * Return an array with thirdparty information
      *
      * @param   int     $id             Id of third party to load
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws  RestException
      */
@@ -347,7 +347,7 @@ class Thirdparties extends DolibarrApi
      *
      * @param int   $id             ID of thirdparty to keep (the target third party)
      * @param int   $idtodelete     ID of thirdparty to remove (the thirdparty to delete), once data has been merged into the target third party.
-     * @return Object               Return the resulted third party.
+     * @return array               Return the resulted third party.
      *
      * @url PUT {id}/merge/{idtodelete}
      */
@@ -429,7 +429,7 @@ class Thirdparties extends DolibarrApi
      *
      * @param   int     $id             ID of thirdparty
      * @param   int     $priceLevel     Price level to apply to thirdparty
-     * @return  Object                  Thirdparty data without useless information
+     * @return  array                  Thirdparty data without useless information
      *
      * @url PUT {id}/setpricelevel/{priceLevel}
      *

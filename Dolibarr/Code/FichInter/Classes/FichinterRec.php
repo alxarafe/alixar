@@ -35,7 +35,6 @@ namespace Dolibarr\Code\FichInter\Classes;
  *  \brief      File for class to manage recurring interventions
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
 
 
 /**

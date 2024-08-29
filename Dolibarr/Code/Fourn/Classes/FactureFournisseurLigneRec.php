@@ -36,7 +36,6 @@ use Dolibarr\Code\Core\Classes\CommonInvoiceLine;
  *  \brief      File for class to manage invoice templates
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 /**

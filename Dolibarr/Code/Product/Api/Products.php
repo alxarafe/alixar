@@ -507,7 +507,7 @@ class Products extends DolibarrApi
      *
      * @param int $id Id of product to update
      * @param array $request_data Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      *
      * @throws RestException 401
      * @throws RestException 404
@@ -1271,7 +1271,7 @@ class Products extends DolibarrApi
      * Get attribute by ID.
      *
      * @param int $id ID of Attribute
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws RestException 401
      * @throws RestException 404
@@ -1447,7 +1447,7 @@ class Products extends DolibarrApi
      *
      * @param int $id ID of Attribute
      * @param array $request_data Datas
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws RestException
      * @throws RestException 401
@@ -1800,7 +1800,7 @@ class Products extends DolibarrApi
      *
      * @param int $id ID of Attribute
      * @param array $request_data Datas
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws RestException 401
      * @throws RestException 500    System error

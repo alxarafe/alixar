@@ -61,7 +61,7 @@ class Donations extends DolibarrApi
      * Return an array with donation information
      *
      * @param   int         $id         ID of order
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws  RestException
      */
@@ -214,9 +214,10 @@ class Donations extends DolibarrApi
     /**
      * Update order general fields (won't touch lines of order)
      *
-     * @param   int     $id                 Id of order to update
-     * @param   array   $request_data       Datas
-     * @return  Object                      Updated object
+     * @param int $id Id of order to update
+     * @param array $request_data Datas
+     * @return  array                      Updated object
+     * @throws RestException
      */
     public function put($id, $request_data = null)
     {

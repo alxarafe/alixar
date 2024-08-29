@@ -20,16 +20,20 @@
 
 namespace Dolibarr\Code\Categories\Api;
 
-use Luracast\Restler\RestException;
-
+use Dolibarr\Code\Adherents\Api\Members;
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
 use Dolibarr\Code\Categories\Classes\Categorie;
-
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/api_members.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/api_products.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/api_contacts.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/api_thirdparties.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/api_projects.class.php';
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Product\Api\Products;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Api\Projects;
+use Dolibarr\Code\Societe\Api\Contacts;
+use Dolibarr\Code\Societe\Api\Thirdparties;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\DolibarrApi;
+use Luracast\Restler\RestException;
 
 /**
  * API class for categories
@@ -224,7 +228,7 @@ class Categories extends DolibarrApi
      *
      * @param   int         $id             Id of category to update
      * @param   array       $request_data   Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      */
     public function put($id, $request_data = null)
     {

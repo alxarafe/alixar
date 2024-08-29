@@ -17,7 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Dolibarr\Code\Product\Api;
+namespace Dolibarr\Code\ProductStock\Api;
 
 use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
 use Dolibarr\Code\Product\Classes\Entrepot;
@@ -202,7 +202,8 @@ class Warehouses extends DolibarrApi
      *
      * @param int $id Id of warehouse to update
      * @param array $request_data Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
+     * @throws RestException
      */
     public function put($id, $request_data = null)
     {
@@ -248,7 +249,7 @@ class Warehouses extends DolibarrApi
      * Return an array with warehouse information
      *
      * @param int $id ID of warehouse
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws  RestException
      */

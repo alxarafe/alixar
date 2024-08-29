@@ -21,12 +21,11 @@
 
 namespace Dolibarr\Code\Api\Api;
 
-use Dolibarr\Code\Api\Classes\DoliDB;
 use Dolibarr\Code\User\Classes\User;
 use Luracast\Restler\RestException;
+use DoliDB;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
-
 
 /**
  * API that allows to log in with an user account.

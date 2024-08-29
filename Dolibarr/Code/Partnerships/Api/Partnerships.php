@@ -19,6 +19,8 @@
 
 namespace Dolibarr\Code\Partnerships\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Partnerships\Classes\Partnership;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
@@ -62,7 +64,7 @@ class Partnerships extends DolibarrApi
      * Return an array with partnership information
      *
      * @param   int     $id             ID of partnership
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url GET partnerships/{id}
      *
@@ -222,7 +224,7 @@ class Partnerships extends DolibarrApi
      *
      * @param   int     $id                 Id of partnership to update
      * @param   array   $request_data       Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      *
      * @throws RestException
      *

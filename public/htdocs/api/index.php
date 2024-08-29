@@ -25,7 +25,7 @@ use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\Format\UploadFormat;
 
-$api_route = $_GET['api_route'] ?? '/';
+$api_route = $_GET['api_route'] ?? '';
 unset($_GET['api_route']);
 $_SERVER['SCRIPT_NAME'] = '/api/index.php';
 
@@ -147,8 +147,11 @@ $hookmanager->initHooks(array('api'));
 $refreshcache = (getDolGlobalString('API_PRODUCTION_DO_NOT_ALWAYS_REFRESH_CACHE') ? false : true);
 if (!empty($reg[1]) && $reg[1] == 'explorer' && ($reg[2] == '/swagger.json' || $reg[2] == '/swagger.json/root' || $reg[2] == '/resources.json' || $reg[2] == '/resources.json/root')) {
     $refreshcache = true;
+    if (!is_dir($conf->api->dir_temp)) {
+        mkdir($conf->api->dir_temp);
+    }
     if (!is_writable($conf->api->dir_temp)) {
-        print 'Erreur temp dir api/temp not writable';
+        print 'Erreur temp dir api/temp (' . $conf->api->dir_temp . ') not writable';
         header('HTTP/1.1 500 temp dir api/temp not writable');
         exit(0);
     }
@@ -203,90 +206,6 @@ if (getDolGlobalString('API_RESTRICT_ON_IP')) {
 // Call Explorer file for all APIs definitions (this part is slow)
 if (!empty($reg[1]) && $reg[1] == 'explorer' && ($reg[2] == '/swagger.json' || $reg[2] == '/swagger.json/' || $reg[2] == '/swagger.json/root' || $reg[2] == '/resources.json/' || $reg[2] == '/resources.json' || $reg[2] == '/resources.json/root')) {
     // Scan all API files to load them
-
-    /*
-    $listofapis = array();
-    $modulesdir = dolGetModulesDirs();
-    foreach ($modulesdir as $dir) {
-        //dump(['dir' => $dir]);
-        // Search available module
-        dol_syslog("Scan directory " . $dir . " for module descriptor files, then search for API files");
-
-        $handle = @opendir(dol_osencode($dir));
-        if (is_resource($handle)) {
-            while (($file = readdir($handle)) !== false) {
-                //dump(['file' => $file]);
-
-                $regmod = array();
-                if (is_readable($dir . $file) && preg_match("/^mod(.*)\.class\.php$/i", $file, $regmod)) {
-                    $module = strtolower($regmod[1]);
-                    $moduledirforclass = getModuleDirForApiClass($module);
-                    $modulenameforenabled = $module;
-                    if ($module == 'propale') {
-                        $modulenameforenabled = 'propal';
-                    } elseif ($module == 'supplierproposal') {
-                        $modulenameforenabled = 'supplier_proposal';
-                    } elseif ($module == 'ficheinter') {
-                        $modulenameforenabled = 'intervention';
-                    }
-
-                    dol_syslog("Found module file " . $file . " - module=" . $module . " - modulenameforenabled=" . $modulenameforenabled . " - moduledirforclass=" . $moduledirforclass);
-
-                    // Defined if module is enabled
-                    $enabled = true;
-                    if (!isModEnabled($modulenameforenabled)) {
-                        $enabled = false;
-                    }
-
-                    if ($enabled) {
-                        // If exists, load the API class for enable module
-                        // Search files named api_<object>.class.php into /htdocs/<module>/class directory
-                        // @todo : use getElementProperties() function ?
-                        $dir_part = dol_buildpath('/' . $moduledirforclass . '/class/');
-
-                        $handle_part = @opendir(dol_osencode($dir_part));
-                        if (is_resource($handle_part)) {
-                            while (($file_searched = readdir($handle_part)) !== false) {
-
-
-                                if ($file_searched == 'api_access.class.php') {
-                                    continue;
-                                }
-
-                                //$conf->global->MAIN_MODULE_API_LOGIN_DISABLED = 1;
-                                if ($file_searched == 'api_login.class.php' && getDolGlobalString('MAIN_MODULE_API_LOGIN_DISABLED')) {
-                                    continue;
-                                }
-
-                                //dol_syslog("We scan to search api file with into ".$dir_part.$file_searched);
-
-                                $regapi = array();
-                                if (is_readable($dir_part . $file_searched) && preg_match("/^api_(.*)\.class\.php$/i", $file_searched, $regapi)) {
-                                    $classname = ucwords($regapi[1]);
-                                    $classname = str_replace('_', '', $classname);
-                                    require_once $dir_part . $file_searched;
-                                    if (class_exists($classname . 'Api')) {
-                                        //dol_syslog("Found API by index.php: classname=".$classname."Api for module ".$dir." into ".$dir_part.$file_searched);
-                                        $listofapis[strtolower($classname . 'Api')] = $classname . 'Api';
-                                    } elseif (class_exists($classname)) {
-                                        //dol_syslog("Found API by index.php: classname=".$classname." for module ".$dir." into ".$dir_part.$file_searched);
-                                        $listofapis[strtolower($classname)] = $classname;
-                                    } else {
-                                        dol_syslog("We found an api_xxx file (" . $file_searched . ") but class " . $classname . " does not exists after loading file", LOG_WARNING);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // Sort the classes before adding them to Restler.
-    // The Restler API Explorer shows the classes in the order they are added and it's a mess if they are not sorted.
-    */
-
     $listofapis = DolibarrApi::getModules();
     foreach ($listofapis as $apiname => $classname) {
         new $classname();
@@ -294,7 +213,6 @@ if (!empty($reg[1]) && $reg[1] == 'explorer' && ($reg[2] == '/swagger.json' || $
     }
 }
 
-dd([$listofapis, $api->r]);
 
 // Call one APIs or one definition of an API
 $regbis = array();
@@ -364,8 +282,9 @@ if (!empty($reg[1]) && ($reg[1] != 'explorer' || ($reg[2] != '/swagger.json' && 
 
     dol_syslog('Search api file /' . $moduledirforclass . '/class/api_' . $classfile . '.class.php => dir_part_file=' . $dir_part_file . ', classname=' . $classname);
 
-    $namespace = DolibarrApi::getModule($modulename, $classname);
-    if (!class_exists($namespace)) {
+    $namespace = DolibarrApi::getModuleNamespace($modulename, $classname);
+    $class = new $namespace();
+    if (!isset($class)) {
         dol_syslog('Failed to make include_once ' . $dir_part_file, LOG_WARNING);
         print 'API not found (failed to include API file)';
         header('HTTP/1.1 501 API not found (failed to include API file)');

@@ -64,7 +64,7 @@ class Shipments extends DolibarrApi
      * Return an array with shipment information
      *
      * @param   int         $id         ID of shipment
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws  RestException
      */
@@ -443,7 +443,7 @@ class Shipments extends DolibarrApi
      *
      * @param   int     $id                 Id of shipment to update
      * @param   array   $request_data       Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      */
     public function put($id, $request_data = null)
     {

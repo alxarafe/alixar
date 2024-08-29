@@ -476,7 +476,7 @@ class Tickets extends DolibarrApi
      *
      * @param int $id Id of ticket to update
      * @param array $request_data Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      */
     public function put($id, $request_data = null)
     {
@@ -516,7 +516,7 @@ class Tickets extends DolibarrApi
      * Return an array with ticket information
      *
      * @param int $id ID of ticket
-     * @return  Object                      Object with cleaned properties
+     * @return  array                      Object with cleaned properties
      *
      * @throws RestException 401
      * @throws RestException 403

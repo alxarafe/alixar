@@ -74,7 +74,7 @@ class ExpenseReports extends DolibarrApi
      * Return an array with Expense Report information
      *
      * @param   int         $id         ID of Expense Report
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws  RestException
      */
@@ -413,7 +413,7 @@ class ExpenseReports extends DolibarrApi
      *
      * @param   int     $id                 Id of Expense Report to update
      * @param   array   $request_data       Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      *
      * @throws  RestException   401     Not allowed
      * @throws  RestException   404     Expense report not found

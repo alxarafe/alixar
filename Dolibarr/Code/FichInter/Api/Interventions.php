@@ -20,6 +20,8 @@
 
 namespace Dolibarr\Code\FichInter\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
 use Dolibarr\Core\Base\DolibarrApi;
 
 /**
@@ -29,7 +31,6 @@ use Dolibarr\Core\Base\DolibarrApi;
  */
 
 use Luracast\Restler\RestException;
-
 
 /**
  * API class for Interventions
@@ -77,7 +78,7 @@ class Interventions extends DolibarrApi
      * Return an array with Expense Report information
      *
      * @param       int         $id         ID of Expense Report
-     * @return      Object                  Object with cleaned properties
+     * @return      array                  Object with cleaned properties
      *
      * @throws  RestException
      */
@@ -347,7 +348,7 @@ class Interventions extends DolibarrApi
      *
      * @url POST    {id}/validate
      *
-     * @return  Object
+     * @return  array
      */
     public function validate($id, $notrigger = 0)
     {
@@ -383,7 +384,7 @@ class Interventions extends DolibarrApi
      *
      * @url POST    {id}/close
      *
-     * @return  Object
+     * @return  array
      */
     public function closeFichinter($id)
     {

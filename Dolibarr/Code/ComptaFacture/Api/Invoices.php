@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2015   Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2020   Thibault FOUCART		<support@ptibogxiv.net>
- * Copyright (C) 2023	Joachim Kueter			<git-jk@bloxera.com>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2020       Thibault FOUCART		    <support@ptibogxiv.net>
+ * Copyright (C) 2023	    Joachim Kueter			    <git-jk@bloxera.com>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,11 +21,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Adherents\Classes\Adherent;
+namespace Dolibarr\Code\ComptaFacture\Api;
+
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\FactureRec;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
-
+use Paiement;
 
 /**
  * API class for invoices
@@ -72,7 +78,7 @@ class Invoices extends DolibarrApi
      *
      * @param   int     $id             ID of invoice
      * @param   int     $contact_list   0:Return array contains all properties, 1:Return array contains just id, -1: Do not return contacts/adddesses
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws  RestException
      */
@@ -88,7 +94,7 @@ class Invoices extends DolibarrApi
      *
      * @param   string      $ref            Ref of object
      * @param   int         $contact_list   0: Returned array of contacts/addresses contains all properties, 1: Return array contains just id, -1: Do not return contacts/adddesses
-     * @return  Object                      Object with cleaned properties
+     * @return  array                      Object with cleaned properties
      *
      * @url GET    ref/{ref}
      *
@@ -106,7 +112,7 @@ class Invoices extends DolibarrApi
      *
      * @param   string      $ref_ext        External reference of object
      * @param   int         $contact_list   0: Returned array of contacts/addresses contains all properties, 1: Return array contains just id, -1: Do not return contacts/adddesses
-     * @return  Object                      Object with cleaned properties
+     * @return  array                      Object with cleaned properties
      *
      * @url GET    ref_ext/{ref_ext}
      *
@@ -330,7 +336,7 @@ class Invoices extends DolibarrApi
      * Create an invoice using an existing order.
      *
      * @param int   $orderid       Id of the order
-     * @return  Object              Object with cleaned properties
+     * @return  array              Object with cleaned properties
      *
      * @url     POST /createfromorder/{orderid}
      *
@@ -369,7 +375,7 @@ class Invoices extends DolibarrApi
     * Create an invoice using a contract.
     *
     * @param int   $contractid       Id of the contract
-    * @return     Object                          Object with cleaned properties
+     * @return     array                          Object with cleaned properties
     *
     * @url     POST /createfromcontract/{contractid}
     *
@@ -441,7 +447,7 @@ class Invoices extends DolibarrApi
      * @param   int   $id             Id of invoice to update
      * @param   int   $lineid         Id of line to update
      * @param   array $request_data   InvoiceLine data
-     * @return  Object                Object with cleaned properties
+     * @return  array                Object with cleaned properties
      *
      * @url PUT {id}/lines/{lineid}
      *
@@ -560,7 +566,7 @@ class Invoices extends DolibarrApi
      * @param   int    $id             Id of invoice to update
      * @param   int    $contactid      Row key of the contact in the array contact_ids.
      * @param   string $type           Type of the contact (BILLING, SHIPPING, CUSTOMER).
-     * @return  Object                 Object with cleaned properties
+     * @return  array                 Object with cleaned properties
      *
      * @url DELETE {id}/contact/{contactid}/{type}
      *
@@ -604,7 +610,7 @@ class Invoices extends DolibarrApi
      *
      * @param   int   $id               Id of invoice
      * @param   int   $lineid           Id of the line to delete
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url     DELETE {id}/lines/{lineid}
      *
@@ -883,7 +889,7 @@ class Invoices extends DolibarrApi
      *
      * @param   int $id             Order ID
      * @param   int $idwarehouse    Warehouse ID
-     * @return  Object              Object with cleaned properties
+     * @return  array              Object with cleaned properties
      *
      * @url POST    {id}/settodraft
      *
@@ -989,7 +995,7 @@ class Invoices extends DolibarrApi
      * @param   int     $id            Order ID
      * @param   string  $close_code    Code filled if we classify to 'Paid completely' when payment is not complete (for escompte for example)
      * @param   string  $close_note    Comment defined if we classify to 'Paid' when payment is not complete (for escompte for example)
-     * @return  Object                 Object with cleaned properties
+     * @return  array                 Object with cleaned properties
      *
      * @url POST    {id}/settopaid
      *
@@ -1038,7 +1044,7 @@ class Invoices extends DolibarrApi
      * Sets an invoice as unpaid
      *
      * @param   int     $id             Order ID
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url POST    {id}/settounpaid
      *
@@ -1086,7 +1092,7 @@ class Invoices extends DolibarrApi
      * Get discount from invoice
      *
      * @param int   $id             Id of invoice
-     * @return  Object              Object with cleaned properties
+     * @return  array              Object with cleaned properties
      *
      * @url GET {id}/discount
      */
@@ -1124,7 +1130,7 @@ class Invoices extends DolibarrApi
      * Create a discount (credit available) for a credit note or a deposit.
      *
      * @param   int     $id             Invoice ID
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url POST    {id}/markAsCreditAvailable
      *
@@ -1777,7 +1783,7 @@ class Invoices extends DolibarrApi
      *
      * @param   int     $id             ID of template invoice
      * @param   int     $contact_list   0:Return array contains all properties, 1:Return array contains just id, -1: Do not return contacts/adddesses
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url GET    templates/{id}
      *
@@ -1797,7 +1803,7 @@ class Invoices extends DolibarrApi
      * @param   string      $ref            Ref of object
      * @param   string      $ref_ext        External reference of object
      * @param   int         $contact_list   0: Returned array of contacts/addresses contains all properties, 1: Return array contains just id, -1: Do not return contacts/adddesses
-     * @return  Object                      Object with cleaned properties
+     * @return  array                      Object with cleaned properties
      *
      * @throws  RestException
      */

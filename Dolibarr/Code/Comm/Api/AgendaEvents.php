@@ -20,9 +20,10 @@
 
 namespace Dolibarr\Code\Comm\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-
 
 /**
  * API class for Agenda Events
@@ -60,7 +61,7 @@ class AgendaEvents extends DolibarrApi
      * Return an array with Agenda Events information
      *
      * @param   int         $id         ID of Agenda Events
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws  RestException
      */

@@ -80,7 +80,9 @@ class DolibarrApi
         if (!isset($modulesdir)) {
             $modulesdir = dolGetModulesDirs();
         }
-        return static::_getModules($modulesdir);
+        $result = static::_getModules($modulesdir);
+        asort($result);
+        return $result;
     }
 
     private static function _getModules($modulesdir)
@@ -128,72 +130,94 @@ class DolibarrApi
         $mapping = [
             'Accounting' => 'Accountancy',
             'Adherent' => 'Adherents',
-            'Agenda' => null,
+            'Agenda' => 'Comm',
             'Ai' => 'Ai',
             'Api' => 'Api',
-            'Asset' => 'Asset',
+            'Banque' => 'ComptaBank',
+            'Barcode' => 'Barcode',
+            'BlockedLog' => 'BloquedLog',
+            'Bom' => 'Bom',
+            'BookCal' => 'BookCal',
+            'Bookmark' => 'Bookmark',
+            'Category' => 'Categories',
+            'ClickToDial' => 'ClickToDial',
+            'Commande' => 'Commande',
+            'Contrat' => 'Contrat',
+            'Cron' => 'Cron',
+            'DataPolicy' => 'DataPolicy',
+            'Dav' => 'Dav',
+            'DebugBar' => 'DebugBar',
+            'Don' => 'Don',
+            'DynamicPrices' => 'DynamicPrices',
+            'ECM' => 'Ecm',
+            'EmailCollector' => 'EmailCollector',
+            'EventOrganization' => 'EventOrganization',
+            'Expedition' => 'Expedition',
+            'ExpenseReport' => 'ExpenseReport',
+            'Export' => 'Exports',
+            'ExternalRss' => 'ExternalRss',
+            'ExternalSite' => 'ExternalSite',
+            'Facture' => 'ComptaFacture',
+            'Fckeditor' => 'Fckeditor',
+            'Ficheinter' => 'FichInter',
+            'Fournisseur' => 'Fourn',
+            'GeoIPMaxmind' => 'GeoIPMaxmind',
+            'Gravatar' => 'Gravatar',
+            'Holiday' => 'Holiday',
+            'HRM' => 'Hrm',
+            'Import' => 'Imports',
+            'Incoterm' => 'Incoterm',
+            'KnowledgeManagement' => 'KnowledgeManagement',
+            'Ldap' => 'Ldap',
+            'Loan' => 'Loan',
+            'Mailing' => 'Mailing',
+            'MailmanSpip' => 'MailmanSpip',
+            'Margin' => 'Margin',
+            'ModuleBuilder' => 'ModuleBuilder',
+            'Mrp' => 'Mrp',
+            'MultiCurrency' => 'MultiCurrency',
+            'Notification' => 'Notification',
+            'Oauth' => 'Oauth',
+            'OpenSurvey' => 'OpenSurvey',
+            'Partnership' => 'Partnerships',
+            'PaymentByBankTransfer' => 'PaymentByBankTransfer',
+            'Paypal' => 'Paypal',
+            'Prelevement' => 'Prelevement',
+            'Printing' => 'Printing',
+            'ProductBatch' => 'ProductBatch',
+            'Product' => 'Product',
+            'Projet' => 'Projet',
+            'Propale' => 'CommPropale',
+            'ReceiptPrinter' => 'ReceiptPrinter',
+            'Reception' => 'Reception',
+            'Recruitment' => 'Recruitement',
+            'Resource' => 'Resource',
+            'Salaries' => 'Salaries',
+            'Service' => 'Service',
+            'SocialNetworks' => 'SocialNetworks',
+            'Societe' => 'Societe',
+            'Stock' => 'ProductStock',
+            'StockTransfer' => 'StockTransfer',
+            'Stripe' => 'Stripe',
+            'SupplierProposal' => 'SupplierProposal',
+            'Syslog' => 'Syslog',
+            'TakePos' => 'TakePos',
+            'Tax' => 'Tax',
+            'Ticket' => 'Ticket',
+            'User' => 'User',
+            'Variants' => 'Variants',
+            'Webhook' => 'WebHook',
+            'WebPortal' => 'WebPortal',
+            'Website' => 'Website',
+            'Workflow' => 'Workflow',
+            'Workstation' => 'Workstation',
         ];
 
         if (isset($mapping[$moduleobject])) {
             return $mapping[$moduleobject];
         }
 
-        $moduledirforclass = $moduleobject;
-        if ($moduledirforclass != 'api') {
-            $moduledirforclass = preg_replace('/api$/i', '', $moduledirforclass);
-        }
-
-        if ($moduleobject == 'contracts') {
-            $moduledirforclass = 'contrat';
-        } elseif (in_array($moduleobject, array('admin', 'login', 'setup', 'access', 'status', 'tools', 'documents'))) {
-            $moduledirforclass = 'api';
-        } elseif ($moduleobject == 'contact' || $moduleobject == 'contacts' || $moduleobject == 'customer' || $moduleobject == 'thirdparty' || $moduleobject == 'thirdparties') {
-            $moduledirforclass = 'societe';
-        } elseif ($moduleobject == 'propale' || $moduleobject == 'proposals') {
-            $moduledirforclass = 'comm/propal';
-        } elseif ($moduleobject == 'agenda' || $moduleobject == 'agendaevents') {
-            $moduledirforclass = 'comm/action';
-        } elseif ($moduleobject == 'adherent' || $moduleobject == 'members' || $moduleobject == 'memberstypes' || $moduleobject == 'subscriptions') {
-            $moduledirforclass = 'adherents';
-        } elseif ($moduleobject == 'don' || $moduleobject == 'donations') {
-            $moduledirforclass = 'don';
-        } elseif ($moduleobject == 'banque' || $moduleobject == 'bankaccounts') {
-            $moduledirforclass = 'compta/bank';
-        } elseif ($moduleobject == 'category' || $moduleobject == 'categorie') {
-            $moduledirforclass = 'categories';
-        } elseif ($moduleobject == 'order' || $moduleobject == 'orders') {
-            $moduledirforclass = 'commande';
-        } elseif ($moduleobject == 'shipments') {
-            $moduledirforclass = 'expedition';
-        } elseif ($moduleobject == 'multicurrencies') {
-            $moduledirforclass = 'multicurrency';
-        } elseif ($moduleobject == 'facture' || $moduleobject == 'invoice' || $moduleobject == 'invoices') {
-            $moduledirforclass = 'compta/facture';
-        } elseif ($moduleobject == 'project' || $moduleobject == 'projects' || $moduleobject == 'task' || $moduleobject == 'tasks') {
-            $moduledirforclass = 'projet';
-        } elseif ($moduleobject == 'stock' || $moduleobject == 'stockmovements' || $moduleobject == 'warehouses') {
-            $moduledirforclass = 'product/stock';
-        } elseif ($moduleobject == 'supplierproposals' || $moduleobject == 'supplierproposal' || $moduleobject == 'supplier_proposal') {
-            $moduledirforclass = 'supplier_proposal';
-        } elseif ($moduleobject == 'fournisseur' || $moduleobject == 'supplierinvoices' || $moduleobject == 'supplierorders') {
-            $moduledirforclass = 'fourn';
-        } elseif ($moduleobject == 'ficheinter' || $moduleobject == 'interventions') {
-            $moduledirforclass = 'fichinter';
-        } elseif ($moduleobject == 'mos') {
-            $moduledirforclass = 'mrp';
-        } elseif ($moduleobject == 'workstations') {
-            $moduledirforclass = 'workstation';
-        } elseif ($moduleobject == 'accounting') {
-            $moduledirforclass = 'accountancy';
-        } elseif (in_array($moduleobject, array('products', 'expensereports', 'users', 'tickets', 'boms', 'receptions', 'partnerships', 'recruitments'))) {
-            $moduledirforclass = preg_replace('/s$/', '', $moduleobject);
-        } elseif ($moduleobject == 'paymentsalaries') {
-            $moduledirforclass = 'salaries';
-        } elseif ($moduleobject == 'paymentexpensereports') {
-            $moduledirforclass = 'expensereport';
-        }
-
-        return $moduledirforclass;
+        return null;
     }
 
     public static function getModuleApiClasses($moduleName): array
@@ -240,9 +264,6 @@ class DolibarrApi
     public static function getModule($moduleName, $className)
     {
         $namespace = static::getModuleNamespace($moduleName, $className);
-        if (!is_dir)
-            dump(['namespace' => $namespace]);
-
         return new $namespace();
     }
 

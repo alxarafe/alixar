@@ -378,7 +378,7 @@ class Contracts extends DolibarrApi
      * Return an array with contract information
      *
      * @param int $id ID of contract
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      * @throws  RestException
      */
     public function get($id)
@@ -521,7 +521,8 @@ class Contracts extends DolibarrApi
      *
      * @param int $id Id of contract to update
      * @param array $request_data Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
+     * @throws RestException
      */
     public function put($id, $request_data = null)
     {

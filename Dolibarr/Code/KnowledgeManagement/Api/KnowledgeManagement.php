@@ -64,7 +64,7 @@ class KnowledgeManagement extends DolibarrApi
      * Return an array with knowledgerecord information
      *
      * @param   int     $id             ID of knowledgerecord
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url GET knowledgerecords/{id}
      *
@@ -262,7 +262,7 @@ class KnowledgeManagement extends DolibarrApi
      *
      * @param   int     $id                 Id of knowledgerecord to update
      * @param   array   $request_data       Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      *
      * @throws RestException
      *

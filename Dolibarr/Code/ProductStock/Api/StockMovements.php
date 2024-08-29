@@ -17,7 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Dolibarr\Code\Product\Api;
+namespace Dolibarr\Code\ProductStock\Api;
 
 use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
 use Dolibarr\Code\Product\Classes\MouvementStock;

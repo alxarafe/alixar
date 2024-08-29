@@ -472,6 +472,8 @@ class Tasks extends DolibarrApi
      * @param int $id Id of task to update
      * @param array $request_data Datas
      * @return  array                      Updated object
+     *
+     * @throws RestException
      */
     public function put($id, $request_data = null)
     {

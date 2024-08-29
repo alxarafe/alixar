@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2016 Xebax Christy <xebax@wanadoo.fr>
+ * Copyright (C) 2016       Xebax Christy               <xebax@wanadoo.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -20,8 +20,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Luracast\Restler\RestException;
+namespace Dolibarr\Code\ComptaBank\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Core\Base\DolibarrApi;
+use Luracast\Restler\RestException;
 
 /**
  * API class for accounts
@@ -126,7 +130,7 @@ class BankAccounts extends DolibarrApi
      * Get account by ID.
      *
      * @param   int         $id             ID of account
-     * @return  Object                      Object with cleaned properties
+     * @return  array                      Object with cleaned properties
      *
      * @throws RestException
      */
@@ -324,7 +328,7 @@ class BankAccounts extends DolibarrApi
      *
      * @param   int    $id              ID of account
      * @param   array  $request_data    data
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      */
     public function put($id, $request_data = null)
     {

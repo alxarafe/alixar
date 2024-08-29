@@ -93,7 +93,7 @@ class SupplierProposals extends DolibarrApi
      * Return an array with supplier proposal information
      *
      * @param       int         $id         ID of supplier proposal
-     * @return      Object                  Object with cleaned properties
+     * @return      array                  Object with cleaned properties
      *
      * @throws  RestException
      */
@@ -158,7 +158,7 @@ class SupplierProposals extends DolibarrApi
      *
      * @param   int     $id             Id of supplier proposal to update
      * @param   array   $request_data   Datas
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      */
     public function put($id, $request_data = null)
     {

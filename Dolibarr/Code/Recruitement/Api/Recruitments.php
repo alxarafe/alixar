@@ -19,11 +19,11 @@
 
 namespace Dolibarr\Code\Recruitement\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Recruitement\Classes\RecruitmentCandidature;
+use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-dol_include_once('/recruitment/class/recruitmentjobposition.class.php');
-dol_include_once('/recruitment/class/recruitmentcandidature.class.php');
 
 /**
  * \file    recruitment/class/api_recruitment.class.php
@@ -70,7 +70,7 @@ class Recruitments extends DolibarrApi
      * Return an array with jobposition information
      *
      * @param   int         $id     ID of jobposition
-     * @return  Object              Object with cleaned properties
+     * @return  array              Object with cleaned properties
      *
      * @url GET jobposition/{id}
      *
@@ -101,7 +101,7 @@ class Recruitments extends DolibarrApi
      * Return an array with candidature information
      *
      * @param   int     $id     ID of candidature
-     * @return  Object          Object with cleaned properties
+     * @return  array          Object with cleaned properties
      *
      * @url GET candidature/{id}
      *
@@ -391,7 +391,7 @@ class Recruitments extends DolibarrApi
      *
      * @param int   $id                     Id of jobposition to update
      * @param array $request_data           Datas
-     * @return      Object                  Object with cleaned properties
+     * @return      array                  Object with cleaned properties
      *
      * @throws RestException
      *
@@ -440,7 +440,7 @@ class Recruitments extends DolibarrApi
      *
      * @param   int     $id             Id of candidature to update
      * @param   array   $request_data   Datas
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws RestException
      *

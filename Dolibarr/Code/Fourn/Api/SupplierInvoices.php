@@ -22,9 +22,10 @@
 
 namespace Dolibarr\Code\Fourn\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
 
 /**
  * API class for supplier invoices
@@ -64,7 +65,7 @@ class SupplierInvoices extends DolibarrApi
      * Return an array with supplier invoice information
      *
      * @param   int     $id             ID of supplier invoice
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws  RestException 403
      * @throws  RestException 404

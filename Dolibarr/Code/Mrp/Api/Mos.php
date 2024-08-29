@@ -64,7 +64,7 @@ class Mos extends DolibarrApi
      * Return an array with MO information
      *
      * @param   int     $id             ID of MO
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url GET {id}
      * @throws  RestException
@@ -214,7 +214,7 @@ class Mos extends DolibarrApi
      *
      * @param   int     $id                 Id of MO to update
      * @param   array   $request_data       Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      */
     public function put($id, $request_data = null)
     {

@@ -70,7 +70,7 @@ class Projects extends DolibarrApi
      * Return an array with project information
      *
      * @param string $ref Ref of project
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url GET ref/{ref}
      *
@@ -152,7 +152,7 @@ class Projects extends DolibarrApi
      * Return an array with project information
      *
      * @param string $ref_ext Ref_Ext of project
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url GET ref_ext/{ref_ext}
      *
@@ -183,7 +183,7 @@ class Projects extends DolibarrApi
      * Return an array with project information
      *
      * @param string $email_msgid Email msgid of project
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url GET email_msgid/{email_msgid}
      *
@@ -222,6 +222,8 @@ class Projects extends DolibarrApi
      * @param string $sqlfilters Other criteria to filter answers separated by a comma. Syntax example "(t.ref:like:'SO-%') and (t.date_creation:<:'20160101')"
      * @param string $properties Restrict the data returned to these properties. Ignored if empty. Comma separated list of properties names
      * @return  array                               Array of project objects
+     *
+     * @throws RestException
      */
     public function index($sortfield = "t.rowid", $sortorder = 'ASC', $limit = 100, $page = 0, $thirdparty_ids = '', $category = 0, $sqlfilters = '', $properties = '')
     {
@@ -573,7 +575,9 @@ class Projects extends DolibarrApi
      *
      * @param int $id Id of project to update
      * @param array $request_data Datas
-     * @return  Object                      Updated object
+     * @return  Array                      Updated object
+     *
+     * @throws RestException
      */
     public function put($id, $request_data = null)
     {
@@ -621,7 +625,7 @@ class Projects extends DolibarrApi
      * Return an array with project information
      *
      * @param int $id ID of project
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws  RestException
      */
@@ -653,6 +657,8 @@ class Projects extends DolibarrApi
      * @param int $id Project ID
      *
      * @return  array
+     *
+     * @throws RestException
      */
     public function delete($id)
     {
@@ -691,12 +697,15 @@ class Projects extends DolibarrApi
      * @url POST    {id}/validate
      *
      * @return  array
+     *
      * FIXME An error 403 is returned if the request has an empty body.
      * Error message: "Forbidden: Content type `text/plain` is not supported."
      * Workaround: send this in the body
      * {
      *   "notrigger": 0
      * }
+     *
+     * @throws RestException
      */
     public function validate($id, $notrigger = 0)
     {

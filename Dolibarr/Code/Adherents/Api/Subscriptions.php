@@ -57,7 +57,7 @@ class Subscriptions extends DolibarrApi
      * Return an array with subscription information
      *
      * @param   int     $id             ID of subscription
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws  RestException   403     Access denied
      * @throws  RestException   404     No Subscription found
@@ -183,7 +183,7 @@ class Subscriptions extends DolibarrApi
      *
      * @param   int         $id             ID of subscription to update
      * @param   array       $request_data   Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      *
      * @throws  RestException   403     Access denied
      * @throws  RestException   404     No Subscription found
