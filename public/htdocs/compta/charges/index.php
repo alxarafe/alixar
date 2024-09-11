@@ -34,7 +34,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/paymentvat.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/paymentsocialcontribution.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 

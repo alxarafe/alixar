@@ -48,7 +48,6 @@ if (isModEnabled('margin')) {
 use Dolibarr\Code\Adherents\Classes\Adherent;
 
 if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
 }
 
 // Load translation files required by the page

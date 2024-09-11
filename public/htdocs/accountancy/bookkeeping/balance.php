@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2016       Olivier Geffroy         <jeff@jeffinfo.com>
- * Copyright (C) 2016       Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2016-2024  Alexandre Spangaro      <alexandre@inovea-conseil.com>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2024       MDW                     <mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2016       Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2016       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2016-2024  Alexandre Spangaro          <alexandre@inovea-conseil.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       MDW                         <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,10 +21,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Accountancy\Classes\AccountancyExport;
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
-use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Accountancy\Classes\BookKeeping;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormOther;
 
 /**
  *  \file       htdocs/accountancy/bookkeeping/balance.php
@@ -38,7 +39,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 // Class
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("accountancy", "compta"));

@@ -33,7 +33,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
 }
 
 // Load translation files required by the page

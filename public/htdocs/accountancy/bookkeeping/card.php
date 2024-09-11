@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2013-2017  Olivier Geffroy         <jeff@jeffinfo.com>
- * Copyright (C) 2013-2017  Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2013-2024  Alexandre Spangaro      <alexandre@inovea-conseil.com>
- * Copyright (C) 2017       Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2024       MDW                     <mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2013-2017  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2017  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2024  Alexandre Spangaro          <alexandre@inovea-conseil.com>
+ * Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       MDW                         <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,8 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Accountancy\Classes\BookKeeping;
 use Dolibarr\Code\Accountancy\Classes\BookKeepingLine;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
 
 /**
  * \file        htdocs/accountancy/bookkeeping/card.php
@@ -36,7 +38,6 @@ use Dolibarr\Code\Accountancy\Classes\BookKeepingLine;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("accountancy", "bills", "compta"));
@@ -342,8 +343,6 @@ if (empty($reshook)) {
         }
     }
 }
-
-
 
 /*
  * View

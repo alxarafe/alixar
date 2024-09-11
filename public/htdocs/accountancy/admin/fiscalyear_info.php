@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2014-2024  Alexandre Spangaro  <aspangaro@easya.solutions>
+/* Copyright (C) 2014-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,8 @@
  * \ingroup     Accountancy (Double entries)
  * \brief       Page to show info of a fiscal year
  */
+
+use Dolibarr\Code\Core\Classes\Fiscalyear;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

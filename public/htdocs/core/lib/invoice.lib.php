@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2005-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2013		Florian Henry		<florian.henry@open-concept.pro>
- * Copyright (C) 2015       Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2017      	Charlie Benke		<charlie@patas-monkey.com>
- * Copyright (C) 2017       ATM-CONSULTING		<contact@atm-consulting.fr>
+/* Copyright (C) 2005-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2013		Florian Henry		        <florian.henry@open-concept.pro>
+ * Copyright (C) 2015       Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2017      	Charlie Benke		        <charlie@patas-monkey.com>
+ * Copyright (C) 2017       ATM-CONSULTING		        <contact@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -29,6 +29,14 @@
  *      \brief      Functions used by invoice module
  *      \ingroup    invoice
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  * Initialize the array of tabs for customer invoice

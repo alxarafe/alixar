@@ -48,7 +48,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 if (isModEnabled("product")) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 }

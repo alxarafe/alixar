@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2016       Jamal Elbaz         <jamelbaz@gmail.pro>
- * Copyright (C) 2017-2024  Alexandre Spangaro  <aspangaro@easya.solutions>
- * Copyright (C) 2022       Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2016       Jamal Elbaz                 <jamelbaz@gmail.pro>
+ * Copyright (C) 2017-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2022       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -26,11 +26,13 @@
  * \brief   Page to assign mass categories to accounts
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountancycategory.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 
 $error = 0;
 
@@ -74,7 +76,6 @@ if (!$user->hasRight('accounting', 'chartofaccount')) {
 }
 
 $accountingcategory = new AccountancyCategory($db);
-
 
 /*
  * Actions

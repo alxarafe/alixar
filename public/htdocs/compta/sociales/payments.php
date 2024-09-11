@@ -37,7 +37,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
 
 use Dolibarr\Code\User\Classes\User;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/paymentsocialcontribution.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formsocialcontrib.class.php';

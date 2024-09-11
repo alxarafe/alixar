@@ -35,7 +35,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
 
 // Load translation files required by the page

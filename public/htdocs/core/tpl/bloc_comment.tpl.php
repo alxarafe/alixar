@@ -8,7 +8,6 @@ if (empty($conf) || !is_object($conf)) {
 
 // Require
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
 
 // Vars

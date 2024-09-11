@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017-2024  Alexandre Spangaro   <aspangaro@easya.solutions>
+/* Copyright (C) 2017-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,7 +19,9 @@
  *
  */
 
-use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormCompany;
 
 /**
  * \file        htdocs/accountancy/admin/journals_list.php
@@ -35,7 +37,6 @@ if (!defined('CSRFCHECK_WITH_TOKEN')) {
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 
 // Load translation files required by the page

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2014-2024  Alexandre Spangaro  <aspangaro@easya.solutions>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@netlogic.fr>
+/* Copyright (C) 2014-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,10 @@
  * \ingroup     Accountancy (Double entries)
  * \brief       Page to show a fiscal year
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Fiscalyear;
+use Dolibarr\Code\Core\Classes\Form;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -61,11 +65,11 @@ include DOL_DOCUMENT_ROOT . '/core/actions_fetchobject.inc.php'; // Must be incl
 
 // List of status
 static $tmpstatus2label = array(
-        '0' => 'OpenFiscalYear',
-        '1' => 'CloseFiscalYear'
+    '0' => 'OpenFiscalYear',
+    '1' => 'CloseFiscalYear'
 );
 $status2label = array(
-        '' => ''
+    '' => ''
 );
 foreach ($tmpstatus2label as $key => $val) {
     $status2label[$key] = $langs->trans($val);
@@ -169,8 +173,6 @@ if ($action == 'confirm_delete' && $confirm == "yes") {
     }
 }
 
-
-
 /*
  * View
  */
@@ -207,7 +209,7 @@ if ($action == 'create') {
 
     // Date end
     print '<tr><td class="fieldrequired">' . $langs->trans("DateEnd") . '</td><td>';
-    print $form->selectDate(($date_end ? $date_end : - 1), 'fiscalyearend');
+    print $form->selectDate(($date_end ? $date_end : -1), 'fiscalyearend');
     print '</td></tr>';
 
     /*
@@ -269,12 +271,12 @@ if (($id || $ref) && $action == 'edit') {
 
     // Date start
     print '<tr><td class="fieldrequired">' . $langs->trans("DateStart") . '</td><td>';
-    print $form->selectDate($object->date_start ? $object->date_start : - 1, 'fiscalyear');
+    print $form->selectDate($object->date_start ? $object->date_start : -1, 'fiscalyear');
     print '</td></tr>';
 
     // Date end
     print '<tr><td class="fieldrequired">' . $langs->trans("DateEnd") . '</td><td>';
-    print $form->selectDate($object->date_end ? $object->date_end : - 1, 'fiscalyearend');
+    print $form->selectDate($object->date_end ? $object->date_end : -1, 'fiscalyearend');
     print '</td></tr>';
 
     // Status

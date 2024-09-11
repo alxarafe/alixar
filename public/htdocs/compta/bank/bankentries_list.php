@@ -36,7 +36,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 
 use Dolibarr\Code\Societe\Classes\Societe;
@@ -44,7 +43,6 @@ use Dolibarr\Code\User\Classes\User;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/bankcateg.class.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/paymentvat.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/paymentsocialcontribution.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';

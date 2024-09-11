@@ -51,7 +51,6 @@ use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/paymentdonation.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';

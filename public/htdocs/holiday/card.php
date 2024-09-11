@@ -37,7 +37,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 use Dolibarr\Code\User\Classes\UserGroup;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/holiday.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';

@@ -356,7 +356,6 @@ print '<span class="opacitymedium">' . $langs->trans("DisplayDesc") . "</span><b
 print "<br>\n";
 
 //WYSIWYG Editor
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
 print '<form enctype="multipart/form-data" method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
 print '<input type="hidden" name="token" value="' . newToken() . '">';

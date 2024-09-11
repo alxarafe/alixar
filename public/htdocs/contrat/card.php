@@ -43,7 +43,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/price.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contract.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/contract/modules_contract.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 if (isModEnabled("propal")) {
 }
 if (isModEnabled('project')) {

@@ -40,7 +40,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contact.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
 use Dolibarr\Code\User\Classes\User;
 

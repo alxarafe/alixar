@@ -1,17 +1,16 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2022 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2015 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2020 Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2015      Jean-François Ferry	<jfefe@aternatik.fr>
- * Copyright (C) 2015      Raphaël Doursenaud   <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2016      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2019      Nicolas ZABOURI      <info@inovea-conseil.com>
- * Copyright (C) 2020      Tobias Sekan         <tobias.sekan@startmail.com>
- * Copyright (C) 2020      Josep Lluís Amador   <joseplluis@lliuretic.cat>
- * Copyright (C) 2021-2024 Frédéric France		<frederic.france@free.fr>
- * Copyright (C) 2024      Rafael San José      <rsanjose@alxarafe.com>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2015  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2020  Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2015       Jean-François Ferry	        <jfefe@aternatik.fr>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2016       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2020       Tobias Sekan                <tobias.sekan@startmail.com>
+ * Copyright (C) 2020       Josep Lluís Amador          <joseplluis@lliuretic.cat>
+ * Copyright (C) 2021-2024  Frédéric France		        <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -35,10 +34,16 @@
  *  \brief      Main page of accountancy area
  */
 
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 
 // L'espace compta/treso doit toujours etre actif car c'est un espace partage

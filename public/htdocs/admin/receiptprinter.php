@@ -32,7 +32,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/receiptprinter.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolreceiptprinter.class.php';
 

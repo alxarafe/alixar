@@ -111,7 +111,6 @@ print dol_get_fiche_head($head, 'css', $langs->trans($title), -1, "webportal");
 echo '<span class="opacitymedium">' . $langs->trans("WebPortalCSS") . '</span><br><br>';
 
 //WYSIWYG Editor
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
 print '<form enctype="multipart/form-data" method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
 

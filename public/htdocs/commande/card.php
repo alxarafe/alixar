@@ -44,7 +44,6 @@ use Dolibarr\Code\Comm\Classes\Propal;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formorder.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/commande/modules_commande.php';

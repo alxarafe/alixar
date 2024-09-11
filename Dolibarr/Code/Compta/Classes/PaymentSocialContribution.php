@@ -28,7 +28,6 @@
  */
 
 use Dolibarr\Core\Base\CommonObject;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
 
 
 /**

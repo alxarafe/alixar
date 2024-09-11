@@ -50,7 +50,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 if (isModEnabled('workstation')) {
 }
 if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
 }
 
 // Load translation files required by the page

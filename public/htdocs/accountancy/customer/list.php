@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2013-2014  Olivier Geffroy     <jeff@jeffinfo.com>
- * Copyright (C) 2013-2024	Alexandre Spangaro	<aspangaro@easya.solutions>
- * Copyright (C) 2014-2015	Ari Elbaz (elarifr)	<github@accedinfo.com>
- * Copyright (C) 2013-2021	Florian Henry		<florian.henry@open-concept.pro>
- * Copyright (C) 2014	  	Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2016	  	Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2021      	Gauthier VERDOL     <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2013-2014  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2024	Alexandre Spangaro	        <aspangaro@easya.solutions>
+ * Copyright (C) 2014-2015	Ari Elbaz (elarifr)	        <github@accedinfo.com>
+ * Copyright (C) 2013-2021	Florian Henry		        <florian.henry@open-concept.pro>
+ * Copyright (C) 2014	  	Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2016	  	Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021      	Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,13 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\FactureLigne;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  * \file        htdocs/accountancy/customer/list.php
@@ -32,8 +39,6 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
