@@ -29,14 +29,12 @@
 
 namespace Dolibarr\Modules;
 
+use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Core\Base\DolibarrModules;
 use DoliDB;
 use FormMail;
 use stdClass;
 use User;
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
 
 /**
  *  Description and activation class for module EventOrganization

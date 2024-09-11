@@ -17,6 +17,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\HookManager;
+
 /**
  *  \file       htdocs/takepos/phone.php
  *  \ingroup    takepos
@@ -43,10 +46,6 @@ if (!defined('NOREQUIREAJAX')) {
 if (!defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
     require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 }
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
-use Dolibarr\Code\Core\Classes\HookManager;
 
 if (defined('INCLUDE_PHONEPAGE_FROM_PUBLIC_PAGE')) {
     // Decode place if it is an order from a customer phone

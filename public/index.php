@@ -107,7 +107,6 @@ if ($last_slash_pos !== false) {
 $relative_path = substr($fullpath, strlen(DOL_DOCUMENT_ROOT));
 
 if (isset($_GET['api_route'])) {
-    $route = '/' . trim($route, '/') . '/';
     $_SERVER['PHP_SELF'] = $route;
     require_once constant('DOL_DOCUMENT_ROOT') . '/api/index.php';
     die();

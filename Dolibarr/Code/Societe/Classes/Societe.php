@@ -3334,7 +3334,6 @@ class Societe extends CommonObject
     public function display_rib($mode = 'label')
     {
 		// phpcs:enable
-        require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
 
         $bac = new CompanyBankAccount($this->db);
         // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
@@ -3370,7 +3369,6 @@ class Societe extends CommonObject
     public function get_all_rib()
     {
 		// phpcs:enable
-        require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
         $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "societe_rib WHERE type='ban' AND fk_soc = " . ((int) $this->id);
         $result = $this->db->query($sql);
         if (!$result) {
@@ -4981,7 +4979,6 @@ class Societe extends CommonObject
             }
 
             if (!isset($this->bank_account)) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
                 $bac = new CompanyBankAccount($this->db);
                 // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
                 $result = $bac->fetch(0, '', $this->id);

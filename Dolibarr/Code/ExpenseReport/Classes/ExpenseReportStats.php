@@ -31,7 +31,6 @@ use Dolibarr\Code\Core\Classes\Stats;
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/stats.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
 
 /**
  *  Class to manage the statistics of the expensereports and expense notes

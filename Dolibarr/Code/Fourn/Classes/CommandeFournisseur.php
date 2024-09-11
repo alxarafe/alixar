@@ -1266,7 +1266,6 @@ class CommandeFournisseur extends CommonOrder
 
                 // If stock is incremented on validate order, we must increment it
                 if (!$error && $movetoapprovestatus && isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_SUPPLIER_VALIDATE_ORDER')) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
                     $langs->load("agenda");
 
                     $cpt = count($this->lines);
@@ -2221,7 +2220,6 @@ class CommandeFournisseur extends CommonOrder
         global $conf, $langs;
 
         $error = 0;
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 
         // Check parameters (if test are wrong here, there is bug into caller)
         if ($entrepot <= 0) {

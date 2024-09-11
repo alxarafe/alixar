@@ -37,6 +37,7 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Adherents\Classes\Adherent;
 
 /**
  * \file    htdocs/compta/facture/card.php
@@ -46,23 +47,13 @@ use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 
 // Libraries
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/facture/modules_facture.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-if (isModEnabled('order')) {
-    use Dolibarr\Code\Adherents\Classes\Adherent;
-}
-if (isModEnabled('project')) {
-    }
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
-if (isModEnabled('variants')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('bills', 'companies', 'compta', 'products', 'banks', 'main', 'withdrawals'));
@@ -1533,7 +1524,6 @@ if (empty($reshook)) {
                     $object->linked_objects[$object->origin] = $object->origin_id;
                     // link with order if it is a shipping invoice
                     if ($object->origin == 'shipping') {
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
                         $exp = new Expedition($db);
                         $exp->fetch($object->origin_id);
                         $exp->fetchObjectLinked();
@@ -4368,7 +4358,6 @@ if ($action == 'create') {
 
         $text = $langs->trans('ConfirmValidateBill', $numref);
         if (isModEnabled('notification')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
             $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('BILL_VALIDATE', $object->socid, $object);

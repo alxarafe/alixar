@@ -210,7 +210,6 @@ class Reception extends CommonObject
 
         $now = dol_now();
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
         $error = 0;
 
         // Clean parameters
@@ -543,7 +542,6 @@ class Reception extends CommonObject
 
         // If stock increment is done on reception (recommended choice)
         if (!$error && isModEnabled('stock') && getDolGlobalInt('STOCK_CALCULATE_ON_RECEPTION')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 
             $langs->load("agenda");
 
@@ -1645,7 +1643,6 @@ class Reception extends CommonObject
 
             // If stock increment is done on closing
             if (!$error && isModEnabled('stock') && getDolGlobalInt('STOCK_CALCULATE_ON_RECEPTION_CLOSE')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 
                 $langs->load("agenda");
 
@@ -1803,7 +1800,6 @@ class Reception extends CommonObject
 
             // If stock increment is done on closing
             if (!$error && isModEnabled('stock') && getDolGlobalInt('STOCK_CALCULATE_ON_RECEPTION_CLOSE')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
                 $numref = $this->ref;
                 $langs->load("agenda");
 
@@ -1939,7 +1935,6 @@ class Reception extends CommonObject
         if ($this->db->query($sql)) {
             // If stock increment is done on closing
             if (!$error && isModEnabled('stock') && getDolGlobalInt('STOCK_CALCULATE_ON_RECEPTION')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 
                 $langs->load("agenda");
 

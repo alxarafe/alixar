@@ -31,6 +31,7 @@ namespace Dolibarr\Code\Adherents\Classes;
  *  \brief      File of class to manage members types
  */
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 

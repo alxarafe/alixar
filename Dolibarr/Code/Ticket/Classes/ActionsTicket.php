@@ -34,7 +34,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
 use Dolibarr\Code\Contact\Classes\Contact;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonhookactions.class.php';
 
 // TODO Only the last method emailElementlist is a hook method. Other must be moved into standard ticket.class.php

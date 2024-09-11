@@ -22,11 +22,10 @@
 
 namespace Dolibarr\Code\Bom\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Bom\Classes\BOM;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
-
 
 /**
  * \file    htdocs/bom/class/api_boms.class.php
@@ -64,7 +63,7 @@ class Boms extends DolibarrApi
      * Return an array with bom information
      *
      * @param   int     $id             ID of bom
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url GET {id}
      *
@@ -221,7 +220,7 @@ class Boms extends DolibarrApi
      *
      * @param   int         $id             Id of bom to update
      * @param   array       $request_data   Datas
-     * @return  Object                      Object after update
+     * @return  array                      Object after update
      *
      * @throws  RestException   403     Access denied
      * @throws  RestException   404     BOM not found

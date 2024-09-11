@@ -21,6 +21,9 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /*
  * Code to output content when action is presend
  *
@@ -343,9 +346,6 @@ if ($action == 'presend') {
     $contactarr = $tmpobject->liste_contact(-1, 'external', 0, '', 1);
 
     if (is_array($contactarr) && count($contactarr) > 0) {
-        use Dolibarr\Code\Contact\Classes\Contact;
-
-        use Dolibarr\Code\Societe\Classes\Societe;
         $contactstatic = new Contact($db);
         $tmpcompany = new Societe($db);
 

@@ -23,6 +23,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *       \file       htdocs/product/stats/card.php
  *       \ingroup    product
@@ -33,9 +35,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width', 380);
 $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height', 160);

@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 // This page return an image of public photos of a category or product.
 // Test to check image can be publicly viewed is done inside the viewimage.php wrapper.
 
@@ -58,8 +60,6 @@ if (!isModEnabled('takepos')) {
  */
 
 if ($query == "cat") {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/categories.lib.php';
 
     $object = new Categorie($db);

@@ -19,8 +19,10 @@
 
 namespace Dolibarr\Code\Adherents\Api;
 
+use Dolibarr\Code\Adherents\Classes\Subscription;
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
 
 /**
  * API class for subscriptions
@@ -55,7 +57,7 @@ class Subscriptions extends DolibarrApi
      * Return an array with subscription information
      *
      * @param   int     $id             ID of subscription
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws  RestException   403     Access denied
      * @throws  RestException   404     No Subscription found
@@ -181,7 +183,7 @@ class Subscriptions extends DolibarrApi
      *
      * @param   int         $id             ID of subscription to update
      * @param   array       $request_data   Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      *
      * @throws  RestException   403     Access denied
      * @throws  RestException   404     No Subscription found

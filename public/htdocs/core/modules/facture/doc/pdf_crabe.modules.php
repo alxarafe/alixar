@@ -1227,7 +1227,6 @@ class pdf_crabe extends ModelePDFFactures
                 $lib_mode_reg = $outputlangs->transnoentities("PaymentType" . $object->mode_reglement_code) != 'PaymentType' . $object->mode_reglement_code ? $outputlangs->transnoentities("PaymentType" . $object->mode_reglement_code) : $outputlangs->convToOutputCharset($object->mode_reglement);
                 //#21654: add account number used for the debit
                 if ($object->mode_reglement_code == "PRE") {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
                     $bac = new CompanyBankAccount($this->db);
                     // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
                     $bac->fetch(0, '', $object->thirdparty->id);

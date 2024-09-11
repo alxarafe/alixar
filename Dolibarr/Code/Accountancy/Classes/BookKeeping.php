@@ -26,6 +26,7 @@ namespace Dolibarr\Code\Accountancy\Classes;
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Accountancy\Classes\BookKeepingLine;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use Dolibarr\Core\Base\CommonObjectLine;
 use DoliDB;
@@ -35,9 +36,6 @@ use DoliDB;
  * \ingroup     Accountancy (Double entries)
  * \brief       File of class to manage Ledger (General Ledger and Subledger)
  */
-
-// Class
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/fiscalyear.class.php';
 
 /**
  * Class to manage Ledger (General Ledger and Subledger)

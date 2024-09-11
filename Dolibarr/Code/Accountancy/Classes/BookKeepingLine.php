@@ -23,8 +23,6 @@
 
 namespace Dolibarr\Code\Accountancy\Classes;
 
-use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
-use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Core\Base\CommonObjectLine;
 
 /**
@@ -34,7 +32,6 @@ use Dolibarr\Core\Base\CommonObjectLine;
  */
 
 // Class
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/fiscalyear.class.php';
 
 /**
  * Class BookKeepingLine

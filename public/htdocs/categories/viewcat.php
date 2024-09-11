@@ -24,6 +24,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
+
 /**
  *       \file       htdocs/categories/viewcat.php
  *       \ingroup    category
@@ -122,13 +128,10 @@ if ($id > 0 && $removeelem > 0 && $action == 'unlink') {
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'customer';
     } elseif ($type == Categorie::TYPE_MEMBER && $user->hasRight('adherent', 'creer')) {
-        use Dolibarr\Code\Adherents\Classes\Adherent;
         $tmpobject = new Adherent($db);
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'member';
     } elseif ($type == Categorie::TYPE_CONTACT && $user->hasRight('societe', 'creer')) {
-        use Dolibarr\Code\Contact\Classes\Contact;
-
         $tmpobject = new Contact($db);
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'contact';
@@ -141,8 +144,6 @@ if ($id > 0 && $removeelem > 0 && $action == 'unlink') {
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'project';
     } elseif ($type == Categorie::TYPE_USER && $user->hasRight('user', 'user', 'creer')) {
-        use Dolibarr\Code\User\Classes\User;
-
         $tmpobject = new User($db);
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'user';
@@ -190,11 +191,9 @@ if (
         $newobject = new Product($db);
         $elementtype = 'product';
     } elseif ($type == Categorie::TYPE_CUSTOMER) {
-        use Dolibarr\Code\Societe\Classes\Societe;
         $newobject = new Societe($db);
         $elementtype = 'customer';
     } elseif ($type == Categorie::TYPE_SUPPLIER) {
-        use Dolibarr\Code\Societe\Classes\Societe;
         $newobject = new Societe($db);
         $elementtype = 'supplier';
     } elseif ($type == Categorie::TYPE_TICKET) {
@@ -204,17 +203,12 @@ if (
         $newobject = new Project($db);
         $elementtype = 'project';
     } elseif ($type == Categorie::TYPE_MEMBER) {
-        use Dolibarr\Code\Adherents\Classes\Adherent;
         $newobject = new Adherent($db);
         $elementtype = 'member';
     } elseif ($type == Categorie::TYPE_CONTACT) {
-        use Dolibarr\Code\Contact\Classes\Contact;
-
         $newobject = new Contact($db);
         $elementtype = 'contact';
     } elseif ($type == Categorie::TYPE_USER) {
-        use Dolibarr\Code\User\Classes\User;
-
         $newobject = new User($db);
         $elementtype = 'user';
     } elseif ($type == Categorie::TYPE_ACCOUNT) {
@@ -391,21 +385,6 @@ if ($cats < 0) {
     $categstatic = new Categorie($db);
 
     $fulltree = $categstatic->get_full_arbo($type, $object->id, 1);
-
-    // Load possible missing includes
-    if (getDolGlobalString('CATEGORY_SHOW_COUNTS')) {
-        if ($type == Categorie::TYPE_MEMBER) {
-            use Dolibarr\Code\Adherents\Classes\Adherent;
-        }
-        if ($type == Categorie::TYPE_ACCOUNT) {
-        }
-        if ($type == Categorie::TYPE_PROJECT) {
-        }
-        if ($type == Categorie::TYPE_USER) {
-            use Dolibarr\Code\User\Classes\User;
-
-        }
-    }
 
     // Define data (format for treeview)
     $data = array();
@@ -763,8 +742,6 @@ if ($type == Categorie::TYPE_SUPPLIER) {
 // List of members
 if ($type == Categorie::TYPE_MEMBER) {
     if ($user->hasRight("adherent", "read")) {
-        use Dolibarr\Code\Adherents\Classes\Adherent;
-
         $permission = $user->hasRight('adherent', 'creer');
 
         $members = $object->getObjectsInCateg($type, 0, $limit, $offset);
@@ -1125,9 +1102,6 @@ if ($type == Categorie::TYPE_PROJECT) {
 // List of users
 if ($type == Categorie::TYPE_USER) {
     if ($user->hasRight("user", "user", "read")) {
-        use Dolibarr\Code\User\Classes\User;
-
-
         $users = $object->getObjectsInCateg($type);
         if ($users < 0) {
             dol_print_error($db, $object->error, $object->errors);

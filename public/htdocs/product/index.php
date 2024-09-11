@@ -24,6 +24,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *  \file       htdocs/product/index.php
  *  \ingroup    product
@@ -238,8 +240,6 @@ if ((isModEnabled("product") || isModEnabled("service")) && ($user->hasRight("pr
 
 $graphcat = '';
 if (isModEnabled('category') && getDolGlobalString('CATEGORY_GRAPHSTATS_ON_PRODUCTS')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
     $graphcat .= '<br>';
     $graphcat .= '<div class="div-table-responsive-no-min">';
     $graphcat .= '<table class="noborder centpercent">';

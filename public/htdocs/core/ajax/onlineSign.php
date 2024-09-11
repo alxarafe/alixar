@@ -567,7 +567,6 @@ if ($action == "importSignature") {
             }
         } elseif ($mode == "societe_rib") {
             $langs->load('withdrawals');
-            require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
             $modelpath = "core/modules/bank/doc/";
             $object = new CompanyBankAccount($db);
@@ -772,7 +771,6 @@ if ($action == "importSignature") {
                 }
             }
         } elseif ($mode == 'expedition') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 
             $object = new Expedition($db);

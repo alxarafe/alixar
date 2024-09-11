@@ -857,7 +857,6 @@ class Salary extends CommonObject
 
         dol_syslog(get_class($this) . "::demande_prelevement", LOG_DEBUG);
         if ($this->paye == 0) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
             $bac = new CompanyBankAccount($this->db);
             // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
             $bac->fetch(0, '', $mysoc->id);

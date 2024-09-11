@@ -20,8 +20,10 @@
 
 namespace Dolibarr\Code\Commande\Api;
 
-use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
 /**
@@ -507,7 +509,7 @@ class Orders extends DolibarrApi
      *
      * @param int $id Id of order to update
      * @param int $lineid Id of line to delete
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url DELETE {id}/lines/{lineid}
      *
@@ -544,7 +546,7 @@ class Orders extends DolibarrApi
      *
      * @param int $id ID of order
      * @param string $type Type of the contact (BILLING, SHIPPING, CUSTOMER)
-     * @return  Object              Object with cleaned properties
+     * @return  array              Object with cleaned properties
      *
      * @url GET {id}/contacts
      *
@@ -671,7 +673,8 @@ class Orders extends DolibarrApi
      *
      * @param int $id Id of order to update
      * @param array $request_data Datas
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
+     * @throws RestException
      */
     public function put($id, $request_data = null)
     {
@@ -764,7 +767,7 @@ class Orders extends DolibarrApi
      * @param int $id Order ID
      * @param int $idwarehouse Warehouse ID
      * @param int $notrigger 1=Does not execute triggers, 0= execute triggers
-     * @return  Object              Object with cleaned properties
+     * @return  array              Object with cleaned properties
      *
      * @url POST    {id}/validate
      *
@@ -852,7 +855,7 @@ class Orders extends DolibarrApi
      * Classify the order as invoiced. Could be also called setbilled
      *
      * @param int $id Id of the order
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url     POST {id}/setinvoiced
      *
@@ -898,7 +901,7 @@ class Orders extends DolibarrApi
      *
      * @param int $id Order ID
      * @param int $notrigger Disabled triggers
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url POST    {id}/close
      */
@@ -943,7 +946,7 @@ class Orders extends DolibarrApi
      *
      * @param int $id Order ID
      * @param int $idwarehouse Warehouse ID to use for stock change (Used only if option STOCK_CALCULATE_ON_VALIDATE_ORDER is on)
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url POST    {id}/settodraft
      */
@@ -987,7 +990,7 @@ class Orders extends DolibarrApi
      * Create an order using an existing proposal.
      *
      * @param int $proposalid Id of the proposal
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url     POST /createfromproposal/{proposalid}
      *
@@ -1040,7 +1043,6 @@ class Orders extends DolibarrApi
      */
     public function getOrderShipments($id)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
         if (!DolibarrApiAccess::$user->hasRight('expedition', 'lire')) {
             throw new RestException(403);
         }
@@ -1096,7 +1098,6 @@ class Orders extends DolibarrApi
      */
     public function createOrderShipment($id, $warehouse_id)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
         if (!DolibarrApiAccess::$user->hasRight('expedition', 'creer')) {
             throw new RestException(403);
         }

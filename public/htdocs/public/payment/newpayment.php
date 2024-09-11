@@ -1730,7 +1730,6 @@ if ($source == 'donation') {
     $found = true;
     $langs->load("don");
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 
     $don = new Don($db);
     // @phan-suppress-next-line PhanPluginSuspiciousParamPosition

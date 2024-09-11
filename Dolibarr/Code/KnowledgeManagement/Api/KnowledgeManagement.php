@@ -20,11 +20,11 @@
 
 namespace Dolibarr\Code\KnowledgeManagement\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-dol_include_once('/knowledgemanagement/class/knowledgerecord.class.php');
-dol_include_once('/categories/class/categorie.class.php');
 
 /**
  * \file    knowledgemanagement/class/api_knowledgemanagement.class.php
@@ -64,7 +64,7 @@ class KnowledgeManagement extends DolibarrApi
      * Return an array with knowledgerecord information
      *
      * @param   int     $id             ID of knowledgerecord
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url GET knowledgerecords/{id}
      *
@@ -262,7 +262,7 @@ class KnowledgeManagement extends DolibarrApi
      *
      * @param   int     $id                 Id of knowledgerecord to update
      * @param   array   $request_data       Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      *
      * @throws RestException
      *

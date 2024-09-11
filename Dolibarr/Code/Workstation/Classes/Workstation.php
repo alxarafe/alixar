@@ -22,7 +22,10 @@
 
 namespace Dolibarr\Code\Workstation\Classes;
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        htdocs/workstation/class/workstation.class.php
@@ -197,9 +200,6 @@ class Workstation extends CommonObject
     public function __construct(DoliDB $db)
     {
         global $conf, $langs;
-
-        require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/class/workstationusergroup.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/class/workstationresource.class.php';
 
         $this->db = $db;
 

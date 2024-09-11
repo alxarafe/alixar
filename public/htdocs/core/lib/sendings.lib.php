@@ -24,7 +24,6 @@
  *  \brief      Library for expedition module
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 
 
 /**

@@ -21,8 +21,9 @@
 
 namespace Dolibarr\Code\Api\Api;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
+use Dolibarr\Core\Base\DolibarrApi;
 
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 
 /**
  * API that gives the status of the Dolibarr instance.

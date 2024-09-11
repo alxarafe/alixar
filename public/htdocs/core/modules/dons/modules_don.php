@@ -28,7 +28,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 
 
 

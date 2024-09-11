@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+
 /**
  *  \file       htdocs/contact/project.php
  *  \ingroup    contact
@@ -53,8 +55,6 @@ if ($reshook < 0) {
 $form = new Form($db);
 
 if ($id) {
-    use Dolibarr\Code\Contact\Classes\Contact;
-
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contact.lib.php';
 
     $object = new Contact($db);

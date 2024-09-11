@@ -23,6 +23,7 @@
 namespace Dolibarr\Code\Workstation\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        htdocs/workstation/class/workstationusergroup.class.php

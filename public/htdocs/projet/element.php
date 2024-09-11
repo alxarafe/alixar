@@ -49,15 +49,12 @@ if (isModEnabled('deplacement')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 }
 if (isModEnabled('don')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 }
 if (isModEnabled('shipping')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 }
 if (isModEnabled('expensereport')) {
 }
 if (isModEnabled('invoice')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
 }
 if (isModEnabled('intervention')) {
 }
@@ -66,7 +63,6 @@ if (isModEnabled('loan')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loanschedule.class.php';
 }
 if (isModEnabled('stock')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 }
 if (isModEnabled('stocktransfer')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransfer.class.php';

@@ -30,7 +30,6 @@ use Dolibarr\Code\Core\Classes\DolGraph;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/donstats.class.php';
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');

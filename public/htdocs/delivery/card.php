@@ -38,7 +38,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 if (isModEnabled("product") || isModEnabled("service")) {
 }
 if (isModEnabled('shipping')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 }
 if (isModEnabled('stock')) {
 }

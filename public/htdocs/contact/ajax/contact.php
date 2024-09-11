@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+
 /**
  *       \file       htdocs/contact/ajax/contact.php
  *       \brief      File to return Ajax response on contact list request. Used by the combo list of contacts.
@@ -80,9 +82,6 @@ top_httphead('application/json');
 //print '<!-- Ajax page called with url '.dol_escape_htmltag($_SERVER["PHP_SELF"]).'?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]).' -->'."\n";
 
 if (!empty($action) && $action == 'fetch' && !empty($id)) {
-    use Dolibarr\Code\Contact\Classes\Contact;
-
-
     $outjson = array();
 
     if ($object->id > 0) {

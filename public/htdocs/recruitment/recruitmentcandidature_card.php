@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       recruitmentcandidature_card.php
  *      \ingroup    recruitment
@@ -665,8 +667,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
     $job = new RecruitmentJobPosition($db);
     $job->fetch($object->fk_recruitmentjobposition);
-
-    use Dolibarr\Code\User\Classes\User;
 
     $recruiter = new User($db);
     $recruiter->fetch($job->fk_user_recruiter);

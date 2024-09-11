@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\User\Classes\UserGroup;
+
 /**
  *       \file       htdocs/projet/contact.php
  *       \ingroup    project
@@ -170,7 +172,6 @@ if (empty($reshook)) {
         $errorgrouparray = array();
 
         if ($groupid > 0) {
-            use Dolibarr\Code\User\Classes\UserGroup;
             $usergroup = new UserGroup($db);
             $result = $usergroup->fetch($groupid);
             if ($result > 0) {

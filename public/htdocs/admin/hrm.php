@@ -22,6 +22,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  * \file    htdocs/admin/hrm.php
  * \ingroup hrm
@@ -544,8 +546,6 @@ if ($action == 'edit') {
                 }
                 print $form->selectarray($constname, $arrayofmessagename, getDolGlobalString($constname), 'None', 0, 0, '', 0, 0, 0, '', '', 1);
             } elseif (preg_match('/category:/', $val['type'])) {
-                use Dolibarr\Code\Categories\Classes\Categorie;
-
                 $formother = new FormOther($db);
 
                 $tmp = explode(':', $val['type']);

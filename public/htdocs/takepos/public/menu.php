@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *       \file       htdocs/takepos/public/menu.php
  *       \ingroup    takepos
@@ -35,9 +37,6 @@ if (!defined('NOBROWSERNOTIF')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
 
 if (!$conf->global->TAKEPOS_QR_MENU) {
     accessforbidden(); // If Restaurant Menu is disabled never allow NO LOGIN access

@@ -509,7 +509,6 @@ class Facture extends CommonInvoice
             if (getDolGlobalString('MODEL_FAC_REC_AUTHOR')) {
                 $origin_user_author_id = ($this->fk_user_author > 0 ? $this->fk_user_author : $origin_user_author_id);
             }
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
             $_facrec = new FactureRec($this->db);
             $result = $_facrec->fetch($this->fac_rec);
             $result = $_facrec->fetchObjectLinked(null, '', null, '', 'OR', 1, 'sourcetype', 0); // This load $_facrec->linkedObjectsIds
@@ -745,7 +744,6 @@ class Facture extends CommonInvoice
                 $originforcontact = $this->origin;
                 $originidforcontact = $this->origin_id;
                 if ($originforcontact == 'shipping') {     // shipment and order share the same contacts. If creating from shipment we take data of order
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
                     $exp = new Expedition($this->db);
                     $exp->fetch($this->origin_id);
                     $exp->fetchObjectLinked(null, '', null, '', 'OR', 1, 'sourcetype', 0);
@@ -2833,7 +2831,6 @@ class Facture extends CommonInvoice
 
             // If we decrease stock on invoice validation, we increase back if a warehouse id was provided
             if ($this->type != self::TYPE_DEPOSIT && $result >= 0 && isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_BILL') && $idwarehouse != -1) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
                 $langs->load("agenda");
 
                 $num = count($this->lines);
@@ -3351,7 +3348,6 @@ class Facture extends CommonInvoice
 
                 // If active we decrement the main product and its components at invoice validation
                 if ($this->type != self::TYPE_DEPOSIT && $result >= 0 && isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_BILL') && $idwarehouse > 0) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
                     $langs->load("agenda");
 
                     // Loop on each line
@@ -3681,7 +3677,6 @@ class Facture extends CommonInvoice
 
             // If we decrease stock on invoice validation, we increase back
             if ($this->type != self::TYPE_DEPOSIT && $result >= 0 && isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_BILL')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
                 $langs->load("agenda");
 
                 $num = count($this->lines);

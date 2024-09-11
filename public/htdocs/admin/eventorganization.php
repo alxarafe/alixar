@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2021       Florian Henry           <florian.henry@scopen.fr>
- * Copyright (C) 2024		MDW						<mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2021       Florian Henry               <florian.henry@scopen.fr>
+ * Copyright (C) 2024		MDW						    <mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  * \file    htdocs/admin/eventorganization.php
  * \ingroup eventorganization
@@ -31,9 +34,6 @@ global $langs, $user;
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/eventorganization.lib.php';
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
 
 // Translations
 $langs->loadLangs(array("admin", "eventorganization", "categories"));
@@ -223,8 +223,6 @@ if ($action == 'edit') {
                 }
                 print $form->selectarray($constname, $arrayofmessagename, getDolGlobalString($constname), 'None', 0, 0, '', 0, 0, 0, '', '', 1);
             } elseif (preg_match('/category:/', $val['type'])) {
-                use Dolibarr\Code\Categories\Classes\Categorie;
-
                 $formother = new FormOther($db);
 
                 $tmp = explode(':', $val['type']);

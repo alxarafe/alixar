@@ -25,13 +25,17 @@
 
 namespace Dolibarr\Code\Api\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Core\Classes\Ccountry;
+use Dolibarr\Code\Core\Classes\Cregion;
+use Dolibarr\Code\Core\Classes\Cstate;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Hrm\Classes\Establishment;
+use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cstate.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cregion.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ccountry.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/establishment.class.php';
 
 /**
  * API class for dictionaries
@@ -322,7 +326,7 @@ class Setup extends DolibarrApi
      * Get region by ID.
      *
      * @param   int       $id       ID of region
-     * @return  Object              Object with cleaned properties
+     * @return  array              Object with cleaned properties
      *
      * @url     GET dictionary/regions/{id}
      *
@@ -338,7 +342,7 @@ class Setup extends DolibarrApi
      * Get region by Code.
      *
      * @param   string    $code     Code of region
-     * @return  Object              Object with cleaned properties
+     * @return  array              Object with cleaned properties
      *
      * @url     GET dictionary/regions/byCode/{code}
      *
@@ -431,7 +435,7 @@ class Setup extends DolibarrApi
      * Get state by ID.
      *
      * @param   int       $id           ID of state
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url     GET dictionary/states/{id}
      *
@@ -447,7 +451,7 @@ class Setup extends DolibarrApi
      * Get state by Code.
      *
      * @param   string    $code         Code of state
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url     GET dictionary/states/byCode/{code}
      *
@@ -539,7 +543,7 @@ class Setup extends DolibarrApi
      *
      * @param   int       $id           ID of country
      * @param   string    $lang         Code of the language the name of the country must be translated to
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url     GET dictionary/countries/{id}
      *
@@ -556,7 +560,7 @@ class Setup extends DolibarrApi
      *
      * @param   string    $code         Code of country (2 characters)
      * @param   string    $lang         Code of the language the name of the country must be translated to
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url     GET dictionary/countries/byCode/{code}
      *
@@ -573,7 +577,7 @@ class Setup extends DolibarrApi
      *
      * @param   string    $iso          ISO of country (3 characters)
      * @param   string    $lang         Code of the language the name of the country must be translated to
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url     GET dictionary/countries/byISO/{iso}
      *
@@ -2278,7 +2282,7 @@ class Setup extends DolibarrApi
      * Get establishment by ID.
      *
      * @param   int       $id           ID of establishment
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @url     GET establishments/{id}
      *
@@ -2665,7 +2669,7 @@ class Setup extends DolibarrApi
      *
      * @throws RestException 403 Forbidden
      */
-    public function getModules()
+    public function getModulesOld()
     {
         global $conf;
 

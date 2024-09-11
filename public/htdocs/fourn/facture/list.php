@@ -33,6 +33,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *       \file       htdocs/fourn/facture/list.php
  *       \ingroup    fournisseur,facture
@@ -1044,8 +1046,6 @@ if (isModEnabled('category') && $user->hasRight('categorie', 'lire') && ($user->
 }
 
 if (isModEnabled('category')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('SuppliersCategoriesShort');
     $moreforfilter .= img_picto($tmptitle, 'category', 'class="pictofixedwidth"') . $formother->select_categories('supplier', $search_categ_sup, 'search_categ_sup', 1, $tmptitle);

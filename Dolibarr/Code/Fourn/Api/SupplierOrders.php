@@ -20,9 +20,10 @@
 
 namespace Dolibarr\Code\Fourn\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
 
 /**
  * API class for supplier orders
@@ -313,7 +314,7 @@ class SupplierOrders extends DolibarrApi
      * @param   int     $id         ID of supplier order
      * @param   string  $source     Source of the contact (internal, external, all).
      * @param   string  $type       Type of the contact (BILLING, SHIPPING, CUSTOMER, SALESREPFOLL, ...)
-     * @return  Object              Object with cleaned properties
+     * @return  array              Object with cleaned properties
      *
      * @url GET {id}/contacts
      *

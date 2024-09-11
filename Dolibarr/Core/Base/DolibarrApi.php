@@ -75,6 +75,200 @@ class DolibarrApi
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
 
+    public static function getModules($modulesdir = null)
+    {
+        if (!isset($modulesdir)) {
+            $modulesdir = dolGetModulesDirs();
+        }
+        $result = static::_getModules($modulesdir);
+        asort($result);
+        return $result;
+    }
+
+    private static function _getModules($modulesdir)
+    {
+        $result = [];
+        foreach ($modulesdir as $dir) {
+            // Search available module
+            dol_syslog("Scan directory " . $dir . " for module descriptor files, then search for API files");
+
+            $handle = @opendir(dol_osencode($dir));
+            if (is_resource($handle)) {
+                while (($file = readdir($handle)) !== false) {
+
+                    if (is_readable($dir . $file)) {
+                        $module = DolibarrModules::_getModuleName($file);
+                        if (!DolibarrModules::isActivated($module)) {
+                            continue;
+                        }
+
+                        $moduledirforclass = static::getFolderForModuleCode($module);
+                        $moduleClasses = DolibarrApi::getModuleApiClasses($moduledirforclass);
+
+                        if (empty($moduleClasses)) {
+                            continue;
+                        }
+
+                        foreach ($moduleClasses as $name => $module) {
+                            $result[$name] = $module;
+                        }
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Get name of directory where the api_...class.php file is stored
+     *
+     * @param string $moduleobject Module object name
+     * @return  string                    Directory name
+     */
+    public static function getFolderForModuleCode($moduleobject)
+    {
+        $mapping = [
+            'Accounting' => 'Accountancy',
+            'Adherent' => 'Adherents',
+            'Agenda' => 'Comm',
+            'Ai' => 'Ai',
+            'Api' => 'Api',
+            'Banque' => 'ComptaBank',
+            'Barcode' => 'Barcode',
+            'BlockedLog' => 'BloquedLog',
+            'Bom' => 'Bom',
+            'BookCal' => 'BookCal',
+            'Bookmark' => 'Bookmark',
+            'Category' => 'Categories',
+            'ClickToDial' => 'ClickToDial',
+            'Commande' => 'Commande',
+            'Contrat' => 'Contrat',
+            'Cron' => 'Cron',
+            'DataPolicy' => 'DataPolicy',
+            'Dav' => 'Dav',
+            'DebugBar' => 'DebugBar',
+            'Don' => 'Don',
+            'DynamicPrices' => 'DynamicPrices',
+            'ECM' => 'Ecm',
+            'EmailCollector' => 'EmailCollector',
+            'EventOrganization' => 'EventOrganization',
+            'Expedition' => 'Expedition',
+            'ExpenseReport' => 'ExpenseReport',
+            'Export' => 'Exports',
+            'ExternalRss' => 'ExternalRss',
+            'ExternalSite' => 'ExternalSite',
+            'Facture' => 'ComptaFacture',
+            'Fckeditor' => 'Fckeditor',
+            'Ficheinter' => 'FichInter',
+            'Fournisseur' => 'Fourn',
+            'GeoIPMaxmind' => 'GeoIPMaxmind',
+            'Gravatar' => 'Gravatar',
+            'Holiday' => 'Holiday',
+            'HRM' => 'Hrm',
+            'Import' => 'Imports',
+            'Incoterm' => 'Incoterm',
+            'KnowledgeManagement' => 'KnowledgeManagement',
+            'Ldap' => 'Ldap',
+            'Loan' => 'Loan',
+            'Mailing' => 'Mailing',
+            'MailmanSpip' => 'MailmanSpip',
+            'Margin' => 'Margin',
+            'ModuleBuilder' => 'ModuleBuilder',
+            'Mrp' => 'Mrp',
+            'MultiCurrency' => 'MultiCurrency',
+            'Notification' => 'Notification',
+            'Oauth' => 'Oauth',
+            'OpenSurvey' => 'OpenSurvey',
+            'Partnership' => 'Partnerships',
+            'PaymentByBankTransfer' => 'PaymentByBankTransfer',
+            'Paypal' => 'Paypal',
+            'Prelevement' => 'Prelevement',
+            'Printing' => 'Printing',
+            'ProductBatch' => 'ProductBatch',
+            'Product' => 'Product',
+            'Projet' => 'Projet',
+            'Propale' => 'CommPropale',
+            'ReceiptPrinter' => 'ReceiptPrinter',
+            'Reception' => 'Reception',
+            'Recruitment' => 'Recruitement',
+            'Resource' => 'Resource',
+            'Salaries' => 'Salaries',
+            'Service' => 'Service',
+            'SocialNetworks' => 'SocialNetworks',
+            'Societe' => 'Societe',
+            'Stock' => 'ProductStock',
+            'StockTransfer' => 'StockTransfer',
+            'Stripe' => 'Stripe',
+            'SupplierProposal' => 'SupplierProposal',
+            'Syslog' => 'Syslog',
+            'TakePos' => 'TakePos',
+            'Tax' => 'Tax',
+            'Ticket' => 'Ticket',
+            'User' => 'User',
+            'Variants' => 'Variants',
+            'Webhook' => 'WebHook',
+            'WebPortal' => 'WebPortal',
+            'Website' => 'Website',
+            'Workflow' => 'Workflow',
+            'Workstation' => 'Workstation',
+        ];
+
+        if (isset($mapping[$moduleobject])) {
+            return $mapping[$moduleobject];
+        }
+
+        return null;
+    }
+
+    public static function getModuleApiClasses($moduleName): array
+    {
+        $result = [];
+        $apiPath = realpath(constant('BASE_PATH') . '/../Dolibarr/Code/' . $moduleName . '/Api');
+        if ($apiPath === false) {
+            return $result;
+        }
+
+        $dir = opendir($apiPath);
+        while (($file = readdir($dir)) !== false) {
+            if (pathinfo($file, PATHINFO_EXTENSION) !== 'php') {
+                continue;
+            }
+            $className = pathinfo($file, PATHINFO_FILENAME);
+            $result[$className] = static::getModuleNamespace($moduleName, $className);
+        }
+        closedir($dir);
+        return $result;
+    }
+
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
+    /**
+     * Obtains the namespace of an API module.
+     *
+     * @param $moduleName
+     * @param $className
+     * @return string
+     */
+    public static function getModuleNamespace($moduleName, $className): string
+    {
+        return 'Dolibarr\\Code\\' . $moduleName . '\\Api\\' . $className;
+    }
+
+    /**
+     * Obtains an instance of $moduleName/$className, or null.
+     *
+     * @param $moduleName
+     * @param $className
+     * @return mixed
+     */
+    public static function getModule($moduleName, $className)
+    {
+        $namespace = static::getModuleNamespace($moduleName, $className);
+        return new $namespace();
+    }
+
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      * Check access by user to a given resource
      *
@@ -177,6 +371,7 @@ class DolibarrApi
         }
     }
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
 
     /**
@@ -225,8 +420,6 @@ class DolibarrApi
 
         return $object;
     }
-
-    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
 
     /**
      * Clean sensible object datas
@@ -407,9 +600,6 @@ class DolibarrApi
 
         return $object;
     }
-
-    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
 
     /**
      * Return if a $sqlfilters parameter is valid

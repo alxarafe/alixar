@@ -1285,7 +1285,6 @@ class Mo extends CommonObject
             return 1;
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
         $error = 0;
         $langs->load('stocks');
 

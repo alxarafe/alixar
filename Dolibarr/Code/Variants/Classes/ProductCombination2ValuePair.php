@@ -107,8 +107,6 @@ class ProductCombination2ValuePair
      */
     public function __toString()
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttributeValue.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttribute.class.php';
 
         $prodattr = new ProductAttribute($this->db);
         $prodattrval = new ProductAttributeValue($this->db);

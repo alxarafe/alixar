@@ -30,7 +30,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contract.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 
 use Dolibarr\Code\Contact\Classes\Contact;
 

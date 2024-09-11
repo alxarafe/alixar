@@ -117,7 +117,7 @@ class MultiCurrencies extends DolibarrApi
      * Return an array with Currency information
      *
      * @param   int         $id     ID of Currency
-     * @return  Object              Object with cleaned properties
+     * @return  array              Object with cleaned properties
      *
      * @throws RestException
      */
@@ -251,7 +251,7 @@ class MultiCurrencies extends DolibarrApi
      *
      * @param   int   $id               Id of Currency to update
      * @param   array $request_data     Datas
-     * @return  Object                  The updated Currency
+     * @return  array                  The updated Currency
      *
      * @throws RestException
      */

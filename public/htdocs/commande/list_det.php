@@ -30,6 +30,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *  \file       htdocs/commande/list.php
  *  \ingroup    order
@@ -47,9 +49,6 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
 
 if (isModEnabled('category')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
-
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
 }
 
 // Load translation files required by the page
@@ -944,8 +943,6 @@ if ($resql) {
         $moreforfilter .= $formcategory->getFilterBox(Categorie::TYPE_PRODUCT, $search_product_category_array, 'minwidth300imp minwidth300', $searchCategoryProductOperator ? $searchCategoryProductOperator : 0);
     }
     if (isModEnabled("category") && $user->hasRight('categorie', 'lire')) {
-        use Dolibarr\Code\Categories\Classes\Categorie;
-
         $moreforfilter .= '<div class="divsearchfield">';
         $tmptitle = $langs->trans('CustomersProspectsCategoriesShort');
         $moreforfilter .= img_picto($tmptitle, 'category', 'class="pictofixedwidth"') . $formother->select_categories('customer', $search_categ_cus, 'search_categ_cus', 1, $tmptitle, 'maxwidth300 widthcentpercentminusx');

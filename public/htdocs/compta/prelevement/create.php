@@ -548,7 +548,6 @@ if ($resql) {
 
     if ($num) {
         if ($sourcetype != 'salary') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
         } else {
         }
 

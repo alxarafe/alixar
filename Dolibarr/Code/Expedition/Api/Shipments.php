@@ -20,10 +20,11 @@
 
 namespace Dolibarr\Code\Expedition\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Expedition\Classes\ExpeditionLigne;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 
 /**
  * API class for shipments
@@ -63,7 +64,7 @@ class Shipments extends DolibarrApi
      * Return an array with shipment information
      *
      * @param   int         $id         ID of shipment
-     * @return  Object                  Object with cleaned properties
+     * @return  array                  Object with cleaned properties
      *
      * @throws  RestException
      */
@@ -442,7 +443,7 @@ class Shipments extends DolibarrApi
      *
      * @param   int     $id                 Id of shipment to update
      * @param   array   $request_data       Datas
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      */
     public function put($id, $request_data = null)
     {
@@ -614,9 +615,6 @@ class Shipments extends DolibarrApi
     /*
     public function createShipmentFromOrder($orderid)
     {
-
-        use Dolibarr\Code\Adherents\Classes\Adherent;
-
         if(! DolibarrApiAccess::$user->hasRight('expedition', 'lire')) {
                 throw new RestException(403);
         }

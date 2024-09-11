@@ -22,12 +22,11 @@
 
 namespace Dolibarr\Code\User\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\User\Classes\UserGroup;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-use Dolibarr\Code\User\Classes\User;
-
-use Dolibarr\Code\User\Classes\UserGroup;
 
 /**
  * API class for users
@@ -357,7 +356,7 @@ class Users extends DolibarrApi
      *
      * @param   int         $id                 Id of account to update
      * @param   array       $request_data       Datas
-     * @return  Object                          Updated object
+     * @return  array                          Updated object
      *
      * @throws RestException 403 Not allowed
      * @throws RestException 404 Not found

@@ -23,6 +23,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *  \file       htdocs/projet/card.php
  *  \ingroup    projet
@@ -34,9 +36,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
-
-use Dolibarr\Code\Categories\Classes\Categorie;
-
 
 // Load translation files required by the page
 $langsLoad = array('projects', 'companies');

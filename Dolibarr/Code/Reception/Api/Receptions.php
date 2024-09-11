@@ -20,11 +20,11 @@
 
 namespace Dolibarr\Code\Reception\Api;
 
+use Dolibarr\Code\Api\Classes\DolibarrApiAccess;
+use Dolibarr\Code\Reception\Classes\Reception;
+use Dolibarr\Code\Reception\Classes\ReceptionLineBatch;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/reception/class/reception.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/reception/class/receptionlinebatch.class.php';
 
 /**
  * API class for receptions
@@ -64,7 +64,7 @@ class Receptions extends DolibarrApi
      * Return an array with reception information
      *
      * @param       int         $id         ID of reception
-     * @return      Object                  Object with cleaned properties
+     * @return      array                  Object with cleaned properties
      * @throws  RestException
      */
     public function get($id)
@@ -445,7 +445,7 @@ class Receptions extends DolibarrApi
      *
      * @param int   $id                     Id of reception to update
      * @param array $request_data           Datas
-     * @return      Object                  Object with cleaned properties
+     * @return      array                  Object with cleaned properties
      */
     public function put($id, $request_data = null)
     {
@@ -524,7 +524,8 @@ class Receptions extends DolibarrApi
      *
      * @url POST    {id}/validate
      *
-     * @return  Object
+     * @return  array
+     *
      * \todo An error 403 is returned if the request has an empty body.
      * Error message: "Forbidden: Content type `text/plain` is not supported."
      * Workaround: send this in the body
@@ -616,9 +617,6 @@ class Receptions extends DolibarrApi
     /*
     public function createShipmentFromOrder($orderid)
     {
-
-        use Dolibarr\Code\Adherents\Classes\Adherent;
-
         if (!DolibarrApiAccess::$user->hasRight('reception', 'lire')) {
                 throw new RestException(403);
         }
@@ -652,7 +650,7 @@ class Receptions extends DolibarrApi
     *
     * @url POST    {id}/close
     *
-    * @return  Object
+     * @return  array
     */
     public function close($id, $notrigger = 0)
     {

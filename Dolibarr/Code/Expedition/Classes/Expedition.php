@@ -290,7 +290,6 @@ class Expedition extends CommonObject
 
         $now = dol_now();
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
         $error = 0;
 
         // Clean parameters
@@ -1112,7 +1111,6 @@ class Expedition extends CommonObject
 
         $error = 0;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 
         $langs->load("agenda");
 
@@ -2483,7 +2481,6 @@ class Expedition extends CommonObject
 
             // If stock increment is done on closing
             if (!$error && isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_SHIPMENT_CLOSE')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
 
                 $langs->load("agenda");
 

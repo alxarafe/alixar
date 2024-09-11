@@ -23,6 +23,7 @@
 namespace Dolibarr\Code\Recruitement\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        htdocs/recruitment/class/recruitmentjobposition.class.php

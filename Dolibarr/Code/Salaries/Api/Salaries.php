@@ -117,7 +117,7 @@ class Salaries extends DolibarrApi
      * Get salary by ID.
      *
      * @param   int    $id      ID of salary
-     * @return  Object          Salary object
+     * @return  array          Salary object
      *
      * @throws RestException
      */
@@ -166,7 +166,7 @@ class Salaries extends DolibarrApi
      *
      * @param   int     $id                 ID of salary
      * @param   array   $request_data       Data
-     * @return  Object                      Updated object
+     * @return  array                      Updated object
      */
     public function put($id, $request_data = null)
     {
@@ -283,7 +283,7 @@ class Salaries extends DolibarrApi
      * Get a given payment.
      *
      * @param   int    $pid     ID of payment salary
-     * @return  Object          PaymentSalary object
+     * @return  array          PaymentSalary object
      *
      * @url     GET /payments/{pid}
      *
@@ -350,7 +350,7 @@ class Salaries extends DolibarrApi
      *
      * @param   int    $id              ID of paymentsalary
      * @param   array  $request_data    data
-     * @return  Object                  PaymentSalary object
+     * @return  array                  PaymentSalary object
      *
      * @url     POST {id}/payments
      *

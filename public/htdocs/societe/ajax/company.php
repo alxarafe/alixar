@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *       \file       htdocs/societe/ajax/company.php
  *       \brief      File to return Ajax response on thirdparty list request. Used by the combo list of thirdparties.
@@ -79,8 +81,6 @@ top_httphead('application/json');
 //print '<!-- Ajax page called with url '.dol_escape_htmltag($_SERVER["PHP_SELF"]).'?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]).' -->'."\n";
 
 if (!empty($action) && $action == 'fetch' && !empty($id)) {
-    use Dolibarr\Code\Societe\Classes\Societe;
-
     $outjson = array();
 
     if ($object->id > 0) {

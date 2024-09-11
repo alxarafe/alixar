@@ -1868,7 +1868,6 @@ class FactureFournisseur extends CommonInvoice
         if ($resql) {
             // Si on incrémente le produit principal et ses composants à la validation de facture fournisseur
             if (!$error && isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_SUPPLIER_BILL')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
                 $langs->load("agenda");
 
                 $cpt = count($this->lines);
@@ -2010,7 +2009,6 @@ class FactureFournisseur extends CommonInvoice
 
             // Si on incremente le produit principal et ses composants a la validation de facture fournisseur, on decremente
             if ($result >= 0 && isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_SUPPLIER_BILL')) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
                 $langs->load("agenda");
 
                 $cpt = count($this->lines);

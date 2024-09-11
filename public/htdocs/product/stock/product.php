@@ -43,10 +43,6 @@ if (isModEnabled('project')) {
     }
 
 if (isModEnabled('variants')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttribute.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttributeValue.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductCombination2ValuePair.class.php';
 }
 
 // Load translation files required by the page
@@ -791,7 +787,6 @@ if ($id > 0 || $ref) {
 
             // Number of product from sales order already sent (partial shipping)
             if (isModEnabled("shipping")) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
                 $filterShipmentStatus = '';
                 if (getDolGlobalString('STOCK_CALCULATE_ON_SHIPMENT')) {
                     $filterShipmentStatus = Expedition::STATUS_VALIDATED . ',' . Expedition::STATUS_CLOSED;

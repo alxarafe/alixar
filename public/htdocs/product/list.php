@@ -33,6 +33,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 /**
  *  \file       htdocs/product/list.php
  *  \ingroup    produit
@@ -48,8 +50,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 if (isModEnabled('workstation')) {
 }
 if (isModEnabled('category')) {
-    use Dolibarr\Code\Categories\Classes\Categorie;
-
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
 }
 

@@ -368,7 +368,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
         $text = $langs->trans('ConfirmValidateEvaluation', $numref);
         if (isModEnabled('notification')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
             $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('HRM_EVALUATION_VALIDATE', 0, $object);

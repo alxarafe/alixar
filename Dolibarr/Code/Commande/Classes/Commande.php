@@ -506,7 +506,6 @@ class Commande extends CommonOrder
         if (!$error) {
             // If stock is incremented on validate order, we must increment it
             if ($result >= 0 && isModEnabled('stock') && getDolGlobalInt('STOCK_CALCULATE_ON_VALIDATE_ORDER') == 1) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
                 $langs->load("agenda");
 
                 // Loop on each line
@@ -646,7 +645,6 @@ class Commande extends CommonOrder
             if (isModEnabled('stock') && getDolGlobalInt('STOCK_CALCULATE_ON_VALIDATE_ORDER') == 1) {
                 $result = 0;
 
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
                 $langs->load("agenda");
 
                 $num = count($this->lines);
@@ -831,7 +829,6 @@ class Commande extends CommonOrder
         if ($this->db->query($sql)) {
             // If stock is decremented on validate order, we must reincrement it
             if (isModEnabled('stock') && getDolGlobalInt('STOCK_CALCULATE_ON_VALIDATE_ORDER') == 1) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
                 $langs->load("agenda");
 
                 $num = count($this->lines);
@@ -1111,7 +1108,6 @@ class Commande extends CommonOrder
                         $originforcontact = $this->origin;
                         $originidforcontact = $this->origin_id;
                         if ($originforcontact == 'shipping') {     // shipment and order share the same contacts. If creating from shipment we take data of order
-                            require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
                             $exp = new Expedition($this->db);
                             $exp->fetch($this->origin_id);
                             $exp->fetchObjectLinked();
