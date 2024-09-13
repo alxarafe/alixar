@@ -45,7 +45,6 @@ use Dolibarr\Code\Comm\Classes\Propal;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/sendings.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expedition/modules_expedition.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("sendings", "companies", "bills", 'deliveries', 'orders', 'stocks', 'other', 'propal', 'productbatch'));

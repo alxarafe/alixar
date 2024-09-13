@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018-2021  Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2018-2021  Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify

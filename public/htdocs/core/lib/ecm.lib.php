@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2008-2014 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2022       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2008-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,12 +19,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+
 /**
  * \file       htdocs/core/lib/ecm.lib.php
  * \brief      Ensemble de functions de base pour le module ecm
  * \ingroup    ecm
  */
-
 
 /**
  * Prepare array with list of different ecm main dashboard

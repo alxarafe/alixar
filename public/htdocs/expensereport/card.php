@@ -41,7 +41,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/expensereport.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/price.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expensereport/modules_expensereport.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("trips", "bills", "mails"));

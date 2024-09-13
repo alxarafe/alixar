@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005	   Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2015	   Francis Appels		<francis.appels@yahoo.com>
+/* Copyright (C) 2005-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005	    Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2015	    Francis Appels		        <francis.appels@yahoo.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,13 +20,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\BarCode\Classes\ModeleBarCode;
+
 /**
  *      \file       htdocs/core/modules/barcode/doc/tcpdfbarcode.modules.php
  *      \ingroup    barcode
  *      \brief      File of class to manage barcode numbering with tcpdf library
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/barcode/modules_barcode.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/barcode.lib.php'; // This is to include def like $genbarcode_loc and $font_loc
 
 /**

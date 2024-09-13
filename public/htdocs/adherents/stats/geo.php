@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (c) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (c) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  *      \file       htdocs/adherents/stats/geo.php
  *      \ingroup    member
@@ -28,7 +32,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
 
 $graphwidth = DolGraph::getDefaultGraphSizeForStats('width', 700);
 $mapratio = 0.5;

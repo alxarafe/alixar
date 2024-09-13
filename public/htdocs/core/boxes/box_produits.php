@@ -167,7 +167,6 @@ class box_produits extends ModeleBoxes
                             //Parse the dynamic price
                             $productstatic->fetch($objp->rowid, '', '', 1);
 
-                            require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
                             $priceparser = new PriceParser($this->db);
                             $price_result = $priceparser->parseProduct($productstatic);
                             if ($price_result >= 0) {

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2021       Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2022-2024	Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2021       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022-2024	Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,8 +25,11 @@
  *  \brief      File with class to manage the numbering module Simple for member references
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/member/modules_member.class.php';
-
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Members\Classes\ModeleNumRefMembers;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  Class to manage the numbering module Simple for member references

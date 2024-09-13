@@ -27,9 +27,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loanschedule.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/paymentloan.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/loan.lib.php';
 
 $langs->loadLangs(array("bills", "loan"));

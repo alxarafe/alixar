@@ -275,7 +275,6 @@ if (empty($reshook)) {
 
             if ($object->fk_price_expression != 0) {
                 //Check the expression validity by parsing it
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
                 $priceparser = new PriceParser($db);
 
                 if ($priceparser->parseProduct($object) < 0) {

@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Compta\Classes;
+
 /**
  * \file       compta/bank/class/bankcateg.class.php
  * \ingroup    bank

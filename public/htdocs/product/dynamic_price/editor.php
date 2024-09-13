@@ -69,7 +69,6 @@ if ($action == 'add') {
         $result = $price_expression->find_title($title);
         if ($result == 0) { //No existing entry found with title, ok
             // Check the expression validity by parsing it
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
             $priceparser = new PriceParser($db);
             $price_result = $priceparser->testExpression($id, $expression);
             if ($price_result < 0) { //Expression is not valid
@@ -98,7 +97,6 @@ if ($action == 'update') {
         $result = $price_expression->find_title($title);
         if ($result == 0 || $result == $eid) { //No existing entry found with title or existing one is the current one, ok
             // Check the expression validity by parsing it
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
             $priceparser = new PriceParser($db);
             $price_result = $priceparser->testExpression($id, $expression);
             if ($price_result < 0) { //Expression is not valid

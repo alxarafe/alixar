@@ -30,7 +30,6 @@
  *  \brief          File that contains parent class for myobjects document models and parent class for myobjects numbering models
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
 
 
 /**

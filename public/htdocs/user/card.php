@@ -52,7 +52,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security2.lib.php';
 if (isModEnabled('ldap')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ldap.class.php';
 }
 if (isModEnabled('stock')) {
     }

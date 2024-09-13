@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Compta\Classes;
+
 /**
  *      \file       htdocs/compta/sociales/class/paymentsocialcontribution.class.php
  *      \ingroup    invoice

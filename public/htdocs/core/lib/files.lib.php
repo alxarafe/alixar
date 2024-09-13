@@ -1969,7 +1969,6 @@ function dol_add_file_process($upload_dir, $allowoverwrite = 0, $updatesessionor
 
                     // Update session
                     if (empty($updatesessionordb)) {
-                        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                         $formmail = new FormMail($db);
                         $formmail->trackid = $trackid;
                         $formmail->add_attached_files($destfull, $destfile, $TFile['type'][$i]);

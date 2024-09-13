@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2008-2011  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2016  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2012       J. Fernando Lagrange    <fernando@demo-tic.org>
- * Copyright (C) 2015       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2023       Eric Seigne      		<eric.seigne@cap-rel.fr>
+/* Copyright (C) 2008-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2016  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       J. Fernando Lagrange        <fernando@demo-tic.org>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2023       Eric Seigne      		    <eric.seigne@cap-rel.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,8 +23,10 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormMail;
 use Dolibarr\Core\Base\DolibarrModules;
-use Dolibarr\Lib\Modules;
 
 /**
  *  \file           htdocs/core/lib/admin.lib.php
@@ -1772,12 +1774,11 @@ function form_constantes($tableau, $strictw3c = 2, $helptext = '', $text = 'Valu
                     print $obj->value;
                     print "</textarea>\n";
                 } elseif ($obj->type == 'html') {
-                                    $doleditor = new DolEditor('constvalue' . (empty($strictw3c) ? '' : ($strictw3c == 3 ? '_' . $const : '[]')), $obj->value, '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
+                    $doleditor = new DolEditor('constvalue' . (empty($strictw3c) ? '' : ($strictw3c == 3 ? '_' . $const : '[]')), $obj->value, '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
                     $doleditor->Create();
                 } elseif ($obj->type == 'yesno') {
                     print $form->selectyesno('constvalue' . (empty($strictw3c) ? '' : ($strictw3c == 3 ? '_' . $const : '[]')), $obj->value, 1, false, 0, 1);
                 } elseif (preg_match('/emailtemplate/', $obj->type)) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                     $formmail = new FormMail($db);
 
                     $tmp = explode(':', $obj->type);

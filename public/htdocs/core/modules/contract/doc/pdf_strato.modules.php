@@ -26,13 +26,18 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ModelePDFContract;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/core/modules/contract/doc/pdf_strato.modules.php
  *  \ingroup    ficheinter
  *  \brief      Strato contracts template class file
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/contract/modules_contract.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';

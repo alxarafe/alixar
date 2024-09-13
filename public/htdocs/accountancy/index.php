@@ -59,7 +59,6 @@ $pcgver = getDolGlobalInt('CHARTOFACCOUNTS');
 
 if (GETPOST('addbox')) {
     // Add box (when submit is done from a form when ajax disabled)
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/infobox.class.php';
     $zone = GETPOSTINT('areacode');
     $userid = GETPOSTINT('userid');
     $boxorder = GETPOST('boxorder', 'aZ09');

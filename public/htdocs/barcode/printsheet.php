@@ -453,7 +453,6 @@ print '	<div class="tagtr">';
 print '	<div class="tagtd" style="overflow: hidden; white-space: nowrap; max-width: 300px;">';
 print $langs->trans("BarcodeType") . ' &nbsp; ';
 print '</div><div class="tagtd" style="overflow: hidden; white-space: nowrap; max-width: 300px;">';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formbarcode.class.php';
 $formbarcode = new FormBarCode($db);
 print $formbarcode->selectBarcodeType($fk_barcode_type, 'fk_barcode_type', 1);
 print '</div></div>';

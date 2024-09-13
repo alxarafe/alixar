@@ -283,7 +283,6 @@ class BlockedLog
                 $this->error++;
             }
         } elseif ($this->element === 'payment_donation') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/paymentdonation.class.php';
 
             $object = new PaymentDonation($this->db);
             if ($object->fetch($this->fk_object) > 0) {
@@ -292,7 +291,6 @@ class BlockedLog
                 $this->error++;
             }
         } elseif ($this->element === 'payment_various') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
 
             $object = new PaymentVarious($this->db);
             if ($object->fetch($this->fk_object) > 0) {

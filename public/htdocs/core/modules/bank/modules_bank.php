@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2014  Regis Houssin   <regis.houssin@inodbox.com>
- * Copyright (C) 2014       Marcos García   <marcosgdf@gmail.com>
+/* Copyright (C) 2010-2014  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,14 +20,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  *      \file       htdocs/core/modules/bank/modules_bank.php
  *      \ingroup    project
  *      \brief      File that contain parent class for bank models
  *                  and parent class for bank numbering models
  */
-
-
 
 /**
  *  Parent class for bank account models

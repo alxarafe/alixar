@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2018 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2022 Charlene Benke	   <charlene@patas-monkey.com>
+/* Copyright (C) 2018       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022       Charlene Benke	            <charlene@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\EmailCollector\Classes\EmailCollector;
+use Dolibarr\Code\EmailCollector\Classes\EmailCollectorAction;
+use Dolibarr\Code\EmailCollector\Classes\EmailCollectorFilter;
+use OAuth\Common\Storage\DoliStorage;
+use OAuth\Common\Consumer\Credentials;
+use Webklex\PHPIMAP\ClientManager;
+use Webklex\PHPIMAP\Exceptions\ConnectionFailedException;
+
 /**
  *      \file       htdocs/admin/emailcollector_card.php
  *      \ingroup    emailcollector
@@ -29,7 +40,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/events.class.php';
 
 include_once DOL_DOCUMENT_ROOT . '/core/class/html.formcompany.class.php';
 include_once DOL_DOCUMENT_ROOT . '/core/class/html.formfile.class.php';
@@ -37,13 +47,6 @@ include_once DOL_DOCUMENT_ROOT . '/emailcollector/class/emailcollector.class.php
 include_once DOL_DOCUMENT_ROOT . '/emailcollector/class/emailcollectorfilter.class.php';
 include_once DOL_DOCUMENT_ROOT . '/emailcollector/class/emailcollectoraction.class.php';
 include_once DOL_DOCUMENT_ROOT . '/emailcollector/lib/emailcollector.lib.php';
-
-use Webklex\PHPIMAP\ClientManager;
-use Webklex\PHPIMAP\Exceptions\ConnectionFailedException;
-
-
-use OAuth\Common\Storage\DoliStorage;
-use OAuth\Common\Consumer\Credentials;
 
 if (!$user->admin) {
     accessforbidden();
@@ -268,8 +271,6 @@ if ($action == 'confirm_collect') {
 
     $action = '';
 }
-
-
 
 /*
  * View

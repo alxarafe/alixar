@@ -35,11 +35,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/cheque/class/remisecheque.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/paymentdonation.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/paymentloan.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
 //show files
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';

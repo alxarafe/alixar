@@ -38,7 +38,6 @@ use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
 
 use Dolibarr\Code\User\Classes\User;
 
@@ -1237,7 +1236,6 @@ if ($modecompta == 'BOOKKEEPING') {
         dol_syslog('get loan payments', LOG_DEBUG);
         $result = $db->query($sql);
         if ($result) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
             $loan_static = new Loan($db);
             while ($obj = $db->fetch_object($result)) {
                 $loan_static->id = $obj->id;

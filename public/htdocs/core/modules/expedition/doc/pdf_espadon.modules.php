@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2012 Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2014-2015 Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2018-2024  Frédéric France    	<frederic.france@free.fr>
- * Copyright (C) 2023 		Charlene Benke    	<charlene@patas-monkey.com>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2012  Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2014-2015  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018-2024  Frédéric France    	        <frederic.france@free.fr>
+ * Copyright (C) 2023 		Charlene Benke    	        <charlene@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,13 +24,14 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Expedition\Classes\ModelePdfExpedition;
+
 /**
  *  \file       htdocs/core/modules/expedition/doc/pdf_espadon.modules.php
  *  \ingroup    expedition
  *  \brief      Class file allowing Espadon shipping template generation
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expedition/modules_expedition.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';

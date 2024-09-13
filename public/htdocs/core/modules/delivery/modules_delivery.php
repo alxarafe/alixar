@@ -30,7 +30,6 @@
  *              et la class mere de numerotation des bons de livraisons
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
 
 
 /**

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2006-2015  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2015-2016	Alexandre Spangaro	<aspangaro@open-dsi.fr>
- * Copyright (C) 2015		Raphaël Doursenaud	<rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2017		Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2006-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015-2016	Alexandre Spangaro	        <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015		Raphaël Doursenaud	        <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2017		Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -27,7 +27,11 @@
  * \brief      Functions for module members
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Adherents\Classes\Subscription;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
 
 /**
  *  Return array head with list of tabs to view object information

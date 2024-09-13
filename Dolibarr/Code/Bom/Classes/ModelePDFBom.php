@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2003-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2006      Andre Cianfarani     <acianfa@free.fr>
- * Copyright (C) 2012      Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2014      Marcos García        <marcosgdf@gmail.com>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2012       Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,10 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Bom\Classes;
+
+use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+
 /**
  *  \file           htdocs/core/modules/bom/modules_bom.php
  *  \ingroup        bom
@@ -31,26 +35,23 @@
  *                  and parent class for boms numbering models
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php'; // required for use by classes that inherit
-
 
 /**
  *  Parent class for boms models
  */
 abstract class ModelePDFBom extends CommonDocGenerator
 {
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *  Return list of active generation modules
      *
-     *  @param  DoliDB  $db                 Database handler
-     *  @param  integer $maxfilenamelength  Max length of value to show
-     *  @return array                       List of templates
+     * @param DoliDB $db Database handler
+     * @param integer $maxfilenamelength Max length of value to show
+     * @return array                       List of templates
      */
     public static function liste_modeles($db, $maxfilenamelength = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         $type = 'bom';
         $list = array();
 
@@ -59,14 +60,4 @@ abstract class ModelePDFBom extends CommonDocGenerator
 
         return $list;
     }
-}
-
-
-
-/**
- *  Parent class to manage numbering of BOMs
- */
-abstract class ModeleNumRefBoms extends CommonNumRefGenerator
-{
-    // No overload code
 }

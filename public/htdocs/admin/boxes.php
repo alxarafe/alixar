@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2022 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015       Jean-François Ferry		<jfefe@aternatik.fr>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Jean-François Ferry		    <jfefe@aternatik.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\InfoBox;
+
 /**
  *   \file       htdocs/admin/boxes.php
  *   \brief      Page to setup boxes
@@ -29,7 +32,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/infobox.class.php';
 include_once DOL_DOCUMENT_ROOT . '/core/lib/admin.lib.php';
 
 // Load translation files required by the page
@@ -96,7 +98,7 @@ if ($action == 'add') {
                         $arrayofexistingboxid = array();
                         $nbboxonleft = $nbboxonright = 0;
                         $sql = "SELECT box_id, box_order FROM " . MAIN_DB_PREFIX . "boxes";
-                        $sql .= " WHERE position = " . ((int) $pos) . " AND fk_user = " . ((int) $fk_user) . " AND entity = " . ((int) $conf->entity);
+                        $sql .= " WHERE position = " . ((int)$pos) . " AND fk_user = " . ((int)$fk_user) . " AND entity = " . ((int)$conf->entity);
                         dol_syslog("boxes.php activate box", LOG_DEBUG);
                         $resql = $db->query($sql);
                         if ($resql) {
@@ -118,7 +120,7 @@ if ($action == 'add') {
                             $sql = "INSERT INTO " . MAIN_DB_PREFIX . "boxes (";
                             $sql .= "box_id, position, box_order, fk_user, entity";
                             $sql .= ") VALUES (";
-                            $sql .= ((int) $boxid['value']) . ", " . ((int) $pos) . ", '" . (($nbboxonleft > $nbboxonright) ? 'B01' : 'A01') . "', " . ((int) $fk_user) . ", " . $conf->entity;
+                            $sql .= ((int)$boxid['value']) . ", " . ((int)$pos) . ", '" . (($nbboxonleft > $nbboxonright) ? 'B01' : 'A01') . "', " . ((int)$fk_user) . ", " . $conf->entity;
                             $sql .= ")";
 
                             dol_syslog("boxes.php activate box", LOG_DEBUG);
@@ -145,7 +147,7 @@ if ($action == 'add') {
 
 if ($action == 'delete') {
     $sql = "SELECT box_id FROM " . MAIN_DB_PREFIX . "boxes";
-    $sql .= " WHERE rowid=" . ((int) $rowid);
+    $sql .= " WHERE rowid=" . ((int)$rowid);
 
     $resql = $db->query($sql);
     $obj = $db->fetch_object($resql);
@@ -154,7 +156,7 @@ if ($action == 'delete') {
 
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "boxes";
         $sql .= " WHERE entity = " . $conf->entity;
-        $sql .= " AND box_id=" . ((int) $obj->box_id);
+        $sql .= " AND box_id=" . ((int)$obj->box_id);
 
         $resql = $db->query($sql);
 
@@ -179,18 +181,18 @@ if ($action == 'switch') {
         $newsecond = $objfrom->box_order;
         if ($newfirst == $newsecond) {
             $newsecondchar = preg_replace('/[0-9]+/', '', $newsecond);
-            $newsecondnum = (int) preg_replace('/[a-zA-Z]+/', '', $newsecond);
+            $newsecondnum = (int)preg_replace('/[a-zA-Z]+/', '', $newsecond);
             $newsecond = sprintf("%s%02d", $newsecondchar ? $newsecondchar : 'A', $newsecondnum + 1);
         }
 
-        $sql = "UPDATE " . MAIN_DB_PREFIX . "boxes SET box_order='" . $db->escape($newfirst) . "' WHERE rowid=" . ((int) $objfrom->rowid);
+        $sql = "UPDATE " . MAIN_DB_PREFIX . "boxes SET box_order='" . $db->escape($newfirst) . "' WHERE rowid=" . ((int)$objfrom->rowid);
         dol_syslog($sql);
         $resultupdatefrom = $db->query($sql);
         if (!$resultupdatefrom) {
             dol_print_error($db);
         }
 
-        $sql = "UPDATE " . MAIN_DB_PREFIX . "boxes SET box_order='" . $db->escape($newsecond) . "' WHERE rowid=" . ((int) $objto->rowid);
+        $sql = "UPDATE " . MAIN_DB_PREFIX . "boxes SET box_order='" . $db->escape($newsecond) . "' WHERE rowid=" . ((int)$objto->rowid);
         dol_syslog($sql);
         $resultupdateto = $db->query($sql);
         if (!$resultupdateto) {
@@ -256,7 +258,7 @@ if ($resql) {
         // We renumber the order of the boxes if one of them is in ''
         // This occurs just after an insert.
         if ($decalage) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . "boxes SET box_order='" . $db->escape($decalage) . "' WHERE rowid=" . ((int) $obj->rowid);
+            $sql = "UPDATE " . MAIN_DB_PREFIX . "boxes SET box_order='" . $db->escape($decalage) . "' WHERE rowid=" . ((int)$obj->rowid);
             $db->query($sql);
         }
     }

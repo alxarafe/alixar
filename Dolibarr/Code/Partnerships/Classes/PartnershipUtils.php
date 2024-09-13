@@ -162,7 +162,6 @@ class PartnershipUtils
                             dol_syslog("Now we will send an email to member id=" . $object->fk_member . " with label " . $labeltemplate);
 
                             // Send deployment email
-                            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                             include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
                             $formmail = new FormMail($this->db);
 
@@ -387,7 +386,6 @@ class PartnershipUtils
                                     dol_syslog("Now we will send an email to partner id=" . $fk_partner . " with label " . $labeltemplate);
 
                                     // Send deployment email
-                                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                                     include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
                                     $formmail = new FormMail($this->db);
 

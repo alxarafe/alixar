@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017-2020  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2017-2018	Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2017-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2017-2018	Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DefaultValues;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+
 /**
  *       \file      htdocs/admin/defaultvalues.php
  *       \brief     Page to set default values used used in a create form
@@ -32,7 +36,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/defaultvalues.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'products', 'admin', 'sms', 'other', 'errors'));

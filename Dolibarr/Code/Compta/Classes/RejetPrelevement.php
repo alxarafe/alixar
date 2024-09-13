@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Compta\Classes;
+
 /**
  *  \file       htdocs/compta/prelevement/class/rejetprelevement.class.php
  *  \ingroup    prelevement

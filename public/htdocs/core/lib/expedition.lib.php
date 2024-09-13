@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2006-2012  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007		Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2010-2012	Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010		Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015 Claudio Aschieri				<c.aschieri@19.coop>
+/* Copyright (C) 2006-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007		Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2010-2012	Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010		Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Claudio Aschieri            <c.aschieri@19.coop>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Expedition\Classes\Expedition;
 
 /**
  *  \file       htdocs/core/lib/expedition.lib.php

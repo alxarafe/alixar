@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2006-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2010-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2015		Alexandre Spangaro	<aspangaro@open-dsi.fr>
+/* Copyright (C) 2006-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2015		Alexandre Spangaro	        <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *      \file       htdocs/core/lib/doleditor.lib.php

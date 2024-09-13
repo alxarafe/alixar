@@ -21,7 +21,10 @@
 
 namespace Dolibarr\Code\EmailCollector\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+use Exception;
 use OAuth\Common\Consumer\Credentials;
 use OAuth\Common\Storage\DoliStorage;
 use Webklex\PHPIMAP\ClientManager;

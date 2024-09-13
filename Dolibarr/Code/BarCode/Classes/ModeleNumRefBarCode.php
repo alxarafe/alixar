@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2014 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2014       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,13 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\BarCode\Classes;
+
+use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *   \file       htdocs/core/modules/barcode/modules_barcode.class.php
  *   \ingroup    barcode
@@ -27,46 +34,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
-
-
-/**
- *  Parent class for barcode document generators (image)
- */
-abstract class ModeleBarCode
-{
-    /**
-     * @var string Error code (or message)
-     */
-    public $error = '';
-
-
-    /**
-     * Return if a model can be used or not
-     *
-     * @return      boolean     true if model can be used
-     */
-    public function isEnabled()
-    {
-        return true;
-    }
-
-    /**
-     *  Save an image file on disk (with no output)
-     *
-     *  @param     string       $code             Value to encode
-     *  @param     string       $encoding         Mode of encoding ('QRCODE', 'EAN13', ...)
-     *  @param     string       $readable         Code can be read
-     *  @param     integer      $scale            Scale (not used with this engine)
-     *  @param     integer      $nooutputiferror  No output if error (not used with this engine)
-     *  @return    int                            Return integer <0 if KO, >0 if OK
-     */
-    public function writeBarCode($code, $encoding, $readable = 'Y', $scale = 1, $nooutputiferror = 0)
-    {
-        return -1;  // Error by default, this method must be implemented by the driver
-    }
-}
-
 
 /**
  *  Parent class for barcode numbering models
@@ -80,9 +47,9 @@ abstract class ModeleNumRefBarCode extends CommonNumRefGenerator
     /**
      *  Return next value available
      *
-     *  @param  ?CommonObject   $objcommon  Object Product, Thirdparty
-     *  @param  string          $type       Type of barcode (EAN, ISBN, ...)
-     *  @return string                      Value
+     * @param  ?CommonObject $objcommon Object Product, Thirdparty
+     * @param string $type Type of barcode (EAN, ISBN, ...)
+     * @return string                      Value
      */
     public function getNextValue($objcommon = null, $type = '')
     {
@@ -93,10 +60,10 @@ abstract class ModeleNumRefBarCode extends CommonNumRefGenerator
     /**
      *      Return description of module parameters
      *
-     *      @param  Translate   $langs      Output language
-     *      @param  Societe     $soc        Third party object
-     *      @param  int         $type       -1=Nothing, 0=Product, 1=Service
-     *      @return string                  HTML translated description
+     * @param Translate $langs Output language
+     * @param Societe $soc Third party object
+     * @param int $type -1=Nothing, 0=Product, 1=Service
+     * @return string                  HTML translated description
      */
     public function getToolTip($langs, $soc, $type)
     {

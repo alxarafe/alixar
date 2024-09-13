@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2010-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2012		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2010-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
 *
 * This program is free software; you can redistribute it and/or modify
@@ -20,13 +20,17 @@
 * or see https://www.gnu.org/
 */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Members\Classes\ModelePDFMember;
+
 /**
  *  \file       htdocs/core/modules/member/doc/doc_generic_member_odt.class.php
  *  \ingroup    societe
  *  \brief      File of class to build ODT documents for members
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/member/modules_member.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';

@@ -37,13 +37,11 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/salaries.lib.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
 if (isModEnabled('project')) {
     }
 

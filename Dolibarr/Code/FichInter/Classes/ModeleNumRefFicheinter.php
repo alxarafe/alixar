@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2019 Philippe Grand	    <philippe.grand@atoo-net.com>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2019  Philippe Grand	            <philippe.grand@atoo-net.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,42 +22,16 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\FichInter\Classes;
+
+use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
+
 /**
  *  \file       htdocs/core/modules/fichinter/modules_fichinter.php
  *  \ingroup    ficheinter
  *  \brief      File that contains parent class for PDF interventions models
  *              and parent class for interventions numbering models
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
-
-
-/**
- *  Parent class to manage intervention document templates
- */
-abstract class ModelePDFFicheinter extends CommonDocGenerator
-{
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-    /**
-     *  Return list of active generation modules
-     *
-     *  @param  DoliDB  $db                 Database handler
-     *  @param  integer $maxfilenamelength  Max length of value to show
-     *  @return array                       List of templates
-     */
-    public static function liste_modeles($db, $maxfilenamelength = 0)
-    {
-		// phpcs:enable
-        $type = 'ficheinter';
-        $list = array();
-
-        include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
-        $list = getListOfModels($db, $type, $maxfilenamelength);
-
-        return $list;
-    }
-}
-
 
 /**
  *  Parent class numbering models of intervention sheet references
@@ -67,23 +41,22 @@ abstract class ModeleNumRefFicheinter extends CommonNumRefGenerator
     // No overload code
 }
 
-
 // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
 /**
  *  Create an intervention document on disk using template defined into FICHEINTER_ADDON_PDF
  *
- *  @param  DoliDB      $db             object base de donnee
- *  @param  Object      $object         Object fichinter
- *  @param  string      $modele         force le modele a utiliser ('' par default)
- *  @param  Translate   $outputlangs    object lang a utiliser pour traduction
- *  @param  int         $hidedetails    Hide details of lines
- *  @param  int         $hidedesc       Hide description
- *  @param  int         $hideref        Hide ref
- *  @return int                         0 if KO, 1 if OK
+ * @param DoliDB $db object base de donnee
+ * @param Object $object Object fichinter
+ * @param string $modele force le modele a utiliser ('' par default)
+ * @param Translate $outputlangs object lang a utiliser pour traduction
+ * @param int $hidedetails Hide details of lines
+ * @param int $hidedesc Hide description
+ * @param int $hideref Hide ref
+ * @return int                         0 if KO, 1 if OK
  */
 function fichinter_create($db, $object, $modele, $outputlangs, $hidedetails = 0, $hidedesc = 0, $hideref = 0)
 {
-	// phpcs:enable
+    // phpcs:enable
     global $conf, $langs;
     $langs->load("ficheinter");
 

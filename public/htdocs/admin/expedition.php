@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2003-2008  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2004		Sebastien Di Cintio		<sdicintio@ressource-toi.org>
- * Copyright (C) 2004		Benoit Mortier			<benoit.mortier@opensides.be>
- * Copyright (C) 2004		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2011-2012	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2011-2018	Philippe Grand			<philippe.grand@atoo-net.com>
+/* Copyright (C) 2003-2008  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Sebastien Di Cintio		    <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004		Benoit Mortier			    <benoit.mortier@opensides.be>
+ * Copyright (C) 2004		Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2012	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2011-2018	Philippe Grand			    <philippe.grand@atoo-net.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -33,6 +33,10 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
@@ -57,7 +61,6 @@ if (!getDolGlobalString('EXPEDITION_ADDON_NUMBER')) {
     $conf->global->EXPEDITION_ADDON_NUMBER = 'mod_expedition_safor';
 }
 
-
 /*
  * Actions
  */
@@ -67,7 +70,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_setmoduleoptions.inc.php';
 if ($action == 'updateMask') {
     $maskconst = GETPOST('maskconstexpedition', 'aZ09');
     $maskvalue = GETPOST('maskexpedition', 'alpha');
-    if (!empty($maskconst) && preg_match('/_MASK$/', $maskconst)) {
+    if (!empty($maskconst) && str_ends_with($maskconst, '_MASK')) {
         $res = dolibarr_set_const($db, $maskconst, $maskvalue, 'chaine', 0, '', $conf->entity);
     }
 
@@ -470,7 +473,6 @@ $variablename = 'SHIPPING_FREE_TEXT';
 if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
     print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
 } else {
-    include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
     print $doleditor->Create();
 }

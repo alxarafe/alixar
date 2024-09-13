@@ -30,6 +30,7 @@
 
 namespace Dolibarr\Code\Fourn\Classes;
 
+use Dolibarr\Code\Compta\Classes\Paiement;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 use DoliDB;
 

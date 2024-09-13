@@ -29,8 +29,6 @@
  *               and parent class of proposals and proposal numbering
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php'; // Requis car utilise dans les classes qui heritent
 
 
 /**

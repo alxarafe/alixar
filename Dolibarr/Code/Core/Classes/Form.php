@@ -3117,7 +3117,6 @@ class Form
         dol_syslog(get_class($this) . "::select_produits_list search products", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 
             $num = $this->db->num_rows($result);
@@ -3199,7 +3198,6 @@ class Form
                         $price_product = new Product($this->db);
                         $price_product->fetch($objp->rowid, '', '', 1);
 
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
                         $priceparser = new PriceParser($this->db);
                         $price_result = $priceparser->parseProduct($price_product);
                         if ($price_result >= 0) {
@@ -3738,7 +3736,6 @@ class Form
         dol_syslog(get_class($this) . "::select_produits_fournisseurs_list", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 
             $num = $this->db->num_rows($result);
@@ -3874,7 +3871,6 @@ class Form
                         $prod_supplier->fourn_tva_tx = $objp->tva_tx;
                         $prod_supplier->fk_supplier_price_expression = $objp->fk_supplier_price_expression;
 
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
                         $priceparser = new PriceParser($this->db);
                         $price_result = $priceparser->parseProductSupplier($prod_supplier);
                         if ($price_result >= 0) {
@@ -4123,7 +4119,6 @@ class Form
             if (!$num) {
                 $form .= '<option value="0">-- ' . $langs->trans("NoSupplierPriceDefinedForThisProduct") . ' --</option>';
             } else {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
                 $form .= '<option value="0">&nbsp;</option>';
 
                 $i = 0;
@@ -4145,7 +4140,6 @@ class Form
                         $prod_supplier->fourn_tva_tx = $objp->tva_tx;
                         $prod_supplier->fk_supplier_price_expression = $objp->fk_supplier_price_expression;
 
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
                         $priceparser = new PriceParser($this->db);
                         $price_result = $priceparser->parseProductSupplier($prod_supplier);
                         if ($price_result >= 0) {

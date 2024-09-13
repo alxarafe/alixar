@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2015      Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2015       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -20,13 +20,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Cheque\Classes\ModeleNumRefChequeReceipts;
+use Dolibarr\Code\Compta\Classes\RemiseCheque;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  * \file       htdocs/core/modules/cheque/mod_chequereceipt_mint.php
  * \ingroup    cheque
  * \brief      File containing class for numbering module Mint
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/cheque/modules_chequereceipts.php';
 
 /**
  *  Class to manage cheque receipts numbering rules Mint

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2009       Laurent Destailleur        <eldy@users.sourceforge.net>
- * Copyright (C) 2010-2016  Juanjo Menent	       <jmenent@2byte.es>
- * Copyright (C) 2013-2018  Philippe Grand             <philippe.grand@atoo-net.com>
+/* Copyright (C) 2009       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2016  Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2013-2018  Philippe Grand              <philippe.grand@atoo-net.com>
  * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\RemiseCheque;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *      \file       htdocs/admin/bank.php
@@ -33,7 +36,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/cheque/class/remisecheque.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "companies", "bills", "other", "banks"));
@@ -59,7 +61,7 @@ if (!getDolGlobalString('CHEQUERECEIPTS_ADDON')) {
 if ($action == 'updateMask') {
     $maskconstchequereceipts = GETPOST('maskconstchequereceipts', 'aZ09');
     $maskchequereceipts = GETPOST('maskchequereceipts', 'alpha');
-    if ($maskconstchequereceipts && preg_match('/_MASK$/', $maskconstchequereceipts)) {
+    if ($maskconstchequereceipts && str_ends_with($maskconstchequereceipts, '_MASK')) {
         $res = dolibarr_set_const($db, $maskconstchequereceipts, $maskchequereceipts, 'chaine', 0, '', $conf->entity);
     }
 
@@ -270,7 +272,6 @@ $variablename = 'BANK_CHEQUERECEIPT_FREE_TEXT';
 if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
     print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
 } else {
-    include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
     print $doleditor->Create();
 }

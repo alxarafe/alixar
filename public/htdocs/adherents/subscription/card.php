@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2007-2019  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2020  Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2007-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2020  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Adherents\Classes\Subscription;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *       \file       htdocs/adherents/subscription/card.php
  *       \ingroup    member
@@ -27,9 +33,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
-if (isModEnabled("bank")) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "members", "bills", "users", "banks"));

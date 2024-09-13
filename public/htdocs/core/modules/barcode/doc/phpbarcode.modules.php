@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005      Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,15 +19,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\BarCode\Classes\ModeleBarCode;
+
 /**
  *  \file       htdocs/core/modules/barcode/doc/phpbarcode.modules.php
  *  \ingroup    barcode
  *  \brief      File with class to generate barcode images using php internal lib barcode generator
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/barcode/modules_barcode.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/barcode.lib.php'; // This is to include def like $genbarcode_loc and $font_loc
-
 
 /**
  *  Class to generate barcode images using php barcode generator

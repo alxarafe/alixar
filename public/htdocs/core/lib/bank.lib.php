@@ -32,7 +32,9 @@
  */
 
 use Dolibarr\Code\Compta\Classes\Account;
-
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  * Prepare array with list of tabs

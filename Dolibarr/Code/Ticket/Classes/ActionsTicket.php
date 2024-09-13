@@ -217,7 +217,6 @@ class ActionsTicket extends CommonHookActions
         if ($user->hasRight('ticket', 'manage') && $action == 'edit_message_init') {
             // MESSAGE
             $msg = GETPOSTISSET('message_initial') ? GETPOST('message_initial', 'restricthtml') : $object->message;
-            include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
             $uselocalbrowser = true;
             $ckeditorenabledforticket = getDolGlobalString('FCKEDITOR_ENABLE_TICKET');
             if (!$ckeditorenabledforticket) {

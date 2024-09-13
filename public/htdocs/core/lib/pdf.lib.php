@@ -1,20 +1,20 @@
 <?php
 
-/* Copyright (C) 2006-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2006		Rodolphe Quiedeville	<rodolphe@quiedeville.org>
- * Copyright (C) 2007		Patrick Raguin      	<patrick.raguin@gmail.com>
- * Copyright (C) 2010-2012	Regis Houssin       	<regis.houssin@inodbox.com>
- * Copyright (C) 2010-2017	Juanjo Menent       	<jmenent@2byte.es>
- * Copyright (C) 2012		Christophe Battarel		<christophe.battarel@altairis.fr>
- * Copyright (C) 2012       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2012-2015  Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2014		Cedric GROSS			<c.gross@kreiz-it.fr>
- * Copyright (C) 2014		Teddy Andreotti			<125155@supinfo.com>
- * Copyright (C) 2015-2016  Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2019       Lenin Rivas           	<lenin.rivas@servcom-it.com>
- * Copyright (C) 2020       Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2021-2022	Anthony Berton       	<anthony.berton@bb2a.fr>
- * Copyright (C) 2023-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2006-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006		Rodolphe Quiedeville	    <rodolphe@quiedeville.org>
+ * Copyright (C) 2007		Patrick Raguin      	    <patrick.raguin@gmail.com>
+ * Copyright (C) 2010-2012	Regis Houssin       	    <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2017	Juanjo Menent       	    <jmenent@2byte.es>
+ * Copyright (C) 2012		Christophe Battarel		    <christophe.battarel@altairis.fr>
+ * Copyright (C) 2012       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2012-2015  Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2014		Cedric GROSS			    <c.gross@kreiz-it.fr>
+ * Copyright (C) 2014		Teddy Andreotti			    <125155@supinfo.com>
+ * Copyright (C) 2015-2016  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2019       Lenin Rivas           	    <lenin.rivas@servcom-it.com>
+ * Copyright (C) 2020       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2021-2022	Anthony Berton       	    <anthony.berton@bb2a.fr>
+ * Copyright (C) 2023-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -38,6 +38,8 @@
  *  \brief      Set of functions used for PDF generation
  *  \ingroup    core
  */
+
+use Dolibarr\Code\Core\Classes\Translate;
 
 include_once DOL_DOCUMENT_ROOT . '/core/lib/signature.lib.php';
 

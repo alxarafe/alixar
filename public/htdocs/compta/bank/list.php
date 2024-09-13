@@ -36,7 +36,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories', 'accountancy', 'compta'));

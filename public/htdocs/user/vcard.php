@@ -33,7 +33,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 use Dolibarr\Code\User\Classes\User;
 
 use Dolibarr\Code\Societe\Classes\Societe;
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/vcard.class.php';
 
 $id = GETPOSTINT('id');
 

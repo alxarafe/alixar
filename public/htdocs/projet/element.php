@@ -43,7 +43,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 if (isModEnabled('agenda')) {
     }
 if (isModEnabled('bank')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
 }
 if (isModEnabled('deplacement')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
@@ -59,7 +58,6 @@ if (isModEnabled('invoice')) {
 if (isModEnabled('intervention')) {
 }
 if (isModEnabled('loan')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loanschedule.class.php';
 }
 if (isModEnabled('stock')) {

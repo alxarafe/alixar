@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2014 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011      Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2022      Faustin Boitel <fboitel@enseirb-matmeca.fr>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011       Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2022       Faustin Boitel              <fboitel@enseirb-matmeca.fr>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,14 +24,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\BarCode\Classes\ModeleNumRefBarCode;
+
 /**
  *       \file       htdocs/core/modules/barcode/mod_barcode_thirdparty_standard.php
  *       \ingroup    barcode
  *       \brief      File of class to manage barcode numbering with standard rule
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/barcode/modules_barcode.class.php';
-
 
 /**
  *  Class to manage barcode with standard rule

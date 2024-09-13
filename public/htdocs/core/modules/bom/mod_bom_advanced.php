@@ -22,14 +22,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Bom\Classes\ModeleNumRefBoms;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  * \file       htdocs/core/modules/bom/mod_bom_advanced.php
  * \ingroup    bom
  * \brief      File containing class for numbering model of BOMs advanced
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/bom/modules_bom.php';
-
 
 /**
  *  Class to manage customer Bom numbering rules advanced

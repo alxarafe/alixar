@@ -27,7 +27,7 @@
  *  \brief      File of class to manage BOMs numbering rules standard
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/bom/modules_bom.php';
+use Dolibarr\Code\Bom\Classes\ModeleNumRefBoms;
 
 /**
  *  Class to manage the Standard numbering rule for BOM

@@ -734,7 +734,6 @@ if (empty($reshook)) {
                     $msg = '';
 
                     // Send subscription email
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                     $formmail = new FormMail($db);
                     // Set output language
                     $outputlangs = new Translate('', $conf);
@@ -801,7 +800,6 @@ if (empty($reshook)) {
                     $msg = '';
 
                     // Send subscription email
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                     $formmail = new FormMail($db);
                     // Set output language
                     $outputlangs = new Translate('', $conf);

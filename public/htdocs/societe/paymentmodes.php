@@ -37,7 +37,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companypaymentmode.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';

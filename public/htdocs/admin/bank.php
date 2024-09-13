@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2009       Laurent Destailleur    <eldy@users.sourceforge.net>
- * Copyright (C) 2010-2016  Juanjo Menent	       <jmenent@2byte.es>
- * Copyright (C) 2013-2018  Philippe Grand         <philippe.grand@atoo-net.com>
- * Copyright (C) 2015       Jean-François Ferry    <jfefe@aternatik.fr>
+/* Copyright (C) 2009       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2016  Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2013-2018  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -29,10 +29,14 @@
  *      \brief      Page to setup the bank module
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Societe\Classes\CompanyBankAccount;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "companies", "bills", "other", "banks"));
@@ -202,8 +206,6 @@ if ($action == 'set') {
         $ret = addDocumentModel($value, $type, $label, $scandir);
     }
 }
-
-
 
 /*
  * View

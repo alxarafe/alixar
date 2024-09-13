@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2008-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2011		Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2017  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2015		Jean-François Ferry	    <jfefe@aternatik.fr>
- * Copyright (C) 2016		Charlie Benke		    <charlie@patas-monkey.com>
- * Copyright (C) 2017       Open-DSI                <support@open-dsi.fr>
+/* Copyright (C) 2008-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011		Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2017  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015		Jean-François Ferry	        <jfefe@aternatik.fr>
+ * Copyright (C) 2016		Charlie Benke		        <charlie@patas-monkey.com>
+ * Copyright (C) 2017       Open-DSI                    <support@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -31,10 +31,15 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Core\Classes\DefaultValues;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/defaultvalues.class.php';
 
 if (!$user->admin) {
     accessforbidden();

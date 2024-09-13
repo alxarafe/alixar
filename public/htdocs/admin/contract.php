@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2011-2013      Juanjo Menent       <jmenent@2byte.es>
- * Copyright (C) 2011-2018      Philippe Grand	    <philippe.grand@atoo-net.com>
+/* Copyright (C) 2011-2013  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2011-2018  Philippe Grand	            <philippe.grand@atoo-net.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -19,6 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *  \file       htdocs/admin/contract.php
@@ -501,7 +505,6 @@ $variablename = 'CONTRACT_FREE_TEXT';
 if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
     print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
 } else {
-    include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
     print $doleditor->Create();
 }

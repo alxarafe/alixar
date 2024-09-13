@@ -39,7 +39,7 @@ namespace Dolibarr\Code\Commande\Classes;
  *  \brief      class for orders
  */
 
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Core\Classes\CommonOrderLine;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 

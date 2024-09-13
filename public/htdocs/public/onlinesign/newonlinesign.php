@@ -156,7 +156,6 @@ if ($source == 'proposal') {
     $object = new Fichinter($db);
     $result = $object->fetch(0, $ref);
 } elseif ($source == 'societe_rib') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
     $object = new CompanyBankAccount($db);
     $result = $object->fetch(0, $ref);
 } elseif ($source == 'expedition') {

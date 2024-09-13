@@ -35,7 +35,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 use Dolibarr\Code\User\Classes\User;
 
 use Dolibarr\Code\User\Classes\UserGroup;
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ldap.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ldap.lib.php';
 
 // Load translation files required by the page

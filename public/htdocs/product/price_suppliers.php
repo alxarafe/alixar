@@ -325,7 +325,6 @@ if (empty($reshook)) {
                 } else {
                     if (isModEnabled('dynamicprices') && $price_expression !== '') {
                         //Check the expression validity by parsing it
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
                         $priceparser = new PriceParser($db);
                         $object->fk_supplier_price_expression = $price_expression;
                         $price_result = $priceparser->parseProductSupplier($object);

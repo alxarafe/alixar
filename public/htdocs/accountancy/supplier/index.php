@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2013-2014  Olivier Geffroy     <jeff@jeffinfo.com>
- * Copyright (C) 2013-2021  Florian Henry       <florian.henry@open-concept.pro>
- * Copyright (C) 2013-2022  Alexandre Spangaro  <aspangaro@easya.solutions>
- * Copyright (C) 2014	    Juanjo Menent       <jmenent@2byte.es>
+/* Copyright (C) 2013-2014  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2021  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2022  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2014	    Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,10 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\SupplierInvoiceLine;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  * \file        htdocs/accountancy/supplier/index.php

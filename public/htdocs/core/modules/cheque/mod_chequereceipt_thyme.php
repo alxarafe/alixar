@@ -19,14 +19,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Cheque\Classes\ModeleNumRefChequeReceipts;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  * \file       htdocs/core/modules/cheque/mod_chequereceipt_thyme.php
  * \ingroup    cheque
  * \brief      File containing class for numbering module Thyme
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/cheque/modules_chequereceipts.php';
-
 
 /**
  *  Class to manage cheque receipts numbering rules Thyme

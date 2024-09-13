@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,43 +22,18 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Members\Classes;
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/core/modules/member/modules_member.class.php
  *  \ingroup    members
  *  \brief      File with parent class for generating members to PDF
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
-
-
-/**
- *  Parent class to manage intervention document templates
- */
-abstract class ModelePDFMember extends CommonDocGenerator
-{
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-    /**
-     *  Return list of active generation modules
-     *
-     *  @param  DoliDB  $db                 Database handler
-     *  @param  integer $maxfilenamelength  Max length of value to show
-     *  @return array                       List of templates
-     */
-    public static function liste_modeles($db, $maxfilenamelength = 0)
-    {
-		// phpcs:enable
-        $type = 'member';
-        $list = array();
-
-        include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
-        $list = getListOfModels($db, $type, $maxfilenamelength);
-        return $list;
-    }
-}
-
-
 
 /**
  *  Class mere des modeles de numerotation des references de members
@@ -68,9 +43,9 @@ abstract class ModeleNumRefMembers extends CommonNumRefGenerator
     /**
      *  Return description of module parameters
      *
-     *  @param  Translate   $langs      Output language
-     *  @param  Societe     $soc        Third party object
-     *  @return string                  HTML translated description
+     * @param Translate $langs Output language
+     * @param Societe $soc Third party object
+     * @return string                  HTML translated description
      */
     public function getToolTip($langs, $soc)
     {
@@ -114,9 +89,9 @@ abstract class ModeleNumRefMembers extends CommonNumRefGenerator
     /**
      *  Return next value
      *
-     *  @param  Societe     $objsoc     Object third party
-     *  @param  Adherent    $object     Object we need next value for
-     *  @return string                  next value
+     * @param Societe $objsoc Object third party
+     * @param Adherent $object Object we need next value for
+     * @return string                  next value
      */
     public function getNextValue($objsoc, $object)
     {

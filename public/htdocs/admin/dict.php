@@ -1,20 +1,20 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2018	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2004		Benoit Mortier			<benoit.mortier@opensides.be>
- * Copyright (C) 2005-2017	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2010-2022	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2011-2021	Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2011		Remy Younes				<ryounes@gmail.com>
- * Copyright (C) 2012-2015	Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2012		Christophe Battarel		<christophe.battarel@ltairis.fr>
- * Copyright (C) 2011-2023	Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2015		Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2016		Raphaël Doursenaud		<rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2019-2022  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2020-2022  Open-Dsi                <support@open-dsi.fr>
- * Copyright (C) 2024       Charlene Benke          <charlene@patas-monkey.com>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2018	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Benoit Mortier			    <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2017	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2022	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2011-2021	Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2011		Remy Younes				    <ryounes@gmail.com>
+ * Copyright (C) 2012-2015	Marcos García			    <marcosgdf@gmail.com>
+ * Copyright (C) 2012		Christophe Battarel		    <christophe.battarel@ltairis.fr>
+ * Copyright (C) 2011-2023	Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015		Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2016		Raphaël Doursenaud		    <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2019-2022  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2020-2022  Open-Dsi                    <support@open-dsi.fr>
+ * Copyright (C) 2024       Charlene Benke              <charlene@patas-monkey.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,6 +31,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+
 /**
  *      \file       htdocs/admin/dict.php
  *      \ingroup    setup
@@ -38,8 +40,6 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';

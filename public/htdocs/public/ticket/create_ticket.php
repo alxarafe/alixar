@@ -377,7 +377,6 @@ if (empty($reshook)) {
                     $res = $object->fetch($id);
                     if ($res) {
                         // Create form object
-                        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                         include_once DOL_DOCUMENT_ROOT . '/core/lib/files.lib.php';
                         $formmail = new FormMail($db);
 

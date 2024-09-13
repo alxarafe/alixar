@@ -31,9 +31,7 @@
  *                  and parent class for MOs numbering models
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php'; // required for use by classes that inherit
-
+use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 
 /**
  *  Parent class for mos models

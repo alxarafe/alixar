@@ -1,12 +1,11 @@
 <?php
 
-/* Copyright (C) 2006-2007  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2007		Rodolphe Quiedeville	<rodolphe@quiedeville.org>
- * Copyright (C) 2012		Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2016		Gilles Poirier 		   <glgpoirier@gmail.com>
- * Copyright (C) 2018		charlene Benke 		   <charlie@patas-monkey.com>
+/* Copyright (C) 2006-2007  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007		Rodolphe Quiedeville	    <rodolphe@quiedeville.org>
+ * Copyright (C) 2012		Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2016		Gilles Poirier 		        <glgpoirier@gmail.com>
+ * Copyright (C) 2018		charlene Benke 		        <charlie@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
-
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,6 +28,10 @@
  *  \brief      Ensemble de functions de base pour le module fichinter
  *  \ingroup    fichinter
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Resource\Classes\Dolresource;
 
 /**
  * Prepare array with list of tabs

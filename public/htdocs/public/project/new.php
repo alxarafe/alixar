@@ -345,7 +345,6 @@ if (empty($reshook) && $action == 'add') {
                     $msg = '';
 
                     // Send subscription email
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                     $formmail = new FormMail($db);
                     // Set output language
                     $outputlangs = new Translate('', $conf);

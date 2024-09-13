@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2003-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2006      Andre Cianfarani     <acianfa@free.fr>
- * Copyright (C) 2011      Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2011-2019 Philippe Grand       <philippe.grand@atoo-net.com>
- * Copyright (C) 2014      Marcos García        <marcosgdf@gmail.com>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2011       Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2011-2019  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,11 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Expedition\Classes;
+
+use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
+
 /**
  *  \file       htdocs/core/modules/expedition/modules_expedition.php
  *  \ingroup    expedition
@@ -32,25 +37,22 @@
  *              and parent class for sending receipts numbering models
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
-
-
 /**
  *  Parent class of sending receipts models
  */
 abstract class ModelePdfExpedition extends CommonDocGenerator
 {
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *  Return list of active generation models
      *
-     *  @param  DoliDB  $db                 Database handler
-     *  @param  integer $maxfilenamelength  Max length of value to show
-     *  @return array                       List of templates
+     * @param DoliDB $db Database handler
+     * @param integer $maxfilenamelength Max length of value to show
+     * @return array                       List of templates
      */
     public static function liste_modeles($db, $maxfilenamelength = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         $type = 'shipping';
         $list = array();
 
@@ -59,13 +61,4 @@ abstract class ModelePdfExpedition extends CommonDocGenerator
 
         return $list;
     }
-}
-
-
-/**
- *  Parent Class of numbering models of sending receipts references
- */
-abstract class ModelNumRefExpedition extends CommonNumRefGenerator
-{
-    // No overload code
 }

@@ -1478,7 +1478,6 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                         $fk_barcode_type = 0;
                     }
                 }
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formbarcode.class.php';
                 $formbarcode = new FormBarCode($db);
                 print $formbarcode->selectBarcodeType($fk_barcode_type, 'fk_barcode_type', 1);
                 print '</td>';
@@ -2097,7 +2096,6 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                             $fk_barcode_type = getDolGlobalString('PRODUIT_DEFAULT_BARCODE_TYPE');
                         }
                     }
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formbarcode.class.php';
                     $formbarcode = new FormBarCode($db);
                     print $formbarcode->selectBarcodeType($fk_barcode_type, 'fk_barcode_type', 1);
                     print '</td></tr>';
@@ -2466,7 +2464,6 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                     print '</tr></table>';
                     print '</td><td>';
                     if ($action == 'editbarcodetype' || $action == 'editbarcode') {
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formbarcode.class.php';
                         $formbarcode = new FormBarCode($db);
                     }
 

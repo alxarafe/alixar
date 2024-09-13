@@ -771,7 +771,6 @@ if ($ispaymentok) {
                         $msg = '';
 
                         // Send subscription email
-                        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                         $formmail = new FormMail($db);
                         // Load traductions files required by page
                         $outputlangs->loadLangs(array("main", "members"));
@@ -1392,7 +1391,6 @@ if ($ispaymentok) {
                         if ($resultthirdparty < 0) {
                             setEventMessages($resultthirdparty->error, $resultthirdparty->errors, "errors");
                         } else {
-                            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                             $formmail = new FormMail($db);
                             // Set output language
                             $outputlangs = new Translate('', $conf);
@@ -1619,7 +1617,6 @@ if ($ispaymentok) {
                                         setEventMessages(null, $thirdparty->errors, "errors");
                                     } else {
                                         // Sending mail
-                                        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                                         $formmail = new FormMail($db);
                                         // Set output language
                                         $outputlangs = new Translate('', $conf);

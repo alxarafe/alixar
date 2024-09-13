@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2003      Eric Seigne          <erics@rycks.com>
- * Copyright (C) 2003,2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Sebastien Di Cintio  <sdicintio@ressource-toi.org>
- * Copyright (C) 2004      Benoit Mortier       <benoit.mortier@opensides.be>
- * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011 	   Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2020		Tobias Sekan		<tobias.sekan@startmail.com>
+/* Copyright (C) 2003       Eric Seigne                 <erics@rycks.com>
+ * Copyright (C) 2003,2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Sebastien Di Cintio         <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011 	    Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2020		Tobias Sekan		        <tobias.sekan@startmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,6 +25,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\InfoBox;
+use Dolibarr\Code\Core\Classes\RssParser;
+
 /**
  *      \file       htdocs/admin/external_rss.php
  *      \ingroup    external_rss
@@ -34,8 +38,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/rssparser.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/infobox.class.php';
 
 // Load translation files required by the page
 $langs->load("admin");
@@ -47,7 +49,6 @@ $action = GETPOST('action', 'aZ09');
 if (!$user->admin) {
     accessforbidden();
 }
-
 
 /*
  * Actions

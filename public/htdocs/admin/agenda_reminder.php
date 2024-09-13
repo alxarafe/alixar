@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,6 +25,10 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Cron\Classes\Cronjob;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';

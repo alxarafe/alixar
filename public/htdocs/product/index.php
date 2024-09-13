@@ -68,7 +68,6 @@ $resultboxes = FormOther::getBoxesArea($user, "4");
 
 if (GETPOST('addbox')) {
     // Add box (when submit is done from a form when ajax disabled)
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/infobox.class.php';
     $zone = GETPOST('areacode', 'int');
     $userid = GETPOST('userid', 'int');
     $boxorder = GETPOST('boxorder', 'aZ09');
@@ -417,7 +416,6 @@ if ((isModEnabled("product") || isModEnabled("service")) && ($user->hasRight("pr
                         $product = new Product($db);
                         $product->fetch($objp->rowid);
 
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
                         $priceparser = new PriceParser($db);
                         $price_result = $priceparser->parseProduct($product);
                         if ($price_result >= 0) {

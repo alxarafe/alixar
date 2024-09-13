@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2015 Laurent Destailleur    <eldy@users.sourceforge.net>
+/* Copyright (C) 2015       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,25 +17,27 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
+namespace Dolibarr\Code\ExpenseReport\Classes;
 
+use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use Dolibarr\Code\Core\Classes\Translate;
 
 /**
  *  Parent class for trips and expenses templates
  */
 abstract class ModeleExpenseReport extends CommonDocGenerator
 {
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *  Return list of active models generation
      *
-     *  @param  DoliDB  $db                 Database handler
-     *  @param  integer $maxfilenamelength  Max length of value to show
-     *  @return array                       List of templates
+     * @param DoliDB $db Database handler
+     * @param integer $maxfilenamelength Max length of value to show
+     * @return array                       List of templates
      */
     public static function liste_modeles($db, $maxfilenamelength = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         $type = 'expensereport';
         $list = array();
 
@@ -49,25 +51,17 @@ abstract class ModeleExpenseReport extends CommonDocGenerator
 /**
  * expensereport_pdf_create
  *
- *  @param      DoliDB      $db             Database handler
- *  @param      ExpenseReport   $object     Object ExpenseReport
- *  @param      string      $message        Message
- *  @param      string      $modele         Force the model to use ('' to not force)
- *  @param      Translate   $outputlangs    lang object to use for translation
- *  @param      int         $hidedetails    Hide details of lines
- *  @param      int         $hidedesc       Hide description
- *  @param      int         $hideref        Hide ref
- *  @return     int                         0 if KO, 1 if OK
+ * @param DoliDB $db Database handler
+ * @param ExpenseReport $object Object ExpenseReport
+ * @param string $message Message
+ * @param string $modele Force the model to use ('' to not force)
+ * @param Translate $outputlangs lang object to use for translation
+ * @param int $hidedetails Hide details of lines
+ * @param int $hidedesc Hide description
+ * @param int $hideref Hide ref
+ * @return     int                         0 if KO, 1 if OK
  */
 function expensereport_pdf_create(DoliDB $db, ExpenseReport $object, $message, $modele, $outputlangs, $hidedetails = 0, $hidedesc = 0, $hideref = 0)
 {
     return $object->generateDocument($modele, $outputlangs, $hidedetails, $hidedesc, $hideref);
-}
-
-/**
- *  Parent class for numbering masks of expense reports
- */
-abstract class ModeleNumRefExpenseReport extends CommonNumRefGenerator
-{
-    // No overload code
 }

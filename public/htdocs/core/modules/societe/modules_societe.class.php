@@ -29,7 +29,6 @@
  *      \brief      File with parent class of submodules to manage numbering and document generation
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
 
 
 /**

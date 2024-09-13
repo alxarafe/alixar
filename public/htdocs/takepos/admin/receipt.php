@@ -126,7 +126,6 @@ if (getDolGlobalString('TAKEPOS_PRINT_METHOD') == "browser" || getDolGlobalStrin
     if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
         print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
     } else {
-        include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
         $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
         print $doleditor->Create();
     }
@@ -139,7 +138,6 @@ if (getDolGlobalString('TAKEPOS_PRINT_METHOD') == "browser" || getDolGlobalStrin
     if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
         print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
     } else {
-        include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
         $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
         print $doleditor->Create();
     }

@@ -43,6 +43,7 @@ namespace Dolibarr\Code\Adherents\Classes;
 
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Code\Core\Traits\CommonPeople;
 use Dolibarr\Code\Societe\Classes\Societe;

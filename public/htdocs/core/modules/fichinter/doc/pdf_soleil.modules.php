@@ -26,13 +26,14 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\FichInter\Classes\ModelePDFFicheinter;
+
 /**
  *  \file       htdocs/core/modules/fichinter/doc/pdf_soleil.modules.php
  *  \ingroup    ficheinter
  *  \brief      File of Class to build interventions documents with model Soleil
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/fichinter/modules_fichinter.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';

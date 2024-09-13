@@ -32,7 +32,6 @@
  *  \brief      File with parent class for generating holiday to PDF and File of class to manage contract numbering
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
 
 
 /**

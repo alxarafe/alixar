@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017 Maxime Kohlhaas <support@atm-consulting.fr>
+/* Copyright (C) 2017       Maxime Kohlhaas             <support@atm-consulting.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -26,7 +26,7 @@
  *  \brief      File of class to manage expensereport numbering rules Jade
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expensereport/modules_expensereport.php';
+use Dolibarr\Code\ExpenseReport\Classes\ModeleNumRefExpenseReport;
 
 /**
  *  Class to manage expensereport numbering rules Jade

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2021-2024  Alexandre Spangaro  <alexandre@inovea-conseil.com>
+/* Copyright (C) 2021-2024  Alexandre Spangaro          <alexandre@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  * \file        htdocs/accountancy/journal/variousjournal.php

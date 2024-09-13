@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2011      Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2011       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -20,13 +20,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Expedition\Classes\ModelNumRefExpedition;
+
 /**
  *  \file       htdocs/core/modules/expedition/mod_expedition_safor.php
  *  \ingroup    expedition
  *  \brief      File of class to manage shipments numbering rules Safor
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expedition/modules_expedition.php';
 
 /**
  *  Class to manage expedition numbering rules Safor

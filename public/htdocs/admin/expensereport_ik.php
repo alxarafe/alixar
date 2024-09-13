@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2012      Mikael Carlavan        <contact@mika-carl.fr>
- * Copyright (C) 2017      ATM Consulting         <contact@atm-consulting.fr>
- * Copyright (C) 2017      Pierre-Henry Favre     <phf@atm-consulting.fr>
+/* Copyright (C) 2012       Mikael Carlavan             <contact@mika-carl.fr>
+ * Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
+ * Copyright (C) 2017       Pierre-Henry Favre          <phf@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReportIk;
 
 /**
  *      \file       htdocs/admin/expensereport_ik.php

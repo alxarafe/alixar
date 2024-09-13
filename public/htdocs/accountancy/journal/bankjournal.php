@@ -1,19 +1,19 @@
 <?php
 
-/* Copyright (C) 2007-2010  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2007-2010  Jean Heimburger         <jean@tiaris.info>
- * Copyright (C) 2011       Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2012       Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2013       Christophe Battarel     <christophe.battarel@altairis.fr>
- * Copyright (C) 2013-2022  Open-DSI                <support@open-dsi.fr>
- * Copyright (C) 2013-2024  Alexandre Spangaro      <alexandre@inovea-conseil.com>
- * Copyright (C) 2013-2014  Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2013-2014  Olivier Geffroy         <jeff@jeffinfo.com>
- * Copyright (C) 2017-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2018       Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2018-2024  Eric Seigne             <eric.seigne@cap-rel.fr>
- * Copyright (C) 2021       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2024       MDW                     <mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2007-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007-2010  Jean Heimburger             <jean@tiaris.info>
+ * Copyright (C) 2011       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2012       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2013-2022  Open-DSI                    <support@open-dsi.fr>
+ * Copyright (C) 2013-2024  Alexandre Spangaro          <alexandre@inovea-conseil.com>
+ * Copyright (C) 2013-2014  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2014  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2017-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2018       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018-2024  Eric Seigne                 <eric.seigne@cap-rel.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2024       MDW                         <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -34,6 +34,27 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Accountancy\Classes\BookKeeping;
 use Dolibarr\Code\Accountancy\Classes\Lettering;
+use Dolibarr\Code\Adherents\Classes\Subscription;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Compta\Classes\PaymentVarious;
+use Dolibarr\Code\Compta\Classes\Tva;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\Don\Classes\PaymentDonation;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Code\Loan\Classes\PaymentLoan;
+use Dolibarr\Code\Salaries\Classes\PaymentSalary;
+use Dolibarr\Code\Salaries\Classes\Salary;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/accountancy/journal/bankjournal.php
@@ -46,16 +67,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/report.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-
-use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Code\User\Classes\User;
-
-use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/paymentdonation.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/paymentloan.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "other", "compta", "banks", "bills", "donations", "loan", "accountancy", "trips", "salaries", "hrm", "members"));

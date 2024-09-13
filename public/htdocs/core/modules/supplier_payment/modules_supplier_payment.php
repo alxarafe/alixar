@@ -18,7 +18,6 @@
  * or see https://www.gnu.org/
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonnumrefgenerator.class.php';
 
 
 /**

@@ -37,7 +37,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/fichinter/modules_fichinter.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fichinter.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 if (isModEnabled('project')) {

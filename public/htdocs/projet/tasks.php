@@ -821,7 +821,6 @@ if ($action == 'create' && $user->hasRight('projet', 'creer') && (empty($object-
     print '<td>';
 
     // WYSIWYG editor
-    include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
     $nbrows = 0;
     if (getDolGlobalString('MAIN_INPUT_DESC_HEIGHT')) {
         $nbrows = getDolGlobalString('MAIN_INPUT_DESC_HEIGHT');

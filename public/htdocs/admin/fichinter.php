@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2003-2004 Rodolphe Quiedeville         <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur          <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Sebastien Di Cintio          <sdicintio@ressource-toi.org>
- * Copyright (C) 2004      Benoit Mortier               <benoit.mortier@opensides.be>
- * Copyright (C) 2005-2014 Regis Houssin                <regis.houssin@inodbox.com>
- * Copyright (C) 2008      Raphael Bertrand (Resultic)  <raphael.bertrand@resultic.fr>
- * Copyright (C) 2011-2013 Juanjo Menent			    <jmenent@2byte.es>
- * Copyright (C) 2011-2018 Philippe Grand			    <philippe.grand@atoo-net.com>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Sebastien Di Cintio         <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2014  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008       Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
+ * Copyright (C) 2011-2013  Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2011-2018  Philippe Grand			    <philippe.grand@atoo-net.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -25,6 +25,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
 
 /**
  *  \file       htdocs/admin/fichinter.php
@@ -63,7 +67,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_setmoduleoptions.inc.php';
 if ($action == 'updateMask') {
     $maskconst = GETPOST('maskconst', 'aZ09');
     $maskvalue = GETPOST('maskvalue', 'alpha');
-    if ($maskconst && preg_match('/_MASK$/', $maskconst)) {
+    if ($maskconst && str_ends_with($maskconst, '_MASK')) {
         $res = dolibarr_set_const($db, $maskconst, $maskvalue, 'chaine', 0, '', $conf->entity);
     }
 
@@ -543,7 +547,6 @@ $variablename = 'FICHINTER_FREE_TEXT';
 if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
     print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
 } else {
-    include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
     print $doleditor->Create();
 }
