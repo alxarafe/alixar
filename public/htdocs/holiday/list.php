@@ -35,7 +35,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 use Dolibarr\Code\User\Classes\User;
 
 use Dolibarr\Code\User\Classes\UserGroup;
-require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 

@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2019 Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2019       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +23,8 @@
  * \ingroup mrp
  * \brief   Library files with common functions for Mrp
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
 
 /**
  * Prepare admin pages header

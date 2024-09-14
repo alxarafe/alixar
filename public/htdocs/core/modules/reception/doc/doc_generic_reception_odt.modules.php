@@ -19,18 +19,22 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Reception\Classes\ModelePdfReception;
+use Dolibarr\Code\Reception\Classes\Reception;
+
 /**
  *  \file       htdocs/core/modules/reception/doc/doc_generic_reception_odt.modules.php
  *  \ingroup    reception
  *  \brief      File of class to build ODT documents for reception
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/reception/modules_reception.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/doc.lib.php';
-
 
 /**
  *  Class to build documents using ODF templates generator
@@ -85,7 +89,6 @@ class doc_generic_reception_odt extends ModelePdfReception
             $this->emetteur->country_code = substr($langs->defaultlang, -2); // By default if not defined
         }
     }
-
 
     /**
      *  Return description of a module

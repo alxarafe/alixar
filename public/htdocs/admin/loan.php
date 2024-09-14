@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2014-2017  Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2014-2017  Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,9 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Class

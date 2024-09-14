@@ -22,13 +22,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
+use Dolibarr\Code\KnowledgeManagement\Classes\ModeleNumRefKnowledgeRecord;
+
 /**
  * \file       htdocs/knowledgemanagement/core/modules/knowledgemanagement/mod_knowledgerecord_advanced.php
  * \ingroup    knowledgemanagement
  * \brief      File containing class for advanced numbering model of KnowledgeRecord
  */
 
-dol_include_once('/knowledgemanagement/core/modules/knowledgemanagement/modules_knowledgerecord.php');
 
 
 /**

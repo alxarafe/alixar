@@ -45,7 +45,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 if (isModEnabled('margin')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 }
@@ -1504,7 +1503,6 @@ if ($user->hasRight("user", "user", "lire")) {
 
 // If the user can view other products/services than his own
 if (isModEnabled('category') && $user->hasRight("categorie", "lire") && ($user->hasRight("produit", "lire") || $user->hasRight("service", "lire"))) {
-    include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('IncludingProductWithTag');
     $cate_arbo = $form->select_all_categories(Categorie::TYPE_PRODUCT, null, 'parent', null, null, 1);

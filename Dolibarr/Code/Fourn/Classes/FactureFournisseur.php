@@ -3458,7 +3458,6 @@ class FactureFournisseur extends CommonInvoice
         }
 
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
         $formmail = new FormMail($this->db);
 
         $now = dol_now();

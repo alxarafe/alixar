@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2011-2019      Juanjo Menent       <jmenent@2byte.es>
- * Copyright (C) 2011-2018      Philippe Grand	    <philippe.grand@atoo-net.com>
- * Copyright (C) 2018		    Charlene Benke		<charlie@patas-monkey.com>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2011-2019  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2011-2018  Philippe Grand	            <philippe.grand@atoo-net.com>
+ * Copyright (C) 2018		Charlene Benke		        <charlie@patas-monkey.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -28,10 +28,13 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/holiday.lib.php';
 
 // Load translation files required by the page
@@ -63,7 +66,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_setmoduleoptions.inc.php';
 if ($action == 'updateMask') {
     $maskconst = GETPOST('maskconstholiday', 'aZ09');
     $maskvalue = GETPOST('maskholiday', 'alpha');
-    if ($maskconst && preg_match('/_MASK$/', $maskconst)) {
+    if ($maskconst && str_ends_with($maskconst, '_MASK')) {
         $res = dolibarr_set_const($db, $maskconst, $maskvalue, 'chaine', 0, '', $conf->entity);
     }
 

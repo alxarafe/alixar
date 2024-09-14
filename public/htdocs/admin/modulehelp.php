@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2017   Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2017	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2022	Charlene Benke			<charlene@patas-monkey.com>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2017	    Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2022	    Charlene Benke			    <charlene@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,13 +20,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\DolibarrModules;
+
 /**
  *  \file       htdocs/admin/modulehelp.php
  *  \brief      Page to activate/disable all modules
  */
-
-use Dolibarr\Core\Base\DolibarrModules;
-use Dolibarr\Lib\Modules;
 
 if (!defined('NOREQUIREMENU')) {
     define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
@@ -34,7 +35,6 @@ if (!defined('NOREQUIREMENU')) {
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1'); // Disabled because this page is into a popup on module search page and we want to avoid to have an Anti CSRF token error (done if MAIN_SECURITY_CSRF_WITH_TOKEN is on) when we make a second search after closing popup.
 }
-
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -498,7 +498,6 @@ if ($mode == 'feature') {
     } else {
         $yesno = '<span class="opacitymedium">No</span>';
     }
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/interfaces.class.php';
     $interfaces = new Interfaces($db);
     $triggers = $interfaces->getTriggersList(array((($objMod->isCoreOrExternalModule() == 'external') ? '/' . $moduledir : '') . '/core/triggers'));
     foreach ($triggers as $triggercursor) {

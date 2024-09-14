@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2015-2018  Frederic France     <frederic.france@netlogic.fr>
- * Copyright (C) 2016       Raphaël Doursenaud  <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2022       Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2015-2018  Frederic France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2016       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2022       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  * \file        htdocs/admin/oauth.php
@@ -52,7 +54,6 @@ $label = GETPOST('label', 'aZ09');
 $servicetoeditname = GETPOST('servicetoeditname', 'aZ09');
 
 $error = 0;
-
 
 /*
  * Actions

@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2012 Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2014-2015 Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
- * Copyright (C) 2021 		Gauthier VERDOL 	<gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2012  Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2014-2015  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2021 		Gauthier VERDOL 	        <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,17 +24,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\StockTransfer\Classes\ModelePDFStockTransfer;
+
 /**
  *  \file       htdocs/core/modules/stocktransfer/doc/pdf_eagle.modules.php
  *  \ingroup    expedition
  *  \brief      Class file used to generate the dispatch slips for the Eagle model
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/stocktransfer/modules_stocktransfer.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-
 
 /**
  *  Class to build sending documents with model Eagle

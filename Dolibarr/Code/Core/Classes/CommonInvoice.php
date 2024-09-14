@@ -308,7 +308,6 @@ abstract class CommonInvoice extends CommonObject
             return 0.0;
         }*/
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 
         $discountstatic = new DiscountAbsolute($this->db);
         $result = $discountstatic->getSumDepositsUsed($this, $multicurrency);
@@ -336,7 +335,6 @@ abstract class CommonInvoice extends CommonObject
      */
     public function getSumCreditNotesUsed($multicurrency = 0)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 
         $discountstatic = new DiscountAbsolute($this->db);
         $result = $discountstatic->getSumCreditNotesUsed($this, $multicurrency);
@@ -362,7 +360,6 @@ abstract class CommonInvoice extends CommonObject
      */
     public function getSumFromThisCreditNotesNotUsed($multicurrency = 0)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 
         $discountstatic = new DiscountAbsolute($this->db);
         $result = $discountstatic->getSumFromThisCreditNotesNotUsed($this, $multicurrency);
@@ -1220,7 +1217,6 @@ abstract class CommonInvoice extends CommonObject
                     $this->db->begin();
 
                     // Create a prelevement_bon
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
                     $bon = new BonPrelevement($this->db);
                     if (!$error) {
                         if (empty($obj->fk_prelevement_bons)) {

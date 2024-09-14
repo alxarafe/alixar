@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2008  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2015  Regis Houssin           <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2015  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,13 +21,18 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Facture\Classes\ModeleNumRefFactures;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/facture/mod_facture_terre.php
  *  \ingroup    invoice
  *  \brief      File containing class for numbering module Terre
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/facture/modules_facture.php';
 
 /**
  *  \class      mod_facture_terre

@@ -22,14 +22,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Hrm\Classes\Evaluation;
+use Dolibarr\Code\Hrm\Classes\ModeleNumRefEvaluation;
+
 /**
  * \file       htdocs/core/modules/hrm/mod_evaluation_advanced.php
  * \ingroup    hrm
  * \brief      File containing class for advanced numbering model of Evaluation
  */
-
- require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/hrm/modules_evaluation.php';
-
 
 /**
  *  Class to manage customer Bom numbering rules advanced

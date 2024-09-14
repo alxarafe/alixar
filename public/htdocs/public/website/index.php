@@ -94,7 +94,6 @@ $type = '';
 
 
 if (empty($pageid)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/website.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/websitepage.class.php';
 
     $object = new Website($db);

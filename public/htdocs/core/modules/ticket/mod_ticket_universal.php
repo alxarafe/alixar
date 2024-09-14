@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2010 Regis Houssin  <regis.houssin@inodbox.com>
+/* Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,13 +18,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\ModeleNumRefTicket;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+
 /**
  *    \file       htdocs/core/modules/ticket/mod_ticket_universal.php
  *    \ingroup    ticket
  *    \brief      File with class to manage the numbering module Universal for Ticket references
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/ticket/modules_ticket.php';
 
 /**
  *  Class to manage the numbering module Universal for Ticket references

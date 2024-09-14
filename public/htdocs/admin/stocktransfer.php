@@ -1,10 +1,11 @@
 <?php
 
-/* Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 SuperAdmin
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       SuperAdmin
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +21,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\Misc;
+
 /**
  * \file    stocktransfer/admin/setup.php
  * \ingroup stocktransfer
@@ -33,7 +37,6 @@ global $langs, $user;
 
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransfer.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/lib/stocktransfer.lib.php';
 
 // Translations
@@ -94,7 +97,7 @@ if ($action == 'updateMask') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/stocktransfer/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -154,15 +157,13 @@ if ($action == 'updateMask') {
     dolibarr_set_const($db, $constforval, $value, 'chaine', 0, '', $conf->entity);
 }
 
-
-
 /*
  * View
  */
 
 $form = new Form($db);
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $page_name = "StockTransferSetup";
 llxHeader('', $langs->trans($page_name), '', '', 0, 0, '', '', '', 'mod-admin page-stocktransfer');
@@ -314,7 +315,7 @@ foreach ($myTmpObjects as $myTmpObjectKey => $myTmpObjectArray) {
                                 print '</td>';
 
                                 $nameofclass = $myTmpObjectArray['class'];
-                                $mytmpinstance = new $nameofclass($db);
+                                $mytmpinstance = Misc::getCodeLibClass($nameofclass, $db);
                                 $mytmpinstance->initAsSpecimen();
 
                                 // Info

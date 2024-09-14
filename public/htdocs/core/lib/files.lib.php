@@ -2082,7 +2082,6 @@ function dol_remove_file_process($filenb, $donotupdatesession = 0, $donotdeletef
                 setEventMessages($langs->trans("FileWasRemoved", $filetodelete), null, 'mesgs');
             }
             if (empty($donotupdatesession)) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $formmail = new FormMail($db);
                 $formmail->trackid = $trackid;
                 $formmail->remove_attached_files($keytodelete);

@@ -47,8 +47,6 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
 
 // Libraries
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/facture/modules_facture.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
@@ -592,7 +590,6 @@ if (empty($reshook)) {
         }
         // We use the credit to reduce remain to pay
         if (GETPOSTINT("remise_id_for_payment") > 0) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
             $discount = new DiscountAbsolute($db);
             $discount->fetch(GETPOSTINT("remise_id_for_payment"));
 

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018      Quentin Vial-Gouteyron    <quentin.vial-gouteyron@atm-consulting.fr>
+/* Copyright (C) 2018       Quentin Vial-Gouteyron      <quentin.vial-gouteyron@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,10 @@
 
 namespace Dolibarr\Modules;
 
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Core\Base\DolibarrModules;
+use DoliDB;
+
 /**
  *  \defgroup   reception     Module Reception
  *  \brief      Module to manage receptions of products
@@ -27,9 +31,6 @@ namespace Dolibarr\Modules;
  *  \ingroup    reception
  *  \brief      Description and activation file for the module Reception
  */
-
-use CommandeFournisseur;
-use Dolibarr\Core\Base\DolibarrModules;
 
 /**
  *  Class to describe and enable module Reception

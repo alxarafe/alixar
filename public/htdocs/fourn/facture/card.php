@@ -42,9 +42,7 @@ use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_invoice/modules_facturefournisseur.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture-rec.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -519,7 +517,6 @@ if (empty($reshook)) {
         }
         // We use the credit to reduce remain to pay
         if (GETPOSTINT("remise_id_for_payment")) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
             $discount = new DiscountAbsolute($db);
             $discount->fetch(GETPOSTINT("remise_id_for_payment"));
 

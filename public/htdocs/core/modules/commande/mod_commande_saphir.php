@@ -22,14 +22,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Commande\Classes\ModeleNumRefCommandes;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  * \file       htdocs/core/modules/commande/mod_commande_saphir.php
  * \ingroup    order
  *  \brief     File of class to manage Sales Order numbering rules Saphir
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/commande/modules_commande.php';
-
 
 /**
  *  Class to manage Sales Order numbering rules Saphir

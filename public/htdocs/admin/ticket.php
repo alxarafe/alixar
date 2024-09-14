@@ -1,11 +1,12 @@
 <?php
 
-/* Copyright (C) 2013-2018  Jean-François FERRY <hello@librethic.io>
- * Copyright (C) 2016       Christophe Battarel <christophe@altairis.fr>
- * Copyright (C) 2022-2023  Udo Tamm            <dev@dolibit.de>
- * Copyright (C) 2023       Alexandre Spangaro  <aspangaro@easya.solutions>
+/* Copyright (C) 2013-2018  Jean-François FERRY         <hello@librethic.io>
+ * Copyright (C) 2016       Christophe Battarel         <christophe@altairis.fr>
+ * Copyright (C) 2022-2023  Udo Tamm                    <dev@dolibit.de>
+ * Copyright (C) 2023       Alexandre Spangaro          <aspangaro@easya.solutions>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,11 +29,13 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\FormCategory;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once DOL_DOCUMENT_ROOT . "/core/class/html.formcategory.class.php";
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once DOL_DOCUMENT_ROOT . "/core/lib/ticket.lib.php";
-require_once DOL_DOCUMENT_ROOT . "/ticket/class/ticket.class.php";
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "ticket"));

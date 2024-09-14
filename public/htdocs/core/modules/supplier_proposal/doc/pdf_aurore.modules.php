@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2004-2014 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2008      Raphael Bertrand     <raphael.bertrand@resultic.fr>
- * Copyright (C) 2010-2014 Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2012      Christophe Battarel  <christophe.battarel@altairis.fr>
- * Copyright (C) 2017      Ferran Marcet        <fmarcet@2byte.es>
+/* Copyright (C) 2004-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008       Raphael Bertrand            <raphael.bertrand@resultic.fr>
+ * Copyright (C) 2010-2014  Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2017       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -25,17 +25,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\SupplierProposal\Classes\ModelePDFSupplierProposal;
+
 /**
  *  \file       htdocs/core/modules/supplier_proposal/doc/pdf_aurore.modules.php
  *  \ingroup    propale
  *  \brief      File of the class allowing to generate the supplier proposals to the Aurore model
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_proposal/modules_supplier_proposal.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-
 
 /**
  *  Class to generate PDF supplier proposal Aurore

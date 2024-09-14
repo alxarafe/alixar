@@ -361,7 +361,6 @@ if (isModEnabled('project')) {
 
 if (isModEnabled('receiptprinter')) {
     // Select printer to use with terminal
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolreceiptprinter.class.php';
     $printer = new dolReceiptPrinter($db);
 
     $printer->listprinters();
@@ -393,7 +392,6 @@ if (isModEnabled('receiptprinter')) {
 
 if (isModEnabled('receiptprinter') || getDolGlobalString('TAKEPOS_PRINT_METHOD') == "receiptprinter" || getDolGlobalString('TAKEPOS_PRINT_METHOD') == "takeposconnector") {
     // Select printer to use with terminal
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolreceiptprinter.class.php';
     $printer = new dolReceiptPrinter($db);
     $printer->listPrintersTemplates();
     $templates = array();

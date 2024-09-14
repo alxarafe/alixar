@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2012   Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010        Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,13 +21,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Ticket\Classes\ModeleNumRefTicket;
+
 /**
  *    \file       htdocs/core/modules/ticket/mod_ticket_simple.php
  *    \ingroup    ticket
  *    \brief      File with class to manage the numbering module Simple for ticket references
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/ticket/modules_ticket.php';
 
 /**
  *     Class to manage the numbering module Simple for ticket references

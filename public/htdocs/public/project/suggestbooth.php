@@ -481,7 +481,6 @@ if (empty($reshook) && $action == 'add') {
         $db->commit();
 
         // Sending mail
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
         $formmail = new FormMail($db);
         // Set output language
         $outputlangs = new Translate('', $conf);

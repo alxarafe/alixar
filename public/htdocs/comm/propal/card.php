@@ -49,7 +49,6 @@ use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formpropal.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/propale/modules_propale.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/propal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 if (isModEnabled('variants')) {

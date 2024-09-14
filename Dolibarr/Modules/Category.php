@@ -35,9 +35,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Core\Base\DolibarrModules;
 use DoliDB;
 
-include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
-
-
 /**
  *  Class to describe and enable module Categorie
  */

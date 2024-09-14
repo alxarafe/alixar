@@ -34,7 +34,6 @@ use DoliDB;
  *    \brief      File of class to generate the form for creating a new ticket.
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
 
 if (!class_exists('FormCompany')) {
     include DOL_DOCUMENT_ROOT . '/core/class/html.formcompany.class.php';
@@ -509,7 +508,6 @@ class FormTicket
 
         // Categories
         if (isModEnabled('category')) {
-            include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
             $cate_arbo = $form->select_all_categories(Categorie::TYPE_TICKET, '', 'parent', 64, 0, 3);
 
             if (count($cate_arbo)) {

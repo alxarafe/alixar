@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2007-2020  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2013		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2016		Jonathan TISSEAU		<jonathan.tisseau@86dev.fr>
- * Copyright (C) 2023		Anthony Berton			<anthony.berton@bb2a.fr>
+/* Copyright (C) 2007-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2013		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2016		Jonathan TISSEAU		    <jonathan.tisseau@86dev.fr>
+ * Copyright (C) 2023		Anthony Berton			    <anthony.berton@bb2a.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,6 +27,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -148,8 +150,6 @@ if ($action == 'presend' && GETPOST('trackid', 'alphanohtml') == 'test') {
 if ($action == 'presend' && GETPOST('trackid', 'alphanohtml') == 'testhtml') {
     $action = 'testhtml';
 }
-
-
 
 /*
  * View
@@ -1083,7 +1083,6 @@ if ($action == 'edit') {
         print '<div id="formmailaftertstconnect" name="formmailaftertstconnect"></div>';
         print load_fiche_titre($langs->trans("DoTestServerAvailability"));
 
-        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
         $mail = new CMailFile('', '', '', '', array(), array(), array(), '', '', 0, '', '', '', '', $trackid, $sendcontext);
         $result = $mail->check_server_port($server, $port);
         if ($result) {
@@ -1108,7 +1107,6 @@ if ($action == 'edit') {
         print dol_get_fiche_head(array(), '', '', -1);
 
         // Cree l'objet formulaire mail
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
         $formmail = new FormMail($db);
         $formmail->trackid = (($action == 'testhtml') ? "testhtml" : "test");
         $formmail->fromname = (GETPOSTISSET('fromname') ? GETPOST('fromname') : getDolGlobalString('MAIN_MAIL_EMAIL_FROM'));

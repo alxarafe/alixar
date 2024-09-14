@@ -37,7 +37,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/emailing.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/comm/mailing/class/mailing.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("mails", "admin"));
@@ -1233,7 +1232,6 @@ if ($action == 'create') {
                 print dol_get_fiche_head(null, '', '', -1);
 
                 // Create mail form object
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $formmail = new FormMail($db);
                 $formmail->fromname = $object->email_from;
                 $formmail->frommail = $object->email_from;

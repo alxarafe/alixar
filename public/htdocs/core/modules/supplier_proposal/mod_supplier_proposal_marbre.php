@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,14 +21,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\SupplierProposal\Classes\ModeleNumRefSupplierProposal;
+
 /**
  *      \file       htdocs/core/modules/propale/mod_propale_marbre.php
  *      \ingroup    propale
  *      \brief      File of class to manage commercial proposal numbering rules Marbre
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_proposal/modules_supplier_proposal.php';
-
 
 /**
  * Class to manage the Marbre numbering rule for Request for quotation

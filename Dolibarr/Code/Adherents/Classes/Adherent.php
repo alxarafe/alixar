@@ -477,7 +477,6 @@ class Adherent extends CommonObject
         $trackid = 'mem' . $this->id;
 
         // Send email (substitutionarray must be done just before this)
-        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($subjecttosend, $this->email, $from, $texttosend, $filename_list, $mimetype_list, $mimefilename_list, $addr_cc, $addr_bcc, $deliveryreceipt, $msgishtml, '', '', $trackid, $moreinheader);
         if ($mailfile->sendfile()) {
             return 1;
@@ -3053,7 +3052,6 @@ class Adherent extends CommonObject
             if ($resql) {
                 $num_rows = $this->db->num_rows($resql);
 
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $adherent = new Adherent($this->db);
                 $formmail = new FormMail($this->db);
 
@@ -3100,7 +3098,6 @@ class Adherent extends CommonObject
                             $trackid = 'mem' . $adherent->id;
                             $moreinheader = 'X-Dolibarr-Info: sendReminderForExpiredSubscription' . "\r\n";
 
-                            include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
                             $cmail = new CMailFile($subject, $to, $from, $msg, array(), array(), array(), $cc, '', 0, 1, '', '', $trackid, $moreinheader);
                             $result = $cmail->sendfile();
                             if (!$result) {

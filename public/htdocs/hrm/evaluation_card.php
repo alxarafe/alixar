@@ -30,9 +30,7 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/evaluation.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skill.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skillrank.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_evaluation.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_skillrank.lib.php';

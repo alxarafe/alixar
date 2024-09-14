@@ -41,7 +41,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 if (isModEnabled('margin')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 }

@@ -222,7 +222,6 @@ if (GETPOST("boutonp") || GETPOST("boutonp.x") || GETPOST("boutonp_x")) {       
 
                     //Linked user may not have an email set
                     if ($email) {
-                        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
 
                         $application = ($conf->global->MAIN_APPLICATION_TITLE ? $conf->global->MAIN_APPLICATION_TITLE : 'Dolibarr ERP/CRM');
 

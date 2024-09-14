@@ -11023,7 +11023,6 @@ class Form
 
         $TModels = array();
 
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
         $formmail = new FormMail($this->db);
         $result = $formmail->fetchAllEMailTemplate($modelType, $user, $langs);
 

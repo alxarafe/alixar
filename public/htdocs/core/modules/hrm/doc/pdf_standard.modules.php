@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2015       Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2016-2023  Philippe Grand          <philippe.grand@atoo-net.com>
- * Copyright (C) 2018-2020  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2018       Francis Appels          <francis.appels@z-application.com>
- * Copyright (C) 2019       Markus Welters          <markus@welters.de>
- * Copyright (C) 2019       Rafael Ingenleuf        <ingenleuf@welters.de>
- * Copyright (C) 2020       Marc Guenneugues        <marc.guenneugues@simicar.fr>
+/* Copyright (C) 2015       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2016-2023  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2018-2020  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2018       Francis Appels              <francis.appels@z-application.com>
+ * Copyright (C) 2019       Markus Welters              <markus@welters.de>
+ * Copyright (C) 2019       Rafael Ingenleuf            <ingenleuf@welters.de>
+ * Copyright (C) 2020       Marc Guenneugues            <marc.guenneugues@simicar.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -26,13 +26,14 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Hrm\Classes\ModelePDFEvaluation;
+
 /**
  *  \file       htdocs/core/modules/hrm/doc/pdf_standard.modules.php
  *  \ingroup    hrm
  *  \brief      File of class to generate evaluation report from standard model
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/hrm/modules_evaluation.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';

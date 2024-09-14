@@ -63,7 +63,6 @@ if (isModEnabled('loan')) {
 if (isModEnabled('stock')) {
 }
 if (isModEnabled('stocktransfer')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransfer.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransferline.class.php';
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018      Quentin Vial-Gouteyron    <quentin.vial-gouteyron@atm-consulting.fr>
+/* Copyright (C) 2018       Quentin Vial-Gouteyron      <quentin.vial-gouteyron@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -19,6 +19,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Reception\Classes\Reception;
+
 /**
  *      \file       htdocs/admin/reception_setup.php
  *      \ingroup    reception
@@ -32,7 +35,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/reception.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 
 $langs->loadLangs(array("admin", "receptions", 'other'));
-
 
 if (!$user->admin) {
     accessforbidden();

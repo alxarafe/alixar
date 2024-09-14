@@ -32,7 +32,6 @@ if (isModEnabled('project')) {
 }
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once DOL_DOCUMENT_ROOT . "/ticket/class/ticket.class.php";
 
 $langs->loadLangs(array('companies', 'contracts', 'tickets'));
 

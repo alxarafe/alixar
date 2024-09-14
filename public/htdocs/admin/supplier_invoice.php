@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2013 Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2011 Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2004      Sebastien Di Cintio     <sdicintio@ressource-toi.org>
- * Copyright (C) 2004      Benoit Mortier          <benoit.mortier@opensides.be>
- * Copyright (C) 2010-2013 Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2011-2018 Philippe Grand          <philippe.grand@atoo-net.com>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2004       Sebastien Di Cintio         <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2010-2013  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2011-2018  Philippe Grand              <philippe.grand@atoo-net.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -24,6 +24,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\Fournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/admin/supplier_invoice.php
@@ -184,7 +190,6 @@ if ($action == 'set_SUPPLIER_INVOICE_FREE_TEXT') {
         setEventMessages($langs->trans("Error"), null, 'errors');
     }
 }
-
 
 /*
  * View

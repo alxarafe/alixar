@@ -402,7 +402,6 @@ if ($action == 'getProducts') {
     }
 } elseif ($action == "opendrawer" && $term != '') {
     top_httphead('application/html');
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolreceiptprinter.class.php';
     $printer = new dolReceiptPrinter($db);
     // check printer for terminal
     if (getDolGlobalInt('TAKEPOS_PRINTER_TO_USE' . $term) > 0) {
@@ -418,7 +417,6 @@ if ($action == 'getProducts') {
 } elseif ($action == "printinvoiceticket" && $term != '' && $id > 0 && $user->hasRight('facture', 'lire')) {
     top_httphead('application/html');
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolreceiptprinter.class.php';
     $printer = new dolReceiptPrinter($db);
     // check printer for terminal
     if ((getDolGlobalInt('TAKEPOS_PRINTER_TO_USE' . $term) > 0 || getDolGlobalString('TAKEPOS_PRINT_METHOD') == "takeposconnector") && getDolGlobalInt('TAKEPOS_TEMPLATE_TO_USE_FOR_INVOICES' . $term) > 0) {
@@ -440,7 +438,6 @@ if ($action == 'getProducts') {
     top_httphead('application/html');
 
     $place = GETPOST('place', 'alpha');
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolreceiptprinter.class.php';
 
     $object = new Facture($db);
 

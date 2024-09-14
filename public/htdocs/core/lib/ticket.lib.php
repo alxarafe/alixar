@@ -1,9 +1,10 @@
 <?php
 
-/* Copyright (C) 2013-2018  Jean-François FERRY    <hello@librethic.io>
- * Copyright (C) 2016		Christophe Battarel	<christophe@altairis.fr>
- * Copyright (C) 2019-2024  Frédéric France     <frederic.france@netlogic.fr>
+/* Copyright (C) 2013-2018  Jean-François FERRY         <hello@librethic.io>
+ * Copyright (C) 2016		Christophe Battarel	        <christophe@altairis.fr>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +26,7 @@
  * \brief      This file is a library for Ticket module
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Lib\Images;
 
 /**

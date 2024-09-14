@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2010-2011      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2010-2014 		Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2015           Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2022           Ferran Marcet        <fmarcet@2byte.es>
+/* Copyright (C) 2010-2011  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2010-2014 	Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2022       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,17 +21,20 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\SupplierPayment\Classes\ModelePDFSuppliersPayments;
+
 /**
  *  \file       htdocs/core/modules/supplier_payment/doc/pdf_standard.modules.php
  *  \ingroup    fournisseur
  *  \brief      Class file to generate the supplier invoice payment file with the standard model
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_payment/modules_supplier_payment.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functionsnumtoword.lib.php';
-
 
 /**
  *  Class to generate the supplier invoices payment file with the standard model

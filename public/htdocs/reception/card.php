@@ -42,7 +42,6 @@ use Dolibarr\Code\Comm\Classes\Propal;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/reception.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/reception/modules_reception.php';
 if (isModEnabled("product") || isModEnabled("service")) {
 }
 if (isModEnabled("propal")) {

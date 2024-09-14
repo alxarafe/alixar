@@ -348,7 +348,6 @@ if (($action == 'send' || $action == 'relance') && !GETPOST('addfile') && !GETPO
             }
 
             // Create form object
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
             $formmail = new FormMail($db);
             $formmail->trackid = $trackid; // $trackid must be defined
 

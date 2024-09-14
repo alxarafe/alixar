@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2011      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2018-2023 Charlene Benke		<charlene@patas-monkey.com>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2011       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2018-2023  Charlene Benke              <charlene@patas-monkey.com>
+ * Copyright (C) 2024		Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,13 +21,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\Holiday\Classes\ModelNumRefHolidays;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/holiday/mod_holiday_madonna.php
  *  \ingroup    holiday
  *  \brief      File of class to manage holiday numbering rules Madonna
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/holiday/modules_holiday.php';
 
 /**
  *  Class to manage holiday numbering rules Madonna
@@ -56,8 +60,8 @@ class mod_holiday_madonna extends ModelNumRefHolidays
     /**
      *  Return default description of numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -65,23 +69,11 @@ class mod_holiday_madonna extends ModelNumRefHolidays
         return $langs->trans("SimpleNumRefModelDesc", $this->prefix);
     }
 
-
-    /**
-     *  Return numbering example
-     *
-     *  @return     string      Example
-     */
-    public function getExample()
-    {
-        return $this->prefix . "0501-0001";
-    }
-
-
     /**
      *  Test if existing numbers make problems with numbering
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -114,11 +106,21 @@ class mod_holiday_madonna extends ModelNumRefHolidays
     }
 
     /**
+     *  Return numbering example
+     *
+     * @return     string      Example
+     */
+    public function getExample()
+    {
+        return $this->prefix . "0501-0001";
+    }
+
+    /**
      *  Return next value
      *
-     *  @param  Societe     $objsoc     third party object
-     *  @param  Holiday     $holiday    Holiday object
-     *  @return string|-1               Value if OK, -1 if KO
+     * @param Societe $objsoc third party object
+     * @param Holiday $holiday Holiday object
+     * @return string|-1               Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $holiday)
     {

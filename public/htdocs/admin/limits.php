@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2007-2022  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2018	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2010		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2023       Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2007-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2018	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2010		Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2023       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -27,6 +27,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/price.lib.php';
@@ -119,7 +121,6 @@ if ($action == 'update' && !$cancel) {
         exit;
     }
 }
-
 
 /*
  * View

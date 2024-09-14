@@ -36,10 +36,8 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 use Dolibarr\Code\User\Classes\User;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skill.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skillrank.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_skill.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/evaluation.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_evaluation.lib.php';
 
 // Load translation files required by the page

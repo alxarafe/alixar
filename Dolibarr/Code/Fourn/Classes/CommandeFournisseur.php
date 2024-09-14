@@ -37,6 +37,7 @@ namespace Dolibarr\Code\Fourn\Classes;
 use Dolibarr\Code\Core\Classes\CommonOrder;
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use DoliDB;
 
 /**
  *  \file       htdocs/fourn/class/fournisseur.commande.class.php

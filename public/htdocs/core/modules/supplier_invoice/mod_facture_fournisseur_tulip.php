@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2003-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2008	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2013-2018	Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2013		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2016-2021  Alexandre Spangaro		<aspangaro@open-dsi.fr>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2008	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2018	Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2013		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2016-2021  Alexandre Spangaro		    <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,14 +24,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\FactureFournisseur\Classes\ModeleNumRefSuppliersInvoices;
+
 /**
  *  \file       htdocs/core/modules/supplier_invoice/mod_facture_fournisseur_tulip.php
  *  \ingroup    Supplier invoice
  *  \brief      File containing the Tulip Class of numbering models of suppliers invoices references
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_invoice/modules_facturefournisseur.php';
-
 
 /**
  * \class      mod_facture_fournisseur_tulip

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2007-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2009      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013 	   Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2020      Frédéric France      <frederic.france@netlogic.fr>
+/* Copyright (C) 2007-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013 	    Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2020       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\CSMSFile;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormSms;
 
 /**
  *       \file       htdocs/admin/sms.php

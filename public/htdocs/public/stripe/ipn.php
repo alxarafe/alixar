@@ -51,7 +51,6 @@ if (!defined('USESUFFIXINLOG')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/stripe/stripe-php/init.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 

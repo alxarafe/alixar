@@ -617,7 +617,6 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
             $confattendee->setStatut(1);
 
             // Sending mail
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
             $formmail = new FormMail($db);
             // Set output language
             $outputlangs = new Translate('', $conf);

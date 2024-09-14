@@ -78,7 +78,6 @@ class box_last_knowledgerecord extends ModeleBoxes
 
         $this->max = $max;
 
-        require_once DOL_DOCUMENT_ROOT . "/knowledgemanagement/class/knowledgerecord.class.php";
 
         $text = $langs->trans("BoxLastKnowledgerecordDescription", $max);
         $this->info_box_head = array(

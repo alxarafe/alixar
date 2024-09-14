@@ -37,7 +37,6 @@ if (!defined('NOREQUIRESOC')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/website.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/websitepage.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/website2.lib.php';
 

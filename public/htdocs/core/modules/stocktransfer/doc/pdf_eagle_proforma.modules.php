@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2004-2014  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2008		Raphael Bertrand	<raphael.bertrand@resultic.fr>
- * Copyright (C) 2010-2013	Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2012      	Christophe Battarel <christophe.battarel@altairis.fr>
- * Copyright (C) 2012       Cedric Salvador     <csalvador@gpcsolutions.fr>
- * Copyright (C) 2015       Marcos García       <marcosgdf@gmail.com>
- * Copyright (C) 2017       Ferran Marcet       <fmarcet@2byte.es>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
- * Copyright (C) 2021 		Gauthier VERDOL 	<gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2004-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2008		Raphael Bertrand	        <raphael.bertrand@resultic.fr>
+ * Copyright (C) 2010-2013	Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2012      	Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2012       Cedric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2017       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2021 		Gauthier VERDOL 	        <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -28,17 +28,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\StockTransfer\Classes\ModelePDFStockTransfer;
+
 /**
  *  \file       htdocs/core/modules/stocktransfer/doc/pdf_eagle_proforma.modules.php
  *  \ingroup    order
  *  \brief      File of Class to generate PDF orders with template Proforma
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/stocktransfer/modules_stocktransfer.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-
 
 /**
  *  Class to generate PDF orders with template Eagle

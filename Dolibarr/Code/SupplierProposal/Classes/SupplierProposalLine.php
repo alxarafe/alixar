@@ -36,6 +36,8 @@
 
 namespace Dolibarr\Code\SupplierProposal\Classes;
 
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObjectLine;
 
 /**
@@ -44,6 +46,7 @@ use Dolibarr\Core\Base\CommonObjectLine;
  */
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use DoliDB;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 

@@ -25,7 +25,9 @@
  * \brief      File containing class for numbering module Cicada
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/payment/modules_payment.php';
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Payment\Classes\ModeleNumRefPayments;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  Class to manage customer payment numbering rules Cicada

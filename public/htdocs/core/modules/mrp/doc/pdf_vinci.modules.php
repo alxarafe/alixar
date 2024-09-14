@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2004-2014 Laurent Destailleur   <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2011 Regis Houssin         <regis.houssin@inodbox.com>
- * Copyright (C) 2007      Franky Van Liedekerke <franky.van.liedekerke@telenet.be>
- * Copyright (C) 2010-2014 Juanjo Menent         <jmenent@2byte.es>
- * Copyright (C) 2015      Marcos García         <marcosgdf@gmail.com>
- * Copyright (C) 2017      Ferran Marcet         <fmarcet@2byte.es>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2004-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007       Franky Van Liedekerke       <franky.van.liedekerke@telenet.be>
+ * Copyright (C) 2010-2014  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2017       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,13 +25,14 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Mrp\Classes\ModelePDFMo;
+
 /**
  *  \file       htdocs/core/modules/mrp/doc/pdf_vinci.modules.php
  *  \ingroup    mrp
  *  \brief      File of class to generate MO document from vinci model
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/mrp/modules_mo.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';

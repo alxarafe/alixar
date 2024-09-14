@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2006-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2010-2017	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2015	    Alexandre Spangaro	<aspangaro@open-dsi.fr>
- * Copyright (C) 2018       Ferran Marcet       <fmarcet@2byte.es>
- * Copyright (C) 2021-2023  Anthony Berton      <anthony.berton@bb2a.fr>
+/* Copyright (C) 2006-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2017	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2015	    Alexandre Spangaro	        <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2021-2023  Anthony Berton              <anthony.berton@bb2a.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -24,11 +24,16 @@
  * or see https://www.gnu.org/
  */
 
-
 /**
  *      \file       htdocs/core/lib/usergroups.lib.php
  *      \brief      Set of function to manage users, groups and permissions
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\User\Classes\UserGroup;
 
 /**
  * Prepare array with list of tabs

@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2003-2004 Rodolphe Quiedeville        <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur         <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Sebastien Di Cintio         <sdicintio@ressource-toi.org>
- * Copyright (C) 2004      Benoit Mortier              <benoit.mortier@opensides.be>
- * Copyright (C) 2004      Eric Seigne                 <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2012 Regis Houssin               <regis.houssin@inodbox.com>
- * Copyright (C) 2008      Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
- * Copyright (C) 2011-2013 Juanjo Menent			   <jmenent@2byte.es>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Sebastien Di Cintio         <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008       Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
+ * Copyright (C) 2011-2013  Juanjo Menent			    <jmenent@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -27,6 +27,8 @@
  */
 
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *      \file       htdocs/admin/propal.php
@@ -642,14 +644,12 @@ if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
 print '</td>';
 print "</tr>\n";
 
-
 print '<tr class="oddeven"><td>';
 print $form->textwithpicto($langs->trans("WatermarkOnDraftProposal"), $htmltext, 1, 'help', '', 0, 2, 'watermarktooltip') . '<br>';
 print '</td><td>';
 print '<input class="flat minwidth200" type="text" name="PROPALE_DRAFT_WATERMARK" value="' . dol_escape_htmltag(getDolGlobalString('PROPALE_DRAFT_WATERMARK')) . '">';
 print '</td>';
 print "</tr>\n";
-
 
 // Allow external download
 print '<tr class="oddeven">';
@@ -664,7 +664,6 @@ print '<td>' . $langs->trans("AllowOnLineSign") . '</td>';
 print '<td class="center">';
 print ajax_constantonoff('PROPOSAL_ALLOW_ONLINESIGN', array(), null, 0, 0, 0, 2, 0, 1);
 print '</td></tr>';
-
 
 /* Seems to be not so used. So kept hidden for the moment to avoid dangerous options inflation.
 if (isModEnabled('facture'))

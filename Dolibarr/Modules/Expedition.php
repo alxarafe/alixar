@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011      Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2013	   Philippe Grand	    <philippe.grand@atoo-net.com>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011       Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2013	    Philippe Grand	            <philippe.grand@atoo-net.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Modules;
+
+use Dolibarr\Core\Base\DolibarrModules;
+use Dolibarr\Code\Commande\Classes\Commande;
+use DoliDB;
+
 /**
  *  \defgroup   expedition     Module Shipping
  *  \brief      Module to manage product shipments
@@ -29,12 +35,6 @@
  *  \ingroup    expedition
  *  \brief      Description and activation file for the module Expedition
  */
-
-namespace Dolibarr\Modules;
-
-use Commande;
-use Dolibarr\Core\Base\DolibarrModules;
-use DoliDB;
 
 /**
  *  Class to describe and enable module Expedition
@@ -228,7 +228,6 @@ class Expedition extends DolibarrModules
         // Menus
         //-------
         $this->menu = 1; // This module add menu entries. They are coded into menu manager.
-
 
         // Exports
         //--------

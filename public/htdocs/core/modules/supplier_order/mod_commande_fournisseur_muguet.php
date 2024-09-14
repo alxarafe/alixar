@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,14 +21,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\SupplierOrder\Classes\ModeleNumRefSuppliersOrders;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *      \file       htdocs/core/modules/supplier_order/mod_commande_fournisseur_muguet.php
  *      \ingroup    order
  *      \brief      Fichier contenant la class du modele de numerotation de reference de commande fournisseur Muguet
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_order/modules_commandefournisseur.php';
-
 
 /**
  *  Class du modele de numerotation de reference de commande fournisseur Muguet
@@ -83,7 +86,6 @@ class mod_commande_fournisseur_muguet extends ModeleNumRefSuppliersOrders
         return $langs->trans("SimpleNumRefModelDesc", $this->prefix);
     }
 
-
     /**
      *  Return an example of numbering
      *
@@ -93,7 +95,6 @@ class mod_commande_fournisseur_muguet extends ModeleNumRefSuppliersOrders
     {
         return $this->prefix . "0501-0001";
     }
-
 
     /**
      *  Checks if the numbers already in the database do not

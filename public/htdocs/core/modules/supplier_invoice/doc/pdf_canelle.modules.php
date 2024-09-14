@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2010-2011  Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2010-2014  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2018-2024  Frédéric France      <frederic.france@netlogic.fr>
+/* Copyright (C) 2010-2011  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2010-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -28,11 +28,11 @@
  *  \brief      Class file to generate the supplier invoices with the canelle model
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_invoice/modules_facturefournisseur.php';
+use Dolibarr\Code\FactureFournisseur\Classes\ModelePDFSuppliersInvoices;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-
 
 /**
  *  Class to generate the supplier invoices PDF with the template canelle

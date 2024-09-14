@@ -124,7 +124,6 @@ if ($action == "productinfo") {
 } elseif ($action == "checkplease") {
     if (GETPOSTISSET("payment")) {
         print '<h1>' . $langs->trans('Ordered') . '</h1>';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolreceiptprinter.class.php';
         $printer = new dolReceiptPrinter($db);
         $printer->initPrinter(getDolGlobalString('TAKEPOS_PRINTER_TO_USE' . $_SESSION["takeposterminal"]));
         if ($printer->getPrintConnector()) {

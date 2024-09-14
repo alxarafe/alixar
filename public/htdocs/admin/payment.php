@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2015  Juanjo Menent                <jmenent@2byte.es>
- * Copyright (C) 2020  Maxime DEMAREST              <maxime@indelog.fr>
+/* Copyright (C) 2015       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2020       Maxime DEMAREST             <maxime@indelog.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+namespace Dolibarr\Code\Payment\Classes;
+
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *      \file       htdocs/admin/payment.php

@@ -23,6 +23,8 @@
  * \brief   Library files with common functions for StockTransfer
  */
 
+use Dolibarr\Code\Product\Classes\StockTransfer;
+
 /**
  * Prepare array of tabs for StockTransfer
  *

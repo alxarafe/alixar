@@ -29,7 +29,10 @@
  * \brief      File containing class for advanced numbering model of StockTransfer
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/stocktransfer/modules_stocktransfer.php';
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\StockTransfer;
+use Dolibarr\Code\StockTransfer\Classes\ModeleNumRefStockTransfer;
 
 
 /**

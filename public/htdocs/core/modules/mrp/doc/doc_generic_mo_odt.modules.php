@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2010-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2012		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2014		Marcos García		<marcosgdf@gmail.com>
- * Copyright (C) 2016		Charlie Benke		<charlie@patas-monkey.com>
- * Copyright (C) 2018-2021  Philippe Grand      <philippe.grand@atoo-net.com>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
+/* Copyright (C) 2010-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2014		Marcos García		        <marcosgdf@gmail.com>
+ * Copyright (C) 2016		Charlie Benke		        <charlie@patas-monkey.com>
+ * Copyright (C) 2018-2021  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,13 +23,18 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Mrp\Classes\ModelePDFMo;
+
 /**
  *  \file       htdocs/core/modules/mrp/doc/doc_generic_mo_odt.modules.php
  *  \ingroup    mrp
  *  \brief      File of class to build ODT documents for MOs
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/mrp/modules_mo.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';

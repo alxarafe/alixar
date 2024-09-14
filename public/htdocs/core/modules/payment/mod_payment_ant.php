@@ -18,14 +18,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Payment\Classes\ModeleNumRefPayments;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  * \file       htdocs/core/modules/payment/mod_payment_ant.php
  * \ingroup    payment
  * \brief      File containing class for numbering module Ant
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/payment/modules_payment.php';
-
 
 /**
  *  Class to manage customer payment numbering rules Ant
@@ -142,7 +144,6 @@ class mod_payment_ant extends ModeleNumRefPayments
 
         return  $numFinal;
     }
-
 
 	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**

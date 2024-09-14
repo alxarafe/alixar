@@ -108,7 +108,6 @@ function displayRankInfos($selected_rank, $fk_skill, $inputname = 'TNote', $mode
 {
     global $db, $conf, $langs;
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skill.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skilldet.class.php';
 
     // On charge les différentes notes possibles pour la compétence $fk_skill

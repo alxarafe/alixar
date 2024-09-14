@@ -35,7 +35,6 @@ use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formexpensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmfiles.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/expensereport.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/price.lib.php';

@@ -49,10 +49,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/website.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/website2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formwebsite.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/website.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/websitepage.class.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
 
 
 // Load translation files required by the page

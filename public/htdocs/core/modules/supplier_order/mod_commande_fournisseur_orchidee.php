@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -22,14 +22,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\SupplierOrder\Classes\ModeleNumRefSuppliersOrders;
+
 /**
  *  \file       htdocs/core/modules/supplier_order/mod_commande_fournisseur_orchidee.php
  *  \ingroup    order
  *  \brief      File for class for 'orchidee' type numbering the supplier orders
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_order/modules_commandefournisseur.php';
-
 
 /**
  *  Class providing the 'Orchidee' numbering models for supplier orders

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2009-2019  Laurent Destailleur <eldy@users.sourceforge.org>
- * Copyright (C) 2011-2013  Juanjo Menent		<jmenent@2byte.es>
+/* Copyright (C) 2009-2019  Laurent Destailleur         <eldy@users.sourceforge.org>
+ * Copyright (C) 2011-2013  Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,10 +25,12 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\DolGeoIP;
+use Dolibarr\Code\Core\Classes\Form;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgeoip.class.php';
 
 // Security check
 if (!$user->admin) {

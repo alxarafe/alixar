@@ -25,7 +25,9 @@
 
 namespace Dolibarr\Code\Hrm\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObjectLine;
+use DoliDB;
 
 /**
  * \file        class/evaluationdet.class.php

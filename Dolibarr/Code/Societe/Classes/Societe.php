@@ -2460,7 +2460,6 @@ class Societe extends CommonObject
                 $vatrate = preg_replace('/\s*\(.*\)/', '', $vatrate); // Remove code into vatrate.
             }
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 
             $discount = new DiscountAbsolute($this->db);
             $discount->fk_soc = $this->id;
@@ -2506,7 +2505,6 @@ class Societe extends CommonObject
      */
     public function getAvailableDiscounts($user = null, $filter = '', $maxvalue = 0, $discount_type = 0)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 
         $discountstatic = new DiscountAbsolute($this->db);
         $result = $discountstatic->getAvailableDiscounts($this, $user, $filter, $maxvalue, $discount_type);
@@ -3344,7 +3342,6 @@ class Societe extends CommonObject
                 return $bac->getRibLabel(true);
             } elseif ($mode == 'rum') {
                 if (empty($bac->rum)) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
                     $prelevement = new BonPrelevement($this->db);
                     $bac->fetch_thirdparty();
                     $bac->rum = $prelevement->buildRumNumber($bac->thirdparty->code_client, $bac->datec, $bac->id);
@@ -5390,7 +5387,6 @@ class Societe extends CommonObject
             }
 
             // Merge categories
-            include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
             $static_cat = new Categorie($this->db);
 
             $custcats_ori = $static_cat->containing($soc_origin->id, 'customer', 'id');

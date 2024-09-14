@@ -38,9 +38,7 @@
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skill.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/evaluation.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/position.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm.lib.php';
 

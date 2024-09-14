@@ -2538,7 +2538,6 @@ class Ticket extends CommonObject
         global $conf;
 
         // Create form object
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
         include_once DOL_DOCUMENT_ROOT . '/core/lib/files.lib.php';
         include_once DOL_DOCUMENT_ROOT . '/core/lib/images.lib.php';
 
@@ -2620,7 +2619,6 @@ class Ticket extends CommonObject
         }
 
         // Get current categories
-        include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
         $c = new Categorie($this->db);
         $existing = $c->containing($this->id, Categorie::TYPE_TICKET, 'id');
 
@@ -3062,7 +3060,6 @@ class Ticket extends CommonObject
 
                 $upload_dir_tmp = $conf->user->dir_output . "/" . $user->id . '/temp';
 
-                include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
                 $trackid = "tic" . $this->id;
 
                 $moreinheader = 'X-Dolibarr-Info: sendTicketMessageByEmail' . "\r\n";

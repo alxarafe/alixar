@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville        <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010 Laurent Destailleur         <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2007 Regis Houssin               <regis.houssin@inodbox.com>
- * Copyright (C) 2008      Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2007  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008       Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,14 +21,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\SupplierProposal\Classes\ModeleNumRefSupplierProposal;
+use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+
 /**
  * \file       htdocs/core/modules/propale/mod_propale_saphir.php
  * \ingroup    propale
  * \brief      File that contains the numbering module rules Saphir
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_proposal/modules_supplier_proposal.php';
-
 
 /**
  * Class of file that contains the numbering module rules Saphir
@@ -57,7 +60,6 @@ class mod_supplier_proposal_saphir extends ModeleNumRefSupplierProposal
      * @var string model name
      */
     public $name = 'Saphir';
-
 
     /**
      *  Return description of module

@@ -25,6 +25,10 @@
  *  \brief      File to manage triggers Mailman and Spip
  */
 
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/dolibarrtriggers.class.php';
 
 

@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +19,13 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormSetup;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  * \file    webhook/admin/webhook.php
@@ -59,7 +67,6 @@ $setupnotempty = 0;
 $useFormSetup = 1;
 
 if (!class_exists('FormSetup')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formsetup.class.php';
 }
 
 $formSetup = new FormSetup($db);
@@ -68,7 +75,7 @@ $formSetup = new FormSetup($db);
 $setupnotempty = count($formSetup->items);
 
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 
 /*
@@ -140,7 +147,6 @@ if ($action == 'updateMask') {
 }
 
 
-
 /*
  * View
  */
@@ -168,7 +174,7 @@ print '<span class="opacitymedium">' . $langs->trans("WebhookSetupPage", $langs-
 
 
 if ($action == 'edit') {
-    if ($useFormSetup && (float) DOL_VERSION >= 15) {
+    if ($useFormSetup && (float)DOL_VERSION >= 15) {
         print $formSetup->generateOutput(true);
     } else {
         print '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
@@ -191,7 +197,7 @@ if ($action == 'edit') {
                     print getDolGlobalString($constname);
                     print "</textarea>\n";
                 } elseif ($val['type'] == 'html') {
-                                    $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
+                    $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
                     $doleditor->Create();
                 } elseif ($val['type'] == 'yesno') {
                     print $form->selectyesno($constname, getDolGlobalString($constname), 1);
@@ -254,7 +260,7 @@ if ($action == 'edit') {
 
     print '<br>';
 } else {
-    if ($useFormSetup && (float) DOL_VERSION >= 15) {
+    if ($useFormSetup && (float)DOL_VERSION >= 15) {
         if (!empty($formSetup->items)) {
             print $formSetup->generateOutput();
         }

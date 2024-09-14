@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2020 	   Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2020 	    Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -22,13 +22,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Workstation\Classes\ModeleNumRefWorkstation;
+use Dolibarr\Code\Workstation\Classes\Workstation;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/workstation/mod_workstation_standard.php
  *  \ingroup    workstation
  *  \brief      File of class to manage Workstation numbering rules standard
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/workstation/modules_workstation.php';
 
 /**
  * Class to manage the Standard numbering rule for Workstation

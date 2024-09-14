@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2018      Quentin Vial-Gouteyron   <quentin.vial-gouteyron@atm-consulting.fr>
- * Copyright (C) 2023-2024  Frédéric France          <frederic.france@free.fr>
+/* Copyright (C) 2018       Quentin Vial-Gouteyron      <quentin.vial-gouteyron@atm-consulting.fr>
+ * Copyright (C) 2023-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,13 +20,18 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Reception\Classes\ModelePdfReception;
+use Dolibarr\Code\Reception\Classes\Reception;
+
 /**
  *  \file       htdocs/core/modules/reception/doc/pdf_squille.modules.php
  *  \ingroup    reception
  *  \brief      Fichier de la class permettant de generer les bordereaux envoi au modele Squille
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/reception/modules_reception.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 

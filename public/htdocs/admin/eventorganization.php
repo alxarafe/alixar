@@ -206,7 +206,6 @@ if ($action == 'edit') {
             } elseif ($val['type'] == 'yesno') {
                 print $form->selectyesno($constname, getDolGlobalString($constname), 1);
             } elseif (preg_match('/emailtemplate:/', $val['type'])) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $formmail = new FormMail($db);
 
                 $tmp = explode(':', $val['type']);

@@ -124,7 +124,6 @@ class InterfaceTicketEmail extends DolibarrTriggers
                                     $old_MAIN_MAIL_AUTOCOPY_TO = getDolGlobalString('MAIN_MAIL_AUTOCOPY_TO');
                                     $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
                                 }
-                                include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
                                 $mailfile = new CMailFile($subject, $sendto, $from, $message, $filepath, $mimetype, $filename, '', '', 0, -1);
                                 if ($mailfile->error) {
                                     setEventMessages($mailfile->error, $mailfile->errors, 'errors');
@@ -364,7 +363,6 @@ class InterfaceTicketEmail extends DolibarrTriggers
             $old_MAIN_MAIL_AUTOCOPY_TO = getDolGlobalString('MAIN_MAIL_AUTOCOPY_TO');
             $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
         }
-        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($subject, $sendto, $from, $message_admin, $filepath, $mimetype, $filename, '', '', 0, -1, '', '', $trackid, '', 'ticket');
         if ($mailfile->error) {
             dol_syslog($mailfile->error, LOG_DEBUG);
@@ -454,7 +452,6 @@ class InterfaceTicketEmail extends DolibarrTriggers
             $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
         }
 
-        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($subject, $sendto, $from, $message_customer, $filepath, $mimetype, $filename, '', '', 0, -1, '', '', $trackid, '', 'ticket');
         if ($mailfile->error) {
             dol_syslog($mailfile->error, LOG_DEBUG);

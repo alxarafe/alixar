@@ -28,7 +28,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
 
 use Dolibarr\Code\User\Classes\User;
 

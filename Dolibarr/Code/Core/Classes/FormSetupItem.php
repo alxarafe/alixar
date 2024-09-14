@@ -442,7 +442,6 @@ class FormSetupItem
 
         $out = '';
         if (preg_match('/emailtemplate:/', $this->type)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
             $formmail = new FormMail($this->db);
 
             $tmp = explode(':', $this->type);
@@ -658,7 +657,6 @@ class FormSetupItem
             }
         } elseif (preg_match('/emailtemplate:/', $this->type)) {
             if ($this->fieldValue > 0) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $formmail = new FormMail($this->db);
 
                 $tmp = explode(':', $this->type);

@@ -23,14 +23,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Mrp\Classes\ModeleNumRefMos;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  * \file       htdocs/core/modules/mrp/mod_mo_advanced.php
  * \ingroup    mrp
  * \brief      File containing class for numbering model of MOs advanced
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/mrp/modules_mo.php';
-
 
 /**
  *  Class to manage MO numbering rules advanced

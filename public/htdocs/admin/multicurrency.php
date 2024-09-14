@@ -1,7 +1,7 @@
 <?php
 
-/* <one line to give the program's name and a brief idea of what it does.>
- * Copyright (C) 2015 ATM Consulting <support@atm-consulting.fr>
+/* Copyright (C) 2015       ATM Consulting              <support@atm-consulting.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+
 /**
  *  \file       admin/multicurrency.php
  *  \ingroup    multicurrency
  *  \brief      Page to setup multicurrency module
  */
-
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 // Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -41,7 +42,6 @@ if (!$user->admin || !isModEnabled('multicurrency')) {
 
 // Parameters
 $action = GETPOST('action', 'aZ09');
-
 
 /*
  * Actions
@@ -164,7 +164,6 @@ if ($resql) {
         $TCurrency[] = $currency;
     }
 }
-
 
 /*
  * View

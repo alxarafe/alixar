@@ -1,28 +1,35 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville    <rodolphe@quiedeville.org>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
-* Copyright (C) 2004-2011 Laurent Destailleur     <eldy@users.sourceforge.net>
-* Copyright (C) 2005-2011 Regis Houssin           <regis.houssin@inodbox.com>
-* Copyright (C) 2004      Sebastien Di Cintio     <sdicintio@ressource-toi.org>
-* Copyright (C) 2004      Benoit Mortier          <benoit.mortier@opensides.be>
-* Copyright (C) 2010-2013 Juanjo Menent           <jmenent@2byte.es>
-* Copyright (C) 2011-2018 Philippe Grand          <philippe.grand@atoo-net.com>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <https://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2004       Sebastien Di Cintio         <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2010-2013  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2011-2018  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Fourn\Classes\Fournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/admin/supplier_order.php
@@ -31,8 +38,6 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Modules\modFournisseur;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
@@ -58,7 +63,6 @@ $error = 0;
 if (!$user->admin) {
     accessforbidden();
 }
-
 
 /*
  * Actions

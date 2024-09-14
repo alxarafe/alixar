@@ -415,7 +415,6 @@ if (empty($reshook)) {
                             $old_MAIN_MAIL_AUTOCOPY_TO = getDolGlobalString('TICKET_DISABLE_MAIL_AUTOCOPY_TO');
                             $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
                         }
-                        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
                         $mailfile = new CMailFile($subject, $sendto, $from, $message, $filepath, $mimetype, $filename, $sendtocc, '', $deliveryreceipt, -1, '', '', 'tic' . $object->id, '', 'ticket');
                         if ($mailfile->error || !empty($mailfile->errors)) {
                             setEventMessages($mailfile->error, $mailfile->errors, 'errors');
@@ -458,7 +457,6 @@ if (empty($reshook)) {
                                 $old_MAIN_MAIL_AUTOCOPY_TO = getDolGlobalString('TICKET_DISABLE_MAIL_AUTOCOPY_TO');
                                 $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
                             }
-                            include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
                             $mailfile = new CMailFile($subject, $sendto, $from, $message_admin, $filepath, $mimetype, $filename, $sendtocc, '', $deliveryreceipt, -1, '', '', 'tic' . $object->id, '', 'ticket');
                             if ($mailfile->error || !empty($mailfile->errors)) {
                                 setEventMessages($mailfile->error, $mailfile->errors, 'errors');

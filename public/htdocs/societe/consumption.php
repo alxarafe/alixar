@@ -626,7 +626,6 @@ if ($sql_select) {
             </a>
             <?php
             if ($objp->description) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
                 if ($objp->description == '(CREDIT_NOTE)' && $objp->fk_remise_except > 0) {
                     $discount = new DiscountAbsolute($db);
                     $discount->fetch($objp->fk_remise_except);

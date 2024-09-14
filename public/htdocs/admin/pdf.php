@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2022 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2012-2107 Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2019	   Ferran Marcet		<fmarcet@2byte.es>
- * Copyright (C) 2021-2022 Anthony Berton		<bertonanthony@gmail.com>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012-2107  Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2019	    Ferran Marcet		        <fmarcet@2byte.es>
+ * Copyright (C) 2021-2022  Anthony Berton		        <bertonanthony@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormOther;
 
 /**
  *       \file       htdocs/admin/pdf.php

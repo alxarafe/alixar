@@ -26,11 +26,12 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Product\Classes\StockTransfer;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransfer.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("stocks", "other"));

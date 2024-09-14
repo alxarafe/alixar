@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013-2018 Philippe Grand       <philippe.grand@atoo-net.com>
- * Copyright (C) 2016      Alexandre Spangaro   <aspangaro@open-dsi.fr>
+/* Copyright (C) 2005-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2018  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2016       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -23,14 +23,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\FactureFournisseur\Classes\ModeleNumRefSuppliersInvoices;
+
 /**
  *      \file       htdocs/core/modules/supplier_invoice/mod_facture_fournisseur_cactus.php
  *      \ingroup    supplier invoice
  *      \brief      File containing class for the numbering module Cactus
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_invoice/modules_facturefournisseur.php';
-
 
 /**
  *  Cactus Class of numbering models of suppliers invoices references

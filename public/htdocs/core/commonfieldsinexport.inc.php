@@ -1,5 +1,7 @@
 <?php
 
+use Dolibarr\Lib\Misc;
+
 '@phan-var-force DolibarrModules $this';
 
 if (empty($keyforclass) || empty($keyforclassfile) || empty($keyforelement)) {
@@ -11,10 +13,8 @@ if (empty($keyforalias)) {
     $keyforalias = 't';
 }
 
-dol_include_once($keyforclassfile);
-if (class_exists($keyforclass)) {
-    $tmpobject = new $keyforclass($this->db);
-
+$tmpobject = Misc::getCodeLibClass('Ticket', $this->db);
+if (isset($tmpobject)) {
     // Add common fields
     foreach ($tmpobject->fields as $keyfield => $valuefield) {
         $fieldname = $keyforalias . '.' . $keyfield;
@@ -60,6 +60,6 @@ if (class_exists($keyforclass)) {
         }
     }
 } else {
-    dol_print_error($this->db, 'Failed to find class ' . $keyforclass . ', even after the include of ' . $keyforclassfile);
+    dol_print_error($this->db, '(Export) Failed to find class ' . $keyforclass . ', even after the include of ' . $keyforclassfile);
 }
 // End add common fields

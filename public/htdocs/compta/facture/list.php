@@ -50,8 +50,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 if (isModEnabled('margin')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 }
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/facture/modules_facture.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -1299,7 +1297,6 @@ if ($user->hasRight("user", "user", "lire")) {
 }
 // Filter on product tags
 if (isModEnabled('category') && $user->hasRight("categorie", "lire") && ($user->hasRight("produit", "lire") || $user->hasRight("service", "lire"))) {
-    include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('IncludingProductWithTag');
     $cate_arbo = $form->select_all_categories(Categorie::TYPE_PRODUCT, null, 'parent', null, null, 1);

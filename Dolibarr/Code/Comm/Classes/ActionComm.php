@@ -1917,7 +1917,6 @@ class ActionComm extends CommonObject
         }
 
         // Get current categories
-        include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
         $c = new Categorie($this->db);
         $existing = $c->containing($this->id, Categorie::TYPE_ACTIONCOMM, 'id');
 
@@ -2637,7 +2636,6 @@ class ActionComm extends CommonObject
         $resql = $this->db->query($sql);
 
         if ($resql) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
             $formmail = new FormMail($this->db);
             $to = null;  // Ensure 'to' is defined for static analysis
 

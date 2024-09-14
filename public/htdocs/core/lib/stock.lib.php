@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2009 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2009       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,8 @@
  * \file       htdocs/core/lib/stock.lib.php
  * \brief      Library file with function for stock module
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
 
 /**
  * Prepare array with list of tabs

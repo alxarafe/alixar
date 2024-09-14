@@ -1,8 +1,9 @@
 <?php
 
-/* Copyright (C) 2004-2017  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2024		MDW					<mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2024		MDW					        <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +20,12 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\Misc;
 
 /**
  * \file    htdocs/admin/knowledgemanagement.php
@@ -34,7 +41,6 @@ global $langs, $user;
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once DOL_DOCUMENT_ROOT . "/knowledgemanagement/lib/knowledgemanagement.lib.php";
-require_once DOL_DOCUMENT_ROOT . "/knowledgemanagement/class/knowledgerecord.class.php";
 
 // Translations
 $langs->loadLangs(array("admin", "knowledgemanagement"));
@@ -113,7 +119,7 @@ if ($action == 'updateMask') {
     // Search template files
     $file = '';
     $className = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/knowledgemanagement/doc/pdf_" . $modele . "_" . strtolower($tmpobjectkey) . ".modules.php", 0);
         if (file_exists($file)) {
@@ -183,14 +189,13 @@ if ($action == 'updateMask') {
 }
 
 
-
 /*
  * View
  */
 
 $form = new Form($db);
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $page_name = "KnowledgeManagementSetup";
 llxHeader('', $langs->trans($page_name), '', '', 0, 0, '', '', '', 'mod-admin page-knowledgemanagement');
@@ -229,12 +234,11 @@ if ($action == 'edit') {
                 print getDolGlobalString($constname);
                 print "</textarea>\n";
             } elseif ($val['type'] == 'html') {
-                            $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
+                $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
                 $doleditor->Create();
             } elseif ($val['type'] == 'yesno') {
                 print $form->selectyesno($constname, getDolGlobalString($constname), 1);
             } elseif (preg_match('/emailtemplate:/', $val['type'])) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $formmail = new FormMail($db);
 
                 $tmp = explode(':', $val['type']);
@@ -417,7 +421,7 @@ foreach ($myTmpObjects as $myTmpObjectKey => $myTmpObjectArray) {
                                 print '</td>';
 
                                 $className = $myTmpObjectArray['class'];
-                                $mytmpinstance = new $className($db);
+                                $mytmpinstance = Misc::getCodeLibClass($className, $db);
                                 $mytmpinstance->initAsSpecimen();
 
                                 // Info

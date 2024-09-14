@@ -56,7 +56,6 @@ $setupnotempty = 0;
 $useFormSetup = 1;
 
 if (!class_exists('FormSetup')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formsetup.class.php';
 }
 
 $formSetup = new FormSetup($db);

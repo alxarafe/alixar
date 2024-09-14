@@ -1,12 +1,13 @@
 <?php
 
-/* Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +24,9 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Hrm\Classes\Skill;
+use Dolibarr\Lib\Misc;
 
 /**
  * \file    htdocs/admin/hrm.php
@@ -36,11 +40,8 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 global $langs, $user;
 
 // Libraries
-require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skill.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/evaluation.class.php';
-//require_once "../class/myclass.class.php";
 
 // Translations
 $langs->loadLangs(array("admin", "hrm"));
@@ -62,14 +63,14 @@ $scandir = GETPOST('scan_dir', 'alpha');
 $type = 'evaluation';
 
 $arrayofparameters = array(
-    'HRM_MAXRANK' => array('type' => 'integer','enabled' => 1, 'css' => ''),
-    'HRM_DEFAULT_SKILL_DESCRIPTION' => array('type' => 'varchar','enabled' => 1, 'css' => ''),
+    'HRM_MAXRANK' => array('type' => 'integer', 'enabled' => 1, 'css' => ''),
+    'HRM_DEFAULT_SKILL_DESCRIPTION' => array('type' => 'varchar', 'enabled' => 1, 'css' => ''),
 );
 
 $error = 0;
 $setupnotempty = 0;
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $moduledir = 'hrm';
 // TODO Scan list of objects to fill this array
@@ -138,7 +139,7 @@ if ($action == 'update') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/hrm/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -305,7 +306,7 @@ foreach ($myTmpObjects as $myTmpObjectKey => $myTmpObjectArray) {
                                 print '</td>';
 
                                 $nameofclass = ucfirst($myTmpObjectKey);
-                                $mytmpinstance = new $nameofclass($db);
+                                $mytmpinstance = Misc::getCodeLibClass($nameofclass, $db);
                                 '@phan-var-force Evaluation $mytmpinstance';
                                 $mytmpinstance->initAsSpecimen();
 
@@ -521,12 +522,11 @@ if ($action == 'edit') {
             } elseif ($val['type'] == 'integer') {
                 print '<input  class="flat" name="' . $constname . '" id="' . $constname . '" value="' . getDolGlobalString($constname) . '" type="number" step="1" min="0" max="50" >' . "\n";
             } elseif ($val['type'] == 'html') {
-                            $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
+                $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
                 $doleditor->Create();
             } elseif ($val['type'] == 'yesno') {
                 print $form->selectyesno($constname, getDolGlobalString($constname), 1);
             } elseif (preg_match('/emailtemplate:/', $val['type'])) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $formmail = new FormMail($db);
 
                 $tmp = explode(':', $val['type']);

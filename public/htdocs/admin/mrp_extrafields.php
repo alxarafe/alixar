@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2003		Jean-Louis Bergamo		<jlb@j1b.org>
- * Copyright (C) 2004-2011	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2012		Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2014		Florian Henry			<florian.henry@open-concept.pro>
- * Copyright (C) 2015		Jean-François Ferry		<jfefe@aternatik.fr>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003		Jean-Louis Bergamo		    <jlb@j1b.org>
+ * Copyright (C) 2004-2011	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2014		Florian Henry			    <florian.henry@open-concept.pro>
+ * Copyright (C) 2015		Jean-François Ferry		    <jfefe@aternatik.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *      \file       htdocs/admin/mrp_extrafields.php
@@ -49,14 +52,11 @@ if (!$user->admin) {
     accessforbidden();
 }
 
-
 /*
  * Actions
  */
 
 require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
-
-
 
 /*
  * View
@@ -66,10 +66,8 @@ $textobject = $langs->transnoentitiesnoconv('ManufacturingOrder');
 
 llxHeader('', $langs->trans("MrpSetupPage"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-mrp_extrafields');
 
-
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("MrpSetupPage"), $linkback, 'title_setup');
-
 
 $head = mrpAdminPrepareHead();
 
@@ -78,7 +76,6 @@ print dol_get_fiche_head($head, 'mrp_extrafields', $langs->trans("ExtraFields"),
 require DOL_DOCUMENT_ROOT . '/core/tpl/admin_extrafields_view.tpl.php';
 
 print dol_get_fiche_end();
-
 
 /*
  * Creation of an optional field

@@ -43,7 +43,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formorder.class.p
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_order/modules_commandefournisseur.php';
 
 if (isModEnabled('supplier_proposal')) {
     }

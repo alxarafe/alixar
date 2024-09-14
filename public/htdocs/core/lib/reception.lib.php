@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2006-2012  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007		Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2010-2012	Regis Houssin        <regis.houssin@capnetworks.com>
- * Copyright (C) 2010		Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015 Claudio Aschieri				<c.aschieri@19.coop>
+/* Copyright (C) 2006-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007		Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2010-2012	Regis Houssin               <regis.houssin@capnetworks.com>
+ * Copyright (C) 2010		Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Claudio Aschieri			<c.aschieri@19.coop>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Reception\Classes\Reception;
 
 /**
  *  \file       htdocs/core/lib/reception.lib.php
