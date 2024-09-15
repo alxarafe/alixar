@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2017 ATM Consulting       <contact@atm-consulting.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
+
 /**
  *      \file       htdocs/blockedlog/ajax/block-info.php
  *      \ingroup    blockedlog
@@ -26,8 +28,6 @@
 
 // This script is called with a POST method.
 // Directory to scan (full path) is inside POST['dir'].
-
-use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
 
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', 1); // Disables token renewal

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2017 ATM Consulting       <contact@atm-consulting.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\BloquedLog\Classes\BlockedLogAuthority;
 
 /**
  *      \file       htdocs/blockedlog/ajax/check_signature.php
@@ -43,7 +45,6 @@ if (!defined('NOREQUIREHTML')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/geturl.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/authority.class.php';
 
 
 if (!getDolGlobalString('BLOCKEDLOG_AUTHORITY_URL')) {

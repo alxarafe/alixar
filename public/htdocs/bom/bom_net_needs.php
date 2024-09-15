@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017-2020  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2017-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Core\Classes\CUnits;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *      \file       htdocs/bom/bom_net_needs.php
@@ -34,12 +41,12 @@ $langs->loadLangs(array("mrp", "other", "stocks"));
 // Get parameters
 $id = GETPOSTINT('id');
 $lineid = GETPOSTINT('lineid');
-$ref    = GETPOST('ref', 'alpha');
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
-$confirm  = GETPOST('confirm', 'alpha');
-$cancel   = GETPOST('cancel', 'aZ09');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'bomnet_needs'; // To manage different context of search
-$backtopage  = GETPOST('backtopage', 'alpha');
+$backtopage = GETPOST('backtopage', 'alpha');
 
 
 // Initialize technical objects
@@ -213,7 +220,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     print "<thead>\n";
     print '<tr class="liste_titre nodrag nodrop">';
     print '<td class="linecoldescription">' . $langs->trans('Product');
-    if (getDolGlobalString('BOM_SUB_BOM')  && $action == 'treeview') {
+    if (getDolGlobalString('BOM_SUB_BOM') && $action == 'treeview') {
         print ' &nbsp; <a id="show_all" href="#">' . img_picto('', 'folder-open', 'class="paddingright"') . $langs->trans("ExpandAll") . '</a>&nbsp;&nbsp;';
         print '<a id="hide_all" href="#">' . img_picto('', 'folder', 'class="paddingright"') . $langs->trans("UndoExpandAll") . '</a>&nbsp;';
     }
@@ -300,7 +307,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
                 print '<td>';
                 $useunit = (($prod->type == Product::TYPE_PRODUCT && getDolGlobalInt('PRODUCT_USE_UNITS')) || (($prod->type == Product::TYPE_SERVICE) && ($elem['fk_unit'])));
                 if ($useunit) {
-                                $unit = new CUnits($db);
+                    $unit = new CUnits($db);
                     $unit->fetch($elem['fk_unit']);
                     print(isset($unit->label) ? "&nbsp;" . $langs->trans(ucwords($unit->label)) . "&nbsp;" : '');
                 }
@@ -315,7 +322,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     print '</table>';
 
 
-
     /*
      * ButAction
      */
@@ -327,55 +333,54 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     }
     print '</div>'; ?>
 
-        <script type="text/javascript" language="javascript">
-            $(document).ready(function() {
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
 
-                function folderManage(element) {
-                    var id_bom_line = element.attr('id').replace('collapse-', '');
-                    let TSubLines = $('[parentid="'+ id_bom_line +'"]');
+            function folderManage(element) {
+                var id_bom_line = element.attr('id').replace('collapse-', '');
+                let TSubLines = $('[parentid="' + id_bom_line + '"]');
 
-                    if(element.html().indexOf('folder-open') <= 0) {
-                        $('[parentid="'+ id_bom_line +'"]').show();
-                        element.html('<?php echo dol_escape_js(img_picto('', 'folder-open')); ?>');
-                    }
-                    else {
-                        for (let i = 0; i < TSubLines.length; i++) {
-                            let subBomFolder = $(TSubLines[i]).children('.linecoldescription').children('.collapse_bom');
-                            if (subBomFolder.length > 0) {
-                                folderManage(subBomFolder);
-                            }
+                if (element.html().indexOf('folder-open') <= 0) {
+                    $('[parentid="' + id_bom_line + '"]').show();
+                    element.html('<?php echo dol_escape_js(img_picto('', 'folder-open')); ?>');
+                } else {
+                    for (let i = 0; i < TSubLines.length; i++) {
+                        let subBomFolder = $(TSubLines[i]).children('.linecoldescription').children('.collapse_bom');
+                        if (subBomFolder.length > 0) {
+                            folderManage(subBomFolder);
                         }
-                        TSubLines.hide();
-                        element.html('<?php echo dol_escape_js(img_picto('', 'folder')); ?>');
                     }
+                    TSubLines.hide();
+                    element.html('<?php echo dol_escape_js(img_picto('', 'folder')); ?>');
                 }
+            }
 
-                // When clicking on collapse
-                $(".collapse_bom").click(function() {
-                    folderManage($(this));
-                    return false;
-                });
-
-                // To Show all the sub bom lines
-                $("#show_all").click(function() {
-                    console.log("We click on show all");
-                    $("[class^=sub_bom_lines]").show();
-                    $("[class^=collapse_bom]").html('<?php echo dol_escape_js(img_picto('', 'folder-open')); ?>');
-                    return false;
-                });
-
-                // To Hide all the sub bom lines
-                $("#hide_all").click(function() {
-                    console.log("We click on hide all");
-                    $("[class^=sub_bom_lines]").hide();
-                    $("[class^=collapse_bom]").html('<?php echo dol_escape_js(img_picto('', 'folder')); ?>');
-                    return false;
-                });
-
+            // When clicking on collapse
+            $(".collapse_bom").click(function () {
+                folderManage($(this));
+                return false;
             });
-        </script>
 
-        <?php
+            // To Show all the sub bom lines
+            $("#show_all").click(function () {
+                console.log("We click on show all");
+                $("[class^=sub_bom_lines]").show();
+                $("[class^=collapse_bom]").html('<?php echo dol_escape_js(img_picto('', 'folder-open')); ?>');
+                return false;
+            });
+
+            // To Hide all the sub bom lines
+            $("#hide_all").click(function () {
+                console.log("We click on hide all");
+                $("[class^=sub_bom_lines]").hide();
+                $("[class^=collapse_bom]").html('<?php echo dol_escape_js(img_picto('', 'folder')); ?>');
+                return false;
+            });
+
+        });
+    </script>
+
+    <?php
 }
 
 // End of page

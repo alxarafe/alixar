@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2019       Maxime Kohlhaas         <maxime@atm-consulting.fr>
  * Copyright (C) 2019-2023  Frédéric France         <frederic.france@netlogic.fr>
  *
@@ -15,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Core\Classes\Link;
 
 /**
  * \file    htdocs/bom/lib/bom.lib.php

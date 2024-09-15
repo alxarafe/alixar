@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2003		Jean-Louis Bergamo		<jlb@j1b.org>
- * Copyright (C) 2004-2011	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2012		Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2014		Florian Henry			<florian.henry@open-concept.pro>
- * Copyright (C) 2015		Jean-François Ferry		<jfefe@aternatik.fr>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003		Jean-Louis Bergamo		    <jlb@j1b.org>
+ * Copyright (C) 2004-2011	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2014		Florian Henry			    <florian.henry@open-concept.pro>
+ * Copyright (C) 2015		Jean-François Ferry		    <jfefe@aternatik.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *   \file       htdocs/bookcal/admin/availabilities_extrafields.php
  *   \ingroup    bookcal
@@ -30,7 +33,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
 require_once '../lib/bookcal.lib.php';
 
 // Load translation files required by the page
@@ -49,7 +51,6 @@ $elementtype = 'bookcal_availabilities'; //Must be the $table_element of the cla
 if (!$user->admin) {
     accessforbidden();
 }
-
 
 /*
  * Actions

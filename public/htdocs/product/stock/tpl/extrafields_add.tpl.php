@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2014   Maxime Kohlhaas     <support@atm-consulting.fr>
  * Copyright (C) 2014	Juanjo Menent		<jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>

@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2011      Juanjo Menent        <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *

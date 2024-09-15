@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2007-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2023 Alice Adminson <aadminson@example.com>
+/* Copyright (C) 2007-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023       Alice Adminson              <aadminson@example.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\BookCal\Classes\Calendar;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+
 /**
  *      \file       htdocs/bookcal/calendar_list.php
  *      \ingroup    bookcal
@@ -31,7 +37,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
 // load module libraries
-require_once __DIR__ . '/class/calendar.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("agenda", "other"));
@@ -221,8 +226,6 @@ if (empty($reshook)) {
     // You can add more action here
     // if ($action == 'xxx' && $permissiontoxxx) ...
 }
-
-
 
 /*
  * View

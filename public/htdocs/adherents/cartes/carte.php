@@ -33,7 +33,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/format_cards.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/member/modules_cards.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/printsheet/modules_labels.php';
 
 $langs->loadLangs(array("members", "errors"));
 

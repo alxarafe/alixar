@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2010-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
  * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>

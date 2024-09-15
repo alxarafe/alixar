@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2003	   Jean-Louis Bergamo	<jlb@j1b.org>
- * Copyright (C) 2006-2017 Laurent Destailleur	<eldy@users.sourceforge.net>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003	    Jean-Louis Bergamo	        <jlb@j1b.org>
+ * Copyright (C) 2006-2017  Laurent Destailleur	        <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormBarCode;
+use Dolibarr\Code\Core\Classes\GenericObject;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/barcode/printsheet.php
@@ -37,8 +43,6 @@ if (!empty($_POST['mode']) && $_POST['mode'] === 'label') { // Page is called to
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/format_cards.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/printsheet/modules_labels.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/genericobject.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('admin', 'members', 'errors'));
@@ -300,7 +304,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View

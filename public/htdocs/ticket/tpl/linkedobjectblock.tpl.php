@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2010-2012 Regis Houssin <regis.houssin@inodbox.com>
  * Copyright (C) 2013      Jean-François FERRY <hello@librethic.io>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>

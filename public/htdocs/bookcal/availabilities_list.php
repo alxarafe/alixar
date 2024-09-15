@@ -18,6 +18,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\BookCal\Classes\Availabilities;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+
 /**
  *   \file       htdocs/bookcal/availabilities_list.php
  *   \ingroup    bookcal
@@ -25,12 +31,6 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\BookCal\Classes\Availabilities;
-use Dolibarr\Code\Core\Classes\ExtraFields;
-use Dolibarr\Code\Core\Classes\Form;
-use Dolibarr\Code\Core\Classes\FormAdmin;
-use Dolibarr\Code\Core\Classes\FormFile;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';

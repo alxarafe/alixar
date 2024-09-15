@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\BookCal\Classes\Availabilities;
+use Dolibarr\Code\Core\Classes\Link;
 
 /**
  * \file    htdocs/bookcal/lib/bookcal_availabilities.lib.php
