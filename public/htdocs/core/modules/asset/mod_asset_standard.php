@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005-2010  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2022-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2022       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2022-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2022       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,13 +22,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Asset\Classes\Asset;
+use Dolibarr\Code\Asset\Classes\ModeleNumRefAsset;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/asset/mod_asset_standard.php
  *  \ingroup    asset
  *  \brief      File of class to manage Asset numbering rules standard
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/asset/modules_asset.php';
 
 /**
  *  Class to manage the Standard numbering rule for Asset

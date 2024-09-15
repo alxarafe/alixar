@@ -22,13 +22,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Asset\Classes\Asset;
+use Dolibarr\Code\Asset\Classes\ModeleNumRefAsset;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  * \file       htdocs/core/modules/asset/mod_asset_advanced.php
  * \ingroup    asset
  * \brief      File containing class for advanced numbering model of Asset
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/asset/modules_asset.php';
 
 /**
  *  Class to manage customer Bom numbering rules advanced

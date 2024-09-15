@@ -371,9 +371,6 @@ class AccountingJournal extends CommonObject
         }
 
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/asset.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/assetaccountancycodes.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/assetdepreciationoptions.class.php';
 
         $langs->loadLangs(array("assets"));
 
@@ -559,7 +556,6 @@ class AccountingJournal extends CommonObject
 
                     // Get accountancy codes
                     //---------------------------
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/assetaccountancycodes.class.php';
                     $accountancy_codes = new AssetAccountancyCodes($this->db);
                     $result = $accountancy_codes->fetchAccountancyCodes($element_static->id);
                     if ($result < 0) {
@@ -795,8 +791,7 @@ class AccountingJournal extends CommonObject
                             //
                             //                          if (!$error_for_line && isModEnabled('asset') && $this->nature == 1 && $bookkeeping->fk_doc > 0) {
                             //                              // Set last cumulative depreciation
-                            //                              require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/asset.class.php';
-                            //                              $asset = new Asset($this->db);
+                            //                                                          //                              $asset = new Asset($this->db);
                             //                              $result = $asset->setLastCumulativeDepreciation($bookkeeping->fk_doc);
                             //                              if ($result < 0) {
                             //                                  $error++;
