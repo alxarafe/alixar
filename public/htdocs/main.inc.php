@@ -3034,7 +3034,7 @@ function top_menu_bookmark()
     }
 
     if (!defined('JS_JQUERY_DISABLE_DROPDOWN') && !empty($conf->use_javascript_ajax)) {     // This may be set by some pages that use different jquery version to avoid errors
-        include_once DOL_DOCUMENT_ROOT . '/bookmarks/bookmarks.lib.php';
+        include_once DOL_DOCUMENT_ROOT . '/bookmarks/lib/bookmarks.lib.php';
         $langs->load("bookmarks");
 
         if (getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER')) {

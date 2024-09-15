@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2005       Matthieu Valleton   <mv@seeschloss.org>
- * Copyright (C) 2006-2021	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2014	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2007		Patrick Raguin		<patrick.raguin@gmail.com>
- * Copyright (C) 2013		Florian Henry		<florian.henry@open-concept.pro>
- * Copyright (C) 2015       Raphaël Doursenaud  <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2020       Frédéric France     <frederic.france@netlogic.fr>
+/* Copyright (C) 2005       Matthieu Valleton           <mv@seeschloss.org>
+ * Copyright (C) 2006-2021	Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2014	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2007		Patrick Raguin		        <patrick.raguin@gmail.com>
+ * Copyright (C) 2013		Florian Henry		        <florian.henry@open-concept.pro>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2020       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,6 +24,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+
 /**
  *      \file       htdocs/categories/card.php
  *      \ingroup    category
@@ -32,8 +38,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Categories\Classes\Categorie;
 
 
 // Load translation files required by the page
@@ -46,38 +50,38 @@ if (!$user->hasRight('categorie', 'lire')) {
 }
 
 $action = GETPOST('action', 'alpha');
-$cancel     = GETPOST('cancel', 'alpha');
-$origin     = GETPOST('origin', 'alpha');
-$catorigin  = GETPOSTINT('catorigin');
+$cancel = GETPOST('cancel', 'alpha');
+$origin = GETPOST('origin', 'alpha');
+$catorigin = GETPOSTINT('catorigin');
 $type = GETPOST('type', 'aZ09');
 $urlfrom = GETPOST('urlfrom', 'alpha');
 $backtopage = GETPOST('backtopage', 'alpha');
 
-$label = (string) GETPOST('label', 'alphanohtml');
-$description = (string) GETPOST('description', 'restricthtml');
-$color = preg_replace('/[^0-9a-f#]/i', '', (string) GETPOST('color', 'alphanohtml'));
+$label = (string)GETPOST('label', 'alphanohtml');
+$description = (string)GETPOST('description', 'restricthtml');
+$color = preg_replace('/[^0-9a-f#]/i', '', (string)GETPOST('color', 'alphanohtml'));
 $position = GETPOSTINT('position');
 $visible = GETPOSTINT('visible');
 $parent = GETPOSTINT('parent');
 
 if ($origin) {
     if ($type == Categorie::TYPE_PRODUCT) {
-        $idProdOrigin     = $origin;
+        $idProdOrigin = $origin;
     }
     if ($type == Categorie::TYPE_SUPPLIER) {
         $idSupplierOrigin = $origin;
     }
     if ($type == Categorie::TYPE_CUSTOMER) {
-        $idCompanyOrigin  = $origin;
+        $idCompanyOrigin = $origin;
     }
     if ($type == Categorie::TYPE_MEMBER) {
-        $idMemberOrigin   = $origin;
+        $idMemberOrigin = $origin;
     }
     if ($type == Categorie::TYPE_CONTACT) {
-        $idContactOrigin  = $origin;
+        $idContactOrigin = $origin;
     }
     if ($type == Categorie::TYPE_PROJECT) {
-        $idProjectOrigin  = $origin;
+        $idProjectOrigin = $origin;
     }
 }
 
@@ -143,11 +147,11 @@ if (empty($reshook)) {
                 exit;
             }
         }
-        $object->label          = $label;
-        $object->color          = $color;
-        $object->position       = $position;
+        $object->label = $label;
+        $object->color = $color;
+        $object->position = $position;
         $object->description = dol_htmlcleanlastbr($description);
-        $object->socid          = ($socid > 0 ? $socid : 0);
+        $object->socid = ($socid > 0 ? $socid : 0);
         $object->visible = $visible;
         $object->type = $type;
 
@@ -255,7 +259,7 @@ if ($user->hasRight('categorie', 'creer')) {
 
         // Description
         print '<tr><td class="tdtop">' . $langs->trans("Description") . '</td><td>';
-            $doleditor = new DolEditor('description', $description, '', 160, 'dolibarr_notes', '', false, true, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_5, '90%');
+        $doleditor = new DolEditor('description', $description, '', 160, 'dolibarr_notes', '', false, true, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_5, '90%');
         $doleditor->Create();
         print '</td></tr>';
 

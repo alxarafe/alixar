@@ -113,7 +113,6 @@ if (empty($nosearch)) {
 
     print '</div><div class="fichehalfright">';
 
-
     /*
      * Categories found
      */
@@ -223,7 +222,6 @@ foreach ($data as $record) {
         $morethan1level = 1;
     }
 }
-
 
 print '<table class="liste nohover centpercent">';
 print '<tr class="liste_titre"><td>' . $langs->trans("Categories") . '</td><td></td><td class="right">';

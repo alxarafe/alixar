@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2009 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2009       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,6 @@
  *  \ingroup    bookmarks
  *  \brief      File with library for bookmark module
  */
-
 
 /**
  * Add area with bookmarks in top menu
@@ -65,7 +64,7 @@ function printDropdownBookmarksList()
     if (!empty($_POST) && is_array($_POST)) {
         foreach ($_POST as $key => $val) {
             if (
-                (preg_match('/^search_/', $key) || in_array($key, $authorized_var))
+                (str_starts_with($key, 'search_') || in_array($key, $authorized_var))
                 && $val != ''
                 && !array_key_exists($key, $url_param)
             ) {
@@ -116,7 +115,7 @@ function printDropdownBookmarksList()
             $bookmarkList = '<div id="dropdown-bookmarks-list" >';
             $i = 0;
             while ((!getDolGlobalString('BOOKMARKS_SHOW_IN_MENU') || $i < getDolGlobalInt('BOOKMARKS_SHOW_IN_MENU')) && $obj = $db->fetch_object($resql)) {
-                $bookmarkList .= '<a class="dropdown-item bookmark-item' . (strpos($obj->url, 'http') === 0 ? ' bookmark-item-external' : '') . '" id="bookmark-item-' . $obj->rowid . '" data-id="' . $obj->rowid . '" ' . ($obj->target == 1 ? ' target="_blank"  rel="noopener noreferrer"' : '') . ' href="' . dol_escape_htmltag($obj->url) . '" >';
+                $bookmarkList .= '<a class="dropdown-item bookmark-item' . (str_starts_with($obj->url, 'http') ? ' bookmark-item-external' : '') . '" id="bookmark-item-' . $obj->rowid . '" data-id="' . $obj->rowid . '" ' . ($obj->target == 1 ? ' target="_blank"  rel="noopener noreferrer"' : '') . ' href="' . dol_escape_htmltag($obj->url) . '" >';
                 $bookmarkList .= dol_escape_htmltag($obj->title);
                 $bookmarkList .= '</a>';
                 $i++;

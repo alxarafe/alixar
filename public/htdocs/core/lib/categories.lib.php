@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2011 Regis Houssin  <regis.houssin@inodbox.com>
+/* Copyright (C) 2011       Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
 
 /**
  *  \file       htdocs/core/lib/categories.lib.php
