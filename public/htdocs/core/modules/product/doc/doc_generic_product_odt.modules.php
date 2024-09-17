@@ -25,7 +25,6 @@
  *  \brief      File of class to build ODT documents for products/services
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product/modules_product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';

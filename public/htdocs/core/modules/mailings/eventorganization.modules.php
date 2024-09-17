@@ -1,8 +1,9 @@
 <?php
 
-/* Copyright (C) 2018-2018 Andre Schild        <a.schild@aarboard.ch>
- * Copyright (C) 2005-2010 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin       <regis.houssin@inodbox.com>
+/* Copyright (C) 2018-2018  Andre Schild                <a.schild@aarboard.ch>
+ * Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This file is an example to follow to add your own email selector inside
  * the Dolibarr email tool.
@@ -11,6 +12,9 @@
  * Code that need to be changed in this file are marked by "CHANGE THIS" tag.
  */
 
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Mailing\Classes\MailingTargets;
+
 /**
  *  \file       htdocs/core/modules/mailings/eventorganization.modules.php
  *  \ingroup    mailing
@@ -18,7 +22,6 @@
  */
 
 // Load Dolibarr Environment
-include_once DOL_DOCUMENT_ROOT . '/core/modules/mailings/modules_mailings.php';
 
 
 /**

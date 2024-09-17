@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2019	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2016	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2021		Waël Almoman            <info@almoman.com>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2019	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2016	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2021		Waël Almoman                <info@almoman.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Mailing;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\FormMail;
+
 /**
  *       \file       htdocs/comm/mailing/card.php
  *       \ingroup    mailing
@@ -36,7 +40,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/emailing.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/mailing/class/mailing.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("mails", "admin"));
@@ -98,7 +101,6 @@ $upload_dir = $conf->mailing->dir_output . "/" . get_exdir($object->id, 2, 0, 1,
 $permissiontocreate = $user->hasRight('mailing', 'creer');
 $permissiontovalidatesend = $user->hasRight('mailing', 'valider');
 $permissiontodelete = $user->hasRight('mailing', 'supprimer');
-
 
 /*
  * Actions

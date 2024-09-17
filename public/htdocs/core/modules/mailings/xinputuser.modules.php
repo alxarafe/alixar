@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2005-2012 Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2005-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,13 +18,14 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Mailing\Classes\MailingTargets;
+
 /**
  *  \file       htdocs/core/modules/mailings/xinputuser.modules.php
  *  \ingroup    mailing
  *  \brief      File of class to offer a selector of emailing targets with Rule 'xinputuser'.
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/modules/mailings/modules_mailings.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 

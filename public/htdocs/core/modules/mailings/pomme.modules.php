@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2011 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin       <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,14 +19,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Mailing\Classes\MailingTargets;
+
 /**
  *  \file       htdocs/core/modules/mailings/pomme.modules.php
  *  \ingroup    mailing
  *  \brief      File of class to offer a selector of emailing targets of users.
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/modules/mailings/modules_mailings.php';
-
 
 /**
  *  Class to offer a selector of emailing targets with Rule 'Pomme'.

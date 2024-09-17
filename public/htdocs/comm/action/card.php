@@ -39,6 +39,7 @@ use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 

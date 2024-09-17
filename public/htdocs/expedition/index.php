@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2019      Nicolas ZABOURI      <info@inovea-conseil.com>
- * Copyright (C) 2020      Tobias Sekan         <tobias.sekan@startmail.com>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2020       Tobias Sekan                <tobias.sekan@startmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *       \file       htdocs/expedition/index.php
@@ -54,7 +57,6 @@ $helpurl = 'EN:Module_Shipments|FR:Module_Exp&eacute;ditions|ES:M&oacute;dulo_Ex
 llxHeader('', $langs->trans("Shipment"), $helpurl);
 
 print load_fiche_titre($langs->trans("SendingsArea"), '', 'dolly');
-
 
 print '<div class="fichecenter"><div class="fichethirdleft">';
 

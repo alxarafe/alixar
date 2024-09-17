@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2023   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2023       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,14 +18,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use DebugBar\DataCollector\DataCollector;
+use DebugBar\DataCollector\Renderable;
+
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolPhpCollector.php
  *  \brief      Class for debugbar collection
  *  \ingroup    debugbar
  */
-
-use DebugBar\DataCollector\DataCollector;
-use DebugBar\DataCollector\Renderable;
 
 /**
  * Class PhpCollector

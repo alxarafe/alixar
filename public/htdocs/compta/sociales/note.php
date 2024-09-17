@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2007-2022 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2007-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *  \file       htdocs/compta/sociales/note.php
@@ -71,7 +75,6 @@ if ($reshook < 0) {
 if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_setnotes.inc.php'; // Must be include, not include_once
 }
-
 
 /*
  * View

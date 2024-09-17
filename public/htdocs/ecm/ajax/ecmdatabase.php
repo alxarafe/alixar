@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2012   Regis Houssin   <regis.houssin@inodbox.com>
+/* Copyright (C) 2012       Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,8 @@
  *       \file       htdocs/ecm/ajax/ecmdatabase.php
  *       \brief      File to build/refresh the ecm database for directories
  */
+
+use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1'); // Disables token renewal
@@ -56,7 +58,6 @@ if (isset($action) && !empty($action)) {
     $error = 0;
 
     if ($action == 'build' && !empty($element)) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmdirectory.class.php';
 
         $ecmdirstatic = new EcmDirectory($db);
         $ecmdirtmp = new EcmDirectory($db);

@@ -1016,7 +1016,6 @@ if ($action == 'create') {
 
         // Model pdf
         print "<tr><td>" . $langs->trans('Model') . "</td><td>";
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/supplier_invoice/modules_facturefournisseur.php';
         $list = ModelePDFSuppliersInvoices::liste_modeles($db);
         print $form->selectarray('modelpdf', $list, $conf->global->INVOICE_SUPPLIER_ADDON_PDF);
         print "</td></tr>";
@@ -1409,7 +1408,6 @@ if ($action == 'create') {
         print '</tr></table>';
         print '</td><td>';
         if ($action == 'editmodelpdf') {
-            include_once DOL_DOCUMENT_ROOT . '/core/modules/supplier_invoice/modules_facturefournisseur.php';
             $list = array();
             $models = ModelePDFSuppliersInvoices::liste_modeles($db);
             foreach ($models as $k => $model) {

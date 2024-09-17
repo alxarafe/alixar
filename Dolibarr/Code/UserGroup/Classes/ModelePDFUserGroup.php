@@ -24,6 +24,7 @@
 namespace Dolibarr\Code\UserGroup\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
 
 /**
  *  \file       htdocs/core/modules/contract/modules_contract.php

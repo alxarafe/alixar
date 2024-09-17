@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2014 Florian Henry        <florian.henry@open-concept.pro>
- * Copyright (C) 2016 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2014       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2016       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\AdvanceTargetingMailing;
+use Dolibarr\Code\Comm\Classes\FormAdvTargetEmailing;
+use Dolibarr\Code\Comm\Classes\Mailing;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
+
 /**
  *       \file       htdocs/comm/mailing/advtargetemailing.php
  *       \ingroup    mailing
@@ -31,10 +38,7 @@ if (!defined('NOSTYLECHECK')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/mailing/class/mailing.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/emailing.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/mailing/class/advtargetemailing.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/mailing/class/html.formadvtargetemailing.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/mailings/advthirdparties.modules.php';
 
 // Load translation files required by the page
@@ -130,7 +134,7 @@ if ($action == 'add') {
         // print '$key='.$key.' $value='.$value.'<BR>';
         if (preg_match("/^options_.*(?<!_cnct)$/", $key)) {
             // Special case for start date come with 3 inputs day, month, year
-            if (preg_match("/st_dt/", $key)) {
+            if (str_contains($key, "st_dt")) {
                 $dtarr = array();
                 $dtarr = explode('_', $key);
                 if (!array_key_exists('options_' . $dtarr[1] . '_st_dt', $array_query)) {

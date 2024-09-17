@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2019      Nicolas ZABOURI      <info@inovea-conseil.com>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\HookManager;
+
 /**
  *  \file       htdocs/commande/index.php
  *  \ingroup    order
@@ -30,6 +35,8 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
 
 
@@ -59,7 +66,6 @@ $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
 $maxDraftCount = !getDolGlobalString('MAIN_MAXLIST_OVERLOAD') ? 500 : $conf->global->MAIN_MAXLIST_OVERLOAD;
 $maxLatestEditCount = 5;
 $maxOpenCount = !getDolGlobalString('MAIN_MAXLIST_OVERLOAD') ? 500 : $conf->global->MAIN_MAXLIST_OVERLOAD;
-
 
 /*
  * View
@@ -147,9 +153,7 @@ if (isModEnabled('order')) {
     }
 }
 
-
 print '</div><div class="fichetwothirdright">';
-
 
 /*
  * Latest modified orders
@@ -236,7 +240,6 @@ if ($resql) {
 } else {
     dol_print_error($db);
 }
-
 
 /*
  * Orders to process

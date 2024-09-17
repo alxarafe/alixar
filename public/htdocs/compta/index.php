@@ -35,6 +35,7 @@
  */
 
 use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;

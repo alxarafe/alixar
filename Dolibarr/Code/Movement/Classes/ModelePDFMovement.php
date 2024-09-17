@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018-2020 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2018-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,12 +18,15 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Movement\Classes;
+
+use DoliDB;
+
 /**
  *  \file       htdocs/core/modules/movement/modules_movement.php
  *  \ingroup    stock
  *  \brief      File with parent class for generating PDF of a stock movements
  */
-
 
 /**
  *  Parent class to manage warehouse movement document templates

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2009 Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2004	   Eric Seigne			<eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2009 Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2009  Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2004	    Eric Seigne			        <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2009  Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+namespace Dolibarr\Code\Members\Classes;
+
+use Dolibarr\Code\Core\Classes\Translate;
+use DoliDB;
 
 /**
  *  \file       htdocs/core/modules/member/modules_cards.php

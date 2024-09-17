@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,14 +20,14 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Mailing\Classes\MailingTargets;
+
 /**
  *  \file       htdocs/core/modules/mailings/contacts1.modules.php
  *  \ingroup    mailing
  *  \brief      File of class to offer a selector of emailing targets with Rule 'Poire'.
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/modules/mailings/modules_mailings.php';
-
 
 /**
  *  Class to offer a selector of emailing targets from contacts

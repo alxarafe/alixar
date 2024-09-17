@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville  <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2008 Laurent Destailleur   <eldy@users.sourceforge.net>
- * Copyright (C) 2005      Marc Barilley / Ocebo <marc@ocebo.com>
- * Copyright (C) 2005-2017 Regis Houssin         <regis.houssin@inodbox.com>
- * Copyright (C) 2019	   Nicolas ZABOURI       <info@inovea-conseil.com>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2005-2017  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019	    Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *  \file       htdocs/compta/bankaccount_statement_document.php
  *  \ingroup    banque
@@ -31,7 +34,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/bank.lib.php";
 require_once DOL_DOCUMENT_ROOT . "/core/lib/files.lib.php";
 require_once DOL_DOCUMENT_ROOT . "/core/lib/images.lib.php";
-require_once DOL_DOCUMENT_ROOT . "/core/class/html.formfile.class.php";
 
 global $conf, $db, $langs;
 // Load translation files required by the page
@@ -134,7 +136,6 @@ if (!empty($numref)) {
 }
 $backtopage = $_SERVER['PHP_SELF'] . "?account=" . urlencode((string) ($id)) . "&num=" . urlencode((string) ($numref));
 include DOL_DOCUMENT_ROOT . '/core/actions_linkedfiles.inc.php';
-
 
 /*
  * View

@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2003-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2006      Andre Cianfarani     <acianfa@free.fr>
- * Copyright (C) 2012      Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2014      Marcos García        <marcosgdf@gmail.com>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2012       Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,12 +24,16 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Recruitement\Classes;
+
+use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+
 /**
  *  \file           htdocs/core/modules/recruitment/modules_recruitmentjobposition.php
  *  \ingroup        recruitment
  *  \brief          File that contains parent class for recruitmentjobpositions document models and parent class for recruitmentjobpositions numbering models
  */
-
 
 /**
  *  Parent class for documents models
@@ -55,13 +59,4 @@ abstract class ModelePDFRecruitmentCandidature extends CommonDocGenerator
 
         return $list;
     }
-}
-
-
-/**
- *  Parent class to manage numbering of RecruitmentCandidature
- */
-abstract class ModeleNumRefRecruitmentCandidature extends CommonNumRefGenerator
-{
-    // No overloaded code
 }

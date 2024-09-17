@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013      Charles-Fr BENKE     <charles.fr@benke.fr>
- * Copyright (C) 2015      Jean-François Ferry	<jfefe@aternatik.fr>
- * Copyright (C) 2016      Marcos García        <marcosgdf@gmail.com>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Charles-Fr BENKE            <charles.fr@benke.fr>
+ * Copyright (C) 2015       Jean-François Ferry	        <jfefe@aternatik.fr>
+ * Copyright (C) 2016       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\BankCateg;
+
 /**
  *    \file       htdocs/compta/bank/categ.php
  *    \ingroup    compta/bank
@@ -30,12 +32,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/bankcateg.class.php';
-
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories'));
-
 
 // Get Parameters
 $action = GETPOST('action', 'aZ09');
@@ -43,17 +42,13 @@ $optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always ''
 $categid = GETPOST('categid');
 $label = GETPOST("label");
 
-
 // Initialize technical objects
 $bankcateg = new BankCateg($db);
-
 
 // Security Check  Access Control
 if (!$user->hasRight('banque', 'configurer')) {
     accessforbidden();
 }
-
-
 
 /*
  * Actions

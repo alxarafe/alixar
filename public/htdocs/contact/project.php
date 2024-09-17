@@ -19,6 +19,8 @@
  */
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/contact/project.php

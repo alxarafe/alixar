@@ -848,7 +848,6 @@ function pdf_bank(&$pdf, $outputlangs, $curx, $cury, $account, $onlynumber = 0, 
 {
     global $mysoc, $conf;
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formbank.class.php';
 
     $diffsizetitle = getDolGlobalInt('PDF_DIFFSIZE_TITLE', 3);
     $diffsizecontent = getDolGlobalInt('PDF_DIFFSIZE_CONTENT', 4);

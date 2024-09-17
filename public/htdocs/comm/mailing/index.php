@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2010      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2019      Nicolas ZABOURI      <info@inovea-conseil.com>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Mailing;
+use Dolibarr\Code\Core\Classes\HookManager;
+
 /**
  *       \file       htdocs/comm/mailing/index.php
  *       \ingroup    mailing
@@ -29,7 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/mailing/class/mailing.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 $hookmanager = new HookManager($db);
@@ -44,7 +46,6 @@ $object = new Mailing($db);
 
 // Security check
 $result = restrictedArea($user, 'mailing');
-
 
 /*
  *	View

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2023   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2023       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,15 +17,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use DebugBar\DataCollector\AssetProvider;
+use DebugBar\DataCollector\DataCollector;
+use DebugBar\DataCollector\Renderable;
+
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolQueryCollector.php
  *  \brief      Class for debugbar collection
  *  \ingroup    debugbar
  */
-
-use DebugBar\DataCollector\AssetProvider;
-use DebugBar\DataCollector\DataCollector;
-use DebugBar\DataCollector\Renderable;
 
 dol_include_once('/debugbar/class/TraceableDB.php');
 

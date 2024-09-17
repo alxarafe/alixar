@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2004-2009  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2006-2007  Yannick Warnier     <ywarnier@beeznest.org>
- * Copyright (C) 2011	    Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2012-2017  Juanjo Menent       <jmenent@2byte.es>
- * Copyright (C) 2012       Cédric Salvador     <csalvador@gpcsolutions.fr>
- * Copyright (C) 2012-2014  Raphaël Doursenaud  <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2015       Marcos García       <marcosgdf@gmail.com>
- * Copyright (C) 2021-2022  Open-Dsi            <support@open-dsi.fr>
+/* Copyright (C) 2004-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006-2007  Yannick Warnier             <ywarnier@beeznest.org>
+ * Copyright (C) 2011	    Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012-2017  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2012       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2012-2014  Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2021-2022  Open-Dsi                    <support@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,12 +24,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Core\Classes\Link;
+
 /**
  *      \file       htdocs/core/lib/tax.lib.php
  *      \ingroup    tax
  *      \brief      Library for tax module
  */
-
 
 /**
  * Prepare array with list of tabs

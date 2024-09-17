@@ -25,6 +25,7 @@
 namespace Dolibarr\Code\FichInter\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
 
 /**
  *  \file       htdocs/core/modules/fichinter/modules_fichinter.php

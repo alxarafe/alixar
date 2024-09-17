@@ -1,20 +1,20 @@
 <?php
 
-/* Copyright (C) 2001-2004  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2003       Eric Seigne             <erics@rycks.com>
- * Copyright (C) 2004-2012  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2013-2015  Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2013       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2013       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2018       Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2018       Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2019       Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2019       Josep Lluís Amador      <joseplluis@lliuretic.cat>
- * Copyright (C) 2020       Open-Dsi      			<support@open-dsi.fr>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003       Eric Seigne                 <erics@rycks.com>
+ * Copyright (C) 2004-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2015  Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2018       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2018       Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2019       Josep Lluís Amador          <joseplluis@lliuretic.cat>
+ * Copyright (C) 2020       Open-Dsi      			    <support@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Benjamin Falière		<benjamin.faliere@altairis.fr>
+ * Copyright (C) 2024		Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,6 +32,12 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
 
 /**
  *      \file       htdocs/contact/list.php
@@ -41,9 +47,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
 // Load translation files required by the page
@@ -231,11 +234,11 @@ $arrayfields = array();
 foreach ($object->fields as $key => $val) {
     // If $val['visible']==0, then we never show the field
     if (!empty($val['visible'])) {
-        $visible = (int) dol_eval($val['visible'], 1);
+        $visible = (int)dol_eval($val['visible'], 1);
         $arrayfields['p.' . $key] = array(
             'label' => $val['label'],
             'checked' => (($visible < 0) ? 0 : 1),
-            'enabled' => (abs($visible) != 3 && (int) dol_eval($val['enabled'], 1)),
+            'enabled' => (abs($visible) != 3 && (int)dol_eval($val['enabled'], 1)),
             'position' => $val['position'],
             'help' => isset($val['help']) ? $val['help'] : ''
         );
@@ -250,10 +253,10 @@ if (!getDolGlobalString('SOCIETE_DISABLE_CONTACTS')) {
 }
 
 $arrayfields['unsubscribed'] = array(
-        'label' => 'No_Email',
-        'checked' => 0,
-        'enabled' => (isModEnabled('mailing')),
-        'position' => 111);
+    'label' => 'No_Email',
+    'checked' => 0,
+    'enabled' => (isModEnabled('mailing')),
+    'position' => 111);
 
 if (isModEnabled('socialnetworks')) {
     foreach ($socialnetworks as $key => $value) {
@@ -312,11 +315,11 @@ if ($action == "change" && $user->hasRight('takepos', 'run')) { // Change custom
         $invoice->module_source = 'takepos';
         $invoice->pos_source = $_SESSION["takeposterminal"];
         $placeid = $invoice->create($user);
-        $sql = "UPDATE " . MAIN_DB_PREFIX . "facture set ref='(PROV-POS" . $_SESSION["takeposterminal"] . "-" . $place . ")' where rowid = " . ((int) $placeid);
+        $sql = "UPDATE " . MAIN_DB_PREFIX . "facture set ref='(PROV-POS" . $_SESSION["takeposterminal"] . "-" . $place . ")' where rowid = " . ((int)$placeid);
         $db->query($sql);
     }
 
-    $sql = "UPDATE " . MAIN_DB_PREFIX . "facture set fk_soc=" . ((int) $idcustomer) . " where ref='(PROV-POS" . $_SESSION["takeposterminal"] . "-" . $place . ")'";
+    $sql = "UPDATE " . MAIN_DB_PREFIX . "facture set fk_soc=" . ((int)$idcustomer) . " where ref='(PROV-POS" . $_SESSION["takeposterminal"] . "-" . $place . ")'";
     $resql = $db->query($sql);
 
     // set contact on invoice
@@ -326,17 +329,17 @@ if ($action == "change" && $user->hasRight('takepos', 'run')) { // Change custom
         $invoice->delete_linked_contact('external', 'BILLING');
     }
     $invoice->add_contact($idcontact, 'BILLING'); ?>
-        <script>
+    <script>
         console.log("Reload page invoice.php with place=<?php print $place; ?>");
-        parent.$("#poslines").load("invoice.php?place=<?php print $place; ?>", function() {
+        parent.$("#poslines").load("invoice.php?place=<?php print $place; ?>", function () {
             //parent.$("#poslines").scrollTop(parent.$("#poslines")[0].scrollHeight);
             <?php if (!$resql) { ?>
-                alert('Error failed to update customer on draft invoice.');
+            alert('Error failed to update customer on draft invoice.');
             <?php } ?>
             parent.$("#idcustomer").val(<?php echo $idcustomer; ?>);
             parent.$.colorbox.close(); /* Close the popup */
         });
-        </script>
+    </script>
     <?php
     exit;
 }
@@ -516,7 +519,7 @@ $reshook = $hookmanager->executeHooks('printFieldListFrom', $parameters, $object
 $sql .= $hookmanager->resPrint;
 $sql .= ' WHERE p.entity IN (' . getEntity('contact') . ')';
 if (!empty($userid)) {    // propre au commercial
-    $sql .= " AND p.fk_user_creat=" . ((int) $userid);
+    $sql .= " AND p.fk_user_creat=" . ((int)$userid);
 }
 if ($search_level) {
     $sql .= natural_search("p.fk_prospectlevel", implode(',', $search_level), 3);
@@ -527,13 +530,13 @@ if ($search_stcomm != '' && $search_stcomm != -2) {
 
 // Filter to exclude not owned private contacts
 if ($search_priv != '0' && $search_priv != '1') {
-    $sql .= " AND (p.priv='0' OR (p.priv='1' AND p.fk_user_creat=" . ((int) $user->id) . "))";
+    $sql .= " AND (p.priv='0' OR (p.priv='1' AND p.fk_user_creat=" . ((int)$user->id) . "))";
 } else {
     if ($search_priv == '0') {
         $sql .= " AND p.priv='0'";
     }
     if ($search_priv == '1') {
-        $sql .= " AND (p.priv='1' AND p.fk_user_creat=" . ((int) $user->id) . ")";
+        $sql .= " AND (p.priv='1' AND p.fk_user_creat=" . ((int)$user->id) . ")";
     }
 }
 // Search on sale representative
@@ -541,7 +544,7 @@ if (!empty($search_sale) && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . $db->prefix() . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . $db->prefix() . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . $db->prefix() . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 
@@ -557,9 +560,9 @@ if (!empty($searchCategoryContactList)) {
             $searchCategoryContactSqlList[] = "NOT EXISTS (SELECT ck.fk_socpeople FROM " . MAIN_DB_PREFIX . "categorie_contact as ck WHERE p.rowid = ck.fk_socpeople)";
         } elseif (intval($searchCategoryContact) > 0) {
             if ($searchCategoryContactOperator == 0) {
-                $searchCategoryContactSqlList[] = " EXISTS (SELECT ck.fk_socpeople FROM " . MAIN_DB_PREFIX . "categorie_contact as ck WHERE p.rowid = ck.fk_socpeople AND ck.fk_categorie = " . ((int) $searchCategoryContact) . ")";
+                $searchCategoryContactSqlList[] = " EXISTS (SELECT ck.fk_socpeople FROM " . MAIN_DB_PREFIX . "categorie_contact as ck WHERE p.rowid = ck.fk_socpeople AND ck.fk_categorie = " . ((int)$searchCategoryContact) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryContact);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryContact);
             }
         }
     }
@@ -589,9 +592,9 @@ if (!empty($searchCategoryCustomerList)) {
             $searchCategoryCustomerSqlList[] = "NOT EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as ck WHERE s.rowid = ck.fk_soc)";
         } elseif (intval($searchCategoryCustomer) > 0) {
             if ($searchCategoryCustomerOperator == 0) {
-                $searchCategoryCustomerSqlList[] = " EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as ck WHERE s.rowid = ck.fk_soc AND ck.fk_categorie = " . ((int) $searchCategoryCustomer) . ")";
+                $searchCategoryCustomerSqlList[] = " EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as ck WHERE s.rowid = ck.fk_soc AND ck.fk_categorie = " . ((int)$searchCategoryCustomer) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryCustomer);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryCustomer);
             }
         }
     }
@@ -621,9 +624,9 @@ if (!empty($searchCategorySupplierList)) {
             $searchCategorySupplierSqlList[] = "NOT EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_fournisseur as ck WHERE s.rowid = ck.fk_soc)";
         } elseif (intval($searchCategorySupplier) > 0) {
             if ($searchCategorySupplierOperator == 0) {
-                $searchCategorySupplierSqlList[] = " EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_fournisseur as ck WHERE s.rowid = ck.fk_soc AND ck.fk_categorie = " . ((int) $searchCategorySupplier) . ")";
+                $searchCategorySupplierSqlList[] = " EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_fournisseur as ck WHERE s.rowid = ck.fk_soc AND ck.fk_categorie = " . ((int)$searchCategorySupplier) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategorySupplier);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategorySupplier);
             }
         }
     }
@@ -730,7 +733,7 @@ if ($search_no_email != -1 && $search_no_email == 0) {
     $sql .= " AND (SELECT count(*) FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe WHERE email = p.email) = 0 AND p.email IS NOT NULL  AND p.email <> ''";
 }
 if ($search_status != '' && $search_status >= 0) {
-    $sql .= " AND p.statut = " . ((int) $search_status);
+    $sql .= " AND p.statut = " . ((int)$search_status);
 }
 if ($search_import_key) {
     $sql .= natural_search("p.import_key", $search_import_key);
@@ -745,7 +748,7 @@ if ($type == "o") {        // filter on type
     $sql .= " AND s.client IN (2, 3)";
 }
 if (!empty($socid)) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 if ($search_birthday_start) {
     $sql .= " AND p.birthday >= '" . $db->idate($search_birthday_start) . "'";
@@ -832,30 +835,30 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
 }
-$param .= '&begin=' . urlencode((string) ($begin)) . '&userid=' . urlencode((string) ($userid)) . '&contactname=' . urlencode((string) ($search_all));
+$param .= '&begin=' . urlencode((string)($begin)) . '&userid=' . urlencode((string)($userid)) . '&contactname=' . urlencode((string)($search_all));
 $param .= '&type=' . urlencode($type) . '&view=' . urlencode($view);
 if (!empty($search_sale) && $search_sale != '-1') {
     $param .= '&search_sale=' . urlencode($search_sale);
 }
 if (!empty($search_categ) && $search_categ != '-1') {
-    $param .= '&search_categ=' . urlencode((string) ($search_categ));
+    $param .= '&search_categ=' . urlencode((string)($search_categ));
 }
 if (!empty($search_categ_thirdparty) && $search_categ_thirdparty != '-1') {
-    $param .= '&search_categ_thirdparty=' . urlencode((string) ($search_categ_thirdparty));
+    $param .= '&search_categ_thirdparty=' . urlencode((string)($search_categ_thirdparty));
 }
 if (!empty($search_categ_supplier) && $search_categ_supplier != '-1') {
-    $param .= '&search_categ_supplier=' . urlencode((string) ($search_categ_supplier));
+    $param .= '&search_categ_supplier=' . urlencode((string)($search_categ_supplier));
 }
 if ($search_all != '') {
     $param .= '&search_all=' . urlencode($search_all);
 }
 if ($search_id > 0) {
-    $param .= "&search_id=" . urlencode((string) ($search_id));
+    $param .= "&search_id=" . urlencode((string)($search_id));
 }
 if ($search_lastname != '') {
     $param .= '&search_lastname=' . urlencode($search_lastname);
@@ -900,16 +903,16 @@ if ($search_email != '') {
     $param .= '&search_email=' . urlencode($search_email);
 }
 if ($search_no_email != '') {
-    $param .= '&search_no_email=' . urlencode((string) ($search_no_email));
+    $param .= '&search_no_email=' . urlencode((string)($search_no_email));
 }
 if ($search_status != '') {
-    $param .= '&search_status=' . urlencode((string) ($search_status));
+    $param .= '&search_status=' . urlencode((string)($search_status));
 }
 if ($search_priv == '0' || $search_priv == '1') {
     $param .= "&search_priv=" . urlencode($search_priv);
 }
 if ($search_stcomm != '') {
-    $param .= '&search_stcomm=' . urlencode((string) ($search_stcomm));
+    $param .= '&search_stcomm=' . urlencode((string)($search_stcomm));
 }
 if (is_array($search_level) && count($search_level)) {
     foreach ($search_level as $slevel) {
@@ -943,7 +946,7 @@ if (!empty($permissiontodelete)) {
 if (isModEnabled('category') && $user->hasRight('societe', 'creer')) {
     $arrayofmassactions['preaffecttag'] = img_picto('', 'category', 'class="pictofixedwidth"') . $langs->trans("AffectTag");
 }
-if (GETPOSTINT('nomassaction') || in_array($massaction, array('presend', 'predelete','preaffecttag'))) {
+if (GETPOSTINT('nomassaction') || in_array($massaction, array('presend', 'predelete', 'preaffecttag'))) {
     $arrayofmassactions = array();
 }
 
@@ -968,7 +971,7 @@ print '<input type="hidden" name="page_y" value="">';
 print '<input type="hidden" name="mode" value="' . $mode . '">';
 
 
-$newcardbutton  = '';
+$newcardbutton = '';
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewKanban'), '', 'fa fa-th-list imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=kanban' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ($mode == 'kanban' ? 2 : 1), array('morecss' => 'reposition'));
 $newcardbutton .= dolGetButtonTitleSeparator();
@@ -1399,7 +1402,7 @@ while ($i < $imaxinloop) {
         break; // Should not happen
     }
 
-    $arraysocialnetworks = (array) json_decode($obj->socialnetworks, true);
+    $arraysocialnetworks = (array)json_decode($obj->socialnetworks, true);
     $contactstatic->lastname = $obj->lastname;
     $contactstatic->firstname = '';
     $contactstatic->id = $obj->rowid;
@@ -1694,7 +1697,7 @@ while ($i < $imaxinloop) {
                     $titlealt = $val['label'];
                 }
                 if ($obj->stcomm_id != $val['id']) {
-                    print '<a class="pictosubstatus" href="' . $_SERVER["PHP_SELF"] . '?stcommcontactid=' . $obj->rowid . '&stcomm=' . urlencode((string) ($val['code'])) . '&action=setstcomm&token=' . newToken() . $param . ($page ? '&page=' . urlencode((string) ($page)) : '') . '">' . img_action($titlealt, $val['code'], $val['picto']) . '</a>';
+                    print '<a class="pictosubstatus" href="' . $_SERVER["PHP_SELF"] . '?stcommcontactid=' . $obj->rowid . '&stcomm=' . urlencode((string)($val['code'])) . '&action=setstcomm&token=' . newToken() . $param . ($page ? '&page=' . urlencode((string)($page)) : '') . '">' . img_action($titlealt, $val['code'], $val['picto']) . '</a>';
                 }
             }
             print '</div></div></td>';

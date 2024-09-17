@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2002-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2003		Jean-Louis Bergamo		<jlb@j1b.org>
- * Copyright (C) 2004-2016	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2014-2017	Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2015		Jean-François Ferry		<jfefe@aternatik.fr>
- * Copyright (C) 2016		Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2022       Charlene Benke          <charlene@patas-monkey.com>
+/* Copyright (C) 2002-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003		Jean-Louis Bergamo		    <jlb@j1b.org>
+ * Copyright (C) 2004-2016	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2014-2017	Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015		Jean-François Ferry		    <jfefe@aternatik.fr>
+ * Copyright (C) 2016		Marcos García			    <marcosgdf@gmail.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2022       Charlene Benke              <charlene@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -29,6 +29,12 @@
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormBank;
+use Dolibarr\Code\Core\Classes\FormCompany;
 
 /**
  *      \file       htdocs/compta/bank/card.php
@@ -40,7 +46,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formbank.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("banks", "bills", "categories", "companies", "compta", "withdrawals"));
@@ -345,7 +350,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View

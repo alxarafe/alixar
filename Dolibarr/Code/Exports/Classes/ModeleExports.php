@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005      Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2007 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2007  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,12 +18,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Exports\Classes;
+
+use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
+
 /**
  *  \file       htdocs/core/modules/export/modules_export.php
  *  \ingroup    export
  *  \brief      File of parent class for export modules
  */
-
 
 /**
  *  Parent class for export modules

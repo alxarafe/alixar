@@ -25,6 +25,8 @@
  *      \brief      Library for tax module (VAT)
  */
 
+use Dolibarr\Code\Core\Classes\Link;
+
 
 /**
  * Prepare array with list of tabs

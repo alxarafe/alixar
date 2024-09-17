@@ -27,7 +27,6 @@
  *       \brief      Fichier de la class des gestion leopard des codes produits
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product/modules_product.class.php';
 
 
 /**

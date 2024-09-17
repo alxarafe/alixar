@@ -1,18 +1,18 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005       Marc Barilley / Ocebo   <marc@ocebo.com>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2007       Franky Van Liedekerke   <franky.van.liedekerke@telenet.be>
- * Copyright (C) 2012       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2014       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2014       Teddy Andreotti         <125155@supinfo.com>
- * Copyright (C) 2015       Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2023  		Lenin Rivas	            <lenin.rivas777@gmail.com>
- * Copyright (C) 2023       Sylvain Legrand	        <technique@infras.fr>
- * Copyright (C) 2023		William Mead			<william.mead@manchenumerique.fr>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007       Franky Van Liedekerke       <franky.van.liedekerke@telenet.be>
+ * Copyright (C) 2012       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2014       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2014       Teddy Andreotti             <125155@supinfo.com>
+ * Copyright (C) 2015       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2023  		Lenin Rivas	                <lenin.rivas777@gmail.com>
+ * Copyright (C) 2023       Sylvain Legrand	            <technique@infras.fr>
+ * Copyright (C) 2023		William Mead			    <william.mead@manchenumerique.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -30,6 +30,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+
 /**
  *  \file       htdocs/compta/paiement.php
  *  \ingroup    invoice
@@ -39,6 +41,8 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
 
 // Load translation files required by the page
@@ -323,17 +327,13 @@ if (empty($reshook)) {
     }
 }
 
-
 /*
  * View
  */
 
 $form = new Form($db);
 
-
 llxHeader('', $langs->trans("Payment"));
-
-
 
 if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paiement') {
     $facture = new Facture($db);

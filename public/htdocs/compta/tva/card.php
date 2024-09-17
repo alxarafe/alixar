@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2013  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2023  Alexandre Spangaro      <aspangaro@easya.solutions>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2021       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2013  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2023  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\PaymentVAT;
+use Dolibarr\Code\Compta\Classes\Tva;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+
 /**
  *      \file       htdocs/compta/tva/card.php
  *      \ingroup    tax
@@ -30,7 +40,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/paymentvat.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/vat.lib.php';
 
 if (isModEnabled('accounting')) {
@@ -370,7 +379,6 @@ if (empty($reshook)) {
     // Actions to build doc
     include DOL_DOCUMENT_ROOT . '/core/actions_builddoc.inc.php';
 }
-
 
 /*
  *	View

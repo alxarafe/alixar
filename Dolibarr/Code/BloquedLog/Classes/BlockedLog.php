@@ -315,7 +315,6 @@ class BlockedLog
                 $this->error++;
             }
         } elseif ($this->element === 'cashcontrol') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/cashcontrol/class/cashcontrol.class.php';
 
             $object = new CashControl($this->db);
             if ($object->fetch($this->fk_object) > 0) {

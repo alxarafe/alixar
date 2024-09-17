@@ -31,7 +31,6 @@ use Dolibarr\Code\Contact\Classes\Contact;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentjobposition.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/lib/recruitment_recruitmentjobposition.lib.php';
 
 

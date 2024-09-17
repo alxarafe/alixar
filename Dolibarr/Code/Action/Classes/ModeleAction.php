@@ -22,7 +22,10 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Action\Classes;
+
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
 
 /**
  *  \class      ModeleAction

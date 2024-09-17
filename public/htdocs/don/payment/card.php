@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2015       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\Don\Classes\PaymentDonation;
+
 /**
  *      \file       htdocs/don/payment/card.php
  *      \ingroup    donations
@@ -26,8 +31,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-if (isModEnabled("bank")) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("bills", "banks", "companies", "donations"));
@@ -137,7 +140,6 @@ if (isModEnabled("bank")) {
 }
 
 print '</table>';
-
 
 /*
  * List of donations paid

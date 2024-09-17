@@ -726,7 +726,6 @@ class Reception extends CommonObject
      */
     public function getStatusDispatch()
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 
         $status = CommandeFournisseur::STATUS_RECEIVED_PARTIALLY;
 
@@ -1194,7 +1193,6 @@ class Reception extends CommonObject
 		// phpcs:enable
         $this->lines = array();
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 
         $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "receptiondet_batch";
         $sql .= " WHERE fk_reception = " . ((int) $this->id);

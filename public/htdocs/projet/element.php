@@ -45,7 +45,6 @@ if (isModEnabled('agenda')) {
 if (isModEnabled('bank')) {
 }
 if (isModEnabled('deplacement')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 }
 if (isModEnabled('don')) {
 }

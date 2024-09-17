@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2015-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2021 Nicolas ZABOURI	<info@inovea-conseil.com>
- * Copyright (C) 2018 	   Juanjo Menent  <jmenent@2byte.es>
- * Copyright (C) 2019 	   Ferran Marcet  <fmarcet@2byte.es>
- * Copyright (C) 2019-2021 Frédéric France <frederic.france@netlogic.fr>
+/* Copyright (C) 2015-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2021  Nicolas ZABOURI	            <info@inovea-conseil.com>
+ * Copyright (C) 2018 	    Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2019 	    Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2019-2021  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
 
 /**
  *    \file            htdocs/core/actions_massactions.inc.php

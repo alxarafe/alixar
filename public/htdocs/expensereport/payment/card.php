@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2015-2017  Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2015-2017  Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
 
 /**
  *      \file       htdocs/expensereport/payment/card.php
@@ -71,7 +77,6 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('expense
         $db->rollback();
     }
 }
-
 
 /*
  * View

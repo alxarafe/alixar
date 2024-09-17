@@ -32,7 +32,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/reception.lib.php';
 if (isModEnabled('project')) {
     }
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 
 $langs->loadLangs(array("receptions", "companies", "bills", 'deliveries', 'orders', 'stocks', 'other', 'propal'));
 

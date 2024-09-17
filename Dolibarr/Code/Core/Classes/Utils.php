@@ -207,7 +207,6 @@ class Utils
 
                 // Update cachenbofdoc
                 if (isModEnabled('ecm') && $choice == 'allfiles') {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmdirectory.class.php';
                     $ecmdirstatic = new EcmDirectory($this->db);
                     $result = $ecmdirstatic->refreshcachenboffile(1);
                 }

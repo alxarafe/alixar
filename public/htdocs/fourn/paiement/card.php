@@ -395,7 +395,6 @@ if ($result > 0) {
         print '<div class="fichecenter"><div class="fichehalfleft">';
 
         // Generated documents
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/supplier_payment/modules_supplier_payment.php';
         $modellist = ModelePDFSuppliersPayments::liste_modeles($db);
         if (is_array($modellist)) {
             $ref = dol_sanitizeFileName($object->ref);

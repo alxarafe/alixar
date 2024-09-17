@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2006 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2014 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2015-2018 Charlene BENKE  	<charlie@patas-monkey.com>
- * Copyright (C) 2020      Maxime DEMAREST <maxime@indelog.fr>
+/* Copyright (C) 2003-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015-2018  Charlene BENKE  	        <charlie@patas-monkey.com>
+ * Copyright (C) 2020       Maxime DEMAREST             <maxime@indelog.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,10 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  *  \file       htdocs/core/modules/rapport/pdf_paiement.class.php
  *  \ingroup    banque
@@ -29,7 +33,6 @@
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-
 
 /**
  *  Class to manage reporting of payments

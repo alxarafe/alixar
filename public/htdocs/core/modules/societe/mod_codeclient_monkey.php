@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2007	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2006-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2007	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2006-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,14 +22,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\ModeleThirdPartyCode;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *       \file       htdocs/core/modules/societe/mod_codeclient_monkey.php
  *       \ingroup    societe
  *       \brief      Fichier de la class des gestion lion des codes clients
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/societe/modules_societe.class.php';
-
 
 /**
  *  Class permettant la gestion monkey des codes tiers
@@ -62,7 +63,6 @@ class mod_codeclient_monkey extends ModeleThirdPartyCode
         $this->prefixIsRequired = 0;
     }
 
-
     /**
      *  Return description of module
      *
@@ -87,7 +87,6 @@ class mod_codeclient_monkey extends ModeleThirdPartyCode
     {
         return $this->prefixcustomer . '0901-00001<br>' . $this->prefixsupplier . '0901-00001';
     }
-
 
     /**
      *  Return next value

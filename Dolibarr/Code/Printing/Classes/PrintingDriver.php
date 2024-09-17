@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2023 Frederic France      <frederic.france@netlogic.fr>
+ * Copyright (C) 2014-2023  Frederic France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,10 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Printing\Classes;
+
+use DoliDB;
+
 /**
  *      \file       htdocs/core/modules/printing/modules_printing.php
  *      \ingroup    printing
@@ -28,7 +32,6 @@
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-
 
 /**
  *      Parent class of emailing target selectors modules

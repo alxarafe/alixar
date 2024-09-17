@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2004  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2018       Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2019      Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2023-2024	William Mead			<william.mead@manchenumerique.fr>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2018       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2019       Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2023-2024	William Mead			    <william.mead@manchenumerique.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,6 +25,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ContratLigne;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/contrat/services_list.php
  *      \ingroup    contrat
@@ -32,9 +40,6 @@
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once DOL_DOCUMENT_ROOT . "/contrat/class/contrat.class.php";
-require_once DOL_DOCUMENT_ROOT . "/product/class/product.class.php";
-require_once DOL_DOCUMENT_ROOT . "/societe/class/societe.class.php";
 
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'contracts', 'companies'));
@@ -108,7 +113,6 @@ $opcloturemonth = GETPOSTINT('opcloturemonth');
 $opclotureday = GETPOSTINT('opclotureday');
 $opclotureyear = GETPOSTINT('opclotureyear');
 $filter_opcloture = GETPOST('filter_opcloture', 'alpha');
-
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $object = new ContratLigne($db);
@@ -781,7 +785,6 @@ if (!getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
     $totalarray['nbfield']++;
 }
 print '</tr>' . "\n";
-
 
 // Loop on record
 // --------------------------------------------------------------------

@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2004-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005      Simon Tosser         <simon@kornog-computing.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010	   Pierre Morin         <pierre.morin@auguria.net>
- * Copyright (C) 2013      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2024      MDW                  <mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2004-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Simon Tosser                <simon@kornog-computing.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010	    Pierre Morin                <pierre.morin@auguria.net>
+ * Copyright (C) 2013       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2024       MDW                         <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,12 +23,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+
 /**
  *  \file       htdocs/core/ajax/ajaxdirpreview.php
  *  \brief      Service to return a HTML preview of a directory
  *              Call of this service is made with URL:
  *              ajaxdirpreview.php?mode=nojs&action=preview&module=ecm&section=0&file=xxx
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', 1); // Disables token renewal
@@ -46,7 +51,6 @@ if (!defined('NOREQUIREAJAX')) {
 if (!isset($mode) || $mode != 'noajax') {    // For ajax call
     require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmdirectory.class.php';
 
     $action = GETPOST('action', 'aZ09');
     $file = urldecode(GETPOST('file', 'alpha'));
@@ -186,7 +190,6 @@ if (!empty($websitekey)) {
 if (!empty($pageid)) {
     $param .= '&pageid=' . ((int) $pageid);
 }
-
 
 // Dir scan
 if ($type == 'directory') {
@@ -394,8 +397,6 @@ if ($type == 'directory') {
     }
 }
 
-
-
 // Bottom of page
 $useajax = 1;
 if (!empty($conf->dol_use_jmobile)) {
@@ -420,7 +421,6 @@ if ($useajax || $action == 'deletefile') {
         $section_dir = GETPOST("file", "alpha");
     }
     $section_id = $section;
-
 
     $form = new Form($db);
     $formquestion = array();

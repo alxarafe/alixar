@@ -54,23 +54,9 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product/modules_product.class.php';
 
-
-
-
-if (isModEnabled('propal')) {
-}
-if (isModEnabled('invoice')) {
-}
-if (isModEnabled('order')) {
-}
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-}
-if (isModEnabled('bom')) {
-}
-if (isModEnabled('workstation')) {
 }
 
 // Load translation files required by the page

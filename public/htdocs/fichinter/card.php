@@ -43,7 +43,6 @@ if (isModEnabled('project')) {
     }
 if (isModEnabled('contract')) {
     require_once DOL_DOCUMENT_ROOT . "/core/class/html.formcontract.class.php";
-    require_once DOL_DOCUMENT_ROOT . "/contrat/class/contrat.class.php";
 }
 if (getDolGlobalString('FICHEINTER_ADDON') && is_readable(DOL_DOCUMENT_ROOT . "/core/modules/fichinter/mod_" . getDolGlobalString('FICHEINTER_ADDON') . ".php")) {
     require_once DOL_DOCUMENT_ROOT . "/core/modules/fichinter/mod_" . getDolGlobalString('FICHEINTER_ADDON') . '.php';

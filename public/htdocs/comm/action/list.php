@@ -60,7 +60,7 @@ $optioncss  = GETPOST('optioncss', 'alpha');
 $disabledefaultvalues = GETPOSTINT('disabledefaultvalues');
 
 $mode = GETPOST('mode', 'aZ09');
-if (empty($mode) && preg_match('/show_/', $action)) {
+if (empty($mode) && str_contains($action, 'show_')) {
     $mode = $action;    // For backward compatibility
 }
 $resourceid = GETPOSTINT("search_resourceid") ? GETPOSTINT("search_resourceid") : GETPOSTINT("resourceid");

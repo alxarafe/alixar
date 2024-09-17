@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2004-2006 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010-2021 Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2014      Cedric Gross         <c.gross@kreiz-it.fr>
- * Copyright (C) 2016      Florian Henry        <florian.henry@atm-consulting.fr>
- * Copyright (C) 2017-2022 Ferran Marcet        <fmarcet@2byte.es>
- * Copyright (C) 2018-2022 Frédéric France      <frederic.france@netlogic.fr>
- * Copyright (C) 2019-2020 Christophe Battarel	<christophe@altairis.fr>
+/* Copyright (C) 2004-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2021  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2014       Cedric Gross                <c.gross@kreiz-it.fr>
+ * Copyright (C) 2016       Florian Henry               <florian.henry@atm-consulting.fr>
+ * Copyright (C) 2017-2022  Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018-2022  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2019-2020  Christophe Battarel	        <christophe@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+
 /**
  * \file    htdocs/expedition/dispatch.php
  * \ingroup expedition
@@ -35,10 +41,7 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/sendings.lib.php';
-if (isModEnabled('project')) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("sendings", "companies", "bills", 'deliveries', 'orders', 'stocks', 'other', 'propal', 'receptions'));

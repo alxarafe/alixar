@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2006	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2012		Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2012       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2014-2020  Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2015  		Benoit Bruchard			<benoitb21@gmail.com>
- * Copyright (C) 2015  		Benjamin Neumann <btdn@sigsoft.org>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2006	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2014-2020  Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015  		Benoit Bruchard			    <benoitb21@gmail.com>
+ * Copyright (C) 2015  		Benjamin Neumann            <btdn@sigsoft.org>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,15 +24,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\Don\Classes\ModeleDon;
+
 /**
  *  \file       htdocs/core/modules/dons/html_generic.modules.php
  *  \ingroup    don
  *  \brief      Form of donation
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/dons/modules_don.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-
 
 /**
  *  Class to generate document for a generic donations receipt

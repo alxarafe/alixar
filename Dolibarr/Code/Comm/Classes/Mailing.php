@@ -490,7 +490,6 @@ class Mailing extends CommonObject
         if (!$error) {
             // Clone recipient targets
             if (!empty($option2)) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/mailings/modules_mailings.php';
 
                 $mailing_target = new MailingTargets($this->db);
 

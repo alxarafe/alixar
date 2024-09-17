@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010-2013 Juanjo Menent 		<jmenent@2byte.es>
- * Copyright (C) 2005-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2013  Juanjo Menent 		        <jmenent@2byte.es>
+ * Copyright (C) 2005-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\LignePrelevement;
+use Dolibarr\Code\Compta\Classes\RejetPrelevement;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/compta/prelevement/rejets.php
  *      \ingroup    prelevement
@@ -28,8 +33,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/rejetprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/ligneprelevement.class.php';
 
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
@@ -90,7 +93,6 @@ $thirdpartystatic = new Societe($db);
 $userstatic = new User($db);
 
 $hookmanager->initHooks(array('withdrawalsreceiptsrejectedlist'));
-
 
 // List of invoices
 

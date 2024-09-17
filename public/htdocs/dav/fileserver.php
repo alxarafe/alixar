@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2018   Destailleur Laurent <eldy@users.sourceforge.net>
- * Copyright (C) 2019	Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2018       Destailleur Laurent         <eldy@users.sourceforge.net>
+ * Copyright (C) 2019	    Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *

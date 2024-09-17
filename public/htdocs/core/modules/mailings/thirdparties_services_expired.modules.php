@@ -1,13 +1,16 @@
 <?php
 
-/* Copyright (C) 2005-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
-* This file is an example to follow to add your own email selector inside
-* the Dolibarr email tool.
-* Follow instructions given in README file to know what to change to build
-* your own emailing list selector.
-* Code that need to be changed in this file are marked by "CHANGE THIS" tag.
-*/
+ * This file is an example to follow to add your own email selector inside
+ * the Dolibarr email tool.
+ * Follow instructions given in README file to know what to change to build
+ * your own emailing list selector.
+ * Code that need to be changed in this file are marked by "CHANGE THIS" tag.
+ */
+
+use Dolibarr\Code\Mailing\Classes\MailingTargets;
 
 /**
  *  \file       htdocs/core/modules/mailings/thirdparties_services_expired.modules.php
@@ -15,9 +18,7 @@
  *  \brief      File of class to offer a selector of emailing targets with Rule 'services expired'.
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/modules/mailings/modules_mailings.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-
 
 /**
  *  Class to offer a selector of emailing targets with Rule 'services expired'.

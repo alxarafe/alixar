@@ -1,8 +1,8 @@
-M<?php
+<?php
 
-/* Copyright (C) 2003-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,11 @@ M<?php
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Mailing\Classes;
+
+use DoliDB;
+use Exception;
+
 /**
  *      \file       htdocs/core/modules/mailings/modules_mailings.php
  *      \ingroup    mailing
@@ -27,7 +32,6 @@ M<?php
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
-
 
 /**
  *      Parent class of emailing target selectors modules

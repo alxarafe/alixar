@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2004-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2018 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Benoit Mortier       <benoit.mortier@opensides.be>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2007      Franky Van Liedekerke <franky.van.liedekerke@telenet.be>
- * Copyright (C) 2013      Florian Henry		<florian.henry@open-concept.pro>
- * Copyright (C) 2013-2016 Alexandre Spangaro 	<aspangaro@open-dsi.fr>
- * Copyright (C) 2014      Juanjo Menent	 	<jmenent@2byte.es>
- * Copyright (C) 2015      Jean-François Ferry	<jfefe@aternatik.fr>
+/* Copyright (C) 2004-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007       Franky Van Liedekerke       <franky.van.liedekerke@telenet.be>
+ * Copyright (C) 2013       Florian Henry		        <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2016  Alexandre Spangaro 	        <aspangaro@open-dsi.fr>
+ * Copyright (C) 2014       Juanjo Menent	 	        <jmenent@2byte.es>
+ * Copyright (C) 2015       Jean-François Ferry	        <jfefe@aternatik.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+
 /**
  *       \file       htdocs/contact/card.php
  *       \ingroup    societe
@@ -33,17 +35,15 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contact.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
-use Dolibarr\Code\User\Classes\User;
-
-use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Canvas;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
@@ -137,7 +137,6 @@ if (empty($reshook)) {
         $search_agenda_label = '';
     }
 }
-
 
 /*
  *	View

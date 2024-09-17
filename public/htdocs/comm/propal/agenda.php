@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2023 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2023       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *  \file       htdocs/comm/propal/agenda.php
@@ -120,8 +122,6 @@ if (empty($reshook)) {
     }
 }
 
-
-
 /*
  *	View
  */
@@ -137,7 +137,6 @@ if ($object->id > 0) {
         $langs->load("mails");
     }
     $head = propal_prepare_head($object);
-
 
     print dol_get_fiche_head($head, 'agenda', $langs->trans("Proposal"), -1, $object->picto);
 
@@ -174,7 +173,6 @@ if ($object->id > 0) {
     }
     $morehtmlref .= '</div>';
 
-
     dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref);
 
     print '<div class="fichecenter">';
@@ -186,8 +184,6 @@ if ($object->id > 0) {
     print '</div>';
 
     print dol_get_fiche_end();
-
-
 
     // Actions buttons
 

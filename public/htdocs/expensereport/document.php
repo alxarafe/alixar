@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville  <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015 Laurent Destailleur   <eldy@users.sourceforge.net>
- * Copyright (C) 2005      Marc Barilley / Ocebo <marc@ocebo.com>
- * Copyright (C) 2005-2009 Regis Houssin         <regis.houssin@inodbox.com>
- * Copyright (C) 2005      Simon TOSSER          <simon@kornog-computing.com>
- * Copyright (C) 2011-2012 Juanjo Menent         <jmenent@2byte.es>
- * Copyright (C) 2013      Cédric Salvador       <csalvador@gpcsolutions.fr>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2005       Simon TOSSER                <simon@kornog-computing.com>
+ * Copyright (C) 2011-2012  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 
 /**
  *       \file       htdocs/expensereport/document.php

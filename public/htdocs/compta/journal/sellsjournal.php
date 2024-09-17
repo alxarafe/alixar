@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2007-2010  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2007-2010  Jean Heimburger         <jean@tiaris.info>
- * Copyright (C) 2011-2014  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2012       Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2012  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2012       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2013       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2014       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2007-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007-2010  Jean Heimburger             <jean@tiaris.info>
+ * Copyright (C) 2011-2014  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2012       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2012  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2012       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2014       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\FactureLigne;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Client;
 
 /**
  *      \file       htdocs/compta/journal/sellsjournal.php
@@ -65,8 +70,6 @@ $hookmanager->initHooks(['selljournallist']);
  */
 
 // None
-
-
 
 /*
  * View

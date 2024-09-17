@@ -24,6 +24,7 @@
 namespace Dolibarr\Code\User\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
 
 /**
  *      \class      ModeleProductCode

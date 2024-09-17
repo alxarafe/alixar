@@ -37,7 +37,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/reception.lib.php';
 if (isModEnabled('project')) {
 }
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('receptions', 'companies', 'other'));

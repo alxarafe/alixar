@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2005-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2005-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Exports\Classes\Export;
+use Dolibarr\Code\Exports\Classes\ModeleExports;
+
 /**
  *       \file       htdocs/exports/index.php
  *       \ingroup    export
@@ -24,7 +28,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/exports/class/export.class.php';
 
 // Load translation files required by the page
 $langs->load("exports");
@@ -72,7 +75,6 @@ print '<td>' . $langs->trans("LibraryShort") . '</td>';
 print '<td class="right">' . $langs->trans("LibraryVersion") . '</td>';
 print '</tr>';
 
-include_once DOL_DOCUMENT_ROOT . '/core/modules/export/modules_export.php';
 $model = new ModeleExports($db);
 $liste = $model->listOfAvailableExportFormat($db); // This is not a static method for exports because method load non static properties
 

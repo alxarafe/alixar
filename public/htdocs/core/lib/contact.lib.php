@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2006-2010  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2010-2017  Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2021  Frederic France     <frederic.france@netlogic.fr>
- * Copyright (C) 2015       Raphaël Doursenaud  <rdoursenaud@gpcsolutions.fr>
+/* Copyright (C) 2006-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2017  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2021  Frederic France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *      \file       htdocs/core/lib/contact.lib.php
@@ -217,7 +223,6 @@ function show_contacts_projects($conf, $langs, $db, $object, $backtopage = '', $
             print '</tr>';
 
             if ($num > 0) {
-
                 $projecttmp = new Project($db);
 
                 $i = 0;

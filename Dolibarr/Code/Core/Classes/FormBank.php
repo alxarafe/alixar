@@ -21,6 +21,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Compta\Classes\Account;
 use DoliDB;
 
 /**

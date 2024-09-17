@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,7 +22,11 @@
  * $formalreadyopen can be set to 1 to avoid to open the <form> to submit files a second time
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+
 // Protection to avoid direct call of template
+
 if (empty($conf) || !is_object($conf)) {
     print "Error, template page filemanager.tpl.php can't be called as URL";
     exit;
@@ -35,7 +39,6 @@ if (empty($conf) || !is_object($conf)) {
 
 <?php
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmdirectory.class.php';
 
 $langs->load("ecm");
 

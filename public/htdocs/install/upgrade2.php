@@ -1985,7 +1985,6 @@ function migrate_modeles($db, $langs, $conf)
     dolibarr_install_syslog("upgrade2::migrate_modeles");
 
     if (isModEnabled('invoice')) {
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/facture/modules_facture.php';
         $modellist = ModelePDFFactures::liste_modeles($db);
         if (count($modellist) == 0) {
             // Aucun model par default.
@@ -1998,7 +1997,6 @@ function migrate_modeles($db, $langs, $conf)
     }
 
     if (isModEnabled('order')) {
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/commande/modules_commande.php';
         $modellist = ModelePDFCommandes::liste_modeles($db);
         if (count($modellist) == 0) {
             // Aucun model par default.
@@ -2011,7 +2009,6 @@ function migrate_modeles($db, $langs, $conf)
     }
 
     if (isModEnabled("shipping")) {
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/expedition/modules_expedition.php';
         $modellist = ModelePdfExpedition::liste_modeles($db);
         if (count($modellist) == 0) {
             // Aucun model par default.

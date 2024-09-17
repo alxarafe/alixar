@@ -21,6 +21,8 @@
  */
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
 
 /**
  *      \file       htdocs/core/lib/expensereport.lib.php

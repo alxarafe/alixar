@@ -30,7 +30,6 @@
  *  \brief      File of class to build ODT documents for third parties
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
@@ -44,7 +43,6 @@ if (isModEnabled('invoice')) {
 if (isModEnabled('invoice')) {
 }
 if (isModEnabled('deplacement')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 }
 if (isModEnabled('shipping')) {
 }

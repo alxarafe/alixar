@@ -24,6 +24,7 @@
 namespace Dolibarr\Code\FactureFournisseur\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
 
 /**
  *      \file       htdocs/core/modules/supplier_invoice/modules_facturefournisseur.php

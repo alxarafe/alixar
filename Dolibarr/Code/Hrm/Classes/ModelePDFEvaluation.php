@@ -27,6 +27,7 @@
 namespace Dolibarr\Code\Hrm\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
 
 /**
  *  \file           htdocs/core/modules/hrm/modules_evaluation.php

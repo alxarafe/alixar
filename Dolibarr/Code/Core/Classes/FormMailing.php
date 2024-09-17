@@ -55,7 +55,6 @@ class FormMailing extends Form
 
         $langs->load("mails");
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/mailing/class/mailing.class.php';
         $mailing = new Mailing($this->db);
 
         $options = array();

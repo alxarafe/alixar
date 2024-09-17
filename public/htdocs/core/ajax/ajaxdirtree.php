@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2007-2018  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2007-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Ecm\Classes\EcmDirectory;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *      \file       htdocs/core/ajax/ajaxdirtree.php

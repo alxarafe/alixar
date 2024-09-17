@@ -27,8 +27,6 @@
  *  \brief      Fichier contenant la class du modele de numerotation de reference de livraison Saphir
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/delivery/modules_delivery.php';
-
 /**
  *  \class      mod_delivery_saphir
  *  \brief      Class du modele de numerotation de reference de livraison Saphir

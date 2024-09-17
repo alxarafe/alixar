@@ -29,13 +29,11 @@ use Dolibarr\Code\Contrat\Classes\Contrat;
  *  \brief      File of class to generate project document beluga
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 
 /**
  *  Class to manage generation of project document Beluga

@@ -30,6 +30,7 @@ namespace Dolibarr\Code\Compta\Classes;
  *      \brief      File for the ChargesSociales class
  */
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) ---Put here your own copyright and developer email---
- * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+/* Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  * \file    htdocs/eventorganization/lib/eventorganization_conferenceorbooth.lib.php

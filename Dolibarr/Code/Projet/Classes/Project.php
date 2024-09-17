@@ -31,7 +31,9 @@ namespace Dolibarr\Code\Projet\Classes;
 
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *      \file       htdocs/projet/class/project.class.php

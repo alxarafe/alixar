@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,11 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\PrintSheet\Classes;
+
+use Dolibarr\Code\Core\Classes\Translate;
+use DoliDB;
+
 /**
  *  \file       htdocs/core/modules/printsheet/modules_labels.php
  *  \ingroup    member
@@ -29,7 +34,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-
 
 /**
  *  Parent class of document generator for address sheet.

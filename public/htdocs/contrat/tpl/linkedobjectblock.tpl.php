@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2011 Regis Houssin <regis.houssin@inodbox.com>
- * Copyright (C) 2018      Juanjo Menent <jmenent@2byte.es>
+/* Copyright (C) 2010-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2018       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,9 +24,7 @@ if (empty($conf) || !is_object($conf)) {
     exit(1);
 }
 
-
 print "<!-- BEGIN PHP TEMPLATE contrat/tpl/linkedobjectblock.tpl.php -->\n";
-
 
 global $user;
 global $noMoreLinkedObjectBlockAfter;

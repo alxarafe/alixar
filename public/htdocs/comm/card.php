@@ -1,17 +1,17 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville        <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2020 Laurent Destailleur         <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne                 <eric.seigne@ryxeo.com>
- * Copyright (C) 2006      Andre Cianfarani            <acianfa@free.fr>
- * Copyright (C) 2005-2017 Regis Houssin               <regis.houssin@inodbox.com>
- * Copyright (C) 2008      Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
- * Copyright (C) 2010-2020 Juanjo Menent               <jmenent@2byte.es>
- * Copyright (C) 2013      Alexandre Spangaro          <aspangaro@open-dsi.fr>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2005-2017  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008       Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
+ * Copyright (C) 2010-2020  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2021-2024  Frédéric France             <frederic.france@free.fr>
- * Copyright (C) 2015      Marcos García               <marcosgdf@gmail.com>
- * Copyright (C) 2020      Open-Dsi         		   <support@open-dsi.fr>
- * Copyright (C) 2022      Anthony Berton     			<anthony.berton@bb2a.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2020       Open-Dsi         		    <support@open-dsi.fr>
+ * Copyright (C) 2022       Anthony Berton     			<anthony.berton@bb2a.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,21 @@
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\FactureRec;
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ContratLigne;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Societe\Classes\Client;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *       \file       htdocs/comm/card.php
@@ -44,6 +58,7 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
+
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'banks'));
 
@@ -121,7 +136,6 @@ if ($user->socid > 0) {
     $id = $user->socid;
 }
 $result = restrictedArea($user, 'societe', $object->id, '&societe', '', 'fk_soc', 'rowid', 0);
-
 
 /*
  * Actions
@@ -280,7 +294,6 @@ if (empty($reshook)) {
         $result = $object->setWarehouse(GETPOSTINT('fk_warehouse'));
     }
 }
-
 
 /*
  * View

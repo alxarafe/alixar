@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2020       Maxime Kohlhaas         <maxime@atm-consulting.fr>
+/* Copyright (C) 2020       Maxime Kohlhaas             <maxime@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *     \file        htdocs/compta/stats/supplier_turnover_by_prodserv.php
  *     \brief      Page reporting purchase turnover by Products & Services
@@ -29,6 +31,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/tax.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\FormOther;
 
 
 // Load translation files required by the page

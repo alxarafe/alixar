@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2021	Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004		Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2011	Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015       Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2019       Nicolas ZABOURI      <info@inovea-conseil.com>
- * Copyright (C) 2019-2024  Frédéric France      <frederic.france@free.fr>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2021	Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2011	Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/expensereport/index.php
@@ -67,7 +72,6 @@ if ($user->socid) {
     $socid = $user->socid;
 }
 $result = restrictedArea($user, 'expensereport', '', '');
-
 
 /*
  * View

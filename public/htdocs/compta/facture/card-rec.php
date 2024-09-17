@@ -28,13 +28,28 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\FactureLigneRec;
+use Dolibarr\Code\Compta\Classes\FactureRec;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Facture\Classes\ModelePDFFactures;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/compta/facture/card-rec.php
  *  \ingroup    invoice
  *  \brief      Page to show predefined invoice
  */
-
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -1106,7 +1121,6 @@ if ($action == 'create') {
 
         // Model pdf
         print "<tr><td>" . $langs->trans('Model') . "</td><td>";
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/facture/modules_facture.php';
         $list = ModelePDFFactures::liste_modeles($db);
         print img_picto('', 'generic', 'class="pictofixedwidth"');
         // @phan-suppress-next-line PhanPluginSuspiciousParamOrder
@@ -1516,7 +1530,6 @@ if ($action == 'create') {
         print '</tr></table>';
         print '</td><td>';
         if ($action == 'editmodelpdf') {
-            include_once DOL_DOCUMENT_ROOT . '/core/modules/facture/modules_facture.php';
             $list = array();
             $models = ModelePDFFactures::liste_modeles($db);
             foreach ($models as $k => $model) {

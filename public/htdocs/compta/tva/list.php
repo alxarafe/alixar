@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2020	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2011-2019	Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2020		Tobias Sekan			<tobias.sekan@startmail.com>
- * Copyright (C) 2021       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2020	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2019	Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2020		Tobias Sekan			    <tobias.sekan@startmail.com>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,6 +24,12 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\Tva;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
 
 /**
  *  \file       htdocs/compta/tva/list.php
@@ -33,7 +39,6 @@ use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 // Load translation files required by the page
@@ -149,7 +154,6 @@ if (empty($reshook)) {
     $uploaddir = $conf->tax->dir_output;
     include DOL_DOCUMENT_ROOT . '/core/actions_massactions.inc.php';
 }
-
 
 /*
  * View

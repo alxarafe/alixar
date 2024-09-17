@@ -1,25 +1,25 @@
 <?php
 
-/* Copyright (C) 2002-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2004-2016	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005		Marc Barilley / Ocebo	<marc@ocebo.com>
- * Copyright (C) 2005-2015	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2006		Andre Cianfarani		<acianfa@free.fr>
- * Copyright (C) 2010-2020	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2012		Christophe Battarel		<christophe.battarel@altairis.fr>
- * Copyright (C) 2013		Florian Henry			<florian.henry@open-concept.pro>
- * Copyright (C) 2013		Cédric Salvador			<csalvador@gpcsolutions.fr>
- * Copyright (C) 2015		Jean-François Ferry		<jfefe@aternatik.fr>
- * Copyright (C) 2015-2022	Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2017		Josep Lluís Amador		<joseplluis@lliuretic.cat>
- * Copyright (C) 2018		Charlene Benke			<charlie@patas-monkey.com>
- * Copyright (C) 2019-2021	Alexandre Spangaro		<aspangaro@open-dsi.fr>
+/* Copyright (C) 2002-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004		Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2004-2016	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005		Marc Barilley / Ocebo	    <marc@ocebo.com>
+ * Copyright (C) 2005-2015	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2006		Andre Cianfarani		    <acianfa@free.fr>
+ * Copyright (C) 2010-2020	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2012		Christophe Battarel		    <christophe.battarel@altairis.fr>
+ * Copyright (C) 2013		Florian Henry			    <florian.henry@open-concept.pro>
+ * Copyright (C) 2013		Cédric Salvador			    <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015		Jean-François Ferry		    <jfefe@aternatik.fr>
+ * Copyright (C) 2015-2022	Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2017		Josep Lluís Amador		    <joseplluis@lliuretic.cat>
+ * Copyright (C) 2018		Charlene Benke			    <charlie@patas-monkey.com>
+ * Copyright (C) 2019-2021	Alexandre Spangaro		    <aspangaro@open-dsi.fr>
  * Copyright (C) 2023		Nick Fragoulis
- * Copyright (C) 2023		Joachim Kueter			<git-jk@bloxera.com>
- * Copyright (C) 2024		MDW						<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
- * Copyright (C) 2021-2024 	Anthony Berton			<anthony.berton@bb2a.fr>
+ * Copyright (C) 2023		Joachim Kueter			    <git-jk@bloxera.com>
+ * Copyright (C) 2024		MDW						    <mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
+ * Copyright (C) 2021-2024 	Anthony Berton			    <anthony.berton@bb2a.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -36,8 +36,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\FactureRec;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormMargin;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/compta/facture/list.php
@@ -47,9 +60,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-if (isModEnabled('margin')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
-}
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -583,8 +593,6 @@ if ($action == 'makepayment_confirm' && $user->hasRight('facture', 'paiement')) 
         }
     }
 }
-
-
 
 /*
  * View

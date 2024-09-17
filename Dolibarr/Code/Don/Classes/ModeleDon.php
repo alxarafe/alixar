@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005      Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005       Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,12 +21,16 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Don\Classes;
+
+use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
+
 /**
  *      \file       htdocs/core/modules/dons/modules_don.php
  *      \ingroup    donations
  *      \brief      File of class to manage donation document generation
  */
-
 
 /**
  *  Parent class of subscription templates
@@ -52,13 +56,4 @@ abstract class ModeleDon extends CommonDocGenerator
 
         return $list;
     }
-}
-
-
-/**
- *  Parent class of donation numbering templates
- */
-abstract class ModeleNumRefDons extends CommonNumRefGenerator
-{
-    // No overload code
 }

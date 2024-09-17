@@ -25,6 +25,7 @@
 namespace Dolibarr\Code\Cheque\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
 
 /**
  *  Class parent for templates of document generation

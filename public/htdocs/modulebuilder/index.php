@@ -6019,7 +6019,6 @@ if ($module == 'initmodule') {
 
         if ($tab == 'emailings') {
             print '<!-- tab=emailings -->' . "\n";
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/mailings/modules_mailings.php';
 
             $emailingselectors = MailingTargets::getEmailingSelectorsList(array('/' . strtolower($module) . '/core/modules/mailings'));
 

@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2004-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2020 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011      Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2013      Florian Henry		<florian.henry@open-concept.pro>
+/* Copyright (C) 2004-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011       Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2013       Florian Henry		        <florian.henry@open-concept.pro>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+
 /**
  *  \file       htdocs/compta/paymentbybanktransfer/index.php
  *  \ingroup    paymentbybanktransfer
@@ -31,7 +34,10 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
+use Dolibarr\Code\Salaries\Classes\Salary;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/prelevement.lib.php';
 
 // Load translation files required by the page

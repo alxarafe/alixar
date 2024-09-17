@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2012  Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2010		Laurent Destailleur	<eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010		Laurent Destailleur	        <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,14 +21,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\ModeleNumRefProjects;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/project/mod_project_simple.php
  *  \ingroup    project
  *  \brief      File with class to manage the numbering module Simple for project references
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
-
 
 /**
  *  Class to manage the numbering module Simple for project references
@@ -60,7 +63,6 @@ class mod_project_simple extends ModeleNumRefProjects
      */
     public $name = 'Simple';
 
-
     /**
      *  Return description of numbering module
      *
@@ -73,7 +75,6 @@ class mod_project_simple extends ModeleNumRefProjects
         return $langs->trans("SimpleNumRefModelDesc", $this->prefix);
     }
 
-
     /**
      *  Return an example of numbering module values
      *
@@ -83,7 +84,6 @@ class mod_project_simple extends ModeleNumRefProjects
     {
         return $this->prefix . "0501-0001";
     }
-
 
     /**
      *  Checks if the numbers already in the database do not

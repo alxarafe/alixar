@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2005-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2005-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *  \file       htdocs/compta/sociales/info.php
@@ -62,7 +67,6 @@ if ($action == 'setlib' && $user->hasRight('tax', 'charges', 'creer')) {
         setEventMessages($object->error, $object->errors, 'errors');
     }
 }
-
 
 /*
  * View

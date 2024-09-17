@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004-2014  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2016-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2021       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2004-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2016-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\PaymentVAT;
+use Dolibarr\Code\Compta\Classes\Tva;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/compta/paiement_charge.php
  *      \ingroup    tax
@@ -27,7 +31,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/paymentvat.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("banks", "bills"));

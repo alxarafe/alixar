@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2003-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2006-2011 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2012 Philippe Grand	    <philippe.grand@atoo-net.com>
- * Copyright (C) 2014      Marcos García        <marcosgdf@gmail.com>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2006-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2012  Philippe Grand	            <philippe.grand@atoo-net.com>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,13 +23,17 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Delivery\Classes;
+
+use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
+
 /**
  *  \file       htdocs/core/modules/delivery/modules_delivery.php
  *  \ingroup    expedition
  *  \brief      Fichier contenant la class mere de generation de bon de livraison en PDF
  *              et la class mere de numerotation des bons de livraisons
  */
-
 
 /**
  *  Class mere des modeles de bon de livraison
@@ -55,13 +59,4 @@ abstract class ModelePDFDeliveryOrder extends CommonDocGenerator
 
         return $list;
     }
-}
-
-
-/**
- *  Class mere des modeles de numerotation des references de bon de livraison
- */
-abstract class ModeleNumRefDeliveryOrder extends CommonNumRefGenerator
-{
-    // No overload code
 }

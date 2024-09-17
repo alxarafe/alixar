@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2020  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010  Regis Houssin        <regis.houssin@capnetworks.com>
- * Copyright (C) 2012       Vinícius Nogueira    <viniciusvgn@gmail.com>
- * Copyright (C) 2014       Florian Henry        <florian.henry@open-cooncept.pro>
- * Copyright (C) 2015       Jean-François Ferry  <jfefe@aternatik.fr>
- * Copyright (C) 2016       Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2017       Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2018       Andreu Bisquerra	 <jove@bisquerra.com>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@capnetworks.com>
+ * Copyright (C) 2012       Vinícius Nogueira           <viniciusvgn@gmail.com>
+ * Copyright (C) 2014       Florian Henry               <florian.henry@open-cooncept.pro>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2016       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2017       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018       Andreu Bisquerra	        <jove@bisquerra.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,6 +25,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\CashControl;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/compta/cashcontrol/report.php
@@ -43,8 +48,6 @@ $optioncss = "print";
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/cashcontrol/class/cashcontrol.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/cashcontrol/class/cashcontrol.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 

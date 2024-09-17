@@ -32,6 +32,7 @@
 namespace Dolibarr\Code\Core\Classes;
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 use ModeleBoxes;
 

@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2017       Pierre-Henry Favre   <support@atm-consulting.fr>
- * Copyright (C) 2020       Maxime DEMAREST      <maxime@indelog.fr>
- * Copyright (C) 2021       Gauthier VERDOL      <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2022-2024  Alexandre Spangaro   <aspangaro@easya.solutions>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2017       Pierre-Henry Favre          <support@atm-consulting.fr>
+ * Copyright (C) 2020       Maxime DEMAREST             <maxime@indelog.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2022-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\PaymentVarious;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Loan\Classes\PaymentLoan;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Salaries\Classes\PaymentSalary;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/compta/accounting-files.php
@@ -572,7 +586,6 @@ if ($result && $action == "dl" && !$error) {
         }
     }
 }
-
 
 /*
  * View

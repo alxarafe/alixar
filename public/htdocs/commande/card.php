@@ -1,21 +1,21 @@
 <?php
 
-/* Copyright (C) 2003-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005		Marc Barilley / Ocebo	<marc@ocebo.com>
- * Copyright (C) 2005-2015	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2006		Andre Cianfarani		<acianfa@free.fr>
- * Copyright (C) 2010-2013	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2011-2023	Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2012-2023	Christophe Battarel		<christophe.battarel@altairis.fr>
- * Copyright (C) 2012-2016	Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2012       Cedric Salvador      	<csalvador@gpcsolutions.fr>
- * Copyright (C) 2013		Florian Henry			<florian.henry@open-concept.pro>
- * Copyright (C) 2014       Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2015       Jean-François Ferry		<jfefe@aternatik.fr>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2022	    Gauthier VERDOL     	<gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2023-2024	Benjamin Falière		<benjamin.faliere@altairis.fr>
+/* Copyright (C) 2003-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005		Marc Barilley / Ocebo	    <marc@ocebo.com>
+ * Copyright (C) 2005-2015	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2006		Andre Cianfarani		    <acianfa@free.fr>
+ * Copyright (C) 2010-2013	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2011-2023	Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2012-2023	Christophe Battarel		    <christophe.battarel@altairis.fr>
+ * Copyright (C) 2012-2016	Marcos García			    <marcosgdf@gmail.com>
+ * Copyright (C) 2012       Cedric Salvador      	    <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013		Florian Henry			    <florian.henry@open-concept.pro>
+ * Copyright (C) 2014       Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2015       Jean-François Ferry		    <jfefe@aternatik.fr>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2022	    Gauthier VERDOL     	    <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2023-2024	Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -33,8 +33,27 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Adherents\Classes\Adherent;
-use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Commande\Classes\ModelePDFCommandes;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormMargin;
+use Dolibarr\Code\Core\Classes\FormOrder;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Notify;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\Variants\Classes\ProductCombination;
 
 /**
  *   \file      htdocs/commande/card.php
@@ -44,8 +63,6 @@ use Dolibarr\Code\Comm\Classes\Propal;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formorder.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
 
@@ -832,7 +849,6 @@ if (empty($reshook)) {
                     }
                 } elseif (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
                     // If price per customer
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productcustomerprice.class.php';
 
                     $prodcustprice = new ProductCustomerPrice($db);
 
@@ -2041,7 +2057,6 @@ if ($action == 'create' && $usercancreate) {
         // Template to use by default
         print '<tr><td>' . $langs->trans('DefaultModel') . '</td>';
         print '<td>';
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/commande/modules_commande.php';
         $liste = ModelePDFCommandes::liste_modeles($db);
         $preselected = getDolGlobalString('COMMANDE_ADDON_PDF');
         print img_picto('', 'pdf', 'class="pictofixedwidth"');

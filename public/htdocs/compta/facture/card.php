@@ -1,25 +1,25 @@
 <?php
 
-/* Copyright (C) 2002-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004       Eric Seigne             <eric.seigne@ryxeo.com>
- * Copyright (C) 2004-2020  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005       Marc Barilley / Ocebo   <marc@ocebo.com>
- * Copyright (C) 2005-2015  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2006       Andre Cianfarani        <acianfa@free.fr>
- * Copyright (C) 2010-2015  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2012-2023  Christophe Battarel     <christophe.battarel@altairis.fr>
- * Copyright (C) 2012-2013  Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2012-2014  Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2013       Jean-Francois FERRY     <jfefe@aternatik.fr>
- * Copyright (C) 2013-2014  Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2013       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2014-2024  Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2015-2016  Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2022       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2002-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2004-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2005-2015  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2010-2015  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2012-2023  Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2012-2013  Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2012-2014  Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2013       Jean-Francois FERRY         <jfefe@aternatik.fr>
+ * Copyright (C) 2013-2014  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2014-2024  Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2015-2016  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2022       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2023       Nick Fragoulis
- * Copyright (C) 2024       MDW                     <mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024       Alexandre Spangaro      <alexandre@inovea-conseil.com>
+ * Copyright (C) 2024       MDW                         <mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Alexandre Spangaro          <alexandre@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -38,6 +38,23 @@
 
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\FactureLigne;
+use Dolibarr\Code\Compta\Classes\FactureRec;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormMargin;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Variants\Classes\ProductCombination;
 
 /**
  * \file    htdocs/compta/facture/card.php
@@ -47,7 +64,6 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
 
 // Libraries
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -3125,11 +3141,9 @@ if (empty($reshook)) {
     }
 }
 
-
 /*
  * View
  */
-
 
 $form = new Form($db);
 $formother = new FormOther($db);
@@ -4017,7 +4031,6 @@ if ($action == 'create') {
         print '<tr><td>' . $langs->trans('Model') . '</td>';
         print '<td colspan="2">';
         print img_picto('', 'pdf', 'class="pictofixedwidth"');
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/facture/modules_facture.php';
         $liste = ModelePDFFactures::liste_modeles($db);
         if (getDolGlobalString('INVOICE_USE_DEFAULT_DOCUMENT')) {
             // Hidden conf

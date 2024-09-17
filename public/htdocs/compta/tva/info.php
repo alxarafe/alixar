@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2016-2023  Alexandre Spangaro      <aspangaro@easya.solutions>
+/* Copyright (C) 2016-2023  Alexandre Spangaro          <aspangaro@easya.solutions>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Tva;
 
 /**
  *  \file       htdocs/compta/tva/info.php

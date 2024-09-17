@@ -28,7 +28,6 @@ use Dolibarr\Code\Contact\Classes\Contact;
  *  \brief      File of class to build ODT documents for third parties
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/societe/modules_societe.class.php';
 
 use Dolibarr\Code\Societe\Classes\Societe;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';

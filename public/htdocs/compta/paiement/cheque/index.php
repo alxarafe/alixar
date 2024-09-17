@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2006      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2007-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2009      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2016      Juanjo Menent	    <jmenent@2byte.es>
+/* Copyright (C) 2006       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2007-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2016       Juanjo Menent	            <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\RemiseCheque;
 
 /**
  *      \file       htdocs/compta/paiement/cheque/index.php

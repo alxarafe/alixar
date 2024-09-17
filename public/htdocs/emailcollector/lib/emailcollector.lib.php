@@ -18,14 +18,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\EmailCollector\Classes\EmailCollector;
+
 /**
  * \file        emailcollector/lib/emailcollector.lib.php
  * \ingroup     emailcollector
  * \brief       Library files with common functions for EmailCollector
  */
-
-use Dolibarr\Code\EmailCollector\Classes\EmailCollector;
-
 
 /**
  * Prepare array of tabs for EmailCollector

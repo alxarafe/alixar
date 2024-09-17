@@ -28,7 +28,6 @@
  *  \brief      File of class to manage Lot numbering rules standard
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product_batch/modules_product_batch.class.php';
 
 /**
  *  Class to manage MO numbering rules standard

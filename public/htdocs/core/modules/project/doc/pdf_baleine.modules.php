@@ -26,7 +26,6 @@
  *  \brief      File of the class allowing to generate projects with the baleine model
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2006-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2012      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2024		William Mead		<william.mead@manchenumerique.fr>
+/* Copyright (C) 2006-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2024		William Mead		        <william.mead@manchenumerique.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,18 +20,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Exports\Classes\ModeleExports;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+
 /**
  *  \file       htdocs/core/modules/export/export_excel2007.modules.php
  *  \ingroup    export
  *  \brief      File of class to generate export file with Excel format
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/export/modules_export.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 /**
  *  Class to build export files with Excel format

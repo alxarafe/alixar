@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville  <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2014 Laurent Destailleur   <eldy@users.sourceforge.net>
- * Copyright (C) 2005      Marc Barilley / Ocebo <marc@ocebo.com>
- * Copyright (C) 2005-2009 Regis Houssin         <regis.houssin@inodbox.com>
- * Copyright (C) 2021      Gauthier VERDOL       <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\PaymentVAT;
+use Dolibarr\Code\Compta\Classes\Tva;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/compta/payment_vat/card.php
  *      \ingroup    invoice
@@ -30,9 +35,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/paymentvat.class.php';
-if (isModEnabled("bank")) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('bills', 'banks', 'companies'));
@@ -115,7 +117,6 @@ if ($action == 'confirm_valide' && $confirm == 'yes' && $user->rights->tax->char
 }
 */
 
-
 /*
  * View
  */
@@ -137,7 +138,6 @@ $h++;
 $head[$h][1] = $langs->trans("Info");
 $h++;
 */
-
 
 print dol_get_fiche_head($head, $hselected, $langs->trans("VATPayment"), -1, 'payment');
 
@@ -195,7 +195,6 @@ print '</table>';
 print '</div>';
 
 print dol_get_fiche_end();
-
 
 /*
  * List of social contributions paid

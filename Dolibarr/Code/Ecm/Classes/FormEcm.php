@@ -26,7 +26,6 @@ use DoliDB;
  *  \brief          File of class to manage HTML component for ECM and generic filemanager
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmdirectory.class.php';
 
 
 /**

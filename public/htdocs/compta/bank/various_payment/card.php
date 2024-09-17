@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2017-2024  Alexandre Spangaro      <aspangaro@easya.solutions>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2023       Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2023       Joachim Kueter     		<git-jk@bloxera.com>
+/* Copyright (C) 2017-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2023       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023       Joachim Kueter     		    <git-jk@bloxera.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,7 +22,13 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
-use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\BankCateg;
+use Dolibarr\Code\Compta\Classes\PaymentVarious;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *  \file       htdocs/compta/bank/various_payment/card.php
@@ -34,8 +40,6 @@ use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-if (isModEnabled('project')) {
-    }
 
 // Load translation files required by the page
 $langs->loadLangs(array("compta", "banks", "bills", "users", "accountancy", "categories"));
@@ -319,7 +323,6 @@ if ($action == 'confirm_clone' && $confirm == 'yes' && $permissiontoadd) {
     }
 }
 
-
 /*
  *	View
  */
@@ -350,7 +353,6 @@ llxHeader('', $title, $help_url);
 $options = array();
 
 // Load bank groups
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/bankcateg.class.php';
 $bankcateg = new BankCateg($db);
 
 $arrayofbankcategs = $bankcateg->fetchAll();

@@ -44,7 +44,6 @@ if (!defined('NOBROWSERNOTIF')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 
-require_once DOL_DOCUMENT_ROOT . "/product/class/product.class.php";
 
 use Dolibarr\Code\Societe\Classes\Societe;
 

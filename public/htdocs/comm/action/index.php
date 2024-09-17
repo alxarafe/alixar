@@ -109,7 +109,7 @@ if (!$user->hasRight('agenda', 'allactions', 'read') || $filter == 'mine') {  //
 $action = GETPOST('action', 'aZ09');
 
 $mode = GETPOST('mode', 'aZ09');
-if (empty($mode) && preg_match('/show_/', $action)) {
+if (empty($mode) && str_contains($action, 'show_')) {
     $mode = $action;    // For backward compatibility
 }
 $resourceid = GETPOST("search_resourceid", 'int');

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017-2024 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021      Florian Henry        <florian.henry@scopen.fr>
+/* Copyright (C) 2017-2024  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Florian Henry               <florian.henry@scopen.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *    \file       htdocs/eventorganization/conferenceorboothattendee_list.php
@@ -227,8 +233,6 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/eventorganization/core/actions_massactions_mail.inc.php';
     include DOL_DOCUMENT_ROOT . '/core/actions_massactions.inc.php';
 }
-
-
 
 /*
  * View

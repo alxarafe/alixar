@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2001-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2021 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2021  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/comm/remise.php
  *      \ingroup    societe
@@ -27,9 +30,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'orders', 'bills'));
@@ -90,8 +90,6 @@ if ($action == 'setremise') {
         setEventMessages($object->error, $object->errors, 'errors');
     }
 }
-
-
 
 /*
  * View

@@ -42,11 +42,19 @@ namespace Dolibarr\Code\Societe\Classes;
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Interfaces;
+use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Core\Traits\CommonIncoterm;
 use Dolibarr\Code\Core\Traits\CommonPeople;
 use Dolibarr\Code\Core\Traits\CommonSocialNetworks;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
@@ -836,12 +844,10 @@ class Societe extends CommonObject
 
     public $partnerships = array();
 
-
     /**
      * @var Account|string Default BAN account
      */
     public $bank_account;
-
 
     const STATUS_CEASED = 0;
     const STATUS_INACTIVITY = 1;

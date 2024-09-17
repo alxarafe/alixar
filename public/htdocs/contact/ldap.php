@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006-2010  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2006-2021	Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2006-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006-2021	Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *       \file       htdocs/contact/ldap.php
  *       \ingroup    ldap
@@ -28,6 +30,8 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Ldap;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contact.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ldap.lib.php';
@@ -49,7 +53,6 @@ $object = new Contact($db);
 if ($id > 0) {
     $object->fetch($id, $user);
 }
-
 
 /*
  * Actions

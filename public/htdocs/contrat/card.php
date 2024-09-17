@@ -1,17 +1,17 @@
 <?php
 
-/* Copyright (C) 2003-2004  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019  Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2014  Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2006       Andre Cianfarani		<acianfa@free.fr>
- * Copyright (C) 2010-2017  Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2013       Christophe Battarel     <christophe.battarel@altairis.fr>
- * Copyright (C) 2013-2014  Florian Henry		  	<florian.henry@open-concept.pro>
- * Copyright (C) 2014-2020	Ferran Marcet		  	<fmarcet@2byte.es>
- * Copyright (C) 2014-2016  Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2023       Charlene Benke     		<charlene@patas-monkey.com>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2014  Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2006       Andre Cianfarani		    <acianfa@free.fr>
+ * Copyright (C) 2010-2017  Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2013       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2013-2014  Florian Henry		  	    <florian.henry@open-concept.pro>
+ * Copyright (C) 2014-2020	Ferran Marcet		  	    <fmarcet@2byte.es>
+ * Copyright (C) 2014-2016  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2023       Charlene Benke     		    <charlene@patas-monkey.com>
  * Copyright (C) 2023       Nick Fragoulis
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -31,6 +31,20 @@
  */
 
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ContratLigne;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *       \file       htdocs/contrat/card.php
@@ -42,10 +56,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/price.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contract.lib.php';
-if (isModEnabled("propal")) {
-}
-if (isModEnabled('project')) {
-    }
 
 // Load translation files required by the page
 $langs->loadLangs(array("contracts", "orders", "companies", "bills", "products", 'compta'));
@@ -515,7 +525,6 @@ if (empty($reshook)) {
                     $price_min_ttc = $prod->multiprices_min_ttc[$object->thirdparty->price_level];
                 } elseif (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
                     // If price per customer
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productcustomerprice.class.php';
 
                     $prodcustprice = new ProductCustomerPrice($db);
 
@@ -2312,7 +2321,8 @@ $db->close();
 
 <?php
 if (isModEnabled('margin') && $action == 'editline') {
-    // TODO Why this ? To manage margin on contracts ??>
+    // TODO Why this ? To manage margin on contracts
+    ?>
 <script type="text/javascript">
 $(document).ready(function() {
   var idprod = $("input[name='idprod']").val();

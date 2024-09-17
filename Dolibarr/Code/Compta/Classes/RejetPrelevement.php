@@ -125,7 +125,6 @@ class RejetPrelevement
         $bankaccount = ($this->type == 'bank-transfer' ? getDolGlobalString('PAYMENTBYBANKTRANSFER_ID_BANKACCOUNT') : getDolGlobalString('PRELEVEMENT_ID_BANKACCOUNT'));
         $facs = $this->getListInvoices(1);
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/ligneprelevement.class.php';
         $lipre = new LignePrelevement($this->db);
         $lipre->fetch($id);
 

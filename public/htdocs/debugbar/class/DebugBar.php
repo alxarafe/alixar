@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2023   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2023       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use DebugBar\DebugBar;
+
 /**
  *  \file       htdocs/debugbar/class/DebugBar.php
  *  \brief      Class for debugbar
@@ -25,8 +27,6 @@
  */
 
 dol_include_once('/debugbar/class/autoloader.php');
-
-use DebugBar\DebugBar;
 
 dol_include_once('/debugbar/class/DataCollector/DolRequestDataCollector.php');
 dol_include_once('/debugbar/class/DataCollector/DolConfigCollector.php');

@@ -46,7 +46,6 @@ if (isModEnabled("product") || isModEnabled("service")) {
 }
 if (isModEnabled("propal")) {
 }
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 if (isModEnabled('productbatch')) {
 }
 if (isModEnabled('project')) {
@@ -936,7 +935,6 @@ if ($action == 'create') {
             }
 
             // Document model
-            include_once DOL_DOCUMENT_ROOT . '/core/modules/reception/modules_reception.php';
             $list = ModelePdfReception::liste_modeles($db);
 
             if (count($list) > 1) {

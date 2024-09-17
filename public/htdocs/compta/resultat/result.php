@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2016-2017  Jamal Elbaz             <jamelbaz@gmail.com>
- * Copyright (C) 2016-2022  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2018-2020  Laurent Destailleur     <eldy@destailleur.fr>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2016-2017  Jamal Elbaz                 <jamelbaz@gmail.com>
+ * Copyright (C) 2016-2022  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018-2020  Laurent Destailleur         <eldy@destailleur.fr>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  * \file        htdocs/compta/resultat/result.php

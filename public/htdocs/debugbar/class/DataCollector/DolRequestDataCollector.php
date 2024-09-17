@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2023   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2023       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,13 +17,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use DebugBar\DataCollector\RequestDataCollector;
+
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolRequestDataCollector.php
  *  \brief      Class for debugbar collection
  *  \ingroup    debugbar
  */
-
-use DebugBar\DataCollector\RequestDataCollector;
 
 /**
  * DolRequestDataCollector class
@@ -47,7 +47,7 @@ class DolRequestDataCollector extends RequestDataCollector
 
                 if ($var == '_COOKIE') {
                     foreach ($arrayofvalues as $key => $val) {
-                        if (preg_match('/^DOLSESSID_/', $key)) {
+                        if (str_starts_with($key, 'DOLSESSID_')) {
                             $arrayofvalues[$key] = '*****hidden*****';
                         }
                     }
@@ -55,7 +55,7 @@ class DolRequestDataCollector extends RequestDataCollector
                 }
                 if ($var == '_SERVER') {
                     foreach ($arrayofvalues as $key => $val) {
-                        if (preg_match('/^PHP_AUTH_PW/', $key)) {
+                        if (str_starts_with($key, 'PHP_AUTH_PW')) {
                             $arrayofvalues[$key] = '*****hidden*****';
                         }
                     }

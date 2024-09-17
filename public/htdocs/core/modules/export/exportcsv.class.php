@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2006-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2006-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,13 +17,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Exports\Classes\ModeleExports;
+
 /**
  *      \file       htdocs/core/modules/export/exportcsv.class.php
  *      \ingroup    export
  *      \brief      File of class to build exports with CSV format
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/export/modules_export.php';
 
 // avoid timeout for big export
 set_time_limit(0);

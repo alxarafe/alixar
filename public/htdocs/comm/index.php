@@ -25,6 +25,7 @@
 
 use Dolibarr\Code\Comm\Classes\Propal;
 use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Contrat\Classes\Contrat;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\HookManager;

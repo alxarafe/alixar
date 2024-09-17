@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C)    2013      Cédric Salvador     <csalvador@gpcsolutions.fr>
- * Copyright (C)    2013-2014 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C)	2015	  Marcos García		  <marcosgdf@gmail.com>
- * Copyright (C) 	2019	  Nicolas ZABOURI     <info@inovea-conseil.com>
+/* Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015	    Marcos García		        <marcosgdf@gmail.com>
+ * Copyright (C) 2019	    Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,6 +32,8 @@
 // $savingdocmask = dol_sanitizeFileName($object->ref).'-__file__';
 
 // Protection to avoid direct call of template
+use Dolibarr\Code\Core\Classes\FormFile;
+
 if (empty($langs) || !is_object($langs)) {
     print "Error, template page can't be called as URL";
     exit(1);

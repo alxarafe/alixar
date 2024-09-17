@@ -25,7 +25,6 @@
  *   \brief      File containing the Universal project reference numbering model class
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
 
 
 /**

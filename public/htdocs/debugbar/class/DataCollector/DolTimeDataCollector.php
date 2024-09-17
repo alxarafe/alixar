@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2023   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2023       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,13 +17,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use DebugBar\DataCollector\TimeDataCollector;
+
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolTimeDataCollector.php
  *  \brief      Class for debugbar collection
  *  \ingroup    debugbar
  */
-
-use DebugBar\DataCollector\TimeDataCollector;
 
 /**
  * DolTimeDataCollector class

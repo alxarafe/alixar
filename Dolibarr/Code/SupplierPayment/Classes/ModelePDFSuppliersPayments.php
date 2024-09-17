@@ -21,6 +21,7 @@
 namespace Dolibarr\Code\SupplierPayment\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
 
 /**
  *  Parent class for supplier invoices models

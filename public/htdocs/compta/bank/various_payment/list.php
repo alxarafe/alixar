@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2017-2023  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2017       Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2020       Tobias Sekan            <tobias.sekan@startmail.com>
+/* Copyright (C) 2017-2023  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2020       Tobias Sekan                <tobias.sekan@startmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,13 @@
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\PaymentVarious;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *  \file       htdocs/compta/bank/various_payment/list.php

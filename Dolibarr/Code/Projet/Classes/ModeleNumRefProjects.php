@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2014  Regis Houssin   <regis.houssin@inodbox.com>
- * Copyright (C) 2014       Marcos García   <marcosgdf@gmail.com>
+/* Copyright (C) 2010-2014  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,52 +19,16 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Projet\Classes;
+
+use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
+
 /**
  *      \file       htdocs/core/modules/project/modules_project.php
  *      \ingroup    project
  *      \brief      File that contain parent class for projects models
  *                  and parent class for projects numbering models
  */
-
-
-/**
- *  Parent class for projects models
- */
-abstract class ModelePDFProjects extends CommonDocGenerator
-{
-    /**
-     * @var DoliDB Database handler
-     */
-    public $db;
-
-    /**
-     * @var string model description (short text)
-     */
-    public $description;
-
-
-    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-
-    /**
-     *  Return list of active generation modules
-     *
-     * @param DoliDB $db Database handler
-     * @param integer $maxfilenamelength Max length of value to show
-     * @return array                       List of templates
-     */
-    public static function liste_modeles($db, $maxfilenamelength = 0)
-    {
-        // phpcs:enable
-        $type = 'project';
-        $list = array();
-
-        include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
-        $list = getListOfModels($db, $type, $maxfilenamelength);
-
-        return $list;
-    }
-}
-
 
 /**
  *  Class mere des modeles de numerotation des references de projects

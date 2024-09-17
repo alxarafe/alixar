@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *  \file       htdocs/compta/bank/graph.php
@@ -56,7 +60,6 @@ if (GETPOST("mode") == 'showalltime') {
 }
 $error = 0;
 
-
 /*
  * View
  */
@@ -72,7 +75,6 @@ if (GETPOSTINT("year")) {
 if (GETPOSTINT("month")) {
     $month = sprintf("%02d", GETPOSTINT("month"));
 }
-
 
 $object = new Account($db);
 if (GETPOST('account') && !preg_match('/,/', GETPOST('account'))) { // if for a particular account and not a list

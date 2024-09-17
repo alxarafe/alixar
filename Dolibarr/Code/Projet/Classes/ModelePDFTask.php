@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2010 Regis Houssin  <regis.houssin@inodbox.com>
- * Copyright (C) 2010 Florian Henry  <florian.henry<àopen-concept.pro>
- * Copyright (C) 2014 Marcos García  <marcosgdf@gmail.com>
+/* Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010       Florian Henry               <florian.henry<àopen-concept.pro>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,13 +20,17 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Projet\Classes;
+
+use Dolibarr\Code\Core\Classes\CommonDocGenerator;
+use DoliDB;
+
 /**
  *      \file       htdocs/core/modules/project/task/modules_task.php
  *      \ingroup    project
  *      \brief      File that contain parent class for task models
  *                  and parent class for task numbering models
  */
-
 
 /**
  *  Parent class for task models
@@ -52,13 +56,4 @@ abstract class ModelePDFTask extends CommonDocGenerator
 
         return $list;
     }
-}
-
-
-/**
- * Parent class of task reference numbering models
- */
-abstract class ModeleNumRefTask extends CommonNumRefGenerator
-{
-    // No overload code
 }

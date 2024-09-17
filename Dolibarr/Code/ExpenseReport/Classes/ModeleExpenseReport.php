@@ -21,6 +21,7 @@ namespace Dolibarr\Code\ExpenseReport\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use Dolibarr\Code\Core\Classes\Translate;
+use DoliDB;
 
 /**
  *  Parent class for trips and expenses templates

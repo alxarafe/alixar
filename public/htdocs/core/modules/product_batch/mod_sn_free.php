@@ -26,7 +26,6 @@
  *       \brief      File containing class for numbering model of SN free
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product_batch/modules_product_batch.class.php';
 
 /**
  *  \class      mod_codeproduct_leopard

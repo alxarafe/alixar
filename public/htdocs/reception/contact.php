@@ -34,7 +34,6 @@ use Dolibarr\Code\Contact\Classes\Contact;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/reception.lib.php';
 if (isModEnabled('project')) {
     }
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 
 $langs->loadLangs(array("orders", "receptions", "companies"));
 

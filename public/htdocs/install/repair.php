@@ -865,7 +865,6 @@ if ($ok && GETPOST('clean_orphelin_dir', 'alpha')) {
         } elseif ($modulepart == 'contract') {
             $object_instance = new Contrat($db);
         } elseif ($modulepart == 'tax') {
-            include_once DOL_DOCUMENT_ROOT . '/compta/sociales/class/chargesociales.class.php';
             $object_instance = new ChargeSociales($db);
         }
 

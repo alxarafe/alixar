@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Copyright (C) 2013       Marcos García          <marcosgdf@gmail.com>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2020       Abbes Bahfir            <bafbes@gmail.com>
- * Copyright (C) 2021       Waël Almoman            <info@almoman.com>
+ * Copyright (C) 2013       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2020       Abbes Bahfir                <bafbes@gmail.com>
+ * Copyright (C) 2021       Waël Almoman                <info@almoman.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Core\Classes\Link;
 
 /**
  * Returns an array with the tabs for the "Payment" section

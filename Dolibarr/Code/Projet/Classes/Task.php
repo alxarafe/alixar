@@ -27,6 +27,7 @@
 namespace Dolibarr\Code\Projet\Classes;
 
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObjectLine;
 
 /**

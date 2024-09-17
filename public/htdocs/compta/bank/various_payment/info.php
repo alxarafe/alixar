@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017       Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2017       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\PaymentVarious;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *  \file       htdocs/compta/bank/various_payment/info.php

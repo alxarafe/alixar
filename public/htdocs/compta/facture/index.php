@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2020   Tobias Sekan    <tobias.sekan@startmail.com>
+/* Copyright (C) 2020       Tobias Sekan                <tobias.sekan@startmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,6 @@ if (isset($user->socid) && $user->socid > 0) {
 $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
 $maxDraftCount = !getDolGlobalString('MAIN_MAXLIST_OVERLOAD') ? $max : $conf->global->MAIN_MAXLIST_OVERLOAD;
 $maxOpenCount = !getDolGlobalString('MAIN_MAXLIST_OVERLOAD') ? $max : $conf->global->MAIN_MAXLIST_OVERLOAD;
-
 
 /*
  * View

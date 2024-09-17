@@ -1,16 +1,16 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2024  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010  Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2012       Vinícius Nogueira    <viniciusvgn@gmail.com>
- * Copyright (C) 2014       Florian Henry        <florian.henry@open-cooncept.pro>
- * Copyright (C) 2015       Jean-François Ferry  <jfefe@aternatik.fr>
- * Copyright (C) 2016       Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2017-2019  Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2018       Ferran Marcet        <fmarcet@2byte.es>
- * Copyright (C) 2018-2024  Frédéric France      <frederic.france@free.fr>
- * Copyright (C) 2021       Gauthier VERDOL      <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2024  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Vinícius Nogueira           <viniciusvgn@gmail.com>
+ * Copyright (C) 2014       Florian Henry               <florian.henry@open-cooncept.pro>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2016       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2017-2019  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,6 +27,31 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\BankCateg;
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Compta\Classes\PaymentSocialContribution;
+use Dolibarr\Code\Compta\Classes\PaymentVarious;
+use Dolibarr\Code\Compta\Classes\PaymentVAT;
+use Dolibarr\Code\Compta\Classes\RemiseCheque;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\Don\Classes\PaymentDonation;
+use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Code\Salaries\Classes\PaymentSalary;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/compta/bank/bankentries_list.php
  *  \ingroup    banque
@@ -37,14 +62,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
-
-use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Code\User\Classes\User;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/bankcateg.class.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/paymentvat.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/paymentsocialcontribution.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("banks", "bills", "categories", "companies", "margins", "salaries", "loan", "donations", "trips", "members", "compta", "accountancy"));
@@ -526,7 +543,6 @@ llxHeader('', $title, $help_url, '', 0, 0, array(), array(), $param);
 
 if ($id > 0 || !empty($ref)) {
     // Load bank groups
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/bankcateg.class.php';
     $bankcateg = new BankCateg($db);
 
     $arrayofbankcateg = $bankcateg->fetchAll();

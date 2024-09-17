@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2020       Maxime Kohlhaas         <maxime@atm-consulting.fr>
- * Copyright (C) 2023       Ferran Marcet           <fmarcet@2byte.es>
+/* Copyright (C) 2020       Maxime Kohlhaas             <maxime@atm-consulting.fr>
+ * Copyright (C) 2023       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *    \file        htdocs/compta/stats/supplier_turnover_by_thirdparty.php
  *    \brief       Page reporting purchase turnover by thirdparty
@@ -31,6 +33,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/report.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/tax.lib.php';
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 
 // Load translation files required by the page

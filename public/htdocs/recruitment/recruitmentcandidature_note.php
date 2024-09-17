@@ -26,7 +26,6 @@
 
 // Load Dolibarr environment
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentcandidature.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/lib/recruitment_recruitmentcandidature.lib.php';
 
 // Load translation files required by the page

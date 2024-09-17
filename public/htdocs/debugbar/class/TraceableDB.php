@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2023   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2023       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -19,13 +19,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/db/DoliDB.class.php';
+
 /**
  *  \file       htdocs/debugbar/class/DataCollector/TraceableDB.php
  *  \brief      Class for debugbar DB
  *  \ingroup    debugbar
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/db/DoliDB.class.php';
 
 /**
  * TraceableDB class

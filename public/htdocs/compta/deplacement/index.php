@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015	Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004		Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2011	Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015	Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2011	Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Deplacement;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/compta/deplacement/index.php
  *  \brief      Page list of expenses
@@ -27,7 +31,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'users', 'trips'));

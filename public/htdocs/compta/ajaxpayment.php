@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2011 Auguria <anthony.poiret@auguria.net>
+/* Copyright (C) 2011       Auguria                     <anthony.poiret@auguria.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *

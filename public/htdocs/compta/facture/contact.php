@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2005      Patrick Rouillon     <patrick@rouillon.net>
- * Copyright (C) 2005-2009 Destailleur Laurent  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2015 Philippe Grand       <philippe.grand@atoo-net.com>
- * Copyright (C) 2017      Ferran Marcet       	 <fmarcet@2byte.es>
- * Copyright (C) 2023      Christian Foellmann  <christian@foellmann.de>
+/* Copyright (C) 2005       Patrick Rouillon            <patrick@rouillon.net>
+ * Copyright (C) 2005-2009  Destailleur Laurent         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2015  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2017       Ferran Marcet       	    <fmarcet@2byte.es>
+ * Copyright (C) 2023       Christian Foellmann         <christian@foellmann.de>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *       \file       htdocs/compta/facture/contact.php
  *       \ingroup    invoice
@@ -30,12 +37,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
-if (isModEnabled('project')) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('bills', 'companies'));

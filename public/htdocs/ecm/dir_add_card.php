@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2008-2017  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2008-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2015-2016	Alexandre Spangaro	<aspangaro@open-dsi.fr>
+/* Copyright (C) 2008-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2008-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2016	Alexandre Spangaro	        <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Ecm\Classes\EcmDirectory;
+use Dolibarr\Code\Ecm\Classes\FormEcm;
+
 /**
  *  \file       htdocs/ecm/dir_add_card.php
  *  \ingroup    ecm
@@ -31,8 +35,6 @@ if (! defined('DISABLE_JS_GRAHP')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/htmlecm.form.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmdirectory.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("ecm", "companies", "other", "users", "orders", "propal", "bills", "contracts", "categories"));
@@ -199,9 +201,6 @@ if ($action == 'add' && $permissiontoadd) {
     $result = $ecmdir->delete($user);
     setEventMessages($langs->trans("ECMSectionWasRemoved", $ecmdir->label), null, 'mesgs');
 }
-
-
-
 
 /*
  * View

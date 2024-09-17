@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2023 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2023  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Mailing;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *       \file       htdocs/comm/mailing/list.php
  *       \ingroup    mailing
@@ -27,7 +31,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/mailing/class/mailing.class.php';
 
 // Load translation files required by the page
 $langs->load('mails');
@@ -96,7 +99,6 @@ if (!$user->hasRight('mailing', 'lire') || (!getDolGlobalString('EXTERNAL_USERS_
 }
 //$result = restrictedArea($user, 'mailing');
 
-
 /*
  * Actions
  */
@@ -144,7 +146,6 @@ if (empty($reshook)) {
     $uploaddir = $conf->mailing->dir_output;
     include DOL_DOCUMENT_ROOT . '/core/actions_massactions.inc.php';
 }
-
 
 /*
  * View

@@ -41,6 +41,7 @@ namespace Dolibarr\Code\Contact\Classes;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Traits\CommonPeople;
 use Dolibarr\Code\Core\Traits\CommonSocialNetworks;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 

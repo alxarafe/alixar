@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2010-2011  Juanjo Menent       <jmenent@2byte.es>
- * Copyright (C) 2010		Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2011      	Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2010-2011  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2010		Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2011      	Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
 
 /**
  *  \file       htdocs/core/lib/prelevement.lib.php
