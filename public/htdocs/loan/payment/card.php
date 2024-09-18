@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2014-2018  Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2014-2018  Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,9 +24,11 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Code\Loan\Classes\PaymentLoan;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-if (isModEnabled("bank")) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("bills", "banks", "companies", "loan"));
@@ -48,7 +50,6 @@ if ($id > 0) {
         dol_print_error($db, 'Failed to get payment id ' . $id);
     }
 }
-
 
 /*
  * Actions
@@ -73,7 +74,6 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('loan', 
         $db->rollback();
     }
 }
-
 
 /*
  * View

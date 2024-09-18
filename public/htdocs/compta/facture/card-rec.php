@@ -54,7 +54,6 @@ use Dolibarr\Code\User\Classes\User;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 if (isModEnabled('project')) {
-    include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
     //include_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
 }
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';

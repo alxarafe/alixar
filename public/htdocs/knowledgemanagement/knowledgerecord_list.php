@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2007-2023  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2021		Frédéric France			<frederic.france@netlogic.fr>
- * Copyright (C) 2023		Anthony Berton			<anthony.berton@bb2a.fr>
+/* Copyright (C) 2007-2023  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021		Frédéric France			    <frederic.france@netlogic.fr>
+ * Copyright (C) 2023		Anthony Berton			    <anthony.berton@bb2a.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,13 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormCategory;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *      \file       knowledgerecord_list.php
@@ -203,8 +210,6 @@ if (empty($reshook)) {
     $uploaddir = $conf->knowledgemanagement->dir_output;
     include DOL_DOCUMENT_ROOT . '/core/actions_massactions.inc.php';
 }
-
-
 
 /*
  * View

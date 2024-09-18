@@ -1,6 +1,7 @@
 <?php
 
-/* Copyright (C) 2015       Alexandre Spangaro <aspangaro@open-dsi.fr>
+/* Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Hrm\Classes\Establishment;
 
 /**
  *    \file       htdocs/hrm/admin/admin_establishment.php
@@ -65,13 +69,11 @@ $offset = $limit * $page;
 $pageprev = $page - 1;
 $pagenext = $page + 1;
 
-
 /*
  * Actions
  */
 
 // None
-
 
 /*
  * View

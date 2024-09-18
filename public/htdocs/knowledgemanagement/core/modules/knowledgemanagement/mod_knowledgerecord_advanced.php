@@ -32,8 +32,6 @@ use Dolibarr\Code\KnowledgeManagement\Classes\ModeleNumRefKnowledgeRecord;
  * \brief      File containing class for advanced numbering model of KnowledgeRecord
  */
 
-
-
 /**
  *  Class to manage customer Bom numbering rules advanced
  */

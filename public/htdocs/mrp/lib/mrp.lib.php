@@ -18,13 +18,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+
 /**
  * \file    htdocs/mrp/lib/mrp.lib.php
  * \ingroup mrp
  * \brief   Library files with common functions for Mrp
  */
-
-use Dolibarr\Code\Core\Classes\ExtraFields;
 
 /**
  * Prepare admin pages header

@@ -21,9 +21,12 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Propale\Classes\ModelePDFPropales;
+use Dolibarr\Code\Societe\Classes\CompanyBankAccount;
 
 /**
  *  \file       htdocs/core/modules/propale/doc/doc_generic_proposal_odt.modules.php

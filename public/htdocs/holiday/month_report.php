@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2007-2010  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2011       François Legastelois    <flegastelois@teclib.com>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2020       Tobias Sekan            <tobias.sekan@startmail.com>
+/* Copyright (C) 2007-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011       François Legastelois        <flegastelois@teclib.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2020       Tobias Sekan                <tobias.sekan@startmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       month_report.php
  *      \ingroup    holiday
@@ -29,6 +31,8 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Holiday\Classes\Holiday;
 use Dolibarr\Code\User\Classes\User;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -138,7 +142,6 @@ $arrayfields = array(
     'used_days_month' => array('label' => 'NbUseDaysCPShortInMonth', 'checked' => 1, 'position' => 54),
     'cp.description' => array('label' => 'DescCP', 'checked' => -1, 'position' => 800),
 );
-
 
 /*
  * View

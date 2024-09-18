@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2014-2023  Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2015       Frederic France      <frederic.france@free.fr>
- * Copyright (C) 2015       Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2016       Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2014-2023  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
+ * Copyright (C) 2015       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2016       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Loan\Classes\Loan;
 
 /**
  *  \file       htdocs/loan/list.php
@@ -139,7 +143,6 @@ if (empty($reshook)) {
     }
 }
 
-
 /*
  *	View
  */
@@ -149,7 +152,6 @@ $now = dol_now();
 $help_url = "EN:Module_Loan|FR:Module_Emprunt";
 $help_url = '';
 $title = $langs->trans('Loans');
-
 
 // Build and execute select
 // --------------------------------------------------------------------

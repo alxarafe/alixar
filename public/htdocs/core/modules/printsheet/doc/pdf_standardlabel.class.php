@@ -2,10 +2,10 @@
 
 /* Copyright (C) 2003       Steve Dillon
  * Copyright (C) 2003       Laurent Passebecq
- * Copyright (C) 2001-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2002-2003  Jean-Louis Bergamo      <jlb@j1b.org>
- * Copyright (C) 2006-2013  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Francis Appels          <francis.appels@yahoo.com>
+ * Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2002-2003  Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2006-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Francis Appels              <francis.appels@yahoo.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,12 +22,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\CommonStickerGenerator;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  *  \file       htdocs/core/modules/printsheet/doc/pdf_standardlabel.class.php
  *  \ingroup    core
  *  \brief      Fichier de la class permettant d'editer au format PDF des etiquettes au format Avery ou personnalise
  */
-
 
 /**
  *  Class to generate stick sheet with format Avery or other personalised

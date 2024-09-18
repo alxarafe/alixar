@@ -24,28 +24,29 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\ModelePDFProjects;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/project/doc/doc_generic_project_odt.modules.php
  *  \ingroup    project
  *  \brief      File of class to build ODT documents for third parties
  */
 
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/doc.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-if (isModEnabled("propal")) {
-}
-if (isModEnabled('invoice')) {
-}
-if (isModEnabled('invoice')) {
-}
-if (isModEnabled('deplacement')) {
-}
-if (isModEnabled('shipping')) {
-}
 
 /**
  *  Class to build documents using ODF templates generator

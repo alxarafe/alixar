@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2010-2011 Regis Houssin <regis.houssin@inodbox.com>
- * Copyright (C) 2014      Marcos García <marcosgdf@gmail.com>
- * Copyright (C) 2015      Charlie Benke <charlie@patas-monkey.com>
- * Copyright (C) 2016      Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Charlie Benke               <charlie@patas-monkey.com>
+ * Copyright (C) 2016       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 
 // Protection to avoid direct call of template
 if (empty($conf) || !is_object($conf)) {

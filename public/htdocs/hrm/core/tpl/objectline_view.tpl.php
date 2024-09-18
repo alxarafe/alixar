@@ -1,16 +1,16 @@
 <?php
 
-/* Copyright (C) 2010-2013  Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2010-2011	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2012-2013	Christophe Battarel	<christophe.battarel@altairis.fr>
- * Copyright (C) 2012       Cédric Salvador     <csalvador@gpcsolutions.fr>
- * Copyright (C) 2012-2014  Raphaël Doursenaud  <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2013		Florian Henry		<florian.henry@open-concept.pro>
- * Copyright (C) 2017		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2010-2013  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2011	Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2012-2013	Christophe Battarel	        <christophe.battarel@altairis.fr>
+ * Copyright (C) 2012       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2012-2014  Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2013		Florian Henry		        <florian.henry@open-concept.pro>
+ * Copyright (C) 2017		Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -43,6 +43,8 @@
  *
  * $text, $description, $line
  */
+
+use Dolibarr\Code\Hrm\Classes\Skill;
 
 // Protection to avoid direct call of template
 if (empty($object) || !is_object($object)) {

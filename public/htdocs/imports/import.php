@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2012      Christophe Battarel	<christophe.battarel@altairis.fr>
- * Copyright (C) 2022      Charlene Benke		<charlene@patas-monkey.com>
+/* Copyright (C) 2005-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Christophe Battarel	        <christophe.battarel@altairis.fr>
+ * Copyright (C) 2022       Charlene Benke		        <charlene@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -22,6 +22,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Imports\Classes\Import;
+use Dolibarr\Code\Imports\Classes\ModeleImports;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       htdocs/imports/import.php
  *      \ingroup    import
@@ -29,8 +36,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/imports/class/import.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/import/modules_import.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/import.lib.php';
@@ -43,114 +48,112 @@ $result = restrictedArea($user, 'import');
 
 // Map icons, array duplicated in export.php, was not synchronized, TODO put it somewhere only once
 $entitytoicon = array(
-    'invoice'      => 'bill',
+    'invoice' => 'bill',
     'invoice_line' => 'bill',
-    'order'        => 'order',
-    'order_line'   => 'order',
-    'propal'       => 'propal',
-    'propal_line'  => 'propal',
+    'order' => 'order',
+    'order_line' => 'order',
+    'propal' => 'propal',
+    'propal_line' => 'propal',
     'intervention' => 'intervention',
-    'inter_line'   => 'intervention',
-    'member'       => 'user',
-    'member_type'  => 'group',
+    'inter_line' => 'intervention',
+    'member' => 'user',
+    'member_type' => 'group',
     'subscription' => 'payment',
-    'payment'      => 'payment',
-    'tax'          => 'bill',
-    'tax_type'     => 'generic',
-    'other'        => 'generic',
-    'account'      => 'account',
-    'product'      => 'product',
+    'payment' => 'payment',
+    'tax' => 'bill',
+    'tax_type' => 'generic',
+    'other' => 'generic',
+    'account' => 'account',
+    'product' => 'product',
     'virtualproduct' => 'product',
-    'subproduct'   => 'product',
-    'product_supplier_ref'      => 'product',
-    'stock'        => 'stock',
-    'warehouse'    => 'stock',
-    'batch'        => 'stock',
-    'stockbatch'   => 'stock',
-    'category'     => 'category',
-    'shipment'     => 'sending',
+    'subproduct' => 'product',
+    'product_supplier_ref' => 'product',
+    'stock' => 'stock',
+    'warehouse' => 'stock',
+    'batch' => 'stock',
+    'stockbatch' => 'stock',
+    'category' => 'category',
+    'shipment' => 'sending',
     'shipment_line' => 'sending',
     'reception' => 'sending',
     'reception_line' => 'sending',
     'expensereport' => 'trip',
     'expensereport_line' => 'trip',
-    'holiday'      => 'holiday',
+    'holiday' => 'holiday',
     'contract_line' => 'contract',
-    'translation'  => 'generic',
-    'bomm'         => 'bom',
-    'bomline'      => 'bom'
+    'translation' => 'generic',
+    'bomm' => 'bom',
+    'bomline' => 'bom'
 );
 
 // Translation code, array duplicated in export.php, was not synchronized, TODO put it somewhere only once
 $entitytolang = array(
-    'user'         => 'User',
-    'company'      => 'Company',
-    'contact'      => 'Contact',
-    'invoice'      => 'Bill',
+    'user' => 'User',
+    'company' => 'Company',
+    'contact' => 'Contact',
+    'invoice' => 'Bill',
     'invoice_line' => 'InvoiceLine',
-    'order'        => 'Order',
-    'order_line'   => 'OrderLine',
-    'propal'       => 'Proposal',
-    'propal_line'  => 'ProposalLine',
+    'order' => 'Order',
+    'order_line' => 'OrderLine',
+    'propal' => 'Proposal',
+    'propal_line' => 'ProposalLine',
     'intervention' => 'Intervention',
-    'inter_line'   => 'InterLine',
-    'member'       => 'Member',
-    'member_type'  => 'MemberType',
+    'inter_line' => 'InterLine',
+    'member' => 'Member',
+    'member_type' => 'MemberType',
     'subscription' => 'Subscription',
-    'tax'          => 'SocialContribution',
-    'tax_type'     => 'DictionarySocialContributions',
-    'account'      => 'BankTransactions',
-    'payment'      => 'Payment',
-    'product'      => 'Product',
-    'virtualproduct'  => 'AssociatedProducts',
-    'subproduct'      => 'SubProduct',
-    'product_supplier_ref'      => 'SupplierPrices',
-    'service'      => 'Service',
-    'stock'        => 'Stock',
-    'movement'     => 'StockMovement',
-    'batch'        => 'Batch',
-    'stockbatch'   => 'StockDetailPerBatch',
-    'warehouse'    => 'Warehouse',
-    'category'     => 'Category',
-    'other'        => 'Other',
-    'trip'         => 'TripsAndExpenses',
-    'shipment'     => 'Shipments',
+    'tax' => 'SocialContribution',
+    'tax_type' => 'DictionarySocialContributions',
+    'account' => 'BankTransactions',
+    'payment' => 'Payment',
+    'product' => 'Product',
+    'virtualproduct' => 'AssociatedProducts',
+    'subproduct' => 'SubProduct',
+    'product_supplier_ref' => 'SupplierPrices',
+    'service' => 'Service',
+    'stock' => 'Stock',
+    'movement' => 'StockMovement',
+    'batch' => 'Batch',
+    'stockbatch' => 'StockDetailPerBatch',
+    'warehouse' => 'Warehouse',
+    'category' => 'Category',
+    'other' => 'Other',
+    'trip' => 'TripsAndExpenses',
+    'shipment' => 'Shipments',
     'shipment_line' => 'ShipmentLine',
-    'project'      => 'Projects',
-    'projecttask'  => 'Tasks',
-    'task_time'    => 'TaskTimeSpent',
-    'action'       => 'Event',
+    'project' => 'Projects',
+    'projecttask' => 'Tasks',
+    'task_time' => 'TaskTimeSpent',
+    'action' => 'Event',
     'expensereport' => 'ExpenseReport',
     'expensereport_line' => 'ExpenseReportLine',
-    'holiday'      => 'TitreRequestCP',
-    'contract'     => 'Contract',
+    'holiday' => 'TitreRequestCP',
+    'contract' => 'Contract',
     'contract_line' => 'ContractLine',
-    'translation'  => 'Translation',
-    'bom'          => 'BOM',
-    'bomline'      => 'BOMLine'
+    'translation' => 'Translation',
+    'bom' => 'BOM',
+    'bomline' => 'BOMLine'
 );
 
-$datatoimport       = GETPOST('datatoimport');
-$format             = GETPOST('format');
-$filetoimport       = GETPOST('filetoimport');
-$action             = GETPOST('action', 'alpha');
-$confirm            = GETPOST('confirm', 'alpha');
-$step               = (GETPOST('step') ? GETPOST('step') : 1);
+$datatoimport = GETPOST('datatoimport');
+$format = GETPOST('format');
+$filetoimport = GETPOST('filetoimport');
+$action = GETPOST('action', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
+$step = (GETPOST('step') ? GETPOST('step') : 1);
 $import_name = GETPOST('import_name');
-$hexa               = GETPOST('hexa');
+$hexa = GETPOST('hexa');
 $importmodelid = GETPOSTINT('importmodelid');
 $excludefirstline = (GETPOST('excludefirstline') ? GETPOST('excludefirstline') : 2);
-$endatlinenb        = (GETPOST('endatlinenb') ? GETPOST('endatlinenb') : '');
-$updatekeys         = (GETPOST('updatekeys', 'array') ? GETPOST('updatekeys', 'array') : array());
-$separator          = (GETPOST('separator', 'nohtml') ? GETPOST('separator', 'nohtml', 3) : '');
-$enclosure          = (GETPOST('enclosure', 'nohtml') ? GETPOST('enclosure', 'nohtml') : '"');  // We must use 'nohtml' and not 'alphanohtml' because we must accept "
-$charset            = GETPOST('charset', 'aZ09');
-$separator_used     = str_replace('\t', "\t", $separator);
-
+$endatlinenb = (GETPOST('endatlinenb') ? GETPOST('endatlinenb') : '');
+$updatekeys = (GETPOST('updatekeys', 'array') ? GETPOST('updatekeys', 'array') : array());
+$separator = (GETPOST('separator', 'nohtml') ? GETPOST('separator', 'nohtml', 3) : '');
+$enclosure = (GETPOST('enclosure', 'nohtml') ? GETPOST('enclosure', 'nohtml') : '"');  // We must use 'nohtml' and not 'alphanohtml' because we must accept "
+$charset = GETPOST('charset', 'aZ09');
+$separator_used = str_replace('\t', "\t", $separator);
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $hookmanager->initHooks(array('imports'));
-
 
 $objimport = new Import($db);
 $objimport->load_arrays($user, ($step == 1 ? '' : $datatoimport));
@@ -306,7 +309,6 @@ if ($action == 'saveselectorder') {
 }
 
 
-
 /*
  * View
  */
@@ -354,7 +356,7 @@ if ($step == 1 || !$datatoimport) {
     print '<td>&nbsp;</td>';
     print '</tr>';
 
-    if (count($objimport->array_import_module)) {
+    if (count($objimport->array_import_module ?? [])) {
         $sortedarrayofmodules = dol_sort_array($objimport->array_import_module, 'position_of_profile', 'asc', 0, 0, 1);
         foreach ($sortedarrayofmodules as $key => $value) {
             //var_dump($key.' '.$value['position_of_profile'].' '.$value['import_code'].' '.$objimport->array_import_module[$key]['module']->getName().' '.$objimport->array_import_code[$key]);
@@ -623,29 +625,29 @@ if ($step == 3 && $datatoimport) {
         $max = getDolGlobalString('MAIN_UPLOAD_DOC'); // In Kb
         $maxphp = @ini_get('upload_max_filesize'); // In unknown
         if (preg_match('/k$/i', $maxphp)) {
-            $maxphp = (int) substr($maxphp, 0, -1);
+            $maxphp = (int)substr($maxphp, 0, -1);
         }
         if (preg_match('/m$/i', $maxphp)) {
-            $maxphp = (int) substr($maxphp, 0, -1) * 1024;
+            $maxphp = (int)substr($maxphp, 0, -1) * 1024;
         }
         if (preg_match('/g$/i', $maxphp)) {
-            $maxphp = (int) substr($maxphp, 0, -1) * 1024 * 1024;
+            $maxphp = (int)substr($maxphp, 0, -1) * 1024 * 1024;
         }
         if (preg_match('/t$/i', $maxphp)) {
-            $maxphp = (int) substr($maxphp, 0, -1) * 1024 * 1024 * 1024;
+            $maxphp = (int)substr($maxphp, 0, -1) * 1024 * 1024 * 1024;
         }
         $maxphp2 = @ini_get('post_max_size'); // In unknown
         if (preg_match('/k$/i', $maxphp2)) {
-            $maxphp2 = (int) substr($maxphp2, 0, -1);
+            $maxphp2 = (int)substr($maxphp2, 0, -1);
         }
         if (preg_match('/m$/i', $maxphp2)) {
-            $maxphp2 = (int) substr($maxphp2, 0, -1) * 1024;
+            $maxphp2 = (int)substr($maxphp2, 0, -1) * 1024;
         }
         if (preg_match('/g$/i', $maxphp2)) {
-            $maxphp2 = (int) substr($maxphp2, 0, -1) * 1024 * 1024;
+            $maxphp2 = (int)substr($maxphp2, 0, -1) * 1024 * 1024;
         }
         if (preg_match('/t$/i', $maxphp2)) {
-            $maxphp2 = (int) substr($maxphp2, 0, -1) * 1024 * 1024 * 1024;
+            $maxphp2 = (int)substr($maxphp2, 0, -1) * 1024 * 1024 * 1024;
         }
         // Now $max and $maxphp and $maxphp2 are in Kb
         $maxmin = $max;
@@ -1227,7 +1229,7 @@ if ($step == 4 && $datatoimport) {
                     //var_dump($tmpstring1.' - '.$tmpstring2.' - '.$tmpval['labelkey'].' - '.$tmpval['label'].' - '.$tmpval2.' - '.$labeltarget);
                     if (
                         $tmpstring1 && ($tmpstring1 == $tmpcode || $tmpstring1 == strtolower($labeltarget)
-                        || $tmpstring1 == strtolower(dol_string_unaccent($labeltarget)) || $tmpstring1 == strtolower($tmpval2))
+                            || $tmpstring1 == strtolower(dol_string_unaccent($labeltarget)) || $tmpstring1 == strtolower($tmpval2))
                     ) {
                         if (empty($codeselectedarray[$code])) {
                             $selectforline .= ' selected';
@@ -1236,7 +1238,7 @@ if ($step == 4 && $datatoimport) {
                         }
                     } elseif (
                         $tmpstring2 && ($tmpstring2 == $tmpcode || $tmpstring2 == strtolower($labeltarget)
-                        || $tmpstring2 == strtolower(dol_string_unaccent($labeltarget)) || $tmpstring2 == strtolower($tmpval2))
+                            || $tmpstring2 == strtolower(dol_string_unaccent($labeltarget)) || $tmpstring2 == strtolower($tmpval2))
                     ) {
                         if (empty($codeselectedarray[$code])) {
                             $selectforline .= ' selected';
@@ -1248,10 +1250,10 @@ if ($step == 4 && $datatoimport) {
             } elseif ($modetoautofillmapping == 'session' && !empty($_SESSION['dol_array_match_file_to_database_select'])) {
                 $tmpselectioninsession = dolExplodeIntoArray($_SESSION['dol_array_match_file_to_database_select'], ',', '=');
                 //var_dump($code);
-                if (!empty($tmpselectioninsession[(string) ($i + 1)]) && $tmpselectioninsession[(string) ($i + 1)] == $tmpcode) {
+                if (!empty($tmpselectioninsession[(string)($i + 1)]) && $tmpselectioninsession[(string)($i + 1)] == $tmpcode) {
                     $selectforline .= ' selected';
                 }
-                $selectforline .= ' data-debug="' . $tmpcode . '-' . $code . '-' . $j . '-' . (!empty($tmpselectioninsession[(string) ($i + 1)]) ? $tmpselectioninsession[(string) ($i + 1)] : "") . '"';
+                $selectforline .= ' data-debug="' . $tmpcode . '-' . $code . '-' . $j . '-' . (!empty($tmpselectioninsession[(string)($i + 1)]) ? $tmpselectioninsession[(string)($i + 1)] : "") . '"';
             }
             $selectforline .= ' data-html="' . dol_escape_htmltag($labelhtml) . '"';
             $selectforline .= '>';
@@ -1488,7 +1490,7 @@ if ($step == 4 && $datatoimport) {
         $sql .= " FROM " . MAIN_DB_PREFIX . "import_model";
         $sql .= " WHERE type = '" . $db->escape($datatoimport) . "'";
         if (!getDolGlobalString('EXPORTS_SHARE_MODELS')) {  // EXPORTS_SHARE_MODELS means all templates are visible, whatever is owner.
-            $sql .= " AND fk_user IN (0, " . ((int) $user->id) . ")";
+            $sql .= " AND fk_user IN (0, " . ((int)$user->id) . ")";
         }
         $sql .= " ORDER BY rowid";
 
@@ -1869,18 +1871,18 @@ if ($step == 5 && $datatoimport) {
                 }
 
                 $parameters = array(
-                    'step'                         => $step,
-                    'datatoimport'                 => $datatoimport,
-                    'obj'                          => &$obj,
-                    'arrayrecord'                  => $arrayrecord,
+                    'step' => $step,
+                    'datatoimport' => $datatoimport,
+                    'obj' => &$obj,
+                    'arrayrecord' => $arrayrecord,
                     'array_match_file_to_database' => $array_match_file_to_database,
-                    'objimport'                    => $objimport,
-                    'fieldssource'                 => $fieldssource,
-                    'importid'                     => $importid,
-                    'updatekeys'                   => $updatekeys,
-                    'arrayoferrors'                => &$arrayoferrors,
-                    'arrayofwarnings'              => &$arrayofwarnings,
-                    'nbok'                         => &$nbok,
+                    'objimport' => $objimport,
+                    'fieldssource' => $fieldssource,
+                    'importid' => $importid,
+                    'updatekeys' => $updatekeys,
+                    'arrayoferrors' => &$arrayoferrors,
+                    'arrayofwarnings' => &$arrayofwarnings,
+                    'nbok' => &$nbok,
                 );
 
                 $reshook = $hookmanager->executeHooks('ImportInsert', $parameters);
@@ -2280,18 +2282,18 @@ if ($step == 6 && $datatoimport) {
             }
 
             $parameters = array(
-                'step'                         => $step,
-                'datatoimport'                 => $datatoimport,
-                'obj'                          => &$obj,
-                'arrayrecord'                  => $arrayrecord,
+                'step' => $step,
+                'datatoimport' => $datatoimport,
+                'obj' => &$obj,
+                'arrayrecord' => $arrayrecord,
                 'array_match_file_to_database' => $array_match_file_to_database,
-                'objimport'                    => $objimport,
-                'fieldssource'                 => $fieldssource,
-                'importid'                     => $importid,
-                'updatekeys'                   => $updatekeys,
-                'arrayoferrors'                => &$arrayoferrors,
-                'arrayofwarnings'              => &$arrayofwarnings,
-                'nbok'                         => &$nbok,
+                'objimport' => $objimport,
+                'fieldssource' => $fieldssource,
+                'importid' => $importid,
+                'updatekeys' => $updatekeys,
+                'arrayoferrors' => &$arrayoferrors,
+                'arrayofwarnings' => &$arrayofwarnings,
+                'nbok' => &$nbok,
             );
 
             $reshook = $hookmanager->executeHooks('ImportInsert', $parameters);
@@ -2373,7 +2375,6 @@ if ($step == 6 && $datatoimport) {
 }
 
 
-
 print '<br>';
 
 // End of page
@@ -2384,9 +2385,9 @@ $db->close();
 /**
  * Function to put the movable box of a source field
  *
- * @param   array   $fieldssource   List of source fields
- * @param   int     $pos            Pos
- * @param   string  $key            Key
+ * @param array $fieldssource List of source fields
+ * @param int $pos Pos
+ * @param string $key Key
  * @return  void
  */
 function show_elem($fieldssource, $pos, $key)
@@ -2467,8 +2468,8 @@ function show_elem($fieldssource, $pos, $key)
 /**
  * Return not used field number
  *
- * @param   array   $fieldssource   Array of field source
- * @param   array   $listofkey      Array of keys
+ * @param array $fieldssource Array of field source
+ * @param array $listofkey Array of keys
  * @return  integer
  */
 function getnewkey(&$fieldssource, &$listofkey)
@@ -2491,12 +2492,13 @@ function getnewkey(&$fieldssource, &$listofkey)
     $listofkey[$i] = 1;
     return $i;
 }
+
 /**
  * Return array with element inserted in it at position $position
  *
- * @param   array   $array          Array of field source
- * @param   mixed   $position       key of position to insert to
- * @param   array   $insertArray    Array to insert
+ * @param array $array Array of field source
+ * @param mixed $position key of position to insert to
+ * @param array $insertArray Array to insert
  * @return  array
  */
 function arrayInsert($array, $position, $insertArray)

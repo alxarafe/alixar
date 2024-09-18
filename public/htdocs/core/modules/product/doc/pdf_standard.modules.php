@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017   Laurent Destailleur     <eldy@products.sourceforge.net>
- * Copyright (C) 2023 	Anthony Berton			<anthony.berton@bb2a.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@products.sourceforge.net>
+ * Copyright (C) 2023 	    Anthony Berton			    <anthony.berton@bb2a.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\Product\Classes\ModelePDFProduct;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *  \file       htdocs/core/modules/product/doc/pdf_standard.modules.php

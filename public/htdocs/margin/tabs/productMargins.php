@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2012-2013  Christophe Battarel <christophe.battarel@altairis.fr>
+/* Copyright (C) 2012-2013  Christophe Battarel         <christophe.battarel@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *  \file       htdocs/margin/tabs/productMargins.php
@@ -111,7 +115,6 @@ if (empty($search_invoice_date_start) && empty($search_invoice_date_end) && !GET
         $search_invoice_date_end = dol_get_last_day($year_end, $month_end);
     }
 }
-
 
 /*
  * View

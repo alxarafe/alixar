@@ -1,21 +1,21 @@
 <?php
 
-/* Copyright (C) 2002-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2013	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2013-2019	Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2013		Florian Henry			<florian.henry@open-concept.pro>
- * Copyright (C) 2013		Cédric Salvador			<csalvador@gpcsolutions.fr>
- * Copyright (C) 2015		Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2015-2007	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2015		Abbes Bahfir			<bafbes@gmail.com>
- * Copyright (C) 2015-2016	Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2017		Josep Lluís Amador		<joseplluis@lliuretic.cat>
- * Copyright (C) 2018-2022	Charlene Benke			<charlene@patas-monkey.com>
- * Copyright (C) 2018-2024  Frédéric France			<frederic.france@free.fr>
- * Copyright (C) 2019-2023	Alexandre Spangaro		<aspangaro@easya.solutions>
+/* Copyright (C) 2002-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2013	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2019	Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2013		Florian Henry			    <florian.henry@open-concept.pro>
+ * Copyright (C) 2013		Cédric Salvador			    <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015		Marcos García			    <marcosgdf@gmail.com>
+ * Copyright (C) 2015-2007	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2015		Abbes Bahfir			    <bafbes@gmail.com>
+ * Copyright (C) 2015-2016	Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2017		Josep Lluís Amador		    <joseplluis@lliuretic.cat>
+ * Copyright (C) 2018-2022	Charlene Benke			    <charlene@patas-monkey.com>
+ * Copyright (C) 2018-2024  Frédéric France			    <frederic.france@free.fr>
+ * Copyright (C) 2019-2023	Alexandre Spangaro		    <aspangaro@easya.solutions>
  * Copyright (C) 2023		Nick Fragoulis
- * Copyright (C) 2023		Joachim Kueter		    <git-jk@bloxera.com>
+ * Copyright (C) 2023		Joachim Kueter		        <git-jk@bloxera.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -34,6 +34,19 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\Fournisseur;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *       \file       htdocs/fourn/facture/list.php
@@ -408,7 +421,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View

@@ -26,6 +26,7 @@
 namespace Dolibarr\Code\Hrm\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        class/position.class.php

@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2013       Florian Henry		  	<florian.henry@open-concept.pro>
- * Copyright (C) 2017      	Ferran Marcet       	<fmarcet@2byte.es>
- * Copyright (C) 2021		Frédéric France			<frederic.france@netlogic.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Florian Henry		  	    <florian.henry@open-concept.pro>
+ * Copyright (C) 2017      	Ferran Marcet       	    <fmarcet@2byte.es>
+ * Copyright (C) 2021		Frédéric France			    <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *      \file       htdocs/fourn/facture/note.php
@@ -31,8 +35,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
-if (isModEnabled('project')) {
-}
 
 $langs->loadLangs(array("bills", "companies"));
 
@@ -56,7 +58,6 @@ $usercancreate = ($user->hasRight("fournisseur", "facture", "creer") || $user->h
 $permissiontoadd = $usercancreate;
 $permissionnote = ($user->hasRight("fournisseur", "facture", "creer") || $user->hasRight("supplier_invoice", "creer")); // Used by the include of actions_setnotes.inc.php
 
-
 /*
  * Actions
  */
@@ -77,7 +78,6 @@ if ($action == 'setlabel' && ($user->hasRight("fournisseur", "facture", "creer")
         dol_print_error($db);
     }
 }
-
 
 /*
  * View

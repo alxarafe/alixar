@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2007-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2007-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *      \file       mo_list.php
  *      \ingroup    mrp
@@ -28,12 +35,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-
-// load mrp libraries
-require_once __DIR__ . '/class/mo.class.php';
-
-// for other modules
-//dol_include_once('/othermodule/class/otherobject.class.php');
 
 // Load translation files required by the page
 $langs->loadLangs(array("mrp", "other"));
@@ -612,7 +613,6 @@ if (isset($extrafields->attributes[$object->table_element]['computed']) && is_ar
         }
     }
 }
-
 
 $bom = new BOM($db);
 $product = new Product($db);

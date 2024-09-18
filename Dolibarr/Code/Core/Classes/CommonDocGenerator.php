@@ -1420,7 +1420,6 @@ abstract class CommonDocGenerator
         return $extrafieldOutputContent;
     }
 
-
     /**
      *  display extrafields columns content
      *

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2019-2020  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2023 		Christian Humpel     <christian.humpel@gmail.com>
- * Copyright (C) 2023 		Vincent de Grandpré  <vincent@de-grandpre.quebec>
+/* Copyright (C) 2019-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023 		Christian Humpel            <christian.humpel@gmail.com>
+ * Copyright (C) 2023 		Vincent de Grandpré         <vincent@de-grandpre.quebec>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -20,6 +20,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Mrp\Classes\MoLine;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Workstation\Classes\Workstation;
 
 /**
  *    \file       mo_production.php
@@ -488,8 +504,6 @@ if (empty($reshook)) {
         }
     }
 }
-
-
 
 /*
  * View

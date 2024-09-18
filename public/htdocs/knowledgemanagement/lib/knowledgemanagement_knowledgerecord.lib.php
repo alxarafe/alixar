@@ -1,6 +1,7 @@
 <?php
 
-/* Copyright (C) 2021       Frédéric France           <frederic.france@netlogic.fr>
+/* Copyright (C) 2021       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
 
 /**
  * \file    htdocs/knowledgemanagement/lib/knowledgemanagement_knowledgerecord.lib.php

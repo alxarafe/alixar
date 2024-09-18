@@ -24,13 +24,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\ProductBatch\Classes\ModeleNumRefBatch;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  * \file       htdocs/core/modules/product_batch/mod_sn_advanced.php
  * \ingroup    productbatch
  * \brief      File containing class for numbering model of SN advanced
  */
-
-
 
 /**
  *  Class to manage Batch numbering rules advanced
@@ -52,7 +56,6 @@ class mod_sn_advanced extends ModeleNumRefBatch
      * @var string name
      */
     public $name = 'sn_advanced';
-
 
     /**
      *  Returns the description of the numbering model

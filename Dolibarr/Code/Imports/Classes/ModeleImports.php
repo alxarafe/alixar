@@ -21,6 +21,11 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Imports\Classes;
+
+use Dolibarr\Code\Societe\Classes\Societe;
+use DoliDB;
+
 /**
  *  \file       htdocs/core/modules/import/modules_import.php
  *  \ingroup    export
@@ -28,7 +33,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
-
 
 /**
  *  Parent class for import file readers

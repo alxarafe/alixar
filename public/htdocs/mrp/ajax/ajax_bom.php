@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2019   Laurent Destailleur (eldy)  <eldy@users.sourceforge.net>
+/* Copyright (C) 2019       Laurent Destailleur (eldy)  <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Bom\Classes\BOM;
 
 /**
  *  \file       htdocs/mrp/ajax/ajax_bom.php

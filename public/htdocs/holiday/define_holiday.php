@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2007-2022  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2011		Dimitri Mouillard	<dmouillard@teclib.com>
- * Copyright (C) 2013		Marcos García		<marcosgdf@gmail.com>
- * Copyright (C) 2016		Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2007-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011		Dimitri Mouillard	        <dmouillard@teclib.com>
+ * Copyright (C) 2013		Marcos García		        <marcosgdf@gmail.com>
+ * Copyright (C) 2016		Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      File that defines the balance of paid holiday of users.
  *
@@ -31,9 +36,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\User\Classes\User;
-
 
 // Load translation files required by the page
 $langs->loadlangs(array('users', 'other', 'holiday', 'hrm'));
@@ -68,13 +70,11 @@ if (!$sortorder) {
     $sortorder = "ASC";
 }
 
-
 // Initialize technical object to manage hooks. Note that conf->hooks_modules contains array
 $hookmanager->initHooks(array('defineholidaylist'));
 $extrafields = new ExtraFields($db);
 
 $holiday = new Holiday($db);
-
 
 if (empty($conf->holiday->enabled)) {
     accessforbidden('Module not enabled');
@@ -96,7 +96,6 @@ $arrayfields = array(
     'cp.nbHoliday' => array('label' => $langs->trans("MenuConfCP"), 'checked' => 1, 'position' => 40),
     'cp.note_public' => array('label' => $langs->trans("Note"), 'checked' => 1, 'position' => 50),
 );
-
 
 /*
  * Actions

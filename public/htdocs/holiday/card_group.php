@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2011       Dimitri Mouillard   <dmouillard@teclib.com>
- * Copyright (C) 2012-2016	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2012-2016	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2013		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2017		Alexandre Spangaro	<aspangaro@open-dsi.fr>
- * Copyright (C) 2014-2017  Ferran Marcet		<fmarcet@2byte.es>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
- * Copyright (C) 2020-2021  Udo Tamm            <dev@dolibit.de>
- * Copyright (C) 2022		Anthony Berton      <anthony.berton@bb2a.fr>
+/* Copyright (C) 2011       Dimitri Mouillard           <dmouillard@teclib.com>
+ * Copyright (C) 2012-2016	Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2012-2016	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2013		Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2017		Alexandre Spangaro	        <aspangaro@open-dsi.fr>
+ * Copyright (C) 2014-2017  Ferran Marcet		        <fmarcet@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2020-2021  Udo Tamm                    <dev@dolibit.de>
+ * Copyright (C) 2022		Anthony Berton              <anthony.berton@bb2a.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -26,6 +26,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/holiday/card.php
  *      \ingroup    holiday
@@ -35,6 +40,8 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\User\Classes\UserGroup;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/holiday.lib.php';

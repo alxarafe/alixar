@@ -1,19 +1,19 @@
 <?php
 
-/* Copyright (C) 2003-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2004-2020	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2004		Christophe Combelles	<ccomb@free.fr>
- * Copyright (C) 2005		Marc Barilley / Ocebo	<marc@ocebo.com>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2014		Teddy Andreotti			<125155@supinfo.com>
- * Copyright (C) 2015       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2015       Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2017       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2018-2020  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2021       Charlene Benke          <charlene@patas-monkey.com>
- * Copyright (C) 2022       Udo Tamm				<dev@dolibit.de>
- * Copyright (C) 2023       Sylvain Legrand			<technique@infras.fr>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004		Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2004-2020	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Christophe Combelles	    <ccomb@free.fr>
+ * Copyright (C) 2005		Marc Barilley / Ocebo	    <marc@ocebo.com>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2014		Teddy Andreotti			    <125155@supinfo.com>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2017       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018-2020  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2021       Charlene Benke              <charlene@patas-monkey.com>
+ * Copyright (C) 2022       Udo Tamm				    <dev@dolibit.de>
+ * Copyright (C) 2023       Sylvain Legrand			    <technique@infras.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -30,6 +30,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/fourn/facture/paiement.php
@@ -107,8 +114,6 @@ $extrafields->fetch_name_optionals_label($object->table_element);
 $search_array_options = $extrafields->getOptionalsFromPost($object->table_element, '', 'search_');
 
 $arrayfields = array();
-
-
 
 /*
  * Actions
@@ -373,7 +378,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View

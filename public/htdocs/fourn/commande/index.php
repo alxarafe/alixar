@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2012	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2012		Vinicius Nogueira	<viniciusvgn@gmail.com>
- * Copyright (C) 2019		Nicolas ZABOURI         <info@inovea-conseil.com>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2012	Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2012		Vinicius Nogueira	        <viniciusvgn@gmail.com>
+ * Copyright (C) 2019		Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,7 +22,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *    \file       htdocs/fourn/commande/index.php
@@ -49,7 +53,6 @@ if ($user->socid) {
     $socid = $user->socid;
 }
 $result = restrictedArea($user, 'fournisseur', $orderid, '', 'commande');
-
 
 /*
  * 	View

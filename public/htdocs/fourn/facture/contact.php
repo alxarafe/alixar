@@ -22,13 +22,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       htdocs/fourn/facture/contact.php
  *      \ingroup    invoice, fournisseur
  *      \brief      Onglet de gestion des contacts des factures
  */
-
-use Dolibarr\Code\Contact\Classes\Contact;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -107,7 +112,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View

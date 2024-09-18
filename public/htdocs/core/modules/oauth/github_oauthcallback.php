@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2022       Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Frederic France      <frederic.france@free.fr>
+/* Copyright (C) 2022       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use OAuth\Common\Http\Uri\UriFactory;
 
 /**
  *      \file       htdocs/core/modules/oauth/github_oauthcallback.php
@@ -47,11 +49,10 @@ if (empty($keyforprovider) && !empty($_SESSION["oauthkeyforproviderbeforeoauthju
 /**
  * Create a new instance of the URI class with the current URI, stripping the query string
  */
-$uriFactory = new \OAuth\Common\Http\Uri\UriFactory();
+$uriFactory = new UriFactory();
 //$currentUri = $uriFactory->createFromSuperGlobalArray($_SERVER);
 //$currentUri->setQuery('');
 $currentUri = $uriFactory->createFromAbsolute($urlwithroot . '/core/modules/oauth/github_oauthcallback.php');
-
 
 /**
  * Load the credential for the service

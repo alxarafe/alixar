@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2012 Regis Houssin  <regis.houssin@inodbox.com>
- * Copyright (C) 2018      Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2018       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,12 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\ModelePDFProjects;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+
 /**
  *  \file       htdocs/core/modules/project/doc/pdf_baleine.modules.php
  *  \ingroup    project
@@ -30,7 +36,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-
 
 /**
  *  Class to manage generation of project document Baleine

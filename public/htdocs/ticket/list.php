@@ -39,7 +39,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
 use Dolibarr\Code\User\Classes\User;
 
-include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
 include_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
 include_once DOL_DOCUMENT_ROOT . '/core/lib/project.lib.php';
 

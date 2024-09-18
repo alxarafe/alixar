@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2006-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2012      Christophe Battarel  <christophe.battarel@altairis.fr>
- * Copyright (C) 2012-2016 Juanjo Menent		<jmenent@2byte.es>
+/* Copyright (C) 2006-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2012-2016  Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,14 +22,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Imports\Classes\ModeleImports;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/core/modules/import/import_csv.modules.php
  *      \ingroup    import
  *      \brief      File to load import files with CSV format
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/import/modules_import.php';
-
 
 /**
  *  Class to import CSV files

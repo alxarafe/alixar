@@ -57,7 +57,6 @@ if (isModEnabled('invoice')) {
 if (isModEnabled('intervention')) {
 }
 if (isModEnabled('loan')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loanschedule.class.php';
 }
 if (isModEnabled('stock')) {
 }

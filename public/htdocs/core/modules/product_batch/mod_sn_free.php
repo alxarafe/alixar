@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,12 +20,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\ProductBatch\Classes\ModeleNumRefBatch;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *       \file       htdocs/core/modules/product_batch/mod_sn_free.php
  *       \ingroup    productbatch
  *       \brief      File containing class for numbering model of SN free
  */
-
 
 /**
  *  \class      mod_codeproduct_leopard

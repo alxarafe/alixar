@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville  <rodolphe@quiedeville.org>
- * Copyright (C) 2005      Marc Barilley / Ocebo <marc@ocebo.com>
- * Copyright (C) 2006-2010 Laurent Destailleur   <eldy@users.sourceforge.net>
- * Copyright (C) 2014      Marcos García         <marcosgdf@gmail.com>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2006-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\SupplierPayment\Classes\ModelePDFSuppliersPayments;
+
 /**
  *    \file       htdocs/fourn/paiement/card.php
  *    \ingroup    invoice, fournisseur
@@ -32,10 +40,8 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 
-
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'bills', 'companies', 'suppliers'));
-
 
 // Get Parameters
 $id         = GETPOSTINT('id');

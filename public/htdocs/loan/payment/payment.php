@@ -19,6 +19,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Code\Loan\Classes\LoanSchedule;
+use Dolibarr\Code\Loan\Classes\PaymentLoan;
+
 /**
  *      \file       htdocs/loan/payment/payment.php
  *      \ingroup    Loan
@@ -27,7 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loanschedule.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/loan.lib.php';
 
 $langs->loadLangs(array("bills", "loan"));

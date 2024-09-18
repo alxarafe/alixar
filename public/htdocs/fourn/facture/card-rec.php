@@ -28,6 +28,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\FactureFournisseur\Classes\ModelePDFSuppliersInvoices;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseurLigneRec;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseurRec;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *    \file       htdocs/fourn/facture/card-rec.php
  *    \ingroup    invoice fournisseurs
@@ -35,13 +51,7 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture-rec.class.php';
-if (isModEnabled('project')) {
-    include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
-}
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 
 // Load translation files required by the page
@@ -215,7 +225,6 @@ if (empty($reshook)) {
             if ($ret < 0) {
                 $error++;
             }
-
 
             $db->begin();
 

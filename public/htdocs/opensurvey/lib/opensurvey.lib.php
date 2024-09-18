@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2013 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2014 Marcos García			<marcosgdf@gmail.com>
+/* Copyright (C) 2013       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014       Marcos García			    <marcosgdf@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  *
 * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,7 @@
  *  \brief      Functions for module
  */
 
+use Dolibarr\Code\OpenSurvey\Classes\Opensurveysondage;
 use Dolibarr\Lib\Images;
 
 /**

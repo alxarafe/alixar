@@ -38,10 +38,6 @@ use stdClass;
  *   \brief      File of class to manage user groups
  */
 
-if (isModEnabled('ldap')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . "/core/class/ldap.class.php";
-}
-
 /**
  *  Class to manage user groups
  */
@@ -142,7 +138,6 @@ class UserGroup extends CommonObject
      * @var string[]    List of child tables. To know object to delete on cascade.
      */
     protected $childtablesoncascade = array('usergroup_rights', 'usergroup_user');
-
 
     /**
      *    Class constructor

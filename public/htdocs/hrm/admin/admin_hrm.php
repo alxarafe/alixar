@@ -1,6 +1,7 @@
 <?php
 
-/* Copyright (C) 2015       Alexandre Spangaro <aspangaro@open-dsi.fr>
+/* Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *    \file       htdocs/hrm/admin/admin_hrm.php
@@ -53,7 +56,6 @@ if (!isModEnabled('hrm')) {
 if (empty($permissiontoread)) {
     accessforbidden();
 }
-
 
 /*
  * Actions

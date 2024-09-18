@@ -27,8 +27,6 @@
  *       \brief      Fichier de la class des gestion leopard des codes produits
  */
 
-
-
 /**
  *  \class      mod_codeproduct_leopard
  *  \brief      Class permettant la gestion leopard des codes produits

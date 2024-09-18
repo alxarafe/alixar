@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2010 Regis Houssin  <regis.houssin@inodbox.com>
+/* Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,7 +25,9 @@
  *   \brief      File containing the Universal project reference numbering model class
  */
 
-
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  Class to manage the numbering module Universal for project references
@@ -59,7 +61,6 @@ class mod_project_universal extends ModeleNumRefProjects
      * @var string model name
      */
     public $name = 'Universal';
-
 
     /**
      *  Returns the description of the numbering model

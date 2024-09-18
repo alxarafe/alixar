@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2017  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2021  Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021  Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021  Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021  Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,7 +21,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
 
+use Dolibarr\Code\Hrm\Classes\Job;
+
+/*
  * \file        htdocs/hrm/compare.php
  * \ingroup     hrm
  * \brief       This file compares skills of user groups
@@ -34,15 +38,11 @@
  * 3-  the right part displays the members of group 2 or the job to be compared
  */
 
-
 // Load Dolibarr environment
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/position.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm.lib.php';
-
 
 // Load translation files required by the page
 $langs->load('hrm');

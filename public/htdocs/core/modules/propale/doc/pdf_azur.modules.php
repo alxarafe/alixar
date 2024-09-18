@@ -29,9 +29,13 @@
  */
 
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Propalmergepdfproduct;
 use Dolibarr\Code\Propale\Classes\ModelePDFPropales;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/core/modules/propale/doc/pdf_azur.modules.php

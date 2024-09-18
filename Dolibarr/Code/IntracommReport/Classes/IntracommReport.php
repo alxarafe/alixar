@@ -22,8 +22,12 @@
 
 namespace Dolibarr\Code\IntracommReport\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use Dolibarr\Code\Categories\Classes\Categorie;
+use DoliDB;
+use SimpleXMLElement;
+use stdClass;
 
 /**
  *    \file       htdocs/intracommreport/class/intracommreport.class.php

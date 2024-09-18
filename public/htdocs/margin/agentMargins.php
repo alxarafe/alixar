@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2012-2013  Christophe Battarel <christophe.battarel@altairis.fr>
- * Copyright (C) 2014		Ferran Marcet		<fmarcet@2byte.es>
- * Copyright (C) 2015       Marcos García       <marcosgdf@gmail.com>
+/* Copyright (C) 2012-2013  Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2014		Ferran Marcet		        <fmarcet@2byte.es>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/margin/agentMargins.php
@@ -90,8 +95,6 @@ $hookmanager->initHooks(array('marginagentlist'));
  */
 
 // None
-
-
 
 /*
  * View

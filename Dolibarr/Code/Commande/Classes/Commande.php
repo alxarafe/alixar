@@ -34,9 +34,15 @@
 namespace Dolibarr\Code\Commande\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonOrder;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use DoliDB;
 
 /**
  *  \file       htdocs/commande/class/commande.class.php

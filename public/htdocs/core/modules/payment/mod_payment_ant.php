@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2015      Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2015       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2007-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2011      Dimitri Mouillard    <dmouillard@teclib.com>
- * Copyright (C) 2020      Tobias Sekan         <tobias.sekan@startmail.com>
+/* Copyright (C) 2007-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011       Dimitri Mouillard           <dmouillard@teclib.com>
+ * Copyright (C) 2020       Tobias Sekan                <tobias.sekan@startmail.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\User\Classes\UserGroup;
+
 /**
  *  Displays the log of actions performed in the module.
  *
@@ -36,9 +43,6 @@ if (!$user->hasRight('holiday', 'define_holiday') || $user->socid > 0) {
 }
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-
-use Dolibarr\Code\User\Classes\User;
-
 
 $action             = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'add', 'create', 'edit', 'update', 'view', ...
 $massaction         = GETPOST('massaction', 'alpha'); // The bulk action (combo box choice into lists)

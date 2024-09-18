@@ -40,7 +40,6 @@ use DoliDB;
  *      \brief      File of class to manage payments of suppliers invoices
  */
 
-
 /**
  *  Class to manage payments for supplier invoices
  */

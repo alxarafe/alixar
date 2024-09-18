@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2010-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2018  Charlene Benke          <charlie@patas-monkey.com>
- * Copyright (C) 2018       Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2018  Charlene Benke              <charlie@patas-monkey.com>
+ * Copyright (C) 2018       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,7 +21,15 @@
  * or see https://www.gnu.org/
  */
 
-use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\CommonInvoice;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReportLine;
+use Dolibarr\Code\Projet\Classes\ModelePDFProjects;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/core/modules/project/doc/pdf_beluga.modules.php

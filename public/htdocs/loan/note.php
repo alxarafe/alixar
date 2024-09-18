@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2007  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2013       Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2015       Frederic France         <frederic.france@free.fr>
- * Copyright (C) 2016-2023  Alexandre Spangaro      <aspangaro@easya.solutions>
- * Copyright (C) 2017       Ferran Marcet           <fmarcet@2byte.es>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2007  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
+ * Copyright (C) 2016-2023  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2017       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,6 +24,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *   \file       htdocs/loan/note.php
  *   \ingroup    loan
@@ -33,8 +37,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/loan.lib.php';
-if (isModEnabled('project')) {
-}
 
 $action = GETPOST('action', 'aZ09');
 
@@ -54,11 +56,9 @@ if ($id > 0) {
 
 $permissionnote = $user->hasRight('loan', 'write'); // Used by the include of actions_setnotes.inc.php
 
-
 /*
  *  Actions
  */
-
 
 $reshook = $hookmanager->executeHooks('doActions', array(), $object, $action); // Note that $action and $object may have been modified by some hooks
 if ($reshook < 0) {
@@ -67,7 +67,6 @@ if ($reshook < 0) {
 if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_setnotes.inc.php'; // Must be include, not include_once
 }
-
 
 /*
  *  View

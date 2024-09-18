@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017   Laurent Destailleur <eldy@stocks.sourceforge.net>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@stocks.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -19,6 +19,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\Movement\Classes\ModelePDFMovement;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/core/modules/movement/doc/pdf_standard.modules.php

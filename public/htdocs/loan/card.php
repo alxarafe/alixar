@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2014-2023  Alexandre Spangaro   <aspangaro@easya.solutions>
- * Copyright (C) 2015       Frederic France      <frederic.france@free.fr>
- * Copyright (C) 2017       Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2020       Maxime DEMAREST      <maxime@indelog.fr>
+/* Copyright (C) 2014-2023  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
+ * Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2020       Maxime DEMAREST             <maxime@indelog.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,13 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *   \file       htdocs/loan/card.php
@@ -33,13 +40,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/loan.lib.php';
-
-if (isModEnabled('accounting')) {
-}
-
-if (isModEnabled('project')) {
-}
-
 
 // Load translation files required by the page
 $langs->loadLangs(array("bills", "compta", "loan"));
@@ -249,7 +249,6 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_builddoc.inc.php';
 }
 
-
 /*
  * View
  */
@@ -265,7 +264,6 @@ if (isModEnabled('accounting')) {
 $title = $langs->trans("Loan") . ' - ' . $langs->trans("Card");
 $help_url = 'EN:Module_Loan|FR:Module_Emprunt';
 llxHeader("", $title, $help_url);
-
 
 // Create mode
 if ($action == 'create') {

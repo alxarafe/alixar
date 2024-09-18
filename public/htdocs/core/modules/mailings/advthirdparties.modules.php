@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2010 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin       <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This file is an example to follow to add your own email selector inside
@@ -11,14 +11,15 @@
  * Code that need to be changed in this file are marked by "CHANGE THIS" tag.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Mailing\Classes\MailingTargets;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/core/modules/mailings/advthirdparties.modules.php
  *  \ingroup    mailing
  *  \brief      Example file to provide a list of recipients for mailing module
  */
-
 
 /**
  *  Class to manage a list of personalised recipients for mailing feature

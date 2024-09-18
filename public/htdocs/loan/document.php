@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2014-2023  Alexandre Spangaro  <aspangaro@easya.solutions>
- * Copyright (C) 2017       Ferran Marcet       <fmarcet@2byte.es>
+/* Copyright (C) 2014-2023  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2017       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *       \file       htdocs/loan/document.php
  *       \ingroup    loan
@@ -30,8 +34,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/loan.lib.php';
-if (isModEnabled('project')) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("other", "companies", "compta", "bills", "loan"));
@@ -74,13 +76,11 @@ $modulepart = 'loan';
 
 $permissiontoadd = $user->hasRight('loan', 'write'); // Used by the include of actions_addupdatedelete.inc.php and actions_linkedfiles.inc.php
 
-
 /*
  * Actions
  */
 
 include DOL_DOCUMENT_ROOT . '/core/actions_linkedfiles.inc.php';
-
 
 /*
  * View

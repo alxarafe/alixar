@@ -1,18 +1,18 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2018  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@capnetworks.com>
- * Copyright (C) 2012-2016  Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2013-2019	Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2013-2015  Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2013       Jean Heimburger         <jean@tiaris.info>
- * Copyright (C) 2013       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2013       Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2013       Adolfo segura           <adolfo.segura@gmail.com>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2016       Ferran Marcet		    <fmarcet@2byte.es>
- * Copyright (C) 2023       Lenin Rivas		    	<lenin.rivas777@gmail.com>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@capnetworks.com>
+ * Copyright (C) 2012-2016  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2013-2019	Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013-2015  Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2013       Jean Heimburger             <jean@tiaris.info>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013       Adolfo segura               <adolfo.segura@gmail.com>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2016       Ferran Marcet		        <fmarcet@2byte.es>
+ * Copyright (C) 2023       Lenin Rivas		    	    <lenin.rivas777@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -37,9 +37,13 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\MultiCurrency\Classes\CurrencyRate;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/multicurrency.lib.php';
-
 
 // Load translation files required by the page
 $langs->loadLangs(array('admin', 'multicurrency'));
@@ -86,7 +90,6 @@ $newcardbutton = '';
 $object = new CurrencyRate($db);
 $form = new Form($db);
 $extrafields = new ExtraFields($db);
-
 
 // Initialize technical object to manage hooks. Note that conf->hooks_modules contains array of hooks
 $hookmanager->initHooks(array('EditorRatelist', 'globallist'));

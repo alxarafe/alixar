@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2010-2012 Regis Houssin  <regis.houssin@inodbox.com>
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
 
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\ModelePDFProjects;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/core/modules/project/doc/pdf_timespent.modules.php

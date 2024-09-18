@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2012   Christophe Battarel <christophe.battarel@altairis.fr>
- * Copyright (C) 2014   Marcos García       <marcosgdf@gmail.com>
+/* Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify

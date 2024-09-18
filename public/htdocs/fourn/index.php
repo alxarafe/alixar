@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2001-2006 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,9 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/fourn/index.php
@@ -39,7 +42,6 @@ if ($user->socid) {
 }
 $result = restrictedArea($user, 'societe', $socid, '');
 
-
 /*
  * View
  */
@@ -52,11 +54,9 @@ llxHeader("", $langs->trans("SuppliersArea"));
 
 print load_fiche_titre($langs->trans("SuppliersArea"));
 
-
 //print '<table border="0" width="100%" class="notopnoleftnoright">';
 //print '<tr><td valign="top" width="30%" class="notopnoleft">';
 print '<div class="fichecenter"><div class="fichethirdleft">';
-
 
 // Orders
 $sql = "SELECT count(cf.rowid), cf.fk_statut";

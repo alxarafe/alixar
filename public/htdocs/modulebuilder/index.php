@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004-2023 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2019 Nicolas ZABOURI	<info@inovea-conseil.com>
- * Copyright (C) 2023      Alexandre Janniaux   <alexandre.janniaux@gmail.com>
+/* Copyright (C) 2004-2023  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2019  Nicolas ZABOURI	            <info@inovea-conseil.com>
+ * Copyright (C) 2023       Alexandre Janniaux          <alexandre.janniaux@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -23,6 +23,8 @@
  * You can also make a direct call the page with parameter like this:
  * htdocs/modulebuilder/index.php?module=Inventory@/pathtodolibarr/htdocs/product
  */
+
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *       \file       htdocs/modulebuilder/index.php

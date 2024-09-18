@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005-2012  Regis Houssin   <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2012	Juanjo Menent	<jmenent@2byte.es>
- * Copyright (C) 2013       Florian Henry		  	<florian.henry@open-concept.pro>
- * Copyright (C) 2017      Ferran Marcet       	 <fmarcet@2byte.es>
+/* Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2012	Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2013       Florian Henry		  	    <florian.henry@open-concept.pro>
+ * Copyright (C) 2017       Ferran Marcet       	    <fmarcet@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *  \file       htdocs/fichinter/note.php
@@ -62,7 +66,6 @@ if ($reshook < 0) {
 if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_setnotes.inc.php'; // Must be include, not include_once
 }
-
 
 /*
  * View

@@ -28,7 +28,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once DOL_DOCUMENT_ROOT . "/core/lib/files.lib.php";
-require_once DOL_DOCUMENT_ROOT . "/opensurvey/class/opensurveysondage.class.php";
 
 
 $action = GETPOST('action', 'aZ09');

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2004-2022 Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2011       Juanjo Menent           <jmenent@2byte.es>
+/* Copyright (C) 2004-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *       \file       htdocs/ftp/admin/ftpclient.php
@@ -216,7 +218,7 @@ if (!function_exists('ftp_connect')) {
 
     print '</table>'; ?>
     <div class="center">
-    <input type="submit" class="button" value="<?php echo $langs->trans("Add") ?>"></div>
+        <input type="submit" class="button" value="<?php echo $langs->trans("Add") ?>"></div>
     <input type="hidden" name="action" value="add">
     <input type="hidden" name="numero_entry" value="<?php echo($lastftpentry + 1) ?>">
     <?php

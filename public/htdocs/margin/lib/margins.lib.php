@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2012      Christophe Battarel <christophe.battarel@altairis.fr>
- * Copyright (C) 2014-2015 Marcos García       <marcosgdf@gmail.com>
- * Copyright (C) 2016	   Florian Henry       <florian.henry@open-concept.pro>
+/* Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2014-2015  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2016	    Florian Henry               <florian.henry@open-concept.pro>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
 
 /**
  *  \file           /htdocs/margin/lib/margins.lib.php

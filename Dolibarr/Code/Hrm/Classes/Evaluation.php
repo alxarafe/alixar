@@ -225,7 +225,6 @@ class Evaluation extends CommonObject
         $resultcreate = $this->createCommon($user, $notrigger);
 
         if ($resultcreate > 0) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skillrank.class.php';
             $skillRank = new SkillRank($this->db);
             $TRequiredRanks = $skillRank->fetchAll('ASC', 't.rowid', 0, 0, '(fk_object:=:' . ((int) $this->fk_job) . ") AND (objecttype:=:'job')");
 

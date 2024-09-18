@@ -1,18 +1,18 @@
 <?php
 
-/* Copyright (C) 2003-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2004-2020	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2004		Christophe Combelles	<ccomb@free.fr>
- * Copyright (C) 2005		Marc Barilley / Ocebo	<marc@ocebo.com>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2014		Teddy Andreotti			<125155@supinfo.com>
- * Copyright (C) 2015		Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2015		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2017-2023  Alexandre Spangaro		<aspangaro@easya.solutions>
- * Copyright (C) 2018-2021	Frédéric France			<frederic.france@netlogic.fr>
- * Copyright (C) 2020		Tobias Sekan			<tobias.sekan@startmail.com>
- * Copyright (C) 2021		Ferran Marcet			<fmarcet@2byte.es>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004		Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2004-2020	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Christophe Combelles	    <ccomb@free.fr>
+ * Copyright (C) 2005		Marc Barilley / Ocebo	    <marc@ocebo.com>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2014		Teddy Andreotti			    <125155@supinfo.com>
+ * Copyright (C) 2015		Marcos García			    <marcosgdf@gmail.com>
+ * Copyright (C) 2015		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2017-2023  Alexandre Spangaro		    <aspangaro@easya.solutions>
+ * Copyright (C) 2018-2021	Frédéric France			    <frederic.france@netlogic.fr>
+ * Copyright (C) 2020		Tobias Sekan			    <tobias.sekan@startmail.com>
+ * Copyright (C) 2021		Ferran Marcet			    <fmarcet@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -31,10 +31,15 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/fourn/paiement/list.php
-*   \ingroup    fournisseur,facture
+ *  \ingroup    fournisseur,facture
  *  \brief      Payment list for supplier invoices
  */
 

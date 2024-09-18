@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2013-2017 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2014      Marcos García       <marcosgdf@gmail.com>
+/* Copyright (C) 2013-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\OpenSurvey\Classes\Opensurveysondage;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/opensurvey/list.php
  *  \ingroup    opensurvey
@@ -28,7 +34,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once DOL_DOCUMENT_ROOT . "/core/lib/files.lib.php";
-require_once DOL_DOCUMENT_ROOT . "/opensurvey/class/opensurveysondage.class.php";
 
 // Load translation files required by the page
 $langs->load("opensurvey");

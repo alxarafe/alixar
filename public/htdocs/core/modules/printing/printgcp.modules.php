@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2019  Frédéric France      <frederic.france@netlogic.fr>
+ * Copyright (C) 2014-2019  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,10 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Printing\Classes\PrintingDriver;
+use OAuth\Common\Storage\DoliStorage;
+use OAuth\Common\Consumer\Credentials;
+
 /**
  *      \file       htdocs/core/modules/printing/printgcp.modules.php
  *      \ingroup    printing
@@ -27,9 +31,6 @@
 
 include_once DOL_DOCUMENT_ROOT . '/core/modules/printing/modules_printing.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/OAuth/bootstrap.php';
-
-use OAuth\Common\Storage\DoliStorage;
-use OAuth\Common\Consumer\Credentials;
 
 /**
  *     Class to provide printing with Google Cloud Print

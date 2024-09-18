@@ -19,17 +19,17 @@
  * or see https://www.gnu.org/
  */
 
-/**
- *  \file       htdocs/core/modules/member/mod_member_simple.php
- *  \ingroup    member
- *  \brief      File with class to manage the numbering module Simple for member references
- */
-
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Members\Classes\ModeleNumRefMembers;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Core\Base\CommonObject;
+
+/**
+ *  \file       htdocs/core/modules/member/mod_member_simple.php
+ *  \ingroup    member
+ *  \brief      File with class to manage the numbering module Simple for member references
+ */
 
 /**
  *  Class to manage the numbering module Simple for member references

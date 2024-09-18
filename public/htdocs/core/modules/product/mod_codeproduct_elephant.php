@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011      Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011       Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,13 +23,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\ModeleProductCode;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *       \file       htdocs/core/modules/product/mod_codeproduct_elephant.php
  *       \ingroup    product
  *       \brief      File of class to manage product code with elephant rule
  */
-
-
 
 /**
  *  Class to manage product code with elephant rule
@@ -52,7 +54,6 @@ class mod_codeproduct_elephant extends ModeleProductCode
      */
     public $numbitcounter;
 
-
     /**
      *  Constructor
      */
@@ -65,7 +66,6 @@ class mod_codeproduct_elephant extends ModeleProductCode
         $this->code_auto = 1;
         $this->prefixIsRequired = 0;
     }
-
 
     /**
      *  Return description of module

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017-2021 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021      NextGestion			<contact@nextgestion.com>
+/* Copyright (C) 2017-2021  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       NextGestion			        <contact@nextgestion.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Partnerships\Classes\Partnership;
+
 /**
  *      \file       partnership_card.php
  *      \ingroup    partnership
@@ -26,7 +35,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-use Dolibarr\Code\Partnerships\Classes\Partnership;
 require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/lib/partnership.lib.php';
 
 // Load translation files required by the page
@@ -258,8 +266,6 @@ if (empty($reshook)) {
 if ($object->id > 0 && $object->status == $object::STATUS_REFUSED) {
     $object->fields['reason_decline_or_cancel']['visible'] = 3;
 }
-
-
 
 /*
  * View

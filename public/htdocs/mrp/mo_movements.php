@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2019 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2022 Ferran Marcet <fmarcet@2byte.es>
+/* Copyright (C) 2019       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *    \file       mo_movements.php
@@ -241,8 +253,6 @@ if (empty($reshook)) {
         $result = $object->setStatut($object::STATUS_INPROGRESS, 0, '', 'MRP_REOPEN');
     }
 }
-
-
 
 /*
  * View

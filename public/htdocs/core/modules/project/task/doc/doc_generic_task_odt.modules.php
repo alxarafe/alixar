@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2010-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2012		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2013		Florian Henry		<florian.henry@ope-concept.pro>
- * Copyright (C) 2016		Charlie Benke		<charlie@patas-monkey.com>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
- * Copyright (C) 2023      	Gauthier VERDOL     <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2010-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2013		Florian Henry		        <florian.henry@ope-concept.pro>
+ * Copyright (C) 2016		Charlie Benke		        <charlie@patas-monkey.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2023      	Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,9 +24,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\ModelePDFTask;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  \file       htdocs/core/modules/project/task/doc/doc_generic_task_odt.modules.php

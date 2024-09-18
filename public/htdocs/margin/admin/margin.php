@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2012   Christophe Battarel <christophe.battarel@altairis.fr>
- * Copyright (C) 2016	Laurent Destailleur	<eldy@users.sourceforge.net>
+/* Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2016	    Laurent Destailleur	        <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+
 /**
  *      \file       /htdocs/margin/admin/margin.php
  *      \ingroup    margin
@@ -28,7 +32,6 @@ include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once DOL_DOCUMENT_ROOT . "/compta/facture/class/facture.class.php";
 
 $langs->loadLangs(array("admin", "bills", "margins", "stocks"));
 
@@ -37,7 +40,6 @@ if (!$user->admin) {
 }
 
 $action = GETPOST('action', 'aZ09');
-
 
 /*
  * Action

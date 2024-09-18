@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2011      Dimitri Mouillard    <dmouillard@teclib.com>
- * Copyright (C) 2013-2020 Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2012-2016 Regis Houssin	<regis.houssin@inodbox.com>
- * Copyright (C) 2018      Charlene Benke	<charlie@patas-monkey.com>
- * Copyright (C) 2019-2024  Frédéric France		<frederic.france@free.fr>
- * Copyright (C) 2024		Benjamin Falière	<benjamin.faliere@altairis.fr>
+/* Copyright (C) 2011       Dimitri Mouillard           <dmouillard@teclib.com>
+ * Copyright (C) 2013-2020  Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2012-2016  Regis Houssin	            <regis.houssin@inodbox.com>
+ * Copyright (C) 2018       Charlene Benke	            <charlie@patas-monkey.com>
+ * Copyright (C) 2019-2024  Frédéric France		        <frederic.france@free.fr>
+ * Copyright (C) 2024		Benjamin Falière	        <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\User\Classes\UserGroup;
+
 /**
  *      \file       htdocs/holiday/list.php
  *      \ingroup    holiday
@@ -31,10 +39,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-
-use Dolibarr\Code\User\Classes\User;
-
-use Dolibarr\Code\User\Classes\UserGroup;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 
@@ -222,9 +226,6 @@ if (empty($reshook)) {
     $uploaddir = $conf->holiday->dir_output;
     include DOL_DOCUMENT_ROOT . '/core/actions_massactions.inc.php';
 }
-
-
-
 
 /*
  * View

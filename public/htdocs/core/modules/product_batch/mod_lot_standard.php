@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2021       Christophe Battarel			<christophe@altairis.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
@@ -21,6 +21,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\ProductBatch\Classes\ModeleNumRefBatch;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  \file       htdocs/core/modules/product_batch/mod_lot_standard.php
@@ -52,7 +58,6 @@ class mod_lot_standard extends ModeleNumRefBatch
      */
     public $name = 'lot_standard';
 
-
     /**
      *  Return description of numbering module
      *
@@ -64,7 +69,6 @@ class mod_lot_standard extends ModeleNumRefBatch
         global $langs;
         return $langs->trans("SimpleNumRefModelDesc", $this->prefix);
     }
-
 
     /**
      *  Return an example of numbering

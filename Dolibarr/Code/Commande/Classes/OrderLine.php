@@ -33,17 +33,17 @@
 
 namespace Dolibarr\Code\Commande\Classes;
 
+use Dolibarr\Code\Core\Classes\CommonOrderLine;
+use Dolibarr\Code\User\Classes\User;
+use DoliDB;
+
 /**
  *  \file       htdocs/commande/class/commande.class.php
  *  \ingroup    order
  *  \brief      class for orders
  */
 
-use Dolibarr\Code\Core\Classes\CommonOrderLine;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
-
-use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  Class to manage order lines

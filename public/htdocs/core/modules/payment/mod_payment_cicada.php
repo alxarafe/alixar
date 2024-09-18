@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2015      Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2015       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,15 +19,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Payment\Classes\ModeleNumRefPayments;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  * \file       htdocs/core/modules/payment/mod_payment_cicada.php
  * \ingroup    payment
  * \brief      File containing class for numbering module Cicada
  */
-
-use Dolibarr\Code\Core\Classes\Translate;
-use Dolibarr\Code\Payment\Classes\ModeleNumRefPayments;
-use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  Class to manage customer payment numbering rules Cicada

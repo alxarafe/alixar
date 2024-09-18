@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2021       Grégory Blémand     <contact@atm-consulting.fr>
- * Copyright (C) 2021       Gauthier VERDOL     <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021       Greg Rastklan       <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021       Jean-Pascal BOUDET  <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021       Grégory BLEMAND     <gregory.blemand@atm-consulting.fr>
- * Copyright (C) 2024       Frédéric France     <frederic.france@free.fr>
- * Copyright (C) 2024       Alexandre Spangaro  <alexandre@inovea-conseil.com>
+/* Copyright (C) 2021       Grégory Blémand             <contact@atm-consulting.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
+ * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Alexandre Spangaro          <alexandre@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Hrm\Classes\Evaluation;
+use Dolibarr\Code\Hrm\Classes\Job;
+use Dolibarr\Code\Hrm\Classes\Skill;
+use Dolibarr\Code\Hrm\Classes\SkillRank;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *    \file       htdocs/hrm/skill_tab.php
  *    \ingroup    hrm
@@ -31,12 +40,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-
-use Dolibarr\Code\User\Classes\User;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skillrank.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_skill.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_evaluation.lib.php';
 
@@ -458,7 +461,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
             print '</form>';
         }
     }
-
 
     // liste des evaluation liées
     if ($objecttype == 'user' && $permissiontoadd) {

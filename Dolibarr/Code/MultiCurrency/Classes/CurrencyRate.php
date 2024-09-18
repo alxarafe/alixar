@@ -25,7 +25,8 @@
 
 namespace Dolibarr\Code\MultiCurrency\Classes;
 
-use CommonObjectLine;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObjectLine;
 use DoliDB;
 
 /**
@@ -33,8 +34,6 @@ use DoliDB;
  * \ingroup multicurrency
  * \brief   This file is a CRUD class file (Create/Read/Update/Delete) for multicurrency
  */
-
-use Dolibarr\Core\Base\CommonObjectLine;
 
 /**
  * Class CurrencyRate

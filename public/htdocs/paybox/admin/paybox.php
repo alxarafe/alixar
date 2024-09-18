@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2010 Laurent Destailleur  <eldy@users.sourceforge.org>
- * Copyright (C) 2011-2012 Juanjo Menent		<jmenent@2byte.es>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.org>
+ * Copyright (C) 2011-2012  Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\DolEditor;
 
 /**
  * \file       htdocs/paybox/admin/paybox.php

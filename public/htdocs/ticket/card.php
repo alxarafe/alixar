@@ -44,7 +44,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 if (isModEnabled('project')) {
     include_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
     include_once DOL_DOCUMENT_ROOT . '/core/lib/project.lib.php';
-    include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
 }
 if (isModEnabled('contract')) {
     include_once DOL_DOCUMENT_ROOT . '/core/class/html.formcontract.class.php';

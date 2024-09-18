@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2007-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2012      Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *       \file       htdocs/fichinter/contact.php
  *       \ingroup    fichinter
@@ -26,6 +28,11 @@
  */
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -52,7 +59,6 @@ if (!$result) {
 }
 
 $usercancreate = $user->hasRight('ficheinter', 'creer');
-
 
 /*
  * Adding a new contact
@@ -92,7 +98,6 @@ if ($action == 'addcontact' && $user->hasRight('ficheinter', 'creer')) {
         dol_print_error($db);
     }
 }
-
 
 /*
  * View
