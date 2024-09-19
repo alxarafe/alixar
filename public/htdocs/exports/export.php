@@ -41,99 +41,99 @@ $langs->loadlangs(array('admin', 'exports', 'other', 'users', 'companies', 'proj
 
 // Everybody should be able to go on this page
 //if (! $user->admin)
-    //  accessforbidden();
+//  accessforbidden();
 
-    // Map icons, array duplicated in import.php, was not synchronized, TODO put it somewhere only once
+// Map icons, array duplicated in import.php, was not synchronized, TODO put it somewhere only once
 $entitytoicon = array(
-    'invoice'      => 'bill',
+    'invoice' => 'bill',
     'invoice_line' => 'bill',
-    'order'        => 'order',
-    'order_line'   => 'order',
-    'propal'       => 'propal',
-    'propal_line'  => 'propal',
+    'order' => 'order',
+    'order_line' => 'order',
+    'propal' => 'propal',
+    'propal_line' => 'propal',
     'intervention' => 'intervention',
-    'inter_line'   => 'intervention',
-    'member'       => 'user',
-    'member_type'  => 'group',
+    'inter_line' => 'intervention',
+    'member' => 'user',
+    'member_type' => 'group',
     'subscription' => 'payment',
-    'payment'      => 'payment',
-    'tax'          => 'generic',
-    'tax_type'     => 'generic',
-    'other'        => 'generic',
-    'account'      => 'account',
-    'product'      => 'product',
+    'payment' => 'payment',
+    'tax' => 'generic',
+    'tax_type' => 'generic',
+    'other' => 'generic',
+    'account' => 'account',
+    'product' => 'product',
     'virtualproduct' => 'product',
-    'subproduct'   => 'product',
-    'product_supplier_ref'      => 'product',
-    'stock'        => 'stock',
-    'warehouse'    => 'stock',
-    'batch'        => 'stock',
-    'stockbatch'   => 'stock',
-    'category'     => 'category',
+    'subproduct' => 'product',
+    'product_supplier_ref' => 'product',
+    'stock' => 'stock',
+    'warehouse' => 'stock',
+    'batch' => 'stock',
+    'stockbatch' => 'stock',
+    'category' => 'category',
     'securityevent' => 'generic',
-    'shipment'     => 'sending',
+    'shipment' => 'sending',
     'shipment_line' => 'sending',
     'reception' => 'sending',
     'reception_line' => 'sending',
     'expensereport' => 'trip',
     'expensereport_line' => 'trip',
-    'holiday'      => 'holiday',
+    'holiday' => 'holiday',
     'contract_line' => 'contract',
-    'translation'  => 'generic',
-    'bomm'         => 'bom',
-    'bomline'      => 'bom',
+    'translation' => 'generic',
+    'bomm' => 'bom',
+    'bomline' => 'bom',
     'conferenceorboothattendee' => 'contact'
 );
 
 // Translation code, array duplicated in import.php, was not synchronized, TODO put it somewhere only once
 $entitytolang = array(
-    'user'         => 'User',
-    'company'      => 'Company',
-    'contact'      => 'Contact',
-    'invoice'      => 'Bill',
+    'user' => 'User',
+    'company' => 'Company',
+    'contact' => 'Contact',
+    'invoice' => 'Bill',
     'invoice_line' => 'InvoiceLine',
-    'order'        => 'Order',
-    'order_line'   => 'OrderLine',
-    'propal'       => 'Proposal',
-    'propal_line'  => 'ProposalLine',
+    'order' => 'Order',
+    'order_line' => 'OrderLine',
+    'propal' => 'Proposal',
+    'propal_line' => 'ProposalLine',
     'intervention' => 'Intervention',
-    'inter_line'   => 'InterLine',
-    'member'       => 'Member',
-    'member_type'  => 'MemberType',
+    'inter_line' => 'InterLine',
+    'member' => 'Member',
+    'member_type' => 'MemberType',
     'subscription' => 'Subscription',
-    'tax'          => 'SocialContribution',
-    'tax_type'     => 'DictionarySocialContributions',
-    'account'      => 'BankTransactions',
-    'payment'      => 'Payment',
-    'product'      => 'Product',
-    'virtualproduct'  => 'AssociatedProducts',
-    'subproduct'      => 'SubProduct',
-    'product_supplier_ref'      => 'SupplierPrices',
-    'service'      => 'Service',
-    'stock'        => 'Stock',
-    'movement'     => 'StockMovement',
-    'batch'        => 'Batch',
-    'stockbatch'   => 'StockDetailPerBatch',
-    'warehouse'    => 'Warehouse',
-    'category'     => 'Category',
-    'other'        => 'Other',
-    'trip'         => 'TripsAndExpenses',
+    'tax' => 'SocialContribution',
+    'tax_type' => 'DictionarySocialContributions',
+    'account' => 'BankTransactions',
+    'payment' => 'Payment',
+    'product' => 'Product',
+    'virtualproduct' => 'AssociatedProducts',
+    'subproduct' => 'SubProduct',
+    'product_supplier_ref' => 'SupplierPrices',
+    'service' => 'Service',
+    'stock' => 'Stock',
+    'movement' => 'StockMovement',
+    'batch' => 'Batch',
+    'stockbatch' => 'StockDetailPerBatch',
+    'warehouse' => 'Warehouse',
+    'category' => 'Category',
+    'other' => 'Other',
+    'trip' => 'TripsAndExpenses',
     'securityevent' => 'SecurityEvent',
-    'shipment'     => 'Shipments',
+    'shipment' => 'Shipments',
     'shipment_line' => 'ShipmentLine',
-    'project'      => 'Projects',
-    'projecttask'  => 'Tasks',
-    'resource'     => 'Resource',
-    'task_time'    => 'TaskTimeSpent',
-    'action'       => 'Event',
+    'project' => 'Projects',
+    'projecttask' => 'Tasks',
+    'resource' => 'Resource',
+    'task_time' => 'TaskTimeSpent',
+    'action' => 'Event',
     'expensereport' => 'ExpenseReport',
     'expensereport_line' => 'ExpenseReportLine',
-    'holiday'      => 'TitreRequestCP',
-    'contract'     => 'Contract',
+    'holiday' => 'TitreRequestCP',
+    'contract' => 'Contract',
     'contract_line' => 'ContractLine',
-    'translation'  => 'Translation',
-    'bom'          => 'BOM',
-    'bomline'      => 'BOMLine',
+    'translation' => 'Translation',
+    'bom' => 'BOM',
+    'bomline' => 'BOMLine',
     'conferenceorboothattendee' => 'Attendee'
 );
 
@@ -422,7 +422,7 @@ if ($step == 4 && $action == 'submitFormField') {
     if (is_array($objexport->array_export_TypeFields[0])) {
         $_SESSION["export_filtered_fields"] = array();
         foreach ($objexport->array_export_TypeFields[0] as $code => $type) {    // $code: s.fieldname $value: Text|Boolean|List:ccc
-            $newcode = (string) preg_replace('/\./', '_', $code);
+            $newcode = (string)preg_replace('/\./', '_', $code);
             //print 'xxx '.$code."=".$newcode."=".$type."=".GETPOST($newcode)."\n<br>";
             $check = 'alphanohtml';
             $filterqualified = 1;
@@ -1080,7 +1080,7 @@ if ($step == 4 && $datatoexport) {
         $sql .= " FROM " . MAIN_DB_PREFIX . "export_model";
         $sql .= " WHERE type = '" . $db->escape($datatoexport) . "'";
         if (!getDolGlobalString('EXPORTS_SHARE_MODELS')) {  // EXPORTS_SHARE_MODELS means all templates are visible, whatever is owner.
-            $sql .= " AND fk_user IN (0, " . ((int) $user->id) . ")";
+            $sql .= " AND fk_user IN (0, " . ((int)$user->id) . ")";
         }
         $sql .= " ORDER BY rowid";
         $resql = $db->query($sql);
@@ -1293,9 +1293,9 @@ exit; // don't know why but apache hangs with php 5.3.10-1ubuntu3.12 and apache 
 /**
  *  Return table name of an alias. For this, we look for the "tablename as alias" in sql string.
  *
- *  @param  string  $code               Alias.Fieldname
- *  @param  string  $sqlmaxforexport    SQL request to parse
- *  @return string                      Table name of field
+ * @param string $code Alias.Fieldname
+ * @param string $sqlmaxforexport SQL request to parse
+ * @return string                      Table name of field
  */
 function getablenamefromfield($code, $sqlmaxforexport)
 {

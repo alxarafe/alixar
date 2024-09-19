@@ -16,11 +16,12 @@ class Yahoo extends AbstractService
 {
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        SignatureInterface $signature,
-        UriInterface $baseApiUri = null
-    ) {
+        SignatureInterface   $signature,
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage, $signature, $baseApiUri);
 
         if (null === $baseApiUri) {
@@ -70,7 +71,6 @@ class Yahoo extends AbstractService
         );
 
 
-        
         $headers = array_merge($authorizationHeader, $this->getExtraOAuthHeaders(), array());
 
         $responseBody = $this->httpClient->retrieveResponse($this->getAccessTokenEndpoint(), $bodyParams, $headers);

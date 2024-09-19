@@ -45,9 +45,9 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 $langs->loadLangs(array("compta", "banks", "bills", "accountancy"));
 
 $optioncss = GETPOST('optioncss', 'alpha');
-$mode      = GETPOST('mode', 'alpha');
+$mode = GETPOST('mode', 'alpha');
 $massaction = GETPOST('massaction', 'aZ09');
-$toselect   = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
+$toselect = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'directdebitcredittransferlist'; // To manage different context of search
 
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
@@ -63,11 +63,11 @@ $search_amount_cred = GETPOST('search_amount_cred', 'alpha');
 $search_bank_account = GETPOST('search_account', "intcomma");
 $search_bank_entry = GETPOST('search_bank_entry', 'alpha');
 $search_accountancy_account = GETPOST("search_accountancy_account");
-if ($search_accountancy_account == - 1) {
+if ($search_accountancy_account == -1) {
     $search_accountancy_account = '';
 }
 $search_accountancy_subledger = GETPOST("search_accountancy_subledger");
-if ($search_accountancy_subledger == - 1) {
+if ($search_accountancy_subledger == -1) {
     $search_accountancy_subledger = '';
 }
 if (empty($search_datep_start)) {
@@ -165,18 +165,18 @@ $fieldstosearchall = array(
 
 // Definition of fields for lists
 $arrayfields = array(
-    'ref'           => array('label' => "Ref", 'checked' => 1, 'position' => 100),
-    'label'         => array('label' => "Label", 'checked' => 1, 'position' => 110),
-    'datep'         => array('label' => "DatePayment", 'checked' => 1, 'position' => 120),
-    'datev'         => array('label' => "DateValue", 'checked' => -1, 'position' => 130),
-    'type'          => array('label' => "PaymentMode", 'checked' => 1, 'position' => 140),
-    'project'       => array('label' => "Project", 'checked' => 1, 'position' => 200, "enabled" => isModEnabled('project')),
-    'bank'          => array('label' => "BankAccount", 'checked' => 1, 'position' => 300, "enabled" => isModEnabled("bank")),
-    'entry'         => array('label' => "BankTransactionLine", 'checked' => 1, 'position' => 310, "enabled" => isModEnabled("bank")),
-    'account'       => array('label' => "AccountAccountingShort", 'checked' => 1, 'position' => 400, "enabled" => isModEnabled('accounting')),
-    'subledger'     => array('label' => "SubledgerAccount", 'checked' => 1, 'position' => 410, "enabled" => isModEnabled('accounting')),
-    'debit'         => array('label' => "Debit", 'checked' => 1, 'position' => 500),
-    'credit'        => array('label' => "Credit", 'checked' => 1, 'position' => 510),
+    'ref' => array('label' => "Ref", 'checked' => 1, 'position' => 100),
+    'label' => array('label' => "Label", 'checked' => 1, 'position' => 110),
+    'datep' => array('label' => "DatePayment", 'checked' => 1, 'position' => 120),
+    'datev' => array('label' => "DateValue", 'checked' => -1, 'position' => 130),
+    'type' => array('label' => "PaymentMode", 'checked' => 1, 'position' => 140),
+    'project' => array('label' => "Project", 'checked' => 1, 'position' => 200, "enabled" => isModEnabled('project')),
+    'bank' => array('label' => "BankAccount", 'checked' => 1, 'position' => 300, "enabled" => isModEnabled("bank")),
+    'entry' => array('label' => "BankTransactionLine", 'checked' => 1, 'position' => 310, "enabled" => isModEnabled("bank")),
+    'account' => array('label' => "AccountAccountingShort", 'checked' => 1, 'position' => 400, "enabled" => isModEnabled('accounting')),
+    'subledger' => array('label' => "SubledgerAccount", 'checked' => 1, 'position' => 410, "enabled" => isModEnabled('accounting')),
+    'debit' => array('label' => "Debit", 'checked' => 1, 'position' => 500),
+    'credit' => array('label' => "Credit", 'checked' => 1, 'position' => 510),
 );
 
 $arrayfields = dol_sort_array($arrayfields, 'position');
@@ -245,10 +245,10 @@ if ($arrayfields['bank']['checked'] && isModEnabled('accounting')) {
     $accountingjournal = new AccountingJournal($db);
 }
 if ($arrayfields['ref']['checked']) {
-    $variousstatic      = new PaymentVarious($db);
+    $variousstatic = new PaymentVarious($db);
 }
 if ($arrayfields['bank']['checked']) {
-    $accountstatic      = new Account($db);
+    $accountstatic = new Account($db);
 }
 if ($arrayfields['project']['checked']) {
     $proj = new Project($db);
@@ -281,7 +281,7 @@ $sql .= " WHERE v.entity IN (" . getEntity('payment_various') . ")";
 
 // Search criteria
 if ($search_ref) {
-    $sql .= " AND v.rowid = " . ((int) $search_ref);
+    $sql .= " AND v.rowid = " . ((int)$search_ref);
 }
 if ($search_label) {
     $sql .= natural_search(array('v.label'), $search_label);
@@ -305,19 +305,19 @@ if ($search_amount_cred) {
     $sql .= natural_search("v.amount", $search_amount_cred, 1);
 }
 if ($search_bank_account > 0) {
-    $sql .= " AND b.fk_account = " . ((int) $search_bank_account);
+    $sql .= " AND b.fk_account = " . ((int)$search_bank_account);
 }
 if ($search_bank_entry > 0) {
-    $sql .= " AND b.fk_account = " . ((int) $search_bank_account);
+    $sql .= " AND b.fk_account = " . ((int)$search_bank_account);
 }
 if ($search_accountancy_account > 0) {
-    $sql .= " AND v.accountancy_code = " . ((int) $search_accountancy_account);
+    $sql .= " AND v.accountancy_code = " . ((int)$search_accountancy_account);
 }
 if ($search_accountancy_subledger > 0) {
-    $sql .= " AND v.subledger_account = " . ((int) $search_accountancy_subledger);
+    $sql .= " AND v.subledger_account = " . ((int)$search_accountancy_subledger);
 }
 if ($search_type_id > 0) {
-    $sql .= " AND v.fk_typepayment=" . ((int) $search_type_id);
+    $sql .= " AND v.fk_typepayment=" . ((int)$search_type_id);
 }
 if ($search_all) {
     $sql .= natural_search(array_keys($fieldstosearchall), $search_all);
@@ -388,7 +388,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -412,7 +412,7 @@ if ($search_datev_end) {
     $param .= '&search_datev_end=' . urlencode($search_datev_end);
 }
 if ($search_type_id > 0) {
-    $param .= '&search_type_id=' . urlencode((string) ($search_type_id));
+    $param .= '&search_type_id=' . urlencode((string)($search_type_id));
 }
 if ($search_amount_deb) {
     $param .= '&search_amount_deb=' . urlencode($search_amount_deb);
@@ -421,7 +421,7 @@ if ($search_amount_cred) {
     $param .= '&search_amount_cred=' . urlencode($search_amount_cred);
 }
 if ($search_bank_account > 0) {
-    $param .= '&search_account=' . urlencode((string) ($search_bank_account));
+    $param .= '&search_account=' . urlencode((string)($search_bank_account));
 }
 if ($search_accountancy_account > 0) {
     $param .= '&search_accountancy_account=' . urlencode($search_accountancy_account);
@@ -432,7 +432,7 @@ if ($search_accountancy_subledger > 0) {
 
 $url = constant('BASE_URL') . '/compta/bank/various_payment/card.php?action=create';
 if (!empty($socid)) {
-    $url .= '&socid=' . urlencode((string) ($socid));
+    $url .= '&socid=' . urlencode((string)($socid));
 }
 
 // List of mass actions available
@@ -453,7 +453,7 @@ print '<input type="hidden" name="contextpage" value="' . $contextpage . '">';
 print '<input type="hidden" name="page_y" value="">';
 print '<input type="hidden" name="mode" value="' . $mode . '">';
 
-$newcardbutton  = '';
+$newcardbutton = '';
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewKanban'), '', 'fa fa-th-list imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=kanban' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ($mode == 'kanban' ? 2 : 1), array('morecss' => 'reposition'));
 $newcardbutton .= dolGetButtonTitleSeparator();

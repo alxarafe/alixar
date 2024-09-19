@@ -52,9 +52,9 @@ abstract class Collection extends Geometry
     * */
     public function invertxy()
     {
-        for ($i = 0;$i < count($this->components);$i++) {
+        for ($i = 0; $i < count($this->components); $i++) {
             if (method_exists($this->components[$i], 'invertxy'))
-            $this->components[$i]->invertxy();
+                $this->components[$i]->invertxy();
         }
     }
 
@@ -89,10 +89,10 @@ abstract class Collection extends Geometry
 
             $geos_ring = $envelope->exteriorRing();
             return array(
-            'maxy' => $geos_ring->pointN(3)->getY(),
-            'miny' => $geos_ring->pointN(1)->getY(),
-            'maxx' => $geos_ring->pointN(1)->getX(),
-            'minx' => $geos_ring->pointN(3)->getX(),
+                'maxy' => $geos_ring->pointN(3)->getY(),
+                'miny' => $geos_ring->pointN(1)->getY(),
+                'maxx' => $geos_ring->pointN(1)->getX(),
+                'minx' => $geos_ring->pointN(3)->getX(),
             );
         }
 
@@ -118,10 +118,10 @@ abstract class Collection extends Geometry
         }
 
         return array(
-        'maxy' => $maxy,
-        'miny' => $miny,
-        'maxx' => $maxx,
-        'minx' => $minx,
+            'maxy' => $maxy,
+            'miny' => $miny,
+            'maxx' => $maxx,
+            'minx' => $minx,
         );
     }
 
@@ -314,46 +314,56 @@ abstract class Collection extends Geometry
     // --------------------------------
     public function x()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function y()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function startPoint()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function endPoint()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function isRing()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function isClosed()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function pointN($n)
     {
-        return null; 
-}
+        return null;
+    }
+
     public function exteriorRing()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function numInteriorRings()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function interiorRingN($n)
     {
-        return null; 
-}
+        return null;
+    }
+
     public function pointOnSurface()
     {
-        return null; 
-}
+        return null;
+    }
 }

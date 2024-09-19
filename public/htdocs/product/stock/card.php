@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2003-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005		Simon Tosser			<simon@kornog-computing.com>
- * Copyright (C) 2005-2014	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2016	    Francis Appels       	<francis.appels@yahoo.com>
- * Copyright (C) 2021		Noé Cendrier			<noe.cendrier@altairis.fr>
- * Copyright (C) 2021-2024  Frédéric France			<frederic.france@free.fr>
- * Copyright (C) 2022-2023	Charlene Benke			<charlene@patas-monkey.com>
- * Copyright (C) 2023       Christian Foellmann     <christian@foellmann.de>
+/* Copyright (C) 2003-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005		Simon Tosser			    <simon@kornog-computing.com>
+ * Copyright (C) 2005-2014	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2016	    Francis Appels       	    <francis.appels@yahoo.com>
+ * Copyright (C) 2021		Noé Cendrier			    <noe.cendrier@altairis.fr>
+ * Copyright (C) 2021-2024  Frédéric France			    <frederic.france@free.fr>
+ * Copyright (C) 2022-2023	Charlene Benke			    <charlene@patas-monkey.com>
+ * Copyright (C) 2023       Christian Foellmann         <christian@foellmann.de>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -27,6 +27,17 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *  \file       htdocs/product/stock/card.php
@@ -91,7 +102,6 @@ $usercanread = (($user->hasRight('stock', 'lire')));
 $usercancreate = (($user->hasRight('stock', 'creer')));
 $usercandelete = (($user->hasRight('stock', 'supprimer')));
 
-
 /*
  * Actions
  */
@@ -129,19 +139,19 @@ if (empty($reshook)) {
 
     // Ajout entrepot
     if ($action == 'add' && $user->hasRight('stock', 'creer')) {
-        $object->ref          = (string) GETPOST("ref", "alpha");
-        $object->fk_parent    = GETPOSTINT("fk_parent");
-        $object->fk_project   = GETPOSTINT('projectid');
-        $object->label        = (string) GETPOST("libelle", "alpha");
-        $object->description  = (string) GETPOST("desc", "alpha");
-        $object->statut       = GETPOSTINT("statut");
-        $object->lieu         = (string) GETPOST("lieu", "alpha");
-        $object->address      = (string) GETPOST("address", "alpha");
-        $object->zip          = (string) GETPOST("zipcode", "alpha");
-        $object->town         = (string) GETPOST("town", "alpha");
-        $object->country_id   = GETPOSTINT("country_id");
-        $object->phone        = (string) GETPOST("phone", "alpha");
-        $object->fax          = (string) GETPOST("fax", "alpha");
+        $object->ref = (string)GETPOST("ref", "alpha");
+        $object->fk_parent = GETPOSTINT("fk_parent");
+        $object->fk_project = GETPOSTINT('projectid');
+        $object->label = (string)GETPOST("libelle", "alpha");
+        $object->description = (string)GETPOST("desc", "alpha");
+        $object->statut = GETPOSTINT("statut");
+        $object->lieu = (string)GETPOST("lieu", "alpha");
+        $object->address = (string)GETPOST("address", "alpha");
+        $object->zip = (string)GETPOST("zipcode", "alpha");
+        $object->town = (string)GETPOST("town", "alpha");
+        $object->country_id = GETPOSTINT("country_id");
+        $object->phone = (string)GETPOST("phone", "alpha");
+        $object->fax = (string)GETPOST("fax", "alpha");
 
         if (!empty($object->label)) {
             // Fill array 'array_options' with data from add form
@@ -159,11 +169,11 @@ if (empty($reshook)) {
                     $categories = GETPOST('categories', 'array');
                     $object->setCategories($categories);
                     if (!empty($backtopage)) {
-                        $backtopage = str_replace("__ID__", (string) $id, $backtopage);
+                        $backtopage = str_replace("__ID__", (string)$id, $backtopage);
                         header("Location: " . $backtopage);
                         exit;
                     } else {
-                        header("Location: card.php?id=" . urlencode((string) ($id)));
+                        header("Location: card.php?id=" . urlencode((string)($id)));
                         exit;
                     }
                 } else {
@@ -195,15 +205,15 @@ if (empty($reshook)) {
     if ($action == 'update' && !$cancel) {
         if ($object->fetch($id)) {
             $object->label = GETPOST("libelle");
-            $object->fk_parent   = GETPOST("fk_parent");
+            $object->fk_parent = GETPOST("fk_parent");
             $object->fk_project = GETPOST('projectid');
             $object->description = GETPOST("desc", 'restricthtml');
-            $object->statut      = GETPOST("statut");
-            $object->lieu        = GETPOST("lieu");
-            $object->address     = GETPOST("address");
-            $object->zip         = GETPOST("zipcode");
-            $object->town        = GETPOST("town");
-            $object->country_id  = GETPOST("country_id");
+            $object->statut = GETPOST("statut");
+            $object->lieu = GETPOST("lieu");
+            $object->address = GETPOST("address");
+            $object->zip = GETPOST("zipcode");
+            $object->town = GETPOST("town");
+            $object->country_id = GETPOST("country_id");
             $object->phone = GETPOST("phone");
             $object->fax = GETPOST("fax");
 
@@ -265,7 +275,6 @@ if (empty($reshook)) {
     $permissiontoadd = $user->hasRight('stock', 'creer');
     include DOL_DOCUMENT_ROOT . '/core/actions_builddoc.inc.php';
 }
-
 
 /*
  * View
@@ -537,7 +546,7 @@ if ($action == 'create') {
             if ($user->hasRight('stock', 'mouvement', 'lire')) {
                 $sql = "SELECT max(m.datem) as datem";
                 $sql .= " FROM " . MAIN_DB_PREFIX . "stock_mouvement as m";
-                $sql .= " WHERE m.fk_entrepot = " . ((int) $object->id);
+                $sql .= " WHERE m.fk_entrepot = " . ((int)$object->id);
                 $resqlbis = $db->query($sql);
                 if ($resqlbis) {
                     $obj = $db->fetch_object($resqlbis);
@@ -712,10 +721,10 @@ if ($action == 'create') {
 
             $sql .= " WHERE ps.fk_product = p.rowid";
             $sql .= " AND ps.reel <> 0"; // We do not show if stock is 0 (no product in this warehouse)
-            $sql .= " AND ps.fk_entrepot = " . ((int) $object->id);
+            $sql .= " AND ps.fk_entrepot = " . ((int)$object->id);
 
             if ($separatedPMP) {
-                $sql .= " AND pa.fk_product = p.rowid AND pa.entity = " . (int) $conf->entity;
+                $sql .= " AND pa.fk_product = p.rowid AND pa.entity = " . (int)$conf->entity;
             }
 
             $sql .= $db->order($sortfield, $sortorder);
@@ -734,7 +743,7 @@ if ($action == 'create') {
                     if (getDolGlobalInt('MAIN_MULTILANGS')) { // si l'option est active
                         $sql = "SELECT label";
                         $sql .= " FROM " . MAIN_DB_PREFIX . "product_lang";
-                        $sql .= " WHERE fk_product = " . ((int) $objp->rowid);
+                        $sql .= " WHERE fk_product = " . ((int)$objp->rowid);
                         $sql .= " AND lang = '" . $db->escape($langs->getDefaultLang()) . "'";
                         $sql .= " LIMIT 1";
 
@@ -909,7 +918,7 @@ if ($action == 'create') {
             // Description
             print '<tr><td class="tdtop">' . $langs->trans("Description") . '</td><td>';
             // Editeur wysiwyg
-                    $doleditor = new DolEditor('desc', $object->description, '', 180, 'dolibarr_notes', 'In', false, true, isModEnabled('fckeditor'), ROWS_5, '90%');
+            $doleditor = new DolEditor('desc', $object->description, '', 180, 'dolibarr_notes', 'In', false, true, isModEnabled('fckeditor'), ROWS_5, '90%');
             $doleditor->Create();
             print '</td></tr>';
 
@@ -1021,7 +1030,7 @@ if ($action != 'create' && $action != 'edit' && $action != 'delete') {
     //$morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', DOL_URL_ROOT.'/product/stock/agenda.php?id='.$object->id);
 
     // List of actions on element
-        $formactions = new FormActions($db);
+    $formactions = new FormActions($db);
     $somethingshown = $formactions->showactions($object, 'stock', 0, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for product
 
     print '</div></div>';

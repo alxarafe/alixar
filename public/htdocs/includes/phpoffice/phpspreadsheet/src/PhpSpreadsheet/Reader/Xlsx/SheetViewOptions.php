@@ -44,14 +44,14 @@ class SheetViewOptions extends BaseParserClass
     private function tabColor(\SimpleXMLElement $sheetPr)
     {
         if (isset($sheetPr->tabColor, $sheetPr->tabColor['rgb'])) {
-            $this->worksheet->getTabColor()->setARGB((string) $sheetPr->tabColor['rgb']);
+            $this->worksheet->getTabColor()->setARGB((string)$sheetPr->tabColor['rgb']);
         }
     }
 
     private function codeName(\SimpleXMLElement $sheetPr)
     {
         if (isset($sheetPr['codeName'])) {
-            $this->worksheet->setCodeName((string) $sheetPr['codeName'], false);
+            $this->worksheet->setCodeName((string)$sheetPr['codeName'], false);
         }
     }
 
@@ -60,7 +60,7 @@ class SheetViewOptions extends BaseParserClass
         if (isset($sheetPr->outlinePr)) {
             if (
                 isset($sheetPr->outlinePr['summaryRight']) &&
-                !self::boolean((string) $sheetPr->outlinePr['summaryRight'])
+                !self::boolean((string)$sheetPr->outlinePr['summaryRight'])
             ) {
                 $this->worksheet->setShowSummaryRight(false);
             } else {
@@ -69,7 +69,7 @@ class SheetViewOptions extends BaseParserClass
 
             if (
                 isset($sheetPr->outlinePr['summaryBelow']) &&
-                !self::boolean((string) $sheetPr->outlinePr['summaryBelow'])
+                !self::boolean((string)$sheetPr->outlinePr['summaryBelow'])
             ) {
                 $this->worksheet->setShowSummaryBelow(false);
             } else {
@@ -83,7 +83,7 @@ class SheetViewOptions extends BaseParserClass
         if (isset($sheetPr->pageSetUpPr)) {
             if (
                 isset($sheetPr->pageSetUpPr['fitToPage']) &&
-                !self::boolean((string) $sheetPr->pageSetUpPr['fitToPage'])
+                !self::boolean((string)$sheetPr->pageSetUpPr['fitToPage'])
             ) {
                 $this->worksheet->getPageSetup()->setFitToPage(false);
             } else {
@@ -96,21 +96,21 @@ class SheetViewOptions extends BaseParserClass
     {
         if (
             isset($sheetFormatPr['customHeight']) &&
-            self::boolean((string) $sheetFormatPr['customHeight']) &&
+            self::boolean((string)$sheetFormatPr['customHeight']) &&
             isset($sheetFormatPr['defaultRowHeight'])
         ) {
             $this->worksheet->getDefaultRowDimension()
-                ->setRowHeight((float) $sheetFormatPr['defaultRowHeight']);
+                ->setRowHeight((float)$sheetFormatPr['defaultRowHeight']);
         }
 
         if (isset($sheetFormatPr['defaultColWidth'])) {
             $this->worksheet->getDefaultColumnDimension()
-                ->setWidth((float) $sheetFormatPr['defaultColWidth']);
+                ->setWidth((float)$sheetFormatPr['defaultColWidth']);
         }
 
         if (
             isset($sheetFormatPr['zeroHeight']) &&
-            ((string) $sheetFormatPr['zeroHeight'] === '1')
+            ((string)$sheetFormatPr['zeroHeight'] === '1')
         ) {
             $this->worksheet->getDefaultRowDimension()->setZeroHeight(true);
         }
@@ -118,16 +118,16 @@ class SheetViewOptions extends BaseParserClass
 
     private function printOptions(\SimpleXMLElement $printOptions)
     {
-        if (self::boolean((string) $printOptions['gridLinesSet'])) {
+        if (self::boolean((string)$printOptions['gridLinesSet'])) {
             $this->worksheet->setShowGridlines(true);
         }
-        if (self::boolean((string) $printOptions['gridLines'])) {
+        if (self::boolean((string)$printOptions['gridLines'])) {
             $this->worksheet->setPrintGridlines(true);
         }
-        if (self::boolean((string) $printOptions['horizontalCentered'])) {
+        if (self::boolean((string)$printOptions['horizontalCentered'])) {
             $this->worksheet->getPageSetup()->setHorizontalCentered(true);
         }
-        if (self::boolean((string) $printOptions['verticalCentered'])) {
+        if (self::boolean((string)$printOptions['verticalCentered'])) {
             $this->worksheet->getPageSetup()->setVerticalCentered(true);
         }
     }

@@ -34,7 +34,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 /**
  *  Class permettant de generer les projects au modele Ban
  */
-
 class pdf_ban extends ModeleBankAccountDoc
 {
     /**
@@ -55,7 +54,7 @@ class pdf_ban extends ModeleBankAccountDoc
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -97,17 +96,18 @@ class pdf_ban extends ModeleBankAccountDoc
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Fonction generant le projet sur le disque
      *
-     *  @param  Account     $object         Object Account to generate
-     *  @param  Translate   $outputlangs    Lang output object
-     *  @return int                         1 if OK, <=0 if KO
+     * @param Account $object Object Account to generate
+     * @param Translate $outputlangs Lang output object
+     * @return int                         1 if OK, <=0 if KO
      */
     public function write_file($object, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $hookmanager, $langs, $user;
 
         if (!is_object($outputlangs)) {
@@ -221,7 +221,6 @@ class pdf_ban extends ModeleBankAccountDoc
                 $pdf->MultiCell(200, 3, $outputlangs->trans("BAN") . ' : ' . $object->account_number, 0, 'L');
 
 
-
                 // Show square
                 if ($pagenb == 1) {
                     $this->_tableau($pdf, $tab_top, $this->page_hauteur - $tab_top - $heightforinfotot - $heightforfreetext - $heightforfooter, 0, $outputlangs, 0, 0);
@@ -272,41 +271,43 @@ class pdf_ban extends ModeleBankAccountDoc
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     string      $tab_top        Top position of table
-     *   @param     string      $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        Hide top bar of array
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param string $tab_top Top position of table
+     * @param string $tab_height Height of table (rectangle)
+     * @param int $nexY Y
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop Hide top bar of array
+     * @param int $hidebottom Hide bottom bar of array
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $mysoc;
 
         $default_font_size = pdf_getPDFFontSize($outputlangs);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Account     $object         Object to show
-     *  @param  int         $showaddress    0=no, 1=yes
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @return float|int                   Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param Account $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @return float|int                   Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs)
     {
         global $langs, $conf, $mysoc;
-		// phpcs:enable
+        // phpcs:enable
 
         $default_font_size = pdf_getPDFFontSize($outputlangs);
 
@@ -380,19 +381,20 @@ class pdf_ban extends ModeleBankAccountDoc
         return 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *      Show footer of page. Need this->emetteur object
      *
-     *      @param  TCPDF       $pdf                PDF
-     *      @param  Account     $object             Object to show
-     *      @param  Translate   $outputlangs        Object lang for output
-     *      @param  int         $hidefreetext       1=Hide free text
-     *      @return integer
+     * @param TCPDF $pdf PDF
+     * @param Account $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return integer
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf;
 
         $showdetails = !getDolGlobalString('MAIN_GENERATE_DOCUMENTS_SHOW_FOOT_DETAILS') ? 0 : $conf->global->MAIN_GENERATE_DOCUMENTS_SHOW_FOOT_DETAILS;

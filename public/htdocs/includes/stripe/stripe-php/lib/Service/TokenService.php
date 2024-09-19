@@ -15,9 +15,9 @@ class TokenService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Token
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Token
      */
     public function create($params = null, $opts = null)
     {
@@ -31,9 +31,9 @@ class TokenService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Token
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Token
      */
     public function retrieve($id, $params = null, $opts = null)
     {

@@ -83,7 +83,7 @@ class mod_facture_terre extends ModeleNumRefFactures
     {
         global $conf, $mysoc;
 
-        if (((float) getDolGlobalString('MAIN_VERSION_LAST_INSTALL')) >= 16.0 && $mysoc->country_code != 'FR') {
+        if (((float)getDolGlobalString('MAIN_VERSION_LAST_INSTALL')) >= 16.0 && $mysoc->country_code != 'FR') {
             $this->prefixinvoice = 'IN'; // We use correct standard code "IN = Invoice"
             $this->prefixreplacement = 'IR';
             $this->prefixdeposit = 'ID';
@@ -98,8 +98,8 @@ class mod_facture_terre extends ModeleNumRefFactures
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -111,7 +111,7 @@ class mod_facture_terre extends ModeleNumRefFactures
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -122,8 +122,8 @@ class mod_facture_terre extends ModeleNumRefFactures
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -208,9 +208,9 @@ class mod_facture_terre extends ModeleNumRefFactures
      * ALTER TABLE llx_facture ADD COLUMN calculated_numrefonly INTEGER AS (CASE SUBSTRING(ref FROM 1 FOR 2) WHEN 'FA' THEN CAST(SUBSTRING(ref FROM 10) AS SIGNED) ELSE 0 END) PERSISTENT;
      * ALTER TABLE llx_facture ADD INDEX calculated_numrefonly_idx (calculated_numrefonly);
      *
-     * @param   Societe     $objsoc     Object third party
-     * @param   Facture     $invoice    Object invoice
-     * @param   string      $mode       'next' for next value or 'last' for last value
+     * @param Societe $objsoc Object third party
+     * @param Facture $invoice Object invoice
+     * @param string $mode 'next' for next value or 'last' for last value
      * @return  string|int<-1,0>        Next ref value or last ref if $mode is 'last', -1 or 0 if KO
      */
     public function getNextValue($objsoc, $invoice, $mode = 'next')
@@ -292,11 +292,11 @@ class mod_facture_terre extends ModeleNumRefFactures
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc         Object third party
-     *  @param  Facture      $objforref      Object for number to search
-     *  @param   string     $mode           'next' for next value or 'last' for last value
-     *  @return  string|int<-1,0>           Next free value, -1 or 0 if error
-     *  @deprecated see getNextValue
+     * @param Societe $objsoc Object third party
+     * @param Facture $objforref Object for number to search
+     * @param string $mode 'next' for next value or 'last' for last value
+     * @return  string|int<-1,0>           Next free value, -1 or 0 if error
+     * @deprecated see getNextValue
      */
     public function getNumRef($objsoc, $objforref, $mode = 'next')
     {

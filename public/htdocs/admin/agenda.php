@@ -58,9 +58,9 @@ if ($resql) {
     while ($i < $num) {
         $obj = $db->fetch_object($resql);
         $triggers[$i]['rowid'] = $obj->rowid;
-        $triggers[$i]['code']       = $obj->code;
+        $triggers[$i]['code'] = $obj->code;
         $triggers[$i]['element'] = $obj->elementtype;
-        $triggers[$i]['label']      = ($langs->trans("Notify_" . $obj->code) != "Notify_" . $obj->code ? $langs->trans("Notify_" . $obj->code) : $obj->label);
+        $triggers[$i]['label'] = ($langs->trans("Notify_" . $obj->code) != "Notify_" . $obj->code ? $langs->trans("Notify_" . $obj->code) : $obj->label);
         $triggers[$i]['position'] = $obj->position;
 
         $i++;
@@ -110,7 +110,6 @@ if ($action == "save" && empty($cancel)) {
         $db->rollback();
     }
 }
-
 
 
 /**

@@ -75,7 +75,6 @@ if (!$error && $massaction == 'confirm_presend_attendees') {
     $oneemailperrecipient = (GETPOSTINT('oneemailperrecipient') ? 1 : 0);
 
     if (!$error) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
         $attendee = new ConferenceOrBoothAttendee($db);
         $listofselectedid = array();
         $listofselectedref = array();

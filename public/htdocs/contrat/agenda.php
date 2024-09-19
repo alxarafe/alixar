@@ -38,8 +38,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contract.lib.php';
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "contracts"));
 
-$action     = GETPOST('action', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
+$action = GETPOST('action', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'contratagenda';
 
 if (GETPOST('actioncode', 'array')) {
@@ -54,8 +54,8 @@ if (GETPOST('actioncode', 'array')) {
 $search_rowid = GETPOST('search_rowid');
 $search_agenda_label = GETPOST('search_agenda_label');
 
-$id         = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
 
 // Security check
 if ($user->socid) {

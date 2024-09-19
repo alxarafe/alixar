@@ -234,9 +234,9 @@ if (!empty($searchCategoryBankList)) {
             $searchCategoryBankSqlList[] = "NOT EXISTS (SELECT ck.fk_account FROM " . MAIN_DB_PREFIX . "categorie_account as ck WHERE b.rowid = ck.fk_account)";
         } elseif (intval($searchCategoryBank) > 0) {
             if ($searchCategoryBankOperator == 0) {
-                $searchCategoryBankSqlList[] = " EXISTS (SELECT ck.fk_account FROM " . MAIN_DB_PREFIX . "categorie_account as ck WHERE b.rowid = ck.fk_account AND ck.fk_categorie = " . ((int) $searchCategoryBank) . ")";
+                $searchCategoryBankSqlList[] = " EXISTS (SELECT ck.fk_account FROM " . MAIN_DB_PREFIX . "categorie_account as ck WHERE b.rowid = ck.fk_account AND ck.fk_categorie = " . ((int)$searchCategoryBank) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryBank);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryBank);
             }
         }
     }
@@ -302,7 +302,6 @@ if ($resql) {
 }
 
 
-
 llxHeader('', $title, $help_url);
 
 
@@ -316,7 +315,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -334,7 +333,7 @@ if ($search_status != '' && $search_status != '-1') {
     $param .= '&search_status=' . urlencode($search_status);
 }
 if ($show_files) {
-    $param .= '&show_files=' . urlencode((string) ($show_files));
+    $param .= '&show_files=' . urlencode((string)($show_files));
 }
 // Add $param from extra fields
 include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_list_search_param.tpl.php';
@@ -354,7 +353,7 @@ if (!empty($permissiontodelete)) {
 if (isModEnabled('category') && $user->hasRight('banque', 'modifier')) {
     $arrayofmassactions['preaffecttag'] = img_picto('', 'category', 'class="pictofixedwidth"') . $langs->trans("AffectTag");
 }
-if (in_array($massaction, array('presend', 'predelete','preaffecttag'))) {
+if (in_array($massaction, array('presend', 'predelete', 'preaffecttag'))) {
     $arrayofmassactions = array();
 }
 $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
@@ -375,7 +374,7 @@ print '<input type="hidden" name="search_status" value="' . $search_status . '">
 print '<input type="hidden" name="mode" value="' . $mode . '">';
 
 
-$newcardbutton  = '';
+$newcardbutton = '';
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewKanban'), '', 'fa fa-th-list imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=kanban' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ($mode == 'kanban' ? 2 : 1), array('morecss' => 'reposition'));
 $newcardbutton .= dolGetButtonTitleSeparator();

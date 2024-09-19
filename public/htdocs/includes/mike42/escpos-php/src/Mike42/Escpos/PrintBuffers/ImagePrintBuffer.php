@@ -40,30 +40,30 @@ class ImagePrintBuffer implements PrintBuffer
         if (!EscposImage::isImagickLoaded()) {
             throw new Exception("ImagePrintBuffer requires the imagick extension");
         }
-        $this -> font = null;
-        $this -> fontSize = 24;
+        $this->font = null;
+        $this->fontSize = 24;
     }
 
     public function flush()
     {
-        if ($this -> printer == null) {
+        if ($this->printer == null) {
             throw new LogicException("Not attached to a printer.");
         }
     }
 
     public function getPrinter()
     {
-        return $this -> printer;
+        return $this->printer;
     }
 
     public function setPrinter(Printer $printer = null)
     {
-        $this -> printer = $printer;
+        $this->printer = $printer;
     }
 
     public function writeText(string $text)
     {
-        if ($this -> printer == null) {
+        if ($this->printer == null) {
             throw new LogicException("Not attached to a printer.");
         }
         if ($text == null) {
@@ -75,40 +75,40 @@ class ImagePrintBuffer implements PrintBuffer
         $draw = new \ImagickDraw();
         $color = new \ImagickPixel('#000000');
         $background = new \ImagickPixel('white');
-            
+
         /* Create annotation */
         if ($this->font !== null) {
             // Allow fallback on defaults as necessary
             $draw->setFont($this->font);
         }
         /* In Arial, size 21 looks good as a substitute for FONT_B, 24 for FONT_A */
-        $draw -> setFontSize($this -> fontSize);
-        $draw -> setFillColor($color);
-        $draw -> setStrokeAntialias(true);
-        $draw -> setTextAntialias(true);
-        $metrics = $image -> queryFontMetrics($draw, $text);
-        $draw -> annotation(0, $metrics['ascender'], $text);
+        $draw->setFontSize($this->fontSize);
+        $draw->setFillColor($color);
+        $draw->setStrokeAntialias(true);
+        $draw->setTextAntialias(true);
+        $metrics = $image->queryFontMetrics($draw, $text);
+        $draw->annotation(0, $metrics['ascender'], $text);
 
         /* Create image & draw annotation on it */
-        $image -> newImage($metrics['textWidth'], $metrics['textHeight'], $background);
-        $image -> setImageFormat('png');
-        $image -> drawImage($draw);
+        $image->newImage($metrics['textWidth'], $metrics['textHeight'], $background);
+        $image->setImageFormat('png');
+        $image->drawImage($draw);
         // debugging if you want to view the images yourself
         //$image -> writeImage("test.png");
 
         /* Save image */
         $escposImage = new ImagickEscposImage();
-        $escposImage -> readImageFromImagick($image);
+        $escposImage->readImageFromImagick($image);
         $size = Printer::IMG_DEFAULT;
-        $this -> printer -> bitImage($escposImage, $size);
+        $this->printer->bitImage($escposImage, $size);
     }
 
     public function writeTextRaw(string $text)
     {
-        if ($this -> printer == null) {
+        if ($this->printer == null) {
             throw new LogicException("Not attached to a printer.");
         }
-        $this -> printer -> getPrintConnector() -> write($text);
+        $this->printer->getPrintConnector()->write($text);
     }
 
     /**

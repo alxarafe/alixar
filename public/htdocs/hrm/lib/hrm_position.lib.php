@@ -32,7 +32,7 @@ use Dolibarr\Code\Hrm\Classes\Position;
 /**
  * Prepare array of tabs for positions
  *
- * @param   Position    $object     Position
+ * @param Position $object Position
  * @return  array                   Array of tabs
  */
 function positionCardPrepareHead($object)

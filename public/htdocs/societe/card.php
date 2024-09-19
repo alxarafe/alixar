@@ -1,22 +1,22 @@
 <?php
 
-/* Copyright (C) 2001-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2003       Brian Fraval            <brian@fraval.org>
- * Copyright (C) 2004-2015  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005       Eric Seigne             <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2017  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2008       Patrick Raguin          <patrick.raguin@auguria.net>
- * Copyright (C) 2010-2020  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2011-2023  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2015       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2015       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2018       Nicolas ZABOURI	        <info@inovea-conseil.com>
- * Copyright (C) 2018       Ferran Marcet		    <fmarcet@2byte.es.com>
- * Copyright (C) 2018-2022  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2022-2023  George Gkantinas	    <info@geowv.eu>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003       Brian Fraval                <brian@fraval.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2017  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008       Patrick Raguin              <patrick.raguin@auguria.net>
+ * Copyright (C) 2010-2020  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2011-2023  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2018       Nicolas ZABOURI	            <info@inovea-conseil.com>
+ * Copyright (C) 2018       Ferran Marcet		        <fmarcet@2byte.es.com>
+ * Copyright (C) 2018-2022  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2022-2023  George Gkantinas	        <info@geowv.eu>
  * Copyright (C) 2023       Nick Fragoulis
- * Copyright (C) 2023       Alexandre Janniaux      <alexandre.janniaux@gmail.com>
+ * Copyright (C) 2023       Alexandre Janniaux          <alexandre.janniaux@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -37,7 +37,15 @@
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Categories\Classes\Categorie;
-use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Canvas;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/societe/card.php
@@ -54,18 +62,12 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 }
-if (isModEnabled('accounting')) {
-}
-if (isModEnabled('eventorganization')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
-}
 
 if ($mysoc->country_code == 'GR') {
     $u = getDolGlobalString('AADE_WEBSERVICE_USER');
     $p = getDolGlobalString('AADE_WEBSERVICE_KEY');
     $myafm = preg_replace('/\D/', '', getDolGlobalString('MAIN_INFO_TVAINTRA'));
 }
-
 
 // Load translation files required by the page
 
@@ -92,12 +94,12 @@ $errors = array();
 
 
 // Get parameters
-$action     = (GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view');
-$cancel     = GETPOST('cancel', 'alpha');
+$action = (GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view');
+$cancel = GETPOST('cancel', 'alpha');
 $backtopage = GETPOST('backtopage', 'alpha');
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');
 $backtopagejsfields = GETPOST('backtopagejsfields', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 
 $dol_openinpopup = '';
 if (!empty($backtopagejsfields)) {
@@ -142,22 +144,20 @@ if (!($object->id > 0) && $action == 'view') {
 $canvas = $object->canvas ? $object->canvas : GETPOST("canvas");
 $objcanvas = null;
 if (!empty($canvas)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
     $objcanvas = new Canvas($db, $action);
     $objcanvas->getCanvas('thirdparty', 'card', $canvas);
 }
 
 // Permissions
-$permissiontoread   = $user->hasRight('societe', 'lire');
-$permissiontoadd    = $user->hasRight('societe', 'creer'); // Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
+$permissiontoread = $user->hasRight('societe', 'lire');
+$permissiontoadd = $user->hasRight('societe', 'creer'); // Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
 $permissiontodelete = $user->hasRight('societe', 'supprimer') || ($permissiontoadd && isset($object->status) && $object->status == 0);
-$permissionnote     = $user->hasRight('societe', 'creer'); // Used by the include of actions_setnotes.inc.php
-$permissiondellink  = $user->hasRight('societe', 'creer'); // Used by the include of actions_dellink.inc.php
-$upload_dir         = $conf->societe->multidir_output[isset($object->entity) ? $object->entity : 1];
+$permissionnote = $user->hasRight('societe', 'creer'); // Used by the include of actions_setnotes.inc.php
+$permissiondellink = $user->hasRight('societe', 'creer'); // Used by the include of actions_dellink.inc.php
+$upload_dir = $conf->societe->multidir_output[isset($object->entity) ? $object->entity : 1];
 
 // Security check
 $result = restrictedArea($user, 'societe', $socid, '&societe', '', 'fk_soc', 'rowid', 0);
-
 
 
 /*
@@ -306,24 +306,24 @@ if (empty($reshook)) {
             }
 
             if (GETPOSTINT("private") == 1) {   // Ask to create a contact
-                $object->particulier        = GETPOSTINT("private");
+                $object->particulier = GETPOSTINT("private");
 
                 $object->name = dolGetFirstLastname(GETPOST('firstname', 'alphanohtml'), GETPOST('name', 'alphanohtml'));
-                $object->civility_id        = GETPOST('civility_id', 'alphanohtml'); // Note: civility id is a code, not an int
+                $object->civility_id = GETPOST('civility_id', 'alphanohtml'); // Note: civility id is a code, not an int
                 // Add non official properties
-                $object->name_bis           = GETPOST('name', 'alphanohtml');
-                $object->firstname          = GETPOST('firstname', 'alphanohtml');
+                $object->name_bis = GETPOST('name', 'alphanohtml');
+                $object->firstname = GETPOST('firstname', 'alphanohtml');
             } else {
-                $object->name               = GETPOST('name', 'alphanohtml');
+                $object->name = GETPOST('name', 'alphanohtml');
             }
-            $object->entity                 = (GETPOSTISSET('entity') ? GETPOSTINT('entity') : $conf->entity);
-            $object->name_alias             = GETPOST('name_alias', 'alphanohtml');
-            $object->parent                 = GETPOSTISSET('parent_company_id') ? GETPOSTINT('parent_company_id') : $object->parent;
-            $object->address                = GETPOST('address', 'alphanohtml');
-            $object->zip                    = GETPOST('zipcode', 'alphanohtml');
-            $object->town                   = GETPOST('town', 'alphanohtml');
-            $object->country_id             = GETPOSTINT('country_id');
-            $object->state_id               = GETPOSTINT('state_id');
+            $object->entity = (GETPOSTISSET('entity') ? GETPOSTINT('entity') : $conf->entity);
+            $object->name_alias = GETPOST('name_alias', 'alphanohtml');
+            $object->parent = GETPOSTISSET('parent_company_id') ? GETPOSTINT('parent_company_id') : $object->parent;
+            $object->address = GETPOST('address', 'alphanohtml');
+            $object->zip = GETPOST('zipcode', 'alphanohtml');
+            $object->town = GETPOST('town', 'alphanohtml');
+            $object->country_id = GETPOSTINT('country_id');
+            $object->state_id = GETPOSTINT('state_id');
 
             $object->socialnetworks = array();
             if (isModEnabled('socialnetworks')) {
@@ -334,54 +334,54 @@ if (empty($reshook)) {
                 }
             }
 
-            $object->phone                  = GETPOST('phone', 'alpha');
-            $object->phone_mobile           = (string) GETPOST("phone_mobile", 'alpha');
-            $object->fax                    = GETPOST('fax', 'alpha');
-            $object->email                  = trim(GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL));
-            $object->no_email               = GETPOSTINT("no_email");
-            $object->url                    = trim(GETPOST('url', 'custom', 0, FILTER_SANITIZE_URL));
-            $object->idprof1                = trim(GETPOST('idprof1', 'alphanohtml'));
-            $object->idprof2                = trim(GETPOST('idprof2', 'alphanohtml'));
-            $object->idprof3                = trim(GETPOST('idprof3', 'alphanohtml'));
-            $object->idprof4                = trim(GETPOST('idprof4', 'alphanohtml'));
-            $object->idprof5                = trim(GETPOST('idprof5', 'alphanohtml'));
-            $object->idprof6                = trim(GETPOST('idprof6', 'alphanohtml'));
-            $object->prefix_comm            = GETPOST('prefix_comm', 'alphanohtml');
-            $object->code_client            = GETPOSTISSET('customer_code') ? GETPOST('customer_code', 'alpha') : GETPOST('code_client', 'alpha');
-            $object->code_fournisseur       = GETPOSTISSET('supplier_code') ? GETPOST('supplier_code', 'alpha') : GETPOST('code_fournisseur', 'alpha');
-            $object->capital                = GETPOST('capital', 'alphanohtml');
-            $object->barcode                = GETPOST('barcode', 'alphanohtml');
+            $object->phone = GETPOST('phone', 'alpha');
+            $object->phone_mobile = (string)GETPOST("phone_mobile", 'alpha');
+            $object->fax = GETPOST('fax', 'alpha');
+            $object->email = trim(GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL));
+            $object->no_email = GETPOSTINT("no_email");
+            $object->url = trim(GETPOST('url', 'custom', 0, FILTER_SANITIZE_URL));
+            $object->idprof1 = trim(GETPOST('idprof1', 'alphanohtml'));
+            $object->idprof2 = trim(GETPOST('idprof2', 'alphanohtml'));
+            $object->idprof3 = trim(GETPOST('idprof3', 'alphanohtml'));
+            $object->idprof4 = trim(GETPOST('idprof4', 'alphanohtml'));
+            $object->idprof5 = trim(GETPOST('idprof5', 'alphanohtml'));
+            $object->idprof6 = trim(GETPOST('idprof6', 'alphanohtml'));
+            $object->prefix_comm = GETPOST('prefix_comm', 'alphanohtml');
+            $object->code_client = GETPOSTISSET('customer_code') ? GETPOST('customer_code', 'alpha') : GETPOST('code_client', 'alpha');
+            $object->code_fournisseur = GETPOSTISSET('supplier_code') ? GETPOST('supplier_code', 'alpha') : GETPOST('code_fournisseur', 'alpha');
+            $object->capital = GETPOST('capital', 'alphanohtml');
+            $object->barcode = GETPOST('barcode', 'alphanohtml');
 
-            $object->tva_intra              = GETPOST('tva_intra', 'alphanohtml');
-            $object->tva_assuj              = GETPOST('assujtva_value', 'alpha');
-            $object->vat_reverse_charge     = GETPOST('vat_reverse_charge') == 'on' ? 1 : 0;
+            $object->tva_intra = GETPOST('tva_intra', 'alphanohtml');
+            $object->tva_assuj = GETPOST('assujtva_value', 'alpha');
+            $object->vat_reverse_charge = GETPOST('vat_reverse_charge') == 'on' ? 1 : 0;
             $object->status = GETPOST('status', 'alpha');
 
             // Local Taxes
-            $object->localtax1_assuj        = GETPOST('localtax1assuj_value', 'alpha');
-            $object->localtax2_assuj        = GETPOST('localtax2assuj_value', 'alpha');
+            $object->localtax1_assuj = GETPOST('localtax1assuj_value', 'alpha');
+            $object->localtax2_assuj = GETPOST('localtax2assuj_value', 'alpha');
 
-            $object->localtax1_value        = GETPOST('lt1', 'alpha');
-            $object->localtax2_value        = GETPOST('lt2', 'alpha');
+            $object->localtax1_value = GETPOST('lt1', 'alpha');
+            $object->localtax2_value = GETPOST('lt2', 'alpha');
 
-            $object->forme_juridique_code   = GETPOSTINT('forme_juridique_code');
-            $object->effectif_id            = GETPOSTINT('effectif_id');
-            $object->typent_id              = GETPOSTINT('typent_id');
+            $object->forme_juridique_code = GETPOSTINT('forme_juridique_code');
+            $object->effectif_id = GETPOSTINT('effectif_id');
+            $object->typent_id = GETPOSTINT('typent_id');
 
-            $object->typent_code            = dol_getIdFromCode($db, $object->typent_id, 'c_typent', 'id', 'code'); // Force typent_code too so check in verify() will be done on new type
+            $object->typent_code = dol_getIdFromCode($db, $object->typent_id, 'c_typent', 'id', 'code'); // Force typent_code too so check in verify() will be done on new type
 
-            $object->client                 = GETPOSTINT('client');
-            $object->fournisseur            = GETPOSTINT('fournisseur');
+            $object->client = GETPOSTINT('client');
+            $object->fournisseur = GETPOSTINT('fournisseur');
 
-            $object->commercial_id          = GETPOSTINT('commercial_id');
-            $object->default_lang           = GETPOST('default_lang');
+            $object->commercial_id = GETPOSTINT('commercial_id');
+            $object->default_lang = GETPOST('default_lang');
 
             // Webservices url/key
-            $object->webservices_url        = GETPOST('webservices_url', 'custom', 0, FILTER_SANITIZE_URL);
-            $object->webservices_key        = GETPOST('webservices_key', 'san_alpha');
+            $object->webservices_url = GETPOST('webservices_url', 'custom', 0, FILTER_SANITIZE_URL);
+            $object->webservices_key = GETPOST('webservices_key', 'san_alpha');
 
             if (GETPOSTISSET('accountancy_code_sell')) {
-                $accountancy_code_sell      = GETPOST('accountancy_code_sell', 'alpha');
+                $accountancy_code_sell = GETPOST('accountancy_code_sell', 'alpha');
 
                 if (empty($accountancy_code_sell) || $accountancy_code_sell == '-1') {
                     $object->accountancy_code_sell = '';
@@ -390,7 +390,7 @@ if (empty($reshook)) {
                 }
             }
             if (GETPOSTISSET('accountancy_code_buy')) {
-                $accountancy_code_buy       = GETPOST('accountancy_code_buy', 'alpha');
+                $accountancy_code_buy = GETPOST('accountancy_code_buy', 'alpha');
 
                 if (empty($accountancy_code_buy) || $accountancy_code_buy == '-1') {
                     $object->accountancy_code_buy = '';
@@ -593,7 +593,7 @@ if (empty($reshook)) {
                     }
 
                     if (!empty($backtopage)) {
-                        $backtopage = preg_replace('/--IDFORBACKTOPAGE--/', (string) $object->id, $backtopage); // New method to autoselect project after a New on another form object creation
+                        $backtopage = preg_replace('/--IDFORBACKTOPAGE--/', (string)$object->id, $backtopage); // New method to autoselect project after a New on another form object creation
                         if (preg_match('/\?/', $backtopage)) {
                             $backtopage .= '&socid=' . $object->id; // Old method
                         }
@@ -690,7 +690,7 @@ if (empty($reshook)) {
                 }
 
                 // Logo/Photo save
-                $dir     = $conf->societe->multidir_output[$object->entity] . "/" . $object->id . "/logos";
+                $dir = $conf->societe->multidir_output[$object->entity] . "/" . $object->id . "/logos";
                 $file_OK = is_uploaded_file($_FILES['photo']['tmp_name']);
                 if (GETPOST('deletephoto') && $object->logo) {
                     $fileimg = $dir . '/' . $object->logo;
@@ -749,7 +749,7 @@ if (empty($reshook)) {
                 // Update linked member
                 if (!$error && isset($object->fk_soc) && $object->fk_soc > 0) {
                     $sql = "UPDATE " . MAIN_DB_PREFIX . "adherent";
-                    $sql .= " SET fk_soc = NULL WHERE fk_soc = " . ((int) $socid);
+                    $sql .= " SET fk_soc = NULL WHERE fk_soc = " . ((int)$socid);
                     if (!$object->db->query($sql)) {
                         $error++;
                         $object->error .= $object->db->lasterror();
@@ -842,7 +842,6 @@ if (empty($reshook)) {
     $permissiontoadd = $user->hasRight('societe', 'creer');
     include DOL_DOCUMENT_ROOT . '/core/actions_builddoc.inc.php';
 }
-
 
 /*
  *  View
@@ -961,13 +960,13 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
         $object->name = GETPOST('name', 'alphanohtml');
         $object->name_alias = GETPOST('name_alias', 'alphanohtml');
         $object->firstname = GETPOST('firstname', 'alphanohtml');
-        $object->particulier        = $private;
-        $object->prefix_comm        = GETPOST('prefix_comm', 'alphanohtml');
+        $object->particulier = $private;
+        $object->prefix_comm = GETPOST('prefix_comm', 'alphanohtml');
         $object->client = GETPOSTINT('client') ? GETPOSTINT('client') : $object->client;
 
         if (empty($duplicate_code_error)) {
-            $object->code_client        = GETPOST('customer_code', 'alpha');
-            $object->fournisseur        = GETPOST('fournisseur') ? GETPOSTINT('fournisseur') : $object->fournisseur;
+            $object->code_client = GETPOST('customer_code', 'alpha');
+            $object->fournisseur = GETPOST('fournisseur') ? GETPOSTINT('fournisseur') : $object->fournisseur;
             $object->code_fournisseur = GETPOST('supplier_code', 'alpha');
         } else {
             setEventMessages($langs->trans('NewCustomerSupplierCodeProposed'), null, 'warnings');
@@ -987,33 +986,33 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
             }
         }
 
-        $object->phone              = GETPOST('phone', 'alpha');
-        $object->phone_mobile       = (string) GETPOST("phone_mobile", 'alpha');
-        $object->fax                = GETPOST('fax', 'alpha');
-        $object->email              = GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
-        $object->url                = GETPOST('url', 'custom', 0, FILTER_SANITIZE_URL);
-        $object->capital            = GETPOST('capital', 'alphanohtml');
-        $object->barcode            = GETPOST('barcode', 'alphanohtml');
-        $object->idprof1            = GETPOST('idprof1', 'alphanohtml');
-        $object->idprof2            = GETPOST('idprof2', 'alphanohtml');
-        $object->idprof3            = GETPOST('idprof3', 'alphanohtml');
-        $object->idprof4            = GETPOST('idprof4', 'alphanohtml');
-        $object->idprof5            = GETPOST('idprof5', 'alphanohtml');
-        $object->idprof6            = GETPOST('idprof6', 'alphanohtml');
+        $object->phone = GETPOST('phone', 'alpha');
+        $object->phone_mobile = (string)GETPOST("phone_mobile", 'alpha');
+        $object->fax = GETPOST('fax', 'alpha');
+        $object->email = GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
+        $object->url = GETPOST('url', 'custom', 0, FILTER_SANITIZE_URL);
+        $object->capital = GETPOST('capital', 'alphanohtml');
+        $object->barcode = GETPOST('barcode', 'alphanohtml');
+        $object->idprof1 = GETPOST('idprof1', 'alphanohtml');
+        $object->idprof2 = GETPOST('idprof2', 'alphanohtml');
+        $object->idprof3 = GETPOST('idprof3', 'alphanohtml');
+        $object->idprof4 = GETPOST('idprof4', 'alphanohtml');
+        $object->idprof5 = GETPOST('idprof5', 'alphanohtml');
+        $object->idprof6 = GETPOST('idprof6', 'alphanohtml');
         $object->typent_id = GETPOSTINT('typent_id');
-        $object->effectif_id        = GETPOSTINT('effectif_id');
-        $object->civility_id        = GETPOST('civility_id', 'alpha');
+        $object->effectif_id = GETPOSTINT('effectif_id');
+        $object->civility_id = GETPOST('civility_id', 'alpha');
 
         $object->tva_assuj = GETPOSTINT('assujtva_value');
         $object->vat_reverse_charge = GETPOST('vat_reverse_charge') == 'on' ? 1 : 0;
         $object->status = GETPOSTINT('status');
 
         //Local Taxes
-        $object->localtax1_assuj    = GETPOSTINT('localtax1assuj_value');
-        $object->localtax2_assuj    = GETPOSTINT('localtax2assuj_value');
+        $object->localtax1_assuj = GETPOSTINT('localtax1assuj_value');
+        $object->localtax2_assuj = GETPOSTINT('localtax2assuj_value');
 
-        $object->localtax1_value    = GETPOSTINT('lt1');
-        $object->localtax2_value    = GETPOSTINT('lt2');
+        $object->localtax1_value = GETPOSTINT('lt1');
+        $object->localtax2_value = GETPOSTINT('lt2');
 
         $object->tva_intra = GETPOST('tva_intra', 'alphanohtml');
 
@@ -1021,7 +1020,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
         $object->default_lang = GETPOST('default_lang');
 
         if (GETPOSTISSET('accountancy_code_sell')) {
-            $accountancy_code_sell  = GETPOST('accountancy_code_sell', 'alpha');
+            $accountancy_code_sell = GETPOST('accountancy_code_sell', 'alpha');
 
             if (empty($accountancy_code_sell) || $accountancy_code_sell == '-1') {
                 $object->accountancy_code_sell = '';
@@ -1030,7 +1029,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
             }
         }
         if (GETPOSTISSET('accountancy_code_buy')) {
-            $accountancy_code_buy   = GETPOST('accountancy_code_buy', 'alpha');
+            $accountancy_code_buy = GETPOST('accountancy_code_buy', 'alpha');
 
             if (empty($accountancy_code_buy) || $accountancy_code_buy == '-1') {
                 $object->accountancy_code_buy = '';
@@ -1042,7 +1041,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
         $object->logo = (isset($_FILES['photo']) ? dol_sanitizeFileName($_FILES['photo']['name']) : '');
 
         // Company logo management
-        $dir     = $conf->societe->multidir_output[$conf->entity] . "/" . $object->id . "/logos";
+        $dir = $conf->societe->multidir_output[$conf->entity] . "/" . $object->id . "/logos";
         $file_OK = (isset($_FILES['photo']) ? is_uploaded_file($_FILES['photo']['tmp_name']) : false);
         if ($file_OK) {
             if (image_format_supported($_FILES['photo']['name'])) {
@@ -1874,36 +1873,36 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                     }
                 }
 
-                $object->phone                  = GETPOST('phone', 'alpha');
-                $object->phone_mobile           = (string) GETPOST('phone_mobile', 'alpha');
-                $object->fax                    = GETPOST('fax', 'alpha');
-                $object->email                  = GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
-                $object->no_email               = GETPOSTINT("no_email");
-                $object->url                    = GETPOST('url', 'custom', 0, FILTER_SANITIZE_URL);
-                $object->capital                = GETPOST('capital', 'alphanohtml');
-                $object->idprof1                = GETPOST('idprof1', 'alphanohtml');
-                $object->idprof2                = GETPOST('idprof2', 'alphanohtml');
-                $object->idprof3                = GETPOST('idprof3', 'alphanohtml');
-                $object->idprof4                = GETPOST('idprof4', 'alphanohtml');
-                $object->idprof5                = GETPOST('idprof5', 'alphanohtml');
-                $object->idprof6                = GETPOST('idprof6', 'alphanohtml');
+                $object->phone = GETPOST('phone', 'alpha');
+                $object->phone_mobile = (string)GETPOST('phone_mobile', 'alpha');
+                $object->fax = GETPOST('fax', 'alpha');
+                $object->email = GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
+                $object->no_email = GETPOSTINT("no_email");
+                $object->url = GETPOST('url', 'custom', 0, FILTER_SANITIZE_URL);
+                $object->capital = GETPOST('capital', 'alphanohtml');
+                $object->idprof1 = GETPOST('idprof1', 'alphanohtml');
+                $object->idprof2 = GETPOST('idprof2', 'alphanohtml');
+                $object->idprof3 = GETPOST('idprof3', 'alphanohtml');
+                $object->idprof4 = GETPOST('idprof4', 'alphanohtml');
+                $object->idprof5 = GETPOST('idprof5', 'alphanohtml');
+                $object->idprof6 = GETPOST('idprof6', 'alphanohtml');
                 $object->typent_id = GETPOSTINT('typent_id');
                 $object->effectif_id = GETPOSTINT('effectif_id');
-                $object->barcode                = GETPOST('barcode', 'alphanohtml');
+                $object->barcode = GETPOST('barcode', 'alphanohtml');
                 $object->forme_juridique_code = GETPOSTINT('forme_juridique_code');
                 $object->default_lang = GETPOST('default_lang', 'alpha');
 
-                $object->tva_assuj              = GETPOSTINT('assujtva_value');
-                $object->vat_reverse_charge     = GETPOST('vat_reverse_charge') == 'on' ? 1 : 0;
-                $object->tva_intra              = GETPOST('tva_intra', 'alphanohtml');
-                $object->status =               GETPOSTINT('status');
+                $object->tva_assuj = GETPOSTINT('assujtva_value');
+                $object->vat_reverse_charge = GETPOST('vat_reverse_charge') == 'on' ? 1 : 0;
+                $object->tva_intra = GETPOST('tva_intra', 'alphanohtml');
+                $object->status = GETPOSTINT('status');
 
                 // Webservices url/key
-                $object->webservices_url        = GETPOST('webservices_url', 'custom', 0, FILTER_SANITIZE_URL);
-                $object->webservices_key        = GETPOST('webservices_key', 'san_alpha');
+                $object->webservices_url = GETPOST('webservices_url', 'custom', 0, FILTER_SANITIZE_URL);
+                $object->webservices_key = GETPOST('webservices_key', 'san_alpha');
 
                 if (GETPOSTISSET('accountancy_code_sell')) {
-                    $accountancy_code_sell  = GETPOST('accountancy_code_sell', 'alpha');
+                    $accountancy_code_sell = GETPOST('accountancy_code_sell', 'alpha');
 
                     if (empty($accountancy_code_sell) || $accountancy_code_sell == '-1') {
                         $object->accountancy_code_sell = '';
@@ -1912,7 +1911,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                     }
                 }
                 if (GETPOSTISSET('accountancy_code_buy')) {
-                    $accountancy_code_buy   = GETPOST('accountancy_code_buy', 'alpha');
+                    $accountancy_code_buy = GETPOST('accountancy_code_buy', 'alpha');
 
                     if (empty($accountancy_code_buy) || $accountancy_code_buy == '-1') {
                         $object->accountancy_code_buy = '';
@@ -1928,11 +1927,11 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                 }
 
                 //Local Taxes
-                $object->localtax1_assuj        = GETPOST('localtax1assuj_value');
-                $object->localtax2_assuj        = GETPOST('localtax2assuj_value');
+                $object->localtax1_assuj = GETPOST('localtax1assuj_value');
+                $object->localtax2_assuj = GETPOST('localtax2assuj_value');
 
-                $object->localtax1_value        = GETPOST('lt1');
-                $object->localtax2_value        = GETPOST('lt2');
+                $object->localtax1_value = GETPOST('lt1');
+                $object->localtax2_value = GETPOST('lt2');
 
                 // We set country_id, and country_code label of the chosen country
                 if ($object->country_id > 0) {
@@ -2882,7 +2881,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
             // Warehouse
             if (isModEnabled('stock') && getDolGlobalString('SOCIETE_ASK_FOR_WAREHOUSE')) {
                 $langs->load('stocks');
-                                $formproduct = new FormProduct($db);
+                $formproduct = new FormProduct($db);
                 print '<tr class="nowrap">';
                 print '<td>';
                 print $form->editfieldkey("Warehouse", 'warehouse', '', $object, $user->hasRight('societe', 'creer'));
@@ -3244,43 +3243,43 @@ $db->close();
 ?>
 
 <script>
-// Function to retrieve VAT details from the Greek Ministry of Finance GSIS SOAP web service
-function GRVAT(a, u, p, myafm) {
-  var afm = a.replace(/\D/g, ""); // Remove non-digit characters from 'a'
+    // Function to retrieve VAT details from the Greek Ministry of Finance GSIS SOAP web service
+    function GRVAT(a, u, p, myafm) {
+        var afm = a.replace(/\D/g, ""); // Remove non-digit characters from 'a'
 
-  $.ajax({
-    type: "GET",
-    url: '<?php echo DOL_URL_ROOT ?>/societe/checkvat/checkVatGr.php',
-    data: { afm }, // Set request parameters
-    success: function(data) {
-        var obj = data; // Parse response data as JSON
+        $.ajax({
+            type: "GET",
+            url: '<?php echo DOL_URL_ROOT ?>/societe/checkvat/checkVatGr.php',
+            data: {afm}, // Set request parameters
+            success: function (data) {
+                var obj = data; // Parse response data as JSON
 
-        // Update form fields based on retrieved data
-        if (obj.RgWsPublicBasicRt_out.afm === null) {
-            alert(obj.pErrorRec_out.errorDescr); // Display error message if AFM is null
-        } else {
-            $("#name").val(obj.RgWsPublicBasicRt_out.onomasia); // Set 'name' field value
-            $("#address").val(obj.RgWsPublicBasicRt_out.postalAddress + " " + obj.RgWsPublicBasicRt_out.postalAddressNo); // Set 'address' field value
-            $("#zipcode").val(obj.RgWsPublicBasicRt_out.postalZipCode); // Set 'zipcode' field value
-            $("#town").val(obj.RgWsPublicBasicRt_out.postalAreaDescription); // Set 'town' field value
-            $("#idprof2").val(obj.RgWsPublicBasicRt_out.doyDescr); // Set 'idprof2' field value
-            $("#name_alias_input").val(obj.RgWsPublicBasicRt_out.commerTitle); // Set 'name_alias' field value
+                // Update form fields based on retrieved data
+                if (obj.RgWsPublicBasicRt_out.afm === null) {
+                    alert(obj.pErrorRec_out.errorDescr); // Display error message if AFM is null
+                } else {
+                    $("#name").val(obj.RgWsPublicBasicRt_out.onomasia); // Set 'name' field value
+                    $("#address").val(obj.RgWsPublicBasicRt_out.postalAddress + " " + obj.RgWsPublicBasicRt_out.postalAddressNo); // Set 'address' field value
+                    $("#zipcode").val(obj.RgWsPublicBasicRt_out.postalZipCode); // Set 'zipcode' field value
+                    $("#town").val(obj.RgWsPublicBasicRt_out.postalAreaDescription); // Set 'town' field value
+                    $("#idprof2").val(obj.RgWsPublicBasicRt_out.doyDescr); // Set 'idprof2' field value
+                    $("#name_alias_input").val(obj.RgWsPublicBasicRt_out.commerTitle); // Set 'name_alias' field value
 
-        if (obj.arrayOfRgWsPublicFirmActRt_out.RgWsPublicFirmActRtUser) {
-            var firmActUser = obj.arrayOfRgWsPublicFirmActRt_out.RgWsPublicFirmActRtUser;
+                    if (obj.arrayOfRgWsPublicFirmActRt_out.RgWsPublicFirmActRtUser) {
+                        var firmActUser = obj.arrayOfRgWsPublicFirmActRt_out.RgWsPublicFirmActRtUser;
 
-        if (Array.isArray(firmActUser)) {
-            var primaryFirmAct = firmActUser.find(item => item.firmActKindDescr === "ΚΥΡΙΑ"); // Find primary client activity
-            if (primaryFirmAct) {
-                $("#idprof1").val(primaryFirmAct.firmActDescr); // Set 'idprof1' field value
+                        if (Array.isArray(firmActUser)) {
+                            var primaryFirmAct = firmActUser.find(item => item.firmActKindDescr === "ΚΥΡΙΑ"); // Find primary client activity
+                            if (primaryFirmAct) {
+                                $("#idprof1").val(primaryFirmAct.firmActDescr); // Set 'idprof1' field value
+                            }
+                        } else {
+                            $("#idprof1").val(firmActUser.firmActDescr); // Set 'idprof1' field value
+                        }
+                    }
+                }
             }
-        } else {
-            $("#idprof1").val(firmActUser.firmActDescr); // Set 'idprof1' field value
-            }
-        }
-        }
+        });
     }
-    });
-}
 
 </script>

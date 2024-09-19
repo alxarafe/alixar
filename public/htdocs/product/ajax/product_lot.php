@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2023   Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2023   Lionel Vessiller     	<lvessiller@easya.solutions>
+/* Copyright (C) 2023       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023       Lionel Vessiller     	    <lvessiller@easya.solutions>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Product\Classes\Productlot;
 
 /**
  *  \file       htdocs/product/ajax/product_lot.php

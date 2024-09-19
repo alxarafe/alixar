@@ -46,10 +46,10 @@ if (!defined('NOIPCHECK')) {
 if (!defined("NOSESSION")) {
     define("NOSESSION", '1');
 }
-if (! defined('NOREQUIREHTML')) {
+if (!defined('NOREQUIREHTML')) {
     define('NOREQUIREHTML', '1');               // If we don't need to load the html.form.class.php
 }
-if (! defined('NOREQUIREAJAX')) {
+if (!defined('NOREQUIREAJAX')) {
     define('NOREQUIREAJAX', '1');               // Do not load ajax.lib.php library
 }
 
@@ -135,7 +135,7 @@ if ($obj->email != $email)
 
 // Update status of mail in recipient mailing list table
 $statut = '3';
-$sql = "UPDATE " . MAIN_DB_PREFIX . "mailing_cibles SET statut=" . ((int) $statut) . " WHERE tag = '" . $db->escape($tag) . "'";
+$sql = "UPDATE " . MAIN_DB_PREFIX . "mailing_cibles SET statut=" . ((int)$statut) . " WHERE tag = '" . $db->escape($tag) . "'";
 
 $resql = $db->query($sql);
 if (!$resql) {
@@ -157,7 +157,7 @@ if (! $resql) dol_print_error($db);
 */
 
 // Update status communication of email (new usage)
-$sql = "INSERT INTO " . MAIN_DB_PREFIX . "mailing_unsubscribe (date_creat, entity, email, unsubscribegroup, ip) VALUES ('" . $db->idate(dol_now()) . "', " . ((int) $obj->entity) . ", '" . $db->escape($obj->email) . "', '', '" . $db->escape(getUserRemoteIP()) . "')";
+$sql = "INSERT INTO " . MAIN_DB_PREFIX . "mailing_unsubscribe (date_creat, entity, email, unsubscribegroup, ip) VALUES ('" . $db->idate(dol_now()) . "', " . ((int)$obj->entity) . ", '" . $db->escape($obj->email) . "', '', '" . $db->escape(getUserRemoteIP()) . "')";
 
 $resql = $db->query($sql);
 //if (! $resql) dol_print_error($db);   No test on errors, may fail if already unsubscribed

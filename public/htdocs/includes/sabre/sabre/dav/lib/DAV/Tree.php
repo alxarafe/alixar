@@ -123,7 +123,7 @@ class Tree implements INodeByPath
     /**
      * Copies a file from path to another.
      *
-     * @param string $sourcePath      The source location
+     * @param string $sourcePath The source location
      * @param string $destinationPath The full destination path
      */
     public function copy($sourcePath, $destinationPath)
@@ -145,7 +145,7 @@ class Tree implements INodeByPath
     /**
      * Moves a file from one location to another.
      *
-     * @param string $sourcePath      The path to the file which should be moved
+     * @param string $sourcePath The path to the file which should be moved
      * @param string $destinationPath The full destination path, so not just the destination parent node
      */
     public function move($sourcePath, $destinationPath)
@@ -232,7 +232,7 @@ class Tree implements INodeByPath
         // flushing the entire cache
         $path = trim($path, '/');
         foreach ($this->cache as $nodePath => $node) {
-            if ('' === $path || $nodePath == $path || 0 === strpos((string) $nodePath, $path . '/')) {
+            if ('' === $path || $nodePath == $path || 0 === strpos((string)$nodePath, $path . '/')) {
                 unset($this->cache[$nodePath]);
             }
         }
@@ -294,7 +294,7 @@ class Tree implements INodeByPath
      */
     protected function copyNode(INode $source, ICollection $destinationParent, $destinationName = null)
     {
-        if ('' === (string) $destinationName) {
+        if ('' === (string)$destinationName) {
             $destinationName = $source->getName();
         }
 

@@ -36,7 +36,7 @@ use Dolibarr\Code\Core\Classes\Link;
 /**
  * Prepare array with list of tabs
  *
- * @param   ChargeSociales  $object     Object related to tabs
+ * @param ChargeSociales $object Object related to tabs
  * @return  array                       Array of tabs to show
  */
 function tax_prepare_head(ChargeSociales $object)
@@ -101,16 +101,16 @@ function tax_prepare_head(ChargeSociales $object)
 /**
  *  Look for collectable VAT clients in the chosen year (and month)
  *
- *  @param  string  $type           Tax type, either 'vat', 'localtax1' or 'localtax2'
- *  @param  DoliDB  $db             Database handle
- *  @param  int     $y              Year
- *  @param  string  $date_start     Start date
- *  @param  string  $date_end       End date
- *  @param  int     $modetax        Not used
- *  @param  string  $direction      'sell' or 'buy'
- *  @param  int     $m              Month
- *  @param  int     $q              Quarter
- *  @return array|int               Array with details of VATs (per third parties), -1 if no accountancy module, -2 if not yet developed, -3 if error
+ * @param string $type Tax type, either 'vat', 'localtax1' or 'localtax2'
+ * @param DoliDB $db Database handle
+ * @param int $y Year
+ * @param string $date_start Start date
+ * @param string $date_end End date
+ * @param int $modetax Not used
+ * @param string $direction 'sell' or 'buy'
+ * @param int $m Month
+ * @param int $q Quarter
+ * @return array|int               Array with details of VATs (per third parties), -1 if no accountancy module, -2 if not yet developed, -3 if error
  */
 function tax_by_thirdparty($type, $db, $y, $date_start, $date_end, $modetax, $direction, $m = 0, $q = 0)
 {
@@ -304,10 +304,10 @@ function tax_by_thirdparty($type, $db, $y, $date_start, $date_end, $modetax, $di
 
                 if ($assoc['rowid'] != $oldrowid) {       // Si rupture sur d.rowid
                     $oldrowid = $assoc['rowid'];
-                    $list[$assoc['company_id']]['totalht']  += $assoc['total_ht'];
-                    $list[$assoc['company_id']]['vat']      += $assoc['total_vat'];
-                    $list[$assoc['company_id']]['localtax1']      += $assoc['total_localtax1'];
-                    $list[$assoc['company_id']]['localtax2']      += $assoc['total_localtax2'];
+                    $list[$assoc['company_id']]['totalht'] += $assoc['total_ht'];
+                    $list[$assoc['company_id']]['vat'] += $assoc['total_vat'];
+                    $list[$assoc['company_id']]['localtax1'] += $assoc['total_localtax1'];
+                    $list[$assoc['company_id']]['localtax2'] += $assoc['total_localtax2'];
                 }
 
                 $list[$assoc['company_id']]['dtotal_ttc'][] = $assoc['total_ttc'];
@@ -508,10 +508,10 @@ function tax_by_thirdparty($type, $db, $y, $date_start, $date_end, $modetax, $di
 
                 if ($assoc['rowid'] != $oldrowid) {       // Si rupture sur d.rowid
                     $oldrowid = $assoc['rowid'];
-                    $list[$assoc['company_id']]['totalht']  += $assoc['total_ht'];
-                    $list[$assoc['company_id']]['vat']      += $assoc['total_vat'];
-                    $list[$assoc['company_id']]['localtax1']     += $assoc['total_localtax1'];
-                    $list[$assoc['company_id']]['localtax2']     += $assoc['total_localtax2'];
+                    $list[$assoc['company_id']]['totalht'] += $assoc['total_ht'];
+                    $list[$assoc['company_id']]['vat'] += $assoc['total_vat'];
+                    $list[$assoc['company_id']]['localtax1'] += $assoc['total_localtax1'];
+                    $list[$assoc['company_id']]['localtax2'] += $assoc['total_localtax2'];
                 }
                 $list[$assoc['company_id']]['dtotal_ttc'][] = $assoc['total_ttc'];
                 $list[$assoc['company_id']]['dtype'][] = $assoc['dtype'];
@@ -632,8 +632,8 @@ function tax_by_thirdparty($type, $db, $y, $date_start, $date_end, $modetax, $di
                         $oldrowid = $assoc['rowid'];
                         $list[$assoc['company_id']]['totalht'] += $assoc['total_ht'];
                         $list[$assoc['company_id']]['vat'] += $assoc['total_vat'];
-                        $list[$assoc['company_id']]['localtax1']     += $assoc['total_localtax1'];
-                        $list[$assoc['company_id']]['localtax2']     += $assoc['total_localtax2'];
+                        $list[$assoc['company_id']]['localtax1'] += $assoc['total_localtax1'];
+                        $list[$assoc['company_id']]['localtax2'] += $assoc['total_localtax2'];
                     }
 
                     $list[$assoc['company_id']]['dtotal_ttc'][] = $assoc['total_ttc'];
@@ -694,16 +694,16 @@ function tax_by_thirdparty($type, $db, $y, $date_start, $date_end, $modetax, $di
  *  The function gets the Tax in split results, as the Tax declaration asks
  *  to report the amounts for different Tax rates as different lines.
  *
- *  @param  string  $type           Tax type, either 'vat', 'localtax1' or 'localtax2'
- *  @param  DoliDB  $db             Database handler object
- *  @param  int     $y              Year
- *  @param  int     $q              Quarter
- *  @param  string  $date_start     Start date
- *  @param  string  $date_end       End date
- *  @param  int     $modetax        Not used
- *  @param  int     $direction      'sell' (customer invoice) or 'buy' (supplier invoices)
- *  @param  int     $m              Month
- *  @return array|int               Array with details of VATs (per rate), -1 if no accountancy module, -2 if not yet developed, -3 if error
+ * @param string $type Tax type, either 'vat', 'localtax1' or 'localtax2'
+ * @param DoliDB $db Database handler object
+ * @param int $y Year
+ * @param int $q Quarter
+ * @param string $date_start Start date
+ * @param string $date_end End date
+ * @param int $modetax Not used
+ * @param int $direction 'sell' (customer invoice) or 'buy' (supplier invoices)
+ * @param int $m Month
+ * @return array|int               Array with details of VATs (per rate), -1 if no accountancy module, -2 if not yet developed, -3 if error
  */
 function tax_by_rate($type, $db, $y, $q, $date_start, $date_end, $modetax, $direction, $m = 0)
 {
@@ -898,8 +898,8 @@ function tax_by_rate($type, $db, $y, $q, $date_start, $date_end, $modetax, $dire
 
                 if ($assoc['rowid'] != $oldrowid) {       // Si rupture sur d.rowid
                     $oldrowid = $assoc['rowid'];
-                    $list[$rate_key]['totalht']   += $assoc['total_ht'];
-                    $list[$rate_key]['vat']       += $assoc['total_vat'];
+                    $list[$rate_key]['totalht'] += $assoc['total_ht'];
+                    $list[$rate_key]['vat'] += $assoc['total_vat'];
                     $list[$rate_key]['localtax1'] += $assoc['total_localtax1'];
                     $list[$rate_key]['localtax2'] += $assoc['total_localtax2'];
                 }
@@ -1101,8 +1101,8 @@ function tax_by_rate($type, $db, $y, $q, $date_start, $date_end, $modetax, $dire
 
                 if ($assoc['rowid'] != $oldrowid) {       // Si rupture sur d.rowid
                     $oldrowid = $assoc['rowid'];
-                    $list[$rate_key]['totalht']   += $assoc['total_ht'];
-                    $list[$rate_key]['vat']       += $assoc['total_vat'];
+                    $list[$rate_key]['totalht'] += $assoc['total_ht'];
+                    $list[$rate_key]['vat'] += $assoc['total_vat'];
                     $list[$rate_key]['localtax1'] += $assoc['total_localtax1'];
                     $list[$rate_key]['localtax2'] += $assoc['total_localtax2'];
                 }
@@ -1228,7 +1228,7 @@ function tax_by_rate($type, $db, $y, $q, $date_start, $date_end, $modetax, $dire
 
                     if ($assoc['rowid'] != $oldrowid) {       // Si rupture sur d.rowid
                         $oldrowid = $assoc['rowid'];
-                        $list[$rate_key]['totalht']   += $assoc['total_ht'];
+                        $list[$rate_key]['totalht'] += $assoc['total_ht'];
                         $list[$rate_key]['vat'] += $assoc['total_vat'];
                         $list[$rate_key]['localtax1'] += $assoc['total_localtax1'];
                         $list[$rate_key]['localtax2'] += $assoc['total_localtax2'];

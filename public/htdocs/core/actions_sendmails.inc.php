@@ -210,8 +210,8 @@ if (($action == 'send' || $action == 'relance') && !GETPOST('addfile') && !GETPO
                     $tmparray[] = dol_string_nospecial($contact->getFullName($langs), ' ', array(",")) . ' <' . $contact->email . '>';
                     $sendtoid[] = $contact->id;
                 } elseif ($val) {   // $val is the Id of a contact
-                    $tmparray[] = $thirdparty->contact_get_property((int) $val, 'email');
-                    $sendtoid[] = ((int) $val);
+                    $tmparray[] = $thirdparty->contact_get_property((int)$val, 'email');
+                    $sendtoid[] = ((int)$val);
                 }
             }
         }
@@ -252,7 +252,7 @@ if (($action == 'send' || $action == 'relance') && !GETPOST('addfile') && !GETPO
                     $tmparray[] = dol_string_nospecial($contact->name, ' ', array(",")) . ' <' . $contact->email . '>';
                     //$sendtoid[] = $contact->id;  TODO Add also id of contact in CC ?
                 } elseif ($val) {               // $val is the Id of a contact
-                    $tmparray[] = $thirdparty->contact_get_property((int) $val, 'email');
+                    $tmparray[] = $thirdparty->contact_get_property((int)$val, 'email');
                     //$sendtoid[] = ((int) $val);  TODO Add also id of contact in CC ?
                 }
             }
@@ -295,7 +295,7 @@ if (($action == 'send' || $action == 'relance') && !GETPOST('addfile') && !GETPO
                 $from = trim($tmp[($reg[1] - 1)]);
             } elseif (preg_match('/senderprofile_(\d+)_(\d+)/', $fromtype, $reg)) {
                 $sql = 'SELECT rowid, label, email FROM ' . MAIN_DB_PREFIX . 'c_email_senderprofile';
-                $sql .= ' WHERE rowid = ' . (int) $reg[1];
+                $sql .= ' WHERE rowid = ' . (int)$reg[1];
                 $resql = $db->query($sql);
                 $obj = $db->fetch_object($resql);
                 if ($obj) {
@@ -303,7 +303,7 @@ if (($action == 'send' || $action == 'relance') && !GETPOST('addfile') && !GETPO
                 }
             } elseif (preg_match('/from_template_(\d+)/', $fromtype, $reg)) {
                 $sql = 'SELECT rowid, email_from FROM ' . MAIN_DB_PREFIX . 'c_email_templates';
-                $sql .= ' WHERE rowid = ' . (int) $reg[1];
+                $sql .= ' WHERE rowid = ' . (int)$reg[1];
                 $resql = $db->query($sql);
                 $obj = $db->fetch_object($resql);
                 if ($obj) {
@@ -396,7 +396,7 @@ if (($action == 'send' || $action == 'relance') && !GETPOST('addfile') && !GETPO
                         $object->actionmsg = $message; // Long text
                         $object->actionmsg2 = $actionmsg2; // Short text ($langs->transnoentities('MailSentByTo')...);
                         if (getDolGlobalString('MAIN_MAIL_REPLACE_EVENT_TITLE_BY_EMAIL_SUBJECT')) {
-                            $object->actionmsg2     = $subject; // Short text
+                            $object->actionmsg2 = $subject; // Short text
                         }
 
                         $object->trackid = $trackid;

@@ -120,8 +120,9 @@ class GPX extends GeoAdapter
                     $components[] = new Point($lon, $lat);
                 }
             }
-            if ($components) {$lines[] = new LineString($components);
-}
+            if ($components) {
+                $lines[] = new LineString($components);
+            }
         }
         return $lines;
     }
@@ -148,10 +149,10 @@ class GPX extends GeoAdapter
         switch ($type) {
             case 'point':
                 return $this->pointToGPX($geom);
-            break;
+                break;
             case 'linestring':
                 return $this->linestringToGPX($geom);
-            break;
+                break;
             case 'polygon':
             case 'multipoint':
             case 'multilinestring':

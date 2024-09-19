@@ -14,9 +14,9 @@ class SessionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\FinancialConnections\Session
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\FinancialConnections\Session
      */
     public function create($params = null, $opts = null)
     {
@@ -30,9 +30,9 @@ class SessionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\FinancialConnections\Session
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\FinancialConnections\Session
      */
     public function retrieve($id, $params = null, $opts = null)
     {

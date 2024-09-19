@@ -171,31 +171,31 @@ class WKB extends GeoAdapter
             case 'Point';
                 $wkb .= pack('L', 1);
                 $wkb .= $this->writePoint($geometry);
-            break;
+                break;
             case 'LineString';
                 $wkb .= pack('L', 2);
                 $wkb .= $this->writeLineString($geometry);
-            break;
+                break;
             case 'Polygon';
                 $wkb .= pack('L', 3);
                 $wkb .= $this->writePolygon($geometry);
-        break;
+                break;
             case 'MultiPoint';
                 $wkb .= pack('L', 4);
                 $wkb .= $this->writeMulti($geometry);
-        break;
+                break;
             case 'MultiLineString';
                 $wkb .= pack('L', 5);
                 $wkb .= $this->writeMulti($geometry);
-        break;
+                break;
             case 'MultiPolygon';
                 $wkb .= pack('L', 6);
                 $wkb .= $this->writeMulti($geometry);
-        break;
+                break;
             case 'GeometryCollection';
                 $wkb .= pack('L', 7);
                 $wkb .= $this->writeMulti($geometry);
-        break;
+                break;
         }
 
         if ($write_as_hex) {

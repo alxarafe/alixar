@@ -97,7 +97,7 @@ if ($action == 'setremise') {
 
 $form = new Form($db);
 
-if (! ($socid > 0)) {
+if (!($socid > 0)) {
     accessforbidden('Record not found');
 }
 
@@ -222,7 +222,7 @@ if ($isCustomer) {
     $sql = "SELECT rc.rowid, rc.remise_client as remise_percent, rc.note, rc.datec as dc,";
     $sql .= " u.login, u.rowid as user_id";
     $sql .= " FROM " . MAIN_DB_PREFIX . "societe_remise as rc, " . MAIN_DB_PREFIX . "user as u";
-    $sql .= " WHERE rc.fk_soc = " . ((int) $object->id);
+    $sql .= " WHERE rc.fk_soc = " . ((int)$object->id);
     $sql .= " AND rc.entity IN (" . getEntity('discount') . ")";
     $sql .= " AND u.rowid = rc.fk_user_author";
     $sql .= " ORDER BY rc.datec DESC";
@@ -272,7 +272,7 @@ if ($isSupplier) {
     $sql = "SELECT rc.rowid, rc.remise_supplier as remise_percent, rc.note, rc.datec as dc,";
     $sql .= " u.login, u.rowid as user_id";
     $sql .= " FROM " . MAIN_DB_PREFIX . "societe_remise_supplier as rc, " . MAIN_DB_PREFIX . "user as u";
-    $sql .= " WHERE rc.fk_soc = " . ((int) $object->id);
+    $sql .= " WHERE rc.fk_soc = " . ((int)$object->id);
     $sql .= " AND rc.entity IN (" . getEntity('discount') . ")";
     $sql .= " AND u.rowid = rc.fk_user_author";
     $sql .= " ORDER BY rc.datec DESC";

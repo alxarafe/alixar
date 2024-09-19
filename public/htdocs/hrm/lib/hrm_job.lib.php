@@ -32,7 +32,7 @@ use Dolibarr\Code\Hrm\Classes\Job;
 /**
  * Prepare array of tabs for Job
  *
- * @param   Job     $object     Job
+ * @param Job $object Job
  * @return  array               Array of tabs
  */
 function jobPrepareHead($object)
@@ -52,7 +52,7 @@ function jobPrepareHead($object)
     $head[$h][0] = constant('BASE_URL') . "/hrm/skill_tab.php?id=" . $object->id . '&objecttype=job';
     $head[$h][1] = $langs->trans("RequiredSkills");
     $nbResources = 0;
-    $sql = "SELECT COUNT(rowid) as nb FROM " . MAIN_DB_PREFIX . "hrm_skillrank WHERE objecttype = 'job' AND fk_object = " . ((int) $object->id);
+    $sql = "SELECT COUNT(rowid) as nb FROM " . MAIN_DB_PREFIX . "hrm_skillrank WHERE objecttype = 'job' AND fk_object = " . ((int)$object->id);
     $resql = $db->query($sql);
     if ($resql) {
         $obj = $db->fetch_object($resql);
@@ -69,7 +69,7 @@ function jobPrepareHead($object)
     $head[$h][0] = constant('BASE_URL') . "/hrm/position.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("PositionsWithThisProfile");
     $nbResources = 0;
-    $sql = "SELECT COUNT(rowid) as nb FROM " . MAIN_DB_PREFIX . "hrm_job_user WHERE fk_job = " . ((int) $object->id);
+    $sql = "SELECT COUNT(rowid) as nb FROM " . MAIN_DB_PREFIX . "hrm_job_user WHERE fk_job = " . ((int)$object->id);
     $resql = $db->query($sql);
     if ($resql) {
         $obj = $db->fetch_object($resql);

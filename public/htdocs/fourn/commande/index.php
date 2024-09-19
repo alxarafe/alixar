@@ -81,10 +81,10 @@ if (!$user->hasRight("societe", "client", "voir") && !$socid) {
 $sql .= " WHERE cf.fk_soc = s.rowid";
 $sql .= " AND cf.entity IN (" . getEntity('supplier_order') . ")";
 if ($user->socid) {
-    $sql .= ' AND cf.fk_soc = ' . ((int) $user->socid);
+    $sql .= ' AND cf.fk_soc = ' . ((int)$user->socid);
 }
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 $sql .= " GROUP BY cf.fk_statut";
 
@@ -119,7 +119,7 @@ if ($resql) {
     print "</tr>\n";
     $listofstatus = array(0, 1, 2, 3, 4, 5, 6, 9);
     foreach ($listofstatus as $status) {
-        $dataseries[] = array($commandestatic->LibStatut($status, 1), (isset($vals[$status]) ? (int) $vals[$status] : 0));
+        $dataseries[] = array($commandestatic->LibStatut($status, 1), (isset($vals[$status]) ? (int)$vals[$status] : 0));
         if ($status == CommandeFournisseur::STATUS_DRAFT) {
             $colorseries[$status] = '-' . $badgeStatus0;
         }
@@ -191,10 +191,10 @@ if (isModEnabled("supplier_order")) {
     $sql .= " AND c.entity IN (" . getEntity("supplier_order") . ")"; // Thirdparty sharing is mandatory with supplier order sharing
     $sql .= " AND c.fk_statut = 0";
     if (!empty($socid)) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
     if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
 
     $resql = $db->query($sql);
@@ -297,10 +297,10 @@ $sql .= " WHERE c.fk_soc = s.rowid";
 $sql .= " AND c.entity IN (" . getEntity('supplier_order') . ")";
 //$sql.= " AND c.fk_statut > 2";
 if (!empty($socid)) {
-    $sql .= " AND c.fk_soc = " . ((int) $socid);
+    $sql .= " AND c.fk_soc = " . ((int)$socid);
 }
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 $sql .= " ORDER BY c.tms DESC";
 $sql .= $db->plimit($max, 0);

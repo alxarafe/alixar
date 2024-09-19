@@ -30,7 +30,7 @@ use Dolibarr\Code\Don\Classes\Don;
 /**
  *  Prepare array with list of admin tabs
  *
- *  @return array                   Array of tabs to show
+ * @return array                   Array of tabs to show
  */
 function donation_admin_prepare_head()
 {
@@ -70,8 +70,8 @@ function donation_admin_prepare_head()
 /**
  *  Prepare array with list of tabs
  *
- *  @param  Don         $object     Donation
- *  @return array                   Array of tabs to show
+ * @param Don $object Donation
+ * @return array                   Array of tabs to show
  */
 function donation_prepare_head($object)
 {

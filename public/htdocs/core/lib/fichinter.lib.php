@@ -36,7 +36,7 @@ use Dolibarr\Code\Resource\Classes\Dolresource;
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function fichinter_prepare_head($object)
@@ -137,7 +137,7 @@ function fichinter_prepare_head($object)
         } else {
             $sql = "SELECT COUNT(id) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm";
-            $sql .= " WHERE fk_element = " . ((int) $object->id);
+            $sql .= " WHERE fk_element = " . ((int)$object->id);
             $sql .= " AND elementtype = 'fichinter'";
             $resql = $db->query($sql);
             if ($resql) {
@@ -168,7 +168,7 @@ function fichinter_prepare_head($object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function fichinter_admin_prepare_head()
 {
@@ -218,7 +218,7 @@ function fichinter_admin_prepare_head()
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function fichinter_rec_prepare_head($object)

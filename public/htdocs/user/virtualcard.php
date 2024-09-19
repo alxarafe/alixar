@@ -123,7 +123,7 @@ $morehtmlref = '<a href="' . constant('BASE_URL') . '/user/vcard.php?id=' . $obj
 $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
 $morehtmlref .= '</a>';
 
-$urltovirtualcard = '/user/virtualcard.php?id=' . ((int) $object->id);
+$urltovirtualcard = '/user/virtualcard.php?id=' . ((int)$object->id);
 $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl") . ' - ' . $object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
 
@@ -131,7 +131,7 @@ print '<div class="fichecenter">';
 
 print '<br>';
 
-$param = '&id=' . ((int) $object->id);
+$param = '&id=' . ((int)$object->id);
 $param .= '&dol_openinpopup=1';
 
 $enabledisablehtml = $langs->trans("EnablePublicVirtualCard") . ' ';

@@ -29,6 +29,7 @@ use OAuth\Common\Http\Uri\UriFactory;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/OAuth/bootstrap.php';
+
 use OAuth\Common\Storage\DoliStorage;
 use OAuth\Common\Consumer\Credentials;
 

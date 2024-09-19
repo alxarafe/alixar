@@ -16,5 +16,6 @@
 --
 -- ============================================================================
 
-ALTER TABLE llx_product_attribute ADD UNIQUE INDEX uk_product_attribute_ref (ref);
+ALTER TABLE llx_product_attribute
+    ADD UNIQUE INDEX uk_product_attribute_ref (ref);
 

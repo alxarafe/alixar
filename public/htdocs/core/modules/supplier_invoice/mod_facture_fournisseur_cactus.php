@@ -69,8 +69,8 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
     /**
      *  Return description of numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -83,7 +83,7 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
     /**
      *  Returns a numbering example
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -94,8 +94,8 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
     /**
      *  Tests if the numbers already in the database do not cause conflicts that would prevent this numbering.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if KO (there is a conflict), true if OK
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if KO (there is a conflict), true if OK
      */
     public function canBeActivated($object)
     {
@@ -176,9 +176,9 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
     /**
      * Return next value
      *
-     * @param   Societe             $objsoc     Object third party
-     * @param   FactureFournisseur  $object     Object invoice
-     * @param   string              $mode       'next' for next value or 'last' for last value
+     * @param Societe $objsoc Object third party
+     * @param FactureFournisseur $object Object invoice
+     * @param string $mode 'next' for next value or 'last' for last value
      * @return  string|-1                       Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $object, $mode = 'next')
@@ -259,9 +259,9 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
     /**
      * Return next free value
      *
-     * @param   Societe             $objsoc         Object third party
-     * @param   FactureFournisseur  $objforref      Object for number to search
-     * @param   string              $mode           'next' for next value or 'last' for last value
+     * @param Societe $objsoc Object third party
+     * @param FactureFournisseur $objforref Object for number to search
+     * @param string $mode 'next' for next value or 'last' for last value
      * @return  string                              Next free value
      * @deprecated see getNextValue
      */

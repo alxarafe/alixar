@@ -47,7 +47,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -90,12 +90,12 @@ if (empty($conf->project->enabled)) {
 /**
  * Show header for new member
  *
- * @param   string      $title              Title
- * @param   string      $head               Head array
- * @param   int         $disablejs          More content into html header
- * @param   int         $disablehead        More content into html header
- * @param   array       $arrayofjs          Array of complementary js files
- * @param   array       $arrayofcss         Array of complementary css files
+ * @param string $title Title
+ * @param string $head Head array
+ * @param int $disablejs More content into html header
+ * @param int $disablehead More content into html header
+ * @param array $arrayofjs Array of complementary js files
+ * @param array $arrayofcss Array of complementary css files
  * @return  void
  */
 function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $arrayofjs = [], $arrayofcss = [])
@@ -150,7 +150,6 @@ function llxFooterVierge()
     print "</body>\n";
     print "</html>\n";
 }
-
 
 
 /*
@@ -213,7 +212,7 @@ if (empty($reshook) && $action == 'add') {
         } else {
             // Create the prospect
             if (GETPOST('societe')) {
-                $thirdparty->name =  GETPOST('societe');
+                $thirdparty->name = GETPOST('societe');
                 $thirdparty->name_alias = dolGetFirstLastname(GETPOST('firstname'), GETPOST('lastname'));
             } else {
                 $thirdparty->name = dolGetFirstLastname(GETPOST('firstname'), GETPOST('lastname'));
@@ -258,7 +257,7 @@ if (empty($reshook) && $action == 'add') {
         $file = '';
         $classname = '';
         $filefound = 0;
-        $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+        $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
         foreach ($dirmodels as $reldir) {
             $file = dol_buildpath($reldir . "core/modules/project/" . $modele . '.php', 0);
             if (file_exists($file)) {
@@ -291,14 +290,14 @@ if (empty($reshook) && $action == 'add') {
             $proj->public = 1;
         }
 
-        $proj->ref         = $defaultref;
-        $proj->statut      = $proj::STATUS_DRAFT;
-        $proj->status      = $proj::STATUS_DRAFT;
+        $proj->ref = $defaultref;
+        $proj->statut = $proj::STATUS_DRAFT;
+        $proj->status = $proj::STATUS_DRAFT;
         $proj->usage_opportunity = 1;
-        $proj->title       = $langs->trans("LeadFromPublicForm");
+        $proj->title = $langs->trans("LeadFromPublicForm");
         $proj->description = GETPOST("description", "alphanohtml");
-        $proj->opp_status  = $defaultoppstatus;
-        $proj->fk_opp_status  = $defaultoppstatus;
+        $proj->opp_status = $defaultoppstatus;
+        $proj->fk_opp_status = $defaultoppstatus;
 
         $proj->ip = getUserRemoteIP();
         $nb_post_max = getDolGlobalInt("MAIN_SECURITY_MAX_POST_ON_PUBLIC_PAGES_BY_IP_ADDRESS", 200);
@@ -361,7 +360,7 @@ if (empty($reshook) && $action == 'add') {
 
                     if (!empty($labeltouse) && is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
                         $subject = $arraydefaultmessage->topic;
-                        $msg     = $arraydefaultmessage->content;
+                        $msg = $arraydefaultmessage->content;
                     }
                     if (empty($labeltosue)) {
                         $appli = $mysoc->name;
@@ -432,7 +431,6 @@ if (empty($reshook) && $action == 'added') {
     llxFooterVierge();
     exit;
 }
-
 
 
 /*

@@ -72,7 +72,7 @@ $head = contract_prepare_head($object);
 
 dol_get_fiche_head($head, 'ticket', $langs->trans("Contract"), -1, 'contract');
 
-$linkback = '<a href="' . constant('BASE_URL') . '/contrat/list.php' . (! empty($socid) ? '?socid=' . $socid : '') . '">';
+$linkback = '<a href="' . constant('BASE_URL') . '/contrat/list.php' . (!empty($socid) ? '?socid=' . $socid : '') . '">';
 $linkback .= $langs->trans("BackToList") . '</a>';
 
 $morehtmlref = '';
@@ -133,11 +133,11 @@ $morehtmlref .= $form->editfieldval(
 // Thirdparty
 $morehtmlref .= '<br>' . $langs->trans('ThirdParty') . ' : ' . $object->thirdparty->getNomUrl(1);
 // Project
-if (! empty($conf->projet->enabled)) {
-    
+if (!empty($conf->projet->enabled)) {
+
     $langs->load("projects");
     $morehtmlref .= '<br>' . $langs->trans('Project') . ' : ';
-    if (! empty($object->fk_project)) {
+    if (!empty($object->fk_project)) {
         $proj = new Project($db);
         $proj->fetch($object->fk_project);
         $morehtmlref .= '<a href="' . constant('BASE_URL') . '/projet/card.php?id=';

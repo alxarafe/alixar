@@ -39,10 +39,10 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_skill.lib.php';
 $langs->loadLangs(array('hrm', 'companies'));
 
 // Get parameters
-$id         = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
-$action     = GETPOST('action', 'aZ09');
-$cancel     = GETPOST('cancel', 'aZ09');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
+$action = GETPOST('action', 'aZ09');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 // Initialize technical objects
@@ -60,7 +60,7 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // Permissions
-$permissionnote   = $user->hasRight('hrm', 'all', 'write');
+$permissionnote = $user->hasRight('hrm', 'all', 'write');
 $permissiontoread = $user->hasRight('hrm', 'all', 'read'); // Used by the include of actions_addupdatedelete.inc.php
 
 // Security check (enable the most restrictive one)

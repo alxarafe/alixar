@@ -20,6 +20,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Fourn\Classes\Fournisseur;
 
@@ -28,9 +29,6 @@ use Dolibarr\Code\Fourn\Classes\Fournisseur;
  *      \ingroup    fournisseur
  *      \brief      Widget to show remain to get on purchase invoices
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 
 /**
  * Class to manage the box to show not paid suppliers invoices
@@ -45,8 +43,8 @@ class box_factures_fourn_imp extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -60,8 +58,8 @@ class box_factures_fourn_imp extends ModeleBoxes
     /**
      *  Load data into info_box_contents array to show array later.
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -101,10 +99,10 @@ class box_factures_fourn_imp extends ModeleBoxes
             $sql2 .= " AND f.paye = 0";
             $sql2 .= " AND fk_statut = 1";
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql2 .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql2 .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             if ($user->socid) {
-                $sql2 .= " AND s.rowid = " . ((int) $user->socid);
+                $sql2 .= " AND s.rowid = " . ((int)$user->socid);
             }
             $sql3 = " GROUP BY s.rowid, s.nom, s.name_alias, s.code_fournisseur, s.code_compta_fournisseur, s.fournisseur, s.logo, s.email, s.entity, s.tva_intra, s.siren, s.siret, s.ape, s.idprof4, s.idprof5, s.idprof6,";
             $sql3 .= " f.rowid, f.ref, f.ref_supplier, f.date_lim_reglement,";
@@ -260,10 +258,10 @@ class box_factures_fourn_imp extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

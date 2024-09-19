@@ -78,9 +78,9 @@ interface IWriter
      * @param bool $pValue
      * @param string $pDirectory Disk caching directory
      *
+     * @return IWriter
      * @throws Exception when directory does not exist
      *
-     * @return IWriter
      */
     public function setUseDiskCaching($pValue, $pDirectory = null);
 

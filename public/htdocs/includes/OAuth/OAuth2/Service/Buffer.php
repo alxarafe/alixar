@@ -19,11 +19,12 @@ class Buffer extends AbstractService
 {
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage, $scopes, $baseApiUri);
         if ($baseApiUri === null) {
             $this->baseApiUri = new Uri('https://api.bufferapp.com/1/');
@@ -62,8 +63,8 @@ class Buffer extends AbstractService
         $parameters = array_merge(
             $additionalParameters,
             array(
-                'client_id'     => $this->credentials->getConsumerId(),
-                'redirect_uri'  => $this->credentials->getCallbackUrl(),
+                'client_id' => $this->credentials->getConsumerId(),
+                'redirect_uri' => $this->credentials->getCallbackUrl(),
                 'response_type' => 'code',
             )
         );
@@ -111,11 +112,11 @@ class Buffer extends AbstractService
     public function requestAccessToken($code)
     {
         $bodyParams = array(
-            'client_id'     => $this->credentials->getConsumerId(),
+            'client_id' => $this->credentials->getConsumerId(),
             'client_secret' => $this->credentials->getConsumerSecret(),
             'redirect_uri' => $this->credentials->getCallbackUrl(),
-            'code'          => $code,
-            'grant_type'    => 'authorization_code',
+            'code' => $code,
+            'grant_type' => 'authorization_code',
         );
 
         $responseBody = $this->httpClient->retrieveResponse(

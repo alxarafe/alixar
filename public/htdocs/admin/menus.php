@@ -45,7 +45,7 @@ if (!$user->admin) {
 
 $dirstandard = array();
 $dirsmartphone = array();
-$dirmenus = array_merge(array("/core/menus/"), (array) $conf->modules_parts['menus']);
+$dirmenus = array_merge(array("/core/menus/"), (array)$conf->modules_parts['menus']);
 foreach ($dirmenus as $dirmenu) {
     $dirstandard[] = $dirmenu . 'standard';
     $dirsmartphone[] = $dirmenu . 'smartphone';
@@ -89,7 +89,7 @@ if ($action == 'update' && !$cancel) {
     // Initialize menu handlers
     foreach ($listofmenuhandler as $key => $val) {
         // Load sql init_menu_handler.sql file
-        $dirmenus = array_merge(array("/core/menus/"), (array) $conf->modules_parts['menus']);
+        $dirmenus = array_merge(array("/core/menus/"), (array)$conf->modules_parts['menus']);
         foreach ($dirmenus as $dirmenu) {
             $file = 'init_menu_' . $key . '.sql';
             $fullpath = dol_buildpath($dirmenu . $file);

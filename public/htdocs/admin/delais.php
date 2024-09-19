@@ -165,7 +165,6 @@ if (!isset($conf->global->MAIN_DELAY_ORDERS_TO_PROCESS)) {
 }
 
 
-
 /*
  * Actions
  */
@@ -383,14 +382,14 @@ if (!getDolGlobalString('MAIN_DISABLE_METEO') || getDolGlobalInt('MAIN_DISABLE_M
 
         <script type="text/javascript">
 
-            $(document).ready(function() {
+            $(document).ready(function () {
 
-                $("#change_mode").click(function() {
+                $("#change_mode").click(function () {
                     var use_percent = $("#MAIN_USE_METEO_WITH_PERCENTAGE");
                     var str_mode_std = "<?php print $str_mode_std; ?>";
                     var str_mode_percentage = "<?php print $str_mode_percentage; ?>";
 
-                    if(use_percent.val() == 1) {
+                    if (use_percent.val() == 1) {
                         use_percent.val(0);
                         $("#standard").show();
                         $("#percentage").hide();

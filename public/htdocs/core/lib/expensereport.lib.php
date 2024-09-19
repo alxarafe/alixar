@@ -32,7 +32,7 @@ use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function expensereport_prepare_head($object)
@@ -98,7 +98,7 @@ function expensereport_prepare_head($object)
  * Returns an array with the tabs for the "Expense report payment" section
  * It loads tabs from modules looking for the entity payment
  *
- * @param   PaymentExpenseReport    $object     Current payment object
+ * @param PaymentExpenseReport $object Current payment object
  * @return  array                               Tabs for the payment section
  */
 function payment_expensereport_prepare_head(PaymentExpenseReport $object)
@@ -132,7 +132,7 @@ function payment_expensereport_prepare_head(PaymentExpenseReport $object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function expensereport_admin_prepare_head()
 {

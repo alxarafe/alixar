@@ -35,7 +35,7 @@ $langs->loadLangs(array("other", "admin"));
 
 $dirstandard = array();
 $dirsmartphone = array();
-$dirmenus = array_merge(array("/core/menus/"), (array) $conf->modules_parts['menus']);
+$dirmenus = array_merge(array("/core/menus/"), (array)$conf->modules_parts['menus']);
 foreach ($dirmenus as $dirmenu) {
     $dirstandard[] = $dirmenu . 'standard';
     $dirsmartphone[] = $dirmenu . 'smartphone';
@@ -111,13 +111,13 @@ if ($action == 'up') {
     }
 
     $sql = "UPDATE " . MAIN_DB_PREFIX . "menu as m";
-    $sql .= " SET m.position = " . ((int) $previous['order']);
-    $sql .= " WHERE m.rowid = " . ((int) $current['rowid']); // Up the selected entry
+    $sql .= " SET m.position = " . ((int)$previous['order']);
+    $sql .= " WHERE m.rowid = " . ((int)$current['rowid']); // Up the selected entry
     dol_syslog("admin/menus/index.php " . $sql);
     $db->query($sql);
     $sql = "UPDATE " . MAIN_DB_PREFIX . "menu as m";
-    $sql .= " SET m.position = " . ((int) ($current['order'] != $previous['order'] ? $current['order'] : $current['order'] + 1));
-    $sql .= " WHERE m.rowid = " . ((int) $previous['rowid']); // Descend celui du dessus
+    $sql .= " SET m.position = " . ((int)($current['order'] != $previous['order'] ? $current['order'] : $current['order'] + 1));
+    $sql .= " WHERE m.rowid = " . ((int)$previous['rowid']); // Descend celui du dessus
     dol_syslog("admin/menus/index.php " . $sql);
     $db->query($sql);
 } elseif ($action == 'down') {
@@ -162,13 +162,13 @@ if ($action == 'up') {
     }
 
     $sql = "UPDATE " . MAIN_DB_PREFIX . "menu as m";
-    $sql .= " SET m.position = " . ((int) ($current['order'] != $next['order'] ? $next['order'] : $current['order'] + 1)); // Down the selected entry
-    $sql .= " WHERE m.rowid = " . ((int) $current['rowid']);
+    $sql .= " SET m.position = " . ((int)($current['order'] != $next['order'] ? $next['order'] : $current['order'] + 1)); // Down the selected entry
+    $sql .= " WHERE m.rowid = " . ((int)$current['rowid']);
     dol_syslog("admin/menus/index.php " . $sql);
     $db->query($sql);
     $sql = "UPDATE " . MAIN_DB_PREFIX . "menu as m"; // Up the next entry
-    $sql .= " SET m.position = " . ((int) $current['order']);
-    $sql .= " WHERE m.rowid = " . ((int) $next['rowid']);
+    $sql .= " SET m.position = " . ((int)$current['order']);
+    $sql .= " WHERE m.rowid = " . ((int)$next['rowid']);
     dol_syslog("admin/menus/index.php " . $sql);
     $db->query($sql);
 } elseif ($action == 'confirm_delete' && $confirm == 'yes') {
@@ -287,7 +287,7 @@ $sql .= " AND entity = " . $conf->entity;
 //$sql.= " AND fk_menu >= 0";
 $sql .= " ORDER BY m.position, m.rowid"; // Order is position then rowid (because we need a sort criteria when position is same)
 
-$res  = $db->query($sql);
+$res = $db->query($sql);
 if ($res) {
     $num = $db->num_rows($res);
 

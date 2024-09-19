@@ -28,7 +28,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function stock_prepare_head($object)
@@ -90,7 +90,7 @@ function stock_prepare_head($object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function stock_admin_prepare_head()
 {

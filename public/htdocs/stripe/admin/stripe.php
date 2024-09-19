@@ -32,7 +32,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/lib/stripe.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 
 $servicename = 'Stripe';
 
@@ -621,7 +620,6 @@ print info_admin($langs->trans("ExampleOfTestCreditCard", '4242424242424242 (no 
 if (getDolGlobalString('STRIPE_SEPA_DIRECT_DEBIT')) {
     print info_admin($langs->trans("ExampleOfTestBankAcountForSEPA", 'AT611904300234573201 (pending->succeed) or AT861904300235473202 (pending->failed)'));
 }
-
 
 
 if (!empty($conf->use_javascript_ajax)) {

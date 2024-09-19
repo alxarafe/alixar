@@ -116,16 +116,16 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = d.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = d.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = d.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search on socid
 if ($socid) {
-    $sql .= " AND d.fk_soc = " . ((int) $socid);
+    $sql .= " AND d.fk_soc = " . ((int)$socid);
 }
 
 if ($search_ref) {
-    $sql .= " AND d.rowid = " . ((int) $search_ref);
+    $sql .= " AND d.rowid = " . ((int)$search_ref);
 }
 if ($search_name) {
     $sql .= natural_search('u.lastname', $search_name);

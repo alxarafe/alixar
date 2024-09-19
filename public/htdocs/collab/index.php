@@ -81,8 +81,6 @@ if (empty($action)) {
 }
 
 
-
-
 /*
  * Actions
  */
@@ -158,7 +156,6 @@ if ($action == 'delete') {
 }
 
 
-
 /*
  * View
  */
@@ -184,8 +181,6 @@ if ($action != 'preview' && $action != 'editcontent') {
 
 //var_dump($objectpage);exit;
 print '<div class="centpercent websitebar">';
-
-
 
 
 print "</div>\n</form>\n";

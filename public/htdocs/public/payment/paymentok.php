@@ -47,7 +47,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['e']) ? (int) $_GET['e'] : (!empty($_POST['e']) ? (int) $_POST['e'] : 1));
+$entity = (!empty($_GET['e']) ? (int)$_GET['e'] : (!empty($_POST['e']) ? (int)$_POST['e'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -277,15 +277,15 @@ if (isModEnabled('paypal')) {
     if ($paymentmethod === 'paypal') {                          // We call this page only if payment is ok on payment system
         if ($PAYPALTOKEN) {
             // Get on url call
-            $onlinetoken        = $PAYPALTOKEN;
-            $fulltag            = $FULLTAG;
-            $payerID            = $PAYPALPAYERID;
+            $onlinetoken = $PAYPALTOKEN;
+            $fulltag = $FULLTAG;
+            $payerID = $PAYPALPAYERID;
             // Set by newpayment.php
-            $currencyCodeType   = $_SESSION['currencyCodeType'];
-            $FinalPaymentAmt    = $_SESSION["FinalPaymentAmt"];
-            $paymentType        = $_SESSION['PaymentType'];         // Value can be 'Mark', 'Sole', 'Sale' for example
+            $currencyCodeType = $_SESSION['currencyCodeType'];
+            $FinalPaymentAmt = $_SESSION["FinalPaymentAmt"];
+            $paymentType = $_SESSION['PaymentType'];         // Value can be 'Mark', 'Sole', 'Sale' for example
             // From env
-            $ipaddress          = $_SESSION['ipaddress'];
+            $ipaddress = $_SESSION['ipaddress'];
 
             dol_syslog("Call paymentok with token=" . $onlinetoken . " paymentType=" . $paymentType . " currencyCodeType=" . $currencyCodeType . " payerID=" . $payerID . " ipaddress=" . $ipaddress . " FinalPaymentAmt=" . $FinalPaymentAmt . " fulltag=" . $fulltag, LOG_DEBUG, 0, '_payment');
 
@@ -311,10 +311,10 @@ if (isModEnabled('paypal')) {
                 if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
                     dol_syslog("Call to GetExpressCheckoutDetails return " . $ack, LOG_DEBUG, 0, '_payment');
 
-                    $object->source     = $source;
+                    $object->source = $source;
                     $object->ref = $ref;
-                    $object->payerID    = $payerID;
-                    $object->fulltag    = $fulltag;
+                    $object->payerID = $payerID;
+                    $object->fulltag = $fulltag;
                     $object->resArray = $resArray2;
 
                     // resArray was built from a string like that
@@ -389,7 +389,7 @@ if (empty($TRANSACTIONID)) {
     $TRANSACTIONID = empty($_SESSION['TRANSACTIONID']) ? '' : $_SESSION['TRANSACTIONID'];    // pi_... or ch_...
     if (empty($TRANSACTIONID) && GETPOST('payment_intent', 'alphanohtml')) {
         // For the case we use STRIPE_USE_INTENT_WITH_AUTOMATIC_CONFIRMATION = 2
-        $TRANSACTIONID   = GETPOST('payment_intent', 'alphanohtml');
+        $TRANSACTIONID = GETPOST('payment_intent', 'alphanohtml');
     }
 }
 if (empty($FinalPaymentAmt)) {
@@ -447,7 +447,7 @@ if ($ispaymentok) {
         $adht = new AdherentType($db);
         $object = new Adherent($db);
 
-        $result1 = $object->fetch((int) $tmptag['MEM']);
+        $result1 = $object->fetch((int)$tmptag['MEM']);
         $result2 = $adht->fetch($object->typeid);
 
         $defaultdelay = !empty($adht->duration_value) ? $adht->duration_value : 1;
@@ -530,7 +530,7 @@ if ($ispaymentok) {
                     dol_syslog("Failed to validate member (bad currency check): " . $errmsg, LOG_ERR, 0, '_payment');
                 }
 
-                if (! $error) {
+                if (!$error) {
                     // We validate the member (no effect if it is already validated)
                     $result = ($object->status == $object::STATUS_EXCLUDED) ? -1 : $object->validate($user); // if membre is excluded (status == -2) the new validation is not possible
                     if ($result < 0 || empty($object->datevalid)) {
@@ -548,7 +548,7 @@ if ($ispaymentok) {
                 if ($object->datefin > 0) {
                     $datesubscription = dol_time_plus_duree($object->datefin, 1, 'd');
                 } elseif (getDolGlobalString('MEMBER_SUBSCRIPTION_START_AFTER')) {
-                    $datesubscription = dol_time_plus_duree($now, (int) substr(getDolGlobalString('MEMBER_SUBSCRIPTION_START_AFTER'), 0, -1), substr(getDolGlobalString('MEMBER_SUBSCRIPTION_START_AFTER'), -1));
+                    $datesubscription = dol_time_plus_duree($now, (int)substr(getDolGlobalString('MEMBER_SUBSCRIPTION_START_AFTER'), 0, -1), substr(getDolGlobalString('MEMBER_SUBSCRIPTION_START_AFTER'), -1));
                 }
 
                 if (getDolGlobalString('MEMBER_SUBSCRIPTION_START_FIRST_DAY_OF') === "m") {
@@ -727,7 +727,7 @@ if ($ispaymentok) {
                                         }
                                     } else {
                                         $sql = "INSERT INTO " . MAIN_DB_PREFIX . "societe_account (fk_soc, login, key_account, site, site_account, status, entity, date_creation, fk_user_creat)";
-                                        $sql .= " VALUES (" . ((int) $object->fk_soc) . ", '', '" . $db->escape($stripecu) . "', 'stripe', '" . $db->escape($stripearrayofkeysbyenv[$servicestatus]['publishable_key']) . "', " . ((int) $servicestatus) . ", " . ((int) $conf->entity) . ", '" . $db->idate(dol_now()) . "', 0)";
+                                        $sql .= " VALUES (" . ((int)$object->fk_soc) . ", '', '" . $db->escape($stripecu) . "', 'stripe', '" . $db->escape($stripearrayofkeysbyenv[$servicestatus]['publishable_key']) . "', " . ((int)$servicestatus) . ", " . ((int)$conf->entity) . ", '" . $db->idate(dol_now()) . "', 0)";
                                         $resql = $db->query($sql);
                                         if (!$resql) {  // should not happen
                                             $error++;
@@ -784,7 +784,7 @@ if ($ispaymentok) {
 
                         if (!empty($labeltouse) && is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
                             $subject = $arraydefaultmessage->topic;
-                            $msg     = $arraydefaultmessage->content;
+                            $msg = $arraydefaultmessage->content;
                         }
 
                         $substitutionarray = getCommonSubstitutionArray($outputlangs, 0, null, $object);
@@ -857,7 +857,7 @@ if ($ispaymentok) {
     } elseif (array_key_exists('INV', $tmptag) && $tmptag['INV'] > 0) {
         // Record payment
         $object = new Facture($db);
-        $result = $object->fetch((int) $tmptag['INV']);
+        $result = $object->fetch((int)$tmptag['INV']);
         if ($result) {
             $FinalPaymentAmt = $_SESSION["FinalPaymentAmt"];
 
@@ -906,9 +906,9 @@ if ($ispaymentok) {
                     $ispostactionok = -1;
                     $error++; // Not yet supported
                 }
-                $paiement->paiementid   = $paymentTypeId;
+                $paiement->paiementid = $paymentTypeId;
                 $paiement->num_payment = '';
-                $paiement->note_public  = 'Online payment ' . dol_print_date($now, 'standard') . ' from ' . $ipaddress;
+                $paiement->note_public = 'Online payment ' . dol_print_date($now, 'standard') . ' from ' . $ipaddress;
                 $paiement->ext_payment_id = $TRANSACTIONID;     // TODO LDR May be we should store py_... instead of pi_... but we started with pi_... so we continue.
                 //$paiement->ext_payment_id = $TRANSACTIONID.':'.$customer->id.'@'.$stripearrayofkeysbyenv[$servicestatus]['publishable_key'];  // TODO LDR It would be better if we could store this. Do we have customer->id and publishable_key ?
                 $paiement->ext_payment_site = $service;
@@ -982,7 +982,7 @@ if ($ispaymentok) {
         }
     } elseif (array_key_exists('ORD', $tmptag) && $tmptag['ORD'] > 0) {
         $object = new Commande($db);
-        $result = $object->fetch((int) $tmptag['ORD']);
+        $result = $object->fetch((int)$tmptag['ORD']);
         if ($result) {
             $FinalPaymentAmt = $_SESSION["FinalPaymentAmt"];
 
@@ -1117,7 +1117,7 @@ if ($ispaymentok) {
     } elseif (array_key_exists('DON', $tmptag) && $tmptag['DON'] > 0) {
         include_once DOL_DOCUMENT_ROOT . '/don/class/don.class.php';
         $don = new Don($db);
-        $result = $don->fetch((int) $tmptag['DON']);
+        $result = $don->fetch((int)$tmptag['DON']);
         if ($result) {
             $paymentTypeId = 0;
             if ($paymentmethod == 'paybox') {
@@ -1168,7 +1168,7 @@ if ($ispaymentok) {
                 $paiement->datep = $now;
                 $paiement->paymenttype = $paymentTypeId;
                 $paiement->num_payment = '';
-                $paiement->note_public  = 'Online payment ' . dol_print_date($now, 'standard') . ' from ' . $ipaddress;
+                $paiement->note_public = 'Online payment ' . dol_print_date($now, 'standard') . ' from ' . $ipaddress;
                 $paiement->ext_payment_id = $TRANSACTIONID;
                 $paiement->ext_payment_site = $service;
 
@@ -1245,7 +1245,6 @@ if ($ispaymentok) {
         //      (we need first that the donation module is able to generate a pdf document for the cerfa with pre filled content)
     } elseif (array_key_exists('ATT', $tmptag) && $tmptag['ATT'] > 0) {
         // Record payment for registration to an event for an attendee
-        require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorbooth.class.php';
         $object = new Facture($db);
         $result = $object->fetch($ref);
@@ -1299,9 +1298,9 @@ if ($ispaymentok) {
                         $ispostactionok = -1;
                         $error++; // Not yet supported
                     }
-                    $paiement->paiementid   = $paymentTypeId;
+                    $paiement->paiementid = $paymentTypeId;
                     $paiement->num_payment = '';
-                    $paiement->note_public  = 'Online payment ' . dol_print_date($now, 'standard') . ' from ' . $ipaddress . ' for event registration';
+                    $paiement->note_public = 'Online payment ' . dol_print_date($now, 'standard') . ' from ' . $ipaddress . ' for event registration';
                     $paiement->ext_payment_id = $TRANSACTIONID;
                     $paiement->ext_payment_site = $service;
 
@@ -1363,7 +1362,7 @@ if ($ispaymentok) {
 
                     if (!$error) {
                         // Validating the attendee
-                        $resultattendee = $attendeetovalidate->fetch((int) $tmptag['ATT']);
+                        $resultattendee = $attendeetovalidate->fetch((int)$tmptag['ATT']);
                         if ($resultattendee < 0) {
                             $error++;
                             setEventMessages(null, $attendeetovalidate->errors, "errors");
@@ -1384,7 +1383,7 @@ if ($ispaymentok) {
                         $db->rollback();
                     }
 
-                    if (! $error) {
+                    if (!$error) {
                         // Sending mail
                         $thirdparty = new Societe($db);
                         $resultthirdparty = $thirdparty->fetch($attendeetovalidate->fk_soc);
@@ -1408,7 +1407,7 @@ if ($ispaymentok) {
 
                             if (!empty($idoftemplatetouse) && is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
                                 $subject = $arraydefaultmessage->topic;
-                                $msg     = $arraydefaultmessage->content;
+                                $msg = $arraydefaultmessage->content;
                             } else {
                                 $subject = '[' . $appli . '] ' . $object->ref . ' - ' . $outputlangs->trans("NewRegistration");
                                 $msg = $outputlangs->trans("OrganizationEventPaymentOfRegistrationWasReceived");
@@ -1473,7 +1472,6 @@ if ($ispaymentok) {
         }
     } elseif (array_key_exists('BOO', $tmptag) && $tmptag['BOO'] > 0) {
         // Record payment for booth or conference
-        require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorbooth.class.php';
         $object = new Facture($db);
         $result = $object->fetch($ref);
@@ -1529,9 +1527,9 @@ if ($ispaymentok) {
                         $ispostactionok = -1;
                         $error++; // Not yet supported
                     }
-                    $paiement->paiementid   = $paymentTypeId;
+                    $paiement->paiementid = $paymentTypeId;
                     $paiement->num_payment = '';
-                    $paiement->note_public  = 'Online payment ' . dol_print_date($now, 'standard') . ' from ' . $ipaddress;
+                    $paiement->note_public = 'Online payment ' . dol_print_date($now, 'standard') . ' from ' . $ipaddress;
                     $paiement->ext_payment_id = $TRANSACTIONID;
                     $paiement->ext_payment_site = $service;
 
@@ -1591,10 +1589,8 @@ if ($ispaymentok) {
 
                     if (!$error) {
                         // Putting the booth to "suggested" state
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorbooth.class.php';
                         $booth = new ConferenceOrBooth($db);
-                        $resultbooth = $booth->fetch((int) $tmptag['BOO']);
+                        $resultbooth = $booth->fetch((int)$tmptag['BOO']);
                         if ($resultbooth < 0) {
                             $error++;
                             setEventMessages(null, $booth->errors, "errors");
@@ -1634,7 +1630,7 @@ if ($ispaymentok) {
 
                                         if (!empty($idoftemplatetouse) && is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
                                             $subject = $arraydefaultmessage->topic;
-                                            $msg     = $arraydefaultmessage->content;
+                                            $msg = $arraydefaultmessage->content;
                                         } else {
                                             $subject = '[' . $appli . '] ' . $booth->ref . ' - ' . $outputlangs->trans("NewRegistration") . ']';
                                             $msg = $outputlangs->trans("OrganizationEventPaymentOfBoothWasReceived");
@@ -1683,7 +1679,7 @@ if ($ispaymentok) {
         }
     } elseif (array_key_exists('CON', $tmptag) && $tmptag['CON'] > 0) {
         $object = new Contrat($db);
-        $result = $object->fetch((int) $tmptag['CON']);
+        $result = $object->fetch((int)$tmptag['CON']);
         if ($result) {
             $FinalPaymentAmt = $_SESSION["FinalPaymentAmt"];
 
@@ -1720,7 +1716,7 @@ if ($ispaymentok) {
             if (isModEnabled('invoice')) {
                 if (!empty($FinalPaymentAmt) && $paymentTypeId > 0) {
                     $invoice = new Facture($db);
-                    $result = $invoice->createFromContract($object, $user, array((int) $contract_lines));
+                    $result = $invoice->createFromContract($object, $user, array((int)$contract_lines));
                     if ($result > 0) {
                         // $object->classifyBilled($user);
                         $invoice->validate($user);
@@ -1833,12 +1829,12 @@ if ($ispaymentok) {
 
 if ($ispaymentok) {
     // Get on url call
-    $onlinetoken        = empty($PAYPALTOKEN) ? $_SESSION['onlinetoken'] : $PAYPALTOKEN;
-    $payerID            = empty($PAYPALPAYERID) ? $_SESSION['payerID'] : $PAYPALPAYERID;
+    $onlinetoken = empty($PAYPALTOKEN) ? $_SESSION['onlinetoken'] : $PAYPALTOKEN;
+    $payerID = empty($PAYPALPAYERID) ? $_SESSION['payerID'] : $PAYPALPAYERID;
     // Set by newpayment.php
-    $currencyCodeType   = empty($_SESSION['currencyCodeType']) ? '' : $_SESSION['currencyCodeType'];
-    $FinalPaymentAmt    = empty($_SESSION["FinalPaymentAmt"]) ? '' : $_SESSION["FinalPaymentAmt"];
-    $paymentType        = empty($_SESSION['PaymentType']) ? '' : $_SESSION['PaymentType'];  // Seems used by paypal only
+    $currencyCodeType = empty($_SESSION['currencyCodeType']) ? '' : $_SESSION['currencyCodeType'];
+    $FinalPaymentAmt = empty($_SESSION["FinalPaymentAmt"]) ? '' : $_SESSION["FinalPaymentAmt"];
+    $paymentType = empty($_SESSION['PaymentType']) ? '' : $_SESSION['PaymentType'];  // Seems used by paypal only
 
     if (is_object($object) && method_exists($object, 'call_trigger')) {
         // Call trigger
@@ -1914,12 +1910,12 @@ if ($ispaymentok) {
         $topic = '[' . $appli . '] ' . $companylangs->transnoentitiesnoconv("NewOnlinePaymentReceived");
         $content = "";
         if (array_key_exists('MEM', $tmptag)) {
-            $url = $urlwithroot . "/adherents/subscription.php?rowid=" . ((int) $tmptag['MEM']);
+            $url = $urlwithroot . "/adherents/subscription.php?rowid=" . ((int)$tmptag['MEM']);
             $content .= '<strong>' . $companylangs->trans("PaymentSubscription") . "</strong><br><br>\n";
             $content .= $companylangs->trans("MemberId") . ': <strong>' . $tmptag['MEM'] . "</strong><br>\n";
             $content .= $companylangs->trans("Link") . ': <a href="' . $url . '">' . $url . '</a>' . "<br>\n";
         } elseif (array_key_exists('INV', $tmptag)) {
-            $url = $urlwithroot . "/compta/facture/card.php?id=" . ((int) $tmptag['INV']);
+            $url = $urlwithroot . "/compta/facture/card.php?id=" . ((int)$tmptag['INV']);
             $content .= '<strong>' . $companylangs->trans("Payment") . "</strong><br><br>\n";
             $content .= $companylangs->trans("InvoiceId") . ': <strong>' . $tmptag['INV'] . "</strong><br>\n";
             //$content.=$companylangs->trans("ThirdPartyId").': '.$tmptag['CUS']."<br>\n";
@@ -1987,11 +1983,11 @@ if ($ispaymentok) {
 
     // Get on url call
     $onlinetoken = empty($PAYPALTOKEN) ? $_SESSION['onlinetoken'] : $PAYPALTOKEN;
-    $payerID            = empty($PAYPALPAYERID) ? $_SESSION['payerID'] : $PAYPALPAYERID;
+    $payerID = empty($PAYPALPAYERID) ? $_SESSION['payerID'] : $PAYPALPAYERID;
     // Set by newpayment.php
-    $paymentType        = $_SESSION['PaymentType'];
-    $currencyCodeType   = $_SESSION['currencyCodeType'];
-    $FinalPaymentAmt    = $_SESSION["FinalPaymentAmt"];
+    $paymentType = $_SESSION['PaymentType'];
+    $currencyCodeType = $_SESSION['currencyCodeType'];
+    $FinalPaymentAmt = $_SESSION["FinalPaymentAmt"];
 
     if (is_object($object) && method_exists($object, 'call_trigger')) {
         // Call trigger

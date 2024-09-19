@@ -46,7 +46,6 @@ if (!defined('NOBROWSERNOTIF')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/stripe/stripe-php/init.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 
 $action = GETPOST('action', 'aZ09');
 $location = GETPOST('location', 'alphanohtml');
@@ -59,7 +58,7 @@ if (!$user->hasRight('takepos', 'run')) {
 }
 
 $usestripeterminals = getDolGlobalString('STRIPE_LOCATION');
-if (! $usestripeterminals) {
+if (!$usestripeterminals) {
     accessforbidden('Feature to use Stripe terminals not enabled');
 }
 

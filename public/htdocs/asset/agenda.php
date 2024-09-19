@@ -126,7 +126,6 @@ if (empty($reshook)) {
 }
 
 
-
 /*
  *	View
  */
@@ -172,14 +171,14 @@ if ($object->id > 0) {
     $objthirdparty = $object;
     $objcon = new stdClass();
 
-    $out = '&origin=' . urlencode((string) ($object->element . '@' . $object->module)) . '&originid=' . urlencode((string) ($object->id));
+    $out = '&origin=' . urlencode((string)($object->element . '@' . $object->module)) . '&originid=' . urlencode((string)($object->id));
     $urlbacktopage = $_SERVER['PHP_SELF'] . '?id=' . $object->id;
     $out .= '&backtopage=' . urlencode($urlbacktopage);
     $permok = $user->hasRight('agenda', 'myactions', 'create');
     if ((!empty($objthirdparty->id) || !empty($objcon->id)) && $permok) {
         //$out.='<a href="'.DOL_URL_ROOT.'/comm/action/card.php?action=create';
         if (get_class($objthirdparty) == 'Societe') {
-            $out .= '&socid=' . urlencode((string) ($objthirdparty->id));
+            $out .= '&socid=' . urlencode((string)($objthirdparty->id));
         }
         $out .= (!empty($objcon->id) ? '&contactid=' . urlencode($objcon->id) : '');
         //$out.=$langs->trans("AddAnAction").' ';
@@ -206,7 +205,7 @@ if ($object->id > 0) {
             $param .= '&contextpage=' . urlencode($contextpage);
         }
         if ($limit > 0 && $limit != $conf->liste_limit) {
-            $param .= '&limit=' . ((int) $limit);
+            $param .= '&limit=' . ((int)$limit);
         }
 
 

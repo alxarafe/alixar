@@ -32,6 +32,7 @@ if (!defined('DOL_DOCUMENT_ROOT')) {
 }
 
 use Dolibarr\Code\Core\Classes\Conf;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/translate.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
@@ -82,10 +83,10 @@ if (!defined('DONOTLOADCONF') && file_exists($conffile) && filesize($conffile) >
         }
 
         // Clean parameters
-        $dolibarr_main_data_root        = isset($dolibarr_main_data_root) ? trim($dolibarr_main_data_root) : '';
-        $dolibarr_main_url_root         = isset($dolibarr_main_url_root) ? trim($dolibarr_main_url_root) : '';
-        $dolibarr_main_url_root_alt     = isset($dolibarr_main_url_root_alt) ? trim($dolibarr_main_url_root_alt) : '';
-        $dolibarr_main_document_root    = isset($dolibarr_main_document_root) ? trim($dolibarr_main_document_root) : '';
+        $dolibarr_main_data_root = isset($dolibarr_main_data_root) ? trim($dolibarr_main_data_root) : '';
+        $dolibarr_main_url_root = isset($dolibarr_main_url_root) ? trim($dolibarr_main_url_root) : '';
+        $dolibarr_main_url_root_alt = isset($dolibarr_main_url_root_alt) ? trim($dolibarr_main_url_root_alt) : '';
+        $dolibarr_main_document_root = isset($dolibarr_main_document_root) ? trim($dolibarr_main_document_root) : '';
         $dolibarr_main_document_root_alt = isset($dolibarr_main_document_root_alt) ? trim($dolibarr_main_document_root_alt) : '';
 
         // Remove last / or \ on directories or url value
@@ -180,8 +181,8 @@ if (GETPOST('lang', 'aZ09')) {
 /**
  *  Load conf file (file must exists)
  *
- *  @param  string  $dolibarr_main_document_root        Root directory of Dolibarr bin files
- *  @return int                                         Return integer <0 if KO, >0 if OK
+ * @param string $dolibarr_main_document_root Root directory of Dolibarr bin files
+ * @return int                                         Return integer <0 if KO, >0 if OK
  */
 function loadconf($dolibarr_main_document_root)
 {
@@ -221,9 +222,9 @@ function loadconf($dolibarr_main_document_root)
 /**
  * Show HTML header
  *
- * @param   string  $soutitre   Title
- * @param   string  $next       Next
- * @param   string  $action     Action code
+ * @param string $soutitre Title
+ * @param string $next Next
+ * @param string $action Action code
  * @return  void
  */
 function pHeader($soutitre, $next, $action = 'none')
@@ -261,8 +262,8 @@ function pHeader($soutitre, $next, $action = 'none')
 /**
  * Print HTML footer
  *
- * @param   integer $nonext         No button "Next step"
- * @param   string  $setuplang      Language code
+ * @param integer $nonext No button "Next step"
+ * @param string $setuplang Language code
  * @return  void
  */
 function pFooter($nonext = 0, $setuplang = '')

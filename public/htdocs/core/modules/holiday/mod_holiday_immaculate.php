@@ -52,8 +52,8 @@ class mod_holiday_immaculate extends ModelNumRefHolidays
     /**
      *  Return default description of numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -89,7 +89,7 @@ class mod_holiday_immaculate extends ModelNumRefHolidays
     /**
      *  Return numbering example
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -109,9 +109,9 @@ class mod_holiday_immaculate extends ModelNumRefHolidays
     /**
      *  Return next value
      *
-     *  @param  Societe     $objsoc     third party object
-     *  @param  Holiday     $holiday    holiday object
-     *  @return string|0                Value if OK, 0 if KO
+     * @param Societe $objsoc third party object
+     * @param Holiday $holiday holiday object
+     * @return string|0                Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $holiday)
     {
@@ -128,6 +128,6 @@ class mod_holiday_immaculate extends ModelNumRefHolidays
 
         $numFinal = get_next_value($db, $mask, 'holiday', 'ref', '', $objsoc, $holiday->date_create);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

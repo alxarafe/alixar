@@ -574,7 +574,7 @@ if (($action == "create") || ($action == "edit")) {
         $langs->load($reg[1]);
     }
 
-    $labeltoshow =  preg_replace('/:.*$/', '', $object->label);
+    $labeltoshow = preg_replace('/:.*$/', '', $object->label);
 
     $morehtmlref = '<div class="refidno">';
     $morehtmlref .= $langs->trans($labeltoshow);

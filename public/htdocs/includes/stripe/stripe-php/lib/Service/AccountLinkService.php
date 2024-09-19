@@ -14,9 +14,9 @@ class AccountLinkService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\AccountLink
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\AccountLink
      */
     public function create($params = null, $opts = null)
     {

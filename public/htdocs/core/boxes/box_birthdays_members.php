@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 
 /**
  *  \file       htdocs/core/boxes/box_birthdays_members.php
@@ -29,26 +30,24 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
  *  \brief      Box for members birthdays
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 
 /**
  * Class to manage the box to show members birthdays
  */
 class box_birthdays_members extends ModeleBoxes
 {
-    public $boxcode  = "birthdays_members";
-    public $boximg   = "object_user";
+    public $boxcode = "birthdays_members";
+    public $boximg = "object_user";
     public $boxlabel = "BoxTitleMemberNextBirthdays";
-    public $depends  = array("adherent");
+    public $depends = array("adherent");
 
     public $enabled = 1;
 
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param = '')
     {
@@ -62,8 +61,8 @@ class box_birthdays_members extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 20)
     {
@@ -165,10 +164,10 @@ class box_birthdays_members extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

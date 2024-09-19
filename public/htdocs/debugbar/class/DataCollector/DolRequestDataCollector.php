@@ -28,7 +28,6 @@ use DebugBar\DataCollector\RequestDataCollector;
 /**
  * DolRequestDataCollector class
  */
-
 class DolRequestDataCollector extends RequestDataCollector
 {
     /**
@@ -70,7 +69,7 @@ class DolRequestDataCollector extends RequestDataCollector
     /**
      *  Return widget settings
      *
-     *  @return array   Array
+     * @return array   Array
      */
     public function getWidgets()
     {

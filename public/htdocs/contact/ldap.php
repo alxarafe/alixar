@@ -154,7 +154,6 @@ if (getDolGlobalString('LDAP_CONTACT_ACTIVE') && getDolGlobalInt('LDAP_CONTACT_A
 }
 
 
-
 // Affichage attributes LDAP
 print load_fiche_titre($langs->trans("LDAPInformationsForThisContact"));
 

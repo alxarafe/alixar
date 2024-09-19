@@ -32,7 +32,6 @@ use Dolibarr\Code\Resource\Classes\Dolresource;
  */
 
 // Load Dolibarr environment
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Load translation files required by the page

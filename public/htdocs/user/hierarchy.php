@@ -86,7 +86,6 @@ if (isModEnabled('salaries') && $contextpage == 'employeelist' && $search_employ
 $childids = $user->getAllChildIds(1);
 
 
-
 /*
  * View
  */
@@ -109,10 +108,10 @@ llxHeader('', $title, $help_url, '', 0, 0, $arrayofjs, $arrayofcss, '', 'bodyfor
 
 $filters = [];
 if (($search_status != '' && $search_status >= 0)) {
-    $filters[] = "statut = " . ((int) $search_status);
+    $filters[] = "statut = " . ((int)$search_status);
 }
 if (($search_employee != '' && $search_employee >= 0)) {
-    $filters[] = "employee = " . ((int) $search_employee);
+    $filters[] = "employee = " . ((int)$search_employee);
 }
 $sqlfilter = '';
 if (!empty($filters)) {
@@ -142,7 +141,7 @@ if (!is_array($user_arbo) && $user_arbo < 0) {
 
     foreach ($fulltree as $key => $val) {
         $userstatic->id = $val['id'];
-        $userstatic->ref = (string) $val['id'];
+        $userstatic->ref = (string)$val['id'];
         $userstatic->login = $val['login'];
         $userstatic->firstname = $val['firstname'];
         $userstatic->lastname = $val['lastname'];
@@ -198,7 +197,7 @@ if (!is_array($user_arbo) && $user_arbo < 0) {
                 if (!empty($user_arbo_all[$idparent])) {
                     $val = $user_arbo_all[$idparent];
                     $userstatic->id = $val['id'];
-                    $userstatic->ref = (string) $val['id'];
+                    $userstatic->ref = (string)$val['id'];
                     $userstatic->login = $val['login'];
                     $userstatic->firstname = $val['firstname'];
                     $userstatic->lastname = $val['lastname'];

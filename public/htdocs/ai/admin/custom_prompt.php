@@ -67,7 +67,7 @@ $item->defaultFieldValue = '';
 
 $setupnotempty += count($formSetup->items);
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 // List of AI features
 $arrayofaifeatures = array(

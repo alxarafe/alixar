@@ -50,14 +50,16 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'users', 'other', 'commercial'));
 
-$mesg = ''; $error = 0; $errors = array();
+$mesg = '';
+$error = 0;
+$errors = array();
 
 // Get parameters
-$action     = (GETPOST('action', 'alpha') ? GETPOST('action', 'alpha') : 'view');
-$confirm    = GETPOST('confirm', 'alpha');
+$action = (GETPOST('action', 'alpha') ? GETPOST('action', 'alpha') : 'view');
+$confirm = GETPOST('confirm', 'alpha');
 $backtopage = GETPOST('backtopage', 'alpha');
 $id = GETPOSTINT('id');
-$socid      = GETPOSTINT('socid');
+$socid = GETPOSTINT('socid');
 
 // Initialize objects
 $object = new Contact($db);
@@ -71,7 +73,6 @@ $object->getCanvas($id);
 $objcanvas = null;
 $canvas = (!empty($object->canvas) ? $object->canvas : GETPOST("canvas"));
 if (!empty($canvas)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
     $objcanvas = new Canvas($db, $action);
     $objcanvas->getCanvas('contact', 'contactcard', $canvas);
 }

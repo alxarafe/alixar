@@ -92,7 +92,6 @@ if ($action == 'setvalue' && $user->admin) {
 }
 
 
-
 /*
  * View
  */

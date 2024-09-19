@@ -14,9 +14,9 @@ class TransferService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Transfer>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Transfer>
      */
     public function all($params = null, $opts = null)
     {
@@ -34,9 +34,9 @@ class TransferService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\TransferReversal>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\TransferReversal>
      */
     public function allReversals($parentId, $params = null, $opts = null)
     {
@@ -51,9 +51,9 @@ class TransferService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Transfer
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Transfer
      */
     public function create($params = null, $opts = null)
     {
@@ -74,9 +74,9 @@ class TransferService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\TransferReversal
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TransferReversal
      */
     public function createReversal($parentId, $params = null, $opts = null)
     {
@@ -92,9 +92,9 @@ class TransferService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Transfer
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Transfer
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -111,9 +111,9 @@ class TransferService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\TransferReversal
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TransferReversal
      */
     public function retrieveReversal($parentId, $id, $params = null, $opts = null)
     {
@@ -130,9 +130,9 @@ class TransferService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Transfer
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Transfer
      */
     public function update($id, $params = null, $opts = null)
     {
@@ -150,9 +150,9 @@ class TransferService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\TransferReversal
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TransferReversal
      */
     public function updateReversal($parentId, $id, $params = null, $opts = null)
     {

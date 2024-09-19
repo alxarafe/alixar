@@ -269,7 +269,7 @@ if ($action == 'presend') {
             $emailsendersignature = '';
         } elseif (preg_match('/senderprofile_(\d+)/', $formmail->fromtype, $reg)) {
             $sql = "SELECT rowid, label, email, signature FROM " . $db->prefix() . "c_email_senderprofile";
-            $sql .= " WHERE rowid = " . ((int) $reg[1]);
+            $sql .= " WHERE rowid = " . ((int)$reg[1]);
             $resql = $db->query($sql);
             if ($resql) {
                 $obj = $db->fetch_object($resql);

@@ -83,8 +83,8 @@ function ticketAdminPrepareHead()
 /**
  *  Build tabs for a Ticket object
  *
- *  @param  Ticket    $object       Object Ticket
- *  @return array                         Array of tabs
+ * @param Ticket $object Object Ticket
+ * @return array                         Array of tabs
  */
 function ticket_prepare_head($object)
 {
@@ -115,7 +115,7 @@ function ticket_prepare_head($object)
     $upload_dir = $conf->ticket->dir_output . "/" . $object->ref;
     $nbFiles = count(dol_dir_list($upload_dir, 'files'));
     $sql = 'SELECT id FROM ' . MAIN_DB_PREFIX . 'actioncomm';
-    $sql .= " WHERE fk_element = " . (int) $object->id . " AND elementtype = 'ticket'";
+    $sql .= " WHERE fk_element = " . (int)$object->id . " AND elementtype = 'ticket'";
     $resql = $db->query($sql);
     if ($resql) {
         $numrows = $db->num_rows($resql);
@@ -167,7 +167,7 @@ function ticket_prepare_head($object)
 /**
  * Return string with full Url. The file qualified is the one defined by relative path in $object->last_main_doc
  *
- * @param   Object  $object             Object
+ * @param Object $object Object
  * @return  string                      Url string
  */
 function showDirectPublicLink($object)
@@ -203,14 +203,14 @@ function showDirectPublicLink($object)
 /**
  *  Generate a random id
  *
- *  @param  int     $car    Length of string to generate key
- *  @return string
+ * @param int $car Length of string to generate key
+ * @return string
  */
 function generate_random_id($car = 16)
 {
     $string = "";
     $chaine = "abcdefghijklmnopqrstuvwxyz123456789";
-    mt_srand((int) ((float) microtime() * 1000000));
+    mt_srand((int)((float)microtime() * 1000000));
     for ($i = 0; $i < $car; $i++) {
         $string .= $chaine[mt_rand() % strlen($chaine)];
     }
@@ -220,12 +220,12 @@ function generate_random_id($car = 16)
 /**
  * Show http header, open body tag and show HTML header banner for public pages for tickets
  *
- * @param  string $title       Title
- * @param  string $head        Head array
- * @param  int    $disablejs   More content into html header
- * @param  int    $disablehead More content into html header
- * @param  array  $arrayofjs   Array of complementary js files
- * @param  array  $arrayofcss  Array of complementary css files
+ * @param string $title Title
+ * @param string $head Head array
+ * @param int $disablejs More content into html header
+ * @param int $disablehead More content into html header
+ * @param array $arrayofjs Array of complementary js files
+ * @param array $arrayofcss Array of complementary css files
  * @return void
  */
 function llxHeaderTicket($title, $head = "", $disablejs = 0, $disablehead = 0, $arrayofjs = [], $arrayofcss = [])

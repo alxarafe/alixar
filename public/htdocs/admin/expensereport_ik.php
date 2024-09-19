@@ -41,8 +41,8 @@ $error = 0;
 $action = GETPOST('action', 'aZ09');
 
 $id = GETPOSTINT('id');
-$ikoffset = (float) price2num(GETPOST('ikoffset', 'alpha'));
-$coef = (float) price2num(GETPOST('coef', 'alpha'));
+$ikoffset = (float)price2num(GETPOST('ikoffset', 'alpha'));
+$coef = (float)price2num(GETPOST('coef', 'alpha'));
 $fk_c_exp_tax_cat = GETPOSTINT('fk_c_exp_tax_cat');
 $fk_range = GETPOSTINT('fk_range');
 

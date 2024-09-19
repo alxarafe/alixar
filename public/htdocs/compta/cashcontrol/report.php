@@ -73,9 +73,9 @@ $arrayfields = array(
     'b.credit' => array('label' => $langs->trans("Credit"), 'checked' => 1, 'position' => 605),
 );
 
-$syear  = $object->year_close;
+$syear = $object->year_close;
 $smonth = $object->month_close;
-$sday   = $object->day_close;
+$sday = $object->day_close;
 
 $posmodule = $object->posmodule;
 $terminalid = $object->posnumber;
@@ -383,7 +383,7 @@ if ($resql) {
     }
 
     //$cash = $amountpertype['LIQ'] + $object->opening;
-    $newcash = price2num($cash + (float) $object->opening, 'MT');
+    $newcash = price2num($cash + (float)$object->opening, 'MT');
 
     print '<div style="text-align: right">';
     print '<h2>';
@@ -429,7 +429,7 @@ if ($resql) {
 
     print "<br>";
 
-    print $langs->trans("Total") . ' (' . $totalqty . ' ' . $langs->trans("Articles") . ') : <div class="inline-block amount width100"></div><div class="inline-block amount width100">' . price((float) $cash + (float) $cheque + (float) $bank + (float) $other) . '</div>';
+    print $langs->trans("Total") . ' (' . $totalqty . ' ' . $langs->trans("Articles") . ') : <div class="inline-block amount width100"></div><div class="inline-block amount width100">' . price((float)$cash + (float)$cheque + (float)$bank + (float)$other) . '</div>';
 
     print '<br>' . $langs->trans("TotalVAT") . ' : <div class="inline-block amount width100"></div><div class="inline-block amount width100">' . price($totalvat) . '</div>';
 

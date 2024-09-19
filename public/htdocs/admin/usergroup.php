@@ -117,7 +117,7 @@ $head = user_admin_prepare_head();
 print dol_get_fiche_head($head, 'usergroupcard', $langs->trans("MenuUsersAndGroups"), -1, 'user');
 
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $form = new Form($db);
 

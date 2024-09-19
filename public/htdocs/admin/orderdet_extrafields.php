@@ -66,7 +66,6 @@ if (!$user->admin) {
 require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 
 
-
 /*
  * View
  */

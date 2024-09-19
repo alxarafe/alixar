@@ -28,9 +28,9 @@ abstract class Collection extends Node implements ICollection
      *
      * @param string $name
      *
+     * @return INode
      * @throws Exception\NotFound
      *
-     * @return INode
      */
     public function getChild($name)
     {
@@ -82,7 +82,7 @@ abstract class Collection extends Node implements ICollection
      * return the same contents of what was submitted here, you are strongly
      * recommended to omit the ETag.
      *
-     * @param string          $name Name of the file
+     * @param string $name Name of the file
      * @param resource|string $data Initial payload
      *
      * @return string|null

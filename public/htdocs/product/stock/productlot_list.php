@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2007-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2021  Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2007-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2021  Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Product\Classes\Productlot;
 
 /**
  * \file        product/stock/productlot_list.php
@@ -110,11 +116,11 @@ $arrayfields = array();
 foreach ($object->fields as $key => $val) {
     // If $val['visible']==0, then we never show the field
     if (!empty($val['visible'])) {
-        $visible = (int) dol_eval($val['visible'], 1);
+        $visible = (int)dol_eval($val['visible'], 1);
         $arrayfields['t.' . $key] = array(
             'label' => $val['label'],
             'checked' => (($visible < 0) ? 0 : 1),
-            'enabled' => (abs($visible) != 3 && (int) dol_eval($val['enabled'], 1)),
+            'enabled' => (abs($visible) != 3 && (int)dol_eval($val['enabled'], 1)),
             'position' => $val['position'],
             'help' => isset($val['help']) ? $val['help'] : ''
         );
@@ -379,7 +385,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 foreach ($search as $key => $val) {
     if (is_array($search[$key]) && count($search[$key])) {

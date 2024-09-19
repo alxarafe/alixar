@@ -38,7 +38,7 @@ use Dolibarr\Code\User\Classes\UserGroup;
 /**
  * Prepare array with list of tabs
  *
- * @param   User    $object     Object related to tabs
+ * @param User $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function user_prepare_head(User $object)
@@ -122,7 +122,7 @@ function user_prepare_head(User $object)
         $nbNote = 0;
         $sql = "SELECT COUNT(n.rowid) as nb";
         $sql .= " FROM " . MAIN_DB_PREFIX . "notify_def as n";
-        $sql .= " WHERE fk_user = " . ((int) $object->id);
+        $sql .= " WHERE fk_user = " . ((int)$object->id);
         $resql = $db->query($sql);
         if ($resql) {
             $num = $db->num_rows($resql);
@@ -185,7 +185,7 @@ function user_prepare_head(User $object)
 
         // Attached files
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-            $upload_dir = $conf->user->dir_output . "/" . $object->id;
+        $upload_dir = $conf->user->dir_output . "/" . $object->id;
         $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
         $nbLinks = Link::count($db, $object->element, $object->id);
         $head[$h][0] = constant('BASE_URL') . '/user/document.php?userid=' . $object->id;
@@ -209,7 +209,7 @@ function user_prepare_head(User $object)
             } else {
                 $sql = "SELECT COUNT(ac.id) as nb";
                 $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm as ac";
-                $sql .= " WHERE ac.fk_user_action = " . ((int) $object->id);
+                $sql .= " WHERE ac.fk_user_action = " . ((int)$object->id);
                 $sql .= " AND ac.entity IN (" . getEntity('agenda') . ")";
                 $resql = $db->query($sql);
                 if ($resql) {
@@ -239,7 +239,7 @@ function user_prepare_head(User $object)
 /**
  * Prepare array with list of tabs
  *
- * @param   UserGroup $object       Object group
+ * @param UserGroup $object Object group
  * @return  array                   Array of tabs
  */
 function group_prepare_head($object)
@@ -347,10 +347,10 @@ function user_admin_prepare_head()
 /**
  *  Show list of themes. Show all thumbs of themes
  *
- *  @param  User|null   $fuser              User concerned or null for global theme
- *  @param  int         $edit               1 to add edit form
- *  @param  boolean     $foruserprofile     Show for user profile view
- *  @return void
+ * @param User|null $fuser User concerned or null for global theme
+ * @param int $edit 1 to add edit form
+ * @param boolean $foruserprofile Show for user profile view
+ * @return void
  */
 function showSkins($fuser, $edit = 0, $foruserprofile = false)
 {
@@ -362,7 +362,7 @@ function showSkins($fuser, $edit = 0, $foruserprofile = false)
     $dirthemes = array('/htdocs/theme');
     if (!empty($conf->modules_parts['theme'])) {        // Using this feature slow down application
         foreach ($conf->modules_parts['theme'] as $reldir) {
-            $dirthemes = array_merge($dirthemes, (array) ($reldir . 'theme'));
+            $dirthemes = array_merge($dirthemes, (array)($reldir . 'theme'));
         }
     }
     $dirthemes = array_unique($dirthemes);
@@ -449,7 +449,7 @@ function showSkins($fuser, $edit = 0, $foruserprofile = false)
                 while (($subdir = readdir($handle)) !== false) {
                     if (
                         is_dir($dirtheme . "/" . $subdir) && substr($subdir, 0, 1) != '.'
-                            && substr($subdir, 0, 3) != 'CVS' && !preg_match('/common|phones/i', $subdir)
+                        && substr($subdir, 0, 3) != 'CVS' && !preg_match('/common|phones/i', $subdir)
                     ) {
                         // Disable not stable themes (dir ends with _exp or _dev)
                         if (getDolGlobalInt('MAIN_FEATURES_LEVEL') < 2 && preg_match('/_dev$/i', $subdir)) {

@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2005 Rodolphe Quiedeville     <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur      <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin            <regis.houssin@capnetworks.com>
- * Copyright (C) 2018	   Quentin Vial-Gouteyron   <quentin.vial-gouteyron@atm-consulting.fr>
- * Copyright (C) 2019      Nicolas ZABOURI          <info@inovea-conseil.com>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@capnetworks.com>
+ * Copyright (C) 2018	    Quentin Vial-Gouteyron      <quentin.vial-gouteyron@atm-consulting.fr>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Reception\Classes\Reception;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *       \file       htdocs/reception/index.php
@@ -45,7 +50,6 @@ if ($user->socid) {
     $socid = $user->socid;
 }
 $result = restrictedArea($user, 'reception', 0, '');
-
 
 /*
  *	View

@@ -52,9 +52,9 @@ class CurlClient extends AbstractClient
      * They should return, in string form, the response body and throw an exception on error.
      *
      * @param UriInterface $endpoint
-     * @param mixed        $requestBody
-     * @param array        $extraHeaders
-     * @param string       $method
+     * @param mixed $requestBody
+     * @param array $extraHeaders
+     * @param string $method
      *
      * @return string
      *
@@ -63,10 +63,11 @@ class CurlClient extends AbstractClient
      */
     public function retrieveResponse(
         UriInterface $endpoint,
-        $requestBody,
+              $requestBody,
         array $extraHeaders = array(),
-        $method = 'POST'
-    ) {
+              $method = 'POST'
+    )
+    {
         // Normalize method name
         $method = strtoupper($method);
 
@@ -80,7 +81,7 @@ class CurlClient extends AbstractClient
             $extraHeaders['Content-Type'] = 'Content-Type: application/x-www-form-urlencoded';
         }
 
-        $extraHeaders['Host']       = 'Host: ' . $endpoint->getHost();
+        $extraHeaders['Host'] = 'Host: ' . $endpoint->getHost();
         $extraHeaders['Connection'] = 'Connection: close';
 
         $ch = curl_init();
@@ -122,11 +123,11 @@ class CurlClient extends AbstractClient
             curl_setopt($ch, CURLOPT_SSLVERSION, 3);
         }
 
-        $response     = curl_exec($ch);
+        $response = curl_exec($ch);
         $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         if (false === $response) {
-            $errNo  = curl_errno($ch);
+            $errNo = curl_errno($ch);
             $errStr = curl_error($ch);
             curl_close($ch);
             if (empty($errStr)) {

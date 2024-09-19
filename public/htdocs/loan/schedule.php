@@ -85,7 +85,7 @@ if ($action == 'createecheancier' && empty($pay_without_schedule)) {
         $new_echeance->datec = dol_now();
         $new_echeance->tms = dol_now();
         $new_echeance->datep = $date;
-        $new_echeance->amount_capital = $mens - (float) $int;
+        $new_echeance->amount_capital = $mens - (float)$int;
         $new_echeance->amount_insurance = $insurance;
         $new_echeance->amount_interest = $int;
         $new_echeance->fk_typepayment = 3;
@@ -119,7 +119,7 @@ if ($action == 'updateecheancier' && empty($pay_without_schedule)) {
         $new_echeance = new LoanSchedule($db);
         $new_echeance->fetch($id);
         $new_echeance->tms = dol_now();
-        $new_echeance->amount_capital = $mens - (float) $int;
+        $new_echeance->amount_capital = $mens - (float)$int;
         $new_echeance->amount_insurance = $insurance;
         $new_echeance->amount_interest = $int;
         $new_echeance->fk_user_modif = $user->id;
@@ -195,38 +195,45 @@ $morehtmlstatus = '';
 dol_banner_tab($object, 'loanid', $linkback, 1, 'rowid', 'ref', $morehtmlref, '', 0, '', $morehtmlstatus);
 
 ?>
-<script type="text/javascript">
-$(document).ready(function() {
-    $('[name^="mens"]').focusout(function() {
-        var echeance=$(this).attr('ech');
-        var mens=price2numjs($(this).val());
-        var idcap=echeance-1;
-        idcap = '#hi_capital'+idcap;
-        var capital=price2numjs($(idcap).val());
-        console.log("Change monthly amount echeance="+echeance+" idcap="+idcap+" capital="+capital);
-        $.ajax({
-              method: "GET",
-              dataType: 'json',
-              url: 'calcmens.php',
-              data: { echeance: echeance, mens: mens, capital:capital, rate:<?php echo $object->rate / 100; ?>, nbterm: <?php echo $object->nbterm; ?>, token: '<?php echo currentToken(); ?>' },
-              success: function(data) {
-                $.each(data, function(index, element) {
-                    var idcap_res='#hi_capital'+index;
-                    var idcap_res_srt='#capital'+index;
-                    var interet_res='#hi_interets'+index;
-                    var interet_res_str='#interets'+index;
-                    var men_res='#mens'+index;
-                    $(idcap_res).val(element.cap_rest);
-                    $(idcap_res_srt).text(element.cap_rest_str);
-                    $(interet_res).val(element.interet);
-                    $(interet_res_str).text(element.interet_str);
-                    $(men_res).val(element.mens);
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[name^="mens"]').focusout(function () {
+                var echeance = $(this).attr('ech');
+                var mens = price2numjs($(this).val());
+                var idcap = echeance - 1;
+                idcap = '#hi_capital' + idcap;
+                var capital = price2numjs($(idcap).val());
+                console.log("Change monthly amount echeance=" + echeance + " idcap=" + idcap + " capital=" + capital);
+                $.ajax({
+                    method: "GET",
+                    dataType: 'json',
+                    url: 'calcmens.php',
+                    data: {
+                        echeance: echeance,
+                        mens: mens,
+                        capital: capital,
+                        rate:<?php echo $object->rate / 100; ?>,
+                        nbterm: <?php echo $object->nbterm; ?>,
+                        token: '<?php echo currentToken(); ?>'
+                    },
+                    success: function (data) {
+                        $.each(data, function (index, element) {
+                            var idcap_res = '#hi_capital' + index;
+                            var idcap_res_srt = '#capital' + index;
+                            var interet_res = '#hi_interets' + index;
+                            var interet_res_str = '#interets' + index;
+                            var men_res = '#mens' + index;
+                            $(idcap_res).val(element.cap_rest);
+                            $(idcap_res_srt).text(element.cap_rest_str);
+                            $(interet_res).val(element.interet);
+                            $(interet_res_str).text(element.interet_str);
+                            $(men_res).val(element.mens);
+                        });
+                    }
                 });
-            }
+            });
         });
-    });
-});
-</script>
+    </script>
 <?php
 
 if ($pay_without_schedule == 1) {
@@ -271,15 +278,15 @@ print '</tr>' . "\n";
 if ($object->nbterm > 0 && count($echeances->lines) == 0) {
     $i = 1;
     $capital = $object->capital;
-    $insurance = (float) $object->insurance_amount / $object->nbterm;
+    $insurance = (float)$object->insurance_amount / $object->nbterm;
     $insurance = price2num($insurance, 'MT');
-    $regulInsurance = price2num((float) $object->insurance_amount - ((float) $insurance * $object->nbterm));
+    $regulInsurance = price2num((float)$object->insurance_amount - ((float)$insurance * $object->nbterm));
     while ($i < $object->nbterm + 1) {
         $mens = price2num($echeances->calcMonthlyPayments($capital, $object->rate / 100, $object->nbterm - $i + 1), 'MT');
         $int = ($capital * ($object->rate / 12)) / 100;
         $int = price2num($int, 'MT');
-        $insu = ((float) $insurance + (($i == 1) ? (float) $regulInsurance : 0));
-        $cap_rest = price2num((float) $capital - ((float) $mens - (float) $int), 'MT');
+        $insu = ((float)$insurance + (($i == 1) ? (float)$regulInsurance : 0));
+        $cap_rest = price2num((float)$capital - ((float)$mens - (float)$int), 'MT');
         print '<tr>';
         print '<td class="center" id="n' . $i . '">' . $i . '</td>';
         print '<td class="center" id ="date' . $i . '"><input type="hidden" name="hi_date' . $i . '" id ="hi_date' . $i . '" value="' . dol_time_plus_duree($object->datestart, $i - 1, 'm') . '">' . dol_print_date(dol_time_plus_duree($object->datestart, $i - 1, 'm'), 'day') . '</td>';
@@ -294,14 +301,14 @@ if ($object->nbterm > 0 && count($echeances->lines) == 0) {
 } elseif (count($echeances->lines) > 0) {
     $i = 1;
     $capital = $object->capital;
-    $insurance = (float) $object->insurance_amount / $object->nbterm;
+    $insurance = (float)$object->insurance_amount / $object->nbterm;
     $insurance = price2num($insurance, 'MT');
-    $regulInsurance = price2num((float) $object->insurance_amount - ((float) $insurance * $object->nbterm));
+    $regulInsurance = price2num((float)$object->insurance_amount - ((float)$insurance * $object->nbterm));
     $printed = false;
     foreach ($echeances->lines as $line) {
         $mens = $line->amount_capital + $line->amount_interest;
         $int = $line->amount_interest;
-        $insu = ((float) $insurance + (($i == 1) ? (float) $regulInsurance : 0));
+        $insu = ((float)$insurance + (($i == 1) ? (float)$regulInsurance : 0));
         $cap_rest = price2num($capital - ($mens - $int), 'MT');
 
         print '<tr>';

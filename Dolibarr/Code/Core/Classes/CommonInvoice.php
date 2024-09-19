@@ -1176,7 +1176,6 @@ abstract class CommonInvoice extends CommonObject
                 $amount = $obj->amount;
 
                 if (is_numeric($amount) && $amount != 0) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companypaymentmode.class.php';
                     $companypaymentmode = new CompanyPaymentMode($this->db);    // table societe_rib
                     $companypaymentmode->fetch($bac->id);
 

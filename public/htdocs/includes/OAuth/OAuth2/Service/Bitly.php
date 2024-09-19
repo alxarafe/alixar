@@ -14,11 +14,12 @@ class Bitly extends AbstractService
 {
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage, $scopes, $baseApiUri);
 
         if (null === $baseApiUri) {
@@ -84,11 +85,11 @@ class Bitly extends AbstractService
         }
 
         $bodyParams = array(
-            'code'          => $code,
-            'client_id'     => $this->credentials->getConsumerId(),
+            'code' => $code,
+            'client_id' => $this->credentials->getConsumerId(),
             'client_secret' => $this->credentials->getConsumerSecret(),
-            'redirect_uri'  => $this->credentials->getCallbackUrl(),
-            'grant_type'    => 'authorization_code',
+            'redirect_uri' => $this->credentials->getCallbackUrl(),
+            'grant_type' => 'authorization_code',
         );
 
         $responseBody = $this->httpClient->retrieveResponse(

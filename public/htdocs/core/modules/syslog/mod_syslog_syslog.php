@@ -16,7 +16,7 @@ class mod_syslog_syslog extends LogHandler
     /**
      *  Return name of logger
      *
-     *  @return string      Name of logger
+     * @return string      Name of logger
      */
     public function getName()
     {
@@ -63,7 +63,7 @@ class mod_syslog_syslog extends LogHandler
     /**
      *  Return array of configuration data
      *
-     *  @return array       Return array of configuration data
+     * @return array       Return array of configuration data
      */
     public function configure()
     {
@@ -81,7 +81,7 @@ class mod_syslog_syslog extends LogHandler
     /**
      *  Return if configuration is valid
      *
-     *  @return bool        True if ok.
+     * @return bool        True if ok.
      */
     public function checkConfiguration()
     {
@@ -106,8 +106,8 @@ class mod_syslog_syslog extends LogHandler
     /**
      * Export the message
      *
-     * @param   array   $content            Array containing the info about the message
-     * @param   string  $suffixinfilename   When output is a file, append this suffix into default log filename.
+     * @param array $content Array containing the info about the message
+     * @param string $suffixinfilename When output is a file, append this suffix into default log filename.
      * @return  void
      */
     public function export($content, $suffixinfilename = '')
@@ -125,7 +125,7 @@ class mod_syslog_syslog extends LogHandler
         }
 
         // (int) is required to avoid error parameter 3 expected to be long
-        openlog('dolibarr', LOG_PID | LOG_PERROR, (int) $facility);
+        openlog('dolibarr', LOG_PID | LOG_PERROR, (int)$facility);
 
         $message = sprintf("%6s", dol_trunc($content['osuser'], 6, 'right', 'UTF-8', 1));
         $message .= " " . $content['message'];

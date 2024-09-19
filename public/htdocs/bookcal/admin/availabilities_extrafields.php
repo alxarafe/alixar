@@ -59,7 +59,6 @@ if (!$user->admin) {
 require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 
 
-
 /*
  * View
  */
@@ -83,7 +82,6 @@ print dol_get_fiche_head($head, 'availabilities_extrafields', $langs->trans($pag
 require DOL_DOCUMENT_ROOT . '/core/tpl/admin_extrafields_view.tpl.php';
 
 print dol_get_fiche_end();
-
 
 
 /*

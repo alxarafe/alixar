@@ -12,9 +12,9 @@ class ShippingRateService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\ShippingRate>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\ShippingRate>
      */
     public function all($params = null, $opts = null)
     {
@@ -27,9 +27,9 @@ class ShippingRateService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\ShippingRate
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\ShippingRate
      */
     public function create($params = null, $opts = null)
     {
@@ -43,9 +43,9 @@ class ShippingRateService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\ShippingRate
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\ShippingRate
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -59,9 +59,9 @@ class ShippingRateService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\ShippingRate
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\ShippingRate
      */
     public function update($id, $params = null, $opts = null)
     {

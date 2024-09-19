@@ -18,25 +18,27 @@ if (empty($context) || !is_object($context)) {
 
                 <div class="login__field">
                     <i class="login__icon fas fa-user"></i>
-                    <input type="text" class="login__input" name="login" placeholder="<?php print dol_escape_htmltag($langs->trans('loginWebportalUserName')); ?>">
+                    <input type="text" class="login__input" name="login"
+                           placeholder="<?php print dol_escape_htmltag($langs->trans('loginWebportalUserName')); ?>">
                 </div>
                 <div class="login__field">
                     <i class="login__icon fas fa-lock"></i>
-                    <input type="password" class="login__input" name="password" placeholder="<?php print dol_escape_htmltag($langs->trans('Password')) ?>">
+                    <input type="password" class="login__input" name="password"
+                           placeholder="<?php print dol_escape_htmltag($langs->trans('Password')) ?>">
                 </div>
                 <button class="button login__submit">
                     <span class="button__text"><?php print dol_escape_htmltag($langs->trans('Connection')) ?></span>
                     <i class="button__icon fas fa-chevron-right"></i>
                 </button>
             </form>
-<!--            <div class="social-login">-->
-<!--                <span class="social-login__title">Follow us on</span>-->
-<!--                <div class="social-icons">-->
-<!--                    <a href="#" class="social-login__icon fab fa-instagram"></a>-->
-<!--                    <a href="#" class="social-login__icon fab fa-facebook"></a>-->
-<!--                    <a href="#" class="social-login__icon fab fa-twitter"></a>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--            <div class="social-login">-->
+            <!--                <span class="social-login__title">Follow us on</span>-->
+            <!--                <div class="social-icons">-->
+            <!--                    <a href="#" class="social-login__icon fab fa-instagram"></a>-->
+            <!--                    <a href="#" class="social-login__icon fab fa-facebook"></a>-->
+            <!--                    <a href="#" class="social-login__icon fab fa-twitter"></a>-->
+            <!--                </div>-->
+            <!--            </div>-->
         </div>
         <div class="login-screen__background">
             <span class="login-screen__background__shape login-screen__background__shape4"></span>

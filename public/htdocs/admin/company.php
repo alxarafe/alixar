@@ -87,7 +87,7 @@ if (
             $res = dolibarr_set_const($db, "MAIN_PROFID1_IN_ADDRESS", 1, 'chaine', 0, '', $conf->entity);
         }
 
-        $mysoc->country_id   = $tmparray['id'];
+        $mysoc->country_id = $tmparray['id'];
         $mysoc->country_code = $tmparray['code'];
         $mysoc->country_label = $tmparray['label'];
 
@@ -99,7 +99,7 @@ if (
 
     $tmparray = getState(GETPOSTINT('state_id'), 'all', $db, $langs, 0);
     if (!empty($tmparray['id'])) {
-        $mysoc->state_id   = $tmparray['id'];
+        $mysoc->state_id = $tmparray['id'];
         $mysoc->state_code = $tmparray['code'];
         $mysoc->state_label = $tmparray['label'];
 

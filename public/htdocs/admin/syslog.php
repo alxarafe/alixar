@@ -220,7 +220,7 @@ foreach ($syslogModules as $moduleName) {
     $module = new $moduleName();
     '@phan-var-force LogHandler $module';
 
-    $moduleactive = (int) $module->isActive();
+    $moduleactive = (int)$module->isActive();
     //print $moduleName." = ".$moduleactive." - ".$module->getName()." ".($moduleactive == -1)."<br>\n";
     if (($moduleactive == -1) && getDolGlobalInt('MAIN_FEATURES_LEVEL') == 0) {
         continue; // Some modules are hidden if not activable and not into debug mode (end user must not see them)

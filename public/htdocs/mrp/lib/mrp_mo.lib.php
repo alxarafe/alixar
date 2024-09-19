@@ -28,7 +28,7 @@ use Dolibarr\Code\Mrp\Classes\Mo;
 /**
  * Prepare array of tabs for Mo
  *
- * @param   Mo  $object     Mo
+ * @param Mo $object Mo
  * @return  array                   Array of tabs
  */
 function moPrepareHead($object)

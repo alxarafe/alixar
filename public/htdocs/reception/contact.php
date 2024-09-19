@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005      Patrick Rouillon     <patrick@rouillon.net>
- * Copyright (C) 2005-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+/* Copyright (C) 2005       Patrick Rouillon            <patrick@rouillon.net>
+ * Copyright (C) 2005-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@capnetworks.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Reception\Classes\Reception;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *     \file       htdocs/reception/contact.php
  *     \ingroup    reception
@@ -28,12 +38,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/reception.lib.php';
-if (isModEnabled('project')) {
-    }
 
 $langs->loadLangs(array("orders", "receptions", "companies"));
 
@@ -90,7 +95,6 @@ if (isModEnabled("reception")) {
     $permissiontodelete = $user->hasRight('fournisseur', 'commande', 'receptionner');
 }
 
-
 /*
  * Actions
  */
@@ -143,7 +147,6 @@ $formcompany = new FormCompany($db);
 $formother = new FormOther($db);
 $contactstatic = new Contact($db);
 $userstatic = new User($db);
-
 
 // View mode
 

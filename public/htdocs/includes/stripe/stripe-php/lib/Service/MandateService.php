@@ -13,9 +13,9 @@ class MandateService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Mandate
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Mandate
      */
     public function retrieve($id, $params = null, $opts = null)
     {

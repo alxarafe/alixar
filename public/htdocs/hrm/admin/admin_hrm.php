@@ -37,13 +37,12 @@ $langs->loadLangs(array('admin', 'hrm'));
 $action = GETPOST('action', 'aZ09');
 
 // Other parameters HRM_*
-$list = array(
-//      'HRM_EMAIL_EXTERNAL_SERVICE'   // To prevent your public accountant for example
+$list = array(//      'HRM_EMAIL_EXTERNAL_SERVICE'   // To prevent your public accountant for example
 );
 
 // Permissions
 $permissiontoread = $user->admin;
-$permissiontoadd  = $user->admin;
+$permissiontoadd = $user->admin;
 
 // Security check - Protection if external user
 //if ($user->socid > 0) accessforbidden();

@@ -168,9 +168,9 @@ if ($action == 'confirm_deletefile' && $permissiontodelete) {
 
 // Add directory
 if ($action == 'add' && $permissiontocreatedir) {
-    $ecmdir->ref                = 'NOTUSEDYET';
-    $ecmdir->label              = GETPOST("label");
-    $ecmdir->description        = GETPOST("desc");
+    $ecmdir->ref = 'NOTUSEDYET';
+    $ecmdir->label = GETPOST("label");
+    $ecmdir->description = GETPOST("desc");
 
     $id = $ecmdir->create($user);
     if ($id > 0) {
@@ -262,10 +262,10 @@ if ($action == 'refreshmanual' && $permissiontoread) {
             }
 
             if ($fk_parent >= 0) {
-                $ecmdirtmp->ref                = 'NOTUSEDYET';
-                $ecmdirtmp->label              = dol_basename($dirdesc['fullname']);
-                $ecmdirtmp->description        = '';
-                $ecmdirtmp->fk_parent          = $fk_parent;
+                $ecmdirtmp->ref = 'NOTUSEDYET';
+                $ecmdirtmp->label = dol_basename($dirdesc['fullname']);
+                $ecmdirtmp->description = '';
+                $ecmdirtmp->fk_parent = $fk_parent;
 
                 $txt = "We create directory " . $ecmdirtmp->label . " with parent " . $fk_parent;
                 dol_syslog($txt);
@@ -273,10 +273,10 @@ if ($action == 'refreshmanual' && $permissiontoread) {
                 $id = $ecmdirtmp->create($user);
                 if ($id > 0) {
                     $newdirsql = array('id' => $id,
-                                     'id_mere' => $ecmdirtmp->fk_parent,
-                                     'label' => $ecmdirtmp->label,
-                                     'description' => $ecmdirtmp->description,
-                                     'fullrelativename' => $relativepathmissing);
+                        'id_mere' => $ecmdirtmp->fk_parent,
+                        'label' => $ecmdirtmp->label,
+                        'description' => $ecmdirtmp->description,
+                        'fullrelativename' => $relativepathmissing);
                     $sqltree[] = $newdirsql; // We complete fulltree for following loops
                     //var_dump($sqltree);
                     $adirwascreated = 1;
@@ -311,7 +311,6 @@ if ($action == 'refreshmanual' && $permissiontoread) {
         $sqltree = null;
     }
 }
-
 
 
 /*

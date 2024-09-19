@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2017	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2010-2012	Regis Houssin			<regis.houssin@inodbox.com>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2017	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2012	Regis Houssin			    <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
 
 /**
  *  \file       htdocs/projet/tasks/comment.php
@@ -78,8 +85,6 @@ if ($id > 0 || $ref) {
 $socid = 0;
 
 restrictedArea($user, 'projet', $object->fk_project, 'projet&project');
-
-
 
 /*
  * View
@@ -291,7 +296,7 @@ if ($id > 0 || !empty($ref)) {
             $projectsListId = $projectstatic->getProjectsAuthorizedForUser($user, 0, 1);
             $object->next_prev_filter = "fk_projet IN (" . $db->sanitize($projectsListId) . ")";
         } else {
-            $object->next_prev_filter = "fk_projet = " . ((int) $projectstatic->id);
+            $object->next_prev_filter = "fk_projet = " . ((int)$projectstatic->id);
         }
 
         $morehtmlref = '';

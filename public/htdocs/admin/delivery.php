@@ -49,11 +49,11 @@ if (!$user->admin) {
     accessforbidden();
 }
 
-$action  = GETPOST('action', 'alpha');
-$value   = GETPOST('value', 'alpha');
+$action = GETPOST('action', 'alpha');
+$value = GETPOST('value', 'alpha');
 $modulepart = GETPOST('modulepart', 'aZ09');    // Used by actions_setmoduleoptions.inc.php
 
-$label   = GETPOST('label', 'alpha');
+$label = GETPOST('label', 'alpha');
 $scandir = GETPOST('scan_dir', 'alpha');
 $type = 'delivery';
 
@@ -139,7 +139,7 @@ if ($action == 'specimen') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/delivery/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -202,12 +202,11 @@ if ($action == 'setmod') {
 }
 
 
-
 /*
  * View
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-delivery');
 
@@ -232,7 +231,6 @@ if (!getDolGlobalString('MAIN_SUBMODULE_DELIVERY')) {
 print '<br><span class="opacitymedium">' . info_admin($langs->trans("NoNeedForDeliveryReceipts"), 0, 1) . '</span>';
 print '<br>';
 print '<br>';
-
 
 
 if (getDolGlobalString('MAIN_SUBMODULE_DELIVERY')) {

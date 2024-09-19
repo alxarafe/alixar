@@ -466,7 +466,7 @@ if ($action == 'new') {
         $sql .= " AND b.dateo <= '" . $db->idate($search_date_end) . "'";
     }
     if ($filteraccountid > 0) {
-        $sql .= " AND ba.rowid = " . ((int) $filteraccountid);
+        $sql .= " AND ba.rowid = " . ((int)$filteraccountid);
     }
     $sql .= $db->order("b.dateo,b.rowid", "ASC");
 
@@ -652,7 +652,7 @@ if ($action == 'new') {
         print $langs->trans('RefExt');
         print '</td>';
         if ($action != 'editrefext') {
-            print '<td class="right"><a class="editfielda" href="' . $_SERVER["PHP_SELF"] . '?action=editrefext&token=' . newToken() . '&id=' . ((int) $object->id) . '">' . img_edit($langs->trans('SetRefExt'), 1) . '</a></td>';
+            print '<td class="right"><a class="editfielda" href="' . $_SERVER["PHP_SELF"] . '?action=editrefext&token=' . newToken() . '&id=' . ((int)$object->id) . '">' . img_edit($langs->trans('SetRefExt'), 1) . '</a></td>';
         }
         print '</tr></table>';
         print '</td><td>';
@@ -696,7 +696,7 @@ if ($action == 'new') {
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "paiement as p ON p.fk_bank = b.rowid";
     $sql .= " WHERE ba.entity IN (" . getEntity('bank_account') . ")";
     $sql .= " AND b.fk_type= '" . $db->escape($object->type) . "'";
-    $sql .= " AND b.fk_bordereau = " . ((int) $object->id);
+    $sql .= " AND b.fk_bordereau = " . ((int)$object->id);
     $sql .= $db->order($sortfield, $sortorder);
 
     $resql = $db->query($sql);
@@ -793,8 +793,6 @@ if ($action == 'new') {
 }
 
 
-
-
 /*
  * Actions Buttons
  */
@@ -809,7 +807,6 @@ if ($user->socid == 0 && !empty($object->id) && $user->hasRight('banque', 'chequ
     print dolGetButtonAction($langs->trans("Delete"), '', 'delete', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=delete&token=' . newToken(), 'delete', $permissiontodelete);
 }
 print '</div>';
-
 
 
 if ($action != 'new') {

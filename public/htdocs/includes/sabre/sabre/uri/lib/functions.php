@@ -55,7 +55,7 @@ function resolve(string $basePath, string $newPath): string
         } else {
             // Removing last component from base path.
             $path = $base['path'];
-            $length = strrpos((string) $path, '/');
+            $length = strrpos((string)$path, '/');
             if (false !== $length) {
                 $path = substr($path, 0, $length);
             }
@@ -199,7 +199,7 @@ function parse(string $uri): array
     }
 
     return
-         $result + [
+        $result + [
             'scheme' => null,
             'host' => null,
             'path' => null,
@@ -355,7 +355,7 @@ function _parse_fallback(string $uri): array
             $result['host'] = $matches['host'];
         }
         if (isset($matches['port'])) {
-            $result['port'] = (int) $matches['port'];
+            $result['port'] = (int)$matches['port'];
         }
         if (isset($matches['path'])) {
             $result['path'] = $matches['path'];

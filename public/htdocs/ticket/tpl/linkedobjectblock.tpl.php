@@ -46,11 +46,11 @@ foreach ($linkedObjectBlock as $key => $objectlink) {
     if ($ilink == count($linkedObjectBlock) && empty($noMoreLinkedObjectBlockAfter) && count($linkedObjectBlock) <= 1) {
         $trclass .= ' liste_sub_total';
     } ?>
-    <tr class="<?php echo $trclass; ?>" >
+    <tr class="<?php echo $trclass; ?>">
         <td class="linkedcol-element tdoverflowmax100"><?php echo $langs->trans("Ticket"); ?>
-        <?php if (!empty($showImportButton) && getDolGlobalString('MAIN_ENABLE_IMPORT_LINKED_OBJECT_LINES')) {
-            print '<a class="objectlinked_importbtn" href="' . $objectlink->getNomUrl(0, '', 0, 1) . '&amp;action=selectlines"  data-element="' . $objectlink->element . '"  data-id="' . $objectlink->id . '"  > <i class="fa fa-indent"></i> </a';
-        } ?>
+            <?php if (!empty($showImportButton) && getDolGlobalString('MAIN_ENABLE_IMPORT_LINKED_OBJECT_LINES')) {
+                print '<a class="objectlinked_importbtn" href="' . $objectlink->getNomUrl(0, '', 0, 1) . '&amp;action=selectlines"  data-element="' . $objectlink->element . '"  data-id="' . $objectlink->id . '"  > <i class="fa fa-indent"></i> </a';
+            } ?>
         </td>
         <td class="linkedcol-name tdoverflowmax150"><?php echo $objectlink->getNomUrl(1); ?></td>
         <td class="linkedcol-ref center"><?php echo $objectlink->ref_client; ?></td>
@@ -66,11 +66,12 @@ foreach ($linkedObjectBlock as $key => $objectlink) {
             // For now, shipments must stay linked to order, so link is not deletable
             if ($object->element != 'shipping') {
                 ?>
-                <a class="reposition" href="<?php echo $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=dellink&token=' . newToken() . '&dellinkid=' . $key; ?>"><?php echo img_picto($langs->transnoentitiesnoconv("RemoveLink"), 'unlink'); ?></a>
+                <a class="reposition"
+                   href="<?php echo $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=dellink&token=' . newToken() . '&dellinkid=' . $key; ?>"><?php echo img_picto($langs->transnoentitiesnoconv("RemoveLink"), 'unlink'); ?></a>
                 <?php
             } ?>
         </td>
-</tr>
+    </tr>
     <?php
 }
 if (count($linkedObjectBlock) > 1) {

@@ -82,12 +82,12 @@ $nbofyear = 1;
 $year = GETPOSTINT("year");
 $month = GETPOSTINT("month");
 if (empty($year)) {
-    $year_current = (int) dol_print_date(dol_now(), "%Y");
-    $month_current = (int) dol_print_date(dol_now(), "%m");
+    $year_current = (int)dol_print_date(dol_now(), "%Y");
+    $month_current = (int)dol_print_date(dol_now(), "%m");
     $year_start = $year_current - ($nbofyear - 1);
 } else {
     $year_current = $year;
-    $month_current = (int) dol_print_date(dol_now(), "%m");
+    $month_current = (int)dol_print_date(dol_now(), "%m");
     $year_start = $year - $nbofyear + (getDolGlobalInt('SOCIETE_FISCAL_MONTH_START') > 1 ? 0 : 1);
 }
 $date_start = dol_mktime(0, 0, 0, $date_startmonth, $date_startday, $date_startyear, 'tzserver');   // We use timezone of server so report is same from everywhere
@@ -293,7 +293,6 @@ if (isModEnabled('accounting')) {
 }
 
 
-
 $name = array();
 $amount = array();
 $amount_ht = array();
@@ -327,20 +326,20 @@ if ($modecompta == 'CREANCES-DETTES') {
         $sql .= " AND f.datef >= '" . $db->idate($date_start) . "' AND f.datef <= '" . $db->idate($date_end) . "'";
     }
     if ($selected_type >= 0) {
-        $sql .= " AND l.product_type = " . ((int) $selected_type);
+        $sql .= " AND l.product_type = " . ((int)$selected_type);
     }
     if ($selected_cat === -2) { // Without any category
         $sql .= " AND cp.fk_product is null";
     } elseif ($selected_cat) {  // Into a specific category
-        $sql .= " AND (c.rowid = " . ((int) $selected_cat);
+        $sql .= " AND (c.rowid = " . ((int)$selected_cat);
         if ($subcat) {
-            $sql .= " OR c.fk_parent = " . ((int) $selected_cat);
+            $sql .= " OR c.fk_parent = " . ((int)$selected_cat);
         }
         $sql .= ")";
         $sql .= " AND cp.fk_categorie = c.rowid AND cp.fk_product = p.rowid";
     }
     if ($selected_soc > 0) {
-        $sql .= " AND soc.rowid=" . ((int) $selected_soc);
+        $sql .= " AND soc.rowid=" . ((int)$selected_soc);
     }
     $sql .= " AND f.entity IN (" . getEntity('supplier_invoice') . ")";
     $sql .= " GROUP BY p.rowid, p.ref, p.label, p.fk_product_type";

@@ -76,7 +76,7 @@ function payment_prepare_head(Paiement $object)
  * Returns an array with the tabs for the "Bannkline" section
  * It loads tabs from modules looking for the entity payment
  *
- * @param   int     $id     ID of bank line
+ * @param int $id ID of bank line
  * @return  array           Tabs for the Bankline section
  */
 function bankline_prepare_head($id)
@@ -157,7 +157,7 @@ function payment_supplier_prepare_head(Paiement $object)
 /**
  * Return array of valid payment mode
  *
- * @param   string  $paymentmethod      Filter on this payment method (''=none, 'paypal', 'stripe', ...)
+ * @param string $paymentmethod Filter on this payment method (''=none, 'paypal', 'stripe', ...)
  * @return  array                       Array of valid payment method
  */
 function getValidOnlinePaymentMethods($paymentmethod = '')
@@ -203,9 +203,9 @@ function getValidOnlinePaymentMethods($paymentmethod = '')
 /**
  * Return string with full online payment Url
  *
- * @param   string      $type       Type of URL ('free', 'order', 'invoice', 'contractline', 'member' ...)
- * @param   string      $ref        Ref of object
- * @param   int|float   $amount     Amount of money to request for
+ * @param string $type Type of URL ('free', 'order', 'invoice', 'contractline', 'member' ...)
+ * @param string $ref Ref of object
+ * @param int|float $amount Amount of money to request for
  * @return  string                  Url string
  */
 function showOnlinePaymentUrl($type, $ref, $amount = 0)
@@ -229,10 +229,10 @@ function showOnlinePaymentUrl($type, $ref, $amount = 0)
 /**
  * Return string with HTML link for online payment
  *
- * @param   string      $type       Type of URL ('free', 'order', 'invoice', 'contractline', 'member' ...)
- * @param   string      $ref        Ref of object
- * @param   string      $label      Text or HTML tag to display, if empty it display the URL
- * @param   int|float   $amount     Amount of money to request for
+ * @param string $type Type of URL ('free', 'order', 'invoice', 'contractline', 'member' ...)
+ * @param string $ref Ref of object
+ * @param string $label Text or HTML tag to display, if empty it display the URL
+ * @param int|float $amount Amount of money to request for
  * @return  string                  Url string
  */
 function getHtmlOnlinePaymentLink($type, $ref, $label = '', $amount = 0)
@@ -246,12 +246,12 @@ function getHtmlOnlinePaymentLink($type, $ref, $label = '', $amount = 0)
 /**
  * Return string with full Url
  *
- * @param   int         $mode             0=True url, 1=Url formatted with colors
- * @param   string      $type             Type of URL ('free', 'order', 'invoice', 'contractline', 'member', 'boothlocation', ...)
- * @param   string      $ref              Ref of object
- * @param   int|float   $amount           Amount of money to request for
- * @param   string      $freetag          Free tag (required and used for $type='free' only)
- * @param   int         $localorexternal  0=Url for browser, 1=Url for external access
+ * @param int $mode 0=True url, 1=Url formatted with colors
+ * @param string $type Type of URL ('free', 'order', 'invoice', 'contractline', 'member', 'boothlocation', ...)
+ * @param string $ref Ref of object
+ * @param int|float $amount Amount of money to request for
+ * @param string $freetag Free tag (required and used for $type='free' only)
+ * @param int $localorexternal 0=Url for browser, 1=Url for external access
  * @return  string                        Url string
  */
 function getOnlinePaymentUrl($mode, $type, $ref = '', $amount = 0, $freetag = 'your_tag', $localorexternal = 1)

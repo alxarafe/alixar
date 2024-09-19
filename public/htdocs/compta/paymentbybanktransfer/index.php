@@ -142,7 +142,7 @@ if (isModEnabled('supplier_invoice')) {
     $sql .= " AND pfd.ext_payment_id IS NULL";
     $sql .= " AND pfd.fk_facture_fourn = f.rowid";
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -224,7 +224,7 @@ if (isModEnabled('salaries')) {
     $resql2 = $db->query($sqlForSalary);
     if ($resql2) {
         $numRow = $db->num_rows($resql2);
-        $j = 0 ;
+        $j = 0;
 
         print '<div class="div-table-responsive-no-min">';
         print '<table class="noborder rightpercent">';

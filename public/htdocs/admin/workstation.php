@@ -50,7 +50,7 @@ $value = GETPOST('value', 'alpha');
 $error = 0;
 $setupnotempty = 0;
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 // Access control
 if (!$user->admin) {
@@ -100,7 +100,7 @@ if ($action == 'updateMask') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/workstation/doc/pdf_" . $modele . "_" . strtolower($tmpobjectkey) . ".modules.php", 0);
         if (file_exists($file)) {
@@ -157,7 +157,6 @@ if ($action == 'updateMask') {
     $constforval = 'WORKSTATION_' . strtoupper($tmpobjectkey) . "_ADDON";
     dolibarr_set_const($db, $constforval, $value, 'chaine', 0, '', $conf->entity);
 }
-
 
 
 /*

@@ -77,10 +77,10 @@ top_httphead();
 
 // Load original field value
 if (!empty($field) && !empty($element) && !empty($table_element) && !empty($fk_element)) {
-    $ext_element    = GETPOST('ext_element', 'alpha');
+    $ext_element = GETPOST('ext_element', 'alpha');
     $field = substr($field, 8); // remove prefix val_
     $type = GETPOST('type', 'alpha');
-    $loadmethod     = (GETPOST('loadmethod', 'alpha') ? GETPOST('loadmethod', 'alpha') : 'getValueFrom');
+    $loadmethod = (GETPOST('loadmethod', 'alpha') ? GETPOST('loadmethod', 'alpha') : 'getValueFrom');
 
     if ($element != 'order_supplier' && $element != 'invoice_supplier' && preg_match('/^([^_]+)_([^_]+)/i', $element, $regs)) {
         $element = $regs[1];

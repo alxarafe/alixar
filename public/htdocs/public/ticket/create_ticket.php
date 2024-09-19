@@ -51,7 +51,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -167,7 +167,7 @@ if (empty($reshook)) {
             // Ensure that contact is active and select first active contact
             $cid = -1;
             foreach ($contacts as $key => $contact) {
-                if ((int) $contact->statut == 1) {
+                if ((int)$contact->statut == 1) {
                     $cid = $key;
                     break;
                 }
@@ -394,7 +394,7 @@ if (empty($reshook)) {
                         $appli = $mysoc->name;
 
                         $subject = '[' . $appli . '] ' . $langs->transnoentities('TicketNewEmailSubject', $object->ref, $object->track_id);
-                        $message  = (getDolGlobalString('TICKET_MESSAGE_MAIL_NEW') !== '' ? getDolGlobalString('TICKET_MESSAGE_MAIL_NEW') : $langs->transnoentities('TicketNewEmailBody')) . '<br><br>';
+                        $message = (getDolGlobalString('TICKET_MESSAGE_MAIL_NEW') !== '' ? getDolGlobalString('TICKET_MESSAGE_MAIL_NEW') : $langs->transnoentities('TicketNewEmailBody')) . '<br><br>';
                         $message .= $langs->transnoentities('TicketNewEmailBodyInfosTicket') . '<br>';
 
                         $url_public_ticket = getDolGlobalString('TICKET_URL_PUBLIC_INTERFACE', dol_buildpath('/public/ticket/', 2)) . 'view.php?track_id=' . $object->track_id;

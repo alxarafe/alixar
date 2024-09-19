@@ -105,16 +105,16 @@ class Service
      *
      * @param string|resource $input
      *
+     * @return array|object|string
      * @throws ParseException
      *
-     * @return array|object|string
      */
     public function parse($input, string $contextUri = null, string &$rootElementName = null)
     {
         if (is_resource($input)) {
             // Unfortunately the XMLReader doesn't support streams. When it
             // does, we can optimize this.
-            $input = (string) stream_get_contents($input);
+            $input = (string)stream_get_contents($input);
         }
 
         // If input is empty, then it's safe to throw an exception
@@ -149,16 +149,16 @@ class Service
      * @param string|string[] $rootElementName
      * @param string|resource $input
      *
+     * @return array|object|string
      * @throws ParseException
      *
-     * @return array|object|string
      */
     public function expect($rootElementName, $input, string $contextUri = null)
     {
         if (is_resource($input)) {
             // Unfortunately the XMLReader doesn't support streams. When it
             // does, we can optimize this.
-            $input = (string) stream_get_contents($input);
+            $input = (string)stream_get_contents($input);
         }
 
         // If input is empty, then it's safe to throw an exception
@@ -170,7 +170,7 @@ class Service
         $r->contextUri = $contextUri;
         $r->XML($input, null, $this->options);
 
-        $rootElementName = (array) $rootElementName;
+        $rootElementName = (array)$rootElementName;
 
         foreach ($rootElementName as &$rEl) {
             if ('{' !== $rEl[0]) {

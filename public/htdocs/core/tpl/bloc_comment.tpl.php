@@ -1,5 +1,8 @@
 <?php
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\User\Classes\User;
+
 // Protection to avoid direct call of template
 if (empty($conf) || !is_object($conf)) {
     print "Error, template page can't be called as URL";
@@ -9,11 +12,9 @@ if (empty($conf) || !is_object($conf)) {
 // Require
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
-
 // Vars
 $userstatic = new User($db);
 $varpage = empty($contextpage) ? $_SERVER["PHP_SELF"] : $contextpage;
-
 
 // Add comment
 print '<br>';

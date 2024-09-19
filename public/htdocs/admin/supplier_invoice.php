@@ -110,7 +110,7 @@ if ($action == 'specimen') {  // For invoices
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/supplier_invoice/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -197,7 +197,7 @@ if ($action == 'set_SUPPLIER_INVOICE_FREE_TEXT') {
 
 $form = new Form($db);
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-supplier_invoice');
 
@@ -309,8 +309,6 @@ foreach ($dirmodels as $reldir) {
 }
 
 print '</table></div><br>';
-
-
 
 
 /*

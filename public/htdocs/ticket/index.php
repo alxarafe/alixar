@@ -80,7 +80,6 @@ $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
 // None
 
 
-
 /*
  * View
  */
@@ -165,16 +164,16 @@ $sql .= ' WHERE t.entity IN (' . getEntity('ticket') . ')';
 $sql .= dolSqlDateFilter('datec', 0, 0, $endyear);
 
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND t.fk_soc = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND t.fk_soc = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 
 // External users restriction
 if ($user->socid > 0) {
-    $sql .= " AND t.fk_soc= " . ((int) $user->socid);
+    $sql .= " AND t.fk_soc= " . ((int)$user->socid);
 } else {
     // For internals users,
     if (getDolGlobalString('TICKET_LIMIT_VIEW_ASSIGNED_ONLY') && !$user->hasRight('ticket', 'manage')) {
-        $sql .= " AND t.fk_user_assign = " . ((int) $user->id);
+        $sql .= " AND t.fk_user_assign = " . ((int)$user->id);
     }
 }
 $sql .= " GROUP BY t.fk_statut";
@@ -341,15 +340,15 @@ if ($user->hasRight('ticket', 'read')) {
     $sql .= ' WHERE t.entity IN (' . getEntity('ticket') . ')';
     $sql .= " AND t.fk_statut = 0";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND t.fk_soc = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND t.fk_soc = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
 
     if ($user->socid > 0) {
-        $sql .= " AND t.fk_soc= " . ((int) $user->socid);
+        $sql .= " AND t.fk_soc= " . ((int)$user->socid);
     } else {
         // Restricted to assigned user only
         if (getDolGlobalString('TICKET_LIMIT_VIEW_ASSIGNED_ONLY') && !$user->hasRight('ticket', 'manage')) {
-            $sql .= " AND t.fk_user_assign = " . ((int) $user->id);
+            $sql .= " AND t.fk_user_assign = " . ((int)$user->id);
         }
     }
     $sql .= $db->order("t.datec", "DESC");

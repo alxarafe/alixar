@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (C) 2015 Marcos García    <marcosgdf@gmail.com
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
  * Page to set how to autocalculate price for each level when option PRODUCT_MULTIPRICE is on.
  * This page is a tab in the setup of module Product if option PRODUIT_MULTIPRICES_ALLOW_AUTOCALC_PRICELEVEL is set.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -64,33 +66,33 @@ if ($action == 'update') {
 
         // Set $i_var_percent, the percent of price for level compared to an other level
         if ($i != 1) {
-            $i_var_percent = (float) price2num($var_percent[$i]);
+            $i_var_percent = (float)price2num($var_percent[$i]);
         }
 
-        $i_var_min_percent = (float) price2num($var_min_percent[$i]);
-        $i_fk_level = (int) $fk_level[$i];
+        $i_var_min_percent = (float)price2num($var_min_percent[$i]);
+        $i_fk_level = (int)$fk_level[$i];
 
         if ($i == 1) {
             $check1 = true;
             $check2 = $i_var_min_percent;
         } else {
             $check1 = $i_fk_level >= 1 && $i_fk_level <= $produit_multiprices_limit;
-            $check2 = $i_var_percent && ($i_var_min_percent || (string) $i_var_min_percent === '0');
+            $check2 = $i_var_percent && ($i_var_min_percent || (string)$i_var_min_percent === '0');
         }
 
         if (empty($i_var_percent) && empty($i_var_min_percent)) {
             //If the level is between range but percent fields are empty, then we ensure it does not exist in DB
-            $db->query("DELETE FROM " . MAIN_DB_PREFIX . "product_pricerules WHERE level = " . ((int) $i));
+            $db->query("DELETE FROM " . MAIN_DB_PREFIX . "product_pricerules WHERE level = " . ((int)$i));
             continue;
         }
 
         $sql = "INSERT INTO " . MAIN_DB_PREFIX . "product_pricerules (level, fk_level, var_percent, var_min_percent) VALUES (";
-        $sql .= ((int) $i) . ", " . $db->escape($i_fk_level) . ", " . $i_var_percent . ", " . $i_var_min_percent . ")";
+        $sql .= ((int)$i) . ", " . $db->escape($i_fk_level) . ", " . $i_var_percent . ", " . $i_var_min_percent . ")";
 
         if (!$db->query($sql)) {
             //If we could not create, then we try updating
             $sql = "UPDATE " . MAIN_DB_PREFIX . "product_pricerules";
-            $sql .= " SET fk_level = " . $db->escape($i_fk_level) . ", var_percent = " . $i_var_percent . ", var_min_percent = " . $i_var_min_percent . " WHERE level = " . ((int) $i);
+            $sql .= " SET fk_level = " . $db->escape($i_fk_level) . ", var_percent = " . $i_var_percent . ", var_min_percent = " . $i_var_min_percent . " WHERE level = " . ((int)$i);
 
             if (!$db->query($sql)) {
                 setEventMessages($langs->trans('ErrorSavingChanges'), null, 'errors');
@@ -158,11 +160,15 @@ for ($i = 1; $i <= $produit_multiprices_limit; $i++) {
         <tr class="liste_titre">
             <td style="text-align: center"><?php echo $langs->trans('PriceLevel') ?></td>
             <td style="text-align: center"><?php echo $langs->trans('Price') ?></td>
-            <td style="text-align: center"><?php echo $langs->trans('MinPrice') ?></td></tr>
+            <td style="text-align: center"><?php echo $langs->trans('MinPrice') ?></td>
+        </tr>
         <tr>
             <td class="fieldrequired" style="text-align: center"><?php echo $langs->trans('SellingPrice') ?> 1</td>
             <td></td>
-            <td style="text-align: center"><input type="text"  style="text-align: right" name="var_min_percent[1]" size="5" value="<?php echo price(isset($rules[1]) ? $rules[1]->var_min_percent : 0, 2) ?>"> <?php echo $langs->trans('PercentDiscountOver', $langs->trans('SellingPrice') . ' 1') ?></td>
+            <td style="text-align: center"><input type="text" style="text-align: right" name="var_min_percent[1]"
+                                                  size="5"
+                                                  value="<?php echo price(isset($rules[1]) ? $rules[1]->var_min_percent : 0, 2) ?>"> <?php echo $langs->trans('PercentDiscountOver', $langs->trans('SellingPrice') . ' 1') ?>
+            </td>
         </tr>
         <?php for ($i = 2; $i <= $produit_multiprices_limit; $i++) : ?>
             <tr>
@@ -170,13 +176,14 @@ for ($i = 1; $i <= $produit_multiprices_limit; $i++) {
                     echo $langs->trans('SellingPrice') . ' ' . $i;
                     // Label of price
                     $keyforlabel = 'PRODUIT_MULTIPRICES_LABEL' . $i;
-                if (getDolGlobalString($keyforlabel)) {
-                    print ' - ' . $langs->trans(getDolGlobalString($keyforlabel));
-                }
-                ?>
-                    </td>
+                    if (getDolGlobalString($keyforlabel)) {
+                        print ' - ' . $langs->trans(getDolGlobalString($keyforlabel));
+                    }
+                    ?>
+                </td>
                 <td style="text-align: center">
-                    <input type="text" style="text-align: right" name="var_percent[<?php echo $i ?>]" size="5" value="<?php echo price(isset($rules[$i]) ? $rules[$i]->var_percent : 0, 2) ?>">
+                    <input type="text" style="text-align: right" name="var_percent[<?php echo $i ?>]" size="5"
+                           value="<?php echo price(isset($rules[$i]) ? $rules[$i]->var_percent : 0, 2) ?>">
                     <?php
                     $return = array();
                     for ($j = 1; $j < $i; $j++) {
@@ -188,7 +195,8 @@ for ($i = 1; $i <= $produit_multiprices_limit; $i++) {
                     ?>
                 </td>
                 <td style="text-align: center">
-                    <input type="text" style="text-align: right" name="var_min_percent[<?php echo $i ?>]" size="5" value="<?php echo price(isset($rules[$i]) ? $rules[$i]->var_min_percent : 0, 2) ?>">
+                    <input type="text" style="text-align: right" name="var_min_percent[<?php echo $i ?>]" size="5"
+                           value="<?php echo price(isset($rules[$i]) ? $rules[$i]->var_min_percent : 0, 2) ?>">
                     <?php echo $langs->trans('PercentDiscountOver', $langs->transnoentitiesnoconv('SellingPrice') . ' ' . $i) ?>
                 </td>
             </tr>

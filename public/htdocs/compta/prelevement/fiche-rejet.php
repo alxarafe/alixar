@@ -214,7 +214,7 @@ $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_bons as p";
 $sql .= " , " . MAIN_DB_PREFIX . "prelevement_lignes as pl";
 $sql .= " , " . MAIN_DB_PREFIX . "societe as s";
 $sql .= " , " . MAIN_DB_PREFIX . "prelevement_rejet as pr";
-$sql .= " WHERE p.rowid=" . ((int) $object->id);
+$sql .= " WHERE p.rowid=" . ((int)$object->id);
 $sql .= " AND pl.fk_prelevement_bons = p.rowid";
 $sql .= " AND p.entity IN (" . getEntity('facture') . ")";
 $sql .= " AND pl.fk_soc = s.rowid";

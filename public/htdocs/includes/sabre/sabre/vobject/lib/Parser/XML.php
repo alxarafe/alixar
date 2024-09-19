@@ -50,7 +50,7 @@ class XML extends Parser
      * Optionally, it's possible to parse the input stream here.
      *
      * @param mixed $input
-     * @param int   $options any parser options (OPTION constants)
+     * @param int $options any parser options (OPTION constants)
      */
     public function __construct($input = null, $options = 0)
     {
@@ -65,11 +65,11 @@ class XML extends Parser
      * Parse xCal or xCard.
      *
      * @param resource|string $input
-     * @param int             $options
-     *
-     * @throws \Exception
+     * @param int $options
      *
      * @return \Sabre\VObject\Document
+     * @throws \Exception
+     *
      */
     public function parse($input = null, $options = 0)
     {
@@ -222,8 +222,8 @@ class XML extends Parser
             }
 
             $propertyNameExtended = ($this->root instanceof VCalendar
-                                      ? 'xcal'
-                                      : 'xcard') . ':' . $propertyName;
+                    ? 'xcal'
+                    : 'xcard') . ':' . $propertyName;
 
             switch ($propertyNameExtended) {
                 case 'xcal:geo':
@@ -248,10 +248,10 @@ class XML extends Parser
 
                 case 'xcal:freebusy':
                     $propertyType = 'freebusy';
-                    // We don't break because we only want to set
-                    // another property type.
+                // We don't break because we only want to set
+                // another property type.
 
-                    // no break
+                // no break
                 case 'xcal:categories':
                 case 'xcal:resources':
                 case 'xcal:exdate':
@@ -325,9 +325,9 @@ class XML extends Parser
      * Create a property.
      *
      * @param string $name
-     * @param array  $parameters
+     * @param array $parameters
      * @param string $type
-     * @param mixed  $value
+     * @param mixed $value
      */
     protected function createProperty(Component $parentComponent, $name, $parameters, $type, $value)
     {

@@ -30,6 +30,7 @@
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
 
 use Dolibarr\Code\Core\Classes\Conf;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 
 global $langs;
@@ -56,7 +57,6 @@ $error = 0;
 $ok = 0;
 
 
-
 /*
  *	View
  */
@@ -78,7 +78,7 @@ print $langs->trans("LastStepDesc") . '<br><br>';
 
 print '<table cellspacing="0" cellpadding="2">';
 
-$db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int) $conf->db->port);
+$db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int)$conf->db->port);
 
 if ($db->ok) {
     print '<tr><td><label for="login">' . $langs->trans("Login") . ' :</label></td><td>';

@@ -744,30 +744,29 @@ $localtax_typeList = array(
 );
 
 
-
 /*
  * Actions
  */
 
 $object = new stdClass();
 $parameters = array(
-    'id'            => $id,
-    'rowid'         => $rowid,
-    'code'          => $code,
-    'confirm'       => $confirm,
-    'entity'        => $entity,
-    'taborder'      => $taborder,
-    'tabname'       => $tabname,
-    'tablib'        => $tablib,
-    'tabsql'        => $tabsql,
-    'tabsqlsort'    => $tabsqlsort,
-    'tabfield'      => $tabfield,
+    'id' => $id,
+    'rowid' => $rowid,
+    'code' => $code,
+    'confirm' => $confirm,
+    'entity' => $entity,
+    'taborder' => $taborder,
+    'tabname' => $tabname,
+    'tablib' => $tablib,
+    'tabsql' => $tabsql,
+    'tabsqlsort' => $tabsqlsort,
+    'tabfield' => $tabfield,
     'tabfieldvalue' => $tabfieldvalue,
     'tabfieldinsert' => $tabfieldinsert,
-    'tabrowid'      => $tabrowid,
-    'tabcond'       => $tabcond,
-    'tabhelp'       => $tabhelp,
-    'tabcomplete'   => $tabcomplete
+    'tabrowid' => $tabrowid,
+    'tabcond' => $tabcond,
+    'tabhelp' => $tabhelp,
+    'tabcomplete' => $tabcomplete
 );
 $reshook = $hookmanager->executeHooks('doActions', $parameters, $object, $action); // Note that $action and $object may have been modified by some hooks
 if ($reshook < 0) {
@@ -942,7 +941,7 @@ if (empty($reshook)) {
                 $result = $db->query($sql);
                 if ($result) {
                     $obj = $db->fetch_object($result);
-                    $newid = ((int) $obj->newid) + 1;
+                    $newid = ((int)$obj->newid) + 1;
                 } else {
                     dol_print_error($db);
                 }
@@ -1067,10 +1066,10 @@ if (empty($reshook)) {
             if (in_array($rowidcol, array('code', 'code_iso'))) {
                 $sql .= " WHERE " . $db->sanitize($rowidcol) . " = '" . $db->escape($rowid) . "'";
             } else {
-                $sql .= " WHERE " . $db->sanitize($rowidcol) . " = " . ((int) $rowid);
+                $sql .= " WHERE " . $db->sanitize($rowidcol) . " = " . ((int)$rowid);
             }
             if (in_array('entity', $listfieldmodify)) {
-                $sql .= " AND entity = " . ((int) getEntity($tablename, 0));
+                $sql .= " AND entity = " . ((int)getEntity($tablename, 0));
             }
 
             dol_syslog("actionmodify", LOG_DEBUG);
@@ -1099,7 +1098,7 @@ if (empty($reshook)) {
         $tablename = $tabname[$id];
         $tablename = preg_replace('/^' . preg_quote(MAIN_DB_PREFIX, '/') . '/', '', $tablename);
 
-        $sql = "DELETE FROM " . MAIN_DB_PREFIX . $tablename . " WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+        $sql = "DELETE FROM " . MAIN_DB_PREFIX . $tablename . " WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
 
         dol_syslog("delete", LOG_DEBUG);
         $result = $db->query($sql);
@@ -1124,9 +1123,9 @@ if (empty($reshook)) {
         $tablename = preg_replace('/^' . preg_quote(MAIN_DB_PREFIX, '/') . '/', '', $tablename);
 
         if ($rowid) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET active = 1 WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET active = 1 WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
         } elseif ($code) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET active = 1 WHERE code = '" . $db->escape(dol_escape_htmltag($code)) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET active = 1 WHERE code = '" . $db->escape(dol_escape_htmltag($code)) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
         }
 
         $result = $db->query($sql);
@@ -1147,9 +1146,9 @@ if (empty($reshook)) {
         $tablename = preg_replace('/^' . preg_quote(MAIN_DB_PREFIX, '/') . '/', '', $tablename);
 
         if ($rowid) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET active = 0 WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET active = 0 WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
         } elseif ($code) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET active = 0 WHERE code = '" . $db->escape(dol_escape_htmltag($code)) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET active = 0 WHERE code = '" . $db->escape(dol_escape_htmltag($code)) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
         }
 
         $result = $db->query($sql);
@@ -1170,9 +1169,9 @@ if (empty($reshook)) {
         $tablename = preg_replace('/^' . preg_quote(MAIN_DB_PREFIX, '/') . '/', '', $tablename);
 
         if ($rowid) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET favorite = 1 WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET favorite = 1 WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
         } elseif ($code) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET favorite = 1 WHERE code = '" . $db->escape(dol_escape_htmltag($code)) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET favorite = 1 WHERE code = '" . $db->escape(dol_escape_htmltag($code)) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
         }
 
         $result = $db->query($sql);
@@ -1193,9 +1192,9 @@ if (empty($reshook)) {
         $tablename = preg_replace('/^' . preg_quote(MAIN_DB_PREFIX, '/') . '/', '', $tablename);
 
         if ($rowid) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET favorite = 0 WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET favorite = 0 WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
         } elseif ($code) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET favorite = 0 WHERE code = '" . $db->escape(dol_escape_htmltag($code)) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET favorite = 0 WHERE code = '" . $db->escape(dol_escape_htmltag($code)) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
         }
 
         $result = $db->query($sql);
@@ -1216,9 +1215,9 @@ if (empty($reshook)) {
         $tablename = preg_replace('/^' . preg_quote(MAIN_DB_PREFIX, '/') . '/', '', $tablename);
 
         if ($rowid) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET eec = 1 WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET eec = 1 WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
         } elseif ($code) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET eec = 1 WHERE code = '" . $db->escape(dol_escape_htmltag($code)) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET eec = 1 WHERE code = '" . $db->escape(dol_escape_htmltag($code)) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
         }
 
         $result = $db->query($sql);
@@ -1239,9 +1238,9 @@ if (empty($reshook)) {
         $tablename = preg_replace('/^' . preg_quote(MAIN_DB_PREFIX, '/') . '/', '', $tablename);
 
         if ($rowid) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET eec = 0 WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET eec = 0 WHERE " . $rowidcol . " = '" . $db->escape($rowid) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
         } elseif ($code) {
-            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET eec = 0 WHERE code = '" . $db->escape(dol_escape_htmltag($code)) . "'" . ($entity != '' ? " AND entity = " . (int) $entity : '');
+            $sql = "UPDATE " . MAIN_DB_PREFIX . $tablename . " SET eec = 0 WHERE code = '" . $db->escape(dol_escape_htmltag($code)) . "'" . ($entity != '' ? " AND entity = " . (int)$entity : '');
         }
 
         $result = $db->query($sql);
@@ -1277,9 +1276,9 @@ if ($id == DICT_CHARGESOCIALES && GETPOST('from') == 'accountancy') {
     $titlepicto = 'accountancy';
 }
 
-$param = '&id=' . urlencode((string) ($id));
+$param = '&id=' . urlencode((string)($id));
 if ($search_country_id || GETPOSTISSET('page') || GETPOST('button_removefilter', 'alpha') || GETPOST('button_removefilter.x', 'alpha') || GETPOST('button_removefilter_x', 'alpha')) {
-    $param .= '&search_country_id=' . urlencode((string) ($search_country_id ? $search_country_id : -1));
+    $param .= '&search_country_id=' . urlencode((string)($search_country_id ? $search_country_id : -1));
 }
 if ($search_code != '') {
     $param .= '&search_code=' . urlencode($search_code);
@@ -1288,7 +1287,7 @@ if ($search_active != '') {
     $param .= '&search_active=' . urlencode($search_active);
 }
 if ($entity != '') {
-    $param .= '&entity=' . (int) $entity;
+    $param .= '&entity=' . (int)$entity;
 }
 if ($from) {
     $param .= '&from=' . urlencode($from);
@@ -1332,7 +1331,7 @@ if ($id > 0) {
         $sql .= " WHERE 1 = 1";
     }
     if ($search_country_id > 0) {
-        $sql .= " AND c.rowid = " . ((int) $search_country_id);
+        $sql .= " AND c.rowid = " . ((int)$search_country_id);
     }
     if ($search_code != '') {
         $sql .= natural_search($tablecode, $search_code);
@@ -2615,11 +2614,11 @@ $db->close();
 /**
  *  Show fields in insert/edit mode
  *
- *  @param      array       $fieldlist      Array of fields
- *  @param      Object      $obj            If we show a particular record, obj is filled with record fields
- *  @param      string      $tabname        Name of SQL table
- *  @param      string      $context        'add'=Output field for the "add form", 'edit'=Output field for the "edit form", 'hide'=Output field for the "add form" but we don't want it to be rendered
- *  @return     string                      '' or value of entity into table
+ * @param array $fieldlist Array of fields
+ * @param Object $obj If we show a particular record, obj is filled with record fields
+ * @param string $tabname Name of SQL table
+ * @param string $context 'add'=Output field for the "add form", 'edit'=Output field for the "edit form", 'hide'=Output field for the "add form" but we don't want it to be rendered
+ * @return     string                      '' or value of entity into table
  */
 function fieldList($fieldlist, $obj = null, $tabname = '', $context = '')
 {
@@ -2806,7 +2805,7 @@ function fieldList($fieldlist, $obj = null, $tabname = '', $context = '')
             print '</td>';
         } elseif ($value == 'type_duration') {
             print '<td>';
-            print $form->selectTypeDuration('', (empty($obj->type_duration) ? '' : $obj->type_duration), array('i','h'));
+            print $form->selectTypeDuration('', (empty($obj->type_duration) ? '' : $obj->type_duration), array('i', 'h'));
             print '</td>';
         } else {
             $fieldValue = isset($obj->{$value}) ? $obj->{$value} : '';

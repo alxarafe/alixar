@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2011 Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2010-2012 Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -34,160 +34,172 @@ if (empty($conf) || !is_object($conf)) {
 
 <?php if ($conf->use_javascript_ajax) { ?>
     <?php echo $this->control->tpl['ajax_selecttype']; ?>
-<br>
+    <br>
     <?php echo $langs->trans("ThirdPartyType") ?>: &nbsp;
-<input type="radio" id="radiocompany" class="flat" name="private" value="0">
+    <input type="radio" id="radiocompany" class="flat" name="private" value="0">
     <?php echo $langs->trans("CompanyFoundation"); ?> &nbsp; &nbsp;
-<input type="radio" id="radioprivate" class="flat" name="private" value="1" checked> <?php echo $langs->trans("Individual"); ?> (<?php echo $langs->trans("ToCreateContactWithSameName") ?>)
-<br>
-<br>
+    <input type="radio" id="radioprivate" class="flat" name="private" value="1"
+           checked> <?php echo $langs->trans("Individual"); ?> (<?php echo $langs->trans("ToCreateContactWithSameName") ?>)
+    <br>
+    <br>
     <?php echo $this->control->tpl['ajax_selectcountry']; ?>
 <?php } ?>
 
 <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST" name="formsoc">
 
-<input type="hidden" name="action" value="add">
-<input type="hidden" name="canvas" value="<?php echo $canvas ?>">
-<input type="hidden" name="token" value="<?php echo newToken(); ?>">
-<input type="hidden" name="private" value="<?php echo $this->control->tpl['particulier']; ?>">
-<?php if ($this->control->tpl['auto_customercode'] || $this->control->tpl['auto_suppliercode']) { ?>
-<input type="hidden" name="code_auto" value="1">
-<?php } ?>
-
-<table class="border allwidth">
-
-<tr>
-    <td><span class="fieldrequired"><?php echo $langs->trans('LastName'); ?></span></td>
-    <td><input type="text" size="30" maxlength="60" name="nom" value="<?php echo $this->control->tpl['nom']; ?>"></td>
-    <?php if (getDolGlobalString('SOCIETE_USEPREFIX')) { ?>
-    <td><?php echo $langs->trans('Prefix'); ?></td>
-    <td><input type="text" size="5" maxlength="5" name="prefix_comm" value="<?php echo $this->control->tpl['prefix_comm']; ?>"></td>
+    <input type="hidden" name="action" value="add">
+    <input type="hidden" name="canvas" value="<?php echo $canvas ?>">
+    <input type="hidden" name="token" value="<?php echo newToken(); ?>">
+    <input type="hidden" name="private" value="<?php echo $this->control->tpl['particulier']; ?>">
+    <?php if ($this->control->tpl['auto_customercode'] || $this->control->tpl['auto_suppliercode']) { ?>
+        <input type="hidden" name="code_auto" value="1">
     <?php } ?>
-</tr>
 
-<tr>
-    <td><?php echo $langs->trans('FirstName'); ?></td>
-    <td><input type="text" size="30" name="firstname" value="<?php echo $this->control->tpl['firstname']; ?>"></td>
-    <td colspan="2">&nbsp;</td>
-</tr>
+    <table class="border allwidth">
 
-<tr>
-    <td><?php echo $langs->trans("UserTitle"); ?></td>
-    <td><?php echo $this->control->tpl['select_civility']; ?></td>
-    <td colspan="2">&nbsp;</td>
-</tr>
+        <tr>
+            <td><span class="fieldrequired"><?php echo $langs->trans('LastName'); ?></span></td>
+            <td><input type="text" size="30" maxlength="60" name="nom"
+                       value="<?php echo $this->control->tpl['nom']; ?>"></td>
+            <?php if (getDolGlobalString('SOCIETE_USEPREFIX')) { ?>
+                <td><?php echo $langs->trans('Prefix'); ?></td>
+                <td><input type="text" size="5" maxlength="5" name="prefix_comm"
+                           value="<?php echo $this->control->tpl['prefix_comm']; ?>"></td>
+            <?php } ?>
+        </tr>
 
-<tr>
-    <td width="25%"><span class="fieldrequired"><?php echo $langs->trans('ProspectCustomer'); ?></span></td>
-    <td width="25%"><?php echo $this->control->tpl['select_customertype']; ?></td>
+        <tr>
+            <td><?php echo $langs->trans('FirstName'); ?></td>
+            <td><input type="text" size="30" name="firstname" value="<?php echo $this->control->tpl['firstname']; ?>">
+            </td>
+            <td colspan="2">&nbsp;</td>
+        </tr>
 
-    <td width="25%"><?php echo $langs->trans('CustomerCode'); ?></td>
-    <td width="25%">
-        <table class="nobordernopadding">
+        <tr>
+            <td><?php echo $langs->trans("UserTitle"); ?></td>
+            <td><?php echo $this->control->tpl['select_civility']; ?></td>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+
+        <tr>
+            <td width="25%"><span class="fieldrequired"><?php echo $langs->trans('ProspectCustomer'); ?></span></td>
+            <td width="25%"><?php echo $this->control->tpl['select_customertype']; ?></td>
+
+            <td width="25%"><?php echo $langs->trans('CustomerCode'); ?></td>
+            <td width="25%">
+                <table class="nobordernopadding">
+                    <tr>
+                        <td><input type="text" name="code_client" size="16"
+                                   value="<?php echo $this->control->tpl['customercode']; ?>" maxlength="24"></td>
+                        <td><?php echo $this->control->tpl['help_customercode']; ?></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <?php if ($this->control->tpl['supplier_enabled']) { ?>
             <tr>
-                <td><input type="text" name="code_client" size="16" value="<?php echo $this->control->tpl['customercode']; ?>" maxlength="24"></td>
-                <td><?php echo $this->control->tpl['help_customercode']; ?></td>
+                <td><span class="fieldrequired"><?php echo $langs->trans('Supplier'); ?></span></td>
+                <td><?php echo $this->control->tpl['yn_supplier']; ?></td>
+                <td><?php echo $langs->trans('SupplierCode'); ?></td>
+                <td>
+                    <table class="nobordernopadding">
+                        <tr>
+                            <td><input type="text" name="code_fournisseur" size="16"
+                                       value="<?php echo $this->control->tpl['suppliercode']; ?>" maxlength="24"></td>
+                            <td><?php echo $this->control->tpl['help_suppliercode']; ?></td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
-        </table>
-    </td>
-</tr>
 
-<?php if ($this->control->tpl['supplier_enabled']) { ?>
-<tr>
-    <td><span class="fieldrequired"><?php echo $langs->trans('Supplier'); ?></span></td>
-    <td><?php echo $this->control->tpl['yn_supplier']; ?></td>
-    <td><?php echo $langs->trans('SupplierCode'); ?></td>
-    <td>
-        <table class="nobordernopadding">
+            <?php if (count($this->control->tpl['suppliercategory']) > 0) { ?>
+                <tr>
+                    <td><?php echo $langs->trans('SupplierCategory'); ?></td>
+                    <td colspan="3"><?php echo $this->control->tpl['select_suppliercategory']; ?></td>
+                </tr>
+            <?php }
+        }
+
+        if (isModEnabled('barcode')) { ?>
             <tr>
-                <td><input type="text" name="code_fournisseur" size="16" value="<?php echo $this->control->tpl['suppliercode']; ?>" maxlength="24"></td>
-                <td><?php echo $this->control->tpl['help_suppliercode']; ?></td>
+                <td><?php echo $langs->trans('Gencod'); ?></td>
+                <td colspan="3"><input type="text" name="barcode" value="<?php echo $this->control->tpl['barcode']; ?>">
+                </td>
             </tr>
-        </table>
-    </td>
-</tr>
+        <?php } ?>
 
-    <?php if (count($this->control->tpl['suppliercategory']) > 0) { ?>
-<tr>
-    <td><?php echo $langs->trans('SupplierCategory'); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['select_suppliercategory']; ?></td>
-</tr>
-    <?php }
-}
+        <tr>
+            <td class="tdtop"><?php echo $langs->trans('Address'); ?></td>
+            <td colspan="3"><textarea name="address" cols="40"
+                                      rows="3"><?php echo $this->control->tpl['address']; ?></textarea></td>
+        </tr>
 
-if (isModEnabled('barcode')) { ?>
-<tr>
-    <td><?php echo $langs->trans('Gencod'); ?></td>
-    <td colspan="3"><input type="text" name="barcode" value="<?php echo $this->control->tpl['barcode']; ?>"></td>
-</tr>
-<?php } ?>
+        <tr>
+            <td><?php echo $langs->trans('Zip'); ?></td>
+            <td><input size="6" type="text" name="zip"
+                       value="<?php echo $this->control->tpl['zip']; ?>"><?php echo $this->control->tpl['autofilltownfromzip']; ?>
+            </td>
+            <td><?php echo $langs->trans('Town'); ?></td>
+            <td><input type="text" name="town" value="<?php echo $this->control->tpl['town']; ?>"></td>
+        </tr>
 
-<tr>
-    <td class="tdtop"><?php echo $langs->trans('Address'); ?></td>
-    <td colspan="3"><textarea name="address" cols="40" rows="3"><?php echo $this->control->tpl['address']; ?></textarea></td>
-</tr>
+        <tr>
+            <td width="25%"><?php echo $langs->trans('Country'); ?></td>
+            <td colspan="3"><?php echo $this->control->tpl['select_country'];
+                echo $this->control->tpl['info_admin']; ?></td>
+        </tr>
 
-<tr>
-    <td><?php echo $langs->trans('Zip'); ?></td>
-    <td><input size="6" type="text" name="zip" value="<?php echo $this->control->tpl['zip']; ?>"><?php echo $this->control->tpl['autofilltownfromzip']; ?></td>
-    <td><?php echo $langs->trans('Town'); ?></td>
-    <td><input type="text" name="town" value="<?php echo $this->control->tpl['town']; ?>"></td>
-</tr>
+        <tr>
+            <td><?php echo $langs->trans('State'); ?></td>
+            <td colspan="3"><?php echo $this->control->tpl['select_state']; ?></td>
+        </tr>
 
-<tr>
-    <td width="25%"><?php echo $langs->trans('Country'); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['select_country']; echo $this->control->tpl['info_admin']; ?></td>
-</tr>
+        <tr>
+            <td><?php echo $langs->trans('Phone'); ?></td>
+            <td><input type="text" name="phone" value="<?php echo $this->control->tpl['phone']; ?>"></td>
+            <td><?php echo $langs->trans('PhoneMobile'); ?></td>
+            <td><input type="text" name="phone_mobile" value="<?php echo $this->control->tpl['phone_mobile']; ?>"></td>
+            <td><?php echo $langs->trans('Fax'); ?></td>
+            <td><input type="text" name="fax" value="<?php echo $this->control->tpl['fax']; ?>"></td>
+        </tr>
 
-<tr>
-    <td><?php echo $langs->trans('State'); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['select_state']; ?></td>
-</tr>
+        <tr>
+            <td><?php echo $langs->trans('EMail') . ($conf->global->SOCIETE_EMAIL_MANDATORY ? '*' : ''); ?></td>
+            <td><input type="text" name="email" size="32" value="<?php echo $this->control->tpl['email']; ?>"></td>
+            <td><?php echo $langs->trans('Web'); ?></td>
+            <td><input type="text" name="url" size="32" value="<?php echo $this->control->tpl['url']; ?>"></td>
+        </tr>
 
-<tr>
-    <td><?php echo $langs->trans('Phone'); ?></td>
-    <td><input type="text" name="phone" value="<?php echo $this->control->tpl['phone']; ?>"></td>
-    <td><?php echo $langs->trans('PhoneMobile'); ?></td>
-    <td><input type="text" name="phone_mobile" value="<?php echo $this->control->tpl['phone_mobile']; ?>"></td>
-    <td><?php echo $langs->trans('Fax'); ?></td>
-    <td><input type="text" name="fax" value="<?php echo $this->control->tpl['fax']; ?>"></td>
-</tr>
+        <?php if (getDolGlobalInt('MAIN_MULTILANGS')) { ?>
+            <tr>
+                <td><?php echo $langs->trans("DefaultLang"); ?></td>
+                <td colspan="3"><?php echo $this->control->tpl['select_lang']; ?></td>
+            </tr>
+        <?php } ?>
 
-<tr>
-    <td><?php echo $langs->trans('EMail') . ($conf->global->SOCIETE_EMAIL_MANDATORY ? '*' : ''); ?></td>
-    <td><input type="text" name="email" size="32" value="<?php echo $this->control->tpl['email']; ?>"></td>
-    <td><?php echo $langs->trans('Web'); ?></td>
-    <td><input type="text" name="url" size="32" value="<?php echo $this->control->tpl['url']; ?>"></td>
-</tr>
+        <tr>
+            <td><?php echo $langs->trans('VATIsUsed'); ?></td>
+            <td colspan="3"><?php echo $this->control->tpl['yn_assujtva']; ?></td>
+        </tr>
 
-<?php if (getDolGlobalInt('MAIN_MULTILANGS')) { ?>
-<tr>
-    <td><?php echo $langs->trans("DefaultLang"); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['select_lang']; ?></td>
-</tr>
-<?php } ?>
+        <?php if (!empty($this->control->tpl['localtax'])) {
+            echo $this->control->tpl['localtax'];
+        } ?>
 
-<tr>
-    <td><?php echo $langs->trans('VATIsUsed'); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['yn_assujtva']; ?></td>
-</tr>
+        <?php if ($user->hasRight('societe', 'client', 'voir')) { ?>
+            <tr>
+                <td><?php echo $langs->trans("AllocateCommercial"); ?></td>
+                <td colspan="3"><?php echo $this->control->tpl['select_users']; ?></td>
+            </tr>
+        <?php } ?>
 
-<?php if (!empty($this->control->tpl['localtax'])) {
-    echo $this->control->tpl['localtax'];
-} ?>
+        <tr>
+            <td colspan="4" class="center"><input type="submit" class="button"
+                                                  value="<?php echo $langs->trans('AddThirdParty'); ?>"></td>
+        </tr>
 
-<?php if ($user->hasRight('societe', 'client', 'voir')) { ?>
-<tr>
-    <td><?php echo $langs->trans("AllocateCommercial"); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['select_users']; ?></td>
-</tr>
-<?php } ?>
-
-<tr>
-    <td colspan="4" class="center"><input type="submit" class="button" value="<?php echo $langs->trans('AddThirdParty'); ?>"></td>
-</tr>
-
-</table>
+    </table>
 </form>
 
 <!-- END PHP TEMPLATE -->

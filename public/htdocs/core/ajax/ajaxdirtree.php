@@ -358,19 +358,18 @@ if ((!isset($mode) || $mode != 'noajax') && is_object($db)) {
 }
 
 
-
 /**
  * treeOutputForAbsoluteDir
  *
- * @param   array   $sqltree                Sqltree
- * @param   string  $selecteddir            Selected dir
- * @param   string  $fullpathselecteddir    Full path of selected dir
- * @param   string  $modulepart             Modulepart
- * @param   string  $websitekey             Website key
- * @param   int     $pageid                 Page id
- * @param   string  $preopened              Current open dir
- * @param   string  $fullpathpreopened      Full path of current open dir
- * @param   int     $depth                  Depth
+ * @param array $sqltree Sqltree
+ * @param string $selecteddir Selected dir
+ * @param string $fullpathselecteddir Full path of selected dir
+ * @param string $modulepart Modulepart
+ * @param string $websitekey Website key
+ * @param int $pageid Page id
+ * @param string $preopened Current open dir
+ * @param string $fullpathpreopened Full path of current open dir
+ * @param int $depth Depth
  * @return  void
  */
 function treeOutputForAbsoluteDir($sqltree, $selecteddir, $fullpathselecteddir, $modulepart, $websitekey, $pageid, $preopened, $fullpathpreopened, $depth = 0)

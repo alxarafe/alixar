@@ -48,8 +48,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 $langs->loadLangs(array("companies", "other", "opensurveys"));
 
 // Get parameters
-$action   = GETPOST('action', 'aZ09');
-$cancel   = GETPOST('cancel', 'alpha');
+$action = GETPOST('action', 'aZ09');
+$cancel = GETPOST('cancel', 'alpha');
 $SECUREKEY = GETPOST("securekey");
 $entity = GETPOSTINT('entity') ? GETPOSTINT('entity') : $conf->entity;
 $backtopage = '';

@@ -65,7 +65,7 @@ class DolHooksCollector extends RequestDataCollector
     /**
      *  Return widget settings
      *
-     *  @return     array<string,array{icon?:string,widget?:string,map:string,default:int|string}>  Array
+     * @return     array<string,array{icon?:string,widget?:string,map:string,default:int|string}>  Array
      */
     public function getWidgets()
     {

@@ -145,7 +145,7 @@ if ($id > 0 || !empty($ref)) {
 
     $param = "&id=" . $object->id;
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($search_invoice_date_start) {
         $param .= '&search_invoice_date_start_day=' . dol_print_date($search_invoice_date_start, '%d') . '&search_invoice_date_start_month=' . dol_print_date($search_invoice_date_start, '%m') . '&search_invoice_date_start_year=' . dol_print_date($search_invoice_date_start, '%Y');
@@ -219,12 +219,12 @@ if ($id > 0 || !empty($ref)) {
             $sql .= " AND f.fk_statut > 0";
             $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
             $sql .= " AND d.fk_facture = f.rowid";
-            $sql .= " AND d.fk_product = " . ((int) $object->id);
+            $sql .= " AND d.fk_product = " . ((int)$object->id);
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             if (!empty($socid)) {
-                $sql .= " AND f.fk_soc = " . ((int) $socid);
+                $sql .= " AND f.fk_soc = " . ((int)$socid);
             }
             $sql .= " AND d.buy_price_ht IS NOT NULL";
             // We should not use this here. Option ForceBuyingPriceIfNull should have effect only when inserting data. Once data is recorded, it must be used as it is for report.

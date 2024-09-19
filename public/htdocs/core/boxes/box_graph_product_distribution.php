@@ -18,6 +18,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Comm\Classes\PropaleStats;
 use Dolibarr\Code\Commande\Classes\CommandeStats;
 use Dolibarr\Code\Compta\Classes\FactureStats;
@@ -28,8 +29,6 @@ use Dolibarr\Code\Core\Classes\DolGraph;
  *  \ingroup    invoices
  *  \brief      Box to show graph of invoices per month
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
 
 /**
  * Class to manage the box to show last invoices

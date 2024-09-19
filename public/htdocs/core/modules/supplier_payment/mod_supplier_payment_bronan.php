@@ -65,8 +65,8 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -77,7 +77,7 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -89,8 +89,8 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if KO (there is a conflict), true if OK
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if KO (there is a conflict), true if OK
      */
     public function canBeActivated($object)
     {
@@ -125,9 +125,9 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
     /**
      *  Return next free value
      *
-     *  @param  Societe         $objsoc     Object thirdparty
-     *  @param  PaiementFourn   $object     Object we need next value for
-     *  @return string|-1                   Value if OK, -1 if KO
+     * @param Societe $objsoc Object thirdparty
+     * @param PaiementFourn $object Object we need next value for
+     * @return string|-1                   Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $object)
     {

@@ -31,7 +31,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 // Load translation files required by page
 $langs->loadLangs(array('users', 'admin'));
 
-$action = (string) GETPOST('action', 'aZ09');
+$action = (string)GETPOST('action', 'aZ09');
 $id = GETPOSTINT('id');
 
 // Security check
@@ -62,10 +62,10 @@ if (empty($reshook)) {
         $edituser = new User($db);
         $edituser->fetch($id);
 
-        $edituser->clicktodial_url = (string) GETPOST("url", "alpha");
-        $edituser->clicktodial_login = (string) GETPOST("login", "alpha");
-        $edituser->clicktodial_password = (string) GETPOST("password", "alpha");
-        $edituser->clicktodial_poste = (string) GETPOST("poste", "alpha");
+        $edituser->clicktodial_url = (string)GETPOST("url", "alpha");
+        $edituser->clicktodial_login = (string)GETPOST("login", "alpha");
+        $edituser->clicktodial_password = (string)GETPOST("password", "alpha");
+        $edituser->clicktodial_poste = (string)GETPOST("poste", "alpha");
 
         $result = $edituser->update_clicktodial();
         if ($result < 0) {
@@ -112,7 +112,7 @@ if ($id > 0) {
     $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
     $morehtmlref .= '</a>';
 
-    $urltovirtualcard = '/user/virtualcard.php?id=' . ((int) $object->id);
+    $urltovirtualcard = '/user/virtualcard.php?id=' . ((int)$object->id);
     $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl") . ' - ' . $object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
     dol_banner_tab($object, 'id', $linkback, $user->hasRight('user', 'user', 'lire') || $user->admin, 'rowid', 'ref', $morehtmlref);

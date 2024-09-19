@@ -37,14 +37,14 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ecm.lib.php';
 // Load translation files required by page
 $langs->loadLangs(array('ecm', 'companies', 'other'));
 
-$action     = GETPOST('action', 'alpha');
-$cancel     = GETPOST('cancel', 'aZ09');
+$action = GETPOST('action', 'alpha');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 
-$module  = GETPOST('module', 'alpha');
+$module = GETPOST('module', 'alpha');
 $website = GETPOST('website', 'alpha');
-$pageid  = GETPOSTINT('pageid');
+$pageid = GETPOSTINT('pageid');
 if (empty($module)) {
     $module = 'ecm';
 }
@@ -427,7 +427,7 @@ print $nbofiles;
 if ($ecmdir->id > 0) {
     // Test if nb is same than in cache
     if ($nbofiles != $ecmdir->cachenbofdoc) {
-        $ecmdir->changeNbOfFiles((string) $nbofiles);
+        $ecmdir->changeNbOfFiles((string)$nbofiles);
     }
 }
 print '</td></tr>';
@@ -447,7 +447,6 @@ if ($action == 'edit') {
 }
 
 print dol_get_fiche_end();
-
 
 
 // Actions buttons

@@ -39,7 +39,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and get of entity must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : (!empty($_GET['e']) ? (int) $_GET['e'] : (!empty($_POST['e']) ? (int) $_POST['e'] : 1))));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : (!empty($_GET['e']) ? (int)$_GET['e'] : (!empty($_POST['e']) ? (int)$_POST['e'] : 1))));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -49,7 +49,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
 
 // Hook to be used by external payment modules (ie Payzen, ...)
 $hookmanager = new HookManager($db);
@@ -275,7 +274,7 @@ if (getDolGlobalString('PROJECT_IMAGE_PUBLIC_SUGGEST_BOOTH')) {
 }
 
 print '<table id="welcome" class="center">' . "\n";
-$text  = '<tr><td class="textpublicpayment"><br><strong>' . $langs->trans("EvntOrgRegistrationWelcomeMessage") . '</strong></td></tr>' . "\n";
+$text = '<tr><td class="textpublicpayment"><br><strong>' . $langs->trans("EvntOrgRegistrationWelcomeMessage") . '</strong></td></tr>' . "\n";
 $text .= '<tr><td class="textpublicpayment">' . $langs->trans("EvntOrgVoteHelpMessage") . ' : "' . $project->title . '".<br><br></td></tr>' . "\n";
 $text .= '<tr><td class="textpublicpayment">' . $project->note_public . '</td></tr>' . "\n";
 print $text;

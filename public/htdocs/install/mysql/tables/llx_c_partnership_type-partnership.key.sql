@@ -16,4 +16,5 @@
 --
 -- ========================================================================
 
-ALTER TABLE llx_c_partnership_type ADD UNIQUE INDEX uk_c_partnership_type(entity, code);
+ALTER TABLE llx_c_partnership_type
+    ADD UNIQUE INDEX uk_c_partnership_type(entity, code);

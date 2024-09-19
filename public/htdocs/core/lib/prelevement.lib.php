@@ -32,7 +32,7 @@ use Dolibarr\Code\Compta\Classes\BonPrelevement;
 /**
  * Prepare array with list of tabs
  *
- * @param   BonPrelevement  $object     Object related to tabs
+ * @param BonPrelevement $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function prelevement_prepare_head(BonPrelevement $object)
@@ -93,9 +93,9 @@ function prelevement_prepare_head(BonPrelevement $object)
 /**
  *  Check need data to create standigns orders receipt file
  *
- *  @param  string  $type       'bank-transfer' or 'direct-debit'
+ * @param string $type 'bank-transfer' or 'direct-debit'
  *
- *  @return     int     -1 if ko 0 if ok
+ * @return     int     -1 if ko 0 if ok
  */
 function prelevement_check_config($type = 'direct-debit')
 {
@@ -120,13 +120,13 @@ function prelevement_check_config($type = 'direct-debit')
     return 0;
 }
 
-    /**
+/**
  *  Return array head with list of tabs to view object information
  *
- *  @param  BonPrelevement  $object             Member
- *  @param  int             $nbOfInvoices       No of invoices
- *  @param  int             $nbOfSalaryInvoice  No of salary invoices
- *  @return array                               head
+ * @param BonPrelevement $object Member
+ * @param int $nbOfInvoices No of invoices
+ * @param int $nbOfSalaryInvoice No of salary invoices
+ * @return array                               head
  */
 function bon_prelevement_prepare_head(BonPrelevement $object, $nbOfInvoices, $nbOfSalaryInvoice)
 {

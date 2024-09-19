@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\ModeleProductCode;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *       \file       htdocs/core/modules/product/mod_codeproduct_leopard.php
@@ -59,8 +63,8 @@ class mod_codeproduct_leopard extends ModeleProductCode
     /**
      *  Return description of module
      *
-     *  @param  Translate   $langs  Object langs
-     *  @return string              Description of module
+     * @param Translate $langs Object langs
+     * @return string              Description of module
      */
     public function info($langs)
     {
@@ -71,9 +75,9 @@ class mod_codeproduct_leopard extends ModeleProductCode
     /**
      * Return an example of result returned by getNextValue
      *
-     * @param   Translate   $langs      Object langs
-     * @param   Product     $objproduct     Object product
-     * @param   int         $type       Type of third party (1:customer, 2:supplier, -1:autodetect)
+     * @param Translate $langs Object langs
+     * @param Product $objproduct Object product
+     * @param int $type Type of third party (1:customer, 2:supplier, -1:autodetect)
      * @return  string                  Return string example
      */
     public function getExample($langs, $objproduct = null, $type = -1)
@@ -84,8 +88,8 @@ class mod_codeproduct_leopard extends ModeleProductCode
     /**
      * Return an example of result returned by getNextValue
      *
-     * @param   Product|string  $objproduct Object product
-     * @param   int             $type       Type of third party (1:customer, 2:supplier, -1:autodetect)
+     * @param Product|string $objproduct Object product
+     * @param int $type Type of third party (1:customer, 2:supplier, -1:autodetect)
      * @return  string                      Return next value
      */
     public function getNextValue($objproduct = '', $type = -1)
@@ -97,11 +101,11 @@ class mod_codeproduct_leopard extends ModeleProductCode
     /**
      *  Check validity of code according to its rules
      *
-     *  @param  DoliDB      $db         Database handler
-     *  @param  string      $code       Code to check/correct
-     *  @param  Product     $product    Object product
-     *  @param  int         $type       0 = product , 1 = service
-     *  @return int                     0 if OK
+     * @param DoliDB $db Database handler
+     * @param string $code Code to check/correct
+     * @param Product $product Object product
+     * @param int $type 0 = product , 1 = service
+     * @return int                     0 if OK
      *                                  -1 ErrorBadProductCodeSyntax
      *                                  -2 ErrorProductCodeRequired
      *                                  -3 ErrorProductCodeAlreadyUsed

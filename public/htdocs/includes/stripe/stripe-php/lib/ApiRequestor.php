@@ -106,21 +106,21 @@ class ApiRequestor
     }
 
     /**
-     * @param string     $method
-     * @param string     $url
+     * @param string $method
+     * @param string $url
      * @param null|array $params
      * @param null|array $headers
      *
+     * @return array tuple containing (ApiReponse, API key)
      * @throws Exception\ApiErrorException
      *
-     * @return array tuple containing (ApiReponse, API key)
      */
     public function request($method, $url, $params = null, $headers = null)
     {
         $params = $params ?: [];
         $headers = $headers ?: [];
         list($rbody, $rcode, $rheaders, $myApiKey) =
-        $this->_requestRaw($method, $url, $params, $headers);
+            $this->_requestRaw($method, $url, $params, $headers);
         $json = $this->_interpretResponse($rbody, $rcode, $rheaders);
         $resp = new ApiResponse($rbody, $rcode, $rheaders, $json);
 
@@ -128,8 +128,8 @@ class ApiRequestor
     }
 
     /**
-     * @param string     $method
-     * @param string     $url
+     * @param string $method
+     * @param string $url
      * @param callable $readBodyChunkCallable
      * @param null|array $params
      * @param null|array $headers
@@ -141,7 +141,7 @@ class ApiRequestor
         $params = $params ?: [];
         $headers = $headers ?: [];
         list($rbody, $rcode, $rheaders, $myApiKey) =
-        $this->_requestRawStreaming($method, $url, $params, $headers, $readBodyChunkCallable);
+            $this->_requestRawStreaming($method, $url, $params, $headers, $readBodyChunkCallable);
         if ($rcode >= 300) {
             $this->_interpretResponse($rbody, $rcode, $rheaders);
         }
@@ -160,7 +160,7 @@ class ApiRequestor
     {
         if (!\is_array($resp) || !isset($resp['error'])) {
             $msg = "Invalid response object from API: {$rbody} "
-              . "(HTTP response code was {$rcode})";
+                . "(HTTP response code was {$rcode})";
 
             throw new Exception\UnexpectedValueException($msg);
         }
@@ -182,10 +182,10 @@ class ApiRequestor
      * @static
      *
      * @param string $rbody
-     * @param int    $rcode
-     * @param array  $rheaders
-     * @param array  $resp
-     * @param array  $errorData
+     * @param int $rcode
+     * @param array $rheaders
+     * @param array $resp
+     * @param array $errorData
      *
      * @return Exception\ApiErrorException
      */
@@ -208,7 +208,7 @@ class ApiRequestor
                     return Exception\IdempotencyException::factory($msg, $rcode, $rbody, $resp, $rheaders, $code);
                 }
 
-                // no break
+            // no break
             case 404:
                 return Exception\InvalidRequestException::factory($msg, $rcode, $rbody, $resp, $rheaders, $code, $param);
 
@@ -233,10 +233,10 @@ class ApiRequestor
      * @static
      *
      * @param bool|string $rbody
-     * @param int         $rcode
-     * @param array       $rheaders
-     * @param array       $resp
-     * @param string      $errorCode
+     * @param int $rcode
+     * @param array $rheaders
+     * @param array $resp
+     * @param string $errorCode
      *
      * @return Exception\OAuth\OAuthErrorException
      */
@@ -316,7 +316,7 @@ class ApiRequestor
      * @static
      *
      * @param string $apiKey
-     * @param null   $clientInfo
+     * @param null $clientInfo
      *
      * @return array
      */
@@ -360,9 +360,9 @@ class ApiRequestor
 
         if (!$myApiKey) {
             $msg = 'No API key provided.  (HINT: set your API key using '
-              . '"Stripe::setApiKey(<API-KEY>)".  You can generate API keys from '
-              . 'the Stripe web interface.  See https://stripe.com/api for '
-              . 'details, or email support@stripe.com if you have any questions.';
+                . '"Stripe::setApiKey(<API-KEY>)".  You can generate API keys from '
+                . 'the Stripe web interface.  See https://stripe.com/api for '
+                . 'details, or email support@stripe.com if you have any questions.';
 
             throw new Exception\AuthenticationException($msg);
         }
@@ -384,8 +384,8 @@ class ApiRequestor
             );
             if (\count($optionKeysInParams) > 0) {
                 $message = \sprintf('Options found in $params: %s. Options should '
-                  . 'be passed in their own array after $params. (HINT: pass an '
-                  . 'empty array to $params if you do not have any.)', \implode(', ', $optionKeysInParams));
+                    . 'be passed in their own array after $params. (HINT: pass an '
+                    . 'empty array to $params if you do not have any.)', \implode(', ', $optionKeysInParams));
                 \trigger_error($message, \E_USER_WARNING);
             }
         }
@@ -437,10 +437,10 @@ class ApiRequestor
      * @param array $params
      * @param array $headers
      *
-     * @throws Exception\AuthenticationException
+     * @return array
      * @throws Exception\ApiConnectionException
      *
-     * @return array
+     * @throws Exception\AuthenticationException
      */
     private function _requestRaw($method, $url, $params, $headers)
     {
@@ -477,10 +477,10 @@ class ApiRequestor
      * @param array $headers
      * @param callable $readBodyChunkCallable
      *
-     * @throws Exception\AuthenticationException
+     * @return array
      * @throws Exception\ApiConnectionException
      *
-     * @return array
+     * @throws Exception\AuthenticationException
      */
     private function _requestRawStreaming($method, $url, $params, $headers, $readBodyChunkCallable)
     {
@@ -514,9 +514,9 @@ class ApiRequestor
     /**
      * @param resource $resource
      *
+     * @return \CURLFile|string
      * @throws Exception\InvalidArgumentException
      *
-     * @return \CURLFile|string
      */
     private function _processResourceParam($resource)
     {
@@ -539,13 +539,13 @@ class ApiRequestor
 
     /**
      * @param string $rbody
-     * @param int    $rcode
-     * @param array  $rheaders
-     *
-     * @throws Exception\UnexpectedValueException
-     * @throws Exception\ApiErrorException
+     * @param int $rcode
+     * @param array $rheaders
      *
      * @return array
+     * @throws Exception\ApiErrorException
+     *
+     * @throws Exception\UnexpectedValueException
      */
     private function _interpretResponse($rbody, $rcode, $rheaders)
     {
@@ -553,7 +553,7 @@ class ApiRequestor
         $jsonError = \json_last_error();
         if (null === $resp && \JSON_ERROR_NONE !== $jsonError) {
             $msg = "Invalid response body from API: {$rbody} "
-              . "(HTTP response code was {$rcode}, json_last_error() was {$jsonError})";
+                . "(HTTP response code was {$rcode}, json_last_error() was {$jsonError})";
 
             throw new Exception\UnexpectedValueException($msg, $rcode);
         }

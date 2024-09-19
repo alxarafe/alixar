@@ -65,11 +65,11 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 if (isModEnabled('supplier_proposal')) {
-    }
+}
 if (isModEnabled("product")) {
 }
 if (isModEnabled('project')) {
-    }
+}
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
 
 if (isModEnabled('variants')) {
@@ -86,19 +86,19 @@ if (isModEnabled('incoterm')) {
 // Get Parameters
 $id = GETPOSTINT('id');
 $ref = GETPOST('ref', 'alpha');
-$action      = GETPOST('action', 'alpha');
-$confirm     = GETPOST('confirm', 'alpha');
+$action = GETPOST('action', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'purchaseordercard'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');
 
-$socid     = GETPOSTINT('socid');
+$socid = GETPOSTINT('socid');
 $projectid = GETPOSTINT('projectid');
-$cancel    = GETPOST('cancel', 'alpha');
-$lineid    = GETPOSTINT('lineid');
-$origin    = GETPOST('origin', 'alpha');
-$originid  = (GETPOSTINT('originid') ? GETPOSTINT('originid') : GETPOSTINT('origin_id')); // For backward compatibility
-$rank      = (GETPOSTINT('rank') > 0) ? GETPOSTINT('rank') : -1;
+$cancel = GETPOST('cancel', 'alpha');
+$lineid = GETPOSTINT('lineid');
+$origin = GETPOST('origin', 'alpha');
+$originid = (GETPOSTINT('originid') ? GETPOSTINT('originid') : GETPOSTINT('origin_id')); // For backward compatibility
+$rank = (GETPOSTINT('rank') > 0) ? GETPOSTINT('rank') : -1;
 
 // PDF
 $hidedetails = (GETPOSTINT('hidedetails') ? GETPOSTINT('hidedetails') : (getDolGlobalString('MAIN_GENERATE_DOCUMENTS_HIDE_DETAILS') ? 1 : 0));
@@ -149,17 +149,17 @@ $isdraft = (isset($object->statut) && ($object->statut == $object::STATUS_DRAFT)
 $result = restrictedArea($user, 'fournisseur', $object, 'commande_fournisseur', 'commande', 'fk_soc', 'rowid', $isdraft);
 
 // Common permissions
-$usercanread    = ($user->hasRight("fournisseur", "commande", "lire") || $user->hasRight("supplier_order", "lire"));
-$usercancreate  = ($user->hasRight("fournisseur", "commande", "creer") || $user->hasRight("supplier_order", "creer"));
-$usercandelete  = (($user->hasRight("fournisseur", "commande", "supprimer") || $user->hasRight("supplier_order", "supprimer")) || ($usercancreate && isset($object->statut) && $object->statut == $object::STATUS_DRAFT));
+$usercanread = ($user->hasRight("fournisseur", "commande", "lire") || $user->hasRight("supplier_order", "lire"));
+$usercancreate = ($user->hasRight("fournisseur", "commande", "creer") || $user->hasRight("supplier_order", "creer"));
+$usercandelete = (($user->hasRight("fournisseur", "commande", "supprimer") || $user->hasRight("supplier_order", "supprimer")) || ($usercancreate && isset($object->statut) && $object->statut == $object::STATUS_DRAFT));
 
 // Advanced permissions
 $usercanvalidate = ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && !empty($usercancreate)) || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight("fournisseur", "supplier_order_advance", "validate")));
 
 // Additional area permissions
-$usercanapprove         = $user->hasRight("fournisseur", "commande", "approuver");
-$usercanapprovesecond   = $user->hasRight("fournisseur", "commande", "approve2");
-$usercanorder           = $user->hasRight("fournisseur", "commande", "commander");
+$usercanapprove = $user->hasRight("fournisseur", "commande", "approuver");
+$usercanapprovesecond = $user->hasRight("fournisseur", "commande", "approve2");
+$usercanorder = $user->hasRight("fournisseur", "commande", "commander");
 if (!isModEnabled('reception')) {
     $usercanreceive = $user->hasRight("fournisseur", "commande", "receptionner");
 } else {
@@ -167,10 +167,10 @@ if (!isModEnabled('reception')) {
 }
 
 // Permissions for includes
-$permissionnote     = $usercancreate; // Used by the include of actions_setnotes.inc.php
-$permissiondellink  = $usercancreate; // Used by the include of actions_dellink.inc.php
-$permissiontoedit   = $usercancreate; // Used by the include of actions_lineupdown.inc.php
-$permissiontoadd    = $usercancreate; // Used by the include of actions_addupdatedelete.inc.php
+$permissionnote = $usercancreate; // Used by the include of actions_setnotes.inc.php
+$permissiondellink = $usercancreate; // Used by the include of actions_dellink.inc.php
+$permissiontoedit = $usercancreate; // Used by the include of actions_lineupdown.inc.php
+$permissiontoadd = $usercancreate; // Used by the include of actions_addupdatedelete.inc.php
 
 // Project permission
 $caneditproject = false;
@@ -192,7 +192,7 @@ if ($reshook < 0) {
 }
 
 if (empty($reshook)) {
-    $backurlforlist = constant('BASE_URL') . '/fourn/commande/list.php' . ($socid > 0 ? '?socid=' . ((int) $socid) : '');
+    $backurlforlist = constant('BASE_URL') . '/fourn/commande/list.php' . ($socid > 0 ? '?socid=' . ((int)$socid) : '');
 
     if (empty($backtopage) || ($cancel && empty($id))) {
         if (empty($backtopage) || ($cancel && strpos($backtopage, '__ID__'))) {
@@ -290,9 +290,9 @@ if (empty($reshook)) {
 
             // Update supplier
             $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'commande_fournisseur';
-            $sql .= ' SET fk_soc = ' . ((int) $new_socid);
-            $sql .= ' WHERE fk_soc = ' . ((int) $object->thirdparty->id);
-            $sql .= ' AND rowid = ' . ((int) $object->id);
+            $sql .= ' SET fk_soc = ' . ((int)$new_socid);
+            $sql .= ' WHERE fk_soc = ' . ((int)$object->thirdparty->id);
+            $sql .= ' AND rowid = ' . ((int)$object->id);
 
             $res = $db->query($sql);
 
@@ -305,8 +305,8 @@ if (empty($reshook)) {
                 foreach ($object->lines as $l) {
                     $sql = 'SELECT price, unitprice, tva_tx, ref_fourn';
                     $sql .= ' FROM ' . MAIN_DB_PREFIX . 'product_fournisseur_price';
-                    $sql .= ' WHERE fk_product = ' . ((int) $l->fk_product);
-                    $sql .= ' AND fk_soc = ' . ((int) $new_socid);
+                    $sql .= ' WHERE fk_product = ' . ((int)$l->fk_product);
+                    $sql .= ' AND fk_soc = ' . ((int)$new_socid);
                     $sql .= ' ORDER BY unitprice ASC';
 
                     $resql = $db->query($sql);
@@ -384,14 +384,14 @@ if (empty($reshook)) {
                 // Currently the "Re-open" also remove the billed flag because there is no button "Set unpaid" yet.
                 $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'commande_fournisseur';
                 $sql .= ' SET billed = 0';
-                $sql .= ' WHERE rowid = ' . ((int) $object->id);
+                $sql .= ' WHERE rowid = ' . ((int)$object->id);
 
                 $resql = $db->query($sql);
 
                 if ($newstatus == 0) {
                     $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'commande_fournisseur';
                     $sql .= ' SET fk_user_approve = null, fk_user_approve2 = null, date_approve = null, date_approve2 = null';
-                    $sql .= ' WHERE rowid = ' . ((int) $object->id);
+                    $sql .= ' WHERE rowid = ' . ((int)$object->id);
 
                     $resql = $db->query($sql);
                 }
@@ -809,7 +809,7 @@ if (empty($reshook)) {
             }
 
             $ttc = price2num(GETPOST('price_ttc'), '', 2);
-            $ht = (float) $ttc / (1 + ($vatratecleaned / 100));
+            $ht = (float)$ttc / (1 + ($vatratecleaned / 100));
             $price_base_type = 'HT';
         }
 
@@ -1253,19 +1253,19 @@ if (empty($reshook)) {
             $db->begin();
 
             // Creation commande
-            $object->ref_supplier   = GETPOST('refsupplier');
-            $object->socid          = $socid;
+            $object->ref_supplier = GETPOST('refsupplier');
+            $object->socid = $socid;
             $object->cond_reglement_id = GETPOSTINT('cond_reglement_id');
             $object->mode_reglement_id = GETPOSTINT('mode_reglement_id');
-            $object->fk_account        = GETPOSTINT('fk_account');
+            $object->fk_account = GETPOSTINT('fk_account');
             $object->note_private = GETPOST('note_private', 'restricthtml');
-            $object->note_public    = GETPOST('note_public', 'restricthtml');
+            $object->note_public = GETPOST('note_public', 'restricthtml');
             $object->delivery_date = $datelivraison;
             $object->fk_incoterms = GETPOSTINT('incoterm_id');
             $object->location_incoterms = GETPOST('location_incoterms', 'alpha');
             $object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
             $object->multicurrency_tx = price2num(GETPOST('originmulticurrency_tx', 'alpha'));
-            $object->fk_project       = GETPOSTINT('projectid');
+            $object->fk_project = GETPOSTINT('projectid');
 
             // Fill array 'array_options' with data from add form
             if (!$error) {
@@ -1360,9 +1360,9 @@ if (empty($reshook)) {
                                         foreach ($srcobject->lines as $li) {
                                             $sql = 'SELECT price, unitprice, tva_tx, remise_percent, entity, ref_fourn';
                                             $sql .= ' FROM ' . MAIN_DB_PREFIX . 'product_fournisseur_price';
-                                            $sql .= ' WHERE fk_product = ' . ((int) $li->fk_product);
+                                            $sql .= ' WHERE fk_product = ' . ((int)$li->fk_product);
                                             $sql .= ' AND entity IN (' . getEntity('product_fournisseur_price') . ')';
-                                            $sql .= ' AND fk_soc = ' . ((int) $object->socid);
+                                            $sql .= ' AND fk_soc = ' . ((int)$object->socid);
                                             $sql .= ' ORDER BY unitprice ASC';
 
                                             $resql = $db->query($sql);
@@ -1467,19 +1467,19 @@ if (empty($reshook)) {
                 $action = 'create';
             } else {
                 $db->commit();
-                header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . urlencode((string) ($id)));
+                header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . urlencode((string)($id)));
                 exit;
             }
         }
     }
 
     if ($action == 'webservice' && $permissiontoadd && GETPOST('mode', 'alpha') == "send" && !GETPOST('cancel', 'alpha')) {
-        $ws_url         = $object->thirdparty->webservices_url;
-        $ws_key         = $object->thirdparty->webservices_key;
-        $ws_user        = GETPOST('ws_user', 'alpha');
-        $ws_password    = GETPOST('ws_password', 'alpha');
-        $ws_entity      = GETPOSTINT('ws_entity');
-        $ws_thirdparty  = GETPOSTINT('ws_thirdparty');
+        $ws_url = $object->thirdparty->webservices_url;
+        $ws_key = $object->thirdparty->webservices_key;
+        $ws_user = GETPOST('ws_user', 'alpha');
+        $ws_password = GETPOST('ws_password', 'alpha');
+        $ws_entity = GETPOSTINT('ws_entity');
+        $ws_thirdparty = GETPOSTINT('ws_thirdparty');
 
         // NS and Authentication parameters
         $ws_ns = 'http://www.dolibarr.org/ns/';
@@ -1517,18 +1517,18 @@ if (empty($reshook)) {
 
                 if ($result_product["result"]["result_code"] == "OK") {
                     $order_lines[] = array(
-                        'desc'          => $line->product_desc,
-                        'type'          => $line->product_type,
-                        'product_id'    => $result_product["product"]["id"],
-                        'vat_rate'      => $line->tva_tx,
-                        'qty'           => $line->qty,
-                        'price'         => $line->price,
-                        'unitprice'     => $line->subprice,
-                        'total_net'     => $line->total_ht,
-                        'total_vat'     => $line->total_tva,
-                        'total'         => $line->total_ttc,
-                        'date_start'    => $line->date_start,
-                        'date_end'      => $line->date_end,
+                        'desc' => $line->product_desc,
+                        'type' => $line->product_type,
+                        'product_id' => $result_product["product"]["id"],
+                        'vat_rate' => $line->tva_tx,
+                        'qty' => $line->qty,
+                        'price' => $line->price,
+                        'unitprice' => $line->subprice,
+                        'total_net' => $line->total_ht,
+                        'total_vat' => $line->total_tva,
+                        'total' => $line->total_ttc,
+                        'date_start' => $line->date_start,
+                        'date_end' => $line->date_end,
                     );
                 }
             }
@@ -1536,11 +1536,11 @@ if (empty($reshook)) {
             //Prepare the order header
             $order = array(
                 'thirdparty_id' => $ws_thirdparty,
-                'date'          => dol_print_date(dol_now(), 'dayrfc'),
-                'total_net'     => $object->total_ht,
-                'total_var'     => $object->total_tva,
-                'total'         => $object->total_ttc,
-                'lines'         => $order_lines
+                'date' => dol_print_date(dol_now(), 'dayrfc'),
+                'total_net' => $object->total_ht,
+                'total_var' => $object->total_tva,
+                'total' => $object->total_ttc,
+                'lines' => $order_lines
             );
 
             $ws_parameters = array('authentication' => $ws_authentication, 'order' => $order);
@@ -1686,15 +1686,15 @@ if ($action == 'create') {
         } else {
             $soc = $objectsrc->thirdparty;
 
-            $cond_reglement_id  = (!empty($objectsrc->cond_reglement_id) ? $objectsrc->cond_reglement_id : (!empty($soc->cond_reglement_id) ? $soc->cond_reglement_id : 0));
-            $mode_reglement_id  = (!empty($objectsrc->mode_reglement_id) ? $objectsrc->mode_reglement_id : (!empty($soc->mode_reglement_id) ? $soc->mode_reglement_id : 0));
-            $fk_account         = (!empty($objectsrc->fk_account) ? $objectsrc->fk_account : (!empty($soc->fk_account) ? $soc->fk_account : 0));
-            $availability_id    = (!empty($objectsrc->availability_id) ? $objectsrc->availability_id : (!empty($soc->availability_id) ? $soc->availability_id : 0));
+            $cond_reglement_id = (!empty($objectsrc->cond_reglement_id) ? $objectsrc->cond_reglement_id : (!empty($soc->cond_reglement_id) ? $soc->cond_reglement_id : 0));
+            $mode_reglement_id = (!empty($objectsrc->mode_reglement_id) ? $objectsrc->mode_reglement_id : (!empty($soc->mode_reglement_id) ? $soc->mode_reglement_id : 0));
+            $fk_account = (!empty($objectsrc->fk_account) ? $objectsrc->fk_account : (!empty($soc->fk_account) ? $soc->fk_account : 0));
+            $availability_id = (!empty($objectsrc->availability_id) ? $objectsrc->availability_id : (!empty($soc->availability_id) ? $soc->availability_id : 0));
             $shipping_method_id = (!empty($objectsrc->shipping_method_id) ? $objectsrc->shipping_method_id : (!empty($soc->shipping_method_id) ? $soc->shipping_method_id : 0));
             $demand_reason_id = (!empty($objectsrc->demand_reason_id) ? $objectsrc->demand_reason_id : (!empty($soc->demand_reason_id) ? $soc->demand_reason_id : 0));
             //$remise_percent       = (!empty($objectsrc->remise_percent) ? $objectsrc->remise_percent : (!empty($soc->remise_supplier_percent) ? $soc->remise_supplier_percent : 0));
             //$remise_absolue       = (!empty($objectsrc->remise_absolue) ? $objectsrc->remise_absolue : (!empty($soc->remise_absolue) ? $soc->remise_absolue : 0));
-            $dateinvoice        = !getDolGlobalString('MAIN_AUTOFILL_DATE') ? -1 : '';
+            $dateinvoice = !getDolGlobalString('MAIN_AUTOFILL_DATE') ? -1 : '';
 
             $datedelivery = (!empty($objectsrc->delivery_date) ? $objectsrc->delivery_date : '');
 
@@ -1714,8 +1714,8 @@ if ($action == 'create') {
             $srccontactslist = $objectsrc->liste_contact(-1, 'external', 1);
         }
     } else {
-        $cond_reglement_id  = !empty($societe->cond_reglement_supplier_id) ? $societe->cond_reglement_supplier_id : 0;
-        $mode_reglement_id  = !empty($societe->mode_reglement_supplier_id) ? $societe->mode_reglement_supplier_id : 0;
+        $cond_reglement_id = !empty($societe->cond_reglement_supplier_id) ? $societe->cond_reglement_supplier_id : 0;
+        $mode_reglement_id = !empty($societe->mode_reglement_supplier_id) ? $societe->mode_reglement_supplier_id : 0;
 
         if (isModEnabled("multicurrency") && !empty($societe->multicurrency_code)) {
             $currency_code = $societe->multicurrency_code;
@@ -1810,7 +1810,7 @@ if ($action == 'create') {
         // Payment term
         print '<tr><td class="nowrap">' . $langs->trans('PaymentConditionsShort') . '</td><td>';
         print img_picto('', 'payment', 'class="pictofixedwidth"');
-        print $form->getSelectConditionsPaiements((GETPOSTISSET('cond_reglement_id') &&  GETPOST('cond_reglement_id') != 0) ? GETPOST('cond_reglement_id') : $cond_reglement_id, 'cond_reglement_id', -1, 1);
+        print $form->getSelectConditionsPaiements((GETPOSTISSET('cond_reglement_id') && GETPOST('cond_reglement_id') != 0) ? GETPOST('cond_reglement_id') : $cond_reglement_id, 'cond_reglement_id', -1, 1);
         print '</td></tr>';
 
         // Payment mode
@@ -2024,7 +2024,7 @@ if ($action == 'create') {
         $formquestion = array();
         if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_SUPPLIER_VALIDATE_ORDER') && $qualified_for_stock_change) {
             $langs->load("stocks");
-                        $formproduct = new FormProduct($db);
+            $formproduct = new FormProduct($db);
             $forcecombo = 0;
             if ($conf->browser->name == 'ie') {
                 $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -2057,7 +2057,7 @@ if ($action == 'create') {
                 'morecss' => 'minwidth300'
             )
         );
-        $formconfirm  = $form->formconfirm($_SERVER['PHP_SELF'] . "?id=$object->id", $langs->trans("DenyingThisOrder"), $langs->trans("ConfirmDenyingThisOrder", $object->ref), "confirm_refuse", $formquestion, 0, 1);
+        $formconfirm = $form->formconfirm($_SERVER['PHP_SELF'] . "?id=$object->id", $langs->trans("DenyingThisOrder"), $langs->trans("ConfirmDenyingThisOrder", $object->ref), "confirm_refuse", $formquestion, 0, 1);
     }
 
     // Confirmation of cancellation
@@ -2858,20 +2858,20 @@ if ($action == 'create') {
          * Action webservice
          */
         if ($action == 'webservice' && GETPOST('mode', 'alpha') != "send" && !GETPOST('cancel', 'alpha')) {
-            $mode        = GETPOST('mode', 'alpha');
-            $ws_url      = $object->thirdparty->webservices_url;
-            $ws_key      = $object->thirdparty->webservices_key;
-            $ws_user     = GETPOST('ws_user', 'alpha');
+            $mode = GETPOST('mode', 'alpha');
+            $ws_url = $object->thirdparty->webservices_url;
+            $ws_key = $object->thirdparty->webservices_key;
+            $ws_user = GETPOST('ws_user', 'alpha');
             $ws_password = GETPOST('ws_password', 'alpha');
 
             // NS and Authentication parameters
             $ws_ns = 'http://www.dolibarr.org/ns/';
             $ws_authentication = array(
-            'dolibarrkey' => $ws_key,
-            'sourceapplication' => 'DolibarrWebServiceClient',
-            'login' => $ws_user,
-            'password' => $ws_password,
-            'entity' => ''
+                'dolibarrkey' => $ws_key,
+                'sourceapplication' => 'DolibarrWebServiceClient',
+                'login' => $ws_user,
+                'password' => $ws_password,
+                'entity' => ''
             );
 
             print load_fiche_titre($langs->trans('CreateRemoteOrder'), '');

@@ -150,7 +150,7 @@ print "<br>\n";
 $todisabletext = '';
 $i = 0;
 foreach ($arrayoffunctionstodisable as $functiontodisable) {
-    if (! in_array($functiontodisable, $arrayoffunctionsdisabled)) {
+    if (!in_array($functiontodisable, $arrayoffunctionsdisabled)) {
         if ($i > 0) {
             $todisabletext .= ', ';
         }
@@ -165,7 +165,7 @@ if ($todisabletext) {
 $todisabletext = '';
 $i = 0;
 foreach ($arrayoffunctionstodisable2 as $functiontodisable) {
-    if (! in_array($functiontodisable, $arrayoffunctionsdisabled)) {
+    if (!in_array($functiontodisable, $arrayoffunctionsdisabled)) {
         if ($i > 0) {
             $todisabletext .= ', ';
         }
@@ -189,7 +189,7 @@ print '<br>';
 
 // JSON
 print '<strong>JSON</strong>: ';
-$loadedExtensions    = array_map('strtolower', get_loaded_extensions(false));
+$loadedExtensions = array_map('strtolower', get_loaded_extensions(false));
 $test = !in_array('json', $loadedExtensions);
 if ($test) {
     print img_picto('', 'error') . ' ' . $langs->trans("NotInstalled") . ' - ' . $langs->trans("VulnerableToRCEAttack");
@@ -307,7 +307,6 @@ if (file_exists($installmoduleslock)) {
 }
 
 print '</div>';
-
 
 
 // File conf.php
@@ -495,11 +494,11 @@ print '<br>';
 $umask = getDolGlobalString('MAIN_UMASK');
 
 print '<strong>' . $langs->trans("UMask") . '</strong>: ';
-if (! in_array($umask, array('600', '660', '0600', '0660'))) {
+if (!in_array($umask, array('600', '660', '0600', '0660'))) {
     print img_warning() . ' ';
 }
 print $umask;
-if (! in_array($umask, array('600', '660', '0600', '0660'))) {
+if (!in_array($umask, array('600', '660', '0600', '0660'))) {
     print ' &nbsp; <span class="opacitymedium">(' . $langs->trans("Recommended") . ': 0600 | 0660)</span>';
 }
 print '<br>';

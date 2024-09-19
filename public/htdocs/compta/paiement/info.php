@@ -59,7 +59,6 @@ if ($socid && $socid != $object->thirdparty->id) {
 }
 
 
-
 /*
  * Actions
  */

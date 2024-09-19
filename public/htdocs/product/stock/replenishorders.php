@@ -1,10 +1,11 @@
 <?php
 
 /*
- * Copyright (C) 2013       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2014       Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2018-2019  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2019	    Juanjo Menent           <jmenent@2byte.es>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2014       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2018-2019  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2019	    Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +21,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/product/stock/replenishorders.php
  *  \ingroup    stock
@@ -28,11 +33,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-require_once DOL_DOCUMENT_ROOT . '/core/class/html.formother.class.php';
-require_once DOL_DOCUMENT_ROOT . '/core/class/html.form.class.php';
-require_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
-require_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.commande.class.php';
 require_once DOL_DOCUMENT_ROOT . '/product/stock/lib/replenishment.lib.php';
 require_once DOL_DOCUMENT_ROOT . '/core/lib/date.lib.php';
 
@@ -93,8 +93,6 @@ if (GETPOST('button_removefilter_x', 'alpha') || GETPOST('button_removefilter.x'
     $search_product = 0;
 }
 
-
-
 /*
  * View
  */
@@ -140,7 +138,7 @@ if (getDolGlobalString('STOCK_CALCULATE_ON_SUPPLIER_VALIDATE_ORDER')) {
     $sql .= ' AND cf.fk_statut < 5';
 }
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= ' AND s.rowid = sc.fk_soc AND sc.fk_user = ' . ((int) $user->id);
+    $sql .= ' AND s.rowid = sc.fk_soc AND sc.fk_user = ' . ((int)$user->id);
 }
 if ($sref) {
     $sql .= natural_search('cf.ref', $sref);
@@ -159,7 +157,7 @@ if ($sall) {
     $sql .= natural_search(array('cf.ref', 'cf.note'), $sall);
 }
 if (!empty($socid)) {
-    $sql .= ' AND s.rowid = ' . ((int) $socid);
+    $sql .= ' AND s.rowid = ' . ((int)$socid);
 }
 if (GETPOSTINT('statut')) {
     $sql .= ' AND fk_statut = ' . GETPOSTINT('statut');
@@ -188,7 +186,7 @@ if ($resql) {
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($sref) {
         $param .= '&search_ref=' . urlencode($sref);
@@ -203,13 +201,13 @@ if ($resql) {
         $param .= '&search_ttc=' . urlencode($sttc);
     }
     if ($search_dateyear) {
-        $param .= '&search_dateyear=' . urlencode((string) ($search_dateyear));
+        $param .= '&search_dateyear=' . urlencode((string)($search_dateyear));
     }
     if ($search_datemonth) {
-        $param .= '&search_datemonth=' . urlencode((string) ($search_datemonth));
+        $param .= '&search_datemonth=' . urlencode((string)($search_datemonth));
     }
     if ($search_dateday) {
-        $param .= '&search_dateday=' . urlencode((string) ($search_dateday));
+        $param .= '&search_dateday=' . urlencode((string)($search_dateday));
     }
     if ($optioncss != '') {
         $param .= '&optioncss=' . urlencode($optioncss);

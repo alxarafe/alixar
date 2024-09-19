@@ -41,11 +41,11 @@ if (isModEnabled('project')) {
 $langs->loadLangs(array('companies', 'other', 'ticket'));
 
 // Get parameters
-$id       = GETPOSTINT('id');
-$ref      = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
 $track_id = GETPOST('track_id', 'alpha', 3);
-$socid    = GETPOSTINT('socid');
-$action   = GETPOST('action', 'aZ09');
+$socid = GETPOSTINT('socid');
+$action = GETPOST('action', 'aZ09');
 
 // Store current page url
 $url_page_current = constant('BASE_URL') . '/ticket/messaging.php';
@@ -165,9 +165,9 @@ if ($socid > 0) {
 }
 
 if (!$user->socid && getDolGlobalString('TICKET_LIMIT_VIEW_ASSIGNED_ONLY')) {
-    $object->next_prev_filter = "te.fk_user_assign = " . ((int) $user->id);
+    $object->next_prev_filter = "te.fk_user_assign = " . ((int)$user->id);
 } elseif ($user->socid > 0) {
-    $object->next_prev_filter = "te.fk_soc = " . ((int) $user->socid);
+    $object->next_prev_filter = "te.fk_soc = " . ((int)$user->socid);
 }
 $head = ticket_prepare_head($object);
 

@@ -30,7 +30,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 /**
  * Prepare array with list of different ecm main dashboard
  *
- * @param   object  $object     Object related to tabs
+ * @param object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function ecm_prepare_dasboard_head($object)
@@ -86,9 +86,9 @@ function ecm_prepare_dasboard_head($object)
 /**
  * Prepare array with list of tabs
  *
- * @param   object  $object     Object related to tabs
- * @param   string  $module     Module
- * @param   string  $section    Section
+ * @param object $object Object related to tabs
+ * @param string $module Module
+ * @param string $section Section
  * @return  array               Array of tabs to show
  */
 function ecm_prepare_head($object, $module = 'ecm', $section = '')
@@ -115,7 +115,7 @@ function ecm_prepare_head($object, $module = 'ecm', $section = '')
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function ecm_file_prepare_head($object)
@@ -151,7 +151,7 @@ function ecm_file_prepare_head($object)
 /**
  * Prepare array with list of tabs
  *
- * @param   object  $object     Object related to tabs
+ * @param object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function ecm_prepare_head_fm($object)
@@ -176,7 +176,7 @@ function ecm_prepare_head_fm($object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function ecm_admin_prepare_head()
 {

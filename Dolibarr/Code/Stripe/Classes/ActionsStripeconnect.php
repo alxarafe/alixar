@@ -31,7 +31,6 @@ use Dolibarr\Code\Core\Classes\CommonHookActions;
  *  \brief      File Class actionsstripeconnect
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonhookactions.class.php';
 
 // TODO File of hooks not used yet. To remove ?

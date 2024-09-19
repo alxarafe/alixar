@@ -24,6 +24,8 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
 /**

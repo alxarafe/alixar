@@ -291,36 +291,36 @@ if (empty($backtourl)) {
     $regs = array();
 
     if (in_array($modulepart, array('product', 'produit', 'service', 'produit|service'))) {
-        $backtourl = constant('BASE_URL') . "/product/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/product/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('expensereport'))) {
-        $backtourl = constant('BASE_URL') . "/expensereport/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/expensereport/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('holiday'))) {
-        $backtourl = constant('BASE_URL') . "/holiday/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/holiday/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('member'))) {
-        $backtourl = constant('BASE_URL') . "/adherents/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/adherents/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('project'))) {
-        $backtourl = constant('BASE_URL') . "/projet/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/projet/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('propal'))) {
-        $backtourl = constant('BASE_URL') . "/comm/propal/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/comm/propal/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('societe'))) {
-        $backtourl = constant('BASE_URL') . "/societe/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/societe/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('tax'))) {
-        $backtourl = constant('BASE_URL') . "/compta/sociales/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/compta/sociales/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('ticket'))) {
-        $backtourl = constant('BASE_URL') . "/ticket/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/ticket/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('user'))) {
-        $backtourl = constant('BASE_URL') . "/user/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/user/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('facture'))) {
-        $backtourl = constant('BASE_URL') . "/compta/facture/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/compta/facture/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('facture_fourn', 'facture_fournisseur'))) {
-        $backtourl = constant('BASE_URL') . "/fourn/facture/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/fourn/facture/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('bank')) && preg_match('/\/statement\/([^\/]+)\//', $file, $regs)) {
         $num = $regs[1];
-        $backtourl = constant('BASE_URL') . "/compta/bank/account_statement_document.php?id=" . ((int) $id) . '&num=' . urlencode($num) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/compta/bank/account_statement_document.php?id=" . ((int)$id) . '&num=' . urlencode($num) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('bank'))) {
-        $backtourl = constant('BASE_URL') . "/compta/bank/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/compta/bank/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('mrp'))) {
-        $backtourl = constant('BASE_URL') . "/mrp/mo_document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/mrp/mo_document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('medias'))) {
         $section_dir = dirname($file);
         if (!preg_match('/\/$/', $section_dir)) {
@@ -329,7 +329,7 @@ if (empty($backtourl)) {
         $backtourl = constant('BASE_URL') . '/website/index.php?action=file_manager' . ($website ? '&website=' . urlencode($website) : '') . '&section_dir=' . urlencode($section_dir);
     } else {
         // Generic case that should work for everybody else
-        $backtourl = constant('BASE_URL') . "/" . $modulepart . "/" . $modulepart . "_document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/" . $modulepart . "/" . $modulepart . "_document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     }
 }
 
@@ -503,7 +503,7 @@ print '<br>' . "\n";
  */
 
 print '<!-- Form to resize -->' . "\n";
-print '<form name="redim_file" action="' . $_SERVER["PHP_SELF"] . '?id=' . ((int) $id) . ($num ? '&num=' . urlencode($num) : '') . '" method="POST">';
+print '<form name="redim_file" action="' . $_SERVER["PHP_SELF"] . '?id=' . ((int)$id) . ($num ? '&num=' . urlencode($num) : '') . '" method="POST">';
 print '<input type="hidden" name="token" value="' . newToken() . '">';
 print '<input type="hidden" name="backtourl" value="' . $backtourl . '">';
 
@@ -561,11 +561,11 @@ if (!empty($conf->use_javascript_ajax)) {
 
     if (empty($conf->dol_no_mouse_hover)) {
         print '<div style="border: 1px solid #888888; width: ' . $widthforcrop . 'px;">';
-        print '<img src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . urlencode($modulepart) . '&entity=' . ((int) $object->entity) . '&file=' . urlencode($original_file) . '" alt="" id="cropbox" width="' . $widthforcrop . 'px"/>';
+        print '<img src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . urlencode($modulepart) . '&entity=' . ((int)$object->entity) . '&file=' . urlencode($original_file) . '" alt="" id="cropbox" width="' . $widthforcrop . 'px"/>';
         print '</div>';
         print '</div><br>';
 
-        print '<form action="' . $_SERVER["PHP_SELF"] . '?id=' . ((int) $id) . ($num ? '&num=' . urlencode($num) : '') . '" method="POST">';
+        print '<form action="' . $_SERVER["PHP_SELF"] . '?id=' . ((int)$id) . ($num ? '&num=' . urlencode($num) : '') . '" method="POST">';
         print '<input type="hidden" name="token" value="' . newToken() . '">';
         print '<input type="hidden" name="backtourl" value="' . $backtourl . '">';
         print '

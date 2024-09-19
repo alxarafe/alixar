@@ -398,7 +398,7 @@ $i = 0; // is a sequencer of modules found
 $j = 0; // j is module number. Automatically affected if module number not defined.
 $modNameLoaded = array();
 
-$allModules =DolibarrModules::getModules($modulesdir);
+$allModules = DolibarrModules::getModules($modulesdir);
 $main_features_level = getDolGlobalInt('MAIN_FEATURES_LEVEL');
 foreach ($allModules as $modName => $filename) {
     $dir = dirname($filename) . DIRECTORY_SEPARATOR;

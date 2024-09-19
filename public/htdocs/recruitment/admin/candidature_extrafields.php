@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2020   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2020       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *      \file       htdocs/recruitment/admin/candidature_extrafields.php
@@ -44,14 +47,11 @@ if (!$user->admin) {
     accessforbidden();
 }
 
-
 /*
  * Actions
  */
 
 require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
-
-
 
 /*
  * View

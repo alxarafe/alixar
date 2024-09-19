@@ -83,12 +83,11 @@ abstract class DoliDB implements Database
     public $error;
 
 
-
     /**
      *  Return the DB prefix found into prefix_db (if it was set manually by doing $dbhandler->prefix_db=...).
      *  Otherwise return MAIN_DB_PREFIX (common use).
      *
-     *  @return string      The DB prefix
+     * @return string      The DB prefix
      */
     public function prefix()
     {
@@ -98,10 +97,10 @@ abstract class DoliDB implements Database
     /**
      *  Format a SQL IF
      *
-     *  @param  string  $test           Test string (example: 'cd.statut=0', 'field IS NULL')
-     *  @param  string  $resok          resultat si test equal
-     *  @param  string  $resko          resultat si test non equal
-     *  @return string                  SQL string
+     * @param string $test Test string (example: 'cd.statut=0', 'field IS NULL')
+     * @param string $resok resultat si test equal
+     * @param string $resko resultat si test non equal
+     * @return string                  SQL string
      */
     public function ifsql($test, $resok, $resko)
     {
@@ -112,7 +111,7 @@ abstract class DoliDB implements Database
     /**
      * Return SQL string to aggregate using the Standard Deviation of population
      *
-     * @param   string  $nameoffield    Name of field
+     * @param string $nameoffield Name of field
      * @return  string                  SQL string
      */
     public function stddevpop($nameoffield)
@@ -123,7 +122,7 @@ abstract class DoliDB implements Database
     /**
      * Return SQL string to force an index
      *
-     * @param   string  $nameofindex    Name of index
+     * @param string $nameofindex Name of index
      * @return  string                  SQL string
      */
     public function hintindex($nameofindex)
@@ -135,10 +134,10 @@ abstract class DoliDB implements Database
     /**
      *  Format a SQL REGEXP
      *
-     *  @param  string  $subject        Field name to test
-     *  @param  string  $pattern        SQL pattern to match
-     *  @param  int     $sqlstring      0=the string being tested is a hard coded string, 1=the string is a field
-     *  @return string                  SQL string
+     * @param string $subject Field name to test
+     * @param string $pattern SQL pattern to match
+     * @param int $sqlstring 0=the string being tested is a hard coded string, 1=the string is a field
+     * @return string                  SQL string
      */
     public function regexpsql($subject, $pattern, $sqlstring = 0)
     {
@@ -154,9 +153,9 @@ abstract class DoliDB implements Database
      *   Convert (by PHP) a GM Timestamp date into a string date with PHP server TZ to insert into a date field.
      *   Function to use to build INSERT, UPDATE or WHERE predica
      *
-     *   @param     int     $param      Date TMS to convert
-     *   @param     mixed   $gm         'gmt'=Input information are GMT values, 'tzserver'=Local to server TZ
-     *   @return    string              Date in a string YYYY-MM-DD HH:MM:SS
+     * @param int $param Date TMS to convert
+     * @param mixed $gm 'gmt'=Input information are GMT values, 'tzserver'=Local to server TZ
+     * @return    string              Date in a string YYYY-MM-DD HH:MM:SS
      */
     public function idate($param, $gm = 'tzserver')
     {
@@ -167,7 +166,7 @@ abstract class DoliDB implements Database
     /**
      *  Return last error code
      *
-     *  @return     string  lasterrno
+     * @return     string  lasterrno
      */
     public function lasterrno()
     {
@@ -177,11 +176,11 @@ abstract class DoliDB implements Database
     /**
      * Sanitize a string for SQL forging
      *
-     * @param   string  $stringtosanitize   String to escape
-     * @param   int     $allowsimplequote   1=Allow simple quotes in string. When string is used as a list of SQL string ('aa', 'bb', ...)
-     * @param   int     $allowsequals       1=Allow equals sign
-     * @param   int     $allowsspace        1=Allow space char
-     * @param   int     $allowschars        1=Allow a-z chars
+     * @param string $stringtosanitize String to escape
+     * @param int $allowsimplequote 1=Allow simple quotes in string. When string is used as a list of SQL string ('aa', 'bb', ...)
+     * @param int $allowsequals 1=Allow equals sign
+     * @param int $allowsspace 1=Allow space char
+     * @param int $allowschars 1=Allow a-z chars
      * @return  string                      String escaped
      */
     public function sanitize($stringtosanitize, $allowsimplequote = 0, $allowsequals = 0, $allowsspace = 0, $allowschars = 1)
@@ -192,7 +191,7 @@ abstract class DoliDB implements Database
     /**
      * Start transaction
      *
-     * @param   string  $textinlog      Add a small text into log. '' by default.
+     * @param string $textinlog Add a small text into log. '' by default.
      * @return  int                     1 if transaction successfully opened or already opened, 0 if error
      */
     public function begin($textinlog = '')
@@ -217,7 +216,7 @@ abstract class DoliDB implements Database
     /**
      * Validate a database transaction
      *
-     * @param   string  $log        Add more log to default log line
+     * @param string $log Add more log to default log line
      * @return  int                 1 if validation is OK or transaction level no started, 0 if ERROR
      */
     public function commit($log = '')
@@ -241,8 +240,8 @@ abstract class DoliDB implements Database
     /**
      *  Cancel a transaction and go back to initial data values
      *
-     *  @param  string          $log        Add more log to default log line
-     *  @return resource|int                1 if cancellation is ok or transaction not open, 0 if error
+     * @param string $log Add more log to default log line
+     * @return resource|int                1 if cancellation is ok or transaction not open, 0 if error
      */
     public function rollback($log = '')
     {
@@ -261,9 +260,9 @@ abstract class DoliDB implements Database
     /**
      *  Define limits and offset of request
      *
-     *  @param  int     $limit      Maximum number of lines returned (-1=conf->liste_limit, 0=no limit)
-     *  @param  int     $offset     Numero of line from where starting fetch
-     *  @return string              String with SQL syntax to add a limit and offset
+     * @param int $limit Maximum number of lines returned (-1=conf->liste_limit, 0=no limit)
+     * @param int $offset Numero of line from where starting fetch
+     * @return string              String with SQL syntax to add a limit and offset
      */
     public function plimit($limit = 0, $offset = 0)
     {
@@ -275,16 +274,16 @@ abstract class DoliDB implements Database
             $limit = $conf->liste_limit;
         }
         if ($offset > 0) {
-            return " LIMIT " . ((int) $offset) . "," . ((int) $limit) . " ";
+            return " LIMIT " . ((int)$offset) . "," . ((int)$limit) . " ";
         } else {
-            return " LIMIT " . ((int) $limit) . " ";
+            return " LIMIT " . ((int)$limit) . " ";
         }
     }
 
     /**
      *  Return version of database server into an array
      *
-     *  @return         string[]        Version array
+     * @return         string[]        Version array
      */
     public function getVersionArray()
     {
@@ -294,7 +293,7 @@ abstract class DoliDB implements Database
     /**
      *  Return last request executed with query()
      *
-     *  @return string                  Last query
+     * @return string                  Last query
      */
     public function lastquery()
     {
@@ -304,8 +303,8 @@ abstract class DoliDB implements Database
     /**
      * Define sort criteria of request
      *
-     * @param   string      $sortfield      List of sort fields, separated by comma. Example: 't1.fielda,t2.fieldb'
-     * @param   string      $sortorder      Sort order, separated by comma. Example: 'ASC,DESC'. Note: If the quantity for sortorder values is lower than sortfield, we used the last value for missing values.
+     * @param string $sortfield List of sort fields, separated by comma. Example: 't1.fielda,t2.fieldb'
+     * @param string $sortorder Sort order, separated by comma. Example: 'ASC,DESC'. Note: If the quantity for sortorder values is lower than sortfield, we used the last value for missing values.
      * @return  string                      String to provide syntax of a sort sql string
      */
     public function order($sortfield = '', $sortorder = '')
@@ -349,7 +348,7 @@ abstract class DoliDB implements Database
     /**
      *  Return last error label
      *
-     *  @return     string      Last error
+     * @return     string      Last error
      */
     public function lasterror()
     {
@@ -361,9 +360,9 @@ abstract class DoliDB implements Database
      *  19700101020000 -> 3600 with server TZ = +1 and $gm='tzserver'
      *  19700101020000 -> 7200 whaterver is server TZ if $gm='gmt'
      *
-     *  @param  string              $string     Date in a string (YYYYMMDDHHMMSS, YYYYMMDD, YYYY-MM-DD HH:MM:SS)
-     *  @param  mixed               $gm         'gmt'=Input information are GMT values, 'tzserver'=Local to server TZ
-     *  @return int|''                          Date TMS or ''
+     * @param string $string Date in a string (YYYYMMDDHHMMSS, YYYYMMDD, YYYY-MM-DD HH:MM:SS)
+     * @param mixed $gm 'gmt'=Input information are GMT values, 'tzserver'=Local to server TZ
+     * @return int|''                          Date TMS or ''
      */
     public function jdate($string, $gm = 'tzserver')
     {
@@ -373,14 +372,14 @@ abstract class DoliDB implements Database
         }
         $string = preg_replace('/([^0-9])/i', '', $string);
         $tmp = $string . '000000';
-        $date = dol_mktime((int) substr($tmp, 8, 2), (int) substr($tmp, 10, 2), (int) substr($tmp, 12, 2), (int) substr($tmp, 4, 2), (int) substr($tmp, 6, 2), (int) substr($tmp, 0, 4), $gm);
+        $date = dol_mktime((int)substr($tmp, 8, 2), (int)substr($tmp, 10, 2), (int)substr($tmp, 12, 2), (int)substr($tmp, 4, 2), (int)substr($tmp, 6, 2), (int)substr($tmp, 0, 4), $gm);
         return $date;
     }
 
     /**
      *  Return last query in error
      *
-     *  @return     string  lastqueryerror
+     * @return     string  lastqueryerror
      */
     public function lastqueryerror()
     {
@@ -392,7 +391,7 @@ abstract class DoliDB implements Database
      * Note : This method executes a given SQL query and retrieves the first row of results as an object. It should only be used with SELECT queries
      * Don't add LIMIT to your query, it will be added by this method
      *
-     * @param   string              $sql    The sql query string
+     * @param string $sql The sql query string
      * @return  bool|int|object             False on failure, 0 on empty, object on success
      */
     public function getRow($sql)
@@ -418,7 +417,7 @@ abstract class DoliDB implements Database
      * Note : It should only be used with SELECT queries and with a limit. If you are not able to defined/know what can be the limit, it
      * just means this function is not what you need. Do not use it.
      *
-     * @param   string          $sql    The sql query string. Must end with "... LIMIT x"
+     * @param string $sql The sql query string. Must end with "... LIMIT x"
      * @return  bool|array              Result
      */
     public function getRows($sql)

@@ -119,7 +119,7 @@ print '</tr>' . "\n";
 
 // Select of all the sub-BOM lines
 $sql = 'SELECT rowid, fk_bom_child, fk_product, qty FROM ' . MAIN_DB_PREFIX . 'bom_bomline AS bl';
-$sql .= ' WHERE fk_bom =' . (int) $tmpbom->id;
+$sql .= ' WHERE fk_bom =' . (int)$tmpbom->id;
 $resql = $db->query($sql);
 
 if ($resql) {
@@ -157,7 +157,7 @@ if ($resql) {
         if ($sub_bom_line->qty_frozen > 0) {
             print '<td class="linecolqty nowrap right" id="sub_bom_qty_' . $sub_bom_line->id . '">' . price($sub_bom_line->qty, 0, '', 0, 0) . '</td>';
         } else {
-            print '<td class="linecolqty nowrap right" id="sub_bom_qty_' . $sub_bom_line->id . '">' . price($sub_bom_line->qty * (float) $line->qty, 0, '', 0, 0) . '</td>';
+            print '<td class="linecolqty nowrap right" id="sub_bom_qty_' . $sub_bom_line->id . '">' . price($sub_bom_line->qty * (float)$line->qty, 0, '', 0, 0) . '</td>';
         }
 
         // Unit

@@ -39,7 +39,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and get of entity must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : (!empty($_GET['e']) ? (int) $_GET['e'] : (!empty($_POST['e']) ? (int) $_POST['e'] : 1))));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : (!empty($_GET['e']) ? (int)$_GET['e'] : (!empty($_POST['e']) ? (int)$_POST['e'] : 1))));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -49,7 +49,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
 
 global $dolibarr_main_url_root;
 
@@ -63,7 +62,7 @@ $errmsg = '';
 $action = GETPOST('action', 'aZ09');
 $id = GETPOSTINT('id');
 $securekeyreceived = GETPOST("securekey", 'alpha');
-$securekeytocompare = dol_hash(getDolGlobalString('EVENTORGANIZATION_SECUREKEY') . 'conferenceorbooth' . ((int) $id), 'md5');
+$securekeytocompare = dol_hash(getDolGlobalString('EVENTORGANIZATION_SECUREKEY') . 'conferenceorbooth' . ((int)$id), 'md5');
 
 if ($securekeytocompare != $securekeyreceived) {
     print $langs->trans('MissingOrBadSecureKey');
@@ -94,16 +93,15 @@ if (empty($conf->project->enabled)) {
 }
 
 
-
 /**
  * Show header for new member
  *
- * @param   string      $title              Title
- * @param   string      $head               Head array
- * @param   int         $disablejs          More content into html header
- * @param   int         $disablehead        More content into html header
- * @param   array       $arrayofjs          Array of complementary js files
- * @param   array       $arrayofcss         Array of complementary css files
+ * @param string $title Title
+ * @param string $head Head array
+ * @param int $disablejs More content into html header
+ * @param int $disablehead More content into html header
+ * @param array $arrayofjs Array of complementary js files
+ * @param array $arrayofcss Array of complementary css files
  * @return  void
  */
 function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $arrayofjs = [], $arrayofcss = [])
@@ -181,8 +179,6 @@ if (GETPOST('viewandvote')) {
 }
 
 
-
-
 /*
  * View
  */
@@ -200,7 +196,6 @@ $replacemainarea = (empty($conf->dol_hide_leftmenu) ? '<div>' : '') . '<div>';
 //llxHeader($head, $langs->trans("SuggestForm"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
 
 llxHeaderVierge($langs->trans("SuggestForm"));
-
 
 
 print '<span id="dolpaymentspan"></span>' . "\n";
@@ -305,7 +300,7 @@ if ($project->accept_conference_suggestions == 2 || $project->accept_conference_
     print '<input type="submit" value="' . $langs->trans("ViewAndVote") . '" id="viewandvote" name="viewandvote" class="button minwidth250">';
 }
 
-if (! $foundaction) {
+if (!$foundaction) {
     print '<span class="opacitymedium">' . $langs->trans("NoPublicActionsAllowedForThisEvent") . '</span>';
 }
 
@@ -320,7 +315,6 @@ print '</div></div>';
 print '</form>' . "\n";
 print '</div>' . "\n";
 print '<br>';
-
 
 
 htmlPrintOnlineFooter($mysoc, $langs, 1, $suffix, $object);

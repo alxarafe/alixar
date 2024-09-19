@@ -145,7 +145,7 @@ if ($id > 0) {
         $sql .= " f.paye as paye, f.fk_statut as statut, f.rowid as facid,";
         $sql .= " u.login, u.rowid as userid";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s," . MAIN_DB_PREFIX . "facture as f," . MAIN_DB_PREFIX . "user as u";
-        $sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int) $object->id);
+        $sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int)$object->id);
         $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
         $sql .= " AND f.fk_user_valid = u.rowid";
         $sql .= $db->order($sortfield, $sortorder);
@@ -195,7 +195,7 @@ if ($id > 0) {
                 $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "user as u ON p.fk_user_creat = u.rowid";
                 $sql .= " WHERE pf.fk_paiement = p.rowid";
                 $sql .= " AND p.entity = " . $conf->entity;
-                $sql .= " AND pf.fk_facture = " . ((int) $fac->id);
+                $sql .= " AND pf.fk_facture = " . ((int)$fac->id);
                 $sql .= " ORDER BY p.datep ASC, p.rowid ASC";
 
                 $resqlp = $db->query($sql);
@@ -213,7 +213,7 @@ if ($id > 0) {
                         $userstatic->login = $objp->login;
 
                         $values = array(
-                        'fk_paiement' => $objp->rowid,
+                            'fk_paiement' => $objp->rowid,
                             'date' => $db->jdate($objp->dp),
                             'datefieldforsort' => $db->jdate($objp->dp) . '-' . $fac->ref,
                             'link' => $langs->trans("Payment") . ' ' . $paymentstatic->getNomUrl(1),

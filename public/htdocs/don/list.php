@@ -43,7 +43,7 @@ if (isModEnabled('project')) {
 $langs->loadLangs(array('companies', 'donations'));
 
 // Get parameters
-$action     = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'create'/'add', 'edit'/'update', 'view', ...
+$action = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'create'/'add', 'edit'/'update', 'view', ...
 $massaction = GETPOST('massaction', 'alpha'); // The bulk action (combo box choice into lists)
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'donationlist';
 $toselect = GETPOST('toselect', 'array');
@@ -285,7 +285,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -516,10 +516,10 @@ while ($i < $imaxinloop) {
             if (!empty($obj->socid) && $company->id > 0) {
                 print "<td>" . $company->getNomUrl(1) . "</td>";
             } else {
-                print "<td>" . ((string) $obj->societe) . "</td>";
+                print "<td>" . ((string)$obj->societe) . "</td>";
             }
         } else {
-            print "<td>" . ((string) $obj->societe) . "</td>";
+            print "<td>" . ((string)$obj->societe) . "</td>";
         }
         print "<td>" . $donationstatic->getFullName($langs) . "</td>";
         print '<td class="center">' . dol_print_date($db->jdate($obj->datedon), 'day') . '</td>';

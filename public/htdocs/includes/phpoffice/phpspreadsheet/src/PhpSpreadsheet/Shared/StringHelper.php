@@ -373,7 +373,7 @@ class StringHelper
             return str_replace(',', '.', $value);
         }
 
-        return (string) $value;
+        return (string)$value;
     }
 
     /**
@@ -715,7 +715,7 @@ class StringHelper
         if (is_numeric($value)) {
             return $value;
         }
-        $v = (float) $value;
+        $v = (float)$value;
 
         return (is_numeric(substr($value, 0, strlen($v)))) ? $v : $value;
     }

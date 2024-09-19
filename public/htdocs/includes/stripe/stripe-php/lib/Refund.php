@@ -59,9 +59,9 @@ class Refund extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Refund the canceled refund
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Refund the canceled refund
      */
     public function cancel($params = null, $opts = null)
     {

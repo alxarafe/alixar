@@ -26,7 +26,7 @@ class Polygon extends Collection
         $pts = $exterior_ring->getComponents();
 
         $c = count($pts);
-        if ((int) $c == '0') return null;
+        if ((int)$c == '0') return null;
         $a = '0';
         foreach ($pts as $k => $p) {
             $j = ($k + 1) % $c;
@@ -60,7 +60,7 @@ class Polygon extends Collection
         $pts = $exterior_ring->getComponents();
 
         $c = count($pts);
-        if ((int) $c == '0') return null;
+        if ((int)$c == '0') return null;
         $cn = array('x' => '0', 'y' => '0');
         $a = $this->area(true, true);
 
@@ -76,8 +76,8 @@ class Polygon extends Collection
             $cn['y'] = $cn['y'] + ($p->getY() + $pts[$j]->getY()) * $P;
         }
 
-        $cn['x'] = $cn['x'] / ( 6 * $a);
-        $cn['y'] = $cn['y'] / ( 6 * $a);
+        $cn['x'] = $cn['x'] / (6 * $a);
+        $cn['y'] = $cn['y'] / (6 * $a);
 
         $centroid = new Point($cn['x'], $cn['y']);
         return $centroid;
@@ -191,15 +191,15 @@ class Polygon extends Collection
                 && $vertex1->y() != $vertex2->y()
             ) {
                 $xinters =
-                ($point->y() - $vertex1->y()) * ($vertex2->x() - $vertex1->x())
-                / ($vertex2->y() - $vertex1->y())
-                + $vertex1->x();
+                    ($point->y() - $vertex1->y()) * ($vertex2->x() - $vertex1->x())
+                    / ($vertex2->y() - $vertex1->y())
+                    + $vertex1->x();
                 if ($xinters == $point->x()) {
-                        // Check if point is on the polygon boundary (other than horizontal)
-                        return $pointOnBoundary ? true : false;
+                    // Check if point is on the polygon boundary (other than horizontal)
+                    return $pointOnBoundary ? true : false;
                 }
                 if ($vertex1->x() == $vertex2->x() || $point->x() <= $xinters) {
-                      $intersections++;
+                    $intersections++;
                 }
             }
         }
@@ -225,6 +225,6 @@ class Polygon extends Collection
     // --------------------------------
     public function length()
     {
-        return null; 
-}
+        return null;
+    }
 }

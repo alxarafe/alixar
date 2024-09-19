@@ -35,7 +35,7 @@ class Recur extends Property
     {
         // If we're getting the data from json, we'll be receiving an object
         if ($value instanceof \StdClass) {
-            $value = (array) $value;
+            $value = (array)$value;
         }
 
         if (is_array($value)) {
@@ -250,9 +250,9 @@ class Recur extends Property
                     unset($values[$key]);
                 }
             } elseif ('BYMONTH' == $key) {
-                $byMonth = (array) $value;
+                $byMonth = (array)$value;
                 foreach ($byMonth as $i => $v) {
-                    if (!is_numeric($v) || (int) $v < 1 || (int) $v > 12) {
+                    if (!is_numeric($v) || (int)$v < 1 || (int)$v > 12) {
                         $warnings[] = [
                             'level' => $repair ? 1 : 3,
                             'message' => 'BYMONTH in RRULE must have value(s) between 1 and 12!',
@@ -272,9 +272,9 @@ class Recur extends Property
                     unset($values[$key]);
                 }
             } elseif ('BYWEEKNO' == $key) {
-                $byWeekNo = (array) $value;
+                $byWeekNo = (array)$value;
                 foreach ($byWeekNo as $i => $v) {
-                    if (!is_numeric($v) || (int) $v < -53 || 0 == (int) $v || (int) $v > 53) {
+                    if (!is_numeric($v) || (int)$v < -53 || 0 == (int)$v || (int)$v > 53) {
                         $warnings[] = [
                             'level' => $repair ? 1 : 3,
                             'message' => 'BYWEEKNO in RRULE must have value(s) from -53 to -1, or 1 to 53!',
@@ -294,9 +294,9 @@ class Recur extends Property
                     unset($values[$key]);
                 }
             } elseif ('BYYEARDAY' == $key) {
-                $byYearDay = (array) $value;
+                $byYearDay = (array)$value;
                 foreach ($byYearDay as $i => $v) {
-                    if (!is_numeric($v) || (int) $v < -366 || 0 == (int) $v || (int) $v > 366) {
+                    if (!is_numeric($v) || (int)$v < -366 || 0 == (int)$v || (int)$v > 366) {
                         $warnings[] = [
                             'level' => $repair ? 1 : 3,
                             'message' => 'BYYEARDAY in RRULE must have value(s) from -366 to -1, or 1 to 366!',

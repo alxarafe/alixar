@@ -67,12 +67,12 @@ class Bitrix24 extends AbstractService
     public function getAccessTokenUri($code)
     {
         $parameters = array(
-            'code'          => $code,
-            'client_id'     => $this->credentials->getConsumerId(),
+            'code' => $code,
+            'client_id' => $this->credentials->getConsumerId(),
             'client_secret' => $this->credentials->getConsumerSecret(),
-            'redirect_uri'  => $this->credentials->getCallbackUrl(),
-            'grant_type'    => 'authorization_code',
-            'scope'         => $this->scopes
+            'redirect_uri' => $this->credentials->getCallbackUrl(),
+            'grant_type' => 'authorization_code',
+            'scope' => $this->scopes
         );
 
         $parameters['scope'] = implode(' ', $this->scopes);

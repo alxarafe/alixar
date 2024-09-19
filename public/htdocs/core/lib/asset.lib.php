@@ -88,7 +88,7 @@ function assetAdminPrepareHead()
 /**
  * Prepare array of tabs for Asset
  *
- * @param   Asset   $object     Asset
+ * @param Asset $object Asset
  * @return  array               Array of tabs
  */
 function assetPrepareHead(Asset $object)
@@ -183,7 +183,7 @@ function assetPrepareHead(Asset $object)
 /**
  * Prepare array of tabs for AssetModel
  *
- * @param   AssetModel  $object     AssetModel
+ * @param AssetModel $object AssetModel
  * @return  array                   Array of tabs
  */
 function assetModelPrepareHead($object)

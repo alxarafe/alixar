@@ -56,8 +56,8 @@ class File extends Node implements DAV\PartialUpdate\IPatchSupport
      * time.
      *
      * @param resource|string $data
-     * @param int             $rangeType
-     * @param int             $offset
+     * @param int $rangeType
+     * @param int $offset
      *
      * @return string|null
      */
@@ -123,10 +123,10 @@ class File extends Node implements DAV\PartialUpdate\IPatchSupport
     public function getETag()
     {
         return '"' . sha1(
-            fileinode($this->path) .
-            filesize($this->path) .
-            filemtime($this->path)
-        ) . '"';
+                fileinode($this->path) .
+                filesize($this->path) .
+                filemtime($this->path)
+            ) . '"';
     }
 
     /**

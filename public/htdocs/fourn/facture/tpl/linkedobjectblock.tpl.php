@@ -51,30 +51,34 @@ foreach ($linkedObjectBlock as $key => $objectlink) {
     } ?>
     <tr class="<?php echo $trclass; ?>">
         <td><?php echo $langs->trans("SupplierInvoice"); ?></td>
-        <td><a href="<?php echo constant('BASE_URL') . '/fourn/facture/card.php?facid=' . $objectlink->id ?>"><?php echo img_object($langs->trans("ShowBill"), "bill") . ' ' . $objectlink->ref; ?></a></td>
+        <td>
+            <a href="<?php echo constant('BASE_URL') . '/fourn/facture/card.php?facid=' . $objectlink->id ?>"><?php echo img_object($langs->trans("ShowBill"), "bill") . ' ' . $objectlink->ref; ?></a>
+        </td>
         <td class="left"><?php echo $objectlink->ref_supplier; ?></td>
         <td class="center"><?php echo dol_print_date($objectlink->date, 'day'); ?></td>
         <td class="right"><?php
-        if ($user->hasRight('fournisseur', 'facture', 'lire')) {
-            $sign = 1;
-            if ($object->type == FactureFournisseur::TYPE_CREDIT_NOTE) {
-                $sign = -1;
-            }
-            if ($objectlink->statut != 3) {
-                // If not abandoned
-                $total = $total + $sign * $objectlink->total_ht;
-                echo price($objectlink->total_ht);
-            } else {
-                echo '<strike>' . price($objectlink->total_ht) . '</strike>';
-            }
-        } ?></td>
+            if ($user->hasRight('fournisseur', 'facture', 'lire')) {
+                $sign = 1;
+                if ($object->type == FactureFournisseur::TYPE_CREDIT_NOTE) {
+                    $sign = -1;
+                }
+                if ($objectlink->statut != 3) {
+                    // If not abandoned
+                    $total = $total + $sign * $objectlink->total_ht;
+                    echo price($objectlink->total_ht);
+                } else {
+                    echo '<strike>' . price($objectlink->total_ht) . '</strike>';
+                }
+            } ?></td>
         <td class="right"><?php
-        if (method_exists($objectlink, 'getSommePaiement')) {
-            echo $objectlink->getLibStatut(3, $objectlink->getSommePaiement());
-        } else {
-            echo $objectlink->getLibStatut(3);
-        } ?></td>
-        <td class="right"><a class="reposition" href="<?php echo $_SERVER["PHP_SELF"] . '?id=' . urlencode((string) ($object->id)) . '&action=dellink&token=' . newToken() . '&dellinkid=' . urlencode((string) ($key)); ?>"><?php echo img_picto($langs->transnoentitiesnoconv("RemoveLink"), 'unlink'); ?></a></td>
+            if (method_exists($objectlink, 'getSommePaiement')) {
+                echo $objectlink->getLibStatut(3, $objectlink->getSommePaiement());
+            } else {
+                echo $objectlink->getLibStatut(3);
+            } ?></td>
+        <td class="right"><a class="reposition"
+                             href="<?php echo $_SERVER["PHP_SELF"] . '?id=' . urlencode((string)($object->id)) . '&action=dellink&token=' . newToken() . '&dellinkid=' . urlencode((string)($key)); ?>"><?php echo img_picto($langs->transnoentitiesnoconv("RemoveLink"), 'unlink'); ?></a>
+        </td>
     </tr>
     <?php
 }

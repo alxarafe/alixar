@@ -55,16 +55,16 @@ if (isModEnabled('contract')) {
 $langs->loadLangs(array("companies", "other", "ticket"));
 
 // Get parameters
-$id        = GETPOSTINT('id');
-$ref       = GETPOST('ref', 'alpha');
-$track_id  = GETPOST('track_id', 'alpha', 3);
-$socid     = GETPOSTINT('socid');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
+$track_id = GETPOST('track_id', 'alpha', 3);
+$socid = GETPOSTINT('socid');
 $contactid = GETPOSTINT('contactid');
 $projectid = GETPOSTINT('projectid');
 $notifyTiers = GETPOST("notify_tiers_at_create", 'alpha');
 
-$action    = GETPOST('action', 'aZ09');
-$cancel    = GETPOST('cancel', 'alpha');
+$action = GETPOST('action', 'aZ09');
+$cancel = GETPOST('cancel', 'alpha');
 $backtopage = GETPOST('backtopage', 'alpha');
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');
 
@@ -138,12 +138,11 @@ $result = restrictedArea($user, 'ticket', $object->id);
 $triggermodname = 'TICKET_MODIFY';
 
 // Permissions
-$permissiontoread   = $user->hasRight('ticket', 'read');
-$permissiontoadd    = $user->hasRight('ticket', 'write');
+$permissiontoread = $user->hasRight('ticket', 'read');
+$permissiontoadd = $user->hasRight('ticket', 'write');
 $permissiontodelete = $user->hasRight('ticket', 'delete');
 
 $upload_dir = $conf->ticket->dir_output;
-
 
 
 /*
@@ -874,9 +873,9 @@ if ($action == 'create' || $action == 'presend') {
         }
 
         if (!$user->socid && getDolGlobalString('TICKET_LIMIT_VIEW_ASSIGNED_ONLY')) {
-            $object->next_prev_filter = "te.fk_user_assign = " . ((int) $user->id);
+            $object->next_prev_filter = "te.fk_user_assign = " . ((int)$user->id);
         } elseif ($user->socid > 0) {
-            $object->next_prev_filter = "te.fk_soc = " . ((int) $user->socid);
+            $object->next_prev_filter = "te.fk_soc = " . ((int)$user->socid);
         }
 
         $head = ticket_prepare_head($object);
@@ -968,8 +967,8 @@ if ($action == 'create' || $action == 'presend') {
                         $morehtmlref .= $formcontract->formSelectContract($_SERVER["PHP_SELF"] . '?id=' . $object->id, $object->socid, $object->fk_contract, 'contratid', 0, 1, 1, 1);
                     } else {
                         $morehtmlref .= '<a class="editfielda" href="' . $_SERVER["PHP_SELF"] . '?action=edit_contrat&token=' . newToken() . '&id=' . $object->id . '">';
-                        $morehtmlref .=  img_edit($langs->trans('SetContract'));
-                        $morehtmlref .=  '</a>';
+                        $morehtmlref .= img_edit($langs->trans('SetContract'));
+                        $morehtmlref .= '</a>';
                     }
                 } else {
                     if (!empty($object->fk_contract)) {

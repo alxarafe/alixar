@@ -21,6 +21,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Core\Classes\HookManager;
 
 /**
@@ -28,8 +29,6 @@ use Dolibarr\Code\Core\Classes\HookManager;
  *  \ingroup    core
  *  \brief      Module Dolibarr state base
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
 
 /**
  * Class to manage the box to show last thirdparties

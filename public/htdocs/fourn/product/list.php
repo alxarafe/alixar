@@ -44,10 +44,10 @@ use Dolibarr\Code\Societe\Classes\Societe;
 $langs->loadLangs(array('products', 'suppliers'));
 
 // Get Parameters
-$action     = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'create'/'add', 'edit'/'update', 'view', ...
-$toselect   = GETPOST('toselect', 'array:int'); // Array of ids of elements selected into a list
+$action = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'create'/'add', 'edit'/'update', 'view', ...
+$toselect = GETPOST('toselect', 'array:int'); // Array of ids of elements selected into a list
 $optioncss = GETPOST('optioncss', 'alpha');
-$mode       = GETPOST('mode', 'aZ'); // The output mode ('list', 'kanban', 'hierarchy', 'calendar', ...)
+$mode = GETPOST('mode', 'aZ'); // The output mode ('list', 'kanban', 'hierarchy', 'calendar', ...)
 
 $sref = GETPOST('sref', 'alphanohtml');
 $sRefSupplier = GETPOST('srefsupplier');
@@ -181,10 +181,10 @@ if ($snom) {
     $sql .= natural_search('p.label', $snom);
 }
 if ($catid) {
-    $sql .= " AND cp.fk_categorie = " . ((int) $catid);
+    $sql .= " AND cp.fk_categorie = " . ((int)$catid);
 }
 if ($fourn_id > 0) {
-    $sql .= " AND ppf.fk_soc = " . ((int) $fourn_id);
+    $sql .= " AND ppf.fk_soc = " . ((int)$fourn_id);
 }
 
 // Add WHERE filters from hooks
@@ -261,7 +261,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);

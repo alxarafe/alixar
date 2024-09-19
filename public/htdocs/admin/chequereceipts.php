@@ -53,7 +53,6 @@ if (!getDolGlobalString('CHEQUERECEIPTS_ADDON')) {
 }
 
 
-
 /*
  * Actions
  */
@@ -100,7 +99,7 @@ if ($action == 'set_BANK_CHEQUERECEIPT_FREE_TEXT') {
  * View
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 llxHeader("", $langs->trans("BankSetupModule"), '', '', 0, 0, '', '', '', 'mod-admin page-chequereceipts');
 
 $form = new Form($db);

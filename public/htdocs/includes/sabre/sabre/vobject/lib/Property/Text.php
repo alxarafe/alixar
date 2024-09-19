@@ -64,11 +64,11 @@ class Text extends Property
      * parameters will automatically be created, or you can just pass a list of
      * Parameter objects.
      *
-     * @param Component         $root       The root document
-     * @param string            $name
+     * @param Component $root The root document
+     * @param string $name
      * @param string|array|null $value
-     * @param array             $parameters List of parameters
-     * @param string            $group      The vcard property group
+     * @param array $parameters List of parameters
+     * @param string $group The vcard property group
      */
     public function __construct(Component $root, $name, $value = null, array $parameters = [], $group = null)
     {

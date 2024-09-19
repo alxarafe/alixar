@@ -28,13 +28,12 @@ use DebugBar\DataCollector\ExceptionsCollector;
 /**
  * DolExceptionsCollector class
  */
-
 class DolExceptionsCollector extends ExceptionsCollector
 {
     /**
      *  Return widget settings
      *
-     *  @return    array       Array
+     * @return    array       Array
      */
     public function getWidgets()
     {

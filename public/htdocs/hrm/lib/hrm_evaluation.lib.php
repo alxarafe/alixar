@@ -33,7 +33,7 @@ use Dolibarr\Code\Hrm\Classes\Evaluation;
 /**
  * Prepare array of tabs for Evaluation
  *
- * @param   Evaluation  $object     Evaluation
+ * @param Evaluation $object Evaluation
  * @return  array<array<int,string>>    Array of tabs
  */
 function evaluationPrepareHead($object)
@@ -134,7 +134,7 @@ function GetLegendSkills()
 }
 
 /**
- * @param  object $obj Object needed to be represented
+ * @param object $obj Object needed to be represented
  * @return string
  */
 function getRankOrderResults($obj)
@@ -169,7 +169,7 @@ function getRankOrderResults($obj)
 /**
  * Grouped rows with same ref in array
  *
- * @param   object[]  $objects   all rows retrieve from sql query
+ * @param object[] $objects all rows retrieve from sql query
  * @return  array<object>|int           Object by groiup, -1 if error (empty or bad argument)
  */
 function getGroupedEval($objects)

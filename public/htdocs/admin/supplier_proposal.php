@@ -88,7 +88,7 @@ if ($action == 'specimen') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/supplier_proposal/doc/pdf_" . $modele . ".modules.php");
         if (file_exists($file)) {
@@ -224,7 +224,7 @@ if ($action == 'set') {
  * Affiche page
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 
 llxHeader('', $langs->trans("SupplierProposalSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-supplier_proposal');
@@ -560,7 +560,6 @@ print ajax_constantonoff('PROPOSAL_ALLOW_EXTERNAL_DOWNLOAD', array(), null, 0, 0
 print '</td></tr>';
 
 print '</table>';
-
 
 
 /*

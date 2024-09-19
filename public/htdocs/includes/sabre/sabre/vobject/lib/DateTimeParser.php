@@ -26,7 +26,7 @@ class DateTimeParser
      * if the non-UTC format is used. The argument is used as a reference, the
      * returned DateTimeImmutable object will still be in the UTC timezone.
      *
-     * @param string       $dt
+     * @param string $dt
      * @param DateTimeZone $tz
      *
      * @return DateTimeImmutable
@@ -56,7 +56,7 @@ class DateTimeParser
     /**
      * Parses an iCalendar (rfc5545) formatted date and returns a DateTimeImmutable object.
      *
-     * @param string       $date
+     * @param string $date
      * @param DateTimeZone $tz
      *
      * @return DateTimeImmutable
@@ -90,7 +90,7 @@ class DateTimeParser
      * suitable for strtotime or DateTime::modify.
      *
      * @param string $duration
-     * @param bool   $asString
+     * @param bool $asString
      *
      * @return DateInterval|string
      */
@@ -117,7 +117,7 @@ class DateTimeParser
             ];
 
             foreach ($parts as $part) {
-                $matches[$part] = isset($matches[$part]) && $matches[$part] ? (int) $matches[$part] : 0;
+                $matches[$part] = isset($matches[$part]) && $matches[$part] ? (int)$matches[$part] : 0;
             }
 
             // We need to re-construct the $duration string, because weeks and
@@ -190,7 +190,7 @@ class DateTimeParser
     /**
      * Parses either a Date or DateTime, or Duration value.
      *
-     * @param string              $date
+     * @param string $date
      * @param DateTimeZone|string $referenceTz
      *
      * @return DateTimeImmutable|DateInterval
@@ -491,29 +491,29 @@ class DateTimeParser
     {
         // \d{8}|\d{4}-\d\d|--\d\d(\d\d)?|---\d\d
         $valueDate = '/^(?J)(?:' .
-                         '(?<year>\d{4})(?<month>\d\d)(?<date>\d\d)' .
-                         '|(?<year>\d{4})-(?<month>\d\d)' .
-                         '|--(?<month>\d\d)(?<date>\d\d)?' .
-                         '|---(?<date>\d\d)' .
-                         ')$/';
+            '(?<year>\d{4})(?<month>\d\d)(?<date>\d\d)' .
+            '|(?<year>\d{4})-(?<month>\d\d)' .
+            '|--(?<month>\d\d)(?<date>\d\d)?' .
+            '|---(?<date>\d\d)' .
+            ')$/';
 
         // (\d\d(\d\d(\d\d)?)?|-\d\d(\d\d)?|--\d\d)(Z|[+\-]\d\d(\d\d)?)?
         $valueTime = '/^(?J)(?:' .
-                         '((?<hour>\d\d)((?<minute>\d\d)(?<second>\d\d)?)?' .
-                         '|-(?<minute>\d\d)(?<second>\d\d)?' .
-                         '|--(?<second>\d\d))' .
-                         '(?<timezone>(Z|[+\-]\d\d(\d\d)?))?' .
-                         ')$/';
+            '((?<hour>\d\d)((?<minute>\d\d)(?<second>\d\d)?)?' .
+            '|-(?<minute>\d\d)(?<second>\d\d)?' .
+            '|--(?<second>\d\d))' .
+            '(?<timezone>(Z|[+\-]\d\d(\d\d)?))?' .
+            ')$/';
 
         // (\d{8}|--\d{4}|---\d\d)T\d\d(\d\d(\d\d)?)?(Z|[+\-]\d\d(\d\d?)?
         $valueDateTime = '/^(?:' .
-                         '((?<year0>\d{4})(?<month0>\d\d)(?<date0>\d\d)' .
-                         '|--(?<month1>\d\d)(?<date1>\d\d)' .
-                         '|---(?<date2>\d\d))' .
-                         'T' .
-                         '(?<hour>\d\d)((?<minute>\d\d)(?<second>\d\d)?)?' .
-                         '(?<timezone>(Z|[+\-]\d\d(\d\d?)))?' .
-                         ')$/';
+            '((?<year0>\d{4})(?<month0>\d\d)(?<date0>\d\d)' .
+            '|--(?<month1>\d\d)(?<date1>\d\d)' .
+            '|---(?<date2>\d\d))' .
+            'T' .
+            '(?<hour>\d\d)((?<minute>\d\d)(?<second>\d\d)?)?' .
+            '(?<timezone>(Z|[+\-]\d\d(\d\d?)))?' .
+            ')$/';
 
         // date-and-or-time is date | date-time | time
         // in this strict order.

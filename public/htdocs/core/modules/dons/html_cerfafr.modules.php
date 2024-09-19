@@ -45,7 +45,7 @@ class html_cerfafr extends ModeleDon
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -63,7 +63,7 @@ class html_cerfafr extends ModeleDon
     /**
      *  Return if a module can be used or not
      *
-     *  @return boolean     true if module can be used
+     * @return boolean     true if module can be used
      */
     public function isEnabled()
     {
@@ -71,18 +71,19 @@ class html_cerfafr extends ModeleDon
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Write the object to document file to disk
      *
-     *  @param  Don         $don            Donation object
-     *  @param  Translate   $outputlangs    Lang object for output language
-     *  @param  string      $currency       Currency code
-     *  @return int                         >0 if OK, <0 if KO
+     * @param Don $don Donation object
+     * @param Translate $outputlangs Lang object for output language
+     * @param string $currency Currency code
+     * @return int                         >0 if OK, <0 if KO
      */
     public function write_file($don, $outputlangs, $currency = '')
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $conf, $langs, $mysoc;
 
         $now = dol_now();
@@ -158,7 +159,7 @@ class html_cerfafr extends ModeleDon
                 // Define contents
                 $donmodel = DOL_DOCUMENT_ROOT . "/core/modules/dons/html_cerfafr.html";
                 $form = implode('', file($donmodel));
-                $form = str_replace('__REF__', (string) $don->id, $form);
+                $form = str_replace('__REF__', (string)$don->id, $form);
                 $form = str_replace('__DATE__', dol_print_date($don->date, 'day', false, $outputlangs), $form);
                 //$form = str_replace('__IP__',$user->ip,$form); // TODO $user->ip not exist
                 $form = str_replace('__AMOUNT__', price($don->amount), $form);
@@ -173,7 +174,7 @@ class html_cerfafr extends ModeleDon
                 $form = str_replace('__DONATOR_FIRSTNAME__', $don->firstname, $form);
                 $form = str_replace('__DONATOR_LASTNAME__', $don->lastname, $form);
                 $form = str_replace('__DONATOR_SOCIETE__', $don->societe, $form);
-                $form = str_replace('__DONATOR_STATUT__', (string) $don->statut, $form);
+                $form = str_replace('__DONATOR_STATUT__', (string)$don->statut, $form);
                 $form = str_replace('__DONATOR_ADDRESS__', $don->address, $form);
                 $form = str_replace('__DONATOR_ZIP__', $don->zip, $form);
                 $form = str_replace('__DONATOR_TOWN__', $don->town, $form);
@@ -265,9 +266,9 @@ class html_cerfafr extends ModeleDon
     /**
      * numbers to letters
      *
-     * @param   mixed   $montant    amount
-     * @param   mixed   $devise1    devise 1 ex: euro
-     * @param   mixed   $devise2    devise 2 ex: centimes
+     * @param mixed $montant amount
+     * @param mixed $devise1 devise 1 ex: euro
+     * @param mixed $devise2 devise 2 ex: centimes
      * @return string               amount in letters
      */
     private function amountToLetters($montant, $devise1 = '', $devise2 = '')

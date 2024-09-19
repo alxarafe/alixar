@@ -50,9 +50,9 @@ class Xml extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return bool
      * @throws Exception
      *
-     * @return bool
      */
     public function canRead($pFilename)
     {
@@ -103,9 +103,9 @@ class Xml extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return false|\SimpleXMLElement
      * @throws Exception
      *
-     * @return false|\SimpleXMLElement
      */
     public function trySimpleXMLLoadString($pFilename)
     {
@@ -127,9 +127,9 @@ class Xml extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return array
      * @throws Exception
      *
-     * @return array
      */
     public function listWorksheetNames($pFilename)
     {
@@ -147,7 +147,7 @@ class Xml extends BaseReader
         $xml_ss = $xml->children($namespaces['ss']);
         foreach ($xml_ss->Worksheet as $worksheet) {
             $worksheet_ss = $worksheet->attributes($namespaces['ss']);
-            $worksheetNames[] = self::convertStringEncoding((string) $worksheet_ss['Name'], $this->charSet);
+            $worksheetNames[] = self::convertStringEncoding((string)$worksheet_ss['Name'], $this->charSet);
         }
 
         return $worksheetNames;
@@ -158,9 +158,9 @@ class Xml extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return array
      * @throws Exception
      *
-     * @return array
      */
     public function listWorksheetInfo($pFilename)
     {
@@ -185,7 +185,7 @@ class Xml extends BaseReader
             $tmpInfo['totalColumns'] = 0;
 
             if (isset($worksheet_ss['Name'])) {
-                $tmpInfo['worksheetName'] = (string) $worksheet_ss['Name'];
+                $tmpInfo['worksheetName'] = (string)$worksheet_ss['Name'];
             } else {
                 $tmpInfo['worksheetName'] = "Worksheet_{$worksheetID}";
             }
@@ -229,9 +229,9 @@ class Xml extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function load($pFilename)
     {
@@ -300,9 +300,9 @@ class Xml extends BaseReader
      * @param string $pFilename
      * @param Spreadsheet $spreadsheet
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function loadIntoExisting($pFilename, Spreadsheet $spreadsheet)
     {
@@ -373,7 +373,7 @@ class Xml extends BaseReader
                 $propertyAttributes = $propertyValue->attributes($namespaces['dt']);
                 $propertyName = preg_replace_callback('/_x([0-9a-z]{4})_/', ['self', 'hex2str'], $propertyName);
                 $propertyType = Properties::PROPERTY_TYPE_UNKNOWN;
-                switch ((string) $propertyAttributes) {
+                switch ((string)$propertyAttributes) {
                     case 'string':
                         $propertyType = Properties::PROPERTY_TYPE_STRING;
                         $propertyValue = trim($propertyValue);
@@ -381,17 +381,17 @@ class Xml extends BaseReader
                         break;
                     case 'boolean':
                         $propertyType = Properties::PROPERTY_TYPE_BOOLEAN;
-                        $propertyValue = (bool) $propertyValue;
+                        $propertyValue = (bool)$propertyValue;
 
                         break;
                     case 'integer':
                         $propertyType = Properties::PROPERTY_TYPE_INTEGER;
-                        $propertyValue = (int) $propertyValue;
+                        $propertyValue = (int)$propertyValue;
 
                         break;
                     case 'float':
                         $propertyType = Properties::PROPERTY_TYPE_FLOAT;
-                        $propertyValue = (float) $propertyValue;
+                        $propertyValue = (float)$propertyValue;
 
                         break;
                     case 'dateTime.tz':
@@ -423,7 +423,7 @@ class Xml extends BaseReader
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex($worksheetID);
             if (isset($worksheet_ss['Name'])) {
-                $worksheetName = self::convertStringEncoding((string) $worksheet_ss['Name'], $this->charSet);
+                $worksheetName = self::convertStringEncoding((string)$worksheet_ss['Name'], $this->charSet);
                 //    Use false for $updateFormulaCellReferences to prevent adjustment of worksheet references in
                 //        formula cells... during the load, all formulae should be correct, and we're simply bringing
                 //        the worksheet name in line with the formula, not the reverse
@@ -435,7 +435,7 @@ class Xml extends BaseReader
                 foreach ($worksheet->Table->Column as $columnData) {
                     $columnData_ss = $columnData->attributes($namespaces['ss']);
                     if (isset($columnData_ss['Index'])) {
-                        $columnID = Coordinate::stringFromColumnIndex((int) $columnData_ss['Index']);
+                        $columnID = Coordinate::stringFromColumnIndex((int)$columnData_ss['Index']);
                     }
                     if (isset($columnData_ss['Width'])) {
                         $columnWidth = $columnData_ss['Width'];
@@ -452,14 +452,14 @@ class Xml extends BaseReader
                     $rowHasData = false;
                     $row_ss = $rowData->attributes($namespaces['ss']);
                     if (isset($row_ss['Index'])) {
-                        $rowID = (int) $row_ss['Index'];
+                        $rowID = (int)$row_ss['Index'];
                     }
 
                     $columnID = 'A';
                     foreach ($rowData->Cell as $cell) {
                         $cell_ss = $cell->attributes($namespaces['ss']);
                         if (isset($cell_ss['Index'])) {
-                            $columnID = Coordinate::stringFromColumnIndex((int) $cell_ss['Index']);
+                            $columnID = Coordinate::stringFromColumnIndex((int)$cell_ss['Index']);
                         }
                         $cellRange = $columnID . $rowID;
 
@@ -478,7 +478,7 @@ class Xml extends BaseReader
                         if ((isset($cell_ss['MergeAcross'])) || (isset($cell_ss['MergeDown']))) {
                             $columnTo = $columnID;
                             if (isset($cell_ss['MergeAcross'])) {
-                                $additionalMergedCells += (int) $cell_ss['MergeAcross'];
+                                $additionalMergedCells += (int)$cell_ss['MergeAcross'];
                                 $columnTo = Coordinate::stringFromColumnIndex(Coordinate::columnIndexFromString($columnID) + $cell_ss['MergeAcross']);
                             }
                             $rowTo = $rowID;
@@ -518,9 +518,9 @@ class Xml extends BaseReader
                                         break;
                                     case 'Number':
                                         $type = DataType::TYPE_NUMERIC;
-                                        $cellValue = (float) $cellValue;
+                                        $cellValue = (float)$cellValue;
                                         if (floor($cellValue) == $cellValue) {
-                                            $cellValue = (int) $cellValue;
+                                            $cellValue = (int)$cellValue;
                                         }
 
                                         break;
@@ -609,7 +609,7 @@ class Xml extends BaseReader
                             $commentAttributes = $cell->Comment->attributes($namespaces['ss']);
                             $author = 'unknown';
                             if (isset($commentAttributes->Author)) {
-                                $author = (string) $commentAttributes->Author;
+                                $author = (string)$commentAttributes->Author;
                             }
                             $node = $cell->Comment->Data->asXML();
                             $annotation = strip_tags($node);
@@ -617,7 +617,7 @@ class Xml extends BaseReader
                         }
 
                         if (($cellIsSet) && (isset($cell_ss['StyleID']))) {
-                            $style = (string) $cell_ss['StyleID'];
+                            $style = (string)$cell_ss['StyleID'];
                             if ((isset($this->styles[$style])) && (!empty($this->styles[$style]))) {
                                 if (!$spreadsheet->getActiveSheet()->cellExists($columnID . $rowID)) {
                                     $spreadsheet->getActiveSheet()->getCell($columnID . $rowID)->setValue(null);
@@ -679,7 +679,7 @@ class Xml extends BaseReader
 
         foreach ($xml->Styles[0] as $style) {
             $style_ss = $style->attributes($namespaces['ss']);
-            $styleID = (string) $style_ss['ID'];
+            $styleID = (string)$style_ss['ID'];
             $this->styles[$styleID] = (isset($this->styles['Default'])) ? $this->styles['Default'] : [];
             foreach ($style as $styleType => $styleData) {
                 $styleAttributes = $styleData->attributes($namespaces['ss']);
@@ -731,7 +731,7 @@ class Xml extends BaseReader
         ];
 
         foreach ($styleAttributes as $styleAttributeKey => $styleAttributeValue) {
-            $styleAttributeValue = (string) $styleAttributeValue;
+            $styleAttributeValue = (string)$styleAttributeValue;
             switch ($styleAttributeKey) {
                 case 'Vertical':
                     if (self::identifyFixedStyleValue($verticalAlignmentStyles, $styleAttributeValue)) {
@@ -805,7 +805,7 @@ class Xml extends BaseReader
         ];
 
         foreach ($styleAttributes as $styleAttributeKey => $styleAttributeValue) {
-            $styleAttributeValue = (string) $styleAttributeValue;
+            $styleAttributeValue = (string)$styleAttributeValue;
             switch ($styleAttributeKey) {
                 case 'FontName':
                     $this->styles[$styleID]['font']['name'] = $styleAttributeValue;

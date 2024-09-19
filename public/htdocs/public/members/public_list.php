@@ -42,7 +42,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -61,8 +61,8 @@ $langs->loadLangs(array("main", "members", "companies", "other"));
 /**
  * Show header for member list
  *
- * @param   string      $title      Title
- * @param   string      $head       More info into header
+ * @param string $title Title
+ * @param string $head More info into header
  * @return  void
  */
 function llxHeaderVierge($title, $head = "")
@@ -132,7 +132,7 @@ $sql = "SELECT rowid, firstname, lastname, societe, zip, town, email, birth, pho
 $sqlfields = $sql;
 
 $sql .= " FROM " . MAIN_DB_PREFIX . "adherent";
-$sql .= " WHERE entity = " . ((int) $entity);
+$sql .= " WHERE entity = " . ((int)$entity);
 $sql .= " AND statut = 1";
 $sql .= " AND public = 1";
 

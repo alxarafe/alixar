@@ -115,9 +115,9 @@ class Column
      *
      * @param string $pColumn Column (e.g. A)
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setColumnIndex($pColumn)
     {
@@ -171,9 +171,9 @@ class Column
      *
      * @param string $pFilterType
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setFilterType($pFilterType)
     {
@@ -201,9 +201,9 @@ class Column
      *
      * @param string $pJoin And/Or
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setJoin($pJoin)
     {

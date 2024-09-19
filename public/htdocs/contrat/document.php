@@ -41,10 +41,10 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 // Load translation files required by the page
 $langs->loadLangs(array('other', 'products', 'contracts'));
 
-$action     = GETPOST('action', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
-$id         = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
+$action = GETPOST('action', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
 
 // Security check
 if ($user->socid > 0) {

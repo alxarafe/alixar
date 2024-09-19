@@ -124,9 +124,9 @@ class Ods extends BaseWriter
      *
      * @param string $pFilename
      *
+     * @return ZipArchive
      * @throws WriterException
      *
-     * @return ZipArchive
      */
     private function createZip($pFilename)
     {
@@ -149,9 +149,9 @@ class Ods extends BaseWriter
     /**
      * Get Spreadsheet object.
      *
+     * @return Spreadsheet
      * @throws WriterException
      *
-     * @return Spreadsheet
      */
     public function getSpreadsheet()
     {

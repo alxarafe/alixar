@@ -42,10 +42,10 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 // Load translation files required by the page
 $langs->loadLangs(array('bills', 'companies'));
 
-$id     = (GETPOST('id') ? GETPOSTINT('id') : GETPOSTINT('facid')); // For backward compatibility
-$ref    = GETPOST('ref', 'alpha');
+$id = (GETPOST('id') ? GETPOSTINT('id') : GETPOSTINT('facid')); // For backward compatibility
+$ref = GETPOST('ref', 'alpha');
 $lineid = GETPOSTINT('lineid');
-$socid  = GETPOSTINT('socid');
+$socid = GETPOSTINT('socid');
 $action = GETPOST('action', 'aZ09');
 
 // Security check
@@ -80,8 +80,8 @@ if (empty($reshook)) {
     if ($action == 'addcontact' && $user->hasRight('facture', 'creer')) {
         if ($result > 0 && $id > 0) {
             $contactid = (GETPOST('userid') ? GETPOSTINT('userid') : GETPOSTINT('contactid'));
-            $typeid    = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
-            $result    = $object->add_contact($contactid, $typeid, GETPOST("source", 'aZ09'));
+            $typeid = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
+            $result = $object->add_contact($contactid, $typeid, GETPOST("source", 'aZ09'));
         }
 
         if ($result >= 0) {

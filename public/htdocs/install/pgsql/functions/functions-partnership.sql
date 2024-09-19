@@ -16,5 +16,11 @@
 --
 -- ============================================================================
 
-CREATE TRIGGER update_customer_modtime BEFORE UPDATE ON llx_partnership FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
-CREATE TRIGGER update_customer_modtime BEFORE UPDATE ON llx_partnership_extrafields FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
+CREATE TRIGGER update_customer_modtime
+    BEFORE UPDATE
+    ON llx_partnership
+    FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
+CREATE TRIGGER update_customer_modtime
+    BEFORE UPDATE
+    ON llx_partnership_extrafields
+    FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();

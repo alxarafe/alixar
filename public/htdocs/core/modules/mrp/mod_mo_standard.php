@@ -60,8 +60,8 @@ class mod_mo_standard extends ModeleNumRefMos
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -73,7 +73,7 @@ class mod_mo_standard extends ModeleNumRefMos
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -85,8 +85,8 @@ class mod_mo_standard extends ModeleNumRefMos
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object Object we need next value for
-     *  @return boolean                 false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                 false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -121,9 +121,9 @@ class mod_mo_standard extends ModeleNumRefMos
     /**
      *  Return next free value
      *
-     *  @param  Product     $objprod    Object product
-     *  @param  Mo          $object     Object we need next value for
-     *  @return string|-1               Value if OK, -1 if KO
+     * @param Product $objprod Object product
+     * @param Mo $object Object we need next value for
+     * @return string|-1               Value if OK, -1 if KO
      */
     public function getNextValue($objprod, $object)
     {

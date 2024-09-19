@@ -26,7 +26,7 @@
  *  \brief      Page with information on database tables. Add also some maintenance action to convert tables.
  */
 
-if (! defined('CSRFCHECK_WITH_TOKEN')) {
+if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');        // Force use of CSRF protection with tokens even for GET
 }
 
@@ -121,7 +121,7 @@ if (!$base) {
             //print $shortsqlfilename.' ';
             $shortsqlfilename = preg_replace('/\-[a-z]+\./', '.', $value['name']);
             $arrayoffiles[$value['name']] = $shortsqlfilename;
-            if ($value['name'] == $shortsqlfilename && ! preg_match('/\.key\.sql$/', $value['name'])) {
+            if ($value['name'] == $shortsqlfilename && !preg_match('/\.key\.sql$/', $value['name'])) {
                 // This is a sql file automatically created
                 $arrayoftablesautocreated[$value['name']] = $shortsqlfilename;
             }

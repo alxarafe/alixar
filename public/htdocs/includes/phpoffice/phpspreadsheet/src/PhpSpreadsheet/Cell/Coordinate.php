@@ -25,9 +25,9 @@ abstract class Coordinate
      *
      * @param string $pCoordinateString eg: 'A1'
      *
+     * @return string[] Array containing column and row (indexes 0 and 1)
      * @throws Exception
      *
-     * @return string[] Array containing column and row (indexes 0 and 1)
      */
     public static function coordinateFromString($pCoordinateString)
     {
@@ -60,9 +60,9 @@ abstract class Coordinate
      * @param string $pCoordinateString e.g. 'A' or '1' or 'A1'
      *                    Note that this value can be a row or column reference as well as a cell reference
      *
+     * @return string Absolute coordinate        e.g. '$A' or '$1' or '$A$1'
      * @throws Exception
      *
-     * @return string Absolute coordinate        e.g. '$A' or '$1' or '$A$1'
      */
     public static function absoluteReference($pCoordinateString)
     {
@@ -91,9 +91,9 @@ abstract class Coordinate
      *
      * @param string $pCoordinateString e.g. 'A1'
      *
+     * @return string Absolute coordinate        e.g. '$A$1'
      * @throws Exception
      *
-     * @return string Absolute coordinate        e.g. '$A$1'
      */
     public static function absoluteCoordinate($pCoordinateString)
     {
@@ -145,9 +145,9 @@ abstract class Coordinate
      *
      * @param array $pRange Array containg one or more arrays containing one or two coordinate strings
      *
+     * @return string String representation of $pRange
      * @throws Exception
      *
-     * @return string String representation of $pRange
      */
     public static function buildRange(array $pRange)
     {
@@ -362,7 +362,7 @@ abstract class Coordinate
 
         // Single cell?
         if (!self::coordinateIsRange($cellBlock)) {
-            return (array) $cellBlock;
+            return (array)$cellBlock;
         }
 
         // Range...
@@ -433,11 +433,11 @@ abstract class Coordinate
             }
 
             [$column, $row] = self::coordinateFromString($coord);
-            $row = (int) (ltrim($row, '$'));
+            $row = (int)(ltrim($row, '$'));
             $hashCode = $column . '-' . (is_object($value) ? $value->getHashCode() : $value);
 
             if (!isset($hashedValues[$hashCode])) {
-                $hashedValues[$hashCode] = (object) [
+                $hashedValues[$hashCode] = (object)[
                     'value' => $value,
                     'col' => $column,
                     'rows' => [$row],

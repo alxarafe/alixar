@@ -45,7 +45,7 @@ class mailing_thirdparties_services_expired extends MailingTargets
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -79,18 +79,19 @@ class mailing_thirdparties_services_expired extends MailingTargets
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  This is the main function that returns the array of emails
      *
-     *  @param  int     $mailing_id     Id of mailing. No need to use it.
-     *  @return int                     Return integer <0 if error, number of emails added if ok
+     * @param int $mailing_id Id of mailing. No need to use it.
+     * @return int                     Return integer <0 if error, number of emails added if ok
      */
     public function add_to_target($mailing_id)
     {
         global $conf;
 
-		// phpcs:enable
+        // phpcs:enable
         $key = GETPOSTINT('filter');
 
         $cibles = array();
@@ -112,12 +113,12 @@ class mailing_thirdparties_services_expired extends MailingTargets
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "contrat as c";
         $sql .= ", " . MAIN_DB_PREFIX . "contratdet as cd, " . MAIN_DB_PREFIX . "product as p";
         $sql .= " WHERE s.entity IN (" . getEntity('societe') . ")";
-        $sql .= " AND s.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int) $mailing_id) . ")";
+        $sql .= " AND s.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int)$mailing_id) . ")";
         $sql .= " AND s.rowid = c.fk_soc AND cd.fk_contrat = c.rowid AND s.email != ''";
         $sql .= " AND cd.statut= 4 AND cd.fk_product=p.rowid AND p.ref = '" . $this->db->escape($product) . "'";
         $sql .= " AND cd.date_fin_validite < '" . $this->db->idate($now) . "'";
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
         $sql .= " ORDER BY s.email";
 
@@ -134,17 +135,17 @@ class mailing_thirdparties_services_expired extends MailingTargets
                 $obj = $this->db->fetch_object($result);
                 if ($old != $obj->email) {
                     $cibles[$j] = array(
-                    'email' => $obj->email,
-                    'lastname' => $obj->name, // For thirdparties, lastname must be name
-                    'firstname' => '', // For thirdparties, firstname is ''
-                    'other' =>
-                    ('DateStart=' . dol_print_date($this->db->jdate($obj->date_start_real), 'day')) . ';' . // date start real
-                    ('DateEnd=' . dol_print_date($this->db->jdate($obj->date_end), 'day')) . ';' . // date end planned
-                    ('Contract=' . $obj->fk_contrat) . ';' .
-                    ('ContactLine=' . $obj->cdid),
-                    'source_url' => $this->url($obj->id),
-                    'source_id' => $obj->id,
-                    'source_type' => 'thirdparty'
+                        'email' => $obj->email,
+                        'lastname' => $obj->name, // For thirdparties, lastname must be name
+                        'firstname' => '', // For thirdparties, firstname is ''
+                        'other' =>
+                            ('DateStart=' . dol_print_date($this->db->jdate($obj->date_start_real), 'day')) . ';' . // date start real
+                            ('DateEnd=' . dol_print_date($this->db->jdate($obj->date_end), 'day')) . ';' . // date end planned
+                            ('Contract=' . $obj->fk_contrat) . ';' .
+                            ('ContactLine=' . $obj->cdid),
+                        'source_url' => $this->url($obj->id),
+                        'source_id' => $obj->id,
+                        'source_type' => 'thirdparty'
                     );
                     $old = $obj->email;
                     $j++;
@@ -170,7 +171,7 @@ class mailing_thirdparties_services_expired extends MailingTargets
      *  array of SQL request that returns two field:
      *  One called "label", One called "nb".
      *
-     *  @return     array       Array with SQL requests
+     * @return     array       Array with SQL requests
      */
     public function getSqlArrayForStats()
     {
@@ -187,8 +188,8 @@ class mailing_thirdparties_services_expired extends MailingTargets
      *  For example if this selector is used to extract 500 different
      *  emails from a text file, this function must return 500.
      *
-     *  @param      string          $sql        SQL request to use to count
-     *  @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
+     * @param string $sql SQL request to use to count
+     * @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
      */
     public function getNbOfRecipients($sql = '')
     {
@@ -207,7 +208,7 @@ class mailing_thirdparties_services_expired extends MailingTargets
         $sql .= " AND p.ref IN (" . $this->db->sanitize("'" . implode("','", $this->arrayofproducts) . "'", 1) . ")";
         $sql .= " AND cd.date_fin_validite < '" . $this->db->idate($now) . "'";
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
 
         $a = parent::getNbOfRecipients($sql);
@@ -219,7 +220,7 @@ class mailing_thirdparties_services_expired extends MailingTargets
      *  This is to add a form filter to provide variant of selector
      *  If used, the HTML select must be called "filter"
      *
-     *  @return     string      A html select zone
+     * @return     string      A html select zone
      */
     public function formFilter()
     {
@@ -245,8 +246,8 @@ class mailing_thirdparties_services_expired extends MailingTargets
     /**
      *  Can include an URL link on each record provided by selector shown on target page.
      *
-     *  @param  int     $id     ID
-     *  @return string          Url link
+     * @param int $id ID
+     * @return string          Url link
      */
     public function url($id)
     {

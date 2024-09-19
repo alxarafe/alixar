@@ -20,6 +20,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
@@ -30,24 +31,21 @@ use Dolibarr\Code\User\Classes\User;
  *      \brief      Widget for latest sale orders
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
-
 /**
  * Class to manage the box to show last customer orders
  */
 class box_commandes extends ModeleBoxes
 {
-    public $boxcode  = "lastcustomerorders";
-    public $boximg   = "object_order";
+    public $boxcode = "lastcustomerorders";
+    public $boximg = "object_order";
     public $boxlabel = "BoxLastCustomerOrders";
-    public $depends  = array("commande");
+    public $depends = array("commande");
 
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -61,8 +59,8 @@ class box_commandes extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -105,10 +103,10 @@ class box_commandes extends ModeleBoxes
                 $sql .= " AND c.fk_statut = 1";
             }
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             if ($user->socid) {
-                $sql .= " AND s.rowid = " . ((int) $user->socid);
+                $sql .= " AND s.rowid = " . ((int)$user->socid);
             }
             if (getDolGlobalString('MAIN_LASTBOX_ON_OBJECT_DATE')) {
                 $sql .= " ORDER BY c.date_commande DESC, c.ref DESC ";
@@ -190,8 +188,8 @@ class box_commandes extends ModeleBoxes
 
                 if ($num == 0) {
                     $this->info_box_contents[$line][0] = array(
-                    'td' => 'class="center"',
-                    'text' => '<span class="opacitymedium">' . $langs->trans("NoRecordedOrders") . '</span>'
+                        'td' => 'class="center"',
+                        'text' => '<span class="opacitymedium">' . $langs->trans("NoRecordedOrders") . '</span>'
                     );
                 }
 
@@ -214,10 +212,10 @@ class box_commandes extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

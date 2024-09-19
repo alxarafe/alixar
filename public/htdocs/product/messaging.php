@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005      Brice Davoleau       <brice.davoleau@gmail.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2006-2019 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007      Patrick Raguin  		<patrick.raguin@gmail.com>
- * Copyright (C) 2010      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005       Brice Davoleau              <brice.davoleau@gmail.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007       Patrick Raguin  		    <patrick.raguin@gmail.com>
+ * Copyright (C) 2010       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,13 +23,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/societe/messaging.php
  *  \ingroup    societe
  *  \brief      Page of third party events
  */
-
-use Dolibarr\Code\Contact\Classes\Contact;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -124,8 +125,6 @@ if (empty($reshook)) {
     }
 }
 
-
-
 /*
  *	View
  */
@@ -149,7 +148,7 @@ llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-messagi
 if (isModEnabled('notification')) {
     $langs->load("mails");
 }
-    $type = $langs->trans('Product');
+$type = $langs->trans('Product');
 if ($object->isService()) {
     $type = $langs->trans('Service');
 }
@@ -161,7 +160,7 @@ $picto = ($object->type == Product::TYPE_SERVICE ? 'service' : 'product');
 print dol_get_fiche_head($head, 'agenda', $titre, -1, $picto);
 
 $linkback = '<a href="' . constant('BASE_URL') . '/product/list.php?restore_lastsearch_values=1&type=' . $object->type . '">' . $langs->trans("BackToList") . '</a>';
-$object->next_prev_filter = "fk_product_type = " . ((int) $object->type);
+$object->next_prev_filter = "fk_product_type = " . ((int)$object->type);
 
 $shownav = 1;
 if ($user->socid && !in_array('product', explode(',', getDolGlobalString('MAIN_MODULES_FOR_EXTERNAL')))) {
@@ -180,7 +179,6 @@ dol_print_object_info($object, 1);
 print '</div>';
 
 print dol_get_fiche_end();
-
 
 
 // Actions buttons
@@ -231,12 +229,12 @@ if (isModEnabled('agenda')) {
 if (isModEnabled('agenda') && ($user->hasRight('agenda', 'myactions', 'read') || $user->hasRight('agenda', 'allactions', 'read'))) {
     print '<br>';
 
-    $param = '&socid=' . urlencode((string) ($socid));
+    $param = '&socid=' . urlencode((string)($socid));
     if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
 
     // Try to know count of actioncomm from cache

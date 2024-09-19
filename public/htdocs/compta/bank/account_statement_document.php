@@ -87,7 +87,7 @@ if (GETPOST("rel") == 'prev') {
     $sql = "SELECT DISTINCT(b.num_releve) as num";
     $sql .= " FROM " . MAIN_DB_PREFIX . "bank as b";
     $sql .= " WHERE b.num_releve < '" . $db->escape($numref) . "'";
-    $sql .= " AND b.fk_account = " . ((int) $id);
+    $sql .= " AND b.fk_account = " . ((int)$id);
     $sql .= " ORDER BY b.num_releve DESC";
 
     dol_syslog("htdocs/compta/bank/releve.php", LOG_DEBUG);
@@ -105,7 +105,7 @@ if (GETPOST("rel") == 'prev') {
     $sql = "SELECT DISTINCT(b.num_releve) as num";
     $sql .= " FROM " . MAIN_DB_PREFIX . "bank as b";
     $sql .= " WHERE b.num_releve > '" . $db->escape($numref) . "'";
-    $sql .= " AND b.fk_account = " . ((int) $id);
+    $sql .= " AND b.fk_account = " . ((int)$id);
     $sql .= " ORDER BY b.num_releve ASC";
 
     dol_syslog("htdocs/compta/bank/releve.php", LOG_DEBUG);
@@ -134,7 +134,7 @@ if (!empty($numref)) {
     $object->fetch_thirdparty();
     $upload_dir = $conf->bank->dir_output . "/" . $id . "/statement/" . dol_sanitizeFileName($numref);
 }
-$backtopage = $_SERVER['PHP_SELF'] . "?account=" . urlencode((string) ($id)) . "&num=" . urlencode((string) ($numref));
+$backtopage = $_SERVER['PHP_SELF'] . "?account=" . urlencode((string)($id)) . "&num=" . urlencode((string)($numref));
 include DOL_DOCUMENT_ROOT . '/core/actions_linkedfiles.inc.php';
 
 /*

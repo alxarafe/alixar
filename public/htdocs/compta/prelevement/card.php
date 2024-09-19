@@ -96,7 +96,6 @@ if ($type == 'bank-transfer') {
 }
 
 
-
 /*
  * Actions
  */
@@ -467,12 +466,12 @@ if ($id > 0 || $ref) {
         $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_lignes as pl";
         $sql .= ", " . MAIN_DB_PREFIX . "prelevement_bons as pb";
         $sql .= ", " . MAIN_DB_PREFIX . "user as u";
-        $sql .= " WHERE pl.fk_prelevement_bons = " . ((int) $id);
+        $sql .= " WHERE pl.fk_prelevement_bons = " . ((int)$id);
         $sql .= " AND pl.fk_prelevement_bons = pb.rowid";
-        $sql .= " AND pb.entity = " . ((int) $conf->entity);  // No sharing of entity here
+        $sql .= " AND pb.entity = " . ((int)$conf->entity);  // No sharing of entity here
         $sql .= " AND pl.fk_user = u.rowid";
         if ($socid) {
-            $sql .= " AND u.rowid = " . ((int) $socid);
+            $sql .= " AND u.rowid = " . ((int)$socid);
         }
         $sql .= $db->order($sortfield, $sortorder);
     } else {
@@ -481,12 +480,12 @@ if ($id > 0 || $ref) {
         $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_lignes as pl";
         $sql .= ", " . MAIN_DB_PREFIX . "prelevement_bons as pb";
         $sql .= ", " . MAIN_DB_PREFIX . "societe as s";
-        $sql .= " WHERE pl.fk_prelevement_bons = " . ((int) $id);
+        $sql .= " WHERE pl.fk_prelevement_bons = " . ((int)$id);
         $sql .= " AND pl.fk_prelevement_bons = pb.rowid";
-        $sql .= " AND pb.entity = " . ((int) $conf->entity);  // No sharing of entity here
+        $sql .= " AND pb.entity = " . ((int)$conf->entity);  // No sharing of entity here
         $sql .= " AND pl.fk_soc = s.rowid";
         if ($socid) {
-            $sql .= " AND s.rowid = " . ((int) $socid);
+            $sql .= " AND s.rowid = " . ((int)$socid);
         }
         $sql .= $db->order($sortfield, $sortorder);
     }
@@ -510,9 +509,9 @@ if ($id > 0 || $ref) {
         $num = $db->num_rows($result);
         $i = 0;
 
-        $urladd = "&id=" . urlencode((string) ($id));
+        $urladd = "&id=" . urlencode((string)($id));
         if ($limit > 0 && $limit != $conf->liste_limit) {
-            $urladd .= '&limit=' . ((int) $limit);
+            $urladd .= '&limit=' . ((int)$limit);
         }
 
         print '<form method="POST" action="' . $_SERVER ['PHP_SELF'] . '" name="search_form">' . "\n";

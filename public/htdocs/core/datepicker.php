@@ -139,8 +139,8 @@ print '</body></html>' . "\n";
 /**
  *  Convert date to timestamp
  *
- *  @param  string      $mysqldate      Date YYYMMDD
- *  @return integer                 Timestamp
+ * @param string $mysqldate Date YYYMMDD
+ * @return integer                 Timestamp
  */
 function xyzToUnixTimestamp($mysqldate)
 {
@@ -154,9 +154,9 @@ function xyzToUnixTimestamp($mysqldate)
 /**
  * Show box
  *
- * @param   string  $selectedDate   Date YYYMMDD
- * @param   int     $month          Month
- * @param   int     $year           Year
+ * @param string $selectedDate Date YYYMMDD
+ * @param int $month Month
+ * @param int $year Year
  * @return  void
  */
 function displayBox($selectedDate, $month, $year)
@@ -175,137 +175,144 @@ function displayBox($selectedDate, $month, $year)
         $selDate = 0;
         $xyz = 0;
     } ?>
-<table class="dp">
-    <tr>
-        <td colspan="6" class="dpHead"><?php
-        $selectMonth = dol_print_date($thedate, '%m');
-        $selectYear = dol_print_date($thedate, '%Y');
-        echo $langs->trans("Month" . $selectMonth) . ", " . $selectYear; ?></td>
-        <td class="dpHead">
-        <button type="button" class="dpInvisibleButtons" id="DPCancel"
-            onClick="closeDPBox();">X</button>
-        </td>
-    </tr>
-    <tr>
-        <td class="dpButtons"
-            onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php echo $month?>','<?php echo $year - 1?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">&lt;&lt;</td>
-        <td class="dpButtons"
-            onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php if ($month == 1) {
-                echo "12";
-                                } else {
-                                    echo $month - 1;
-                                } ?>','<?php if ($month == 1) {
-    echo $year - 1;
-                                } else {
-                                    echo $year;
-                                } ?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">&lt;</td>
-        <td colspan="3" class="dpButtons"
-            onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php echo (int) dol_print_date($today, '%m')?>','<?php echo $todayArray["year"]?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')"><?php echo '-' ?></td>
-        <td class="dpButtons"
-            onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php if ($month == 12) {
-                echo "1";
-                                } else {
-                                    echo $month + 1;
-                                } ?>','<?php if ($month == 12) {
-    echo $year + 1;
-                                } else {
-                                    echo $year;
-                                } ?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">&gt;</td>
-        <td class="dpButtons"
-            onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php echo $month?>','<?php echo $year + 1?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">&gt;&gt;</td>
-    </tr>
-    <tr class="dpDayNames">
-    <?php
-    $startday = isset($conf->global->MAIN_START_WEEK) ? $conf->global->MAIN_START_WEEK : 1;
-    $day_names = array('ShortSunday', 'ShortMonday', 'ShortTuesday', 'ShortWednesday', 'ShortThursday', 'ShortFriday', 'ShortSaturday');
-    for ($i = 0; $i < 7; $i++) {
-        echo '<td width="', (int) (($i + 1) * 100 / 7) - (int) ($i * 100 / 7), '%">', $langs->trans($day_names[($i + $startday) % 7]), '</td>', "\n";
-    }
-    print '</tr>';
-    //print "x ".$thedate." y";         // $thedate = first day of month
-    $firstdate = dol_getdate($thedate);
-    //var_dump($firstdateofweek);
-    $mydate = dol_get_first_day_week(1, $month, $year, true); // mydate = cursor date
-
-    // Loop on each day of month
-    $stoploop = 0;
-    $day = 1;
-    $cols = 0;
-    while (!$stoploop) {
-        //print_r($mydate);
-        if ($mydate < $firstdate) { // At first run
-            echo "<tr class=\"dpWeek\">";
-            //echo $conf->global->MAIN_START_WEEK.' '.$firstdate["wday"].' '.$startday;
-            $cols = 0;
+    <table class="dp">
+        <tr>
+            <td colspan="6" class="dpHead"><?php
+                $selectMonth = dol_print_date($thedate, '%m');
+                $selectYear = dol_print_date($thedate, '%Y');
+                echo $langs->trans("Month" . $selectMonth) . ", " . $selectYear; ?></td>
+            <td class="dpHead">
+                <button type="button" class="dpInvisibleButtons" id="DPCancel"
+                        onClick="closeDPBox();">X
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td class="dpButtons"
+                onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php echo $month ?>','<?php echo $year - 1 ?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">
+                &lt;&lt;
+            </td>
+            <td class="dpButtons"
+                onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php if ($month == 1) {
+                    echo "12";
+                } else {
+                    echo $month - 1;
+                } ?>','<?php if ($month == 1) {
+                    echo $year - 1;
+                } else {
+                    echo $year;
+                } ?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">&lt;
+            </td>
+            <td colspan="3" class="dpButtons"
+                onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php echo (int)dol_print_date($today, '%m') ?>','<?php echo $todayArray["year"] ?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')"><?php echo '-' ?></td>
+            <td class="dpButtons"
+                onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php if ($month == 12) {
+                    echo "1";
+                } else {
+                    echo $month + 1;
+                } ?>','<?php if ($month == 12) {
+                    echo $year + 1;
+                } else {
+                    echo $year;
+                } ?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">&gt;
+            </td>
+            <td class="dpButtons"
+                onClick="loadMonth('<?php echo constant('BASE_URL') . '/core/' ?>','<?php echo $month ?>','<?php echo $year + 1 ?>','<?php echo $xyz ?>','<?php echo $langs->defaultlang ?>')">
+                &gt;&gt;
+            </td>
+        </tr>
+        <tr class="dpDayNames">
+            <?php
+            $startday = isset($conf->global->MAIN_START_WEEK) ? $conf->global->MAIN_START_WEEK : 1;
+            $day_names = array('ShortSunday', 'ShortMonday', 'ShortTuesday', 'ShortWednesday', 'ShortThursday', 'ShortFriday', 'ShortSaturday');
             for ($i = 0; $i < 7; $i++) {
-                $w = ($i + $startday) % 7;
-                if ($w == $firstdate["wday"]) {
-                    $mydate = $firstdate;
-                    break;
+                echo '<td width="', (int)(($i + 1) * 100 / 7) - (int)($i * 100 / 7), '%">', $langs->trans($day_names[($i + $startday) % 7]), '</td>', "\n";
+            }
+            print '</tr>';
+            //print "x ".$thedate." y";         // $thedate = first day of month
+            $firstdate = dol_getdate($thedate);
+            //var_dump($firstdateofweek);
+            $mydate = dol_get_first_day_week(1, $month, $year, true); // mydate = cursor date
+
+            // Loop on each day of month
+            $stoploop = 0;
+            $day = 1;
+            $cols = 0;
+            while (!$stoploop) {
+                //print_r($mydate);
+                if ($mydate < $firstdate) { // At first run
+                    echo "<tr class=\"dpWeek\">";
+                    //echo $conf->global->MAIN_START_WEEK.' '.$firstdate["wday"].' '.$startday;
+                    $cols = 0;
+                    for ($i = 0; $i < 7; $i++) {
+                        $w = ($i + $startday) % 7;
+                        if ($w == $firstdate["wday"]) {
+                            $mydate = $firstdate;
+                            break;
+                        }
+                        echo "<td>&nbsp;</td>";
+                        $cols++;
+                    }
+                } else {
+                    if ($mydate["wday"] == $startday) {
+                        echo "<tr class=\"dpWeek\">";
+                        $cols = 0;
+                    }
                 }
-                echo "<td>&nbsp;</td>";
+
+                $dayclass = "dpReg";
+                if ($thedate == $selDate) {
+                    $dayclass = "dpSelected";
+                } elseif ($thedate == $today) {
+                    $dayclass = "dpToday";
+                }
+
+                if ($langs->trans("FormatDateShortJavaInput") == "FormatDateShortJavaInput") {
+                    print "ERROR FormatDateShortJavaInput not defined for language " . $langs->defaultlang;
+                    exit;
+                }
+
+                // Sur click dans calendrier, appelle fonction dpClickDay
+                echo "<td class=\"" . $dayclass . "\"";
+                echo " onMouseOver=\"dpHighlightDay(" . $mydate["year"] . ",parseInt('" . dol_print_date($thedate, "%m") . "',10)," . $mydate["mday"] . ",tradMonths)\"";
+                echo " onClick=\"dpClickDay(" . $mydate["year"] . ",parseInt('" . dol_print_date($thedate, "%m") . "',10)," . $mydate["mday"] . ",'" . $langs->trans("FormatDateShortJavaInput") . "')\"";
+                echo ">" . sprintf("%02d", $mydate["mday"]) . "</td>";
                 $cols++;
+
+                if (($mydate["wday"] + 1) % 7 == $startday) {
+                    echo "</TR>\n";
+                }
+
+                //$thedate=strtotime("tomorrow",$thedate);
+                $day++;
+                $thedate = dol_mktime(12, 0, 0, $month, $day, $year);
+                if ($thedate == '') {
+                    $stoploop = 1;
+                } else {
+                    $mydate = dol_getdate($thedate);
+                    if ($firstdate["month"] != $mydate["month"]) {
+                        $stoploop = 1;
+                    }
+                }
             }
-        } else {
-            if ($mydate["wday"] == $startday) {
-                echo "<tr class=\"dpWeek\">";
-                $cols = 0;
-            }
-        }
 
-        $dayclass = "dpReg";
-        if ($thedate == $selDate) {
-            $dayclass = "dpSelected";
-        } elseif ($thedate == $today) {
-            $dayclass = "dpToday";
-        }
-
-        if ($langs->trans("FormatDateShortJavaInput") == "FormatDateShortJavaInput") {
-            print "ERROR FormatDateShortJavaInput not defined for language " . $langs->defaultlang;
-            exit;
-        }
-
-        // Sur click dans calendrier, appelle fonction dpClickDay
-        echo "<td class=\"" . $dayclass . "\"";
-        echo " onMouseOver=\"dpHighlightDay(" . $mydate["year"] . ",parseInt('" . dol_print_date($thedate, "%m") . "',10)," . $mydate["mday"] . ",tradMonths)\"";
-        echo " onClick=\"dpClickDay(" . $mydate["year"] . ",parseInt('" . dol_print_date($thedate, "%m") . "',10)," . $mydate["mday"] . ",'" . $langs->trans("FormatDateShortJavaInput") . "')\"";
-        echo ">" . sprintf("%02d", $mydate["mday"]) . "</td>";
-        $cols++;
-
-        if (($mydate["wday"] + 1) % 7 == $startday) {
-            echo "</TR>\n";
-        }
-
-        //$thedate=strtotime("tomorrow",$thedate);
-        $day++;
-        $thedate = dol_mktime(12, 0, 0, $month, $day, $year);
-        if ($thedate == '') {
-            $stoploop = 1;
-        } else {
-            $mydate = dol_getdate($thedate);
-            if ($firstdate["month"] != $mydate["month"]) {
-                $stoploop = 1;
-            }
-        }
-    }
-
-    if ($cols < 7) {
-        for ($i = 6; $i >= $cols; $i--) {
-            echo "<td>&nbsp;</td>";
-        }
-        echo "</tr>\n";
-    } ?>
-    <tr>
-        <td id="dpExp" class="dpExplanation" colspan="7"><?php
-        if ($selDate) {
-            $tempDate = dol_getdate($selDate);
-            print $langs->trans("Month" . $selectMonth) . " ";
-            print sprintf("%02d", $tempDate["mday"]);
-            print ", " . $selectYear;
-        } else {
-            print "Click a Date";
-        } ?></td>
-    </tr>
-</table>
-        <?php
+            if ($cols < 7) {
+                for ($i = 6; $i >= $cols; $i--) {
+                    echo "<td>&nbsp;</td>";
+                }
+                echo "</tr>\n";
+            } ?>
+        <tr>
+            <td id="dpExp" class="dpExplanation" colspan="7"><?php
+                if ($selDate) {
+                    $tempDate = dol_getdate($selDate);
+                    print $langs->trans("Month" . $selectMonth) . " ";
+                    print sprintf("%02d", $tempDate["mday"]);
+                    print ", " . $selectYear;
+                } else {
+                    print "Click a Date";
+                } ?></td>
+        </tr>
+    </table>
+    <?php
 }//end function

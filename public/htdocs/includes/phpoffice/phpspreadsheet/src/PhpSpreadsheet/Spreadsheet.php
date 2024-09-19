@@ -212,7 +212,7 @@ class Spreadsheet
      */
     public function setHasMacros($hasMacros)
     {
-        $this->hasMacros = (bool) $hasMacros;
+        $this->hasMacros = (bool)$hasMacros;
     }
 
     /**
@@ -340,9 +340,9 @@ class Spreadsheet
      * List of unparsed loaded data for export to same format with better compatibility.
      * It has to be minimized when the library start to support currently unparsed data.
      *
+     * @return array
      * @internal
      *
-     * @return array
      */
     public function getUnparsedLoadedData()
     {
@@ -353,9 +353,9 @@ class Spreadsheet
      * List of unparsed loaded data for export to same format with better compatibility.
      * It has to be minimized when the library start to support currently unparsed data.
      *
+     * @param array $unparsedLoadedData
      * @internal
      *
-     * @param array $unparsedLoadedData
      */
     public function setUnparsedLoadedData(array $unparsedLoadedData)
     {
@@ -573,9 +573,9 @@ class Spreadsheet
     /**
      * Get active sheet.
      *
+     * @return Worksheet
      * @throws Exception
      *
-     * @return Worksheet
      */
     public function getActiveSheet()
     {
@@ -587,9 +587,9 @@ class Spreadsheet
      *
      * @param null|int $sheetIndex Index where sheet should go (0,1,..., or null for last)
      *
+     * @return Worksheet
      * @throws Exception
      *
-     * @return Worksheet
      */
     public function createSheet($sheetIndex = null)
     {
@@ -617,9 +617,9 @@ class Spreadsheet
      * @param Worksheet $pSheet
      * @param null|int $iSheetIndex Index where sheet should go (0,1,..., or null for last)
      *
+     * @return Worksheet
      * @throws Exception
      *
-     * @return Worksheet
      */
     public function addSheet(Worksheet $pSheet, $iSheetIndex = null)
     {
@@ -687,9 +687,9 @@ class Spreadsheet
      *
      * @param int $pIndex Sheet index
      *
+     * @return Worksheet
      * @throws Exception
      *
-     * @return Worksheet
      */
     public function getSheet($pIndex)
     {
@@ -738,9 +738,9 @@ class Spreadsheet
      *
      * @param Worksheet $pSheet
      *
+     * @return int index
      * @throws Exception
      *
-     * @return int index
      */
     public function getIndex(Worksheet $pSheet)
     {
@@ -759,9 +759,9 @@ class Spreadsheet
      * @param string $sheetName Sheet name to modify index for
      * @param int $newIndex New index for the sheet
      *
+     * @return int New sheet index
      * @throws Exception
      *
-     * @return int New sheet index
      */
     public function setIndexByName($sheetName, $newIndex)
     {
@@ -806,9 +806,9 @@ class Spreadsheet
      *
      * @param int $pIndex Active sheet index
      *
+     * @return Worksheet
      * @throws Exception
      *
-     * @return Worksheet
      */
     public function setActiveSheetIndex($pIndex)
     {
@@ -829,9 +829,9 @@ class Spreadsheet
      *
      * @param string $pValue Sheet title
      *
+     * @return Worksheet
      * @throws Exception
      *
-     * @return Worksheet
      */
     public function setActiveSheetIndexByName($pValue)
     {
@@ -866,9 +866,9 @@ class Spreadsheet
      * @param Worksheet $pSheet External sheet to add
      * @param null|int $iSheetIndex Index where sheet should go (0,1,..., or null for last)
      *
+     * @return Worksheet
      * @throws Exception
      *
-     * @return Worksheet
      */
     public function addExternalSheet(Worksheet $pSheet, $iSheetIndex = null)
     {
@@ -1071,9 +1071,9 @@ class Spreadsheet
     /**
      * Get default style.
      *
+     * @return Style
      * @throws Exception
      *
-     * @return Style
      */
     public function getDefaultStyle()
     {
@@ -1310,7 +1310,7 @@ class Spreadsheet
      */
     public function setShowHorizontalScroll($showHorizontalScroll)
     {
-        $this->showHorizontalScroll = (bool) $showHorizontalScroll;
+        $this->showHorizontalScroll = (bool)$showHorizontalScroll;
     }
 
     /**
@@ -1330,7 +1330,7 @@ class Spreadsheet
      */
     public function setShowVerticalScroll($showVerticalScroll)
     {
-        $this->showVerticalScroll = (bool) $showVerticalScroll;
+        $this->showVerticalScroll = (bool)$showVerticalScroll;
     }
 
     /**
@@ -1350,7 +1350,7 @@ class Spreadsheet
      */
     public function setShowSheetTabs($showSheetTabs)
     {
-        $this->showSheetTabs = (bool) $showSheetTabs;
+        $this->showSheetTabs = (bool)$showSheetTabs;
     }
 
     /**
@@ -1370,7 +1370,7 @@ class Spreadsheet
      */
     public function setMinimized($minimized)
     {
-        $this->minimized = (bool) $minimized;
+        $this->minimized = (bool)$minimized;
     }
 
     /**
@@ -1392,7 +1392,7 @@ class Spreadsheet
      */
     public function setAutoFilterDateGrouping($autoFilterDateGrouping)
     {
-        $this->autoFilterDateGrouping = (bool) $autoFilterDateGrouping;
+        $this->autoFilterDateGrouping = (bool)$autoFilterDateGrouping;
     }
 
     /**
@@ -1415,7 +1415,7 @@ class Spreadsheet
     public function setFirstSheetIndex($firstSheetIndex)
     {
         if ($firstSheetIndex >= 0) {
-            $this->firstSheetIndex = (int) $firstSheetIndex;
+            $this->firstSheetIndex = (int)$firstSheetIndex;
         } else {
             throw new Exception('First sheet index must be a positive integer.');
         }
@@ -1486,7 +1486,7 @@ class Spreadsheet
     public function setTabRatio($tabRatio)
     {
         if ($tabRatio >= 0 || $tabRatio <= 1000) {
-            $this->tabRatio = (int) $tabRatio;
+            $this->tabRatio = (int)$tabRatio;
         } else {
             throw new Exception('Tab ratio must be between 0 and 1000.');
         }

@@ -12,9 +12,9 @@ class EarlyFraudWarningService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Radar\EarlyFraudWarning>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Radar\EarlyFraudWarning>
      */
     public function all($params = null, $opts = null)
     {
@@ -32,9 +32,9 @@ class EarlyFraudWarningService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Radar\EarlyFraudWarning
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Radar\EarlyFraudWarning
      */
     public function retrieve($id, $params = null, $opts = null)
     {

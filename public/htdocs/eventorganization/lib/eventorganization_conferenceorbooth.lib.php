@@ -170,7 +170,6 @@ function conferenceorboothProjectPrepareHead($object)
     if (!is_null($dataretrieved)) {
         $nbAttendees = $dataretrieved;
     } else {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
         $attendees = new ConferenceOrBoothAttendee($db);
         $result = $attendees->fetchAll('', '', 0, 0, '(t.fk_project:=:' . ((int) $object->id) . ')');
         if (!is_array($result) && $result < 0) {

@@ -152,8 +152,8 @@ abstract class Document extends Component
      * ensure that this does not happen, set $defaults to false.
      *
      * @param string $name
-     * @param array  $children
-     * @param bool   $defaults
+     * @param array $children
+     * @param bool $defaults
      *
      * @return Component
      */
@@ -183,9 +183,9 @@ abstract class Document extends Component
      * Parameter objects.
      *
      * @param string $name
-     * @param mixed  $value
-     * @param array  $parameters
-     * @param string $valueType  Force a specific valuetype, such as URI or TEXT
+     * @param mixed $value
+     * @param array $parameters
+     * @param string $valueType Force a specific valuetype, such as URI or TEXT
      *
      * @return Property
      */

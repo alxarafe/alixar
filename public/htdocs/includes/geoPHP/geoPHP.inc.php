@@ -78,8 +78,7 @@ class geoPHP
         // Data is not an array, just pass it normally
         if (!is_array($data)) {
             $result = call_user_func_array(array($processor, "read"), array_merge(array($data), $args));
-        }
-        // Data is an array, combine all passed in items into a single geometry
+        } // Data is an array, combine all passed in items into a single geometry
         else {
             $geoms = array();
             foreach ($data as $item) {
@@ -93,31 +92,31 @@ class geoPHP
 
     static function getAdapterMap()
     {
-        return array (
-        'wkt' =>  'WKT',
-        'ewkt' => 'EWKT',
-        'wkb' =>  'WKB',
-        'ewkb' => 'EWKB',
-        'json' => 'GeoJSON',
-        'geojson' => 'GeoJSON',
-        'kml' =>  'KML',
-        'gpx' =>  'GPX',
-        'georss' => 'GeoRSS',
-        'google_geocode' => 'GoogleGeocode',
-        'geohash' => 'GeoHash',
+        return array(
+            'wkt' => 'WKT',
+            'ewkt' => 'EWKT',
+            'wkb' => 'WKB',
+            'ewkb' => 'EWKB',
+            'json' => 'GeoJSON',
+            'geojson' => 'GeoJSON',
+            'kml' => 'KML',
+            'gpx' => 'GPX',
+            'georss' => 'GeoRSS',
+            'google_geocode' => 'GoogleGeocode',
+            'geohash' => 'GeoHash',
         );
     }
 
     static function geometryList()
     {
         return array(
-        'point' => 'Point',
-        'linestring' => 'LineString',
-        'polygon' => 'Polygon',
-        'multipoint' => 'MultiPoint',
-        'multilinestring' => 'MultiLineString',
-        'multipolygon' => 'MultiPolygon',
-        'geometrycollection' => 'GeometryCollection',
+            'point' => 'Point',
+            'linestring' => 'LineString',
+            'polygon' => 'Polygon',
+            'multipoint' => 'MultiPoint',
+            'multilinestring' => 'MultiLineString',
+            'multipolygon' => 'MultiPolygon',
+            'geometrycollection' => 'GeometryCollection',
         );
     }
 
@@ -160,7 +159,7 @@ class geoPHP
 
         // If the geometry cannot even theoretically be reduced more, then pass it back
         if (gettype($geometry) == 'object') {
-            $passbacks = array('Point','LineString','Polygon');
+            $passbacks = array('Point', 'LineString', 'Polygon');
             if (in_array($geometry->geometryType(), $passbacks)) {
                 return $geometry;
             }
@@ -169,7 +168,7 @@ class geoPHP
         // If it is a mutlti-geometry, check to see if it just has one member
         // If it does, then pass the member, if not, then just pass back the geometry
         if (gettype($geometry) == 'object') {
-            $simple_collections = array('MultiPoint','MultiLineString','MultiPolygon');
+            $simple_collections = array('MultiPoint', 'MultiLineString', 'MultiPolygon');
             if (in_array(get_class($geometry), $passbacks)) {
                 $components = $geometry->getComponents();
                 if (count($components) == 1) {
@@ -188,7 +187,7 @@ class geoPHP
         $geometries = array();
         $geom_types = array();
 
-        $collections = array('MultiPoint','MultiLineString','MultiPolygon','GeometryCollection');
+        $collections = array('MultiPoint', 'MultiLineString', 'MultiPolygon', 'GeometryCollection');
 
         foreach ($geometry as $item) {
             if ($item) {
@@ -278,12 +277,12 @@ class geoPHP
         if ($bytes[1] == 60) {
             // grab the first 256 characters
             $string = substr($input, 0, 256);
-            if (strpos($string, '<kml') !== false)        return 'kml';
+            if (strpos($string, '<kml') !== false) return 'kml';
             if (strpos($string, '<coordinate') !== false) return 'kml';
-            if (strpos($string, '<gpx') !== false)        return 'gpx';
-            if (strpos($string, '<georss') !== false)     return 'georss';
-            if (strpos($string, '<rss') !== false)        return 'georss';
-            if (strpos($string, '<feed') !== false)       return 'georss';
+            if (strpos($string, '<gpx') !== false) return 'gpx';
+            if (strpos($string, '<georss') !== false) return 'georss';
+            if (strpos($string, '<rss') !== false) return 'georss';
+            if (strpos($string, '<feed') !== false) return 'georss';
         }
 
         // We need an 8 byte string for geohash and unpacked WKB / WKT

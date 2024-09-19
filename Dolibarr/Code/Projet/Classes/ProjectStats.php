@@ -21,9 +21,9 @@
 namespace Dolibarr\Code\Projet\Classes;
 
 use Dolibarr\Code\Core\Classes\Stats;
+use DoliDB;
 
 include_once DOL_DOCUMENT_ROOT . '/core/lib/date.lib.php';
-
 
 /**
  * Class to manage statistics on projects
@@ -41,7 +41,6 @@ class ProjectStats extends Stats
     public $from;
     public $where;
 
-
     /**
      * Constructor
      *
@@ -53,7 +52,6 @@ class ProjectStats extends Stats
 
         $this->db = $db;
 
-        require_once 'project.class.php';
         $this->project = new Project($this->db);
 
         $this->from = MAIN_DB_PREFIX . $this->project->table_element;

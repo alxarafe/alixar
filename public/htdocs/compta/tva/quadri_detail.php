@@ -695,13 +695,13 @@ if (!is_array($x_coll) || !is_array($x_paye)) {
                     ) {
                     } else {
                         if (isset($fields['payment_amount']) && $fields['ftotal_ttc']) {
-                            $ratiopaymentinvoice = ($fields['payment_amount'] / (float) $fields['ftotal_ttc']);
+                            $ratiopaymentinvoice = ($fields['payment_amount'] / (float)$fields['ftotal_ttc']);
                         }
                     }
                 }
 
                 // VAT paid
-                $temp_ht = (float) $fields['totalht'] * $ratiopaymentinvoice;
+                $temp_ht = (float)$fields['totalht'] * $ratiopaymentinvoice;
 
                 // VAT
                 $temp_vat = $fields['vat'] * $ratiopaymentinvoice;
@@ -798,7 +798,7 @@ if (!is_array($x_coll) || !is_array($x_paye)) {
                         print price($fields['totalht']);
                         if (price2num($fields['ftotal_ttc'])) {
                             //print $fields['dtotal_ttc']."/".$fields['ftotal_ttc']." - ";
-                            $ratiolineinvoice = ((float) $fields['dtotal_ttc'] / (float) $fields['ftotal_ttc']);
+                            $ratiolineinvoice = ((float)$fields['dtotal_ttc'] / (float)$fields['ftotal_ttc']);
                             //print ' ('.round($ratiolineinvoice*100,2).'%)';
                         }
                         print '</td>';
@@ -821,7 +821,7 @@ if (!is_array($x_coll) || !is_array($x_paye)) {
                             print $langs->trans("NA");
                         } else {
                             if (isset($fields['payment_amount']) && $fields['ftotal_ttc']) {
-                                $ratiopaymentinvoice = ($fields['payment_amount'] / (float) $fields['ftotal_ttc']);
+                                $ratiopaymentinvoice = ($fields['payment_amount'] / (float)$fields['ftotal_ttc']);
                             }
                             print price(price2num($fields['payment_amount'], 'MT'));
                             if (isset($fields['payment_amount'])) {
@@ -833,7 +833,7 @@ if (!is_array($x_coll) || !is_array($x_paye)) {
 
                     // VAT paid
                     print '<td class="nowrap right">';
-                    $temp_ht = (float) $fields['totalht'] * $ratiopaymentinvoice;
+                    $temp_ht = (float)$fields['totalht'] * $ratiopaymentinvoice;
                     print price(price2num($temp_ht, 'MT'), 1);
                     print '</td>';
 

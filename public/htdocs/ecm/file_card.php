@@ -71,7 +71,7 @@ if (!$section) {
     dol_print_error(null, 'Error, section parameter missing');
     exit;
 }
-$urlfile = (string) dol_sanitizePathName(GETPOST("urlfile"), '_', 0);
+$urlfile = (string)dol_sanitizePathName(GETPOST("urlfile"), '_', 0);
 if (!$urlfile) {
     dol_print_error(null, "ErrorParamNotDefined");
     exit;
@@ -232,7 +232,6 @@ if ($action == 'update' && $permissiontoadd) {
         $db->rollback();
     }
 }
-
 
 
 /*

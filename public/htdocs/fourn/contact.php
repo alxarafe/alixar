@@ -79,7 +79,7 @@ $sql .= " AND s.fournisseur = 1";
 $sql .= " AND s.rowid = p.fk_soc";
 $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 
 if (dol_strlen($stcomm)) {
@@ -97,7 +97,7 @@ if ($contactname) {
 }
 
 if ($socid) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 
 $sql .= " ORDER BY $sortfield $sortorder ";

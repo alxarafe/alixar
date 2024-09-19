@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,6 +21,9 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Recruitement\Classes\ModeleNumRefRecruitmentJobPosition;
+
 /**
  *  \file       htdocs/core/modules/recruitment/mod_recruitmentjobposition_standard.php
  *  \ingroup    recruitment
@@ -28,7 +31,6 @@
  */
 
 dol_include_once('/recruitment/core/modules/recruitment/modules_recruitmentjobposition.php');
-
 
 /**
  *  Class to manage the Standard numbering rule for Job positions

@@ -57,6 +57,7 @@ if (!defined('NOBROWSERNOTIF')) {
 function llxHeader()
 {
 }
+
 /**
  * Footer empty
  *

@@ -35,12 +35,12 @@ class PageSetup extends BaseParserClass
     {
         if ($xmlSheet->pageMargins) {
             $docPageMargins = $worksheet->getPageMargins();
-            $docPageMargins->setLeft((float) ($xmlSheet->pageMargins['left']));
-            $docPageMargins->setRight((float) ($xmlSheet->pageMargins['right']));
-            $docPageMargins->setTop((float) ($xmlSheet->pageMargins['top']));
-            $docPageMargins->setBottom((float) ($xmlSheet->pageMargins['bottom']));
-            $docPageMargins->setHeader((float) ($xmlSheet->pageMargins['header']));
-            $docPageMargins->setFooter((float) ($xmlSheet->pageMargins['footer']));
+            $docPageMargins->setLeft((float)($xmlSheet->pageMargins['left']));
+            $docPageMargins->setRight((float)($xmlSheet->pageMargins['right']));
+            $docPageMargins->setTop((float)($xmlSheet->pageMargins['top']));
+            $docPageMargins->setBottom((float)($xmlSheet->pageMargins['bottom']));
+            $docPageMargins->setHeader((float)($xmlSheet->pageMargins['header']));
+            $docPageMargins->setFooter((float)($xmlSheet->pageMargins['footer']));
         }
     }
 
@@ -50,30 +50,30 @@ class PageSetup extends BaseParserClass
             $docPageSetup = $worksheet->getPageSetup();
 
             if (isset($xmlSheet->pageSetup['orientation'])) {
-                $docPageSetup->setOrientation((string) $xmlSheet->pageSetup['orientation']);
+                $docPageSetup->setOrientation((string)$xmlSheet->pageSetup['orientation']);
             }
             if (isset($xmlSheet->pageSetup['paperSize'])) {
-                $docPageSetup->setPaperSize((int) ($xmlSheet->pageSetup['paperSize']));
+                $docPageSetup->setPaperSize((int)($xmlSheet->pageSetup['paperSize']));
             }
             if (isset($xmlSheet->pageSetup['scale'])) {
-                $docPageSetup->setScale((int) ($xmlSheet->pageSetup['scale']), false);
+                $docPageSetup->setScale((int)($xmlSheet->pageSetup['scale']), false);
             }
-            if (isset($xmlSheet->pageSetup['fitToHeight']) && (int) ($xmlSheet->pageSetup['fitToHeight']) >= 0) {
-                $docPageSetup->setFitToHeight((int) ($xmlSheet->pageSetup['fitToHeight']), false);
+            if (isset($xmlSheet->pageSetup['fitToHeight']) && (int)($xmlSheet->pageSetup['fitToHeight']) >= 0) {
+                $docPageSetup->setFitToHeight((int)($xmlSheet->pageSetup['fitToHeight']), false);
             }
-            if (isset($xmlSheet->pageSetup['fitToWidth']) && (int) ($xmlSheet->pageSetup['fitToWidth']) >= 0) {
-                $docPageSetup->setFitToWidth((int) ($xmlSheet->pageSetup['fitToWidth']), false);
+            if (isset($xmlSheet->pageSetup['fitToWidth']) && (int)($xmlSheet->pageSetup['fitToWidth']) >= 0) {
+                $docPageSetup->setFitToWidth((int)($xmlSheet->pageSetup['fitToWidth']), false);
             }
             if (
                 isset($xmlSheet->pageSetup['firstPageNumber'], $xmlSheet->pageSetup['useFirstPageNumber']) &&
-                self::boolean((string) $xmlSheet->pageSetup['useFirstPageNumber'])
+                self::boolean((string)$xmlSheet->pageSetup['useFirstPageNumber'])
             ) {
-                $docPageSetup->setFirstPageNumber((int) ($xmlSheet->pageSetup['firstPageNumber']));
+                $docPageSetup->setFirstPageNumber((int)($xmlSheet->pageSetup['firstPageNumber']));
             }
 
             $relAttributes = $xmlSheet->pageSetup->attributes('http://schemas.openxmlformats.org/officeDocument/2006/relationships');
             if (isset($relAttributes['id'])) {
-                $unparsedLoadedData['sheets'][$worksheet->getCodeName()]['pageSetupRelId'] = (string) $relAttributes['id'];
+                $unparsedLoadedData['sheets'][$worksheet->getCodeName()]['pageSetupRelId'] = (string)$relAttributes['id'];
             }
         }
 
@@ -87,7 +87,7 @@ class PageSetup extends BaseParserClass
 
             if (
                 isset($xmlSheet->headerFooter['differentOddEven']) &&
-                self::boolean((string) $xmlSheet->headerFooter['differentOddEven'])
+                self::boolean((string)$xmlSheet->headerFooter['differentOddEven'])
             ) {
                 $docHeaderFooter->setDifferentOddEven(true);
             } else {
@@ -95,7 +95,7 @@ class PageSetup extends BaseParserClass
             }
             if (
                 isset($xmlSheet->headerFooter['differentFirst']) &&
-                self::boolean((string) $xmlSheet->headerFooter['differentFirst'])
+                self::boolean((string)$xmlSheet->headerFooter['differentFirst'])
             ) {
                 $docHeaderFooter->setDifferentFirst(true);
             } else {
@@ -103,7 +103,7 @@ class PageSetup extends BaseParserClass
             }
             if (
                 isset($xmlSheet->headerFooter['scaleWithDoc']) &&
-                !self::boolean((string) $xmlSheet->headerFooter['scaleWithDoc'])
+                !self::boolean((string)$xmlSheet->headerFooter['scaleWithDoc'])
             ) {
                 $docHeaderFooter->setScaleWithDocument(false);
             } else {
@@ -111,19 +111,19 @@ class PageSetup extends BaseParserClass
             }
             if (
                 isset($xmlSheet->headerFooter['alignWithMargins']) &&
-                !self::boolean((string) $xmlSheet->headerFooter['alignWithMargins'])
+                !self::boolean((string)$xmlSheet->headerFooter['alignWithMargins'])
             ) {
                 $docHeaderFooter->setAlignWithMargins(false);
             } else {
                 $docHeaderFooter->setAlignWithMargins(true);
             }
 
-            $docHeaderFooter->setOddHeader((string) $xmlSheet->headerFooter->oddHeader);
-            $docHeaderFooter->setOddFooter((string) $xmlSheet->headerFooter->oddFooter);
-            $docHeaderFooter->setEvenHeader((string) $xmlSheet->headerFooter->evenHeader);
-            $docHeaderFooter->setEvenFooter((string) $xmlSheet->headerFooter->evenFooter);
-            $docHeaderFooter->setFirstHeader((string) $xmlSheet->headerFooter->firstHeader);
-            $docHeaderFooter->setFirstFooter((string) $xmlSheet->headerFooter->firstFooter);
+            $docHeaderFooter->setOddHeader((string)$xmlSheet->headerFooter->oddHeader);
+            $docHeaderFooter->setOddFooter((string)$xmlSheet->headerFooter->oddFooter);
+            $docHeaderFooter->setEvenHeader((string)$xmlSheet->headerFooter->evenHeader);
+            $docHeaderFooter->setEvenFooter((string)$xmlSheet->headerFooter->evenFooter);
+            $docHeaderFooter->setFirstHeader((string)$xmlSheet->headerFooter->firstHeader);
+            $docHeaderFooter->setFirstFooter((string)$xmlSheet->headerFooter->firstFooter);
         }
     }
 
@@ -151,7 +151,7 @@ class PageSetup extends BaseParserClass
         foreach ($xmlSheet->colBreaks->brk as $brk) {
             if ($brk['man']) {
                 $worksheet->setBreak(
-                    Coordinate::stringFromColumnIndex(((int) $brk['id']) + 1) . '1',
+                    Coordinate::stringFromColumnIndex(((int)$brk['id']) + 1) . '1',
                     Worksheet::BREAK_COLUMN
                 );
             }

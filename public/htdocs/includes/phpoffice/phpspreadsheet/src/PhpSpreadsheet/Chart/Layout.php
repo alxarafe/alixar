@@ -125,16 +125,16 @@ class Layout
             $this->yMode = $layout['yMode'];
         }
         if (isset($layout['x'])) {
-            $this->xPos = (float) $layout['x'];
+            $this->xPos = (float)$layout['x'];
         }
         if (isset($layout['y'])) {
-            $this->yPos = (float) $layout['y'];
+            $this->yPos = (float)$layout['y'];
         }
         if (isset($layout['w'])) {
-            $this->width = (float) $layout['w'];
+            $this->width = (float)$layout['w'];
         }
         if (isset($layout['h'])) {
-            $this->height = (float) $layout['h'];
+            $this->height = (float)$layout['h'];
         }
     }
 
@@ -181,7 +181,7 @@ class Layout
      */
     public function setXMode($value)
     {
-        $this->xMode = (string) $value;
+        $this->xMode = (string)$value;
 
         return $this;
     }
@@ -205,7 +205,7 @@ class Layout
      */
     public function setYMode($value)
     {
-        $this->yMode = (string) $value;
+        $this->yMode = (string)$value;
 
         return $this;
     }
@@ -229,7 +229,7 @@ class Layout
      */
     public function setXPosition($value)
     {
-        $this->xPos = (float) $value;
+        $this->xPos = (float)$value;
 
         return $this;
     }
@@ -253,7 +253,7 @@ class Layout
      */
     public function setYPosition($value)
     {
-        $this->yPos = (float) $value;
+        $this->yPos = (float)$value;
 
         return $this;
     }

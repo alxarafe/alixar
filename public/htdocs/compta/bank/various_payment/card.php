@@ -294,7 +294,7 @@ if ($action == 'confirm_clone' && $confirm == 'yes' && $permissiontoadd) {
         if (GETPOSTISSET("clone_amount")) {
             $object->amount = GETPOSTFLOAT("clone_amount");
         } else {
-            $object->amount = (float) price2num($object->amount);
+            $object->amount = (float)price2num($object->amount);
         }
 
         if ($object->check()) {

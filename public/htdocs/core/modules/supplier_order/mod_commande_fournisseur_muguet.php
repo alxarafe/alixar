@@ -77,8 +77,8 @@ class mod_commande_fournisseur_muguet extends ModeleNumRefSuppliersOrders
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -89,7 +89,7 @@ class mod_commande_fournisseur_muguet extends ModeleNumRefSuppliersOrders
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -100,8 +100,8 @@ class mod_commande_fournisseur_muguet extends ModeleNumRefSuppliersOrders
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if KO (there is a conflict), true if OK
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if KO (there is a conflict), true if OK
      */
     public function canBeActivated($object)
     {
@@ -135,9 +135,9 @@ class mod_commande_fournisseur_muguet extends ModeleNumRefSuppliersOrders
     /**
      *  Return next value
      *
-     *  @param  Societe|string      $objsoc     Object third party
-     *  @param  CommandeFournisseur $object     Object
-     *  @return string                          Value if OK, 0 if KO
+     * @param Societe|string $objsoc Object third party
+     * @param CommandeFournisseur $object Object
+     * @return string                          Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $object)
     {

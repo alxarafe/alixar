@@ -53,7 +53,6 @@ function webhookAdminPrepareHead()
     */
 
 
-
     // Show more tabs from modules
     // Entries must be declared in modules descriptor with line
     //$this->tabs = array(

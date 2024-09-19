@@ -57,8 +57,8 @@ class mod_facture_mercure extends ModeleNumRefFactures
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -116,7 +116,7 @@ class mod_facture_mercure extends ModeleNumRefFactures
     /**
      *  Return an example of number value
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -139,9 +139,9 @@ class mod_facture_mercure extends ModeleNumRefFactures
     /**
      * Return next value
      *
-     * @param   Societe     $objsoc     Object third party
-     * @param   Facture     $invoice    Object invoice
-     * @param   string      $mode       'next' for next value or 'last' for last value
+     * @param Societe $objsoc Object third party
+     * @param Facture $invoice Object invoice
+     * @param string $mode 'next' for next value or 'last' for last value
      * @return  string|0                Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $invoice, $mode = 'next')
@@ -184,9 +184,9 @@ class mod_facture_mercure extends ModeleNumRefFactures
     /**
      * Return next free value
      *
-     * @param   Societe     $objsoc         Object third party
-     * @param   Facture     $objforref      Object for number to search
-     * @param   string      $mode           'next' for next value or 'last' for last value
+     * @param Societe $objsoc Object third party
+     * @param Facture $objforref Object for number to search
+     * @param string $mode 'next' for next value or 'last' for last value
      * @return  string|0                    Next free value, 0 if KO
      * @deprecated see getNextValue
      */

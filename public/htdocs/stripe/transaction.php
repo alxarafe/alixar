@@ -26,7 +26,6 @@ use Dolibarr\Code\Societe\Classes\Societe;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 //require_once DOL_DOCUMENT_ROOT.'/core/lib/stripe.lib.php';
 
 // Load translation files required by the page
@@ -210,8 +209,8 @@ if (!$rowid) {
             // Type
             print '<td>' . $txn->type . '</td>';
             // Amount
-            print '<td class="right"><span class="amount">' . price(($txn->amount) / 100, 0, '', 1, - 1, - 1, strtoupper($txn->currency)) . "</span></td>";
-            print '<td class="right"><span class="amount">' . price(($txn->fee) / 100, 0, '', 1, - 1, - 1, strtoupper($txn->currency)) . "</span></td>";
+            print '<td class="right"><span class="amount">' . price(($txn->amount) / 100, 0, '', 1, -1, -1, strtoupper($txn->currency)) . "</span></td>";
+            print '<td class="right"><span class="amount">' . price(($txn->fee) / 100, 0, '', 1, -1, -1, strtoupper($txn->currency)) . "</span></td>";
             // Status
             print "<td class='right'>";
             if ($txn->status == 'available') {

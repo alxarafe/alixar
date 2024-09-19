@@ -56,7 +56,6 @@ $hash_algo = GETPOST('hash_algo', 'alpha');
 // None. Being connected is enough.
 
 
-
 /*
  * View
  */

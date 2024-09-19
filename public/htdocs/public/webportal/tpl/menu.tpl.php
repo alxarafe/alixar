@@ -172,39 +172,39 @@ if (empty($reshook)) {
 <nav class="primary-top-nav container-fluid">
     <ul class="brand">
         <li class="brand">
-        <?php
-        $brandTitle = getDolGlobalString('WEBPORTAL_TITLE') ? getDolGlobalString('WEBPORTAL_TITLE') : getDolGlobalString('MAIN_INFO_SOCIETE_NOM');
-        print '<a class="brand__logo-link"  href="' . $context->getControllerUrl() . '" >';
-        if (!empty($context->theme->menuLogoUrl)) {
-            print '<img class="brand__logo-img" src="' . dol_escape_htmltag($context->theme->menuLogoUrl) . '" alt="' . dol_escape_htmltag($brandTitle) . '">';
-        } else {
-            print '<span class="brand__name">' . $brandTitle . '</span>';
-        }
-        print '</a>';
-        ?>
+            <?php
+            $brandTitle = getDolGlobalString('WEBPORTAL_TITLE') ? getDolGlobalString('WEBPORTAL_TITLE') : getDolGlobalString('MAIN_INFO_SOCIETE_NOM');
+            print '<a class="brand__logo-link"  href="' . $context->getControllerUrl() . '" >';
+            if (!empty($context->theme->menuLogoUrl)) {
+                print '<img class="brand__logo-img" src="' . dol_escape_htmltag($context->theme->menuLogoUrl) . '" alt="' . dol_escape_htmltag($brandTitle) . '">';
+            } else {
+                print '<span class="brand__name">' . $brandTitle . '</span>';
+            }
+            print '</a>';
+            ?>
         </li>
     </ul>
     <ul class="menu-entries">
-    <?php
-    if (empty($context->doNotDisplayMenu) && empty($reshook) && !empty($navMenu)) {
-        // show menu
-        print getNav($navMenu);
-    }
-    ?>
+        <?php
+        if (empty($context->doNotDisplayMenu) && empty($reshook) && !empty($navMenu)) {
+            // show menu
+            print getNav($navMenu);
+        }
+        ?>
     </ul>
     <ul class="menu-entries-alt">
-    <?php
+        <?php
         // show menu
-    print '<li data-deep="0" class="--item-propal-list nav-item  "><a href="' . $context->getControllerUrl() . '">' . $langs->trans("Menu") . '...</a></li>';
-    ?>
+        print '<li data-deep="0" class="--item-propal-list nav-item  "><a href="' . $context->getControllerUrl() . '">' . $langs->trans("Menu") . '...</a></li>';
+        ?>
     </ul>
     <ul class="logout">
-    <?php
-    if (empty($context->doNotDisplayMenu) && empty($reshook) && !empty($navUserMenu)) {
-        // show menu
-        uasort($navUserMenu, 'menuSortInv');
-        print getNav($navUserMenu);
-    }
-    ?>
+        <?php
+        if (empty($context->doNotDisplayMenu) && empty($reshook) && !empty($navUserMenu)) {
+            // show menu
+            uasort($navUserMenu, 'menuSortInv');
+            print getNav($navUserMenu);
+        }
+        ?>
     </ul>
 </nav>

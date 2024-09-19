@@ -26,10 +26,10 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 
 /**
-* \file htdocs/compta/facture/admin/invoice_cust_extrafields.php
-* \ingroup invoice
-* \brief Page to setup extra fields of customer invoice
-*/
+ * \file htdocs/compta/facture/admin/invoice_cust_extrafields.php
+ * \ingroup invoice
+ * \brief Page to setup extra fields of customer invoice
+ */
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -58,7 +58,6 @@ if (!$user->admin) {
 */
 
 require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
-
 
 
 /*

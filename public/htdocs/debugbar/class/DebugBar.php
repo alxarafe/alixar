@@ -44,7 +44,6 @@ dol_include_once('/debugbar/class/DataCollector/DolHooksCollector.php');
  *
  * @see http://phpdebugbar.com/docs/base-collectors.html#base-collectors
  */
-
 class DolibarrDebugBar extends DebugBar
 {
     /**

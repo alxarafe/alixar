@@ -59,8 +59,8 @@ class mod_workstation_advanced extends ModeleNumRefWorkstation
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -100,7 +100,7 @@ class mod_workstation_advanced extends ModeleNumRefWorkstation
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -128,8 +128,8 @@ class mod_workstation_advanced extends ModeleNumRefWorkstation
     /**
      *  Return next free value
      *
-     *  @param  Workstation $object     Object we need next value for
-     *  @return string|0                Next value if OK, 0 if KO
+     * @param Workstation $object Object we need next value for
+     * @return string|0                Next value if OK, 0 if KO
      */
     public function getNextValue($object)
     {
@@ -149,6 +149,6 @@ class mod_workstation_advanced extends ModeleNumRefWorkstation
 
         $numFinal = get_next_value($db, $mask, 'workstation_workstation', 'ref', '', null, $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

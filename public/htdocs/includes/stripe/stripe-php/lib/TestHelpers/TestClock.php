@@ -38,9 +38,9 @@ class TestClock extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\TestHelpers\TestClock the advanced test clock
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TestHelpers\TestClock the advanced test clock
      */
     public function advance($params = null, $opts = null)
     {

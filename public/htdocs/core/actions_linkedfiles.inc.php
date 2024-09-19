@@ -40,10 +40,10 @@ if (GETPOSTINT('uploadform') && empty($_POST) && empty($_FILES)) {
 
 if (
     (GETPOST('sendit', 'alpha')
-    || GETPOST('linkit', 'restricthtml')
-    || ($action == 'confirm_deletefile' && $confirm == 'yes')
-    || ($action == 'confirm_updateline' && GETPOST('save', 'alpha') && GETPOST('link', 'alpha'))
-    || ($action == 'renamefile' && GETPOST('renamefilesave', 'alpha'))) && empty($permissiontoadd)
+        || GETPOST('linkit', 'restricthtml')
+        || ($action == 'confirm_deletefile' && $confirm == 'yes')
+        || ($action == 'confirm_updateline' && GETPOST('save', 'alpha') && GETPOST('link', 'alpha'))
+        || ($action == 'renamefile' && GETPOST('renamefilesave', 'alpha'))) && empty($permissiontoadd)
 ) {
     dol_syslog('The file actions_linkedfiles.inc.php was included but parameter $permissiontoadd was not set before.');
     print 'The file actions_linkedfiles.inc.php was included but parameter $permissiontoadd was not set before.';
@@ -165,7 +165,7 @@ if ($action == 'confirm_deletefile' && $confirm == 'yes' && !empty($permissionto
             setEventMessages($langs->trans("ErrorFailToDeleteFile", $urlfile), null, 'errors');
         }
     } elseif ($linkid) {    // delete of external link
-            $link = new Link($db);
+        $link = new Link($db);
         $link->fetch($linkid);
         $res = $link->delete($user);
 

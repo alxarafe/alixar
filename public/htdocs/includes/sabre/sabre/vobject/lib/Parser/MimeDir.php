@@ -71,7 +71,7 @@ class MimeDir extends Parser
      * used.
      *
      * @param string|resource|null $input
-     * @param int                  $options
+     * @param int $options
      *
      * @return \Sabre\VObject\Document
      */
@@ -271,9 +271,9 @@ class MimeDir extends Parser
      *
      * This method strips any newlines and also takes care of unfolding.
      *
+     * @return string
      * @throws \Sabre\VObject\EofException
      *
-     * @return string
      */
     protected function readLine()
     {
@@ -461,7 +461,7 @@ class MimeDir extends Parser
             $charset = $this->charset;
             if (Document::VCARD21 === $this->root->getDocumentType() && isset($propObj['CHARSET'])) {
                 // vCard 2.1 allows the character set to be specified per property.
-                $charset = (string) $propObj['CHARSET'];
+                $charset = (string)$propObj['CHARSET'];
             }
             switch (strtolower($charset)) {
                 case 'utf-8':
@@ -630,7 +630,7 @@ class MimeDir extends Parser
                         case '\'':
                             return '"';
 
-                    // @codeCoverageIgnoreStart
+                        // @codeCoverageIgnoreStart
                     }
                     // @codeCoverageIgnoreEnd
                 },

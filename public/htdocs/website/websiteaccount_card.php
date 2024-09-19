@@ -26,18 +26,17 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/website/lib/websiteaccount.lib.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("website", "other"));
 
 // Get parameters
-$id         = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
-$action     = GETPOST('action', 'aZ09');
-$confirm    = GETPOST('confirm', 'alpha');
-$cancel     = GETPOST('cancel', 'aZ09');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
+$action = GETPOST('action', 'aZ09');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 // Initialize technical objects
@@ -89,9 +88,9 @@ if ($object->id > 0) {
 } else {
     $permissiontocreate = isModEnabled('website') && $user->hasRight('website', 'write') || isModEnabled('webportal') && $user->hasRight('webportal', 'write');
 }
-$permissionnote    = $permissiontocreate;   //  Used by the include of actions_setnotes.inc.php
+$permissionnote = $permissiontocreate;   //  Used by the include of actions_setnotes.inc.php
 $permissiondellink = $permissiontocreate;   //  Used by the include of actions_dellink.inc.php
-$permissiontoadd   = $permissiontocreate;   //  Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
+$permissiontoadd = $permissiontocreate;   //  Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
 
 // check access from type of site on create, edit, delete (other than view)
 $site_type_js = '';
@@ -362,7 +361,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     $morehtmlref .= '</div>';
 
     if ($socid > 0) {
-        $object->next_prev_filter = 'te.fk_soc = ' . ((int) $socid);
+        $object->next_prev_filter = 'te.fk_soc = ' . ((int)$socid);
     }
 
     dol_banner_tab($object, 'id', $linkback, 1, 'rowid', 'rowid', $morehtmlref);

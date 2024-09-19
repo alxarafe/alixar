@@ -30,7 +30,7 @@ print '<input type="hidden" name="id" value="' . $element_id . '" />';
 print '<input type="hidden" name="action" value="update_linked_resource" />';
 print '<input type="hidden" name="resource_type" value="' . $resource_type . '" />';
 
-if ((array) $linked_resources && count($linked_resources) > 0) {
+if ((array)$linked_resources && count($linked_resources) > 0) {
     foreach ($linked_resources as $linked_resource) {
         $object_resource = fetchObjectByElement($linked_resource['resource_id'], $linked_resource['resource_type']);
 

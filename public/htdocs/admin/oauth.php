@@ -198,7 +198,7 @@ if ($action == 'delete_entry') {
 
     $globalkey = empty($provider) ? $label : $label . '-' . $provider;
 
-    if (!dolibarr_del_const($db, $globalkey . '_NAME', $conf->entity) || !dolibarr_del_const($db, $globalkey . '_ID', $conf->entity) || !dolibarr_del_const($db, $globalkey . '_SECRET', $conf->entity) ||  !dolibarr_del_const($db, $globalkey . '_URLAUTHORIZE', $conf->entity) || !dolibarr_del_const($db, $globalkey . '_SCOPE', $conf->entity)) {
+    if (!dolibarr_del_const($db, $globalkey . '_NAME', $conf->entity) || !dolibarr_del_const($db, $globalkey . '_ID', $conf->entity) || !dolibarr_del_const($db, $globalkey . '_SECRET', $conf->entity) || !dolibarr_del_const($db, $globalkey . '_URLAUTHORIZE', $conf->entity) || !dolibarr_del_const($db, $globalkey . '_SCOPE', $conf->entity)) {
         setEventMessages($langs->trans("ErrorInEntryDeletion"), null, 'errors');
         $error++;
     } else {

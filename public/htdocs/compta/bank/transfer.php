@@ -92,7 +92,7 @@ if ($action == 'add' && $user->hasRight('banque', 'transfer')) {
         $type[$i] = GETPOSTINT($i . '_type');
 
         $tabnum[$i] = 0;
-        if (!empty($label[$i]) || !($amount[$i] <= 0) || !($accountfrom[$i] < 0) || !($accountto[$i]  < 0)) {
+        if (!empty($label[$i]) || !($amount[$i] <= 0) || !($accountfrom[$i] < 0) || !($accountto[$i] < 0)) {
             $tabnum[$i] = 1;
             $maxtab = $i;
         }
@@ -169,7 +169,7 @@ if ($action == 'add' && $user->hasRight('banque', 'transfer')) {
                 }
 
                 if (!$error) {
-                    $bank_line_id_from = $tmpaccountfrom->addline($dateo[$n], $typefrom, $label[$n], price2num(-1 * (float) $amount[$n]), '', '', $user);
+                    $bank_line_id_from = $tmpaccountfrom->addline($dateo[$n], $typefrom, $label[$n], price2num(-1 * (float)$amount[$n]), '', '', $user);
                 }
                 if (!($bank_line_id_from > 0)) {
                     $error++;
@@ -302,7 +302,7 @@ print '<th class="right">' . $langs->trans("Amount") . '</th>';
 print '<td class="hideobject multicurrency right">' . $langs->trans("AmountToOthercurrency") . '</td>';
 print '</tr>';
 
-for ($i = 1 ; $i < $MAXLINES; $i++) {
+for ($i = 1; $i < $MAXLINES; $i++) {
     $label = '';
     $amount = '';
     $amountto = '';

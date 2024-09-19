@@ -129,12 +129,12 @@ class GoogleGeocode extends GeoAdapter
 
     private function getPolygon($delta = 0)
     {
-        $points = array (
-        $this->getTopLeft($delta),
-        $this->getTopRight($delta),
-        $this->getBottomRight($delta),
-        $this->getBottomLeft($delta),
-        $this->getTopLeft($delta),
+        $points = array(
+            $this->getTopLeft($delta),
+            $this->getTopRight($delta),
+            $this->getBottomRight($delta),
+            $this->getBottomLeft($delta),
+            $this->getTopLeft($delta),
         );
         $outer_ring = new LineString($points);
         return new Polygon(array($outer_ring));

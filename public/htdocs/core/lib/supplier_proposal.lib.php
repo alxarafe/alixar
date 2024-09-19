@@ -32,7 +32,7 @@ use Dolibarr\Code\Core\Classes\Link;
 /**
  * Prepare array with list of tabs
  *
- * @param   object  $object     Object related to tabs
+ * @param object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function supplier_proposal_prepare_head($object)
@@ -111,7 +111,7 @@ function supplier_proposal_prepare_head($object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function supplier_proposal_admin_prepare_head()
 {

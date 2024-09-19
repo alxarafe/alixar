@@ -23,5 +23,6 @@
 -- de l'install et tous les sigles '--' sont supprimés.
 --
 
-INSERT INTO llx_c_partnership_type (code, label, active) VALUES ('DEFAULT', 'Default', 1);
+INSERT INTO llx_c_partnership_type (code, label, active)
+VALUES ('DEFAULT', 'Default', 1);
 

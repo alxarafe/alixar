@@ -55,9 +55,9 @@ if (!$section) {
     $section = 0;
 }
 
-$module  = GETPOST('module', 'alpha');
+$module = GETPOST('module', 'alpha');
 $website = GETPOST('website', 'alpha');
-$pageid  = GETPOSTINT('pageid');
+$pageid = GETPOSTINT('pageid');
 if (empty($module)) {
     $module = 'ecm';
 }
@@ -102,7 +102,6 @@ if (!$permissiontoread) {
  */
 
 // None
-
 
 
 /*
@@ -257,7 +256,6 @@ foreach ($sectionauto as $sectioncur) {
 print '<tr ' . $bc[false] . '><td colspan="4" class="center"><input type="submit" class="button" value="' . $langs->trans("Search") . '"></td></tr>';
 print "</table></form>";
 //print $langs->trans("ECMSectionAutoDesc");
-
 
 
 print '</td><td class="tdtop">';

@@ -32,7 +32,7 @@ use Dolibarr\Code\Hrm\Classes\Skill;
 /**
  * Prepare array of tabs for Skill
  *
- * @param   Skill   $object     Skill
+ * @param Skill $object Skill
  * @return  array                   Array of tabs
  */
 function skillPrepareHead($object)

@@ -232,7 +232,7 @@ class Reader extends XMLReader
         }
 
         $value = call_user_func(
-            $this->getDeserializerForElementName((string) $name),
+            $this->getDeserializerForElementName((string)$name),
             $this
         );
 

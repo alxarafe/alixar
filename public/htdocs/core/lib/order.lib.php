@@ -35,7 +35,7 @@ use Dolibarr\Code\Core\Classes\Link;
 /**
  * Prepare array with list of tabs
  *
- * @param   Commande    $object     Object related to tabs
+ * @param Commande $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function commande_prepare_head(Commande $object)
@@ -150,7 +150,7 @@ function commande_prepare_head(Commande $object)
         } else {
             $sql = "SELECT COUNT(id) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm";
-            $sql .= " WHERE fk_element = " . ((int) $object->id);
+            $sql .= " WHERE fk_element = " . ((int)$object->id);
             $sql .= " AND elementtype = 'order'";
             $resql = $db->query($sql);
             if ($resql) {
@@ -181,7 +181,7 @@ function commande_prepare_head(Commande $object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array                       head array with tabs
+ * @return array                       head array with tabs
  */
 function order_admin_prepare_head()
 {
@@ -225,11 +225,10 @@ function order_admin_prepare_head()
 }
 
 
-
 /**
  * Return a HTML table that contains a pie chart of sales orders
  *
- * @param   int     $socid      (Optional) Show only results from the customer with this id
+ * @param int $socid (Optional) Show only results from the customer with this id
  * @return  string              A HTML table that contains a pie chart of customer invoices
  */
 function getCustomerOrderPieChart($socid = 0)
@@ -257,10 +256,10 @@ function getCustomerOrderPieChart($socid = 0)
     $sql .= " WHERE c.fk_soc = s.rowid";
     $sql .= " AND c.entity IN (" . getEntity($commandestatic->element) . ")";
     if ($user->socid) {
-        $sql .= ' AND c.fk_soc = ' . ((int) $user->socid);
+        $sql .= ' AND c.fk_soc = ' . ((int)$user->socid);
     }
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     $sql .= " GROUP BY c.fk_statut";
 
@@ -297,7 +296,7 @@ function getCustomerOrderPieChart($socid = 0)
         $result .= '<tr class="liste_titre"><th colspan="2">' . $langs->trans("Statistics") . ' - ' . $langs->trans("CustomersOrders") . '</th></tr>' . "\n";
         $listofstatus = array(0, 1, 2, 3, -1);
         foreach ($listofstatus as $status) {
-            $dataseries[] = array($commandestatic->LibStatut($status, 0, 1, 1), (isset($vals[$status]) ? (int) $vals[$status] : 0));
+            $dataseries[] = array($commandestatic->LibStatut($status, 0, 1, 1), (isset($vals[$status]) ? (int)$vals[$status] : 0));
             if ($status == Commande::STATUS_DRAFT) {
                 $colorseries[$status] = '-' . $badgeStatus0;
             }

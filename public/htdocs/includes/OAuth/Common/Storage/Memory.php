@@ -9,6 +9,7 @@ use OAuth\Common\Storage\Exception\AuthorizationStateNotFoundException;
 /*
  * Stores a token in-memory only (destroyed at end of script execution).
  */
+
 class Memory implements TokenStorageInterface
 {
     /**

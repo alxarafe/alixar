@@ -28,11 +28,12 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
      */
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        SignatureInterface $signature,
-        UriInterface $baseApiUri = null
-    ) {
+        SignatureInterface   $signature,
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage);
 
         $this->signature = $signature;
@@ -107,7 +108,7 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
 
     /**
      * Refreshes an OAuth1 access token
-     * @param  TokenInterface $token
+     * @param TokenInterface $token
      * @return TokenInterface $token
      */
     public function refreshAccessToken(TokenInterface $token)
@@ -119,9 +120,9 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
      * If the path provided is not an absolute URI, the base API Uri (must be passed into constructor) will be used.
      *
      * @param string|UriInterface $path
-     * @param string              $method       HTTP method
-     * @param array               $body         Request body if applicable (key/value pairs)
-     * @param array               $extraHeaders Extra headers if applicable.
+     * @param string $method HTTP method
+     * @param array $body Request body if applicable (key/value pairs)
+     * @param array $extraHeaders Extra headers if applicable.
      *                                          These will override service-specific any defaults.
      *
      * @return string
@@ -192,10 +193,10 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
     /**
      * Builds the authorization header for an authenticated API request
      *
-     * @param string         $method
-     * @param UriInterface   $uri        The uri the request is headed
+     * @param string $method
+     * @param UriInterface $uri The uri the request is headed
      * @param TokenInterface $token
-     * @param array          $bodyParams Request body if applicable (key/value pairs)
+     * @param array $bodyParams Request body if applicable (key/value pairs)
      *
      * @return string
      */
@@ -204,7 +205,8 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
         UriInterface $uri,
         TokenInterface $token,
         $bodyParams = null
-    ) {
+    )
+    {
         $this->signature->setTokenSecret($token->getAccessTokenSecret());
         $authParameters = $this->getBasicAuthorizationHeaderInfo();
         if (isset($authParameters['oauth_callback'])) {
@@ -241,12 +243,12 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
     {
         $dateTime = new \DateTime();
         $headerParameters = array(
-            'oauth_callback'         => $this->credentials->getCallbackUrl(),
-            'oauth_consumer_key'     => $this->credentials->getConsumerId(),
-            'oauth_nonce'            => $this->generateNonce(),
+            'oauth_callback' => $this->credentials->getCallbackUrl(),
+            'oauth_consumer_key' => $this->credentials->getConsumerId(),
+            'oauth_nonce' => $this->generateNonce(),
             'oauth_signature_method' => $this->getSignatureMethod(),
-            'oauth_timestamp'        => $dateTime->format('U'),
-            'oauth_version'          => $this->getVersion(),
+            'oauth_timestamp' => $dateTime->format('U'),
+            'oauth_version' => $this->getVersion(),
         );
 
         return $headerParameters;

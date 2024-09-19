@@ -81,7 +81,7 @@ class CliDumper extends AbstractDumper
      */
     public function setColors($colors)
     {
-        $this->colors = (bool) $colors;
+        $this->colors = (bool)$colors;
     }
 
     /**
@@ -91,7 +91,7 @@ class CliDumper extends AbstractDumper
      */
     public function setMaxStringWidth($maxStringWidth)
     {
-        $this->maxStringWidth = (int) $maxStringWidth;
+        $this->maxStringWidth = (int)$maxStringWidth;
     }
 
     /**
@@ -127,17 +127,17 @@ class CliDumper extends AbstractDumper
                 $style = 'num';
 
                 switch (true) {
-                    case INF === $value:  
+                    case INF === $value:
                         $value = 'INF';
                         break;
-                    case -INF === $value: 
+                    case -INF === $value:
                         $value = '-INF';
                         break;
-                    case is_nan($value):  
+                    case is_nan($value):
                         $value = 'NAN';
                         break;
                     default:
-                        $value = (string) $value;
+                        $value = (string)$value;
                         if (false === strpos($value, $this->decimalPoint)) {
                             $value .= $this->decimalPoint . '0';
                         }
@@ -292,9 +292,9 @@ class CliDumper extends AbstractDumper
     /**
      * Dumps an ellipsis for cut children.
      *
-     * @param Cursor $cursor   The Cursor position in the dump
-     * @param bool   $hasChild When the dump of the hash has child item
-     * @param int    $cut      The number of items the hash has been cut by
+     * @param Cursor $cursor The Cursor position in the dump
+     * @param bool $hasChild When the dump of the hash has child item
+     * @param int $cut The number of items the hash has been cut by
      */
     protected function dumpEllipsis(Cursor $cursor, $hasChild, $cut)
     {
@@ -340,7 +340,7 @@ class CliDumper extends AbstractDumper
 
                 case Cursor::HASH_RESOURCE:
                     $key = "\0~\0" . $key;
-                    // No break;
+                // No break;
                 case Cursor::HASH_OBJECT:
                     if (!isset($key[0]) || "\0" !== $key[0]) {
                         $this->line .= '+' . $bin . $this->style('public', $key) . ': ';
@@ -389,7 +389,7 @@ class CliDumper extends AbstractDumper
      *
      * @param string $style The type of style being applied
      * @param string $value The value being styled
-     * @param array  $attr  Optional context information
+     * @param array $attr Optional context information
      *
      * @return string The value with style decoration
      */

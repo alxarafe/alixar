@@ -221,7 +221,7 @@ if ($action != '') {
  * View
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $form = new Form($db);
 
@@ -259,7 +259,6 @@ print $enabledisablehtml;
 print '<input type="hidden" id="TICKET_ENABLE_PUBLIC_INTERFACE" name="TICKET_ENABLE_PUBLIC_INTERFACE" value="' . (!getDolGlobalInt('TICKET_ENABLE_PUBLIC_INTERFACE') ? 0 : 1) . '">';
 
 print dol_get_fiche_end();
-
 
 
 if (getDolGlobalInt('TICKET_ENABLE_PUBLIC_INTERFACE')) {

@@ -146,7 +146,7 @@ print '</table>';
 print '<br>';
 
 $activatedExtensions = array();
-$loadedExtensions    = array_map('strtolower', get_loaded_extensions(false));
+$loadedExtensions = array_map('strtolower', get_loaded_extensions(false));
 
 print '<table class="noborder centpercent">';
 print '<tr class="liste_titre">';
@@ -155,7 +155,7 @@ print '<td>' . $langs->trans("Test") . '</td>';
 print '</tr>';
 
 $functions = ["mb_check_encoding"];
-$name      = "MBString";
+$name = "MBString";
 
 print "<tr>";
 print "<td>" . $name . "</td>";
@@ -163,7 +163,7 @@ print getResultColumn($name, $activatedExtensions, $loadedExtensions, $functions
 print "</tr>";
 
 $functions = ["json_decode"];
-$name      = "JSON";
+$name = "JSON";
 
 print "<tr>";
 print "<td>" . $name . "</td>";
@@ -171,7 +171,7 @@ print getResultColumn($name, $activatedExtensions, $loadedExtensions, $functions
 print "</tr>";
 
 $functions = ["imagecreate"];
-$name      = "GD";
+$name = "GD";
 
 print "<tr>";
 print "<td>" . $name . "</td>";
@@ -179,7 +179,7 @@ print getResultColumn($name, $activatedExtensions, $loadedExtensions, $functions
 print "</tr>";
 
 $functions = ["curl_init"];
-$name      = "Curl";
+$name = "Curl";
 
 print "<tr>";
 print "<td>" . $name . "</td>";
@@ -187,7 +187,7 @@ print getResultColumn($name, $activatedExtensions, $loadedExtensions, $functions
 print "</tr>";
 
 $functions = ["easter_date"];
-$name      = "Calendar";
+$name = "Calendar";
 
 print "<tr>";
 print "<td>" . $name . "</td>";
@@ -195,7 +195,7 @@ print getResultColumn($name, $activatedExtensions, $loadedExtensions, $functions
 print "</tr>";
 
 $functions = ["simplexml_load_string"];
-$name      = "Xml";
+$name = "Xml";
 
 print "<tr>";
 print "<td>" . $name . "</td>";
@@ -204,7 +204,7 @@ print "</tr>";
 
 if (empty($_SERVER["SERVER_ADMIN"]) || $_SERVER["SERVER_ADMIN"] != 'doliwamp@localhost') {
     $functions = ["locale_get_primary_language", "locale_get_region"];
-    $name      = "Intl";
+    $name = "Intl";
 
     print "<tr>";
     print "<td>" . $name . "</td>";
@@ -213,7 +213,7 @@ if (empty($_SERVER["SERVER_ADMIN"]) || $_SERVER["SERVER_ADMIN"] != 'doliwamp@loc
 }
 
 $functions = ["imap_open"];
-$name      = "IMAP";
+$name = "IMAP";
 
 print "<tr>";
 print "<td>" . $name . "</td>";
@@ -221,7 +221,7 @@ print getResultColumn($name, $activatedExtensions, $loadedExtensions, $functions
 print "</tr>";
 
 $functions = array();
-$name      = "zip";
+$name = "zip";
 
 print "<tr>";
 print "<td>" . $name . "</td>";
@@ -229,7 +229,7 @@ print getResultColumn($name, $activatedExtensions, $loadedExtensions, $functions
 print "</tr>";
 
 $functions = array();
-$name      = "xDebug";
+$name = "xDebug";
 
 print "<tr>";
 print "<td>" . $name . "</td>";
@@ -318,10 +318,10 @@ $db->close();
 /**
  * Return a result column with a translated result text
  *
- * @param string $name          The name of the PHP extension
- * @param array $activated      A list with all activated PHP extensions. Deprecated.
- * @param array $loaded         A list with all loaded PHP extensions
- * @param array $functions      A list with all PHP functions to check
+ * @param string $name The name of the PHP extension
+ * @param array $activated A list with all activated PHP extensions. Deprecated.
+ * @param array $loaded A list with all loaded PHP extensions
+ * @param array $functions A list with all PHP functions to check
  * @return string
  */
 function getResultColumn($name, array $activated, array $loaded, array $functions)

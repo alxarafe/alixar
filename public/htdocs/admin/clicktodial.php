@@ -114,8 +114,8 @@ print '</span>';
 
 //if (!empty($user->clicktodial_url))
 //{
-    print '<br>';
-    print info_admin($langs->trans("ValueOverwrittenByUserSetup"));
+print '<br>';
+print info_admin($langs->trans("ValueOverwrittenByUserSetup"));
 //}
 
 print '</td></tr>';

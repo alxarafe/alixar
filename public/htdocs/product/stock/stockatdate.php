@@ -1,11 +1,12 @@
 <?php
 
-/* Copyright (C) 2013       Cédric Salvador        <csalvador@gpcsolutions.fr>
- * Copyright (C) 2013-2020	Laurent Destaileur	<ely@users.sourceforge.net>
- * Copyright (C) 2014		Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2016		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2016		ATM Consulting		<support@atm-consulting.fr>
- * Copyright (C) 2019-2024  Frédéric France     <frederic.france@free.fr>
+/* Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013-2020	Laurent Destaileur	        <ely@users.sourceforge.net>
+ * Copyright (C) 2014		Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2016		Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2016		ATM Consulting		        <support@atm-consulting.fr>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +22,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/product/stock/stockatdate.php
  *  \ingroup    stock
@@ -29,12 +35,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-require_once DOL_DOCUMENT_ROOT . '/product/stock/class/entrepot.class.php';
-require_once DOL_DOCUMENT_ROOT . '/core/class/html.formother.class.php';
-require_once DOL_DOCUMENT_ROOT . '/core/class/html.form.class.php';
-require_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.commande.class.php';
-require_once DOL_DOCUMENT_ROOT . '/product/class/html.formproduct.class.php';
 require_once './lib/replenishment.lib.php';
 
 // Load translation files required by the page
@@ -155,9 +155,9 @@ if ($date && $dateIsValid) {    // Avoid heavy sql if mandatory date is not defi
         $sql .= " AND w.statut IN (" . $db->sanitize(implode(',', $warehouseStatus)) . ")";
     }
     if ($productid > 0) {
-        $sql .= " AND ps.fk_product = " . ((int) $productid);
+        $sql .= " AND ps.fk_product = " . ((int)$productid);
     }
-    if (! empty($search_fk_warehouse)) {
+    if (!empty($search_fk_warehouse)) {
         $sql .= " AND ps.fk_entrepot IN (" . $db->sanitize(implode(",", $search_fk_warehouse)) . ")";
     }
     if ($search_ref) {
@@ -177,7 +177,7 @@ if ($date && $dateIsValid) {    // Avoid heavy sql if mandatory date is not defi
         while ($i < $num) {
             $obj = $db->fetch_object($resql);
 
-            $tmp_fk_product   = $obj->fk_product;
+            $tmp_fk_product = $obj->fk_product;
             $tmp_fk_warehouse = $obj->fk_warehouse;
             $stock = $obj->stock;
 
@@ -217,7 +217,7 @@ if ($date && $dateIsValid) {
         $sql .= " AND sm.datem >= '" . $db->idate($dateendofday) . "'";
     }
     if ($productid > 0) {
-        $sql .= " AND sm.fk_product = " . ((int) $productid);
+        $sql .= " AND sm.fk_product = " . ((int)$productid);
     }
     if (!empty($search_fk_warehouse)) {
         $sql .= " AND sm.fk_entrepot IN (" . $db->sanitize(implode(",", $search_fk_warehouse)) . ")";
@@ -239,9 +239,9 @@ if ($date && $dateIsValid) {
         while ($i < $num) {
             $obj = $db->fetch_object($resql);
             $fk_product = $obj->fk_product;
-            $fk_entrepot    = $obj->fk_entrepot;
+            $fk_entrepot = $obj->fk_entrepot;
             $stock = $obj->stock;
-            $nbofmovement   = $obj->nbofmovement;
+            $nbofmovement = $obj->nbofmovement;
 
             // Pour llx_product_stock.reel
             $movements_prod_warehouse[$fk_product][$fk_entrepot] = $stock;
@@ -299,7 +299,7 @@ $reshook = $hookmanager->executeHooks('printFieldListJoin', $parameters); // Not
 $sql .= $hookmanager->resPrint;
 $sql .= ' WHERE p.entity IN (' . getEntity('product') . ')';
 if ($productid > 0) {
-    $sql .= " AND p.rowid = " . ((int) $productid);
+    $sql .= " AND p.rowid = " . ((int)$productid);
 }
 if (!getDolGlobalString('STOCK_SUPPORTS_SERVICES')) {
     $sql .= " AND p.fk_product_type = 0";
@@ -373,8 +373,8 @@ if ($ext == 'csv') {
 
     // Lines of title
     print implode(";", ($mode == 'future') ?
-        array('"Product Reference"', '"Label"', '"Current Stock"', '"' . $stocklabel . '"', '"Virtual Stock"') :
-        array('"Product Reference"', '"Label"', '"' . $stocklabel . '"', '"Estimated Stock Value"', '"Estimate Sell Value"', '"Movements"', '"Current Stock"')) . "\r\n";
+            array('"Product Reference"', '"Label"', '"Current Stock"', '"' . $stocklabel . '"', '"Virtual Stock"') :
+            array('"Product Reference"', '"Label"', '"' . $stocklabel . '"', '"Estimated Stock Value"', '"Estimate Sell Value"', '"Movements"', '"Current Stock"')) . "\r\n";
 } else {
     llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock_stockatdate');
 
@@ -441,7 +441,7 @@ if ($ext == 'csv') {
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     $param .= '&mode=' . $mode;
     $param_warehouse = '';
@@ -452,7 +452,7 @@ if ($ext == 'csv') {
         $param .= $param_warehouse;
     }
     if ($productid > 0) {
-        $param .= '&productid=' . (int) $productid;
+        $param .= '&productid=' . (int)$productid;
     }
     if (GETPOSTINT('dateday') > 0) {
         $param .= '&dateday=' . GETPOSTINT('dateday');
@@ -470,8 +470,8 @@ if ($ext == 'csv') {
     print '<div class="div-table-responsive">'; // You can use div-table-responsive-no-min if you don't need reserved height for your table
     if ($num) {
         print '<p>';
-        print '<a href="stockatdate.php?output=csv&sortfield=' . urlencode($sortfield) . '&sortorder=' . urlencode($sortorder) . '&type=' . ((int) $type) . '&mode=' . urlencode($mode) .
-            (($productid > 0) ? "&productid=" . ((int) $productid) : '') .
+        print '<a href="stockatdate.php?output=csv&sortfield=' . urlencode($sortfield) . '&sortorder=' . urlencode($sortorder) . '&type=' . ((int)$type) . '&mode=' . urlencode($mode) .
+            (($productid > 0) ? "&productid=" . ((int)$productid) : '') .
             $param_warehouse .
             "&search_ref=" . dol_escape_htmltag($search_ref) .
             "&search_nom=" . dol_escape_htmltag($search_nom) .
@@ -625,21 +625,21 @@ while ($i < ($limit ? min($num, $limit) : $num)) {
         if ($ext == 'csv') {
             if ($mode == 'future') {
                 print implode(";", array(
-                    '"' . $objp->ref . '"',
-                    '"' . $objp->label . '"',
-                    '"' . price2num($currentstock, 'MS') . '"',
-                    '"' . price2num($stock, 'MS') . '"',
-                    '"' . price2num($virtualstock, 'MS') . '"')) . "\r\n";
+                        '"' . $objp->ref . '"',
+                        '"' . $objp->label . '"',
+                        '"' . price2num($currentstock, 'MS') . '"',
+                        '"' . price2num($stock, 'MS') . '"',
+                        '"' . price2num($virtualstock, 'MS') . '"')) . "\r\n";
                 $totalvirtualstock += $virtualstock;
             } else {
                 print implode(";", array(
-                    '"' . $objp->ref . '"',
-                    '"' . $objp->label . '"',
-                    '"' . price(price2num($stock, 'MS')) . '"',
-                    price2num($stock * $objp->pmp, 'MT') ? '"' . price2num($stock * $objp->pmp, 'MT') . '"' : '',
-                    !getDolGlobalString('PRODUIT_MULTIPRICES') ? '"' . price2num($stock * $objp->price, 'MT') . '"' : '"' . $langs->trans("Variable") . '(' . $langs->trans("OptionMULTIPRICESIsOn") . ')"',
-                    "$nbofmovement",
-                    '"' . price2num($currentstock, 'MS') . '"')) . "\r\n";
+                        '"' . $objp->ref . '"',
+                        '"' . $objp->label . '"',
+                        '"' . price(price2num($stock, 'MS')) . '"',
+                        price2num($stock * $objp->pmp, 'MT') ? '"' . price2num($stock * $objp->pmp, 'MT') . '"' : '',
+                        !getDolGlobalString('PRODUIT_MULTIPRICES') ? '"' . price2num($stock * $objp->price, 'MT') . '"' : '"' . $langs->trans("Variable") . '(' . $langs->trans("OptionMULTIPRICESIsOn") . ')"',
+                        "$nbofmovement",
+                        '"' . price2num($currentstock, 'MS') . '"')) . "\r\n";
                 $totalbuyingprice += $stock * $objp->pmp;
                 $totalsellingprice += $stock * $objp->price;
             }
@@ -691,7 +691,7 @@ while ($i < ($limit ? min($num, $limit) : $num)) {
                 print '">';
                 if (!getDolGlobalString('PRODUIT_MULTIPRICES')) {
                     print '<span class="amount">';
-                    if ($stock || (float) ($stock * $objp->price)) {
+                    if ($stock || (float)($stock * $objp->price)) {
                         print price(price2num($stock * $objp->price, 'MT'), 1);
                     }
                     print '</span>';
@@ -715,7 +715,7 @@ while ($i < ($limit ? min($num, $limit) : $num)) {
                         $url = '';  // Do not show link, multi warehouse as filter not managed yet by target page
                     } else {
                         foreach ($search_fk_warehouse as $val) {
-                            $url .= ($val > 0 ? '&search_warehouse=' . ((int) $val) : '');
+                            $url .= ($val > 0 ? '&search_warehouse=' . ((int)$val) : '');
                         }
                     }
                     if ($url) {
@@ -763,19 +763,19 @@ if ($ext == 'csv') {
     print implode(
         ";",
         ($mode == 'future') ? array(
-        '"' . $langs->trans("Totalforthispage") . '"',
-        '',
-        $productid > 0 ? price2num($totalcurrentstock, 'MS') : '',
-        '',
-        price(price2num($totalvirtualstock, 'MS'))) :
-        array(
-        '"' . $langs->trans("Totalforthispage") . '"',
-        '',
-        '',
-        '"' . price2num($totalbuyingprice, 'MT') . '"',
-        !getDolGlobalString('PRODUIT_MULTIPRICES') ? '"' . price2num($totalsellingprice, 'MT') . '"' : '',
-        '',
-        $productid > 0 ? price2num($totalcurrentstock, 'MS') : ''));
+            '"' . $langs->trans("Totalforthispage") . '"',
+            '',
+            $productid > 0 ? price2num($totalcurrentstock, 'MS') : '',
+            '',
+            price(price2num($totalvirtualstock, 'MS'))) :
+            array(
+                '"' . $langs->trans("Totalforthispage") . '"',
+                '',
+                '',
+                '"' . price2num($totalbuyingprice, 'MT') . '"',
+                !getDolGlobalString('PRODUIT_MULTIPRICES') ? '"' . price2num($totalsellingprice, 'MT') . '"' : '',
+                '',
+                $productid > 0 ? price2num($totalcurrentstock, 'MS') : ''));
 } else {
     if (empty($date) || !$dateIsValid) {
         print '<tr><td colspan="' . $colspan . '"><span class="opacitymedium">' . $langs->trans("EnterADateCriteria") . '</span></td></tr>';

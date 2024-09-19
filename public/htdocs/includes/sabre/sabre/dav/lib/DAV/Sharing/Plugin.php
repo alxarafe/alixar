@@ -104,7 +104,7 @@ class Plugin extends ServerPlugin
      * The sharees  array is a list of people that are to be added modified
      * or removed in the list of shares.
      *
-     * @param string   $path
+     * @param string $path
      * @param Sharee[] $sharees
      */
     public function shareResource($path, array $sharees)
@@ -273,7 +273,7 @@ class Plugin extends ServerPlugin
      *
      * @param string $path
      * @param string $action
-     * @param array  $postVars
+     * @param array $postVars
      */
     public function browserPostAction($path, $action, $postVars)
     {

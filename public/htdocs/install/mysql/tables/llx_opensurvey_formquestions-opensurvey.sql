@@ -15,10 +15,11 @@
 -- along with this program. If not, see <https://www.gnu.org/licenses/>.
 -- ============================================================================
 
-CREATE TABLE llx_opensurvey_formquestions (
-	rowid INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY,
-	id_sondage VARCHAR(16),
-	question TEXT,
-    available_answers TEXT								-- List of available answers
+CREATE TABLE llx_opensurvey_formquestions
+(
+    rowid             INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    id_sondage        VARCHAR(16),
+    question          TEXT,
+    available_answers TEXT -- List of available answers
 ) ENGINE=innodb;
 

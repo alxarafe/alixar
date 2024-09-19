@@ -52,7 +52,7 @@ class AddressData implements XmlDeserializable
             'version' => $reader->getAttribute('version') ?: '3.0',
         ];
 
-        $elems = (array) $reader->parseInnerTree();
+        $elems = (array)$reader->parseInnerTree();
         $elems = array_filter($elems, function ($element) {
             return '{urn:ietf:params:xml:ns:carddav}prop' === $element['name'] &&
                 isset($element['attributes']['name']);

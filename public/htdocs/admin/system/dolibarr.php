@@ -282,7 +282,7 @@ print '<tr class="oddeven"><td>&nbsp; => dol_print_date(0,"dayhourtext")</td><td
 print '<tr class="oddeven"><td>&nbsp; => dol_get_first_day(1970,1,false)</td><td>' . dol_get_first_day(1970, 1, false) . ' &nbsp; &nbsp; (=> dol_print_date() or idate() of this value = ' . dol_print_date(dol_get_first_day(1970, 1, false), 'dayhour') . ')</td>';
 print '<tr class="oddeven"><td>&nbsp; => dol_get_first_day(1970,1,true)</td><td>' . dol_get_first_day(1970, 1, true) . ' &nbsp; &nbsp; (=> dol_print_date() or idate() of this value = ' . dol_print_date(dol_get_first_day(1970, 1, true), 'dayhour') . ')</td>';
 // Client
-$tz = (int) $_SESSION['dol_tz'] + (int) $_SESSION['dol_dst'];
+$tz = (int)$_SESSION['dol_tz'] + (int)$_SESSION['dol_dst'];
 print '<tr class="oddeven"><td>' . $langs->trans("ClientTZ") . '</td><td>' . ($tz ? ($tz >= 0 ? '+' : '') . $tz : '') . ' (' . ($tz >= 0 ? '+' : '') . ($tz * 60 * 60) . ')';
 print ' &nbsp; &nbsp; &nbsp; ' . $_SESSION['dol_tz_string'];
 print ' &nbsp; &nbsp; &nbsp; ' . $langs->trans("DaylingSavingTime") . ': ';
@@ -318,7 +318,6 @@ print '</div>';
 print '<br>';
 
 
-
 // Parameters in conf.php file (when a parameter start with ?, it is shown only if defined)
 $configfileparameters = array(
     'dolibarr_main_prod' => 'Production mode (Hide all error messages)',
@@ -342,7 +341,7 @@ $configfileparameters = array(
     'dolibarr_main_db_readonly' => $langs->trans("ReadOnlyMode"),
     'separator2' => '',
     'dolibarr_main_authentication' => $langs->trans("AuthenticationMode"),
-    '?multicompany_transverse_mode' =>  $langs->trans("MultiCompanyMode"),
+    '?multicompany_transverse_mode' => $langs->trans("MultiCompanyMode"),
     'separator' => '',
     '?dolibarr_main_auth_ldap_login_attribute' => 'dolibarr_main_auth_ldap_login_attribute',
     '?dolibarr_main_auth_ldap_host' => 'dolibarr_main_auth_ldap_host',
@@ -487,7 +486,6 @@ foreach ($configfileparameters as $key => $value) {
 print '</table>';
 print '</div>';
 print '<br>';
-
 
 
 // Parameters in database

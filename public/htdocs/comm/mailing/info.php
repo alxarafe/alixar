@@ -44,7 +44,6 @@ if (!$user->hasRight('mailing', 'lire') || (!getDolGlobalString('EXTERNAL_USERS_
 //$result = restrictedArea($user, 'mailing');
 
 
-
 /*
  * View
  */
@@ -72,7 +71,7 @@ if ($object->fetch($id) >= 0) {
     $nbtry = $nbok = 0;
     if ($object->status == 2 || $object->status == 3) {
         $nbtry = $object->countNbOfTargets('alreadysent');
-        $nbko  = $object->countNbOfTargets('alreadysentko');
+        $nbko = $object->countNbOfTargets('alreadysentko');
 
         $morehtmlstatus .= ' (' . $nbtry . '/' . $object->nbemail;
         if ($nbko) {

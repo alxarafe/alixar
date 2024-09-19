@@ -87,7 +87,7 @@ if ($action == 'add_payment' || ($action == 'confirm_paiement' && $confirm == 'y
         foreach ($_POST as $key => $value) {
             if (substr($key, 0, 7) == 'amount_') {
                 $other_chid = substr($key, 7);
-                $amounts[$other_chid] = (float) price2num(GETPOST($key));
+                $amounts[$other_chid] = (float)price2num(GETPOST($key));
             }
         }
 
@@ -102,12 +102,12 @@ if ($action == 'add_payment' || ($action == 'confirm_paiement' && $confirm == 'y
 
             // Create a line of payments
             $paiement = new PaymentSocialContribution($db);
-            $paiement->chid         = $chid;
-            $paiement->datepaye     = $datepaye;
-            $paiement->amounts      = $amounts; // Amount list
+            $paiement->chid = $chid;
+            $paiement->datepaye = $datepaye;
+            $paiement->amounts = $amounts; // Amount list
             $paiement->paiementtype = GETPOST("paiementtype", 'alphanohtml');
-            $paiement->num_payment  = GETPOST("num_payment", 'alphanohtml');
-            $paiement->note         = GETPOST("note", 'restricthtml');
+            $paiement->num_payment = GETPOST("num_payment", 'alphanohtml');
+            $paiement->note = GETPOST("note", 'restricthtml');
             $paiement->note_private = GETPOST("note", 'restricthtml');
 
             if (!$error) {
@@ -193,7 +193,7 @@ if ($action == 'create') {
 
     $sql = "SELECT sum(p.amount) as total";
     $sql .= " FROM " . MAIN_DB_PREFIX . "paiementcharge as p";
-    $sql .= " WHERE p.fk_charge = " . ((int) $chid);
+    $sql .= " WHERE p.fk_charge = " . ((int)$chid);
     $resql = $db->query($sql);
     if ($resql) {
         $obj = $db->fetch_object($resql);

@@ -26,7 +26,6 @@
  */
 
 
-
 //include_once DOL_DOCUMENT_ROOT.'/core/class/openid.class.php';
 
 
@@ -34,9 +33,9 @@
  * Check validity of user/password/entity
  * If test is ko, reason must be filled into $_SESSION["dol_loginmesg"]
  *
- * @param   string  $usertotest     Login
- * @param   string  $passwordtotest Password
- * @param   int     $entitytotest   Number of instance (always 1 if module multicompany not enabled)
+ * @param string $usertotest Login
+ * @param string $passwordtotest Password
+ * @param int $entitytotest Number of instance (always 1 if module multicompany not enabled)
  * @return  string                  Login if OK, '' if KO
  */
 function check_user_password_googleoauth($usertotest, $passwordtotest, $entitytotest)

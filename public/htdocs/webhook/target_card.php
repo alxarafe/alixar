@@ -32,7 +32,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/geturl.lib.php';
 global $conf, $db, $hookmanager, $langs, $user;
 
 // Load translation files required by the page
-$langs->loadLangs(array('other','admin'));
+$langs->loadLangs(array('other', 'admin'));
 
 // Get parameters
 $id = GETPOSTINT('id');
@@ -43,7 +43,7 @@ $cancel = GETPOST('cancel', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'targetcard'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');
-$lineid   = GETPOSTINT('lineid');
+$lineid = GETPOSTINT('lineid');
 
 // Initialize technical objects
 $object = new Target($db);
@@ -181,8 +181,6 @@ if (empty($reshook)) {
     $trackid = 'target' . $object->id;
     include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
 }
-
-
 
 
 /*

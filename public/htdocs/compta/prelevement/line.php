@@ -116,7 +116,7 @@ if ($action == 'confirm_rejet' && $permissiontoadd) {
                 $result = $rej->create($user, $id, GETPOSTINT('motif'), $daterej, $lipre->bon_rowid, GETPOSTINT('facturer'));
 
                 if ($result > 0) {
-                    header("Location: line.php?id=" . urlencode((string) ($id)) . '&type=' . urlencode((string) ($type)));
+                    header("Location: line.php?id=" . urlencode((string)($id)) . '&type=' . urlencode((string)($type)));
                     exit;
                 }
             }
@@ -124,7 +124,7 @@ if ($action == 'confirm_rejet' && $permissiontoadd) {
             $action = "rejet";
         }
     } else {
-        header("Location: line.php?id=" . urlencode((string) ($id)) . '&type=' . urlencode((string) ($type)));
+        header("Location: line.php?id=" . urlencode((string)($id)) . '&type=' . urlencode((string)($type)));
         exit;
     }
 }
@@ -151,7 +151,7 @@ llxHeader('', $title);
 $head = array();
 
 $h = 0;
-$head[$h][0] = constant('BASE_URL') . '/compta/prelevement/line.php?id=' . ((int) $id) . '&type=' . urlencode($type);
+$head[$h][0] = constant('BASE_URL') . '/compta/prelevement/line.php?id=' . ((int)$id) . '&type=' . urlencode($type);
 $head[$h][1] = $title;
 $hselected = $h;
 $h++;
@@ -308,9 +308,9 @@ if ($id) {
         $sql .= " AND pf.fk_facture = f.rowid";
     }
     $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
-    $sql .= " AND pl.rowid = " . ((int) $id);
+    $sql .= " AND pl.rowid = " . ((int)$id);
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
 
     // Count total nb of records
@@ -345,7 +345,7 @@ if ($id) {
         $num = $db->num_rows($result);
         $i = 0;
 
-        $urladd = "&id=" . urlencode((string) ($id));
+        $urladd = "&id=" . urlencode((string)($id));
         $title = $langs->trans("Bills");
         if ($type == 'bank-transfer') {
             $title = $langs->trans("SupplierInvoices");

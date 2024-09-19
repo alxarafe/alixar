@@ -86,8 +86,6 @@ print $langs->trans("Other") . ':</td><td><input type="text" class="flat inputse
 print "</table></div></form><br>\n";
 
 
-
-
 // Affiche stats de tous les modules de destinataires mailings
 print '<table class="noborder centpercent">';
 print '<tr class="liste_titre"><td colspan="2">' . $langs->trans("TargetsStatistics") . '</td></tr>';
@@ -162,7 +160,7 @@ print '</div><div class="secondcolumn fichehalfright boxhalfright" id="boxhalfri
  */
 
 $limit = 10;
-$sql  = "SELECT m.rowid, m.titre as title, m.nbemail, m.statut as status, m.date_creat, m.messtype";
+$sql = "SELECT m.rowid, m.titre as title, m.nbemail, m.statut as status, m.date_creat, m.messtype";
 $sql .= " FROM " . MAIN_DB_PREFIX . "mailing as m";
 $sql .= " WHERE m.entity = " . $conf->entity;
 $sql .= " ORDER BY m.date_creat DESC";
@@ -204,7 +202,7 @@ if ($result) {
                 print '<td class="center">' . dol_escape_htmltag($obj->messtype) . '</td>';
             }
             print '<td class="center">' . dol_print_date($db->jdate($obj->date_creat), 'day') . '</td>';
-            print '<td class="center">' . ($obj->nbemail ? (int) $obj->nbemail : "0") . '</td>';
+            print '<td class="center">' . ($obj->nbemail ? (int)$obj->nbemail : "0") . '</td>';
             print '<td class="right">' . $mailstatic->LibStatut($obj->status, 5) . '</td>';
             print '</tr>';
             $i++;

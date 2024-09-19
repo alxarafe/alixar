@@ -23,12 +23,12 @@ class TraceablePDO extends PDO
         $this->pdo->setAttribute(PDO::ATTR_STATEMENT_CLASS, [TraceablePDOStatement::class, [$this]]);
     }
 
-   /**
-    * Initiates a transaction
-    *
-    * @link   http://php.net/manual/en/pdo.begintransaction.php
-    * @return bool TRUE on success or FALSE on failure.
-    */
+    /**
+     * Initiates a transaction
+     *
+     * @link   http://php.net/manual/en/pdo.begintransaction.php
+     * @return bool TRUE on success or FALSE on failure.
+     */
     public function beginTransaction(): bool
     {
         return $this->pdo->beginTransaction();
@@ -72,7 +72,7 @@ class TraceablePDO extends PDO
      * Execute an SQL statement and return the number of affected rows
      *
      * @link   http://php.net/manual/en/pdo.exec.php
-     * @param  string   $statement
+     * @param string $statement
      * @return int|bool PDO::exec returns the number of rows that were modified or deleted by the
      * SQL statement you issued. If no rows were affected, PDO::exec returns 0. This function may
      * return Boolean FALSE, but may also return a non-Boolean value which evaluates to FALSE.
@@ -88,7 +88,7 @@ class TraceablePDO extends PDO
      * Retrieve a database connection attribute
      *
      * @link   http://php.net/manual/en/pdo.getattribute.php
-     * @param  int   $attribute One of the PDO::ATTR_* constants
+     * @param int $attribute One of the PDO::ATTR_* constants
      * @return mixed A successful call returns the value of the requested PDO attribute.
      * An unsuccessful call returns null.
      */
@@ -113,7 +113,7 @@ class TraceablePDO extends PDO
      * Returns the ID of the last inserted row or sequence value
      *
      * @link   http://php.net/manual/en/pdo.lastinsertid.php
-     * @param  string $name [optional]
+     * @param string $name [optional]
      * @return string If a sequence name was not specified for the name parameter, PDO::lastInsertId
      * returns a string representing the row ID of the last row that was inserted into the database.
      */
@@ -127,8 +127,8 @@ class TraceablePDO extends PDO
      * Prepares a statement for execution and returns a statement object
      *
      * @link   http://php.net/manual/en/pdo.prepare.php
-     * @param  string $statement This must be a valid SQL statement template for the target DB server.
-     * @param  array  $driver_options [optional] This array holds one or more key=&gt;value pairs to
+     * @param string $statement This must be a valid SQL statement template for the target DB server.
+     * @param array $driver_options [optional] This array holds one or more key=&gt;value pairs to
      * set attribute values for the PDOStatement object that this method returns.
      * @return TraceablePDOStatement|bool If the database server successfully prepares the statement,
      * PDO::prepare returns a PDOStatement object. If the database server cannot successfully prepare
@@ -144,9 +144,9 @@ class TraceablePDO extends PDO
      * Executes an SQL statement, returning a result set as a PDOStatement object
      *
      * @link   http://php.net/manual/en/pdo.query.php
-     * @param  string $statement
-     * @param  int $fetchMode
-     * @param  mixed ...$fetchModeArgs
+     * @param string $statement
+     * @param int $fetchMode
+     * @param mixed ...$fetchModeArgs
      * @return TraceablePDOStatement|bool PDO::query returns a PDOStatement object, or FALSE on
      * failure.
      */
@@ -160,8 +160,8 @@ class TraceablePDO extends PDO
      * Quotes a string for use in a query.
      *
      * @link   http://php.net/manual/en/pdo.quote.php
-     * @param  string $string The string to be quoted.
-     * @param  int    $parameter_type [optional] Provides a data type hint for drivers that have
+     * @param string $string The string to be quoted.
+     * @param int $parameter_type [optional] Provides a data type hint for drivers that have
      * alternate quoting styles.
      * @return string|bool A quoted string that is theoretically safe to pass into an SQL statement.
      * Returns FALSE if the driver does not support quoting in this way.
@@ -187,8 +187,8 @@ class TraceablePDO extends PDO
      * Set an attribute
      *
      * @link   http://php.net/manual/en/pdo.setattribute.php
-     * @param  int $attribute
-     * @param  mixed $value
+     * @param int $attribute
+     * @param mixed $value
      * @return bool TRUE on success or FALSE on failure.
      */
     public function setAttribute($attribute, $value): bool
@@ -199,9 +199,9 @@ class TraceablePDO extends PDO
     /**
      * Profiles a call to a PDO method
      *
-     * @param  string $method
-     * @param  string $sql
-     * @param  array  $args
+     * @param string $method
+     * @param string $sql
+     * @param array $args
      * @return mixed  The result of the call
      */
     #[\ReturnTypeWillChange]
@@ -249,8 +249,8 @@ class TraceablePDO extends PDO
     public function getAccumulatedStatementsDuration(): float
     {
         return array_reduce($this->executedStatements, function ($v, $s) {
- return $v + $s->getDuration(); 
-});
+            return $v + $s->getDuration();
+        });
     }
 
     /**
@@ -261,8 +261,8 @@ class TraceablePDO extends PDO
     public function getMemoryUsage(): int
     {
         return array_reduce($this->executedStatements, function ($v, $s) {
- return $v + $s->getMemoryUsage(); 
-});
+            return $v + $s->getMemoryUsage();
+        });
     }
 
     /**
@@ -273,8 +273,9 @@ class TraceablePDO extends PDO
     public function getPeakMemoryUsage(): int
     {
         return array_reduce($this->executedStatements, function ($v, $s) {
- $m = $s->getEndMemory(); return $m > $v ? $m : $v; 
-});
+            $m = $s->getEndMemory();
+            return $m > $v ? $m : $v;
+        });
     }
 
     /**
@@ -295,8 +296,8 @@ class TraceablePDO extends PDO
     public function getFailedExecutedStatements(): array
     {
         return array_filter($this->executedStatements, function ($s) {
- return !$s->isSuccess(); 
-});
+            return !$s->isSuccess();
+        });
     }
 
     /**

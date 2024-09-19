@@ -112,7 +112,7 @@ abstract class LogHandler
     /**
      * Set current ident.
      *
-     * @param   int     $ident      1=Increase ident of 1, -1=Decrease ident of 1
+     * @param int $ident 1=Increase ident of 1, -1=Decrease ident of 1
      * @return  void
      */
     public function setIdent($ident)
@@ -123,8 +123,8 @@ abstract class LogHandler
     /**
      * Export the message
      *
-     * @param   array   $content            Array containing the info about the message
-     * @param   string  $suffixinfilename   When output is a file, append this suffix into default log filename.
+     * @param array $content Array containing the info about the message
+     * @param string $suffixinfilename When output is a file, append this suffix into default log filename.
      * @return  void
      */
     public function export($content, $suffixinfilename = '')

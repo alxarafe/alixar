@@ -90,7 +90,7 @@ class pdf_einstein extends ModelePDFCommandes
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct(DoliDB $db)
     {
@@ -169,21 +169,22 @@ class pdf_einstein extends ModelePDFCommandes
         $this->atleastonediscount = 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build pdf onto disk
      *
-     *  @param      Commande    $object             Object to generate
-     *  @param      Translate   $outputlangs        Lang output object
-     *  @param      string      $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int         $hidedetails        Do not show line details
-     *  @param      int         $hidedesc           Do not show desc
-     *  @param      int         $hideref            Do not show ref
-     *  @return     int                             1=OK, 0=KO
+     * @param Commande $object Object to generate
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                             1=OK, 0=KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath = '', $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $db, $hookmanager, $nblines;
 
         if (!is_object($outputlangs)) {
@@ -520,7 +521,7 @@ class pdf_einstein extends ModelePDFCommandes
                         $localtax2ligne -= ($localtax2ligne * $object->remise_percent) / 100;
                     }*/
 
-                    $vatrate = (string) $object->lines[$i]->tva_tx;
+                    $vatrate = (string)$object->lines[$i]->tva_tx;
 
                     // Retrieve type from database for backward compatibility with old records
                     if (
@@ -669,37 +670,37 @@ class pdf_einstein extends ModelePDFCommandes
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *  Show payments table
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Commande    $object         Object order
-     *  @param  int         $posy           Position y in PDF
-     *  @param  Translate   $outputlangs    Object langs for output
-     *  @return int                         Return integer <0 if KO, >0 if OK
+     * @param TCPDF $pdf Object PDF
+     * @param Commande $object Object order
+     * @param int $posy Position y in PDF
+     * @param Translate $outputlangs Object langs for output
+     * @return int                         Return integer <0 if KO, >0 if OK
      */
     protected function _tableau_versements(&$pdf, $object, $posy, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         return 1;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *   Show miscellaneous information (payment mode, payment term, ...)
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     Commande    $object         Object to show
-     *   @param     int         $posy           Y
-     *   @param     Translate   $outputlangs    Langs object
-     *   @return    int
+     * @param TCPDF $pdf Object PDF
+     * @param Commande $object Object to show
+     * @param int $posy Y
+     * @param Translate $outputlangs Langs object
+     * @return    int
      */
     protected function _tableau_info(&$pdf, $object, $posy, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $mysoc;
         $default_font_size = pdf_getPDFFontSize($outputlangs);
 
@@ -732,7 +733,7 @@ class pdf_einstein extends ModelePDFCommandes
             $lib_condition_paiement = ($outputlangs->transnoentities("PaymentCondition" . $object->cond_reglement_code) != 'PaymentCondition' . $object->cond_reglement_code) ? $outputlangs->transnoentities("PaymentCondition" . $object->cond_reglement_code) : $outputlangs->convToOutputCharset($object->cond_reglement_doc ? $object->cond_reglement_doc : $object->cond_reglement_label);
             $lib_condition_paiement = str_replace('\n', "\n", $lib_condition_paiement);
             if ($object->deposit_percent > 0) {
-                $lib_condition_paiement = str_replace('__DEPOSIT_PERCENT__', (string) $object->deposit_percent, $lib_condition_paiement);
+                $lib_condition_paiement = str_replace('__DEPOSIT_PERCENT__', (string)$object->deposit_percent, $lib_condition_paiement);
             }
             $pdf->MultiCell(67, 4, $lib_condition_paiement, 0, 'L');
 
@@ -872,22 +873,22 @@ class pdf_einstein extends ModelePDFCommandes
         return $posy;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *  Show total to pay
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Commande    $object         Object invoice
-     *  @param  int         $deja_regle     Montant deja regle
-     *  @param  int         $posy           Position depart
-     *  @param  Translate   $outputlangs    Object langs
-     *  @param  Translate   $outputlangsbis Object lang for output bis
-     *  @return int                         Position pour suite
+     * @param TCPDF $pdf Object PDF
+     * @param Commande $object Object invoice
+     * @param int $deja_regle Montant deja regle
+     * @param int $posy Position depart
+     * @param Translate $outputlangs Object langs
+     * @param Translate $outputlangsbis Object lang for output bis
+     * @return int                         Position pour suite
      */
     protected function _tableau_tot(&$pdf, $object, $deja_regle, $posy, $outputlangs, $outputlangsbis = null)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $mysoc, $hookmanager;
 
         $default_font_size = pdf_getPDFFontSize($outputlangs);
@@ -938,7 +939,7 @@ class pdf_einstein extends ModelePDFCommandes
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX1_OPTION) && $conf->global->FACTURE_LOCAL_TAX1_OPTION=='localtax1on')
                 //{
                 foreach ($this->localtax1 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('1', '3', '5'))) {
+                    if (in_array((string)$localtax_type, array('1', '3', '5'))) {
                         continue;
                     }
                     foreach ($localtax_rate as $tvakey => $tvaval) {
@@ -949,8 +950,8 @@ class pdf_einstein extends ModelePDFCommandes
                             $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
 
                             $tvacompl = '';
-                            if (preg_match('/\*/', (string) $tvakey)) {
-                                $tvakey = str_replace('*', '', (string) $tvakey);
+                            if (preg_match('/\*/', (string)$tvakey)) {
+                                $tvakey = str_replace('*', '', (string)$tvakey);
                                 $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
                             }
                             $totalvat = $outputlangs->transcountrynoentities("TotalLT1", $mysoc->country_code) . (is_object($outputlangsbis) ? ' / ' . $outputlangsbis->transcountrynoentities("TotalLT1", $mysoc->country_code) : '');
@@ -970,7 +971,7 @@ class pdf_einstein extends ModelePDFCommandes
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX2_OPTION) && $conf->global->FACTURE_LOCAL_TAX2_OPTION=='localtax2on')
                 //{
                 foreach ($this->localtax2 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('1', '3', '5'))) {
+                    if (in_array((string)$localtax_type, array('1', '3', '5'))) {
                         continue;
                     }
                     foreach ($localtax_rate as $tvakey => $tvaval) {
@@ -981,8 +982,8 @@ class pdf_einstein extends ModelePDFCommandes
                             $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
 
                             $tvacompl = '';
-                            if (preg_match('/\*/', (string) $tvakey)) {
-                                $tvakey = str_replace('*', '', (string) $tvakey);
+                            if (preg_match('/\*/', (string)$tvakey)) {
+                                $tvakey = str_replace('*', '', (string)$tvakey);
                                 $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
                             }
                             $totalvat = $outputlangs->transcountrynoentities("TotalLT2", $mysoc->country_code) . (is_object($outputlangsbis) ? ' / ' . $outputlangsbis->transcountrynoentities("TotalLT2", $mysoc->country_code) : '');
@@ -1032,7 +1033,7 @@ class pdf_einstein extends ModelePDFCommandes
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX1_OPTION) && $conf->global->FACTURE_LOCAL_TAX1_OPTION=='localtax1on')
                 //{
                 foreach ($this->localtax1 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('2', '4', '6'))) {
+                    if (in_array((string)$localtax_type, array('2', '4', '6'))) {
                         continue;
                     }
 
@@ -1044,8 +1045,8 @@ class pdf_einstein extends ModelePDFCommandes
                             $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
 
                             $tvacompl = '';
-                            if (preg_match('/\*/', (string) $tvakey)) {
-                                $tvakey = str_replace('*', '', (string) $tvakey);
+                            if (preg_match('/\*/', (string)$tvakey)) {
+                                $tvakey = str_replace('*', '', (string)$tvakey);
                                 $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
                             }
                             $totalvat = $outputlangs->transcountrynoentities("TotalLT1", $mysoc->country_code) . (is_object($outputlangsbis) ? ' / ' . $outputlangsbis->transcountrynoentities("TotalLT1", $mysoc->country_code) : '');
@@ -1066,7 +1067,7 @@ class pdf_einstein extends ModelePDFCommandes
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX2_OPTION) && $conf->global->FACTURE_LOCAL_TAX2_OPTION=='localtax2on')
                 //{
                 foreach ($this->localtax2 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('2', '4', '6'))) {
+                    if (in_array((string)$localtax_type, array('2', '4', '6'))) {
                         continue;
                     }
 
@@ -1079,8 +1080,8 @@ class pdf_einstein extends ModelePDFCommandes
                             $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
 
                             $tvacompl = '';
-                            if (preg_match('/\*/', (string) $tvakey)) {
-                                $tvakey = str_replace('*', '', (string) $tvakey);
+                            if (preg_match('/\*/', (string)$tvakey)) {
+                                $tvakey = str_replace('*', '', (string)$tvakey);
                                 $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
                             }
                             $totalvat = $outputlangs->transcountrynoentities("TotalLT2", $mysoc->country_code) . (is_object($outputlangsbis) ? ' / ' . $outputlangsbis->transcountrynoentities("TotalLT2", $mysoc->country_code) : '');
@@ -1148,20 +1149,21 @@ class pdf_einstein extends ModelePDFCommandes
         return ($tab2_top + ($tab2_hl * $index));
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     float|int   $tab_top        Top position of table
-     *   @param     float|int   $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y (not used)
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @param     string      $currency       Currency code
-     *   @param     Translate   $outputlangsbis Langs object bis
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param float|int $tab_top Top position of table
+     * @param float|int $tab_height Height of table (rectangle)
+     * @param int $nexY Y (not used)
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop 1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
+     * @param int $hidebottom Hide bottom bar of array
+     * @param string $currency Currency code
+     * @param Translate $outputlangsbis Langs object bis
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0, $currency = '', $outputlangsbis = null)
     {
@@ -1253,22 +1255,22 @@ class pdf_einstein extends ModelePDFCommandes
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Commande    $object         Object to show
-     *  @param  int         $showaddress    0=no, 1=yes
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @param  Translate   $outputlangsbis Object lang for output bis
-     *  @param  string      $titlekey       Translation key to show as title of document
-     *  @return float|int                   Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param Commande $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @param Translate $outputlangsbis Object lang for output bis
+     * @param string $titlekey Translation key to show as title of document
+     * @return float|int                   Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs, $outputlangsbis = null, $titlekey = "PdfOrderTitle")
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs, $hookmanager;
 
         $ltrdirection = 'L';
@@ -1476,7 +1478,7 @@ class pdf_einstein extends ModelePDFCommandes
 
             $carac_client_name = pdfBuildThirdpartyName($thirdparty, $outputlangs);
 
-            $mode =  'target';
+            $mode = 'target';
             $carac_client = pdf_build_address($outputlangs, $this->emetteur, $object->thirdparty, ($usecontact ? $object->contact : ''), $usecontact, $mode, $object);
 
             // Show recipient
@@ -1520,20 +1522,20 @@ class pdf_einstein extends ModelePDFCommandes
         return $top_shift;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
     /**
      *      Show footer of page. Need this->emetteur object
      *
-     *      @param  TCPDF       $pdf                PDF
-     *      @param  Commande    $object             Object to show
-     *      @param  Translate   $outputlangs        Object lang for output
-     *      @param  int         $hidefreetext       1=Hide free text
-     *      @return int                             Return height of bottom margin including footer text
+     * @param TCPDF $pdf PDF
+     * @param Commande $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return int                             Return height of bottom margin including footer text
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         $showdetails = getDolGlobalInt('MAIN_GENERATE_DOCUMENTS_SHOW_FOOT_DETAILS', 0);
         return pdf_pagefoot($pdf, $outputlangs, 'ORDER_FREE_TEXT', $this->emetteur, $this->marge_basse, $this->marge_gauche, $this->page_hauteur, $object, $showdetails, $hidefreetext, $this->page_largeur, $this->watermark);
     }

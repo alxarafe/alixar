@@ -41,7 +41,7 @@ use Dolibarr\Code\Societe\Classes\Societe;
 /**
  * Initialize the array of tabs for customer invoice
  *
- * @param   Facture     $object     Invoice object
+ * @param Facture $object Invoice object
  * @return  array                   Array of head tabs
  */
 function facture_prepare_head($object)
@@ -58,7 +58,7 @@ function facture_prepare_head($object)
 
     if (!getDolGlobalString('MAIN_DISABLE_CONTACTS_TAB')) {
         $nbContact = count($object->liste_contact(-1, 'internal')) + count($object->liste_contact(-1, 'external'));
-        $head[$h][0] = constant('BASE_URL') . '/compta/facture/contact.php?id=' . urlencode((string) ($object->id));
+        $head[$h][0] = constant('BASE_URL') . '/compta/facture/contact.php?id=' . urlencode((string)($object->id));
         $head[$h][1] = $langs->trans('ContactsAddresses');
         if ($nbContact > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbContact . '</span>';
@@ -71,7 +71,7 @@ function facture_prepare_head($object)
         $nbStandingOrders = 0;
         $sql = "SELECT COUNT(pfd.rowid) as nb";
         $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_demande as pfd";
-        $sql .= " WHERE pfd.fk_facture = " . ((int) $object->id);
+        $sql .= " WHERE pfd.fk_facture = " . ((int)$object->id);
         $sql .= " AND type = 'ban'";
         $resql = $db->query($sql);
         if ($resql) {
@@ -84,7 +84,7 @@ function facture_prepare_head($object)
         }
         $langs->load("banks");
 
-        $head[$h][0] = constant('BASE_URL') . '/compta/facture/prelevement.php?id=' . urlencode((string) ($object->id));
+        $head[$h][0] = constant('BASE_URL') . '/compta/facture/prelevement.php?id=' . urlencode((string)($object->id));
         $head[$h][1] = $langs->trans('StandingOrders');
         if ($nbStandingOrders > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbStandingOrders . '</span>';
@@ -141,7 +141,7 @@ function facture_prepare_head($object)
         } else {
             $sql = "SELECT COUNT(id) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm";
-            $sql .= " WHERE fk_element = " . ((int) $object->id);
+            $sql .= " WHERE fk_element = " . ((int)$object->id);
             $sql .= " AND elementtype = 'invoice'";
             $resql = $db->query($sql);
             if ($resql) {
@@ -255,7 +255,7 @@ function invoice_admin_prepare_head()
 /**
  * Return array head with list of tabs to view object information.
  *
- * @param   Facture     $object     Invoice object
+ * @param Facture $object Invoice object
  * @return array                    head array with tabs
  */
 function invoice_rec_prepare_head($object)
@@ -283,7 +283,7 @@ function invoice_rec_prepare_head($object)
         } else {
             $sql = "SELECT COUNT(id) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm";
-            $sql .= " WHERE fk_element = " . ((int) $object->id);
+            $sql .= " WHERE fk_element = " . ((int)$object->id);
             $sql .= " AND elementtype = 'invoicerec'";
             $resql = $db->query($sql);
             if ($resql) {
@@ -318,7 +318,7 @@ function invoice_rec_prepare_head($object)
 /**
  * Return array head with list of tabs to view object information.
  *
- * @param   Facture     $object     Invoice object
+ * @param Facture $object Invoice object
  * @return array                    head array with tabs
  */
 function supplier_invoice_rec_prepare_head($object)
@@ -347,7 +347,7 @@ function supplier_invoice_rec_prepare_head($object)
 /**
  * Return an HTML table that contains a pie chart of the number of customers or supplier invoices
  *
- * @param   string  $mode       Can be 'customers' or 'suppliers'
+ * @param string $mode Can be 'customers' or 'suppliers'
  * @return  string              A HTML table that contains a pie chart of customers or supplier invoices
  */
 function getNumberInvoicesPieChart($mode)
@@ -393,7 +393,7 @@ function getNumberInvoicesPieChart($mode)
         $sql .= " AND f.type <> 2";
         $sql .= " AND f.fk_statut = 1";
         if (isset($user->socid) && $user->socid > 0) {
-            $sql .= " AND f.fk_soc = " . ((int) $user->socid);
+            $sql .= " AND f.fk_soc = " . ((int)$user->socid);
         }
 
         $resql = $db->query($sql);
@@ -491,8 +491,8 @@ function getNumberInvoicesPieChart($mode)
 /**
  * Return a HTML table that contains a list with customer invoice drafts
  *
- * @param   int     $maxCount   (Optional) The maximum count of elements inside the table
- * @param   int     $socid      (Optional) Show only results from the customer with this id
+ * @param int $maxCount (Optional) The maximum count of elements inside the table
+ * @param int $socid (Optional) Show only results from the customer with this id
  * @return  string              A HTML table that contains a list with customer invoice drafts
  */
 function getCustomerInvoiceDraftTable($maxCount = 500, $socid = 0)
@@ -522,11 +522,11 @@ function getCustomerInvoiceDraftTable($maxCount = 500, $socid = 0)
         $sql .= " WHERE s.rowid = f.fk_soc AND f.fk_statut = " . Facture::STATUS_DRAFT;
         $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
         if (!$user->hasRight('societe', 'client', 'voir')) {
-            $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+            $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
         }
 
         if ($socid) {
-            $sql .= " AND f.fk_soc = " . ((int) $socid);
+            $sql .= " AND f.fk_soc = " . ((int)$socid);
         }
         // Add where from hooks
         $parameters = array();
@@ -641,8 +641,8 @@ function getCustomerInvoiceDraftTable($maxCount = 500, $socid = 0)
 /**
  * Return a HTML table that contains a list with customer invoice drafts
  *
- * @param   int     $maxCount   (Optional) The maximum count of elements inside the table
- * @param   int     $socid      (Optional) Show only results from the customer with this id
+ * @param int $maxCount (Optional) The maximum count of elements inside the table
+ * @param int $socid (Optional) Show only results from the customer with this id
  * @return  string              A HTML table that contains a list with customer invoice drafts
  */
 function getDraftSupplierTable($maxCount = 500, $socid = 0)
@@ -669,10 +669,10 @@ function getDraftSupplierTable($maxCount = 500, $socid = 0)
         $sql .= " WHERE s.rowid = f.fk_soc AND f.fk_statut = " . FactureFournisseur::STATUS_DRAFT;
         $sql .= " AND f.entity IN (" . getEntity('invoice') . ')';
         if (!$user->hasRight('societe', 'client', 'voir')) {
-            $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+            $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
         }
         if ($socid) {
-            $sql .= " AND f.fk_soc = " . ((int) $socid);
+            $sql .= " AND f.fk_soc = " . ((int)$socid);
         }
         // Add where from hooks
         $parameters = array();
@@ -776,8 +776,8 @@ function getDraftSupplierTable($maxCount = 500, $socid = 0)
 /**
  * Return a HTML table that contains a list with latest edited customer invoices
  *
- * @param   int     $maxCount   (Optional) The maximum count of elements inside the table
- * @param   int     $socid      (Optional) Show only results from the customer with this id
+ * @param int $maxCount (Optional) The maximum count of elements inside the table
+ * @param int $socid (Optional) Show only results from the customer with this id
  * @return  string              A HTML table that contains a list with latest edited customer invoices
  */
 function getCustomerInvoiceLatestEditTable($maxCount = 5, $socid = 0)
@@ -794,10 +794,10 @@ function getCustomerInvoiceLatestEditTable($maxCount = 5, $socid = 0)
     $sql .= " WHERE f.fk_soc = s.rowid";
     $sql .= " AND f.entity IN (" . getEntity('facture') . ")";
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     $sql .= " ORDER BY f.tms DESC";
     $sql .= $db->plimit($maxCount, 0);
@@ -843,8 +843,8 @@ function getCustomerInvoiceLatestEditTable($maxCount = 5, $socid = 0)
 
         $companystatic->id = $obj->socid;
         $companystatic->name = $obj->socname;
-        $companystatic->client  = $obj->client;
-        $companystatic->canvas  = $obj->canvas;
+        $companystatic->client = $obj->client;
+        $companystatic->canvas = $obj->canvas;
 
         $filename = dol_sanitizeFileName($obj->ref);
         $filedir = $conf->propal->multidir_output[$obj->entity] . '/' . $filename;
@@ -884,8 +884,8 @@ function getCustomerInvoiceLatestEditTable($maxCount = 5, $socid = 0)
 /**
  * Return a HTML table that contains a list with latest edited supplier invoices
  *
- * @param   int     $maxCount   (Optional) The maximum count of elements inside the table
- * @param   int     $socid      (Optional) Show only results from the supplier with this id
+ * @param int $maxCount (Optional) The maximum count of elements inside the table
+ * @param int $socid (Optional) Show only results from the supplier with this id
  * @return  string              A HTML table that contains a list with latest edited supplier invoices
  */
 function getPurchaseInvoiceLatestEditTable($maxCount = 5, $socid = 0)
@@ -902,10 +902,10 @@ function getPurchaseInvoiceLatestEditTable($maxCount = 5, $socid = 0)
     $sql .= " WHERE f.fk_soc = s.rowid";
     $sql .= " AND f.entity IN (" . getEntity('facture_fourn') . ")";
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     $sql .= " ORDER BY f.tms DESC";
     $sql .= $db->plimit($maxCount, 0);
@@ -998,8 +998,8 @@ function getPurchaseInvoiceLatestEditTable($maxCount = 5, $socid = 0)
 /**
  * Return a HTML table that contains of unpaid customers invoices
  *
- * @param   int     $maxCount   (Optional) The maximum count of elements inside the table
- * @param   int     $socid      (Optional) Show only results from the supplier with this id
+ * @param int $maxCount (Optional) The maximum count of elements inside the table
+ * @param int $socid (Optional) Show only results from the supplier with this id
  * @return  string              A HTML table that contains a list with open (unpaid) supplier invoices
  */
 function getCustomerInvoiceUnpaidOpenTable($maxCount = 500, $socid = 0)
@@ -1027,10 +1027,10 @@ function getCustomerInvoiceUnpaidOpenTable($maxCount = 500, $socid = 0)
         $sql .= " WHERE s.rowid = f.fk_soc AND f.paye = 0 AND f.fk_statut = " . Facture::STATUS_VALIDATED;
         $sql .= " AND f.entity IN (" . getEntity('invoice') . ')';
         if (!$user->hasRight('societe', 'client', 'voir')) {
-            $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+            $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
         }
         if ($socid) {
-            $sql .= " AND f.fk_soc = " . ((int) $socid);
+            $sql .= " AND f.fk_soc = " . ((int)$socid);
         }
         // Add where from hooks
         $parameters = array();
@@ -1186,8 +1186,8 @@ function getCustomerInvoiceUnpaidOpenTable($maxCount = 500, $socid = 0)
 /**
  * Return a HTML table that contains of unpaid purchase invoices
  *
- * @param   int     $maxCount   (Optional) The maximum count of elements inside the table
- * @param   int     $socid      (Optional) Show only results from the supplier with this id
+ * @param int $maxCount (Optional) The maximum count of elements inside the table
+ * @param int $socid (Optional) Show only results from the supplier with this id
  * @return  string              A HTML table that contains a list with open (unpaid) supplier invoices
  */
 function getPurchaseInvoiceUnpaidOpenTable($maxCount = 500, $socid = 0)
@@ -1216,10 +1216,10 @@ function getPurchaseInvoiceUnpaidOpenTable($maxCount = 500, $socid = 0)
         $sql .= " AND ff.paye = 0";
         $sql .= " AND ff.fk_statut = " . FactureFournisseur::STATUS_VALIDATED;
         if (!$user->hasRight('societe', 'client', 'voir')) {
-            $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+            $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
         }
         if ($socid) {
-            $sql .= " AND ff.fk_soc = " . ((int) $socid);
+            $sql .= " AND ff.fk_soc = " . ((int)$socid);
         }
         // Add where from hooks
         $parameters = array();

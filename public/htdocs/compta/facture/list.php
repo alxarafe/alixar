@@ -276,7 +276,7 @@ foreach ($object->fields as $key => $val) {
     // If $val['visible']==0, then we never show the field
 
     if (!empty($val['visible'])) {
-        $visible = (int) dol_eval($val['visible'], 1, 1, '1');
+        $visible = (int)dol_eval($val['visible'], 1, 1, '1');
         $newkey = '';
         if (array_key_exists($key, $arrayfields)) {
             $newkey = $key;
@@ -289,7 +289,7 @@ foreach ($object->fields as $key => $val) {
             $arrayfields[$newkey] = array(
                 'label' => $val['label'],
                 'checked' => (($visible < 0) ? 0 : 1),
-                'enabled' => (abs($visible) != 3 && (int) dol_eval($val['enabled'], 1, 1, '1')),
+                'enabled' => (abs($visible) != 3 && (int)dol_eval($val['enabled'], 1, 1, '1')),
                 'position' => $val['position'],
                 'help' => empty($val['help']) ? '' : $val['help'],
             );
@@ -551,7 +551,7 @@ if ($action == 'makepayment_confirm' && $user->hasRight('facture', 'paiement')) 
                 $rsql .= " , u.rowid as user_id, u.lastname, u.firstname, u.login";
                 $rsql .= " FROM " . MAIN_DB_PREFIX . "prelevement_demande as pfd";
                 $rsql .= " , " . MAIN_DB_PREFIX . "user as u";
-                $rsql .= " WHERE fk_facture = " . ((int) $objecttmp->id);
+                $rsql .= " WHERE fk_facture = " . ((int)$objecttmp->id);
                 $rsql .= " AND pfd.fk_user_demande = u.rowid";
                 $rsql .= " AND pfd.traite = 0";
                 $rsql .= " ORDER BY pfd.date_demande DESC";
@@ -700,13 +700,13 @@ $sql .= $hookmanager->resPrint;
 $sql .= ' WHERE f.fk_soc = s.rowid';
 $sql .= ' AND f.entity IN (' . getEntity('invoice') . ')';
 if ($socid > 0) {
-    $sql .= ' AND s.rowid = ' . ((int) $socid);
+    $sql .= ' AND s.rowid = ' . ((int)$socid);
 }
 if ($userid) {
     if ($userid == -1) {
         $sql .= ' AND f.fk_user_author IS NULL';
     } else {
-        $sql .= ' AND f.fk_user_author = ' . ((int) $userid);
+        $sql .= ' AND f.fk_user_author = ' . ((int)$userid);
     }
 }
 if ($search_ref) {
@@ -829,10 +829,10 @@ if ($search_status != '-1' && $search_status != '') {
 }
 
 if ($search_paymentmode > 0) {
-    $sql .= " AND f.fk_mode_reglement = " . ((int) $search_paymentmode);
+    $sql .= " AND f.fk_mode_reglement = " . ((int)$search_paymentmode);
 }
 if ($search_paymentterms > 0) {
-    $sql .= " AND f.fk_cond_reglement = " . ((int) $search_paymentterms);
+    $sql .= " AND f.fk_cond_reglement = " . ((int)$search_paymentterms);
 }
 if ($search_module_source) {
     $sql .= natural_search("f.module_source", $search_module_source);
@@ -874,14 +874,14 @@ if ($search_user > 0) {
     $sql .= " FROM llx_element_contact as ec";
     $sql .= " INNER JOIN llx_c_type_contact as tc";
     $sql .= " ON ec.fk_c_type_contact = tc.rowid AND tc.element='facture' AND tc.source='internal'";
-    $sql .= " WHERE ec.element_id = f.rowid AND ec.fk_socpeople = " . ((int) $search_user) . ")";
+    $sql .= " WHERE ec.element_id = f.rowid AND ec.fk_socpeople = " . ((int)$search_user) . ")";
 }
 // Search on sale representative
 if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search for tag/category ($searchCategoryProductList is an array of ID)
@@ -895,9 +895,9 @@ if (!empty($searchCategoryProductList)) {
             $searchCategoryProductSqlList[] = "NOT EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "facturedet as fd WHERE fd.fk_facture = f.rowid AND fd.fk_product = ck.fk_product)";
         } elseif (intval($searchCategoryProduct) > 0) {
             if ($searchCategoryProductOperator == 0) {
-                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "facturedet as fd WHERE fd.fk_facture = f.rowid AND fd.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int) $searchCategoryProduct) . ")";
+                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "facturedet as fd WHERE fd.fk_facture = f.rowid AND fd.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int)$searchCategoryProduct) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryProduct);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryProduct);
             }
         }
     }
@@ -925,9 +925,9 @@ if (!empty($searchCategoryCustomerList)) {
             $searchCategoryCustomerSqlList[] = "NOT EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as ck WHERE s.rowid = ck.fk_soc)";
         } elseif (intval($searchCategoryCustomer) > 0) {
             if ($searchCategoryCustomerOperator == 0) {
-                $searchCategoryCustomerSqlList[] = " EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as ck WHERE s.rowid = ck.fk_soc AND ck.fk_categorie = " . ((int) $searchCategoryCustomer) . ")";
+                $searchCategoryCustomerSqlList[] = " EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as ck WHERE s.rowid = ck.fk_soc AND ck.fk_categorie = " . ((int)$searchCategoryCustomer) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryCustomer);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryCustomer);
             }
         }
     }
@@ -1011,7 +1011,7 @@ if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $s
 
 llxHeader('', $title, $help_url);
 
-$param = '&socid=' . urlencode((string) ($socid));
+$param = '&socid=' . urlencode((string)($socid));
 if (!empty($mode)) {
     $param .= '&mode=' . urlencode($mode);
 }
@@ -1019,64 +1019,64 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($search_all) {
     $param .= '&search_all=' . urlencode($search_all);
 }
 if ($search_date_startday) {
-    $param .= '&search_date_startday=' . urlencode((string) ($search_date_startday));
+    $param .= '&search_date_startday=' . urlencode((string)($search_date_startday));
 }
 if ($search_date_startmonth) {
-    $param .= '&search_date_startmonth=' . urlencode((string) ($search_date_startmonth));
+    $param .= '&search_date_startmonth=' . urlencode((string)($search_date_startmonth));
 }
 if ($search_date_startyear) {
-    $param .= '&search_date_startyear=' . urlencode((string) ($search_date_startyear));
+    $param .= '&search_date_startyear=' . urlencode((string)($search_date_startyear));
 }
 if ($search_date_endday) {
-    $param .= '&search_date_endday=' . urlencode((string) ($search_date_endday));
+    $param .= '&search_date_endday=' . urlencode((string)($search_date_endday));
 }
 if ($search_date_endmonth) {
-    $param .= '&search_date_endmonth=' . urlencode((string) ($search_date_endmonth));
+    $param .= '&search_date_endmonth=' . urlencode((string)($search_date_endmonth));
 }
 if ($search_date_endyear) {
-    $param .= '&search_date_endyear=' . urlencode((string) ($search_date_endyear));
+    $param .= '&search_date_endyear=' . urlencode((string)($search_date_endyear));
 }
 if ($search_date_valid_startday) {
-    $param .= '&search_date_valid_startday=' . urlencode((string) ($search_date_valid_startday));
+    $param .= '&search_date_valid_startday=' . urlencode((string)($search_date_valid_startday));
 }
 if ($search_date_valid_startmonth) {
-    $param .= '&search_date_valid_startmonth=' . urlencode((string) ($search_date_valid_startmonth));
+    $param .= '&search_date_valid_startmonth=' . urlencode((string)($search_date_valid_startmonth));
 }
 if ($search_date_valid_startyear) {
-    $param .= '&search_date_valid_startyear=' . urlencode((string) ($search_date_valid_startyear));
+    $param .= '&search_date_valid_startyear=' . urlencode((string)($search_date_valid_startyear));
 }
 if ($search_date_valid_endday) {
-    $param .= '&search_date_valid_endday=' . urlencode((string) ($search_date_valid_endday));
+    $param .= '&search_date_valid_endday=' . urlencode((string)($search_date_valid_endday));
 }
 if ($search_date_valid_endmonth) {
-    $param .= '&search_date_valid_endmonth=' . urlencode((string) ($search_date_valid_endmonth));
+    $param .= '&search_date_valid_endmonth=' . urlencode((string)($search_date_valid_endmonth));
 }
 if ($search_date_valid_endyear) {
-    $param .= '&search_date_valid_endyear=' . urlencode((string) ($search_date_valid_endyear));
+    $param .= '&search_date_valid_endyear=' . urlencode((string)($search_date_valid_endyear));
 }
 if ($search_datelimit_startday) {
-    $param .= '&search_datelimit_startday=' . urlencode((string) ($search_datelimit_startday));
+    $param .= '&search_datelimit_startday=' . urlencode((string)($search_datelimit_startday));
 }
 if ($search_datelimit_startmonth) {
-    $param .= '&search_datelimit_startmonth=' . urlencode((string) ($search_datelimit_startmonth));
+    $param .= '&search_datelimit_startmonth=' . urlencode((string)($search_datelimit_startmonth));
 }
 if ($search_datelimit_startyear) {
-    $param .= '&search_datelimit_startyear=' . urlencode((string) ($search_datelimit_startyear));
+    $param .= '&search_datelimit_startyear=' . urlencode((string)($search_datelimit_startyear));
 }
 if ($search_datelimit_endday) {
-    $param .= '&search_datelimit_endday=' . urlencode((string) ($search_datelimit_endday));
+    $param .= '&search_datelimit_endday=' . urlencode((string)($search_datelimit_endday));
 }
 if ($search_datelimit_endmonth) {
-    $param .= '&search_datelimit_endmonth=' . urlencode((string) ($search_datelimit_endmonth));
+    $param .= '&search_datelimit_endmonth=' . urlencode((string)($search_datelimit_endmonth));
 }
 if ($search_datelimit_endyear) {
-    $param .= '&search_datelimit_endyear=' . urlencode((string) ($search_datelimit_endyear));
+    $param .= '&search_datelimit_endyear=' . urlencode((string)($search_datelimit_endyear));
 }
 if ($search_ref) {
     $param .= '&search_ref=' . urlencode($search_ref);
@@ -1121,16 +1121,16 @@ if ($search_customer_code) {
     $param .= '&search_customer_code=' . urlencode($search_customer_code);
 }
 if ($search_sale > 0) {
-    $param .= '&search_sale=' . urlencode((string) $search_sale);
+    $param .= '&search_sale=' . urlencode((string)$search_sale);
 }
 if ($search_user > 0) {
-    $param .= '&search_user=' . urlencode((string) $search_user);
+    $param .= '&search_user=' . urlencode((string)$search_user);
 }
 if ($search_login) {
     $param .= '&search_login=' . urlencode($search_login);
 }
 if ($search_product_category > 0) {
-    $param .= '&search_product_category=' . urlencode((string) $search_product_category);
+    $param .= '&search_product_category=' . urlencode((string)$search_product_category);
 }
 if ($search_montant_ht != '') {
     $param .= '&search_montant_ht=' . urlencode($search_montant_ht);
@@ -1166,10 +1166,10 @@ if ($search_status != '') {
     $param .= '&search_status=' . urlencode($search_status);
 }
 if ($search_paymentmode > 0) {
-    $param .= '&search_paymentmode=' . urlencode((string) ($search_paymentmode));
+    $param .= '&search_paymentmode=' . urlencode((string)($search_paymentmode));
 }
 if ($search_paymentterms > 0) {
-    $param .= '&search_paymentterms=' . urlencode((string) ($search_paymentterms));
+    $param .= '&search_paymentterms=' . urlencode((string)($search_paymentterms));
 }
 if ($search_module_source) {
     $param .= '&search_module_source=' . urlencode($search_module_source);
@@ -1178,7 +1178,7 @@ if ($search_pos_source) {
     $param .= '&search_pos_source=' . urlencode($search_pos_source);
 }
 if ($show_files) {
-    $param .= '&show_files=' . urlencode((string) ($show_files));
+    $param .= '&show_files=' . urlencode((string)($show_files));
 }
 if ($search_late) {
     $param .= "&search_late=" . urlencode($search_late);
@@ -1187,7 +1187,7 @@ if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
 }
 if ($search_categ_cus > 0) {
-    $param .= '&search_categ_cus=' . urlencode((string) ($search_categ_cus));
+    $param .= '&search_categ_cus=' . urlencode((string)($search_categ_cus));
 }
 if (!empty($search_fac_rec_source_title)) {
     $param .= '&search_fac_rec_source_title=' . urlencode($search_fac_rec_source_title);
@@ -1233,7 +1233,7 @@ if ($contextpage != 'poslist') {
     if (!empty($socid)) {
         $url .= '&socid=' . $socid;
     }
-    $newcardbutton  = '';
+    $newcardbutton = '';
     $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));
     $newcardbutton .= dolGetButtonTitle($langs->trans('ViewKanban'), '', 'fa fa-th-list imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=kanban' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ($mode == 'kanban' ? 2 : 1), array('morecss' => 'reposition'));
     $newcardbutton .= dolGetButtonTitleSeparator();
@@ -1920,10 +1920,10 @@ if ($num > 0) {
     $with_margin_info = false;
     if (
         isModEnabled('margin') && (
-        !empty($arrayfields['total_pa']['checked'])
-        || !empty($arrayfields['total_margin']['checked'])
-        || !empty($arrayfields['total_margin_rate']['checked'])
-        || !empty($arrayfields['total_mark_rate']['checked'])
+            !empty($arrayfields['total_pa']['checked'])
+            || !empty($arrayfields['total_margin']['checked'])
+            || !empty($arrayfields['total_margin_rate']['checked'])
+            || !empty($arrayfields['total_mark_rate']['checked'])
         )
     ) {
         $with_margin_info = true;

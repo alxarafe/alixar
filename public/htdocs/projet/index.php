@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2022 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2019      Nicolas ZABOURI      <info@inovea-conseil.com>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *       \file       htdocs/projet/index.php
@@ -81,7 +87,6 @@ if (empty($reshook)) {
     }
 }
 
-
 /*
  * View
  */
@@ -95,16 +100,13 @@ $projectset = ($mine ? $mine : (!$user->hasRight('projet', 'all', 'lire') ? 0 : 
 $projectsListId = $projectstatic->getProjectsAuthorizedForUser($user, $projectset, 1);
 //var_dump($projectsListId);
 
-
 $title = $langs->trans('ProjectsArea');
 
 $help_url = 'EN:Module_Projects|FR:Module_Projets|ES:M&oacute;dulo_Proyectos|DE:Modul_Projekte';
 
 llxHeader('', $title, $help_url);
 
-
 //if ($mine) $title=$langs->trans("MyProjectsArea");
-
 
 // Title for combo list see all projects
 $titleall = $langs->trans("AllAllowedProjects");
@@ -141,7 +143,10 @@ print_barre_liste($form->textwithpicto($title, $tooltiphelp), 0, $_SERVER["PHP_S
 
 // Get list of ponderated percent and colors for each status
 include DOL_DOCUMENT_ROOT . '/theme/' . $conf->theme . '/theme_vars.inc.php';
-$listofoppstatus = array(); $listofopplabel = array(); $listofoppcode = array(); $colorseries = array();
+$listofoppstatus = array();
+$listofopplabel = array();
+$listofoppcode = array();
+$colorseries = array();
 $sql = "SELECT cls.rowid, cls.code, cls.percent, cls.label";
 $sql .= " FROM " . MAIN_DB_PREFIX . "c_lead_status as cls";
 $sql .= " WHERE active=1";
@@ -217,7 +222,7 @@ if ($mine || !$user->hasRight('projet', 'all', 'lire')) {
     $sql .= " AND p.rowid IN (" . $db->sanitize($projectsListId) . ")"; // If we have this test true, it also means projectset is not 2
 }
 if ($socid) {
-    $sql .= " AND (p.fk_soc IS NULL OR p.fk_soc = 0 OR p.fk_soc = " . ((int) $socid) . ")";
+    $sql .= " AND (p.fk_soc IS NULL OR p.fk_soc = 0 OR p.fk_soc = " . ((int)$socid) . ")";
 }
 $sql .= " ORDER BY p.tms DESC";
 $sql .= $db->plimit($max, 0);
@@ -333,7 +338,7 @@ if ($mine || !$user->hasRight('projet', 'all', 'lire')) {
     $sql .= " AND p.rowid IN (" . $db->sanitize($projectsListId) . ")"; // If we have this test true, it also means projectset is not 2
 }
 if ($socid > 0) {
-    $sql .= " AND (p.fk_soc IS NULL OR p.fk_soc = 0 OR p.fk_soc = " . ((int) $socid) . ")";
+    $sql .= " AND (p.fk_soc IS NULL OR p.fk_soc = 0 OR p.fk_soc = " . ((int)$socid) . ")";
 }
 $sql .= " GROUP BY s.rowid, s.nom, s.name_alias, s.code_client, s.code_compta, s.client, s.code_fournisseur, s.code_compta_fournisseur, s.fournisseur, s.logo, s.email, s.entity, s.canvas, s.status";
 $sql .= $db->order($sortfield, $sortorder);

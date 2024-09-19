@@ -12,9 +12,9 @@ class ScheduledQueryRunService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Sigma\ScheduledQueryRun>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Sigma\ScheduledQueryRun>
      */
     public function all($params = null, $opts = null)
     {
@@ -28,9 +28,9 @@ class ScheduledQueryRunService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Sigma\ScheduledQueryRun
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Sigma\ScheduledQueryRun
      */
     public function retrieve($id, $params = null, $opts = null)
     {

@@ -1,6 +1,7 @@
 # Uso de docker con el proyecto Alixar
 
-Este proyecto utiliza Docker para crear y gestionar los contenedores necesarios para su funcionamiento. A continuación, se detallan los pasos necesarios para construir y ejecutar los contenedores.
+Este proyecto utiliza Docker para crear y gestionar los contenedores necesarios para su funcionamiento. A continuación,
+se detallan los pasos necesarios para construir y ejecutar los contenedores.
 
 ## Prerrequisitos
 
@@ -36,9 +37,11 @@ cd docker
 docker compose build --no-cache
 ```
 
-Este comando construirá las imágenes Docker especificadas en el archivo `docker-compose.yml` sin utilizar la caché, asegurando que se obtengan versiones actualizadas de las dependencias y paquetes.
+Este comando construirá las imágenes Docker especificadas en el archivo `docker-compose.yml` sin utilizar la caché,
+asegurando que se obtengan versiones actualizadas de las dependencias y paquetes.
 
 ## Levantar los Contenedores
+
 Para levantar los contenedores y asegurarte de que se recrean y eliminen los huérfanos, utiliza el siguiente comando:
 
 ```sh
@@ -46,18 +49,21 @@ docker compose up --force-recreate --remove-orphans
 ```
 
 Parámetros:
+
 - --force-recreate: Fuerza la recreación de los contenedores incluso si no ha habido cambios en su configuración.
 - --remove-orphans: Elimina los contenedores que no están definidos en el archivo docker-compose.yml.
 
 ## Acceder al Contenedor PHP
 
-Para acceder a un contenedor específico, por ejemplo, un contenedor llamado alixar_php, puedes usar el siguiente comando:
+Para acceder a un contenedor específico, por ejemplo, un contenedor llamado alixar_php, puedes usar el siguiente
+comando:
 
 ```sh
 docker exec -it alixar_php bash
 ```
 
-Este comando te proporciona una terminal interactiva dentro del contenedor alixar_php, permitiéndote ejecutar comandos directamente en el entorno del contenedor.
+Este comando te proporciona una terminal interactiva dentro del contenedor alixar_php, permitiéndote ejecutar comandos
+directamente en el entorno del contenedor.
 
 ## Apagar y Eliminar los Contenedores
 
@@ -69,4 +75,5 @@ docker compose down
 
 ## Disfrute de Alixar
 
-Una vez levantados los contenedores, puede probar el código con tan sólo acceder desde su navegador a [http://localhost:8080](http://localhost:8080).  
+Una vez levantados los contenedores, puede probar el código con tan sólo acceder desde su navegador
+a [http://localhost:8080](http://localhost:8080).  

@@ -70,7 +70,7 @@ if ($action == 'specimen') {
     if ($modele !== '' && file_exists($dir . $file)) {
         require_once $dir . $file;
 
-        $classname = (string) $modele;
+        $classname = (string)$modele;
         $obj = new $classname($db);
 
         if ($obj->write_file($don, $langs) > 0) {

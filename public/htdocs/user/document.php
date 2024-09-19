@@ -61,9 +61,9 @@ if (getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) {
 if ($id) {
     // $user est le user qui edite, $id est l'id de l'utilisateur edite
     $caneditfield = ((($user->id == $id) && $user->hasRight("user", "self", "write"))
-    || (($user->id != $id) && $user->hasRight("user", "user", "write")));
+        || (($user->id != $id) && $user->hasRight("user", "user", "write")));
     $caneditpassword = ((($user->id == $id) && $user->hasRight("user", "self", "password"))
-    || (($user->id != $id) && $user->hasRight("user", "user", "password")));
+        || (($user->id != $id) && $user->hasRight("user", "user", "password")));
 }
 
 $permissiontoadd = $caneditfield;   // Used by the include of actions_addupdatedelete.inc.php and actions_linkedfiles
@@ -113,7 +113,6 @@ if ($id > 0 || !empty($ref)) {
 $hookmanager->initHooks(array('usercard', 'userdoc', 'globalcard'));
 
 
-
 /*
  * Actions
  */
@@ -161,7 +160,7 @@ if ($object->id) {
     $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
     $morehtmlref .= '</a>';
 
-    $urltovirtualcard = '/user/virtualcard.php?id=' . ((int) $object->id);
+    $urltovirtualcard = '/user/virtualcard.php?id=' . ((int)$object->id);
     $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl") . ' - ' . $object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
     dol_banner_tab($object, 'id', $linkback, $user->hasRight("user", "user", "read") || $user->admin, 'rowid', 'ref', $morehtmlref);

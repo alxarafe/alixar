@@ -165,7 +165,7 @@ if ($action == 'add') {
     if (!$error) {
         $db->begin();
 
-        $sql = "INSERT INTO " . MAIN_DB_PREFIX . "overwrite_trans(lang, transkey, transvalue, entity) VALUES ('" . $db->escape($langcode) . "','" . $db->escape($transkey) . "','" . $db->escape($transvalue) . "', " . ((int) $conf->entity) . ")";
+        $sql = "INSERT INTO " . MAIN_DB_PREFIX . "overwrite_trans(lang, transkey, transvalue, entity) VALUES ('" . $db->escape($langcode) . "','" . $db->escape($transkey) . "','" . $db->escape($transvalue) . "', " . ((int)$conf->entity) . ")";
         $result = $db->query($sql);
         if ($result) {
             $db->commit();
@@ -187,7 +187,7 @@ if ($action == 'add') {
 
 // Delete line from delete picto
 if ($action == 'delete') {
-    $sql = "DELETE FROM " . MAIN_DB_PREFIX . "overwrite_trans WHERE rowid = " . ((int) $id);
+    $sql = "DELETE FROM " . MAIN_DB_PREFIX . "overwrite_trans WHERE rowid = " . ((int)$id);
     $result = $db->query($sql);
     if ($result) {
         setEventMessages($langs->trans("RecordDeleted"), null, 'mesgs');
@@ -234,7 +234,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if (isset($optioncss) && $optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);

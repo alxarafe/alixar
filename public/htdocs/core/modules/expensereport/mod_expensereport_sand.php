@@ -63,8 +63,8 @@ class mod_expensereport_sand extends ModeleNumRefExpenseReport
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -105,7 +105,7 @@ class mod_expensereport_sand extends ModeleNumRefExpenseReport
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -126,8 +126,8 @@ class mod_expensereport_sand extends ModeleNumRefExpenseReport
     /**
      *  Return next free value
      *
-     *  @param  ExpenseReport   $object     Object we need next value for
-     *  @return string|0                    Next value if OK, 0 if KO
+     * @param ExpenseReport $object Object we need next value for
+     * @return string|0                    Next value if OK, 0 if KO
      */
     public function getNextValue($object)
     {

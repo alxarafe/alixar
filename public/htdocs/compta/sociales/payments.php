@@ -122,7 +122,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($sortfield) {
     $param .= '&sortfield=' . urlencode($sortfield);
@@ -131,10 +131,10 @@ if ($sortorder) {
     $param .= '&sortorder=' . urlencode($sortorder);
 }
 if ($year) {
-    $param .= '&year=' . urlencode((string) ($year));
+    $param .= '&year=' . urlencode((string)($year));
 }
 if ($search_sc_type) {
-    $param .= '&search_sc_type=' . urlencode((string) ($search_sc_type));
+    $param .= '&search_sc_type=' . urlencode((string)($search_sc_type));
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -169,7 +169,7 @@ $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "user as u ON u.rowid = cs.fk_user";
 $sql .= " WHERE cs.fk_type = c.id";
 $sql .= " AND cs.entity IN (" . getEntity("tax") . ")";
 if ($search_sc_type > 0) {
-    $sql .= " AND cs.fk_type = " . ((int) $search_sc_type);
+    $sql .= " AND cs.fk_type = " . ((int)$search_sc_type);
 }
 if ($year > 0) {
     $sql .= " AND (";

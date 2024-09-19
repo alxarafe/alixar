@@ -56,7 +56,7 @@ $overwritefile = GETPOSTINT('overwritefile');
 if (empty($action) && $file_manager) {
     $action = 'file_manager';
 }
-$pageid  = GETPOSTINT('pageid');
+$pageid = GETPOSTINT('pageid');
 
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
 $sortfield = GETPOST('sortfield', 'aZ09comma');
@@ -115,7 +115,7 @@ $hookmanager->initHooks(array('ecmmediascard', 'globalcard'));
  */
 
 $savbacktopage = $backtopage;
-$backtopage = $_SERVER["PHP_SELF"] . '?file_manager=1&website=' . urlencode((string) ($websitekey)) . '&pageid=' . urlencode((string) ($pageid)) . (GETPOST('section_dir', 'alpha') ? '&section_dir=' . urlencode((string) (GETPOST('section_dir', 'alpha'))) : ''); // used after a confirm_deletefile into actions_linkedfiles.inc.php
+$backtopage = $_SERVER["PHP_SELF"] . '?file_manager=1&website=' . urlencode((string)($websitekey)) . '&pageid=' . urlencode((string)($pageid)) . (GETPOST('section_dir', 'alpha') ? '&section_dir=' . urlencode((string)(GETPOST('section_dir', 'alpha'))) : ''); // used after a confirm_deletefile into actions_linkedfiles.inc.php
 if ($sortfield) {
     $backtopage .= '&sortfield=' . urlencode($sortfield);
 }
@@ -133,9 +133,9 @@ if ($action == 'renamefile') {  // Must be after include DOL_DOCUMENT_ROOT.'/cor
 
 // Add directory
 if ($action == 'add' && $permissiontouploadfile) {
-    $ecmdir->ref                = 'NOTUSEDYET';
-    $ecmdir->label              = GETPOST("label");
-    $ecmdir->description        = GETPOST("desc");
+    $ecmdir->ref = 'NOTUSEDYET';
+    $ecmdir->label = GETPOST("label");
+    $ecmdir->description = GETPOST("desc");
 
     $id = $ecmdir->create($user);
     if ($id > 0) {
@@ -227,10 +227,10 @@ if ($action == 'refreshmanual') {
             }
 
             if ($fk_parent >= 0) {
-                $ecmdirtmp->ref                = 'NOTUSEDYET';
-                $ecmdirtmp->label              = dol_basename($dirdesc['fullname']);
-                $ecmdirtmp->description        = '';
-                $ecmdirtmp->fk_parent          = $fk_parent;
+                $ecmdirtmp->ref = 'NOTUSEDYET';
+                $ecmdirtmp->label = dol_basename($dirdesc['fullname']);
+                $ecmdirtmp->description = '';
+                $ecmdirtmp->fk_parent = $fk_parent;
 
                 $txt = "We create directory " . $ecmdirtmp->label . " with parent " . $fk_parent;
                 dol_syslog($txt);
@@ -238,10 +238,10 @@ if ($action == 'refreshmanual') {
                 $id = $ecmdirtmp->create($user);
                 if ($id > 0) {
                     $newdirsql = array('id' => $id,
-                                     'id_mere' => $ecmdirtmp->fk_parent,
-                                     'label' => $ecmdirtmp->label,
-                                     'description' => $ecmdirtmp->description,
-                                     'fullrelativename' => $relativepathmissing);
+                        'id_mere' => $ecmdirtmp->fk_parent,
+                        'label' => $ecmdirtmp->label,
+                        'description' => $ecmdirtmp->description,
+                        'fullrelativename' => $relativepathmissing);
                     $sqltree[] = $newdirsql; // We complete fulltree for following loops
                     //var_dump($sqltree);
                     $adirwascreated = 1;
@@ -276,7 +276,6 @@ if ($action == 'refreshmanual') {
         $sqltree = null;
     }
 }
-
 
 
 /*

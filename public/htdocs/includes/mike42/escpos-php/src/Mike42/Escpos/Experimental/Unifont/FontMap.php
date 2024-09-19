@@ -25,9 +25,9 @@ class FontMap
 
     public function __construct(ColumnFormatGlyphFactory $glyphFactory, Printer $printer)
     {
-        $this -> printer = $printer;
-        $this -> glyphFactory = $glyphFactory;
-        $this -> reset();
+        $this->printer = $printer;
+        $this->glyphFactory = $glyphFactory;
+        $this->reset();
     }
 
     public function cacheChars(array $codePoints)
@@ -37,54 +37,54 @@ class FontMap
 
     public function writeChar(int $codePoint)
     {
-        if (!$this -> addChar($codePoint, true)) {
+        if (!$this->addChar($codePoint, true)) {
             throw new InvalidArgumentException("Code point $codePoint not available");
         }
-        $data = implode($this -> chars[$codePoint]);
-        $this -> printer -> getPrintConnector() -> write($data);
+        $data = implode($this->chars[$codePoint]);
+        $this->printer->getPrintConnector()->write($data);
     }
 
     public function reset()
     {
-        $this -> chars = [];
-        $this -> memory = array_fill(0, (\Mike42\Escpos\Experimental\Unifont\FontMap::MAX - FontMap::MIN) + 1, -1);
+        $this->chars = [];
+        $this->memory = array_fill(0, (\Mike42\Escpos\Experimental\Unifont\FontMap::MAX - FontMap::MIN) + 1, -1);
     }
 
     public function occupied($id)
     {
-        return $this -> memory[$id] !== -1;
+        return $this->memory[$id] !== -1;
     }
 
     public function evict($id)
     {
-        if (!$this -> occupied($id)) {
+        if (!$this->occupied($id)) {
             return true;
         }
-        unset($this -> chars[$this -> memory[$id]]);
-        $this -> memory[$id] = -1;
+        unset($this->chars[$this->memory[$id]]);
+        $this->memory[$id] = -1;
         return true;
     }
 
     public function addChar(int $codePoint, $evict = true)
     {
-        if (isset($this -> chars[$codePoint])) {
+        if (isset($this->chars[$codePoint])) {
             // Char already available
             return true;
         }
         // Get glyph
-        $glyph = $this -> glyphFactory -> getGlyph($codePoint);
-        $glyphParts = $glyph -> segment(self::FONT_B_WIDTH);
+        $glyph = $this->glyphFactory->getGlyph($codePoint);
+        $glyphParts = $glyph->segment(self::FONT_B_WIDTH);
         //print_r($glyphParts);
         //
         // Clear count($glyphParts) of space from $start
-        $start = $this -> next;
+        $start = $this->next;
         $chars = [];
         $submit = [];
         for ($i = 0; $i < count($glyphParts); $i++) {
-            $id = ($this -> next + $i) % count($this -> memory);
-            if ($this -> occupied($id)) {
+            $id = ($this->next + $i) % count($this->memory);
+            if ($this->occupied($id)) {
                 if ($evict) {
-                    $this -> evict($id);
+                    $this->evict($id);
                 } else {
                     return false;
                 }
@@ -95,10 +95,10 @@ class FontMap
         }
 
         // Success in locating memory space, move along counters
-        $this -> next = ($this -> next + count($glyphParts)) % count($this -> memory);
-        $this -> submitCharsToPrinterFont($submit);
-        $this -> memory[$start] = $codePoint;
-        $this -> chars[$codePoint] = $chars;
+        $this->next = ($this->next + count($glyphParts)) % count($this->memory);
+        $this->submitCharsToPrinterFont($submit);
+        $this->memory[$start] = $codePoint;
+        $this->chars[$codePoint] = $chars;
 
         return true;
     }
@@ -109,8 +109,8 @@ class FontMap
         // TODO We can sort into batches of contiguous characters here.
         foreach ($chars as $char => $glyph) {
             $verticalBytes = 3;
-            $data = Printer::ESC . "&" . chr($verticalBytes) . chr($char) . chr($char) . chr($glyph -> width) . $glyph -> data;
-            $this -> printer -> getPrintConnector() -> write($data);
+            $data = Printer::ESC . "&" . chr($verticalBytes) . chr($char) . chr($char) . chr($glyph->width) . $glyph->data;
+            $this->printer->getPrintConnector()->write($data);
         }
     }
 }

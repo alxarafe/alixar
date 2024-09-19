@@ -36,7 +36,7 @@ use Dolibarr\Code\Reception\Classes\Reception;
 /**
  * Prepare array with list of tabs
  *
- * @param   Reception   $object     Object related to tabs
+ * @param Reception $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function reception_prepare_head(Reception $object)
@@ -53,7 +53,7 @@ function reception_prepare_head(Reception $object)
     $head[$h][2] = 'reception';
     $h++;
 
-    if ($object->statut ==  Reception::STATUS_DRAFT || ($object->statut == Reception::STATUS_VALIDATED && !getDolGlobalString('STOCK_CALCULATE_ON_RECEPTION'))) {
+    if ($object->statut == Reception::STATUS_DRAFT || ($object->statut == Reception::STATUS_VALIDATED && !getDolGlobalString('STOCK_CALCULATE_ON_RECEPTION'))) {
         $head[$h][0] = constant('BASE_URL') . "/reception/dispatch.php?id=" . $object->id;
         $head[$h][1] = $langs->trans("ReceptionDistribution");
         $head[$h][2] = 'dispatch';
@@ -119,7 +119,7 @@ function reception_prepare_head(Reception $object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array                       head array with tabs
+ * @return array                       head array with tabs
  */
 function reception_admin_prepare_head()
 {

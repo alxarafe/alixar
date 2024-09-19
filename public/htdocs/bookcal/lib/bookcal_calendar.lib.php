@@ -30,7 +30,7 @@ use Dolibarr\Code\Core\Classes\Link;
 /**
  * Prepare array of tabs for Calendar
  *
- * @param   Calendar    $object     Calendar
+ * @param Calendar $object Calendar
  * @return  array                   Array of tabs
  */
 function calendarPrepareHead($object)
@@ -88,7 +88,7 @@ function calendarPrepareHead($object)
 
     if ($showtabofpagedocument) {
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-            $upload_dir = $conf->bookcal->dir_output . "/calendar/" . dol_sanitizeFileName($object->ref);
+        $upload_dir = $conf->bookcal->dir_output . "/calendar/" . dol_sanitizeFileName($object->ref);
         $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
         $nbLinks = Link::count($db, $object->element, $object->id);
         $head[$h][0] = constant('BASE_URL') . '/bookcal/calendar_document.php?id=' . $object->id;

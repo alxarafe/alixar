@@ -64,7 +64,7 @@ if (empty($dolibarr_nocache)) {
 ?>
 
 // For JQuery Timepicker
-jQuery(function($){
+jQuery(function ($) {
     $.timepicker.regional['<?php echo $langs->defaultlang ?>'] = {
         timeOnlyTitle: '<?php echo $langs->trans("TimeOnly") ?>',
         timeText: '<?php echo $langs->trans("Time") ?>',

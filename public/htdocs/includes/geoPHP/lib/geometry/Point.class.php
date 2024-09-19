@@ -110,10 +110,10 @@ class Point extends Geometry
     public function getBBox()
     {
         return array(
-        'maxy' => $this->getY(),
-        'miny' => $this->getY(),
-        'maxx' => $this->getX(),
-        'minx' => $this->getX(),
+            'maxy' => $this->getY(),
+            'miny' => $this->getY(),
+            'maxx' => $this->getX(),
+            'minx' => $this->getX(),
         );
     }
 
@@ -199,50 +199,61 @@ class Point extends Geometry
     // Not valid for this geometry type
     public function numGeometries()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function geometryN($n)
     {
-        return null; 
-}
+        return null;
+    }
+
     public function startPoint()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function endPoint()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function isRing()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function isClosed()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function pointN($n)
     {
-        return null; 
-}
+        return null;
+    }
+
     public function exteriorRing()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function numInteriorRings()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function interiorRingN($n)
     {
-        return null; 
-}
+        return null;
+    }
+
     public function pointOnSurface()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function explode()
     {
-        return null; 
-}
+        return null;
+    }
 }

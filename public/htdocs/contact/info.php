@@ -46,7 +46,6 @@ $result = restrictedArea($user, 'contact', $id, 'socpeople&societe');
 $object = new Contact($db);
 
 
-
 /*
  * 	View
  */

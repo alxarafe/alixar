@@ -32,7 +32,7 @@ use Dolibarr\Code\Hrm\Classes\Skilldet;
 /**
  * Prepare array of tabs for Skilldet
  *
- * @param   Skilldet    $object     Skilldet
+ * @param Skilldet $object Skilldet
  * @return  array                   Array of tabs
  */
 function skilldetPrepareHead($object)

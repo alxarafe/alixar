@@ -138,7 +138,6 @@ if ($user->hasRight('bookcal', 'availabilities', 'read') && isModEnabled('bookca
 //END MODULEBUILDER DRAFT MYOBJECT */
 
 
-
 print '</div><div class="fichetwothirdright">';
 
 

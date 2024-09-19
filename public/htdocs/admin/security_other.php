@@ -42,7 +42,6 @@ if (!$user->admin) {
 $action = GETPOST('action', 'aZ09');
 
 
-
 /*
  * Actions
  */
@@ -91,7 +90,6 @@ if (preg_match('/set_([a-z0-9_\-]+)/i', $action, $reg)) {
 }
 
 
-
 /*
  * View
  */
@@ -105,7 +103,6 @@ print load_fiche_titre($langs->trans("SecuritySetup"), '', 'title_setup');
 
 print '<span class="opacitymedium">' . $langs->trans("MiscellaneousDesc") . "</span><br>\n";
 print "<br>\n";
-
 
 
 print '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';

@@ -66,8 +66,8 @@ class mod_task_simple extends ModeleNumRefTask
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -79,7 +79,7 @@ class mod_task_simple extends ModeleNumRefTask
     /**
      *  Return an example of numbering module values
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -91,8 +91,8 @@ class mod_task_simple extends ModeleNumRefTask
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  Object      $object     Object we need next value for
-     *  @return boolean                 false if KO (there is a conflict), true if OK
+     * @param Object $object Object we need next value for
+     * @return boolean                 false if KO (there is a conflict), true if OK
      */
     public function canBeActivated($object)
     {
@@ -127,9 +127,9 @@ class mod_task_simple extends ModeleNumRefTask
     /**
      *  Return next value
      *
-     *  @param   Societe|string $objsoc     Object third party
-     *  @param   Task|string    $object     Object Task
-     *  @return string|-1                   Value if OK, -1 if KO
+     * @param Societe|string $objsoc Object third party
+     * @param Task|string $object Object Task
+     * @return string|-1                   Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $object)
     {

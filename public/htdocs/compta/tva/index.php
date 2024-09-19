@@ -76,9 +76,9 @@ $result = restrictedArea($user, 'tax', '', 'tva', 'charges');
 /**
  * print function
  *
- * @param       DoliDB  $db     Database handler
- * @param       string  $sql    SQL Request
- * @param       string  $date   Date
+ * @param DoliDB $db Database handler
+ * @param string $sql SQL Request
+ * @param string $date Date
  * @return      void
  */
 function pt($db, $sql, $date)
@@ -473,12 +473,12 @@ if ($refresh === true) {
                         //print $langs->trans("NA");
                     } else {
                         if (isset($fields['payment_amount']) && price2num($fields['ftotal_ttc'])) {
-                            $ratiopaymentinvoice = ($fields['payment_amount'] / (float) $fields['ftotal_ttc']);
+                            $ratiopaymentinvoice = ($fields['payment_amount'] / (float)$fields['ftotal_ttc']);
                         }
                     }
                 }
                 //var_dump('type='.$type.' '.$fields['totalht'].' '.$ratiopaymentinvoice);
-                $temp_ht = (float) $fields['totalht'] * $ratiopaymentinvoice;
+                $temp_ht = (float)$fields['totalht'] * $ratiopaymentinvoice;
                 $temp_vat = $fields['vat'] * $ratiopaymentinvoice;
                 $subtot_paye_total_ht += $temp_ht;
                 $subtot_paye_vat += $temp_vat;

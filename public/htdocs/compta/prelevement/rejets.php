@@ -105,14 +105,14 @@ $sql .= " , " . MAIN_DB_PREFIX . "societe as s";
 $sql .= " WHERE pr.fk_prelevement_lignes = pl.rowid";
 $sql .= " AND pl.fk_prelevement_bons = p.rowid";
 $sql .= " AND pl.fk_soc = s.rowid";
-$sql .= " AND p.entity = " . ((int) $conf->entity);
+$sql .= " AND p.entity = " . ((int)$conf->entity);
 if ($type == 'bank-transfer') {
     $sql .= " AND p.type = 'bank-transfer'";
 } else {
     $sql .= " AND p.type = 'debit-order'";
 }
 if ($socid > 0) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 // Add list for salaries
 if ($type == 'bank-transfer') {
@@ -126,10 +126,10 @@ if ($type == 'bank-transfer') {
     $sql .= " WHERE pr.fk_prelevement_lignes = pl.rowid";
     $sql .= " AND pl.fk_prelevement_bons = p.rowid";
     $sql .= " AND pl.fk_user = u.rowid";
-    $sql .= " AND p.entity = " . ((int) $conf->entity);
+    $sql .= " AND p.entity = " . ((int)$conf->entity);
     $sql .= " AND p.type = 'bank-transfer'";
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
 }
 if ($type == 'bank-transfer') {

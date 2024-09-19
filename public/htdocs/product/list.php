@@ -1,22 +1,22 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2012-2016  Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2013-2023	Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2013-2015  Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2013       Jean Heimburger         <jean@tiaris.info>
- * Copyright (C) 2013       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2013       Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2013       Adolfo segura           <adolfo.segura@gmail.com>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2016       Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2020-2021	Open-DSI                <support@open-dsi.fr>
- * Copyright (C) 2022		Charlene Benke          <charlene@patas-monkey.com>
- * Copyright (C) 2020-2023	Alexandre Spangaro      <aspangaro@easya.solutions>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012-2016  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2013-2023	Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013-2015  Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2013       Jean Heimburger             <jean@tiaris.info>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013       Adolfo segura               <adolfo.segura@gmail.com>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2016       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2020-2021	Open-DSI                    <support@open-dsi.fr>
+ * Copyright (C) 2022		Charlene Benke              <charlene@patas-monkey.com>
+ * Copyright (C) 2020-2023	Alexandre Spangaro          <aspangaro@easya.solutions>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Benjamin Falière		<benjamin.faliere@altairis.fr>
+ * Copyright (C) 2024		Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -34,6 +34,15 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Canvas;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCategory;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Workstation\Classes\Workstation;
 
 /**
  *  \file       htdocs/product/list.php
@@ -47,17 +56,11 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 
-if (isModEnabled('workstation')) {
-}
-if (isModEnabled('category')) {
-}
-
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'stocks', 'suppliers', 'companies', 'margins'));
 if (isModEnabled('productbatch')) {
     $langs->load("productbatch");
 }
-
 
 // Get parameters
 $action = GETPOST('action', 'aZ09');
@@ -136,13 +139,13 @@ if (!$sortorder) {
 
 // Initialize context for list
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'productservicelist';
-if ((string) $type == '1') {
+if ((string)$type == '1') {
     $contextpage = 'servicelist';
     if ($search_type == '') {
         $search_type = '1';
     }
 }
-if ((string) $type == '0') {
+if ((string)$type == '0') {
     $contextpage = 'productlist';
     if ($search_type == '') {
         $search_type = '0';
@@ -169,7 +172,6 @@ if (empty($action)) {
 $canvas = GETPOST("canvas");
 $objcanvas = null;
 if (!empty($canvas)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
     $objcanvas = new Canvas($db, $action);
     $objcanvas->getCanvas('product', 'list', $canvas);
 }
@@ -232,7 +234,7 @@ $arrayfields = array(
     'p.label' => array('label' => "Label", 'checked' => 1, 'position' => 10),
     'p.fk_product_type' => array('label' => "Type", 'checked' => 0, 'enabled' => (isModEnabled("product") && isModEnabled("service")), 'position' => 11),
     'p.barcode' => array('label' => "Gencod", 'checked' => 1, 'enabled' => (isModEnabled('barcode')), 'position' => 12),
-    'p.duration' => array('label' => "Duration", 'checked' => ($contextpage != 'productlist'), 'enabled' => (isModEnabled("service") && (string) $type == '1'), 'position' => 13),
+    'p.duration' => array('label' => "Duration", 'checked' => ($contextpage != 'productlist'), 'enabled' => (isModEnabled("service") && (string)$type == '1'), 'position' => 13),
     'pac.fk_product_parent' => array('label' => "ParentProductOfVariant", 'checked' => -1, 'enabled' => (isModEnabled('variants')), 'position' => 14),
     'p.finished' => array('label' => "Nature", 'checked' => 0, 'enabled' => (isModEnabled("product") && $type != '1'), 'position' => 19),
     'p.weight' => array('label' => 'Weight', 'checked' => 0, 'enabled' => (isModEnabled("product") && $type != '1'), 'position' => 20),
@@ -272,7 +274,7 @@ $arrayfields = array(
     'p.tms' => array('label' => "DateModificationShort", 'checked' => 0, 'position' => 500),
     'p.tosell' => array('label' => $langs->transnoentitiesnoconv("Status") . ' (' . $langs->transnoentitiesnoconv("Sell") . ')', 'checked' => 1, 'position' => 1000),
     'p.tobuy' => array('label' => $langs->transnoentitiesnoconv("Status") . ' (' . $langs->transnoentitiesnoconv("Buy") . ')', 'checked' => 1, 'position' => 1000),
-    'p.import_key'    => array('type' => 'varchar(14)', 'label' => 'ImportId', 'enabled' => 1, 'visible' => -2, 'notnull' => -1, 'index' => 0, 'checked' => -1, 'position' => 1100),
+    'p.import_key' => array('type' => 'varchar(14)', 'label' => 'ImportId', 'enabled' => 1, 'visible' => -2, 'notnull' => -1, 'index' => 0, 'checked' => -1, 'position' => 1100),
 );
 /*foreach ($object->fields as $key => $val) {
     // If $val['visible']==0, then we never show the field
@@ -298,7 +300,7 @@ if (getDolGlobalString('PRODUIT_MULTIPRICES')) {
         } else {
             $labelp = $langs->transnoentitiesnoconv("SellingPrice") . " " . $i;
         }
-        $arrayfields['p.sellprice' . $i] = array('label' => $labelp, 'checked' => ($i == 1 ? 1 : 0), 'enabled' => getDolGlobalString('PRODUIT_MULTIPRICES'), 'position' => (float) ('40.' . sprintf('%03d', $i)));
+        $arrayfields['p.sellprice' . $i] = array('label' => $labelp, 'checked' => ($i == 1 ? 1 : 0), 'enabled' => getDolGlobalString('PRODUIT_MULTIPRICES'), 'position' => (float)('40.' . sprintf('%03d', $i)));
         $arraypricelevel[$i] = array($i);
     }
 }
@@ -381,10 +383,10 @@ if (empty($reshook)) {
 
     // Mass actions
     $objectclass = 'Product';
-    if ((string) $search_type == '1') {
+    if ((string)$search_type == '1') {
         $objectlabel = 'Services';
     }
-    if ((string) $search_type == '0') {
+    if ((string)$search_type == '0') {
         $objectlabel = 'Products';
     }
 
@@ -417,7 +419,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View
@@ -483,7 +484,7 @@ if (isModEnabled('workstation')) {
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "workstation_workstation as ws ON (p.fk_default_workstation = ws.rowid)";
 }
 if (getDolGlobalString('MAIN_PRODUCT_PERENTITY_SHARED')) {
-    $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "product_perentity as ppe ON ppe.fk_product = p.rowid AND ppe.entity = " . ((int) $conf->entity);
+    $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "product_perentity as ppe ON ppe.fk_product = p.rowid AND ppe.entity = " . ((int)$conf->entity);
 }
 if (!empty($extrafields->attributes[$object->table_element]['label']) && is_array($extrafields->attributes[$object->table_element]['label']) && count($extrafields->attributes[$object->table_element]['label'])) {
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "product_extrafields as ef on (p.rowid = ef.fk_object)";
@@ -556,13 +557,13 @@ if ($search_import_key) {
     $sql .= natural_search('p.import_key', $search_import_key);
 }
 if (isset($search_tosell) && dol_strlen($search_tosell) > 0 && $search_tosell != -1) {
-    $sql .= " AND p.tosell = " . ((int) $search_tosell);
+    $sql .= " AND p.tosell = " . ((int)$search_tosell);
 }
 if (isset($search_tobuy) && dol_strlen($search_tobuy) > 0 && $search_tobuy != -1) {
-    $sql .= " AND p.tobuy = " . ((int) $search_tobuy);
+    $sql .= " AND p.tobuy = " . ((int)$search_tobuy);
 }
 if (isset($search_tobatch) && dol_strlen($search_tobatch) > 0 && $search_tobatch != -1) {
-    $sql .= " AND p.tobatch = " . ((int) $search_tobatch);
+    $sql .= " AND p.tobatch = " . ((int)$search_tobatch);
 }
 if ($search_vatrate) {
     $sql .= natural_search('p.tva_tx', $search_vatrate, 1);
@@ -579,9 +580,9 @@ if (!empty($searchCategoryProductList)) {
             $searchCategoryProductSqlList[] = "NOT EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck WHERE p.rowid = ck.fk_product)";
         } elseif (intval($searchCategoryProduct) > 0) {
             if ($searchCategoryProductOperator == 0) {
-                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck WHERE p.rowid = ck.fk_product AND ck.fk_categorie = " . ((int) $searchCategoryProduct) . ")";
+                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck WHERE p.rowid = ck.fk_product AND ck.fk_categorie = " . ((int)$searchCategoryProduct) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryProduct);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryProduct);
             }
         }
     }
@@ -599,16 +600,16 @@ if (!empty($searchCategoryProductList)) {
     }
 }
 if ($fourn_id > 0) {
-    $sql .= " AND pfp.fk_soc = " . ((int) $fourn_id);
+    $sql .= " AND pfp.fk_soc = " . ((int)$fourn_id);
 }
 if ($search_country) {
-    $sql .= " AND p.fk_country = " . ((int) $search_country);
+    $sql .= " AND p.fk_country = " . ((int)$search_country);
 }
 if ($search_state) {
-    $sql .= " AND p.fk_state = " . ((int) $search_state);
+    $sql .= " AND p.fk_state = " . ((int)$search_state);
 }
 if ($search_finished >= 0 && $search_finished !== '') {
-    $sql .= " AND p.finished = " . ((int) $search_finished);
+    $sql .= " AND p.finished = " . ((int)$search_finished);
 }
 if ($search_accountancy_code_sell) {
     $sql .= natural_search($alias_product_perentity . '.accountancy_code_sell', clean_account($search_accountancy_code_sell));
@@ -751,7 +752,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -760,7 +761,7 @@ if ($search_all) {
     $param .= "&search_all=" . urlencode($search_all);
 }
 if ($searchCategoryProductOperator == 1) {
-    $param .= "&search_category_product_operator=" . urlencode((string) ($searchCategoryProductOperator));
+    $param .= "&search_category_product_operator=" . urlencode((string)($searchCategoryProductOperator));
 }
 foreach ($searchCategoryProductList as $searchCategoryProduct) {
     $param .= "&search_category_product_list[]=" . urlencode($searchCategoryProduct);
@@ -793,22 +794,22 @@ if ($search_tobatch) {
     $param .= "&search_tobatch=" . urlencode($search_tobatch);
 }
 if ($search_country != '') {
-    $param .= "&search_country=" . urlencode((string) ($search_country));
+    $param .= "&search_country=" . urlencode((string)($search_country));
 }
 if ($search_state != '') {
-    $param .= "&search_state=" . urlencode((string) ($search_state));
+    $param .= "&search_state=" . urlencode((string)($search_state));
 }
 if ($search_vatrate) {
     $param .= "&search_vatrate=" . urlencode($search_vatrate);
 }
 if ($fourn_id > 0) {
-    $param .= "&fourn_id=" . urlencode((string) ($fourn_id));
+    $param .= "&fourn_id=" . urlencode((string)($fourn_id));
 }
 if ($show_childproducts) {
     $param .= ($show_childproducts ? "&search_show_childproducts=" . urlencode($show_childproducts) : "");
 }
 if ($type != '') {
-    $param .= '&type=' . urlencode((string) ($type));
+    $param .= '&type=' . urlencode((string)($type));
 }
 if ($search_type != '') {
     $param .= '&search_type=' . urlencode($search_type);
@@ -857,7 +858,7 @@ if ($user->hasRight($rightskey, 'creer')) {
 if (isModEnabled('category') && $user->hasRight($rightskey, 'creer')) {
     $arrayofmassactions['preaffecttag'] = img_picto('', 'category', 'class="pictofixedwidth"') . $langs->trans("AffectTag");
 }
-if (in_array($massaction, array('presend', 'predelete','preaffecttag', 'edit_extrafields', 'preupdateprice'))) {
+if (in_array($massaction, array('presend', 'predelete', 'preaffecttag', 'edit_extrafields', 'preupdateprice'))) {
     $arrayofmassactions = array();
 }
 if ($user->hasRight($rightskey, 'supprimer')) {
@@ -1520,7 +1521,7 @@ while ($i < $imaxinloop) {
     if (getDolGlobalInt('MAIN_MULTILANGS')) {  // If multilang is enabled
         $sql = "SELECT label";
         $sql .= " FROM " . MAIN_DB_PREFIX . "product_lang";
-        $sql .= " WHERE fk_product = " . ((int) $obj->rowid);
+        $sql .= " WHERE fk_product = " . ((int)$obj->rowid);
         $sql .= " AND lang = '" . $db->escape($langs->getDefaultLang()) . "'";
         $sql .= " LIMIT 1";
 
@@ -1733,9 +1734,9 @@ while ($i < $imaxinloop) {
                 $duration_value = substr($obj->duration, 0, dol_strlen($obj->duration) - 1);
                 $duration_unit = substr($obj->duration, -1);
 
-                if ((float) $duration_value > 1) {
+                if ((float)$duration_value > 1) {
                     $dur = array("i" => $langs->trans("Minutes"), "h" => $langs->trans("Hours"), "d" => $langs->trans("Days"), "w" => $langs->trans("Weeks"), "m" => $langs->trans("Months"), "y" => $langs->trans("Years"));
-                } elseif ((float) $duration_value > 0) {
+                } elseif ((float)$duration_value > 0) {
                     $dur = array("i" => $langs->trans("Minute"), "h" => $langs->trans("Hour"), "d" => $langs->trans("Day"), "w" => $langs->trans("Week"), "m" => $langs->trans("Month"), "y" => $langs->trans("Year"));
                 }
                 print $duration_value;
@@ -1942,10 +1943,10 @@ while ($i < $imaxinloop) {
 
         // Multiprices
         if (getDolGlobalString('PRODUIT_MULTIPRICES')) {
-            if (! isset($productpricescache)) {
+            if (!isset($productpricescache)) {
                 $productpricescache = array();
             }
-            if (! isset($productpricescache[$obj->rowid])) {
+            if (!isset($productpricescache[$obj->rowid])) {
                 $productpricescache[$obj->rowid] = array();
             }
 
@@ -1954,7 +1955,7 @@ while ($i < $imaxinloop) {
                 // then reuse the cache array if we need prices for other price levels
                 $sqlp = "SELECT p.rowid, p.fk_product, p.price, p.price_ttc, p.price_level, p.date_price, p.price_base_type";
                 $sqlp .= " FROM " . MAIN_DB_PREFIX . "product_price as p";
-                $sqlp .= " WHERE fk_product = " . ((int) $obj->rowid);
+                $sqlp .= " WHERE fk_product = " . ((int)$obj->rowid);
                 $sqlp .= " ORDER BY p.date_price DESC, p.rowid DESC, p.price_level ASC";
                 $resultp = $db->query($sqlp);
                 if ($resultp) {
@@ -2092,7 +2093,7 @@ while ($i < $imaxinloop) {
         if (!empty($arrayfields['p.stock']['checked'])) {
             print '<td class="right">';
             if ($product_static->type != 1) {
-                if ($obj->seuil_stock_alerte != '' && $product_static->stock_reel < (float) $obj->seuil_stock_alerte) {
+                if ($obj->seuil_stock_alerte != '' && $product_static->stock_reel < (float)$obj->seuil_stock_alerte) {
                     print img_warning($langs->trans("StockLowerThanLimit", $obj->seuil_stock_alerte)) . ' ';
                 }
                 if ($usercancreadprice) {
@@ -2114,7 +2115,7 @@ while ($i < $imaxinloop) {
         if (!empty($arrayfields['stock_virtual']['checked'])) {
             print '<td class="right">';
             if ($product_static->type != 1) {
-                if ($obj->seuil_stock_alerte != '' && $product_static->stock_theorique < (float) $obj->seuil_stock_alerte) {
+                if ($obj->seuil_stock_alerte != '' && $product_static->stock_theorique < (float)$obj->seuil_stock_alerte) {
                     print img_warning($langs->trans("StockLowerThanLimit", $obj->seuil_stock_alerte)) . ' ';
                 }
                 if ($usercancreadprice) {

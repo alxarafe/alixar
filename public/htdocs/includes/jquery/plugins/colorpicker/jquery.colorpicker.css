@@ -1,4 +1,4 @@
-.colorpicker-picker-span{
+.colorpicker-picker-span {
     display: block;
     width: 20px;
     height: 20px;
@@ -9,7 +9,7 @@
     cursor: pointer;
 }
 
-.colorpicker-picker-info{
+.colorpicker-picker-info {
     padding: 0 0 2px;
     color: #000;
     text-align: center;

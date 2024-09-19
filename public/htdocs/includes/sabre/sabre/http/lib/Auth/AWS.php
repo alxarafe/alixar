@@ -93,7 +93,7 @@ class AWS extends AbstractAuth
             $body = $this->request->getBody();
             $this->request->setBody($body);
 
-            if ($contentMD5 !== base64_encode(md5((string) $body, true))) {
+            if ($contentMD5 !== base64_encode(md5((string)$body, true))) {
                 // content-md5 header did not match md5 signature of body
                 $this->errorCode = self::ERR_MD5CHECKSUMWRONG;
 
@@ -105,7 +105,7 @@ class AWS extends AbstractAuth
             $requestDate = $this->request->getHeader('Date');
         }
 
-        if (!$this->validateRFC2616Date((string) $requestDate)) {
+        if (!$this->validateRFC2616Date((string)$requestDate)) {
             return false;
         }
 

@@ -32,6 +32,7 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 use Dolibarr\Code\User\Classes\UserGroup;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 
 // Define if user can read permissions
@@ -131,8 +132,8 @@ if (empty($reshook)) {
                 setEventMessages($langs->trans("NameNotDefined"), null, 'errors');
                 $action = "create"; // Go back to create page
             } else {
-                $object->name   = GETPOST("nom", 'alphanohtml');
-                $object->note   = dol_htmlcleanlastbr(trim(GETPOST("note", 'restricthtml')));
+                $object->name = GETPOST("nom", 'alphanohtml');
+                $object->note = dol_htmlcleanlastbr(trim(GETPOST("note", 'restricthtml')));
 
                 // Fill array 'array_options' with data from add form
                 $ret = $extrafields->setOptionalsFromPost(null, $object);

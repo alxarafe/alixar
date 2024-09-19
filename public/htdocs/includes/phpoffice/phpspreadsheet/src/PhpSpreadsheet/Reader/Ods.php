@@ -34,9 +34,9 @@ class Ods extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return bool
      * @throws Exception
      *
-     * @return bool
      */
     public function canRead($pFilename)
     {
@@ -64,7 +64,7 @@ class Ods extends BaseReader
                     foreach ($manifest as $manifestDataSet) {
                         $manifestAttributes = $manifestDataSet->attributes($namespacesContent['manifest']);
                         if ($manifestAttributes->{'full-path'} == '/') {
-                            $mimeType = (string) $manifestAttributes->{'media-type'};
+                            $mimeType = (string)$manifestAttributes->{'media-type'};
 
                             break;
                         }
@@ -85,9 +85,9 @@ class Ods extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return string[]
      * @throws Exception
      *
-     * @return string[]
      */
     public function listWorksheetNames($pFilename)
     {
@@ -139,9 +139,9 @@ class Ods extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return array
      * @throws Exception
      *
-     * @return array
      */
     public function listWorksheetInfo($pFilename)
     {
@@ -208,7 +208,7 @@ class Ods extends BaseReader
                                     }
                                 } elseif ($xml->name == 'table:covered-table-cell' && $xml->nodeType == XMLReader::ELEMENT) {
                                     $mergeSize = $xml->getAttribute('table:number-columns-repeated');
-                                    $currCells += (int) $mergeSize;
+                                    $currCells += (int)$mergeSize;
                                     $xml->read();
                                 } else {
                                     $xml->read();
@@ -233,9 +233,9 @@ class Ods extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function load($pFilename)
     {
@@ -252,9 +252,9 @@ class Ods extends BaseReader
      * @param string $pFilename
      * @param Spreadsheet $spreadsheet
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function loadIntoExisting($pFilename, Spreadsheet $spreadsheet)
     {
@@ -455,33 +455,33 @@ class Ods extends BaseReader
                                             break;
                                         case 'percentage':
                                             $type = DataType::TYPE_NUMERIC;
-                                            $dataValue = (float) $cellData->getAttributeNS($officeNs, 'value');
+                                            $dataValue = (float)$cellData->getAttributeNS($officeNs, 'value');
 
                                             if (floor($dataValue) == $dataValue) {
-                                                $dataValue = (int) $dataValue;
+                                                $dataValue = (int)$dataValue;
                                             }
                                             $formatting = NumberFormat::FORMAT_PERCENTAGE_00;
 
                                             break;
                                         case 'currency':
                                             $type = DataType::TYPE_NUMERIC;
-                                            $dataValue = (float) $cellData->getAttributeNS($officeNs, 'value');
+                                            $dataValue = (float)$cellData->getAttributeNS($officeNs, 'value');
 
                                             if (floor($dataValue) == $dataValue) {
-                                                $dataValue = (int) $dataValue;
+                                                $dataValue = (int)$dataValue;
                                             }
                                             $formatting = NumberFormat::FORMAT_CURRENCY_USD_SIMPLE;
 
                                             break;
                                         case 'float':
                                             $type = DataType::TYPE_NUMERIC;
-                                            $dataValue = (float) $cellData->getAttributeNS($officeNs, 'value');
+                                            $dataValue = (float)$cellData->getAttributeNS($officeNs, 'value');
 
                                             if (floor($dataValue) == $dataValue) {
-                                                if ($dataValue == (int) $dataValue) {
-                                                    $dataValue = (int) $dataValue;
+                                                if ($dataValue == (int)$dataValue) {
+                                                    $dataValue = (int)$dataValue;
                                                 } else {
-                                                    $dataValue = (float) $dataValue;
+                                                    $dataValue = (float)$dataValue;
                                                 }
                                             }
 
@@ -498,12 +498,12 @@ class Ods extends BaseReader
                                             );
 
                                             $dataValue = Date::formattedPHPToExcel(
-                                                (int) $year,
-                                                (int) $month,
-                                                (int) $day,
-                                                (int) $hour,
-                                                (int) $minute,
-                                                (int) $second
+                                                (int)$year,
+                                                (int)$month,
+                                                (int)$day,
+                                                (int)$hour,
+                                                (int)$minute,
+                                                (int)$second
                                             );
 
                                             if ($dataValue != floor($dataValue)) {
@@ -566,7 +566,7 @@ class Ods extends BaseReader
                                 }
 
                                 if ($cellData->hasAttributeNS($tableNs, 'number-columns-repeated')) {
-                                    $colRepeats = (int) $cellData->getAttributeNS($tableNs, 'number-columns-repeated');
+                                    $colRepeats = (int)$cellData->getAttributeNS($tableNs, 'number-columns-repeated');
                                 } else {
                                     $colRepeats = 1;
                                 }
@@ -627,7 +627,7 @@ class Ods extends BaseReader
 
                                         if ($cellData->hasAttributeNS($tableNs, 'number-columns-spanned')) {
                                             $columnIndex = Coordinate::columnIndexFromString($columnID);
-                                            $columnIndex += (int) $cellData->getAttributeNS($tableNs, 'number-columns-spanned');
+                                            $columnIndex += (int)$cellData->getAttributeNS($tableNs, 'number-columns-spanned');
                                             $columnIndex -= 2;
 
                                             $columnTo = Coordinate::stringFromColumnIndex($columnIndex + 1);
@@ -636,7 +636,7 @@ class Ods extends BaseReader
                                         $rowTo = $rowID;
 
                                         if ($cellData->hasAttributeNS($tableNs, 'number-rows-spanned')) {
-                                            $rowTo = $rowTo + (int) $cellData->getAttributeNS($tableNs, 'number-rows-spanned') - 1;
+                                            $rowTo = $rowTo + (int)$cellData->getAttributeNS($tableNs, 'number-rows-spanned') - 1;
                                         }
 
                                         $cellRange = $columnID . $rowID . ':' . $columnTo . $rowTo;
@@ -680,7 +680,7 @@ class Ods extends BaseReader
                 /** @var \DOMAttr $cAttr */
                 $cAttr = $child->attributes->getNamedItem('c');
                 if ($cAttr) {
-                    $multiplier = (int) $cAttr->nodeValue;
+                    $multiplier = (int)$cAttr->nodeValue;
                 } else {
                     $multiplier = 1;
                 }

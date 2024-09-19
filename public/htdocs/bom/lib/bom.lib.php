@@ -71,12 +71,10 @@ function bomAdminPrepareHead()
 }
 
 
-
-
 /**
  * Prepare array of tabs for BillOfMaterials
  *
- * @param   BOM       $object       BillOfMaterials
+ * @param BOM $object BillOfMaterials
  * @return  array                   Array of tabs
  */
 function bomPrepareHead($object)
@@ -161,13 +159,12 @@ function mrpCollapseBomManagement()
         $(document).ready(function () {
             function folderManage(element, onClose = 0) {
                 let id_bom_line = element.attr('id').replace('collapse-', '');
-                let TSubLines = $('[parentid="'+ id_bom_line +'"]');
+                let TSubLines = $('[parentid="' + id_bom_line + '"]');
 
-                if(element.html().indexOf('folder-open') <= 0 && onClose < 1) {
-                    $('[parentid="'+ id_bom_line +'"]').show();
+                if (element.html().indexOf('folder-open') <= 0 && onClose < 1) {
+                    $('[parentid="' + id_bom_line + '"]').show();
                     element.html('<?php echo dol_escape_js(img_picto('', 'folder-open')); ?>');
-                }
-                else {
+                } else {
                     for (let i = 0; i < TSubLines.length; i++) {
                         let subBomFolder = $(TSubLines[i]).children('.linecoldescription').children('.collapse_bom');
 
@@ -182,13 +179,13 @@ function mrpCollapseBomManagement()
             }
 
             // When clicking on collapse
-            $(".collapse_bom").click(function() {
+            $(".collapse_bom").click(function () {
                 folderManage($(this));
                 return false;
             });
 
             // To Show all the sub bom lines
-            $("#show_all").click(function() {
+            $("#show_all").click(function () {
                 console.log("We click on show all");
                 $("[class^=sub_bom_lines]").show();
                 $("[class^=collapse_bom]").html('<?php echo dol_escape_js(img_picto('', 'folder-open')); ?>');
@@ -196,7 +193,7 @@ function mrpCollapseBomManagement()
             });
 
             // To Hide all the sub bom lines
-            $("#hide_all").click(function() {
+            $("#hide_all").click(function () {
                 console.log("We click on hide all");
                 $("[class^=sub_bom_lines]").hide();
                 $("[class^=collapse_bom]").html('<?php echo dol_escape_js(img_picto('', 'folder')); ?>');

@@ -42,7 +42,7 @@ class HomeCollection extends AbstractPrincipalCollection implements IACL
     /**
      * Creates the home collection.
      *
-     * @param string $storagePath     where the actual files are stored
+     * @param string $storagePath where the actual files are stored
      * @param string $principalPrefix list of principals to iterate
      */
     public function __construct(BackendInterface $principalBackend, $storagePath, $principalPrefix = 'principals')

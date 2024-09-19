@@ -220,8 +220,8 @@ if (empty($reshook)) {
 
             $db->commit();
 
-            $urltogo = $backtopage ? str_replace('__ID__', (string) $object->id, $backtopage) : $backurlforlist;
-            $urltogo = preg_replace('/--IDFORBACKTOPAGE--/', (string) $object->id, $urltogo); // New method to autoselect project after a New on another form object creation
+            $urltogo = $backtopage ? str_replace('__ID__', (string)$object->id, $backtopage) : $backurlforlist;
+            $urltogo = preg_replace('/--IDFORBACKTOPAGE--/', (string)$object->id, $urltogo); // New method to autoselect project after a New on another form object creation
 
             if (empty($noback)) {
                 header("Location: " . $urltogo);
@@ -1056,7 +1056,7 @@ if ($action == 'create') {
         print '<tr><td class="tdtop">' . $langs->trans("Comment") . '</td>';
         print '<td>';
         // Editor wysiwyg
-            $doleditor = new DolEditor('account_comment', (GETPOST("account_comment") ? GETPOST("account_comment") : $object->comment), '', 90, 'dolibarr_notes', '', false, true, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_4, '95%');
+        $doleditor = new DolEditor('account_comment', (GETPOST("account_comment") ? GETPOST("account_comment") : $object->comment), '', 90, 'dolibarr_notes', '', false, true, isModEnabled('fckeditor') && getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), ROWS_4, '95%');
         $doleditor->Create();
         print '</td></tr>';
 

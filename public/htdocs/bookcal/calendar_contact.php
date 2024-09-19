@@ -40,10 +40,10 @@ dol_include_once('/bookcal/lib/bookcal_calendar.lib.php');
 // Load translation files required by the page
 $langs->loadLangs(array("agenda", "companies", "other", "mails"));
 
-$id     = (GETPOST('id') ? GETPOSTINT('id') : GETPOSTINT('facid')); // For backward compatibility
-$ref    = GETPOST('ref', 'alpha');
+$id = (GETPOST('id') ? GETPOSTINT('id') : GETPOSTINT('facid')); // For backward compatibility
+$ref = GETPOST('ref', 'alpha');
 $lineid = GETPOSTINT('lineid');
-$socid  = GETPOSTINT('socid');
+$socid = GETPOSTINT('socid');
 $action = GETPOST('action', 'aZ09');
 
 // Initialize technical objects

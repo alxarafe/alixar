@@ -24,7 +24,8 @@ class SymfonySession implements TokenStorageInterface
         $startSession = true,
         $sessionVariableName = 'lusitanian_oauth_token',
         $stateVariableName = 'lusitanian_oauth_state'
-    ) {
+    )
+    {
         $this->session = $session;
         $this->sessionVariableName = $sessionVariableName;
         $this->stateVariableName = $stateVariableName;
@@ -156,8 +157,8 @@ class SymfonySession implements TokenStorageInterface
         $states = $this->session->get($this->stateVariableName);
 
         return is_array($states)
-        && isset($states[$service])
-        && null !== $states[$service];
+            && isset($states[$service])
+            && null !== $states[$service];
     }
 
     /**

@@ -268,7 +268,6 @@ $permissiontoadd = 1;
 $permissiontodelete = 1;
 
 
-
 /*
  * Actions
  */
@@ -405,7 +404,7 @@ if (empty($reshook)) {
                     $sql .= "''"; // langcode must be '' if not defined so the unique key that include lang will work
                 } elseif ($keycode == 'fk_user') {
                     if (!$user->admin) {    // A non admin user can only edit its own template
-                        $sql .= " " . ((int) $user->id);
+                        $sql .= " " . ((int)$user->id);
                     } else {
                         $sql .= " " . (GETPOSTINT($keycode));
                     }
@@ -487,7 +486,7 @@ if (empty($reshook)) {
                     $sql .= "''"; // langcode must be '' if not defined so the unique key that include lang will work
                 } elseif ($keycode == 'fk_user') {
                     if (!$user->admin) {    // A non admin user can only edit its own template
-                        $sql .= " " . ((int) $user->id);
+                        $sql .= " " . ((int)$user->id);
                     } else {
                         $sql .= " " . (GETPOSTINT($keycode));
                     }
@@ -501,9 +500,9 @@ if (empty($reshook)) {
                 $i++;
             }
 
-            $sql .= " WHERE " . $db->escape($rowidcol) . " = " . ((int) $rowid);
+            $sql .= " WHERE " . $db->escape($rowidcol) . " = " . ((int)$rowid);
             if (!$user->admin) {    // A non admin user can only edit its own template
-                $sql .= " AND fk_user  = " . ((int) $user->id);
+                $sql .= " AND fk_user  = " . ((int)$user->id);
             }
             //print $sql;exit;
             dol_syslog("actionmodify", LOG_DEBUG);
@@ -521,9 +520,9 @@ if (empty($reshook)) {
     if ($action == 'confirm_delete' && $confirm == 'yes' && $permissiontodelete) {       // delete
         $rowidcol = "rowid";
 
-        $sql = "DELETE from " . $tabname[$id] . " WHERE " . $rowidcol . " = " . ((int) $rowid);
+        $sql = "DELETE from " . $tabname[$id] . " WHERE " . $rowidcol . " = " . ((int)$rowid);
         if (!$user->admin) {    // A non admin user can only edit its own template
-            $sql .= " AND fk_user = " . ((int) $user->id);
+            $sql .= " AND fk_user = " . ((int)$user->id);
         }
         dol_syslog("delete", LOG_DEBUG);
         $result = $db->query($sql);
@@ -540,7 +539,7 @@ if (empty($reshook)) {
     if ($action == $acts[0] && $permissiontoadd) {
         $rowidcol = "rowid";
 
-        $sql = "UPDATE " . $tabname[$id] . " SET active = 1 WHERE rowid = " . ((int) $rowid);
+        $sql = "UPDATE " . $tabname[$id] . " SET active = 1 WHERE rowid = " . ((int)$rowid);
 
         $result = $db->query($sql);
         if (!$result) {
@@ -552,7 +551,7 @@ if (empty($reshook)) {
     if ($action == $acts[1] && $permissiontoadd) {
         $rowidcol = "rowid";
 
-        $sql = "UPDATE " . $tabname[$id] . " SET active = 0 WHERE rowid = " . ((int) $rowid);
+        $sql = "UPDATE " . $tabname[$id] . " SET active = 0 WHERE rowid = " . ((int)$rowid);
 
         $result = $db->query($sql);
         if (!$result) {
@@ -586,8 +585,8 @@ $sql = "SELECT rowid as rowid, module, label, type_template, lang, fk_user, priv
 $sql .= " FROM " . MAIN_DB_PREFIX . "c_email_templates";
 $sql .= " WHERE entity IN (" . getEntity('email_template') . ")";
 if (!$user->admin) {
-    $sql .= " AND (private = 0 OR (private = 1 AND fk_user = " . ((int) $user->id) . "))"; // Show only public and private to me
-    $sql .= " AND (active = 1 OR fk_user = " . ((int) $user->id) . ")"; // Show only active or owned by me
+    $sql .= " AND (private = 0 OR (private = 1 AND fk_user = " . ((int)$user->id) . "))"; // Show only public and private to me
+    $sql .= " AND (active = 1 OR fk_user = " . ((int)$user->id) . ")"; // Show only active or owned by me
 }
 if (!getDolGlobalInt('MAIN_MULTILANGS')) {
     $sql .= " AND (lang = '" . $db->escape($langs->defaultlang) . "' OR lang IS NULL OR lang = '')";
@@ -633,7 +632,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if (!empty($search) && is_array($search)) {
     foreach ($search as $key => $val) {
@@ -687,7 +686,7 @@ if (!empty($user->admin) && (empty($_SESSION['leftmenu']) || $_SESSION['leftmenu
 
 // Confirm deletion of record
 if ($action == 'delete') {
-    print $form->formconfirm($_SERVER["PHP_SELF"] . '?' . ($page ? 'page=' . $page . '&' : '') . 'sortfield=' . $sortfield . '&sortorder=' . $sortorder . '&rowid=' . ((int) $rowid) . '&id=' . ((int) $id), $langs->trans('DeleteLine'), $langs->trans('ConfirmDeleteLine'), 'confirm_delete', '', 0, 1);
+    print $form->formconfirm($_SERVER["PHP_SELF"] . '?' . ($page ? 'page=' . $page . '&' : '') . 'sortfield=' . $sortfield . '&sortorder=' . $sortorder . '&rowid=' . ((int)$rowid) . '&id=' . ((int)$id), $langs->trans('DeleteLine'), $langs->trans('ConfirmDeleteLine'), 'confirm_delete', '', 0, 1);
 }
 
 
@@ -890,7 +889,7 @@ print '<table class="noborder centpercent">';
 
 $i = 0;
 
-$param = '&id=' . ((int) $id);
+$param = '&id=' . ((int)$id);
 if ($search_label) {
     $param .= '&search_label=' . urlencode($search_label);
 }
@@ -1111,7 +1110,7 @@ if ($num) {
                 print '<tr class="oddeven nohover" id="tr-aaa-' . $rowid . '">';
                 print '<td colspan="10">';
 
-                $fieldsforcontent = array('topic', 'email_from','joinfiles', 'content');
+                $fieldsforcontent = array('topic', 'email_from', 'joinfiles', 'content');
                 if (getDolGlobalString('MAIN_EMAIL_TEMPLATES_FOR_OBJECT_LINES')) {
                     $fieldsforcontent[] = 'content_lines';
                 }
@@ -1184,7 +1183,7 @@ if ($num) {
                     continue; // It means this is a type of template not into elementList (may be because enabled condition of this type is false because module is not enabled)
                 }
                 // Test on 'enabled'
-                if (! (int) dol_eval($obj->enabled, 1, 1, '1')) {
+                if (!(int)dol_eval($obj->enabled, 1, 1, '1')) {
                     $i++;
                     continue; // Email template not qualified
                 }
@@ -1362,11 +1361,11 @@ $db->close();
 /**
  *  Show fields in insert/edit mode
  *
- *  @param      array   $fieldlist      Array of fields
- *  @param      Object  $obj            If we show a particular record, obj is filled with record fields
- *  @param      string  $tabname        Name of SQL table
- *  @param      string  $context        'add'=Output field for the "add form", 'edit'=Output field for the "edit form", 'preview'=show in readonly the template, 'hide'=Output field for the "add form" but we don't want it to be rendered
- *  @return     void
+ * @param array $fieldlist Array of fields
+ * @param Object $obj If we show a particular record, obj is filled with record fields
+ * @param string $tabname Name of SQL table
+ * @param string $context 'add'=Output field for the "add form", 'edit'=Output field for the "edit form", 'preview'=show in readonly the template, 'hide'=Output field for the "add form" but we don't want it to be rendered
+ * @return     void
  */
 function fieldList($fieldlist, $obj = null, $tabname = '', $context = '')
 {

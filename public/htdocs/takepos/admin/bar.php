@@ -100,13 +100,21 @@ print '<input type="hidden" name="token" value="' . newToken() . '">';
 print '<input type="hidden" name="action" value="set">';
 
 ?>
-<script type="text/javascript" src="<?php echo DOL_URL_ROOT ?>/takepos/js/jquery.colorbox-min.js"></script> <!-- TODO It seems we don't need this -->
-<script type="text/javascript">
-function Floors() {
-    console.log("Open box to select floor");
-    $.colorbox({href:"<?php echo DOL_URL_ROOT ?>/takepos/floors.php?mode=edit&place=0", width:"90%", height:"90%", transition:"none", iframe:"true", title:"<?php echo $langs->trans("Floors"); ?>"});
-}
-</script>
+    <script type="text/javascript"
+            src="<?php echo DOL_URL_ROOT ?>/takepos/js/jquery.colorbox-min.js"></script> <!-- TODO It seems we don't need this -->
+    <script type="text/javascript">
+        function Floors() {
+            console.log("Open box to select floor");
+            $.colorbox({
+                href: "<?php echo DOL_URL_ROOT ?>/takepos/floors.php?mode=edit&place=0",
+                width: "90%",
+                height: "90%",
+                transition: "none",
+                iframe: "true",
+                title: "<?php echo $langs->trans("Floors"); ?>"
+            });
+        }
+    </script>
 
 <?php
 

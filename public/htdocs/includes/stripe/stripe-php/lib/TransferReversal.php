@@ -68,9 +68,9 @@ class TransferReversal extends ApiResource
     /**
      * @param null|array|string $opts
      *
+     * @return TransferReversal the saved reversal
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return TransferReversal the saved reversal
      */
     public function save($opts = null)
     {

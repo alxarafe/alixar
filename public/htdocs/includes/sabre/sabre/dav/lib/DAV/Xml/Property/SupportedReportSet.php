@@ -59,7 +59,7 @@ class SupportedReportSet implements XmlSerializable, HtmlOutput
      */
     public function addReport($report)
     {
-        $report = (array) $report;
+        $report = (array)$report;
 
         foreach ($report as $r) {
             if (!preg_match('/^{([^}]*)}(.*)$/', $r)) {

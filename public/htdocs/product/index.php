@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2014  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2014-2016  Charlie BENKE           <charlie@patas-monkey.com>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2019       Pierre Ardoin           <mapiolca@me.com>
- * Copyright (C) 2019-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2019       Nicolas ZABOURI         <info@inovea-conseil.com>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2014  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2014-2016  Charlie BENKE               <charlie@patas-monkey.com>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2019       Pierre Ardoin               <mapiolca@me.com>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\InfoBox;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\PriceParser;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
 
 /**
  *  \file       htdocs/product/index.php
@@ -35,7 +41,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
 
 $type = GETPOST("type", 'intcomma');
 if ($type == '' && !$user->hasRight('produit', 'lire') && $user->hasRight('service', 'lire')) {
@@ -389,7 +394,7 @@ if ((isModEnabled("product") || isModEnabled("service")) && ($user->hasRight("pr
                 if (getDolGlobalInt('MAIN_MULTILANGS')) {
                     $sql = "SELECT label";
                     $sql .= " FROM " . MAIN_DB_PREFIX . "product_lang";
-                    $sql .= " WHERE fk_product = " . ((int) $objp->rowid);
+                    $sql .= " WHERE fk_product = " . ((int)$objp->rowid);
                     $sql .= " AND lang = '" . $db->escape($langs->getDefaultLang()) . "'";
 
                     $resultd = $db->query($sql);
@@ -689,8 +694,8 @@ $db->close();
 /**
  *  Print html activity for product type
  *
- *  @param      int $product_type   Type of product
- *  @return     string
+ * @param int $product_type Type of product
+ * @return     string
  */
 function activitytrim($product_type)
 {
@@ -707,7 +712,7 @@ function activitytrim($product_type)
     $sql .= " AND f.rowid = fd.fk_facture";
     $sql .= " AND pf.fk_facture = f.rowid";
     $sql .= " AND pf.fk_paiement = p.rowid";
-    $sql .= " AND fd.product_type = " . ((int) $product_type);
+    $sql .= " AND fd.product_type = " . ((int)$product_type);
     $sql .= " AND p.datep >= '" . $db->idate(dol_get_first_day($yearofbegindate), 1) . "'";
     $sql .= " GROUP BY annee, mois ";
     $sql .= " ORDER BY annee, mois ";

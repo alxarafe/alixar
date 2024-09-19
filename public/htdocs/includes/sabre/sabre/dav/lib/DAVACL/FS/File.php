@@ -36,8 +36,8 @@ class File extends BaseFile implements IACL
     /**
      * Constructor.
      *
-     * @param string      $path  on-disk path
-     * @param array       $acl   ACL rules
+     * @param string $path on-disk path
+     * @param array $acl ACL rules
      * @param string|null $owner principal owner string
      */
     public function __construct($path, array $acl, $owner = null)

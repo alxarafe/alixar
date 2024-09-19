@@ -21,9 +21,9 @@
 
 CREATE TABLE llx_product_pricerules
 (
-    rowid INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    level INTEGER NOT NULL, -- Which price level is this rule for?
-    fk_level INTEGER NOT NULL, -- Price variations are made over price of X
-    var_percent REAL NOT NULL, -- Price variation over based price
-    var_min_percent REAL NOT NULL -- Min price discount over general price
+    rowid           INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    level           INTEGER             NOT NULL, -- Which price level is this rule for?
+    fk_level        INTEGER             NOT NULL, -- Price variations are made over price of X
+    var_percent     REAL                NOT NULL, -- Price variation over based price
+    var_min_percent REAL                NOT NULL  -- Min price discount over general price
 )ENGINE=innodb;

@@ -97,12 +97,12 @@ if ($action == 'add_payment') {
 
             // Create a line of payments
             $payment = new PaymentDonation($db);
-            $payment->chid         = $chid;
-            $payment->datep     = $datepaid;
-            $payment->amounts      = $amounts; // Tableau de montant
-            $payment->paymenttype  = GETPOSTINT("paymenttype");
-            $payment->num_payment  = GETPOST("num_payment", 'alphanohtml');
-            $payment->note_public  = GETPOST("note_public", 'restricthtml');
+            $payment->chid = $chid;
+            $payment->datep = $datepaid;
+            $payment->amounts = $amounts; // Tableau de montant
+            $payment->paymenttype = GETPOSTINT("paymenttype");
+            $payment->num_payment = GETPOST("num_payment", 'alphanohtml');
+            $payment->note_public = GETPOST("note_public", 'restricthtml');
 
             if (!$error) {
                 $paymentid = $payment->create($user);
@@ -148,7 +148,7 @@ llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-donation page-payment');
 
 $sql = "SELECT sum(p.amount) as total";
 $sql .= " FROM " . MAIN_DB_PREFIX . "payment_donation as p";
-$sql .= " WHERE p.fk_donation = " . ((int) $chid);
+$sql .= " WHERE p.fk_donation = " . ((int)$chid);
 $resql = $db->query($sql);
 if ($resql) {
     $obj = $db->fetch_object($resql);

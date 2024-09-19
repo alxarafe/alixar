@@ -66,8 +66,8 @@ class mod_commande_fournisseur_orchidee extends ModeleNumRefSuppliersOrders
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -108,7 +108,7 @@ class mod_commande_fournisseur_orchidee extends ModeleNumRefSuppliersOrders
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -128,9 +128,9 @@ class mod_commande_fournisseur_orchidee extends ModeleNumRefSuppliersOrders
     /**
      *  Return next value
      *
-     *  @param  Societe|string      $objsoc     Object third party
-     *  @param  CommandeFournisseur $object     Object
-     *  @return string|0                        Value if OK, 0 if KO
+     * @param Societe|string $objsoc Object third party
+     * @param CommandeFournisseur $object Object
+     * @return string|0                        Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $object)
     {
@@ -148,6 +148,6 @@ class mod_commande_fournisseur_orchidee extends ModeleNumRefSuppliersOrders
 
         $numFinal = get_next_value($db, $mask, 'commande_fournisseur', 'ref', '', $objsoc, $object->date_commande);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

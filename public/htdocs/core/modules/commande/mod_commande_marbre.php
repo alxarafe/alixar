@@ -64,7 +64,7 @@ class mod_commande_marbre extends ModeleNumRefCommandes
     {
         global $conf, $mysoc;
 
-        if ((float) $conf->global->MAIN_VERSION_LAST_INSTALL >= 16.0 && $mysoc->country_code != 'FR') {
+        if ((float)$conf->global->MAIN_VERSION_LAST_INSTALL >= 16.0 && $mysoc->country_code != 'FR') {
             $this->prefix = 'SO'; // We use correct standard code "SO = Sale Order"
         }
     }
@@ -72,8 +72,8 @@ class mod_commande_marbre extends ModeleNumRefCommandes
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -85,7 +85,7 @@ class mod_commande_marbre extends ModeleNumRefCommandes
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -97,8 +97,8 @@ class mod_commande_marbre extends ModeleNumRefCommandes
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -133,9 +133,9 @@ class mod_commande_marbre extends ModeleNumRefCommandes
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc     Object thirdparty
-     *  @param  Commande    $object     Object we need next value for
-     *  @return string|-1               Value if OK, -1 if KO
+     * @param Societe $objsoc Object thirdparty
+     * @param Commande $object Object we need next value for
+     * @return string|-1               Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $object)
     {

@@ -220,10 +220,10 @@ if ($salaryBonPl) {
     $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "user as u ON f.fk_user = u.rowid";
     $sql .= " WHERE 1 = 1";
     if ($object->id > 0) {
-        $sql .= " AND p.rowid = " . ((int) $object->id);
+        $sql .= " AND p.rowid = " . ((int)$object->id);
     }
     if ($userid > 0) {
-        $sql .= " AND u.rowid = " . ((int) $userid);
+        $sql .= " AND u.rowid = " . ((int)$userid);
     }
 } else {
     $sql = "SELECT pf.rowid, p.type,";
@@ -255,10 +255,10 @@ if ($salaryBonPl) {
         $sql .= " AND f.entity IN (" . getEntity('supplier_invoice') . ")";
     }
     if ($object->id > 0) {
-        $sql .= " AND p.rowid = " . ((int) $object->id);
+        $sql .= " AND p.rowid = " . ((int)$object->id);
     }
     if ($socid > 0) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
     $sql .= $db->order($sortfield, $sortorder);
 }
@@ -279,9 +279,9 @@ if ($resql) {
     $num = $db->num_rows($resql);
     $i = 0;
 
-    $param = "&id=" . ((int) $id);
+    $param = "&id=" . ((int)$id);
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
 
     // Lines of title fields

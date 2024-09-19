@@ -74,7 +74,7 @@ llxHeader();
 $thirdpartystatic = new Societe($db);
 
 if ($action == 'note') {
-    $sql = "UPDATE " . MAIN_DB_PREFIX . "societe SET note='" . $db->escape($note) . "' WHERE rowid=" . ((int) $socid);
+    $sql = "UPDATE " . MAIN_DB_PREFIX . "societe SET note='" . $db->escape($note) . "' WHERE rowid=" . ((int)$socid);
     $result = $db->query($sql);
 }
 
@@ -88,7 +88,6 @@ if ($mode == 'search') {
         $db->free($resql);
     }
 }
-
 
 
 /*
@@ -107,10 +106,10 @@ if (!$user->hasRight('societe', 'client', 'voir')) {
 $sql .= " WHERE s.fk_stcomm = st.id AND s.client in (1, 3)";
 $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if (dol_strlen($stcomm)) {
-    $sql .= " AND s.fk_stcomm=" . ((int) $stcomm);
+    $sql .= " AND s.fk_stcomm=" . ((int)$stcomm);
 }
 if (GETPOST("search_nom")) {
     $sql .= natural_search("s.nom", GETPOST("search_nom"));
@@ -122,7 +121,7 @@ if (GETPOST("search_code_client")) {
     $sql .= natural_search("s.code_client", GETPOST("search_code_client"));
 }
 if ($socid) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 $sql .= " ORDER BY $sortfield $sortorder";
 $sql .= $db->plimit($conf->liste_limit + 1, $offset);

@@ -128,8 +128,8 @@ if ($result < 0) {
         // Loading table $amounts
         $amounts = array();
 
-        $monthnext = (int) $month + 1;
-        $yearnext = (int) $year;
+        $monthnext = (int)$month + 1;
+        $yearnext = (int)$year;
         if ($monthnext > 12) {
             $monthnext = 1;
             $yearnext++;
@@ -539,8 +539,8 @@ if ($result < 0) {
         $credits = array();
         $debits = array();
 
-        $monthnext = (int) $month + 1;
-        $yearnext = (int) $year;
+        $monthnext = (int)$month + 1;
+        $yearnext = (int)$year;
         if ($monthnext > 12) {
             $monthnext = 1;
             $yearnext++;
@@ -576,8 +576,8 @@ if ($result < 0) {
             dol_print_error($db);
         }
 
-        $monthnext = (int) $month + 1;
-        $yearnext = (int) $year;
+        $monthnext = (int)$month + 1;
+        $yearnext = (int)$year;
         if ($monthnext > 12) {
             $monthnext = 1;
             $yearnext++;
@@ -814,10 +814,10 @@ print '</table>';
 
 // Graphs
 if ($mode == 'standard') {
-    $prevyear = (int) $year;
-    $nextyear = (int) $year;
-    $prevmonth = (int) $month - 1;
-    $nextmonth = (int) $month + 1;
+    $prevyear = (int)$year;
+    $nextyear = (int)$year;
+    $prevmonth = (int)$month - 1;
+    $nextmonth = (int)$month + 1;
     if ($prevmonth < 1) {
         $prevmonth = 12;
         $prevyear--;
@@ -845,8 +845,8 @@ if ($mode == 'standard') {
     print '</div>';
 
     // For year
-    $prevyear = (int) $year - 1;
-    $nextyear = (int) $year + 1;
+    $prevyear = (int)$year - 1;
+    $nextyear = (int)$year + 1;
     $nextyear = sprintf('%04d', $nextyear);
     $prevyear = sprintf('%04d', $prevyear);
     $link = "<a href='" . $_SERVER["PHP_SELF"] . "?account=" . $account . (GETPOST("option") != 'all' ? '' : '&option=all') . "&year=" . ($prevyear) . "'>" . img_previous('', 'class="valignbottom"') . "</a> " . $langs->trans("Year") . " <a href='" . $_SERVER["PHP_SELF"] . "?account=" . $account . (GETPOST("option") != 'all' ? '' : '&option=all') . "&year=" . ($nextyear) . "'>" . img_next('', 'class="valignbottom"') . "</a>";

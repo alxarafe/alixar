@@ -37,12 +37,12 @@ if (!defined('USE_CUSTOM_REPORT_AS_INCLUDE')) {
     require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
     // Get parameters
-    $action     = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'add', 'create', 'edit', 'update', 'view', ...
+    $action = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'add', 'create', 'edit', 'update', 'view', ...
     $massaction = GETPOST('massaction', 'alpha'); // The bulk action (combo box choice into lists)
 
     $mode = GETPOST('mode', 'alpha');
     $objecttype = GETPOST('objecttype', 'aZ09arobase');
-    $tabfamily  = GETPOST('tabfamily', 'aZ09');
+    $tabfamily = GETPOST('tabfamily', 'aZ09');
 
     $search_measures = GETPOST('search_measures', 'array');
 
@@ -265,9 +265,9 @@ if ($errorstr) {
             if ($newcrit != '') {
                 if (!preg_match('/^\'[^\']*\'$/', $newcrit)) {
                     $numnewcrit = price2num($newcrit);
-                    $newres .= '(' . $field . ':' . $operator . ':' . ((float) $numnewcrit) . ')';
+                    $newres .= '(' . $field . ':' . $operator . ':' . ((float)$numnewcrit) . ')';
                 } else {
-                    $newres .= '(' . $field . ':' . $operator . ":" . ((string) $newcrit) . ')';
+                    $newres .= '(' . $field . ':' . $operator . ":" . ((string)$newcrit) . ')';
                 }
                 $i3++; // a criteria was added to string
             }
@@ -325,7 +325,6 @@ $error = 0;
  */
 
 // None
-
 
 
 /*
@@ -442,7 +441,7 @@ if (is_array($search_groupby) && count($search_groupby)) {
         }
         */
 
-        $sql .= " LIMIT " . ((int) ($MAXUNIQUEVALFORGROUP + 1));
+        $sql .= " LIMIT " . ((int)($MAXUNIQUEVALFORGROUP + 1));
 
         //print $sql;
         $resql = $db->query($sql);
@@ -458,7 +457,7 @@ if (is_array($search_groupby) && count($search_groupby)) {
                 $keytouse = '';
                 $valuetranslated = $langs->transnoentitiesnoconv("Empty");
             } else {
-                $keytouse = (string) $obj->val;
+                $keytouse = (string)$obj->val;
                 $valuetranslated = $obj->val;
             }
 
@@ -596,7 +595,7 @@ if (!defined('MAIN_CUSTOM_REPORT_KEEP_GRAPH_ONLY')) {
 	        jQuery(document).ready(function() {
 	        	jQuery("#objecttype").change(function() {
 	        		console.log("Reload for "+jQuery("#objecttype").val());
-	                location.href = "' . $_SERVER["PHP_SELF"] . '?objecttype="+jQuery("#objecttype").val()+"' . ($tabfamily ? '&tabfamily=' . urlencode($tabfamily) : '') . (GETPOSTINT('show_search_component_params_hidden') ? '&show_search_component_params_hidden=' . ((int) GETPOSTINT('show_search_component_params_hidden')) : '') . '";
+	                location.href = "' . $_SERVER["PHP_SELF"] . '?objecttype="+jQuery("#objecttype").val()+"' . ($tabfamily ? '&tabfamily=' . urlencode($tabfamily) : '') . (GETPOSTINT('show_search_component_params_hidden') ? '&show_search_component_params_hidden=' . ((int)GETPOSTINT('show_search_component_params_hidden')) : '') . '";
 	        	});
 	        });
 	    </script>';
@@ -671,7 +670,7 @@ if (!defined('MAIN_CUSTOM_REPORT_KEEP_GRAPH_ONLY')) {
                 } else {
                     $arrayofyaxis['t.' . $key] = array(
                         'label' => $val['label'],
-                        'position' => (int) $val['position'],
+                        'position' => (int)$val['position'],
                         'table' => $object->table_element
                     );
                 }
@@ -683,7 +682,7 @@ if (!defined('MAIN_CUSTOM_REPORT_KEEP_GRAPH_ONLY')) {
                 if (!empty($extrafields->attributes[$object->table_element]['totalizable'][$key]) && (!isset($extrafields->attributes[$object->table_element]['enabled'][$key]) || dol_eval($extrafields->attributes[$object->table_element]['enabled'][$key], 1, 1, '1'))) {
                     $arrayofyaxis['te.' . $key] = array(
                         'label' => $extrafields->attributes[$object->table_element]['label'][$key],
-                        'position' => (int) $extrafields->attributes[$object->table_element]['pos'][$key],
+                        'position' => (int)$extrafields->attributes[$object->table_element]['pos'][$key],
                         'table' => $object->table_element
                     );
                 }
@@ -793,7 +792,7 @@ if (!empty($search_measures) && !empty($search_xaxis)) {
             //var_dump($arrayofgroupby);
             $tmpforloop = dolExplodeIntoArray($arrayofxaxis[$val]['tablefromt'], ',');
             foreach ($tmpforloop as $tmptable => $tmptablealias) {
-                if (! in_array($tmptable, $listoftablesalreadyadded)) { // We do not add join for main table and tables already added
+                if (!in_array($tmptable, $listoftablesalreadyadded)) { // We do not add join for main table and tables already added
                     $tmpforexplode = explode('__', $tmptablealias);
                     $endpart = end($tmpforexplode);
                     $parenttableandfield = preg_replace('/__' . $endpart . '$/', '', $tmptablealias) . '.' . $endpart;
@@ -820,7 +819,7 @@ if (!empty($search_measures) && !empty($search_xaxis)) {
             //var_dump($arrayofgroupby[$val]); var_dump($tmpval);
             $tmpforloop = dolExplodeIntoArray($arrayofgroupby[$val]['tablefromt'], ',');
             foreach ($tmpforloop as $tmptable => $tmptablealias) {
-                if (! in_array($tmptable, $listoftablesalreadyadded)) { // We do not add join for main table and tables already added
+                if (!in_array($tmptable, $listoftablesalreadyadded)) { // We do not add join for main table and tables already added
                     $tmpforexplode = explode('__', $tmptablealias);
                     $endpart = end($tmpforexplode);
                     $parenttableandfield = preg_replace('/__' . $endpart . '$/', '', $tmptablealias) . '.' . $endpart;
@@ -847,7 +846,7 @@ if (!empty($search_measures) && !empty($search_xaxis)) {
             //var_dump($arrayofgroupby);
             $tmpforloop = dolExplodeIntoArray($arrayofmesures[$val]['tablefromt'], ',');
             foreach ($tmpforloop as $tmptable => $tmptablealias) {
-                if (! in_array($tmptable, $listoftablesalreadyadded)) { // We do not add join for main table and tables already added
+                if (!in_array($tmptable, $listoftablesalreadyadded)) { // We do not add join for main table and tables already added
                     $tmpforexplode = explode('__', $tmptablealias);
                     $endpart = end($tmpforexplode);
                     $parenttableandfield = preg_replace('/__' . $endpart . '$/', '', $tmptablealias) . '.' . $endpart;
@@ -1049,7 +1048,7 @@ if ($sql) {
                                 }
                             } else {
                                 //var_dump((string) $objfieldforg.' === '.(string) $gvaluepossiblekey.' -> '.((string) $objfieldforg === (string) $gvaluepossiblekey));
-                                if ((string) $objfieldforg === (string) $gvaluepossiblekey) {
+                                if ((string)$objfieldforg === (string)$gvaluepossiblekey) {
                                     // The record we fetch is for this group
                                     $data[$xi][$fieldforybis] = $obj->$fieldfory;
                                 } elseif (!isset($data[$xi][$fieldforybis])) {

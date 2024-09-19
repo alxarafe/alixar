@@ -67,7 +67,7 @@ if (!$user->hasRight("societe", "client", "voir") && !$socid) {
 }
 $sql .= " WHERE cf.fk_soc = s.rowid ";
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-    $sql .= " AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND sc.fk_user = " . ((int)$user->id);
 }
 $sql .= " AND cf.entity = " . $conf->entity;
 $sql .= " GROUP BY cf.fk_statut";
@@ -113,12 +113,12 @@ if (isModEnabled("supplier_order")) {
     }
     $sql .= " WHERE cf.fk_soc = s.rowid";
     if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-        $sql .= " AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND sc.fk_user = " . ((int)$user->id);
     }
     $sql .= " AND cf.entity = " . $conf->entity;
     $sql .= " AND cf.fk_statut = 0";
     if ($socid) {
-        $sql .= " AND cf.fk_soc = " . ((int) $socid);
+        $sql .= " AND cf.fk_soc = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -169,12 +169,12 @@ if (isModEnabled("supplier_invoice") && ($user->hasRight('fournisseur', 'facture
     }
     $sql .= " WHERE s.rowid = ff.fk_soc";
     if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-        $sql .= " AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND sc.fk_user = " . ((int)$user->id);
     }
     $sql .= " AND ff.entity = " . $conf->entity;
     $sql .= " AND ff.fk_statut = 0";
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -239,7 +239,7 @@ if (getDolGlobalString('MAIN_COMPANY_PERENTITY_SHARED')) {
 $sql .= ", st.libelle as stcomm";
 $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s";
 if (getDolGlobalString('MAIN_COMPANY_PERENTITY_SHARED')) {
-    $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "societe_perentity as spe ON spe.fk_soc = s.rowid AND spe.entity = " . ((int) $conf->entity);
+    $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "societe_perentity as spe ON spe.fk_soc = s.rowid AND spe.entity = " . ((int)$conf->entity);
 }
 $sql .= ", " . MAIN_DB_PREFIX . "c_stcomm as st";
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
@@ -249,10 +249,10 @@ $sql .= " WHERE s.fk_stcomm = st.id";
 $sql .= " AND s.fournisseur = 1";
 $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if ($socid) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 $sql .= " ORDER BY s.tms DESC";
 $sql .= $db->plimit($max, 0);

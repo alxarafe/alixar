@@ -35,7 +35,7 @@ use Dolibarr\Code\Projet\Classes\Project;
 /**
  * Prepare array with list of tabs
  *
- * @param   Contact $object     Object related to tabs
+ * @param Contact $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function contact_prepare_head(Contact $object)
@@ -80,7 +80,7 @@ function contact_prepare_head(Contact $object)
             $sql = 'SELECT COUNT(n.rowid) as nb';
             $sql .= ' FROM ' . MAIN_DB_PREFIX . 'projet as n';
             $sql .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact as cc ON (n.rowid = cc.element_id)';
-            $sql .= " WHERE cc.fk_socpeople = " . ((int) $object->id);
+            $sql .= " WHERE cc.fk_socpeople = " . ((int)$object->id);
             $sql .= " AND cc.fk_c_type_contact IN (SELECT rowid FROM " . MAIN_DB_PREFIX . "c_type_contact WHERE element='project' AND source='external')";
             $sql .= " AND n.entity IN (" . getEntity('project') . ")";
 
@@ -167,14 +167,14 @@ function contact_prepare_head(Contact $object)
 /**
  *      Show html area for list of projects
  *
- *      @param  Conf        $conf           Object conf
- *      @param  Translate   $langs          Object langs
- *      @param  DoliDB      $db             Database handler
- *      @param  Object      $object         Third party object
- *      @param  string      $backtopage     Url to go once contact is created
- *      @param  int         $nocreatelink   1=Hide create project link
- *      @param  string      $morehtmlright  More html on right of title
- *      @return int
+ * @param Conf $conf Object conf
+ * @param Translate $langs Object langs
+ * @param DoliDB $db Database handler
+ * @param Object $object Third party object
+ * @param string $backtopage Url to go once contact is created
+ * @param int $nocreatelink 1=Hide create project link
+ * @param string $morehtmlright More html on right of title
+ * @return int
  */
 function show_contacts_projects($conf, $langs, $db, $object, $backtopage = '', $nocreatelink = 0, $morehtmlright = '')
 {
@@ -195,13 +195,13 @@ function show_contacts_projects($conf, $langs, $db, $object, $backtopage = '', $
         print '<div class="div-table-responsive">';
         print "\n" . '<table class="noborder" width=100%>';
 
-        $sql  = 'SELECT p.rowid as id, p.entity, p.title, p.ref, p.public, p.dateo as do, p.datee as de, p.fk_statut as status, p.fk_opp_status, p.opp_amount, p.opp_percent, p.tms as date_modification, p.budget_amount';
+        $sql = 'SELECT p.rowid as id, p.entity, p.title, p.ref, p.public, p.dateo as do, p.datee as de, p.fk_statut as status, p.fk_opp_status, p.opp_amount, p.opp_percent, p.tms as date_modification, p.budget_amount';
         $sql .= ', cls.code as opp_status_code, ctc.libelle as type_label';
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'projet as p';
         $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'c_lead_status as cls on p.fk_opp_status = cls.rowid';
         $sql .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact as cc ON (p.rowid = cc.element_id)';
         $sql .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'c_type_contact as ctc ON (ctc.rowid = cc.fk_c_type_contact)';
-        $sql .= " WHERE cc.fk_socpeople = " . ((int) $object->id);
+        $sql .= " WHERE cc.fk_socpeople = " . ((int)$object->id);
         $sql .= " AND ctc.element='project' AND ctc.source='external'";
         $sql .= " AND p.entity IN (" . getEntity('project') . ")";
         $sql .= " ORDER BY p.dateo DESC";

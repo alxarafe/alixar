@@ -32,8 +32,8 @@ if (!defined('NOTOKENRENEWAL')) {
 /**
  * This file is a wrapper, so empty header
  *
- * @ignore
  * @return  void
+ * @ignore
  */
 function llxHeader()
 {
@@ -43,8 +43,8 @@ function llxHeader()
 /**
  * This file is a wrapper, so empty footer
  *
- * @ignore
  * @return  void
+ * @ignore
  */
 function llxFooter()
 {

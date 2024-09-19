@@ -13,9 +13,9 @@ class EphemeralKeyService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\EphemeralKey
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\EphemeralKey
      */
     public function delete($id, $params = null, $opts = null)
     {
@@ -28,9 +28,9 @@ class EphemeralKeyService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\EphemeralKey
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\EphemeralKey
      */
     public function create($params = null, $opts = null)
     {

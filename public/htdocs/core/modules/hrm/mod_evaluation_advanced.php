@@ -58,8 +58,8 @@ class mod_evaluation_advanced extends ModeleNumRefEvaluation
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -99,7 +99,7 @@ class mod_evaluation_advanced extends ModeleNumRefEvaluation
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -127,8 +127,8 @@ class mod_evaluation_advanced extends ModeleNumRefEvaluation
     /**
      *  Return next free value
      *
-     *  @param  Evaluation  $object     Object we need next value for
-     *  @return string|0                Value if OK, 0 if KO
+     * @param Evaluation $object Object we need next value for
+     * @return string|0                Value if OK, 0 if KO
      */
     public function getNextValue($object)
     {
@@ -148,6 +148,6 @@ class mod_evaluation_advanced extends ModeleNumRefEvaluation
 
         $numFinal = get_next_value($db, $mask, 'hrm_evaluation', 'ref', '', null, $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

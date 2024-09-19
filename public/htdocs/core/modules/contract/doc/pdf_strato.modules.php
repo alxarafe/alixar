@@ -93,7 +93,7 @@ class pdf_strato extends ModelePDFContract
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -133,21 +133,22 @@ class pdf_strato extends ModelePDFContract
         $this->posxdesc = $this->marge_gauche + 1;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build pdf onto disk
      *
-     *  @param      Contrat         $object             Object to generate
-     *  @param      Translate       $outputlangs        Lang output object
-     *  @param      string          $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int             $hidedetails        Do not show line details
-     *  @param      int             $hidedesc           Do not show desc
-     *  @param      int             $hideref            Do not show ref
-     *  @return     int                                 1=OK, 0=KO
+     * @param Contrat $object Object to generate
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                                 1=OK, 0=KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath = '', $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $db, $hookmanager, $nblines;
 
         if (!is_object($outputlangs)) {
@@ -311,13 +312,13 @@ class pdf_strato extends ModelePDFContract
                         // Description of product line
 
                         if (!empty($objectligne->date_start)) {
-                            $datei = dol_print_date((int) $objectligne->date_start, 'day', false, $outputlangs, true);
+                            $datei = dol_print_date((int)$objectligne->date_start, 'day', false, $outputlangs, true);
                         } else {
                             $datei = $langs->trans("Unknown");
                         }
 
                         if (!empty($objectligne->date_end)) {
-                            $durationi = convertSecondToTime((int) $objectligne->date_end - (int) $objectligne->date_start, 'allwithouthour');
+                            $durationi = convertSecondToTime((int)$objectligne->date_end - (int)$objectligne->date_start, 'allwithouthour');
                             $datee = dol_print_date($objectligne->date_end, 'day', false, $outputlangs, true);
                         } else {
                             $durationi = $langs->trans("Unknown");
@@ -325,13 +326,13 @@ class pdf_strato extends ModelePDFContract
                         }
 
                         if (!empty($objectligne->date_start_real)) {
-                            $daters = dol_print_date((int) $objectligne->date_start_real, 'day', false, $outputlangs, true);
+                            $daters = dol_print_date((int)$objectligne->date_start_real, 'day', false, $outputlangs, true);
                         } else {
                             $daters = $langs->trans("Unknown");
                         }
 
                         if (!empty($objectligne->date_end_real)) {
-                            $datere = dol_print_date((int) $objectligne->date_end_real, 'day', false, $outputlangs, true);
+                            $datere = dol_print_date((int)$objectligne->date_end_real, 'day', false, $outputlangs, true);
                         } else {
                             $datere = $langs->trans("Unknown");
                         }
@@ -497,18 +498,19 @@ class pdf_strato extends ModelePDFContract
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     float|int   $tab_top        Top position of table
-     *   @param     float|int   $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        Hide top bar of array
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param float|int $tab_top Top position of table
+     * @param float|int $tab_height Height of table (rectangle)
+     * @param int $nexY Y
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop Hide top bar of array
+     * @param int $hidebottom Hide bottom bar of array
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0)
     {
@@ -554,10 +556,10 @@ class pdf_strato extends ModelePDFContract
 
     /**
      * Show footer signature of page
-     * @param   TCPDF       $pdf            Object PDF
-     * @param   int         $tab_top        tab height position
-     * @param   int         $tab_height     tab height
-     * @param   Translate   $outputlangs    Object language for output
+     * @param TCPDF $pdf Object PDF
+     * @param int $tab_top tab height position
+     * @param int $tab_height tab height
+     * @param Translate $outputlangs Object language for output
      * @return void
      */
     protected function tabSignature(&$pdf, $tab_top, $tab_height, $outputlangs)
@@ -579,21 +581,22 @@ class pdf_strato extends ModelePDFContract
         $pdf->MultiCell($this->page_largeur - $this->marge_droite - $posmiddle - 5, 20, '', 1);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Contrat     $object         Object to show
-     *  @param  int         $showaddress    0=no, 1=yes
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @param  Translate   $outputlangsbis Object lang for output bis
-     *  @param  string      $titlekey       Translation key to show as title of document
-     *  @return float|int                   Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param Contrat $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @param Translate $outputlangsbis Object lang for output bis
+     * @param string $titlekey Translation key to show as title of document
+     * @return float|int                   Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs, $outputlangsbis = null, $titlekey = "Contract")
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf;
 
         $top_shift = 0;
@@ -797,15 +800,16 @@ class pdf_strato extends ModelePDFContract
         return $top_shift;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *      Show footer of page. Need this->emetteur object
      *
-     *      @param  TCPDF       $pdf                PDF
-     *      @param  Contrat     $object             Object to show
-     *      @param  Translate   $outputlangs        Object lang for output
-     *      @param  int         $hidefreetext       1=Hide free text
-     *      @return integer
+     * @param TCPDF $pdf PDF
+     * @param Contrat $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return integer
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {

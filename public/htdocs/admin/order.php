@@ -94,7 +94,7 @@ if ($action == 'updateMask') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/commande/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -252,14 +252,13 @@ if ($action == 'updateMask') {
 } */
 
 
-
 /*
  * View
  */
 
 $form = new Form($db);
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 llxHeader("", $langs->trans("OrdersSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-order');
 
@@ -691,7 +690,7 @@ print '</form>';
 
 // Disallow to classify billed an order without invoice, only if module invoice is enable
 if (isModEnabled('invoice')) {
-    print '<tr class="oddeven"><td>' . $langs->trans("InvoiceClassifyBilledSupplierOrderWithoutInvoice") . '&nbsp;' ;
+    print '<tr class="oddeven"><td>' . $langs->trans("InvoiceClassifyBilledSupplierOrderWithoutInvoice") . '&nbsp;';
     print $form->textwithpicto('', $langs->trans("InvoiceClassifyBilledSupplierOrderWithoutInvoiceHelp"), 1, 'help') . '</td>';
     print '<td class="left" colspan="2">';
     print ajax_constantonoff('ORDER_DISABLE_CLASSIFY_BILLED_FROM_ORDER');

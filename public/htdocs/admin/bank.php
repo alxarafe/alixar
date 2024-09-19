@@ -154,7 +154,7 @@ if ($action == 'specimen') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/bank/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -214,7 +214,7 @@ if ($action == 'set') {
 $form = new Form($db);
 $formother = new FormOther($db);
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 llxHeader("", $langs->trans("BankSetupModule"), '', '', 0, 0, '', '', '', 'mod-admin page-bank');
 
@@ -271,7 +271,7 @@ while ($i < $nbofbank) {
         print img_picto($langs->trans("Activated"), 'on');
         print '</td>';
     } else {
-        print '<td class="center"><a href="' . $_SERVER['PHP_SELF'] . '?action=setbankorder&token=' . newToken() . '&value=' . ((int) $i) . '">';
+        print '<td class="center"><a href="' . $_SERVER['PHP_SELF'] . '?action=setbankorder&token=' . newToken() . '&value=' . ((int)$i) . '">';
         print img_picto($langs->trans("Disabled"), 'off');
         print '</a></td>';
     }

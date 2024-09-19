@@ -95,7 +95,7 @@ if (function_exists('socket_create')) {
         if (is_bool($client)) {
             $client_str = 'true';
         } else {
-            $client_str = (string) $client;
+            $client_str = (string)$client;
         }
         print "Connection established: " . $client_str . " - address=" . $address . " port=" . $port . "<br>\n";
         print "There is a Remote debug server at this address.<br>\n";

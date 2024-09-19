@@ -13,9 +13,11 @@ dl.phpdebugbar-widgets-kvlist.phpdebugbar-widgets-hooklist dt {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 dl.phpdebugbar-widgets-kvlist.phpdebugbar-widgets-hooklist dt span {
     font-weight: bold;
 }
+
 dl.phpdebugbar-widgets-kvlist dd {
     margin-left: 240px;
     padding: 5px;
@@ -28,7 +30,7 @@ dl.phpdebugbar-widgets-kvlist dd span {
     display: inline-block;
 }
 
-dl.phpdebugbar-widgets-kvlist dd span strong{
+dl.phpdebugbar-widgets-kvlist dd span strong {
     font-weight: bold;
 }
 

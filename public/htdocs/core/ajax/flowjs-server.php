@@ -141,11 +141,11 @@ if ($result) {
 /**
  * Check if all the parts exist, and gather all the parts of the file together.
  *
- * @param string    $temp_dir       the temporary directory holding all the parts of the file
- * @param string    $upload_dir     the temporary directory to create file
- * @param string    $fileName       the original file name
- * @param string    $chunkSize      each chunk size (in bytes)
- * @param string    $totalSize      original file size (in bytes)
+ * @param string $temp_dir the temporary directory holding all the parts of the file
+ * @param string $upload_dir the temporary directory to create file
+ * @param string $fileName the original file name
+ * @param string $chunkSize each chunk size (in bytes)
+ * @param string $totalSize original file size (in bytes)
  * @return bool                     true if Ok false else
  */
 function createFileFromChunks($temp_dir, $upload_dir, $fileName, $chunkSize, $totalSize)
@@ -163,7 +163,7 @@ function createFileFromChunks($temp_dir, $upload_dir, $fileName, $chunkSize, $to
 
     // check that all the parts are present
     // the size of the last part is between chunkSize and 2*$chunkSize
-    if ($total_files * (float) $chunkSize >=  ((float) $totalSize - (float) $chunkSize + 1)) {
+    if ($total_files * (float)$chunkSize >= ((float)$totalSize - (float)$chunkSize + 1)) {
         // create the final destination file
         if (($fp = fopen($upload_dir . '/' . $fileName, 'w')) !== false) {
             for ($i = 1; $i <= $total_files; $i++) {

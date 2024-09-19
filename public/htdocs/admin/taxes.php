@@ -45,7 +45,6 @@ if (!$user->admin) {
 $action = GETPOST('action', 'aZ09');
 
 
-
 /*
  * Actions
  */

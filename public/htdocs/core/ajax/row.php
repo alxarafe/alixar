@@ -140,7 +140,7 @@ if (
     if ($reshook > 0) {
         $perm = $hookmanager->resArray['perm'];
     }
-    if (! $perm) {
+    if (!$perm) {
         // We should not be here. If we are not allowed to reorder rows, feature should not be visible on script.
         // If we are here, it is a hack attempt, so we report a warning.
         print 'Bad permission to modify position of lines for object in table ' . $table_element_line;
@@ -157,12 +157,11 @@ if (
     }
 
 
-
     $row->line_ajaxorder($newrowordertab); // This update field rank or position in table row->table_element_line
 
     // Reorder line to have position of children lines sharing same counter than parent lines
     // This should be useless because there is no need to have children sharing same counter than parent, but well, it's cleaner into database.
-    if (in_array($fk_element, array('fk_facture', 'fk_propal', 'fk_commande','fk_contrat'))) {
+    if (in_array($fk_element, array('fk_facture', 'fk_propal', 'fk_commande', 'fk_contrat'))) {
         $result = $row->line_order(true);
     }
 } else {

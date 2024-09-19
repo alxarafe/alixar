@@ -26,7 +26,7 @@
 /**
  * Prepare array of tabs for SocieteAccount
  *
- * @param   SocieteAccount  $object     SocieteAccount
+ * @param SocieteAccount $object SocieteAccount
  * @return  array                       Array of tabs
  */
 function websiteaccountPrepareHead($object)

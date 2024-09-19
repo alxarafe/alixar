@@ -239,7 +239,7 @@ if ($action == 'updateMask') {
  * View
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $formcategory = new FormCategory($db);
 
@@ -365,7 +365,6 @@ foreach ($dirmodels as $reldir) {
 print '</table>';
 print '</div>';
 print '<br>';
-
 
 
 /*

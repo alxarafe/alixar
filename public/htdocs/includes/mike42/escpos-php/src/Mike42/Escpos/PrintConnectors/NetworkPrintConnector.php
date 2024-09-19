@@ -34,8 +34,8 @@ class NetworkPrintConnector extends FilePrintConnector
         $defaultSocketTimeout = ini_get("default_socket_timeout") ?: 60;
         $timeout = $timeout ?: $defaultSocketTimeout;
 
-        $this -> fp = @fsockopen($ip, $port, $errno, $errstr, $timeout);
-        if ($this -> fp === false) {
+        $this->fp = @fsockopen($ip, $port, $errno, $errstr, $timeout);
+        if ($this->fp === false) {
             throw new Exception("Cannot initialise NetworkPrintConnector: " . $errstr);
         }
     }

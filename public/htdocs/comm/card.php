@@ -540,7 +540,7 @@ if ($object->id > 0) {
     // Warehouse
     if (isModEnabled('stock') && getDolGlobalString('SOCIETE_ASK_FOR_WAREHOUSE')) {
         $langs->load('stocks');
-                $formproduct = new FormProduct($db);
+        $formproduct = new FormProduct($db);
         print '<tr class="nowrap">';
         print '<td>';
         print $form->editfieldkey("Warehouse", 'warehouse', '', $object, $user->hasRight('societe', 'creer'));
@@ -822,7 +822,7 @@ if ($object->id > 0) {
         $sql .= ", p.datep as dp, p.fin_validite as date_limit, p.entity";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "propal as p, " . MAIN_DB_PREFIX . "c_propalst as c";
         $sql .= " WHERE p.fk_soc = s.rowid AND p.fk_statut = c.id";
-        $sql .= " AND s.rowid = " . ((int) $object->id);
+        $sql .= " AND s.rowid = " . ((int)$object->id);
         $sql .= " AND p.entity IN (" . getEntity('propal') . ")";
         $sql .= " ORDER BY p.datep DESC";
 
@@ -920,7 +920,7 @@ if ($object->id > 0) {
         $sql .= ", c.facture as billed";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "commande as c";
         $sql .= " WHERE c.fk_soc = s.rowid ";
-        $sql .= " AND s.rowid = " . ((int) $object->id);
+        $sql .= " AND s.rowid = " . ((int)$object->id);
         $sql .= " AND c.entity IN (" . getEntity('commande') . ')';
         $sql .= " ORDER BY c.date_commande DESC";
 
@@ -936,7 +936,7 @@ if ($object->id > 0) {
                 $sql2 .= ' FROM ' . MAIN_DB_PREFIX . 'societe as s';
                 $sql2 .= ', ' . MAIN_DB_PREFIX . 'commande as c';
                 $sql2 .= ' WHERE c.fk_soc = s.rowid';
-                $sql2 .= ' AND s.rowid = ' . ((int) $object->id);
+                $sql2 .= ' AND s.rowid = ' . ((int)$object->id);
                 // Show orders with status validated, shipping started and delivered (well any order we can bill)
                 $sql2 .= " AND ((c.fk_statut IN (1,2)) OR (c.fk_statut = 3 AND c.facture = 0))";
 
@@ -1027,7 +1027,7 @@ if ($object->id > 0) {
         $sql .= ', s.nom';
         $sql .= ', s.rowid as socid';
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "expedition as e";
-        $sql .= " WHERE e.fk_soc = s.rowid AND s.rowid = " . ((int) $object->id);
+        $sql .= " WHERE e.fk_soc = s.rowid AND s.rowid = " . ((int)$object->id);
         $sql .= " AND e.entity IN (" . getEntity('expedition') . ")";
         $sql .= ' GROUP BY e.rowid';
         $sql .= ', e.ref, e.entity';
@@ -1122,7 +1122,7 @@ if ($object->id > 0) {
         $sql .= " c.last_main_doc, c.model_pdf";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "contrat as c";
         $sql .= " WHERE c.fk_soc = s.rowid ";
-        $sql .= " AND s.rowid = " . ((int) $object->id);
+        $sql .= " AND s.rowid = " . ((int)$object->id);
         $sql .= " AND c.entity IN (" . getEntity('contract') . ")";
         $sql .= " ORDER BY c.datec DESC";
 
@@ -1229,7 +1229,7 @@ if ($object->id > 0) {
         $sql = "SELECT s.nom, s.rowid, f.rowid as id, f.ref, f.fk_statut, f.duree as duration, f.datei as startdate, f.entity";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "fichinter as f";
         $sql .= " WHERE f.fk_soc = s.rowid";
-        $sql .= " AND s.rowid = " . ((int) $object->id);
+        $sql .= " AND s.rowid = " . ((int)$object->id);
         $sql .= " AND f.entity IN (" . getEntity('intervention') . ")";
         $sql .= " ORDER BY f.tms DESC";
 
@@ -1323,7 +1323,7 @@ if ($object->id > 0) {
         $sql .= ', f.suspended as suspended';
         $sql .= ', s.nom, s.rowid as socid';
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s," . MAIN_DB_PREFIX . "facture_rec as f";
-        $sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int) $object->id);
+        $sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int)$object->id);
         $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
         $sql .= ' GROUP BY f.rowid, f.titre, f.total_ht, f.total_tva, f.total_ttc,';
         $sql .= ' f.date_last_gen, f.datec, f.frequency, f.unit_frequency,';
@@ -1423,7 +1423,7 @@ if ($object->id > 0) {
         $sql .= ', SUM(pf.amount) as am';
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s," . MAIN_DB_PREFIX . "facture as f";
         $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'paiement_facture as pf ON f.rowid=pf.fk_facture';
-        $sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int) $object->id);
+        $sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int)$object->id);
         $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
         $sql .= ' GROUP BY f.rowid, f.ref, f.type, f.total_ht, f.total_tva, f.total_ttc,';
         $sql .= ' f.entity, f.datef, f.date_lim_reglement, f.datec, f.paye, f.fk_statut,';

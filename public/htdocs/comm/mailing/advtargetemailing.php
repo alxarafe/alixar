@@ -180,10 +180,10 @@ if ($action == 'add') {
             $array_query[$key] = GETPOST($key);
 
             $specials_date_key = array(
-                    'contact_update_st_dt',
-                    'contact_update_end_dt',
-                    'contact_create_st_dt',
-                    'contact_create_end_dt'
+                'contact_update_st_dt',
+                'contact_update_end_dt',
+                'contact_create_st_dt',
+                'contact_create_end_dt'
             );
             foreach ($specials_date_key as $date_key) {
                 if ($key == $date_key) {
@@ -227,7 +227,7 @@ if ($action == 'add') {
         // If use contact but no result use artefact to so not use socid into add_to_target
         if (count($advTarget->contact_lines) == 0) {
             $advTarget->contact_lines = array(
-                    0
+                0
             );
         }
     } else {
@@ -334,10 +334,10 @@ if ($action == 'savefilter' || $action == 'createfilter') {
                 $array_query[$key] = GETPOST($key);
 
                 $specials_date_key = array(
-                        'contact_update_st_dt',
-                        'contact_update_end_dt',
-                        'contact_create_st_dt',
-                        'contact_create_end_dt'
+                    'contact_update_st_dt',
+                    'contact_update_end_dt',
+                    'contact_create_st_dt',
+                    'contact_create_end_dt'
                 );
                 foreach ($specials_date_key as $date_key) {
                     if ($key == $date_key) {
@@ -384,7 +384,7 @@ if ($action == 'deletefilter') {
 
 if ($action == 'delete') {
     // Ici, rowid indique le destinataire et id le mailing
-    $sql = "DELETE FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE rowid = " . ((int) $rowid);
+    $sql = "DELETE FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE rowid = " . ((int)$rowid);
     $resql = $db->query($sql);
     if ($resql) {
         if (!empty($id)) {

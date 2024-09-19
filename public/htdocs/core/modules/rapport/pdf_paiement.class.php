@@ -70,7 +70,7 @@ class pdf_paiement extends CommonDocGenerator
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -117,19 +117,20 @@ class pdf_paiement extends CommonDocGenerator
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Fonction generant la rapport sur le disque
      *
-     *  @param  string  $_dir           repertoire
-     *  @param  int     $month          mois du rapport
-     *  @param  int     $year           annee du rapport
-     *  @param  string  $outputlangs    Lang output object
-     *  @return int                     Return integer <0 if KO, >0 if OK
+     * @param string $_dir repertoire
+     * @param int $month mois du rapport
+     * @param int $year annee du rapport
+     * @param string $outputlangs Lang output object
+     * @return int                     Return integer <0 if KO, >0 if OK
      */
     public function write_file($_dir, $month, $year, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         include_once DOL_DOCUMENT_ROOT . '/core/lib/date.lib.php';
 
         global $conf, $hookmanager, $langs, $user;
@@ -239,10 +240,10 @@ class pdf_paiement extends CommonDocGenerator
                 $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
                 $sql .= " AND p.datep BETWEEN '" . $this->db->idate(dol_get_first_day($year, $month)) . "' AND '" . $this->db->idate(dol_get_last_day($year, $month)) . "'";
                 if (!$user->hasRight('societe', 'client', 'voir')) {
-                    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
                 }
                 if (!empty($socid)) {
-                    $sql .= " AND s.rowid = " . ((int) $socid);
+                    $sql .= " AND s.rowid = " . ((int)$socid);
                 }
                 // If global param PAYMENTS_REPORT_GROUP_BY_MOD is set, payment are ordered by paiement_code
                 if (getDolGlobalString('PAYMENTS_REPORT_GROUP_BY_MOD')) {
@@ -277,10 +278,10 @@ class pdf_paiement extends CommonDocGenerator
                 $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
                 $sql .= " AND p.datep BETWEEN '" . $this->db->idate(dol_get_first_day($year, $month)) . "' AND '" . $this->db->idate(dol_get_last_day($year, $month)) . "'";
                 if (!$user->hasRight('societe', 'client', 'voir')) {
-                    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
                 }
                 if (!empty($socid)) {
-                    $sql .= " AND s.rowid = " . ((int) $socid);
+                    $sql .= " AND s.rowid = " . ((int)$socid);
                 }
                 // If global param PAYMENTS_FOURN_REPORT_GROUP_BY_MOD is set, payment fourn are ordered by paiement_code
                 if (getDolGlobalString('PAYMENTS_FOURN_REPORT_GROUP_BY_MOD')) {
@@ -383,19 +384,20 @@ class pdf_paiement extends CommonDocGenerator
         return 1;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  int         $page           Object to show
-     *  @param  int         $showaddress    0=no, 1=yes
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @return float|int                   Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param int $page Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @return float|int                   Return topshift value
      */
     protected function _pagehead(&$pdf, $page, $showaddress, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
 
         // Do not add the BACKGROUND as this is a report
         //pdf_pagehead($pdf,$outputlangs,$this->page_hauteur);
@@ -458,19 +460,20 @@ class pdf_paiement extends CommonDocGenerator
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Output body
      *
-     *  @param  TCPDF       $pdf            PDF object
-     *  @param  string      $page           Page
-     *  @param  array       $lines          Array of lines
-     *  @param  Translate   $outputlangs    Object langs
-     *  @return void
+     * @param TCPDF $pdf PDF object
+     * @param string $page Page
+     * @param array $lines Array of lines
+     * @param Translate $outputlangs Object langs
+     * @return void
      */
     public function Body(&$pdf, $page, $lines, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $langs, $conf;
         $default_font_size = pdf_getPDFFontSize($outputlangs);
 

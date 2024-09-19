@@ -20,6 +20,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Societe\Classes\Client;
 
 /**
@@ -28,26 +29,24 @@ use Dolibarr\Code\Societe\Classes\Client;
  *  \brief      Module for generating box to show last customers
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 
 /**
  * Class to manage the box to show last customers
  */
 class box_clients extends ModeleBoxes
 {
-    public $boxcode  = "lastcustomers";
-    public $boximg   = "object_company";
+    public $boxcode = "lastcustomers";
+    public $boximg = "object_company";
     public $boxlabel = "BoxLastCustomers";
-    public $depends  = array("societe");
+    public $depends = array("societe");
 
     public $enabled = 1;
 
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param = '')
     {
@@ -66,8 +65,8 @@ class box_clients extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -76,7 +75,7 @@ class box_clients extends ModeleBoxes
 
         $this->max = $max;
 
-            $thirdpartystatic = new Client($this->db);
+        $thirdpartystatic = new Client($this->db);
 
         $this->info_box_head = array(
             'text' => $langs->trans("BoxTitleLastModifiedCustomers", $max) . '<a class="paddingleft" href="' . constant('BASE_URL') . '/societe/list.php?type=c&sortfield=s.tms&sortorder=DESC"><span class="badge">...</span></a>',
@@ -94,14 +93,14 @@ class box_clients extends ModeleBoxes
             $sql .= " WHERE s.client IN (1, 3)";
             $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             // Add where from hooks
             $parameters = array('socid' => $user->socid, 'boxcode' => $this->boxcode);
             $reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters, $thirdpartystatic); // Note that $action and $object may have been modified by hook
             if (empty($reshook)) {
                 if ($user->socid > 0) {
-                    $sql .= " AND s.rowid = " . ((int) $user->socid);
+                    $sql .= " AND s.rowid = " . ((int)$user->socid);
                 }
             }
             $sql .= $hookmanager->resPrint;
@@ -150,7 +149,7 @@ class box_clients extends ModeleBoxes
 
                 if ($num == 0) {
                     $this->info_box_contents[$line][0] = array(
-                    'td' => 'class="center"',
+                        'td' => 'class="center"',
                         'text' => '<span class="opacitymedium">' . $langs->trans("NoRecordedCustomers") . '</span>'
                     );
                 }
@@ -174,10 +173,10 @@ class box_clients extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

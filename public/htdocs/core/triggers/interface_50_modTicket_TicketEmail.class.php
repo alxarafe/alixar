@@ -45,7 +45,7 @@ class InterfaceTicketEmail extends DolibarrTriggers
     /**
      *   Constructor
      *
-     *   @param DoliDB $db Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -62,12 +62,12 @@ class InterfaceTicketEmail extends DolibarrTriggers
      *      Function called when a Dolibarr business event is done.
      *      All functions "runTrigger" are triggered if file is inside directory htdocs/core/triggers
      *
-     *      @param  string    $action Event action code
-     *      @param  Ticket    $object Object
-     *      @param  User      $user   Object user
-     *      @param  Translate $langs  Object langs
-     *      @param  Conf      $conf   Object conf
-     *      @return int                     Return integer <0 if KO, 0 if no triggered ran, >0 if OK
+     * @param string $action Event action code
+     * @param Ticket $object Object
+     * @param User $user Object user
+     * @param Translate $langs Object langs
+     * @param Conf $conf Object conf
+     * @return int                     Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
     {
@@ -271,7 +271,7 @@ class InterfaceTicketEmail extends DolibarrTriggers
                         // Refuse email if not
                         $contact = new Contact($this->db);
                         $res = $contact->fetch($contactid);
-                        if (! in_array($contact, $linked_contacts)) {
+                        if (!in_array($contact, $linked_contacts)) {
                             $error_msg = $langs->trans('Error') . ': ';
                             $error_msg .= $langs->transnoentities('TicketWrongContact');
                             setEventMessages($error_msg, [], 'errors');
@@ -307,11 +307,11 @@ class InterfaceTicketEmail extends DolibarrTriggers
     /**
      * Composes and sends a message concerning a ticket, to be sent to admin address.
      *
-     * @param string    $sendto         Addresses to send the mail, format "first@address.net, second@address.net," etc.
-     * @param string    $base_subject   email subject. Non-translated string.
-     * @param string    $body           email body (first line). Non-translated string.
-     * @param Ticket    $object         the ticket thet the email refers to
-     * @param Translate $langs          the translation object
+     * @param string $sendto Addresses to send the mail, format "first@address.net, second@address.net," etc.
+     * @param string $base_subject email subject. Non-translated string.
+     * @param string $body email body (first line). Non-translated string.
+     * @param Ticket $object the ticket thet the email refers to
+     * @param Translate $langs the translation object
      * @return void
      */
     private function composeAndSendAdminMessage($sendto, $base_subject, $body, Ticket $object, Translate $langs)
@@ -377,12 +377,12 @@ class InterfaceTicketEmail extends DolibarrTriggers
     /**
      * Composes and sends a message concerning a ticket, to be sent to customer addresses.
      *
-     * @param string    $sendto         Addresses to send the mail, format "first@address.net, second@address.net, " etc.
-     * @param string    $base_subject   email subject. Non-translated string.
-     * @param string    $body           email body (first line). Non-translated string.
-     * @param string    $see_ticket     string indicating the ticket public address
-     * @param Ticket    $object         the ticket thet the email refers to
-     * @param Translate $langs          the translation object
+     * @param string $sendto Addresses to send the mail, format "first@address.net, second@address.net, " etc.
+     * @param string $base_subject email subject. Non-translated string.
+     * @param string $body email body (first line). Non-translated string.
+     * @param string $see_ticket string indicating the ticket public address
+     * @param Ticket $object the ticket thet the email refers to
+     * @param Translate $langs the translation object
      * @return void
      */
     private function composeAndSendCustomerMessage($sendto, $base_subject, $body, $see_ticket, Ticket $object, Translate $langs)
@@ -408,11 +408,11 @@ class InterfaceTicketEmail extends DolibarrTriggers
             foreach ($extrafields->attributes[$object->table_element]['label'] as $key => $value) {
                 $enabled = 1;
                 if ($enabled && isset($extrafields->attributes[$object->table_element]['list'][$key])) {
-                    $enabled = (int) dol_eval($extrafields->attributes[$object->table_element]['list'][$key], 1);
+                    $enabled = (int)dol_eval($extrafields->attributes[$object->table_element]['list'][$key], 1);
                 }
                 $perms = 1;
                 if ($perms && isset($extrafields->attributes[$object->table_element]['perms'][$key])) {
-                    $perms = (int) dol_eval($extrafields->attributes[$object->table_element]['perms'][$key], 1);
+                    $perms = (int)dol_eval($extrafields->attributes[$object->table_element]['perms'][$key], 1);
                 }
 
                 $qualified = true;

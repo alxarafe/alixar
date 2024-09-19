@@ -63,8 +63,8 @@ class mod_supplier_payment_brodator extends ModeleNumRefSupplierPayments
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -104,7 +104,7 @@ class mod_supplier_payment_brodator extends ModeleNumRefSupplierPayments
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -124,9 +124,9 @@ class mod_supplier_payment_brodator extends ModeleNumRefSupplierPayments
     /**
      *  Return next free value
      *
-     *  @param  Societe         $objsoc     Object thirdparty
-     *  @param  PaiementFourn   $object     Object we need next value for
-     *  @return string|0                    Next value if OK, 0 if KO
+     * @param Societe $objsoc Object thirdparty
+     * @param PaiementFourn $object Object we need next value for
+     * @return string|0                    Next value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $object)
     {
@@ -144,6 +144,6 @@ class mod_supplier_payment_brodator extends ModeleNumRefSupplierPayments
 
         $numFinal = get_next_value($db, $mask, 'paiementfourn', 'ref', '', $objsoc, $object->datepaye);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

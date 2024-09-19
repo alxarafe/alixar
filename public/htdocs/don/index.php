@@ -140,7 +140,7 @@ print "</tr>\n";
 
 $listofstatus = array(0, 1, -1, 2);
 foreach ($listofstatus as $status) {
-    $dataseries[] = array($donstatic->LibStatut($status, 1), (isset($nb[$status]) ? (int) $nb[$status] : 0));
+    $dataseries[] = array($donstatic->LibStatut($status, 1), (isset($nb[$status]) ? (int)$nb[$status] : 0));
     if ($status == Don::STATUS_DRAFT) {
         $colorseries[$status] = '-' . $badgeStatus0;
     }

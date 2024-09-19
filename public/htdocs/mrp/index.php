@@ -108,7 +108,7 @@ if ($conf->use_javascript_ajax) {
         print '</tr>' . "\n";
         $listofstatus = array(0, 1, 2, 3, 9);
         foreach ($listofstatus as $status) {
-            $dataseries[] = array($staticmo->LibStatut($status, 1), (isset($vals[$status]) ? (int) $vals[$status] : 0));
+            $dataseries[] = array($staticmo->LibStatut($status, 1), (isset($vals[$status]) ? (int)$vals[$status] : 0));
             if ($status == Mo::STATUS_DRAFT) {
                 $colorseries[$status] = '-' . $badgeStatus0;
             }

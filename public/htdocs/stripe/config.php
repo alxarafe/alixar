@@ -21,10 +21,10 @@
  */
 
 /**
-*  \file       htdocs/stripe/config.php
-*  \ingroup    Stripe
-*  \brief      Page to move config in api
-*/
+ *  \file       htdocs/stripe/config.php
+ *  \ingroup    Stripe
+ *  \brief      Page to move config in api
+ */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/stripe/stripe-php/init.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/stripe/stripe-php/lib/Stripe.php';
@@ -35,11 +35,11 @@ global $stripearrayofkeysbyenv;
 
 $stripearrayofkeysbyenv = array(
     array(
-        "secret_key"      => getDolGlobalString('STRIPE_TEST_SECRET_KEY'),
+        "secret_key" => getDolGlobalString('STRIPE_TEST_SECRET_KEY'),
         "publishable_key" => getDolGlobalString('STRIPE_TEST_PUBLISHABLE_KEY')
     ),
     array(
-        "secret_key"      => getDolGlobalString('STRIPE_LIVE_SECRET_KEY'),
+        "secret_key" => getDolGlobalString('STRIPE_LIVE_SECRET_KEY'),
         "publishable_key" => getDolGlobalString('STRIPE_LIVE_PUBLISHABLE_KEY')
     )
 );

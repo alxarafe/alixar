@@ -36,15 +36,15 @@ class Properties
             $xmlCore->registerXPathNamespace('dcterms', 'http://purl.org/dc/terms/');
             $xmlCore->registerXPathNamespace('cp', 'http://schemas.openxmlformats.org/package/2006/metadata/core-properties');
 
-            $this->docProps->setCreator((string) self::getArrayItem($xmlCore->xpath('dc:creator')));
-            $this->docProps->setLastModifiedBy((string) self::getArrayItem($xmlCore->xpath('cp:lastModifiedBy')));
+            $this->docProps->setCreator((string)self::getArrayItem($xmlCore->xpath('dc:creator')));
+            $this->docProps->setLastModifiedBy((string)self::getArrayItem($xmlCore->xpath('cp:lastModifiedBy')));
             $this->docProps->setCreated(strtotime(self::getArrayItem($xmlCore->xpath('dcterms:created')))); //! respect xsi:type
             $this->docProps->setModified(strtotime(self::getArrayItem($xmlCore->xpath('dcterms:modified')))); //! respect xsi:type
-            $this->docProps->setTitle((string) self::getArrayItem($xmlCore->xpath('dc:title')));
-            $this->docProps->setDescription((string) self::getArrayItem($xmlCore->xpath('dc:description')));
-            $this->docProps->setSubject((string) self::getArrayItem($xmlCore->xpath('dc:subject')));
-            $this->docProps->setKeywords((string) self::getArrayItem($xmlCore->xpath('cp:keywords')));
-            $this->docProps->setCategory((string) self::getArrayItem($xmlCore->xpath('cp:category')));
+            $this->docProps->setTitle((string)self::getArrayItem($xmlCore->xpath('dc:title')));
+            $this->docProps->setDescription((string)self::getArrayItem($xmlCore->xpath('dc:description')));
+            $this->docProps->setSubject((string)self::getArrayItem($xmlCore->xpath('dc:subject')));
+            $this->docProps->setKeywords((string)self::getArrayItem($xmlCore->xpath('cp:keywords')));
+            $this->docProps->setCategory((string)self::getArrayItem($xmlCore->xpath('cp:category')));
         }
     }
 
@@ -54,10 +54,10 @@ class Properties
 
         if (is_object($xmlCore)) {
             if (isset($xmlCore->Company)) {
-                $this->docProps->setCompany((string) $xmlCore->Company);
+                $this->docProps->setCompany((string)$xmlCore->Company);
             }
             if (isset($xmlCore->Manager)) {
-                $this->docProps->setManager((string) $xmlCore->Manager);
+                $this->docProps->setManager((string)$xmlCore->Manager);
             }
         }
     }
@@ -71,11 +71,11 @@ class Properties
                 /** @var \SimpleXMLElement $xmlProperty */
                 $cellDataOfficeAttributes = $xmlProperty->attributes();
                 if (isset($cellDataOfficeAttributes['name'])) {
-                    $propertyName = (string) $cellDataOfficeAttributes['name'];
+                    $propertyName = (string)$cellDataOfficeAttributes['name'];
                     $cellDataOfficeChildren = $xmlProperty->children('http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes');
 
                     $attributeType = $cellDataOfficeChildren->getName();
-                    $attributeValue = (string) $cellDataOfficeChildren->{$attributeType};
+                    $attributeValue = (string)$cellDataOfficeChildren->{$attributeType};
                     $attributeValue = DocumentProperties::convertProperty($attributeValue, $attributeType);
                     $attributeType = DocumentProperties::convertPropertyType($attributeType);
                     $this->docProps->setCustomProperty($propertyName, $attributeValue, $attributeType);

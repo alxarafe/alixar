@@ -60,8 +60,8 @@ class mod_mo_advanced extends ModeleNumRefMos
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -101,7 +101,7 @@ class mod_mo_advanced extends ModeleNumRefMos
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -124,9 +124,9 @@ class mod_mo_advanced extends ModeleNumRefMos
     /**
      *  Return next free value
      *
-     *  @param  Product     $objprod    Object product
-     *  @param  Mo          $object     Object we need next value for
-     *  @return string|0                Value if OK, 0 if KO
+     * @param Product $objprod Object product
+     * @param Mo $object Object we need next value for
+     * @return string|0                Value if OK, 0 if KO
      */
     public function getNextValue($objprod, $object)
     {
@@ -146,6 +146,6 @@ class mod_mo_advanced extends ModeleNumRefMos
 
         $numFinal = get_next_value($db, $mask, 'mrp_mo', 'ref', '', null, $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

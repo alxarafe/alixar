@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2006-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2004-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2006-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -22,13 +22,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\ModeleAccountancyCode;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/core/modules/societe/mod_codecompta_aquarium.php
  *  \ingroup    societe
  *  \brief      File of class to manage accountancy code of thirdparties with Panicum rules
  */
-
-
 
 /**
  *  Class to manage accountancy code of thirdparties with Aquarium rules
@@ -57,7 +59,6 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
 
     public $position = 20;
 
-
     /**
      *  Constructor
      */
@@ -84,7 +85,7 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
     /**
      * Return description of module
      *
-     * @param   Translate   $langs      Object langs
+     * @param Translate $langs Object langs
      * @return  string                  Description of module
      */
     public function info($langs)
@@ -132,9 +133,9 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
     /**
      * Return an example of result returned by getNextValue
      *
-     * @param   Translate       $langs      Object langs
-     * @param   Societe|string  $objsoc     Object thirdparty
-     * @param   int             $type       Type of third party (1:customer, 2:supplier, -1:autodetect)
+     * @param Translate $langs Object langs
+     * @param Societe|string $objsoc Object thirdparty
+     * @param int $type Type of third party (1:customer, 2:supplier, -1:autodetect)
      * @return  string                      Return string example
      */
     public function getExample($langs, $objsoc = '', $type = -1)
@@ -147,18 +148,19 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Set accountancy account code for a third party into this->code
      *
-     *  @param  DoliDB      $db             Database handler
-     *  @param  Societe     $societe        Third party object
-     *  @param  string      $type           'customer' or 'supplier'
-     *  @return int                         >=0 if OK, <0 if KO
+     * @param DoliDB $db Database handler
+     * @param Societe $societe Third party object
+     * @param string $type 'customer' or 'supplier'
+     * @return int                         >=0 if OK, <0 if KO
      */
     public function get_code($db, $societe, $type = '')
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf;
 
         $i = 0;
@@ -205,11 +207,11 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
     /**
      *  Return if a code is available
      *
-     *  @param  DoliDB      $db         Database handler
-     *  @param  string      $code       Code of third party
-     *  @param  Societe     $societe    Object third party
-     *  @param  string      $type       'supplier' or 'customer'
-     *  @return int                     0 if OK but not available, >0 if OK and available, <0 if KO
+     * @param DoliDB $db Database handler
+     * @param string $code Code of third party
+     * @param Societe $societe Object third party
+     * @param string $type 'supplier' or 'customer'
+     * @return int                     0 if OK but not available, >0 if OK and available, <0 if KO
      */
     public function verif($db, $code, $societe, $type)
     {

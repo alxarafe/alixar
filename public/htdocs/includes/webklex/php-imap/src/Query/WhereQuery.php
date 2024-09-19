@@ -142,7 +142,7 @@ class WhereQuery extends Query
             foreach ($criteria as $key => $value) {
                 if (is_numeric($key)) {
                     $this->where($value);
-                }else{
+                } else {
                     $this->where($key, $value);
                 }
             }
@@ -551,10 +551,9 @@ class WhereQuery extends Query
      * Apply the callback if the given "value" is truthy.
      * copied from @url https://github.com/laravel/framework/blob/8.x/src/Illuminate/Support/Traits/Conditionable.php
      *
-     * @param mixed  $value
-     * @param callable  $callback
-     * @param callable|null  $default
-
+     * @param mixed $value
+     * @param callable $callback
+     * @param callable|null $default
      * @return $this|mixed
      */
     public function when($value, $callback, $default = null)
@@ -572,15 +571,14 @@ class WhereQuery extends Query
      * Apply the callback if the given "value" is falsy.
      * copied from @url https://github.com/laravel/framework/blob/8.x/src/Illuminate/Support/Traits/Conditionable.php
      *
-     * @param mixed  $value
-     * @param callable  $callback
-     * @param callable|null  $default
-
+     * @param mixed $value
+     * @param callable $callback
+     * @param callable|null $default
      * @return $this|mixed
      */
     public function unless($value, $callback, $default = null)
     {
-        if (! $value) {
+        if (!$value) {
             return $callback($this, $value) ?: $this;
         } elseif ($default) {
             return $default($this, $value) ?: $this;

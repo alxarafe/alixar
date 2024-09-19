@@ -44,9 +44,9 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 $langs->loadLangs(array('banks', 'bills', 'companies', 'suppliers'));
 
 // Get Parameters
-$id         = GETPOSTINT('id');
-$action     = GETPOST('action', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
+$id = GETPOSTINT('id');
+$action = GETPOST('action', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 
 $socid = 0;
 
@@ -109,10 +109,10 @@ if (
     $action == 'confirm_validate' &&
     $confirm == 'yes' &&
     ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') &&
-    ($user->hasRight("fournisseur", "facture", "creer") ||
-    $user->hasRight("supplier_invoice", "creer"))) ||
-    (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') &&
-    $user->hasRight("fournisseur", "supplier_invoice_advance", "validate")))
+            ($user->hasRight("fournisseur", "facture", "creer") ||
+                $user->hasRight("supplier_invoice", "creer"))) ||
+        (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') &&
+            $user->hasRight("fournisseur", "supplier_invoice_advance", "validate")))
 ) {
     $db->begin();
 
@@ -286,7 +286,7 @@ if ($result > 0) {
     $sql .= ' pf.amount, s.nom as name, s.rowid as socid';
     $sql .= ' FROM ' . MAIN_DB_PREFIX . 'paiementfourn_facturefourn as pf,' . MAIN_DB_PREFIX . 'facture_fourn as f,' . MAIN_DB_PREFIX . 'societe as s';
     $sql .= ' WHERE pf.fk_facturefourn = f.rowid AND f.fk_soc = s.rowid';
-    $sql .= ' AND pf.fk_paiementfourn = ' . ((int) $object->id);
+    $sql .= ' AND pf.fk_paiementfourn = ' . ((int)$object->id);
     $resql = $db->query($sql);
     if ($resql) {
         $num = $db->num_rows($resql);

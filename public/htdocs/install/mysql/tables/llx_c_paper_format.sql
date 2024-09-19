@@ -19,10 +19,11 @@
 
 create table llx_c_paper_format
 (
-  rowid    integer                          AUTO_INCREMENT PRIMARY KEY,
-  code     varchar(16)                      NOT NULL,
-  label    varchar(128)                      NOT NULL,
-  width    float(6,2)                       DEFAULT 0,  -- Largeur du papier
+    rowid integer AUTO_INCREMENT PRIMARY KEY,
+    code  varchar(16)  NOT NULL,
+    label varchar(128) NOT NULL,
+    width float(6, 2
+) DEFAULT 0,  -- Largeur du papier
   height   float(6,2)                       DEFAULT 0,  -- Hauteur du papier
   unit     varchar(5)                       NOT NULL,   -- Mesure unit
   active   tinyint DEFAULT 1                NOT NULL,

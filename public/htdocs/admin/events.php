@@ -142,7 +142,6 @@ $s = $langs->trans("SeeReportPage", '{s1}' . $langs->transnoentities("Home") . '
 print str_replace('{s2}', '</a>', str_replace('{s1}', '<a href="' . constant('BASE_URL') . '/admin/tools/listevents.php" target="_blank">', $s));
 
 
-
 // End of page
 llxFooter();
 $db->close();

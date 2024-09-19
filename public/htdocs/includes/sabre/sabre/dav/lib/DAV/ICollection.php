@@ -35,7 +35,7 @@ interface ICollection extends INode
      * return the same contents of what was submitted here, you are strongly
      * recommended to omit the ETag.
      *
-     * @param string          $name Name of the file
+     * @param string $name Name of the file
      * @param resource|string $data Initial payload
      *
      * @return string|null

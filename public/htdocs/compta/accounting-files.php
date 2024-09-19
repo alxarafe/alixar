@@ -56,7 +56,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 if (isModEnabled('project')) {
-    }
+}
 
 // Constant to define payment sens
 const PAY_DEBIT = 0;
@@ -146,9 +146,8 @@ $listofchoices = array(
     'selectsocialcontributions' => array('label' => 'SocialContributions', 'picto' => 'bill', 'enabled' => isModEnabled('tax'), 'perms' => $user->hasRight('tax', 'charges', 'lire')),
     'selectpaymentsofsalaries' => array('label' => 'SalariesPayments', 'picto' => 'salary', 'lang' => 'salaries', 'enabled' => isModEnabled('salaries'), 'perms' => $user->hasRight('salaries', 'read')),
     'selectvariouspayment' => array('label' => 'VariousPayment', 'picto' => 'payment', 'enabled' => isModEnabled('bank'), 'perms' => $user->hasRight('banque', 'lire')),
-    'selectloanspayment' => array('label' => 'PaymentLoan','picto' => 'loan', 'enabled' => isModEnabled('don'), 'perms' => $user->hasRight('loan', 'read')),
+    'selectloanspayment' => array('label' => 'PaymentLoan', 'picto' => 'loan', 'enabled' => isModEnabled('don'), 'perms' => $user->hasRight('loan', 'read')),
 );
-
 
 
 /*
@@ -193,7 +192,7 @@ if (($action == 'searchfiles' || $action == 'dl')) {
             $sql .= " AND t.entity IN (" . $db->sanitize($entity == 1 ? '0,1' : $entity) . ')';
             $sql .= " AND t.fk_statut <> " . Facture::STATUS_DRAFT;
             if (!empty($projectid)) {
-                $sql .= " AND fk_projet = " . ((int) $projectid);
+                $sql .= " AND fk_projet = " . ((int)$projectid);
             }
         }
         // Vendor invoices
@@ -209,7 +208,7 @@ if (($action == 'searchfiles' || $action == 'dl')) {
             $sql .= " AND t.entity IN (" . $db->sanitize($entity == 1 ? '0,1' : $entity) . ')';
             $sql .= " AND t.fk_statut <> " . FactureFournisseur::STATUS_DRAFT;
             if (!empty($projectid)) {
-                $sql .= " AND fk_projet = " . ((int) $projectid);
+                $sql .= " AND fk_projet = " . ((int)$projectid);
             }
         }
         // Expense reports
@@ -238,7 +237,7 @@ if (($action == 'searchfiles' || $action == 'dl')) {
             $sql .= " AND t.entity IN (" . $db->sanitize($entity == 1 ? '0,1' : $entity) . ')';
             $sql .= " AND t.fk_statut <> " . Don::STATUS_DRAFT;
             if (!empty($projectid)) {
-                $sql .= " AND fk_projet = " . ((int) $projectid);
+                $sql .= " AND fk_projet = " . ((int)$projectid);
             }
         }
         // Payments of salaries
@@ -254,7 +253,7 @@ if (($action == 'searchfiles' || $action == 'dl')) {
             $sql .= " AND t.entity IN (" . $db->sanitize($entity == 1 ? '0,1' : $entity) . ')';
             //$sql.=" AND fk_statut <> ".PaymentSalary::STATUS_DRAFT;
             if (!empty($projectid)) {
-                $sql .= " AND fk_projet = " . ((int) $projectid);
+                $sql .= " AND fk_projet = " . ((int)$projectid);
             }
         }
         // Social contributions
@@ -270,7 +269,7 @@ if (($action == 'searchfiles' || $action == 'dl')) {
             $sql .= " AND t.entity IN (" . $db->sanitize($entity == 1 ? '0,1' : $entity) . ')';
             //$sql.=" AND fk_statut <> ".ChargeSociales::STATUS_UNPAID;
             if (!empty($projectid)) {
-                $sql .= " AND fk_projet = " . ((int) $projectid);
+                $sql .= " AND fk_projet = " . ((int)$projectid);
             }
         }
         // Various payments
@@ -285,7 +284,7 @@ if (($action == 'searchfiles' || $action == 'dl')) {
             $sql .= " WHERE datep between " . $wheretail;
             $sql .= " AND t.entity IN (" . $db->sanitize($entity == 1 ? '0,1' : $entity) . ')';
             if (!empty($projectid)) {
-                $sql .= " AND fk_projet = " . ((int) $projectid);
+                $sql .= " AND fk_projet = " . ((int)$projectid);
             }
         }
         // Loan payments
@@ -703,7 +702,7 @@ if (!empty($date_start) && !empty($date_stop)) {
 
     echo dol_print_date($date_start, 'day', 'tzuserrel') . " - " . dol_print_date($date_stop, 'day', 'tzuserrel');
 
-    print '<a class="marginleftonly small' . (empty($TData) ? ' butActionRefused' : ' butAction') . '" href="' . $_SERVER["PHP_SELF"] . '?action=dl&token=' . currentToken() . '&projectid=' . ((int) $projectid) . '&output=file&file=' . urlencode($filename) . $param . '"';
+    print '<a class="marginleftonly small' . (empty($TData) ? ' butActionRefused' : ' butAction') . '" href="' . $_SERVER["PHP_SELF"] . '?action=dl&token=' . currentToken() . '&projectid=' . ((int)$projectid) . '&output=file&file=' . urlencode($filename) . $param . '"';
     if (empty($TData)) {
         print " disabled";
     }

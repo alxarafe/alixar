@@ -167,7 +167,7 @@ if (empty($reshook)) {
                 $sql .= ' WHERE pf.fk_facture = f.rowid';
                 $sql .= ' AND f.fk_soc = s.rowid';
                 $sql .= ' AND f.entity IN (' . getEntity('invoice') . ')';
-                $sql .= ' AND pf.fk_paiement = ' . ((int) $object->id);
+                $sql .= ' AND pf.fk_paiement = ' . ((int)$object->id);
                 $resql = $db->query($sql);
                 if ($resql) {
                     $i = 0;
@@ -202,7 +202,7 @@ if (empty($reshook)) {
                 }
             }
 
-            if (! $error) {
+            if (!$error) {
                 header('Location: ' . $_SERVER['PHP_SELF'] . '?id=' . $object->id);
                 exit;
             }
@@ -295,7 +295,7 @@ if ($action == 'delete') {
 // Confirmation of payment validation
 if ($action == 'valide') {
     $facid = GETPOSTINT('facid');
-    print $form->formconfirm($_SERVER['PHP_SELF'] . '?id=' . $object->id . '&facid=' . ((int) $facid), $langs->trans("ValidatePayment"), $langs->trans("ConfirmValidatePayment"), 'confirm_validate', '', 0, 2);
+    print $form->formconfirm($_SERVER['PHP_SELF'] . '?id=' . $object->id . '&facid=' . ((int)$facid), $langs->trans("ValidatePayment"), $langs->trans("ConfirmValidatePayment"), 'confirm_validate', '', 0, 2);
 }
 
 $linkback = '<a href="' . constant('BASE_URL') . '/compta/paiement/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
@@ -475,7 +475,7 @@ $sql .= ' FROM ' . MAIN_DB_PREFIX . 'paiement_facture as pf,' . MAIN_DB_PREFIX .
 $sql .= ' WHERE pf.fk_facture = f.rowid';
 $sql .= ' AND f.fk_soc = s.rowid';
 $sql .= ' AND f.entity IN (' . getEntity('invoice') . ')';
-$sql .= ' AND pf.fk_paiement = ' . ((int) $object->id);
+$sql .= ' AND pf.fk_paiement = ' . ((int)$object->id);
 $resql = $db->query($sql);
 if ($resql) {
     $num = $db->num_rows($resql);
@@ -568,7 +568,7 @@ if ($resql) {
             // Status
             print '<td class="right">' . $invoice->getLibStatut(5, $alreadypayed) . '</td>';
 
-            $parameters = array('fk_paiement' => (int) $object->id);
+            $parameters = array('fk_paiement' => (int)$object->id);
             $reshook = $hookmanager->executeHooks('printFieldListValue', $parameters, $objp, $action); // Note that $action and $object may have been modified by hook
 
             print "</tr>\n";
@@ -594,7 +594,6 @@ if ($resql) {
 }
 
 
-
 /*
  * Actions Buttons
  */
@@ -610,7 +609,7 @@ if (getDolGlobalString('BILL_ADD_PAYMENT_VALIDATION')) {
 }
 
 $params = array();
-if (! empty($title_button)) {
+if (!empty($title_button)) {
     $params['attr'] = array('title' => $title_button);
 }
 

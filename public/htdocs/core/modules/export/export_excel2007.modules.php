@@ -78,7 +78,7 @@ class ExportExcel2007 extends ModeleExports
     /**
      *  Constructor
      *
-     *  @param      DoliDB  $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -187,17 +187,18 @@ class ExportExcel2007 extends ModeleExports
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Open output file
      *
-     *  @param      string      $file           File name to generate
-     *  @param      Translate   $outputlangs    Output language object
-     *  @return     int                         Return integer <0 if KO, >=0 if OK
+     * @param string $file File name to generate
+     * @param Translate $outputlangs Output language object
+     * @return     int                         Return integer <0 if KO, >=0 if OK
      */
     public function open_file($file, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs;
 
         dol_syslog(get_class($this) . "::open_file file=" . $file);
@@ -233,35 +234,37 @@ class ExportExcel2007 extends ModeleExports
         return $ret;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Write header
      *
-     *  @param      Translate   $outputlangs        Object lang to translate values
-     *  @return     int                             Return integer <0 if KO, >0 if OK
+     * @param Translate $outputlangs Object lang to translate values
+     * @return     int                             Return integer <0 if KO, >0 if OK
      */
     public function write_header($outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         //$outputlangs->charset_output='ISO-8859-1';    // Because Excel 5 format is ISO
 
         return 0;
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Output title line into file
      *
-     *  @param      array       $array_export_fields_label      Array with list of label of fields
-     *  @param      array       $array_selected_sorted          Array with list of field to export
-     *  @param      Translate   $outputlangs                    Object lang to translate values
-     *  @param      array       $array_types                    Array with types of fields
-     *  @return     int                                         Return integer <0 if KO, >0 if OK
+     * @param array $array_export_fields_label Array with list of label of fields
+     * @param array $array_selected_sorted Array with list of field to export
+     * @param Translate $outputlangs Object lang to translate values
+     * @param array $array_types Array with types of fields
+     * @return     int                                         Return integer <0 if KO, >0 if OK
      */
     public function write_title($array_export_fields_label, $array_selected_sorted, $outputlangs, $array_types)
     {
-		// phpcs:enable
+        // phpcs:enable
 
         // Create a format for the column headings
         $this->workbook->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
@@ -302,19 +305,20 @@ class ExportExcel2007 extends ModeleExports
         return 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Output record line into file
      *
-     *  @param      array       $array_selected_sorted      Array with list of field to export
-     *  @param      Resource    $objp                       A record from a fetch with all fields from select
-     *  @param      Translate   $outputlangs                Object lang to translate values
-     *  @param      array       $array_types                Array with types of fields
-     *  @return     int                                     Return integer <0 if KO, >0 if OK
+     * @param array $array_selected_sorted Array with list of field to export
+     * @param Resource $objp A record from a fetch with all fields from select
+     * @param Translate $outputlangs Object lang to translate values
+     * @param array $array_types Array with types of fields
+     * @return     int                                     Return integer <0 if KO, >0 if OK
      */
     public function write_record($array_selected_sorted, $objp, $outputlangs, $array_types)
     {
-		// phpcs:enable
+        // phpcs:enable
 
         // Define first row
         $this->col = 1;
@@ -396,7 +400,7 @@ class ExportExcel2007 extends ModeleExports
                 $this->workbook->getActiveSheet()->getStyle($coord)->getNumberFormat()->setFormatCode('yyyy-mm-dd h:mm:ss');
             } else {
                 if ($typefield == 'Text' || $typefield == 'TextAuto') {
-                    $this->workbook->getActiveSheet()->SetCellValueByColumnAndRow($this->col, $this->row + 1, (string) $newvalue);
+                    $this->workbook->getActiveSheet()->SetCellValueByColumnAndRow($this->col, $this->row + 1, (string)$newvalue);
                     $coord = $this->workbook->getActiveSheet()->getCellByColumnAndRow($this->col, $this->row + 1)->getCoordinate();
                     $this->workbook->getActiveSheet()->getStyle($coord)->getNumberFormat()->setFormatCode('@');
                     $this->workbook->getActiveSheet()->getStyle($coord)->getAlignment()->setHorizontal(PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
@@ -412,29 +416,31 @@ class ExportExcel2007 extends ModeleExports
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Write footer
      *
-     *  @param      Translate   $outputlangs    Output language object
-     *  @return     int                         Return integer <0 if KO, >0 if OK
+     * @param Translate $outputlangs Output language object
+     * @return     int                         Return integer <0 if KO, >0 if OK
      */
     public function write_footer($outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         return 0;
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Close Excel file
      *
-     *  @return     int                         Return integer <0 if KO, >0 if OK
+     * @return     int                         Return integer <0 if KO, >0 if OK
      */
     public function close_file()
     {
-		// phpcs:enable
+        // phpcs:enable
 
         $objWriter = new Xlsx($this->workbook);
         $objWriter->save($this->file);
@@ -445,16 +451,17 @@ class ExportExcel2007 extends ModeleExports
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Clean a cell to respect rules of Excel file cells
      *
-     * @param   string  $newvalue   String to clean
+     * @param string $newvalue String to clean
      * @return  string              Value cleaned
      */
     public function excel_clean($newvalue)
     {
-		// phpcs:enable
+        // phpcs:enable
         // Rule Dolibarr: No HTML
         $newvalue = dol_string_nohtmltag($newvalue);
 
@@ -465,7 +472,7 @@ class ExportExcel2007 extends ModeleExports
     /**
      * Convert a column to letter (1->A, 0->B, 27->AA, ...)
      *
-     * @param   int     $c      Column position
+     * @param int $c Column position
      * @return  string          Letter
      */
     public function column2Letter($c)
@@ -490,7 +497,7 @@ class ExportExcel2007 extends ModeleExports
      *
      * @param string $val cell value
      * @param string $startCell starting cell
-     * @param string $endCell  ending cell
+     * @param string $endCell ending cell
      * @return int 1 if success -1 if failed
      */
     public function setCellValue($val, $startCell, $endCell = '')
@@ -518,7 +525,7 @@ class ExportExcel2007 extends ModeleExports
      * Set border style
      *
      * @param string $thickness style \PhpOffice\PhpSpreadsheet\Style\Border
-     * @param string $color     color \PhpOffice\PhpSpreadsheet\Style\Color
+     * @param string $color color \PhpOffice\PhpSpreadsheet\Style\Color
      * @return int 1 if ok
      */
     public function setBorderStyle($thickness, $color)
@@ -535,7 +542,7 @@ class ExportExcel2007 extends ModeleExports
     /**
      * Set font style
      *
-     * @param bool   $bold  true if bold
+     * @param bool $bold true if bold
      * @param string $color color \PhpOffice\PhpSpreadsheet\Style\Color
      * @return int 1
      */
@@ -574,8 +581,8 @@ class ExportExcel2007 extends ModeleExports
      * Make a NxN Block in sheet
      *
      * @param string $startCell starting cell
-     * @param array  $TDatas array(ColumnName=>array(Row value 1, row value 2, etc ...))
-     * @param bool   $boldTitle true if bold headers
+     * @param array $TDatas array(ColumnName=>array(Row value 1, row value 2, etc ...))
+     * @param bool $boldTitle true if bold headers
      * @return int 1 if OK, -1 if KO
      */
     public function setBlock($startCell, $TDatas = array(), $boldTitle = false)
@@ -614,8 +621,8 @@ class ExportExcel2007 extends ModeleExports
      * Make a 2xN Tab in Sheet
      *
      * @param string $startCell A1
-     * @param array  $TDatas    array(Title=>val)
-     * @param bool   $boldTitle true if bold titles
+     * @param array $TDatas array(Title=>val)
+     * @param bool $boldTitle true if bold titles
      * @return int 1 if OK, -1 if KO
      */
     public function setBlock2Columns($startCell, $TDatas = array(), $boldTitle = false)
@@ -650,7 +657,7 @@ class ExportExcel2007 extends ModeleExports
      * Enable auto sizing for column range
      *
      * @param string $firstColumn first column to autosize
-     * @param string $lastColumn  to last column to autosize
+     * @param string $lastColumn to last column to autosize
      * @return int 1
      */
     public function enableAutosize($firstColumn, $lastColumn)
@@ -664,10 +671,10 @@ class ExportExcel2007 extends ModeleExports
     /**
      * Set a value cell and merging it by giving a starting cell and a length
      *
-     * @param   string      $val        Cell value
-     * @param   string      $startCell  Starting cell
-     * @param   int         $length     Length
-     * @param   int         $offset     Starting offset
+     * @param string $val Cell value
+     * @param string $startCell Starting cell
+     * @param int $length Length
+     * @param int $offset Starting offset
      * @return  int|string              Coordinate or if KO: -1
      */
     public function setMergeCellValueByLength($val, $startCell, $length, $offset = 0)

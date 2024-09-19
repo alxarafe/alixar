@@ -7,11 +7,11 @@ class BaseParserClass
     protected static function boolean($value)
     {
         if (is_object($value)) {
-            $value = (string) $value;
+            $value = (string)$value;
         }
 
         if (is_numeric($value)) {
-            return (bool) $value;
+            return (bool)$value;
         }
 
         return $value === strtolower('true');

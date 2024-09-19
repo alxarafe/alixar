@@ -84,7 +84,7 @@ class Subscription extends ApiResource
 
     use ApiOperations\Delete {
         delete as protected _delete;
-      }
+    }
 
     public static function getSavedNestedResources()
     {
@@ -102,9 +102,9 @@ class Subscription extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Subscription the updated subscription
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Subscription the updated subscription
      */
     public function deleteDiscount($params = null, $opts = null)
     {
@@ -119,9 +119,9 @@ class Subscription extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Subscription the canceled subscription
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Subscription the canceled subscription
      */
     public function cancel($params = null, $opts = null)
     {
@@ -136,9 +136,9 @@ class Subscription extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Subscription the resumed subscription
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Subscription the resumed subscription
      */
     public function resume($params = null, $opts = null)
     {
@@ -153,9 +153,9 @@ class Subscription extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\SearchResult<Subscription> the subscription search results
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SearchResult<Subscription> the subscription search results
      */
     public static function search($params = null, $opts = null)
     {

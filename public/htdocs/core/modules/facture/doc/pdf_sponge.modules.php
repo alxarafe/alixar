@@ -131,7 +131,7 @@ class pdf_sponge extends ModelePDFFactures
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -191,21 +191,22 @@ class pdf_sponge extends ModelePDFFactures
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build pdf onto disk
      *
-     *  @param      Facture     $object             Object to generate
-     *  @param      Translate   $outputlangs        Lang output object
-     *  @param      string      $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int         $hidedetails        Do not show line details
-     *  @param      int         $hidedesc           Do not show desc
-     *  @param      int         $hideref            Do not show ref
-     *  @return     int                             1=OK, 0=KO
+     * @param Facture $object Object to generate
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                             1=OK, 0=KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath = '', $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $db, $hookmanager, $nblines;
 
         dol_syslog("write_file outputlangs->defaultlang=" . (is_object($outputlangs) ? $outputlangs->defaultlang : 'null'));
@@ -714,7 +715,7 @@ class pdf_sponge extends ModelePDFFactures
                     }
 
                     $pdf->setTopMargin($this->tab_top_newpage);
-                    $page_bottom_margin =  $this->heightforfooter + $this->heightforfreetext + $this->heightforinfotot + $this->getHeightForQRInvoice($pdf->getPage(), $object, $langs);
+                    $page_bottom_margin = $this->heightforfooter + $this->heightforfreetext + $this->heightforinfotot + $this->getHeightForQRInvoice($pdf->getPage(), $object, $langs);
                     $pdf->setPageOrientation('', 1, $page_bottom_margin);
                     $pageposbefore = $pdf->getPage();
 
@@ -926,7 +927,7 @@ class pdf_sponge extends ModelePDFFactures
                         $localtax2ligne -= ($localtax2ligne * $object->remise_percent) / 100;
                     }*/
 
-                    $vatrate = (string) $object->lines[$i]->tva_tx;
+                    $vatrate = (string)$object->lines[$i]->tva_tx;
 
                     // Retrieve type from database for backward compatibility with old records
                     if (
@@ -1084,11 +1085,11 @@ class pdf_sponge extends ModelePDFFactures
     /**
      *  Show payments table
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Facture     $object         Object invoice
-     *  @param  int         $posy           Position y in PDF
-     *  @param  Translate   $outputlangs    Object langs for output
-     *  @return int                         Return integer <0 if KO, >0 if OK
+     * @param TCPDF $pdf Object PDF
+     * @param Facture $object Object invoice
+     * @param int $posy Position y in PDF
+     * @param Translate $outputlangs Object langs for output
+     * @return int                         Return integer <0 if KO, >0 if OK
      */
     public function drawPaymentsTable(&$pdf, $object, $posy, $outputlangs)
     {
@@ -1142,7 +1143,7 @@ class pdf_sponge extends ModelePDFFactures
         $sql .= " re.description, re.fk_facture_source,";
         $sql .= " f.type, f.datef";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe_remise_except as re, " . MAIN_DB_PREFIX . "facture as f";
-        $sql .= " WHERE re.fk_facture_source = f.rowid AND re.fk_facture = " . ((int) $object->id);
+        $sql .= " WHERE re.fk_facture_source = f.rowid AND re.fk_facture = " . ((int)$object->id);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -1188,7 +1189,7 @@ class pdf_sponge extends ModelePDFFactures
         $sql .= " cp.code";
         $sql .= " FROM " . MAIN_DB_PREFIX . "paiement_facture as pf, " . MAIN_DB_PREFIX . "paiement as p";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_paiement as cp ON p.fk_paiement = cp.id";
-        $sql .= " WHERE pf.fk_paiement = p.rowid AND pf.fk_facture = " . ((int) $object->id);
+        $sql .= " WHERE pf.fk_paiement = p.rowid AND pf.fk_facture = " . ((int)$object->id);
         //$sql.= " WHERE pf.fk_paiement = p.rowid AND pf.fk_facture = 1";
         $sql .= " ORDER BY p.datep";
 
@@ -1228,12 +1229,12 @@ class pdf_sponge extends ModelePDFFactures
     /**
      *   Show miscellaneous information (payment mode, payment term, ...)
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     Facture     $object         Object to show
-     *   @param     int         $posy           Y
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     Translate   $outputlangsbis Object lang for output bis
-     *   @return    int                         Pos y
+     * @param TCPDF $pdf Object PDF
+     * @param Facture $object Object to show
+     * @param int $posy Y
+     * @param Translate $outputlangs Langs object
+     * @param Translate $outputlangsbis Object lang for output bis
+     * @return    int                         Pos y
      */
     protected function drawInfoTable(&$pdf, $object, $posy, $outputlangs, $outputlangsbis)
     {
@@ -1475,13 +1476,13 @@ class pdf_sponge extends ModelePDFFactures
     /**
      *  Show total to pay
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Facture     $object         Object invoice
-     *  @param  int         $deja_regle     Amount already paid (in the currency of invoice)
-     *  @param  int         $posy           Position depart
-     *  @param  Translate   $outputlangs    Object langs
-     *  @param  Translate   $outputlangsbis Object lang for output bis
-     *  @return int                         Position pour suite
+     * @param TCPDF $pdf Object PDF
+     * @param Facture $object Object invoice
+     * @param int $deja_regle Amount already paid (in the currency of invoice)
+     * @param int $posy Position depart
+     * @param Translate $outputlangs Object langs
+     * @param Translate $outputlangsbis Object lang for output bis
+     * @return int                         Position pour suite
      */
     protected function drawTotalTable(&$pdf, $object, $deja_regle, $posy, $outputlangs, $outputlangsbis)
     {
@@ -1709,7 +1710,7 @@ class pdf_sponge extends ModelePDFFactures
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX1_OPTION) && $conf->global->FACTURE_LOCAL_TAX1_OPTION=='localtax1on')
                 //{
                 foreach ($this->localtax1 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('1', '3', '5'))) {
+                    if (in_array((string)$localtax_type, array('1', '3', '5'))) {
                         continue;
                     }
 
@@ -1721,8 +1722,8 @@ class pdf_sponge extends ModelePDFFactures
                             $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
 
                             $tvacompl = '';
-                            if (preg_match('/\*/', (string) $tvakey)) {
-                                $tvakey = str_replace('*', '', (string) $tvakey);
+                            if (preg_match('/\*/', (string)$tvakey)) {
+                                $tvakey = str_replace('*', '', (string)$tvakey);
                                 $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
                             }
 
@@ -1743,7 +1744,7 @@ class pdf_sponge extends ModelePDFFactures
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX2_OPTION) && $conf->global->FACTURE_LOCAL_TAX2_OPTION=='localtax2on')
                 //{
                 foreach ($this->localtax2 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('1', '3', '5'))) {
+                    if (in_array((string)$localtax_type, array('1', '3', '5'))) {
                         continue;
                     }
 
@@ -1755,8 +1756,8 @@ class pdf_sponge extends ModelePDFFactures
                             $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
 
                             $tvacompl = '';
-                            if (preg_match('/\*/', (string) $tvakey)) {
-                                $tvakey = str_replace('*', '', (string) $tvakey);
+                            if (preg_match('/\*/', (string)$tvakey)) {
+                                $tvakey = str_replace('*', '', (string)$tvakey);
                                 $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
                             }
                             $totalvat = $outputlangs->transcountrynoentities("TotalLT2", $mysoc->country_code) . (is_object($outputlangsbis) ? ' / ' . $outputlangsbis->transcountrynoentities("TotalLT2", $mysoc->country_code) : '');
@@ -1830,7 +1831,7 @@ class pdf_sponge extends ModelePDFFactures
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX1_OPTION) && $conf->global->FACTURE_LOCAL_TAX1_OPTION=='localtax1on')
                 //{
                 foreach ($this->localtax1 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('2', '4', '6'))) {
+                    if (in_array((string)$localtax_type, array('2', '4', '6'))) {
                         continue;
                     }
 
@@ -1842,8 +1843,8 @@ class pdf_sponge extends ModelePDFFactures
                             $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
 
                             $tvacompl = '';
-                            if (preg_match('/\*/', (string) $tvakey)) {
-                                $tvakey = str_replace('*', '', (string) $tvakey);
+                            if (preg_match('/\*/', (string)$tvakey)) {
+                                $tvakey = str_replace('*', '', (string)$tvakey);
                                 $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
                             }
                             $totalvat = $outputlangs->transcountrynoentities("TotalLT1", $mysoc->country_code) . (is_object($outputlangsbis) ? ' / ' . $outputlangsbis->transcountrynoentities("TotalLT1", $mysoc->country_code) : '');
@@ -1864,7 +1865,7 @@ class pdf_sponge extends ModelePDFFactures
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX2_OPTION) && $conf->global->FACTURE_LOCAL_TAX2_OPTION=='localtax2on')
                 //{
                 foreach ($this->localtax2 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('2', '4', '6'))) {
+                    if (in_array((string)$localtax_type, array('2', '4', '6'))) {
                         continue;
                     }
 
@@ -1877,8 +1878,8 @@ class pdf_sponge extends ModelePDFFactures
                             $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
 
                             $tvacompl = '';
-                            if (preg_match('/\*/', (string) $tvakey)) {
-                                $tvakey = str_replace('*', '', (string) $tvakey);
+                            if (preg_match('/\*/', (string)$tvakey)) {
+                                $tvakey = str_replace('*', '', (string)$tvakey);
                                 $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
                             }
                             $totalvat = $outputlangs->transcountrynoentities("TotalLT2", $mysoc->country_code) . (is_object($outputlangsbis) ? ' / ' . $outputlangsbis->transcountrynoentities("TotalLT2", $mysoc->country_code) : '');
@@ -2012,34 +2013,36 @@ class pdf_sponge extends ModelePDFFactures
         return ($tab2_top + ($tab2_hl * $index));
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return list of active generation modules
      *
-     *  @param  DoliDB  $db                 Database handler
-     *  @param  integer $maxfilenamelength  Max length of value to show
-     *  @return array                       List of templates
+     * @param DoliDB $db Database handler
+     * @param integer $maxfilenamelength Max length of value to show
+     * @return array                       List of templates
      */
     public static function liste_modeles($db, $maxfilenamelength = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         return parent::liste_modeles($db, $maxfilenamelength); // TODO: Change the autogenerated stub
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     float|int   $tab_top        Top position of table
-     *   @param     float|int   $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y (not used)
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @param     string      $currency       Currency code
-     *   @param     Translate   $outputlangsbis Langs object bis
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param float|int $tab_top Top position of table
+     * @param float|int $tab_height Height of table (rectangle)
+     * @param int $nexY Y (not used)
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop 1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
+     * @param int $hidebottom Hide bottom bar of array
+     * @param string $currency Currency code
+     * @param Translate $outputlangsbis Langs object bis
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0, $currency = '', $outputlangsbis = null)
     {
@@ -2094,20 +2097,21 @@ class pdf_sponge extends ModelePDFFactures
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page. This include the logo, ref and address blocks
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Facture     $object         Object to show
-     *  @param  int         $showaddress    0=no, 1=yes (usually set to 1 for first page, and 0 for next pages)
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @param  Translate   $outputlangsbis Object lang for output bis
-     *  @return array                       top shift of linked object lines
+     * @param TCPDF $pdf Object PDF
+     * @param Facture $object Object to show
+     * @param int $showaddress 0=no, 1=yes (usually set to 1 for first page, and 0 for next pages)
+     * @param Translate $outputlangs Object lang for output
+     * @param Translate $outputlangsbis Object lang for output bis
+     * @return array                       top shift of linked object lines
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs, $outputlangsbis = null)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs;
 
         $ltrdirection = 'L';
@@ -2487,16 +2491,17 @@ class pdf_sponge extends ModelePDFFactures
         return $pagehead;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *      Show footer of page. Need this->emetteur object
      *
-     *      @param  TCPDF       $pdf                PDF
-     *      @param  Facture     $object             Object to show
-     *      @param  Translate   $outputlangs        Object lang for output
-     *      @param  int         $hidefreetext       1=Hide free text
-     *      @param  int         $heightforqrinvoice Height for QR invoices
-     *      @return int                             Return height of bottom margin including footer text
+     * @param TCPDF $pdf PDF
+     * @param Facture $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @param int $heightforqrinvoice Height for QR invoices
+     * @return int                             Return height of bottom margin including footer text
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0, $heightforqrinvoice = 0)
     {
@@ -2507,12 +2512,12 @@ class pdf_sponge extends ModelePDFFactures
     /**
      *  Define Array Column Field
      *
-     *  @param  Facture        $object          common object
-     *  @param  Translate      $outputlangs     langs
-     *  @param  int            $hidedetails     Do not show line details
-     *  @param  int            $hidedesc        Do not show desc
-     *  @param  int            $hideref         Do not show ref
-     *  @return void
+     * @param Facture $object common object
+     * @param Translate $outputlangs langs
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return void
      */
     public function defineColumnField($object, $outputlangs, $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {

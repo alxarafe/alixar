@@ -520,7 +520,7 @@ class tcpdi_parser
                     }
                 }
             } elseif ($filltrailer) {
-                switch($key) {
+                switch ($key) {
                     case '/Size':
                     case '/Root':
                     case '/Info':
@@ -567,23 +567,28 @@ class tcpdi_parser
                     }
                     switch ($predictor) {
                         case 1: // No prediction (equivalent to PNG None)
-                        case 10: { // PNG prediction (on encoding, PNG None on all rows)
+                        case 10:
+                        { // PNG prediction (on encoding, PNG None on all rows)
                             $ddata[$k][$j] = $row[$i];
                             break;
                         }
-                        case 11: { // PNG prediction (on encoding, PNG Sub on all rows)
+                        case 11:
+                        { // PNG prediction (on encoding, PNG Sub on all rows)
                             $ddata[$k][$j] = (($row[$i] + $row_left) & 0xff);
                             break;
                         }
-                        case 12: { // PNG prediction (on encoding, PNG Up on all rows)
+                        case 12:
+                        { // PNG prediction (on encoding, PNG Up on all rows)
                             $ddata[$k][$j] = (($row[$i] + $row_up) & 0xff);
                             break;
                         }
-                        case 13: { // PNG prediction (on encoding, PNG Average on all rows)
+                        case 13:
+                        { // PNG prediction (on encoding, PNG Average on all rows)
                             $ddata[$k][$j] = (($row[$i] + (($row_left + $row_up) / 2)) & 0xff);
                             break;
                         }
-                        case 14: { // PNG prediction (on encoding, PNG Paeth on all rows)
+                        case 14:
+                        { // PNG prediction (on encoding, PNG Paeth on all rows)
                             // initial estimate
                             $p = ($row_left + $row_up - $row_upleft);
                             // distances
@@ -593,22 +598,26 @@ class tcpdi_parser
                             $pmin = min($pa, $pb, $pc);
                             // return minumum distance
                             switch ($pmin) {
-                                case $pa: {
+                                case $pa:
+                                {
                                     $ddata[$k][$j] = (($row[$i] + $row_left) & 0xff);
                                     break;
                                 }
-                                case $pb: {
+                                case $pb:
+                                {
                                     $ddata[$k][$j] = (($row[$i] + $row_up) & 0xff);
                                     break;
                                 }
-                                case $pc: {
+                                case $pc:
+                                {
                                     $ddata[$k][$j] = (($row[$i] + $row_upleft) & 0xff);
                                     break;
                                 }
                             }
                             break;
                         }
-                        default: { // PNG prediction (on encoding, PNG optimum)
+                        default:
+                        { // PNG prediction (on encoding, PNG optimum)
                             $this->Error("Unknown PNG predictor $predictor");
                             break;
                         }
@@ -646,11 +655,13 @@ class tcpdi_parser
             }
             foreach ($sdata as $k => $row) {
                 switch ($row[0]) {
-                    case 0: { // (f) linked list of free objects
+                    case 0:
+                    { // (f) linked list of free objects
                         ++$obj_num;
                         break;
                     }
-                    case 1: { // (n) objects that are in use but are not compressed
+                    case 1:
+                    { // (n) objects that are in use but are not compressed
                         // create unique object index: [object number]_[generation number]
                         $index = $obj_num . '_' . $row[2];
                         // check if object already exist
@@ -661,14 +672,16 @@ class tcpdi_parser
                         ++$obj_num;
                         break;
                     }
-                    case 2: { // compressed objects
+                    case 2:
+                    { // compressed objects
                         // $row[1] = object number of the object stream in which this object is stored
                         // $row[2] = index of this object within the object stream
                         /*$index = $row[1].'_0_'.$row[2];
                         $xref['xref'][$row[1]][0][$row[2]] = -1;*/
                         break;
                     }
-                    default: { // null objects
+                    default:
+                    { // null objects
                         break;
                     }
                 }
@@ -724,7 +737,8 @@ class tcpdi_parser
         $char = $data[$offset];
         // get object type
         switch ($char) {
-            case '%': { // \x25 PERCENT SIGN
+            case '%':
+            { // \x25 PERCENT SIGN
                 // skip comment and search for next token
                 $next = strcspn($data, "\r\n", $offset);
                 if ($next > 0) {
@@ -733,7 +747,8 @@ class tcpdi_parser
                 }
                 break;
             }
-            case '/': { // \x2F SOLIDUS
+            case '/':
+            { // \x2F SOLIDUS
                 // name object
                 $objtype = PDF_TYPE_TOKEN;
                 ++$offset;
@@ -743,7 +758,8 @@ class tcpdi_parser
                 break;
             }
             case '(':   // \x28 LEFT PARENTHESIS
-            case ')': { // \x29 RIGHT PARENTHESIS
+            case ')':
+            { // \x29 RIGHT PARENTHESIS
                 // literal string object
                 $objtype = PDF_TYPE_STRING;
                 ++$offset;
@@ -756,16 +772,19 @@ class tcpdi_parser
                         }
                         $ch = $data[$strpos];
                         switch ($ch) {
-                            case '\\': { // REVERSE SOLIDUS (5Ch) (Backslash)
+                            case '\\':
+                            { // REVERSE SOLIDUS (5Ch) (Backslash)
                                 // skip next character
                                 ++$strpos;
                                 break;
                             }
-                            case '(': { // LEFT PARENHESIS (28h)
+                            case '(':
+                            { // LEFT PARENHESIS (28h)
                                 ++$open_bracket;
                                 break;
                             }
-                            case ')': { // RIGHT PARENTHESIS (29h)
+                            case ')':
+                            { // RIGHT PARENTHESIS (29h)
                                 --$open_bracket;
                                 break;
                             }
@@ -778,7 +797,8 @@ class tcpdi_parser
                 break;
             }
             case '[':   // \x5B LEFT SQUARE BRACKET
-            case ']': { // \x5D RIGHT SQUARE BRACKET
+            case ']':
+            { // \x5D RIGHT SQUARE BRACKET
                 // array object
                 $objtype = PDF_TYPE_ARRAY;
                 ++$offset;
@@ -798,7 +818,8 @@ class tcpdi_parser
                 break;
             }
             case '<':   // \x3C LESS-THAN SIGN
-            case '>': { // \x3E GREATER-THAN SIGN
+            case '>':
+            { // \x3E GREATER-THAN SIGN
                 if (isset($data[($offset + 1)]) and ($data[($offset + 1)] == $char)) {
                     // dictionary object
                     $objtype = PDF_TYPE_DICTIONARY;
@@ -821,7 +842,8 @@ class tcpdi_parser
                 }
                 break;
             }
-            default: {
+            default:
+            {
                 $frag = $data[$offset] . @$data[$offset + 1] . @$data[$offset + 2] . @$data[$offset + 3];
                 switch ($frag) {
                     case 'endo':
@@ -891,6 +913,7 @@ class tcpdi_parser
         }
         return array($obj, $offset);
     }
+
     private function getDictValue($offset, &$data)
     {
         $objval = array();
@@ -1078,7 +1101,7 @@ class tcpdi_parser
         $this->objoffsets = array();
         if (preg_match_all('/(*ANYCRLF)^[\s]*([0-9]+)[\s]+([0-9]+)[\s]+obj/im', $this->pdfdata, $matches, PREG_OFFSET_CAPTURE) >= 1) {
             $i = 0;
-            foreach($matches[0] as $match) {
+            foreach ($matches[0] as $match) {
                 $offset = $match[1] + strspn($match[0], "\x00\x09\x0a\x0c\x0d\x20");
                 $this->objoffsets[trim($match[0])] = $offset;
                 $dictoffset = $match[1] + strlen($match[0]);
@@ -1176,7 +1199,7 @@ class tcpdi_parser
      */
     public function setPageno($pageno)
     {
-        $pageno = ((int) $pageno) - 1;
+        $pageno = ((int)$pageno) - 1;
 
         if ($pageno < 0 || $pageno >= $this->getPageCount()) {
             $this->error("Pagenumber is wrong! (Requested $pageno, max " . $this->getPageCount() . ")");
@@ -1202,7 +1225,7 @@ class tcpdi_parser
      */
     private function _getPageResources($obj)
     {
- // $obj = /Page
+        // $obj = /Page
         $obj = $this->getObjectVal($obj);
 
         // If the current object has a resources
@@ -1240,7 +1263,7 @@ class tcpdi_parser
 
         if (isset($this->pages[$this->pageno][1][1]['/Contents'])) {
             $contents = $this->_getPageContent($this->pages[$this->pageno][1][1]['/Contents']);
-            foreach($contents as $tmp_content) {
+            foreach ($contents as $tmp_content) {
                 $buffer .= $this->_rebuildContentStream($tmp_content) . ' ';
             }
         }
@@ -1335,14 +1358,14 @@ class tcpdi_parser
         if (!is_null($box) && $box[0] == PDF_TYPE_ARRAY) {
             $b =& $box[1];
             return array('x' => $b[0][1] / $k,
-                         'y' => $b[1][1] / $k,
-                         'w' => abs($b[0][1] - $b[2][1]) / $k,
-                         'h' => abs($b[1][1] - $b[3][1]) / $k,
-                         'llx' => min($b[0][1], $b[2][1]) / $k,
-                         'lly' => min($b[1][1], $b[3][1]) / $k,
-                         'urx' => max($b[0][1], $b[2][1]) / $k,
-                         'ury' => max($b[1][1], $b[3][1]) / $k,
-                         );
+                'y' => $b[1][1] / $k,
+                'w' => abs($b[0][1] - $b[2][1]) / $k,
+                'h' => abs($b[1][1] - $b[3][1]) / $k,
+                'llx' => min($b[0][1], $b[2][1]) / $k,
+                'lly' => min($b[1][1], $b[3][1]) / $k,
+                'urx' => max($b[0][1], $b[2][1]) / $k,
+                'ury' => max($b[1][1], $b[3][1]) / $k,
+            );
         } elseif (!isset($page[1][1]['/Parent'])) {
             return false;
         } else {
@@ -1372,7 +1395,7 @@ class tcpdi_parser
     {
         $boxes = array();
 
-        foreach($this->availableBoxes as $box) {
+        foreach ($this->availableBoxes as $box) {
             if ($_box = $this->getPageBox($page, $box, $k)) {
                 $boxes[$box] = $_box;
             }
@@ -1394,7 +1417,7 @@ class tcpdi_parser
 
     private function _getPageRotation($obj)
     {
- // $obj = /Page
+        // $obj = /Page
         $obj = $this->getObjectVal($obj);
         if (isset($obj[1][1]['/Rotate'])) {
             $res = $this->getObjectVal($obj[1][1]['/Rotate']);

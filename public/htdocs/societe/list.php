@@ -1,22 +1,22 @@
 <?php
 
-/* Copyright (C) 2001-2004  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2019  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2012       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2013-2015  Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2015       Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2016-2024  Josep Lluis Amador      <joseplluis@lliuretic.cat>
- * Copyright (C) 2016       Ferran Marcet      	    <fmarcet@2byte.es>
- * Copyright (C) 2017       Rui Strecht      	    <rui.strecht@aliartalentos.com>
- * Copyright (C) 2017       Juanjo Menent      	    <jmenent@2byte.es>
- * Copyright (C) 2018       Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2020       Open-Dsi                <support@open-dsi.fr>
- * Copyright (C) 2021       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2022       Anthony Berton          <anthony.berton@bb2a.fr>
- * Copyright (C) 2023       William Mead            <william.mead@manchenumerique.fr>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2019  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2013-2015  Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2015       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2016-2024  Josep Lluis Amador          <joseplluis@lliuretic.cat>
+ * Copyright (C) 2016       Ferran Marcet      	        <fmarcet@2byte.es>
+ * Copyright (C) 2017       Rui Strecht      	        <rui.strecht@aliartalentos.com>
+ * Copyright (C) 2017       Juanjo Menent      	        <jmenent@2byte.es>
+ * Copyright (C) 2018       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2020       Open-Dsi                    <support@open-dsi.fr>
+ * Copyright (C) 2021       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2022       Anthony Berton              <anthony.berton@bb2a.fr>
+ * Copyright (C) 2023       William Mead                <william.mead@manchenumerique.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Benjamin Falière		<benjamin.faliere@altairis.fr>
+ * Copyright (C) 2024		Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -34,6 +34,14 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCategory;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Societe\Classes\Client;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/societe/list.php
@@ -45,21 +53,18 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-if (isModEnabled('category')) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "commercial", "customers", "suppliers", "bills", "compta", "categories", "cashdesk"));
 
-
 // Get parameters
-$action     = GETPOST('action', 'aZ09');
+$action = GETPOST('action', 'aZ09');
 $massaction = GETPOST('massaction', 'alpha');
 $show_files = GETPOSTINT('show_files');
-$confirm    = GETPOST('confirm', 'alpha');
-$toselect   = GETPOST('toselect', 'array');
+$confirm = GETPOST('confirm', 'alpha');
+$toselect = GETPOST('toselect', 'array');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'thirdpartylist';
-$optioncss  = GETPOST('optioncss', 'alpha');
+$optioncss = GETPOST('optioncss', 'alpha');
 if ($contextpage == 'poslist') {
     $optioncss = 'print';
 }
@@ -124,7 +129,7 @@ $search_status = GETPOST("search_status", 'intcomma');
 $search_type = GETPOST('search_type', 'alpha');
 $search_level = GETPOST("search_level", "array:alpha");
 $search_stcomm = GETPOST('search_stcomm', "array:int");
-$search_import_key  = trim(GETPOST("search_import_key", "alpha"));
+$search_import_key = trim(GETPOST("search_import_key", "alpha"));
 $search_parent_name = trim(GETPOST('search_parent_name', 'alpha'));
 
 $search_date_creation_startmonth = GETPOSTINT('search_date_creation_startmonth');
@@ -327,7 +332,6 @@ if ($user->socid) {
 $result = restrictedArea($user, 'societe', $socid, '');
 
 
-
 /*
  * Actions
  */
@@ -347,22 +351,22 @@ if ($action == "change" && $user->hasRight('takepos', 'run')) { // Change custom
         $invoice->module_source = 'takepos';
         $invoice->pos_source = $_SESSION["takeposterminal"];
         $placeid = $invoice->create($user);
-        $sql = "UPDATE " . MAIN_DB_PREFIX . "facture set ref='(PROV-POS" . $_SESSION["takeposterminal"] . "-" . $place . ")' where rowid = " . ((int) $placeid);
+        $sql = "UPDATE " . MAIN_DB_PREFIX . "facture set ref='(PROV-POS" . $_SESSION["takeposterminal"] . "-" . $place . ")' where rowid = " . ((int)$placeid);
         $db->query($sql);
     }
 
-    $sql = "UPDATE " . MAIN_DB_PREFIX . "facture set fk_soc=" . ((int) $idcustomer) . " where ref='(PROV-POS" . $_SESSION["takeposterminal"] . "-" . $place . ")'";
+    $sql = "UPDATE " . MAIN_DB_PREFIX . "facture set fk_soc=" . ((int)$idcustomer) . " where ref='(PROV-POS" . $_SESSION["takeposterminal"] . "-" . $place . ")'";
     $resql = $db->query($sql); ?>
-        <script>
+    <script>
         console.log("Reload page invoice.php with place=<?php print $place; ?>");
-        parent.$("#poslines").load("invoice.php?place=<?php print $place; ?>", function() {
+        parent.$("#poslines").load("invoice.php?place=<?php print $place; ?>", function () {
             //parent.$("#poslines").scrollTop(parent.$("#poslines")[0].scrollHeight);
             <?php if (!$resql) { ?>
-                alert('Error failed to update customer on draft invoice.');
+            alert('Error failed to update customer on draft invoice.');
             <?php } ?>
             parent.$.colorbox.close(); /* Close the popup */
         });
-        </script>
+    </script>
     <?php
     exit;
 }
@@ -479,7 +483,6 @@ if ($search_status == '' && empty($search_all)) {
 }
 
 
-
 /*
  * View
  */
@@ -593,7 +596,7 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = s.rowid)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = s.rowid AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = s.rowid AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 
@@ -606,9 +609,9 @@ if (!empty($searchCategoryCustomerList)) {
             $searchCategoryCustomerSqlList[] = "NOT EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as ck WHERE s.rowid = ck.fk_soc)";
         } elseif (intval($searchCategoryCustomer) > 0) {
             if ($searchCategoryCustomerOperator == 0) {
-                $searchCategoryCustomerSqlList[] = " EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as ck WHERE s.rowid = ck.fk_soc AND ck.fk_categorie = " . ((int) $searchCategoryCustomer) . ")";
+                $searchCategoryCustomerSqlList[] = " EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as ck WHERE s.rowid = ck.fk_soc AND ck.fk_categorie = " . ((int)$searchCategoryCustomer) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryCustomer);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryCustomer);
             }
         }
     }
@@ -635,9 +638,9 @@ if (!empty($searchCategorySupplierList)) {
             $searchCategorySupplierSqlList[] = "NOT EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_fournisseur as ck WHERE s.rowid = ck.fk_soc)";
         } elseif (intval($searchCategorySupplier) > 0) {
             if ($searchCategorySupplierOperator == 0) {
-                $searchCategorySupplierSqlList[] = " EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_fournisseur as ck WHERE s.rowid = ck.fk_soc AND ck.fk_categorie = " . ((int) $searchCategorySupplier) . ")";
+                $searchCategorySupplierSqlList[] = " EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_fournisseur as ck WHERE s.rowid = ck.fk_soc AND ck.fk_categorie = " . ((int)$searchCategorySupplier) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategorySupplier);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategorySupplier);
             }
         }
     }
@@ -804,7 +807,7 @@ $parameters = array('socid' => $socid);
 $reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters, $object, $action); // Note that $action and $object may have been modified by hook
 if (empty($reshook)) {
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
 }
 $sql .= $hookmanager->resPrint;
@@ -893,7 +896,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -902,16 +905,16 @@ if ($search_all != '') {
     $param = "&search_all=" . urlencode($search_all);
 }
 if ($search_categ_cus > 0) {
-    $param .= '&search_categ_cus=' . urlencode((string) ($search_categ_cus));
+    $param .= '&search_categ_cus=' . urlencode((string)($search_categ_cus));
 }
 if ($search_categ_sup > 0) {
-    $param .= '&search_categ_sup=' . urlencode((string) ($search_categ_sup));
+    $param .= '&search_categ_sup=' . urlencode((string)($search_categ_sup));
 }
 if ($searchCategoryCustomerOperator == 1) {
-    $param .= "&search_category_customer_operator=" . urlencode((string) ($searchCategoryCustomerOperator));
+    $param .= "&search_category_customer_operator=" . urlencode((string)($searchCategoryCustomerOperator));
 }
 if ($searchCategorySupplierOperator == 1) {
-    $param .= "&search_category_supplier_operator=" . urlencode((string) ($searchCategorySupplierOperator));
+    $param .= "&search_category_supplier_operator=" . urlencode((string)($searchCategorySupplierOperator));
 }
 foreach ($searchCategoryCustomerList as $searchCategoryCustomer) {
     $param .= "&search_category_customer_list[]=" . urlencode($searchCategoryCustomer);
@@ -920,10 +923,10 @@ foreach ($searchCategorySupplierList as $searchCategorySupplier) {
     $param .= "&search_category_supplier_list[]=" . urlencode($searchCategorySupplier);
 }
 if ($search_sale > 0) {
-    $param .= '&search_sale=' . ((int) $search_sale);
+    $param .= '&search_sale=' . ((int)$search_sale);
 }
 if ($search_id > 0) {
-    $param .= "&search_id=" . ((int) $search_id);
+    $param .= "&search_id=" . ((int)$search_id);
 }
 if ($search_nom != '') {
     $param .= "&search_nom=" . urlencode($search_nom);
@@ -1004,13 +1007,13 @@ if ($search_price_level != '') {
     $param .= '&search_price_level=' . urlencode($search_price_level);
 }
 if ($search_type_thirdparty != '' && $search_type_thirdparty > 0) {
-    $param .= '&search_type_thirdparty=' . urlencode((string) ($search_type_thirdparty));
+    $param .= '&search_type_thirdparty=' . urlencode((string)($search_type_thirdparty));
 }
 if ($search_type != '') {
     $param .= '&search_type=' . urlencode($search_type);
 }
 if ($search_status != '') {
-    $param .= '&search_status=' . urlencode((string) ($search_status));
+    $param .= '&search_status=' . urlencode((string)($search_status));
 }
 if (is_array($search_level) && count($search_level)) {
     foreach ($search_level as $slevel) {
@@ -1032,49 +1035,49 @@ if ($type != '') {
     $param .= '&type=' . urlencode($type);
 }
 if ($search_date_creation_startmonth) {
-    $param .= '&search_date_creation_startmonth=' . urlencode((string) ($search_date_creation_startmonth));
+    $param .= '&search_date_creation_startmonth=' . urlencode((string)($search_date_creation_startmonth));
 }
 if ($search_date_creation_startyear) {
-    $param .= '&search_date_creation_startyear=' . urlencode((string) ($search_date_creation_startyear));
+    $param .= '&search_date_creation_startyear=' . urlencode((string)($search_date_creation_startyear));
 }
 if ($search_date_creation_startday) {
-    $param .= '&search_date_creation_startday=' . urlencode((string) ($search_date_creation_startday));
+    $param .= '&search_date_creation_startday=' . urlencode((string)($search_date_creation_startday));
 }
 if ($search_date_creation_start) {
     $param .= '&search_date_creation_start=' . urlencode($search_date_creation_start);
 }
 if ($search_date_creation_endmonth) {
-    $param .= '&search_date_creation_endmonth=' . urlencode((string) ($search_date_creation_endmonth));
+    $param .= '&search_date_creation_endmonth=' . urlencode((string)($search_date_creation_endmonth));
 }
 if ($search_date_creation_endyear) {
-    $param .= '&search_date_creation_endyear=' . urlencode((string) ($search_date_creation_endyear));
+    $param .= '&search_date_creation_endyear=' . urlencode((string)($search_date_creation_endyear));
 }
 if ($search_date_creation_endday) {
-    $param .= '&search_date_creation_endday=' . urlencode((string) ($search_date_creation_endday));
+    $param .= '&search_date_creation_endday=' . urlencode((string)($search_date_creation_endday));
 }
 if ($search_date_creation_end) {
     $param .= '&search_date_creation_end=' . urlencode($search_date_creation_end);
 }
 if ($search_date_modif_startmonth) {
-    $param .= '&search_date_modif_startmonth=' . urlencode((string) ($search_date_modif_startmonth));
+    $param .= '&search_date_modif_startmonth=' . urlencode((string)($search_date_modif_startmonth));
 }
 if ($search_date_modif_startyear) {
-    $param .= '&search_date_modif_startyear=' . urlencode((string) ($search_date_modif_startyear));
+    $param .= '&search_date_modif_startyear=' . urlencode((string)($search_date_modif_startyear));
 }
 if ($search_date_modif_startday) {
-    $param .= '&search_date_modif_startday=' . urlencode((string) ($search_date_modif_startday));
+    $param .= '&search_date_modif_startday=' . urlencode((string)($search_date_modif_startday));
 }
 if ($search_date_modif_start) {
     $param .= '&search_date_modif_start=' . urlencode($search_date_modif_start);
 }
 if ($search_date_modif_endmonth) {
-    $param .= '&search_date_modif_endmonth=' . urlencode((string) ($search_date_modif_endmonth));
+    $param .= '&search_date_modif_endmonth=' . urlencode((string)($search_date_modif_endmonth));
 }
 if ($search_date_modif_endyear) {
-    $param .= '&search_date_modif_endyear=' . urlencode((string) ($search_date_modif_endyear));
+    $param .= '&search_date_modif_endyear=' . urlencode((string)($search_date_modif_endyear));
 }
 if ($search_date_modif_endday) {
-    $param .= '&search_date_modif_endday=' . urlencode((string) ($search_date_modif_endday));
+    $param .= '&search_date_modif_endday=' . urlencode((string)($search_date_modif_endday));
 }
 if ($search_date_modif_end) {
     $param .= '&search_date_modif_end=' . urlencode($search_date_modif_end);
@@ -1147,7 +1150,7 @@ if ($contextpage != 'poslist') {
     if (!empty($socid)) {
         $url .= '&socid=' . $socid;
     }
-    $newcardbutton   = '';
+    $newcardbutton = '';
     $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));
     $newcardbutton .= dolGetButtonTitle($langs->trans('ViewKanban'), '', 'fa fa-th-list imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=kanban' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ($mode == 'kanban' ? 2 : 1), array('morecss' => 'reposition'));
     $newcardbutton .= dolGetButtonTitle($langs->trans($label), '', 'fa fa-plus-circle', $url, '', $user->hasRight('societe', 'creer'));

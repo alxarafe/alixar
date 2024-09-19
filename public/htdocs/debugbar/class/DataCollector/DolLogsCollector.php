@@ -31,7 +31,6 @@ use Psr\Log\LogLevel;
 /**
  * DolLogsCollector class
  */
-
 class DolLogsCollector extends MessagesCollector
 {
     /**
@@ -51,8 +50,8 @@ class DolLogsCollector extends MessagesCollector
     /**
      * Constructor
      *
-     * @param string $path     Path
-     * @param string $name     Name
+     * @param string $path Path
+     * @param string $name Name
      */
     public function __construct($path = null, $name = 'logs')
     {
@@ -67,7 +66,7 @@ class DolLogsCollector extends MessagesCollector
     /**
      *  Return widget settings
      *
-     *  @return array  Array
+     * @return array  Array
      */
     public function getWidgets()
     {
@@ -93,13 +92,13 @@ class DolLogsCollector extends MessagesCollector
     /**
      *  Return collected data
      *
-     *  @return array  Array of collected data
+     * @return array  Array of collected data
      */
     public function collect()
     {
         global $conf;
 
-        $uselogfile =  getDolGlobalInt('DEBUGBAR_USE_LOG_FILE');
+        $uselogfile = getDolGlobalInt('DEBUGBAR_USE_LOG_FILE');
 
         if ($uselogfile) {
             $this->getStorageLogs($this->path);
@@ -137,7 +136,7 @@ class DolLogsCollector extends MessagesCollector
     /**
      * Get logs
      *
-     * @param   string  $path       Path
+     * @param string $path Path
      * @return  void
      */
     public function getStorageLogs($path)
@@ -157,8 +156,8 @@ class DolLogsCollector extends MessagesCollector
     /**
      * Get latest file lines
      *
-     * @param string       $file       File
-     * @param int          $lines      Lines
+     * @param string $file File
+     * @param int $lines Lines
      * @return array       Array
      */
     protected function tailFile($file, $lines)
@@ -194,7 +193,7 @@ class DolLogsCollector extends MessagesCollector
     /**
      * Search a string for log entries into the log file. Used when debug bar scan log file (very slow).
      *
-     * @param  string  $file       File
+     * @param string $file File
      * @return array               Lines of logs
      */
     public function getLogs($file)

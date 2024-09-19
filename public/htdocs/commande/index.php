@@ -34,6 +34,7 @@ use Dolibarr\Code\Core\Classes\HookManager;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
+
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Societe\Classes\Societe;
 
@@ -109,10 +110,10 @@ if (isModEnabled('order')) {
     $sql .= " AND c.entity IN (" . getEntity('commande') . ")";
     $sql .= " AND c.fk_statut = 0";
     if ($socid) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
 
     $resql = $db->query($sql);
@@ -173,10 +174,10 @@ $sql .= " WHERE c.fk_soc = s.rowid";
 $sql .= " AND c.entity IN (" . getEntity('commande') . ")";
 //$sql.= " AND c.fk_statut > 2";
 if ($socid) {
-    $sql .= " AND c.fk_soc = " . ((int) $socid);
+    $sql .= " AND c.fk_soc = " . ((int)$socid);
 }
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 $sql .= " ORDER BY c.tms DESC";
 $sql .= $db->plimit($max, 0);
@@ -258,10 +259,10 @@ if (isModEnabled('order')) {
     $sql .= " AND c.entity IN (" . getEntity('commande') . ")";
     $sql .= " AND c.fk_statut = " . Commande::STATUS_VALIDATED;
     if ($socid) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     $sql .= " ORDER BY c.rowid DESC";
 
@@ -345,12 +346,12 @@ if (isModEnabled('order')) {
     }
     $sql .= " WHERE c.fk_soc = s.rowid";
     $sql .= " AND c.entity IN (" . getEntity('commande') . ")";
-    $sql .= " AND c.fk_statut = " . ((int) Commande::STATUS_ACCEPTED);
+    $sql .= " AND c.fk_statut = " . ((int)Commande::STATUS_ACCEPTED);
     if ($socid) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     $sql .= " ORDER BY c.rowid DESC";
 

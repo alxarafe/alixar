@@ -28,17 +28,17 @@
 /**
  *  Show header of a report
  *
- *  @param  string              $reportname     Name of report
- *  @param  string              $notused        Not used
- *  @param  string              $period         Period of report
- *  @param  string              $periodlink     Link to switch period
- *  @param  string              $description    Description
- *  @param  integer             $builddate      Date generation
- *  @param  string              $exportlink     Link for export or ''
- *  @param  array               $moreparam      Array with list of params to add into form
- *  @param  string              $calcmode       Calculation mode
- *  @param  string              $varlink        Add a variable into the address of the page
- *  @return void
+ * @param string $reportname Name of report
+ * @param string $notused Not used
+ * @param string $period Period of report
+ * @param string $periodlink Link to switch period
+ * @param string $description Description
+ * @param integer $builddate Date generation
+ * @param string $exportlink Link for export or ''
+ * @param array $moreparam Array with list of params to add into form
+ * @param string $calcmode Calculation mode
+ * @param string $varlink Add a variable into the address of the page
+ * @return void
  */
 function report_header($reportname, $notused, $period, $periodlink, $description, $builddate, $exportlink = '', $moreparam = array(), $calcmode = '', $varlink = '')
 {

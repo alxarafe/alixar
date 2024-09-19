@@ -54,17 +54,17 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security2.lib.php';
 if (isModEnabled('ldap')) {
 }
 if (isModEnabled('stock')) {
-    }
+}
 
 // Load translation files required by page
 $langs->loadLangs(array('users', 'companies', 'ldap', 'admin', 'hrm', 'stocks', 'other'));
 
 $id = GETPOSTINT('id');
-$action     = GETPOST('action', 'aZ09');
+$action = GETPOST('action', 'aZ09');
 $mode = GETPOST('mode', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 $group = GETPOSTINT("group", 3);
-$cancel     = GETPOST('cancel', 'alpha');
+$cancel = GETPOST('cancel', 'alpha');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'useracard'; // To manage different context of search
 
 if (empty($id) && $action != 'create') {
@@ -560,22 +560,22 @@ if (empty($reshook)) {
                         $contact->fetch($contactid);
 
                         $sql = "UPDATE " . MAIN_DB_PREFIX . "user";
-                        $sql .= " SET fk_socpeople=" . ((int) $contactid);
+                        $sql .= " SET fk_socpeople=" . ((int)$contactid);
                         if (!empty($contact->socid)) {
-                            $sql .= ", fk_soc=" . ((int) $contact->socid);
+                            $sql .= ", fk_soc=" . ((int)$contact->socid);
                         } elseif ($socid > 0) {
                             $sql .= ", fk_soc = null";
                             setEventMessages($langs->trans("WarningUserDifferentContactSocid"), null, 'warnings'); // Add message if post socid != $contact->socid
                         }
-                        $sql .= " WHERE rowid = " . ((int) $object->id);
+                        $sql .= " WHERE rowid = " . ((int)$object->id);
                     } elseif ($socid > 0) {
                         $sql = "UPDATE " . MAIN_DB_PREFIX . "user";
-                        $sql .= " SET fk_socpeople=NULL, fk_soc=" . ((int) $socid);
-                        $sql .= " WHERE rowid = " . ((int) $object->id);
+                        $sql .= " SET fk_socpeople=NULL, fk_soc=" . ((int)$socid);
+                        $sql .= " WHERE rowid = " . ((int)$object->id);
                     } else {
                         $sql = "UPDATE " . MAIN_DB_PREFIX . "user";
                         $sql .= " SET fk_socpeople=NULL, fk_soc=NULL";
-                        $sql .= " WHERE rowid = " . ((int) $object->id);
+                        $sql .= " WHERE rowid = " . ((int)$object->id);
                     }
                     dol_syslog("usercard::update", LOG_DEBUG);
                     $resql = $db->query($sql);
@@ -1531,7 +1531,7 @@ if ($action == 'create' || $action == 'adduserldap') {
             $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard") . ' (' . $langs->trans("AddToContacts") . ')', 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
             $morehtmlref .= '</a>';
 
-            $urltovirtualcard = '/user/virtualcard.php?id=' . ((int) $object->id);
+            $urltovirtualcard = '/user/virtualcard.php?id=' . ((int)$object->id);
             $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl") . ' - ' . $object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
             dol_banner_tab($object, 'id', $linkback, $user->hasRight("user", "user", "read") || $user->admin, 'rowid', 'ref', $morehtmlref);
@@ -2094,7 +2094,6 @@ if ($action == 'create' || $action == 'adduserldap') {
             print "</div>\n";
 
 
-
             // Select mail models is same action as presend
             if (GETPOST('modelselected')) {
                 $action = 'presend';
@@ -2168,7 +2167,7 @@ if ($action == 'create' || $action == 'adduserldap') {
                                 print '</td>';
                                 print '<td class="right">';
                                 if ($caneditgroup) {
-                                    print '<a class="reposition" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&action=removegroup&token=' . newToken() . '&group=' . ((int) $group->id) . '">';
+                                    print '<a class="reposition" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&action=removegroup&token=' . newToken() . '&group=' . ((int)$group->id) . '">';
                                     print img_picto($langs->trans("RemoveFromGroup"), 'unlink');
                                     print '</a>';
                                 } else {
@@ -2276,8 +2275,8 @@ if ($action == 'create' || $action == 'adduserldap') {
                     $user->admin                                // Need to be admin to allow downgrade of an admin
                     && ($user->id != $object->id)                   // Don't downgrade ourself
                     && (
-                    (!isModEnabled('multicompany') && $nbAdmin >= 1)
-                    || (isModEnabled('multicompany') && (($object->entity > 0 || ($user->entity == 0 && $object->entity == 0)) || $nbSuperAdmin > 1))    // Don't downgrade a superadmin if alone
+                        (!isModEnabled('multicompany') && $nbAdmin >= 1)
+                        || (isModEnabled('multicompany') && (($object->entity > 0 || ($user->entity == 0 && $object->entity == 0)) || $nbSuperAdmin > 1))    // Don't downgrade a superadmin if alone
                     )
                 ) {
                     print $form->selectyesno('admin', $object->admin, 1, false, 0, 1);
@@ -2834,7 +2833,7 @@ if ($action == 'create' || $action == 'adduserldap') {
             print '<tr><td class="tdtop">' . $langs->trans("Signature") . '</td>';
             print '<td>';
             if ($caneditfield) {
-            
+
                 $doleditor = new DolEditor('signature', $object->signature, '', 138, 'dolibarr_notes', 'In', false, $acceptlocallinktomedia, !getDolGlobalString('FCKEDITOR_ENABLE_USERSIGN') ? 0 : 1, ROWS_4, '90%');
                 print $doleditor->Create(1);
             } else {

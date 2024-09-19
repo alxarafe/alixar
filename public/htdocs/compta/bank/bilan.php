@@ -39,8 +39,8 @@ if (!$user->hasRight('banque', 'lire')) {
 /**
  *  Get result of sql for field amount
  *
- *  @param  string  $sql    SQL string
- *  @return int             Amount
+ * @param string $sql SQL string
+ * @return int             Amount
  */
 function valeur($sql)
 {

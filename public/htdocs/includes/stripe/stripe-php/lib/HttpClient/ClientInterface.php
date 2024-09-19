@@ -12,11 +12,11 @@ interface ClientInterface
      * @param bool $hasFile Whether or not $params references a file (via an @ prefix or
      *                         CURLFile)
      *
-     * @throws \Stripe\Exception\ApiConnectionException
-     * @throws \Stripe\Exception\UnexpectedValueException
-     *
      * @return array an array whose first element is raw request body, second
      *    element is HTTP status code and third array of HTTP headers
+     * @throws \Stripe\Exception\UnexpectedValueException
+     *
+     * @throws \Stripe\Exception\ApiConnectionException
      */
     public function request($method, $absUrl, $headers, $params, $hasFile);
 }

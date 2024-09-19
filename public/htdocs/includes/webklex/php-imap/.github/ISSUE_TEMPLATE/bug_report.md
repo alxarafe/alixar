@@ -12,6 +12,7 @@ Please provide the used config, if you are not using the package default config.
 
 **Code to Reproduce**
 The troubling code section which produces the reported bug.
+
 ```php
 echo "Bug";
 ```
@@ -23,6 +24,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Desktop / Server (please complete the following information):**
+
 - OS: [e.g. Debian 10]
 - PHP: [e.g. 5.5.9]
 - Version [e.g. v2.3.1]

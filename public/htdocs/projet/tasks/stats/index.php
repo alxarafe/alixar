@@ -88,7 +88,6 @@ if (!empty($year)) {
 }
 
 
-
 // Build graphic number of object
 // $data = array(array('Lib',val1,val2,val3),...)
 $data = $stats_tasks->getNbByMonthWithPrevYear($endyear, $startyear);

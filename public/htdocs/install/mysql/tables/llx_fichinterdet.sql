@@ -19,11 +19,11 @@
 
 create table llx_fichinterdet
 (
-  rowid             integer AUTO_INCREMENT PRIMARY KEY,
-  fk_fichinter      integer,
-  fk_parent_line    integer NULL,
-  date              datetime,          -- date de la ligne d'intervention
-  description       text,              -- description de la ligne d'intervention
-  duree             integer,           -- duree de la ligne d'intervention
-  rang              integer DEFAULT 0  -- ordre affichage sur la fiche
+    rowid          integer AUTO_INCREMENT PRIMARY KEY,
+    fk_fichinter   integer,
+    fk_parent_line integer NULL,
+    date           datetime,         -- date de la ligne d'intervention
+    description    text,             -- description de la ligne d'intervention
+    duree          integer,          -- duree de la ligne d'intervention
+    rang           integer DEFAULT 0 -- ordre affichage sur la fiche
 )ENGINE=innodb;

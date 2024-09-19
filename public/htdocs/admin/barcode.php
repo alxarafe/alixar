@@ -78,7 +78,7 @@ if ($action == 'setcoder') {
     $code_id = GETPOSTINT('code_id');
     $sqlp = "UPDATE " . MAIN_DB_PREFIX . "c_barcode_type";
     $sqlp .= " SET coder = '" . $db->escape($coder) . "'";
-    $sqlp .= " WHERE rowid = " . ((int) $code_id);
+    $sqlp .= " WHERE rowid = " . ((int)$code_id);
     $sqlp .= " AND entity = " . $conf->entity;
 
     $resql = $db->query($sqlp);
@@ -118,7 +118,7 @@ if ($action == 'setcoder') {
 
                 $sqlp = "UPDATE " . MAIN_DB_PREFIX . "c_barcode_type";
                 $sqlp .= " SET coder = '" . $db->escape($coder) . "'";
-                $sqlp .= " WHERE rowid = " . ((int) $code_id);
+                $sqlp .= " WHERE rowid = " . ((int)$code_id);
                 $sqlp .= " AND entity = " . $conf->entity;
 
                 $upsql = $db->query($sqlp);

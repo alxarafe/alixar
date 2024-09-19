@@ -289,9 +289,9 @@ REGEX;
  */
 function getHeaderValues($values, $values2 = null): array
 {
-    $values = (array) $values;
+    $values = (array)$values;
     if ($values2) {
-        $values = array_merge($values, (array) $values2);
+        $values = array_merge($values, (array)$values2);
     }
 
     $result = [];
@@ -353,7 +353,7 @@ function parseMimeType(string $str): array
         if ('q' !== $partName) {
             $parameters[$partName] = $part;
         } else {
-            $quality = (float) $partValue;
+            $quality = (float)$partValue;
             break; // Stop parsing parts
         }
     }

@@ -33,7 +33,7 @@ class DolMemoryCollector extends MemoryCollector
     /**
      *  Return value of indicator
      *
-     *  @return array       Array
+     * @return array       Array
      */
     public function collect()
     {
@@ -50,7 +50,7 @@ class DolMemoryCollector extends MemoryCollector
     /**
      *  Return widget settings
      *
-     *  @return array   Array
+     * @return array   Array
      */
     public function getWidgets()
     {

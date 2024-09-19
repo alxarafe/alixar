@@ -17,4 +17,5 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_don_extrafields ADD INDEX idx_don_extrafields (fk_object);
+ALTER TABLE llx_don_extrafields
+    ADD INDEX idx_don_extrafields (fk_object);

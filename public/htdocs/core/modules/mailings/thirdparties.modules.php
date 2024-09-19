@@ -44,7 +44,7 @@ class mailing_thirdparties extends MailingTargets
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -55,16 +55,17 @@ class mailing_thirdparties extends MailingTargets
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *    This is the main function that returns the array of emails
      *
-     *    @param    int     $mailing_id     Id of mailing. No need to use it.
-     *    @return   int                     Return integer <0 if error, number of emails added if ok
+     * @param int $mailing_id Id of mailing. No need to use it.
+     * @return   int                     Return integer <0 if error, number of emails added if ok
      */
     public function add_to_target($mailing_id)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs;
 
         $cibles = array();
@@ -138,7 +139,7 @@ class mailing_thirdparties extends MailingTargets
             $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s";
             $sql .= " WHERE s.email <> ''";
             $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
-            $sql .= " AND s.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int) $mailing_id) . ")";
+            $sql .= " AND s.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int)$mailing_id) . ")";
             if (empty($this->evenunsubscribe)) {
                 $sql .= " AND (SELECT count(*) FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe WHERE email = s.email) = 0";
             }
@@ -148,7 +149,7 @@ class mailing_thirdparties extends MailingTargets
             $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "categorie_societe as cs, " . MAIN_DB_PREFIX . "categorie as c";
             $sql .= " WHERE s.email <> ''";
             $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
-            $sql .= " AND s.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int) $mailing_id) . ")";
+            $sql .= " AND s.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int)$mailing_id) . ")";
             $sql .= " AND cs.fk_soc = s.rowid";
             $sql .= " AND c.rowid = cs.fk_categorie";
             if (GETPOSTINT('filter_thirdparties') > 0) {
@@ -163,7 +164,7 @@ class mailing_thirdparties extends MailingTargets
             $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "categorie_fournisseur as cs, " . MAIN_DB_PREFIX . "categorie as c";
             $sql .= " WHERE s.email <> ''";
             $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
-            $sql .= " AND s.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int) $mailing_id) . ")";
+            $sql .= " AND s.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int)$mailing_id) . ")";
             $sql .= " AND cs.fk_soc = s.rowid";
             $sql .= " AND c.rowid = cs.fk_categorie";
             if (GETPOSTINT('filter_thirdparties') > 0) {
@@ -197,14 +198,14 @@ class mailing_thirdparties extends MailingTargets
                     }
                     $otherTxt .= $addDescription;
                     $cibles[$j] = array(
-                                'email' => $obj->email,
-                                'fk_contact' => $obj->fk_contact,
-                                'lastname' => $obj->name, // For a thirdparty, we must use name
-                                'firstname' => '', // For a thirdparty, lastname is ''
-                                'other' => $otherTxt,
-                                'source_url' => $this->url($obj->id),
-                                'source_id' => $obj->id,
-                                'source_type' => 'thirdparty'
+                        'email' => $obj->email,
+                        'fk_contact' => $obj->fk_contact,
+                        'lastname' => $obj->name, // For a thirdparty, we must use name
+                        'firstname' => '', // For a thirdparty, lastname is ''
+                        'other' => $otherTxt,
+                        'source_url' => $this->url($obj->id),
+                        'source_id' => $obj->id,
+                        'source_type' => 'thirdparty'
                     );
                     $old = $obj->email;
                     $j++;
@@ -228,7 +229,7 @@ class mailing_thirdparties extends MailingTargets
      *  array of SQL request that returns two field:
      *  One called "label", One called "nb".
      *
-     *  @return     array       Array with SQL requests
+     * @return     array       Array with SQL requests
      */
     public function getSqlArrayForStats()
     {
@@ -245,8 +246,8 @@ class mailing_thirdparties extends MailingTargets
      *  For example if this selector is used to extract 500 different
      *  emails from a text file, this function must return 500.
      *
-     *  @param      string          $sql        Requete sql de comptage
-     *  @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
+     * @param string $sql Requete sql de comptage
+     * @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
      */
     public function getNbOfRecipients($sql = '')
     {
@@ -257,7 +258,7 @@ class mailing_thirdparties extends MailingTargets
         $sql .= " WHERE s.email <> ''";
         $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
 
         // La requete doit retourner un champ "nb" pour etre comprise par parent::getNbOfRecipients
@@ -268,7 +269,7 @@ class mailing_thirdparties extends MailingTargets
      *  This is to add a form filter to provide variant of selector
      *  If used, the HTML select must be called "filter"
      *
-     *  @return     string      A html select zone
+     * @return     string      A html select zone
      */
     public function formFilter()
     {
@@ -378,8 +379,8 @@ class mailing_thirdparties extends MailingTargets
     /**
      *  Can include an URL link on each record provided by selector shown on target page.
      *
-     *  @param  int     $id     ID
-     *  @return string          Url link
+     * @param int $id ID
+     * @return string          Url link
      */
     public function url($id)
     {

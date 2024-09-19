@@ -10350,7 +10350,6 @@ abstract class CommonObject
      */
     public function fetchComments()
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/comment.class.php';
 
         $comment = new Comment($this->db);
         $result = $comment->fetchAllFor($this->element, $this->id);

@@ -20,7 +20,7 @@ interface TokenStorageInterface
     public function retrieveAccessToken($service);
 
     /**
-     * @param string         $service
+     * @param string $service
      * @param TokenInterface $token
      *
      * @return TokenStorageInterface

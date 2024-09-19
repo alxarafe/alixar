@@ -5969,8 +5969,6 @@ if ($module == 'initmodule') {
 
         if ($tab == 'widgets') {
             print '<!-- tab=widgets -->' . "\n";
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/boxes/modules_boxes.php';
-
             $widgets = ModeleBoxes::getWidgetsList(array('/' . strtolower($module) . '/core/boxes'));
 
             if ($action != 'editfile' || empty($file)) {

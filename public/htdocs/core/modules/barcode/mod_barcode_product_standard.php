@@ -64,8 +64,8 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
 
     /**     Return description of module
      *
-     *      @param  Translate       $langs      Object langs
-     *      @return string                  Description of module
+     * @param Translate $langs Object langs
+     * @return string                  Description of module
      */
     public function info($langs)
     {
@@ -109,8 +109,8 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
     /**
      * Return an example of result returned by getNextValue
      *
-     * @param   Translate   $langs          Object langs
-     * @param   ?Product    $objproduct     Object product
+     * @param Translate $langs Object langs
+     * @param   ?Product $objproduct Object product
      * @return  string                      Return string example
      */
     public function getExample($langs, $objproduct = null)
@@ -126,12 +126,13 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
 
         return $examplebarcode;
     }
+
     /**
      *  Return literal barcode type code from numerical rowid type of barcode
      *
-     *  @param  DoliDB  $db         Database
-     *  @param  int     $type       Type of barcode (EAN, ISBN, ...) as rowid
-     *  @return string
+     * @param DoliDB $db Database
+     * @param int $type Type of barcode (EAN, ISBN, ...) as rowid
+     * @return string
      */
     public function literalBarcodeType($db, $type = 0)
     {
@@ -140,8 +141,8 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
 
         $sql = "SELECT rowid, code, libelle as label";
         $sql .= " FROM " . MAIN_DB_PREFIX . "c_barcode_type";
-        $sql .= " WHERE rowid = " . (int) $type;
-        $sql .= " AND entity = " . ((int) $conf->entity);
+        $sql .= " WHERE rowid = " . (int)$type;
+        $sql .= " AND entity = " . ((int)$conf->entity);
         $result = $db->query($sql);
         if ($result) {
             $num = $db->num_rows($result);
@@ -160,8 +161,8 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
     /**
      * Return next value
      *
-     * @param   ?CommonObject   $objproduct     Object product (not used)
-     * @param   string          $type           Type of barcode (EAN, ISBN, ...)
+     * @param   ?CommonObject $objproduct Object product (not used)
+     * @param string $type Type of barcode (EAN, ISBN, ...)
      * @return  string|int<-1,-1>               Value if OK, '' if module not configured, <0 if KO
      */
     public function getNextValue($objproduct = null, $type = '')
@@ -208,7 +209,7 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
                         $numFinal = $ean;
                     }
                     break;
-                    // Other barcode cases with key could be written here
+                // Other barcode cases with key could be written here
                 default:
                     break;
             }
@@ -222,12 +223,12 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
     /**
      *  Check validity of code according to its rules
      *
-     *  @param  DoliDB      $db                 Database handler
-     *  @param  string      $code               Code to check/correct
-     *  @param  Product     $product            Object product
-     *  @param  int         $thirdparty_type    0 = customer/prospect , 1 = supplier
-     *  @param  string      $type               type of barcode (EAN, ISBN, ...)
-     *  @return int                             0 if OK
+     * @param DoliDB $db Database handler
+     * @param string $code Code to check/correct
+     * @param Product $product Object product
+     * @param int $thirdparty_type 0 = customer/prospect , 1 = supplier
+     * @param string $type type of barcode (EAN, ISBN, ...)
+     * @return int                             0 if OK
      *                                          -1 ErrorBadCustomerCodeSyntax
      *                                          -2 ErrorCustomerCodeRequired
      *                                          -3 ErrorCustomerCodeAlreadyUsed
@@ -270,18 +271,19 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return if a code is used (by other element)
      *
-     *  @param  DoliDB      $db         Handler access base
-     *  @param  string      $code       Code to check
-     *  @param  Product     $product    Object product
-     *  @return int                     0 if available, <0 if KO
+     * @param DoliDB $db Handler access base
+     * @param string $code Code to check
+     * @param Product $product Object product
+     * @return int                     0 if available, <0 if KO
      */
     public function verif_dispo($db, $code, $product)
     {
-		// phpcs:enable
+        // phpcs:enable
         $sql = "SELECT barcode FROM " . MAIN_DB_PREFIX . "product";
         $sql .= " WHERE barcode = '" . $db->escape($code) . "'";
         $sql .= " AND entity IN (" . getEntity('product') . ")";
@@ -302,17 +304,18 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return if a barcode value match syntax
      *
-     *  @param  string  $codefortest    Code to check syntax
-     *  @param  string  $typefortest    Type of barcode (ISBN, EAN, ...)
-     *  @return int                     0 if OK, <0 if KO
+     * @param string $codefortest Code to check syntax
+     * @param string $typefortest Type of barcode (ISBN, EAN, ...)
+     * @return int                     0 if OK, <0 if KO
      */
     public function verif_syntax($codefortest, $typefortest)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf;
 
         $result = 0;

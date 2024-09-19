@@ -204,11 +204,11 @@ $arrayfields = array(
 foreach ($object->fields as $key => $val) {
     // If $val['visible']==0, then we never show the field
     if (!empty($val['visible'])) {
-        $visible = (int) dol_eval($val['visible'], 1);
+        $visible = (int)dol_eval($val['visible'], 1);
         $arrayfields['cf.' . $key] = array(
             'label' => $val['label'],
             'checked' => (($visible < 0) ? 0 : 1),
-            'enabled' => (abs($visible) != 3 && (int) dol_eval($val['enabled'], 1)),
+            'enabled' => (abs($visible) != 3 && (int)dol_eval($val['enabled'], 1)),
             'position' => $val['position'],
             'help' => isset($val['help']) ? $val['help'] : ''
         );
@@ -411,8 +411,8 @@ if (empty($reshook)) {
                 }
                 $objecttmp->socid = $cmd->socid;
                 $objecttmp->type = $objecttmp::TYPE_STANDARD;
-                $objecttmp->cond_reglement_id   = $cmd->cond_reglement_id;
-                $objecttmp->mode_reglement_id   = $cmd->mode_reglement_id;
+                $objecttmp->cond_reglement_id = $cmd->cond_reglement_id;
+                $objecttmp->mode_reglement_id = $cmd->mode_reglement_id;
                 $objecttmp->fk_project = $cmd->fk_project;
                 $objecttmp->multicurrency_code = $cmd->multicurrency_code;
                 $objecttmp->ref_supplier = !empty($cmd->ref_supplier) ? $cmd->ref_supplier : $default_ref_supplier;
@@ -424,7 +424,7 @@ if (empty($reshook)) {
                 }
 
                 $objecttmp->date = $datefacture;
-                $objecttmp->origin    = 'order_supplier';
+                $objecttmp->origin = 'order_supplier';
                 $objecttmp->origin_id = $id_order;
 
                 $res = $objecttmp->create($user);
@@ -445,7 +445,7 @@ if (empty($reshook)) {
                 $sql .= ") VALUES (";
                 $sql .= $id_order;
                 $sql .= ", '" . $db->escape($objecttmp->origin) . "'";
-                $sql .= ", " . ((int) $objecttmp->id);
+                $sql .= ", " . ((int)$objecttmp->id);
                 $sql .= ", '" . $db->escape($objecttmp->element) . "'";
                 $sql .= ")";
 
@@ -598,7 +598,7 @@ if (empty($reshook)) {
 
             if ($nb_bills_created == 1) {
                 $texttoshow = $langs->trans('BillXCreated', '{s1}');
-                $texttoshow = str_replace('{s1}', '<a href="' . constant('BASE_URL') . '/fourn/facture/card.php?id=' . urlencode((string) ($lastid)) . '">' . $lastref . '</a>', $texttoshow);
+                $texttoshow = str_replace('{s1}', '<a href="' . constant('BASE_URL') . '/fourn/facture/card.php?id=' . urlencode((string)($lastid)) . '">' . $lastref . '</a>', $texttoshow);
                 setEventMessages($texttoshow, null, 'mesgs');
             } else {
                 setEventMessages($langs->trans('BillCreated', $nb_bills_created), null, 'mesgs');
@@ -613,88 +613,88 @@ if (empty($reshook)) {
                 $param .= '&contextpage=' . urlencode($contextpage);
             }
             if ($limit > 0 && $limit != $conf->liste_limit) {
-                $param .= '&limit=' . ((int) $limit);
+                $param .= '&limit=' . ((int)$limit);
             }
             if ($search_all) {
                 $param .= '&search_all=' . urlencode($search_all);
             }
             if ($socid > 0) {
-                $param .= '&socid=' . urlencode((string) ($socid));
+                $param .= '&socid=' . urlencode((string)($socid));
             }
             if ($search_status != '') {
                 $param .= '&search_status=' . urlencode($search_status);
             }
             if ($search_date_order_startday) {
-                $param .= '&search_date_order_startday=' . urlencode((string) ($search_date_order_startday));
+                $param .= '&search_date_order_startday=' . urlencode((string)($search_date_order_startday));
             }
             if ($search_date_order_startmonth) {
-                $param .= '&search_date_order_startmonth=' . urlencode((string) ($search_date_order_startmonth));
+                $param .= '&search_date_order_startmonth=' . urlencode((string)($search_date_order_startmonth));
             }
             if ($search_date_order_startyear) {
-                $param .= '&search_date_order_startyear=' . urlencode((string) ($search_date_order_startyear));
+                $param .= '&search_date_order_startyear=' . urlencode((string)($search_date_order_startyear));
             }
             if ($search_date_order_endday) {
-                $param .= '&search_date_order_endday=' . urlencode((string) ($search_date_order_endday));
+                $param .= '&search_date_order_endday=' . urlencode((string)($search_date_order_endday));
             }
             if ($search_date_order_endmonth) {
-                $param .= '&search_date_order_endmonth=' . urlencode((string) ($search_date_order_endmonth));
+                $param .= '&search_date_order_endmonth=' . urlencode((string)($search_date_order_endmonth));
             }
             if ($search_date_order_endyear) {
-                $param .= '&search_date_order_endyear=' . urlencode((string) ($search_date_order_endyear));
+                $param .= '&search_date_order_endyear=' . urlencode((string)($search_date_order_endyear));
             }
             if ($search_date_delivery_startday) {
-                $param .= '&search_date_delivery_startday=' . urlencode((string) ($search_date_delivery_startday));
+                $param .= '&search_date_delivery_startday=' . urlencode((string)($search_date_delivery_startday));
             }
             if ($search_date_delivery_startmonth) {
-                $param .= '&search_date_delivery_startmonth=' . urlencode((string) ($search_date_delivery_startmonth));
+                $param .= '&search_date_delivery_startmonth=' . urlencode((string)($search_date_delivery_startmonth));
             }
             if ($search_date_delivery_startyear) {
-                $param .= '&search_date_delivery_startyear=' . urlencode((string) ($search_date_delivery_startyear));
+                $param .= '&search_date_delivery_startyear=' . urlencode((string)($search_date_delivery_startyear));
             }
             if ($search_date_delivery_endday) {
-                $param .= '&search_date_delivery_endday=' . urlencode((string) ($search_date_delivery_endday));
+                $param .= '&search_date_delivery_endday=' . urlencode((string)($search_date_delivery_endday));
             }
             if ($search_date_delivery_endmonth) {
-                $param .= '&search_date_delivery_endmonth=' . urlencode((string) ($search_date_delivery_endmonth));
+                $param .= '&search_date_delivery_endmonth=' . urlencode((string)($search_date_delivery_endmonth));
             }
             if ($search_date_delivery_endyear) {
-                $param .= '&search_date_delivery_endyear=' . urlencode((string) ($search_date_delivery_endyear));
+                $param .= '&search_date_delivery_endyear=' . urlencode((string)($search_date_delivery_endyear));
             }
             if ($search_date_valid_startday) {
-                $param .= '&search_date_valid_startday=' . urlencode((string) ($search_date_valid_startday));
+                $param .= '&search_date_valid_startday=' . urlencode((string)($search_date_valid_startday));
             }
             if ($search_date_valid_startmonth) {
-                $param .= '&search_date_valid_startmonth=' . urlencode((string) ($search_date_valid_startmonth));
+                $param .= '&search_date_valid_startmonth=' . urlencode((string)($search_date_valid_startmonth));
             }
             if ($search_date_valid_startyear) {
-                $param .= '&search_date_valid_startyear=' . urlencode((string) ($search_date_valid_startyear));
+                $param .= '&search_date_valid_startyear=' . urlencode((string)($search_date_valid_startyear));
             }
             if ($search_date_valid_endday) {
-                $param .= '&search_date_valid_endday=' . urlencode((string) ($search_date_valid_endday));
+                $param .= '&search_date_valid_endday=' . urlencode((string)($search_date_valid_endday));
             }
             if ($search_date_valid_endmonth) {
-                $param .= '&search_date_valid_endmonth=' . urlencode((string) ($search_date_valid_endmonth));
+                $param .= '&search_date_valid_endmonth=' . urlencode((string)($search_date_valid_endmonth));
             }
             if ($search_date_valid_endyear) {
-                $param .= '&search_date_valid_endyear=' . urlencode((string) ($search_date_valid_endyear));
+                $param .= '&search_date_valid_endyear=' . urlencode((string)($search_date_valid_endyear));
             }
             if ($search_date_approve_startday) {
-                $param .= '&search_date_approve_startday=' . urlencode((string) ($search_date_approve_startday));
+                $param .= '&search_date_approve_startday=' . urlencode((string)($search_date_approve_startday));
             }
             if ($search_date_approve_startmonth) {
-                $param .= '&search_date_approve_startmonth=' . urlencode((string) ($search_date_approve_startmonth));
+                $param .= '&search_date_approve_startmonth=' . urlencode((string)($search_date_approve_startmonth));
             }
             if ($search_date_approve_startyear) {
-                $param .= '&search_date_approve_startyear=' . urlencode((string) ($search_date_approve_startyear));
+                $param .= '&search_date_approve_startyear=' . urlencode((string)($search_date_approve_startyear));
             }
             if ($search_date_approve_endday) {
-                $param .= '&search_date_approve_endday=' . urlencode((string) ($search_date_approve_endday));
+                $param .= '&search_date_approve_endday=' . urlencode((string)($search_date_approve_endday));
             }
             if ($search_date_approve_endmonth) {
-                $param .= '&search_date_approve_endmonth=' . urlencode((string) ($search_date_approve_endmonth));
+                $param .= '&search_date_approve_endmonth=' . urlencode((string)($search_date_approve_endmonth));
             }
             if ($search_date_approve_endyear) {
-                $param .= '&search_date_approve_endyear=' . urlencode((string) ($search_date_approve_endyear));
+                $param .= '&search_date_approve_endyear=' . urlencode((string)($search_date_approve_endyear));
             }
             if ($search_ref) {
                 $param .= '&search_ref=' . urlencode($search_ref);
@@ -707,7 +707,7 @@ if (empty($reshook)) {
             }
             //if ($search_ref_customer) $param .= '&search_ref_customer='.urlencode($search_ref_customer);
             if ($search_user > 0) {
-                $param .= '&search_user=' . urlencode((string) ($search_user));
+                $param .= '&search_user=' . urlencode((string)($search_user));
             }
             if ($search_sale > 0) {
                 $param .= '&search_sale=' . urlencode($search_sale);
@@ -725,7 +725,7 @@ if (empty($reshook)) {
                 $param .= "&search_project_ref=" . urlencode($search_project_ref);
             }
             if ($show_files) {
-                $param .= '&show_files=' . urlencode((string) ($show_files));
+                $param .= '&show_files=' . urlencode((string)($show_files));
             }
             if ($optioncss != '') {
                 $param .= '&optioncss=' . urlencode($optioncss);
@@ -833,7 +833,7 @@ $sql .= $hookmanager->resPrint;
 $sql .= ' WHERE cf.fk_soc = s.rowid';
 $sql .= ' AND cf.entity IN (' . getEntity('supplier_order') . ')';
 if ($socid > 0) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 if ($search_ref) {
     $sql .= natural_search('cf.ref', $search_ref);
@@ -858,7 +858,7 @@ if ($search_request_author) {
     $sql .= natural_search(array('u.lastname', 'u.firstname', 'u.login'), $search_request_author);
 }
 if ($search_billed != '' && $search_billed >= 0) {
-    $sql .= " AND cf.billed = " . ((int) $search_billed);
+    $sql .= " AND cf.billed = " . ((int)$search_billed);
 }
 //Required triple check because statut=0 means draft filter
 if (GETPOST('statut', 'intcomma') !== '') {
@@ -914,7 +914,7 @@ if ($search_user > 0) {
     $sql .= " SELECT ec.rowid ";
     $sql .= " FROM " . MAIN_DB_PREFIX . "element_contact as ec";
     $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "c_type_contact as tc ON tc.rowid = ec.fk_c_type_contact";
-    $sql .= " WHERE ec.element_id = cf.rowid AND ec.fk_socpeople = " . ((int) $search_user);
+    $sql .= " WHERE ec.element_id = cf.rowid AND ec.fk_socpeople = " . ((int)$search_user);
     $sql .= " AND tc.element = 'order_supplier' AND tc.source = 'internal'";
     $sql .= ")";
 }
@@ -950,7 +950,7 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = cf.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = cf.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = cf.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search for tag/category ($searchCategoryProductList is an array of ID)
@@ -964,9 +964,9 @@ if (!empty($searchCategoryProductList)) {
             $searchCategoryProductSqlList[] = "NOT EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "commande_fournisseurdet as cd WHERE cd.fk_commande = cf.rowid AND cd.fk_product = ck.fk_product)";
         } elseif (intval($searchCategoryProduct) > 0) {
             if ($searchCategoryProductOperator == 0) {
-                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "commande_fournisseurdet as cd WHERE cd.fk_commande = cf.rowid AND cd.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int) $searchCategoryProduct) . ")";
+                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "commande_fournisseurdet as cd WHERE cd.fk_commande = cf.rowid AND cd.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int)$searchCategoryProduct) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryProduct);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryProduct);
             }
         }
     }
@@ -1040,88 +1040,88 @@ if ($resql) {
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($search_all) {
         $param .= '&search_all=' . urlencode($search_all);
     }
     if ($socid > 0) {
-        $param .= '&socid=' . urlencode((string) ($socid));
+        $param .= '&socid=' . urlencode((string)($socid));
     }
     if ($search_all) {
         $param .= "&search_all=" . urlencode($search_all);
     }
     if ($search_date_order_startday) {
-        $param .= '&search_date_order_startday=' . urlencode((string) ($search_date_order_startday));
+        $param .= '&search_date_order_startday=' . urlencode((string)($search_date_order_startday));
     }
     if ($search_date_order_startmonth) {
-        $param .= '&search_date_order_startmonth=' . urlencode((string) ($search_date_order_startmonth));
+        $param .= '&search_date_order_startmonth=' . urlencode((string)($search_date_order_startmonth));
     }
     if ($search_date_order_startyear) {
-        $param .= '&search_date_order_startyear=' . urlencode((string) ($search_date_order_startyear));
+        $param .= '&search_date_order_startyear=' . urlencode((string)($search_date_order_startyear));
     }
     if ($search_date_order_endday) {
-        $param .= '&search_date_order_endday=' . urlencode((string) ($search_date_order_endday));
+        $param .= '&search_date_order_endday=' . urlencode((string)($search_date_order_endday));
     }
     if ($search_date_order_endmonth) {
-        $param .= '&search_date_order_endmonth=' . urlencode((string) ($search_date_order_endmonth));
+        $param .= '&search_date_order_endmonth=' . urlencode((string)($search_date_order_endmonth));
     }
     if ($search_date_order_endyear) {
-        $param .= '&search_date_order_endyear=' . urlencode((string) ($search_date_order_endyear));
+        $param .= '&search_date_order_endyear=' . urlencode((string)($search_date_order_endyear));
     }
     if ($search_date_delivery_startday) {
-        $param .= '&search_date_delivery_startday=' . urlencode((string) ($search_date_delivery_startday));
+        $param .= '&search_date_delivery_startday=' . urlencode((string)($search_date_delivery_startday));
     }
     if ($search_date_delivery_startmonth) {
-        $param .= '&search_date_delivery_startmonth=' . urlencode((string) ($search_date_delivery_startmonth));
+        $param .= '&search_date_delivery_startmonth=' . urlencode((string)($search_date_delivery_startmonth));
     }
     if ($search_date_delivery_startyear) {
-        $param .= '&search_date_delivery_startyear=' . urlencode((string) ($search_date_delivery_startyear));
+        $param .= '&search_date_delivery_startyear=' . urlencode((string)($search_date_delivery_startyear));
     }
     if ($search_date_delivery_endday) {
-        $param .= '&search_date_delivery_endday=' . urlencode((string) ($search_date_delivery_endday));
+        $param .= '&search_date_delivery_endday=' . urlencode((string)($search_date_delivery_endday));
     }
     if ($search_date_delivery_endmonth) {
-        $param .= '&search_date_delivery_endmonth=' . urlencode((string) ($search_date_delivery_endmonth));
+        $param .= '&search_date_delivery_endmonth=' . urlencode((string)($search_date_delivery_endmonth));
     }
     if ($search_date_delivery_endyear) {
-        $param .= '&search_date_delivery_endyear=' . urlencode((string) ($search_date_delivery_endyear));
+        $param .= '&search_date_delivery_endyear=' . urlencode((string)($search_date_delivery_endyear));
     }
     if ($search_date_valid_startday) {
-        $param .= '&search_date_valid_startday=' . urlencode((string) ($search_date_valid_startday));
+        $param .= '&search_date_valid_startday=' . urlencode((string)($search_date_valid_startday));
     }
     if ($search_date_valid_startmonth) {
-        $param .= '&search_date_valid_startmonth=' . urlencode((string) ($search_date_valid_startmonth));
+        $param .= '&search_date_valid_startmonth=' . urlencode((string)($search_date_valid_startmonth));
     }
     if ($search_date_valid_startyear) {
-        $param .= '&search_date_valid_startyear=' . urlencode((string) ($search_date_valid_startyear));
+        $param .= '&search_date_valid_startyear=' . urlencode((string)($search_date_valid_startyear));
     }
     if ($search_date_valid_endday) {
-        $param .= '&search_date_valid_endday=' . urlencode((string) ($search_date_valid_endday));
+        $param .= '&search_date_valid_endday=' . urlencode((string)($search_date_valid_endday));
     }
     if ($search_date_valid_endmonth) {
-        $param .= '&search_date_valid_endmonth=' . urlencode((string) ($search_date_valid_endmonth));
+        $param .= '&search_date_valid_endmonth=' . urlencode((string)($search_date_valid_endmonth));
     }
     if ($search_date_valid_endyear) {
-        $param .= '&search_date_valid_endyear=' . urlencode((string) ($search_date_valid_endyear));
+        $param .= '&search_date_valid_endyear=' . urlencode((string)($search_date_valid_endyear));
     }
     if ($search_date_approve_startday) {
-        $param .= '&search_date_approve_startday=' . urlencode((string) ($search_date_approve_startday));
+        $param .= '&search_date_approve_startday=' . urlencode((string)($search_date_approve_startday));
     }
     if ($search_date_approve_startmonth) {
-        $param .= '&search_date_approve_startmonth=' . urlencode((string) ($search_date_approve_startmonth));
+        $param .= '&search_date_approve_startmonth=' . urlencode((string)($search_date_approve_startmonth));
     }
     if ($search_date_approve_startyear) {
-        $param .= '&search_date_approve_startyear=' . urlencode((string) ($search_date_approve_startyear));
+        $param .= '&search_date_approve_startyear=' . urlencode((string)($search_date_approve_startyear));
     }
     if ($search_date_approve_endday) {
-        $param .= '&search_date_approve_endday=' . urlencode((string) ($search_date_approve_endday));
+        $param .= '&search_date_approve_endday=' . urlencode((string)($search_date_approve_endday));
     }
     if ($search_date_approve_endmonth) {
-        $param .= '&search_date_approve_endmonth=' . urlencode((string) ($search_date_approve_endmonth));
+        $param .= '&search_date_approve_endmonth=' . urlencode((string)($search_date_approve_endmonth));
     }
     if ($search_date_approve_endyear) {
-        $param .= '&search_date_approve_endyear=' . urlencode((string) ($search_date_approve_endyear));
+        $param .= '&search_date_approve_endyear=' . urlencode((string)($search_date_approve_endyear));
     }
     if ($search_ref) {
         $param .= '&search_ref=' . urlencode($search_ref);
@@ -1133,7 +1133,7 @@ if ($resql) {
         $param .= '&search_company_alias=' . urlencode($search_company_alias);
     }
     if ($search_user > 0) {
-        $param .= '&search_user=' . urlencode((string) ($search_user));
+        $param .= '&search_user=' . urlencode((string)($search_user));
     }
     if ($search_request_author) {
         $param .= '&search_request_author=' . urlencode($search_request_author);
@@ -1175,13 +1175,13 @@ if ($resql) {
         $param .= "&search_billed=" . urlencode($search_billed);
     }
     if ($show_files) {
-        $param .= '&show_files=' . urlencode((string) ($show_files));
+        $param .= '&show_files=' . urlencode((string)($show_files));
     }
     if ($optioncss != '') {
         $param .= '&optioncss=' . urlencode($optioncss);
     }
     if ($search_type_thirdparty != '' && $search_type_thirdparty > 0) {
-        $param .= '&search_type_thirdparty=' . urlencode((string) ($search_type_thirdparty));
+        $param .= '&search_type_thirdparty=' . urlencode((string)($search_type_thirdparty));
     }
 
     // Add $param from extra fields
@@ -1219,8 +1219,8 @@ if ($resql) {
 
     $url = constant('BASE_URL') . '/fourn/commande/card.php?action=create';
     if ($socid > 0) {
-        $url .= '&socid=' . ((int) $socid);
-        $url .= '&backtopage=' . urlencode(constant('BASE_URL') . '/fourn/commande/list.php?socid=' . ((int) $socid));
+        $url .= '&socid=' . ((int)$socid);
+        $url .= '&backtopage=' . urlencode(constant('BASE_URL') . '/fourn/commande/list.php?socid=' . ((int)$socid));
     }
     $newcardbutton = '';
     $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));

@@ -53,7 +53,7 @@ $search_supervisor = GETPOST('search_supervisor', "intcomma");
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
 $sortfield = GETPOST('sortfield', 'aZ09comma');
 $sortorder = GETPOST('sortorder', 'aZ09comma');
-$toselect   = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
+$toselect = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
 $confirm = GETPOST('confirm', 'alpha');
 
 $page = GETPOSTISSET('pageplusone') ? (GETPOSTINT('pageplusone') - 1) : GETPOSTINT("page");
@@ -152,7 +152,7 @@ if (empty($reshook)) {
             $userValue = GETPOST('nb_holiday_' . $val['rowid']);
             $userValue = $userValue[$userID];
 
-            if (!empty($userValue) || (string) $userValue == '0') {
+            if (!empty($userValue) || (string)$userValue == '0') {
                 $userValue = price2num($userValue, 5);
             } else {
                 $userValue = '';
@@ -267,12 +267,12 @@ if ($massaction == 'preincreaseholiday') {
     foreach ($typeleaves as $key => $val) {
         $labeltypes[$val['id']] = ($langs->trans($val['code']) != $val['code']) ? $langs->trans($val['code']) : $langs->trans($val['label']);
     }
-    $formquestion [] = array( 'type' => 'other',
+    $formquestion [] = array('type' => 'other',
         'name' => 'typeofholiday',
         'label' => $langs->trans("Type"),
         'value' => $form->selectarray('typeholiday', $labeltypes, GETPOST('typeholiday', 'alpha'), 1)
     );
-    $formquestion [] = array( 'type' => 'other',
+    $formquestion [] = array('type' => 'other',
         'name' => 'nbdaysholydays',
         'label' => $langs->trans("NumberDayAddMass"),
         'value' => '<input name="nbdaysholidays" class="maxwidth75" id="nbdaysholidays" value="' . GETPOSTINT('nbdaysholidays') . '">'
@@ -313,7 +313,6 @@ if (is_numeric($listUsers) && $listUsers < 0) {
 }
 
 $i = 0;
-
 
 
 if (count($typeleaves) == 0) {

@@ -30,7 +30,7 @@ trait PHPUnitAssertions
      *
      * @param resource|string|Component $expected
      * @param resource|string|Component $actual
-     * @param string                    $message
+     * @param string $message
      */
     public function assertVObjectEqualsVObject($expected, $actual, $message = '')
     {
@@ -45,7 +45,7 @@ trait PHPUnitAssertions
                 $this->fail('Input must be a string, stream or VObject component');
             }
             unset($input->PRODID);
-            if ($input instanceof Component\VCalendar && 'GREGORIAN' === (string) $input->CALSCALE) {
+            if ($input instanceof Component\VCalendar && 'GREGORIAN' === (string)$input->CALSCALE) {
                 unset($input->CALSCALE);
             }
 

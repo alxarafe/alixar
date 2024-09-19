@@ -88,10 +88,10 @@ class BankAccount extends ApiResource
     public static function retrieve($_id, $_opts = null)
     {
         $msg = 'Bank accounts cannot be retrieved without a customer ID or ' .
-               'an account ID. Retrieve a bank account using ' .
-               "`Customer::retrieveSource('customer_id', " .
-               "'bank_account_id')` or `Account::retrieveExternalAccount(" .
-               "'account_id', 'bank_account_id')`.";
+            'an account ID. Retrieve a bank account using ' .
+            "`Customer::retrieveSource('customer_id', " .
+            "'bank_account_id')` or `Account::retrieveExternalAccount(" .
+            "'account_id', 'bank_account_id')`.";
 
         throw new Exception\BadMethodCallException($msg);
     }
@@ -106,10 +106,10 @@ class BankAccount extends ApiResource
     public static function update($_id, $_params = null, $_options = null)
     {
         $msg = 'Bank accounts cannot be updated without a customer ID or an ' .
-               'account ID. Update a bank account using ' .
-               "`Customer::updateSource('customer_id', 'bank_account_id', " .
-               '$updateParams)` or `Account::updateExternalAccount(' .
-               "'account_id', 'bank_account_id', \$updateParams)`.";
+            'account ID. Update a bank account using ' .
+            "`Customer::updateSource('customer_id', 'bank_account_id', " .
+            '$updateParams)` or `Account::updateExternalAccount(' .
+            "'account_id', 'bank_account_id', \$updateParams)`.";
 
         throw new Exception\BadMethodCallException($msg);
     }
@@ -118,9 +118,9 @@ class BankAccount extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return BankAccount the verified bank account
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return BankAccount the verified bank account
      */
     public function verify($params = null, $opts = null)
     {

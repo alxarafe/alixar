@@ -51,8 +51,8 @@ if (!defined('NOREQUIREAJAX')) {
 /**
  * Empty header
  *
- * @ignore
  * @return  void
+ * @ignore
  */
 function llxHeader()
 {
@@ -65,8 +65,8 @@ function llxHeader()
 /**
  * Empty footer
  *
- * @ignore
  * @return  void
+ * @ignore
  */
 function llxFooter()
 {
@@ -189,7 +189,7 @@ if (!empty($number)) {
         $errno = 0;
         $errstr = 0;
         $strCallerId = "Dolibarr caller $found <" . strtolower($number) . ">";
-        $oSocket = @fsockopen($strHost, (int) $port, $errno, $errstr, 10);
+        $oSocket = @fsockopen($strHost, (int)$port, $errno, $errstr, 10);
         if (!$oSocket) {
             print '<body>' . "\n";
             $txt = "Failed to execute fsockopen($strHost, $port, \$errno, \$errstr, 10)<br>\n";

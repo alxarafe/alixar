@@ -152,11 +152,11 @@ if (isModEnabled('invoice') && $user->hasRight('facture', 'lire')) {
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_country as cc ON cc.rowid = s.fk_pays";
     $sql .= " WHERE f.entity IN (" . getEntity('invoice') . ")";
     if ($socid > 0) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     // Filter on sale representative
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc AND sc.fk_user = " . ((int) $user->id) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc AND sc.fk_user = " . ((int)$user->id) . ")";
     }
     // Add where from hooks
     $parameters = array();
@@ -300,11 +300,11 @@ if ((isModEnabled('fournisseur') && !getDolGlobalString('MAIN_USE_NEW_SUPPLIERMO
     $sql .= " WHERE s.rowid = ff.fk_soc";
     $sql .= " AND ff.entity IN (" . getEntity('facture_fourn') . ")";
     if ($socid > 0) {
-        $sql .= " AND ff.fk_soc = " . ((int) $socid);
+        $sql .= " AND ff.fk_soc = " . ((int)$socid);
     }
     // Filter on sale representative
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = ff.fk_soc AND sc.fk_user = " . ((int) $user->id) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = ff.fk_soc AND sc.fk_user = " . ((int)$user->id) . ")";
     }
     // Add where from hooks
     $parameters = array();
@@ -409,7 +409,6 @@ if ((isModEnabled('fournisseur') && !getDolGlobalString('MAIN_USE_NEW_SUPPLIERMO
         dol_print_error($db);
     }
 }
-
 
 
 // Latest donations
@@ -616,13 +615,13 @@ if (isModEnabled('invoice') && isModEnabled('order') && $user->hasRight("command
     $sql .= " WHERE c.fk_soc = s.rowid";
     $sql .= " AND c.entity IN (" . getEntity('commande') . ")";
     if ($socid) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
-    $sql .= " AND c.fk_statut = " . ((int) Commande::STATUS_CLOSED);
+    $sql .= " AND c.fk_statut = " . ((int)Commande::STATUS_CLOSED);
     $sql .= " AND c.facture = 0";
     // Filter on sale representative
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int) $user->id) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int)$user->id) . ")";
     }
 
     // Add where from hooks

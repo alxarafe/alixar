@@ -1376,7 +1376,6 @@ if ($object->id > 0 || !empty($object->ref)) {
 		';
             print '</script>';
         }
-        include DOL_DOCUMENT_ROOT . '/core/class/html.formother.class.php';
         $formother = new FormOther($db);
         print $formother->getHTMLScannerForm("barcodescannerjs", 'all', 1);
     }

@@ -196,7 +196,7 @@ if ($id > 0 || $ref) {
 
     $sql = "SELECT sum(pl.amount), pl.statut";
     $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_lignes as pl";
-    $sql .= " WHERE pl.fk_prelevement_bons = " . ((int) $object->id);
+    $sql .= " WHERE pl.fk_prelevement_bons = " . ((int)$object->id);
     $sql .= " GROUP BY pl.statut";
 
     $resql = $db->query($sql);

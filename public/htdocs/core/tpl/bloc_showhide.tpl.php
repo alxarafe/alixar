@@ -54,7 +54,7 @@ print '		$("#hide-' . $blocname . '").show();' . "\n";
 print '});' . "\n";
 
 print 'function setShowHide(status) {' . "\n";
-print '		var id			= ' . ((int) $object->id) . ";\n";
+print '		var id			= ' . ((int)$object->id) . ";\n";
 print "		var element		= '" . dol_escape_js($object->element) . "';\n";
 print "		var htmlelement	= '" . dol_escape_js($blocname) . "';\n";
 print '		var type		= "showhide";' . "\n";

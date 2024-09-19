@@ -21,11 +21,11 @@
 
 create table llx_product_stock
 (
-  rowid           integer AUTO_INCREMENT PRIMARY KEY,
-  tms             timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  fk_product      integer NOT NULL,
-  fk_entrepot     integer NOT NULL,
-  reel            real,           			-- physical stock
-  import_key      varchar(14)               -- Import key
+    rowid       integer AUTO_INCREMENT PRIMARY KEY,
+    tms         timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_product  integer NOT NULL,
+    fk_entrepot integer NOT NULL,
+    reel        real,       -- physical stock
+    import_key  varchar(14) -- Import key
 )ENGINE=innodb;
 

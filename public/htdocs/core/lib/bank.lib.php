@@ -39,7 +39,7 @@ use Dolibarr\Core\Base\CommonObject;
 /**
  * Prepare array with list of tabs
  *
- * @param   Account $object     Object related to tabs
+ * @param Account $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function bank_prepare_head(Account $object)
@@ -82,7 +82,7 @@ function bank_prepare_head(Account $object)
         // List of all standing receipts
         $sql = "SELECT COUNT(DISTINCT(b.num_releve)) as nb";
         $sql .= " FROM " . MAIN_DB_PREFIX . "bank as b";
-        $sql .= " WHERE b.fk_account = " . ((int) $object->id);
+        $sql .= " WHERE b.fk_account = " . ((int)$object->id);
 
         $resql = $db->query($sql);
         if ($resql) {
@@ -93,7 +93,7 @@ function bank_prepare_head(Account $object)
             $db->free($resql);
         }
 
-        $head[$h][0] = constant('BASE_URL') . "/compta/bank/releve.php?account=" . ((int) $object->id);
+        $head[$h][0] = constant('BASE_URL') . "/compta/bank/releve.php?account=" . ((int)$object->id);
         $head[$h][1] = $langs->trans("AccountStatements");
         if (($nbReceipts) > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . ($nbReceipts) . '</span>';
@@ -130,10 +130,11 @@ function bank_prepare_head(Account $object)
 
     return $head;
 }
+
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to shoc
  */
 function bank_admin_prepare_head($object)
@@ -194,8 +195,8 @@ function bank_admin_prepare_head($object)
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
- * @param   string  $num        val to account statement
+ * @param Object $object Object related to tabs
+ * @param string $num val to account statement
  * @return  array               Array of tabs to shoc
  */
 function account_statement_prepare_head($object, $num)
@@ -234,7 +235,7 @@ function account_statement_prepare_head($object, $num)
 /**
  * Prepare array with list of tabs
  *
- * @param   CommonObject    $object     Object related to tabs
+ * @param CommonObject $object Object related to tabs
  * @return  array                       Array of tabs to shoc
  */
 function various_payment_prepare_head($object)
@@ -280,9 +281,9 @@ function various_payment_prepare_head($object)
 /**
  *      Check SWIFT information for a bank account
  *
- *      @param  ?Account    $account    A bank account (used to get BIC/SWIFT)
- *      @param  ?string     $swift      Swift value (used to get BIC/SWIFT, param $account non used if provided)
- *      @return boolean                 True if information are valid, false otherwise
+ * @param  ?Account $account A bank account (used to get BIC/SWIFT)
+ * @param  ?string $swift Swift value (used to get BIC/SWIFT, param $account non used if provided)
+ * @return boolean                 True if information are valid, false otherwise
  */
 function checkSwiftForAccount(Account $account = null, $swift = null)
 {
@@ -301,9 +302,9 @@ function checkSwiftForAccount(Account $account = null, $swift = null)
 /**
  *      Check IBAN number information for a bank account.
  *
- *      @param  ?Account    $account        A bank account
- *      @param  ?string     $ibantocheck    Bank account number (used to get BAN, $account not used if provided)
- *      @return boolean                     True if information are valid, false otherwise
+ * @param  ?Account $account A bank account
+ * @param  ?string $ibantocheck Bank account number (used to get BAN, $account not used if provided)
+ * @return boolean                     True if information are valid, false otherwise
  */
 function checkIbanForAccount(Account $account = null, $ibantocheck = null)
 {
@@ -345,8 +346,8 @@ function getIbanHumanReadable(Account $account)
 /**
  *      Check account number information for a bank account
  *
- *      @param  Account     $account    A bank account
- *      @return boolean                 True if information are valid, false otherwise
+ * @param Account $account A bank account
+ * @return boolean                 True if information are valid, false otherwise
  */
 function checkBanForAccount($account)
 {
@@ -376,7 +377,7 @@ function checkBanForAccount($account)
 
         for ($i = 0, $s = 0; $i < 3; $i++) {
             $code = substr($rib, 7 * $i, 7);
-            $s += ((int) $code) * $coef[$i];
+            $s += ((int)$code) * $coef[$i];
         }
         // Soustraction du modulo 97 de $s a 97 pour obtenir la cle
         $cle_rib = 97 - ($s % 97);
@@ -419,13 +420,12 @@ function checkBanForAccount($account)
 }
 
 
-
 /**
  *  Returns the key for Spanish Banks Accounts
  *
- *  @param  string  $IentOfi    IentOfi
- *  @param  string  $InumCta    InumCta
- *  @return string              Key
+ * @param string $IentOfi IentOfi
+ * @param string $InumCta InumCta
+ * @return string              Key
  */
 function checkES($IentOfi, $InumCta)
 {
@@ -451,7 +451,7 @@ function checkES($IentOfi, $InumCta)
     $sum = 0;
 
     for ($i = 2; $i < 10; $i++) {
-        $sum += $values[$i] * (int) substr($IentOfi, $i - 2, 1);
+        $sum += $values[$i] * (int)substr($IentOfi, $i - 2, 1);
     }
 
     $key = 11 - $sum % 11;
@@ -468,7 +468,7 @@ function checkES($IentOfi, $InumCta)
     $sum = 0;
 
     for ($i = 0; $i < 11; $i++) {
-        $sum += $values[$i] * (int) substr($InumCta, $i, 1); //int to cast result of substr to a number
+        $sum += $values[$i] * (int)substr($InumCta, $i, 1); //int to cast result of substr to a number
     }
 
     $key = 11 - $sum % 11;

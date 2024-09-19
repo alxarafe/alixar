@@ -1,18 +1,18 @@
 <?php
 
-/* Copyright (C) 2001-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2021 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010-2012 Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2012      Christophe Battarel  <christophe.battarel@altairis.fr>
- * Copyright (C) 2014      Ion Agorria          <ion@agorria.com>
- * Copyright (C) 2015      Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2016      Ferran Marcet		<fmarcet@2byte.es>
- * Copyright (C) 2019      Frédéric France      <frederic.france@netlogic.fr>
- * Copyright (C) 2019      Tim Otte			    <otte@meuser.it>
- * Copyright (C) 2020      Pierre Ardoin        <mapiolca@me.com>
- * Copyright (C) 2023	   Joachim Kueter		<git-jk@bloxera.com>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2021  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2012  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2014       Ion Agorria                 <ion@agorria.com>
+ * Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2016       Ferran Marcet		        <fmarcet@2byte.es>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2019       Tim Otte			        <otte@meuser.it>
+ * Copyright (C) 2020       Pierre Ardoin               <mapiolca@me.com>
+ * Copyright (C) 2023	    Joachim Kueter		        <git-jk@bloxera.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,7 +29,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormBarCode;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\PriceExpression;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *  \file       htdocs/product/price_suppliers.php
@@ -41,8 +48,6 @@ use Dolibarr\Code\Comm\Classes\Propal;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_expression.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
 if (isModEnabled('barcode')) {
     dol_include_once('/core/class/html.formbarcode.class.php');
 }
@@ -159,7 +164,7 @@ if (empty($reshook)) {
         if ($id) {
             $result = $object->fetch($id);
             $object->pmp = $pmp;
-            $sql = "UPDATE " . MAIN_DB_PREFIX . "product SET pmp = " . ((float) $object->pmp) . " WHERE rowid = " . ((int) $id);
+            $sql = "UPDATE " . MAIN_DB_PREFIX . "product SET pmp = " . ((float)$object->pmp) . " WHERE rowid = " . ((int)$id);
             $resql = $db->query($sql);
             //$result = $object->update($object->id, $user);
             if ($resql) {
@@ -177,7 +182,7 @@ if (empty($reshook)) {
             $action = '';
             $result = $object->remove_product_fournisseur_price($rowid);
             if ($result > 0) {
-                $db->query("DELETE FROM " . MAIN_DB_PREFIX . "product_fournisseur_price_extrafields WHERE fk_object = " . ((int) $rowid));
+                $db->query("DELETE FROM " . MAIN_DB_PREFIX . "product_fournisseur_price_extrafields WHERE fk_object = " . ((int)$rowid));
                 setEventMessages($langs->trans("PriceRemoved"), null, 'mesgs');
             } else {
                 $error++;
@@ -356,7 +361,6 @@ if (empty($reshook)) {
     }
 }
 
-
 /*
  * view
  */
@@ -393,7 +397,7 @@ if ($id > 0 || $ref) {
             print dol_get_fiche_head($head, 'suppliers', $titre, -1, $picto);
 
             $linkback = '<a href="' . constant('BASE_URL') . '/product/list.php?restore_lastsearch_values=1&type=' . $object->type . '">' . $langs->trans("BackToList") . '</a>';
-            $object->next_prev_filter = "fk_product_type = " . ((int) $object->type);
+            $object->next_prev_filter = "fk_product_type = " . ((int)$object->type);
 
             $shownav = 1;
             if ($user->socid && !in_array('product', explode(',', getDolGlobalString('MAIN_MODULES_FOR_EXTERNAL')))) {
@@ -513,7 +517,7 @@ if ($id > 0 || $ref) {
                     $reshook = $hookmanager->executeHooks('formCreateThirdpartyOptions', $parameters, $object, $action);
                     if (empty($reshook)) {
                         if (empty($form->result)) {
-                            print '<a href="' . constant('BASE_URL') . '/societe/card.php?action=create&type=f&backtopage=' . $_SERVER["PHP_SELF"] . ('?id=' . ((int) $object->id) . '&action=' . urlencode($action) . ($action == 'create_price' ? '&token=' . newToken() : '')) . '">';
+                            print '<a href="' . constant('BASE_URL') . '/societe/card.php?action=create&type=f&backtopage=' . $_SERVER["PHP_SELF"] . ('?id=' . ((int)$object->id) . '&action=' . urlencode($action) . ($action == 'create_price' ? '&token=' . newToken() : '')) . '">';
                             print img_picto($langs->trans("CreateDolibarrThirdPartySupplier"), 'add', 'class="marginleftonly"');
                             print '</a>';
                         }
@@ -712,13 +716,13 @@ if ($id > 0 || $ref) {
                     print '</td></tr>';
 
                     $currencies = array();
-                    $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "multicurrency WHERE entity = " . ((int) $conf->entity);
+                    $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "multicurrency WHERE entity = " . ((int)$conf->entity);
                     $resql = $db->query($sql);
                     if ($resql) {
                         $currency = new MultiCurrency($db);
                         while ($obj = $db->fetch_object($resql)) {
                             $currency->fetch($obj->rowid);
-                            $currencies[$currency->code] = ((float) $currency->rate->rate);
+                            $currencies[$currency->code] = ((float)$currency->rate->rate);
                         }
                     }
                     $currencies = json_encode($currencies);
@@ -817,7 +821,7 @@ if ($id > 0 || $ref) {
                 // Product description of the supplier
                 if (getDolGlobalString('PRODUIT_FOURN_TEXTS')) {
                     //WYSIWYG Editor
-                
+
                     print '<tr>';
                     print '<td>' . $langs->trans('ProductSupplierDescription') . '</td>';
                     print '<td>';
@@ -851,13 +855,13 @@ if ($id > 0 || $ref) {
                             }
                         }
                     } else {
-                        $sql  = "SELECT";
+                        $sql = "SELECT";
                         $sql .= " fk_object";
                         foreach ($extralabels as $key => $value) {
                             $sql .= ", " . $key;
                         }
                         $sql .= " FROM " . MAIN_DB_PREFIX . "product_fournisseur_price_extrafields";
-                        $sql .= " WHERE fk_object = " . ((int) $rowid);
+                        $sql .= " WHERE fk_object = " . ((int)$rowid);
                         $resql = $db->query($sql);
                         if ($resql) {
                             $obj = $db->fetch_object($resql);
@@ -912,7 +916,7 @@ if ($id > 0 || $ref) {
                 $reshook = $hookmanager->executeHooks('addMoreActionsButtons', $parameters, $object, $action); // Note that $action and $object may have been modified by hook
                 if (empty($reshook)) {
                     if ($usercancreate) {
-                        print '<a class="butAction" href="' . constant('BASE_URL') . '/product/price_suppliers.php?id=' . ((int) $object->id) . '&action=create_price&token=' . newToken() . '">';
+                        print '<a class="butAction" href="' . constant('BASE_URL') . '/product/price_suppliers.php?id=' . ((int)$object->id) . '&action=create_price&token=' . newToken() . '">';
                         print $langs->trans("AddSupplierPrice") . '</a>';
                     }
                 }
@@ -926,7 +930,7 @@ if ($id > 0 || $ref) {
                     $param .= '&contextpage=' . urlencode($contextpage);
                 }
                 if ($limit > 0 && $limit != $conf->liste_limit) {
-                    $param .= '&limit=' . ((int) $limit);
+                    $param .= '&limit=' . ((int)$limit);
                 }
                 $param .= '&ref=' . urlencode($object->ref);
 
@@ -973,10 +977,10 @@ if ($id > 0 || $ref) {
                             // Show field if not hidden
                             if (!empty($extrafields->attributes["product_fournisseur_price"]['list'][$key]) && $extrafields->attributes["product_fournisseur_price"]['list'][$key] != 3) {
                                 $extratitle = $langs->trans($value);
-                                $arrayfields['ef.' . $key] = array('label'    => $extratitle, 'checked' => 0,
-                                                                   'position' => (end($arrayfields)['position'] + 1),
-                                                                   'langfile' => $extrafields->attributes["product_fournisseur_price"]['langfile'][$key],
-                                                                   'help'     => $extrafields->attributes["product_fournisseur_price"]['help'][$key]);
+                                $arrayfields['ef.' . $key] = array('label' => $extratitle, 'checked' => 0,
+                                    'position' => (end($arrayfields)['position'] + 1),
+                                    'langfile' => $extrafields->attributes["product_fournisseur_price"]['langfile'][$key],
+                                    'help' => $extrafields->attributes["product_fournisseur_price"]['help'][$key]);
                             }
                         }
                     }
@@ -1263,13 +1267,13 @@ if ($id > 0 || $ref) {
 
                         // Extrafields
                         if (!empty($extralabels)) {
-                            $sql  = "SELECT";
+                            $sql = "SELECT";
                             $sql .= " fk_object";
                             foreach ($extralabels as $key => $value) {
                                 $sql .= ", " . $key;
                             }
                             $sql .= " FROM " . MAIN_DB_PREFIX . "product_fournisseur_price_extrafields";
-                            $sql .= " WHERE fk_object = " . ((int) $productfourn->product_fourn_price_id);
+                            $sql .= " WHERE fk_object = " . ((int)$productfourn->product_fourn_price_id);
                             $resql = $db->query($sql);
                             if ($resql) {
                                 if ($db->num_rows($resql) != 1) {
@@ -1299,9 +1303,9 @@ if ($id > 0 || $ref) {
                         print '<td class="center nowraponall">';
 
                         if ($usercancreate) {
-                            print '<a class="editfielda" href="' . $_SERVER['PHP_SELF'] . '?id=' . ((int) $object->id) . '&socid=' . ((int) $productfourn->fourn_id) . '&action=edit_price&token=' . newToken() . '&rowid=' . ((int) $productfourn->product_fourn_price_id) . '">' . img_edit() . "</a>";
+                            print '<a class="editfielda" href="' . $_SERVER['PHP_SELF'] . '?id=' . ((int)$object->id) . '&socid=' . ((int)$productfourn->fourn_id) . '&action=edit_price&token=' . newToken() . '&rowid=' . ((int)$productfourn->product_fourn_price_id) . '">' . img_edit() . "</a>";
                             print ' &nbsp; ';
-                            print '<a href="' . $_SERVER['PHP_SELF'] . '?id=' . ((int) $object->id) . '&socid=' . ((int) $productfourn->fourn_id) . '&action=ask_remove_pf&token=' . newToken() . '&rowid=' . ((int) $productfourn->product_fourn_price_id) . '">' . img_picto($langs->trans("Remove"), 'delete') . '</a>';
+                            print '<a href="' . $_SERVER['PHP_SELF'] . '?id=' . ((int)$object->id) . '&socid=' . ((int)$productfourn->fourn_id) . '&action=ask_remove_pf&token=' . newToken() . '&rowid=' . ((int)$productfourn->product_fourn_price_id) . '">' . img_picto($langs->trans("Remove"), 'delete') . '</a>';
                         }
 
                         print '</td>';

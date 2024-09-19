@@ -132,8 +132,6 @@ if (isModEnabled('accounting')) {
 }
 
 
-
-
 /*
  * View
  */
@@ -254,7 +252,7 @@ if ($modecompta == 'CREANCES-DETTES') {
     }
     $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
 } elseif ($modecompta == "RECETTES-DEPENSES") {
     /*
@@ -269,7 +267,7 @@ if ($modecompta == 'CREANCES-DETTES') {
     $sql .= " AND pf.fk_facture = f.rowid";
     $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
 } elseif ($modecompta == "BOOKKEEPING") {
     $pcgverid = getDolGlobalInt('CHARTOFACCOUNTS');

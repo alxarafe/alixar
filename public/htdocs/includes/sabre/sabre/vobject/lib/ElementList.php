@@ -22,7 +22,7 @@ class ElementList extends ArrayIterator
     /**
      * Sets an item through ArrayAccess.
      *
-     * @param int   $offset
+     * @param int $offset
      * @param mixed $value
      */
     #[\ReturnTypeWillChange]

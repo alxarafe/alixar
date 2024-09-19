@@ -37,7 +37,7 @@ use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 /**
  * Prepare array with list of tabs
  *
- * @param   FactureFournisseur  $object     Object related to tabs
+ * @param FactureFournisseur $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function facturefourn_prepare_head(FactureFournisseur $object)
@@ -68,7 +68,7 @@ function facturefourn_prepare_head(FactureFournisseur $object)
         $nbStandingOrders = 0;
         $sql = "SELECT COUNT(pfd.rowid) as nb";
         $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_demande as pfd";
-        $sql .= " WHERE pfd.fk_facture_fourn = " . ((int) $object->id);
+        $sql .= " WHERE pfd.fk_facture_fourn = " . ((int)$object->id);
         $sql .= " AND type = 'ban'";
         $resql = $db->query($sql);
         if ($resql) {
@@ -140,7 +140,7 @@ function facturefourn_prepare_head(FactureFournisseur $object)
 /**
  * Prepare array with list of tabs
  *
- * @param   CommandeFournisseur $object     Object related to tabs
+ * @param CommandeFournisseur $object Object related to tabs
  * @return  array                           Array of tabs to show
  */
 function ordersupplier_prepare_head(CommandeFournisseur $object)
@@ -183,10 +183,10 @@ function ordersupplier_prepare_head(CommandeFournisseur $object)
             $dispachedLines = $object->getDispachedLines(1);
             $nbDispachedLines = count($dispachedLines);
 
-            for ($line = 0 ; $line < $nbDispachedLines; $line++) {
+            for ($line = 0; $line < $nbDispachedLines; $line++) {
                 $sumQtyAllreadyDispatched = $sumQtyAllreadyDispatched + $dispachedLines[$line]['qty'];
             }
-            for ($line = 0 ; $line < $nbLinesOrdered; $line++) {
+            for ($line = 0; $line < $nbLinesOrdered; $line++) {
                 //If line is a product of conf to manage stocks for services
                 if ($object->lines[$line]->product_type == 0 || getDolGlobalString('STOCK_SUPPORTS_SERVICES')) {
                     $sumQtyOrdered = $sumQtyOrdered + $object->lines[$line]->qty;
@@ -253,7 +253,7 @@ function ordersupplier_prepare_head(CommandeFournisseur $object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function supplierorder_admin_prepare_head()
 {

@@ -58,8 +58,8 @@ class mod_member_simple extends ModeleNumRefMembers
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -71,7 +71,7 @@ class mod_member_simple extends ModeleNumRefMembers
     /**
      *  Return an example of numbering module values
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -83,8 +83,8 @@ class mod_member_simple extends ModeleNumRefMembers
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object Object we need next value for
-     *  @return boolean                 false if KO (there is a conflict), true if OK
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                 false if KO (there is a conflict), true if OK
      */
     public function canBeActivated($object)
     {
@@ -117,9 +117,9 @@ class mod_member_simple extends ModeleNumRefMembers
     /**
      *  Return next value
      *
-     *  @param  Societe     $objsoc     Object third party
-     *  @param  Adherent    $object     Object we need next value for
-     *  @return string|-1               Value if OK, -1 if KO
+     * @param Societe $objsoc Object third party
+     * @param Adherent $object Object we need next value for
+     * @return string|-1               Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $object)
     {
@@ -128,7 +128,7 @@ class mod_member_simple extends ModeleNumRefMembers
         // the ref of a member is the rowid
         $sql = "SELECT MAX(CAST(ref AS SIGNED)) as max";
         $sql .= " FROM " . MAIN_DB_PREFIX . "adherent";
-        $sql .= " WHERE entity = " . (int) $conf->entity;
+        $sql .= " WHERE entity = " . (int)$conf->entity;
 
         $resql = $db->query($sql);
         if ($resql) {
@@ -142,7 +142,7 @@ class mod_member_simple extends ModeleNumRefMembers
             dol_syslog("mod_member_simple::getNextValue", LOG_DEBUG);
             return -1;
         }
-        $max = str_pad((string) $max, getDolGlobalInt('MEMBER_MOD_SIMPLE_LPAD'), "0", STR_PAD_LEFT);
+        $max = str_pad((string)$max, getDolGlobalInt('MEMBER_MOD_SIMPLE_LPAD'), "0", STR_PAD_LEFT);
         return $max;
     }
 }

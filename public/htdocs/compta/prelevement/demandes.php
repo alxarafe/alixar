@@ -45,7 +45,7 @@ $status = GETPOSTINT('status');
 
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'directdebitcredittransferlist'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha'); // Go back to a dedicated page
-$optioncss  = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
+$optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
 
 $type = GETPOST('type', 'aZ09');
 $sourcetype = GETPOST('sourcetype', 'aZ');
@@ -149,17 +149,17 @@ if ($sourcetype != 'salary') {
     $sql .= " WHERE s.rowid = f.fk_soc";
     $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     if (!$status) {
         $sql .= " AND pd.traite = 0";
     }
     $sql .= " AND pd.ext_payment_id IS NULL";
     if ($status) {
-        $sql .= " AND pd.traite = " . ((int) $status);
+        $sql .= " AND pd.traite = " . ((int)$status);
     }
     $sql .= " AND f.total_ttc > 0";
     if (!getDolGlobalString('WITHDRAWAL_ALLOW_ANY_INVOICE_STATUS')) {
@@ -193,7 +193,7 @@ if ($sourcetype != 'salary') {
     }
     $sql .= " AND pd.ext_payment_id IS NULL";
     if ($status) {
-        $sql .= " AND pd.traite = " . ((int) $status);
+        $sql .= " AND pd.traite = " . ((int)$status);
     }
     $sql .= " AND s.amount > 0";
     $sql .= " AND s.paye = " . Salary::STATUS_UNPAID;
@@ -229,7 +229,6 @@ if (is_numeric($nbtotalofrecords) && $limit > $nbtotalofrecords) {
 
     $num = $db->num_rows($resql);
 }
-
 
 
 $newcardbutton = '<a class="marginrightonly" href="' . constant('BASE_URL') . '/compta/prelevement/index.php">' . $langs->trans("Back") . '</a>';

@@ -22,23 +22,24 @@ class Heroku extends AbstractService
      * Defined scopes
      * @link https://devcenter.heroku.com/articles/oauth#scopes
      */
-    const SCOPE_GLOBAL          = 'global';
-    const SCOPE_IDENTITY        = 'identity';
-    const SCOPE_READ            = 'read';
-    const SCOPE_WRITE           = 'write';
-    const SCOPE_READ_PROTECTED  = 'read-protected';
+    const SCOPE_GLOBAL = 'global';
+    const SCOPE_IDENTITY = 'identity';
+    const SCOPE_READ = 'read';
+    const SCOPE_WRITE = 'write';
+    const SCOPE_READ_PROTECTED = 'read-protected';
     const SCOPE_WRITE_PROTECTED = 'write-protected';
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage, $scopes, $baseApiUri);
 
         if (null === $baseApiUri) {

@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2014	   Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2014	   Florian Henry		<florian.henry@open-concept.pro>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2014	    Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2014	    Florian Henry		        <florian.henry@open-concept.pro>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/product/stats/facture.php
@@ -115,7 +122,6 @@ if (GETPOST('button_removefilter_x', 'alpha') || GETPOST('button_removefilter', 
 }
 
 $result = restrictedArea($user, 'produit|service', $fieldvalue, 'product&product', '', '', $fieldtype);
-
 
 /*
  * View
@@ -226,7 +232,7 @@ if ($id > 0 || !empty($ref)) {
             $sql .= " WHERE f.fk_soc = s.rowid";
             $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
             $sql .= " AND d.fk_facture = f.rowid";
-            $sql .= " AND d.fk_product = " . ((int) $product->id);
+            $sql .= " AND d.fk_product = " . ((int)$product->id);
             if ($search_date_start) {
                 $sql .= " AND f.datef >= '" . $db->idate($search_date_start) . "'";
             }
@@ -234,10 +240,10 @@ if ($id > 0 || !empty($ref)) {
                 $sql .= " AND f.datef <= '" . $db->idate($search_date_end) . "'";
             }
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             if ($socid) {
-                $sql .= " AND f.fk_soc = " . ((int) $socid);
+                $sql .= " AND f.fk_soc = " . ((int)$socid);
             }
             // Add where from extra fields
             $extrafieldsobjectkey = 'facture';
@@ -274,7 +280,7 @@ if ($id > 0 || !empty($ref)) {
                 $option .= '&id=' . $product->id;
 
                 if ($limit > 0 && $limit != $conf->liste_limit) {
-                    $option .= '&limit=' . ((int) $limit);
+                    $option .= '&limit=' . ((int)$limit);
                 }
 
                 // Add $param from extra fields
@@ -297,7 +303,7 @@ if ($id > 0 || !empty($ref)) {
                 print_barre_liste($langs->trans("CustomersInvoices"), $page, $_SERVER["PHP_SELF"], $option, $sortfield, $sortorder, '', $num, $totalofrecords, '', 0, '', '', $limit, 0, 0, 1);
 
                 if (!empty($page)) {
-                    $option .= '&page=' . urlencode((string) ($page));
+                    $option .= '&page=' . urlencode((string)($page));
                 }
 
                 print '<div class="liste_titre liste_titre_bydiv centpercent">';

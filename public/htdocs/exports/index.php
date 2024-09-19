@@ -64,7 +64,6 @@ print '</div>';
 print '<br>';
 
 
-
 // List of available export formats
 
 print '<div class="div-table-responsive-no-min">'; // You can use div-table-responsive-no-min if you don't need reserved height for your table

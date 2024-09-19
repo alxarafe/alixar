@@ -26,7 +26,6 @@ use Dolibarr\Code\Societe\Classes\Societe;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 //require_once DOL_DOCUMENT_ROOT.'/core/lib/stripe.lib.php';
 
 // Load translation files required by the page
@@ -135,7 +134,7 @@ if (!$rowid) {
 
         //if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) $param .= '&contextpage='.urlencode($contextpage);
         if ($limit > 0 && $limit != $conf->liste_limit) {
-            $param .= '&limit=' . ((int) $limit);
+            $param .= '&limit=' . ((int)$limit);
         }
         $param .= '&starting_after_' . ($page + 1) . '=' . $list->data[($limit - 1)]->id;
         //$param.='&ending_before_'.($page+1).'='.$list->data[($limit-1)]->id;
@@ -154,12 +153,12 @@ if (!$rowid) {
             if ($charge->refunded == '1') {
                 $status = img_picto($langs->trans("refunded"), 'statut6');
             } elseif ($charge->paid == '1') {
-                $status = img_picto($langs->trans((string) $charge->status), 'statut4');
+                $status = img_picto($langs->trans((string)$charge->status), 'statut4');
             } else {
                 $label = $langs->trans("Message") . ": " . $charge->failure_message . "<br>";
                 $label .= $langs->trans("Network") . ": " . $charge->outcome->network_status . "<br>";
-                $label .= $langs->trans("Status") . ": " . $langs->trans((string) $charge->outcome->seller_message);
-                $status = $form->textwithpicto(img_picto($langs->trans((string) $charge->status), 'statut8'), $label, -1);
+                $label .= $langs->trans("Status") . ": " . $langs->trans((string)$charge->outcome->seller_message);
+                $status = $form->textwithpicto(img_picto($langs->trans((string)$charge->status), 'statut8'), $label, -1);
             }
 
             if (isset($charge->payment_method_details->type) && $charge->payment_method_details->type == 'card') {
@@ -275,7 +274,7 @@ if (!$rowid) {
             print $type;
             print '</td>';
             // Amount
-            print '<td class="right"><span class="amount">' . price(($charge->amount - $charge->amount_refunded) / 100, 0, '', 1, - 1, - 1, strtoupper($charge->currency)) . "</span></td>";
+            print '<td class="right"><span class="amount">' . price(($charge->amount - $charge->amount_refunded) / 100, 0, '', 1, -1, -1, strtoupper($charge->currency)) . "</span></td>";
             // Status
             print '<td class="right">';
             print $status;

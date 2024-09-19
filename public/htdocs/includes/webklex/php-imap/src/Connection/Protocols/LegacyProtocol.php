@@ -94,16 +94,16 @@ class LegacyProtocol extends Protocol
             throw new AuthFailedException($message);
         }
 
-        if(!$this->stream) {
+        if (!$this->stream) {
             $errors = \imap_errors();
             $message = implode("; ", (is_array($errors) ? $errors : array()));
             throw new AuthFailedException($message);
         }
 
         $errors = \imap_errors();
-        if(is_array($errors)) {
+        if (is_array($errors)) {
             $status = $this->examineFolder();
-            if($status['exists'] !== 0) {
+            if ($status['exists'] !== 0) {
                 $message = implode("; ", (is_array($errors) ? $errors : array()));
                 throw new RuntimeException($message);
             }
@@ -269,9 +269,9 @@ class LegacyProtocol extends Protocol
             $raw_flags = \imap_fetch_overview($this->stream, $id, $uid ? IMAP::FT_UID : IMAP::NIL);
             $flags = [];
             if (is_array($raw_flags) && isset($raw_flags[0])) {
-                $raw_flags = (array) $raw_flags[0];
-                foreach($raw_flags as $flag => $value) {
-                    if ($value === 1 && in_array($flag, ["size", "uid", "msgno", "update"]) === false){
+                $raw_flags = (array)$raw_flags[0];
+                foreach ($raw_flags as $flag => $value) {
+                    if ($value === 1 && in_array($flag, ["size", "uid", "msgno", "update"]) === false) {
                         $flags[] = "\\" . ucfirst($flag);
                     }
                 }
@@ -293,7 +293,7 @@ class LegacyProtocol extends Protocol
         if ($id === null) {
             $overview = $this->overview("1:*");
             $uids = [];
-            foreach($overview as $set){
+            foreach ($overview as $set) {
                 $uids[$set->msgno] = $set->uid;
             }
             return $uids;
@@ -337,12 +337,12 @@ class LegacyProtocol extends Protocol
         $result = [];
 
         $items = \imap_getmailboxes($this->stream, $this->getAddress(), $reference . $folder);
-        if(is_array($items)){
+        if (is_array($items)) {
             foreach ($items as $item) {
                 $name = $this->decodeFolderName($item->name);
                 $result[$name] = ['delimiter' => $item->delimiter, 'flags' => []];
             }
-        }else{
+        } else {
             throw new RuntimeException(\imap_last_error());
         }
 
@@ -365,9 +365,9 @@ class LegacyProtocol extends Protocol
     {
         $flag = trim(is_array($flags) ? implode(" ", $flags) : $flags);
 
-        if ($mode == "+"){
+        if ($mode == "+") {
             $status = \imap_setflag_full($this->stream, $from, $flag, $uid ? IMAP::FT_UID : IMAP::NIL);
-        }else{
+        } else {
             $status = \imap_clearflag_full($this->stream, $from, $flag, $uid ? IMAP::FT_UID : IMAP::NIL);
         }
 
@@ -390,7 +390,7 @@ class LegacyProtocol extends Protocol
     public function appendMessage($folder, $message, $flags = null, $date = null)
     {
         if ($date != null) {
-            if ($date instanceof \Carbon\Carbon){
+            if ($date instanceof \Carbon\Carbon) {
                 $date = $date->format('d-M-Y H:i:s O');
             }
             return \imap_append($this->stream, $folder, $message, $flags, $date);
@@ -424,7 +424,7 @@ class LegacyProtocol extends Protocol
      */
     public function copyManyMessages($messages, $folder, $uid = false)
     {
-        foreach($messages as $msg) {
+        foreach ($messages as $msg) {
             if ($this->copyMessage($folder, $msg, null, $uid) == false) {
                 return false;
             }
@@ -458,7 +458,7 @@ class LegacyProtocol extends Protocol
      */
     public function moveManyMessages($messages, $folder, $uid = false)
     {
-        foreach($messages as $msg) {
+        foreach ($messages as $msg) {
             if ($this->moveMessage($folder, $msg, null, $uid) == false) {
                 return false;
             }

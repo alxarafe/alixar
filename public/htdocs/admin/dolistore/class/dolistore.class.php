@@ -57,18 +57,18 @@ class Dolistore
     /**
      * Constructor
      *
-     * @param   boolean     $debug      Enable debug of request on screen
+     * @param boolean $debug Enable debug of request on screen
      */
     public function __construct($debug = false)
     {
         global $langs;
 
-        $this->url       = constant('BASE_URL') . '/admin/modules.php?mode=marketplace';
-        $this->shop_url  = 'https://www.dolistore.com/index.php?controller=product&id_product=';
+        $this->url = constant('BASE_URL') . '/admin/modules.php?mode=marketplace';
+        $this->shop_url = 'https://www.dolistore.com/index.php?controller=product&id_product=';
         $this->debug_api = $debug;
 
-        $langtmp    = explode('_', $langs->defaultlang);
-        $lang       = $langtmp[0];
+        $langtmp = explode('_', $langs->defaultlang);
+        $lang = $langtmp[0];
         $lang_array = array('en' => 1, 'fr' => 2, 'es' => 3, 'it' => 4, 'de' => 5); // Into table ps_lang of Prestashop - 1
         if (!in_array($lang, array_keys($lang_array))) {
             $lang = 'en';
@@ -92,14 +92,14 @@ class Dolistore
             // conf MAIN_MODULE_DOLISTORE_API_KEY is for the login of basic auth. There is no password as it is public data.
 
             // Here we set the option array for the Webservice : we want categories resources
-            $opt              = array();
-            $opt['resource']  = 'categories';
-            $opt['display']   = '[id,id_parent,nb_products_recursive,active,is_root_category,name,description]';
-            $opt['sort']      = 'id_asc';
+            $opt = array();
+            $opt['resource'] = 'categories';
+            $opt['display'] = '[id,id_parent,nb_products_recursive,active,is_root_category,name,description]';
+            $opt['sort'] = 'id_asc';
 
             // Call
             dol_syslog("Call API with opt = " . var_export($opt, true));
-            $xml              = $this->api->get($opt);
+            $xml = $this->api->get($opt);
             $this->categories = $xml->categories->children();
         } catch (PrestaShopWebserviceException $e) {
             // Here we are dealing with errors
@@ -119,18 +119,18 @@ class Dolistore
      * Load data from remote Dolistore market place.
      * This fills ->products
      *
-     * @param   array   $options    Options. If 'categorie' is defined, we filter products on this category id
+     * @param array $options Options. If 'categorie' is defined, we filter products on this category id
      * @return  void
      */
     public function getRemoteProducts($options = array('start' => 0, 'end' => 10, 'per_page' => 50, 'categorie' => 0, 'search' => ''))
     {
         global $conf;
 
-        $this->start     = $options['start'];
-        $this->end       = $options['end'];
-        $this->per_page  = $options['per_page'];
+        $this->start = $options['start'];
+        $this->end = $options['end'];
+        $this->per_page = $options['per_page'];
         $this->categorie = $options['categorie'];
-        $this->search    = $options['search'];
+        $this->search = $options['search'];
 
         if ($this->end == 0) {
             $this->end = $this->per_page;
@@ -142,9 +142,9 @@ class Dolistore
             // conf MAIN_MODULE_DOLISTORE_API_KEY is for the login of basic auth. There is no password as it is public data.
 
             // Here we set the option array for the Webservice : we want products resources
-            $opt             = array();
+            $opt = array();
             $opt['resource'] = 'products';
-            $opt2            = array();
+            $opt2 = array();
 
             // make a search to limit the id returned.
             if ($this->search != '') {
@@ -152,38 +152,38 @@ class Dolistore
 
                 // Call
                 dol_syslog("Call API with opt2 = " . var_export($opt2, true));
-                $xml         = $this->api->get($opt2);
+                $xml = $this->api->get($opt2);
 
-                $products    = array();
+                $products = array();
                 foreach ($xml->products->children() as $product) {
-                    $products[] = (int) $product['id'];
+                    $products[] = (int)$product['id'];
                 }
                 $opt['filter[id]'] = '[' . implode('|', $products) . ']';
             } elseif ($this->categorie != 0) {   // We filter on category, so we first get list of product id in this category
                 // $opt2['url'] is set by default to $this->url.'/api/'.$options['resource'];
                 $opt2['resource'] = 'categories';
-                $opt2['id']       = $this->categorie;
+                $opt2['id'] = $this->categorie;
 
                 // Call
                 dol_syslog("Call API with opt2 = " . var_export($opt2, true));
-                $xml              = $this->api->get($opt2);
+                $xml = $this->api->get($opt2);
 
-                $products         = array();
+                $products = array();
                 foreach ($xml->category->associations->products->children() as $product) {
-                    $products[] = (int) $product->id;
+                    $products[] = (int)$product->id;
                 }
                 $opt['filter[id]'] = '[' . implode('|', $products) . ']';
             }
-            $opt['display']        = '[id,name,id_default_image,id_category_default,reference,price,condition,show_price,date_add,date_upd,description_short,description,module_version,dolibarr_min,dolibarr_max]';
-            $opt['sort']           = 'id_desc';
+            $opt['display'] = '[id,name,id_default_image,id_category_default,reference,price,condition,show_price,date_add,date_upd,description_short,description,module_version,dolibarr_min,dolibarr_max]';
+            $opt['sort'] = 'id_desc';
             $opt['filter[active]'] = '[1]';
-            $opt['limit']          = "$this->start,$this->end";
+            $opt['limit'] = "$this->start,$this->end";
             // $opt['filter[id]'] contains list of product id that are result of search
 
             // Call API to get the detail
             dol_syslog("Call API with opt = " . var_export($opt, true));
-            $xml                   = $this->api->get($opt);
-            $this->products        = $xml->products->children();
+            $xml = $this->api->get($opt);
+            $this->products = $xml->products->children();
         } catch (PrestaShopWebserviceException $e) {
             // Here we are dealing with errors
             $trace = $e->getTrace();
@@ -198,16 +198,17 @@ class Dolistore
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Return tree of Dolistore categories. $this->categories must have been loaded before.
      *
-     * @param   int         $parent     Id of parent category
+     * @param int $parent Id of parent category
      * @return  string
      */
     public function get_categories($parent = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         if (!isset($this->categories)) {
             die('not possible');
         }
@@ -221,13 +222,13 @@ class Dolistore
         for ($i = 0; $i < $nbofcateg; $i++) {
             $cat = $this->categories[$i];
             if ($cat->is_root_category == 1 && $parent == 0) {
-                $html .= '<li class="root"><h3 class="nomargesupinf"><a class="nomargesupinf link2cat" href="?mode=marketplace&categorie=' . ((int) $cat->id) . '" ';
+                $html .= '<li class="root"><h3 class="nomargesupinf"><a class="nomargesupinf link2cat" href="?mode=marketplace&categorie=' . ((int)$cat->id) . '" ';
                 $html .= 'title="' . dol_escape_htmltag(strip_tags($cat->description->language[$this->lang - 1])) . '">' . dol_escape_htmltag($cat->name->language[$this->lang - 1]) . ' <sup>' . dol_escape_htmltag($cat->nb_products_recursive) . '</sup></a></h3>';
                 $html .= self::get_categories($cat->id);
                 $html .= "</li>\n";
             } elseif (trim($cat->id_parent) == $parent && $cat->active == 1 && trim($cat->id_parent) != 0) { // si cat est de ce niveau
                 $select = ($cat->id == $this->categorie) ? ' selected' : '';
-                $html .= '<li><a class="link2cat' . $select . '" href="?mode=marketplace&categorie=' . ((int) $cat->id) . '"';
+                $html .= '<li><a class="link2cat' . $select . '" href="?mode=marketplace&categorie=' . ((int)$cat->id) . '"';
                 $html .= ' title="' . dol_escape_htmltag(strip_tags($cat->description->language[$this->lang - 1])) . '" ';
                 $html .= '>' . dol_escape_htmltag($cat->name->language[$this->lang - 1]) . ' <sup>' . dol_escape_htmltag($cat->nb_products_recursive) . '</sup></a>';
                 $html .= self::get_categories($cat->id);
@@ -245,7 +246,8 @@ class Dolistore
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Return list of product formatted for output
      *
@@ -253,9 +255,9 @@ class Dolistore
      */
     public function get_products()
     {
-		// phpcs:enable
+        // phpcs:enable
         global $langs, $conf;
-        $html       = "";
+        $html = "";
         $last_month = time() - (30 * 24 * 60 * 60);
         foreach ($this->products as $product) {
             // check new product ?
@@ -271,7 +273,7 @@ class Dolistore
 
             // add image or default ?
             if ($product->id_default_image != '') {
-                $image_url = constant('BASE_URL') . '/admin/dolistore/ajax/image.php?id_product=' . urlencode((string) (((int) $product->id))) . '&id_image=' . urlencode((string) (((int) $product->id_default_image)));
+                $image_url = constant('BASE_URL') . '/admin/dolistore/ajax/image.php?id_product=' . urlencode((string)(((int)$product->id))) . '&id_image=' . urlencode((string)(((int)$product->id_default_image)));
                 $images = '<a href="' . $image_url . '" class="documentpreview" target="_blank" rel="noopener noreferrer" mime="image/png" title="' . dol_escape_htmltag($product->name->language[$this->lang - 1] . ', ' . $langs->trans('Version') . ' ' . $product->module_version) . '">';
                 $images .= '<img src="' . $image_url . '&quality=home_default" style="max-height:250px;max-width: 210px;" alt="" /></a>';
             } else {
@@ -283,7 +285,7 @@ class Dolistore
                 $price = '<h3>' . price(price2num($product->price, 'MT'), 0, $langs, 1, -1, -1, 'EUR') . ' ' . $langs->trans("HT") . '</h3>';
                 $download_link = '<a target="_blank" href="' . $this->shop_url . urlencode($product->id) . '"><img width="32" src="' . constant('BASE_URL') . '/admin/dolistore/img/follow.png" /></a>';
             } else {
-                $price         = '<h3>' . $langs->trans('Free') . '</h3>';
+                $price = '<h3>' . $langs->trans('Free') . '</h3>';
                 $download_link = '<a target="_blank" rel="noopener noreferrer" href="' . $this->shop_url . urlencode($product->id) . '"><img width="32" src="' . constant('BASE_URL') . '/admin/dolistore/img/Download-128.png" /></a>';
                 $download_link .= '<br><br><a target="_blank" href="' . $this->shop_url . urlencode($product->id) . '"><img width="32" src="' . constant('BASE_URL') . '/admin/dolistore/img/follow.png" /></a>';
             }
@@ -294,30 +296,30 @@ class Dolistore
                 if ($this->version_compare($product->dolibarr_max, DOL_VERSION) >= 0) {
                     //compatible
                     $version = '<span class="compatible">' . $langs->trans(
-                        'CompatibleUpTo',
-                        $product->dolibarr_max,
-                        $product->dolibarr_min,
-                        $product->dolibarr_max
-                    ) . '</span>';
+                            'CompatibleUpTo',
+                            $product->dolibarr_max,
+                            $product->dolibarr_min,
+                            $product->dolibarr_max
+                        ) . '</span>';
                     $compatible = '';
                 } else {
                     //never compatible, module expired
                     $version = '<span class="notcompatible">' . $langs->trans(
-                        'NotCompatible',
-                        DOL_VERSION,
-                        $product->dolibarr_min,
-                        $product->dolibarr_max
-                    ) . '</span>';
+                            'NotCompatible',
+                            DOL_VERSION,
+                            $product->dolibarr_min,
+                            $product->dolibarr_max
+                        ) . '</span>';
                     $compatible = 'NotCompatible';
                 }
             } else {
                 //need update
                 $version = '<span class="compatibleafterupdate">' . $langs->trans(
-                    'CompatibleAfterUpdate',
-                    DOL_VERSION,
-                    $product->dolibarr_min,
-                    $product->dolibarr_max
-                ) . '</span>';
+                        'CompatibleAfterUpdate',
+                        DOL_VERSION,
+                        $product->dolibarr_min,
+                        $product->dolibarr_max
+                    ) . '</span>';
                 $compatible = 'NotCompatible';
             }
 
@@ -331,7 +333,7 @@ class Dolistore
             $html .= '<br><small>';
             $html .= $version;          // No dol_escape_htmltag, it is already escape html
             $html .= '</small></h2>';
-            $html .= '<small> ' . dol_print_date(dol_stringtotime($product->date_upd), 'dayhour') . ' - ' . $langs->trans('Ref') . ': ' . dol_escape_htmltag($product->reference) . ' - ' . dol_escape_htmltag($langs->trans('Id')) . ': ' . ((int) $product->id) . '</small><br><br>' . dol_escape_htmltag($product->description_short->language[$this->lang - 1]) . '</td>';
+            $html .= '<small> ' . dol_print_date(dol_stringtotime($product->date_upd), 'dayhour') . ' - ' . $langs->trans('Ref') . ': ' . dol_escape_htmltag($product->reference) . ' - ' . dol_escape_htmltag($langs->trans('Id')) . ': ' . ((int)$product->id) . '</small><br><br>' . dol_escape_htmltag($product->description_short->language[$this->lang - 1]) . '</td>';
             // do not load if display none
             $html .= '<td class="margeCote center">';
             $html .= $price;
@@ -342,33 +344,36 @@ class Dolistore
         return $html;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * get previous link
      *
-     * @param   string    $text     symbol previous
+     * @param string $text symbol previous
      * @return  string              html previous link
      */
     public function get_previous_link($text = '<<')
     {
-		// phpcs:enable
+        // phpcs:enable
         return '<a href="' . $this->get_previous_url() . '" class="button">' . dol_escape_htmltag($text) . '</a>';
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * get next link
      *
-     * @param   string    $text     symbol next
+     * @param string $text symbol next
      * @return  string              html next link
      */
     public function get_next_link($text = '>>')
     {
-		// phpcs:enable
+        // phpcs:enable
         return '<a href="' . $this->get_next_url() . '" class="button">' . dol_escape_htmltag($text) . '</a>';
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * get previous url
      *
@@ -376,7 +381,7 @@ class Dolistore
      */
     public function get_previous_url()
     {
-		// phpcs:enable
+        // phpcs:enable
         $param_array = array();
         if ($this->start < $this->per_page) {
             $sub = 0;
@@ -384,7 +389,7 @@ class Dolistore
             $sub = $this->per_page;
         }
         $param_array['start'] = $this->start - $sub;
-        $param_array['end']   = $this->end - $sub;
+        $param_array['end'] = $this->end - $sub;
         if ($this->categorie != 0) {
             $param_array['categorie'] = $this->categorie;
         }
@@ -392,7 +397,8 @@ class Dolistore
         return $this->url . "&" . $param;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * get next url
      *
@@ -400,7 +406,7 @@ class Dolistore
      */
     public function get_next_url()
     {
-		// phpcs:enable
+        // phpcs:enable
         $param_array = array();
         if (count($this->products) < $this->per_page) {
             $add = 0;
@@ -408,7 +414,7 @@ class Dolistore
             $add = $this->per_page;
         }
         $param_array['start'] = $this->start + $add;
-        $param_array['end']   = $this->end + $add;
+        $param_array['end'] = $this->end + $add;
         if ($this->categorie != 0) {
             $param_array['categorie'] = $this->categorie;
         }
@@ -416,23 +422,24 @@ class Dolistore
         return $this->url . "&" . $param;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * version compare
      *
-     * @param   string  $v1     version 1
-     * @param   string  $v2     version 2
+     * @param string $v1 version 1
+     * @param string $v2 version 2
      * @return int              result of compare
      */
     public function version_compare($v1, $v2)
     {
-		// phpcs:enable
-        $v1       = explode('.', $v1);
-        $v2       = explode('.', $v2);
-        $ret      = 0;
-        $level    = 0;
-        $count1   = count($v1);
-        $count2   = count($v2);
+        // phpcs:enable
+        $v1 = explode('.', $v1);
+        $v2 = explode('.', $v2);
+        $ret = 0;
+        $level = 0;
+        $count1 = count($v1);
+        $count2 = count($v2);
         $maxcount = max($count1, $count2);
         while ($level < $maxcount) {
             $operande1 = isset($v1[$level]) ? $v1[$level] : 'x';

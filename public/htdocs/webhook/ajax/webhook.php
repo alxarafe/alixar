@@ -129,7 +129,7 @@ if ($action == "getjsonformtrigger") {
 /**
  * Find and init a specimen for the given object type
  *
- * @param   string      $objecttype     Object type to init as a specimen
+ * @param string $objecttype Object type to init as a specimen
  * @return object|false
  */
 function findobjecttosend($objecttype)

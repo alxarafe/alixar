@@ -92,7 +92,7 @@ class DolQueryCollector extends DataCollector implements Renderable, AssetProvid
     /**
      *  Return collector name
      *
-     *  @return string  Name
+     * @return string  Name
      */
     public function getName()
     {
@@ -102,7 +102,7 @@ class DolQueryCollector extends DataCollector implements Renderable, AssetProvid
     /**
      *  Return widget settings
      *
-     *  @return array      Array
+     * @return array      Array
      */
     public function getWidgets()
     {
@@ -127,7 +127,7 @@ class DolQueryCollector extends DataCollector implements Renderable, AssetProvid
     /**
      *  Return assets
      *
-     *  @return array   Array
+     * @return array   Array
      */
     public function getAssets()
     {

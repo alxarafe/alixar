@@ -330,7 +330,7 @@ if ($modecompta == 'CREANCES-DETTES') {
         $sql .= " AND f.datef >= '" . $db->idate($date_start) . "' AND f.datef <= '" . $db->idate($date_end) . "'";
     }
     if ($selected_type >= 0) {
-        $sql .= " AND l.product_type = " . ((int) $selected_type);
+        $sql .= " AND l.product_type = " . ((int)$selected_type);
     }
 
     // Search for tag/category ($searchCategoryProductList is an array of ID)
@@ -351,9 +351,9 @@ if ($modecompta == 'CREANCES-DETTES') {
                 $searchCategoryProductSqlList[] = "NOT EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck WHERE l.fk_product = ck.fk_product)";
             } elseif (intval($searchCategoryProduct) > 0) {
                 if ($searchCategoryProductOperator == 0) {
-                    $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck WHERE l.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int) $searchCategoryProduct) . ")";
+                    $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck WHERE l.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int)$searchCategoryProduct) . ")";
                 } else {
-                    $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryProduct);
+                    $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryProduct);
                 }
             }
         }
@@ -382,9 +382,9 @@ if ($modecompta == 'CREANCES-DETTES') {
                 $searchCategorySocieteSqlList[] = "NOT EXISTS (SELECT cs.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as cs WHERE f.fk_soc = cs.fk_soc)";
             } elseif (intval($searchCategorySociete) > 0) {
                 if ($searchCategorySocieteOperator == 0) {
-                    $searchCategorySocieteSqlList[] = " EXISTS (SELECT cs.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as cs WHERE f.fk_soc = cs.fk_soc AND cs.fk_categorie = " . ((int) $searchCategorySociete) . ")";
+                    $searchCategorySocieteSqlList[] = " EXISTS (SELECT cs.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as cs WHERE f.fk_soc = cs.fk_soc AND cs.fk_categorie = " . ((int)$searchCategorySociete) . ")";
                 } else {
-                    $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategorySociete);
+                    $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategorySociete);
                 }
             }
         }
@@ -403,11 +403,11 @@ if ($modecompta == 'CREANCES-DETTES') {
     }
 
     if ($selected_soc > 0) {
-        $sql .= " AND f.fk_soc = " . ((int) $selected_soc);
+        $sql .= " AND f.fk_soc = " . ((int)$selected_soc);
     }
 
     if ($typent_id > 0) {
-        $sql .= " AND soc.fk_typent = " . ((int) $typent_id);
+        $sql .= " AND soc.fk_typent = " . ((int)$typent_id);
     }
 
     $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";

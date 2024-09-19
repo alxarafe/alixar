@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2006      Andre Cianfarani     <acianfa@free.fr>
- * Copyright (C) 2005-2013 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2007-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2020      Josep Lluís Amador   <joseplluis@lliuretic.cat>
+/* Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2005-2013  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2020       Josep Lluís Amador          <joseplluis@lliuretic.cat>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
 use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
@@ -52,8 +55,8 @@ $socid = GETPOSTINT('socid');
 // type can be empty string or 0 or 1
 $type = GETPOST('type', 'int');
 $mode = GETPOSTINT('mode');
-$status = ((GETPOSTINT('status') >= 0) ? GETPOSTINT('status') : - 1);   // status buy when mode = customer , status purchase when mode = supplier
-$status_purchase = ((GETPOSTINT('status_purchase') >= 0) ? GETPOSTINT('status_purchase') : - 1);    // status purchase when mode = customer
+$status = ((GETPOSTINT('status') >= 0) ? GETPOSTINT('status') : -1);   // status buy when mode = customer , status purchase when mode = supplier
+$status_purchase = ((GETPOSTINT('status_purchase') >= 0) ? GETPOSTINT('status_purchase') : -1);    // status purchase when mode = customer
 $outjson = (GETPOSTINT('outjson') ? GETPOSTINT('outjson') : 0);
 $price_level = GETPOSTINT('price_level');
 $action = GETPOST('action', 'aZ09');
@@ -140,7 +143,7 @@ if ($action == 'fetch' && !empty($id)) {
         if (!empty($price_by_qty_rowid) && $price_by_qty_rowid >= 1 && (getDolGlobalString('PRODUIT_CUSTOMER_PRICES_BY_QTY') || getDolGlobalString('PRODUIT_CUSTOMER_PRICES_BY_QTY_MULTIPRICES'))) { // If we need a particular price related to qty
             $sql = "SELECT price, unitprice, quantity, remise_percent";
             $sql .= " FROM " . MAIN_DB_PREFIX . "product_price_by_qty";
-            $sql .= " WHERE rowid = " . ((int) $price_by_qty_rowid);
+            $sql .= " WHERE rowid = " . ((int)$price_by_qty_rowid);
 
             $result = $db->query($sql);
             if ($result) {
@@ -166,9 +169,9 @@ if ($action == 'fetch' && !empty($id)) {
             $sql = "SELECT price, price_ttc, price_base_type,";
             $sql .= " tva_tx, default_vat_code";    // Vat rate and code will be used if PRODUIT_MULTIPRICES_USE_VAT_PER_LEVEL is on.
             $sql .= " FROM " . MAIN_DB_PREFIX . "product_price ";
-            $sql .= " WHERE fk_product = " . ((int) $id);
+            $sql .= " WHERE fk_product = " . ((int)$id);
             $sql .= " AND entity IN (" . getEntity('productprice') . ")";
-            $sql .= " AND price_level = " . ((int) $price_level);
+            $sql .= " AND price_level = " . ((int)$price_level);
             $sql .= " ORDER BY date_price";
             $sql .= " DESC LIMIT 1";
 
@@ -226,8 +229,8 @@ if ($action == 'fetch' && !empty($id)) {
         }
 
         // VAT to use and default VAT for product are set to same value by default
-        $product_outtva_tx_formated =  $outtva_tx_formated;
-        $product_outtva_tx =  $outtva_tx;
+        $product_outtva_tx_formated = $outtva_tx_formated;
+        $product_outtva_tx = $outtva_tx;
         $product_outdefault_vat_code = $outdefault_vat_code;
 
         // If we ask the price according to buyer, we change it.

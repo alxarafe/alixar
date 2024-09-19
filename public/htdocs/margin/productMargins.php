@@ -206,7 +206,7 @@ $sql .= ' AND f.entity IN (' . getEntity('invoice') . ')';
 $sql .= " AND f.fk_statut NOT IN (" . $db->sanitize(implode(', ', $invoice_status_except_list)) . ")";
 $sql .= " AND d.fk_facture = f.rowid";
 if ($id > 0) {
-    $sql .= " AND d.fk_product =" . ((int) $id);
+    $sql .= " AND d.fk_product =" . ((int)$id);
 }
 if (!empty($TSelectedCats)) {
     $sql .= ' AND cp.fk_categorie IN (' . $db->sanitize(implode(',', $TSelectedCats)) . ')';
@@ -232,7 +232,7 @@ $sql .= $db->order($sortfield, $sortorder);
 // TODO: calculate total to display then restore pagination
 //$sql.= $db->plimit($conf->liste_limit +1, $offset);
 
-$param = '&id=' . ((int) $id);
+$param = '&id=' . ((int)$id);
 if (GETPOSTINT('startdatemonth')) {
     $param .= '&startdateyear=' . GETPOSTINT('startdateyear');
     $param .= '&startdatemonth=' . GETPOSTINT('startdatemonth');

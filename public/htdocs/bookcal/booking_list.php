@@ -188,7 +188,7 @@ if ($object->id > 0) {
     $sql = "SELECT ac.id, ac.ref, ac.datep as date_start, ac.datep2 as date_end, ac.label, acr.fk_element";
     $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm as ac";
     $sql .= " JOIN " . MAIN_DB_PREFIX . "actioncomm_resources as acr on acr.fk_actioncomm = ac.id";
-    $sql .= " WHERE ac.fk_bookcal_calendar = " . ((int) $object->id);
+    $sql .= " WHERE ac.fk_bookcal_calendar = " . ((int)$object->id);
     $sql .= " AND ac.code = 'AC_RDV'";
     $sql .= " AND acr.element_type = 'socpeople'";
     $resql = $db->query($sql);

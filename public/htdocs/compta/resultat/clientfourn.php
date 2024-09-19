@@ -436,7 +436,7 @@ if ($modecompta == 'BOOKKEEPING') {
     }
     $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     $sql .= " GROUP BY name, socid";
     $sql .= $db->order($sortfield, $sortorder);
@@ -665,9 +665,9 @@ if ($modecompta == 'BOOKKEEPING') {
         }
     }
 
-    $sql .= " AND f.entity = " . ((int) $conf->entity);
+    $sql .= " AND f.entity = " . ((int)$conf->entity);
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     $sql .= " GROUP BY name, socid";
     $sql .= $db->order($sortfield, $sortorder);
@@ -1531,7 +1531,6 @@ $parameters["date_end"] = $date_end;
 $hookmanager->initHooks(array('externalbalance'));
 $reshook = $hookmanager->executeHooks('addBalanceLine', $parameters, $object, $action); // Note that $action and $object may have been modified by some hooks
 print $hookmanager->resPrint;
-
 
 
 // Total

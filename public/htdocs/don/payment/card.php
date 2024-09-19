@@ -74,7 +74,6 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('don', '
 }
 
 
-
 /*
  * View
  */
@@ -150,7 +149,7 @@ $sql = 'SELECT d.rowid as did, d.paid, d.amount as d_amount, pd.amount';
 $sql .= ' FROM ' . MAIN_DB_PREFIX . 'payment_donation as pd,' . MAIN_DB_PREFIX . 'don as d';
 $sql .= ' WHERE pd.fk_donation = d.rowid';
 $sql .= ' AND d.entity = ' . $conf->entity;
-$sql .= ' AND pd.rowid = ' . ((int) $id);
+$sql .= ' AND pd.rowid = ' . ((int)$id);
 
 dol_syslog("don/payment/card.php", LOG_DEBUG);
 $resql = $db->query($sql);
@@ -215,13 +214,12 @@ if (empty($action)) {
         if (!$disable_delete) {
             print dolGetButtonAction($langs->trans('Delete'), '', 'delete', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=delete&token=' . newToken(), '', 1);
         } else {
-            print dolGetButtonAction($langs->trans("CantRemovePaymentWithOneInvoicePaid"), $langs->trans('Delete'), '', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '#', '', 1, [ 'attr' => ['classOverride' => 'butActionRefused']]);
+            print dolGetButtonAction($langs->trans("CantRemovePaymentWithOneInvoicePaid"), $langs->trans('Delete'), '', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '#', '', 1, ['attr' => ['classOverride' => 'butActionRefused']]);
         }
     }
 }
 
 print '</div>';
-
 
 
 llxFooter();

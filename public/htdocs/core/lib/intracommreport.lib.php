@@ -26,7 +26,7 @@
 /**
  *  Prepare array with list of admin tabs
  *
- *  @return array                   Array of tabs to show
+ * @return array                   Array of tabs to show
  */
 function intracommReportAdminPrepareHead()
 {
@@ -55,9 +55,9 @@ function intracommReportAdminPrepareHead()
 /**
  *  Prepare array with list of tabs
  *
- *  @param   Object $object     Object related to tabs
+ * @param Object $object Object related to tabs
  *
- *  @return array                   Array of tabs to show
+ * @return array                   Array of tabs to show
  */
 function intracommReportPrepareHead($object)
 {

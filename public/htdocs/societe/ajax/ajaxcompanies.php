@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2006      Andre Cianfarani     <acianfa@free.fr>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2007-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2010      Cyrille de Lambert   <info@auguria.net>
+/* Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010       Cyrille de Lambert          <info@auguria.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *       \file       htdocs/societe/ajax/ajaxcompanies.php
@@ -44,8 +46,6 @@ if (!defined('NOREQUIRESOC')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Societe\Classes\Societe;
 
 $id = GETPOSTINT('socid');
 if ($id == 0) {
@@ -89,7 +89,7 @@ if (!$socid) {
 }
 
 // Generate list of companies
-if (! $socid) {
+if (!$socid) {
     echo json_encode(array('nom' => 'ErrorBadParameter', 'label' => 'ErrorBadParameter', 'key' => 'ErrorBadParameter', 'value' => 'ErrorBadParameter'));
     exit;
 }
@@ -118,13 +118,13 @@ if ($socid) {
         $sql .= " OR s.code_fournisseur LIKE '%" . $db->escape($db->escapeforlike($socid)) . "%'";
     }
     if (getDolGlobalString('SOCIETE_ALLOW_SEARCH_ON_ROWID')) {
-        $sql .= " OR s.rowid = " . ((int) $socid);
+        $sql .= " OR s.rowid = " . ((int)$socid);
     }
     $sql .= ")";
 }
 // Protection for external user access
 if ($user->socid > 0) {
-    $sql .= " AND s.rowid = " . ((int) $user->socid);
+    $sql .= " AND s.rowid = " . ((int)$user->socid);
 }
 //if (GETPOST("filter")) $sql.= " AND (".GETPOST("filter", "alpha").")"; // Add other filters
 $sql .= " ORDER BY s.nom ASC";

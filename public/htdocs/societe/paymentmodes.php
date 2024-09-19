@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2002-2004  Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2003       Jean-Louis Bergamo   <jlb@j1b.org>
- * Copyright (C) 2004-2022  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009  Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013       Peter Fontaine       <contact@peterfontaine.fr>
- * Copyright (C) 2015-2016  Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2017       Ferran Marcet        <fmarcet@2byte.es>
- * Copyright (C) 2018-2023  Thibault FOUCART     <support@ptibogxiv.net>
- * Copyright (C) 2021       Alexandre Spangaro   <aspangaro@open-dsi.fr>
+/* Copyright (C) 2002-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003       Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2004-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Peter Fontaine              <contact@peterfontaine.fr>
+ * Copyright (C) 2015-2016  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2017       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018-2023  Thibault FOUCART            <support@ptibogxiv.net>
+ * Copyright (C) 2021       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -27,6 +27,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Ecm\Classes\EcmFiles;
+use Dolibarr\Code\Societe\Classes\CompanyBankAccount;
+use Dolibarr\Code\Societe\Classes\CompanyPaymentMode;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Societe\Classes\SocieteAccount;
+use Dolibarr\Code\Stripe\Classes\Stripe;
+
 /**
  *      \file       htdocs/societe/paymentmodes.php
  *      \ingroup    societe
@@ -37,14 +50,9 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companypaymentmode.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
-
 
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "commercial", "banks", "bills", 'paypal', 'stripe', 'withdrawals'));
-
 
 // Get parameters
 $action = GETPOST("action", 'alpha', 3);
@@ -162,28 +170,28 @@ if (empty($reshook)) {
         if (!$error) {
             $companybankaccount->oldcopy = dol_clone($companybankaccount, 2);
 
-            $companybankaccount->socid           = $object->id;
+            $companybankaccount->socid = $object->id;
 
-            $companybankaccount->bank            = GETPOST('bank', 'alpha');
-            $companybankaccount->label           = GETPOST('label', 'alpha');
-            $companybankaccount->status          = GETPOSTINT('clos');
-            $companybankaccount->clos            = $companybankaccount->status;
-            $companybankaccount->code_banque     = GETPOST('code_banque', 'alpha');
-            $companybankaccount->code_guichet    = GETPOST('code_guichet', 'alpha');
-            $companybankaccount->number          = GETPOST('number', 'alpha');
-            $companybankaccount->cle_rib         = GETPOST('cle_rib', 'alpha');
-            $companybankaccount->bic             = GETPOST('bic', 'alpha');
-            $companybankaccount->iban            = GETPOST('iban', 'alpha');
+            $companybankaccount->bank = GETPOST('bank', 'alpha');
+            $companybankaccount->label = GETPOST('label', 'alpha');
+            $companybankaccount->status = GETPOSTINT('clos');
+            $companybankaccount->clos = $companybankaccount->status;
+            $companybankaccount->code_banque = GETPOST('code_banque', 'alpha');
+            $companybankaccount->code_guichet = GETPOST('code_guichet', 'alpha');
+            $companybankaccount->number = GETPOST('number', 'alpha');
+            $companybankaccount->cle_rib = GETPOST('cle_rib', 'alpha');
+            $companybankaccount->bic = GETPOST('bic', 'alpha');
+            $companybankaccount->iban = GETPOST('iban', 'alpha');
 
-            $companybankaccount->address         = GETPOST('address', 'alpha');
-            $companybankaccount->domiciliation   = $companybankaccount->address;
+            $companybankaccount->address = GETPOST('address', 'alpha');
+            $companybankaccount->domiciliation = $companybankaccount->address;
 
-            $companybankaccount->owner_name      = GETPOST('proprio', 'alpha');
-            $companybankaccount->proprio         = $companybankaccount->owner_name;
-            $companybankaccount->owner_address   = GETPOST('owner_address', 'alpha');
-            $companybankaccount->frstrecur       = GETPOST('frstrecur', 'alpha');
-            $companybankaccount->rum             = GETPOST('rum', 'alpha');
-            $companybankaccount->date_rum        = dol_mktime(0, 0, 0, GETPOST('date_rummonth'), GETPOST('date_rumday'), GETPOST('date_rumyear'));
+            $companybankaccount->owner_name = GETPOST('proprio', 'alpha');
+            $companybankaccount->proprio = $companybankaccount->owner_name;
+            $companybankaccount->owner_address = GETPOST('owner_address', 'alpha');
+            $companybankaccount->frstrecur = GETPOST('frstrecur', 'alpha');
+            $companybankaccount->rum = GETPOST('rum', 'alpha');
+            $companybankaccount->date_rum = dol_mktime(0, 0, 0, GETPOST('date_rummonth'), GETPOST('date_rumday'), GETPOST('date_rumyear'));
             if (empty($companybankaccount->rum)) {
                 $companybankaccount->rum = $prelevement->buildRumNumber($object->code_client, $companybankaccount->datec, $companybankaccount->id);
             }
@@ -240,17 +248,17 @@ if (empty($reshook)) {
         if (!$error) {
             $companybankaccount->oldcopy = dol_clone($companybankaccount, 2);
 
-            $companypaymentmode->fk_soc          = $object->id;
+            $companypaymentmode->fk_soc = $object->id;
 
-            $companypaymentmode->bank            = GETPOST('bank', 'alpha');
-            $companypaymentmode->label           = GETPOST('label', 'alpha');
-            $companypaymentmode->number          = GETPOST('cardnumber', 'alpha');
-            $companypaymentmode->last_four       = substr(GETPOST('cardnumber', 'alpha'), -4);
-            $companypaymentmode->proprio         = GETPOST('proprio', 'alpha');
-            $companypaymentmode->exp_date_month  = GETPOSTINT('exp_date_month');
-            $companypaymentmode->exp_date_year   = GETPOSTINT('exp_date_year');
-            $companypaymentmode->cvn             = GETPOST('cvn', 'alpha');
-            $companypaymentmode->country_code    = $object->country_code;
+            $companypaymentmode->bank = GETPOST('bank', 'alpha');
+            $companypaymentmode->label = GETPOST('label', 'alpha');
+            $companypaymentmode->number = GETPOST('cardnumber', 'alpha');
+            $companypaymentmode->last_four = substr(GETPOST('cardnumber', 'alpha'), -4);
+            $companypaymentmode->proprio = GETPOST('proprio', 'alpha');
+            $companypaymentmode->exp_date_month = GETPOSTINT('exp_date_month');
+            $companypaymentmode->exp_date_year = GETPOSTINT('exp_date_year');
+            $companypaymentmode->cvn = GETPOST('cvn', 'alpha');
+            $companypaymentmode->country_code = $object->country_code;
 
             if (GETPOST('stripe_card_ref', 'alpha') && GETPOST('stripe_card_ref', 'alpha') != $companypaymentmode->stripe_card_ref) {
                 // If we set a stripe value that is different than previous one, we also set the stripe account
@@ -294,31 +302,31 @@ if (empty($reshook)) {
             // Ajout
             $companybankaccount = new CompanyBankAccount($db);
 
-            $companybankaccount->socid           = $object->id;
+            $companybankaccount->socid = $object->id;
 
             $companybankaccount->fetch_thirdparty();
 
-            $companybankaccount->bank            = GETPOST('bank', 'alpha');
-            $companybankaccount->label           = GETPOST('label', 'alpha');
-            $companybankaccount->code_banque     = GETPOST('code_banque', 'alpha');
-            $companybankaccount->code_guichet    = GETPOST('code_guichet', 'alpha');
-            $companybankaccount->number          = GETPOST('number', 'alpha');
-            $companybankaccount->cle_rib         = GETPOST('cle_rib', 'alpha');
-            $companybankaccount->bic             = GETPOST('bic', 'alpha');
-            $companybankaccount->iban            = GETPOST('iban', 'alpha');
+            $companybankaccount->bank = GETPOST('bank', 'alpha');
+            $companybankaccount->label = GETPOST('label', 'alpha');
+            $companybankaccount->code_banque = GETPOST('code_banque', 'alpha');
+            $companybankaccount->code_guichet = GETPOST('code_guichet', 'alpha');
+            $companybankaccount->number = GETPOST('number', 'alpha');
+            $companybankaccount->cle_rib = GETPOST('cle_rib', 'alpha');
+            $companybankaccount->bic = GETPOST('bic', 'alpha');
+            $companybankaccount->iban = GETPOST('iban', 'alpha');
 
-            $companybankaccount->domiciliation   = GETPOST('address', 'alpha');
-            $companybankaccount->address         = GETPOST('address', 'alpha');
+            $companybankaccount->domiciliation = GETPOST('address', 'alpha');
+            $companybankaccount->address = GETPOST('address', 'alpha');
 
-            $companybankaccount->proprio         = GETPOST('proprio', 'alpha');
-            $companybankaccount->owner_address   = GETPOST('owner_address', 'alpha');
-            $companybankaccount->frstrecur       = GETPOST('frstrecur', 'alpha');
-            $companybankaccount->rum             = GETPOST('rum', 'alpha');
-            $companybankaccount->date_rum        = dol_mktime(0, 0, 0, GETPOSTINT('date_rummonth'), GETPOSTINT('date_rumday'), GETPOSTINT('date_rumyear'));
-            $companybankaccount->datec           = dol_now();
+            $companybankaccount->proprio = GETPOST('proprio', 'alpha');
+            $companybankaccount->owner_address = GETPOST('owner_address', 'alpha');
+            $companybankaccount->frstrecur = GETPOST('frstrecur', 'alpha');
+            $companybankaccount->rum = GETPOST('rum', 'alpha');
+            $companybankaccount->date_rum = dol_mktime(0, 0, 0, GETPOSTINT('date_rummonth'), GETPOSTINT('date_rumday'), GETPOSTINT('date_rumyear'));
+            $companybankaccount->datec = dol_now();
 
             //$companybankaccount->clos          = GETPOSTINT('clos');
-            $companybankaccount->status          = GETPOSTINT('clos');
+            $companybankaccount->status = GETPOSTINT('clos');
 
             $companybankaccount->bank = trim($companybankaccount->bank);
             if (empty($companybankaccount->bank) && !empty($companybankaccount->thirdparty)) {
@@ -400,20 +408,20 @@ if (empty($reshook)) {
             // Ajout
             $companypaymentmode = new CompanyPaymentMode($db);
 
-            $companypaymentmode->fk_soc          = $object->id;
-            $companypaymentmode->bank            = GETPOST('bank', 'alpha');
-            $companypaymentmode->label           = GETPOST('label', 'alpha');
-            $companypaymentmode->number          = GETPOST('cardnumber', 'alpha');
-            $companypaymentmode->last_four       = substr(GETPOST('cardnumber', 'alpha'), -4);
-            $companypaymentmode->proprio         = GETPOST('proprio', 'alpha');
-            $companypaymentmode->exp_date_month  = GETPOSTINT('exp_date_month');
-            $companypaymentmode->exp_date_year   = GETPOSTINT('exp_date_year');
-            $companypaymentmode->cvn             = GETPOST('cvn', 'alpha');
-            $companypaymentmode->datec           = dol_now();
-            $companypaymentmode->default_rib     = 0;
-            $companypaymentmode->type            = 'card';
-            $companypaymentmode->country_code    = $object->country_code;
-            $companypaymentmode->status          = $servicestatus;
+            $companypaymentmode->fk_soc = $object->id;
+            $companypaymentmode->bank = GETPOST('bank', 'alpha');
+            $companypaymentmode->label = GETPOST('label', 'alpha');
+            $companypaymentmode->number = GETPOST('cardnumber', 'alpha');
+            $companypaymentmode->last_four = substr(GETPOST('cardnumber', 'alpha'), -4);
+            $companypaymentmode->proprio = GETPOST('proprio', 'alpha');
+            $companypaymentmode->exp_date_month = GETPOSTINT('exp_date_month');
+            $companypaymentmode->exp_date_year = GETPOSTINT('exp_date_year');
+            $companypaymentmode->cvn = GETPOST('cvn', 'alpha');
+            $companypaymentmode->datec = dol_now();
+            $companypaymentmode->default_rib = 0;
+            $companypaymentmode->type = 'card';
+            $companypaymentmode->country_code = $object->country_code;
+            $companypaymentmode->status = $servicestatus;
 
             if (GETPOST('stripe_card_ref', 'alpha')) {
                 // If we set a stripe value, we also set the stripe account
@@ -645,10 +653,10 @@ if (empty($reshook)) {
             $db->begin();
 
             if (empty($newcu)) {
-                $sql = "DELETE FROM " . MAIN_DB_PREFIX . "societe_account WHERE site = 'stripe' AND (site_account IS NULL or site_account = '' or site_account = '" . $db->escape($tmpsite_account) . "') AND fk_soc = " . $object->id . " AND status = " . ((int) $tmpservicestatus) . " AND entity = " . $conf->entity;
+                $sql = "DELETE FROM " . MAIN_DB_PREFIX . "societe_account WHERE site = 'stripe' AND (site_account IS NULL or site_account = '' or site_account = '" . $db->escape($tmpsite_account) . "') AND fk_soc = " . $object->id . " AND status = " . ((int)$tmpservicestatus) . " AND entity = " . $conf->entity;
             } else {
                 $sql = 'SELECT rowid FROM ' . MAIN_DB_PREFIX . "societe_account";
-                $sql .= " WHERE site = 'stripe' AND (site_account IS NULL or site_account = '' or site_account = '" . $db->escape($tmpsite_account) . "') AND fk_soc = " . ((int) $object->id) . " AND status = " . ((int) $tmpservicestatus) . " AND entity = " . $conf->entity; // Keep = here for entity. Only 1 record must be modified !
+                $sql .= " WHERE site = 'stripe' AND (site_account IS NULL or site_account = '' or site_account = '" . $db->escape($tmpsite_account) . "') AND fk_soc = " . ((int)$object->id) . " AND status = " . ((int)$tmpservicestatus) . " AND entity = " . $conf->entity; // Keep = here for entity. Only 1 record must be modified !
             }
 
             $resql = $db->query($sql);
@@ -670,7 +678,7 @@ if (empty($reshook)) {
                 } else {
                     $sql = 'UPDATE ' . MAIN_DB_PREFIX . "societe_account";
                     $sql .= " SET key_account = '" . $db->escape($newcu) . "', site_account = '" . $db->escape($tmpsite_account) . "'";
-                    $sql .= " WHERE site = 'stripe' AND (site_account IS NULL or site_account = '' or site_account = '" . $db->escape($tmpsite_account) . "') AND fk_soc = " . ((int) $object->id) . " AND status = " . ((int) $tmpservicestatus) . " AND entity = " . $conf->entity; // Keep = here for entity. Only 1 record must be modified !
+                    $sql .= " WHERE site = 'stripe' AND (site_account IS NULL or site_account = '' or site_account = '" . $db->escape($tmpsite_account) . "') AND fk_soc = " . ((int)$object->id) . " AND status = " . ((int)$tmpservicestatus) . " AND entity = " . $conf->entity; // Keep = here for entity. Only 1 record must be modified !
                     $resql = $db->query($sql);
                 }
             }
@@ -723,7 +731,7 @@ if (empty($reshook)) {
                     $tokenstring['type'] = $stripesup->type;
                     $sql = "UPDATE " . MAIN_DB_PREFIX . "oauth_token";
                     $sql .= " SET tokenstring = '" . $db->escape(json_encode($tokenstring)) . "'";
-                    $sql .= " WHERE site = 'stripe' AND (site_account IS NULL or site_account = '" . $db->escape($tmpsite_account) . "') AND fk_soc = " . ((int) $object->id) . " AND service = '" . $db->escape($tmpservice) . "' AND entity = " . $conf->entity; // Keep = here for entity. Only 1 record must be modified !
+                    $sql .= " WHERE site = 'stripe' AND (site_account IS NULL or site_account = '" . $db->escape($tmpsite_account) . "') AND fk_soc = " . ((int)$object->id) . " AND service = '" . $db->escape($tmpservice) . "' AND entity = " . $conf->entity; // Keep = here for entity. Only 1 record must be modified !
                     // TODO Add site and site_account on oauth_token table
                     $sql .= " WHERE fk_soc = " . $object->id . " AND service = '" . $db->escape($tmpservice) . "' AND entity = " . $conf->entity; // Keep = here for entity. Only 1 record must be modified !
                 } catch (Exception $e) {
@@ -740,7 +748,7 @@ if (empty($reshook)) {
                     $tokenstring['stripe_user_id'] = $stripesup->id;
                     $tokenstring['type'] = $stripesup->type;
                     $sql = "INSERT INTO " . MAIN_DB_PREFIX . "oauth_token (service, fk_soc, entity, tokenstring)";
-                    $sql .= " VALUES ('" . $db->escape($tmpservice) . "', " . ((int) $object->id) . ", " . ((int) $conf->entity) . ", '" . $db->escape(json_encode($tokenstring)) . "')";
+                    $sql .= " VALUES ('" . $db->escape($tmpservice) . "', " . ((int)$object->id) . ", " . ((int)$conf->entity) . ", '" . $db->escape(json_encode($tokenstring)) . "')";
                     // TODO Add site and site_account on oauth_token table
                 } catch (Exception $e) {
                     $error++;
@@ -774,9 +782,9 @@ if (empty($reshook)) {
             try {
                 $cu = $stripe->customerStripe($object, $stripeacc, $servicestatus);
                 if (preg_match('/pm_|src_/', $source)) {
-                    $cu->invoice_settings->default_payment_method = (string) $source; // New
+                    $cu->invoice_settings->default_payment_method = (string)$source; // New
                 } else {
-                    $cu->default_source = (string) $source; // Old
+                    $cu->default_source = (string)$source; // Old
                 }
                 // @phan-suppress-next-line PhanDeprecatedFunction
                 $result = $cu->save();
@@ -860,8 +868,6 @@ if (empty($reshook)) {
         }
     }
 }
-
-
 
 /*
  *	View
@@ -965,7 +971,7 @@ if ($socid && $action != 'edit' && $action != 'create' && $action != 'editcard' 
             print ' <span class="error">(' . $langs->trans("WrongCustomerCode") . ')</span>';
         }
         print '</td></tr>';
-        $sql = "SELECT count(*) as nb from " . MAIN_DB_PREFIX . "facture where fk_soc = " . ((int) $socid);
+        $sql = "SELECT count(*) as nb from " . MAIN_DB_PREFIX . "facture where fk_soc = " . ((int)$socid);
         $resql = $db->query($sql);
         if (!$resql) {
             dol_print_error($db);
@@ -1064,7 +1070,7 @@ if ($socid && $action != 'edit' && $action != 'create' && $action != 'editcard' 
             print ' <span class="error">(' . $langs->trans("WrongSupplierCode") . ')</span>';
         }
         print '</td></tr>';
-        $sql = "SELECT count(*) as nb from " . MAIN_DB_PREFIX . "facture where fk_soc = " . ((int) $socid);
+        $sql = "SELECT count(*) as nb from " . MAIN_DB_PREFIX . "facture where fk_soc = " . ((int)$socid);
         $resql = $db->query($sql);
         if (!$resql) {
             dol_print_error($db);
@@ -1161,7 +1167,7 @@ if ($socid && $action != 'edit' && $action != 'create' && $action != 'editcard' 
                         }
 
                         if ($paymentmethodobjsA->data != null && $paymentmethodobjsB->data != null) {
-                            $listofsources = array_merge((array) $paymentmethodobjsA->data, (array) $paymentmethodobjsB->data);
+                            $listofsources = array_merge((array)$paymentmethodobjsA->data, (array)$paymentmethodobjsB->data);
                         } elseif ($paymentmethodobjsB->data != null) {
                             $listofsources = $paymentmethodobjsB->data;
                         } else {
@@ -1219,8 +1225,8 @@ if ($socid && $action != 'edit' && $action != 'create' && $action != 'editcard' 
 
             $sql = 'SELECT rowid FROM ' . MAIN_DB_PREFIX . "societe_rib";
             $sql .= " WHERE type in ('card')";
-            $sql .= " AND fk_soc = " . ((int) $object->id);
-            $sql .= " AND status = " . ((int) $servicestatus);
+            $sql .= " AND fk_soc = " . ((int)$object->id);
+            $sql .= " AND status = " . ((int)$servicestatus);
 
             $resql = $db->query($sql);
             if ($resql) {
@@ -1236,7 +1242,7 @@ if ($socid && $action != 'edit' && $action != 'create' && $action != 'editcard' 
 
                             $arrayofremotecard[$companypaymentmodetemp->stripe_card_ref] = $companypaymentmodetemp->stripe_card_ref;
 
-                            print '<tr class="oddeven" data-rowid="' . ((int) $companypaymentmodetemp->id) . '">';
+                            print '<tr class="oddeven" data-rowid="' . ((int)$companypaymentmodetemp->id) . '">';
                             // Label
                             print '<td class="tdoverflowmax150" title="' . dol_escape_htmltag($companypaymentmodetemp->label) . '">';
                             print dol_escape_htmltag($companypaymentmodetemp->label);
@@ -1525,7 +1531,7 @@ if ($socid && $action != 'edit' && $action != 'create' && $action != 'editcard' 
 
         if (is_array($currencybalance)) {
             foreach ($currencybalance as $cpt) {
-                print '<tr><td>' . $langs->trans("Currency" . strtoupper($cpt['currency'])) . '</td><td>' . price($cpt['available'], 0, '', 1, - 1, - 1, strtoupper($cpt['currency'])) . '</td><td>' . price(isset($cpt->pending) ? $cpt->pending : 0, 0, '', 1, - 1, - 1, strtoupper($cpt['currency'])) . '</td><td>' . price($cpt['available'] + (isset($cpt->pending) ? $cpt->pending : 0), 0, '', 1, - 1, - 1, strtoupper($cpt['currency'])) . '</td></tr>';
+                print '<tr><td>' . $langs->trans("Currency" . strtoupper($cpt['currency'])) . '</td><td>' . price($cpt['available'], 0, '', 1, -1, -1, strtoupper($cpt['currency'])) . '</td><td>' . price(isset($cpt->pending) ? $cpt->pending : 0, 0, '', 1, -1, -1, strtoupper($cpt['currency'])) . '</td><td>' . price($cpt['available'] + (isset($cpt->pending) ? $cpt->pending : 0), 0, '', 1, -1, -1, strtoupper($cpt['currency'])) . '</td></tr>';
             }
         }
 
@@ -1666,7 +1672,7 @@ if ($socid && $action != 'edit' && $action != 'create' && $action != 'editcard' 
             // Default
             print '<td class="center" width="70">';
             if (!$rib->default_rib) {
-                print '<a href="' . $_SERVER["PHP_SELF"] . '?socid=' . ((int) $object->id) . '&ribid=' . ((int) $rib->id) . '&action=setasbankdefault&token=' . newToken() . '">';
+                print '<a href="' . $_SERVER["PHP_SELF"] . '?socid=' . ((int)$object->id) . '&ribid=' . ((int)$rib->id) . '&action=setasbankdefault&token=' . newToken() . '">';
                 print img_picto($langs->trans("Disabled"), 'off');
                 print '</a>';
             } else {
@@ -1916,7 +1922,7 @@ if ($socid && $action != 'edit' && $action != 'create' && $action != 'editcard' 
             // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
             $result = $companypaymentmodetemp->fetch(0, null, $object->id, 'ban');
 
-                $ecmfile = new EcmFiles($db);
+            $ecmfile = new EcmFiles($db);
             // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
             $result = $ecmfile->fetch(0, '', '', '', '', $companybankaccounttemp->table_element, $companypaymentmodetemp->id);
             if ($result > 0) {

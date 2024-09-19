@@ -91,7 +91,6 @@ $picto = array(
 );
 
 
-
 /*
  *  Actions
  */

@@ -17,4 +17,5 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_contratdet_extrafields ADD UNIQUE INDEX uk_contratdet_extrafields (fk_object);
+ALTER TABLE llx_contratdet_extrafields
+    ADD UNIQUE INDEX uk_contratdet_extrafields (fk_object);

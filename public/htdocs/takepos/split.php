@@ -165,65 +165,68 @@ $arrayOfValidBankAccount = array();
 <body class="takepossplitphp">
 
 <script>
-function Split(selectedline, split) {
-    $.ajax({
-        url: "split.php?action=split&token=<?php echo newToken(); ?>&line="+selectedline+"&split="+split+"&place=<?php echo $place;?>",
-        context: document.body
-    }).done(function() {
-        $("#currentplace").load("invoice.php?place="+parent.place+"&invoiceid="+parent.invoiceid, function() {
-            $('#currentplace').find('.posinvoiceline').click(function(){
-                Split(this.id, 1);
+    function Split(selectedline, split) {
+        $.ajax({
+            url: "split.php?action=split&token=<?php echo newToken(); ?>&line=" + selectedline + "&split=" + split + "&place=<?php echo $place;?>",
+            context: document.body
+        }).done(function () {
+            $("#currentplace").load("invoice.php?place=" + parent.place + "&invoiceid=" + parent.invoiceid, function () {
+                $('#currentplace').find('.posinvoiceline').click(function () {
+                    Split(this.id, 1);
+                });
+            });
+            $("#splitplace").load("invoice.php?place=SPLIT", function () {
+                $('#splitplace').find('.posinvoiceline').click(function () {
+                    Split(this.id, 0);
+                });
             });
         });
-        $("#splitplace").load("invoice.php?place=SPLIT", function() {
-            $('#splitplace').find('.posinvoiceline').click(function(){
+    }
+
+    $(document).ready(function () {
+        if (parent.place == 'SPLIT') {
+            parent.place = 0;
+            parent.invoiceid = 0;
+            parent.Refresh();
+        }
+        $("#currentplace").load("invoice.php?place=" + parent.place + "&invoiceid=" + parent.invoiceid, function () {
+            $('#currentplace').find('.posinvoiceline')
+                .click(function () {
+                    Split(this.id, 1);
+                });
+        });
+
+        $("#splitplace").load("invoice.php?place=SPLIT", function () {
+            $('#splitplace').find('.posinvoiceline').click(function () {
                 Split(this.id, 0);
             });
         });
+
+
+        $("#headersplit1").html("<?php echo $langs->trans("Place");?> " + parent.place);
+        $("#headersplit2").html("<?php echo $langs->trans("SplitSale");?>");
+
     });
-}
-
-$( document ).ready(function() {
-    if (parent.place=='SPLIT') {
-        parent.place=0;
-        parent.invoiceid=0;
-        parent.Refresh();
-    }
-    $("#currentplace").load("invoice.php?place="+parent.place+"&invoiceid="+parent.invoiceid, function() {
-        $('#currentplace').find('.posinvoiceline')
-        .click(function(){
-            Split(this.id, 1);
-        });
-    });
-
-    $("#splitplace").load("invoice.php?place=SPLIT", function() {
-        $('#splitplace').find('.posinvoiceline').click(function(){
-            Split(this.id, 0);
-        });
-    });
-
-
-
-    $("#headersplit1").html("<?php echo $langs->trans("Place");?> "+parent.place);
-    $("#headersplit2").html("<?php echo $langs->trans("SplitSale");?>");
-
-});
 </script>
 
 <div class="headersplit">
-  <a href="#" onclick="top.location.href='index.php?place='+parent.place"><div class="headercontent" id="headersplit1"></div></a>
+    <a href="#" onclick="top.location.href='index.php?place='+parent.place">
+        <div class="headercontent" id="headersplit1"></div>
+    </a>
 </div>
 
 <div class="rowsplit">
-  <div class="splitsale" id="currentplace"></div>
+    <div class="splitsale" id="currentplace"></div>
 </div>
 
 <div class="headersplit">
-  <a href="#" onclick="top.location.href='index.php?place=SPLIT'"><div class="headercontent" id="headersplit2"></div></a>
+    <a href="#" onclick="top.location.href='index.php?place=SPLIT'">
+        <div class="headercontent" id="headersplit2"></div>
+    </a>
 </div>
 
 <div class="rowsplit">
-  <div class="splitsale" id="splitplace"></div>
+    <div class="splitsale" id="splitplace"></div>
 </div>
 
 </body>

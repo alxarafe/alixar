@@ -64,8 +64,8 @@ class mod_supplier_proposal_saphir extends ModeleNumRefSupplierProposal
     /**
      *  Return description of module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -107,7 +107,7 @@ class mod_supplier_proposal_saphir extends ModeleNumRefSupplierProposal
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -127,9 +127,9 @@ class mod_supplier_proposal_saphir extends ModeleNumRefSupplierProposal
     /**
      *  Return next value
      *
-     *  @param  Societe             $objsoc                 Object third party
-     *  @param  SupplierProposal    $supplier_proposal      Object commercial proposal
-     *  @return string|0                                    Value if OK, 0 if KO
+     * @param Societe $objsoc Object third party
+     * @param SupplierProposal $supplier_proposal Object commercial proposal
+     * @return string|0                                    Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $supplier_proposal)
     {
@@ -149,6 +149,6 @@ class mod_supplier_proposal_saphir extends ModeleNumRefSupplierProposal
         $customercode = $objsoc->code_client;
         $numFinal = get_next_value($db, $mask, 'supplier_proposal', 'ref', '', $customercode, $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

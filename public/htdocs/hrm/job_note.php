@@ -40,11 +40,11 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_job.lib.php';
 $langs->loadLangs(array('hrm', 'companies'));
 
 // Get parameters
-$id     = GETPOSTINT('id');
-$ref    = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
 
-$action     = GETPOST('action', 'aZ09');
-$cancel     = GETPOST('cancel', 'aZ09');
+$action = GETPOST('action', 'aZ09');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 // Initialize technical objects

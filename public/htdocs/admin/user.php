@@ -192,7 +192,7 @@ print '</div>';
 
 print '<br>';
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 // Defini tableau def des modeles
 $def = array();

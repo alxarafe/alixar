@@ -1,17 +1,17 @@
 <?php
 
-/* Copyright (C) 2006-2011  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2006       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2007       Patrick Raguin          <patrick.raguin@gmail.com>
- * Copyright (C) 2010-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2013-2014  Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2013-2014  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2013       Christophe Battarel     <contact@altairis.fr>
- * Copyright (C) 2013-2018  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2015-2024	Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2015       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2017       Rui Strecht             <rui.strecht@aliartalentos.com>
- * Copyright (C) 2018       Ferran Marcet           <fmarcet@2byte.es>
+/* Copyright (C) 2006-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2007       Patrick Raguin              <patrick.raguin@gmail.com>
+ * Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2014  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2014  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013       Christophe Battarel         <contact@altairis.fr>
+ * Copyright (C) 2013-2018  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015-2024	Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2017       Rui Strecht                 <rui.strecht@aliartalentos.com>
+ * Copyright (C) 2018       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -36,15 +36,25 @@
  *  \ingroup    societe
  */
 
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Comm\Classes\CActionComm;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Conf;
 use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Societe\Classes\SocieteAccount;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  * Return array of tabs to used on pages for third parties cards.
  *
- * @param   Societe $object     Object company shown
+ * @param Societe $object Object company shown
  * @return  array               Array of tabs
  */
 function societe_prepare_head(Societe $object)
@@ -78,7 +88,7 @@ function societe_prepare_head(Societe $object)
             $parameters = array('contacttab' => true);
             $reshook = $hookmanager->executeHooks('printFieldListFrom', $parameters, $object); // Note that $action and $object may have been modified by hook
             $sql .= $hookmanager->resPrint;
-            $sql .= " WHERE p.fk_soc = " . ((int) $object->id);
+            $sql .= " WHERE p.fk_soc = " . ((int)$object->id);
             $sql .= " AND p.entity IN (" . getEntity($object->element) . ")";
             // Add where from hooks
             $parameters = array('contacttab' => true);
@@ -160,7 +170,7 @@ function societe_prepare_head(Societe $object)
         } else {
             $sql = "SELECT COUNT(n.rowid) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "projet as n";
-            $sql .= " WHERE fk_soc = " . ((int) $object->id);
+            $sql .= " WHERE fk_soc = " . ((int)$object->id);
             $sql .= " AND entity IN (" . getEntity('project') . ")";
             $resql = $db->query($sql);
             if ($resql) {
@@ -222,11 +232,11 @@ function societe_prepare_head(Societe $object)
 
         $sql = "SELECT COUNT(n.rowid) as nb";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe_rib as n";
-        $sql .= " WHERE n.fk_soc = " . ((int) $object->id);
+        $sql .= " WHERE n.fk_soc = " . ((int)$object->id);
         if (!isModEnabled('stripe')) {
             $sql .= " AND n.stripe_card_ref IS NULL";
         } else {
-            $sql .= " AND (n.stripe_card_ref IS NULL OR (n.stripe_card_ref IS NOT NULL AND n.status = " . ((int) $servicestatus) . "))";
+            $sql .= " AND (n.stripe_card_ref IS NULL OR (n.stripe_card_ref IS NOT NULL AND n.status = " . ((int)$servicestatus) . "))";
         }
 
         $resql = $db->query($sql);
@@ -239,7 +249,7 @@ function societe_prepare_head(Societe $object)
 
         //if (isModEnabled('stripe') && $nbBankAccount > 0) $nbBankAccount = '...'; // No way to know exact number
 
-        $head[$h][0] = constant('BASE_URL') . '/societe/paymentmodes.php?socid=' . urlencode((string) ($object->id));
+        $head[$h][0] = constant('BASE_URL') . '/societe/paymentmodes.php?socid=' . urlencode((string)($object->id));
         $head[$h][1] = $title;
         if ($foundonexternalonlinesystem) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">...</span>';
@@ -259,12 +269,12 @@ function societe_prepare_head(Societe $object)
             $site_filter_list[] = 'dolibarr_portal';
         }
 
-        $head[$h][0] = constant('BASE_URL') . '/societe/website.php?id=' . urlencode((string) ($object->id));
+        $head[$h][0] = constant('BASE_URL') . '/societe/website.php?id=' . urlencode((string)($object->id));
         $head[$h][1] = $langs->trans("WebSiteAccounts");
         $nbNote = 0;
         $sql = "SELECT COUNT(n.rowid) as nb";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe_account as n";
-        $sql .= " WHERE fk_soc = " . ((int) $object->id);
+        $sql .= " WHERE fk_soc = " . ((int)$object->id);
         $sql .= " AND entity IN (" . getEntity('thirdpartyaccount') . ")";
         if (!empty($site_filter_list)) {
             $sql .= " AND n.site IN (" . $db->sanitize("'" . implode("','", $site_filter_list) . "'", 1) . ")";
@@ -292,7 +302,7 @@ function societe_prepare_head(Societe $object)
             $nbNote = 0;
             $sql = "SELECT COUNT(n.rowid) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "partnership as n";
-            $sql .= " WHERE fk_soc = " . ((int) $object->id);
+            $sql .= " WHERE fk_soc = " . ((int)$object->id);
             $sql .= " AND entity IN (" . getEntity('partnership') . ")";
             $resql = $db->query($sql);
             if ($resql) {
@@ -326,7 +336,7 @@ function societe_prepare_head(Societe $object)
             // List of notifications enabled for contacts of the third party
             $sql = "SELECT COUNT(t.rowid) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "ticket as t";
-            $sql .= " WHERE t.fk_soc = " . ((int) $object->id);
+            $sql .= " WHERE t.fk_soc = " . ((int)$object->id);
             $resql = $db->query($sql);
             if ($resql) {
                 $obj = $db->fetch_object($resql);
@@ -337,7 +347,7 @@ function societe_prepare_head(Societe $object)
             dol_setcache($cachekey, $nbTicket, 120);        // If setting cache fails, this is not a problem, so we do not test result.
         }
 
-        $head[$h][0] = constant('BASE_URL') . '/ticket/list.php?socid=' . urlencode((string) ($object->id));
+        $head[$h][0] = constant('BASE_URL') . '/ticket/list.php?socid=' . urlencode((string)($object->id));
         $head[$h][1] = $langs->trans("Tickets");
         if ($nbTicket > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbTicket . '</span>';
@@ -372,7 +382,7 @@ function societe_prepare_head(Societe $object)
                 $sql .= " " . MAIN_DB_PREFIX . "socpeople as c";
                 $sql .= " WHERE a.rowid = n.fk_action";
                 $sql .= " AND c.rowid = n.fk_contact";
-                $sql .= " AND c.fk_soc = " . ((int) $object->id);
+                $sql .= " AND c.fk_soc = " . ((int)$object->id);
                 $resql = $db->query($sql);
                 if ($resql) {
                     $obj = $db->fetch_object($resql);
@@ -383,7 +393,7 @@ function societe_prepare_head(Societe $object)
                 dol_setcache($cachekey, $nbNotif, 120);     // If setting cache fails, this is not a problem, so we do not test result.
             }
 
-            $head[$h][0] = constant('BASE_URL') . '/societe/notify/card.php?socid=' . urlencode((string) ($object->id));
+            $head[$h][0] = constant('BASE_URL') . '/societe/notify/card.php?socid=' . urlencode((string)($object->id));
             $head[$h][1] = $langs->trans("Notifications");
             if ($nbNotif > 0) {
                 $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNotif . '</span>';
@@ -400,7 +410,7 @@ function societe_prepare_head(Societe $object)
         if (!empty($object->note_public)) {
             $nbNote++;
         }
-        $head[$h][0] = constant('BASE_URL') . '/societe/note.php?id=' . urlencode((string) ($object->id));
+        $head[$h][0] = constant('BASE_URL') . '/societe/note.php?id=' . urlencode((string)($object->id));
         $head[$h][1] = $langs->trans("Notes");
         if ($nbNote > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbNote . '</span>';
@@ -447,7 +457,7 @@ function societe_prepare_head(Societe $object)
         } else {
             $sql = "SELECT COUNT(id) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm";
-            $sql .= " WHERE fk_soc = " . ((int) $object->id);
+            $sql .= " WHERE fk_soc = " . ((int)$object->id);
             $sql .= " AND entity IN (" . getEntity('agenda') . ")";
             $resql = $db->query($sql);
             if ($resql) {
@@ -483,7 +493,7 @@ function societe_prepare_head(Societe $object)
 /**
  * Return array of tabs to used on page
  *
- * @param   Object  $object     Object for tabs
+ * @param Object $object Object for tabs
  * @return  array               Array of tabs
  */
 function societe_prepare_head2($object)
@@ -506,11 +516,10 @@ function societe_prepare_head2($object)
 }
 
 
-
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function societe_admin_prepare_head()
 {
@@ -558,21 +567,20 @@ function societe_admin_prepare_head()
 }
 
 
-
 /**
  *    Return country label, code or id from an id, code or label
  *
- *    @param    int|string  $searchkey      Id or code of country to search
- *    @param    string      $withcode       '0'=Return label,
+ * @param int|string $searchkey Id or code of country to search
+ * @param string $withcode '0'=Return label,
  *                                          '1'=Return code + label,
  *                                          '2'=Return code from id,
  *                                          '3'=Return id from code,
  *                                          'all'=Return array('id'=>,'code'=>,'label'=>)
- *    @param    DoliDB      $dbtouse        Database handler (using in global way may fail because of conflicts with some autoload features)
- *    @param    Translate   $outputlangs    Langs object for output translation
- *    @param    int         $entconv        0=Return value without entities and not converted to output charset, 1=Ready for html output
- *    @param    string      $searchlabel    Label of country to search (warning: searching on label is not reliable)
- *    @return   int|string|array{id:int,code:string,label:string}   Integer with country id or String with country code or translated country name or Array('id','code','label') or 'NotDefined'
+ * @param DoliDB $dbtouse Database handler (using in global way may fail because of conflicts with some autoload features)
+ * @param Translate $outputlangs Langs object for output translation
+ * @param int $entconv 0=Return value without entities and not converted to output charset, 1=Ready for html output
+ * @param string $searchlabel Label of country to search (warning: searching on label is not reliable)
+ * @return   int|string|array{id:int,code:string,label:string}   Integer with country id or String with country code or translated country name or Array('id','code','label') or 'NotDefined'
  */
 function getCountry($searchkey, $withcode = '', $dbtouse = null, $outputlangs = null, $entconv = 1, $searchlabel = '')
 {
@@ -597,7 +605,7 @@ function getCountry($searchkey, $withcode = '', $dbtouse = null, $outputlangs = 
 
     $sql = "SELECT rowid, code, label FROM " . MAIN_DB_PREFIX . "c_country";
     if (is_numeric($searchkey)) {
-        $sql .= " WHERE rowid = " . ((int) $searchkey);
+        $sql .= " WHERE rowid = " . ((int)$searchkey);
     } elseif (!empty($searchkey)) {
         $sql .= " WHERE code = '" . $db->escape($searchkey) . "'";
     } else {
@@ -642,17 +650,17 @@ function getCountry($searchkey, $withcode = '', $dbtouse = null, $outputlangs = 
 /**
  *    Return state translated from an id. Return value is always utf8 encoded and without entities.
  *
- *    @param    int         $id             id of state (province/departement)
- *    @param    '0'|'1'|'2'|'all'   $withcode   '0'=Return label,
+ * @param int $id id of state (province/departement)
+ * @param    '0'|'1'|'2'|'all'   $withcode   '0'=Return label,
  *                                              '1'=Return string code + label,
  *                                              '2'=Return code,
  *                                              'all'=return array('id'=>,'code'=>,'label'=>)
- *    @param    ?DoliDB     $dbtouse        Database handler (using in global way may fail because of conflicts with some autoload features)
- *    @param    int<0,1>    $withregion     '0'=Ignores region,
+ * @param    ?DoliDB $dbtouse Database handler (using in global way may fail because of conflicts with some autoload features)
+ * @param int<0,1> $withregion '0'=Ignores region,
  *                                          '1'=Add region name/code/id as needed to output,
- *    @param    Translate   $outputlangs    Langs object for output translation, not fully implemented yet
- *    @param    int<0,1>    $entconv        0=Return value without entities and not converted to output charset, 1=Ready for html output
- *    @return   string|array{id:int,code:string,label:string}|array{id:int,code:string,label:string,region_code:string,region:string}       String with state code or state name or Array('id','code','label')/Array('id','code','label','region_code','region')
+ * @param Translate $outputlangs Langs object for output translation, not fully implemented yet
+ * @param int<0,1> $entconv 0=Return value without entities and not converted to output charset, 1=Ready for html output
+ * @return   string|array{id:int,code:string,label:string}|array{id:int,code:string,label:string,region_code:string,region:string}       String with state code or state name or Array('id','code','label')/Array('id','code','label','region_code','region')
  */
 function getState($id, $withcode = '0', $dbtouse = null, $withregion = 0, $outputlangs = null, $entconv = 1)
 {
@@ -664,7 +672,7 @@ function getState($id, $withcode = '0', $dbtouse = null, $withregion = 0, $outpu
 
     $sql = "SELECT d.rowid as id, d.code_departement as code, d.nom as name, d.active, c.label as country, c.code as country_code, r.code_region as region_code, r.nom as region_name FROM";
     $sql .= " " . MAIN_DB_PREFIX . "c_departements as d, " . MAIN_DB_PREFIX . "c_regions as r," . MAIN_DB_PREFIX . "c_country as c";
-    $sql .= " WHERE d.fk_region=r.code_region and r.fk_pays=c.rowid and d.rowid=" . ((int) $id);
+    $sql .= " WHERE d.fk_region=r.code_region and r.fk_pays=c.rowid and d.rowid=" . ((int)$id);
     $sql .= " AND d.active = 1 AND r.active = 1 AND c.active = 1";
     $sql .= " ORDER BY c.code, d.code_departement";
 
@@ -721,10 +729,10 @@ function getState($id, $withcode = '0', $dbtouse = null, $withregion = 0, $outpu
 /**
  *    Return label of currency or code+label
  *
- *    @param      string    $code_iso       Code iso of currency
- *    @param      int       $withcode       '1'=show code + label
- *    @param      Translate $outputlangs    Output language
- *    @return     string                    Label translated of currency
+ * @param string $code_iso Code iso of currency
+ * @param int $withcode '1'=show code + label
+ * @param Translate $outputlangs Output language
+ * @return     string                    Label translated of currency
  */
 function currency_name($code_iso, $withcode = 0, $outputlangs = null)
 {
@@ -768,8 +776,8 @@ function currency_name($code_iso, $withcode = 0, $outputlangs = null)
  *    Return the name translated of juridical status.
  *    This method include a cache.
  *
- *    @param      string    $code       Code of juridical status
- *    @return     string                Value of the juridical status
+ * @param string $code Code of juridical status
+ * @return     string                Value of the juridical status
  */
 function getFormeJuridiqueLabel($code)
 {
@@ -812,7 +820,7 @@ function getFormeJuridiqueLabel($code)
  *  Return list of countries that are inside the EEC (European Economic Community)
  *  Note: Try to keep this function as a "memory only" function for performance reasons.
  *
- *  @return     array                   Array of countries code in EEC
+ * @return     array                   Array of countries code in EEC
  */
 function getCountriesInEEC()
 {
@@ -848,8 +856,8 @@ function getCountriesInEEC()
 /**
  *  Return if a country of an object is inside the EEC (European Economic Community)
  *
- *  @param      Object      $object    Object
- *  @return     boolean                true = country inside EEC, false = country outside EEC
+ * @param Object $object Object
+ * @return     boolean                true = country inside EEC, false = country outside EEC
  */
 function isInEEC($object)
 {
@@ -867,14 +875,14 @@ function isInEEC($object)
 /**
  *      Show html area for list of projects
  *
- *      @param  Conf        $conf           Object conf
- *      @param  Translate   $langs          Object langs
- *      @param  DoliDB      $db             Database handler
- *      @param  Object      $object         Third party object
- *      @param  string      $backtopage     Url to go once contact is created
- *      @param  int         $nocreatelink   1=Hide create project link
- *      @param  string      $morehtmlright  More html on right of title
- *      @return int
+ * @param Conf $conf Object conf
+ * @param Translate $langs Object langs
+ * @param DoliDB $db Database handler
+ * @param Object $object Third party object
+ * @param string $backtopage Url to go once contact is created
+ * @param int $nocreatelink 1=Hide create project link
+ * @param string $morehtmlright More html on right of title
+ * @return int
  */
 function show_projects($conf, $langs, $db, $object, $backtopage = '', $nocreatelink = 0, $morehtmlright = '')
 {
@@ -896,11 +904,11 @@ function show_projects($conf, $langs, $db, $object, $backtopage = '', $nocreatel
         print '<div class="div-table-responsive">' . "\n";
         print '<table class="noborder centpercent">';
 
-        $sql  = "SELECT p.rowid as id, p.entity, p.title, p.ref, p.public, p.dateo as do, p.datee as de, p.fk_statut as status, p.fk_opp_status, p.opp_amount, p.opp_percent, p.tms as date_modification, p.budget_amount";
+        $sql = "SELECT p.rowid as id, p.entity, p.title, p.ref, p.public, p.dateo as do, p.datee as de, p.fk_statut as status, p.fk_opp_status, p.opp_amount, p.opp_percent, p.tms as date_modification, p.budget_amount";
         $sql .= ", cls.code as opp_status_code";
         $sql .= " FROM " . MAIN_DB_PREFIX . "projet as p";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_lead_status as cls on p.fk_opp_status = cls.rowid";
-        $sql .= " WHERE p.fk_soc = " . ((int) $object->id);
+        $sql .= " WHERE p.fk_soc = " . ((int)$object->id);
         $sql .= " AND p.entity IN (" . getEntity('project') . ")";
         $sql .= " ORDER BY p.dateo DESC";
 
@@ -1023,14 +1031,14 @@ function show_projects($conf, $langs, $db, $object, $backtopage = '', $nocreatel
             print '<div class="div-table-responsive">' . "\n";
             print '<table class="noborder centpercent">';
 
-            $sql  = "SELECT p.rowid as id, p.entity, p.title, p.ref, p.public, p.dateo as do, p.datee as de, p.fk_statut as status, p.fk_opp_status, p.opp_amount, p.opp_percent, p.tms as date_update, p.budget_amount";
+            $sql = "SELECT p.rowid as id, p.entity, p.title, p.ref, p.public, p.dateo as do, p.datee as de, p.fk_statut as status, p.fk_opp_status, p.opp_amount, p.opp_percent, p.tms as date_update, p.budget_amount";
             $sql .= ", cls.code as opp_status_code";
             $sql .= " FROM " . MAIN_DB_PREFIX . "projet as p";
             $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_lead_status as cls on p.fk_opp_status = cls.rowid";
             $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "element_contact as ec on p.rowid = ec.element_id";
             $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "socpeople as sc on ec.fk_socpeople = sc.rowid";
             $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_type_contact as tc on ec.fk_c_type_contact = tc.rowid";
-            $sql .= " WHERE sc.fk_soc = " . ((int) $object->id);
+            $sql .= " WHERE sc.fk_soc = " . ((int)$object->id);
             $sql .= " AND p.entity IN (" . getEntity('project') . ")";
             $sql .= " AND tc.element = 'project'";
             $sql .= " ORDER BY p.dateo DESC";
@@ -1128,13 +1136,13 @@ function show_projects($conf, $langs, $db, $object, $backtopage = '', $nocreatel
 /**
  *      Show html area for list of contacts
  *
- *      @param  Conf        $conf           Object conf
- *      @param  Translate   $langs          Object langs
- *      @param  DoliDB      $db             Database handler
- *      @param  Societe     $object         Third party object
- *      @param  string      $backtopage     Url to go once contact is created
- *      @param  int         $showuserlogin  1=Show also user login if it exists
- *      @return int
+ * @param Conf $conf Object conf
+ * @param Translate $langs Object langs
+ * @param DoliDB $db Database handler
+ * @param Societe $object Third party object
+ * @param string $backtopage Url to go once contact is created
+ * @param int $showuserlogin 1=Show also user login if it exists
+ * @return int
  */
 function show_contacts($conf, $langs, $db, $object, $backtopage = '', $showuserlogin = 0)
 {
@@ -1154,10 +1162,10 @@ function show_contacts($conf, $langs, $db, $object, $backtopage = '', $showuserl
         $search_status = 1; // always display active customer first
     }
 
-    $search_rowid   = GETPOST("search_rowid", "intcomma");
-    $search_name    = GETPOST("search_name", 'alpha');
+    $search_rowid = GETPOST("search_rowid", "intcomma");
+    $search_name = GETPOST("search_name", 'alpha');
     $search_address = GETPOST("search_address", 'alpha');
-    $search_poste   = GETPOST("search_poste", 'alpha');
+    $search_poste = GETPOST("search_poste", 'alpha');
     $search_note_private = GETPOST('search_note_private', 'alphanohtml');
     $search_roles = GETPOST("search_roles", 'array');
     $search_birthday_dtstart = GETPOST("search_birthday_dtstart", 'alpha');
@@ -1210,14 +1218,14 @@ function show_contacts($conf, $langs, $db, $object, $backtopage = '', $showuserl
     $extrafields->fetch_name_optionals_label($contactstatic->table_element);
 
     $contactstatic->fields = array(
-        'rowid'     => array('type' => 'integer', 'label' => "TechnicalID", 'enabled' => (getDolGlobalString('MAIN_SHOW_TECHNICAL_ID') ? 1 : 0), 'visible' => (getDolGlobalString('MAIN_SHOW_TECHNICAL_ID') ? 1 : 0), 'position' => 1),
-        'name'      => array('type' => 'varchar(128)', 'label' => 'Name', 'enabled' => 1, 'visible' => 1, 'notnull' => 1, 'showoncombobox' => 1, 'index' => 1, 'position' => 10, 'searchall' => 1),
-        'poste'     => array('type' => 'varchar(128)', 'label' => 'PostOrFunction', 'enabled' => 1, 'visible' => 1, 'notnull' => 1, 'showoncombobox' => 2, 'index' => 1, 'position' => 20),
-        'address'   => array('type' => 'varchar(128)', 'label' => 'Address', 'enabled' => 1, 'visible' => 1, 'notnull' => 1, 'showoncombobox' => 3, 'index' => 1, 'position' => 30),
+        'rowid' => array('type' => 'integer', 'label' => "TechnicalID", 'enabled' => (getDolGlobalString('MAIN_SHOW_TECHNICAL_ID') ? 1 : 0), 'visible' => (getDolGlobalString('MAIN_SHOW_TECHNICAL_ID') ? 1 : 0), 'position' => 1),
+        'name' => array('type' => 'varchar(128)', 'label' => 'Name', 'enabled' => 1, 'visible' => 1, 'notnull' => 1, 'showoncombobox' => 1, 'index' => 1, 'position' => 10, 'searchall' => 1),
+        'poste' => array('type' => 'varchar(128)', 'label' => 'PostOrFunction', 'enabled' => 1, 'visible' => 1, 'notnull' => 1, 'showoncombobox' => 2, 'index' => 1, 'position' => 20),
+        'address' => array('type' => 'varchar(128)', 'label' => 'Address', 'enabled' => 1, 'visible' => 1, 'notnull' => 1, 'showoncombobox' => 3, 'index' => 1, 'position' => 30),
         'note_private' => array('type' => 'html', 'label' => 'NotePrivate', 'enabled' => (!getDolGlobalInt('MAIN_LIST_HIDE_PRIVATE_NOTES')), 'visible' => 3, 'position' => 35),
-        'role'      => array('type' => 'checkbox', 'label' => 'Role', 'enabled' => 1, 'visible' => 1, 'notnull' => 1, 'showoncombobox' => 4, 'index' => 1, 'position' => 40),
-        'birthday'  => array('type' => 'date', 'label' => 'Birthday', 'enabled' => 1, 'visible' => -1, 'notnull' => 0, 'position' => 45),
-        'statut'    => array('type' => 'integer', 'label' => 'Status', 'enabled' => 1, 'visible' => 1, 'notnull' => 1, 'default' => '0', 'index' => 1, 'position' => 50, 'arrayofkeyval' => array(0 => $contactstatic->LibStatut(0, 1), 1 => $contactstatic->LibStatut(1, 1))),
+        'role' => array('type' => 'checkbox', 'label' => 'Role', 'enabled' => 1, 'visible' => 1, 'notnull' => 1, 'showoncombobox' => 4, 'index' => 1, 'position' => 40),
+        'birthday' => array('type' => 'date', 'label' => 'Birthday', 'enabled' => 1, 'visible' => -1, 'notnull' => 0, 'position' => 45),
+        'statut' => array('type' => 'integer', 'label' => 'Status', 'enabled' => 1, 'visible' => 1, 'notnull' => 1, 'default' => '0', 'index' => 1, 'position' => 50, 'arrayofkeyval' => array(0 => $contactstatic->LibStatut(0, 1), 1 => $contactstatic->LibStatut(1, 1))),
     );
 
     // Definition of fields for list
@@ -1237,9 +1245,9 @@ function show_contacts($conf, $langs, $db, $object, $backtopage = '', $showuserl
             if (!empty($extrafields->attributes[$contactstatic->table_element]['list'][$key])) {
                 $arrayfields["ef." . $key] = array(
                     'label' => $extrafields->attributes[$contactstatic->table_element]['label'][$key],
-                    'checked' => (((int) dol_eval($extrafields->attributes[$contactstatic->table_element]['list'][$key], 1, 1, '1') < 0) ? 0 : 1),
+                    'checked' => (((int)dol_eval($extrafields->attributes[$contactstatic->table_element]['list'][$key], 1, 1, '1') < 0) ? 0 : 1),
                     'position' => 1000 + $extrafields->attributes[$contactstatic->table_element]['pos'][$key],
-                    'enabled' => (abs((int) dol_eval($extrafields->attributes[$contactstatic->table_element]['list'][$key], 1)) != 3 && (int) dol_eval($extrafields->attributes[$contactstatic->table_element]['perms'][$key], 1, 1, '1'))
+                    'enabled' => (abs((int)dol_eval($extrafields->attributes[$contactstatic->table_element]['list'][$key], 1)) != 3 && (int)dol_eval($extrafields->attributes[$contactstatic->table_element]['perms'][$key], 1, 1, '1'))
                 );
             }
         }
@@ -1307,12 +1315,12 @@ function show_contacts($conf, $langs, $db, $object, $backtopage = '', $showuserl
     print '<div class="div-table-responsive">'; // You can use div-table-responsive-no-min if you don't need reserved height for your table
     print "\n" . '<table class="tagtable liste">' . "\n";
 
-    $param = "socid=" . urlencode((string) ($object->id));
+    $param = "socid=" . urlencode((string)($object->id));
     if ($search_rowid != '') {
-        $param .= '&search_rowid=' . urlencode((string) ($search_rowid));
+        $param .= '&search_rowid=' . urlencode((string)($search_rowid));
     }
     if ($search_status != '') {
-        $param .= '&search_status=' . urlencode((string) ($search_status));
+        $param .= '&search_status=' . urlencode((string)($search_status));
     }
     if (count($search_roles) > 0) {
         $param .= implode('&search_roles[]=', $search_roles);
@@ -1349,14 +1357,14 @@ function show_contacts($conf, $langs, $db, $object, $backtopage = '', $showuserl
     $sql .= " t.note_private";
     $sql .= " FROM " . MAIN_DB_PREFIX . "socpeople as t";
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "socpeople_extrafields as ef on (t.rowid = ef.fk_object)";
-    $sql .= " WHERE t.fk_soc = " . ((int) $object->id);
+    $sql .= " WHERE t.fk_soc = " . ((int)$object->id);
     $sql .= " AND t.entity IN (" . getEntity('socpeople') . ")";
-    $sql .= " AND ((t.fk_user_creat = " . ((int) $user->id) . " AND t.priv = 1) OR t.priv = 0)";
+    $sql .= " AND ((t.fk_user_creat = " . ((int)$user->id) . " AND t.priv = 1) OR t.priv = 0)";
     if ($search_rowid) {
         $sql .= natural_search('t.rowid', $search_rowid);
     }
     if ($search_status != '' && $search_status != '-1') {
-        $sql .= " AND t.statut = " . ((int) $search_status);
+        $sql .= " AND t.statut = " . ((int)$search_status);
     }
     if ($search_name) {
         $sql .= natural_search(array('t.lastname', 't.firstname'), $search_name);
@@ -1713,14 +1721,14 @@ function show_contacts($conf, $langs, $db, $object, $backtopage = '', $showuserl
 /**
  *      Show html area with actions to do
  *
- *      @param  Conf                $conf           Object conf
- *      @param  Translate           $langs          Object langs
- *      @param  DoliDB              $db             Object db
- *      @param  Adherent|Societe    $filterobj      Object thirdparty or member
- *      @param  Contact             $objcon         Object contact
- *      @param  int                 $noprint        Return string but does not output it
- *      @param  string|string[]     $actioncode     Filter on actioncode
- *      @return string|void                         Return html part or void if noprint is 1
+ * @param Conf $conf Object conf
+ * @param Translate $langs Object langs
+ * @param DoliDB $db Object db
+ * @param Adherent|Societe $filterobj Object thirdparty or member
+ * @param Contact $objcon Object contact
+ * @param int $noprint Return string but does not output it
+ * @param string|string[] $actioncode Filter on actioncode
+ * @return string|void                         Return html part or void if noprint is 1
  */
 function show_actions_todo($conf, $langs, $db, $filterobj, $objcon = null, $noprint = 0, $actioncode = '')
 {
@@ -1739,19 +1747,19 @@ function show_actions_todo($conf, $langs, $db, $filterobj, $objcon = null, $nopr
  *      Show html area with actions (done or not, ignore the name of function).
  *      Note: Global parameter $param must be defined.
  *
- *      @param  Conf               $conf           Object conf
- *      @param  Translate          $langs          Object langs
- *      @param  DoliDB             $db             Object db
- *      @param  mixed              $filterobj      Filter on object Adherent|Societe|Project|Product|CommandeFournisseur|Dolresource|Ticket... to list events linked to an object
- *      @param  Contact            $objcon         Filter on object contact to filter events on a contact
- *      @param  int                $noprint        Return string but does not output it
- *      @param  string|string[]    $actioncode     Filter on actioncode
- *      @param  string             $donetodo       Filter on event 'done' or 'todo' or ''=nofilter (all).
- *      @param  array              $filters        Filter on other fields
- *      @param  string             $sortfield      Sort field
- *      @param  string             $sortorder      Sort order
- *      @param  string             $module         You can add module name here if elementtype in table llx_actioncomm is objectkey@module
- *      @return string|void                        Return html part or void if noprint is 1
+ * @param Conf $conf Object conf
+ * @param Translate $langs Object langs
+ * @param DoliDB $db Object db
+ * @param mixed $filterobj Filter on object Adherent|Societe|Project|Product|CommandeFournisseur|Dolresource|Ticket... to list events linked to an object
+ * @param Contact $objcon Filter on object contact to filter events on a contact
+ * @param int $noprint Return string but does not output it
+ * @param string|string[] $actioncode Filter on actioncode
+ * @param string $donetodo Filter on event 'done' or 'todo' or ''=nofilter (all).
+ * @param array $filters Filter on other fields
+ * @param string $sortfield Sort field
+ * @param string $sortorder Sort order
+ * @param string $module You can add module name here if elementtype in table llx_actioncomm is objectkey@module
+ * @return string|void                        Return html part or void if noprint is 1
  */
 function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $noprint = 0, $actioncode = '', $donetodo = 'done', $filters = array(), $sortfield = 'a.datep,a.id', $sortorder = 'DESC', $module = '')
 {
@@ -1778,7 +1786,7 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
         $tms_start = '';
         $tms_end = '';
     }
-    
+
     // Check parameters
     if (!is_object($filterobj) && !is_object($objcon)) {
         dol_print_error(null, 'BadParameter');
@@ -1862,7 +1870,7 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
         if (is_object($objcon) && $objcon->id > 0) {
             $force_filter_contact = true;
             $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "actioncomm_resources as r ON a.id = r.fk_actioncomm";
-            $sql .= " AND r.element_type = '" . $db->escape($objcon->table_element) . "' AND r.fk_element = " . ((int) $objcon->id);
+            $sql .= " AND r.element_type = '" . $db->escape($objcon->table_element) . "' AND r.fk_element = " . ((int)$objcon->id);
         }
 
         // Fields from hook
@@ -1877,7 +1885,7 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
             $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "element_resources as er";
             $sql .= " ON er.resource_type = 'dolresource'";
             $sql .= " AND er.element_id = a.id";
-            $sql .= " AND er.resource_id = " . ((int) $filterobj->id);
+            $sql .= " AND er.resource_id = " . ((int)$filterobj->id);
         } elseif (is_object($filterobj) && get_class($filterobj) == 'Project') {
             /* Nothing */
         } elseif (is_object($filterobj) && get_class($filterobj) == 'Adherent') {
@@ -1903,50 +1911,50 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
         $sql .= " WHERE a.entity IN (" . getEntity('agenda') . ")";
         if ($force_filter_contact === false) {
             if (is_object($filterobj) && in_array(get_class($filterobj), array('Societe', 'Client', 'Fournisseur')) && $filterobj->id) {
-                $sql .= " AND a.fk_soc = " . ((int) $filterobj->id);
+                $sql .= " AND a.fk_soc = " . ((int)$filterobj->id);
             } elseif (is_object($filterobj) && get_class($filterobj) == 'Dolresource') {
                 /* Nothing */
             } elseif (is_object($filterobj) && get_class($filterobj) == 'Project' && $filterobj->id) {
-                $sql .= " AND a.fk_project = " . ((int) $filterobj->id);
+                $sql .= " AND a.fk_project = " . ((int)$filterobj->id);
             } elseif (is_object($filterobj) && get_class($filterobj) == 'Adherent') {
                 $sql .= " AND a.fk_element = m.rowid AND a.elementtype = 'member'";
                 if ($filterobj->id) {
-                    $sql .= " AND a.fk_element = " . ((int) $filterobj->id);
+                    $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
             } elseif (is_object($filterobj) && get_class($filterobj) == 'Commande') {
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = 'order'";
                 if ($filterobj->id) {
-                    $sql .= " AND a.fk_element = " . ((int) $filterobj->id);
+                    $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
             } elseif (is_object($filterobj) && get_class($filterobj) == 'CommandeFournisseur') {
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = 'order_supplier'";
                 if ($filterobj->id) {
-                    $sql .= " AND a.fk_element = " . ((int) $filterobj->id);
+                    $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
             } elseif (is_object($filterobj) && get_class($filterobj) == 'Facture') {
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = 'invoice'";
                 if ($filterobj->id) {
-                    $sql .= " AND a.fk_element = " . ((int) $filterobj->id);
+                    $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
             } elseif (is_object($filterobj) && get_class($filterobj) == 'Product') {
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = 'product'";
                 if ($filterobj->id) {
-                    $sql .= " AND a.fk_element = " . ((int) $filterobj->id);
+                    $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
             } elseif (is_object($filterobj) && get_class($filterobj) == 'Ticket') {
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = 'ticket'";
                 if ($filterobj->id) {
-                    $sql .= " AND a.fk_element = " . ((int) $filterobj->id);
+                    $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
             } elseif (is_object($filterobj) && get_class($filterobj) == 'BOM') {
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = 'bom'";
                 if ($filterobj->id) {
-                    $sql .= " AND a.fk_element = " . ((int) $filterobj->id);
+                    $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
             } elseif (is_object($filterobj) && get_class($filterobj) == 'Contrat') {
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = 'contract'";
                 if ($filterobj->id) {
-                    $sql .= " AND a.fk_element = " . ((int) $filterobj->id);
+                    $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
             } elseif (
                 is_object($filterobj) && is_array($filterobj->fields) && is_array($filterobj->fields['rowid'])
@@ -1956,13 +1964,13 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
                 // Generic case (if there is a $filterobj and a field rowid and (ref or label) exists.
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = '" . $db->escape($filterobj->element) . ($module ? "@" . $module : "") . "'";
                 if ($filterobj->id) {
-                    $sql .= " AND a.fk_element = " . ((int) $filterobj->id);
+                    $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
             } elseif (is_object($filterobj)) {
                 return 'Bad value for $filterobj';
             }
         } else {
-            $sql .= " AND u.rowid = " . ((int) $filterobj->id);
+            $sql .= " AND u.rowid = " . ((int)$filterobj->id);
         }
 
         if (!empty($tms_start) && !empty($tms_end)) {
@@ -2116,8 +2124,8 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
     if (isModEnabled('agenda') || (isModEnabled('mailing') && !empty($objcon->email))) {
         $delay_warning = $conf->global->MAIN_DELAY_ACTIONS_TODO * 24 * 60 * 60;
 
-                include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
-        
+        include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
+
         $formactions = new FormActions($db);
 
         $actionstatic = new ActionComm($db);
@@ -2422,11 +2430,11 @@ function show_actions_done($conf, $langs, $db, $filterobj, $objcon = null, $nopr
 /**
  *      Show html area for list of subsidiaries
  *
- *      @param  Conf        $conf       Object conf
- *      @param  Translate   $langs      Object langs
- *      @param  DoliDB      $db         Database handler
- *      @param  Societe     $object     Third party object
- *      @return int
+ * @param Conf $conf Object conf
+ * @param Translate $langs Object langs
+ * @param DoliDB $db Database handler
+ * @param Societe $object Third party object
+ * @return int
  */
 function show_subsidiaries($conf, $langs, $db, $object)
 {
@@ -2436,7 +2444,7 @@ function show_subsidiaries($conf, $langs, $db, $object)
 
     $sql = "SELECT s.rowid, s.client, s.fournisseur, s.nom as name, s.name_alias, s.email, s.address, s.zip, s.town, s.code_client, s.code_fournisseur, s.code_compta, s.code_compta_fournisseur, s.canvas";
     $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s";
-    $sql .= " WHERE s.parent = " . ((int) $object->id);
+    $sql .= " WHERE s.parent = " . ((int)$object->id);
     $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
     $sql .= " ORDER BY s.nom";
 
@@ -2487,7 +2495,7 @@ function show_subsidiaries($conf, $langs, $db, $object)
             print '<td class="tdoverflowmax200" title="' . dol_escape_htmltag($obj->code_client) . '">' . $obj->code_client . '</td>';
 
             print '<td class="center">';
-            print '<a class="editfielda" href="' . constant('BASE_URL') . '/societe/card.php?socid=' . ((int) $obj->rowid) . '&action=edit&token=' . newToken() . '">';
+            print '<a class="editfielda" href="' . constant('BASE_URL') . '/societe/card.php?socid=' . ((int)$obj->rowid) . '&action=edit&token=' . newToken() . '">';
             print img_edit();
             print '</a></td>';
 
@@ -2502,13 +2510,14 @@ function show_subsidiaries($conf, $langs, $db, $object)
 
     return $i;
 }
+
 /**
  *      Add Event Type SQL
  *
- *      @param  string      $sql            $sql modified
- *      @param  string      $actioncode     Action code
- *      @param  string      $sqlANDOR       "AND", "OR" or "" sql condition
- *      @return string      sql request
+ * @param string $sql $sql modified
+ * @param string $actioncode Action code
+ * @param string $sqlANDOR "AND", "OR" or "" sql condition
+ * @return string      sql request
  */
 function addEventTypeSQL(&$sql, $actioncode, $sqlANDOR = "AND")
 {
@@ -2543,11 +2552,11 @@ function addEventTypeSQL(&$sql, $actioncode, $sqlANDOR = "AND")
 /**
  *      Add Event Type SQL
  *
- *      @param  string      $sql            $sql modified
- *      @param  string      $donetodo       donetodo
- *      @param  string      $now            now
- *      @param  array       $filters        array
- *      @return string      sql request
+ * @param string $sql $sql modified
+ * @param string $donetodo donetodo
+ * @param string $now now
+ * @param array $filters array
+ * @return string      sql request
  */
 function addOtherFilterSQL(&$sql, $donetodo, $now, $filters)
 {
@@ -2571,10 +2580,10 @@ function addOtherFilterSQL(&$sql, $donetodo, $now, $filters)
 /**
  *  Add Mailing Event Type SQL
  *
- *  @param  string      $actioncode     Action code
- *  @param  Object      $objcon         objcon
- *  @param  Object      $filterobj      filterobj
- *  @return string
+ * @param string $actioncode Action code
+ * @param Object $objcon objcon
+ * @param Object $filterobj filterobj
+ * @return string
  */
 function addMailingEventTypeSQL($actioncode, $objcon, $filterobj)
 {
@@ -2610,15 +2619,14 @@ function addMailingEventTypeSQL($actioncode, $objcon, $filterobj)
 }
 
 
-
 /**
  * Show footer of company in HTML pages
  *
- * @param   Societe     $fromcompany    Third party
- * @param   Translate   $langs          Output language
- * @param   int         $addformmessage Add the payment form message
- * @param   string      $suffix         Suffix to use on constants
- * @param   Object      $object         Object related to payment
+ * @param Societe $fromcompany Third party
+ * @param Translate $langs Output language
+ * @param int $addformmessage Add the payment form message
+ * @param string $suffix Suffix to use on constants
+ * @param Object $object Object related to payment
  * @return  void
  */
 function htmlPrintOnlineFooter($fromcompany, $langs, $addformmessage = 0, $suffix = '', $object = null)
@@ -2688,14 +2696,14 @@ function htmlPrintOnlineFooter($fromcompany, $langs, $addformmessage = 0, $suffi
         $parammessageform = 'ONLINE_PAYMENT_MESSAGE_FORM_' . $suffix;
         if (getDolGlobalString($parammessageform) !== '') {
             print $langs->transnoentities(getDolGlobalString($parammessageform));
-        } elseif (getDolGlobalString('ONLINE_PAYMENT_MESSAGE_FORM')  !== '') {
+        } elseif (getDolGlobalString('ONLINE_PAYMENT_MESSAGE_FORM') !== '') {
             print $langs->transnoentities(getDolGlobalString('ONLINE_PAYMENT_MESSAGE_FORM'));
         }
 
         // Add other message if VAT exists
         if (!empty($object->total_vat) || !empty($object->total_tva)) {
             $parammessageform = 'ONLINE_PAYMENT_MESSAGE_FORMIFVAT_' . $suffix;
-            if (getDolGlobalString($parammessageform)  !== '') {
+            if (getDolGlobalString($parammessageform) !== '') {
                 print $langs->transnoentities(getDolGlobalString($parammessageform));
             } elseif (getDolGlobalString('ONLINE_PAYMENT_MESSAGE_FORMIFVAT') !== '') {
                 print $langs->transnoentities(getDolGlobalString('ONLINE_PAYMENT_MESSAGE_FORMIFVAT'));

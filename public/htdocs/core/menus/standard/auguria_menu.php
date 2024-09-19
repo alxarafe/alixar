@@ -66,8 +66,8 @@ class MenuManager
     /**
      *  Constructor
      *
-     *  @param  DoliDB      $db         Database handler
-     *  @param  int         $type_user  Type of user
+     * @param DoliDB $db Database handler
+     * @param int $type_user Type of user
      */
     public function __construct($db, $type_user)
     {
@@ -79,8 +79,8 @@ class MenuManager
     /**
      * Load this->tabMenu
      *
-     * @param   string  $forcemainmenu      To force mainmenu to load
-     * @param   string  $forceleftmenu      To force leftmenu to load
+     * @param string $forcemainmenu To force mainmenu to load
+     * @param string $forceleftmenu To force leftmenu to load
      * @return  void
      */
     public function loadMenu($forcemainmenu = '', $forceleftmenu = '')
@@ -142,9 +142,9 @@ class MenuManager
      *  Show menu.
      *  Menu defined in sql tables were stored into $this->tabMenu BEFORE this is called.
      *
-     *  @param  string  $mode           'top', 'topnb', 'left', 'jmobile' (used to get full xml ul/li menu)
-     *  @param  array   $moredata       An array with more data to output
-     *  @return int                     0 or nb of top menu entries if $mode = 'topnb'
+     * @param string $mode 'top', 'topnb', 'left', 'jmobile' (used to get full xml ul/li menu)
+     * @param array $moredata An array with more data to output
+     * @return int                     0 or nb of top menu entries if $mode = 'topnb'
      */
     public function showmenu($mode, $moredata = null)
     {

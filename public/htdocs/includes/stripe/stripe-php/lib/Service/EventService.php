@@ -16,9 +16,9 @@ class EventService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Event>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Event>
      */
     public function all($params = null, $opts = null)
     {
@@ -33,9 +33,9 @@ class EventService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Event
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Event
      */
     public function retrieve($id, $params = null, $opts = null)
     {

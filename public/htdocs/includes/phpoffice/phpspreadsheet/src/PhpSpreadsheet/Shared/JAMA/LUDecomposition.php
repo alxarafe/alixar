@@ -15,11 +15,11 @@ use PhpOffice\PhpSpreadsheet\Calculation\Exception as CalculationException;
  *    LU decomposition is in the solution of square systems of simultaneous
  *    linear equations. This will fail if isNonsingular() returns false.
  *
- *    @author Paul Meagher
- *    @author Bartosz Matosiuk
- *    @author Michael Bommarito
+ * @author Paul Meagher
+ * @author Bartosz Matosiuk
+ * @author Michael Bommarito
  *
- *    @version 1.1
+ * @version 1.1
  */
 class LUDecomposition
 {
@@ -189,7 +189,7 @@ class LUDecomposition
     /**
      * Alias for getPivot.
      *
-     *    @see getPivot
+     * @see getPivot
      */
     public function getDoublePivot()
     {
@@ -242,10 +242,10 @@ class LUDecomposition
      *
      * @param mixed $B a Matrix with as many rows as A and any number of columns
      *
-     * @throws CalculationException illegalArgumentException Matrix row dimensions must agree
+     * @return Matrix X so that L*U*X = B(piv,:)
      * @throws CalculationException runtimeException  Matrix is singular
      *
-     * @return Matrix X so that L*U*X = B(piv,:)
+     * @throws CalculationException illegalArgumentException Matrix row dimensions must agree
      */
     public function solve($B)
     {

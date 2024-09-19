@@ -76,7 +76,7 @@ if (!$section) {
     dol_print_error(null, 'Error, section parameter missing');
     exit;
 }
-$urlfile = (string) dol_sanitizePathName(GETPOST("urlfile"));
+$urlfile = (string)dol_sanitizePathName(GETPOST("urlfile"));
 if (!$urlfile) {
     dol_print_error(null, "ErrorParamNotDefined");
     exit;
@@ -173,7 +173,6 @@ if ($backtopage) {
 
 $object->ref = ''; // Force to hide ref
 dol_banner_tab($object, '', $linkback, 0, '', '', $s);
-
 
 
 print '<div class="fichecenter">';

@@ -2732,7 +2732,7 @@ class Calculation
             }
             //    Return strings wrapped in quotes
             return '"' . $value . '"';
-        //    Convert numeric errors to NaN error
+            //    Convert numeric errors to NaN error
         } elseif ((is_float($value)) && ((is_nan($value)) || (is_infinite($value)))) {
             return Functions::NAN();
         }
@@ -2767,9 +2767,9 @@ class Calculation
      *
      * @param Cell $pCell Cell to calculate
      *
+     * @return mixed
      * @throws Exception
      *
-     * @return mixed
      */
     public function calculate(Cell $pCell = null)
     {
@@ -2786,9 +2786,9 @@ class Calculation
      * @param Cell $pCell Cell to calculate
      * @param bool $resetLog Flag indicating whether the debug log should be reset or not
      *
+     * @return mixed
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      *
-     * @return mixed
      */
     public function calculateCellValue(Cell $pCell = null, $resetLog = true)
     {
@@ -2890,9 +2890,9 @@ class Calculation
      * @param string $cellID Address of the cell to calculate
      * @param Cell $pCell Cell to calculate
      *
+     * @return mixed
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      *
-     * @return mixed
      */
     public function calculateFormula($formula, $cellID = null, Cell $pCell = null)
     {
@@ -2967,9 +2967,9 @@ class Calculation
      * @param string $cellID The ID (e.g. A3) of the cell that we are calculating
      * @param Cell $pCell Cell to calculate
      *
+     * @return mixed
      * @throws Exception
      *
-     * @return mixed
      */
     public function _calculateFormulaValue($formula, $cellID = null, Cell $pCell = null)
     {
@@ -2977,7 +2977,7 @@ class Calculation
 
         //  Quote-Prefixed cell values cannot be formulae, but are treated as strings
         if ($pCell !== null && $pCell->getStyle()->getQuotePrefix() === true) {
-            return self::wrapResult((string) $formula);
+            return self::wrapResult((string)$formula);
         }
 
         if (preg_match('/^=\s*cmd\s*\|/miu', $formula) !== 0) {
@@ -3384,22 +3384,22 @@ class Calculation
         $pCellParent = ($pCell !== null) ? $pCell->getWorksheet() : null;
 
         $regexpMatchString = '/^(' . self::CALCULATION_REGEXP_FUNCTION .
-                                '|' . self::CALCULATION_REGEXP_CELLREF .
-                                '|' . self::CALCULATION_REGEXP_NUMBER .
-                                '|' . self::CALCULATION_REGEXP_STRING .
-                                '|' . self::CALCULATION_REGEXP_OPENBRACE .
-                                '|' . self::CALCULATION_REGEXP_NAMEDRANGE .
-                                '|' . self::CALCULATION_REGEXP_ERROR .
-                                ')/si';
+            '|' . self::CALCULATION_REGEXP_CELLREF .
+            '|' . self::CALCULATION_REGEXP_NUMBER .
+            '|' . self::CALCULATION_REGEXP_STRING .
+            '|' . self::CALCULATION_REGEXP_OPENBRACE .
+            '|' . self::CALCULATION_REGEXP_NAMEDRANGE .
+            '|' . self::CALCULATION_REGEXP_ERROR .
+            ')/si';
 
         //    Start with initialisation
         $index = 0;
         $stack = new Stack();
         $output = [];
         $expectingOperator = false; //    We use this test in syntax-checking the expression to determine when a
-                                                    //        - is a negation or + is a positive operator rather than an operation
+        //        - is a negation or + is a positive operator rather than an operation
         $expectingOperand = false; //    We use this test in syntax-checking the expression to determine whether an operand
-                                                    //        should be null in a function call
+        //        should be null in a function call
 
         // IF branch pruning
         // currently pending storeKey (last item of the storeKeysStack
@@ -3726,9 +3726,9 @@ class Calculation
                         $val = self::wrapResult(str_replace('""', '"', self::unwrapResult($val)));
                     } elseif (is_numeric($val)) {
                         if ((strpos($val, '.') !== false) || (stripos($val, 'e') !== false) || ($val > PHP_INT_MAX) || ($val < -PHP_INT_MAX)) {
-                            $val = (float) $val;
+                            $val = (float)$val;
                         } else {
-                            $val = (int) $val;
+                            $val = (int)$val;
                         }
                     } elseif (isset(self::$excelConstants[trim(strtoupper($val))])) {
                         $excelConstant = trim(strtoupper($val));
@@ -3858,7 +3858,7 @@ class Calculation
                 $onlyIfStoreKey = $tokenData['onlyIf'];
                 $storeValue = $branchStore[$onlyIfStoreKey] ?? null;
                 $storeValueAsBool = ($storeValue === null) ?
-                    true : (bool) Functions::flattenSingleValue($storeValue);
+                    true : (bool)Functions::flattenSingleValue($storeValue);
                 if (is_array($storeValue)) {
                     $wrappedItem = end($storeValue);
                     $storeValue = end($wrappedItem);
@@ -3894,7 +3894,7 @@ class Calculation
                 $onlyIfNotStoreKey = $tokenData['onlyIfNot'];
                 $storeValue = $branchStore[$onlyIfNotStoreKey] ?? null;
                 $storeValueAsBool = ($storeValue === null) ?
-                    true : (bool) Functions::flattenSingleValue($storeValue);
+                    true : (bool)Functions::flattenSingleValue($storeValue);
                 if (is_array($storeValue)) {
                     $wrappedItem = end($storeValue);
                     $storeValue = end($wrappedItem);
@@ -4563,7 +4563,7 @@ class Calculation
             if (
                 (Functions::getCompatibilityMode() != Functions::COMPATIBILITY_OPENOFFICE) &&
                 ((is_string($operand1) && !is_numeric($operand1) && strlen($operand1) > 0) ||
-                 (is_string($operand2) && !is_numeric($operand2) && strlen($operand2) > 0))
+                    (is_string($operand2) && !is_numeric($operand2) && strlen($operand2) > 0))
             ) {
                 $result = Functions::VALUE();
             } else {
@@ -4593,7 +4593,7 @@ class Calculation
 
                             return false;
                         }
-                            $result = $operand1 / $operand2;
+                        $result = $operand1 / $operand2;
 
                         break;
                     //    Power

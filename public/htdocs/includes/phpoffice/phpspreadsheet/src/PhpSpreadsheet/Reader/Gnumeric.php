@@ -46,9 +46,9 @@ class Gnumeric extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return bool
      * @throws Exception
      *
-     * @return bool
      */
     public function canRead($pFilename)
     {
@@ -86,7 +86,7 @@ class Gnumeric extends BaseReader
         while ($xml->read()) {
             if ($xml->name == 'gnm:SheetName' && $xml->nodeType == XMLReader::ELEMENT) {
                 $xml->read(); //    Move onto the value node
-                $worksheetNames[] = (string) $xml->value;
+                $worksheetNames[] = (string)$xml->value;
             } elseif ($xml->name == 'gnm:Sheets') {
                 //    break out of the loop once we've got our sheet names rather than parse the entire file
                 break;
@@ -125,14 +125,14 @@ class Gnumeric extends BaseReader
                 while ($xml->read()) {
                     if ($xml->name == 'gnm:Name' && $xml->nodeType == XMLReader::ELEMENT) {
                         $xml->read(); //    Move onto the value node
-                        $tmpInfo['worksheetName'] = (string) $xml->value;
+                        $tmpInfo['worksheetName'] = (string)$xml->value;
                     } elseif ($xml->name == 'gnm:MaxCol' && $xml->nodeType == XMLReader::ELEMENT) {
                         $xml->read(); //    Move onto the value node
-                        $tmpInfo['lastColumnIndex'] = (int) $xml->value;
-                        $tmpInfo['totalColumns'] = (int) $xml->value + 1;
+                        $tmpInfo['lastColumnIndex'] = (int)$xml->value;
+                        $tmpInfo['totalColumns'] = (int)$xml->value + 1;
                     } elseif ($xml->name == 'gnm:MaxRow' && $xml->nodeType == XMLReader::ELEMENT) {
                         $xml->read(); //    Move onto the value node
-                        $tmpInfo['totalRows'] = (int) $xml->value + 1;
+                        $tmpInfo['totalRows'] = (int)$xml->value + 1;
 
                         break;
                     }
@@ -169,9 +169,9 @@ class Gnumeric extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function load($pFilename)
     {
@@ -188,9 +188,9 @@ class Gnumeric extends BaseReader
      * @param string $pFilename
      * @param Spreadsheet $spreadsheet
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function loadIntoExisting($pFilename, Spreadsheet $spreadsheet)
     {
@@ -216,7 +216,7 @@ class Gnumeric extends BaseReader
                     $officePropertyDC = $officePropertyData->children($namespacesMeta['dc']);
                 }
                 foreach ($officePropertyDC as $propertyName => $propertyValue) {
-                    $propertyValue = (string) $propertyValue;
+                    $propertyValue = (string)$propertyValue;
                     switch ($propertyName) {
                         case 'title':
                             $docProps->setTitle(trim($propertyValue));
@@ -249,7 +249,7 @@ class Gnumeric extends BaseReader
                 }
                 foreach ($officePropertyMeta as $propertyName => $propertyValue) {
                     $attributes = $propertyValue->attributes($namespacesMeta['meta']);
-                    $propertyValue = (string) $propertyValue;
+                    $propertyValue = (string)$propertyValue;
                     switch ($propertyName) {
                         case 'keyword':
                             $docProps->setKeywords(trim($propertyValue));
@@ -327,7 +327,7 @@ class Gnumeric extends BaseReader
 
         $worksheetID = 0;
         foreach ($gnmXML->Sheets->Sheet as $sheet) {
-            $worksheetName = (string) $sheet->Name;
+            $worksheetName = (string)$sheet->Name;
             if ((isset($this->loadSheetsOnly)) && (!in_array($worksheetName, $this->loadSheetsOnly))) {
                 continue;
             }
@@ -349,7 +349,7 @@ class Gnumeric extends BaseReader
                         $marginSize = 72 / 100; //    Default
                         switch ($marginAttributes['PrefUnit']) {
                             case 'mm':
-                                $marginSize = (int) ($marginAttributes['Points']) / 100;
+                                $marginSize = (int)($marginAttributes['Points']) / 100;
 
                                 break;
                         }
@@ -385,8 +385,8 @@ class Gnumeric extends BaseReader
 
             foreach ($sheet->Cells->Cell as $cell) {
                 $cellAttributes = $cell->attributes();
-                $row = (int) $cellAttributes->Row + 1;
-                $column = (int) $cellAttributes->Col;
+                $row = (int)$cellAttributes->Row + 1;
+                $column = (int)$cellAttributes->Col;
 
                 if ($row > $maxRow) {
                     $maxRow = $row;
@@ -405,14 +405,14 @@ class Gnumeric extends BaseReader
                 }
 
                 $ValueType = $cellAttributes->ValueType;
-                $ExprID = (string) $cellAttributes->ExprID;
+                $ExprID = (string)$cellAttributes->ExprID;
                 $type = DataType::TYPE_FORMULA;
                 if ($ExprID > '') {
-                    if (((string) $cell) > '') {
+                    if (((string)$cell) > '') {
                         $this->expressions[$ExprID] = [
                             'column' => $cellAttributes->Col,
                             'row' => $cellAttributes->Row,
-                            'formula' => (string) $cell,
+                            'formula' => (string)$cell,
                         ];
                     } else {
                         $expression = $this->expressions[$ExprID];
@@ -438,9 +438,9 @@ class Gnumeric extends BaseReader
 
                             break;
                         case '30':        //    Integer
-                            $cell = (int) $cell;
-                            // Excel 2007+ doesn't differentiate between integer and float, so set the value and dropthru to the next (numeric) case
-                            // no break
+                            $cell = (int)$cell;
+                        // Excel 2007+ doesn't differentiate between integer and float, so set the value and dropthru to the next (numeric) case
+                        // no break
                         case '40':        //    Float
                             $type = DataType::TYPE_NUMERIC;
 
@@ -465,7 +465,7 @@ class Gnumeric extends BaseReader
                     $commentAttributes = $comment->attributes();
                     //    Only comment objects are handled at the moment
                     if ($commentAttributes->Text) {
-                        $spreadsheet->getActiveSheet()->getComment((string) $commentAttributes->ObjectBound)->setAuthor((string) $commentAttributes->Author)->setText($this->parseRichText((string) $commentAttributes->Text));
+                        $spreadsheet->getActiveSheet()->getComment((string)$commentAttributes->ObjectBound)->setAuthor((string)$commentAttributes->Author)->setText($this->parseRichText((string)$commentAttributes->Text));
                     }
                 }
             }
@@ -475,10 +475,10 @@ class Gnumeric extends BaseReader
                     ($styleAttributes['startRow'] <= $maxRow) &&
                     ($styleAttributes['startCol'] <= $maxCol)
                 ) {
-                    $startColumn = Coordinate::stringFromColumnIndex((int) $styleAttributes['startCol'] + 1);
+                    $startColumn = Coordinate::stringFromColumnIndex((int)$styleAttributes['startCol'] + 1);
                     $startRow = $styleAttributes['startRow'] + 1;
 
-                    $endColumn = ($styleAttributes['endCol'] > $maxCol) ? $maxCol : (int) $styleAttributes['endCol'];
+                    $endColumn = ($styleAttributes['endCol'] > $maxCol) ? $maxCol : (int)$styleAttributes['endCol'];
                     $endColumn = Coordinate::stringFromColumnIndex($endColumn + 1);
                     $endRow = ($styleAttributes['endRow'] > $maxRow) ? $maxRow : $styleAttributes['endRow'];
                     $endRow += 1;
@@ -489,10 +489,10 @@ class Gnumeric extends BaseReader
                     //    We still set the number format mask for date/time values, even if readDataOnly is true
                     if (
                         (!$this->readDataOnly) ||
-                        (Date::isDateTimeFormatCode((string) $styleAttributes['Format']))
+                        (Date::isDateTimeFormatCode((string)$styleAttributes['Format']))
                     ) {
                         $styleArray = [];
-                        $styleArray['numberFormat']['formatCode'] = (string) $styleAttributes['Format'];
+                        $styleArray['numberFormat']['formatCode'] = (string)$styleAttributes['Format'];
                         //    If readDataOnly is false, we set all formatting information
                         if (!$this->readDataOnly) {
                             switch ($styleAttributes['HAlign']) {
@@ -544,7 +544,7 @@ class Gnumeric extends BaseReader
 
                             $styleArray['alignment']['wrapText'] = $styleAttributes['WrapText'] == '1';
                             $styleArray['alignment']['shrinkToFit'] = $styleAttributes['ShrinkToFit'] == '1';
-                            $styleArray['alignment']['indent'] = ((int) ($styleAttributes['Indent']) > 0) ? $styleAttributes['indent'] : 0;
+                            $styleArray['alignment']['indent'] = ((int)($styleAttributes['Indent']) > 0) ? $styleAttributes['indent'] : 0;
 
                             $RGB = self::parseGnumericColour($styleAttributes['Fore']);
                             $styleArray['font']['color']['rgb'] = $RGB;
@@ -639,8 +639,8 @@ class Gnumeric extends BaseReader
                             }
 
                             $fontAttributes = $styleRegion->Style->Font->attributes();
-                            $styleArray['font']['name'] = (string) $styleRegion->Style->Font;
-                            $styleArray['font']['size'] = (int) ($fontAttributes['Unit']);
+                            $styleArray['font']['name'] = (string)$styleRegion->Style->Font;
+                            $styleArray['font']['size'] = (int)($fontAttributes['Unit']);
                             $styleArray['font']['bold'] = $fontAttributes['Bold'] == '1';
                             $styleArray['font']['italic'] = $fontAttributes['Italic'] == '1';
                             $styleArray['font']['strikethrough'] = $fontAttributes['StrikeThrough'] == '1';
@@ -785,8 +785,8 @@ class Gnumeric extends BaseReader
         //    Loop through definedNames (global named ranges)
         if (isset($gnmXML->Names)) {
             foreach ($gnmXML->Names->Name as $namedRange) {
-                $name = (string) $namedRange->name;
-                $range = (string) $namedRange->value;
+                $name = (string)$namedRange->name;
+                $range = (string)$namedRange->value;
                 if (stripos($range, '#REF!') !== false) {
                     continue;
                 }

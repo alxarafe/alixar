@@ -73,12 +73,12 @@ if (defined('THEME_ONLY_CONSTANT')) {
 
 ?>
 
-html,body {
+html, body {
     box-sizing: border-box;
-    padding:0px;
-    margin:0;
-    height:100%;
-    width:100%;
+    padding: 0px;
+    margin: 0;
+    height: 100%;
+    width: 100%;
 }
 
 .bodytakepos {
@@ -140,9 +140,11 @@ button.calcbutton2 {
     margin: 1px;
     border-radius: 3px;
 }
+
 button.calcbutton2.clicked {
     background-color: #8855AA;
 }
+
 button.calcbutton2 .iconwithlabel {
     padding-bottom: 10px;
 }
@@ -204,7 +206,7 @@ button.actionbutton {
     width: calc(33.33% - 2px);
     height: calc(25% - 2px);
     margin: 1px;
-       border-width: 0;
+    border-width: 0;
 }
 
 button.item_value {
@@ -226,6 +228,7 @@ div[aria-describedby="dialog-info"] button:before {
     font-weight: 900;
     padding-right: 5px;
 }
+
 div[aria-describedby="dialog-info"].ui-dialog .ui-dialog-buttonpane {
     border-width: 0;
 }
@@ -239,35 +242,35 @@ div[aria-describedby="dialog-info"].ui-dialog .ui-dialog-buttonpane {
 }
 
 
-div.wrapper{
-    float:left; /* important */
-    position:relative; /* important(so we can absolutely position the description div */
-    width:25%;
-    height:33%;
-    margin:0;
-    padding:1px;
+div.wrapper {
+    float: left; /* important */
+    position: relative; /* important(so we can absolutely position the description div */
+    width: 25%;
+    height: 33%;
+    margin: 0;
+    padding: 1px;
     border: 2px solid #EEE;
     /*box-shadow: 3px 3px 3px #bbb; */
     text-align: center;
     box-sizing: border-box;
-    background-color:#fff;
+    background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-div.wrapper2{
-    float:left; /* important */
-    position:relative; /* important(so we can absolutely position the description div */
-    width:12.5%;
-    height:33%;
-    margin:0;
+div.wrapper2 {
+    float: left; /* important */
+    position: relative; /* important(so we can absolutely position the description div */
+    width: 12.5%;
+    height: 33%;
+    margin: 0;
     /* padding:1px; */
     border: 2px solid #EEE;
     /*box-shadow: 3px 3px 3px #bbb;*/
     text-align: center;
     box-sizing: border-box;
-    background-color:#fff;
+    background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -278,35 +281,35 @@ img.imgwrapper {
     max-height: 100%;
 }
 
-button:active{
-    background:black;
+button:active {
+    background: black;
     color: white;
 }
 
-div.description{
-    position:absolute; /* absolute position (so we can position it where we want)*/
-    bottom:0px; /* position will be on bottom */
-    left:0px;
-    width:100%;
+div.description {
+    position: absolute; /* absolute position (so we can position it where we want)*/
+    bottom: 0px; /* position will be on bottom */
+    left: 0px;
+    width: 100%;
     /* styling below */
-    background-color:black;
+    background-color: black;
     /*color:white;*/
-    opacity:1; /* transparency */
+    opacity: 1; /* transparency */
     /*filter:alpha(opacity=80); IE transparency */
-    text-align:center;
+    text-align: center;
 
     padding-top: 30px;
-    background: -webkit-linear-gradient(top, rgba(250,250,250,0), rgba(250,250,250,0.5), rgba(250,250,250,0.95), rgba(250,250,250,1));
+    background: -webkit-linear-gradient(top, rgba(250, 250, 250, 0), rgba(250, 250, 250, 0.5), rgba(250, 250, 250, 0.95), rgba(250, 250, 250, 1));
 }
 
-div.catwatermark{
-    position:absolute;
-    top:3%;
-    left:3%;
-    width:20%;
-    background-color:black;
-    color:white;
-    text-align:center;
+div.catwatermark {
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    width: 20%;
+    background-color: black;
+    color: white;
+    text-align: center;
     font-size: 20px;
     display: none;
     opacity: 0.25;
@@ -327,10 +330,9 @@ table.postablelines tr td {
     line-height: 1.3em !important;
 }
 
-div.paymentbordline
-{
-    width:calc(50% - 16px);
-    background-color:#aaa;
+div.paymentbordline {
+    width: calc(50% - 16px);
+    background-color: #aaa;
     border-radius: 8px;
     margin-bottom: 4px;
     display: inline-block;
@@ -338,58 +340,55 @@ div.paymentbordline
 }
 
 @media only screen and (max-aspect-ratio: 6/4) {
-    div.description{
-    min-height:20%;
+    div.description {
+        min-height: 20%;
     }
 }
 
-.container{
+.container {
     width: 100%;
     height: 100%;
     margin: 0 auto;
-    <?php
-    if (getDolGlobalString('TAKEPOS_USE_ARROW_ON_NAVBAR')) {
-        ?>
-        overflow-x: hidden;
-        overfloy-y: scroll;
-        <?php
-    } else {
-        ?>
-        overflow: visible;
-        <?php
-    }
-    ?>
-    box-sizing: border-box;
+<?php
+if (getDolGlobalString('TAKEPOS_USE_ARROW_ON_NAVBAR')) {
+    ?> overflow-x: hidden;
+    overfloy-y: scroll;
+<?php
+} else {
+?> overflow: visible;
+<?php
+}
+?> box-sizing: border-box;
 }
 
-.row1{
+.row1 {
     margin: 0 auto;
     width: 100%;
     height: 34%;
 }
 
-.row1withhead{
+.row1withhead {
     margin: 0 auto;
     width: 100%;
     height: calc(45% - 50px);
     padding-top: 9px;
 }
 
-.row2{
+.row2 {
     margin: 0 auto;
     width: 100%;
     height: 66%;
 }
 
-.row2withhead{
+.row2withhead {
     margin: 0 auto;
     width: 100%;
     height: 55%;
     overflow-x: hidden;
 }
 
-.div1{
-    height:100%;
+.div1 {
+    height: 100%;
     width: 34%;
     float: left;
     text-align: center;
@@ -401,7 +400,7 @@ div.paymentbordline
     min-height: 180px;
 }
 
-.div2{
+.div2 {
     height: 100%;
     width: 33%;
     font-size: 0;
@@ -412,7 +411,7 @@ div.paymentbordline
     min-height: 180px;
 }
 
-.div3{
+.div3 {
     height: 100%;
     width: 33%;
     float: left;
@@ -421,7 +420,7 @@ div.paymentbordline
     padding-bottom: 0;
 }
 
-.div4{
+.div4 {
     height: 100%;
     width: 34%;
     float: left;
@@ -431,23 +430,25 @@ div.paymentbordline
     padding-bottom: 10px;
 }
 
-.div5{
+.div5 {
     height: 100%;
     width: 66%;
     float: left;
     box-sizing: border-box;
     font-size: 6px;
-    padding-top:10px;
-    padding-bottom:10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .div1, .div2, .div3, .div4, .div5 {
     padding-right: 5px;
     padding-left: 5px;
 }
+
 .div1, .div4 {
     padding-left: 8px;
 }
+
 .div3, .div5 {
     padding-right: 8px;
 }
@@ -455,6 +456,7 @@ div.paymentbordline
 tr.selected, tr.selected td {
     background-color: var(--colorbacklinepairchecked) !important;
 }
+
 .order td {
     color: green;
     /* background-color: #f5f5f5; */
@@ -463,18 +465,23 @@ tr.selected, tr.selected td {
 .colorwhite {
     color: white;
 }
+
 .colorred {
     color: red;
 }
+
 .colorgreen {
     color: green;
 }
+
 .poscolordelete {
     color: #844;
 }
+
 .poscolorgreen {
     color: #060;
 }
+
 .poscolorblue {
     color: #006;
 }
@@ -484,16 +491,18 @@ tr.selected, tr.selected td {
     /* transform: translate(0,-50%);
     top: 50%; */
 }
+
 .trunc {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
 
-p.description_content{
-    padding:10px;
-    margin:0px;
+p.description_content {
+    padding: 10px;
+    margin: 0px;
 }
+
 div.description_content {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -503,16 +512,17 @@ div.description_content {
     padding-right: 2px;
 }
 
-.header{
+.header {
     margin: 0 auto;
     width: 100%;
     height: 52px;
-    background: rgb(60,70,100);
+    background: rgb(60, 70, 100);
 }
 
 .topnav-left {
     float: left;
 }
+
 .topnav-right {
 
 }
@@ -521,31 +531,36 @@ div.description_content {
     max-width: unset;
     width: unset;
 }
-.topnav{
+
+.topnav {
     background: var(--colorbackhmenu1);
     overflow: hidden;
     height: 100%;
 }
+
 .topnav .tmenu {
     display: block;
 }
 
-.topnav a{
+.topnav a {
     float: left;
     color: #f2f2f2;
     text-decoration: none;
 }
+
 .topnav .login_block_other a {
     padding: 5px 10px;
     margin-left: 4px;
     font-size: 1.3em;
 }
+
 .topnav div.login_block_user {
     display: inline-block;
     vertical-align: middle;
     line-height: 50px;
     height: 50px;
 }
+
 .userimg.atoplogin img.userphoto, .userimgatoplogin img.userphoto {
     width: 30px;
     height: 30px;
@@ -561,6 +576,7 @@ div.description_content {
     .div1, .div4 {
         padding-left: 5px;
     }
+
     .div3, .div5 {
         padding-right: 5px;
     }
@@ -577,12 +593,13 @@ div.description_content {
     margin-right: 5px;
     border-radius: 3px;
 }
+
 .topnav-left a:hover:not(.nohover), .topnav .login_block_other a:hover:not(.nohover) {
     background-color: #ddd;
     color: black;
 }
 
-.topnav-right{
+.topnav-right {
     float: right;
 }
 
@@ -612,6 +629,7 @@ div#moreinfo, div#infowarehouse {
     font-weight: bold;
     /* text-decoration: underline; */
 }
+
 .basketnotselected {
     opacity: 0.8;
 }
@@ -632,37 +650,43 @@ div#moreinfo, div#infowarehouse {
 
 
 @media screen and (min-width: 892px) {
-    .actionbutton{
+    .actionbutton {
         font-size: 13px;
     }
-    div.description{
+
+    div.description {
         font-size: 15px;
     }
-    .invoice{
+
+    .invoice {
         font-size: 14px;
     }
 }
 
 @media (max-width: 891px) and (min-width: 386px) {
-    .actionbutton{
+    .actionbutton {
         font-size: 12px;
     }
-    div.description{
+
+    div.description {
         font-size: 13px;
     }
-    .invoice{
+
+    .invoice {
         font-size: 12px;
     }
 }
 
-@media screen and (max-width: 385px){
-    .actionbutton{
+@media screen and (max-width: 385px) {
+    .actionbutton {
         font-size: 10px;
     }
-    div.description{
+
+    div.description {
         font-size: 11px;
     }
-    .invoice{
+
+    .invoice {
         font-size: 10px;
     }
 }
@@ -690,20 +714,24 @@ div#moreinfo, div#infowarehouse {
     .topnav-right {
         float: unset;
     }
+
     .header {
         height: unset;
     }
+
     div.container {
         overflow-x: scroll;
     }
+
     div.wrapper {
         width: 50%;
     }
+
     div.wrapper2 {
         width: 25%;
     }
 
-    .row1withhead{
+    .row1withhead {
         height: unset;
     }
 
@@ -715,6 +743,7 @@ div#moreinfo, div#infowarehouse {
         padding-bottom: 0;
         margin-bottom: 10px;
     }
+
     div.div1, div.div2, div.div3 {
         width: 100%;
     }
@@ -752,70 +781,78 @@ div#moreinfo, div#infowarehouse {
 
 /* Modal box */
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed;
-  z-index: 20;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 20;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 /* The Close Button */
 .close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .modal-header {
-  padding: 2px 16px;
-  background-color: #2b4161;
-  color: white;
+    padding: 2px 16px;
+    background-color: #2b4161;
+    color: white;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body {
+    padding: 2px 16px;
+}
 
 .modal-content {
-  position: relative;
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
-  padding: 0;
-  border: 1px solid #888;
-  width: 40%;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-  animation-name: animatetop;
-  animation-duration: 0.4s;
-  min-width: 200px;
+    position: relative;
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 0;
+    border: 1px solid #888;
+    width: 40%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+    min-width: 200px;
 }
 
 @keyframes animatetop {
-  from {top: -300px; opacity: 0}
-  to {top: 0; opacity: 1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
 .block {
-  display: block;
-  width: 100%;
-  border: none;
-  color: white;
-  background-color: #8c907e;
-  padding: 14px 0px;
-  font-size: 16px;
-  cursor: pointer;
-  text-align: center;
-  margin: 2px;
+    display: block;
+    width: 100%;
+    border: none;
+    color: white;
+    background-color: #8c907e;
+    padding: 14px 0px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    margin: 2px;
 }
 
 .splitsale {
@@ -843,12 +880,11 @@ div#moreinfo, div#infowarehouse {
     border: 3px solid black;
     text-align: center;
     font-size: 150%;
-    background-color: rgb(233,234,237);
+    background-color: rgb(233, 234, 237);
 }
 
 
-@media only screen and (max-width: 767px)
-{
+@media only screen and (max-width: 767px) {
     .headercontent {
         width: 80%;
     }
@@ -860,9 +896,9 @@ div#moreinfo, div#infowarehouse {
 
 
 .row:after {
-  content: "";
-  display: table;
-  clear: both;
+    content: "";
+    display: table;
+    clear: both;
 }
 
 .div5 .imgadd {
@@ -883,7 +919,7 @@ div#moreinfo, div#infowarehouse {
     }
 
     .div4 .wrapper.divempty, .div4 img, .div4 .wrapper:nth-last-child(1), .div4 .wrapper:nth-last-child(2), #prodiv22, #prodiv23, .catwatermark {
-        display: none!important;
+        display: none !important;
     }
 
     .tab-category {
@@ -905,8 +941,8 @@ div#moreinfo, div#infowarehouse {
         padding: 6px;
         text-align: center;
         cursor: pointer;
-        border: 1px solid #FFF!important;
-        border-top: 3px solid #FFF!important;
+        border: 1px solid #FFF !important;
+        border-top: 3px solid #FFF !important;
     }
 
     .div4 .tab-category.active {
@@ -928,7 +964,7 @@ div#moreinfo, div#infowarehouse {
         opacity: 1;
         text-align: center;
         padding-top: 0px;
-        background: -webkit-linear-gradient(top, rgba(250,250,250,0), rgba(250,250,250,0.5), rgba(250,250,250,0.95), rgba(250,250,250,1));
+        background: -webkit-linear-gradient(top, rgba(250, 250, 250, 0), rgba(250, 250, 250, 0.5), rgba(250, 250, 250, 0.95), rgba(250, 250, 250, 1));
     }
 
     .div5 .description .description_content {
@@ -956,7 +992,7 @@ div#moreinfo, div#infowarehouse {
     .div5 .arrow {
         width: auto;
         height: auto;
-        display: none!important;
+        display: none !important;
     }
 
     .div5 .arrow .centerinmiddle {
@@ -967,7 +1003,7 @@ div#moreinfo, div#infowarehouse {
         display: flex;
     }
 
-    div.wrapper2{
+    div.wrapper2 {
         height: 40px;
     }
 }
@@ -981,21 +1017,21 @@ if (!getDolGlobalString('TAKEPOS_USE_ARROW_ON_NAVBAR')) {
     display: none;
 }
 
-    <?php
+<?php
 } else { ?>
 .indicator {
     background: #00000042;
     padding: 15px 5px;
     cursor: pointer;
-    position:absolute;
+    position: absolute;
 }
 
 .indicator.left {
-    left:0;
+    left: 0;
 }
 
 .indicator.right {
-    right:0;
+    right: 0;
 }
 
 .indicator:hover {
@@ -1016,11 +1052,11 @@ if (!getDolGlobalString('TAKEPOS_USE_ARROW_ON_NAVBAR')) {
 
 /* For Header Scroll */
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 .topnav {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 .header {
@@ -1049,7 +1085,7 @@ html {
 }
 
 .topnav-left #shoppingcart {
-    display:inline-flex;
+    display: inline-flex;
 }
 
 .topnav-right .login_block_other {
@@ -1058,29 +1094,29 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+    width: 8px;
 }
 
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+    background: #f1f1f1;
 }
 
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+    background: #888;
 }
 
-.topnav::-webkit-scrollbar-track{
-  background: #eeeeee;
+.topnav::-webkit-scrollbar-track {
+    background: #eeeeee;
 }
 
-.topnav::-webkit-scrollbar{
-  width: 1px;
-  background: #F5F5F5;
+.topnav::-webkit-scrollbar {
+    width: 1px;
+    background: #F5F5F5;
 }
 
-.topnav::-webkit-scrollbar-thumb{
+.topnav::-webkit-scrollbar-thumb {
     background: #f9171700;
 }
 

@@ -19,7 +19,7 @@
 
 /**
  *  \file       htdocs/compta/facture/index.php
-*   \ingroup    facture
+ *   \ingroup    facture
  *  \brief      Home page of customer invoices area
  */
 

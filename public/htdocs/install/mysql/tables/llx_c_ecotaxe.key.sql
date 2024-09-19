@@ -16,4 +16,5 @@
 --
 -- ========================================================================
 
-ALTER TABLE llx_c_ecotaxe ADD UNIQUE INDEX uk_c_ecotaxe (code);
+ALTER TABLE llx_c_ecotaxe
+    ADD UNIQUE INDEX uk_c_ecotaxe (code);

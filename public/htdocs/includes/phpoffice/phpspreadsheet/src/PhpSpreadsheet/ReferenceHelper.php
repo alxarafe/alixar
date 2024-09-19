@@ -628,9 +628,9 @@ class ReferenceHelper
      * @param int $pNumRows Number of rows to insert
      * @param string $sheetName Worksheet name/title
      *
+     * @return string Updated formula
      * @throws Exception
      *
-     * @return string Updated formula
      */
     public function updateFormulaReferences($pFormula = '', $pBefore = 'A1', $pNumCols = 0, $pNumRows = 0, $sheetName = '')
     {
@@ -770,16 +770,16 @@ class ReferenceHelper
      * @param int $pNumCols Number of columns to increment
      * @param int $pNumRows Number of rows to increment
      *
+     * @return string Updated cell range
      * @throws Exception
      *
-     * @return string Updated cell range
      */
     public function updateCellReference($pCellRange = 'A1', $pBefore = 'A1', $pNumCols = 0, $pNumRows = 0)
     {
         // Is it in another worksheet? Will not have to update anything.
         if (strpos($pCellRange, '!') !== false) {
             return $pCellRange;
-        // Is it a range or a single cell?
+            // Is it a range or a single cell?
         } elseif (!Coordinate::coordinateIsRange($pCellRange)) {
             // Single cell
             return $this->updateSingleCellReference($pCellRange, $pBefore, $pNumCols, $pNumRows);
@@ -828,9 +828,9 @@ class ReferenceHelper
      * @param int $pNumCols Number of columns to increment
      * @param int $pNumRows Number of rows to increment
      *
+     * @return string Updated cell range
      * @throws Exception
      *
-     * @return string Updated cell range
      */
     private function updateCellRange($pCellRange = 'A1:A1', $pBefore = 'A1', $pNumCols = 0, $pNumRows = 0)
     {
@@ -868,9 +868,9 @@ class ReferenceHelper
      * @param int $pNumCols Number of columns to increment
      * @param int $pNumRows Number of rows to increment
      *
+     * @return string Updated cell reference
      * @throws Exception
      *
-     * @return string Updated cell reference
      */
     private function updateSingleCellReference($pCellReference = 'A1', $pBefore = 'A1', $pNumCols = 0, $pNumRows = 0)
     {

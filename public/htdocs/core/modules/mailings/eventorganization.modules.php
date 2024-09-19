@@ -48,7 +48,7 @@ class mailing_eventorganization extends MailingTargets
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -59,16 +59,17 @@ class mailing_eventorganization extends MailingTargets
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *    This is the main function that returns the array of emails
      *
-     *    @param    int     $mailing_id     Id of mailing. No need to use it.
-     *    @return   int                     Return integer <0 if error, number of emails added if ok
+     * @param int $mailing_id Id of mailing. No need to use it.
+     * @return   int                     Return integer <0 if error, number of emails added if ok
      */
     public function add_to_target($mailing_id)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs;
 
         $cibles = array();
@@ -81,12 +82,12 @@ class mailing_eventorganization extends MailingTargets
         $sql .= " WHERE e.email <> ''";
         $sql .= " AND e.fk_project = p.rowid";
         $sql .= " AND p.entity IN (" . getEntity('project') . ")";
-        $sql .= " AND e.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int) $mailing_id) . ")";
+        $sql .= " AND e.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int)$mailing_id) . ")";
         if (GETPOSTINT('filter_eventorganization') > 0) {
             $sql .= " AND e.fk_project = " . (GETPOSTINT('filter_eventorganization'));
         }
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = e.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = e.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
         $sql .= " ORDER BY e.email";
 
@@ -109,14 +110,14 @@ class mailing_eventorganization extends MailingTargets
                     }
                     $otherTxt .= $addDescription;
                     $cibles[$j] = array(
-                                'email' => $obj->email,
-                                'fk_project' => $obj->fk_project,
-                                'lastname' => $obj->lastname,
-                                'firstname' => $obj->firstname,
-                                'other' => $otherTxt,
-                                'source_url' => $this->url($obj->id, $obj->source),
-                                'source_id' => $obj->id,
-                                'source_type' => $obj->source
+                        'email' => $obj->email,
+                        'fk_project' => $obj->fk_project,
+                        'lastname' => $obj->lastname,
+                        'firstname' => $obj->firstname,
+                        'other' => $otherTxt,
+                        'source_url' => $this->url($obj->id, $obj->source),
+                        'source_id' => $obj->id,
+                        'source_type' => $obj->source
                     );
                     $old = $obj->email;
                     $j++;
@@ -140,7 +141,7 @@ class mailing_eventorganization extends MailingTargets
      *  array of SQL request that returns two field:
      *  One called "label", One called "nb".
      *
-     *  @return     array       Array with SQL requests
+     * @return     array       Array with SQL requests
      */
     public function getSqlArrayForStats()
     {
@@ -157,8 +158,8 @@ class mailing_eventorganization extends MailingTargets
      *  For example if this selector is used to extract 500 different
      *  emails from a text file, this function must return 500.
      *
-     *  @param      string          $sql        Requete sql de comptage
-     *  @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
+     * @param string $sql Requete sql de comptage
+     * @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
      */
     public function getNbOfRecipients($sql = '')
     {
@@ -171,7 +172,7 @@ class mailing_eventorganization extends MailingTargets
         $sql .= " AND e.fk_project = p.rowid";
         $sql .= " AND p.entity IN (" . getEntity('project') . ")";
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = e.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = e.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
 
         //print $sql;
@@ -184,7 +185,7 @@ class mailing_eventorganization extends MailingTargets
      *  This is to add a form filter to provide variant of selector
      *  If used, the HTML select must be called "filter"
      *
-     *  @return     string      A html select zone
+     * @return     string      A html select zone
      */
     public function formFilter()
     {
@@ -205,14 +206,14 @@ class mailing_eventorganization extends MailingTargets
     /**
      *  Can include an URL link on each record provided by selector shown on target page.
      *
-     *  @param  int     $id         ID
-     *  @param  string  $sourcetype Source type
-     *  @return string              Url link
+     * @param int $id ID
+     * @param string $sourcetype Source type
+     * @return string              Url link
      */
     public function url($id, $sourcetype = 'thirdparty')
     {
         if ($sourcetype == 'project') {
-            return '<a href="' . constant('BASE_URL') . '/eventorganization/conferenceorboothattendee_card.php?id=' . ((int) $id) . '">' . img_object('', "eventorganization") . '</a>';
+            return '<a href="' . constant('BASE_URL') . '/eventorganization/conferenceorboothattendee_card.php?id=' . ((int)$id) . '">' . img_object('', "eventorganization") . '</a>';
         }
 
         return '';

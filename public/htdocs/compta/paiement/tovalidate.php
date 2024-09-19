@@ -65,7 +65,6 @@ if (!$user->hasRight('facture', 'lire')) {
  */
 
 
-
 /*
  * View
  */
@@ -81,7 +80,7 @@ if ($socid) {
 }
 $sql .= " WHERE p.entity IN (" . getEntity('invoice') . ')';
 if ($socid) {
-    $sql .= " AND f.fk_soc = " . ((int) $socid);
+    $sql .= " AND f.fk_soc = " . ((int)$socid);
 }
 $sql .= " AND p.statut = 0";
 

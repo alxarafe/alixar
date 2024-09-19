@@ -12,9 +12,9 @@ class SubscriptionScheduleService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\SubscriptionSchedule>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\SubscriptionSchedule>
      */
     public function all($params = null, $opts = null)
     {
@@ -31,9 +31,9 @@ class SubscriptionScheduleService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SubscriptionSchedule
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SubscriptionSchedule
      */
     public function cancel($id, $params = null, $opts = null)
     {
@@ -47,9 +47,9 @@ class SubscriptionScheduleService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SubscriptionSchedule
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SubscriptionSchedule
      */
     public function create($params = null, $opts = null)
     {
@@ -68,9 +68,9 @@ class SubscriptionScheduleService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SubscriptionSchedule
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SubscriptionSchedule
      */
     public function release($id, $params = null, $opts = null)
     {
@@ -86,9 +86,9 @@ class SubscriptionScheduleService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SubscriptionSchedule
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SubscriptionSchedule
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -102,9 +102,9 @@ class SubscriptionScheduleService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SubscriptionSchedule
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SubscriptionSchedule
      */
     public function update($id, $params = null, $opts = null)
     {

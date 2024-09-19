@@ -52,8 +52,8 @@ class mod_contract_magre extends ModelNumRefContracts
     /**
      *  Return default description of numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -89,7 +89,7 @@ class mod_contract_magre extends ModelNumRefContracts
     /**
      *  Return numbering example
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -109,9 +109,9 @@ class mod_contract_magre extends ModelNumRefContracts
     /**
      *  Return next value
      *
-     *  @param  Societe     $objsoc     third party object
-     *  @param  Contrat     $contract   contract object
-     *  @return string|0                Next value if OK, 0 if KO
+     * @param Societe $objsoc third party object
+     * @param Contrat $contract contract object
+     * @return string|0                Next value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $contract)
     {
@@ -128,6 +128,6 @@ class mod_contract_magre extends ModelNumRefContracts
 
         $numFinal = get_next_value($db, $mask, 'contrat', 'ref', '', $objsoc, $contract->date_contrat);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

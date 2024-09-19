@@ -100,7 +100,7 @@ if (@file_exists($forcedfile)) {
         }
         // In mode 3 the main_url is custom
         if ($force_install_noedit != 3)
-        $main_url = detect_dolibarr_main_url_root();
+            $main_url = detect_dolibarr_main_url_root();
         if (!empty($argv[5])) {
             $main_url = $argv[5]; // override when executing the script in command line
         }
@@ -266,7 +266,7 @@ if (!$error) {
                 }
             }
 
-            $db = getDoliDBInstance($db_type, $db_host, $userroot, $passroot, $databasefortest, (int) $db_port);
+            $db = getDoliDBInstance($db_type, $db_host, $userroot, $passroot, $databasefortest, (int)$db_port);
 
             dol_syslog("databasefortest=" . $databasefortest . " connected=" . json_encode($db->connected) . " database_selected=" . json_encode($db->database_selected), LOG_DEBUG);
 
@@ -297,7 +297,7 @@ if (!$error) {
 
         // If we need simple access
         if (!$error && (empty($db_create_database) && empty($db_create_user))) {
-            $db = getDoliDBInstance($db_type, $db_host, $db_user, $db_pass, $db_name, (int) $db_port);
+            $db = getDoliDBInstance($db_type, $db_host, $db_user, $db_pass, $db_name, (int)$db_port);
 
             if ($db->error) {
                 print '<div class="error">' . $db->error . '</div>';
@@ -558,7 +558,7 @@ if (!$error && $db->connected && $action == "set") {
 
             // Check database connection
 
-            $db = getDoliDBInstance($conf->db->type, $conf->db->host, $userroot, $passroot, $databasefortest, (int) $conf->db->port);
+            $db = getDoliDBInstance($conf->db->type, $conf->db->host, $userroot, $passroot, $databasefortest, (int)$conf->db->port);
 
             if ($db->error) {
                 print '<div class="error">' . $db->error . '</div>';
@@ -642,7 +642,7 @@ if (!$error && $db->connected && $action == "set") {
         // If database creation was asked, we create it
         if (!$error && (isset($db_create_database) && ($db_create_database == "1" || $db_create_database == "on"))) {
             dolibarr_install_syslog("step1: create database: " . $dolibarr_main_db_name . " " . $dolibarr_main_db_character_set . " " . $dolibarr_main_db_collation . " " . $dolibarr_main_db_user);
-            $newdb = getDoliDBInstance($conf->db->type, $conf->db->host, $userroot, $passroot, '', (int) $conf->db->port);
+            $newdb = getDoliDBInstance($conf->db->type, $conf->db->host, $userroot, $passroot, '', (int)$conf->db->port);
             //print 'eee'.$conf->db->type." ".$conf->db->host." ".$userroot." ".$passroot." ".$conf->db->port." ".$newdb->connected." ".$newdb->forcecharset;exit;
 
             if ($newdb->connected) {
@@ -702,7 +702,7 @@ if (!$error && $db->connected && $action == "set") {
             dolibarr_install_syslog("step1: connection type=" . $conf->db->type . " on host=" . $conf->db->host . " port=" . $conf->db->port . " user=" . $conf->db->user . " name=" . $conf->db->name);
             //print "connection de type=".$conf->db->type." sur host=".$conf->db->host." port=".$conf->db->port." user=".$conf->db->user." name=".$conf->db->name;
 
-            $db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int) $conf->db->port);
+            $db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int)$conf->db->port);
 
             if ($db->connected) {
                 dolibarr_install_syslog("step1: connection to server by user " . $conf->db->user . " ok");
@@ -768,19 +768,18 @@ if (!$error && $db->connected && $action == "set") {
 
 ?>
 
-<script type="text/javascript">
-function jsinfo()
-{
-    ok=true;
+    <script type="text/javascript">
+        function jsinfo() {
+            ok = true;
 
-    //alert('<?php echo dol_escape_js($langs->transnoentities("NextStepMightLastALongTime")); ?>');
+            //alert('<?php echo dol_escape_js($langs->transnoentities("NextStepMightLastALongTime")); ?>');
 
-    document.getElementById('nextbutton').style.visibility="hidden";
-    document.getElementById('pleasewait').style.visibility="visible";
+            document.getElementById('nextbutton').style.visibility = "hidden";
+            document.getElementById('pleasewait').style.visibility = "visible";
 
-    return ok;
-}
-</script>
+            return ok;
+        }
+    </script>
 
 <?php
 
@@ -803,9 +802,9 @@ if ($ret) {
 /**
  *  Create main file. No particular permissions are set by installer.
  *
- *  @param  string      $mainfile       Full path name of main file to generate/update
- *  @param  string      $main_dir       Full path name to main.inc.php file
- *  @return void
+ * @param string $mainfile Full path name of main file to generate/update
+ * @param string $main_dir Full path name to main.inc.php file
+ * @return void
  */
 function write_main_file($mainfile, $main_dir)
 {
@@ -823,9 +822,9 @@ function write_main_file($mainfile, $main_dir)
 /**
  *  Create master file. No particular permissions are set by installer.
  *
- *  @param  string      $masterfile     Full path name of master file to generate/update
- *  @param  string      $main_dir       Full path name to master.inc.php file
- *  @return void
+ * @param string $masterfile Full path name of master file to generate/update
+ * @param string $main_dir Full path name to master.inc.php file
+ * @return void
  */
 function write_master_file($masterfile, $main_dir)
 {
@@ -843,8 +842,8 @@ function write_master_file($masterfile, $main_dir)
 /**
  *  Save configuration file. No particular permissions are set by installer.
  *
- *  @param  string      $conffile        Path to conf file to generate/update
- *  @return integer
+ * @param string $conffile Path to conf file to generate/update
+ * @return integer
  */
 function write_conf_file($conffile)
 {
@@ -865,7 +864,7 @@ function write_conf_file($conffile)
 
     $error = 0;
 
-    $key = md5(uniqid((string) mt_rand(), true)); // Generate random hash
+    $key = md5(uniqid((string)mt_rand(), true)); // Generate random hash
 
     $fp = fopen("$conffile", "w");
     if ($fp) {
@@ -896,7 +895,7 @@ function write_conf_file($conffile)
         fwrite($fp, '$dolibarr_main_db_host=\'' . dol_escape_php(trim($db_host), 1) . '\';');
         fwrite($fp, "\n");
 
-        fwrite($fp, '$dolibarr_main_db_port=\'' . ((int) $db_port) . '\';');
+        fwrite($fp, '$dolibarr_main_db_port=\'' . ((int)$db_port) . '\';');
         fwrite($fp, "\n");
 
         fwrite($fp, '$dolibarr_main_db_name=\'' . dol_escape_php(trim($db_name), 1) . '\';');

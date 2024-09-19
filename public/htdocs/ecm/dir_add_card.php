@@ -29,7 +29,7 @@ use Dolibarr\Code\Ecm\Classes\FormEcm;
  *  \brief      Main page for ECM section area
  */
 
-if (! defined('DISABLE_JS_GRAHP')) {
+if (!defined('DISABLE_JS_GRAHP')) {
     define('DISABLE_JS_GRAPH', 1);
 }
 
@@ -40,15 +40,15 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 $langs->loadLangs(array("ecm", "companies", "other", "users", "orders", "propal", "bills", "contracts", "categories"));
 
 // Get parameters
-$socid      = GETPOSTINT('socid');
-$action     = GETPOST('action', 'alpha');
-$cancel     = GETPOST('cancel', 'aZ09');
+$socid = GETPOSTINT('socid');
+$action = GETPOST('action', 'alpha');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 
-$module  = GETPOST('module', 'alpha');
+$module = GETPOST('module', 'alpha');
 $website = GETPOST('website', 'alpha');
-$pageid  = GETPOSTINT('pageid');
+$pageid = GETPOSTINT('pageid');
 if (empty($module)) {
     $module = 'ecm';
 }
@@ -116,7 +116,6 @@ if (!$permissiontoadd) {
 }
 
 
-
 /*
  * Actions
  */
@@ -133,9 +132,9 @@ if ($action == 'add' && $permissiontoadd) {
         }
     }
 
-    $ref = (string) GETPOST("ref", 'alpha');
+    $ref = (string)GETPOST("ref", 'alpha');
     $label = dol_sanitizeFileName(GETPOST("label", 'alpha'));
-    $desc = (string) GETPOST("desc", 'alpha');
+    $desc = (string)GETPOST("desc", 'alpha');
     $catParent = GETPOST("catParent", 'alpha'); // Can be an int (with ECM) or a string (with generic filemanager)
     if ($catParent == '-1') {
         $catParent = 0;
@@ -151,10 +150,10 @@ if ($action == 'add' && $permissiontoadd) {
 
     if (!$error) {
         if ($module == 'ecm') {
-            $ecmdir->ref            = $ref;
-            $ecmdir->label          = $label;
-            $ecmdir->description    = $desc;
-            $ecmdir->fk_parent      = (int) $catParent;
+            $ecmdir->ref = $ref;
+            $ecmdir->label = $label;
+            $ecmdir->description = $desc;
+            $ecmdir->fk_parent = (int)$catParent;
 
             $id = $ecmdir->create($user);
             if ($id <= 0) {

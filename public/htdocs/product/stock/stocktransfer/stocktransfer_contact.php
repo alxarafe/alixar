@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005      Patrick Rouillon     <patrick@rouillon.net>
- * Copyright (C) 2005-2016 Destailleur Laurent  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2011-2015 Philippe Grand       <philippe.grand@atoo-net.com>
- * Copyright (C) 2021  Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2005       Patrick Rouillon            <patrick@rouillon.net>
+ * Copyright (C) 2005-2016  Destailleur Laurent         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2015  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Product\Classes\StockTransfer;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *       \file       htdocs/product/stock/stocktransfer/stocktransfer_contact.php
  *       \ingroup    propal
@@ -28,7 +34,6 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\Product\Classes\StockTransfer;
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/lib/stocktransfer_stocktransfer.lib.php';
@@ -105,7 +110,6 @@ if ($action == 'addcontact' && $user->hasRight('stocktransfer', 'stocktransfer',
         dol_print_error($db);
     }
 }
-
 
 /*
  * View

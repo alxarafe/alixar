@@ -51,7 +51,7 @@ $langs->loadLangs(array('banks', 'categories', 'withdrawals', 'companies', 'bill
 // Get supervariables
 $action = GETPOST('action', 'aZ09');
 $massaction = GETPOST('massaction', 'alpha'); // The bulk action (combo box choice into lists)
-$toselect   = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
+$toselect = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
 $mode = GETPOST('mode', 'alpha') ? GETPOST('mode', 'alpha') : 'real';
 
 $type = GETPOST('type', 'aZ09');
@@ -189,7 +189,7 @@ if (empty($reshook)) {
                     setEventMessages($texttoshow, null);
                 }
 
-                header("Location: " . constant('BASE_URL') . '/compta/prelevement/card.php?id=' . urlencode((string) ($bprev->id)) . '&type=' . urlencode((string) ($type)));
+                header("Location: " . constant('BASE_URL') . '/compta/prelevement/card.php?id=' . urlencode((string)($bprev->id)) . '&type=' . urlencode((string)($type)));
                 exit;
             }
         }
@@ -220,8 +220,7 @@ if ($type != 'bank-transfer') {
 $bprev = new BonPrelevement($db);
 $arrayofselected = is_array($toselect) ? $toselect : array();
 // List of mass actions available
-$arrayofmassactions = array(
-);
+$arrayofmassactions = array();
 if (GETPOSTINT('nomassaction') || in_array($massaction, array('presend', 'predelete'))) {
     $arrayofmassactions = array();
 }
@@ -424,7 +423,7 @@ if ($sourcetype != 'salary') {
         $sql .= " AND pd.fk_facture = f.rowid";
     }
     if ($socid > 0) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
 } else {
     $sql = "SELECT s.ref, s.rowid, s.amount, CONCAT(u.lastname, ' ', u.firstname) as name, u.rowid as uid,";
@@ -464,13 +463,13 @@ if ($resql) {
 
     $param = '';
     if ($type) {
-        $param .= '&type=' . urlencode((string) $type);
+        $param .= '&type=' . urlencode((string)$type);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($socid) {
-        $param .= '&socid=' . urlencode((string) ($socid));
+        $param .= '&socid=' . urlencode((string)($socid));
     }
     if ($option) {
         $param .= "&option=" . urlencode($option);

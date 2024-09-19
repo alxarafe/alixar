@@ -120,8 +120,6 @@ class Financial
      * Excel Function:
      *        ACCRINT(issue,firstinterest,settlement,rate,par,frequency[,basis])
      *
-     * @category Financial Functions
-     *
      * @param mixed $issue the security's issue date
      * @param mixed $firstinterest the security's first interest date
      * @param mixed $settlement The security's settlement date.
@@ -147,6 +145,8 @@ class Financial
      *                                        4                European 30/360
      *
      * @return float|string Result, or a string containing an error
+     * @category Financial Functions
+     *
      */
     public static function ACCRINT($issue, $firstinterest, $settlement, $rate, $par = 1000, $frequency = 1, $basis = 0)
     {
@@ -160,8 +160,8 @@ class Financial
 
         //    Validate
         if ((is_numeric($rate)) && (is_numeric($par))) {
-            $rate = (float) $rate;
-            $par = (float) $par;
+            $rate = (float)$rate;
+            $par = (float)$par;
             if (($rate <= 0) || ($par <= 0)) {
                 return Functions::NAN();
             }
@@ -185,8 +185,6 @@ class Financial
      * Excel Function:
      *        ACCRINTM(issue,settlement,rate[,par[,basis]])
      *
-     * @category Financial Functions
-     *
      * @param mixed $issue The security's issue date
      * @param mixed $settlement The security's settlement (or maturity) date
      * @param float $rate The security's annual coupon rate
@@ -200,6 +198,8 @@ class Financial
      *                                        4                European 30/360
      *
      * @return float|string Result, or a string containing an error
+     * @category Financial Functions
+     *
      */
     public static function ACCRINTM($issue, $settlement, $rate, $par = 1000, $basis = 0)
     {
@@ -211,8 +211,8 @@ class Financial
 
         //    Validate
         if ((is_numeric($rate)) && (is_numeric($par))) {
-            $rate = (float) $rate;
-            $par = (float) $par;
+            $rate = (float)$rate;
+            $par = (float)$par;
             if (($rate <= 0) || ($par <= 0)) {
                 return Functions::NAN();
             }
@@ -243,8 +243,6 @@ class Financial
      * Excel Function:
      *        AMORDEGRC(cost,purchased,firstPeriod,salvage,period,rate[,basis])
      *
-     * @category Financial Functions
-     *
      * @param float $cost The cost of the asset
      * @param mixed $purchased Date of the purchase of the asset
      * @param mixed $firstPeriod Date of the end of the first period
@@ -259,6 +257,8 @@ class Financial
      *                                        4                European 30/360
      *
      * @return float
+     * @category Financial Functions
+     *
      */
     public static function AMORDEGRC($cost, $purchased, $firstPeriod, $salvage, $period, $rate, $basis = 0)
     {
@@ -268,7 +268,7 @@ class Financial
         $salvage = Functions::flattenSingleValue($salvage);
         $period = floor(Functions::flattenSingleValue($period));
         $rate = Functions::flattenSingleValue($rate);
-        $basis = ($basis === null) ? 0 : (int) Functions::flattenSingleValue($basis);
+        $basis = ($basis === null) ? 0 : (int)Functions::flattenSingleValue($basis);
 
         //    The depreciation coefficients are:
         //    Life of assets (1/rate)        Depreciation coefficient
@@ -321,8 +321,6 @@ class Financial
      * Excel Function:
      *        AMORLINC(cost,purchased,firstPeriod,salvage,period,rate[,basis])
      *
-     * @category Financial Functions
-     *
      * @param float $cost The cost of the asset
      * @param mixed $purchased Date of the purchase of the asset
      * @param mixed $firstPeriod Date of the end of the first period
@@ -337,6 +335,8 @@ class Financial
      *                                        4                European 30/360
      *
      * @return float
+     * @category Financial Functions
+     *
      */
     public static function AMORLINC($cost, $purchased, $firstPeriod, $salvage, $period, $rate, $basis = 0)
     {
@@ -346,7 +346,7 @@ class Financial
         $salvage = Functions::flattenSingleValue($salvage);
         $period = Functions::flattenSingleValue($period);
         $rate = Functions::flattenSingleValue($rate);
-        $basis = ($basis === null) ? 0 : (int) Functions::flattenSingleValue($basis);
+        $basis = ($basis === null) ? 0 : (int)Functions::flattenSingleValue($basis);
 
         $fOneRate = $cost * $rate;
         $fCostDelta = $cost - $salvage;
@@ -359,7 +359,7 @@ class Financial
         }
 
         $f0Rate = $yearFrac * $rate * $cost;
-        $nNumOfFullPeriods = (int) (($cost - $salvage - $f0Rate) / $fOneRate);
+        $nNumOfFullPeriods = (int)(($cost - $salvage - $f0Rate) / $fOneRate);
 
         if ($period == 0) {
             return $f0Rate;
@@ -379,8 +379,6 @@ class Financial
      *
      * Excel Function:
      *        COUPDAYBS(settlement,maturity,frequency[,basis])
-     *
-     * @category Financial Functions
      *
      * @param mixed $settlement The security's settlement date.
      *                                The security settlement date is the date after the issue
@@ -404,13 +402,15 @@ class Financial
      *                                        4                European 30/360
      *
      * @return float|string
+     * @category Financial Functions
+     *
      */
     public static function COUPDAYBS($settlement, $maturity, $frequency, $basis = 0)
     {
         $settlement = Functions::flattenSingleValue($settlement);
         $maturity = Functions::flattenSingleValue($maturity);
-        $frequency = (int) Functions::flattenSingleValue($frequency);
-        $basis = ($basis === null) ? 0 : (int) Functions::flattenSingleValue($basis);
+        $frequency = (int)Functions::flattenSingleValue($frequency);
+        $basis = ($basis === null) ? 0 : (int)Functions::flattenSingleValue($basis);
 
         if (is_string($settlement = DateTime::getDateValue($settlement))) {
             return Functions::VALUE();
@@ -441,8 +441,6 @@ class Financial
      * Excel Function:
      *        COUPDAYS(settlement,maturity,frequency[,basis])
      *
-     * @category Financial Functions
-     *
      * @param mixed $settlement The security's settlement date.
      *                                The security settlement date is the date after the issue
      *                                date when the security is traded to the buyer.
@@ -465,13 +463,15 @@ class Financial
      *                                        4                European 30/360
      *
      * @return float|string
+     * @category Financial Functions
+     *
      */
     public static function COUPDAYS($settlement, $maturity, $frequency, $basis = 0)
     {
         $settlement = Functions::flattenSingleValue($settlement);
         $maturity = Functions::flattenSingleValue($maturity);
-        $frequency = (int) Functions::flattenSingleValue($frequency);
-        $basis = ($basis === null) ? 0 : (int) Functions::flattenSingleValue($basis);
+        $frequency = (int)Functions::flattenSingleValue($frequency);
+        $basis = ($basis === null) ? 0 : (int)Functions::flattenSingleValue($basis);
 
         if (is_string($settlement = DateTime::getDateValue($settlement))) {
             return Functions::VALUE();
@@ -517,8 +517,6 @@ class Financial
      * Excel Function:
      *        COUPDAYSNC(settlement,maturity,frequency[,basis])
      *
-     * @category Financial Functions
-     *
      * @param mixed $settlement The security's settlement date.
      *                                The security settlement date is the date after the issue
      *                                date when the security is traded to the buyer.
@@ -541,13 +539,15 @@ class Financial
      *                                        4                European 30/360
      *
      * @return float|string
+     * @category Financial Functions
+     *
      */
     public static function COUPDAYSNC($settlement, $maturity, $frequency, $basis = 0)
     {
         $settlement = Functions::flattenSingleValue($settlement);
         $maturity = Functions::flattenSingleValue($maturity);
-        $frequency = (int) Functions::flattenSingleValue($frequency);
-        $basis = ($basis === null) ? 0 : (int) Functions::flattenSingleValue($basis);
+        $frequency = (int)Functions::flattenSingleValue($frequency);
+        $basis = ($basis === null) ? 0 : (int)Functions::flattenSingleValue($basis);
 
         if (is_string($settlement = DateTime::getDateValue($settlement))) {
             return Functions::VALUE();
@@ -578,8 +578,6 @@ class Financial
      * Excel Function:
      *        COUPNCD(settlement,maturity,frequency[,basis])
      *
-     * @category Financial Functions
-     *
      * @param mixed $settlement The security's settlement date.
      *                                The security settlement date is the date after the issue
      *                                date when the security is traded to the buyer.
@@ -603,13 +601,15 @@ class Financial
      *
      * @return mixed Excel date/time serial value, PHP date/time serial value or PHP date/time object,
      *                        depending on the value of the ReturnDateType flag
+     * @category Financial Functions
+     *
      */
     public static function COUPNCD($settlement, $maturity, $frequency, $basis = 0)
     {
         $settlement = Functions::flattenSingleValue($settlement);
         $maturity = Functions::flattenSingleValue($maturity);
-        $frequency = (int) Functions::flattenSingleValue($frequency);
-        $basis = ($basis === null) ? 0 : (int) Functions::flattenSingleValue($basis);
+        $frequency = (int)Functions::flattenSingleValue($frequency);
+        $basis = ($basis === null) ? 0 : (int)Functions::flattenSingleValue($basis);
 
         if (is_string($settlement = DateTime::getDateValue($settlement))) {
             return Functions::VALUE();
@@ -638,8 +638,6 @@ class Financial
      * Excel Function:
      *        COUPNUM(settlement,maturity,frequency[,basis])
      *
-     * @category Financial Functions
-     *
      * @param mixed $settlement The security's settlement date.
      *                                The security settlement date is the date after the issue
      *                                date when the security is traded to the buyer.
@@ -662,13 +660,15 @@ class Financial
      *                                        4                European 30/360
      *
      * @return int|string
+     * @category Financial Functions
+     *
      */
     public static function COUPNUM($settlement, $maturity, $frequency, $basis = 0)
     {
         $settlement = Functions::flattenSingleValue($settlement);
         $maturity = Functions::flattenSingleValue($maturity);
-        $frequency = (int) Functions::flattenSingleValue($frequency);
-        $basis = ($basis === null) ? 0 : (int) Functions::flattenSingleValue($basis);
+        $frequency = (int)Functions::flattenSingleValue($frequency);
+        $basis = ($basis === null) ? 0 : (int)Functions::flattenSingleValue($basis);
 
         if (is_string($settlement = DateTime::getDateValue($settlement))) {
             return Functions::VALUE();
@@ -708,8 +708,6 @@ class Financial
      * Excel Function:
      *        COUPPCD(settlement,maturity,frequency[,basis])
      *
-     * @category Financial Functions
-     *
      * @param mixed $settlement The security's settlement date.
      *                                The security settlement date is the date after the issue
      *                                date when the security is traded to the buyer.
@@ -733,13 +731,15 @@ class Financial
      *
      * @return mixed Excel date/time serial value, PHP date/time serial value or PHP date/time object,
      *                        depending on the value of the ReturnDateType flag
+     * @category Financial Functions
+     *
      */
     public static function COUPPCD($settlement, $maturity, $frequency, $basis = 0)
     {
         $settlement = Functions::flattenSingleValue($settlement);
         $maturity = Functions::flattenSingleValue($maturity);
-        $frequency = (int) Functions::flattenSingleValue($frequency);
-        $basis = ($basis === null) ? 0 : (int) Functions::flattenSingleValue($basis);
+        $frequency = (int)Functions::flattenSingleValue($frequency);
+        $basis = ($basis === null) ? 0 : (int)Functions::flattenSingleValue($basis);
 
         if (is_string($settlement = DateTime::getDateValue($settlement))) {
             return Functions::VALUE();
@@ -767,8 +767,6 @@ class Financial
      * Excel Function:
      *        CUMIPMT(rate,nper,pv,start,end[,type])
      *
-     * @category Financial Functions
-     *
      * @param float $rate The Interest rate
      * @param int $nper The total number of payment periods
      * @param float $pv Present Value
@@ -780,15 +778,17 @@ class Financial
      *                                1                At the beginning of the period.
      *
      * @return float|string
+     * @category Financial Functions
+     *
      */
     public static function CUMIPMT($rate, $nper, $pv, $start, $end, $type = 0)
     {
         $rate = Functions::flattenSingleValue($rate);
-        $nper = (int) Functions::flattenSingleValue($nper);
+        $nper = (int)Functions::flattenSingleValue($nper);
         $pv = Functions::flattenSingleValue($pv);
-        $start = (int) Functions::flattenSingleValue($start);
-        $end = (int) Functions::flattenSingleValue($end);
-        $type = (int) Functions::flattenSingleValue($type);
+        $start = (int)Functions::flattenSingleValue($start);
+        $end = (int)Functions::flattenSingleValue($end);
+        $type = (int)Functions::flattenSingleValue($type);
 
         // Validate parameters
         if ($type != 0 && $type != 1) {
@@ -815,8 +815,6 @@ class Financial
      * Excel Function:
      *        CUMPRINC(rate,nper,pv,start,end[,type])
      *
-     * @category Financial Functions
-     *
      * @param float $rate The Interest rate
      * @param int $nper The total number of payment periods
      * @param float $pv Present Value
@@ -828,15 +826,17 @@ class Financial
      *                                1                At the beginning of the period.
      *
      * @return float|string
+     * @category Financial Functions
+     *
      */
     public static function CUMPRINC($rate, $nper, $pv, $start, $end, $type = 0)
     {
         $rate = Functions::flattenSingleValue($rate);
-        $nper = (int) Functions::flattenSingleValue($nper);
+        $nper = (int)Functions::flattenSingleValue($nper);
         $pv = Functions::flattenSingleValue($pv);
-        $start = (int) Functions::flattenSingleValue($start);
-        $end = (int) Functions::flattenSingleValue($end);
-        $type = (int) Functions::flattenSingleValue($type);
+        $start = (int)Functions::flattenSingleValue($start);
+        $end = (int)Functions::flattenSingleValue($end);
+        $type = (int)Functions::flattenSingleValue($type);
 
         // Validate parameters
         if ($type != 0 && $type != 1) {
@@ -868,8 +868,6 @@ class Financial
      * Excel Function:
      *        DB(cost,salvage,life,period[,month])
      *
-     * @category Financial Functions
-     *
      * @param float $cost Initial cost of the asset
      * @param float $salvage Value at the end of the depreciation.
      *                                (Sometimes called the salvage value of the asset)
@@ -881,6 +879,8 @@ class Financial
      *                                it defaults to 12.
      *
      * @return float|string
+     * @category Financial Functions
+     *
      */
     public static function DB($cost, $salvage, $life, $period, $month = 12)
     {
@@ -892,11 +892,11 @@ class Financial
 
         //    Validate
         if ((is_numeric($cost)) && (is_numeric($salvage)) && (is_numeric($life)) && (is_numeric($period)) && (is_numeric($month))) {
-            $cost = (float) $cost;
-            $salvage = (float) $salvage;
-            $life = (int) $life;
-            $period = (int) $period;
-            $month = (int) $month;
+            $cost = (float)$cost;
+            $salvage = (float)$salvage;
+            $life = (int)$life;
+            $period = (int)$period;
+            $month = (int)$month;
             if ($cost == 0) {
                 return 0.0;
             } elseif (($cost < 0) || (($salvage / $cost) < 0) || ($life <= 0) || ($period < 1) || ($month < 1)) {
@@ -937,8 +937,6 @@ class Financial
      * Excel Function:
      *        DDB(cost,salvage,life,period[,factor])
      *
-     * @category Financial Functions
-     *
      * @param float $cost Initial cost of the asset
      * @param float $salvage Value at the end of the depreciation.
      *                                (Sometimes called the salvage value of the asset)
@@ -951,6 +949,8 @@ class Financial
      *                                double-declining balance method).
      *
      * @return float|string
+     * @category Financial Functions
+     *
      */
     public static function DDB($cost, $salvage, $life, $period, $factor = 2.0)
     {
@@ -962,11 +962,11 @@ class Financial
 
         //    Validate
         if ((is_numeric($cost)) && (is_numeric($salvage)) && (is_numeric($life)) && (is_numeric($period)) && (is_numeric($factor))) {
-            $cost = (float) $cost;
-            $salvage = (float) $salvage;
-            $life = (int) $life;
-            $period = (int) $period;
-            $factor = (float) $factor;
+            $cost = (float)$cost;
+            $salvage = (float)$salvage;
+            $life = (int)$life;
+            $period = (int)$period;
+            $factor = (float)$factor;
             if (($cost <= 0) || (($salvage / $cost) < 0) || ($life <= 0) || ($period < 1) || ($factor <= 0.0) || ($period > $life)) {
                 return Functions::NAN();
             }
@@ -998,8 +998,6 @@ class Financial
      * Excel Function:
      *        DISC(settlement,maturity,price,redemption[,basis])
      *
-     * @category Financial Functions
-     *
      * @param mixed $settlement The security's settlement date.
      *                                The security settlement date is the date after the issue
      *                                date when the security is traded to the buyer.
@@ -1015,6 +1013,8 @@ class Financial
      *                                        4                European 30/360
      *
      * @return float|string
+     * @category Financial Functions
+     *
      */
     public static function DISC($settlement, $maturity, $price, $redemption, $basis = 0)
     {
@@ -1026,9 +1026,9 @@ class Financial
 
         //    Validate
         if ((is_numeric($price)) && (is_numeric($redemption)) && (is_numeric($basis))) {
-            $price = (float) $price;
-            $redemption = (float) $redemption;
-            $basis = (int) $basis;
+            $price = (float)$price;
+            $redemption = (float)$redemption;
+            $basis = (int)$basis;
             if (($price <= 0) || ($redemption <= 0)) {
                 return Functions::NAN();
             }
@@ -1054,17 +1054,17 @@ class Financial
      * Excel Function:
      *        DOLLARDE(fractional_dollar,fraction)
      *
-     * @category Financial Functions
-     *
      * @param float $fractional_dollar Fractional Dollar
      * @param int $fraction Fraction
      *
      * @return float|string
+     * @category Financial Functions
+     *
      */
     public static function DOLLARDE($fractional_dollar = null, $fraction = 0)
     {
         $fractional_dollar = Functions::flattenSingleValue($fractional_dollar);
-        $fraction = (int) Functions::flattenSingleValue($fraction);
+        $fraction = (int)Functions::flattenSingleValue($fraction);
 
         // Validate parameters
         if ($fractional_dollar === null || $fraction < 0) {
@@ -1092,17 +1092,17 @@ class Financial
      * Excel Function:
      *        DOLLARFR(decimal_dollar,fraction)
      *
-     * @category Financial Functions
-     *
      * @param float $decimal_dollar Decimal Dollar
      * @param int $fraction Fraction
      *
      * @return float|string
+     * @category Financial Functions
+     *
      */
     public static function DOLLARFR($decimal_dollar = null, $fraction = 0)
     {
         $decimal_dollar = Functions::flattenSingleValue($decimal_dollar);
-        $fraction = (int) Functions::flattenSingleValue($fraction);
+        $fraction = (int)Functions::flattenSingleValue($fraction);
 
         // Validate parameters
         if ($decimal_dollar === null || $fraction < 0) {
@@ -1129,17 +1129,17 @@ class Financial
      * Excel Function:
      *        EFFECT(nominal_rate,npery)
      *
-     * @category Financial Functions
-     *
      * @param float $nominal_rate Nominal interest rate
      * @param int $npery Number of compounding payments per year
      *
      * @return float|string
+     * @category Financial Functions
+     *
      */
     public static function EFFECT($nominal_rate = 0, $npery = 0)
     {
         $nominal_rate = Functions::flattenSingleValue($nominal_rate);
-        $npery = (int) Functions::flattenSingleValue($npery);
+        $npery = (int)Functions::flattenSingleValue($npery);
 
         // Validate parameters
         if ($nominal_rate <= 0 || $npery < 1) {
@@ -1157,8 +1157,6 @@ class Financial
      * Excel Function:
      *        FV(rate,nper,pmt[,pv[,type]])
      *
-     * @category Financial Functions
-     *
      * @param float $rate The interest rate per period
      * @param int $nper Total number of payment periods in an annuity
      * @param float $pmt The payment made each period: it cannot change over the
@@ -1171,6 +1169,8 @@ class Financial
      *                                1                At the beginning of the period.
      *
      * @return float|string
+     * @category Financial Functions
+     *
      */
     public static function FV($rate = 0, $nper = 0, $pmt = 0, $pv = 0, $type = 0)
     {
@@ -1252,9 +1252,9 @@ class Financial
 
         //    Validate
         if ((is_numeric($investment)) && (is_numeric($redemption)) && (is_numeric($basis))) {
-            $investment = (float) $investment;
-            $redemption = (float) $redemption;
-            $basis = (int) $basis;
+            $investment = (float)$investment;
+            $redemption = (float)$redemption;
+            $basis = (int)$basis;
             if (($investment <= 0) || ($redemption <= 0)) {
                 return Functions::NAN();
             }
@@ -1290,11 +1290,11 @@ class Financial
     public static function IPMT($rate, $per, $nper, $pv, $fv = 0, $type = 0)
     {
         $rate = Functions::flattenSingleValue($rate);
-        $per = (int) Functions::flattenSingleValue($per);
-        $nper = (int) Functions::flattenSingleValue($nper);
+        $per = (int)Functions::flattenSingleValue($per);
+        $nper = (int)Functions::flattenSingleValue($nper);
         $pv = Functions::flattenSingleValue($pv);
         $fv = Functions::flattenSingleValue($fv);
-        $type = (int) Functions::flattenSingleValue($type);
+        $type = (int)Functions::flattenSingleValue($type);
 
         // Validate parameters
         if ($type != 0 && $type != 1) {
@@ -1485,7 +1485,7 @@ class Financial
     public static function NOMINAL($effect_rate = 0, $npery = 0)
     {
         $effect_rate = Functions::flattenSingleValue($effect_rate);
-        $npery = (int) Functions::flattenSingleValue($npery);
+        $npery = (int)Functions::flattenSingleValue($npery);
 
         // Validate parameters
         if ($effect_rate <= 0 || $npery < 1) {
@@ -1644,11 +1644,11 @@ class Financial
     public static function PPMT($rate, $per, $nper, $pv, $fv = 0, $type = 0)
     {
         $rate = Functions::flattenSingleValue($rate);
-        $per = (int) Functions::flattenSingleValue($per);
-        $nper = (int) Functions::flattenSingleValue($nper);
+        $per = (int)Functions::flattenSingleValue($per);
+        $nper = (int)Functions::flattenSingleValue($nper);
         $pv = Functions::flattenSingleValue($pv);
         $fv = Functions::flattenSingleValue($fv);
-        $type = (int) Functions::flattenSingleValue($type);
+        $type = (int)Functions::flattenSingleValue($type);
 
         // Validate parameters
         if ($type != 0 && $type != 1) {
@@ -1668,11 +1668,11 @@ class Financial
     {
         $settlement = Functions::flattenSingleValue($settlement);
         $maturity = Functions::flattenSingleValue($maturity);
-        $rate = (float) Functions::flattenSingleValue($rate);
-        $yield = (float) Functions::flattenSingleValue($yield);
-        $redemption = (float) Functions::flattenSingleValue($redemption);
-        $frequency = (int) Functions::flattenSingleValue($frequency);
-        $basis = ($basis === null) ? 0 : (int) Functions::flattenSingleValue($basis);
+        $rate = (float)Functions::flattenSingleValue($rate);
+        $yield = (float)Functions::flattenSingleValue($yield);
+        $redemption = (float)Functions::flattenSingleValue($redemption);
+        $frequency = (int)Functions::flattenSingleValue($frequency);
+        $basis = ($basis === null) ? 0 : (int)Functions::flattenSingleValue($basis);
 
         if (is_string($settlement = DateTime::getDateValue($settlement))) {
             return Functions::VALUE();
@@ -1731,9 +1731,9 @@ class Financial
     {
         $settlement = Functions::flattenSingleValue($settlement);
         $maturity = Functions::flattenSingleValue($maturity);
-        $discount = (float) Functions::flattenSingleValue($discount);
-        $redemption = (float) Functions::flattenSingleValue($redemption);
-        $basis = (int) Functions::flattenSingleValue($basis);
+        $discount = (float)Functions::flattenSingleValue($discount);
+        $redemption = (float)Functions::flattenSingleValue($redemption);
+        $basis = (int)Functions::flattenSingleValue($basis);
 
         //    Validate
         if ((is_numeric($discount)) && (is_numeric($redemption)) && (is_numeric($basis))) {
@@ -1780,7 +1780,7 @@ class Financial
         $issue = Functions::flattenSingleValue($issue);
         $rate = Functions::flattenSingleValue($rate);
         $yield = Functions::flattenSingleValue($yield);
-        $basis = (int) Functions::flattenSingleValue($basis);
+        $basis = (int)Functions::flattenSingleValue($basis);
 
         //    Validate
         if (is_numeric($rate) && is_numeric($yield)) {
@@ -1811,8 +1811,8 @@ class Financial
             $daysBetweenSettlementAndMaturity *= $daysPerYear;
 
             return (100 + (($daysBetweenIssueAndMaturity / $daysPerYear) * $rate * 100)) /
-                   (1 + (($daysBetweenSettlementAndMaturity / $daysPerYear) * $yield)) -
-                   (($daysBetweenIssueAndSettlement / $daysPerYear) * $rate * 100);
+                (1 + (($daysBetweenSettlementAndMaturity / $daysPerYear) * $yield)) -
+                (($daysBetweenIssueAndSettlement / $daysPerYear) * $rate * 100);
         }
 
         return Functions::VALUE();
@@ -1863,8 +1863,6 @@ class Financial
      * Excel Function:
      *        RATE(nper,pmt,pv[,fv[,type[,guess]]])
      *
-     * @category Financial Functions
-     *
      * @param float $nper The total number of payment periods in an annuity
      * @param float $pmt The payment made each period and cannot change over the life
      *                                    of the annuity.
@@ -1882,14 +1880,16 @@ class Financial
      *                                    If you omit guess, it is assumed to be 10 percent.
      *
      * @return float
+     * @category Financial Functions
+     *
      */
     public static function RATE($nper, $pmt, $pv, $fv = 0.0, $type = 0, $guess = 0.1)
     {
-        $nper = (int) Functions::flattenSingleValue($nper);
+        $nper = (int)Functions::flattenSingleValue($nper);
         $pmt = Functions::flattenSingleValue($pmt);
         $pv = Functions::flattenSingleValue($pv);
         $fv = ($fv === null) ? 0.0 : Functions::flattenSingleValue($fv);
-        $type = ($type === null) ? 0 : (int) Functions::flattenSingleValue($type);
+        $type = ($type === null) ? 0 : (int)Functions::flattenSingleValue($type);
         $guess = ($guess === null) ? 0.1 : Functions::flattenSingleValue($guess);
 
         $rate = $guess;
@@ -1951,9 +1951,9 @@ class Financial
     {
         $settlement = Functions::flattenSingleValue($settlement);
         $maturity = Functions::flattenSingleValue($maturity);
-        $investment = (float) Functions::flattenSingleValue($investment);
-        $discount = (float) Functions::flattenSingleValue($discount);
-        $basis = (int) Functions::flattenSingleValue($basis);
+        $investment = (float)Functions::flattenSingleValue($investment);
+        $discount = (float)Functions::flattenSingleValue($discount);
+        $basis = (int)Functions::flattenSingleValue($basis);
 
         //    Validate
         if ((is_numeric($investment)) && (is_numeric($discount)) && (is_numeric($basis))) {
@@ -2207,12 +2207,12 @@ class Financial
      * Excel Function:
      *        =XIRR(values,dates,guess)
      *
-     * @param float[] $values     A series of cash flow payments
+     * @param float[] $values A series of cash flow payments
      *                                The series of values must contain at least one positive value & one negative value
-     * @param mixed[] $dates      A series of payment dates
+     * @param mixed[] $dates A series of payment dates
      *                                The first payment date indicates the beginning of the schedule of payments
      *                                All other dates must be later than this date, but they may occur in any order
-     * @param float $guess        An optional guess at the expected answer
+     * @param float $guess An optional guess at the expected answer
      *
      * @return float|mixed|string
      */
@@ -2297,11 +2297,11 @@ class Financial
      *        =XNPV(rate,values,dates)
      *
      * @param float $rate the discount rate to apply to the cash flows
-     * @param float[] $values     A series of cash flows that corresponds to a schedule of payments in dates.
+     * @param float[] $values A series of cash flows that corresponds to a schedule of payments in dates.
      *                                         The first payment is optional and corresponds to a cost or payment that occurs at the beginning of the investment.
      *                                         If the first value is a cost or payment, it must be a negative value. All succeeding payments are discounted based on a 365-day year.
      *                                         The series of values must contain at least one positive value and one negative value.
-     * @param mixed[] $dates      A schedule of payment dates that corresponds to the cash flow payments.
+     * @param mixed[] $dates A schedule of payment dates that corresponds to the cash flow payments.
      *                                         The first payment date indicates the beginning of the schedule of payments.
      *                                         All other dates must be later than this date, but they may occur in any order.
      *
@@ -2363,7 +2363,7 @@ class Financial
         $maturity = Functions::flattenSingleValue($maturity);
         $price = Functions::flattenSingleValue($price);
         $redemption = Functions::flattenSingleValue($redemption);
-        $basis = (int) Functions::flattenSingleValue($basis);
+        $basis = (int)Functions::flattenSingleValue($basis);
 
         //    Validate
         if (is_numeric($price) && is_numeric($redemption)) {
@@ -2415,7 +2415,7 @@ class Financial
         $issue = Functions::flattenSingleValue($issue);
         $rate = Functions::flattenSingleValue($rate);
         $price = Functions::flattenSingleValue($price);
-        $basis = (int) Functions::flattenSingleValue($basis);
+        $basis = (int)Functions::flattenSingleValue($basis);
 
         //    Validate
         if (is_numeric($rate) && is_numeric($price)) {
@@ -2446,8 +2446,8 @@ class Financial
             $daysBetweenSettlementAndMaturity *= $daysPerYear;
 
             return ((1 + (($daysBetweenIssueAndMaturity / $daysPerYear) * $rate) - (($price / 100) + (($daysBetweenIssueAndSettlement / $daysPerYear) * $rate))) /
-                   (($price / 100) + (($daysBetweenIssueAndSettlement / $daysPerYear) * $rate))) *
-                   ($daysPerYear / $daysBetweenSettlementAndMaturity);
+                    (($price / 100) + (($daysBetweenIssueAndSettlement / $daysPerYear) * $rate))) *
+                ($daysPerYear / $daysBetweenSettlementAndMaturity);
         }
 
         return Functions::VALUE();

@@ -26,7 +26,7 @@
 /**
  *  Return array head with list of tabs to view object information
  *
- *  @return array Tabs of the module
+ * @return array Tabs of the module
  */
 function mailmanspip_admin_prepare_head()
 {

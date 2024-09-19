@@ -200,7 +200,6 @@ if ($action == 'update') {
 }
 
 
-
 /*
  * View
  */
@@ -285,7 +284,6 @@ if (getDolGlobalString('PDF_SECURITY_ENCRYPTION')) {
     print 'You should disable this option.';
     print '</div>';
 }
-
 
 
 // Misc options

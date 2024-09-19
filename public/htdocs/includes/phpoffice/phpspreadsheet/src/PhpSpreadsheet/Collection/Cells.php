@@ -105,9 +105,9 @@ class Cells
      *
      * @param Cell $cell Cell to update
      *
+     * @return Cell
      * @throws PhpSpreadsheetException
      *
-     * @return Cell
      */
     public function update(Cell $cell)
     {
@@ -228,7 +228,7 @@ class Cells
 
         sscanf($this->currentCoordinate, '%[A-Z]%d', $column, $row);
 
-        return (int) $row;
+        return (int)$row;
     }
 
     /**
@@ -409,9 +409,9 @@ class Cells
      * @param string $pCoord Coordinate of the cell to update
      * @param Cell $cell Cell to update
      *
+     * @return \PhpOffice\PhpSpreadsheet\Cell\Cell
      * @throws PhpSpreadsheetException
      *
-     * @return \PhpOffice\PhpSpreadsheet\Cell\Cell
      */
     public function add($pCoord, Cell $cell)
     {
@@ -432,9 +432,9 @@ class Cells
      *
      * @param string $pCoord Coordinate of the cell
      *
+     * @return \PhpOffice\PhpSpreadsheet\Cell\Cell Cell that was found, or null if not found
      * @throws PhpSpreadsheetException
      *
-     * @return \PhpOffice\PhpSpreadsheet\Cell\Cell Cell that was found, or null if not found
      */
     public function get($pCoord)
     {

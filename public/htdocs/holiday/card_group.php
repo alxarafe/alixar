@@ -43,21 +43,22 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 use Dolibarr\Code\Holiday\Classes\Holiday;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\User\Classes\UserGroup;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/holiday.lib.php';
 
 // Get parameters
-$action         = GETPOST('action', 'aZ09');
-$cancel         = GETPOST('cancel', 'alpha');
-$confirm        = GETPOST('confirm', 'alpha');
-$id             = GETPOSTINT('id');
-$ref            = GETPOST('ref', 'alpha');
-$fuserid        = (GETPOSTINT('fuserid') ? GETPOSTINT('fuserid') : $user->id);
-$users          = (GETPOST('users', 'array') ? GETPOST('users', 'array') : array($user->id));
-$groups         = GETPOST('groups', 'array');
-$socid          = GETPOSTINT('socid');
+$action = GETPOST('action', 'aZ09');
+$cancel = GETPOST('cancel', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
+$fuserid = (GETPOSTINT('fuserid') ? GETPOSTINT('fuserid') : $user->id);
+$users = (GETPOST('users', 'array') ? GETPOST('users', 'array') : array($user->id));
+$groups = GETPOST('groups', 'array');
+$socid = GETPOSTINT('socid');
 $autoValidation = GETPOSTINT('autoValidation');
-$AutoSendMail   = GETPOSTINT('AutoSendMail');
+$AutoSendMail = GETPOSTINT('AutoSendMail');
 // Load translation files required by the page
 $langs->loadLangs(array("other", "holiday", "mails", "trips"));
 
@@ -167,8 +168,8 @@ if (empty($reshook)) {
         }
 
         if (!$error) {
-            $users      =  GETPOST('users', 'array');
-            $groups     =  GETPOST('groups', 'array');
+            $users = GETPOST('users', 'array');
+            $groups = GETPOST('groups', 'array');
 
             $date_debut = dol_mktime(0, 0, 0, GETPOST('date_debut_month'), GETPOST('date_debut_day'), GETPOST('date_debut_year'));
             $date_fin = dol_mktime(0, 0, 0, GETPOST('date_fin_month'), GETPOST('date_fin_day'), GETPOST('date_fin_year'));
@@ -360,7 +361,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 
 /*
@@ -664,10 +664,10 @@ if (is_object($db)) {
 /**
  * send email to validator for current leave represented by (id)
  *
- * @param int       $id validator for current leave represented by (id)
- * @param int   $cancreate flag for user right
- * @param int   $now date
- * @param int       $autoValidation boolean flag on autovalidation
+ * @param int $id validator for current leave represented by (id)
+ * @param int $cancreate flag for user right
+ * @param int $now date
+ * @param int $autoValidation boolean flag on autovalidation
  *
  * @return stdClass
  * @throws Exception

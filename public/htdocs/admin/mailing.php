@@ -61,10 +61,10 @@ if ($action == 'setvalue') {
         $mailingdelay = '';
     }
     // Clean data
-    if ((float) $mailingdelay > 10) {
+    if ((float)$mailingdelay > 10) {
         $mailingdelay = 10;
     }
-    if (GETPOST('MAILING_DELAY', 'alpha') != '' && GETPOST('MAILING_DELAY', 'alpha') != '0' && (float) $mailingdelay < 0.001) {
+    if (GETPOST('MAILING_DELAY', 'alpha') != '' && GETPOST('MAILING_DELAY', 'alpha') != '0' && (float)$mailingdelay < 0.001) {
         $mailingdelay = 0.001;
     }
 

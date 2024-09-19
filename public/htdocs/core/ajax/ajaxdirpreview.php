@@ -157,7 +157,6 @@ if ($modulepart == 'ecm') {
 // None
 
 
-
 /*
  * View
  */
@@ -188,7 +187,7 @@ if (!empty($websitekey)) {
     $param .= '&website=' . urlencode($websitekey);
 }
 if (!empty($pageid)) {
-    $param .= '&pageid=' . ((int) $pageid);
+    $param .= '&pageid=' . ((int)$pageid);
 }
 
 // Dir scan

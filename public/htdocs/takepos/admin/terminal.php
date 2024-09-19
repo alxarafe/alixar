@@ -33,7 +33,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permi
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/takepos.lib.php";
-require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 
 $terminal = GETPOSTINT('terminal');
 // If socid provided by ajax company selector
@@ -350,7 +349,7 @@ if (isModEnabled('stock')) {
 }
 
 if (isModEnabled('project')) {
-        $formproject = new FormProjets($db);
+    $formproject = new FormProjets($db);
     print '<tr class="oddeven"><td>' . $langs->trans("CashDeskDefaultProject") . '</td><td>';
     print img_picto('', 'project', 'class="pictofixedwidth"');
     // select_projects($socid = -1, $selected = '', $htmlname = 'projectid', $maxlength = 16, $option_only = 0, $show_empty = 1, $discard_closed = 0, $forcefocus = 0, $disabled = 0, $mode = 0, $filterkey = '', $nooutput = 0, $forceaddid = 0, $morecss = '', $htmlid = '', $morefilter = '')
@@ -423,7 +422,7 @@ if (getDolGlobalString('TAKEPOS_ADDON') == "terminal") {
     print $langs->trans("BillsNumberingModule");
     print '<td colspan="2">';
     $array = array(0 => $langs->trans("Default"));
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $dir = dol_buildpath($reldir . "core/modules/facture/");
         if (is_dir($dir)) {

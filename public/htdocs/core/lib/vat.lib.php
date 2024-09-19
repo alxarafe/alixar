@@ -31,7 +31,7 @@ use Dolibarr\Code\Core\Classes\Link;
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function vat_prepare_head($object)

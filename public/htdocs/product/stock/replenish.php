@@ -1,13 +1,14 @@
 <?php
 
-/* Copyright (C) 2013       Cédric Salvador        <csalvador@gpcsolutions.fr>
- * Copyright (C) 2013-2018	Laurent Destaileur	<ely@users.sourceforge.net>
- * Copyright (C) 2014		Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2016		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2016		ATM Consulting		<support@atm-consulting.fr>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2021		Ferran Marcet		<fmarcet@2byte.es>
- * Copyright (C) 2021		Antonin MARCHAL		<antonin@letempledujeu.fr>
+/* Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013-2018	Laurent Destaileur	        <ely@users.sourceforge.net>
+ * Copyright (C) 2014		Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2016		Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2016		ATM Consulting		        <support@atm-consulting.fr>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2021		Ferran Marcet		        <fmarcet@2byte.es>
+ * Copyright (C) 2021		Antonin MARCHAL		        <antonin@letempledujeu.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +23,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseurLigne;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *  \file       htdocs/product/stock/replenish.php
@@ -227,8 +234,8 @@ if ($action == 'order' && GETPOST('valid')) {
 
             // Check if an order for the supplier exists
             $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "commande_fournisseur";
-            $sql .= " WHERE fk_soc = " . ((int) $suppliersid[$i]);
-            $sql .= " AND source = " . ((int) $order::SOURCE_ID_REPLENISHMENT) . " AND fk_statut = " . ((int) $order::STATUS_DRAFT);
+            $sql .= " WHERE fk_soc = " . ((int)$suppliersid[$i]);
+            $sql .= " AND source = " . ((int)$order::SOURCE_ID_REPLENISHMENT) . " AND fk_statut = " . ((int)$order::STATUS_DRAFT);
             $sql .= " AND entity IN (" . getEntity('commande_fournisseur') . ")";
             $sql .= " ORDER BY date_creation DESC";
             $resql = $db->query($sql);
@@ -319,7 +326,6 @@ if ($action == 'order' && GETPOST('valid')) {
     }
 }
 
-
 /*
  * View
  */
@@ -349,7 +355,7 @@ $sql .= " " . $sqldesiredtock . " as desiredstockcombined, " . $sqlalertstock . 
 $sql .= ' s.fk_product,';
 $sql .= " SUM(" . $db->ifsql("s.reel IS NULL", "0", "s.reel") . ') as stock_physique';
 if (getDolGlobalString('STOCK_ALLOW_ADD_LIMIT_STOCK_BY_WAREHOUSE') && $fk_entrepot > 0) {
-    $sql .= ", SUM(" . $db->ifsql("s.reel IS NULL OR s.fk_entrepot <> " . ((int) $fk_entrepot), "0", "s.reel") . ') as stock_real_warehouse';
+    $sql .= ", SUM(" . $db->ifsql("s.reel IS NULL OR s.fk_entrepot <> " . ((int)$fk_entrepot), "0", "s.reel") . ') as stock_real_warehouse';
 }
 
 // Add fields from hooks
@@ -369,7 +375,7 @@ $sql .= ' AND s.fk_entrepot  IN (' . $db->sanitize($list_warehouse_selected) . '
 
 //$sql .= ' LEFT JOIN '.MAIN_DB_PREFIX.'entrepot AS ent ON s.fk_entrepot = ent.rowid AND ent.entity IN('.getEntity('stock').')';
 if (getDolGlobalString('STOCK_ALLOW_ADD_LIMIT_STOCK_BY_WAREHOUSE') && $fk_entrepot > 0) {
-    $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'product_warehouse_properties AS pse ON (p.rowid = pse.fk_product AND pse.fk_entrepot = ' . ((int) $fk_entrepot) . ')';
+    $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'product_warehouse_properties AS pse ON (p.rowid = pse.fk_product AND pse.fk_entrepot = ' . ((int)$fk_entrepot) . ')';
 }
 // Add fields from hooks
 $parameters = array();
@@ -399,7 +405,7 @@ if (isModEnabled('variants') && !getDolGlobalString('VARIANT_ALLOW_STOCK_MOVEMEN
     $sql .= ' AND p.rowid NOT IN (SELECT pac.fk_product_parent FROM ' . MAIN_DB_PREFIX . 'product_attribute_combination as pac WHERE pac.entity IN (' . getEntity('product') . '))';
 }
 if ($fk_supplier > 0) {
-    $sql .= ' AND EXISTS (SELECT pfp.rowid FROM ' . MAIN_DB_PREFIX . 'product_fournisseur_price as pfp WHERE pfp.fk_product = p.rowid AND pfp.fk_soc = ' . ((int) $fk_supplier) . ' AND pfp.entity IN (' . getEntity('product_fournisseur_price') . '))';
+    $sql .= ' AND EXISTS (SELECT pfp.rowid FROM ' . MAIN_DB_PREFIX . 'product_fournisseur_price as pfp WHERE pfp.fk_product = p.rowid AND pfp.fk_soc = ' . ((int)$fk_supplier) . ' AND pfp.entity IN (' . getEntity('product_fournisseur_price') . '))';
 }
 // Add where from hooks
 $parameters = array();
@@ -661,27 +667,27 @@ if ($search_ref || $search_label || $sall || $salert || $draftorder || GETPOST('
     $filters .= '&draftorder=' . urlencode($draftorder);
     $filters .= '&mode=' . urlencode($mode);
     if ($fk_supplier > 0) {
-        $filters .= '&fk_supplier=' . urlencode((string) ($fk_supplier));
+        $filters .= '&fk_supplier=' . urlencode((string)($fk_supplier));
     }
     if ($fk_entrepot > 0) {
-        $filters .= '&fk_entrepot=' . urlencode((string) ($fk_entrepot));
+        $filters .= '&fk_entrepot=' . urlencode((string)($fk_entrepot));
     }
 } else {
     $filters = '&search_ref=' . urlencode($search_ref) . '&search_label=' . urlencode($search_label);
-    $filters .= '&fourn_id=' . urlencode((string) ($fourn_id));
-    $filters .= (isset($type) ? '&type=' . urlencode((string) ($type)) : '');
+    $filters .= '&fourn_id=' . urlencode((string)($fourn_id));
+    $filters .= (isset($type) ? '&type=' . urlencode((string)($type)) : '');
     $filters .= '&salert=' . urlencode($salert);
     $filters .= '&draftorder=' . urlencode($draftorder);
     $filters .= '&mode=' . urlencode($mode);
     if ($fk_supplier > 0) {
-        $filters .= '&fk_supplier=' . urlencode((string) ($fk_supplier));
+        $filters .= '&fk_supplier=' . urlencode((string)($fk_supplier));
     }
     if ($fk_entrepot > 0) {
-        $filters .= '&fk_entrepot=' . urlencode((string) ($fk_entrepot));
+        $filters .= '&fk_entrepot=' . urlencode((string)($fk_entrepot));
     }
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $filters .= '&limit=' . ((int) $limit);
+    $filters .= '&limit=' . ((int)$limit);
 }
 if (!empty($includeproductswithoutdesiredqty)) {
     $filters .= '&includeproductswithoutdesiredqty=' . urlencode($includeproductswithoutdesiredqty);
@@ -690,12 +696,12 @@ if (!empty($salert)) {
     $filters .= '&salert=' . urlencode($salert);
 }
 
-$param = (isset($type) ? '&type=' . urlencode((string) ($type)) : '');
-$param .= '&fourn_id=' . urlencode((string) ($fourn_id)) . '&search_label=' . urlencode((string) ($search_label)) . '&includeproductswithoutdesiredqty=' . urlencode((string) ($includeproductswithoutdesiredqty)) . '&salert=' . urlencode((string) ($salert)) . '&draftorder=' . urlencode((string) ($draftorder));
+$param = (isset($type) ? '&type=' . urlencode((string)($type)) : '');
+$param .= '&fourn_id=' . urlencode((string)($fourn_id)) . '&search_label=' . urlencode((string)($search_label)) . '&includeproductswithoutdesiredqty=' . urlencode((string)($includeproductswithoutdesiredqty)) . '&salert=' . urlencode((string)($salert)) . '&draftorder=' . urlencode((string)($draftorder));
 $param .= '&search_ref=' . urlencode($search_ref);
 $param .= '&mode=' . urlencode($mode);
-$param .= '&fk_supplier=' . urlencode((string) ($fk_supplier));
-$param .= '&fk_entrepot=' . urlencode((string) ($fk_entrepot));
+$param .= '&fk_supplier=' . urlencode((string)($fk_supplier));
+$param .= '&fk_entrepot=' . urlencode((string)($fk_entrepot));
 if (!empty($includeproductswithoutdesiredqty)) {
     $param .= '&includeproductswithoutdesiredqty=' . urlencode($includeproductswithoutdesiredqty);
 }
@@ -830,7 +836,7 @@ while ($i < ($limit ? min($num, $limit) : $num)) {
         if (getDolGlobalInt('MAIN_MULTILANGS')) {
             $sql = 'SELECT label,description';
             $sql .= ' FROM ' . MAIN_DB_PREFIX . 'product_lang';
-            $sql .= ' WHERE fk_product = ' . ((int) $objp->rowid);
+            $sql .= ' WHERE fk_product = ' . ((int)$objp->rowid);
             $sql .= " AND lang = '" . $db->escape($langs->getDefaultLang()) . "'";
             $sql .= ' LIMIT 1';
 

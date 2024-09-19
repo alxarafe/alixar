@@ -66,9 +66,9 @@ class StringTable extends WriterPart
      *
      * @param string[] $pStringTable
      *
+     * @return string XML Output
      * @throws WriterException
      *
-     * @return string XML Output
      */
     public function writeStringTable(array $pStringTable)
     {

@@ -161,7 +161,7 @@ class Cell
      */
     public function getFormattedValue()
     {
-        return (string) NumberFormat::toFormattedString(
+        return (string)NumberFormat::toFormattedString(
             $this->getCalculatedValue(),
             $this->getStyle()
                 ->getNumberFormat()->getFormatCode()
@@ -175,9 +175,9 @@ class Cell
      *
      * @param mixed $pValue Value
      *
+     * @return $this
      * @throws Exception
      *
-     * @return $this
      */
     public function setValue($pValue)
     {
@@ -194,9 +194,9 @@ class Cell
      * @param mixed $pValue Value
      * @param string $pDataType Explicit data type, see DataType::TYPE_*
      *
+     * @return Cell
      * @throws Exception
      *
-     * @return Cell
      */
     public function setValueExplicit($pValue, $pDataType)
     {
@@ -208,7 +208,7 @@ class Cell
                 break;
             case DataType::TYPE_STRING2:
                 $pDataType = DataType::TYPE_STRING;
-                // no break
+            // no break
             case DataType::TYPE_STRING:
                 // Synonym for string
             case DataType::TYPE_INLINE:
@@ -224,11 +224,11 @@ class Cell
 
                 break;
             case DataType::TYPE_FORMULA:
-                $this->value = (string) $pValue;
+                $this->value = (string)$pValue;
 
                 break;
             case DataType::TYPE_BOOL:
-                $this->value = (bool) $pValue;
+                $this->value = (bool)$pValue;
 
                 break;
             case DataType::TYPE_ERROR:
@@ -252,9 +252,9 @@ class Cell
      *
      * @param bool $resetLog Whether the calculation engine logger should be reset or not
      *
+     * @return mixed
      * @throws Exception
      *
-     * @return mixed
      */
     public function getCalculatedValue($resetLog = true)
     {
@@ -301,7 +301,7 @@ class Cell
     public function setCalculatedValue($pValue)
     {
         if ($pValue !== null) {
-            $this->calculatedValue = (is_numeric($pValue)) ? (float) $pValue : $pValue;
+            $this->calculatedValue = (is_numeric($pValue)) ? (float)$pValue : $pValue;
         }
 
         return $this->updateInCollection();
@@ -362,9 +362,9 @@ class Cell
     /**
      *    Does this cell contain Data validation rules?
      *
+     * @return bool
      * @throws Exception
      *
-     * @return bool
      */
     public function hasDataValidation()
     {
@@ -378,9 +378,9 @@ class Cell
     /**
      * Get Data validation rules.
      *
+     * @return DataValidation
      * @throws Exception
      *
-     * @return DataValidation
      */
     public function getDataValidation()
     {
@@ -396,9 +396,9 @@ class Cell
      *
      * @param DataValidation $pDataValidation
      *
+     * @return Cell
      * @throws Exception
      *
-     * @return Cell
      */
     public function setDataValidation(DataValidation $pDataValidation = null)
     {
@@ -426,9 +426,9 @@ class Cell
     /**
      * Does this cell contain a Hyperlink?
      *
+     * @return bool
      * @throws Exception
      *
-     * @return bool
      */
     public function hasHyperlink()
     {
@@ -442,9 +442,9 @@ class Cell
     /**
      * Get Hyperlink.
      *
+     * @return Hyperlink
      * @throws Exception
      *
-     * @return Hyperlink
      */
     public function getHyperlink()
     {
@@ -460,9 +460,9 @@ class Cell
      *
      * @param Hyperlink $pHyperlink
      *
+     * @return Cell
      * @throws Exception
      *
-     * @return Cell
      */
     public function setHyperlink(Hyperlink $pHyperlink = null)
     {
@@ -502,7 +502,7 @@ class Cell
      */
     public function isInMergeRange()
     {
-        return (bool) $this->getMergeRange();
+        return (bool)$this->getMergeRange();
     }
 
     /**
@@ -580,7 +580,7 @@ class Cell
 
         // Verify if cell is in range
         return ($rangeStart[0] <= $myColumn) && ($rangeEnd[0] >= $myColumn) &&
-                ($rangeStart[1] <= $myRow) && ($rangeEnd[1] >= $myRow);
+            ($rangeStart[1] <= $myRow) && ($rangeEnd[1] >= $myRow);
     }
 
     /**
@@ -696,6 +696,6 @@ class Cell
      */
     public function __toString()
     {
-        return (string) $this->getValue();
+        return (string)$this->getValue();
     }
 }

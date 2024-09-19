@@ -140,7 +140,7 @@ llxHeader('', $title, $help_url);
 
 $param = "&socid=" . $socid;
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($search_invoice_date_start) {
     $param .= '&search_invoice_date_start_day=' . dol_print_date($search_invoice_date_start, '%d') . '&search_invoice_date_start_month=' . dol_print_date($search_invoice_date_start, '%m') . '&search_invoice_date_start_year=' . dol_print_date($search_invoice_date_start, '%Y');

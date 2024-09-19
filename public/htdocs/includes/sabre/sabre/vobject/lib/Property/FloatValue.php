@@ -37,7 +37,7 @@ class FloatValue extends Property
     {
         $val = explode($this->delimiter, $val);
         foreach ($val as &$item) {
-            $item = (float) $item;
+            $item = (float)$item;
         }
         $this->setParts($val);
     }

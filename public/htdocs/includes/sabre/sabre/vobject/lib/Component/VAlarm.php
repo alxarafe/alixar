@@ -89,12 +89,12 @@ class VAlarm extends VObject\Component
 
         if (isset($this->DURATION)) {
             $duration = VObject\DateTimeParser::parseDuration($this->DURATION);
-            $repeat = (string) $this->REPEAT;
+            $repeat = (string)$this->REPEAT;
             if (!$repeat) {
                 $repeat = 1;
             }
 
-            $period = new \DatePeriod($effectiveTrigger, $duration, (int) $repeat);
+            $period = new \DatePeriod($effectiveTrigger, $duration, (int)$repeat);
 
             foreach ($period as $occurrence) {
                 if ($start <= $occurrence && $end > $occurrence) {

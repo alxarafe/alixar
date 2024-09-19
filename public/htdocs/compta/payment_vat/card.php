@@ -149,7 +149,6 @@ if ($action == 'delete') {
 }
 
 
-
 $linkback = '<a href="' . constant('BASE_URL') . '/compta/tva/payments.php">' . $langs->trans("BackToList") . '</a>';
 
 dol_banner_tab($object, 'id', $linkback, 1, 'rowid', 'id', '');
@@ -205,7 +204,7 @@ $sql = 'SELECT f.rowid as scid, f.label as label, f.paye, f.amount as tva_amount
 $sql .= ' FROM ' . MAIN_DB_PREFIX . 'payment_vat as pf,' . MAIN_DB_PREFIX . 'tva as f';
 $sql .= ' WHERE pf.fk_tva = f.rowid';
 $sql .= ' AND f.entity = ' . $conf->entity;
-$sql .= ' AND pf.rowid = ' . ((int) $object->id);
+$sql .= ' AND pf.rowid = ' . ((int)$object->id);
 
 dol_syslog("compta/payment_vat/card.php", LOG_DEBUG);
 $resql = $db->query($sql);
@@ -261,7 +260,6 @@ if ($resql) {
 } else {
     dol_print_error($db);
 }
-
 
 
 /*

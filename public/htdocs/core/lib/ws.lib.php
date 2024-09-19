@@ -29,11 +29,11 @@
 /**
  *  Check authentication array and set error, errorcode, errorlabel
  *
- *  @param  array{login:string,password:string,entity:?int,dolibarrkey:string}  $authentication     Array with authentication information ('login'=>,'password'=>,'entity'=>,'dolibarrkey'=>)
- *  @param  int     $error              Number of errors
- *  @param  string  $errorcode          Error string code
- *  @param  string  $errorlabel         Error string label
- *  @return User                        Return user object identified by login/pass/entity into authentication array
+ * @param array{login:string,password:string,entity:?int,dolibarrkey:string}  $authentication     Array with authentication information ('login'=>,'password'=>,'entity'=>,'dolibarrkey'=>)
+ * @param int $error Number of errors
+ * @param string $errorcode Error string code
+ * @param string $errorlabel Error string label
+ * @return User                        Return user object identified by login/pass/entity into authentication array
  */
 function check_authentication($authentication, &$error, &$errorcode, &$errorlabel)
 {

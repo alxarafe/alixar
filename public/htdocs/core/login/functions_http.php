@@ -28,11 +28,11 @@
  * Check validity of user/password/entity
  * If test is ko, reason must be filled into $_SESSION["dol_loginmesg"]
  *
- * @param   string  $usertotest     Login
- * @param   string  $passwordtotest Password
- * @param   int     $entitytotest   Number of instance (always 1 if module multicompany not enabled)
+ * @param string $usertotest Login
+ * @param string $passwordtotest Password
+ * @param int $entitytotest Number of instance (always 1 if module multicompany not enabled)
  * @return  string                  Login if OK, '' if KO
-*/
+ */
 function check_user_password_http($usertotest, $passwordtotest, $entitytotest)
 {
     global $db, $langs;
@@ -58,7 +58,7 @@ function check_user_password_http($usertotest, $passwordtotest, $entitytotest)
  * Note: the $_SERVER["REMOTE_USER"] contains only the login used in the HTTP Basic form
  * Method not used yet, but we keep it for some dev/test purposes.
  *
- * @param   string  $value      Ex: $_SERVER["REMOTE_USER"]
+ * @param string $value Ex: $_SERVER["REMOTE_USER"]
  * @return  Object              object.login & object.password
  */
 function decodeHttpBasicAuth($value)
@@ -67,7 +67,7 @@ function decodeHttpBasicAuth($value)
     $decoded_basic_auth = base64_decode($encoded_basic_auth);
     $credentials_basic_auth = explode(':', $decoded_basic_auth);
 
-    return (object) [
+    return (object)[
         'username' => $credentials_basic_auth[0],
         'password' => $credentials_basic_auth[1]
     ];

@@ -7,11 +7,15 @@
 
 ## Install
 
-**NOTE:** The compiled files are located in `build/`. This directory is located in the published npm package. Which means you can access it when you `npm install octicons`. You can also build this directory by following the [building octicons directions](#building-octicons). The files in the `lib/` directory are the raw source files and are not compiled or optimized.
+**NOTE:** The compiled files are located in `build/`. This directory is located in the published npm package. Which
+means you can access it when you `npm install octicons`. You can also build this directory by following
+the [building octicons directions](#building-octicons). The files in the `lib/` directory are the raw source files and
+are not compiled or optimized.
 
 #### npm
 
-This repository is distributed with [npm][npm]. After [installing npm][install-npm], you can install `octicons` with this command.
+This repository is distributed with [npm][npm]. After [installing npm][install-npm], you can install `octicons` with
+this command.
 
 ```
 $ npm install octicons --save
@@ -19,7 +23,8 @@ $ npm install octicons --save
 
 ## Usage
 
-For all the usages, we recommend using the CSS located in `build/build.css`. This is some simple CSS to normalize the icons and inherit colors.
+For all the usages, we recommend using the CSS located in `build/build.css`. This is some simple CSS to normalize the
+icons and inherit colors.
 
 ### Node
 
@@ -74,15 +79,18 @@ octicons.x.options
 
 #### `octicons.alert.width`
 
-Returns the icon's true width, based on the svg view box width. _Note, this doesn't change if you scale it up with size options, it only is the natural width of the icon._
+Returns the icon's true width, based on the svg view box width. _Note, this doesn't change if you scale it up with size
+options, it only is the natural width of the icon._
 
 #### `octicons.alert.height`
 
-Returns the icon's true height, based on the svg view box height. _Note, this doesn't change if you scale it up with size options, it only is the natural height of the icon._
+Returns the icon's true height, based on the svg view box height. _Note, this doesn't change if you scale it up with
+size options, it only is the natural height of the icon._
 
 #### `keywords`
 
-Returns an array of keywords for the icon. The data comes from the [data file in lib](../data.json). Consider contributing more aliases for the icons.
+Returns an array of keywords for the icon. The data comes from the [data file in lib](../data.json). Consider
+contributing more aliases for the icons.
 
 ```js
 octicons.x.keywords
@@ -98,7 +106,8 @@ octicons.x.toSVG()
 // <svg version="1.1" width="12" height="16" viewBox="0 0 12 16" class="octicon octicon-x" aria-hidden="true"><path d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z"/></svg>
 ```
 
-The `.toSVG()` method accepts an optional `options` object. This is used to add CSS classnames, a11y options, and sizing.
+The `.toSVG()` method accepts an optional `options` object. This is used to add CSS classnames, a11y options, and
+sizing.
 
 ##### class
 
@@ -133,10 +142,14 @@ octicons.x.toSVG({ "width": 45 })
 
 When using the GitHub logos, be sure to follow the [GitHub logo guidelines](https://github.com/logos).
 
-[MIT](./LICENSE)  
+[MIT](./LICENSE)
 
 [primer]: https://github.com/primer/primer
+
 [docs]: http://primercss.io/
+
 [npm]: https://www.npmjs.com/
+
 [install-npm]: https://docs.npmjs.com/getting-started/installing-node
+
 [sass]: http://sass-lang.com/

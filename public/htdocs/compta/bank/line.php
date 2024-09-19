@@ -126,7 +126,7 @@ if ($user->hasRight('banque', 'consolidate') && $action == 'donext') {
 if ($action == 'confirm_delete_categ' && $confirm == "yes" && $user->hasRight('banque', 'modifier')) {
     $cat1 = GETPOSTINT("cat1");
     if (!empty($rowid) && !empty($cat1)) {
-        $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank_class WHERE lineid = " . ((int) $rowid) . " AND fk_categ = " . ((int) $cat1);
+        $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank_class WHERE lineid = " . ((int)$rowid) . " AND fk_categ = " . ((int)$cat1);
         if (!$db->query($sql)) {
             dol_print_error($db);
         }
@@ -199,8 +199,8 @@ if ($user->hasRight('banque', 'modifier') && $action == "update") {
                 $sql .= " datev = '" . $db->idate($dateval) . "',";
             }
         }
-        $sql .= " fk_account = " . ((int) $actarget->id);
-        $sql .= " WHERE rowid = " . ((int) $object->id);
+        $sql .= " fk_account = " . ((int)$actarget->id);
+        $sql .= " WHERE rowid = " . ((int)$object->id);
 
         $result = $db->query($sql);
         if (!$result) {
@@ -209,14 +209,14 @@ if ($user->hasRight('banque', 'modifier') && $action == "update") {
 
         if (!$error) {
             $arrayofcategs = GETPOST('custcats', 'array');
-            $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank_class WHERE lineid = " . ((int) $rowid);
+            $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank_class WHERE lineid = " . ((int)$rowid);
             if (!$db->query($sql)) {
                 $error++;
                 dol_print_error($db);
             }
             if (count($arrayofcategs)) {
                 foreach ($arrayofcategs as $val) {
-                    $sql = "INSERT INTO " . MAIN_DB_PREFIX . "bank_class (lineid, fk_categ) VALUES (" . ((int) $rowid) . ", " . ((int) $val) . ")";
+                    $sql = "INSERT INTO " . MAIN_DB_PREFIX . "bank_class (lineid, fk_categ) VALUES (" . ((int)$rowid) . ", " . ((int)$val) . ")";
                     if (!$db->query($sql)) {
                         $error++;
                         dol_print_error($db);
@@ -263,9 +263,9 @@ if ($user->hasRight('banque', 'consolidate') && ($action == 'num_releve' || $act
         if (empty($num_rel)) {
             $sql .= ", rappro = 0";
         } else {
-            $sql .= ", rappro = " . ((int) $rappro);
+            $sql .= ", rappro = " . ((int)$rappro);
         }
-        $sql .= " WHERE rowid = " . ((int) $rowid);
+        $sql .= " WHERE rowid = " . ((int)$rowid);
 
         $updatePathFile = true;
         $update_dir = true;
@@ -335,7 +335,7 @@ $sql = "SELECT b.rowid, b.dateo as do, b.datev as dv, b.amount, b.label, b.rappr
 $sql .= " b.num_releve, b.fk_user_author, b.num_chq, b.fk_type, b.fk_account, b.fk_bordereau as receiptid,";
 $sql .= " b.emetteur,b.banque";
 $sql .= " FROM " . MAIN_DB_PREFIX . "bank as b";
-$sql .= " WHERE rowid=" . ((int) $rowid);
+$sql .= " WHERE rowid=" . ((int)$rowid);
 $sql .= " ORDER BY dateo ASC";
 $result = $db->query($sql);
 if ($result) {
@@ -358,7 +358,7 @@ if ($result) {
 
         // Confirmations
         if ($action == 'delete_categ') {
-            print $form->formconfirm($_SERVER['PHP_SELF'] . "?rowid=" . urlencode((string) ($rowid)) . "&cat1=" . urlencode((string) (GETPOSTINT("fk_categ"))) . "&orig_account=" . urlencode((string) ($orig_account)), $langs->trans("RemoveFromRubrique"), $langs->trans("RemoveFromRubriqueConfirm"), "confirm_delete_categ", '', 'yes', 1);
+            print $form->formconfirm($_SERVER['PHP_SELF'] . "?rowid=" . urlencode((string)($rowid)) . "&cat1=" . urlencode((string)(GETPOSTINT("fk_categ"))) . "&orig_account=" . urlencode((string)($orig_account)), $langs->trans("RemoveFromRubrique"), $langs->trans("RemoveFromRubriqueConfirm"), "confirm_delete_categ", '', 'yes', 1);
         }
 
         print '<form name="update" method="POST" action="' . $_SERVER['PHP_SELF'] . '?rowid=' . $rowid . '">';
@@ -686,7 +686,6 @@ if ($result) {
         print '<div class="center"><input type="submit" class="button" value="' . $langs->trans("Update") . '"></div><br>';
 
         print "</form>";
-
 
 
         // Releve rappro

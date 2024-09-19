@@ -31,7 +31,6 @@ use Dolibarr\Code\Core\Classes\InfoBox;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
 include_once DOL_DOCUMENT_ROOT . '/core/lib/admin.lib.php';
 
 // Load translation files required by the page

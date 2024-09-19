@@ -179,7 +179,7 @@ SQL
             }
 
             $calendar = [
-                'id' => [(int) $row['calendarid'], (int) $row['id']],
+                'id' => [(int)$row['calendarid'], (int)$row['id']],
                 'uri' => $row['uri'],
                 'principaluri' => $row['principaluri'],
                 '{' . CalDAV\Plugin::NS_CALENDARSERVER . '}getctag' => 'http://sabre.io/ns/sync/' . ($row['synctoken'] ? $row['synctoken'] : '0'),
@@ -189,7 +189,7 @@ SQL
                 'share-resource-uri' => '/ns/share/' . $row['calendarid'],
             ];
 
-            $calendar['share-access'] = (int) $row['access'];
+            $calendar['share-access'] = (int)$row['access'];
             // 1 = owner, 2 = readonly, 3 = readwrite
             if ($row['access'] > 1) {
                 // We need to find more information about the original owner.
@@ -198,7 +198,7 @@ SQL
 
                 // read-only is for backwards compatbility. Might go away in
                 // the future.
-                $calendar['read-only'] = \Sabre\DAV\Sharing\Plugin::ACCESS_READ === (int) $row['access'];
+                $calendar['read-only'] = \Sabre\DAV\Sharing\Plugin::ACCESS_READ === (int)$row['access'];
             }
 
             foreach ($this->propertyMap as $xmlName => $dbName) {
@@ -343,7 +343,7 @@ SQL
 
         $stmt = $this->pdo->prepare('SELECT access FROM ' . $this->calendarInstancesTableName . ' where id = ?');
         $stmt->execute([$instanceId]);
-        $access = (int) $stmt->fetchColumn();
+        $access = (int)$stmt->fetchColumn();
 
         if (\Sabre\DAV\Sharing\Plugin::ACCESS_SHAREDOWNER === $access) {
             /**
@@ -418,9 +418,9 @@ SQL
             $result[] = [
                 'id' => $row['id'],
                 'uri' => $row['uri'],
-                'lastmodified' => (int) $row['lastmodified'],
+                'lastmodified' => (int)$row['lastmodified'],
                 'etag' => '"' . $row['etag'] . '"',
-                'size' => (int) $row['size'],
+                'size' => (int)$row['size'],
                 'component' => strtolower($row['componenttype']),
             ];
         }
@@ -440,7 +440,7 @@ SQL
      *
      * This method must return null if the object did not exist.
      *
-     * @param mixed  $calendarId
+     * @param mixed $calendarId
      * @param string $objectUri
      *
      * @return array|null
@@ -463,12 +463,12 @@ SQL
         return [
             'id' => $row['id'],
             'uri' => $row['uri'],
-            'lastmodified' => (int) $row['lastmodified'],
+            'lastmodified' => (int)$row['lastmodified'],
             'etag' => '"' . $row['etag'] . '"',
-            'size' => (int) $row['size'],
+            'size' => (int)$row['size'],
             'calendardata' => $row['calendardata'],
             'component' => strtolower($row['componenttype']),
-         ];
+        ];
     }
 
     /**
@@ -504,9 +504,9 @@ SQL
                 $result[] = [
                     'id' => $row['id'],
                     'uri' => $row['uri'],
-                    'lastmodified' => (int) $row['lastmodified'],
+                    'lastmodified' => (int)$row['lastmodified'],
                     'etag' => '"' . $row['etag'] . '"',
-                    'size' => (int) $row['size'],
+                    'size' => (int)$row['size'],
                     'calendardata' => $row['calendardata'],
                     'component' => strtolower($row['componenttype']),
                 ];
@@ -529,7 +529,7 @@ SQL
      * calendar-data. If the result of a subsequent GET to this object is not
      * the exact same as this request body, you should omit the ETag.
      *
-     * @param mixed  $calendarId
+     * @param mixed $calendarId
      * @param string $objectUri
      * @param string $calendarData
      *
@@ -575,7 +575,7 @@ SQL
      * calendar-data. If the result of a subsequent GET to this object is not
      * the exact same as this request body, you should omit the ETag.
      *
-     * @param mixed  $calendarId
+     * @param mixed $calendarId
      * @param string $objectUri
      * @param string $calendarData
      *
@@ -625,7 +625,7 @@ SQL
         foreach ($vObject->getComponents() as $component) {
             if ('VTIMEZONE' !== $component->name) {
                 $componentType = $component->name;
-                $uid = (string) $component->UID;
+                $uid = (string)$component->UID;
                 break;
             }
         }
@@ -650,7 +650,7 @@ SQL
                     $lastOccurence = $firstOccurence;
                 }
             } else {
-                $it = new VObject\Recur\EventIterator($vObject, (string) $component->UID);
+                $it = new VObject\Recur\EventIterator($vObject, (string)$component->UID);
                 $maxDate = new \DateTime(self::MAX_DATE);
                 if ($it->isInfinite()) {
                     $lastOccurence = $maxDate->getTimeStamp();
@@ -691,7 +691,7 @@ SQL
      *
      * The object uri is only the basename, or filename and not a full path.
      *
-     * @param mixed  $calendarId
+     * @param mixed $calendarId
      * @param string $objectUri
      */
     public function deleteCalendarObject($calendarId, $objectUri)
@@ -934,10 +934,10 @@ SQL;
      *
      * The limit is 'suggestive'. You are free to ignore it.
      *
-     * @param mixed  $calendarId
+     * @param mixed $calendarId
      * @param string $syncToken
-     * @param int    $syncLevel
-     * @param int    $limit
+     * @param int $syncLevel
+     * @param int $limit
      *
      * @return array|null
      */
@@ -958,7 +958,7 @@ SQL;
             $query = 'SELECT uri, operation, synctoken FROM ' . $this->calendarChangesTableName . ' WHERE synctoken >= ?  AND calendarid = ? ORDER BY synctoken';
             if ($limit > 0) {
                 // Fetch one more raw to detect result truncation
-                $query .= ' LIMIT ' . ((int) $limit + 1);
+                $query .= ' LIMIT ' . ((int)$limit + 1);
             }
 
             // Fetching all changes
@@ -1031,9 +1031,9 @@ SQL;
     /**
      * Adds a change record to the calendarchanges table.
      *
-     * @param mixed  $calendarId
+     * @param mixed $calendarId
      * @param string $objectUri
-     * @param int    $operation  1 = add, 2 = modify, 3 = delete
+     * @param int $operation 1 = add, 2 = modify, 3 = delete
      */
     protected function addChange($calendarId, $objectUri, $operation)
     {
@@ -1255,8 +1255,8 @@ SQL;
             'calendardata' => $row['calendardata'],
             'lastmodified' => $row['lastmodified'],
             'etag' => '"' . $row['etag'] . '"',
-            'size' => (int) $row['size'],
-         ];
+            'size' => (int)$row['size'],
+        ];
     }
 
     /**
@@ -1283,7 +1283,7 @@ SQL;
                 'uri' => $row['uri'],
                 'lastmodified' => $row['lastmodified'],
                 'etag' => '"' . $row['etag'] . '"',
-                'size' => (int) $row['size'],
+                'size' => (int)$row['size'],
             ];
         }
 
@@ -1305,8 +1305,8 @@ SQL;
     /**
      * Creates a new scheduling object. This should land in a users' inbox.
      *
-     * @param string          $principalUri
-     * @param string          $objectUri
+     * @param string $principalUri
+     * @param string $objectUri
      * @param string|resource $objectData
      */
     public function createSchedulingObject($principalUri, $objectUri, $objectData)
@@ -1323,7 +1323,7 @@ SQL;
     /**
      * Updates the list of shares.
      *
-     * @param mixed                           $calendarId
+     * @param mixed $calendarId
      * @param \Sabre\DAV\Xml\Element\Sharee[] $sharees
      */
     public function updateInvites($calendarId, array $sharees)
@@ -1461,9 +1461,9 @@ SQL;
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             $result[] = new Sharee([
                 'href' => isset($row['share_href']) ? $row['share_href'] : \Sabre\HTTP\encodePath($row['principaluri']),
-                'access' => (int) $row['access'],
+                'access' => (int)$row['access'],
                 /// Everyone is always immediately accepted, for now.
-                'inviteStatus' => (int) $row['share_invitestatus'],
+                'inviteStatus' => (int)$row['share_invitestatus'],
                 'properties' => !empty($row['share_displayname'])
                     ? ['{DAV:}displayname' => $row['share_displayname']]
                     : [],
@@ -1478,7 +1478,7 @@ SQL;
      * Publishes a calendar.
      *
      * @param mixed $calendarId
-     * @param bool  $value
+     * @param bool $value
      */
     public function setPublishStatus($calendarId, $value)
     {

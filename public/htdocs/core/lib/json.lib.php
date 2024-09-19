@@ -31,7 +31,7 @@ if (!function_exists('json_encode')) {
     /**
      * Implement json_encode for PHP that does not have module enabled.
      *
-     * @param   mixed   $elements       PHP Object to json encode
+     * @param mixed $elements PHP Object to json encode
      * @return  string                  Json encoded string
      * @phan-suppress PhanRedefineFunctionInternal
      */
@@ -48,7 +48,7 @@ if (!function_exists('json_encode')) {
  * Note: We can found some special chars into a json string:
  * Quotation mark (") = \", Backslash (\) = \\, Slash (/) = \/, Backspace = \b, Form feed = \f, New line =\n, Carriage return =\r, Horizontal tab = \t
  *
- * @param   mixed   $elements       PHP Object to json encode
+ * @param mixed $elements PHP Object to json encode
  * @return  string                  Json encoded string
  * @see json_encode()
  */
@@ -125,7 +125,7 @@ function dol_json_encode($elements)
 /**
  * Return text according to type
  *
- * @param   mixed   $val    Value to show
+ * @param mixed $val Value to show
  * @return  string          Formatted value
  */
 function _val($val)
@@ -234,8 +234,8 @@ if (!function_exists('json_decode')) {
     /**
      * Implement json_decode for PHP that does not support it
      *
-     * @param   string  $json       Json encoded to PHP Object or Array
-     * @param   bool    $assoc      False return an object, true return an array
+     * @param string $json Json encoded to PHP Object or Array
+     * @param bool $assoc False return an object, true return an array
      * @return  mixed               Object or Array
      * @phan-suppress PhanRedefineFunctionInternal
      */
@@ -249,8 +249,8 @@ if (!function_exists('json_decode')) {
  * Implement json_decode for PHP that does not support it
  * Use json_encode and json_decode in your code !
  *
- * @param   string  $json       Json encoded to PHP Object or Array
- * @param   bool    $assoc      False return an object, true return an array. Try to always use it with true !
+ * @param string $json Json encoded to PHP Object or Array
+ * @param bool $assoc False return an object, true return an array. Try to always use it with true !
  * @return  mixed               Object or Array or false on error
  * @see json_decode()
  */
@@ -310,7 +310,7 @@ function dol_json_decode($json, $assoc = false)
         if (!empty($array)) {
             $object = false;
             if (count($array) > 0) {
-                $object = (object) array();
+                $object = (object)array();
             }
             foreach ($array as $key => $value) {
                 if ($key) {
@@ -330,7 +330,7 @@ function dol_json_decode($json, $assoc = false)
 /**
  * Return text according to type
  *
- * @param   string  $val    Value to decode
+ * @param string $val Value to decode
  * @return  string          Formatted value
  */
 function _unval($val)
@@ -339,7 +339,7 @@ function _unval($val)
     while (preg_match('/\\\u([0-9A-F]{2})([0-9A-F]{2})/i', $val, $reg)) {
         // single, escaped unicode character
         $utf16 = chr(hexdec($reg[1])) . chr(hexdec($reg[2]));
-        $utf8  = utf162utf8($utf16);
+        $utf8 = utf162utf8($utf16);
         $val = preg_replace('/\\\u' . $reg[1] . $reg[2] . '/i', $utf8, $val);
     }
     return $val;
@@ -352,7 +352,7 @@ function _unval($val)
  * provides a slower PHP-only method for installations
  * that lack the multibyte string extension.
  *
- * @param    string  $utf16     UTF-16 character
+ * @param string $utf16 UTF-16 character
  * @return   string             UTF-8 character
  */
 function utf162utf8($utf16)
@@ -374,14 +374,14 @@ function utf162utf8($utf16)
             // return a 2-byte UTF-8 character
             // see: http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
             return chr(0xC0 | (($bytes >> 6) & 0x1F))
-        . chr(0x80 | ($bytes & 0x3F));
+                . chr(0x80 | ($bytes & 0x3F));
 
         case (0xFFFF & $bytes) == $bytes:
             // return a 3-byte UTF-8 character
             // see: http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
             return chr(0xE0 | (($bytes >> 12) & 0x0F))
-        . chr(0x80 | (($bytes >> 6) & 0x3F))
-        . chr(0x80 | ($bytes & 0x3F));
+                . chr(0x80 | (($bytes >> 6) & 0x3F))
+                . chr(0x80 | ($bytes & 0x3F));
     }
 
     // ignoring UTF-32 for now, sorry
@@ -395,7 +395,7 @@ function utf162utf8($utf16)
  * provides a slower PHP-only method for installations
  * that lack the multibyte string extension.
  *
- * @param    string  $utf8      UTF-8 character
+ * @param string $utf8 UTF-8 character
  * @return   string             UTF-16 character
  */
 function utf82utf16($utf8)

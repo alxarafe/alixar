@@ -28,13 +28,12 @@ use DebugBar\DataCollector\ConfigCollector;
 /**
  * DolConfigCollector class
  */
-
 class DolConfigCollector extends ConfigCollector
 {
     /**
      *  Return widget settings
      *
-     *  @return array      Array
+     * @return array      Array
      */
     public function getWidgets()
     {
@@ -53,7 +52,7 @@ class DolConfigCollector extends ConfigCollector
     /**
      *  Return collected data
      *
-     *  @return    array   Array of collected data
+     * @return    array   Array of collected data
      */
     public function collect()
     {
@@ -81,25 +80,26 @@ class DolConfigCollector extends ConfigCollector
                 '$user' => $this->objectToArray($user)
             ),
             'PHP' => array(
-                'version'   => PHP_VERSION,
+                'version' => PHP_VERSION,
                 'interface' => PHP_SAPI,
-                'os'        => PHP_OS
+                'os' => PHP_OS
             )
         );
 
         return $config;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Convert an object to array
      *
-     * @param  mixed   $obj        Object
+     * @param mixed $obj Object
      * @return array               Array
      */
     protected function objectToArray($obj)
     {
-		// phpcs:enable
+        // phpcs:enable
         $arr = array();
         $_arr = is_object($obj) ? get_object_vars($obj) : $obj;
         foreach ($_arr as $key => $val) {

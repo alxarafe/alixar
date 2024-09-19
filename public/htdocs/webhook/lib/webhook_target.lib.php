@@ -25,7 +25,7 @@
 /**
  * Prepare array of tabs for Target
  *
- * @param   Target  $object     Target
+ * @param Target $object Target
  * @return  array               Returns an array of tabs
  */
 function targetPrepareHead($object)

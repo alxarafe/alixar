@@ -139,12 +139,12 @@ if ($action == 'setfixednotif' && $user->admin) {
             if (preg_match('/^NOTIF_(.*)_old_(.*)_key/', $key, $reg)) {
                 dolibarr_del_const($db, 'NOTIFICATION_FIXEDEMAIL_' . $reg[1] . '_THRESHOLD_HIGHER_' . $reg[2], $conf->entity);
 
-                $newkey = 'NOTIFICATION_FIXEDEMAIL_' . $reg[1] . '_THRESHOLD_HIGHER_' . ((int) GETPOST($shortkey . '_amount'));
+                $newkey = 'NOTIFICATION_FIXEDEMAIL_' . $reg[1] . '_THRESHOLD_HIGHER_' . ((int)GETPOST($shortkey . '_amount'));
                 $newval = GETPOST($shortkey . '_key');
                 //print $newkey.' - '.$newval.'<br>';
             } elseif (preg_match('/^NOTIF_(.*)_new_key/', $key, $reg)) {
                 // Add a new entry
-                $newkey = 'NOTIFICATION_FIXEDEMAIL_' . $reg[1] . '_THRESHOLD_HIGHER_' . ((int) GETPOST($shortkey . '_amount'));
+                $newkey = 'NOTIFICATION_FIXEDEMAIL_' . $reg[1] . '_THRESHOLD_HIGHER_' . ((int)GETPOST($shortkey . '_amount'));
                 $newval = GETPOST($shortkey . '_key');
             }
 
@@ -164,7 +164,6 @@ if ($action == 'setfixednotif' && $user->admin) {
         setEventMessages($langs->trans("Error"), null, 'errors');
     }
 }
-
 
 
 /*

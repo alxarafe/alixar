@@ -22,12 +22,14 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+
 /**
  *      \file       htdocs/core/class/commonnumrefgenerator.class.php
  *      \ingroup    core
  *      \brief      File of parent class for num ref generators
  */
-
 
 /**
  *  Parent class for number ref generators

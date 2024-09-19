@@ -22,6 +22,9 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Recruitement\Classes\ModeleNumRefRecruitmentJobPosition;
+
 /**
  * \file       htdocs/core/modules/recruitment/mod_recruitmentjobposition_advanced.php
  * \ingroup    recruitment

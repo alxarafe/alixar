@@ -114,7 +114,6 @@ $h++;
 print dol_get_fiche_head($head, 'options', '', -1);
 
 
-
 print '<div class="div-table-responsive-no-min">';
 print '<table class="noborder centpercent">';
 print '<tr class="liste_titre">';

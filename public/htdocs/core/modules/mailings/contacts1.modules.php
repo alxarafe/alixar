@@ -51,7 +51,7 @@ class mailing_contacts1 extends MailingTargets
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -65,7 +65,7 @@ class mailing_contacts1 extends MailingTargets
      *  array of SQL request that returns two field:
      *  One called "label", One called "nb".
      *
-     *  @return     string[]        Array with SQL requests
+     * @return     string[]        Array with SQL requests
      */
     public function getSqlArrayForStats()
     {
@@ -90,8 +90,8 @@ class mailing_contacts1 extends MailingTargets
      *  For example if this selector is used to extract 500 different
      *  emails from a text file, this function must return 500.
      *
-     *  @param      string      $sql        Requete sql de comptage
-     *  @return     int|string              Nb of recipient, or <0 if error, or '' if NA
+     * @param string $sql Requete sql de comptage
+     * @return     int|string              Nb of recipient, or <0 if error, or '' if NA
      */
     public function getNbOfRecipients($sql = '')
     {
@@ -103,7 +103,7 @@ class mailing_contacts1 extends MailingTargets
         $sql .= " WHERE c.entity IN (" . getEntity('contact') . ")";
         $sql .= " AND c.email <> ''"; // Note that null != '' is false
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = c.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = c.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
         // exclude unsubscribed users
         $sql .= " AND c.statut = 1";
@@ -116,11 +116,11 @@ class mailing_contacts1 extends MailingTargets
     /**
      *   Affiche formulaire de filtre qui apparait dans page de selection des destinataires de mailings
      *
-     *   @return     string      Retourne zone select
+     * @return     string      Retourne zone select
      */
     public function formFilter()
     {
-        global $conf,$langs;
+        global $conf, $langs;
 
         // Load translation files required by the page
         $langs->loadLangs(array("commercial", "companies", "suppliers", "categories"));
@@ -320,8 +320,8 @@ class mailing_contacts1 extends MailingTargets
     /**
      *  Renvoie url lien vers fiche de la source du destinataire du mailing
      *
-     *  @param  int     $id     ID
-     *  @return string          Url lien
+     * @param int $id ID
+     * @return string          Url lien
      */
     public function url($id)
     {
@@ -329,16 +329,17 @@ class mailing_contacts1 extends MailingTargets
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Add some recipients into target table
      *
-     *  @param  int     $mailing_id     Id of emailing
-     *  @return int                     Return integer <0 si erreur, nb ajout si ok
+     * @param int $mailing_id Id of emailing
+     * @return int                     Return integer <0 si erreur, nb ajout si ok
      */
     public function add_to_target($mailing_id)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs;
 
         $filter = GETPOST('filter', 'alpha');
@@ -390,11 +391,11 @@ class mailing_contacts1 extends MailingTargets
         $sql .= " AND sp.email <> ''";
 
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = sp.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = sp.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
         // Exclude unsubscribed email addresses
         $sql .= " AND sp.statut = 1";
-        $sql .= " AND sp.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int) $mailing_id) . ")";
+        $sql .= " AND sp.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int)$mailing_id) . ")";
 
         // Filter on category
         if ($filter_category != 'all' && $filter_category != '-1') {
@@ -436,7 +437,7 @@ class mailing_contacts1 extends MailingTargets
 
         // Filter on job position
         $key = $filter_jobposition;
-        if (!empty($key) && $key != 'all'  && $key != '-1') {
+        if (!empty($key) && $key != 'all' && $key != '-1') {
             $sql .= " AND sp.poste = '" . $this->db->escape($key) . "'";
         }
 

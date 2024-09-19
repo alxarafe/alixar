@@ -41,10 +41,10 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'other', 'bills', 'orders'));
 
-$action     = GETPOST('action', 'aZ09');
-$confirm    = GETPOST('confirm');
-$id         = GETPOSTINT('id');
-$ref        = GETPOST('ref');
+$action = GETPOST('action', 'aZ09');
+$confirm = GETPOST('confirm');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref');
 
 // Get parameters
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
@@ -74,7 +74,7 @@ if (!$sortfield) {
 
 $object = new Commande($db);
 
-$usercancreate  =  $user->hasRight("commande", "creer");
+$usercancreate = $user->hasRight("commande", "creer");
 $permissiontoadd = $usercancreate;
 
 // Security check

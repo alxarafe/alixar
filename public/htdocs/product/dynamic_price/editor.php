@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2014     Ion Agorria         <ion@agorria.com>
+/* Copyright (C) 2014       Ion Agorria                 <ion@agorria.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\PriceExpression;
+use Dolibarr\Code\Product\Classes\PriceGlobalVariable;
+use Dolibarr\Code\Product\Classes\PriceParser;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/product/dynamic_price/editor.php
  *  \ingroup    product
@@ -26,9 +33,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_expression.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_global_variable.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'accountancy')); //"Back" translation is on this accountancy file

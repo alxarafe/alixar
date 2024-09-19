@@ -67,7 +67,7 @@ abstract class BaseReader implements IReader
 
     public function setReadDataOnly($pValue)
     {
-        $this->readDataOnly = (bool) $pValue;
+        $this->readDataOnly = (bool)$pValue;
 
         return $this;
     }
@@ -79,7 +79,7 @@ abstract class BaseReader implements IReader
 
     public function setReadEmptyCells($pValue)
     {
-        $this->readEmptyCells = (bool) $pValue;
+        $this->readEmptyCells = (bool)$pValue;
 
         return $this;
     }
@@ -91,7 +91,7 @@ abstract class BaseReader implements IReader
 
     public function setIncludeCharts($pValue)
     {
-        $this->includeCharts = (bool) $pValue;
+        $this->includeCharts = (bool)$pValue;
 
         return $this;
     }

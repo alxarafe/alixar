@@ -160,7 +160,7 @@ class Plugin extends DAV\ServerPlugin
         }
         list($contentType) = explode(';', $contentType);
         if (
-'application/x-www-form-urlencoded' !== $contentType &&
+            'application/x-www-form-urlencoded' !== $contentType &&
             'multipart/form-data' !== $contentType
         ) {
             return;
@@ -490,7 +490,7 @@ HTML;
      * This specifically generates the interfaces for creating new files, and
      * creating new directories.
      *
-     * @param mixed  $output
+     * @param mixed $output
      * @param string $path
      */
     public function htmlActionsPanel(DAV\INode $node, &$output, $path)
@@ -540,9 +540,9 @@ HTML;
      *
      * @param string $assetName
      *
+     * @return string
      * @throws DAV\Exception\NotFound
      *
-     * @return string
      */
     protected function getLocalAssetPath($assetName)
     {
@@ -713,7 +713,7 @@ HTML;
      * Draws a table row for a property.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return string
      */
@@ -731,7 +731,7 @@ HTML;
      * Draws a table row for a property.
      *
      * @param HtmlOutputHelper $html
-     * @param mixed            $value
+     * @param mixed $value
      *
      * @return string
      */

@@ -81,8 +81,8 @@ interface ISyncCollection extends DAV\ICollection
      * The limit is 'suggestive'. You are free to ignore it.
      *
      * @param string $syncToken
-     * @param int    $syncLevel
-     * @param int    $limit
+     * @param int $syncLevel
+     * @param int $limit
      *
      * @return array|null
      */

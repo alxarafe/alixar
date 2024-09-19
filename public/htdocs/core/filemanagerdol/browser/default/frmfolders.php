@@ -58,194 +58,177 @@ top_httphead();
 //top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss);   // Show html headers
 ?>
 <html>
-    <head>
-        <title>Folders</title>
-        <link href="browser.css" type="text/css" rel="stylesheet">
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<?php
-print '<!-- Includes CSS for Dolibarr theme -->' . "\n";
-// Output style sheets (optioncss='print' or ''). Note: $conf->css looks like '/theme/eldy/style.css.php'
-$themepath = dol_buildpath($conf->css, 1);
-$themesubdir = '';
-if (!empty($conf->modules_parts['theme'])) {    // This slow down
-    foreach ($conf->modules_parts['theme'] as $reldir) {
-        if (file_exists(dol_buildpath($reldir . $conf->css, 0))) {
-            $themepath = dol_buildpath($reldir . $conf->css, 1);
-            $themesubdir = $reldir;
-            break;
+<head>
+    <title>Folders</title>
+    <link href="browser.css" type="text/css" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <?php
+    print '<!-- Includes CSS for Dolibarr theme -->' . "\n";
+    // Output style sheets (optioncss='print' or ''). Note: $conf->css looks like '/theme/eldy/style.css.php'
+    $themepath = dol_buildpath($conf->css, 1);
+    $themesubdir = '';
+    if (!empty($conf->modules_parts['theme'])) {    // This slow down
+        foreach ($conf->modules_parts['theme'] as $reldir) {
+            if (file_exists(dol_buildpath($reldir . $conf->css, 0))) {
+                $themepath = dol_buildpath($reldir . $conf->css, 1);
+                $themesubdir = $reldir;
+                break;
+            }
         }
     }
-}
 
-//print 'themepath='.$themepath.' themeparam='.$themeparam;exit;
-print '<link rel="stylesheet" type="text/css" href="' . $themepath . '">' . "\n";
-?>
-        <script type="text/javascript" src="js/common.js"></script>
-        <script type="text/javascript">
+    //print 'themepath='.$themepath.' themeparam='.$themeparam;exit;
+    print '<link rel="stylesheet" type="text/css" href="' . $themepath . '">' . "\n";
+    ?>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
 
-var sActiveFolder ;
+        var sActiveFolder;
 
-var bIsLoaded = false ;
-var iIntervalId ;
+        var bIsLoaded = false;
+        var iIntervalId;
 
-var oListManager = new Object();
+        var oListManager = new Object();
 
-oListManager.Init = function()
-{
-    this.Table = document.getElementById('tableFiles');
-    this.UpRow = document.getElementById('trUp');
+        oListManager.Init = function () {
+            this.Table = document.getElementById('tableFiles');
+            this.UpRow = document.getElementById('trUp');
 
-    this.TableRows = new Object();
-}
-
-oListManager.Clear = function()
-{
-    // Remove all other rows available.
-    while ( this.Table.rows.length > 1 )
-        this.Table.deleteRow(1);
-
-    // Reset the TableRows collection.
-    this.TableRows = new Object();
-}
-
-oListManager.AddItem = function( folderName, folderPath )
-{
-    // Create the new row.
-    var oRow = this.Table.insertRow(-1);
-    oRow.className = 'FolderListFolder' ;
-
-    // Build the link to view the folder.
-    var sLink = '<a href="#" onclick="OpenFolder(\'' + folderPath + '\');return false;">' ;
-
-    // Add the folder icon cell.
-    var oCell = oRow.insertCell(-1);
-    oCell.width = 16 ;
-    oCell.innerHTML = sLink + ' <\/a>' ;
-
-    // Add the folder name cell.
-    oCell = oRow.insertCell(-1);
-    oCell.noWrap = true ;
-    oCell.innerHTML = '&nbsp;' + sLink + folderName + '<\/a>' ;
-
-    this.TableRows[ folderPath ] = oRow ;
-}
-
-oListManager.ShowUpFolder = function( upFolderPath )
-{
-    this.UpRow.style.display = ( upFolderPath != null ? '' : 'none' );
-
-    if ( upFolderPath != null )
-    {
-        document.getElementById('linkUpIcon').onclick = document.getElementById('linkUp').onclick = function()
-        {
-            LoadFolders( upFolderPath );
-            return false ;
+            this.TableRows = new Object();
         }
-    }
-}
 
-function CheckLoaded()
-{
-    if ( window.top.IsLoadedActualFolder
-        && window.top.IsLoadedCreateFolder
-        && window.top.IsLoadedUpload
-        && window.top.IsLoadedResourcesList )
-    {
-        window.clearInterval( iIntervalId );
-        bIsLoaded = true ;
-        OpenFolder( sActiveFolder );
-    }
-}
+        oListManager.Clear = function () {
+            // Remove all other rows available.
+            while (this.Table.rows.length > 1)
+                this.Table.deleteRow(1);
 
-function OpenFolder( folderPath )
-{
-    sActiveFolder = folderPath ;
+            // Reset the TableRows collection.
+            this.TableRows = new Object();
+        }
 
-    if ( ! bIsLoaded )
-    {
-        if ( ! iIntervalId )
-            iIntervalId = window.setInterval( CheckLoaded, 100 );
-        return ;
-    }
+        oListManager.AddItem = function (folderName, folderPath) {
+            // Create the new row.
+            var oRow = this.Table.insertRow(-1);
+            oRow.className = 'FolderListFolder';
 
-    // Change the style for the select row (to show the opened folder).
-    for ( var sFolderPath in oListManager.TableRows )
-    {
-        oListManager.TableRows[ sFolderPath ].className =
-            ( sFolderPath == folderPath ? 'FolderListCurrentFolder' : 'FolderListFolder' );
-    }
+            // Build the link to view the folder.
+            var sLink = '<a href="#" onclick="OpenFolder(\'' + folderPath + '\');return false;">';
 
-    // Set the current folder in all frames.
-    window.parent.frames['frmActualFolder'].SetCurrentFolder( oConnector.ResourceType, folderPath );
-    window.parent.frames['frmCreateFolder'].SetCurrentFolder( oConnector.ResourceType, folderPath );
-    window.parent.frames['frmUpload'].SetCurrentFolder( oConnector.ResourceType, folderPath );
+            // Add the folder icon cell.
+            var oCell = oRow.insertCell(-1);
+            oCell.width = 16;
+            oCell.innerHTML = sLink + ' <\/a>';
 
-    // Load the resources list for this folder.
-    window.parent.frames['frmResourcesList'].LoadResources( oConnector.ResourceType, folderPath );
-}
+            // Add the folder name cell.
+            oCell = oRow.insertCell(-1);
+            oCell.noWrap = true;
+            oCell.innerHTML = '&nbsp;' + sLink + folderName + '<\/a>';
 
-function LoadFolders( folderPath )
-{
-    // Clear the folders list.
-    oListManager.Clear();
+            this.TableRows[folderPath] = oRow;
+        }
 
-    // Get the parent folder path.
-    var sParentFolderPath ;
-    if ( folderPath != '/' )
-        sParentFolderPath = folderPath.substring( 0, folderPath.lastIndexOf( '/', folderPath.length - 2 ) + 1 );
+        oListManager.ShowUpFolder = function (upFolderPath) {
+            this.UpRow.style.display = (upFolderPath != null ? '' : 'none');
 
-    // Show/Hide the Up Folder.
-    oListManager.ShowUpFolder( sParentFolderPath );
+            if (upFolderPath != null) {
+                document.getElementById('linkUpIcon').onclick = document.getElementById('linkUp').onclick = function () {
+                    LoadFolders(upFolderPath);
+                    return false;
+                }
+            }
+        }
 
-    if ( folderPath != '/' )
-    {
-        sActiveFolder = folderPath ;
-        oConnector.CurrentFolder = sParentFolderPath ;
-        oConnector.SendCommand( 'GetFolders', null, GetFoldersCallBack );
-    }
-    else
-        OpenFolder( '/' );
-}
+        function CheckLoaded() {
+            if (window.top.IsLoadedActualFolder
+                && window.top.IsLoadedCreateFolder
+                && window.top.IsLoadedUpload
+                && window.top.IsLoadedResourcesList) {
+                window.clearInterval(iIntervalId);
+                bIsLoaded = true;
+                OpenFolder(sActiveFolder);
+            }
+        }
 
-function GetFoldersCallBack( fckXml )
-{
-    if ( oConnector.CheckError( fckXml ) != 0 )
-        return ;
+        function OpenFolder(folderPath) {
+            sActiveFolder = folderPath;
 
-    // Get the current folder path.
-    var oNode = fckXml.SelectSingleNode( 'Connector/CurrentFolder' );
-    var sCurrentFolderPath = oNode.attributes.getNamedItem('path').value ;
+            if (!bIsLoaded) {
+                if (!iIntervalId)
+                    iIntervalId = window.setInterval(CheckLoaded, 100);
+                return;
+            }
 
-    var oNodes = fckXml.SelectNodes( 'Connector/Folders/Folder' );
+            // Change the style for the select row (to show the opened folder).
+            for (var sFolderPath in oListManager.TableRows) {
+                oListManager.TableRows[sFolderPath].className =
+                    (sFolderPath == folderPath ? 'FolderListCurrentFolder' : 'FolderListFolder');
+            }
 
-    for ( var i = 0 ; i < oNodes.length ; i++ )
-    {
-        var sFolderName = oNodes[i].attributes.getNamedItem('name').value ;
-        oListManager.AddItem( sFolderName, sCurrentFolderPath + sFolderName + '/' );
-    }
+            // Set the current folder in all frames.
+            window.parent.frames['frmActualFolder'].SetCurrentFolder(oConnector.ResourceType, folderPath);
+            window.parent.frames['frmCreateFolder'].SetCurrentFolder(oConnector.ResourceType, folderPath);
+            window.parent.frames['frmUpload'].SetCurrentFolder(oConnector.ResourceType, folderPath);
 
-    OpenFolder( sActiveFolder );
-}
+            // Load the resources list for this folder.
+            window.parent.frames['frmResourcesList'].LoadResources(oConnector.ResourceType, folderPath);
+        }
 
-function SetResourceType( type )
-{
-    oConnector.ResourceType = type ;
-    LoadFolders( '/' );
-}
+        function LoadFolders(folderPath) {
+            // Clear the folders list.
+            oListManager.Clear();
 
-window.onload = function()
-{
-    oListManager.Init();
-    LoadFolders( '/' );
-}
-        </script>
-    </head>
-    <body class="FileArea">
-        <table id="tableFiles" cellSpacing="0" cellPadding="0" width="100%" border="0">
-            <tr id="trUp" style="DISPLAY: none">
-                <td width="16"><a id="linkUpIcon" href="#"><img alt="" src="images/FolderUp.gif" width="16" height="16" border="0"></a></td>
-                <td class="nowrap" width="100%">&nbsp;<a id="linkUp" href="#">..</a></td>
-            </tr>
-        </table>
-    </body>
+            // Get the parent folder path.
+            var sParentFolderPath;
+            if (folderPath != '/')
+                sParentFolderPath = folderPath.substring(0, folderPath.lastIndexOf('/', folderPath.length - 2) + 1);
+
+            // Show/Hide the Up Folder.
+            oListManager.ShowUpFolder(sParentFolderPath);
+
+            if (folderPath != '/') {
+                sActiveFolder = folderPath;
+                oConnector.CurrentFolder = sParentFolderPath;
+                oConnector.SendCommand('GetFolders', null, GetFoldersCallBack);
+            } else
+                OpenFolder('/');
+        }
+
+        function GetFoldersCallBack(fckXml) {
+            if (oConnector.CheckError(fckXml) != 0)
+                return;
+
+            // Get the current folder path.
+            var oNode = fckXml.SelectSingleNode('Connector/CurrentFolder');
+            var sCurrentFolderPath = oNode.attributes.getNamedItem('path').value;
+
+            var oNodes = fckXml.SelectNodes('Connector/Folders/Folder');
+
+            for (var i = 0; i < oNodes.length; i++) {
+                var sFolderName = oNodes[i].attributes.getNamedItem('name').value;
+                oListManager.AddItem(sFolderName, sCurrentFolderPath + sFolderName + '/');
+            }
+
+            OpenFolder(sActiveFolder);
+        }
+
+        function SetResourceType(type) {
+            oConnector.ResourceType = type;
+            LoadFolders('/');
+        }
+
+        window.onload = function () {
+            oListManager.Init();
+            LoadFolders('/');
+        }
+    </script>
+</head>
+<body class="FileArea">
+<table id="tableFiles" cellSpacing="0" cellPadding="0" width="100%" border="0">
+    <tr id="trUp" style="DISPLAY: none">
+        <td width="16"><a id="linkUpIcon" href="#"><img alt="" src="images/FolderUp.gif" width="16" height="16"
+                                                        border="0"></a></td>
+        <td class="nowrap" width="100%">&nbsp;<a id="linkUp" href="#">..</a></td>
+    </tr>
+</table>
+</body>
 </html>

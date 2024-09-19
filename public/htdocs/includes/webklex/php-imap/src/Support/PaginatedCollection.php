@@ -33,10 +33,10 @@ class PaginatedCollection extends Collection
 
     /**
      * Paginate the current collection.
-     * @param int      $per_page
+     * @param int $per_page
      * @param int|null $page
-     * @param string   $page_name
-     * @param boolean  $prepaginated
+     * @param string $page_name
+     * @param boolean $prepaginated
      *
      * @return LengthAwarePaginator
      */
@@ -49,18 +49,18 @@ class PaginatedCollection extends Collection
         $results = !$prepaginated && $total ? $this->forPage($page, $per_page) : $this->all();
 
         return $this->paginator($results, $total, $per_page, $page, [
-            'path'      => Paginator::resolveCurrentPath(),
-            'pageName'  => $page_name,
+            'path' => Paginator::resolveCurrentPath(),
+            'pageName' => $page_name,
         ]);
     }
 
     /**
      * Create a new length-aware paginator instance.
-     * @param  array    $items
-     * @param  int      $total
-     * @param  int      $per_page
-     * @param  int|null $current_page
-     * @param  array    $options
+     * @param array $items
+     * @param int $total
+     * @param int $per_page
+     * @param int|null $current_page
+     * @param array $options
      *
      * @return LengthAwarePaginator
      */
@@ -77,7 +77,7 @@ class PaginatedCollection extends Collection
      */
     public function total($total = null)
     {
-        if($total === null) {
+        if ($total === null) {
             return $this->total;
         }
 

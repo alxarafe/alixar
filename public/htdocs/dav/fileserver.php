@@ -95,11 +95,11 @@ $tmpDir = $conf->dav->multidir_output[$entity]; // We need root dir, not a dir t
 
 // Authentication callback function
 $authBackend = new \Sabre\DAV\Auth\Backend\BasicCallBack(
-    /**
-     * @param string    $username   Username to validate as a login
-     * @param string    $password   Password to validate for $username
-     * @return bool                 True if login ok, false if not
-     */
+/**
+ * @param string $username Username to validate as a login
+ * @param string $password Password to validate for $username
+ * @return bool                 True if login ok, false if not
+ */
     static function ($username, $password) {
         global $user, $conf;
         global $dolibarr_main_authentication, $dolibarr_auto_user;
@@ -168,9 +168,6 @@ $authBackend = new \Sabre\DAV\Auth\Backend\BasicCallBack(
 $authBackend->setRealm(constant('DOL_APPLICATION_TITLE') . ' - WebDAV');
 
 
-
-
-
 /*
  * Actions and View
  */
@@ -190,7 +187,6 @@ $nodes[] = new \Sabre\DAV\FS\Directory($privateDir);
 if (isModEnabled('ecm') && getDolGlobalString('DAV_ALLOW_ECM_DIR')) {
     $nodes[] = new \Sabre\DAV\FS\Directory($ecmDir);
 }
-
 
 
 // Principals Backend
@@ -219,7 +215,7 @@ if (isset($baseUri)) {
 // Add authentication function
 if (
     (!getDolGlobalString('DAV_ALLOW_PUBLIC_DIR')
-    || !preg_match('/' . preg_quote(constant('BASE_URL') . '/dav/fileserver.php/public', '/') . '/', $_SERVER["PHP_SELF"]))
+        || !preg_match('/' . preg_quote(constant('BASE_URL') . '/dav/fileserver.php/public', '/') . '/', $_SERVER["PHP_SELF"]))
     && !preg_match('/^sabreAction=asset&assetName=[a-zA-Z0-9%\-\/]+\.(png|css|woff|ico|ttf)$/', $_SERVER["QUERY_STRING"])   // URL for Sabre browser resources
 ) {
     //var_dump($_SERVER["QUERY_STRING"]);exit;

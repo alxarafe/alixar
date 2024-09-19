@@ -60,10 +60,10 @@ $langs->loadLangs(array("admin", "mails", "other"));
 
 // Get parameters
 $id = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
-$confirm    = GETPOST('confirm', 'alpha');
-$cancel     = GETPOST('cancel', 'aZ09');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'emailcollectorcard'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 
@@ -487,13 +487,13 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
                 $cm = new ClientManager();
                 $client = $cm->make([
-                    'host'           => $object->host,
-                    'port'           => $object->port,
-                    'encryption'     => 'ssl',
-                    'validate_cert'  => true,
-                    'protocol'       => 'imap',
-                    'username'       => $object->login,
-                    'password'       => $token,
+                    'host' => $object->host,
+                    'port' => $object->port,
+                    'encryption' => 'ssl',
+                    'validate_cert' => true,
+                    'protocol' => 'imap',
+                    'username' => $object->login,
+                    'password' => $token,
                     'authentication' => "oauth",
                 ]);
             } else {
@@ -502,13 +502,13 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
                 // Mode login/pass with PHP-IMAP
                 $cm = new ClientManager();
                 $client = $cm->make([
-                    'host'           => $object->host,
-                    'port'           => $object->port,
-                    'encryption'     => 'ssl',
-                    'validate_cert'  => true,
-                    'protocol'       => 'imap',
-                    'username'       => $object->login,
-                    'password'       => $object->password,
+                    'host' => $object->host,
+                    'port' => $object->port,
+                    'encryption' => 'ssl',
+                    'validate_cert' => true,
+                    'protocol' => 'imap',
+                    'username' => $object->login,
+                    'password' => $object->password,
                     'authentication' => "login",
                 ]);
             }

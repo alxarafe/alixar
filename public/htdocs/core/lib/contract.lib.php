@@ -32,7 +32,7 @@ use Dolibarr\Code\Core\Classes\Link;
 /**
  * Prepare array with list of tabs
  *
- * @param   Contrat $object     Object related to tabs
+ * @param Contrat $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function contract_prepare_head(Contrat $object)
@@ -115,7 +115,7 @@ function contract_prepare_head(Contrat $object)
         } else {
             $sql = "SELECT COUNT(id) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm";
-            $sql .= " WHERE fk_element = " . ((int) $object->id);
+            $sql .= " WHERE fk_element = " . ((int)$object->id);
             $sql .= " AND elementtype = 'contract'";
             $resql = $db->query($sql);
             if ($resql) {
@@ -146,7 +146,7 @@ function contract_prepare_head(Contrat $object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function contract_admin_prepare_head()
 {

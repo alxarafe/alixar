@@ -148,7 +148,7 @@ class Client
     protected $default_account_config = [
         'host' => 'localhost',
         'port' => 993,
-        'protocol'  => 'imap',
+        'protocol' => 'imap',
         'encryption' => 'ssl',
         'validate_cert' => true,
         'username' => '',
@@ -193,7 +193,7 @@ class Client
     public function setConfig(array $config)
     {
         $default_account = ClientManager::get('default');
-        $default_config  = ClientManager::get("accounts.$default_account");
+        $default_config = ClientManager::get("accounts.$default_account");
 
         foreach ($this->default_account_config as $key => $value) {
             $this->setAccountConfig($key, $config, $default_config);
@@ -211,9 +211,9 @@ class Client
     private function setAccountConfig($key, $config, $default_config)
     {
         $value = $this->default_account_config[$key];
-        if(isset($config[$key])) {
+        if (isset($config[$key])) {
             $value = $config[$key];
-        }elseif(isset($default_config[$key])) {
+        } elseif (isset($default_config[$key])) {
             $value = $default_config[$key];
         }
         $this->$key = $value;
@@ -226,8 +226,8 @@ class Client
     protected function setEventsFromConfig($config)
     {
         $this->events = ClientManager::get("events");
-        if(isset($config['events'])){
-            foreach($config['events'] as $section => $events) {
+        if (isset($config['events'])) {
+            foreach ($config['events'] as $section => $events) {
                 $this->events[$section] = array_merge($this->events[$section], $events);
             }
         }
@@ -241,45 +241,45 @@ class Client
      */
     protected function setMaskFromConfig($config)
     {
-        $default_config  = ClientManager::get("masks");
+        $default_config = ClientManager::get("masks");
 
-        if(isset($config['masks'])){
-            if(isset($config['masks']['message'])) {
-                if(class_exists($config['masks']['message'])) {
+        if (isset($config['masks'])) {
+            if (isset($config['masks']['message'])) {
+                if (class_exists($config['masks']['message'])) {
                     $this->default_message_mask = $config['masks']['message'];
-                }else{
+                } else {
                     throw new MaskNotFoundException("Unknown mask provided: " . $config['masks']['message']);
                 }
-            }else{
-                if(class_exists($default_config['message'])) {
+            } else {
+                if (class_exists($default_config['message'])) {
                     $this->default_message_mask = $default_config['message'];
-                }else{
+                } else {
                     throw new MaskNotFoundException("Unknown mask provided: " . $default_config['message']);
                 }
             }
-            if(isset($config['masks']['attachment'])) {
-                if(class_exists($config['masks']['attachment'])) {
+            if (isset($config['masks']['attachment'])) {
+                if (class_exists($config['masks']['attachment'])) {
                     $this->default_attachment_mask = $config['masks']['attachment'];
-                }else{
+                } else {
                     throw new MaskNotFoundException("Unknown mask provided: " . $config['masks']['attachment']);
                 }
-            }else{
-                if(class_exists($default_config['attachment'])) {
+            } else {
+                if (class_exists($default_config['attachment'])) {
                     $this->default_attachment_mask = $default_config['attachment'];
-                }else{
+                } else {
                     throw new MaskNotFoundException("Unknown mask provided: " . $default_config['attachment']);
                 }
             }
-        }else{
-            if(class_exists($default_config['message'])) {
+        } else {
+            if (class_exists($default_config['message'])) {
                 $this->default_message_mask = $default_config['message'];
-            }else{
+            } else {
                 throw new MaskNotFoundException("Unknown mask provided: " . $default_config['message']);
             }
 
-            if(class_exists($default_config['attachment'])) {
+            if (class_exists($default_config['attachment'])) {
                 $this->default_attachment_mask = $default_config['attachment'];
-            }else{
+            } else {
                 throw new MaskNotFoundException("Unknown mask provided: " . $default_config['attachment']);
             }
         }
@@ -347,7 +347,7 @@ class Client
             $this->connection = new ImapProtocol($this->validate_cert, $this->encryption);
             $this->connection->setConnectionTimeout($this->timeout);
             $this->connection->setProxy($this->proxy);
-        }else{
+        } else {
             if (extension_loaded('imap') === false) {
                 throw new ConnectionFailedException("connection setup failed - no imap function", 0, new ProtocolNotSupportedException($protocol . " is an unsupported protocol"));
             }
@@ -479,7 +479,7 @@ class Client
         $pattern = $parent_folder . ($hierarchical ? '%' : '*');
         $items = $this->connection->folders('', $pattern);
 
-        if(is_array($items)){
+        if (is_array($items)) {
             foreach ($items as $folder_name => $item) {
                 $folder = new Folder($this, $folder_name, $item["delimiter"], $item["flags"]);
 
@@ -494,7 +494,7 @@ class Client
             }
 
             return $folders;
-        }else{
+        } else {
             throw new FolderFetchingException("failed to fetch any folders");
         }
     }
@@ -534,10 +534,10 @@ class Client
         $this->checkConnection();
         $status = $this->connection->createFolder($folder);
 
-        if($expunge) $this->expunge();
+        if ($expunge) $this->expunge();
 
         $folder = $this->getFolder($folder);
-        if($status && $folder) {
+        if ($status && $folder) {
             $event = $this->getEvent("folder", "new");
             $event::dispatch($folder);
         }
@@ -663,7 +663,7 @@ class Client
      */
     public function setDefaultMessageMask($mask)
     {
-        if(class_exists($mask)) {
+        if (class_exists($mask)) {
             $this->default_message_mask = $mask;
 
             return $this;
@@ -691,7 +691,7 @@ class Client
      */
     public function setDefaultAttachmentMask($mask)
     {
-        if(class_exists($mask)) {
+        if (class_exists($mask)) {
             $this->default_attachment_mask = $mask;
 
             return $this;

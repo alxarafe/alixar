@@ -170,7 +170,7 @@ if (empty($reshook)) {
                 if (!empty($amounts[$cursorfacid])) {
                     $atleastonepaymentnotnull++;
                     if (is_numeric($amounts[$cursorfacid])) {
-                        $totalpayment += (float) $amounts[$cursorfacid];
+                        $totalpayment += (float)$amounts[$cursorfacid];
                     } else {
                         setEventMessages($langs->transnoentities("InputValueIsNotAnNumber", GETPOST($key)), null, 'warnings');
                     }
@@ -182,7 +182,7 @@ if (empty($reshook)) {
                 $amountsresttopay[$cursorfacid] = price2num($tmpinvoice->total_ttc - $tmpinvoice->getSommePaiement());
                 if ($amounts[$cursorfacid]) {
                     // Check amount
-                    if ($amounts[$cursorfacid] && (abs((float) $amounts[$cursorfacid]) > abs((float) $amountsresttopay[$cursorfacid]))) {
+                    if ($amounts[$cursorfacid] && (abs((float)$amounts[$cursorfacid]) > abs((float)$amountsresttopay[$cursorfacid]))) {
                         $addwarning = 1;
                         $formquestion['text'] = img_warning($langs->trans("PaymentHigherThanReminderToPaySupplier")) . ' ' . $langs->trans("HelpPaymentHigherThanReminderToPaySupplier");
                     }
@@ -209,7 +209,7 @@ if (empty($reshook)) {
                 $multicurrency_amountsresttopay[$cursorfacid] = price2num($tmpinvoice->multicurrency_total_ttc - $tmpinvoice->getSommePaiement(1));
                 if ($multicurrency_amounts[$cursorfacid]) {
                     // Check amount
-                    if ($multicurrency_amounts[$cursorfacid] && (abs((float) $multicurrency_amounts[$cursorfacid]) > abs((float) $multicurrency_amountsresttopay[$cursorfacid]))) {
+                    if ($multicurrency_amounts[$cursorfacid] && (abs((float)$multicurrency_amounts[$cursorfacid]) > abs((float)$multicurrency_amountsresttopay[$cursorfacid]))) {
                         $addwarning = 1;
                         $formquestion['text'] = img_warning($langs->trans("PaymentHigherThanReminderToPaySupplier")) . ' ' . $langs->trans("HelpPaymentHigherThanReminderToPaySupplier");
                     }
@@ -284,7 +284,7 @@ if (empty($reshook)) {
             $tmpinvoice->fetch($key);
             if ($tmpinvoice->type == FactureFournisseur::TYPE_CREDIT_NOTE) {
                 $newvalue = price2num($value, 'MT');
-                $amounts[$key] = - abs((float) $newvalue);
+                $amounts[$key] = -abs((float)$newvalue);
             }
             $multicurrency_code[$key] = $tmpinvoice->multicurrency_code;
             $multicurrency_tx[$key] = $tmpinvoice->multicurrency_tx;
@@ -295,7 +295,7 @@ if (empty($reshook)) {
             $tmpinvoice->fetch($key);
             if ($tmpinvoice->type == FactureFournisseur::TYPE_CREDIT_NOTE) {
                 $newvalue = price2num($value, 'MT');
-                $multicurrency_amounts[$key] = - abs((float) $newvalue);
+                $multicurrency_amounts[$key] = -abs((float)$newvalue);
             }
             $multicurrency_code[$key] = $tmpinvoice->multicurrency_code;
             $multicurrency_tx[$key] = $tmpinvoice->multicurrency_tx;
@@ -315,21 +315,21 @@ if (empty($reshook)) {
 
             // Creation of payment line
             $paiement = new PaiementFourn($db);
-            $paiement->datepaye     = $datepaye;
+            $paiement->datepaye = $datepaye;
 
             $correctedAmounts = [];
             foreach ($amounts as $key => $value) {
-                $correctedAmounts[$key] = (float) $value;
+                $correctedAmounts[$key] = (float)$value;
             }
 
-            $paiement->amounts      = $correctedAmounts; // Array of amounts
+            $paiement->amounts = $correctedAmounts; // Array of amounts
             $paiement->multicurrency_amounts = $multicurrency_amounts;
             $paiement->multicurrency_code = $multicurrency_code; // Array with all currency of payments dispatching
             $paiement->multicurrency_tx = $multicurrency_tx; // Array with all currency tx of payments dispatching
-            $paiement->paiementid   = GETPOSTINT('paiementid');
-            $paiement->num_payment  = GETPOST('num_paiement', 'alphanohtml');
+            $paiement->paiementid = GETPOSTINT('paiementid');
+            $paiement->num_payment = GETPOST('num_paiement', 'alphanohtml');
             $paiement->note_private = GETPOST('comment', 'alpha');
-            $paiement->fk_account   = GETPOSTINT('accountid');
+            $paiement->fk_account = GETPOSTINT('accountid');
 
             if (!$error) {
                 // Create payment and update this->multicurrency_amounts if this->amounts filled or
@@ -408,9 +408,9 @@ if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paie
         $sql .= ", " . MAIN_DB_PREFIX . "societe_commerciaux as sc";
     }
     $sql .= ' WHERE f.fk_soc = s.rowid';
-    $sql .= ' AND f.rowid = ' . ((int) $facid);
+    $sql .= ' AND f.rowid = ' . ((int)$facid);
     if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     $resql = $db->query($sql);
     if ($resql) {
@@ -554,8 +554,8 @@ if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paie
                 $sql .= ' SUM(pf.amount) as am, SUM(pf.multicurrency_amount) as multicurrency_am';
                 $sql .= ' FROM ' . MAIN_DB_PREFIX . 'facture_fourn as f';
                 $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'paiementfourn_facturefourn as pf ON pf.fk_facturefourn = f.rowid';
-                $sql .= " WHERE f.entity = " . ((int) $conf->entity);
-                $sql .= ' AND f.fk_soc = ' . ((int) $object->socid);
+                $sql .= " WHERE f.entity = " . ((int)$conf->entity);
+                $sql .= ' AND f.fk_soc = ' . ((int)$object->socid);
                 $sql .= ' AND f.paye = 0';
                 $sql .= ' AND f.fk_statut = 1'; // Status=0 => unvalidated, Status=2 => canceled
                 if ($object->type != FactureFournisseur::TYPE_CREDIT_NOTE) {
@@ -700,7 +700,7 @@ if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paie
 
                                 print '<td class="right">';
                                 if ($objp->multicurrency_code && $objp->multicurrency_code != $conf->currency) {
-                                    print price($sign * (float) $multicurrency_remaintopay);
+                                    print price($sign * (float)$multicurrency_remaintopay);
                                 }
                                 print '</td>';
 
@@ -711,7 +711,7 @@ if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paie
                                 if ($objp->multicurrency_code && $objp->multicurrency_code != $conf->currency) {
                                     if ($action != 'add_paiement') {
                                         if (!empty($conf->use_javascript_ajax)) {
-                                            print img_picto("Auto fill", 'rightarrow', "class='AutoFillAmount' data-rowname='" . $namef . "' data-value='" . ($sign * (float) $multicurrency_remaintopay) . "'");
+                                            print img_picto("Auto fill", 'rightarrow', "class='AutoFillAmount' data-rowname='" . $namef . "' data-value='" . ($sign * (float)$multicurrency_remaintopay) . "'");
                                         }
                                         print '<input type=hidden class="multicurrency_remain" name="' . $nameRemain . '" value="' . $multicurrency_remaintopay . '">';
                                         print '<input type="text" size="8" class="multicurrency_amount" name="' . $namef . '" value="' . GETPOST($namef) . '">';
@@ -735,13 +735,13 @@ if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paie
                             print '</td>';
 
                             print '<td class="right">';
-                            print price($sign * (float) $remaintopay);
+                            print price($sign * (float)$remaintopay);
                             if (isModEnabled('paymentbybanktransfer')) {
                                 $numdirectdebitopen = 0;
                                 $totaldirectdebit = 0;
                                 $sql = "SELECT COUNT(pfd.rowid) as nb, SUM(pfd.amount) as amount";
                                 $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_demande as pfd";
-                                $sql .= " WHERE fk_facture_fourn = " . ((int) $objp->facid);
+                                $sql .= " WHERE fk_facture_fourn = " . ((int)$objp->facid);
                                 $sql .= " AND pfd.traite = 0";
                                 $sql .= " AND pfd.ext_payment_id IS NULL";
 
@@ -768,7 +768,7 @@ if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paie
 
                             if ($action != 'add_paiement') {
                                 if (!empty($conf->use_javascript_ajax)) {
-                                    print img_picto("Auto fill", 'rightarrow', "class='AutoFillAmount' data-rowname='" . $namef . "' data-value='" . ($sign * (float) $remaintopay) . "'");
+                                    print img_picto("Auto fill", 'rightarrow', "class='AutoFillAmount' data-rowname='" . $namef . "' data-value='" . ($sign * (float)$remaintopay) . "'");
                                 }
                                 print '<input type="hidden" class="remain" name="' . $nameRemain . '" value="' . $remaintopay . '">';
                                 print '<input type="text" size="8" class="amount" name="' . $namef . '" value="' . dol_escape_htmltag(GETPOST($namef)) . '">'; // class is required to be used by javascript callForResult();
@@ -806,7 +806,7 @@ if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paie
                                 print '+' . price($totalrecudeposits);
                             }
                             print   '</b></td>';
-                            print '<td class="right"><b>' . price($sign * (float) price2num($total_ttc - $totalrecu - $totalrecucreditnote - $totalrecudeposits, 'MT')) . '</b></td>';
+                            print '<td class="right"><b>' . price($sign * (float)price2num($total_ttc - $totalrecu - $totalrecucreditnote - $totalrecudeposits, 'MT')) . '</b></td>';
                             print '<td class="center" id="result" style="font-weight: bold;"></td>'; // Autofilled
                             print "</tr>\n";
                         }

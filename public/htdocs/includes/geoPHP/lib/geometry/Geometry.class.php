@@ -12,34 +12,59 @@ abstract class Geometry
     // Abtract: Standard
     // -----------------
     abstract public function area();
+
     abstract public function boundary();
+
     abstract public function centroid();
+
     abstract public function length();
+
     abstract public function y();
+
     abstract public function x();
+
     abstract public function numGeometries();
+
     abstract public function geometryN($n);
+
     abstract public function startPoint();
+
     abstract public function endPoint();
+
     abstract public function isRing();            // Mssing dependancy
+
     abstract public function isClosed();          // Missing dependancy
+
     abstract public function numPoints();
+
     abstract public function pointN($n);
+
     abstract public function exteriorRing();
+
     abstract public function numInteriorRings();
+
     abstract public function interiorRingN($n);
+
     abstract public function dimension();
+
     abstract public function equals($geom);
+
     abstract public function isEmpty();
+
     abstract public function isSimple();
 
     // Abtract: Non-Standard
     // ---------------------
     abstract public function getBBox();
+
     abstract public function asArray();
+
     abstract public function getPoints();
+
     abstract public function explode();
+
     abstract public function greatCircleLength(); //meters
+
     abstract public function haversineLength(); //degrees
 
 
@@ -67,12 +92,12 @@ abstract class Geometry
         }
 
         $bbox = $this->getBBox();
-        $points = array (
-        new Point($bbox['maxx'], $bbox['miny']),
-        new Point($bbox['maxx'], $bbox['maxy']),
-        new Point($bbox['minx'], $bbox['maxy']),
-        new Point($bbox['minx'], $bbox['miny']),
-        new Point($bbox['maxx'], $bbox['miny']),
+        $points = array(
+            new Point($bbox['maxx'], $bbox['miny']),
+            new Point($bbox['maxx'], $bbox['maxy']),
+            new Point($bbox['minx'], $bbox['maxy']),
+            new Point($bbox['minx'], $bbox['miny']),
+            new Point($bbox['maxx'], $bbox['miny']),
         );
 
         $outer_boundary = new LineString($points);

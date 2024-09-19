@@ -110,7 +110,7 @@ print '</tr>' . "\n";
 $sql = "SELECT r.id, r.libelle as label, r.module, r.perms, r.subperms, r.module_position, r.bydefault";
 $sql .= " FROM " . MAIN_DB_PREFIX . "rights_def as r";
 $sql .= " WHERE r.libelle NOT LIKE 'tou%'"; // On ignore droits "tous"
-$sql .= " AND r.entity = " . ((int) $entity);
+$sql .= " AND r.entity = " . ((int)$entity);
 if (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) {
     $sql .= " AND r.perms NOT LIKE '%_advance'"; // Hide advanced perms if option is not enabled
 }
@@ -148,9 +148,9 @@ if ($result) {
                     $newmoduleposition += 100000;
                 }
 
-                $sqlupdate = 'UPDATE ' . MAIN_DB_PREFIX . "rights_def SET module_position = " . ((int) $newmoduleposition) . ",";
-                $sqlupdate .= " family_position = " . ((int) $familyposition);
-                $sqlupdate .= " WHERE module_position = " . ((int) $obj->module_position) . " AND module = '" . $db->escape($obj->module) . "'";
+                $sqlupdate = 'UPDATE ' . MAIN_DB_PREFIX . "rights_def SET module_position = " . ((int)$newmoduleposition) . ",";
+                $sqlupdate .= " family_position = " . ((int)$familyposition);
+                $sqlupdate .= " WHERE module_position = " . ((int)$obj->module_position) . " AND module = '" . $db->escape($obj->module) . "'";
                 $db->query($sqlupdate);
             }
         }

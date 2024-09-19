@@ -54,7 +54,7 @@ $hookmanager->initHooks(array('ordernote'));
 
 $result = restrictedArea($user, 'commande', $id, '');
 
-$usercancreate  =  $user->hasRight("commande", "creer");
+$usercancreate = $user->hasRight("commande", "creer");
 
 $permissionnote = $user->hasRight('commande', 'creer'); // Used by the include of actions_setnotes.inc.php
 

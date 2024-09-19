@@ -43,8 +43,8 @@ if (isModEnabled('project')) {
 // Load translation files required by the page
 $langs->loadLangs(array("facture", "orders", "sendings", "companies"));
 
-$id     = GETPOSTINT('id');
-$ref    = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
 
 // Security check
@@ -56,8 +56,8 @@ $hookmanager->initHooks(array('ordersuppliercardcontact', 'ordersuppliercontactc
 
 $object = new CommandeFournisseur($db);
 
-$usercancreate  = ($user->hasRight("fournisseur", "commande", "creer") || $user->hasRight("supplier_order", "creer"));
-$permissiontoadd    = $usercancreate; // Used by the include of actions_addupdatedelete.inc.php
+$usercancreate = ($user->hasRight("fournisseur", "commande", "creer") || $user->hasRight("supplier_order", "creer"));
+$permissiontoadd = $usercancreate; // Used by the include of actions_addupdatedelete.inc.php
 
 /*
  * Actions
@@ -79,8 +79,8 @@ if (empty($reshook)) {
 
         if ($result > 0 && $id > 0) {
             $contactid = (GETPOST('userid') ? GETPOST('userid') : GETPOST('contactid'));
-            $typeid    = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
-            $result    = $object->add_contact($contactid, $typeid, GETPOST("source", 'aZ09'));
+            $typeid = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
+            $result = $object->add_contact($contactid, $typeid, GETPOST("source", 'aZ09'));
         }
 
         if ($result >= 0) {

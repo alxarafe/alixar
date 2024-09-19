@@ -62,8 +62,8 @@ class mod_sn_free extends ModeleNumRefBatch
     /**
      *  Return description of module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -75,7 +75,7 @@ class mod_sn_free extends ModeleNumRefBatch
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -85,8 +85,8 @@ class mod_sn_free extends ModeleNumRefBatch
     /**
      * Return an example of result returned by getNextValue
      *
-     * @param   Societe     $objsoc     Object thirdparty
-     * @param   Productlot  $object     Object we need next value for
+     * @param Societe $objsoc Object thirdparty
+     * @param Productlot $object Object we need next value for
      * @return  string                  Return next value
      */
     public function getNextValue($objsoc, $object)

@@ -113,9 +113,9 @@ class OLE
      *
      * @param string $file
      *
+     * @return bool true on success, PEAR_Error on failure
      * @throws ReaderException
      *
-     * @return bool true on success, PEAR_Error on failure
      */
     public function read($file)
     {
@@ -539,9 +539,9 @@ class OLE
      *
      * @param string $oleTimestamp A binary string with the encoded date
      *
+     * @return int The Unix timestamp corresponding to the string
      * @throws ReaderException
      *
-     * @return int The Unix timestamp corresponding to the string
      */
     public static function OLE2LocalDate($oleTimestamp)
     {
@@ -551,8 +551,8 @@ class OLE
 
         // convert to units of 100 ns since 1601:
         $unpackedTimestamp = unpack('v4', $oleTimestamp);
-        $timestampHigh = (float) $unpackedTimestamp[4] * 65536 + (float) $unpackedTimestamp[3];
-        $timestampLow = (float) $unpackedTimestamp[2] * 65536 + (float) $unpackedTimestamp[1];
+        $timestampHigh = (float)$unpackedTimestamp[4] * 65536 + (float)$unpackedTimestamp[3];
+        $timestampLow = (float)$unpackedTimestamp[2] * 65536 + (float)$unpackedTimestamp[1];
 
         // translate to seconds since 1601:
         $timestampHigh /= 10000000;
@@ -564,8 +564,8 @@ class OLE
         // translate to seconds since 1970:
         $unixTimestamp = floor(65536.0 * 65536.0 * $timestampHigh + $timestampLow - $days * 24 * 3600 + 0.5);
 
-        if ((int) $unixTimestamp == $unixTimestamp) {
-            return (int) $unixTimestamp;
+        if ((int)$unixTimestamp == $unixTimestamp) {
+            return (int)$unixTimestamp;
         }
 
         return $unixTimestamp >= 0.0 ? PHP_INT_MAX : PHP_INT_MIN;

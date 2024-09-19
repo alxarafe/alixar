@@ -305,7 +305,6 @@ print '<br>';
 print '<br>';
 
 
-
 // Example 1 : Adding jquery code
 print '<script type="text/javascript">
 function confirm_erase() {
@@ -453,7 +452,6 @@ if (isModEnabled('product') || isModEnabled('service')) {
 print load_fiche_titre($langs->trans("BarCodePrintsheet"), '', 'generic');
 print '<br>' . "\n";
 print $langs->trans("ClickHereToGoTo") . ' : <a href="' . constant('BASE_URL') . 'barcode/printsheet.php">' . $langs->trans("BarCodePrintsheet") . '</a>';
-
 
 
 print '<br>';

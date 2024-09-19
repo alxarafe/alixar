@@ -106,13 +106,11 @@ if (GETPOST('button_removefilter_x', 'alpha') || GETPOST('button_removefilter.x'
 }
 
 
-
-
 // Add directory
 if ($action == 'add' && $user->hasRight('ecm', 'setup')) {
-    $ecmdir->ref                = 'NOTUSEDYET';
-    $ecmdir->label              = GETPOST("label");
-    $ecmdir->description        = GETPOST("desc");
+    $ecmdir->ref = 'NOTUSEDYET';
+    $ecmdir->label = GETPOST("label");
+    $ecmdir->description = GETPOST("desc");
 
     $id = $ecmdir->create($user);
     if ($id > 0) {
@@ -235,10 +233,10 @@ if ($action == 'refreshmanual') {
             }
 
             if ($fk_parent >= 0) {
-                $ecmdirtmp->ref                = 'NOTUSEDYET';
-                $ecmdirtmp->label              = dol_basename($dirdesc['fullname']);
-                $ecmdirtmp->description        = '';
-                $ecmdirtmp->fk_parent          = $fk_parent;
+                $ecmdirtmp->ref = 'NOTUSEDYET';
+                $ecmdirtmp->label = dol_basename($dirdesc['fullname']);
+                $ecmdirtmp->description = '';
+                $ecmdirtmp->fk_parent = $fk_parent;
 
                 $txt = "We create directory " . $ecmdirtmp->label . " with parent " . $fk_parent;
                 dol_syslog($txt);
@@ -246,10 +244,10 @@ if ($action == 'refreshmanual') {
                 $id = $ecmdirtmp->create($user);
                 if ($id > 0) {
                     $newdirsql = array('id' => $id,
-                                     'id_mere' => $ecmdirtmp->fk_parent,
-                                     'label' => $ecmdirtmp->label,
-                                     'description' => $ecmdirtmp->description,
-                                     'fullrelativename' => $relativepathmissing);
+                        'id_mere' => $ecmdirtmp->fk_parent,
+                        'label' => $ecmdirtmp->label,
+                        'description' => $ecmdirtmp->description,
+                        'fullrelativename' => $relativepathmissing);
                     $sqltree[] = $newdirsql; // We complete fulltree for following loops
                     //var_dump($sqltree);
                     $adirwascreated = 1;
@@ -284,7 +282,6 @@ if ($action == 'refreshmanual') {
         $sqltree = null;
     }
 }
-
 
 
 /*
@@ -418,7 +415,6 @@ $head = ecm_prepare_dasboard_head(null);
 print dol_get_fiche_head($head, 'index_auto', '', -1, '');
 
 
-
 // Confirm remove file (for non javascript users)
 if ($action == 'deletefile' && empty($conf->use_javascript_ajax)) {
     print $form->formconfirm($_SERVER["PHP_SELF"] . '?section=' . $section . '&urlfile=' . urlencode(GETPOST("urlfile")), $langs->trans('DeleteFile'), $langs->trans('ConfirmDeleteFile'), 'confirm_deletefile', '', '', 1);
@@ -426,112 +422,112 @@ if ($action == 'deletefile' && empty($conf->use_javascript_ajax)) {
 
 // Start container of all panels
 ?>
-<!-- Begin div id="containerlayout" -->
-<div id="containerlayout">
-<div id="ecm-layout-north" class="toolbar largebutton">
-<?php
+    <!-- Begin div id="containerlayout" -->
+    <div id="containerlayout">
+        <div id="ecm-layout-north" class="toolbar largebutton">
+            <?php
 
-// Start top panel, toolbar
-print '<div class="inline-block toolbarbutton centpercent">';
+            // Start top panel, toolbar
+            print '<div class="inline-block toolbarbutton centpercent">';
 
-// Toolbar
-$url = ((!empty($conf->use_javascript_ajax) && !getDolGlobalString('MAIN_ECM_DISABLE_JS')) ? '#' : ($_SERVER["PHP_SELF"] . '?action=refreshmanual' . ($module ? '&amp;module=' . $module : '') . ($section ? '&amp;section=' . $section : '')));
-print '<a href="' . $url . '" class="inline-block valignmiddle toolbarbutton paddingtop" title="' . dol_escape_htmltag($langs->trans('Refresh')) . '">';
-print img_picto('', 'refresh', 'id="refreshbutton"', false, 0, 0, '', 'size15x marginrightonly');
-print '</a>';
-
-print '</div>';
-// End top panel, toolbar
-
-?>
-</div>
-<div id="ecm-layout-west" class="inline-block">
-<?php
-// Start left area
-
-
-// Confirmation de la suppression d'une ligne categorie
-if ($action == 'delete_section') {
-    print $form->formconfirm($_SERVER["PHP_SELF"] . '?section=' . $section, $langs->trans('DeleteSection'), $langs->trans('ConfirmDeleteSection', $ecmdir->label), 'confirm_deletesection', '', '', 1);
-}
-// End confirm
-
-
-if (empty($action) || $action == 'file_manager' || preg_match('/refresh/i', $action) || $action == 'deletefile') {
-    print '<table class="liste centpercent">' . "\n";
-
-    print '<!-- Title for auto directories -->' . "\n";
-    print '<tr class="liste_titre">' . "\n";
-    print '<th class="liste_titre" align="left" colspan="6">';
-    print '&nbsp;' . $langs->trans("ECMSections");
-    print '</th></tr>';
-
-    $showonrightsize = '';
-    // Auto section
-    if (count($sectionauto)) {
-        $htmltooltip = $langs->trans("ECMAreaDesc2");
-        $htmltooltip .= '<br>' . $langs->trans("ECMAreaDesc2b");
-
-        $sectionauto = dol_sort_array($sectionauto, 'label', 'ASC', true, false);
-
-        print '<tr>';
-        print '<td colspan="6">';
-        print '<div id="filetreeauto" class="ecmfiletree"><ul class="ecmjqft">';
-
-        $nbofentries = 0;
-        $oldvallevel = 0;
-        foreach ($sectionauto as $key => $val) {
-            if (empty($val['test'])) {
-                continue; // If condition to show the ECM auto directory is ok
-            }
-
-            print '<li class="directory collapsed">';
-            print '<a class="fmdirlia jqft ecmjqft" href="' . $_SERVER["PHP_SELF"] . '?module=' . urlencode($val['module']) . '">';
-            print $val['label'];
+            // Toolbar
+            $url = ((!empty($conf->use_javascript_ajax) && !getDolGlobalString('MAIN_ECM_DISABLE_JS')) ? '#' : ($_SERVER["PHP_SELF"] . '?action=refreshmanual' . ($module ? '&amp;module=' . $module : '') . ($section ? '&amp;section=' . $section : '')));
+            print '<a href="' . $url . '" class="inline-block valignmiddle toolbarbutton paddingtop" title="' . dol_escape_htmltag($langs->trans('Refresh')) . '">';
+            print img_picto('', 'refresh', 'id="refreshbutton"', false, 0, 0, '', 'size15x marginrightonly');
             print '</a>';
 
-            print '<div class="ecmjqft">';
-            // Info
-            $htmltooltip = '<b>' . $langs->trans("ECMSection") . '</b>: ' . $val['label'] . '<br>';
-            $htmltooltip .= '<b>' . $langs->trans("Type") . '</b>: ' . $langs->trans("ECMSectionAuto") . '<br>';
-            $htmltooltip .= '<b>' . $langs->trans("ECMCreationUser") . '</b>: ' . $langs->trans("ECMTypeAuto") . '<br>';
-            $htmltooltip .= '<b>' . $langs->trans("Description") . '</b>: ' . $val['desc'];
-            print $form->textwithpicto('', $htmltooltip, 1, 'info');
             print '</div>';
+            // End top panel, toolbar
 
-            print '</li>';
-
-            $nbofentries++;
-        }
-
-        print '</ul></div></td></tr>';
-    }
-
-    print "</table>";
-}
+            ?>
+        </div>
+        <div id="ecm-layout-west" class="inline-block">
+            <?php
+            // Start left area
 
 
-// End left panel
-?>
-</div>
-<div id="ecm-layout-center" class="inline-block">
-<div class="pane-in ecm-in-layout-center">
-<div id="ecmfileview" class="ecmfileview">
-<?php
-// Start right panel
-
-$mode = 'noajax';
-$url = constant('BASE_URL') . '/ecm/index_auto.php';
-include_once DOL_DOCUMENT_ROOT . '/core/ajax/ajaxdirpreview.php';
+            // Confirmation de la suppression d'une ligne categorie
+            if ($action == 'delete_section') {
+                print $form->formconfirm($_SERVER["PHP_SELF"] . '?section=' . $section, $langs->trans('DeleteSection'), $langs->trans('ConfirmDeleteSection', $ecmdir->label), 'confirm_deletesection', '', '', 1);
+            }
+            // End confirm
 
 
-// End right panel
-?>
-</div>
-</div>
+            if (empty($action) || $action == 'file_manager' || preg_match('/refresh/i', $action) || $action == 'deletefile') {
+                print '<table class="liste centpercent">' . "\n";
 
-</div>
-</div> <!-- End div id="containerlayout" -->
+                print '<!-- Title for auto directories -->' . "\n";
+                print '<tr class="liste_titre">' . "\n";
+                print '<th class="liste_titre" align="left" colspan="6">';
+                print '&nbsp;' . $langs->trans("ECMSections");
+                print '</th></tr>';
+
+                $showonrightsize = '';
+                // Auto section
+                if (count($sectionauto)) {
+                    $htmltooltip = $langs->trans("ECMAreaDesc2");
+                    $htmltooltip .= '<br>' . $langs->trans("ECMAreaDesc2b");
+
+                    $sectionauto = dol_sort_array($sectionauto, 'label', 'ASC', true, false);
+
+                    print '<tr>';
+                    print '<td colspan="6">';
+                    print '<div id="filetreeauto" class="ecmfiletree"><ul class="ecmjqft">';
+
+                    $nbofentries = 0;
+                    $oldvallevel = 0;
+                    foreach ($sectionauto as $key => $val) {
+                        if (empty($val['test'])) {
+                            continue; // If condition to show the ECM auto directory is ok
+                        }
+
+                        print '<li class="directory collapsed">';
+                        print '<a class="fmdirlia jqft ecmjqft" href="' . $_SERVER["PHP_SELF"] . '?module=' . urlencode($val['module']) . '">';
+                        print $val['label'];
+                        print '</a>';
+
+                        print '<div class="ecmjqft">';
+                        // Info
+                        $htmltooltip = '<b>' . $langs->trans("ECMSection") . '</b>: ' . $val['label'] . '<br>';
+                        $htmltooltip .= '<b>' . $langs->trans("Type") . '</b>: ' . $langs->trans("ECMSectionAuto") . '<br>';
+                        $htmltooltip .= '<b>' . $langs->trans("ECMCreationUser") . '</b>: ' . $langs->trans("ECMTypeAuto") . '<br>';
+                        $htmltooltip .= '<b>' . $langs->trans("Description") . '</b>: ' . $val['desc'];
+                        print $form->textwithpicto('', $htmltooltip, 1, 'info');
+                        print '</div>';
+
+                        print '</li>';
+
+                        $nbofentries++;
+                    }
+
+                    print '</ul></div></td></tr>';
+                }
+
+                print "</table>";
+            }
+
+
+            // End left panel
+            ?>
+        </div>
+        <div id="ecm-layout-center" class="inline-block">
+            <div class="pane-in ecm-in-layout-center">
+                <div id="ecmfileview" class="ecmfileview">
+                    <?php
+                    // Start right panel
+
+                    $mode = 'noajax';
+                    $url = constant('BASE_URL') . '/ecm/index_auto.php';
+                    include_once DOL_DOCUMENT_ROOT . '/core/ajax/ajaxdirpreview.php';
+
+
+                    // End right panel
+                    ?>
+                </div>
+            </div>
+
+        </div>
+    </div> <!-- End div id="containerlayout" -->
 <?php
 // End of page
 

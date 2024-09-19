@@ -59,8 +59,8 @@ class mod_bom_advanced extends ModeleNumRefBoms
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -100,7 +100,7 @@ class mod_bom_advanced extends ModeleNumRefBoms
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -123,9 +123,9 @@ class mod_bom_advanced extends ModeleNumRefBoms
     /**
      *  Return next free value
      *
-     *  @param  Product     $objprod    Object product
-     *  @param  Bom         $object     Object we need next value for
-     *  @return string|0                Next value if OK, 0 if KO
+     * @param Product $objprod Object product
+     * @param Bom $object Object we need next value for
+     * @return string|0                Next value if OK, 0 if KO
      */
     public function getNextValue($objprod, $object)
     {
@@ -145,6 +145,6 @@ class mod_bom_advanced extends ModeleNumRefBoms
 
         $numFinal = get_next_value($db, $mask, 'bom_bom', 'ref', '', null, $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

@@ -26,7 +26,7 @@ class IntegerValue extends Property
      */
     public function setRawMimeDirValue($val)
     {
-        $this->setValue((int) $val);
+        $this->setValue((int)$val);
     }
 
     /**
@@ -61,7 +61,7 @@ class IntegerValue extends Property
      */
     public function getJsonValue()
     {
-        return [(int) $this->getValue()];
+        return [(int)$this->getValue()];
     }
 
     /**

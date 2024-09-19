@@ -64,7 +64,6 @@ $hookmanager->initHooks(array('takeposproductsearch')); // new context for produ
 $pricelevel = 1;    // default price level if PRODUIT_MULTIPRICES. TODO Get price level from thirdparty.
 
 
-
 /*
  * View
  */
@@ -99,7 +98,7 @@ if ($action == 'getProducts') {
     if ($result > 0) {
         $filter = '';
         if ($tosell != '') {
-            $filter = '(o.tosell:=:' . ((int) $tosell) . ')';
+            $filter = '(o.tosell:=:' . ((int)$tosell) . ')';
         }
         $prods = $object->getObjectsInCateg("product", 0, $limit, $offset, getDolGlobalString('TAKEPOS_SORTPRODUCTFIELD'), 'ASC', $filter);
         // Removed properties we don't need
@@ -135,11 +134,11 @@ if ($action == 'getProducts') {
     if ($result && $thirdparty->id > 0) {
         $rows = array();
         $rows[] = array(
-                'rowid' => $thirdparty->id,
-                'name' => $thirdparty->name,
-                'barcode' => $thirdparty->barcode,
-                'object' => 'thirdparty'
-            );
+            'rowid' => $thirdparty->id,
+            'name' => $thirdparty->name,
+            'barcode' => $thirdparty->barcode,
+            'object' => 'thirdparty'
+        );
         echo json_encode($rows);
         exit;
     }
@@ -197,7 +196,7 @@ if ($action == 'getProducts') {
 
             if (isset($barcode_value_list['ref'])) {
                 // search product from reference
-                $sql  = "SELECT rowid, ref, label, tosell, tobuy, barcode, price, price_ttc";
+                $sql = "SELECT rowid, ref, label, tosell, tobuy, barcode, price, price_ttc";
                 $sql .= " FROM " . $db->prefix() . "product as p";
                 $sql .= " WHERE entity IN (" . getEntity('product') . ")";
                 $sql .= " AND ref = '" . $db->escape($barcode_value_list['ref']) . "'";
@@ -216,7 +215,7 @@ if ($action == 'getProducts') {
                             if (isset($barcode_value_list['qd'])) {
                                 $qty_str .= '.' . $barcode_value_list['qd'];
                             }
-                            $qty = (float) $qty_str;
+                            $qty = (float)$qty_str;
                         }
 
                         $objProd = new Product($db);
@@ -264,7 +263,7 @@ if ($action == 'getProducts') {
         }
     }
 
-    $sql = 'SELECT p.rowid, p.ref, p.label, p.tosell, p.tobuy, p.barcode, p.price, p.price_ttc' ;
+    $sql = 'SELECT p.rowid, p.ref, p.label, p.tosell, p.tobuy, p.barcode, p.price, p.price_ttc';
     if (getDolGlobalInt('TAKEPOS_PRODUCT_IN_STOCK') == 1) {
         if (getDolGlobalInt('CASHDESK_ID_WAREHOUSE' . $_SESSION['takeposterminal'])) {
             $sql .= ', ps.reel';
@@ -293,7 +292,7 @@ if ($action == 'getProducts') {
         $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'product_stock as ps';
         $sql .= ' ON (p.rowid = ps.fk_product';
         if (getDolGlobalString('CASHDESK_ID_WAREHOUSE' . $_SESSION['takeposterminal'])) {
-            $sql .= " AND ps.fk_entrepot = " . ((int) getDolGlobalInt("CASHDESK_ID_WAREHOUSE" . $_SESSION['takeposterminal']));
+            $sql .= " AND ps.fk_entrepot = " . ((int)getDolGlobalInt("CASHDESK_ID_WAREHOUSE" . $_SESSION['takeposterminal']));
         }
         $sql .= ')';
     }

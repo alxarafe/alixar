@@ -78,9 +78,9 @@ class Payout extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Payout the canceled payout
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Payout the canceled payout
      */
     public function cancel($params = null, $opts = null)
     {
@@ -95,9 +95,9 @@ class Payout extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Payout the reversed payout
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Payout the reversed payout
      */
     public function reverse($params = null, $opts = null)
     {

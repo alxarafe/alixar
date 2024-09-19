@@ -110,7 +110,6 @@ $arrayofcss = array();
 top_htmlhead($head, $title, 0, 0, $arrayofjs, $arrayofcss);
 
 
-
 print '<body>' . "\n";
 print '<div>';
 //print '<br>';

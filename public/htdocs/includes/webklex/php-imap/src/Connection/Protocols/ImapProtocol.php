@@ -449,7 +449,7 @@ class ImapProtocol extends Protocol
             try {
                 $result = $this->requestAndResponse('LOGOUT', [], true);
             } catch (Exception $e) {
-}
+            }
             fclose($this->stream);
             $this->stream = null;
         }
@@ -463,7 +463,7 @@ class ImapProtocol extends Protocol
      */
     public function connected()
     {
-        return (bool) $this->stream;
+        return (bool)$this->stream;
     }
 
     /**
@@ -643,7 +643,7 @@ class ImapProtocol extends Protocol
             }
             if ($uid) {
                 $result[$tokens[2][$uidKey]] = $data;
-            }else{
+            } else {
                 $result[$tokens[0]] = $data;
             }
         }
@@ -717,7 +717,7 @@ class ImapProtocol extends Protocol
                 }
             }
         } catch (RuntimeException $e) {
-}
+        }
 
         throw new MessageNotFoundException('unique id not found');
     }
@@ -1100,7 +1100,7 @@ class ImapProtocol extends Protocol
         $ids = [];
         foreach ($uids as $msgn => $v) {
             $id = $uid ? $v : $msgn;
-            if (($to >= $id && $from <= $id) || ($to === "*" && $from <= $id)){
+            if (($to >= $id && $from <= $id) || ($to === "*" && $from <= $id)) {
                 $ids[] = $id;
             }
         }

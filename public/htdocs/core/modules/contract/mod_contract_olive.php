@@ -55,11 +55,12 @@ class mod_contract_olive extends ModelNumRefContracts
         $this->code_modifiable_null = 1;
         $this->code_auto = 0;
     }
+
     /**
      *  Return description of module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -72,7 +73,7 @@ class mod_contract_olive extends ModelNumRefContracts
     /**
      *  Return numbering example
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -82,8 +83,8 @@ class mod_contract_olive extends ModelNumRefContracts
     /**
      * Return an example of result returned by getNextValue
      *
-     * @param   Societe     $objsoc     Object thirdparty
-     * @param   Contrat     $contract   Object contract
+     * @param Societe $objsoc Object thirdparty
+     * @param Contrat $contract Object contract
      * @return  string                  Return next value
      */
     public function getNextValue($objsoc, $contract)
@@ -95,11 +96,11 @@ class mod_contract_olive extends ModelNumRefContracts
     /**
      *  Check validity of code according to its rules
      *
-     *  @param  DoliDB      $db     Database handler
-     *  @param  string      $code   Code to check/correct
-     *  @param  Product     $product    Object product
-     *  @param  int         $type   0 = product , 1 = service
-     *  @return int                 0 if OK
+     * @param DoliDB $db Database handler
+     * @param string $code Code to check/correct
+     * @param Product $product Object product
+     * @param int $type 0 = product , 1 = service
+     * @return int                 0 if OK
      *                              -1 ErrorBadProductCodeSyntax
      *                              -2 ErrorProductCodeRequired
      *                              -3 ErrorProductCodeAlreadyUsed

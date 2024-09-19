@@ -361,20 +361,20 @@ class Printer
     public function __construct(PrintConnector $connector, CapabilityProfile $profile = null)
     {
         /* Set connector */
-        $this -> connector = $connector;
-        
+        $this->connector = $connector;
+
         /* Set capability profile */
         if ($profile === null) {
             $profile = CapabilityProfile::load('default');
         }
-        $this -> profile = $profile;
+        $this->profile = $profile;
         /* Set buffer */
         $buffer = new EscposPrintBuffer();
-        $this -> buffer = null;
-        $this -> setPrintBuffer($buffer);
-        $this -> initialize();
+        $this->buffer = null;
+        $this->setPrintBuffer($buffer);
+        $this->initialize();
     }
-    
+
     /**
      * Print a barcode.
      *
@@ -432,16 +432,16 @@ class Printer
                 self::validateStringRegex($content, __FUNCTION__, "/^\{[A-C][\\x00-\\x7F]+$/", "Code128 barcode content");
                 break;
         }
-        if (!$this -> profile -> getSupportsBarcodeB()) {
+        if (!$this->profile->getSupportsBarcodeB()) {
             // A simpler barcode command which supports fewer codes
             self::validateInteger($type, 65, 71, __FUNCTION__);
-            $this -> connector -> write(self::GS . "k" . chr($type - 65) . $content . self::NUL);
+            $this->connector->write(self::GS . "k" . chr($type - 65) . $content . self::NUL);
             return;
         }
         // More advanced function B, used in preference
-        $this -> connector -> write(self::GS . "k" . chr($type) . chr(strlen($content)) . $content);
+        $this->connector->write(self::GS . "k" . chr($type) . chr(strlen($content)) . $content);
     }
-    
+
     /**
      * Print an image, using the older "bit image" command. This creates padding on the right of the image,
      * if its width is not divisible by 8.
@@ -457,10 +457,10 @@ class Printer
     public function bitImage(EscposImage $img, int $size = Printer::IMG_DEFAULT)
     {
         self::validateInteger($size, 0, 3, __FUNCTION__);
-        $rasterData = $img -> toRasterFormat();
-        $header = Printer::dataHeader([$img -> getWidthBytes(), $img -> getHeight()], true);
-        $this -> connector -> write(self::GS . "v0" . chr($size) . $header);
-        $this -> connector -> write($rasterData);
+        $rasterData = $img->toRasterFormat();
+        $header = Printer::dataHeader([$img->getWidthBytes(), $img->getHeight()], true);
+        $this->connector->write(self::GS . "v0" . chr($size) . $header);
+        $this->connector->write($rasterData);
     }
 
     /**
@@ -476,22 +476,22 @@ class Printer
      */
     public function bitImageColumnFormat(EscposImage $img, int $size = Printer::IMG_DEFAULT)
     {
-        $highDensityVertical = ! (($size & self::IMG_DOUBLE_HEIGHT) == Printer::IMG_DOUBLE_HEIGHT);
-        $highDensityHorizontal = ! (($size & self::IMG_DOUBLE_WIDTH) == Printer::IMG_DOUBLE_WIDTH);
+        $highDensityVertical = !(($size & self::IMG_DOUBLE_HEIGHT) == Printer::IMG_DOUBLE_HEIGHT);
+        $highDensityHorizontal = !(($size & self::IMG_DOUBLE_WIDTH) == Printer::IMG_DOUBLE_WIDTH);
         // Experimental column format printing
         // This feature is not yet complete and may produce unpredictable results.
-        $this -> setLineSpacing(16); // 16-dot line spacing. This is the correct value on both TM-T20 and TM-U220
+        $this->setLineSpacing(16); // 16-dot line spacing. This is the correct value on both TM-T20 and TM-U220
         // Header and density code (0, 1, 32, 33) re-used for every line
         $densityCode = ($highDensityHorizontal ? 1 : 0) + ($highDensityVertical ? 32 : 0);
-        $colFormatData = $img -> toColumnFormat($highDensityVertical);
-        $header = Printer::dataHeader([$img -> getWidth()], true);
+        $colFormatData = $img->toColumnFormat($highDensityVertical);
+        $header = Printer::dataHeader([$img->getWidth()], true);
         foreach ($colFormatData as $line) {
             // Print each line, double density etc for printing are set here also
-            $this -> connector -> write(self::ESC . "*" . chr($densityCode) . $header . $line);
-            $this -> feed();
+            $this->connector->write(self::ESC . "*" . chr($densityCode) . $header . $line);
+            $this->feed();
             // sleep(0.1); // Reduces the amount of trouble that a TM-U220 has keeping up with large images
         }
-        $this -> setLineSpacing(); // Revert to default line spacing
+        $this->setLineSpacing(); // Revert to default line spacing
     }
 
     /**
@@ -500,9 +500,9 @@ class Printer
      */
     public function close()
     {
-        $this -> connector -> finalize();
+        $this->connector->finalize();
     }
-    
+
     /**
      * Cut the paper.
      *
@@ -512,9 +512,9 @@ class Printer
     public function cut(int $mode = Printer::CUT_FULL, int $lines = 3)
     {
         // TODO validation on cut() inputs
-        $this -> connector -> write(self::GS . "V" . chr($mode) . chr($lines));
+        $this->connector->write(self::GS . "V" . chr($mode) . chr($lines));
     }
-    
+
     /**
      * Print and feed line / Print and feed n lines.
      *
@@ -524,9 +524,9 @@ class Printer
     {
         self::validateInteger($lines, 1, 255, __FUNCTION__);
         if ($lines <= 1) {
-            $this -> connector -> write(self::LF);
+            $this->connector->write(self::LF);
         } else {
-            $this -> connector -> write(self::ESC . "d" . chr($lines));
+            $this->connector->write(self::ESC . "d" . chr($lines));
         }
     }
 
@@ -536,7 +536,7 @@ class Printer
      */
     public function feedForm()
     {
-        $this -> connector -> write(self::FF);
+        $this->connector->write(self::FF);
     }
 
     /**
@@ -544,7 +544,7 @@ class Printer
      */
     public function release()
     {
-        $this -> connector -> write(self::ESC . chr(113));
+        $this->connector->write(self::ESC . chr(113));
     }
 
     /**
@@ -555,7 +555,7 @@ class Printer
     public function feedReverse(int $lines = 1)
     {
         self::validateInteger($lines, 1, 255, __FUNCTION__);
-        $this -> connector -> write(self::ESC . "e" . chr($lines));
+        $this->connector->write(self::ESC . "e" . chr($lines));
     }
 
     /**
@@ -563,15 +563,15 @@ class Printer
      */
     public function getCharacterTable()
     {
-        return $this -> characterTable;
+        return $this->characterTable;
     }
-    
+
     /**
      * @return PrintBuffer
      */
     public function getPrintBuffer()
     {
-        return $this -> buffer;
+        return $this->buffer;
     }
 
     /**
@@ -579,7 +579,7 @@ class Printer
      */
     public function getPrintConnector()
     {
-        return $this -> connector;
+        return $this->connector;
     }
 
     /**
@@ -587,7 +587,7 @@ class Printer
      */
     public function getPrinterCapabilityProfile()
     {
-        return $this -> profile;
+        return $this->profile;
     }
 
     /**
@@ -612,24 +612,24 @@ class Printer
     public function graphics(EscposImage $img, int $size = Printer::IMG_DEFAULT)
     {
         self::validateInteger($size, 0, 3, __FUNCTION__);
-        $rasterData = $img -> toRasterFormat();
-        $imgHeader = Printer::dataHeader([$img -> getWidth(), $img -> getHeight()], true);
+        $rasterData = $img->toRasterFormat();
+        $imgHeader = Printer::dataHeader([$img->getWidth(), $img->getHeight()], true);
         $tone = '0';
         $colors = '1';
         $xm = (($size & self::IMG_DOUBLE_WIDTH) == Printer::IMG_DOUBLE_WIDTH) ? chr(2) : chr(1);
         $ym = (($size & self::IMG_DOUBLE_HEIGHT) == Printer::IMG_DOUBLE_HEIGHT) ? chr(2) : chr(1);
         $header = $tone . $xm . $ym . $colors . $imgHeader;
-        $this -> wrapperSendGraphicsData('0', 'p', $header . $rasterData);
-        $this -> wrapperSendGraphicsData('0', '2');
+        $this->wrapperSendGraphicsData('0', 'p', $header . $rasterData);
+        $this->wrapperSendGraphicsData('0', '2');
     }
-    
+
     /**
      * Initialize printer. This resets formatting back to the defaults.
      */
     public function initialize()
     {
-        $this -> connector -> write(self::ESC . "@");
-        $this -> characterTable = 0;
+        $this->connector->write(self::ESC . "@");
+        $this->characterTable = 0;
     }
 
     /**
@@ -658,24 +658,24 @@ class Printer
         if ($content == "") {
             return;
         }
-        if (!$this -> profile -> getSupportsPdf417Code()) {
+        if (!$this->profile->getSupportsPdf417Code()) {
             // TODO use software rendering via a library instead
             throw new Exception("PDF417 codes are not supported on your printer.");
         }
         $cn = '0'; // Code type for pdf417 code
         // Select model: standard or truncated
-        $this -> wrapperSend2dCodeData(chr(70), $cn, chr($options));
+        $this->wrapperSend2dCodeData(chr(70), $cn, chr($options));
         // Column count
-        $this -> wrapperSend2dCodeData(chr(65), $cn, chr($dataColumnCount));
+        $this->wrapperSend2dCodeData(chr(65), $cn, chr($dataColumnCount));
         // Set dot sizes
-        $this -> wrapperSend2dCodeData(chr(67), $cn, chr($width));
-        $this -> wrapperSend2dCodeData(chr(68), $cn, chr($heightMultiplier));
+        $this->wrapperSend2dCodeData(chr(67), $cn, chr($width));
+        $this->wrapperSend2dCodeData(chr(68), $cn, chr($heightMultiplier));
         // Set error correction ratio: 1% to 400%
         $ec_int = (int)ceil(floatval($ec) * 10);
-        $this -> wrapperSend2dCodeData(chr(69), $cn, chr($ec_int), '1');
+        $this->wrapperSend2dCodeData(chr(69), $cn, chr($ec_int), '1');
         // Send content & print
-        $this -> wrapperSend2dCodeData(chr(80), $cn, $content, '0');
-        $this -> wrapperSend2dCodeData(chr(81), $cn, '', '0');
+        $this->wrapperSend2dCodeData(chr(80), $cn, $content, '0');
+        $this->wrapperSend2dCodeData(chr(81), $cn, '', '0');
     }
 
     /**
@@ -691,7 +691,7 @@ class Printer
         self::validateInteger($pin, 0, 1, __FUNCTION__);
         self::validateInteger($on_ms, 1, 511, __FUNCTION__);
         self::validateInteger($off_ms, 1, 511, __FUNCTION__);
-        $this -> connector -> write(self::ESC . "p" . chr($pin + 48) . chr($on_ms / 2) . chr($off_ms / 2));
+        $this->connector->write(self::ESC . "p" . chr($pin + 48) . chr($on_ms / 2) . chr($off_ms / 2));
     }
 
     /**
@@ -702,7 +702,7 @@ class Printer
      * @param int $size Pixel size to use. Must be 1-16 (default 3)
      * @param int $model QR code model to use. Must be one of Printer::QR_MODEL_1, Printer::QR_MODEL_2 (default) or Printer::QR_MICRO (not supported by all printers).
      */
-    public function qrCode(string $content, int $ec = Printer::QR_ECLEVEL_L, int$size = 3, int $model = Printer::QR_MODEL_2)
+    public function qrCode(string $content, int $ec = Printer::QR_ECLEVEL_L, int $size = 3, int $model = Printer::QR_MODEL_2)
     {
         self::validateInteger($ec, 0, 3, __FUNCTION__);
         self::validateInteger($size, 1, 16, __FUNCTION__);
@@ -710,20 +710,20 @@ class Printer
         if ($content == "") {
             return;
         }
-        if (!$this -> profile -> getSupportsQrCode()) {
+        if (!$this->profile->getSupportsQrCode()) {
             // TODO use software rendering via phpqrcode instead
             throw new Exception("QR codes are not supported on your printer.");
         }
         $cn = '1'; // Code type for QR code
         // Select model: 1, 2 or micro.
-        $this -> wrapperSend2dCodeData(chr(65), $cn, chr(48 + $model) . chr(0));
+        $this->wrapperSend2dCodeData(chr(65), $cn, chr(48 + $model) . chr(0));
         // Set dot size.
-        $this -> wrapperSend2dCodeData(chr(67), $cn, chr($size));
+        $this->wrapperSend2dCodeData(chr(67), $cn, chr($size));
         // Set error correction level: L, M, Q, or H
-        $this -> wrapperSend2dCodeData(chr(69), $cn, chr(48 + $ec));
+        $this->wrapperSend2dCodeData(chr(69), $cn, chr(48 + $ec));
         // Send content & print
-        $this -> wrapperSend2dCodeData(chr(80), $cn, $content, '0');
-        $this -> wrapperSend2dCodeData(chr(81), $cn, '', '0');
+        $this->wrapperSend2dCodeData(chr(80), $cn, $content, '0');
+        $this->wrapperSend2dCodeData(chr(81), $cn, '', '0');
     }
 
     /**
@@ -735,17 +735,17 @@ class Printer
     public function selectCharacterTable(int $table = 0)
     {
         self::validateInteger($table, 0, 255, __FUNCTION__);
-        $supported = $this -> profile -> getCodePages();
+        $supported = $this->profile->getCodePages();
         if (!isset($supported[$table])) {
             throw new InvalidArgumentException("There is no code table $table allowed by this printer's capability profile.");
         }
-        $this -> characterTable = $table;
-        if ($this -> profile -> getSupportsStarCommands()) {
+        $this->characterTable = $table;
+        if ($this->profile->getSupportsStarCommands()) {
             /* Not an ESC/POS command: STAR printers stash all the extra code pages under a different command. */
-            $this -> connector -> write(self::ESC . self::GS . "t" . chr($table));
+            $this->connector->write(self::ESC . self::GS . "t" . chr($table));
             return;
         }
-        $this -> connector -> write(self::ESC . "t" . chr($table));
+        $this->connector->write(self::ESC . "t" . chr($table));
     }
 
     /**
@@ -768,7 +768,7 @@ class Printer
             throw new InvalidArgumentException("Invalid mode");
         }
 
-        $this -> connector -> write(self::ESC . "!" . chr($mode));
+        $this->connector->write(self::ESC . "!" . chr($mode));
     }
 
     /**
@@ -778,7 +778,7 @@ class Printer
      */
     public function selectUserDefinedCharacterSet($on = true)
     {
-        $this -> connector -> write(self::ESC . "%" . ($on ? chr(1) : chr(0)));
+        $this->connector->write(self::ESC . "%" . ($on ? chr(1) : chr(0)));
     }
 
     /**
@@ -789,7 +789,7 @@ class Printer
     public function setBarcodeHeight(int $height = 8)
     {
         self::validateInteger($height, 1, 255, __FUNCTION__);
-        $this -> connector -> write(self::GS . "h" . chr($height));
+        $this->connector->write(self::GS . "h" . chr($height));
     }
 
     /**
@@ -801,22 +801,22 @@ class Printer
     public function setBarcodeWidth(int $width = 3)
     {
         self::validateInteger($width, 1, 255, __FUNCTION__);
-        $this -> connector -> write(self::GS . "w" . chr($width));
+        $this->connector->write(self::GS . "w" . chr($width));
     }
-    
+
     /**
      * Set the position for the Human Readable Interpretation (HRI) of barcode characters.
      *
-     * @param int $position. Use Printer::BARCODE_TEXT_NONE to hide the text (default),
+     * @param int $position . Use Printer::BARCODE_TEXT_NONE to hide the text (default),
      *  or any combination of Printer::BARCODE_TEXT_ABOVE and Printer::BARCODE_TEXT_BELOW
      *  flags to display the text.
      */
     public function setBarcodeTextPosition(int $position = Printer::BARCODE_TEXT_NONE)
     {
         self::validateInteger($position, 0, 3, __FUNCTION__, "Barcode text position");
-        $this -> connector -> write(self::GS . "H" . chr($position));
+        $this->connector->write(self::GS . "H" . chr($position));
     }
-    
+
     /**
      * Turn double-strike mode on/off.
      *
@@ -825,7 +825,7 @@ class Printer
     public function setDoubleStrike(bool $on = true)
     {
         self::validateBoolean($on, __FUNCTION__);
-        $this -> connector -> write(self::ESC . "G" . ($on ? chr(1) : chr(0)));
+        $this->connector->write(self::ESC . "G" . ($on ? chr(1) : chr(0)));
     }
 
     /**
@@ -836,20 +836,20 @@ class Printer
     public function setColor(int $color = Printer::COLOR_1)
     {
         self::validateInteger($color, 0, 1, __FUNCTION__, "Color");
-        $this -> connector -> write(self::ESC . "r" . chr($color));
+        $this->connector->write(self::ESC . "r" . chr($color));
     }
 
     /**
      * Turn emphasized mode on/off.
      *
-     *  @param boolean $on true for emphasis, false for no emphasis
+     * @param boolean $on true for emphasis, false for no emphasis
      */
     public function setEmphasis(bool $on = true)
     {
         self::validateBoolean($on, __FUNCTION__);
-        $this -> connector -> write(self::ESC . "E" . ($on ? chr(1) : chr(0)));
+        $this->connector->write(self::ESC . "E" . ($on ? chr(1) : chr(0)));
     }
-    
+
     /**
      * Select font. Most printers have two fonts (Fonts A and B), and some have a third (Font C).
      *
@@ -858,9 +858,9 @@ class Printer
     public function setFont(int $font = Printer::FONT_A)
     {
         self::validateInteger($font, 0, 2, __FUNCTION__);
-        $this -> connector -> write(self::ESC . "M" . chr($font));
+        $this->connector->write(self::ESC . "M" . chr($font));
     }
-    
+
     /**
      * Select justification.
      *
@@ -869,7 +869,7 @@ class Printer
     public function setJustification(int $justification = Printer::JUSTIFY_LEFT)
     {
         self::validateInteger($justification, 0, 2, __FUNCTION__);
-        $this -> connector -> write(self::ESC . "a" . chr($justification));
+        $this->connector->write(self::ESC . "a" . chr($justification));
     }
 
     /**
@@ -884,11 +884,11 @@ class Printer
     {
         if ($height === null) {
             // Reset to default
-            $this -> connector -> write(self::ESC . "2"); // Revert to default line spacing
+            $this->connector->write(self::ESC . "2"); // Revert to default line spacing
             return;
         }
         self::validateInteger($height, 1, 255, __FUNCTION__);
-        $this -> connector -> write(self::ESC . "3" . chr($height));
+        $this->connector->write(self::ESC . "3" . chr($height));
     }
 
     /**
@@ -899,7 +899,7 @@ class Printer
     public function setPrintLeftMargin(int $margin = 0)
     {
         self::validateInteger($margin, 0, 65535, __FUNCTION__);
-        $this -> connector -> write(Printer::GS . 'L' . self::intLowHigh($margin, 2));
+        $this->connector->write(Printer::GS . 'L' . self::intLowHigh($margin, 2));
     }
 
     /**
@@ -911,7 +911,7 @@ class Printer
     public function setPrintWidth(int $width = 512)
     {
         self::validateInteger($width, 1, 65535, __FUNCTION__);
-         $this -> connector -> write(Printer::GS . 'W' . self::intLowHigh($width, 2));
+        $this->connector->write(Printer::GS . 'W' . self::intLowHigh($width, 2));
     }
 
     /**
@@ -922,19 +922,19 @@ class Printer
      */
     public function setPrintBuffer(PrintBuffer $buffer)
     {
-        if ($buffer === $this -> buffer) {
+        if ($buffer === $this->buffer) {
             return;
         }
-        if ($buffer -> getPrinter() != null) {
+        if ($buffer->getPrinter() != null) {
             throw new InvalidArgumentException("This buffer is already attached to a printer.");
         }
-        if ($this -> buffer !== null) {
-            $this -> buffer -> setPrinter(null);
+        if ($this->buffer !== null) {
+            $this->buffer->setPrinter(null);
         }
-        $this -> buffer = $buffer;
-        $this -> buffer -> setPrinter($this);
+        $this->buffer = $buffer;
+        $this->buffer->setPrinter($this);
     }
-    
+
     /**
      * Set black/white reverse mode on or off. In this mode, text is printed white on a black background.
      *
@@ -943,7 +943,7 @@ class Printer
     public function setReverseColors(bool $on = true)
     {
         self::validateBoolean($on, __FUNCTION__);
-        $this -> connector -> write(self::GS . "B" . ($on ? chr(1) : chr(0)));
+        $this->connector->write(self::GS . "B" . ($on ? chr(1) : chr(0)));
     }
 
     /**
@@ -957,7 +957,7 @@ class Printer
         self::validateInteger($widthMultiplier, 1, 8, __FUNCTION__);
         self::validateInteger($heightMultiplier, 1, 8, __FUNCTION__);
         $c = (2 << 3) * ($widthMultiplier - 1) + ($heightMultiplier - 1);
-        $this -> connector -> write(self::GS . "!" . chr($c));
+        $this->connector->write(self::GS . "!" . chr($c));
     }
 
     /**
@@ -969,7 +969,7 @@ class Printer
     {
         /* Set the underline */
         self::validateInteger($underline, 0, 2, __FUNCTION__);
-        $this -> connector -> write(self::ESC . "-" . chr($underline));
+        $this->connector->write(self::ESC . "-" . chr($underline));
     }
 
     /**
@@ -979,7 +979,7 @@ class Printer
      */
     public function setUpsideDown(bool $on = true)
     {
-        $this -> connector -> write(self::ESC . "{" . ($on ? chr(1) : chr(0)));
+        $this->connector->write(self::ESC . "{" . ($on ? chr(1) : chr(0)));
     }
 
     /**
@@ -992,7 +992,7 @@ class Printer
      */
     public function text(string $str)
     {
-        $this -> buffer -> writeText((string)$str);
+        $this->buffer->writeText((string)$str);
     }
 
     /**
@@ -1005,10 +1005,10 @@ class Printer
      */
     public function textChinese(string $str = "")
     {
-        $this -> connector -> write(self::FS . "&");
+        $this->connector->write(self::FS . "&");
         $str = \UConverter::transcode($str, "GBK", "UTF-8");
-        $this -> buffer -> writeTextRaw((string)$str);
-        $this -> connector -> write(self::FS . ".");
+        $this->buffer->writeTextRaw((string)$str);
+        $this->connector->write(self::FS . ".");
     }
 
     /**
@@ -1021,9 +1021,9 @@ class Printer
      */
     public function textRaw(string $str = "")
     {
-        $this -> buffer -> writeTextRaw((string)$str);
+        $this->buffer->writeTextRaw((string)$str);
     }
-    
+
     /**
      * Wrapper for GS ( k, to calculate and send correct data length.
      *
@@ -1033,15 +1033,15 @@ class Printer
      * @param string $m Modifier/variant for function. Often '0' where used.
      * @throws InvalidArgumentException Where the input lengths are bad.
      */
-    protected function wrapperSend2dCodeData(string $fn, string $cn, string$data = '', string $m = '')
+    protected function wrapperSend2dCodeData(string $fn, string $cn, string $data = '', string $m = '')
     {
         if (strlen($m) > 1 || strlen($cn) != 1 || strlen($fn) != 1) {
             throw new InvalidArgumentException("wrapperSend2dCodeData: cn and fn must be one character each.");
         }
-        $header = $this -> intLowHigh(strlen($data) + strlen($m) + 2, 2);
-        $this -> connector -> write(self::GS . "(k" . $header . $cn . $fn . $m . $data);
+        $header = $this->intLowHigh(strlen($data) + strlen($m) + 2, 2);
+        $this->connector->write(self::GS . "(k" . $header . $cn . $fn . $m . $data);
     }
-    
+
     /**
      * Wrapper for GS ( L, to calculate and send correct data length.
      *
@@ -1050,15 +1050,15 @@ class Printer
      * @param string $data Data to send.
      * @throws InvalidArgumentException Where the input lengths are bad.
      */
-    protected function wrapperSendGraphicsData(string $m, string $fn, string$data = '')
+    protected function wrapperSendGraphicsData(string $m, string $fn, string $data = '')
     {
         if (strlen($m) != 1 || strlen($fn) != 1) {
             throw new InvalidArgumentException("wrapperSendGraphicsData: m and fn must be one character each.");
         }
-        $header = $this -> intLowHigh(strlen($data) + 2, 2);
-        $this -> connector -> write(self::GS . "(L" . $header . $m . $fn . $data);
+        $header = $this->intLowHigh(strlen($data) + 2, 2);
+        $this->connector->write(self::GS . "(L" . $header . $m . $fn . $data);
     }
-    
+
     /**
      * Convert widths and heights to characters. Used before sending graphics to set the size.
      *
@@ -1079,7 +1079,7 @@ class Printer
         }
         return implode("", $outp);
     }
-    
+
     /**
      * Generate two characters for a number: In lower and higher parts, or more parts as needed.
      *
@@ -1098,7 +1098,7 @@ class Printer
         }
         return $outp;
     }
-    
+
     /**
      * Throw an exception if the argument given is not a boolean
      *
@@ -1144,7 +1144,7 @@ class Printer
     {
         self::validateIntegerMulti($test, [[$min, $max]], $source, $argument);
     }
-    
+
     /**
      * Throw an exception if the argument given is not an integer within one of the specified ranges
      *

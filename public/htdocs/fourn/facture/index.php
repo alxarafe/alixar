@@ -54,7 +54,6 @@ restrictedArea($user, 'fournisseur', 0, '', 'facture');
 // None
 
 
-
 /*
  * View
  */

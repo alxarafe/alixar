@@ -92,7 +92,7 @@ class AddressBookHome extends DAV\Collection implements DAV\IExtendedCollection,
      *
      * This is currently not allowed
      *
-     * @param string   $name
+     * @param string $name
      * @param resource $data
      */
     public function createFile($name, $data = null)
@@ -117,9 +117,9 @@ class AddressBookHome extends DAV\Collection implements DAV\IExtendedCollection,
      *
      * @param string $name
      *
+     * @return AddressBook
      * @todo needs optimizing
      *
-     * @return AddressBook
      */
     public function getChild($name)
     {

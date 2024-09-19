@@ -41,12 +41,12 @@ if (isModEnabled('project')) {
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "other", "ticket", "mails"));
 
-$id       = GETPOSTINT('id');
+$id = GETPOSTINT('id');
 $socid = GETPOSTINT('socid');
-$ref      = GETPOST('ref', 'alpha');
+$ref = GETPOST('ref', 'alpha');
 $track_id = GETPOST('track_id', 'alpha');
-$action   = GETPOST('action', 'alpha');
-$confirm  = GETPOST('confirm', 'alpha');
+$action = GETPOST('action', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 
 // Store current page url
 $url_page_current = constant('BASE_URL') . '/ticket/document.php';
@@ -139,9 +139,9 @@ if ($object->id) {
     }
 
     if (!$user->socid && getDolGlobalString('TICKET_LIMIT_VIEW_ASSIGNED_ONLY')) {
-        $object->next_prev_filter = "te.fk_user_assign = " . ((int) $user->id);
+        $object->next_prev_filter = "te.fk_user_assign = " . ((int)$user->id);
     } elseif ($user->socid > 0) {
-        $object->next_prev_filter = "te.fk_soc = " . ((int) $user->socid);
+        $object->next_prev_filter = "te.fk_soc = " . ((int)$user->socid);
     }
 
     $head = ticket_prepare_head($object);
@@ -212,7 +212,7 @@ if ($object->id) {
     $filearray = dol_dir_list($upload_dir, "files", 0, '', '\.meta$', $sortfield, (strtolower($sortorder) == 'desc' ? SORT_DESC : SORT_ASC), 1);
     // same as above for every messages
     $sql = 'SELECT id FROM ' . MAIN_DB_PREFIX . 'actioncomm';
-    $sql .= " WHERE fk_element = " . (int) $object->id . " AND elementtype = 'ticket'";
+    $sql .= " WHERE fk_element = " . (int)$object->id . " AND elementtype = 'ticket'";
     $resql = $db->query($sql);
     if ($resql) {
         $file_msg_array = array();

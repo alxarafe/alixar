@@ -48,9 +48,9 @@ class Topup extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Topup the canceled topup
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Topup the canceled topup
      */
     public function cancel($params = null, $opts = null)
     {

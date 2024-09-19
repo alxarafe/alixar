@@ -99,7 +99,6 @@ $conn_id = null; // FTP connection ID
 $mesg = '';
 
 
-
 /*
  * ACTIONS
  */
@@ -161,9 +160,9 @@ if ($action == 'addfolder') {
 // Action ajout d'un rep
 if ($action == 'add' && $user->hasRight('ftp', 'setup')) {
     $ecmdir = new EcmDirectory($db);
-    $ecmdir->ref                = GETPOST("ref");
-    $ecmdir->label              = GETPOST("label");
-    $ecmdir->description        = GETPOST("desc");
+    $ecmdir->ref = GETPOST("ref");
+    $ecmdir->label = GETPOST("label");
+    $ecmdir->description = GETPOST("desc");
 
     $id = $ecmdir->create($user);
     if ($id > 0) {
@@ -334,8 +333,6 @@ if ($action == 'download') {
 }
 
 
-
-
 /*
  * View
  */
@@ -345,26 +342,26 @@ llxHeader();
 // Add logic to shoow/hide buttons
 if ($conf->use_javascript_ajax) {
     ?>
-<script type="text/javascript">
-jQuery(document).ready(function() {
-    jQuery("#delconst").hide();
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery("#delconst").hide();
 
-    jQuery(".checkboxfordelete").click(function() {
-        jQuery("#delconst").show();
-    });
+            jQuery(".checkboxfordelete").click(function () {
+                jQuery("#delconst").show();
+            });
 
-    $("#checkall").click(function() {
-        $(".checkboxfordelete").prop('checked', true);
-        jQuery("#delconst").show();
-    });
-    $("#checknone").click(function() {
-        $(".checkboxfordelete").prop('checked', false);
-        jQuery("#delconst").hide();
-    });
+            $("#checkall").click(function () {
+                $(".checkboxfordelete").prop('checked', true);
+                jQuery("#delconst").show();
+            });
+            $("#checknone").click(function () {
+                $(".checkboxfordelete").prop('checked', false);
+                jQuery("#delconst").hide();
+            });
 
-});
+        });
 
-</script>
+    </script>
 
     <?php
 }

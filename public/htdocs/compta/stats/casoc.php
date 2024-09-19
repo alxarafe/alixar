@@ -298,9 +298,9 @@ if ($modecompta == 'CREANCES-DETTES') {
     if ($selected_cat === -2) { // Without any category
         $sql .= " AND cs.fk_soc is null";
     } elseif ($selected_cat) {  // Into a specific category
-        $sql .= " AND (c.rowid = " . ((int) $selected_cat);
+        $sql .= " AND (c.rowid = " . ((int)$selected_cat);
         if ($subcat) {
-            $sql .= " OR c.fk_parent = " . ((int) $selected_cat);
+            $sql .= " OR c.fk_parent = " . ((int)$selected_cat);
         }
         $sql .= ")";
         $sql .= " AND cs.fk_categorie = c.rowid AND cs.fk_soc = s.rowid";
@@ -329,9 +329,9 @@ if ($modecompta == 'CREANCES-DETTES') {
     if ($selected_cat === -2) { // Without any category
         $sql .= " AND cs.fk_soc is null";
     } elseif ($selected_cat) {  // Into a specific category
-        $sql .= " AND (c.rowid = " . ((int) $selected_cat);
+        $sql .= " AND (c.rowid = " . ((int)$selected_cat);
         if ($subcat) {
-            $sql .= " OR c.fk_parent = " . ((int) $selected_cat);
+            $sql .= " OR c.fk_parent = " . ((int)$selected_cat);
         }
         $sql .= ")";
         $sql .= " AND cs.fk_categorie = c.rowid AND cs.fk_soc = s.rowid";
@@ -349,11 +349,11 @@ if (!empty($search_town)) {
     $sql .= natural_search('s.town', $search_town);
 }
 if ($search_country > 0) {
-    $sql .= ' AND s.fk_pays = ' . ((int) $search_country);
+    $sql .= ' AND s.fk_pays = ' . ((int)$search_country);
 }
 $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
 if ($socid) {
-    $sql .= " AND f.fk_soc = " . ((int) $socid);
+    $sql .= " AND f.fk_soc = " . ((int)$socid);
 }
 $sql .= " GROUP BY s.rowid, s.nom, s.name_alias, s.zip, s.town, s.fk_pays";
 $sql .= " ORDER BY s.rowid";

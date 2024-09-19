@@ -217,7 +217,6 @@ $permissiontodelete = $user->hasRight('contrat', 'supprimer');
 $result = restrictedArea($user, 'contrat', 0);
 
 
-
 /*
  * Actions
  */
@@ -353,7 +352,7 @@ if ($search_type_thirdparty != '' && $search_type_thirdparty > 0) {
     $sql .= " AND s.fk_typent IN (" . $db->sanitize($db->escape($search_type_thirdparty)) . ')';
 }
 if ($socid > 0) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 if ($search_date_start) {
     $sql .= " AND c.date_contrat >= '" . $db->idate($search_date_start) . "'";
@@ -392,14 +391,14 @@ if ($search_all) {
     $sql .= natural_search(array_keys($fieldstosearchall), $search_all);
 }
 if ($search_user > 0) {
-    $sql .= " AND ec.fk_c_type_contact = tc.rowid AND tc.element='contrat' AND tc.source='internal' AND ec.element_id = c.rowid AND ec.fk_socpeople = " . ((int) $search_user);
+    $sql .= " AND ec.fk_c_type_contact = tc.rowid AND tc.element='contrat' AND tc.source='internal' AND ec.element_id = c.rowid AND ec.fk_socpeople = " . ((int)$search_user);
 }
 // Search on sale representative
 if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search for tag/category ($searchCategoryProductList is an array of ID)
@@ -413,9 +412,9 @@ if (!empty($searchCategoryProductList)) {
             $searchCategoryProductSqlList[] = "NOT EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "contratdet as cd WHERE cd.fk_contrat = c.rowid AND cd.fk_product = ck.fk_product)";
         } elseif (intval($searchCategoryProduct) > 0) {
             if ($searchCategoryProductOperator == 0) {
-                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "contratdet as cd WHERE cd.fk_contrat = c.rowid AND cd.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int) $searchCategoryProduct) . ")";
+                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "contratdet as cd WHERE cd.fk_contrat = c.rowid AND cd.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int)$searchCategoryProduct) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryProduct);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryProduct);
             }
         }
     }
@@ -437,7 +436,7 @@ if ($searchCategoryCustomerOperator == 1) {
     $existsCategoryCustomerList = array();
     foreach ($searchCategoryCustomerList as $searchCategoryCustomer) {
         if (intval($searchCategoryCustomer) == -2) {
-            $sqlCategoryCustomerNotExists  = " NOT EXISTS (";
+            $sqlCategoryCustomerNotExists = " NOT EXISTS (";
             $sqlCategoryCustomerNotExists .= " SELECT cat_cus.fk_soc";
             $sqlCategoryCustomerNotExists .= " FROM " . $db->prefix() . "categorie_societe AS cat_cus";
             $sqlCategoryCustomerNotExists .= " WHERE cat_cus.fk_soc = s.rowid";
@@ -469,7 +468,7 @@ if ($searchCategoryCustomerOperator == 1) {
             $sqlCategoryCustomerNotExists .= " )";
             $searchCategoryCustomerSqlList[] = $sqlCategoryCustomerNotExists;
         } elseif (intval($searchCategoryCustomer) > 0) {
-            $searchCategoryCustomerSqlList[] = "s.rowid IN (SELECT fk_soc FROM " . $db->prefix() . "categorie_societe WHERE fk_categorie = " . ((int) $searchCategoryCustomer) . ")";
+            $searchCategoryCustomerSqlList[] = "s.rowid IN (SELECT fk_soc FROM " . $db->prefix() . "categorie_societe WHERE fk_categorie = " . ((int)$searchCategoryCustomer) . ")";
         }
     }
     if (!empty($searchCategoryCustomerSqlList)) {
@@ -612,7 +611,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($search_all != '') {
     $param .= '&search_all=' . urlencode($search_all);
@@ -636,94 +635,94 @@ if ($search_op2df != '') {
     $param .= '&search_op2df=' . urlencode($search_op2df);
 }
 if ($search_date_creation_startmonth) {
-    $param .= '&search_date_creation_startmonth=' . urlencode((string) ($search_date_creation_startmonth));
+    $param .= '&search_date_creation_startmonth=' . urlencode((string)($search_date_creation_startmonth));
 }
 if ($search_date_creation_startyear) {
-    $param .= '&search_date_creation_startyear=' . urlencode((string) ($search_date_creation_startyear));
+    $param .= '&search_date_creation_startyear=' . urlencode((string)($search_date_creation_startyear));
 }
 if ($search_date_creation_startday) {
-    $param .= '&search_date_creation_startday=' . urlencode((string) ($search_date_creation_startday));
+    $param .= '&search_date_creation_startday=' . urlencode((string)($search_date_creation_startday));
 }
 if ($search_date_creation_start) {
     $param .= '&search_date_creation_start=' . urlencode($search_date_creation_start);
 }
 if ($search_date_creation_endmonth) {
-    $param .= '&search_date_creation_endmonth=' . urlencode((string) ($search_date_creation_endmonth));
+    $param .= '&search_date_creation_endmonth=' . urlencode((string)($search_date_creation_endmonth));
 }
 if ($search_date_creation_endyear) {
-    $param .= '&search_date_creation_endyear=' . urlencode((string) ($search_date_creation_endyear));
+    $param .= '&search_date_creation_endyear=' . urlencode((string)($search_date_creation_endyear));
 }
 if ($search_date_creation_endday) {
-    $param .= '&search_date_creation_endday=' . urlencode((string) ($search_date_creation_endday));
+    $param .= '&search_date_creation_endday=' . urlencode((string)($search_date_creation_endday));
 }
 if ($search_date_creation_end) {
     $param .= '&search_date_creation_end=' . urlencode($search_date_creation_end);
 }
 if ($search_date_modif_startmonth) {
-    $param .= '&search_date_modif_startmonth=' . urlencode((string) ($search_date_modif_startmonth));
+    $param .= '&search_date_modif_startmonth=' . urlencode((string)($search_date_modif_startmonth));
 }
 if ($search_date_modif_startyear) {
-    $param .= '&search_date_modif_startyear=' . urlencode((string) ($search_date_modif_startyear));
+    $param .= '&search_date_modif_startyear=' . urlencode((string)($search_date_modif_startyear));
 }
 if ($search_date_modif_startday) {
-    $param .= '&search_date_modif_startday=' . urlencode((string) ($search_date_modif_startday));
+    $param .= '&search_date_modif_startday=' . urlencode((string)($search_date_modif_startday));
 }
 if ($search_date_modif_start) {
     $param .= '&search_date_modif_start=' . urlencode($search_date_modif_start);
 }
 if ($search_date_modif_endmonth) {
-    $param .= '&search_date_modif_endmonth=' . urlencode((string) ($search_date_modif_endmonth));
+    $param .= '&search_date_modif_endmonth=' . urlencode((string)($search_date_modif_endmonth));
 }
 if ($search_date_modif_endyear) {
-    $param .= '&search_date_modif_endyear=' . urlencode((string) ($search_date_modif_endyear));
+    $param .= '&search_date_modif_endyear=' . urlencode((string)($search_date_modif_endyear));
 }
 if ($search_date_modif_endday) {
-    $param .= '&search_date_modif_endday=' . urlencode((string) ($search_date_modif_endday));
+    $param .= '&search_date_modif_endday=' . urlencode((string)($search_date_modif_endday));
 }
 if ($search_date_modif_end) {
     $param .= '&search_date_modif_end=' . urlencode($search_date_modif_end);
 }
 if ($search_date_startday > 0) {
-    $param .= '&search_date_startday=' . urlencode((string) ($search_date_startday));
+    $param .= '&search_date_startday=' . urlencode((string)($search_date_startday));
 }
 if ($search_date_startmonth > 0) {
-    $param .= '&search_date_startmonth=' . urlencode((string) ($search_date_startmonth));
+    $param .= '&search_date_startmonth=' . urlencode((string)($search_date_startmonth));
 }
 if ($search_date_startyear > 0) {
-    $param .= '&search_date_startyear=' . urlencode((string) ($search_date_startyear));
+    $param .= '&search_date_startyear=' . urlencode((string)($search_date_startyear));
 }
 if ($search_date_endday > 0) {
-    $param .= '&search_date_endday=' . urlencode((string) ($search_date_endday));
+    $param .= '&search_date_endday=' . urlencode((string)($search_date_endday));
 }
 if ($search_date_endmonth > 0) {
-    $param .= '&search_date_endmonth=' . urlencode((string) ($search_date_endmonth));
+    $param .= '&search_date_endmonth=' . urlencode((string)($search_date_endmonth));
 }
 if ($search_date_endyear > 0) {
-    $param .= '&search_date_endyear=' . urlencode((string) ($search_date_endyear));
+    $param .= '&search_date_endyear=' . urlencode((string)($search_date_endyear));
 }
 if ($search_dfyear > 0) {
-    $param .= '&search_dfyear=' . urlencode((string) ($search_dfyear));
+    $param .= '&search_dfyear=' . urlencode((string)($search_dfyear));
 }
 if ($search_dfmonth > 0) {
-    $param .= '&search_dfmonth=' . urlencode((string) ($search_dfmonth));
+    $param .= '&search_dfmonth=' . urlencode((string)($search_dfmonth));
 }
 if ($search_sale > 0) {
     $param .= '&search_sale=' . urlencode($search_sale);
 }
 if ($search_user > 0) {
-    $param .= '&search_user=' . urlencode((string) ($search_user));
+    $param .= '&search_user=' . urlencode((string)($search_user));
 }
 if ($search_type_thirdparty > 0) {
-    $param .= '&search_type_thirdparty=' . urlencode((string) ($search_type_thirdparty));
+    $param .= '&search_type_thirdparty=' . urlencode((string)($search_type_thirdparty));
 }
 if ($search_country != '') {
     $param .= "&search_country=" . urlencode($search_country);
 }
 if ($search_product_category > 0) {
-    $param .= '&search_product_category=' . urlencode((string) ($search_product_category));
+    $param .= '&search_product_category=' . urlencode((string)($search_product_category));
 }
 if ($show_files) {
-    $param .= '&show_files=' . urlencode((string) ($show_files));
+    $param .= '&show_files=' . urlencode((string)($show_files));
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -750,7 +749,7 @@ $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
 $url = constant('BASE_URL') . '/contrat/card.php?action=create';
 if (!empty($socid)) {
-    $url .= '&socid=' . ((int) $socid);
+    $url .= '&socid=' . ((int)$socid);
 }
 $newcardbutton = '';
 $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));

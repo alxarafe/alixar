@@ -141,11 +141,11 @@ if (GETPOST("delete")) {
 
                 $sql = "DELETE FROM " . MAIN_DB_PREFIX . "boxes";
                 $sql .= " WHERE entity = " . $conf->entity;
-                $sql .= " AND box_id = " . ((int) $obj->rowid);
+                $sql .= " AND box_id = " . ((int)$obj->rowid);
                 $resql = $db->query($sql);
 
                 $sql = "DELETE FROM " . MAIN_DB_PREFIX . "boxes_def";
-                $sql .= " WHERE rowid = " . ((int) $obj->rowid);
+                $sql .= " WHERE rowid = " . ((int)$obj->rowid);
                 $resql = $db->query($sql);
 
                 if (!$resql) {
@@ -350,14 +350,14 @@ $db->close();
 /**
  * Check if the given RSS feed if inside the list of boxes/widgets
  *
- * @param   int     $idrss      The id of the RSS feed
- * @param   array   $boxlist    A list with boxes/widgets
+ * @param int $idrss The id of the RSS feed
+ * @param array $boxlist A list with boxes/widgets
  * @return  bool                true if the rss feed is inside the box/widget list, otherwise false
  */
 function _isInBoxList($idrss, array $boxlist)
 {
     foreach ($boxlist as $box) {
-        if ($box->boxcode === "lastrssinfos" && strpos($box->note, (string) $idrss) !== false) {
+        if ($box->boxcode === "lastrssinfos" && strpos($box->note, (string)$idrss) !== false) {
             return true;
         }
     }

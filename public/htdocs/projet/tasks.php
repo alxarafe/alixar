@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2017 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2017  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,7 +21,14 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
-use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/projet/tasks.php
@@ -50,7 +57,7 @@ $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'pr
 $backtopage = GETPOST('backtopage', 'alpha');                   // if not set, a default page will be used
 //$backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');   // if not set, $backtopage will be used
 //$backtopagejsfields = GETPOST('backtopagejsfields', 'alpha');
-$optioncss  = GETPOST('optioncss', 'aZ');
+$optioncss = GETPOST('optioncss', 'aZ');
 $backtopage = GETPOST('backtopage', 'alpha');
 $toselect = GETPOST('toselect', 'array');
 
@@ -149,7 +156,7 @@ $description = GETPOST('description', 'restricthtml');
 $planned_workloadhour = (GETPOSTISSET('planned_workloadhour') ? GETPOSTINT('planned_workloadhour') : '');
 $planned_workloadmin = (GETPOSTISSET('planned_workloadmin') ? GETPOSTINT('planned_workloadmin') : '');
 if (GETPOSTISSET('planned_workloadhour') || GETPOSTISSET('planned_workloadmin')) {
-    $planned_workload = (int) $planned_workloadhour * 3600 + (int) $planned_workloadmin * 60;
+    $planned_workload = (int)$planned_workloadhour * 3600 + (int)$planned_workloadmin * 60;
 } else {
     $planned_workload = '';
 }
@@ -343,7 +350,7 @@ if ($action == 'createtask' && $user->hasRight('projet', 'creer')) {
 
         if (!$error) {
             $tmparray = explode('_', GETPOST('task_parent'));
-            $projectid = empty($tmparray[0]) ? $id : (int) $tmparray[0];
+            $projectid = empty($tmparray[0]) ? $id : (int)$tmparray[0];
             $task_parent = empty($tmparray[1]) ? 0 : $tmparray[1];
 
             $task = new Task($db);
@@ -403,7 +410,6 @@ if ($action == 'createtask' && $user->hasRight('projet', 'creer')) {
     }
 }
 
-
 /*
  * View
  */
@@ -461,7 +467,7 @@ if ($id > 0 || !empty($ref)) {
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($search_user_id) {
-        $param .= '&search_user_id=' . urlencode((string) ($search_user_id));
+        $param .= '&search_user_id=' . urlencode((string)($search_user_id));
     }
     if ($search_taskref) {
         $param .= '&search_taskref=' . urlencode($search_taskref);
@@ -491,49 +497,49 @@ if ($id > 0 || !empty($ref)) {
         $param .= '&search_dtendyear=' . urlencode($search_dtendyear);
     }
     if ($search_date_start_startmonth) {
-        $param .= '&search_date_start_startmonth=' . urlencode((string) ($search_date_start_startmonth));
+        $param .= '&search_date_start_startmonth=' . urlencode((string)($search_date_start_startmonth));
     }
     if ($search_date_start_startyear) {
-        $param .= '&search_date_start_startyear=' . urlencode((string) ($search_date_start_startyear));
+        $param .= '&search_date_start_startyear=' . urlencode((string)($search_date_start_startyear));
     }
     if ($search_date_start_startday) {
-        $param .= '&search_date_start_startday=' . urlencode((string) ($search_date_start_startday));
+        $param .= '&search_date_start_startday=' . urlencode((string)($search_date_start_startday));
     }
     if ($search_date_start_start) {
         $param .= '&search_date_start_start=' . urlencode($search_date_start_start);
     }
     if ($search_date_start_endmonth) {
-        $param .= '&search_date_start_endmonth=' . urlencode((string) ($search_date_start_endmonth));
+        $param .= '&search_date_start_endmonth=' . urlencode((string)($search_date_start_endmonth));
     }
     if ($search_date_start_endyear) {
-        $param .= '&search_date_start_endyear=' . urlencode((string) ($search_date_start_endyear));
+        $param .= '&search_date_start_endyear=' . urlencode((string)($search_date_start_endyear));
     }
     if ($search_date_start_endday) {
-        $param .= '&search_date_start_endday=' . urlencode((string) ($search_date_start_endday));
+        $param .= '&search_date_start_endday=' . urlencode((string)($search_date_start_endday));
     }
     if ($search_date_start_end) {
         $param .= '&search_date_start_end=' . urlencode($search_date_start_end);
     }
     if ($search_date_end_startmonth) {
-        $param .= '&search_date_end_startmonth=' . urlencode((string) ($search_date_end_startmonth));
+        $param .= '&search_date_end_startmonth=' . urlencode((string)($search_date_end_startmonth));
     }
     if ($search_date_end_startyear) {
-        $param .= '&search_date_end_startyear=' . urlencode((string) ($search_date_end_startyear));
+        $param .= '&search_date_end_startyear=' . urlencode((string)($search_date_end_startyear));
     }
     if ($search_date_end_startday) {
-        $param .= '&search_date_end_startday=' . urlencode((string) ($search_date_end_startday));
+        $param .= '&search_date_end_startday=' . urlencode((string)($search_date_end_startday));
     }
     if ($search_date_end_start) {
         $param .= '&search_date_end_start=' . urlencode($search_date_end_start);
     }
     if ($search_date_end_endmonth) {
-        $param .= '&search_date_end_endmonth=' . urlencode((string) ($search_date_end_endmonth));
+        $param .= '&search_date_end_endmonth=' . urlencode((string)($search_date_end_endmonth));
     }
     if ($search_date_end_endyear) {
-        $param .= '&search_date_end_endyear=' . urlencode((string) ($search_date_end_endyear));
+        $param .= '&search_date_end_endyear=' . urlencode((string)($search_date_end_endyear));
     }
     if ($search_date_end_endday) {
-        $param .= '&search_date_end_endday=' . urlencode((string) ($search_date_end_endday));
+        $param .= '&search_date_end_endday=' . urlencode((string)($search_date_end_endday));
     }
     if ($search_date_end_end) {
         $param .= '&search_date_end_end=' . urlencode($search_date_end_end);
@@ -575,7 +581,7 @@ if ($id > 0 || !empty($ref)) {
 
     if (!empty($_SESSION['pageforbacktolist']) && !empty($_SESSION['pageforbacktolist']['project'])) {
         $tmpurl = $_SESSION['pageforbacktolist']['project'];
-        $tmpurl = preg_replace('/__SOCID__/', (string) $object->socid, $tmpurl);
+        $tmpurl = preg_replace('/__SOCID__/', (string)$object->socid, $tmpurl);
         $linkback = '<a href="' . $tmpurl . (preg_match('/\?/', $tmpurl) ? '&' : '?') . 'restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
     } else {
         $linkback = '<a href="' . constant('BASE_URL') . '/projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';

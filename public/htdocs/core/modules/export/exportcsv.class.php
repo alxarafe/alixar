@@ -131,17 +131,18 @@ class ExportCsv extends ModeleExports
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Open output file
      *
-     *  @param      string      $file           Path of filename to generate
-     *  @param      Translate   $outputlangs    Output language object
-     *  @return     int                         Return integer <0 if KO, >=0 if OK
+     * @param string $file Path of filename to generate
+     * @param Translate $outputlangs Output language object
+     * @return     int                         Return integer <0 if KO, >=0 if OK
      */
     public function open_file($file, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $langs;
 
         dol_syslog("ExportCsv::open_file file=" . $file);
@@ -159,33 +160,35 @@ class ExportCsv extends ModeleExports
         return $ret;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Output header into file
      *
-     *  @param      Translate   $outputlangs    Output language object
-     *  @return     int                         Return integer <0 if KO, >0 if OK
+     * @param Translate $outputlangs Output language object
+     * @return     int                         Return integer <0 if KO, >0 if OK
      */
     public function write_header($outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         return 0;
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Output title line into file
      *
-     *  @param      array       $array_export_fields_label      Array with list of label of fields
-     *  @param      array       $array_selected_sorted          Array with list of field to export
-     *  @param      Translate   $outputlangs                    Object lang to translate values
-     *  @param      array       $array_types                    Array with types of fields
-     *  @return     int                                         Return integer <0 if KO, >0 if OK
+     * @param array $array_export_fields_label Array with list of label of fields
+     * @param array $array_selected_sorted Array with list of field to export
+     * @param Translate $outputlangs Object lang to translate values
+     * @param array $array_types Array with types of fields
+     * @return     int                                         Return integer <0 if KO, >0 if OK
      */
     public function write_title($array_export_fields_label, $array_selected_sorted, $outputlangs, $array_types)
     {
-		// phpcs:enable
+        // phpcs:enable
         $outputlangs->charset_output = getDolGlobalString('EXPORT_CSV_FORCE_CHARSET');
 
         $selectlabel = array();
@@ -209,19 +212,20 @@ class ExportCsv extends ModeleExports
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Output record line into file
      *
-     *  @param      array       $array_selected_sorted      Array with list of field to export
-     *  @param      Resource    $objp                       A record from a fetch with all fields from select
-     *  @param      Translate   $outputlangs                Object lang to translate values
-     *  @param      array       $array_types                Array with types of fields
-     *  @return     int                                     Return integer <0 if KO, >0 if OK
+     * @param array $array_selected_sorted Array with list of field to export
+     * @param Resource $objp A record from a fetch with all fields from select
+     * @param Translate $outputlangs Object lang to translate values
+     * @param array $array_types Array with types of fields
+     * @return     int                                     Return integer <0 if KO, >0 if OK
      */
     public function write_record($array_selected_sorted, $objp, $outputlangs, $array_types)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf;
 
         $outputlangs->charset_output = getDolGlobalString('EXPORT_CSV_FORCE_CHARSET');
@@ -273,28 +277,30 @@ class ExportCsv extends ModeleExports
         return 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Output footer into file
      *
-     *  @param      Translate   $outputlangs    Output language object
-     *  @return     int                         Return integer <0 if KO, >0 if OK
+     * @param Translate $outputlangs Output language object
+     * @return     int                         Return integer <0 if KO, >0 if OK
      */
     public function write_footer($outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         return 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Close file handle
      *
-     *  @return     int                         Return integer <0 if KO, >0 if OK
+     * @return     int                         Return integer <0 if KO, >0 if OK
      */
     public function close_file()
     {
-		// phpcs:enable
+        // phpcs:enable
         fclose($this->handle);
         return 0;
     }
@@ -305,8 +311,8 @@ class ExportCsv extends ModeleExports
      * Note: It uses $this->separator
      * Note: We keep this function public to be able to test
      *
-     * @param   string  $newvalue   String to clean
-     * @param   string  $charset    Input AND Output character set
+     * @param string $newvalue String to clean
+     * @param string $charset Input AND Output character set
      * @return  string              Value cleaned
      */
     public function csvClean($newvalue, $charset)

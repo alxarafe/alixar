@@ -48,13 +48,13 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
 $langs->loadLangs(array("users", "companies", "agenda", "commercial", "other", "orders", "bills"));
 
 // Get Parameters
-$action     = GETPOST('action', 'aZ09');
+$action = GETPOST('action', 'aZ09');
 $massaction = GETPOST('massaction', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
-$cancel     = GETPOST('cancel', 'alpha');
-$toselect   = GETPOST('toselect', 'array');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'alpha');
+$toselect = GETPOST('toselect', 'array');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'actioncommlist'; // To manage different context of search
-$optioncss  = GETPOST('optioncss', 'alpha');
+$optioncss = GETPOST('optioncss', 'alpha');
 
 
 $disabledefaultvalues = GETPOSTINT('disabledefaultvalues');
@@ -311,7 +311,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($actioncode != '') {
     if (is_array($actioncode)) {
@@ -323,7 +323,7 @@ if ($actioncode != '') {
     }
 }
 if ($resourceid > 0) {
-    $param .= "&search_resourceid=" . urlencode((string) ($resourceid));
+    $param .= "&search_resourceid=" . urlencode((string)($resourceid));
 }
 if ($search_status != '') {
     $param .= "&search_status=" . urlencode($search_status);
@@ -335,16 +335,16 @@ if ($filtert) {
     $param .= "&search_filtert=" . urlencode($filtert);
 }
 if ($usergroup > 0) {
-    $param .= "&search_usergroup=" . urlencode((string) ($usergroup));
+    $param .= "&search_usergroup=" . urlencode((string)($usergroup));
 }
 if ($socid > 0) {
-    $param .= "&search_socid=" . urlencode((string) ($socid));
+    $param .= "&search_socid=" . urlencode((string)($socid));
 }
 if ($showbirthday) {
     $param .= "&search_showbirthday=1";
 }
 if ($pid) {
-    $param .= "&search_projectid=" . urlencode((string) ($pid));
+    $param .= "&search_projectid=" . urlencode((string)($pid));
 }
 if ($type) {
     $param .= "&search_type=" . urlencode($type);
@@ -398,7 +398,7 @@ if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
 }
 if ($search_categ_cus != 0) {
-    $param .= '&search_categ_cus=' . urlencode((string) ($search_categ_cus));
+    $param .= '&search_categ_cus=' . urlencode((string)($search_categ_cus));
 }
 
 // Add $param from extra fields
@@ -418,7 +418,7 @@ if ($user->hasRight('agenda', 'allactions', 'delete')) {
 if (isModEnabled('category') && $user->hasRight('agenda', 'myactions', 'create')) {
     $arrayofmassactions['preaffecttag'] = img_picto('', 'category', 'class="pictofixedwidth"') . $langs->trans("AffectTag");
 }
-if (GETPOSTINT('nomassaction') || in_array($massaction, array('presend', 'predelete','preaffecttag'))) {
+if (GETPOSTINT('nomassaction') || in_array($massaction, array('presend', 'predelete', 'preaffecttag'))) {
     $arrayofmassactions = array();
 }
 $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
@@ -497,10 +497,10 @@ if (!empty($actioncode)) {
     }
 }
 if ($resourceid > 0) {
-    $sql .= " AND r.element_type = 'action' AND r.element_id = a.id AND r.resource_id = " . ((int) $resourceid);
+    $sql .= " AND r.element_type = 'action' AND r.element_id = a.id AND r.resource_id = " . ((int)$resourceid);
 }
 if ($pid) {
-    $sql .= " AND a.fk_project=" . ((int) $pid);
+    $sql .= " AND a.fk_project=" . ((int)$pid);
 }
 // If the internal user must only see his customers, force searching by him
 $search_sale = 0;
@@ -512,19 +512,19 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = a.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = a.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = a.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search on socid
 if ($socid) {
-    $sql .= " AND a.fk_soc = " . ((int) $socid);
+    $sql .= " AND a.fk_soc = " . ((int)$socid);
 }
 // We must filter on assignment table
 if ($filtert > 0 || $usergroup > 0) {
     $sql .= " AND ar.fk_actioncomm = a.id AND ar.element_type='user'";
 }
 if ($type) {
-    $sql .= " AND c.id = " . ((int) $type);
+    $sql .= " AND c.id = " . ((int)$type);
 }
 if ($search_status == '0') {
     $sql .= " AND a.percent = 0";
@@ -557,10 +557,10 @@ if ($search_note) {
 if ($filtert > 0 || $usergroup > 0) {
     $sql .= " AND (";
     if ($filtert > 0) {
-        $sql .= "(ar.fk_element = " . ((int) $filtert) . " OR (ar.fk_element IS NULL AND a.fk_user_action = " . ((int) $filtert) . "))"; // The OR is for backward compatibility
+        $sql .= "(ar.fk_element = " . ((int)$filtert) . " OR (ar.fk_element IS NULL AND a.fk_user_action = " . ((int)$filtert) . "))"; // The OR is for backward compatibility
     }
     if ($usergroup > 0) {
-        $sql .= ($filtert > 0 ? " OR " : "") . " ugu.fk_usergroup = " . ((int) $usergroup);
+        $sql .= ($filtert > 0 ? " OR " : "") . " ugu.fk_usergroup = " . ((int)$usergroup);
     }
     $sql .= ")";
 }
@@ -735,7 +735,7 @@ $viewmode .= '<span class="marginrightonly"></span>';
 
 $tmpforcreatebutton = dol_getdate(dol_now(), true);
 
-$newparam = '&month=' . str_pad((string) $month, 2, "0", STR_PAD_LEFT) . '&year=' . $tmpforcreatebutton['year'];
+$newparam = '&month=' . str_pad((string)$month, 2, "0", STR_PAD_LEFT) . '&year=' . $tmpforcreatebutton['year'];
 
 $url = constant('BASE_URL') . '/comm/action/card.php?action=create';
 $url .= '&apyear=' . $tmpforcreatebutton['year'] . '&apmonth=' . $tmpforcreatebutton['mon'] . '&apday=' . $tmpforcreatebutton['mday'] . '&aphour=' . $tmpforcreatebutton['hours'] . '&apmin=' . $tmpforcreatebutton['minutes'];

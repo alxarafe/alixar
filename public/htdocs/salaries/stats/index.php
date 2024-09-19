@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2018      Alexandre Spangaro <aspangaro@open-dsi.fr>
- * Copyright (C) 2018      Fidesio            <contact@fidesio.com>
- * Copyright (C) 2021		Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2018       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018       Fidesio                     <contact@fidesio.com>
+ * Copyright (C) 2021		Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Salaries\Classes\SalariesStats;
+
 /**
  *  \file       htdocs/salaries/stats/index.php
  *  \ingroup    salaries
@@ -27,7 +31,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/salariesstats.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("salaries", "companies", "bills"));
@@ -57,13 +60,11 @@ $year = GETPOST('year') > 0 ? GETPOST('year') : $nowyear;
 $startyear = $year - (!getDolGlobalString('MAIN_STATS_GRAPHS_SHOW_N_YEARS') ? 2 : max(1, min(10, getDolGlobalString('MAIN_STATS_GRAPHS_SHOW_N_YEARS'))));
 $endyear = $year;
 
-
 /*
  * View
  */
 
 $form = new Form($db);
-
 
 llxHeader();
 

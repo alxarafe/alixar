@@ -66,21 +66,21 @@ class TraceableDB extends DoliDB
     /**
      * Constructor
      *
-     * @param       DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
-        $this->db      = $db;
-        $this->type    = $this->db->type;
+        $this->db = $db;
+        $this->type = $this->db->type;
         $this->queries = array();
     }
 
     /**
      * Format a SQL IF
      *
-     * @param   string $test Test string (example: 'cd.statut=0', 'field IS NULL')
-     * @param   string $resok resultat si test equal
-     * @param   string $resko resultat si test non equal
+     * @param string $test Test string (example: 'cd.statut=0', 'field IS NULL')
+     * @param string $resok resultat si test equal
+     * @param string $resko resultat si test non equal
      * @return  string                SQL string
      */
     public function ifsql($test, $resok, $resko)
@@ -88,16 +88,17 @@ class TraceableDB extends DoliDB
         return $this->db->ifsql($test, $resok, $resko);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Return datas as an array
      *
-     * @param   resource $resultset    Resultset of request
+     * @param resource $resultset Resultset of request
      * @return  array                  Array
      */
     public function fetch_row($resultset)
     {
-		// phpcs:enable
+        // phpcs:enable
         return $this->db->fetch_row($resultset);
     }
 
@@ -105,9 +106,9 @@ class TraceableDB extends DoliDB
      * Convert (by PHP) a GM Timestamp date into a string date with PHP server TZ to insert into a date field.
      * Function to use to build INSERT, UPDATE or WHERE predica
      *
-     *   @param     int     $param      Date TMS to convert
-     *   @param     mixed   $gm         'gmt'=Input information are GMT values, 'tzserver'=Local to server TZ
-     *   @return    string              Date in a string YYYY-MM-DD HH:MM:SS
+     * @param int $param Date TMS to convert
+     * @param mixed $gm 'gmt'=Input information are GMT values, 'tzserver'=Local to server TZ
+     * @return    string              Date in a string YYYY-MM-DD HH:MM:SS
      */
     public function idate($param, $gm = 'tzserver')
     {
@@ -127,7 +128,7 @@ class TraceableDB extends DoliDB
     /**
      * Start transaction
      *
-     * @param   string  $textinlog      Add a small text into log. '' by default.
+     * @param string $textinlog Add a small text into log. '' by default.
      * @return  int                     1 if transaction successfully opened or already opened, 0 if error
      */
     public function begin($textinlog = '')
@@ -140,10 +141,10 @@ class TraceableDB extends DoliDB
      * Do not use function xxx_create_db (xxx=mysql, ...) as they are deprecated
      * We force to create database with charset this->forcecharset and collate this->forcecollate
      *
-     * @param   string      $database       Database name to create
-     * @param   string      $charset        Charset used to store data
-     * @param   string      $collation      Charset used to sort data
-     * @param   string      $owner          Username of database owner
+     * @param string $database Database name to create
+     * @param string $charset Charset used to store data
+     * @param string $collation Charset used to sort data
+     * @param string $owner Username of database owner
      * @return  resource                    resource defined if OK, null if KO
      */
     public function DDLCreateDb($database, $charset = '', $collation = '', $owner = '')
@@ -164,8 +165,8 @@ class TraceableDB extends DoliDB
     /**
      *  Convert a SQL request in Mysql syntax to native syntax
      *
-     * @param   string $line   SQL request line to convert
-     * @param   string $type   Type of SQL order ('ddl' for insert, update, select, delete or 'dml' for create, alter...)
+     * @param string $line SQL request line to convert
+     * @param string $type Type of SQL order ('ddl' for insert, update, select, delete or 'dml' for create, alter...)
      * @return  string         SQL request line converted
      */
     public function convertSQLFromMysql($line, $type = 'ddl')
@@ -173,17 +174,18 @@ class TraceableDB extends DoliDB
         return $this->db->convertSQLFromMysql($line);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Return the number o flines into the result of a request INSERT, DELETE or UPDATE
      *
-     * @param   resource $resultset    Curseur de la requete voulue
+     * @param resource $resultset Curseur de la requete voulue
      * @return  int                    Number of lines
      * @see     num_rows()
      */
     public function affected_rows($resultset)
     {
-		// phpcs:enable
+        // phpcs:enable
         return $this->db->affected_rows($resultset);
     }
 
@@ -200,9 +202,9 @@ class TraceableDB extends DoliDB
     /**
      *  List tables into a database
      *
-     *  @param  string      $database   Name of database
-     *  @param  string      $table      Name of table filter ('xxx%')
-     *  @return array                   List of tables in an array
+     * @param string $database Name of database
+     * @param string $table Name of table filter ('xxx%')
+     * @return array                   List of tables in an array
      */
     public function DDLListTables($database, $table = '')
     {
@@ -212,9 +214,9 @@ class TraceableDB extends DoliDB
     /**
      *  List tables into a database with table info
      *
-     *  @param  string      $database   Name of database
-     *  @param  string      $table      Name of table filter ('xxx%')
-     *  @return array                   List of tables in an array
+     * @param string $database Name of database
+     * @param string $table Name of table filter ('xxx%')
+     * @return array                   List of tables in an array
      */
     public function DDLListTablesFull($database, $table = '')
     {
@@ -234,8 +236,8 @@ class TraceableDB extends DoliDB
     /**
      * Define sort criteria of request
      *
-     * @param   string $sortfield List of sort fields
-     * @param   string $sortorder Sort order
+     * @param string $sortfield List of sort fields
+     * @param string $sortorder Sort order
      * @return  string            String to provide syntax of a sort sql string
      */
     public function order($sortfield = null, $sortorder = null)
@@ -246,7 +248,7 @@ class TraceableDB extends DoliDB
     /**
      * Decrypt sensitive data in database
      *
-     * @param    string $value Value to decrypt
+     * @param string $value Value to decrypt
      * @return   string                    Decrypted value if used
      */
     public function decrypt($value)
@@ -254,16 +256,17 @@ class TraceableDB extends DoliDB
         return $this->db->decrypt($value);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Return datas as an array
      *
-     * @param   resource $resultset    Resultset of request
+     * @param resource $resultset Resultset of request
      * @return  array                  Array
      */
     public function fetch_array($resultset)
     {
-		// phpcs:enable
+        // phpcs:enable
         return $this->db->fetch_array($resultset);
     }
 
@@ -280,7 +283,7 @@ class TraceableDB extends DoliDB
     /**
      * Escape a string to insert data
      *
-     * @param   string $stringtoencode String to escape
+     * @param string $stringtoencode String to escape
      * @return  string                        String escaped
      */
     public function escape($stringtoencode)
@@ -291,25 +294,26 @@ class TraceableDB extends DoliDB
     /**
      *  Escape a string to insert data into a like
      *
-     *  @param  string  $stringtoencode     String to escape
-     *  @return string                      String escaped
+     * @param string $stringtoencode String to escape
+     * @return string                      String escaped
      */
     public function escapeforlike($stringtoencode)
     {
         return $this->db->escapeforlike($stringtoencode);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Get last ID after an insert INSERT
      *
-     * @param   string  $tab        Table name concerned by insert. Ne sert pas sous MySql mais requis pour compatibilite avec Postgresql
-     * @param   string  $fieldid    Field name
+     * @param string $tab Table name concerned by insert. Ne sert pas sous MySql mais requis pour compatibilite avec Postgresql
+     * @param string $fieldid Field name
      * @return  int                 Id of row
      */
     public function last_insert_id($tab, $fieldid = 'rowid')
     {
-		// phpcs:enable
+        // phpcs:enable
         return $this->db->last_insert_id($tab, $fieldid);
     }
 
@@ -326,8 +330,8 @@ class TraceableDB extends DoliDB
     /**
      *  Cancel a transaction and go back to initial data values
      *
-     *  @param  string          $log        Add more log to default log line
-     *  @return resource|int                1 if cancellation is ok or transaction not open, 0 if error
+     * @param string $log Add more log to default log line
+     * @return resource|int                1 if cancellation is ok or transaction not open, 0 if error
      */
     public function rollback($log = '')
     {
@@ -337,11 +341,11 @@ class TraceableDB extends DoliDB
     /**
      * Execute a SQL request and return the resultset
      *
-     * @param   string  $query          SQL query string
-     * @param   int     $usesavepoint   0=Default mode, 1=Run a savepoint before and a rollback to savepoint if error (this allow to have some request with errors inside global transactions).
+     * @param string $query SQL query string
+     * @param int $usesavepoint 0=Default mode, 1=Run a savepoint before and a rollback to savepoint if error (this allow to have some request with errors inside global transactions).
      *                                  Note that with Mysql, this parameter is not used as Myssql can already commit a transaction even if one request is in error, without using savepoints.
-     * @param   string  $type           Type of SQL order ('ddl' for insert, update, select, delete or 'dml' for create, alter...)
-     * @param   int     $result_mode    Result mode
+     * @param string $type Type of SQL order ('ddl' for insert, update, select, delete or 'dml' for create, alter...)
+     * @param int $result_mode Result mode
      * @return  resource                Resultset of answer
      */
     public function query($query, $usesavepoint = 0, $type = 'auto', $result_mode = 0)
@@ -362,30 +366,30 @@ class TraceableDB extends DoliDB
      */
     protected function startTracing()
     {
-        $this->startTime   = microtime(true);
+        $this->startTime = microtime(true);
         $this->startMemory = memory_get_usage(true);
     }
 
     /**
      * End query tracing
      *
-     * @param      string   $sql       query string
-     * @param      string   $resql     query result
+     * @param string $sql query string
+     * @param string $resql query result
      * @return     void
      */
     protected function endTracing($sql, $resql)
     {
-        $endTime     = microtime(true);
-        $duration    = $endTime - $this->startTime;
-        $endMemory   = memory_get_usage(true);
+        $endTime = microtime(true);
+        $duration = $endTime - $this->startTime;
+        $endMemory = memory_get_usage(true);
         $memoryDelta = $endMemory - $this->startMemory;
 
         $this->queries[] = array(
-            'sql'           => $sql,
-            'duration'      => $duration,
-            'memory_usage'  => $memoryDelta,
-            'is_success'    => $resql ? true : false,
-            'error_code'    => $resql ? null : $this->db->lasterrno(),
+            'sql' => $sql,
+            'duration' => $duration,
+            'memory_usage' => $memoryDelta,
+            'is_success' => $resql ? true : false,
+            'error_code' => $resql ? null : $this->db->lasterrno(),
             'error_message' => $resql ? null : $this->db->lasterror()
         );
     }
@@ -393,11 +397,11 @@ class TraceableDB extends DoliDB
     /**
      * Connection to server
      *
-     * @param   string $host database server host
-     * @param   string $login login
-     * @param   string $passwd password
-     * @param   string $name name of database (not used for mysql, used for pgsql)
-     * @param   int    $port Port of database server
+     * @param string $host database server host
+     * @param string $login login
+     * @param string $passwd password
+     * @param string $name name of database (not used for mysql, used for pgsql)
+     * @param int $port Port of database server
      * @return  resource            Database access handler
      * @see     close()
      */
@@ -409,8 +413,8 @@ class TraceableDB extends DoliDB
     /**
      *    Define limits and offset of request
      *
-     * @param   int $limit Maximum number of lines returned (-1=conf->liste_limit, 0=no limit)
-     * @param   int $offset Numero of line from where starting fetch
+     * @param int $limit Maximum number of lines returned (-1=conf->liste_limit, 0=no limit)
+     * @param int $offset Numero of line from where starting fetch
      * @return  string            String with SQL syntax to add a limit and offset
      */
     public function plimit($limit = 0, $offset = 0)
@@ -421,7 +425,7 @@ class TraceableDB extends DoliDB
     /**
      * Return value of server parameters
      *
-     * @param   string  $filter     Filter list on a particular value
+     * @param string $filter Filter list on a particular value
      * @return  array               Array of key-values (key=>value)
      */
     public function getServerParametersValues($filter = '')
@@ -432,7 +436,7 @@ class TraceableDB extends DoliDB
     /**
      * Return value of server status
      *
-     * @param   string $filter      Filter list on a particular value
+     * @param string $filter Filter list on a particular value
      * @return  array               Array of key-values (key=>value)
      */
     public function getServerStatusValues($filter = '')
@@ -450,17 +454,18 @@ class TraceableDB extends DoliDB
         return $this->db->getDefaultCollationDatabase();
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Return number of lines for result of a SELECT
      *
-     * @param   resource $resultset    Resulset of requests
+     * @param resource $resultset Resulset of requests
      * @return  int                    Nb of lines
      * @see     affected_rows()
      */
     public function num_rows($resultset)
     {
-		// phpcs:enable
+        // phpcs:enable
         return $this->db->num_rows($resultset);
     }
 
@@ -497,13 +502,13 @@ class TraceableDB extends DoliDB
     /**
      * Create a table into database
      *
-     * @param        string $table          Name of table
-     * @param        array<string,array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string}>  $fields         Associative table [field name][table of descriptions]
-     * @param        string $primary_key    Nom du champ qui sera la clef primaire
-     * @param        string $type           Type de la table
-     * @param        array  $unique_keys    Tableau associatifs Nom de champs qui seront clef unique => valeur
-     * @param        array  $fulltext_keys  Tableau des Nom de champs qui seront indexes en fulltext
-     * @param        array $keys            Tableau des champs cles noms => valeur
+     * @param string $table Name of table
+     * @param array<string,array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string}> $fields Associative table [field name][table of descriptions]
+     * @param string $primary_key Nom du champ qui sera la clef primaire
+     * @param string $type Type de la table
+     * @param array $unique_keys Tableau associatifs Nom de champs qui seront clef unique => valeur
+     * @param array $fulltext_keys Tableau des Nom de champs qui seront indexes en fulltext
+     * @param array $keys Tableau des champs cles noms => valeur
      * @return       int                    Return integer <0 if KO, >=0 if OK
      */
     public function DDLCreateTable($table, $fields, $primary_key, $type, $unique_keys = null, $fulltext_keys = null, $keys = null)
@@ -514,7 +519,7 @@ class TraceableDB extends DoliDB
     /**
      * Drop a table into database
      *
-     * @param        string $table          Name of table
+     * @param string $table Name of table
      * @return       int                    Return integer <0 if KO, >=0 if OK
      */
     public function DDLDropTable($table)
@@ -535,10 +540,10 @@ class TraceableDB extends DoliDB
     /**
      * Create a new field into table
      *
-     * @param    string $table              Name of table
-     * @param    string $field_name         Name of field to add
-     * @param    array{type:string,label:string,enabled:int|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string} $field_desc         Tableau associatif de description du champ a inserer[nom du parameter][valeur du parameter]
-     * @param    string $field_position     Optionnel ex.: "after champtruc"
+     * @param string $table Name of table
+     * @param string $field_name Name of field to add
+     * @param array{type:string,label:string,enabled:int|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string} $field_desc Tableau associatif de description du champ a inserer[nom du parameter][valeur du parameter]
+     * @param string $field_position Optionnel ex.: "after champtruc"
      * @return   int                        Return integer <0 if KO, >0 if OK
      */
     public function DDLAddField($table, $field_name, $field_desc, $field_position = "")
@@ -549,8 +554,8 @@ class TraceableDB extends DoliDB
     /**
      * Drop a field from table
      *
-     * @param    string $table              Name of table
-     * @param    string $field_name         Name of field to drop
+     * @param string $table Name of table
+     * @param string $field_name Name of field to drop
      * @return   int                        Return integer <0 if KO, >0 if OK
      */
     public function DDLDropField($table, $field_name)
@@ -561,9 +566,9 @@ class TraceableDB extends DoliDB
     /**
      * Update format of a field into a table
      *
-     * @param    string     $table          Name of table
-     * @param    string     $field_name     Name of field to modify
-     * @param    array{type:string,label:string,enabled:int|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string} $field_desc     Array with description of field format
+     * @param string $table Name of table
+     * @param string $field_name Name of field to modify
+     * @param array{type:string,label:string,enabled:int|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string} $field_desc Array with description of field format
      * @return   int                        Return integer <0 if KO, >0 if OK
      */
     public function DDLUpdateField($table, $field_name, $field_desc)
@@ -584,8 +589,8 @@ class TraceableDB extends DoliDB
     /**
      * Return a pointer of line with description of a table or field
      *
-     * @param    string     $table          Name of table
-     * @param    string     $field          Optionnel : Name of field if we want description of field
+     * @param string $table Name of table
+     * @param string $field Optionnel : Name of field if we want description of field
      * @return   resource                   Resource
      */
     public function DDLDescTable($table, $field = "")
@@ -616,10 +621,10 @@ class TraceableDB extends DoliDB
     /**
      * Create a user and privileges to connect to database (even if database does not exists yet)
      *
-     * @param    string $dolibarr_main_db_host  Ip serveur
-     * @param    string $dolibarr_main_db_user  Nom user a creer
-     * @param    string $dolibarr_main_db_pass  Password user a creer
-     * @param    string $dolibarr_main_db_name  Database name where user must be granted
+     * @param string $dolibarr_main_db_host Ip serveur
+     * @param string $dolibarr_main_db_user Nom user a creer
+     * @param string $dolibarr_main_db_pass Password user a creer
+     * @param string $dolibarr_main_db_name Database name where user must be granted
      * @return   int                            Return integer <0 if KO, >=0 if OK
      */
     public function DDLCreateUser($dolibarr_main_db_host, $dolibarr_main_db_user, $dolibarr_main_db_pass, $dolibarr_main_db_name)
@@ -627,19 +632,20 @@ class TraceableDB extends DoliDB
         return $this->db->DDLCreateUser($dolibarr_main_db_host, $dolibarr_main_db_user, $dolibarr_main_db_pass, $dolibarr_main_db_name);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Convert (by PHP) a PHP server TZ string date into a Timestamps date (GMT if gm=true)
      * 19700101020000 -> 3600 with TZ+1 and gmt=0
      * 19700101020000 -> 7200 whaterver is TZ if gmt=1
      *
-     * @param   string          $string     Date in a string (YYYYMMDDHHMMSS, YYYYMMDD, YYYY-MM-DD HH:MM:SS)
-     * @param   bool            $gm         1=Input information are GMT values, otherwise local to server TZ
+     * @param string $string Date in a string (YYYYMMDDHHMMSS, YYYYMMDD, YYYY-MM-DD HH:MM:SS)
+     * @param bool $gm 1=Input information are GMT values, otherwise local to server TZ
      * @return  int|''                      Date TMS or ''
      */
     public function jdate($string, $gm = false)
     {
-		// phpcs:enable
+        // phpcs:enable
         return $this->db->jdate($string, $gm);
     }
 
@@ -647,8 +653,8 @@ class TraceableDB extends DoliDB
      * Encrypt sensitive data in database
      * Warning: This function includes the escape and add the SQL simple quotes on strings.
      *
-     * @param   string  $fieldorvalue   Field name or value to encrypt
-     * @param   int     $withQuotes     Return string including the SQL simple quotes. This param must always be 1 (Value 0 is bugged and deprecated).
+     * @param string $fieldorvalue Field name or value to encrypt
+     * @param int $withQuotes Return string including the SQL simple quotes. This param must always be 1 (Value 0 is bugged and deprecated).
      * @return  string                  XXX(field) or XXX('value') or field or 'value'
      */
     public function encrypt($fieldorvalue, $withQuotes = 1)
@@ -659,7 +665,7 @@ class TraceableDB extends DoliDB
     /**
      * Validate a database transaction
      *
-     * @param   string          $log            Add more log to default log line
+     * @param string $log Add more log to default log line
      * @return  int                             1 if validation is OK or transaction level no started, 0 if ERROR
      */
     public function commit($log = '')
@@ -670,7 +676,7 @@ class TraceableDB extends DoliDB
     /**
      * List information of columns into a table.
      *
-     * @param   string          $table          Name of table
+     * @param string $table Name of table
      * @return  array                           Array with information on table
      */
     public function DDLInfoTable($table)
@@ -681,7 +687,7 @@ class TraceableDB extends DoliDB
     /**
      * Free last resultset used.
      *
-     * @param   resource        $resultset      Fre cursor
+     * @param resource $resultset Fre cursor
      * @return  void
      */
     public function free($resultset = null)
@@ -720,29 +726,31 @@ class TraceableDB extends DoliDB
         return $this->db->DDLGetConnectId();
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Returns the current line (as an object) for the resultset cursor
      *
-     * @param   resource|PgSql\Connection       $resultset      Handler of the desired SQL request
+     * @param resource|PgSql\Connection $resultset Handler of the desired SQL request
      * @return  Object                                          Object result line or false if KO or end of cursor
      */
     public function fetch_object($resultset)
     {
-		// phpcs:enable
+        // phpcs:enable
         return $this->db->fetch_object($resultset);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Select a database
      *
-     * @param   string $database     Name of database
+     * @param string $database Name of database
      * @return  boolean              true if OK, false if KO
      */
     public function select_db($database)
     {
-		// phpcs:enable
+        // phpcs:enable
         return $this->db->select_db($database);
     }
 }

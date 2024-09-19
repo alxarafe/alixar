@@ -35,7 +35,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 /**
  *  Class to generate SEPA mandate
  */
-
 class pdf_sepamandate extends ModeleBankAccountDoc
 {
     /**
@@ -63,10 +62,11 @@ class pdf_sepamandate extends ModeleBankAccountDoc
      * @var int x coordinate reserved to output the Signature area
      */
     public $xPosSignArea;
+
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -113,22 +113,23 @@ class pdf_sepamandate extends ModeleBankAccountDoc
         $this->heightforfooter = $this->marge_basse + 8;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to create pdf of company bank account sepa mandate
      *
-     *  @param  Account             $object             CompanyBankAccount bank account to generate document for
-     *  @param  Translate           $outputlangs        Lang output object
-     *  @param  string              $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param  int                 $hidedetails        Do not show line details (not used for this template)
-     *  @param  int                 $hidedesc           Do not show desc (not used for this template)
-     *  @param  int                 $hideref            Do not show ref (not used for this template)
-     *  @param  null|array          $moreparams         More parameters
-     *  @return int                                     1 if OK, <=0 if KO
+     * @param Account $object CompanyBankAccount bank account to generate document for
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details (not used for this template)
+     * @param int $hidedesc Do not show desc (not used for this template)
+     * @param int $hideref Do not show ref (not used for this template)
+     * @param null|array $moreparams More parameters
+     * @return int                                     1 if OK, <=0 if KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath = '', $hidedetails = 0, $hidedesc = 0, $hideref = 0, $moreparams = null)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $hookmanager, $langs, $user, $mysoc;
 
         if (!$object instanceof CompanyBankAccount) {
@@ -189,7 +190,7 @@ class pdf_sepamandate extends ModeleBankAccountDoc
                 $default_font_size = pdf_getPDFFontSize($outputlangs); // Must be after pdf_getInstance
 
                 if (getDolGlobalString('MAIN_GENERATE_DOCUMENTS_SHOW_FOOT_DETAILS')) {
-                    $this->heightforfooter  += 6;
+                    $this->heightforfooter += 6;
                 }
                 $pdf->SetAutoPageBreak(1, 0);
 
@@ -226,7 +227,7 @@ class pdf_sepamandate extends ModeleBankAccountDoc
                 $tab_top = 50;
                 $tab_top_newpage = 40;
 
-                $tab_height = $this->page_hauteur - $tab_top - $this->heightforfooter  - $this->heightforfreetext ;
+                $tab_height = $this->page_hauteur - $tab_top - $this->heightforfooter - $this->heightforfreetext;
 
                 // Show notes
                 if (!empty($object->note_public)) {
@@ -416,11 +417,11 @@ class pdf_sepamandate extends ModeleBankAccountDoc
 
                 // Show square
                 if ($pagenb == 1) {
-                    $this->_tableau($pdf, $tab_top, $this->page_hauteur - $tab_top - $this->heightforinfotot  - $this->heightforfreetext  - $this->heightforfooter, 0, $outputlangs, 0, 0);
-                    $bottomlasttab = $this->page_hauteur - $this->heightforinfotot  - $this->heightforfreetext  - $this->heightforfooter  + 1;
+                    $this->_tableau($pdf, $tab_top, $this->page_hauteur - $tab_top - $this->heightforinfotot - $this->heightforfreetext - $this->heightforfooter, 0, $outputlangs, 0, 0);
+                    $bottomlasttab = $this->page_hauteur - $this->heightforinfotot - $this->heightforfreetext - $this->heightforfooter + 1;
                 } else {
-                    $this->_tableau($pdf, $tab_top_newpage, $this->page_hauteur - $tab_top_newpage - $this->heightforinfotot  - $this->heightforfreetext  - $this->heightforfooter, 0, $outputlangs, 1, 0);
-                    $bottomlasttab = $this->page_hauteur - $this->heightforinfotot  - $this->heightforfreetext  - $this->heightforfooter  + 1;
+                    $this->_tableau($pdf, $tab_top_newpage, $this->page_hauteur - $tab_top_newpage - $this->heightforinfotot - $this->heightforfreetext - $this->heightforfooter, 0, $outputlangs, 1, 0);
+                    $bottomlasttab = $this->page_hauteur - $this->heightforinfotot - $this->heightforfreetext - $this->heightforfooter + 1;
                 }
 
                 //var_dump($tab_top);
@@ -473,42 +474,43 @@ class pdf_sepamandate extends ModeleBankAccountDoc
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     string      $tab_top        Top position of table
-     *   @param     string      $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        Hide top bar of array
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param string $tab_top Top position of table
+     * @param string $tab_height Height of table (rectangle)
+     * @param int $nexY Y
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop Hide top bar of array
+     * @param int $hidebottom Hide bottom bar of array
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $mysoc;
 
         $default_font_size = pdf_getPDFFontSize($outputlangs);
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *   Show miscellaneous information (payment mode, payment term, ...)
      *
-     *   @param     TCPDF               $pdf            Object PDF
-     *   @param     CompanyBankAccount  $object         Object to show
-     *   @param     int                 $posy           Y
-     *   @param     Translate           $outputlangs    Langs object
-     *   @return    float
+     * @param TCPDF $pdf Object PDF
+     * @param CompanyBankAccount $object Object to show
+     * @param int $posy Y
+     * @param Translate $outputlangs Langs object
+     * @return    float
      */
     protected function _tableau_info(&$pdf, $object, $posy, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $mysoc;
 
         $default_font_size = pdf_getPDFFontSize($outputlangs);
@@ -532,20 +534,20 @@ class pdf_sepamandate extends ModeleBankAccountDoc
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *  Show area for the customer to sign
      *
-     *  @param  TCPDF               $pdf            Object PDF
-     *  @param  CompanyBankAccount  $object         Object invoice
-     *  @param  int                 $posy           Position depart
-     *  @param  Translate           $outputlangs    Object langs
-     *  @return int                                 Position pour suite
+     * @param TCPDF $pdf Object PDF
+     * @param CompanyBankAccount $object Object invoice
+     * @param int $posy Position depart
+     * @param Translate $outputlangs Object langs
+     * @return int                                 Position pour suite
      */
     protected function _signature_area(&$pdf, $object, $posy, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         $default_font_size = pdf_getPDFFontSize($outputlangs);
         $tab_top = $posy + 4;
         $tab_hl = 4;
@@ -574,19 +576,20 @@ class pdf_sepamandate extends ModeleBankAccountDoc
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF               $pdf            Object PDF
-     *  @param  CompanyBankAccount  $object         Object to show
-     *  @param  int                 $showaddress    0=no, 1=yes
-     *  @param  Translate           $outputlangs    Object lang for output
-     *  @return float|int                           Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param CompanyBankAccount $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @return float|int                           Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $langs, $conf, $mysoc;
 
         $default_font_size = pdf_getPDFFontSize($outputlangs);
@@ -667,19 +670,20 @@ class pdf_sepamandate extends ModeleBankAccountDoc
         return 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show footer of page. Need this->emetteur object
      *
-     *  @param  TCPDF               $pdf                PDF
-     *  @param  CompanyBankAccount  $object             Object to show
-     *  @param  Translate           $outputlangs        Object lang for output
-     *  @param  int                 $hidefreetext       1=Hide free text
-     *  @return integer
+     * @param TCPDF $pdf PDF
+     * @param CompanyBankAccount $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return integer
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         $showdetails = getDolGlobalInt('MAIN_GENERATE_DOCUMENTS_SHOW_FOOT_DETAILS', 0);
         return pdf_pagefoot($pdf, $outputlangs, 'PAYMENTORDER_FREE_TEXT', null, $this->marge_basse, $this->marge_gauche, $this->page_hauteur, $object, $showdetails, $hidefreetext);
     }

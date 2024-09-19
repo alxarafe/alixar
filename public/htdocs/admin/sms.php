@@ -79,13 +79,13 @@ if ($action == 'send' && !$cancel) {
     if (empty($smsfrom)) {
         $smsfrom = GETPOST("fromname", 'alphanohtml');
     }
-    $sendto     = GETPOST("sendto", 'alphanohtml');
-    $body       = GETPOST('message', 'alphanohtml');
+    $sendto = GETPOST("sendto", 'alphanohtml');
+    $body = GETPOST('message', 'alphanohtml');
     $deliveryreceipt = GETPOST("deliveryreceipt", 'alphanohtml');
-    $deferred   = GETPOST('deferred', 'alphanohtml');
-    $priority   = GETPOST('priority', 'alphanohtml');
-    $class      = GETPOST('class', 'alphanohtml');
-    $errors_to  = GETPOST("errorstosms", 'alphanohtml');
+    $deferred = GETPOST('deferred', 'alphanohtml');
+    $priority = GETPOST('priority', 'alphanohtml');
+    $class = GETPOST('class', 'alphanohtml');
+    $errors_to = GETPOST("errorstosms", 'alphanohtml');
 
     // Create form object
     include_once DOL_DOCUMENT_ROOT . '/core/class/html.formsms.class.php';
@@ -135,7 +135,6 @@ if ($action == 'send' && !$cancel) {
         $action = '';
     }
 }
-
 
 
 /*

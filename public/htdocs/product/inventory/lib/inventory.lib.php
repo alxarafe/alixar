@@ -1,11 +1,10 @@
 <?php
 
-/* <one line to give the program's name and a brief idea of what it does.>
- * Copyright (C) 2015 ATM Consulting <support@atm-consulting.fr>
+/* Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
- * This program is free software: you can redistribute it and/or modify
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -14,8 +13,10 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Product\Classes\Inventory;
 
 /**
  *  \file       lib/inventory.lib.php
@@ -26,7 +27,7 @@
 /**
  *  Define head array for tabs of inventory tools setup pages
  *
- *  @return array Array of head
+ * @return array Array of head
  */
 function inventoryAdminPrepareHead()
 {
@@ -61,11 +62,11 @@ function inventoryAdminPrepareHead()
 /**
  *  Define head array for tabs of inventory tools setup pages
  *
- *  @param  Inventory   $inventory      Object inventory
- *  @param  string      $title          parameter
- *  @param  string      $get            parameter
+ * @param Inventory $inventory Object inventory
+ * @param string $title parameter
+ * @param string $get parameter
  *
- *  @return array                       Array of head
+ * @return array                       Array of head
  */
 function inventoryPrepareHead(&$inventory, $title = 'Inventory', $get = '')
 {

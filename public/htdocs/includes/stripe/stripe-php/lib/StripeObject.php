@@ -177,11 +177,11 @@ class StripeObject implements \ArrayAccess, \Countable, \JsonSerializable
             $class = static::class;
             $attrs = \implode(', ', \array_keys($this->_values));
             $message = "Stripe Notice: Undefined property of {$class} instance: {$k}. "
-                    . "HINT: The {$k} attribute was set in the past, however. "
-                    . 'It was then wiped when refreshing the object '
-                    . "with the result returned by Stripe's API, "
-                    . 'probably as a result of a save(). The attributes currently '
-                    . "available on this object are: {$attrs}";
+                . "HINT: The {$k} attribute was set in the past, however. "
+                . 'It was then wiped when refreshing the object '
+                . "with the result returned by Stripe's API, "
+                . 'probably as a result of a save(). The attributes currently '
+                . "available on this object are: {$attrs}";
             Stripe::getLogger()->error($message);
 
             return $nullval;
@@ -417,8 +417,8 @@ class StripeObject implements \ArrayAccess, \Countable, \JsonSerializable
 
             throw new Exception\InvalidArgumentException(
                 "Cannot save property `{$key}` containing an API resource of type " .
-                    \get_class($value) . ". It doesn't appear to be persisted and is " .
-                    'not marked as `saveWithParent`.'
+                \get_class($value) . ". It doesn't appear to be persisted and is " .
+                'not marked as `saveWithParent`.'
             );
         }
         if (\is_array($value)) {
@@ -474,7 +474,7 @@ class StripeObject implements \ArrayAccess, \Countable, \JsonSerializable
         };
 
         return \array_reduce(\array_keys($this->_values), function ($acc, $k) use ($maybeToArray) {
-            if ('_' === \substr((string) $k, 0, 1)) {
+            if ('_' === \substr((string)$k, 0, 1)) {
                 return $acc;
             }
             $v = $this->_values[$k];

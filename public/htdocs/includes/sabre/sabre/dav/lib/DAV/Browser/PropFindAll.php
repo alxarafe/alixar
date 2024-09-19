@@ -45,7 +45,7 @@ class PropFindAll extends PropFind
      * It's also possible to not pass a callback, but immediately pass a value
      *
      * @param string $propertyName
-     * @param mixed  $valueOrCallBack
+     * @param mixed $valueOrCallBack
      */
     public function handle($propertyName, $valueOrCallBack)
     {
@@ -66,8 +66,8 @@ class PropFindAll extends PropFind
      * properties, and 404 for null properties.
      *
      * @param string $propertyName
-     * @param mixed  $value
-     * @param int    $status
+     * @param mixed $value
+     * @param int $status
      */
     public function set($propertyName, $value, $status = null)
     {

@@ -167,22 +167,22 @@ llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admi
 // Add logic to show/hide buttons
 if ($conf->use_javascript_ajax) {
     ?>
-<script type="text/javascript">
-jQuery(document).ready(function() {
-    jQuery("#updateconst").hide();
-    jQuery("#delconst").hide();
-    jQuery(".checkboxfordelete").click(function() {
-        jQuery("#delconst").show();
-    });
-    jQuery(".inputforupdate").keyup(function() {    // keypress does not support back
-        var field_id = jQuery(this).attr("id");
-        var row_num = field_id.split("_");
-        jQuery("#updateconst").show();
-        jQuery("#action").val('update');            // so default action if we type enter will be update, but correct action is also detected correctly without that when clicking on "Update" button.
-        jQuery("#check_" + row_num[1]).prop("checked",true);
-    });
-});
-</script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery("#updateconst").hide();
+            jQuery("#delconst").hide();
+            jQuery(".checkboxfordelete").click(function () {
+                jQuery("#delconst").show();
+            });
+            jQuery(".inputforupdate").keyup(function () {    // keypress does not support back
+                var field_id = jQuery(this).attr("id");
+                var row_num = field_id.split("_");
+                jQuery("#updateconst").show();
+                jQuery("#action").val('update');            // so default action if we type enter will be update, but correct action is also detected correctly without that when clicking on "Update" button.
+                jQuery("#check_" + row_num[1]).prop("checked", true);
+            });
+        });
+    </script>
     <?php
 }
 
@@ -300,12 +300,12 @@ if ($result) {
         // Entity limit to superadmin
         if (isModEnabled('multicompany') && empty($user->entity)) {
             print '<td>';
-            print '<input type="text" class="flat" size="1" name="const[' . $i . '][entity]" value="' . ((int) $obj->entity) . '">';
+            print '<input type="text" class="flat" size="1" name="const[' . $i . '][entity]" value="' . ((int)$obj->entity) . '">';
             print '</td>';
             print '<td class="center">';
         } else {
             print '<td class="center">';
-            print '<input type="hidden" name="const[' . $i . '][entity]" value="' . ((int) $obj->entity) . '">';
+            print '<input type="hidden" name="const[' . $i . '][entity]" value="' . ((int)$obj->entity) . '">';
         }
 
         if (!empty($conf->use_javascript_ajax)) {

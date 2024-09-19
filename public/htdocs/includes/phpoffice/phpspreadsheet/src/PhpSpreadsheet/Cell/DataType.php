@@ -74,7 +74,7 @@ class DataType
      */
     public static function checkErrorCode($pValue)
     {
-        $pValue = (string) $pValue;
+        $pValue = (string)$pValue;
 
         if (!isset(self::$errorCodes[$pValue])) {
             $pValue = '#NULL!';

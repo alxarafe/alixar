@@ -91,10 +91,10 @@ foreach ($arrayofia as $ia => $ialabel) {
     $item->cssClass = 'minwidth500 text-security';
 }
 
-$setupnotempty = + count($formSetup->items);
+$setupnotempty = +count($formSetup->items);
 
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 
 /*

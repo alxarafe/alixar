@@ -238,10 +238,10 @@ if (!$user->hasRight('societe', 'client', 'voir')) {
 }
 $sql .= " WHERE f.fk_soc = s.rowid";
 if ($socid > 0) {
-    $sql .= ' AND s.rowid = ' . ((int) $socid);
+    $sql .= ' AND s.rowid = ' . ((int)$socid);
 }
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 $sql .= " AND f.fk_statut NOT IN (" . $db->sanitize(implode(', ', $invoice_status_except_list)) . ")";
 $sql .= ' AND s.entity IN (' . getEntity('societe') . ')';
@@ -275,7 +275,7 @@ $sql .= $db->order($sortfield, $sortorder);
 // TODO: calculate total to display then restore pagination
 //$sql.= $db->plimit($conf->liste_limit +1, $offset);
 
-$param = '&socid=' . ((int) $socid);
+$param = '&socid=' . ((int)$socid);
 if (GETPOSTINT('startdatemonth')) {
     $param .= '&startdateyear=' . GETPOSTINT('startdateyear');
     $param .= '&startdatemonth=' . GETPOSTINT('startdatemonth');

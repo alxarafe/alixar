@@ -58,15 +58,14 @@ $shmkeys = array(
 $shmoffset = 1000; // Max number of entries found into a language file. If too low, some entries will be overwritten.
 
 
-
 /**
  *  Save data into a memory area shared by all users, all sessions on server. Note: MAIN_CACHE_COUNT must be set.
  *
- *  @param  string      $memoryid       Memory id of shared area
- *  @param  mixed       $data           Data to save. It must not be a null value.
- *  @param  int         $expire         ttl in seconds, 0 never expire
- *  @return int                         Return integer <0 if KO, 0 if nothing is done, Nb of bytes written if OK
- *  @see dol_getcache()
+ * @param string $memoryid Memory id of shared area
+ * @param mixed $data Data to save. It must not be a null value.
+ * @param int $expire ttl in seconds, 0 never expire
+ * @return int                         Return integer <0 if KO, 0 if nothing is done, Nb of bytes written if OK
+ * @see dol_getcache()
  */
 function dol_setcache($memoryid, $data, $expire = 0)
 {
@@ -136,9 +135,9 @@ function dol_setcache($memoryid, $data, $expire = 0)
 /**
  *  Read a memory area shared by all users, all sessions on server
  *
- *  @param  string  $memoryid       Memory id of shared area
- *  @return int|mixed               Return integer <0 if KO, data if OK, null if not found into cache or no caching feature enabled
- *  @see dol_setcache()
+ * @param string $memoryid Memory id of shared area
+ * @return int|mixed               Return integer <0 if KO, data if OK, null if not found into cache or no caching feature enabled
+ * @see dol_setcache()
  */
 function dol_getcache($memoryid)
 {
@@ -212,12 +211,11 @@ function dol_getcache($memoryid)
 }
 
 
-
 /**
  *  Return shared memory address used to store dataset with key memoryid
  *
- *  @param  string  $memoryid       Memory id of shared area ('main', 'agenda', ...)
- *  @return int                     Return integer <0 if KO, Memoy address of shared memory for key
+ * @param string $memoryid Memory id of shared area ('main', 'agenda', ...)
+ * @return int                     Return integer <0 if KO, Memoy address of shared memory for key
  */
 function dol_getshmopaddress($memoryid)
 {
@@ -231,7 +229,7 @@ function dol_getshmopaddress($memoryid)
 /**
  *  Return list of contents of all memory area shared
  *
- *  @return array
+ * @return array
  */
 function dol_listshmop()
 {
@@ -250,10 +248,10 @@ function dol_listshmop()
 /**
  *  Save data into a memory area shared by all users, all sessions on server
  *
- *  @param  int     $memoryid       Memory id of shared area ('main', 'agenda', ...)
- *  @param  string  $data           Data to save. Must be a not null value.
- *  @param  int     $expire         ttl in seconds, 0 never expire
- *  @return int                     Return integer <0 if KO, 0=Caching not available, Nb of bytes written if OK
+ * @param int $memoryid Memory id of shared area ('main', 'agenda', ...)
+ * @param string $data Data to save. Must be a not null value.
+ * @param int $expire ttl in seconds, 0 never expire
+ * @return int                     Return integer <0 if KO, 0=Caching not available, Nb of bytes written if OK
  */
 function dol_setshmop($memoryid, $data, $expire)
 {
@@ -273,7 +271,7 @@ function dol_setshmop($memoryid, $data, $expire)
     //print 'dol_setshmop memoryid='.$memoryid." shmkey=".$shmkey." newdata=".$size."bytes<br>\n";
     $handle = shmop_open($shmkey, 'c', 0644, 6 + $size);
     if ($handle) {
-        $shm_bytes_written1 = shmop_write($handle, str_pad((string) $size, 6), 0);
+        $shm_bytes_written1 = shmop_write($handle, str_pad((string)$size, 6), 0);
         $shm_bytes_written2 = shmop_write($handle, $newdata, 6);
         if ($shm_bytes_written1 + $shm_bytes_written2 != 6 + dol_strlen($newdata)) {
             print "Couldn't write the entire length of data\n";
@@ -290,8 +288,8 @@ function dol_setshmop($memoryid, $data, $expire)
 /**
  *  Read a memory area shared by all users, all sessions on server
  *
- *  @param  string  $memoryid       Memory id of shared area ('main', 'agenda', ...)
- *  @return int|null                Return integer <0 if KO, data if OK, null if no cache enabled or not found
+ * @param string $memoryid Memory id of shared area ('main', 'agenda', ...)
+ * @return int|null                Return integer <0 if KO, data if OK, null if no cache enabled or not found
  */
 function dol_getshmop($memoryid)
 {
@@ -310,7 +308,7 @@ function dol_getshmop($memoryid)
     //print 'dol_getshmop memoryid='.$memoryid." shmkey=".$shmkey."<br>\n";
     $handle = @shmop_open($shmkey, 'a', 0, 0);
     if ($handle) {
-        $size = (int) trim(shmop_read($handle, 0, 6));
+        $size = (int)trim(shmop_read($handle, 0, 6));
         if ($size) {
             $data = unserialize(shmop_read($handle, 6, $size));
         } else {

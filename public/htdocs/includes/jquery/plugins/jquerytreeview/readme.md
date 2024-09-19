@@ -1,12 +1,14 @@
 # jQuery Treeview
 
-Lightweight and flexible transformation of an unordered list into an expandable and collapsable tree, great for unobtrusive navigation enhancements. Supports both location and cookie based persistence.
+Lightweight and flexible transformation of an unordered list into an expandable and collapsable tree, great for
+unobtrusive navigation enhancements. Supports both location and cookie based persistence.
 
 Provides some options for customizing, an async-tree extension and an experimental sortable extension.
 
 ![screenshot](https://raw.github.com/jzaefferer/jquery-treeview/master/screenshot.png)
 
-### Note that this project is not actively maintained anymore.  
+### Note that this project is not actively maintained anymore.
+
 Check out [jqTree](http://mbraak.github.com/jqTree/) for a more up to date plugin.
 
 ---
@@ -17,16 +19,15 @@ Check out [jqTree](http://mbraak.github.com/jqTree/) for a more up to date plugi
 
 #### [Changelog](https://raw.github.com/jzaefferer/jquery-treeview/master/changelog.md)
 
-
 ## Todo
 
 ### 1.5
+
 - Add classes and rules for root items
 - Lazy-loading: render the complete tree, but only apply hitzones and hiding of children to the first level on load
 - Async treeview
-  - Support animations
-  - Support persist options
-
+    - Support animations
+    - Support persist options
 
 ## Documentation
 
@@ -34,8 +35,9 @@ Check out [jqTree](http://mbraak.github.com/jqTree/) for a more up to date plugi
 .treeview( options )
 ```
 
-Takes an unordered list and makes all branches collapsable. The "treeview" class is added if not already present. To hide branches on first display, mark their li elements with the class "closed". If the "collapsed" option is used, mark initially open branches with class "open".
-
+Takes an unordered list and makes all branches collapsable. The "treeview" class is added if not already present. To
+hide branches on first display, mark their li elements with the class "closed". If the "collapsed" option is used, mark
+initially open branches with class "open".
 
 ## License
 

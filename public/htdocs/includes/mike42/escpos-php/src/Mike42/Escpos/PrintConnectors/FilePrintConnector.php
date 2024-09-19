@@ -33,15 +33,15 @@ class FilePrintConnector implements PrintConnector
      */
     public function __construct($filename)
     {
-        $this -> fp = fopen($filename, "wb+");
-        if ($this -> fp === false) {
+        $this->fp = fopen($filename, "wb+");
+        if ($this->fp === false) {
             throw new Exception("Cannot initialise FilePrintConnector.");
         }
     }
 
     public function __destruct()
     {
-        if ($this -> fp !== false) {
+        if ($this->fp !== false) {
             trigger_error("Print connector was not finalized. Did you forget to close the printer?", E_USER_NOTICE);
         }
     }
@@ -51,23 +51,23 @@ class FilePrintConnector implements PrintConnector
      */
     public function finalize()
     {
-        if ($this -> fp !== false) {
-            fclose($this -> fp);
-            $this -> fp = false;
+        if ($this->fp !== false) {
+            fclose($this->fp);
+            $this->fp = false;
         }
     }
-    
+
     /* (non-PHPdoc)
      * @see PrintConnector::read()
      */
     public function read($len)
     {
-        if ($this -> fp === false) {
+        if ($this->fp === false) {
             throw new Exception("PrintConnector has been closed, cannot read input.");
         }
-        return fread($this -> fp, $len);
+        return fread($this->fp, $len);
     }
-    
+
     /**
      * Write data to the file
      *
@@ -75,9 +75,9 @@ class FilePrintConnector implements PrintConnector
      */
     public function write($data)
     {
-        if ($this -> fp === false) {
+        if ($this->fp === false) {
             throw new Exception("PrintConnector has been closed, cannot send output.");
         }
-        fwrite($this -> fp, $data);
+        fwrite($this->fp, $data);
     }
 }

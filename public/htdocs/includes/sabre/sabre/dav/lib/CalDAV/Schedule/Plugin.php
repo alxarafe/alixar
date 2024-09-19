@@ -270,20 +270,20 @@ class Plugin extends ServerPlugin
             // old property to a different namespace.
             $availProp = '{' . self::NS_CALDAV . '}calendar-availability';
             $subPropFind = new PropFind(
-                 $propFind->getPath(),
-                 [$availProp]
-             );
+                $propFind->getPath(),
+                [$availProp]
+            );
 
             $this->server->getPropertiesByNode(
-                 $subPropFind,
-                 $node
-             );
+                $subPropFind,
+                $node
+            );
 
             $propFind->set(
-                 '{http://calendarserver.org/ns/}calendar-availability',
-                 $subPropFind->get($availProp),
-                 $subPropFind->getStatus($availProp)
-             );
+                '{http://calendarserver.org/ns/}calendar-availability',
+                $subPropFind->get($availProp),
+                $subPropFind->getStatus($availProp)
+            );
         });
     }
 
@@ -309,12 +309,12 @@ class Plugin extends ServerPlugin
      * This method is triggered whenever there was a calendar object gets
      * created or updated.
      *
-     * @param RequestInterface  $request      HTTP request
-     * @param ResponseInterface $response     HTTP Response
-     * @param VCalendar         $vCal         Parsed iCalendar object
-     * @param mixed             $calendarPath Path to calendar collection
-     * @param mixed             $modified     the iCalendar object has been touched
-     * @param mixed             $isNew        Whether this was a new item or we're updating one
+     * @param RequestInterface $request HTTP request
+     * @param ResponseInterface $response HTTP Response
+     * @param VCalendar $vCal Parsed iCalendar object
+     * @param mixed $calendarPath Path to calendar collection
+     * @param mixed $modified the iCalendar object has been touched
+     * @param mixed $isNew Whether this was a new item or we're updating one
      */
     public function calendarObjectChange(RequestInterface $request, ResponseInterface $response, VCalendar $vCal, $calendarPath, &$modified, $isNew)
     {
@@ -434,9 +434,9 @@ class Plugin extends ServerPlugin
             $principalUri,
             [
                 '{DAV:}principal-URL',
-                 $caldavNS . 'calendar-home-set',
-                 $caldavNS . 'schedule-inbox-URL',
-                 $caldavNS . 'schedule-default-calendar-URL',
+                $caldavNS . 'calendar-home-set',
+                $caldavNS . 'schedule-inbox-URL',
+                $caldavNS . 'schedule-default-calendar-URL',
                 '{http://sabredav.org/ns}email-address',
             ]
         );
@@ -607,8 +607,8 @@ class Plugin extends ServerPlugin
      * This method may update $newObject to add any status changes.
      *
      * @param VCalendar|string|null $oldObject
-     * @param array                 $ignore    any addresses to not send messages to
-     * @param bool                  $modified  a marker to indicate that the original object modified by this process
+     * @param array $ignore any addresses to not send messages to
+     * @param bool $modified a marker to indicate that the original object modified by this process
      */
     protected function processICalendarChange($oldObject, VCalendar $newObject, array $addresses, array $ignore = [], &$modified = false)
     {
@@ -710,7 +710,7 @@ class Plugin extends ServerPlugin
         }
 
         // Validating the METHOD
-        $method = strtoupper((string) $vObject->METHOD);
+        $method = strtoupper((string)$vObject->METHOD);
         if (!$method) {
             throw new BadRequest('A METHOD property must be specified in iTIP messages');
         }
@@ -742,7 +742,7 @@ class Plugin extends ServerPlugin
         $vFreeBusy = $vObject->VFREEBUSY;
         $organizer = $vFreeBusy->ORGANIZER;
 
-        $organizer = (string) $organizer;
+        $organizer = (string)$organizer;
 
         // Validating if the organizer matches the owner of the inbox.
         $owner = $outbox->getOwner();
@@ -762,7 +762,7 @@ class Plugin extends ServerPlugin
 
         $attendees = [];
         foreach ($vFreeBusy->ATTENDEE as $attendee) {
-            $attendees[] = (string) $attendee;
+            $attendees[] = (string)$attendee;
         }
 
         if (!isset($vFreeBusy->DTSTART) || !isset($vFreeBusy->DTEND)) {
@@ -953,7 +953,7 @@ class Plugin extends ServerPlugin
         $result = $generator->getResult();
 
         $vcalendar->VFREEBUSY->ATTENDEE = 'mailto:' . $email;
-        $vcalendar->VFREEBUSY->UID = (string) $request->VFREEBUSY->UID;
+        $vcalendar->VFREEBUSY->UID = (string)$request->VFREEBUSY->UID;
         $vcalendar->VFREEBUSY->ORGANIZER = clone $request->VFREEBUSY->ORGANIZER;
 
         return [

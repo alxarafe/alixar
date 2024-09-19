@@ -56,7 +56,7 @@ class mailing_fraise extends MailingTargets
     /**
      *    Constructor
      *
-     *  @param        DoliDB        $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -70,7 +70,7 @@ class mailing_fraise extends MailingTargets
      *    array of SQL request that returns two field:
      *    One called "label", One called "nb".
      *
-     *    @return        string[]        Array with SQL requests
+     * @return        string[]        Array with SQL requests
      */
     public function getSqlArrayForStats()
     {
@@ -93,17 +93,17 @@ class mailing_fraise extends MailingTargets
      *    For example if this selector is used to extract 500 different
      *    emails from a text file, this function must return 500.
      *
-     *    @param      string        $sql        Requete sql de comptage
-     *    @return     int|string                Nb of recipient, or <0 if error, or '' if NA
+     * @param string $sql Requete sql de comptage
+     * @return     int|string                Nb of recipient, or <0 if error, or '' if NA
      */
     public function getNbOfRecipients($sql = '')
     {
         global $conf;
-        $sql  = "SELECT count(distinct(a.email)) as nb";
+        $sql = "SELECT count(distinct(a.email)) as nb";
         $sql .= " FROM " . MAIN_DB_PREFIX . "adherent as a";
         $sql .= " WHERE (a.email IS NOT NULL AND a.email != '') AND a.entity IN (" . getEntity('member') . ")";
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = a.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = a.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
 
         // La requete doit retourner un champ "nb" pour etre comprise par parent::getNbOfRecipients
@@ -114,7 +114,7 @@ class mailing_fraise extends MailingTargets
     /**
      *   Affiche formulaire de filtre qui apparait dans page de selection des destinataires de mailings
      *
-     *   @return     string      Retourne zone select
+     * @return     string      Retourne zone select
      */
     public function formFilter()
     {
@@ -218,8 +218,8 @@ class mailing_fraise extends MailingTargets
     /**
      *  Renvoie url lien vers fiche de la source du destinataire du mailing
      *
-     *  @param    int        $id        ID
-     *  @return     string      Url lien
+     * @param int $id ID
+     * @return     string      Url lien
      */
     public function url($id)
     {
@@ -227,16 +227,17 @@ class mailing_fraise extends MailingTargets
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Ajoute destinataires dans table des cibles
      *
-     *  @param    int        $mailing_id        Id of emailing
-     *  @return int                       Return integer < 0 si erreur, nb ajout si ok
+     * @param int $mailing_id Id of emailing
+     * @return int                       Return integer < 0 si erreur, nb ajout si ok
      */
     public function add_to_target($mailing_id)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs;
 
         // Load translation files required by the page
@@ -259,7 +260,7 @@ class mailing_fraise extends MailingTargets
         }
         $sql .= " , " . MAIN_DB_PREFIX . "adherent_type as ta";
         $sql .= " WHERE a.entity IN (" . getEntity('member') . ") AND a.email <> ''"; // Note that null != '' is false
-        $sql .= " AND a.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int) $mailing_id) . ")";
+        $sql .= " AND a.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int)$mailing_id) . ")";
         // Filter on status
         if (GETPOST("filter", 'aZ09') == 'draft') {
             $sql .= " AND a.statut = -1";
@@ -283,7 +284,7 @@ class mailing_fraise extends MailingTargets
             $sql .= " AND ta.rowid = " . (GETPOSTINT('filter_type'));
         }
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = a.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = a.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
         $sql .= " ORDER BY a.email";
         //print $sql;
@@ -303,18 +304,18 @@ class mailing_fraise extends MailingTargets
                 $obj = $this->db->fetch_object($result);
                 if ($old != $obj->email) {
                     $cibles[$j] = array(
-                                'email' => $obj->email,
-                                'fk_contact' => $obj->fk_contact,
-                                'lastname' => $obj->lastname,
-                                'firstname' => $obj->firstname,
-                                'other' =>
-                                ($langs->transnoentities("Login") . '=' . $obj->login) . ';' .
-                                ($langs->transnoentities("UserTitle") . '=' . ($obj->civility_id ? $langs->transnoentities("Civility" . $obj->civility_id) : '')) . ';' .
-                                ($langs->transnoentities("DateEnd") . '=' . dol_print_date($this->db->jdate($obj->datefin), 'day')) . ';' .
-                                ($langs->transnoentities("Company") . '=' . $obj->societe),
-                                'source_url' => $this->url($obj->id),
-                                'source_id' => $obj->id,
-                                'source_type' => 'member'
+                        'email' => $obj->email,
+                        'fk_contact' => $obj->fk_contact,
+                        'lastname' => $obj->lastname,
+                        'firstname' => $obj->firstname,
+                        'other' =>
+                            ($langs->transnoentities("Login") . '=' . $obj->login) . ';' .
+                            ($langs->transnoentities("UserTitle") . '=' . ($obj->civility_id ? $langs->transnoentities("Civility" . $obj->civility_id) : '')) . ';' .
+                            ($langs->transnoentities("DateEnd") . '=' . dol_print_date($this->db->jdate($obj->datefin), 'day')) . ';' .
+                            ($langs->transnoentities("Company") . '=' . $obj->societe),
+                        'source_url' => $this->url($obj->id),
+                        'source_id' => $obj->id,
+                        'source_type' => 'member'
                     );
                     $old = $obj->email;
                     $j++;

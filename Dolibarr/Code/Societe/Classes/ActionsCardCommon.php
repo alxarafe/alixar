@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2012  Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2012	Laurent Destailleur	<eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2012	Laurent Destailleur	        <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+namespace Dolibarr\Code\Societe\Classes;
+
+use DoliDB;
 
 /**
  *  \file       htdocs/societe/canvas/actions_card_common.class.php
@@ -59,9 +63,9 @@ abstract class ActionsCardCommon
     /**
      *  Get object from id or ref and save it into this->object
      *
-     *  @param      int     $id         Object id
-     *  @param      string  $ref        Object ref
-     *  @return     object              Object loaded
+     * @param int $id Object id
+     * @param string $ref Object ref
+     * @return     object              Object loaded
      */
     protected function getObject($id, $ref = '')
     {
@@ -76,18 +80,19 @@ abstract class ActionsCardCommon
         return $object;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *    Assign custom values for canvas (for example into this->tpl to be used by templates)
      *
-     *    @param    string  $action    Type of action
-     *    @param    integer $id         Id of object
-     *    @param    string  $ref        Ref of object
-     *    @return   void
+     * @param string $action Type of action
+     * @param integer $id Id of object
+     * @param string $ref Ref of object
+     * @return   void
      */
     public function assign_values(&$action, $id = 0, $ref = '')
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs, $db, $user, $mysoc, $canvas;
         global $form, $formadmin, $formcompany;
 
@@ -299,11 +304,11 @@ abstract class ActionsCardCommon
             }
             $this->tpl['country'] = ($img ? $img . ' ' : '') . $this->object->country;
 
-            $this->tpl['phone']     = dol_print_phone($this->object->phone, $this->object->country_code, 0, $this->object->id, 'AC_TEL');
-            $this->tpl['phone_mobile']  = dol_print_phone($this->object->phone_mobile, $this->object->country_code, 0, $this->object->id, 'AC_MOB');
-            $this->tpl['fax']       = dol_print_phone($this->object->fax, $this->object->country_code, 0, $this->object->id, 'AC_FAX');
-            $this->tpl['email']     = dol_print_email($this->object->email, 0, $this->object->id, 1);
-            $this->tpl['url']       = dol_print_url($this->object->url);
+            $this->tpl['phone'] = dol_print_phone($this->object->phone, $this->object->country_code, 0, $this->object->id, 'AC_TEL');
+            $this->tpl['phone_mobile'] = dol_print_phone($this->object->phone_mobile, $this->object->country_code, 0, $this->object->id, 'AC_MOB');
+            $this->tpl['fax'] = dol_print_phone($this->object->fax, $this->object->country_code, 0, $this->object->id, 'AC_FAX');
+            $this->tpl['email'] = dol_print_email($this->object->email, 0, $this->object->id, 1);
+            $this->tpl['url'] = dol_print_url($this->object->url);
 
             $this->tpl['tva_assuj'] = yn($this->object->tva_assuj);
 
@@ -380,53 +385,54 @@ abstract class ActionsCardCommon
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Assign POST values into object
      *
-     *  @param      string      $action     Action string
-     *  @return     void
+     * @param string $action Action string
+     * @return     void
      */
     private function assign_post($action)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $langs, $mysoc;
 
         $this->object->id = GETPOST("socid");
         $this->object->name = GETPOST("nom");
-        $this->object->prefix_comm          = GETPOST("prefix_comm");
+        $this->object->prefix_comm = GETPOST("prefix_comm");
         $this->object->client = GETPOST("client");
-        $this->object->code_client          = GETPOST("code_client");
-        $this->object->fournisseur          = GETPOST("fournisseur");
+        $this->object->code_client = GETPOST("code_client");
+        $this->object->fournisseur = GETPOST("fournisseur");
         $this->object->code_fournisseur = GETPOST("code_fournisseur");
         $this->object->address = GETPOST("address");
         $this->object->zip = GETPOST("zipcode");
-        $this->object->town                 = GETPOST("town");
+        $this->object->town = GETPOST("town");
         $this->object->country_id = GETPOST("country_id") ? GETPOST("country_id") : $mysoc->country_id;
         $this->object->state_id = GETPOST("state_id");
-        $this->object->phone                = GETPOST("phone");
-        $this->object->phone_mobile         = GETPOST("phone_mobile");
-        $this->object->fax                  = GETPOST("fax");
-        $this->object->email                = GETPOST("email", 'alphawithlgt');
-        $this->object->url                  = GETPOST("url");
-        $this->object->capital              = GETPOST("capital");
-        $this->object->idprof1              = GETPOST("idprof1");
-        $this->object->idprof2              = GETPOST("idprof2");
-        $this->object->idprof3              = GETPOST("idprof3");
-        $this->object->idprof4              = GETPOST("idprof4");
+        $this->object->phone = GETPOST("phone");
+        $this->object->phone_mobile = GETPOST("phone_mobile");
+        $this->object->fax = GETPOST("fax");
+        $this->object->email = GETPOST("email", 'alphawithlgt');
+        $this->object->url = GETPOST("url");
+        $this->object->capital = GETPOST("capital");
+        $this->object->idprof1 = GETPOST("idprof1");
+        $this->object->idprof2 = GETPOST("idprof2");
+        $this->object->idprof3 = GETPOST("idprof3");
+        $this->object->idprof4 = GETPOST("idprof4");
         $this->object->typent_id = GETPOST("typent_id");
         $this->object->effectif_id = GETPOST("effectif_id");
-        $this->object->barcode              = GETPOST("barcode");
+        $this->object->barcode = GETPOST("barcode");
         $this->object->forme_juridique_code = GETPOST("forme_juridique_code");
-        $this->object->default_lang         = GETPOST("default_lang");
-        $this->object->commercial_id        = GETPOST("commercial_id");
+        $this->object->default_lang = GETPOST("default_lang");
+        $this->object->commercial_id = GETPOST("commercial_id");
 
         $this->object->tva_assuj = GETPOST("assujtva_value") ? GETPOST("assujtva_value") : 1;
         $this->object->tva_intra = GETPOST("tva_intra");
 
         //Local Taxes
-        $this->object->localtax1_assuj      = GETPOST("localtax1assuj_value");
-        $this->object->localtax2_assuj      = GETPOST("localtax2assuj_value");
+        $this->object->localtax1_assuj = GETPOST("localtax1assuj_value");
+        $this->object->localtax2_assuj = GETPOST("localtax2assuj_value");
 
         // We set country_id, and country_code label of the chosen country
         if ($this->object->country_id) {

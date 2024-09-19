@@ -97,34 +97,35 @@ if ($action == "send") {
  */
 
 $arrayofcss = array('/takepos/css/pos.css.php');
-$arrayofjs  = array();
+$arrayofjs = array();
 top_htmlhead($head, '', 0, 0, $arrayofjs, $arrayofcss);
 
 ?>
 <body class="center">
 
 <script>
-function SendMail() {
-    $.ajax({
-        type: "GET",
-        data: { token: '<?php echo currentToken(); ?>' },
-        url: "<?php print constant('BASE_URL') . '/takepos/send.php?action=send&token=' . newToken() . '&facid=' . $facid . '&email='; ?>" + $("#email"). val(),
-    });
-    parent.$.colorbox.close();
-}
+    function SendMail() {
+        $.ajax({
+            type: "GET",
+            data: {token: '<?php echo currentToken(); ?>'},
+            url: "<?php print constant('BASE_URL') . '/takepos/send.php?action=send&token=' . newToken() . '&facid=' . $facid . '&email='; ?>" + $("#email").val(),
+        });
+        parent.$.colorbox.close();
+    }
 
 </script>
 
 <div class="center">
-<center>
-<center>
-<input type="email" id="email" name="email" style="width:60%;font-size: 200%;" value="<?php echo $customer->email; ?>"></center>
-</center>
+    <center>
+        <center>
+            <input type="email" id="email" name="email" style="width:60%;font-size: 200%;"
+                   value="<?php echo $customer->email; ?>"></center>
+    </center>
 </div>
 <br>
 <div class="center">
 
-<button type="button" class="calcbutton"  onclick="SendMail()"><?php print $langs->trans("SendTicket"); ?></button>
+    <button type="button" class="calcbutton" onclick="SendMail()"><?php print $langs->trans("SendTicket"); ?></button>
 
 </div>
 

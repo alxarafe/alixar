@@ -83,8 +83,8 @@ if (empty($account->userid)) {
 
 // Define value to know what current user can do on users
 $selfpermission = ($user->id == $id && $user->hasRight('user', 'self', 'creer'));
-$canadduser = (!empty($user->admin) || $user->hasRight('user', 'user', 'creer') || $user->hasRight('hrm', 'write_personal_information', 'write') );
-$canreaduser = (!empty($user->admin) || $user->hasRight('user', 'user', 'lire') || $user->hasRight('hrm', 'read_personal_information', 'read') );
+$canadduser = (!empty($user->admin) || $user->hasRight('user', 'user', 'creer') || $user->hasRight('hrm', 'write_personal_information', 'write'));
+$canreaduser = (!empty($user->admin) || $user->hasRight('user', 'user', 'lire') || $user->hasRight('hrm', 'read_personal_information', 'read'));
 $permissiontoaddbankaccount = ($user->hasRight('salaries', 'write') || $user->hasRight('hrm', 'employee', 'write') || $user->hasRight('user', 'user', 'creer') || $selfpermission);
 $permissiontoreadhr = $user->hasRight('hrm', 'read_personal_information', 'read') || $user->hasRight('hrm', 'write_personal_information', 'write');
 $permissiontowritehr = $user->hasRight('hrm', 'write_personal_information', 'write');
@@ -115,22 +115,22 @@ if (!$ok) {
  */
 
 if ($action == 'add' && !$cancel && $permissiontoaddbankaccount) {
-    $account->userid          = $object->id;
+    $account->userid = $object->id;
 
-    $account->bank            = GETPOST('bank', 'alpha');
-    $account->label           = GETPOST('label', 'alpha');
+    $account->bank = GETPOST('bank', 'alpha');
+    $account->label = GETPOST('label', 'alpha');
     $account->type = GETPOSTINT('courant'); // not used
-    $account->code_banque     = GETPOST('code_banque', 'alpha');
-    $account->code_guichet    = GETPOST('code_guichet', 'alpha');
-    $account->number          = GETPOST('number', 'alpha');
-    $account->cle_rib         = GETPOST('cle_rib', 'alpha');
-    $account->bic             = GETPOST('bic', 'alpha');
-    $account->iban            = GETPOST('iban', 'alpha');
-    $account->domiciliation   = GETPOST('address', 'alpha');
-    $account->address         = GETPOST('address', 'alpha');
+    $account->code_banque = GETPOST('code_banque', 'alpha');
+    $account->code_guichet = GETPOST('code_guichet', 'alpha');
+    $account->number = GETPOST('number', 'alpha');
+    $account->cle_rib = GETPOST('cle_rib', 'alpha');
+    $account->bic = GETPOST('bic', 'alpha');
+    $account->iban = GETPOST('iban', 'alpha');
+    $account->domiciliation = GETPOST('address', 'alpha');
+    $account->address = GETPOST('address', 'alpha');
     $account->owner_name = GETPOST('proprio', 'alpha');
     $account->proprio = $account->owner_name;
-    $account->owner_address   = GETPOST('owner_address', 'alpha');
+    $account->owner_address = GETPOST('owner_address', 'alpha');
 
     $account->currency_code = trim(GETPOST("account_currency_code"));
     $account->state_id = GETPOSTINT("account_state_id");
@@ -150,19 +150,19 @@ if ($action == 'add' && !$cancel && $permissiontoaddbankaccount) {
 if ($action == 'update' && !$cancel && $permissiontoaddbankaccount) {
     $account->userid = $object->id;
 
-    $account->bank            = GETPOST('bank', 'alpha');
-    $account->label           = GETPOST('label', 'alpha');
+    $account->bank = GETPOST('bank', 'alpha');
+    $account->label = GETPOST('label', 'alpha');
     $account->type = GETPOSTINT('courant'); // not used
-    $account->code_banque     = GETPOST('code_banque', 'alpha');
-    $account->code_guichet    = GETPOST('code_guichet', 'alpha');
-    $account->number          = GETPOST('number', 'alpha');
-    $account->cle_rib         = GETPOST('cle_rib', 'alpha');
-    $account->bic             = GETPOST('bic', 'alpha');
-    $account->iban            = GETPOST('iban', 'alpha');
-    $account->domiciliation   = GETPOST('address', 'alpha');
-    $account->address         = GETPOST('address', 'alpha');
-    $account->proprio         = GETPOST('proprio', 'alpha');
-    $account->owner_address   = GETPOST('owner_address', 'alpha');
+    $account->code_banque = GETPOST('code_banque', 'alpha');
+    $account->code_guichet = GETPOST('code_guichet', 'alpha');
+    $account->number = GETPOST('number', 'alpha');
+    $account->cle_rib = GETPOST('cle_rib', 'alpha');
+    $account->bic = GETPOST('bic', 'alpha');
+    $account->iban = GETPOST('iban', 'alpha');
+    $account->domiciliation = GETPOST('address', 'alpha');
+    $account->address = GETPOST('address', 'alpha');
+    $account->proprio = GETPOST('proprio', 'alpha');
+    $account->owner_address = GETPOST('owner_address', 'alpha');
 
     $account->currency_code = trim(GETPOST("account_currency_code"));
     $account->state_id = GETPOSTINT("account_state_id");
@@ -202,7 +202,7 @@ if ($action == 'setbirth' && $canadduser && !$cancel) {
 
 // update personal email
 if ($action == 'setpersonal_email' && $permissiontosimpleedit && !$cancel) {
-    $object->personal_email = (string) GETPOST('personal_email', 'alphanohtml');
+    $object->personal_email = (string)GETPOST('personal_email', 'alphanohtml');
     $result = $object->update($user);
     if ($result < 0) {
         setEventMessages($object->error, $object->errors, 'errors');
@@ -211,7 +211,7 @@ if ($action == 'setpersonal_email' && $permissiontosimpleedit && !$cancel) {
 
 // update personal mobile
 if ($action == 'setpersonal_mobile' && $permissiontosimpleedit && !$cancel) {
-    $object->personal_mobile = (string) GETPOST('personal_mobile', 'alphanohtml');
+    $object->personal_mobile = (string)GETPOST('personal_mobile', 'alphanohtml');
     $result = $object->update($user);
     if ($result < 0) {
         setEventMessages($object->error, $object->errors, 'errors');
@@ -220,7 +220,7 @@ if ($action == 'setpersonal_mobile' && $permissiontosimpleedit && !$cancel) {
 
 // update accountancy_code
 if ($action == 'setaccountancy_code' && $canadduser && !$cancel) {
-    $object->accountancy_code = (string) GETPOST('accountancy_code', 'alphanohtml');
+    $object->accountancy_code = (string)GETPOST('accountancy_code', 'alphanohtml');
     $result = $object->update($user);
     if ($result < 0) {
         setEventMessages($object->error, $object->errors, 'errors');
@@ -229,7 +229,7 @@ if ($action == 'setaccountancy_code' && $canadduser && !$cancel) {
 
 // update ref_employee
 if ($action == 'setref_employee' && $canadduser && !$cancel) {
-    $object->ref_employee = (string) GETPOST('ref_employee', 'alphanohtml');
+    $object->ref_employee = (string)GETPOST('ref_employee', 'alphanohtml');
     $result = $object->update($user);
     if ($result < 0) {
         setEventMessages($object->error, $object->errors, 'errors');
@@ -238,7 +238,7 @@ if ($action == 'setref_employee' && $canadduser && !$cancel) {
 
 // update national_registration_number
 if ($action == 'setnational_registration_number' && $canadduser && !$cancel) {
-    $object->national_registration_number = (string) GETPOST('national_registration_number', 'alphanohtml');
+    $object->national_registration_number = (string)GETPOST('national_registration_number', 'alphanohtml');
     $result = $object->update($user);
     if ($result < 0) {
         setEventMessages($object->error, $object->errors, 'errors');
@@ -340,7 +340,7 @@ if ($action != 'edit' && $action != 'create') {     // If not bank account yet, 
     $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
     $morehtmlref .= '</a>';
 
-    $urltovirtualcard = '/user/virtualcard.php?id=' . ((int) $object->id);
+    $urltovirtualcard = '/user/virtualcard.php?id=' . ((int)$object->id);
     $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl") . ' - ' . $object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
     dol_banner_tab($object, 'id', $linkback, $user->hasRight('user', 'user', 'lire') || $user->admin, 'rowid', 'ref', $morehtmlref);
@@ -615,7 +615,7 @@ if ($action != 'edit' && $action != 'create') {     // If not bank account yet, 
         $sql = "SELECT s.rowid as sid, s.ref as sref, s.label, s.datesp, s.dateep, s.paye, s.amount, SUM(ps.amount) as alreadypaid";
         $sql .= " FROM " . MAIN_DB_PREFIX . "salary as s";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "payment_salary as ps ON (s.rowid = ps.fk_salary)";
-        $sql .= " WHERE s.fk_user = " . ((int) $object->id);
+        $sql .= " WHERE s.fk_user = " . ((int)$object->id);
         $sql .= " AND s.entity IN (" . getEntity('salary') . ")";
         $sql .= " GROUP BY s.rowid, s.ref, s.label, s.datesp, s.dateep, s.paye, s.amount";
         $sql .= " ORDER BY s.dateep DESC";
@@ -677,7 +677,7 @@ if ($action != 'edit' && $action != 'create') {     // If not bank account yet, 
 
         $sql = "SELECT h.rowid, h.statut as status, h.fk_type, h.date_debut, h.date_fin, h.halfday";
         $sql .= " FROM " . MAIN_DB_PREFIX . "holiday as h";
-        $sql .= " WHERE h.fk_user = " . ((int) $object->id);
+        $sql .= " WHERE h.fk_user = " . ((int)$object->id);
         $sql .= " AND h.entity IN (" . getEntity('holiday') . ")";
         $sql .= " ORDER BY h.date_debut DESC";
 
@@ -736,8 +736,8 @@ if ($action != 'edit' && $action != 'create') {     // If not bank account yet, 
 
         $sql = "SELECT e.rowid, e.ref, e.fk_statut as status, e.date_debut, e.total_ttc";
         $sql .= " FROM " . MAIN_DB_PREFIX . "expensereport as e";
-        $sql .= " WHERE e.fk_user_author = " . ((int) $object->id);
-        $sql .= " AND e.entity = " . ((int) $conf->entity);
+        $sql .= " WHERE e.fk_user_author = " . ((int)$object->id);
+        $sql .= " AND e.entity = " . ((int)$conf->entity);
         $sql .= " ORDER BY e.date_debut DESC";
 
         $resql = $db->query($sql);
@@ -887,7 +887,6 @@ if ($action != 'edit' && $action != 'create') {     // If not bank account yet, 
         $colspan = 7;
         print '<tr><td colspan="' . $colspan . '"><span class="opacitymedium">' . $langs->trans("NoBANRecord") . '</span></td></tr>';
     }
-
 
 
     print '</table>';

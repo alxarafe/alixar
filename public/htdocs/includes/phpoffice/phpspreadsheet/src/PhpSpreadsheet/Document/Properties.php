@@ -178,7 +178,7 @@ class Properties
             $time = time();
         } elseif (is_string($time)) {
             if (is_numeric($time)) {
-                $time = (int) $time;
+                $time = (int)$time;
             } else {
                 $time = strtotime($time);
             }
@@ -212,7 +212,7 @@ class Properties
             $time = time();
         } elseif (is_string($time)) {
             if (is_numeric($time)) {
-                $time = (int) $time;
+                $time = (int)$time;
             } else {
                 $time = strtotime($time);
             }
@@ -459,10 +459,10 @@ class Properties
     {
         if (
             ($propertyType === null) || (!in_array($propertyType, [self::PROPERTY_TYPE_INTEGER,
-                                                                        self::PROPERTY_TYPE_FLOAT,
-                                                                        self::PROPERTY_TYPE_STRING,
-                                                                        self::PROPERTY_TYPE_DATE,
-                                                                        self::PROPERTY_TYPE_BOOLEAN, ]))
+                self::PROPERTY_TYPE_FLOAT,
+                self::PROPERTY_TYPE_STRING,
+                self::PROPERTY_TYPE_DATE,
+                self::PROPERTY_TYPE_BOOLEAN,]))
         ) {
             if ($propertyValue === null) {
                 $propertyType = self::PROPERTY_TYPE_STRING;
@@ -516,7 +516,7 @@ class Properties
             case 'i4':        //    4-Byte Signed Integer
             case 'i8':        //    8-Byte Signed Integer
             case 'int':       //    Integer
-                return (int) $propertyValue;
+            return (int)$propertyValue;
 
                 break;
             case 'ui1':       //    1-Byte Unsigned Integer
@@ -524,13 +524,13 @@ class Properties
             case 'ui4':       //    4-Byte Unsigned Integer
             case 'ui8':       //    8-Byte Unsigned Integer
             case 'uint':      //    Unsigned Integer
-                return abs((int) $propertyValue);
+            return abs((int)$propertyValue);
 
                 break;
             case 'r4':        //    4-Byte Real Number
             case 'r8':        //    8-Byte Real Number
             case 'decimal':   //    Decimal
-                return (float) $propertyValue;
+            return (float)$propertyValue;
 
                 break;
             case 'lpstr':     //    LPSTR

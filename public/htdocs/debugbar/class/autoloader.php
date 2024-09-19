@@ -24,10 +24,10 @@
  */
 
 spl_autoload_register(
-    /**
-     * @param string    $class  Class to load
-     * @return bool             If class could be loaded
-     */
+/**
+ * @param string $class Class to load
+ * @return bool             If class could be loaded
+ */
     static function ($class) {
         if (str_starts_with($class, 'DebugBar')) {
             $file = DOL_DOCUMENT_ROOT . '/includes/maximebf/debugbar/src/' . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';

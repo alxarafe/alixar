@@ -97,10 +97,10 @@ class Date
      *
      * @param DateTimeZone|string $timeZone The timezone to set for all Excel datetimestamp to PHP DateTime Object conversions
      *
+     * @return bool Success or failure
+     * @return bool Success or failure
      * @throws \Exception
      *
-     * @return bool Success or failure
-     * @return bool Success or failure
      */
     public static function setDefaultTimezone($timeZone)
     {
@@ -132,10 +132,10 @@ class Date
      *
      * @param DateTimeZone|string $timeZone The timezone to validate, either as a timezone string or object
      *
+     * @return DateTimeZone The timezone as a timezone object
+     * @return DateTimeZone The timezone as a timezone object
      * @throws \Exception
      *
-     * @return DateTimeZone The timezone as a timezone object
-     * @return DateTimeZone The timezone as a timezone object
      */
     protected static function validateTimeZone($timeZone)
     {
@@ -156,9 +156,9 @@ class Date
      *                                                                        if you don't want to treat it as a UTC value
      *                                                                    Use the default (UST) unless you absolutely need a conversion
      *
+     * @return \DateTime PHP date/time object
      * @throws \Exception
      *
-     * @return \DateTime PHP date/time object
      */
     public static function excelToDateTimeObject($excelTimestamp, $timeZone = null)
     {
@@ -194,7 +194,7 @@ class Date
         $interval = $days . ' days';
 
         return $baseDate->modify($interval)
-            ->setTime((int) $hours, (int) $minutes, (int) $seconds);
+            ->setTime((int)$hours, (int)$minutes, (int)$seconds);
     }
 
     /**
@@ -205,13 +205,13 @@ class Date
      *                                                                        if you don't want to treat it as a UTC value
      *                                                                    Use the default (UST) unless you absolutely need a conversion
      *
+     * @return int Unix timetamp for this date/time
      * @throws \Exception
      *
-     * @return int Unix timetamp for this date/time
      */
     public static function excelToTimestamp($excelTimestamp, $timeZone = null)
     {
-        return (int) self::excelToDateTimeObject($excelTimestamp, $timeZone)
+        return (int)self::excelToDateTimeObject($excelTimestamp, $timeZone)
             ->format('U');
     }
 
@@ -246,12 +246,12 @@ class Date
     public static function dateTimeToExcel(DateTimeInterface $dateValue)
     {
         return self::formattedPHPToExcel(
-            (int) $dateValue->format('Y'),
-            (int) $dateValue->format('m'),
-            (int) $dateValue->format('d'),
-            (int) $dateValue->format('H'),
-            (int) $dateValue->format('i'),
-            (int) $dateValue->format('s')
+            (int)$dateValue->format('Y'),
+            (int)$dateValue->format('m'),
+            (int)$dateValue->format('d'),
+            (int)$dateValue->format('H'),
+            (int)$dateValue->format('i'),
+            (int)$dateValue->format('s')
         );
     }
 
@@ -315,7 +315,7 @@ class Date
 
         $excelTime = (($hours * 3600) + ($minutes * 60) + $seconds) / 86400;
 
-        return (float) $excelDate + $excelTime;
+        return (float)$excelDate + $excelTime;
     }
 
     /**
@@ -489,7 +489,7 @@ class Date
     {
         $strippedDayValue = (str_replace(self::$numberSuffixes, '', $day));
         if (is_numeric($strippedDayValue)) {
-            return (int) $strippedDayValue;
+            return (int)$strippedDayValue;
         }
 
         return $day;

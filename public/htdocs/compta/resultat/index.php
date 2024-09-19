@@ -212,7 +212,6 @@ if (isModEnabled('accounting') && $modecompta != 'BOOKKEEPING') {
 }
 
 
-
 /*
  * Factures clients
  */
@@ -251,7 +250,7 @@ if (isModEnabled('invoice') && ($modecompta == 'CREANCES-DETTES' || $modecompta 
     }
     $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     $sql .= " GROUP BY dm";
     $sql .= " ORDER BY dm";
@@ -358,7 +357,7 @@ if (isModEnabled('invoice') && ($modecompta == 'CREANCES-DETTES' || $modecompta 
     $sql .= " AND f.entity IN (" . getEntity('supplier_invoice') . ")";
 
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     $sql .= " GROUP BY dm";
 
@@ -389,7 +388,6 @@ if (isModEnabled('invoice') && ($modecompta == 'CREANCES-DETTES' || $modecompta 
 } elseif ($modecompta == "BOOKKEEPING") {
     // Nothing from this table
 }
-
 
 
 /*
@@ -983,14 +981,12 @@ if (isModEnabled('accounting') && ($modecompta == 'BOOKKEEPING')) {
 }
 
 
-
 $action = "balance";
 $object = array(&$encaiss, &$encaiss_ttc, &$decaiss, &$decaiss_ttc);
 $parameters["mode"] = $modecompta;
 // Initialize technical object to manage hooks of expenses. Note that conf->hooks_modules contains array array
 $hookmanager->initHooks(array('externalbalance'));
 $reshook = $hookmanager->executeHooks('addReportInfo', $parameters, $object, $action); // Note that $action and $object may have been modified by some hooks
-
 
 
 /*
@@ -1008,7 +1004,7 @@ print '<tr class="liste_titre"><td class="liste_titre">&nbsp;</td>';
 
 for ($annee = $year_start; $annee <= $year_end_for_table; $annee++) {
     print '<td align="center" colspan="2" class="liste_titre borderrightlight">';
-    print '<a href="clientfourn.php?year=' . ((int) $annee) . '">';
+    print '<a href="clientfourn.php?year=' . ((int)$annee) . '">';
     print $annee;
     if (getDolGlobalInt('SOCIETE_FISCAL_MONTH_START') > 1) {
         print '-' . ($annee + 1);

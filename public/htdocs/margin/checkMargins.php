@@ -39,12 +39,12 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'bills', 'products', 'margins'));
 
-$action     = GETPOST('action', 'alpha');
+$action = GETPOST('action', 'alpha');
 $massaction = GETPOST('massaction', 'alpha');
-$toselect   = GETPOST('toselect', 'array');
+$toselect = GETPOST('toselect', 'array');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'margindetail'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
-$optioncss  = GETPOST('optioncss', 'alpha');
+$optioncss = GETPOST('optioncss', 'alpha');
 
 // Load variable for pagination
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
@@ -116,8 +116,8 @@ if (empty($reshook)) {
                     $invoicedet_id = $tmp_array[1];
                     if (!empty($invoicedet_id)) {
                         $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'facturedet';
-                        $sql .= " SET buy_price_ht = " . ((float) price2num($value));
-                        $sql .= ' WHERE rowid = ' . ((int) $invoicedet_id);
+                        $sql .= " SET buy_price_ht = " . ((float)price2num($value));
+                        $sql .= ' WHERE rowid = ' . ((int)$invoicedet_id);
                         $result = $db->query($sql);
                         if (!$result) {
                             setEventMessages($db->lasterror, null, 'errors');

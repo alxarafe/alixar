@@ -58,7 +58,7 @@ function cronadmin_prepare_head()
 /**
  * Return array of tabs to used on a cron job
  *
- * @param   Cronjob $object     Object cron
+ * @param Cronjob $object Object cron
  * @return  array               Array of tabs
  */
 function cron_prepare_head(Cronjob $object)

@@ -430,7 +430,6 @@ print $form->buttonsSaveCancel("Modify", '');
 print '</form>';
 
 
-
 /*
  * Test the connection
  */

@@ -98,10 +98,10 @@ if ($action == 'add') {
     $db->begin();
 
     $object->date_delivery = dol_now();
-    $object->note          = GETPOST("note", 'restricthtml');
-    $object->note_private  = GETPOST("note", 'restricthtml');
-    $object->commande_id   = GETPOSTINT("commande_id");
-    $object->fk_incoterms  = GETPOSTINT('incoterm_id');
+    $object->note = GETPOST("note", 'restricthtml');
+    $object->note_private = GETPOST("note", 'restricthtml');
+    $object->commande_id = GETPOSTINT("commande_id");
+    $object->fk_incoterms = GETPOSTINT('incoterm_id');
 
     /* ->entrepot_id seems to not exists
     if (!getDolGlobalInt('MAIN_SUBMODULE_EXPEDITION') && isModEnabled('stock')) {
@@ -137,9 +137,9 @@ if ($action == 'add') {
     $action == 'confirm_valid' &&
     $confirm == 'yes' &&
     ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') &&
-    $user->hasRight('expedition', 'delivery', 'creer')) ||
-    (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') &&
-    $user->hasRight('expedition', 'delivery_advance', 'validate')))
+            $user->hasRight('expedition', 'delivery', 'creer')) ||
+        (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') &&
+            $user->hasRight('expedition', 'delivery_advance', 'validate')))
 ) {
     $result = $object->valid($user);
 

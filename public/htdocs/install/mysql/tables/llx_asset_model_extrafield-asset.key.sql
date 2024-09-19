@@ -15,4 +15,5 @@
 -- along with this program. If not, see <https://www.gnu.org/licenses/>.
 -- ========================================================================
 
-ALTER TABLE llx_asset_model_extrafields ADD INDEX idx_asset_model_extrafields (fk_object);
+ALTER TABLE llx_asset_model_extrafields
+    ADD INDEX idx_asset_model_extrafields (fk_object);

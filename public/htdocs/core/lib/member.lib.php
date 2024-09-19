@@ -36,8 +36,8 @@ use Dolibarr\Code\Core\Classes\Link;
 /**
  *  Return array head with list of tabs to view object information
  *
- *  @param  Adherent    $object             Member
- *  @return array<int,array<int,string>>    head links
+ * @param Adherent $object Member
+ * @return array<int,array<int,string>>    head links
  */
 function member_prepare_head(Adherent $object)
 {
@@ -82,7 +82,7 @@ function member_prepare_head(Adherent $object)
             $nbNote = 0;
             $sql = "SELECT COUNT(n.rowid) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "partnership as n";
-            $sql .= " WHERE fk_member = " . ((int) $object->id);
+            $sql .= " WHERE fk_member = " . ((int)$object->id);
             $resql = $db->query($sql);
             if ($resql) {
                 $obj = $db->fetch_object($resql);
@@ -149,7 +149,7 @@ function member_prepare_head(Adherent $object)
         } else {
             $sql = "SELECT COUNT(id) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm";
-            $sql .= " WHERE elementtype = 'member' AND fk_element = " . ((int) $object->id);
+            $sql .= " WHERE elementtype = 'member' AND fk_element = " . ((int)$object->id);
             $resql = $db->query($sql);
             if ($resql) {
                 $obj = $db->fetch_object($resql);
@@ -179,8 +179,8 @@ function member_prepare_head(Adherent $object)
 /**
  *  Return array head with list of tabs to view object information
  *
- *  @param  AdherentType    $object         Member
- *  @return array<int,array<int,string>>    head links
+ * @param AdherentType $object Member
+ * @return array<int,array<int,string>>    head links
  */
 function member_type_prepare_head(AdherentType $object)
 {
@@ -228,7 +228,7 @@ function member_type_prepare_head(AdherentType $object)
 /**
  *  Return array head with list of tabs to view object information
  *
- *  @return array<int,array<int,string>>    head links
+ * @return array<int,array<int,string>>    head links
  */
 function member_admin_prepare_head()
 {
@@ -289,8 +289,8 @@ function member_admin_prepare_head()
 /**
  *  Return array head with list of tabs to view object stats information
  *
- *  @param  Adherent    $object         Member or null
- *  @return array<int,array<int,string>>    head links
+ * @param Adherent $object Member or null
+ * @return array<int,array<int,string>>    head links
  */
 function member_stats_prepare_head($object)
 {
@@ -343,8 +343,8 @@ function member_stats_prepare_head($object)
 /**
  *  Return array head with list of tabs to view object information
  *
- *  @param  Subscription    $object     Subscription
- *  @return array<int,array<int,string>>    head links
+ * @param Subscription $object Subscription
+ * @return array<int,array<int,string>>    head links
  */
 function subscription_prepare_head(Subscription $object)
 {

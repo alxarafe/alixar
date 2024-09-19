@@ -266,7 +266,7 @@ if (GETPOST('actionadd', 'alpha') || GETPOST('actionmodify', 'alpha')) {
             }
             $i++;
         }
-        $sql .= " WHERE " . $rowidcol . " = " . ((int) $rowid);
+        $sql .= " WHERE " . $rowidcol . " = " . ((int)$rowid);
 
         dol_syslog("actionmodify", LOG_DEBUG);
         //print $sql;
@@ -315,16 +315,16 @@ if ($action == 'confirm_delete' && $confirm == 'yes') {       // delete
     $website->fetch($rowid);
 
     if ($website->id > 0) {
-        $sql = "DELETE from " . MAIN_DB_PREFIX . "website_account WHERE fk_website = " . ((int) $rowid);
+        $sql = "DELETE from " . MAIN_DB_PREFIX . "website_account WHERE fk_website = " . ((int)$rowid);
         $result = $db->query($sql);
 
-        $sql = "DELETE from " . MAIN_DB_PREFIX . "website_page WHERE fk_website = " . ((int) $rowid);
+        $sql = "DELETE from " . MAIN_DB_PREFIX . "website_page WHERE fk_website = " . ((int)$rowid);
         $result = $db->query($sql);
 
-        $sql = "DELETE from " . MAIN_DB_PREFIX . "website_extrafields WHERE fk_object = " . ((int) $rowid);
+        $sql = "DELETE from " . MAIN_DB_PREFIX . "website_extrafields WHERE fk_object = " . ((int)$rowid);
         $result = $db->query($sql);
 
-        $sql = "DELETE from " . MAIN_DB_PREFIX . "website WHERE rowid = " . ((int) $rowid);
+        $sql = "DELETE from " . MAIN_DB_PREFIX . "website WHERE rowid = " . ((int)$rowid);
         $result = $db->query($sql);
         if (!$result) {
             if ($db->errno() == 'DB_ERROR_CHILD_EXISTS') {
@@ -351,7 +351,7 @@ if ($action == $acts[0]) {
     }
 
     if ($rowid) {
-        $sql = "UPDATE " . $tabname[$id] . " SET status = 1 WHERE rowid = " . ((int) $rowid);
+        $sql = "UPDATE " . $tabname[$id] . " SET status = 1 WHERE rowid = " . ((int)$rowid);
     }
 
     $result = $db->query($sql);
@@ -369,7 +369,7 @@ if ($action == $acts[1]) {
     }
 
     if ($rowid) {
-        $sql = "UPDATE " . $tabname[$id] . " SET status = 0 WHERE rowid = " . ((int) $rowid);
+        $sql = "UPDATE " . $tabname[$id] . " SET status = 0 WHERE rowid = " . ((int)$rowid);
     }
 
     $result = $db->query($sql);
@@ -377,7 +377,6 @@ if ($action == $acts[1]) {
         dol_print_error($db);
     }
 }
-
 
 
 /*
@@ -672,11 +671,11 @@ $db->close();
 /**
  *  Show fields in insert/edit mode
  *
- *  @param      array   $fieldlist      Array of fields
- *  @param      Object  $obj            If we show a particular record, obj is filled with record fields
- *  @param      string  $tabname        Name of SQL table
- *  @param      string  $context        'add'=Output field for the "add form", 'edit'=Output field for the "edit form", 'hide'=Output field for the "add form" but we don't want it to be rendered
- *  @return     void
+ * @param array $fieldlist Array of fields
+ * @param Object $obj If we show a particular record, obj is filled with record fields
+ * @param string $tabname Name of SQL table
+ * @param string $context 'add'=Output field for the "add form", 'edit'=Output field for the "edit form", 'hide'=Output field for the "add form" but we don't want it to be rendered
+ * @return     void
  */
 function fieldListWebsites($fieldlist, $obj = null, $tabname = '', $context = '')
 {

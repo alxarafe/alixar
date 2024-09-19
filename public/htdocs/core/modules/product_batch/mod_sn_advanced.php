@@ -60,8 +60,8 @@ class mod_sn_advanced extends ModeleNumRefBatch
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -114,7 +114,7 @@ class mod_sn_advanced extends ModeleNumRefBatch
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -137,9 +137,9 @@ class mod_sn_advanced extends ModeleNumRefBatch
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc     Object thirdparty
-     *  @param  Productlot  $object     Object we need next value for
-     *  @return string|0                Value if OK, 0 if KO
+     * @param Societe $objsoc Object thirdparty
+     * @param Productlot $object Object we need next value for
+     * @return string|0                Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $object)
     {
@@ -169,6 +169,6 @@ class mod_sn_advanced extends ModeleNumRefBatch
 
         $numFinal = get_next_value($db, $mask, 'product_lot', 'batch', $filter, null, $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

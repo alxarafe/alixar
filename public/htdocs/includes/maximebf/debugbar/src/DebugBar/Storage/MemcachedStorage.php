@@ -102,9 +102,9 @@ class MemcachedStorage implements StorageInterface
 
     /**
      * Filter the metadata for matches.
-     * 
-     * @param  array $meta
-     * @param  array $filters
+     *
+     * @param array $meta
+     * @param array $filters
      * @return bool
      */
     protected function filter($meta, $filters)
@@ -130,8 +130,8 @@ class MemcachedStorage implements StorageInterface
     }
 
     /**
-     * @param  string $id
-     * @return string 
+     * @param string $id
+     * @return string
      */
     protected function createKey($id)
     {

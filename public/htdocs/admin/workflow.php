@@ -231,10 +231,9 @@ $workflowcodes = array_filter(
      * @return bool
      */
     static function ($var) {
-        return (bool) $var['enabled'];
+        return (bool)$var['enabled'];
     }
 );
-
 
 
 /*

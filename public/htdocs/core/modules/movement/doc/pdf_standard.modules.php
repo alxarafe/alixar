@@ -68,7 +68,7 @@ class pdf_standard extends ModelePDFMovement
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -131,21 +131,22 @@ class pdf_standard extends ModelePDFMovement
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build a document on disk using the generic odt module.
      *
-     *  @param      MouvementStock  $object             Object source to build document
-     *  @param      Translate       $outputlangs        Lang output object
-     *  @param      string          $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int             $hidedetails        Do not show line details
-     *  @param      int             $hidedesc           Do not show desc
-     *  @param      int             $hideref            Do not show ref
-     *  @return     int                                 1 if OK, <=0 if KO
+     * @param MouvementStock $object Object source to build document
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                                 1 if OK, <=0 if KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath = '', $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $db, $hookmanager, $nblines;
 
         dol_syslog("write_file outputlangs->defaultlang=" . (is_object($outputlangs) ? $outputlangs->defaultlang : 'null'));
@@ -246,7 +247,7 @@ class pdf_standard extends ModelePDFMovement
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "product_lot as pl ON m.batch = pl.batch AND m.fk_product = pl.fk_product";
         $sql .= " WHERE m.fk_product = p.rowid";
         if ($msid > 0) {
-            $sql .= " AND m.rowid = " . ((int) $msid);
+            $sql .= " AND m.rowid = " . ((int)$msid);
         }
         $sql .= " AND m.fk_entrepot = e.rowid";
         $sql .= " AND e.entity IN (" . getEntity('stock') . ")";
@@ -254,19 +255,19 @@ class pdf_standard extends ModelePDFMovement
             $sql .= " AND p.fk_product_type = 0";
         }
         if ($id > 0) {
-            $sql .= " AND e.rowid = " . ((int) $id);
+            $sql .= " AND e.rowid = " . ((int)$id);
         }
         if ($month > 0) {
             if ($year > 0) {
                 $sql .= " AND m.datem BETWEEN '" . $this->db->idate(dol_get_first_day($year, $month, false)) . "' AND '" . $this->db->idate(dol_get_last_day($year, $month, false)) . "'";
             } else {
-                $sql .= " AND date_format(m.datem, '%m') = '" . ((int) $month) . "'";
+                $sql .= " AND date_format(m.datem, '%m') = '" . ((int)$month) . "'";
             }
         } elseif ($year > 0) {
             $sql .= " AND m.datem BETWEEN '" . $this->db->idate(dol_get_first_day($year, 1, false)) . "' AND '" . $this->db->idate(dol_get_last_day($year, 12, false)) . "'";
         }
         if ($idproduct > 0) {
-            $sql .= " AND p.rowid = " . ((int) $idproduct);
+            $sql .= " AND p.rowid = " . ((int)$idproduct);
         }
         if (!empty($search_ref)) {
             $sql .= natural_search('m.rowid', $search_ref, 1);
@@ -284,7 +285,7 @@ class pdf_standard extends ModelePDFMovement
             $sql .= natural_search('p.label', $search_product);
         }
         if ($search_warehouse > 0) {
-            $sql .= " AND e.rowid = " . ((int) $search_warehouse);
+            $sql .= " AND e.rowid = " . ((int)$search_warehouse);
         }
         if (!empty($search_user)) {
             $sql .= natural_search('u.login', $search_user);
@@ -463,7 +464,7 @@ class pdf_standard extends ModelePDFMovement
                         if (getDolGlobalInt('MAIN_MULTILANGS')) { // si l'option est active
                             $sql = "SELECT label";
                             $sql .= " FROM " . MAIN_DB_PREFIX . "product_lang";
-                            $sql .= " WHERE fk_product = " . ((int) $objp->rowid);
+                            $sql .= " WHERE fk_product = " . ((int)$objp->rowid);
                             $sql .= " AND lang = '" . $this->db->escape($langs->getDefaultLang()) . "'";
                             $sql .= " LIMIT 1";
 
@@ -782,19 +783,20 @@ class pdf_standard extends ModelePDFMovement
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     float|int   $tab_top        Top position of table
-     *   @param     float|int   $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y (not used)
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @param     string      $currency       Currency code
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param float|int $tab_top Top position of table
+     * @param float|int $tab_height Height of table (rectangle)
+     * @param int $nexY Y (not used)
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop 1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
+     * @param int $hidebottom Hide bottom bar of array
+     * @param string $currency Currency code
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0, $currency = '')
     {
@@ -906,16 +908,17 @@ class pdf_standard extends ModelePDFMovement
         $pdf->SetLineStyle(array('dash' => 0));
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Object      $object         Object to show
-     *  @param  int         $showaddress    0=no, 1=yes
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @param  string      $titlekey       Translation key to show as title of document
-     *  @return float|int                   Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param Object $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @param string $titlekey Translation key to show as title of document
+     * @return float|int                   Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs, $titlekey = "")
     {
@@ -1031,7 +1034,7 @@ class pdf_standard extends ModelePDFMovement
         // Last movement
         $sql = "SELECT max(m.datem) as datem";
         $sql .= " FROM " . MAIN_DB_PREFIX . "stock_mouvement as m";
-        $sql .= " WHERE m.fk_entrepot = " . ((int) $object->id);
+        $sql .= " WHERE m.fk_entrepot = " . ((int)$object->id);
         $resqlbis = $this->db->query($sql);
         if ($resqlbis) {
             $obj = $this->db->fetch_object($resqlbis);
@@ -1129,15 +1132,16 @@ class pdf_standard extends ModelePDFMovement
         return $top_shift;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show footer of page. Need this->emetteur object
      *
-     *  @param  TCPDF       $pdf                PDF
-     *  @param  Object      $object             Object to show
-     *  @param  Translate   $outputlangs        Object lang for output
-     *  @param  int         $hidefreetext       1=Hide free text
-     *  @return int                             Return height of bottom margin including footer text
+     * @param TCPDF $pdf PDF
+     * @param Object $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return int                             Return height of bottom margin including footer text
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {

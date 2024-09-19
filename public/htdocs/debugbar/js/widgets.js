@@ -15,9 +15,9 @@
      */
     var TooltipIndicator = PhpDebugBar.DebugBar.TooltipIndicator = PhpDebugBar.DebugBar.Indicator.extend({
 
-        render: function() {
+        render: function () {
             this.$icon = $('<i />').appendTo(this.$el);
-            this.bindAttr('icon', function(icon) {
+            this.bindAttr('icon', function (icon) {
                 if (icon) {
                     this.$icon.attr('class', 'fa fa-' + icon);
                 } else {
@@ -28,7 +28,7 @@
             this.bindAttr(['title', 'data'], $('<span />').addClass(csscls('text')).appendTo(this.$el));
 
             this.$tooltip = $('<span />').addClass(csscls('tooltip disabled')).appendTo(this.$el);
-            this.bindAttr('tooltip', function(tooltip) {
+            this.bindAttr('tooltip', function (tooltip) {
                 if (tooltip['html']) {
                     tooltipHTML = $('<span />').html(tooltip['html']).addClass(csscls('tooltip-html'));
                     this.$tooltip.html(tooltipHTML).removeClass(csscls('disabled'));
@@ -60,12 +60,12 @@
 
         tagName: 'a',
 
-        render: function() {
+        render: function () {
             LinkIndicator.__super__.render.apply(this);
-            this.bindAttr('href', function(href) {
+            this.bindAttr('href', function (href) {
                 this.$el.attr('href', href);
             });
-            this.bindAttr('target', function(target) {
+            this.bindAttr('target', function (target) {
                 this.$el.attr('target', target);
             });
         }
@@ -82,13 +82,13 @@
     var HookListWidget = PhpDebugBar.Widgets.HookListWidget = PhpDebugBar.Widgets.KVListWidget.extend({
         className: csscls('widgets-kvlist widgets-hooklist'),
 
-        itemRenderer: function(dt, dd, key, object) {
+        itemRenderer: function (dt, dd, key, object) {
             $('<span />').attr('title', key).text(key).appendTo(dt);
 
 
             dd.html('<span><strong>File: </strong> ' + object.file
                 + '</span><span><strong>Line: </strong>' + object.line
-				+ '</span><span><strong>Count: </strong>' + object.count
+                + '</span><span><strong>Count: </strong>' + object.count
                 + '</span><span><strong>Contexts: </strong>' + (object.contexts === null || object.contexts === '' ? 'Not set' : object.contexts)
                 + '</span>'
             );

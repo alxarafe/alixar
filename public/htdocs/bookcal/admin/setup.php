@@ -71,9 +71,9 @@ $formSetup = new FormSetup($db);
 $item = $formSetup->newItem('BOOKCAL_PUBLIC_INTERFACE_TOPIC');
 $item->defaultFieldValue = 'MyBigCompany public interface for Bookcal';
 
-$setupnotempty = + count($formSetup->items);
+$setupnotempty = +count($formSetup->items);
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 /*
  * Actions
@@ -147,7 +147,6 @@ if ($action == 'updateMask') {
         dolibarr_del_const($db, $constforval, $conf->entity);
     }
 }
-
 
 
 /*

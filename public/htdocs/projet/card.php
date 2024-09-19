@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2023      Charlene Benke       <charlene@patas_monkey.com>
- * Copyright (C) 2023      Christian Foellmann  <christian@foellmann.de>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2023       Charlene Benke              <charlene@patas_monkey.com>
+ * Copyright (C) 2023       Christian Foellmann         <christian@foellmann.de>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -24,6 +24,17 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/projet/card.php
@@ -205,26 +216,26 @@ if (empty($reshook)) {
 
             $db->begin();
 
-            $object->ref                  = GETPOST('ref', 'alphanohtml');
-            $object->fk_project           = GETPOSTINT('fk_project');
-            $object->title                = GETPOST('title', 'alphanohtml');
-            $object->socid                = GETPOSTINT('socid');
-            $object->description          = GETPOST('description', 'restricthtml'); // Do not use 'alpha' here, we want field as it is
-            $object->public               = GETPOST('public', 'alphanohtml');
-            $object->opp_amount           = GETPOSTFLOAT('opp_amount');
-            $object->budget_amount        = GETPOSTFLOAT('budget_amount');
-            $object->date_c               = dol_now();
-            $object->date_start           = $date_start;
-            $object->date_end             = $date_end;
-            $object->date_start_event     = $date_start_event;
-            $object->date_end_event       = $date_end_event;
-            $object->location             = $location;
-            $object->statut               = $status;
-            $object->opp_status           = $opp_status;
-            $object->opp_percent          = $opp_percent;
-            $object->usage_opportunity    = (GETPOST('usage_opportunity', 'alpha') == 'on' ? 1 : 0);
-            $object->usage_task           = (GETPOST('usage_task', 'alpha') == 'on' ? 1 : 0);
-            $object->usage_bill_time      = (GETPOST('usage_bill_time', 'alpha') == 'on' ? 1 : 0);
+            $object->ref = GETPOST('ref', 'alphanohtml');
+            $object->fk_project = GETPOSTINT('fk_project');
+            $object->title = GETPOST('title', 'alphanohtml');
+            $object->socid = GETPOSTINT('socid');
+            $object->description = GETPOST('description', 'restricthtml'); // Do not use 'alpha' here, we want field as it is
+            $object->public = GETPOST('public', 'alphanohtml');
+            $object->opp_amount = GETPOSTFLOAT('opp_amount');
+            $object->budget_amount = GETPOSTFLOAT('budget_amount');
+            $object->date_c = dol_now();
+            $object->date_start = $date_start;
+            $object->date_end = $date_end;
+            $object->date_start_event = $date_start_event;
+            $object->date_end_event = $date_end_event;
+            $object->location = $location;
+            $object->statut = $status;
+            $object->opp_status = $opp_status;
+            $object->opp_percent = $opp_percent;
+            $object->usage_opportunity = (GETPOST('usage_opportunity', 'alpha') == 'on' ? 1 : 0);
+            $object->usage_task = (GETPOST('usage_task', 'alpha') == 'on' ? 1 : 0);
+            $object->usage_bill_time = (GETPOST('usage_bill_time', 'alpha') == 'on' ? 1 : 0);
             $object->usage_organize_event = (GETPOST('usage_organize_event', 'alpha') == 'on' ? 1 : 0);
 
             // Fill array 'array_options' with data from add form
@@ -268,7 +279,7 @@ if (empty($reshook)) {
                 $db->commit();
 
                 if (!empty($backtopage)) {
-                    $backtopage = preg_replace('/--IDFORBACKTOPAGE--|__ID__/', (string) $object->id, $backtopage); // New method to autoselect project after a New on another form object creation
+                    $backtopage = preg_replace('/--IDFORBACKTOPAGE--|__ID__/', (string)$object->id, $backtopage); // New method to autoselect project after a New on another form object creation
                     $backtopage = $backtopage . '&projectid=' . $object->id; // Old method
                     header("Location: " . $backtopage);
                     exit;
@@ -305,33 +316,33 @@ if (empty($reshook)) {
 
             $old_start_date = $object->date_start;
 
-            $object->ref          = GETPOST('ref', 'alpha');
-            $object->fk_project   = GETPOSTINT('fk_project');
-            $object->title        = GETPOST('title', 'alphanohtml'); // Do not use 'alpha' here, we want field as it is
-            $object->statut       = GETPOSTINT('status');
-            $object->socid        = GETPOSTINT('socid');
-            $object->description  = GETPOST('description', 'restricthtml'); // Do not use 'alpha' here, we want field as it is
-            $object->public       = GETPOST('public', 'alpha');
-            $object->date_start   = (!GETPOST('projectstart')) ? '' : $date_start;
-            $object->date_end     = (!GETPOST('projectend')) ? '' : $date_end;
+            $object->ref = GETPOST('ref', 'alpha');
+            $object->fk_project = GETPOSTINT('fk_project');
+            $object->title = GETPOST('title', 'alphanohtml'); // Do not use 'alpha' here, we want field as it is
+            $object->statut = GETPOSTINT('status');
+            $object->socid = GETPOSTINT('socid');
+            $object->description = GETPOST('description', 'restricthtml'); // Do not use 'alpha' here, we want field as it is
+            $object->public = GETPOST('public', 'alpha');
+            $object->date_start = (!GETPOST('projectstart')) ? '' : $date_start;
+            $object->date_end = (!GETPOST('projectend')) ? '' : $date_end;
             $object->date_start_event = (!GETPOST('date_start_event')) ? '' : $date_start_event;
-            $object->date_end_event   = (!GETPOST('date_end_event')) ? '' : $date_end_event;
-            $object->location     = $location;
+            $object->date_end_event = (!GETPOST('date_end_event')) ? '' : $date_end_event;
+            $object->location = $location;
             if (GETPOSTISSET('opp_amount')) {
-                $object->opp_amount   = price2num(GETPOST('opp_amount', 'alpha'));
+                $object->opp_amount = price2num(GETPOST('opp_amount', 'alpha'));
             }
             if (GETPOSTISSET('budget_amount')) {
                 $object->budget_amount = price2num(GETPOST('budget_amount', 'alpha'));
             }
             if (GETPOSTISSET('opp_status')) {
-                $object->opp_status   = $opp_status;
+                $object->opp_status = $opp_status;
             }
             if (GETPOSTISSET('opp_percent')) {
-                $object->opp_percent  = $opp_percent;
+                $object->opp_percent = $opp_percent;
             }
-            $object->usage_opportunity    = (GETPOST('usage_opportunity', 'alpha') == 'on' ? 1 : 0);
-            $object->usage_task           = (GETPOST('usage_task', 'alpha') == 'on' ? 1 : 0);
-            $object->usage_bill_time      = (GETPOST('usage_bill_time', 'alpha') == 'on' ? 1 : 0);
+            $object->usage_opportunity = (GETPOST('usage_opportunity', 'alpha') == 'on' ? 1 : 0);
+            $object->usage_task = (GETPOST('usage_task', 'alpha') == 'on' ? 1 : 0);
+            $object->usage_bill_time = (GETPOST('usage_bill_time', 'alpha') == 'on' ? 1 : 0);
             $object->usage_organize_event = (GETPOST('usage_organize_event', 'alpha') == 'on' ? 1 : 0);
 
             // Fill array 'array_options' with data from add form
@@ -405,10 +416,10 @@ if (empty($reshook)) {
     if ($action == 'set_opp_status' && $user->hasRight('projet', 'creer')) {
         $error = 0;
         if (GETPOSTISSET('opp_status')) {
-            $object->opp_status   = $opp_status;
+            $object->opp_status = $opp_status;
         }
         if (GETPOSTISSET('opp_percent')) {
-            $object->opp_percent  = $opp_percent;
+            $object->opp_percent = $opp_percent;
         }
 
         if (getDolGlobalString('PROJECT_USE_OPPORTUNITIES')) {
@@ -505,7 +516,7 @@ if (empty($reshook)) {
 
             if (!empty($_SESSION['pageforbacktolist']) && !empty($_SESSION['pageforbacktolist']['project'])) {
                 $tmpurl = $_SESSION['pageforbacktolist']['project'];
-                $tmpurl = preg_replace('/__SOCID__/', (string) $object->socid, $tmpurl);
+                $tmpurl = preg_replace('/__SOCID__/', (string)$object->socid, $tmpurl);
                 $urlback = $tmpurl . (preg_match('/\?/', $tmpurl) ? '&' : '?') . 'restore_lastsearch_values=1';
             } else {
                 $urlback = constant('BASE_URL') . '/projet/list.php?restore_lastsearch_values=1';
@@ -553,7 +564,6 @@ if (empty($reshook)) {
     $trackid = 'proj' . $object->id;
     include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
 }
-
 
 /*
  *	View
@@ -615,7 +625,7 @@ if ($action == 'create' && $user->hasRight('projet', 'creer')) {
     $file = '';
     $classname = '';
     $filefound = 0;
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/project/" . $modele . '.php', 0);
         if (file_exists($file)) {
@@ -942,7 +952,7 @@ if ($action == 'create' && $user->hasRight('projet', 'creer')) {
 
     // To verify role of users
     $userAccess = $object->restrictedProjectArea($user, 'read');
-    $userWrite  = $object->restrictedProjectArea($user, 'write');
+    $userWrite = $object->restrictedProjectArea($user, 'write');
     $userDelete = $object->restrictedProjectArea($user, 'delete');
     //print "userAccess=".$userAccess." userWrite=".$userWrite." userDelete=".$userDelete;
 
@@ -1297,7 +1307,7 @@ if ($action == 'create' && $user->hasRight('projet', 'creer')) {
 
         if (!empty($_SESSION['pageforbacktolist']) && !empty($_SESSION['pageforbacktolist']['project'])) {
             $tmpurl = $_SESSION['pageforbacktolist']['project'];
-            $tmpurl = preg_replace('/__SOCID__/', (string) $object->socid, $tmpurl);
+            $tmpurl = preg_replace('/__SOCID__/', (string)$object->socid, $tmpurl);
             $linkback = '<a href="' . $tmpurl . (preg_match('/\?/', $tmpurl) ? '&' : '?') . 'restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
         } else {
             $linkback = '<a href="' . constant('BASE_URL') . '/projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
@@ -1386,8 +1396,8 @@ if ($action == 'create' && $user->hasRight('projet', 'creer')) {
                 print '<a class="editfielda paddingtop" href="' . $_SERVER["PHP_SELF"] . '?action=edit_opp_status&token=' . newToken() . '&id=' . $object->id . '">' . img_edit($langs->transnoentitiesnoconv('Edit'), 1) . '</a>';
             }
             print '</td><td>';
-            $html_name_status   = ($action == 'edit_opp_status') ? 'opp_status' : 'none';
-            $html_name_percent  = ($action == 'edit_opp_status') ? 'opp_percent' : 'none';
+            $html_name_status = ($action == 'edit_opp_status') ? 'opp_status' : 'none';
+            $html_name_percent = ($action == 'edit_opp_status') ? 'opp_percent' : 'none';
             $percent_value = (GETPOSTISSET('opp_percent') ? GETPOST('opp_percent') : (strcmp($object->opp_percent, '') ? vatrate($object->opp_percent) : ''));
             $formproject->formOpportunityStatus($_SERVER['PHP_SELF'] . '?socid=' . $object->id, $object->opp_status, $percent_value, $html_name_status, $html_name_percent);
             print '</td></tr>';
@@ -1501,7 +1511,7 @@ if ($action == 'create' && $user->hasRight('projet', 'creer')) {
             	{
                     var element = jQuery("#opp_status option:selected");
                     var defaultpercent = element.attr("defaultpercent");
-                    var defaultcloseproject = ' . ((int) $defaultcheckedwhenoppclose) . ';
+                    var defaultcloseproject = ' . ((int)$defaultcheckedwhenoppclose) . ';
                     var elemcode = element.attr("elemcode");
                     var oldpercent = \'' . dol_escape_js($object->opp_percent) . '\';
 
@@ -1651,7 +1661,7 @@ if ($action == 'create' && $user->hasRight('projet', 'creer')) {
                     70 => array('lang' => 'interventions', 'enabled' => isModEnabled("intervention"), 'perm' => $user->hasRight('fichinter', 'creer'), 'label' => 'AddIntervention', 'url' => '/fichinter/card.php?action=create&amp;projectid=' . $object->id . '&amp;socid=' . $object->socid),
                     80 => array('lang' => 'contracts', 'enabled' => isModEnabled("contract"), 'perm' => $user->hasRight('contrat', 'creer'), 'label' => 'AddContract', 'url' => '/contrat/card.php?action=create&amp;projectid=' . $object->id . '&amp;socid=' . $object->socid),
                     90 => array('lang' => 'trips', 'enabled' => isModEnabled("expensereport"), 'perm' => $user->hasRight('expensereport', 'creer'), 'label' => 'AddTrip', 'url' => '/expensereport/card.php?action=create&amp;projectid=' . $object->id . '&amp;socid=' . $object->socid),
-                   100 => array('lang' => 'donations', 'enabled' => isModEnabled("don"), 'perm' => $user->hasRight('don', 'creer'), 'label' => 'AddDonation', 'url' => '/don/card.php?action=create&amp;projectid=' . $object->id . '&amp;socid=' . $object->socid),
+                    100 => array('lang' => 'donations', 'enabled' => isModEnabled("don"), 'perm' => $user->hasRight('don', 'creer'), 'label' => 'AddDonation', 'url' => '/don/card.php?action=create&amp;projectid=' . $object->id . '&amp;socid=' . $object->socid),
                 );
 
                 $params = array('backtopage' => $_SERVER["PHP_SELF"] . '?id=' . $object->id);
@@ -1662,7 +1672,7 @@ if ($action == 'create' && $user->hasRight('projet', 'creer')) {
             // Clone
             if ($user->hasRight('projet', 'creer')) {
                 if ($userWrite > 0) {
-                    print dolGetButtonAction('', $langs->trans('ToClone'), 'default', $_SERVER["PHP_SELF"] . '?action=clone&token=' . newToken() . '&id=' . ((int) $object->id), '');
+                    print dolGetButtonAction('', $langs->trans('ToClone'), 'default', $_SERVER["PHP_SELF"] . '?action=clone&token=' . newToken() . '&id=' . ((int)$object->id), '');
                 } else {
                     print dolGetButtonAction($langs->trans('NotOwnerOfProject'), $langs->trans('ToClone'), 'default', $_SERVER['PHP_SELF'] . '#', '', false);
                 }
@@ -1745,7 +1755,7 @@ if ($action == 'create' && $user->hasRight('projet', 'creer')) {
         $morehtmlcenter .= '</div>';
 
         // List of actions on element
-                $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, 'project', 0, 1, '', $MAXEVENT, '', $morehtmlcenter);
 
         print '</div></div>';

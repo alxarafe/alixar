@@ -106,10 +106,10 @@ if ($action == 'add') {
         $db->begin();
 
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "notify_def";
-        $sql .= " WHERE fk_user=" . ((int) $id) . " AND fk_action=" . ((int) $actionid);
+        $sql .= " WHERE fk_user=" . ((int)$id) . " AND fk_action=" . ((int)$actionid);
         if ($db->query($sql)) {
             $sql = "INSERT INTO " . MAIN_DB_PREFIX . "notify_def (datec, fk_user, fk_action)";
-            $sql .= " VALUES ('" . $db->idate($now) . "', " . ((int) $id) . ", " . ((int) $actionid) . ")";
+            $sql .= " VALUES ('" . $db->idate($now) . "', " . ((int)$id) . ", " . ((int)$actionid) . ")";
 
             if (!$db->query($sql)) {
                 $error++;
@@ -133,7 +133,6 @@ if ($action == 'delete') {
     $sql = "DELETE FROM " . MAIN_DB_PREFIX . "notify_def where rowid=" . GETPOSTINT("actid");
     $db->query($sql);
 }
-
 
 
 /*
@@ -167,7 +166,7 @@ if ($result > 0) {
     $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
     $morehtmlref .= '</a>';
 
-    $urltovirtualcard = '/user/virtualcard.php?id=' . ((int) $object->id);
+    $urltovirtualcard = '/user/virtualcard.php?id=' . ((int)$object->id);
     $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl") . ' - ' . $object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
     dol_banner_tab($object, 'id', $linkback, $user->hasRight('user', 'user', 'lire') || $user->admin, 'rowid', 'ref', $morehtmlref, '', 0, '', '', 0, '');
@@ -234,11 +233,11 @@ if ($result > 0) {
     // Add notification form
     //  print load_fiche_titre($langs->trans("AddNewNotification"), '', '');
 
-    print '<form action="' . $_SERVER["PHP_SELF"] . '?id=' . urlencode((string) ($id)) . '" method="POST">';
+    print '<form action="' . $_SERVER["PHP_SELF"] . '?id=' . urlencode((string)($id)) . '" method="POST">';
     print '<input type="hidden" name="token" value="' . newToken() . '">';
     print '<input type="hidden" name="action" value="add">';
 
-    $param = "&id=" . urlencode((string) ($id));
+    $param = "&id=" . urlencode((string)($id));
 
     // Line with titles
     /*  print '<table width="100%" class="noborder">';
@@ -262,7 +261,7 @@ if ($result > 0) {
     $sql .= " " . MAIN_DB_PREFIX . "user c";
     $sql .= " WHERE a.rowid = n.fk_action";
     $sql .= " AND c.rowid = n.fk_user";
-    $sql .= " AND c.rowid = " . ((int) $object->id);
+    $sql .= " AND c.rowid = " . ((int)$object->id);
     $sql .= " AND c.entity IN (" . getEntity('user') . ')';
 
     $resql = $db->query($sql);
@@ -435,7 +434,7 @@ if ($result > 0) {
     $sql .= " " . MAIN_DB_PREFIX . "notify as n";
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "user as c ON n.fk_user = c.rowid";
     $sql .= " WHERE a.rowid = n.fk_action";
-    $sql .= " AND n.fk_user = " . ((int) $object->id);
+    $sql .= " AND n.fk_user = " . ((int)$object->id);
     $sql .= $db->order($sortfield, $sortorder);
 
     // Count total nb of records

@@ -70,7 +70,7 @@ $confirm = GETPOST('confirm', 'alpha');
 $toselect = GETPOST('toselect', 'array');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'orderlist';
 $optioncss = GETPOST('optioncss', 'alpha');
-$mode        = GETPOST('mode', 'alpha');
+$mode = GETPOST('mode', 'alpha');
 
 if (getDolGlobalInt('MAIN_SEE_SUBORDINATES')) {
     $userschilds = $user->getAllChildIds();
@@ -107,14 +107,14 @@ $search_country = GETPOST('search_country', 'aZ09');
 $search_type_thirdparty = GETPOST('search_type_thirdparty', 'intcomma');
 $search_user = GETPOST('search_user', 'intcomma');
 $search_sale = GETPOST('search_sale', 'intcomma');
-$search_total_ht  = GETPOST('search_total_ht', 'alpha');
+$search_total_ht = GETPOST('search_total_ht', 'alpha');
 $search_total_vat = GETPOST('search_total_vat', 'alpha');
 $search_total_ttc = GETPOST('search_total_ttc', 'alpha');
 $search_warehouse = GETPOST('search_warehouse', 'intcomma');
 
 $search_multicurrency_code = GETPOST('search_multicurrency_code', 'alpha');
 $search_multicurrency_tx = GETPOST('search_multicurrency_tx', 'alpha');
-$search_multicurrency_montant_ht  = GETPOST('search_multicurrency_montant_ht', 'alpha');
+$search_multicurrency_montant_ht = GETPOST('search_multicurrency_montant_ht', 'alpha');
 $search_multicurrency_montant_vat = GETPOST('search_multicurrency_montant_vat', 'alpha');
 $search_multicurrency_montant_ttc = GETPOST('search_multicurrency_montant_ttc', 'alpha');
 
@@ -195,7 +195,7 @@ $arrayfields = array(
     'typent.code' => array('label' => "ThirdPartyType", 'checked' => $checkedtypetiers, 'position' => 55),
     'c.date_commande' => array('label' => "OrderDateShort", 'checked' => 1, 'position' => 60, 'csslist' => 'nowraponall'),
     'c.date_delivery' => array('label' => "DateDeliveryPlanned", 'checked' => 1, 'enabled' => !getDolGlobalString('ORDER_DISABLE_DELIVERY_DATE'), 'position' => 65, 'csslist' => 'nowraponall'),
-    'c.fk_shipping_method' => array('label' => "SendingMethod", 'checked' => -1, 'position' => 66 , 'enabled' => isModEnabled("shipping")),
+    'c.fk_shipping_method' => array('label' => "SendingMethod", 'checked' => -1, 'position' => 66, 'enabled' => isModEnabled("shipping")),
     'c.fk_cond_reglement' => array('label' => "PaymentConditionsShort", 'checked' => -1, 'position' => 67),
     'c.fk_mode_reglement' => array('label' => "PaymentMode", 'checked' => -1, 'position' => 68),
     'c.fk_input_reason' => array('label' => "Channel", 'checked' => -1, 'position' => 69),
@@ -218,7 +218,7 @@ $arrayfields = array(
     'c.date_cloture' => array('label' => "DateClosing", 'checked' => 0, 'position' => 130),
     'c.note_public' => array('label' => 'NotePublic', 'checked' => 0, 'enabled' => (!getDolGlobalInt('MAIN_LIST_HIDE_PUBLIC_NOTES')), 'position' => 135, 'searchall' => 1),
     'c.note_private' => array('label' => 'NotePrivate', 'checked' => 0, 'enabled' => (!getDolGlobalInt('MAIN_LIST_HIDE_PRIVATE_NOTES')), 'position' => 140),
-    'shippable' => array('label' => "Shippable", 'checked' => 1,'enabled' => (isModEnabled("shipping")), 'position' => 990),
+    'shippable' => array('label' => "Shippable", 'checked' => 1, 'enabled' => (isModEnabled("shipping")), 'position' => 990),
     'c.facture' => array('label' => "Billed", 'checked' => 1, 'enabled' => (!getDolGlobalString('WORKFLOW_BILL_ON_SHIPMENT')), 'position' => 995),
     'c.import_key' => array('type' => 'varchar(14)', 'label' => 'ImportId', 'enabled' => 1, 'visible' => -2, 'position' => 999),
     'c.fk_statut' => array('label' => "Status", 'checked' => 1, 'position' => 1000)
@@ -403,7 +403,7 @@ if (empty($reshook)) {
                 }
 
                 $objecttmp->date = $datefacture;
-                $objecttmp->origin    = 'commande';
+                $objecttmp->origin = 'commande';
                 $objecttmp->origin_id = $id_order;
 
                 $objecttmp->array_options = $cmd->array_options; // Copy extrafields
@@ -608,11 +608,11 @@ if (empty($reshook)) {
             if ($nb_bills_created == 1) {
                 if (getDolGlobalInt('MAIN_MASSACTION_CREATEBILLS_REDIRECT_IF_ONE') == 1) {
                     // Redirect to generated invoice if unique
-                    header('Location: ' . constant('BASE_URL') . '/compta/facture/card.php?id=' . urlencode((string) $lastid));
+                    header('Location: ' . constant('BASE_URL') . '/compta/facture/card.php?id=' . urlencode((string)$lastid));
                     exit;
                 }
                 $texttoshow = $langs->trans('BillXCreated', '{s1}');
-                $texttoshow = str_replace('{s1}', '<a href="' . constant('BASE_URL') . '/compta/facture/card.php?id=' . urlencode((string) ($lastid)) . '">' . $lastref . '</a>', $texttoshow);
+                $texttoshow = str_replace('{s1}', '<a href="' . constant('BASE_URL') . '/compta/facture/card.php?id=' . urlencode((string)($lastid)) . '">' . $lastref . '</a>', $texttoshow);
                 setEventMessages($texttoshow, null, 'mesgs');
             } else {
                 if (getDolGlobalInt('MAIN_MASSACTION_CREATEBILLS_REDIRECT_IF_MANY') == 1) {
@@ -632,7 +632,7 @@ if (empty($reshook)) {
                 $param .= '&contextpage=' . urlencode($contextpage);
             }
             if ($limit > 0 && $limit != $conf->liste_limit) {
-                $param .= '&limit=' . ((int) $limit);
+                $param .= '&limit=' . ((int)$limit);
             }
             if ($optioncss != '') {
                 $param .= '&optioncss=' . urlencode($optioncss);
@@ -641,10 +641,10 @@ if (empty($reshook)) {
                 $param .= '&search_all=' . urlencode($search_all);
             }
             if ($show_files) {
-                $param .= '&show_files=' . urlencode((string) ($show_files));
+                $param .= '&show_files=' . urlencode((string)($show_files));
             }
             if ($socid > 0) {
-                $param .= '&socid=' . urlencode((string) ($socid));
+                $param .= '&socid=' . urlencode((string)($socid));
             }
             if ($search_status != '') {
                 $param .= '&search_status=' . urlencode($search_status);
@@ -668,7 +668,7 @@ if (empty($reshook)) {
                 $param .= '&search_deliveryyear=' . urlencode($search_deliveryyear);
             }
             if ($search_id) {
-                $param .= '&search_id=' . urlencode((string) $search_id);
+                $param .= '&search_id=' . urlencode((string)$search_id);
             }
             if ($search_ref) {
                 $param .= '&search_ref=' . urlencode($search_ref);
@@ -680,10 +680,10 @@ if (empty($reshook)) {
                 $param .= '&search_ref_customer=' . urlencode($search_ref_customer);
             }
             if ($search_user > 0) {
-                $param .= '&search_user=' . urlencode((string) ($search_user));
+                $param .= '&search_user=' . urlencode((string)($search_user));
             }
             if ($search_sale > 0) {
-                $param .= '&search_sale=' . urlencode((string) ($search_sale));
+                $param .= '&search_sale=' . urlencode((string)($search_sale));
             }
             if ($search_total_ht != '') {
                 $param .= '&search_total_ht=' . urlencode($search_total_ht);
@@ -900,12 +900,12 @@ $sql .= $hookmanager->resPrint;
 $sql .= ' WHERE c.fk_soc = s.rowid';
 $sql .= ' AND c.entity IN (' . getEntity('commande') . ')';
 if ($socid > 0) {
-    $sql .= ' AND s.rowid = ' . ((int) $socid);
+    $sql .= ' AND s.rowid = ' . ((int)$socid);
 }
 
 // Restriction on sale representative
 if (!$permissiontoreadallthirdparty) {
-    $sql .= " AND (EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int) $user->id) . ")";
+    $sql .= " AND (EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int)$user->id) . ")";
     if (getDolGlobalInt('MAIN_SEE_SUBORDINATES') && $userschilds) {
         $sql .= " OR EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user IN (" . $db->sanitize(implode(',', $userschilds)) . "))";
     }
@@ -925,14 +925,14 @@ if ($search_all) {
     $sql .= natural_search(array_keys($fieldstosearchall), $search_all);
 }
 if ($search_billed != '' && $search_billed >= 0) {
-    $sql .= ' AND c.facture = ' . ((int) $search_billed);
+    $sql .= ' AND c.facture = ' . ((int)$search_billed);
 }
 if ($search_status != '') {
     if ($search_status <= 3 && $search_status >= -1) {  // status from -1 to 3 are real status (other are virtual combination)
         if ($search_status == 1 && !isModEnabled('shipping')) {
             $sql .= ' AND c.fk_statut IN (1,2)'; // If module expedition disabled, we include order with status "sent" into "validated"
         } else {
-            $sql .= ' AND c.fk_statut = ' . ((int) $search_status); // draft, validated, in process or canceled
+            $sql .= ' AND c.fk_statut = ' . ((int)$search_status); // draft, validated, in process or canceled
         }
     }
     if ($search_status == -2) { // "validated + in progress"
@@ -1029,16 +1029,16 @@ if ($search_project != '') {
     $sql .= natural_search("p.title", $search_project);
 }
 if ($search_fk_cond_reglement > 0) {
-    $sql .= " AND c.fk_cond_reglement = " . ((int) $search_fk_cond_reglement);
+    $sql .= " AND c.fk_cond_reglement = " . ((int)$search_fk_cond_reglement);
 }
 if ($search_fk_shipping_method > 0) {
-    $sql .= " AND c.fk_shipping_method = " . ((int) $search_fk_shipping_method);
+    $sql .= " AND c.fk_shipping_method = " . ((int)$search_fk_shipping_method);
 }
 if ($search_fk_mode_reglement > 0) {
-    $sql .= " AND c.fk_mode_reglement = " . ((int) $search_fk_mode_reglement);
+    $sql .= " AND c.fk_mode_reglement = " . ((int)$search_fk_mode_reglement);
 }
 if ($search_fk_input_reason > 0) {
-    $sql .= " AND c.fk_input_reason = " . ((int) $search_fk_input_reason);
+    $sql .= " AND c.fk_input_reason = " . ((int)$search_fk_input_reason);
 }
 // Search on user
 if ($search_user > 0) {
@@ -1047,14 +1047,14 @@ if ($search_user > 0) {
     $sql .= " FROM llx_element_contact as ec";
     $sql .= " INNER JOIN  llx_c_type_contact as tc";
     $sql .= " ON ec.fk_c_type_contact = tc.rowid AND tc.element='commande' AND tc.source='internal'";
-    $sql .= " WHERE ec.element_id = c.rowid AND ec.fk_socpeople = " . ((int) $search_user) . ")";
+    $sql .= " WHERE ec.element_id = c.rowid AND ec.fk_socpeople = " . ((int)$search_user) . ")";
 }
 // Search on sale representative
 if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search for tag/category ($searchCategoryCustomerList is an array of ID)
@@ -1068,9 +1068,9 @@ if (!empty($searchCategoryCustomerList)) {
             $searchCategoryCustomerSqlList[] = "NOT EXISTS (SELECT cs.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as cs WHERE s.rowid = cs.fk_soc)";
         } elseif (intval($searchCategoryCustomer) > 0) {
             if ($searchCategoryCustomerOperator == 0) {
-                $searchCategoryCustomerSqlList[] = " EXISTS (SELECT cs.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as cs WHERE s.rowid = cs.fk_soc AND cs.fk_categorie = " . ((int) $searchCategoryCustomer) . ")";
+                $searchCategoryCustomerSqlList[] = " EXISTS (SELECT cs.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as cs WHERE s.rowid = cs.fk_soc AND cs.fk_categorie = " . ((int)$searchCategoryCustomer) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryCustomer);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryCustomer);
             }
         }
     }
@@ -1098,9 +1098,9 @@ if (!empty($searchCategoryProductList)) {
             $searchCategoryProductSqlList[] = "NOT EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "commandedet as cd WHERE cd.fk_commande = c.rowid AND cd.fk_product = ck.fk_product)";
         } elseif (intval($searchCategoryProduct) > 0) {
             if ($searchCategoryProductOperator == 0) {
-                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "commandedet as cd WHERE cd.fk_commande = c.rowid AND cd.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int) $searchCategoryProduct) . ")";
+                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "commandedet as cd WHERE cd.fk_commande = c.rowid AND cd.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int)$searchCategoryProduct) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryProduct);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryProduct);
             }
         }
     }
@@ -1224,13 +1224,13 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($search_all) {
     $param .= '&search_all=' . urlencode($search_all);
 }
 if ($socid > 0) {
-    $param .= '&socid=' . ((int) $socid);
+    $param .= '&socid=' . ((int)$socid);
 }
 if ($search_status != '') {
     $param .= '&search_status=' . urlencode($search_status);
@@ -1254,7 +1254,7 @@ if ($search_datedelivery_end) {
     $param .= '&search_datedelivery_end_day=' . dol_print_date($search_datedelivery_end, '%d') . '&search_datedelivery_end_month=' . dol_print_date($search_datedelivery_end, '%m') . '&search_datedelivery_end_year=' . dol_print_date($search_datedelivery_end, '%Y');
 }
 if ($search_id) {
-    $param .= '&search_id=' . urlencode((string) $search_id);
+    $param .= '&search_id=' . urlencode((string)$search_id);
 }
 if ($search_ref) {
     $param .= '&search_ref=' . urlencode($search_ref);
@@ -1272,10 +1272,10 @@ if ($search_ref_customer) {
     $param .= '&search_ref_customer=' . urlencode($search_ref_customer);
 }
 if ($search_user > 0) {
-    $param .= '&search_user=' . urlencode((string) ($search_user));
+    $param .= '&search_user=' . urlencode((string)($search_user));
 }
 if ($search_sale > 0) {
-    $param .= '&search_sale=' . urlencode((string) ($search_sale));
+    $param .= '&search_sale=' . urlencode((string)($search_sale));
 }
 if ($search_total_ht != '') {
     $param .= '&search_total_ht=' . urlencode($search_total_ht);
@@ -1287,7 +1287,7 @@ if ($search_total_ttc != '') {
     $param .= '&search_total_ttc=' . urlencode($search_total_ttc);
 }
 if ($search_warehouse != '') {
-    $param .= '&search_warehouse=' . urlencode((string) ($search_warehouse));
+    $param .= '&search_warehouse=' . urlencode((string)($search_warehouse));
 }
 if ($search_login) {
     $param .= '&search_login=' . urlencode($search_login);
@@ -1320,19 +1320,19 @@ if ($search_state != '') {
     $param .= '&search_state=' . urlencode($search_state);
 }
 if ($search_country != '') {
-    $param .= '&search_country=' . urlencode((string) ($search_country));
+    $param .= '&search_country=' . urlencode((string)($search_country));
 }
 if ($search_type_thirdparty && $search_type_thirdparty != '-1') {
-    $param .= '&search_type_thirdparty=' . urlencode((string) ($search_type_thirdparty));
+    $param .= '&search_type_thirdparty=' . urlencode((string)($search_type_thirdparty));
 }
 if ($search_product_category != '') {
-    $param .= '&search_product_category=' . urlencode((string) ($search_product_category));
+    $param .= '&search_product_category=' . urlencode((string)($search_product_category));
 }
 if (($search_categ_cus > 0) || ($search_categ_cus == -2)) {
-    $param .= '&search_categ_cus=' . urlencode((string) ($search_categ_cus));
+    $param .= '&search_categ_cus=' . urlencode((string)($search_categ_cus));
 }
 if ($show_files) {
-    $param .= '&show_files=' . urlencode((string) ($show_files));
+    $param .= '&show_files=' . urlencode((string)($show_files));
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -1341,16 +1341,16 @@ if ($search_billed != '') {
     $param .= '&search_billed=' . urlencode($search_billed);
 }
 if ($search_fk_cond_reglement > 0) {
-    $param .= '&search_fk_cond_reglement=' . urlencode((string) ($search_fk_cond_reglement));
+    $param .= '&search_fk_cond_reglement=' . urlencode((string)($search_fk_cond_reglement));
 }
 if ($search_fk_shipping_method > 0) {
-    $param .= '&search_fk_shipping_method=' . urlencode((string) ($search_fk_shipping_method));
+    $param .= '&search_fk_shipping_method=' . urlencode((string)($search_fk_shipping_method));
 }
 if ($search_fk_mode_reglement > 0) {
-    $param .= '&search_fk_mode_reglement=' . urlencode((string) ($search_fk_mode_reglement));
+    $param .= '&search_fk_mode_reglement=' . urlencode((string)($search_fk_mode_reglement));
 }
 if ($search_fk_input_reason > 0) {
-    $param .= '&search_fk_input_reason=' . urlencode((string) ($search_fk_input_reason));
+    $param .= '&search_fk_input_reason=' . urlencode((string)($search_fk_input_reason));
 }
 
 // Add $param from extra fields
@@ -1527,7 +1527,7 @@ if (isModEnabled('category') && $user->hasRight("categorie", "lire")) {
 }
 // If Stock is enabled
 if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER')) {
-        $formproduct = new FormProduct($db);
+    $formproduct = new FormProduct($db);
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('Warehouse');
     $moreforfilter .= img_picto($tmptitle, 'stock', 'class="pictofixedwidth"') . $formproduct->selectWarehouses($search_warehouse, 'search_warehouse', '', 1, 0, 0, $tmptitle, 0, 0, array(), 'maxwidth250 widthcentpercentminusx');
@@ -2074,10 +2074,10 @@ $userstatic = new User($db);
 $with_margin_info = false;
 if (
     isModEnabled('margin') && (
-    !empty($arrayfields['total_pa']['checked'])
-    || !empty($arrayfields['total_margin']['checked'])
-    || !empty($arrayfields['total_margin_rate']['checked'])
-    || !empty($arrayfields['total_mark_rate']['checked'])
+        !empty($arrayfields['total_pa']['checked'])
+        || !empty($arrayfields['total_margin']['checked'])
+        || !empty($arrayfields['total_margin_rate']['checked'])
+        || !empty($arrayfields['total_mark_rate']['checked'])
     )
 ) {
     $with_margin_info = true;
@@ -2688,7 +2688,7 @@ while ($i < $imaxinloop) {
                     $numlines = count($generic_commande->lines); // Loop on each line of order
                     for ($lig = 0; $lig < $numlines; $lig++) {
                         if (isset($generic_commande->expeditions[$generic_commande->lines[$lig]->id])) {
-                            $reliquat =  $generic_commande->lines[$lig]->qty - $generic_commande->expeditions[$generic_commande->lines[$lig]->id];
+                            $reliquat = $generic_commande->lines[$lig]->qty - $generic_commande->expeditions[$generic_commande->lines[$lig]->id];
                         } else {
                             $reliquat = $generic_commande->lines[$lig]->qty;
                         }

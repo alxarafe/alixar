@@ -75,7 +75,6 @@ $help_url = '';
 llxHeader('', $langs->trans("TripsAndExpenses"), $help_url);
 
 
-
 $totalnb = 0;
 $sql = "SELECT count(d.rowid) as nb, sum(d.km) as km, d.type";
 $sql .= " FROM " . MAIN_DB_PREFIX . "deplacement as d";
@@ -121,7 +120,7 @@ print "</tr>\n";
 $listoftype = $tripandexpense_static->listOfTypes();
 $dataseries = array();
 foreach ($listoftype as $code => $label) {
-    $dataseries[] = array($label, (isset($nb[$code]) ? (int) $nb[$code] : 0));
+    $dataseries[] = array($label, (isset($nb[$code]) ? (int)$nb[$code] : 0));
 }
 
 if ($conf->use_javascript_ajax) {
@@ -145,7 +144,6 @@ print '<td class="right">' . $totalnb . '</td>';
 print '</tr>';
 
 print '</table>';
-
 
 
 print '</div><div class="fichetwothirdright">';
@@ -172,12 +170,12 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = d.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = d.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = d.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search on socid
 if ($socid) {
-    $sql .= " AND d.fk_soc = " . ((int) $socid);
+    $sql .= " AND d.fk_soc = " . ((int)$socid);
 }
 $sql .= $db->order("d.tms", "DESC");
 $sql .= $db->plimit($max, 0);

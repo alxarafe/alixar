@@ -38,7 +38,7 @@ class MessageMask extends Mask
             return null;
         }
 
-        if(is_object($bodies['html']) && property_exists($bodies['html'], 'content')) {
+        if (is_object($bodies['html']) && property_exists($bodies['html'], 'content')) {
             return $bodies['html']->content;
         }
         return $bodies['html'];
@@ -53,15 +53,15 @@ class MessageMask extends Mask
     public function getCustomHTMLBody($callback = false)
     {
         $body = $this->getHtmlBody();
-        if($body === null) return null;
+        if ($body === null) return null;
 
         if ($callback !== false) {
             $aAttachment = $this->parent->getAttachments();
             $aAttachment->each(function ($oAttachment) use (&$body, $callback) {
                 /** @var Attachment $oAttachment */
-                if(is_callable($callback)) {
+                if (is_callable($callback)) {
                     $body = $callback($body, $oAttachment);
-                }elseif(is_string($callback)) {
+                } elseif (is_string($callback)) {
                     call_user_func($callback, [$body, $oAttachment]);
                 }
             });

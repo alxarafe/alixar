@@ -109,8 +109,8 @@ if (!isModEnabled('stock')) {
     accessforbidden();
 }
 
-$usercancreate  = ($user->hasRight("fournisseur", "commande", "creer") || $user->hasRight("supplier_order", "creer"));
-$permissiontoadd    = $usercancreate; // Used by the include of actions_addupdatedelete.inc.php
+$usercancreate = ($user->hasRight("fournisseur", "commande", "creer") || $user->hasRight("supplier_order", "creer"));
+$permissiontoadd = $usercancreate; // Used by the include of actions_addupdatedelete.inc.php
 
 
 /*
@@ -297,8 +297,8 @@ if ($action == 'dispatch' && $permissiontoreceive) {
                                 $sql = "UPDATE " . MAIN_DB_PREFIX . "product_fournisseur_price";
                                 $sql .= " SET unitprice='" . price2num(GETPOST($pu), 'MU') . "'";
                                 $sql .= ", price=" . price2num(GETPOST($pu), 'MU') . "*quantity";
-                                $sql .= ", remise_percent = " . ((float) $dto);
-                                $sql .= " WHERE fk_soc=" . ((int) $object->socid);
+                                $sql .= ", remise_percent = " . ((float)$dto);
+                                $sql .= " WHERE fk_soc=" . ((int)$object->socid);
                                 $sql .= " AND fk_product=" . (GETPOSTINT($prod));
 
                                 $resql = $db->query($sql);
@@ -344,7 +344,7 @@ if ($action == 'dispatch' && $permissiontoreceive) {
 
                 if (!(GETPOSTINT($ent) > 0)) {
                     dol_syslog('No dispatch for line ' . $key . ' as no warehouse was chosen.');
-                    $text = $langs->transnoentities('Warehouse') . ', ' . $langs->transnoentities('Line') . ' ' . ($numline) . '-' . ((int) $reg[1] + 1);
+                    $text = $langs->transnoentities('Warehouse') . ', ' . $langs->transnoentities('Line') . ' ' . ($numline) . '-' . ((int)$reg[1] + 1);
                     setEventMessages($langs->trans('ErrorFieldRequired', $text), null, 'errors');
                     $error++;
                 }
@@ -360,7 +360,7 @@ if ($action == 'dispatch' && $permissiontoreceive) {
                 }*/
                 if (!GETPOST($lot, 'alpha') && !$dDLUO && !$dDLC) {
                     dol_syslog('No dispatch for line ' . $key . ' as serial/eat-by/sellby date are not set');
-                    $text = $langs->transnoentities('atleast1batchfield') . ', ' . $langs->transnoentities('Line') . ' ' . ($numline) . '-' . ((int) $reg[1] + 1);
+                    $text = $langs->transnoentities('atleast1batchfield') . ', ' . $langs->transnoentities('Line') . ' ' . ($numline) . '-' . ((int)$reg[1] + 1);
                     setEventMessages($langs->trans('ErrorFieldRequired', $text), null, 'errors');
                     $error++;
                 }
@@ -382,8 +382,8 @@ if ($action == 'dispatch' && $permissiontoreceive) {
                                 $sql .= " SET unitprice = " . price2num(GETPOST($pu), 'MU', 2);
                                 $sql .= ", price = " . price2num(GETPOST($pu), 'MU', 2) . " * quantity";
                                 $sql .= ", remise_percent = " . price2num((empty($dto) ? 0 : $dto), 3, 2) . "'";
-                                $sql .= " WHERE fk_soc = " . ((int) $object->socid);
-                                $sql .= " AND fk_product=" . ((int) $productId);
+                                $sql .= " WHERE fk_soc = " . ((int)$object->socid);
+                                $sql .= " AND fk_product=" . ((int)$productId);
 
                                 $resql = $db->query($sql);
                             }
@@ -651,7 +651,7 @@ if ($id > 0 || !empty($ref)) {
         || $object->statut == CommandeFournisseur::STATUS_RECEIVED_PARTIALLY
         || $object->statut == CommandeFournisseur::STATUS_RECEIVED_COMPLETELY
     ) {
-                $formproduct = new FormProduct($db);
+        $formproduct = new FormProduct($db);
         $formproduct->loadWarehouses();
         $entrepot = new Entrepot($db);
         $listwarehouses = $entrepot->list_array(1);
@@ -678,7 +678,7 @@ if ($id > 0 || !empty($ref)) {
         $sql = "SELECT l.rowid, cfd.fk_product, sum(cfd.qty) as qty";
         $sql .= " FROM " . MAIN_DB_PREFIX . "receptiondet_batch as cfd";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "commande_fournisseurdet as l on l.rowid = cfd.fk_elementdet";
-        $sql .= " WHERE cfd.fk_element = " . ((int) $object->id);
+        $sql .= " WHERE cfd.fk_element = " . ((int)$object->id);
         $sql .= " GROUP BY l.rowid, cfd.fk_product";
 
         $resql = $db->query($sql);
@@ -715,7 +715,7 @@ if ($id > 0 || !empty($ref)) {
 
         $sql .= " FROM " . MAIN_DB_PREFIX . "commande_fournisseurdet as l";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "product as p ON l.fk_product=p.rowid";
-        $sql .= " WHERE l.fk_commande = " . ((int) $object->id);
+        $sql .= " WHERE l.fk_commande = " . ((int)$object->id);
         if (!getDolGlobalString('STOCK_SUPPORTS_SERVICES')) {
             $sql .= " AND l.product_type = 0";
         }
@@ -815,7 +815,7 @@ if ($id > 0 || !empty($ref)) {
                     $nbfreeproduct++;
                 } else {
                     $alreadydispatched = isset($products_dispatched[$objp->rowid]) ? $products_dispatched[$objp->rowid] : 0;
-                    $remaintodispatch = price2num($objp->qty - ((float) $alreadydispatched), 5); // Calculation of dispatched
+                    $remaintodispatch = price2num($objp->qty - ((float)$alreadydispatched), 5); // Calculation of dispatched
                     if ($remaintodispatch < 0 && !getDolGlobalString('SUPPLIER_ORDER_ALLOW_NEGATIVE_QTY_FOR_SUPPLIER_ORDER_RETURN')) {
                         $remaintodispatch = 0;
                     }
@@ -832,7 +832,7 @@ if ($id > 0 || !empty($ref)) {
                         print '<!-- Line to dispatch ' . $suffix . ' -->' . "\n";
                         // hidden fields for js function
                         print '<input id="qty_ordered' . $suffix . '" type="hidden" value="' . $objp->qty . '">';
-                        print '<input id="qty_dispatched' . $suffix . '" type="hidden" value="' . (float) $alreadydispatched . '">';
+                        print '<input id="qty_dispatched' . $suffix . '" type="hidden" value="' . (float)$alreadydispatched . '">';
                         print '<tr class="oddeven">';
 
                         if (empty($conf->cache['product'][$objp->fk_product])) {
@@ -1185,7 +1185,7 @@ if ($id > 0 || !empty($ref)) {
     if ($conf->reception->enabled) {
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "reception as r ON cfd.fk_reception = r.rowid";
     }
-    $sql .= " WHERE cfd.fk_element = " . ((int) $object->id);
+    $sql .= " WHERE cfd.fk_element = " . ((int)$object->id);
     $sql .= " AND cfd.fk_product = p.rowid";
     $sql .= " ORDER BY cfd.rowid ASC";
 

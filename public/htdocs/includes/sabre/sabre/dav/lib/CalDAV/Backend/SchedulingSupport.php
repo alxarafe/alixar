@@ -58,8 +58,8 @@ interface SchedulingSupport extends BackendInterface
     /**
      * Creates a new scheduling object. This should land in a users' inbox.
      *
-     * @param string          $principalUri
-     * @param string          $objectUri
+     * @param string $principalUri
+     * @param string $objectUri
      * @param string|resource $objectData
      */
     public function createSchedulingObject($principalUri, $objectUri, $objectData);

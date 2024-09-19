@@ -300,8 +300,8 @@ if ($action == 'edit') {
 
         print ' &nbsp; ';
         //var_dump($birthdatearray);
-        $ageyear = (int) convertSecondToTime($now - $object->birthday, 'year') - 1970;
-        $agemonth = (int) convertSecondToTime($now - $object->birthday, 'month') - 1;
+        $ageyear = (int)convertSecondToTime($now - $object->birthday, 'year') - 1970;
+        $agemonth = (int)convertSecondToTime($now - $object->birthday, 'month') - 1;
         if ($ageyear >= 2) {
             print '(' . $ageyear . ' ' . $langs->trans("DurationYears") . ')';
         } elseif ($agemonth >= 2) {

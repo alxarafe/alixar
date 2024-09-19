@@ -132,9 +132,9 @@ class TemporaryFileFilterPlugin extends ServerPlugin
      * This is used to deal with HTTP LOCK requests which create a new
      * file.
      *
-     * @param string   $uri
+     * @param string $uri
      * @param resource $data
-     * @param bool     $modified should be set to true, if this event handler
+     * @param bool $modified should be set to true, if this event handler
      *                           changed &$data
      *
      * @return bool

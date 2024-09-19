@@ -66,6 +66,7 @@ if (!defined('NOBROWSERNOTIF')) {
 function llxHeader()
 {
 }
+
 /**
  * Footer empty
  *
@@ -169,7 +170,6 @@ $appli = constant('DOL_APPLICATION_TITLE');
 if (getDolGlobalString('MAIN_APPLICATION_TITLE')) {
     $appli = getDolGlobalString('MAIN_APPLICATION_TITLE');
 }
-
 
 
 /*

@@ -132,9 +132,9 @@ if ($_socid > 0) {
     /*
      * List historic of multiprices
      */
-    $sql  = "SELECT rc.rowid,rc.price_level, rc.datec as dc, u.rowid as uid, u.login";
+    $sql = "SELECT rc.rowid,rc.price_level, rc.datec as dc, u.rowid as uid, u.login";
     $sql .= " FROM " . MAIN_DB_PREFIX . "societe_prices as rc, " . MAIN_DB_PREFIX . "user as u";
-    $sql .= " WHERE rc.fk_soc = " . ((int) $objsoc->id);
+    $sql .= " WHERE rc.fk_soc = " . ((int)$objsoc->id);
     $sql .= " AND u.rowid = rc.fk_user_author";
     $sql .= " ORDER BY rc.datec DESC";
 

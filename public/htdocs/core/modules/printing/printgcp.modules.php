@@ -29,7 +29,6 @@ use OAuth\Common\Consumer\Credentials;
  *      \brief      File to provide printing with Google Cloud Print
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/modules/printing/modules_printing.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/OAuth/bootstrap.php';
 
 /**
@@ -98,7 +97,7 @@ class printing_printgcp extends PrintingDriver
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -206,7 +205,7 @@ class printing_printgcp extends PrintingDriver
     /**
      *  Return list of available printers
      *
-     *  @return  int                     0 if OK, >0 if KO
+     * @return  int                     0 if OK, >0 if KO
      */
     public function listAvailablePrinters()
     {
@@ -253,7 +252,7 @@ class printing_printgcp extends PrintingDriver
     /**
      *  Return list of available printers
      *
-     *  @return array      list of printers
+     * @return array      list of printers
      */
     public function getlistAvailablePrinters()
     {
@@ -322,9 +321,9 @@ class printing_printgcp extends PrintingDriver
     /**
      *  Print selected file
      *
-     * @param   string      $file       file
-     * @param   string      $module     module
-     * @param   string      $subdir     subdir for file
+     * @param string $file file
+     * @param string $module module
+     * @param string $subdir subdir for file
      * @return  int                     0 if OK, >0 if KO
      */
     public function printFile($file, $module, $subdir = '')
@@ -342,7 +341,7 @@ class printing_printgcp extends PrintingDriver
         $mimetype = dol_mimetype($fileprint);
         $printer_id = '';
         // select printer uri for module order, propal,...
-        $sql = "SELECT rowid, printer_id, copy FROM " . MAIN_DB_PREFIX . "printing WHERE module='" . $this->db->escape($module) . "' AND driver='printgcp' AND userid=" . ((int) $user->id);
+        $sql = "SELECT rowid, printer_id, copy FROM " . MAIN_DB_PREFIX . "printing WHERE module='" . $this->db->escape($module) . "' AND driver='printgcp' AND userid=" . ((int)$user->id);
         $result = $this->db->query($sql);
         if ($result) {
             $obj = $this->db->fetch_object($result);
@@ -372,11 +371,11 @@ class printing_printgcp extends PrintingDriver
     /**
      *  Sends document to the printer
      *
-     *  @param  string      $printerid      Printer id returned by Google Cloud Print
-     *  @param  string      $printjobtitle  Job Title
-     *  @param  string      $filepath       File Path to be send to Google Cloud Print
-     *  @param  string      $contenttype    File content type by example application/pdf, image/png
-     *  @return array                       status array
+     * @param string $printerid Printer id returned by Google Cloud Print
+     * @param string $printjobtitle Job Title
+     * @param string $filepath File Path to be send to Google Cloud Print
+     * @param string $contenttype File content type by example application/pdf, image/png
+     * @return array                       status array
      */
     public function sendPrintToPrinter($printerid, $printjobtitle, $filepath, $contenttype)
     {
@@ -445,7 +444,7 @@ class printing_printgcp extends PrintingDriver
     /**
      *  List jobs print
      *
-     *  @return  int                     0 if OK, >0 if KO
+     * @return  int                     0 if OK, >0 if KO
      */
     public function listJobs()
     {
@@ -522,7 +521,7 @@ class printing_printgcp extends PrintingDriver
             foreach ($jobs as $value) {
                 $html .= '<tr class="oddeven">';
                 $html .= '<td>' . $value['id'] . '</td>';
-                $dates = dol_print_date((int) substr($value['createTime'], 0, 10), 'dayhour');
+                $dates = dol_print_date((int)substr($value['createTime'], 0, 10), 'dayhour');
                 $html .= '<td>' . $dates . '</td>';
                 $html .= '<td>' . $value['ownerId'] . '</td>';
                 $html .= '<td>' . $value['printerName'] . '</td>';

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2010-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -98,8 +98,8 @@ print '</tr>';
 if (
     isModEnabled('productbatch') &&
     (($object->element == 'product' &&
-    $object->hasbatch()) ||
-    ($object->element == 'stock'))
+            $object->hasbatch()) ||
+        ($object->element == 'stock'))
 ) {
     print '<tr>';
     print '<td' . ($object->element == 'stock' ? '' : ' class="fieldrequired"') . '>' . $langs->trans("batch_number") . '</td><td colspan="3">';

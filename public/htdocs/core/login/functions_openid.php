@@ -34,9 +34,9 @@ include_once DOL_DOCUMENT_ROOT . '/core/class/openid.class.php';
  * Check validity of user/password/entity
  * If test is ko, reason must be filled into $_SESSION["dol_loginmesg"]
  *
- * @param   string  $usertotest     Login
- * @param   string  $passwordtotest Password
- * @param   int     $entitytotest   Number of instance (always 1 if module multicompany not enabled)
+ * @param string $usertotest Login
+ * @param string $passwordtotest Password
+ * @param int $entitytotest Number of instance (always 1 if module multicompany not enabled)
  * @return  string|false                Login if OK, false otherwise
  */
 function check_user_password_openid($usertotest, $passwordtotest, $entitytotest)
@@ -75,7 +75,7 @@ function check_user_password_openid($usertotest, $passwordtotest, $entitytotest)
             $sql = "SELECT login, entity, datestartvalidity, dateendvalidity";
             $sql .= " FROM " . MAIN_DB_PREFIX . "user";
             $sql .= " WHERE openid = '" . $db->escape(GETPOST('openid_identity')) . "'";
-            $sql .= " AND entity IN (0," . (!empty($_SESSION["dol_entity"]) ? ((int) $_SESSION["dol_entity"]) : 1) . ")";
+            $sql .= " AND entity IN (0," . (!empty($_SESSION["dol_entity"]) ? ((int)$_SESSION["dol_entity"]) : 1) . ")";
 
             dol_syslog("functions_openid::check_user_password_openid", LOG_DEBUG);
             $resql = $db->query($sql);

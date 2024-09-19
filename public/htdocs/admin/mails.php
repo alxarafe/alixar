@@ -72,7 +72,6 @@ $substitutionarrayfortest = array(
 complete_substitutions_array($substitutionarrayfortest, $langs);
 
 
-
 /*
  * Actions
  */
@@ -370,7 +369,7 @@ if ($action == 'edit') {
     print '<tr class="oddeven"><td>' . $langs->trans("MAIN_MAIL_SENDMODE") . '</td><td>';
 
     // SuperAdministrator access only
-    if (!isModEnabled('multicompany')  || ($user->admin && !$user->entity)) {
+    if (!isModEnabled('multicompany') || ($user->admin && !$user->entity)) {
         print $form->selectarray('MAIN_MAIL_SENDMODE', $listofmethods, getDolGlobalString('MAIN_MAIL_SENDMODE', 'mail'));
     } else {
         $text = $listofmethods[getDolGlobalString('MAIN_MAIL_SENDMODE')];
@@ -512,7 +511,7 @@ if ($action == 'edit') {
         print '<tr class="oddeven smtp_oauth_service"><td>' . $langs->trans("MAIN_MAIL_SMTPS_OAUTH_SERVICE") . '</td><td>';
 
         // SuperAdministrator access only
-        if (!isModEnabled('multicompany')  || ($user->admin && !$user->entity)) {
+        if (!isModEnabled('multicompany') || ($user->admin && !$user->entity)) {
             print $form->selectarray('MAIN_MAIL_SMTPS_OAUTH_SERVICE', $oauthservices, $conf->global->MAIN_MAIL_SMTPS_OAUTH_SERVICE);
         } else {
             $text = $oauthservices[getDolGlobalString('MAIN_MAIL_SMTPS_OAUTH_SERVICE')];
@@ -891,7 +890,7 @@ if ($action == 'edit') {
         $liste['user'] = $langs->trans('UserEmail');
         $liste['company'] = $langs->trans('CompanyEmail') . ' (' . (!getDolGlobalString('MAIN_INFO_SOCIETE_MAIL') ? $langs->trans("NotDefined") : $conf->global->MAIN_INFO_SOCIETE_MAIL) . ')';
         $sql = 'SELECT rowid, label, email FROM ' . MAIN_DB_PREFIX . 'c_email_senderprofile';
-        $sql .= ' WHERE active = 1 AND (private = 0 OR private = ' . ((int) $user->id) . ')';
+        $sql .= ' WHERE active = 1 AND (private = 0 OR private = ' . ((int)$user->id) . ')';
         $resql = $db->query($sql);
         if ($resql) {
             $num = $db->num_rows($resql);

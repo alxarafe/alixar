@@ -29,6 +29,7 @@ use OAuth\Common\Http\Uri\UriFactory;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/OAuth/bootstrap.php';
+
 use OAuth\Common\Storage\DoliStorage;
 use OAuth\Common\Consumer\Credentials;
 
@@ -58,7 +59,7 @@ $currentUri = $uriFactory->createFromAbsolute($urlwithroot . '/core/modules/oaut
  * Load the credential for the service
  */
 
-/** @var \OAuth\ServiceFactory $serviceFactory  An OAuth service factory. */
+/** @var \OAuth\ServiceFactory $serviceFactory An OAuth service factory. */
 $serviceFactory = new \OAuth\ServiceFactory();
 $httpClient = new \OAuth\Common\Http\Client\CurlClient();
 // TODO Set options for proxy and timeout

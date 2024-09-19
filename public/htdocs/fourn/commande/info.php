@@ -42,8 +42,8 @@ if (isModEnabled('project')) {
 $langs->loadLangs(array("suppliers", "orders", "companies", "stocks"));
 
 // Get Parameters
-$id     = GETPOSTINT('id');
-$ref    = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
 
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
@@ -88,8 +88,8 @@ if (!$user->hasRight("fournisseur", "commande", "lire")) {
 // Init Hooks
 $hookmanager->initHooks(array('ordersuppliercardinfo'));
 
-$usercancreate  = ($user->hasRight("fournisseur", "commande", "creer") || $user->hasRight("supplier_order", "creer"));
-$permissiontoadd    = $usercancreate; // Used by the include of actions_addupdatedelete.inc.php
+$usercancreate = ($user->hasRight("fournisseur", "commande", "creer") || $user->hasRight("supplier_order", "creer"));
+$permissiontoadd = $usercancreate; // Used by the include of actions_addupdatedelete.inc.php
 
 
 /*
@@ -180,8 +180,6 @@ print '</div>';
 print '<div class="clearboth"></div>';
 
 print dol_get_fiche_end();
-
-
 
 
 // Actions buttons

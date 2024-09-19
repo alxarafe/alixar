@@ -37,10 +37,12 @@ $langs->loadLangs(array('trips', 'companies'));
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');
 $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height');
 
-$userid = GETPOSTINT('userid'); if ($userid < 0) {
+$userid = GETPOSTINT('userid');
+if ($userid < 0) {
     $userid = 0;
 }
-$socid = GETPOSTINT('socid'); if ($socid < 0) {
+$socid = GETPOSTINT('socid');
+if ($socid < 0) {
     $socid = 0;
 }
 $id = GETPOSTINT('id');

@@ -28,7 +28,7 @@
 /**
  * Return if a BVRB number is valid or not (For Switzerland)
  *
- * @param   string  $bvrb       BVRB number
+ * @param string $bvrb BVRB number
  * @return  boolean             True if OK, false if KO
  */
 function dol_ch_controle_bvrb($bvrb)

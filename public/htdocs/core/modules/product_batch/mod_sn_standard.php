@@ -61,8 +61,8 @@ class mod_sn_standard extends ModeleNumRefBatch
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -74,7 +74,7 @@ class mod_sn_standard extends ModeleNumRefBatch
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -85,8 +85,8 @@ class mod_sn_standard extends ModeleNumRefBatch
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object Object we need next value for
-     *  @return boolean                 false if KO (there is a conflict), true if OK
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                 false if KO (there is a conflict), true if OK
      */
     public function canBeActivated($object)
     {
@@ -110,7 +110,7 @@ class mod_sn_standard extends ModeleNumRefBatch
                 $max = 0;
             }
         }
-        if ($max && !preg_match('/' . $this->prefix . '[0-9][0-9][0-9][0-9]/i', (string) $max)) {
+        if ($max && !preg_match('/' . $this->prefix . '[0-9][0-9][0-9][0-9]/i', (string)$max)) {
             $langs->load("errors");
             $this->error = $langs->trans('ErrorNumRefModel', $max);
             return false;
@@ -122,9 +122,9 @@ class mod_sn_standard extends ModeleNumRefBatch
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc     Object thirdparty
-     *  @param  Productlot  $object     Object we need next value for
-     *  @return string|int              String if OK, <0 if KO
+     * @param Societe $objsoc Object thirdparty
+     * @param Productlot $object Object we need next value for
+     * @return string|int              String if OK, <0 if KO
      */
     public function getNextValue($objsoc, $object)
     {

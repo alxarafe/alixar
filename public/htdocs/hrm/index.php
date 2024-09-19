@@ -362,7 +362,7 @@ if (isModEnabled('recruitment') && $user->hasRight('recruitment', 'recruitmentjo
     }
     $sql .= " WHERE rc.entity IN (" . getEntity($staticrecruitmentcandidature->element) . ")";
     if (isModEnabled('societe') && !$user->hasRight('societe', 'client', 'voir') && !$socid) {
-        $sql .= " AND rp.fk_soc = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND rp.fk_soc = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
         $sql .= " AND rp.fk_soc = $socid";

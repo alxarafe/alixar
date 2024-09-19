@@ -13,9 +13,9 @@ class CustomerService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Customer
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Customer
      */
     public function fundCashBalance($id, $params = null, $opts = null)
     {

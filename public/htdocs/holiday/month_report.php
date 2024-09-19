@@ -41,21 +41,21 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 // Load translation files required by the page
 $langs->loadLangs(array('holiday', 'hrm'));
 
-$action      = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view';
-$massaction  = GETPOST('massaction', 'alpha');
+$action = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view';
+$massaction = GETPOST('massaction', 'alpha');
 $contextpage = GETPOST('contextpage', 'aZ');
-$optioncss   = GETPOST('optioncss', 'aZ');
+$optioncss = GETPOST('optioncss', 'aZ');
 
 $id = GETPOSTINT('id');
 
-$search_ref         = GETPOST('search_ref', 'alphanohtml');
-$search_employee    = GETPOST('search_employee', "intcomma");
-$search_type        = GETPOST('search_type', "intcomma");
+$search_ref = GETPOST('search_ref', 'alphanohtml');
+$search_employee = GETPOST('search_employee', "intcomma");
+$search_type = GETPOST('search_type', "intcomma");
 $search_description = GETPOST('search_description', 'alphanohtml');
 
-$limit       = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
-$sortfield   = GETPOST('sortfield', 'aZ09comma');
-$sortorder   = GETPOST('sortorder', 'aZ09comma');
+$limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
+$sortfield = GETPOST('sortfield', 'aZ09comma');
+$sortorder = GETPOST('sortorder', 'aZ09comma');
 
 if (!$sortfield) {
     $sortfield = "cp.rowid";
@@ -175,7 +175,7 @@ if (!empty($search_ref)) {
     $sql .= natural_search('cp.ref', $search_ref);
 }
 if (!empty($search_employee) && $search_employee > 0) {
-    $sql .= " AND cp.fk_user = " . ((int) $search_employee);
+    $sql .= " AND cp.fk_user = " . ((int)$search_employee);
 }
 if (!empty($search_type) && $search_type != '-1') {
     $sql .= ' AND cp.fk_type IN (' . $db->sanitize($search_type) . ')';
@@ -199,7 +199,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if (!empty($search_ref)) {
     $param .= '&search_ref=' . urlencode($search_ref);

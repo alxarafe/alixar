@@ -83,7 +83,7 @@ if ($action == 'add_payment' || ($action == 'confirm_paiement' && $confirm == 'y
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 7) == 'amount_') {
             $other_chid = substr($key, 7);
-            $amounts[$other_chid] = (float) price2num(GETPOST($key));
+            $amounts[$other_chid] = (float)price2num(GETPOST($key));
         }
     }
 
@@ -101,13 +101,13 @@ if ($action == 'add_payment' || ($action == 'confirm_paiement' && $confirm == 'y
 
             // Create a line of payments
             $paiement = new PaymentVAT($db);
-            $paiement->chid         = $chid;
-            $paiement->datepaye     = $datepaye;
-            $paiement->amounts      = $amounts; // Tableau de montant
+            $paiement->chid = $chid;
+            $paiement->datepaye = $datepaye;
+            $paiement->amounts = $amounts; // Tableau de montant
             $paiement->paiementtype = GETPOST("paiementtype", 'alphanohtml');
-            $paiement->num_payment  = GETPOST("num_payment", 'alphanohtml');
-            $paiement->note         = (string) GETPOST("note", 'restricthtml');
-            $paiement->note_private = (string) GETPOST("note", 'restricthtml');
+            $paiement->num_payment = GETPOST("num_payment", 'alphanohtml');
+            $paiement->note = (string)GETPOST("note", 'restricthtml');
+            $paiement->note_private = (string)GETPOST("note", 'restricthtml');
 
             if (!$error) {
                 $paymentid = $paiement->create($user, (GETPOST('closepaidvat') == 'on' ? 1 : 0));
@@ -193,7 +193,7 @@ if ($action == 'create') {
 
     $sql = "SELECT sum(p.amount) as total";
     $sql .= " FROM " . MAIN_DB_PREFIX . "payment_vat as p";
-    $sql .= " WHERE p.fk_tva = " . ((int) $chid);
+    $sql .= " WHERE p.fk_tva = " . ((int)$chid);
     $resql = $db->query($sql);
     if ($resql) {
         $obj = $db->fetch_object($resql);

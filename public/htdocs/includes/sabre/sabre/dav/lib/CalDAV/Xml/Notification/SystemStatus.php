@@ -66,7 +66,7 @@ class SystemStatus implements NotificationInterface
      *
      * @param string $id
      * @param string $etag
-     * @param int    $type
+     * @param int $type
      * @param string $description
      * @param string $href
      */

@@ -45,8 +45,8 @@ class ClientManager
 
     /**
      * Dynamically pass calls to the default account.
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param string $method
+     * @param array $parameters
      *
      * @return mixed
      * @throws Exceptions\MaskNotFoundException
@@ -73,7 +73,7 @@ class ClientManager
     /**
      * Get a dotted config parameter
      * @param string $key
-     * @param null   $default
+     * @param null $default
      *
      * @return mixed|null
      */
@@ -81,17 +81,17 @@ class ClientManager
     {
         $parts = explode('.', $key);
         $value = null;
-        foreach($parts as $part) {
-            if($value === null) {
-                if(isset(self::$config[$part])) {
+        foreach ($parts as $part) {
+            if ($value === null) {
+                if (isset(self::$config[$part])) {
                     $value = self::$config[$part];
-                }else{
+                } else {
                     break;
                 }
-            }else{
-                if(isset($value[$part])) {
+            } else {
+                if (isset($value[$part])) {
                     $value = $value[$part];
-                }else{
+                } else {
                     break;
                 }
             }
@@ -102,7 +102,7 @@ class ClientManager
 
     /**
      * Resolve a account instance.
-     * @param  string  $name
+     * @param string $name
      *
      * @return Client
      * @throws Exceptions\MaskNotFoundException
@@ -124,7 +124,7 @@ class ClientManager
     /**
      * Resolve a account.
      *
-     * @param  string  $name
+     * @param string $name
      *
      * @return Client
      * @throws Exceptions\MaskNotFoundException
@@ -138,7 +138,7 @@ class ClientManager
 
     /**
      * Get the account configuration.
-     * @param  string  $name
+     * @param string $name
      *
      * @return array
      */
@@ -163,7 +163,7 @@ class ClientManager
 
     /**
      * Set the name of the default account.
-     * @param  string  $name
+     * @param string $name
      *
      * @return void
      */
@@ -187,7 +187,7 @@ class ClientManager
     public function setConfig($config)
     {
 
-        if(is_array($config) === false) {
+        if (is_array($config) === false) {
             $config = require $config;
         }
 
@@ -197,16 +197,16 @@ class ClientManager
         $vendor_config = require $path;
         $config = $this->array_merge_recursive_distinct($vendor_config, $config);
 
-        if(is_array($config)){
-            if(isset($config['default'])){
-                if(isset($config['accounts']) && $config['default'] != false){
+        if (is_array($config)) {
+            if (isset($config['default'])) {
+                if (isset($config['accounts']) && $config['default'] != false) {
                     $default_config = $vendor_config['accounts']['default'];
-                    if(isset($config['accounts'][$config['default']])){
+                    if (isset($config['accounts'][$config['default']])) {
                         $default_config = array_merge($default_config, $config['accounts'][$config['default']]);
                     }
 
-                    if(is_array($config['accounts'])){
-                        foreach($config['accounts'] as $account_key => $account){
+                    if (is_array($config['accounts'])) {
+                        foreach ($config['accounts'] as $account_key => $account) {
                             $config['accounts'][$account_key] = array_merge($default_config, $account);
                         }
                     }
@@ -229,8 +229,8 @@ class ClientManager
      * Numeric entries are appended, not replaced, but only if they are
      * unique
      *
-     * @param  array $array1 Initial array to merge.
-     * @param  array ...     Variable list of arrays to recursively merge.
+     * @param array $array1 Initial array to merge.
+     * @param array ...     Variable list of arrays to recursively merge.
      *
      * @return array|mixed
      *
@@ -243,21 +243,21 @@ class ClientManager
         $arrays = func_get_args();
         $base = array_shift($arrays);
 
-        if(!is_array($base)) $base = empty($base) ? array() : array($base);
+        if (!is_array($base)) $base = empty($base) ? array() : array($base);
 
-        foreach($arrays as $append) {
-            if(!is_array($append)) $append = array($append);
+        foreach ($arrays as $append) {
+            if (!is_array($append)) $append = array($append);
 
-            foreach($append as $key => $value) {
-                if(!array_key_exists($key, $base) and !is_numeric($key)) {
+            foreach ($append as $key => $value) {
+                if (!array_key_exists($key, $base) and !is_numeric($key)) {
                     $base[$key] = $append[$key];
                     continue;
                 }
 
-                if(is_array($value) or is_array($base[$key])) {
+                if (is_array($value) or is_array($base[$key])) {
                     $base[$key] = $this->array_merge_recursive_distinct($base[$key], $append[$key]);
-                } else if(is_numeric($key)) {
-                    if(!in_array($value, $base)) $base[] = $value;
+                } else if (is_numeric($key)) {
+                    if (!in_array($value, $base)) $base[] = $value;
                 } else {
                     $base[$key] = $value;
                 }

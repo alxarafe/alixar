@@ -13,9 +13,9 @@ class Comments extends WriterPart
      *
      * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet
      *
+     * @return string XML Output
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      *
-     * @return string XML Output
      */
     public function writeComments(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet)
     {
@@ -96,9 +96,9 @@ class Comments extends WriterPart
      *
      * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet
      *
+     * @return string XML Output
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      *
-     * @return string XML Output
      */
     public function writeVMLComments(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet)
     {

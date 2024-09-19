@@ -209,9 +209,9 @@ class BaseStripeClient implements StripeClientInterface, StripeStreamingClientIn
     /**
      * @param \Stripe\Util\RequestOptions $opts
      *
+     * @return string
      * @throws \Stripe\Exception\AuthenticationException
      *
-     * @return string
      */
     private function apiKeyForRequest($opts)
     {

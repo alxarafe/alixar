@@ -265,10 +265,10 @@ class TCPDI extends FPDF_TPL
     function _putimportedobjects()
     {
         if (is_array($this->parsers) && count($this->parsers) > 0) {
-            foreach($this->parsers as $filename => $p) {
+            foreach ($this->parsers as $filename => $p) {
                 $this->current_parser =& $this->parsers[$filename];
                 if (isset($this->_obj_stack[$filename]) && is_array($this->_obj_stack[$filename])) {
-                    while(($n = key($this->_obj_stack[$filename])) !== null) {
+                    while (($n = key($this->_obj_stack[$filename])) !== null) {
                         $nObj = $this->current_parser->getObjectVal($this->_obj_stack[$filename][$n][1]);
 
                         $this->_newobj($this->_obj_stack[$filename][$n][0]);
@@ -301,7 +301,7 @@ class TCPDI extends FPDF_TPL
     {
         $filter = ($this->compress) ? '/Filter /FlateDecode ' : '';
         reset($this->tpls);
-        foreach($this->tpls as $tplidx => $tpl) {
+        foreach ($this->tpls as $tplidx => $tpl) {
             $p = ($this->compress) ? gzcompress($tpl['buffer']) : $tpl['buffer'];
             $this->_newobj();
             $cN = $this->n; // TCPDF/Protection: rem current "n"
@@ -333,10 +333,10 @@ class TCPDI extends FPDF_TPL
                     $c = cos($angle);
                     $s = sin($angle);
 
-                    switch($tpl['_rotationAngle']) {
+                    switch ($tpl['_rotationAngle']) {
                         case -90:
-                           $tx = -$tpl['box']['lly'];
-                           $ty = $tpl['box']['urx'];
+                            $tx = -$tpl['box']['lly'];
+                            $ty = $tpl['box']['urx'];
                             break;
                         case -180:
                             $tx = $tpl['box']['urx'];
@@ -372,22 +372,21 @@ class TCPDI extends FPDF_TPL
                 $this->_out('<</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]');
                 if (isset($this->_res['tpl'][$tplidx]['fonts']) && count($this->_res['tpl'][$tplidx]['fonts'])) {
                     $this->_out('/Font <<');
-                    foreach($this->_res['tpl'][$tplidx]['fonts'] as $font)
+                    foreach ($this->_res['tpl'][$tplidx]['fonts'] as $font)
                         $this->_out('/F' . $font['i'] . ' ' . $font['n'] . ' 0 R');
                     $this->_out('>>');
                 }
-                if(
+                if (
                     isset($this->_res['tpl'][$tplidx]['images']) && count($this->_res['tpl'][$tplidx]['images']) ||
                     isset($this->_res['tpl'][$tplidx]['tpls']) && count($this->_res['tpl'][$tplidx]['tpls'])
-                )
-                {
+                ) {
                     $this->_out('/XObject <<');
                     if (isset($this->_res['tpl'][$tplidx]['images']) && count($this->_res['tpl'][$tplidx]['images'])) {
-                        foreach($this->_res['tpl'][$tplidx]['images'] as $image)
+                        foreach ($this->_res['tpl'][$tplidx]['images'] as $image)
                             $this->_out('/I' . $image['i'] . ' ' . $image['n'] . ' 0 R');
                     }
                     if (isset($this->_res['tpl'][$tplidx]['tpls']) && count($this->_res['tpl'][$tplidx]['tpls'])) {
-                        foreach($this->_res['tpl'][$tplidx]['tpls'] as $i => $tpl)
+                        foreach ($this->_res['tpl'][$tplidx]['tpls'] as $i => $tpl)
                             $this->_out($this->tplprefix . $i . ' ' . $tpl['n'] . ' 0 R');
                     }
                     $this->_out('>>');
@@ -608,7 +607,7 @@ class TCPDI extends FPDF_TPL
      */
     function cleanUp()
     {
-        foreach ($this->parsers as $k => $_){
+        foreach ($this->parsers as $k => $_) {
             $this->parsers[$k]->cleanUp();
             $this->parsers[$k] = null;
             unset($this->parsers[$k]);
@@ -625,7 +624,7 @@ class TCPDI extends FPDF_TPL
     {
         $out = parent::_getxobjectdict();
         if (count($this->tpls)) {
-            foreach($this->tpls as $tplidx => $tpl) {
+            foreach ($this->tpls as $tplidx => $tpl) {
                 $out .= sprintf('%s%d %d 0 R', $this->tplprefix, $tplidx, $tpl['n']);
             }
         }

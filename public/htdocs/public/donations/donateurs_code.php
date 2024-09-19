@@ -44,6 +44,7 @@ function llxHeaderVierge()
 {
     print '<html><title>List of donators</title><body>';
 }
+
 /**
  * Header function
  *

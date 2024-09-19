@@ -24,15 +24,16 @@ abstract class AbstractService implements ServiceInterface
     protected $storage;
 
     /**
-     * @param CredentialsInterface  $credentials
-     * @param ClientInterface       $httpClient
+     * @param CredentialsInterface $credentials
+     * @param ClientInterface $httpClient
      * @param TokenStorageInterface $storage
      */
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage
-    ) {
+    )
+    {
         $this->credentials = $credentials;
         $this->httpClient = $httpClient;
         $this->storage = $storage;
@@ -40,7 +41,7 @@ abstract class AbstractService implements ServiceInterface
 
     /**
      * @param UriInterface|string $path
-     * @param UriInterface        $baseApiUri
+     * @param UriInterface $baseApiUri
      *
      * @return UriInterface
      *

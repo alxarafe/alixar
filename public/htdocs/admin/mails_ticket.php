@@ -454,7 +454,7 @@ if ($action == 'edit') {
     if (!empty($conf->use_javascript_ajax) || (isset($conf->global->MAIN_MAIL_SENDMODE_TICKET) && in_array($conf->global->MAIN_MAIL_SENDMODE_TICKET, array('smtps', 'swiftmailer')))) {
         print '<tr class="oddeven smtp_oauth_service hideifdefault"><td>' . $langs->trans("MAIN_MAIL_SMTPS_OAUTH_SERVICE") . '</td><td>';
         // SuperAdministrator access only
-        if (!isModEnabled('multicompany')  || ($user->admin && !$user->entity)) {
+        if (!isModEnabled('multicompany') || ($user->admin && !$user->entity)) {
             print $form->selectarray('MAIN_MAIL_SMTPS_OAUTH_SERVICE_TICKET', $oauthservices, $conf->global->MAIN_MAIL_SMTPS_OAUTH_SERVICE_TICKET);
         } else {
             $text = $oauthservices[getDolGlobalString('MAIN_MAIL_SMTPS_OAUTH_SERVICE_TICKET')];

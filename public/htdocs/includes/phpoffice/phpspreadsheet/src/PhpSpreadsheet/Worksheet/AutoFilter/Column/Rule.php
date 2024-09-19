@@ -260,9 +260,9 @@ class Rule
      *
      * @param string $pRuleType see self::AUTOFILTER_RULETYPE_*
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setRuleType($pRuleType)
     {
@@ -290,9 +290,9 @@ class Rule
      *
      * @param string|string[] $pValue
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setValue($pValue)
     {
@@ -334,9 +334,9 @@ class Rule
      *
      * @param string $pOperator see self::AUTOFILTER_COLUMN_RULE_*
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setOperator($pOperator)
     {
@@ -369,9 +369,9 @@ class Rule
      *
      * @param string $pGrouping
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setGrouping($pGrouping)
     {
@@ -395,9 +395,9 @@ class Rule
      * @param string|string[] $pValue
      * @param string $pGrouping
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setRule($pOperator, $pValue, $pGrouping = null)
     {

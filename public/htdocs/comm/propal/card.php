@@ -981,25 +981,25 @@ if (empty($reshook)) {
             $prod = new Product($db);
             $prod->fetch($line->fk_product);
             if ($prod->price_min > $subprice) {
-                $price_subprice  = price($subprice, 0, $outlangs, 1, -1, -1, 'auto');
+                $price_subprice = price($subprice, 0, $outlangs, 1, -1, -1, 'auto');
                 $price_price_min = price($prod->price_min, 0, $outlangs, 1, -1, -1, 'auto');
                 setEventMessages($prod->ref . ' - ' . $prod->label . ' (' . $price_subprice . ' < ' . $price_price_min . ' ' . strtolower($langs->trans("MinPrice")) . ')' . "\n", null, 'warnings');
             }
             // Manage $line->subprice and $line->multicurrency_subprice
-            $multicurrency_subprice = (float) $subprice * $line->multicurrency_subprice / $line->subprice;
+            $multicurrency_subprice = (float)$subprice * $line->multicurrency_subprice / $line->subprice;
             // Update DB
             $result = $object->updateline($line->id, $subprice, $line->qty, $line->remise_percent, $line->tva_tx, $line->localtax1_rate, $line->localtax2_rate, $line->desc, 'HT', $line->info_bits, $line->special_code, $line->fk_parent_line, 0, $line->fk_fournprice, $line->pa_ht, $line->label, $line->product_type, $line->date_start, $line->date_end, $line->array_options, $line->fk_unit, $multicurrency_subprice);
             // Update $object with new margin info
             $line->price = $subprice;
             $line->marge_tx = $margin_rate;
-            $line->marque_tx = $margin_rate * $line->pa_ht / (float) $subprice;
-            $line->total_ht = $line->qty * (float) $subprice;
-            $line->total_tva = $line->tva_tx * $line->qty * (float) $subprice;
-            $line->total_ttc = (1 + $line->tva_tx) * $line->qty * (float) $subprice;
+            $line->marque_tx = $margin_rate * $line->pa_ht / (float)$subprice;
+            $line->total_ht = $line->qty * (float)$subprice;
+            $line->total_tva = $line->tva_tx * $line->qty * (float)$subprice;
+            $line->total_ttc = (1 + $line->tva_tx) * $line->qty * (float)$subprice;
             // Manage $line->subprice and $line->multicurrency_subprice
-            $line->multicurrency_total_ht = $line->qty * (float) $subprice * $line->multicurrency_subprice / $line->subprice;
-            $line->multicurrency_total_tva = $line->tva_tx * $line->qty * (float) $subprice * $line->multicurrency_subprice / $line->subprice;
-            $line->multicurrency_total_ttc = (1 + $line->tva_tx) * $line->qty * (float) $subprice * $line->multicurrency_subprice / $line->subprice;
+            $line->multicurrency_total_ht = $line->qty * (float)$subprice * $line->multicurrency_subprice / $line->subprice;
+            $line->multicurrency_total_tva = $line->tva_tx * $line->qty * (float)$subprice * $line->multicurrency_subprice / $line->subprice;
+            $line->multicurrency_total_ttc = (1 + $line->tva_tx) * $line->qty * (float)$subprice * $line->multicurrency_subprice / $line->subprice;
             // Used previous $line->subprice and $line->multicurrency_subprice above, now they can be set to their new values
             $line->subprice = $subprice;
             $line->multicurrency_subprice = $multicurrency_subprice;
@@ -1153,8 +1153,8 @@ if (empty($reshook)) {
                         if (count($prodcustprice->lines) > 0) {
                             $pu_ht = price($prodcustprice->lines[0]->price);
                             $pu_ttc = price($prodcustprice->lines[0]->price_ttc);
-                            $price_min =  price($prodcustprice->lines[0]->price_min);
-                            $price_min_ttc =  price($prodcustprice->lines[0]->price_min_ttc);
+                            $price_min = price($prodcustprice->lines[0]->price_min);
+                            $price_min_ttc = price($prodcustprice->lines[0]->price_min_ttc);
                             $price_base_type = $prodcustprice->lines[0]->price_base_type;
                             /*$tva_tx = ($prodcustprice->lines[0]->default_vat_code ? $prodcustprice->lines[0]->tva_tx.' ('.$prodcustprice->lines[0]->default_vat_code.' )' : $prodcustprice->lines[0]->tva_tx);
                             if ($prodcustprice->lines[0]->default_vat_code && !preg_match('/\(.*\)/', $tva_tx)) {
@@ -1211,25 +1211,25 @@ if (empty($reshook)) {
                 }
 
                 $tmpvat = price2num(preg_replace('/\s*\(.*\)/', '', $tva_tx));
-                $tmpprodvat = price2num(preg_replace('/\s*\(.*\)/', '', (string) $prod->tva_tx));
+                $tmpprodvat = price2num(preg_replace('/\s*\(.*\)/', '', (string)$prod->tva_tx));
 
                 // Set unit price to use
-                if (!empty($price_ht) || (string) $price_ht === '0') {
+                if (!empty($price_ht) || (string)$price_ht === '0') {
                     $pu_ht = price2num($price_ht, 'MU');
-                    $pu_ttc = price2num((float) $pu_ht * (1 + ((float) $tmpvat / 100)), 'MU');
-                } elseif (!empty($price_ht_devise) || (string) $price_ht_devise === '0') {
+                    $pu_ttc = price2num((float)$pu_ht * (1 + ((float)$tmpvat / 100)), 'MU');
+                } elseif (!empty($price_ht_devise) || (string)$price_ht_devise === '0') {
                     $pu_ht_devise = price2num($price_ht_devise, 'MU');
                     $pu_ht = '';
                     $pu_ttc = '';
-                } elseif (!empty($price_ttc) || (string) $price_ttc === '0') {
+                } elseif (!empty($price_ttc) || (string)$price_ttc === '0') {
                     $pu_ttc = price2num($price_ttc, 'MU');
-                    $pu_ht = price2num((float) $pu_ttc / (1 + ((float) $tmpvat / 100)), 'MU');
+                    $pu_ht = price2num((float)$pu_ttc / (1 + ((float)$tmpvat / 100)), 'MU');
                 } elseif ($tmpvat != $tmpprodvat) {
                     // Is this still used ?
                     if ($price_base_type != 'HT') {
-                        $pu_ht = price2num((float) $pu_ttc / (1 + ($tmpvat / 100)), 'MU');
+                        $pu_ht = price2num((float)$pu_ttc / (1 + ($tmpvat / 100)), 'MU');
                     } else {
-                        $pu_ttc = price2num((float) $pu_ht * (1 + ($tmpvat / 100)), 'MU');
+                        $pu_ttc = price2num((float)$pu_ht * (1 + ($tmpvat / 100)), 'MU');
                     }
                 }
 
@@ -1354,10 +1354,10 @@ if (empty($reshook)) {
             // Check if we have a foreign currency
             // If so, we update the pu_equiv as the equivalent price in base currency
             if ($pu_ht == '' && $pu_ht_devise != '' && $currency_tx != '') {
-                $pu_equivalent = (float) $pu_ht_devise * (float) $currency_tx;
+                $pu_equivalent = (float)$pu_ht_devise * (float)$currency_tx;
             }
             if ($pu_ttc == '' && $pu_ttc_devise != '' && $currency_tx != '') {
-                $pu_equivalent_ttc = (float) $pu_ttc_devise * (float) $currency_tx;
+                $pu_equivalent_ttc = (float)$pu_ttc_devise * (float)$currency_tx;
             }
 
             // TODO $pu_equivalent or $pu_equivalent_ttc must be calculated from the one not null taking into account all taxes
@@ -1376,11 +1376,11 @@ if (empty($reshook)) {
 
             // Check price is not lower than minimum
             if ($usermustrespectpricemin) {
-                if ($pu_equivalent && $price_min && (((float) price2num($pu_equivalent) * (1 - $remise_percent / 100)) < price2num($price_min)) && $price_base_type == 'HT') {
+                if ($pu_equivalent && $price_min && (((float)price2num($pu_equivalent) * (1 - $remise_percent / 100)) < price2num($price_min)) && $price_base_type == 'HT') {
                     $mesg = $langs->trans("CantBeLessThanMinPrice", price(price2num($price_min, 'MU'), 0, $langs, 0, 0, -1, $conf->currency));
                     setEventMessages($mesg, null, 'errors');
                     $error++;
-                } elseif ($pu_equivalent_ttc && $price_min_ttc && (((float) price2num($pu_equivalent_ttc) * (1 - $remise_percent / 100)) < price2num($price_min_ttc)) && $price_base_type == 'TTC') {
+                } elseif ($pu_equivalent_ttc && $price_min_ttc && (((float)price2num($pu_equivalent_ttc) * (1 - $remise_percent / 100)) < price2num($price_min_ttc)) && $price_base_type == 'TTC') {
                     $mesg = $langs->trans("CantBeLessThanMinPriceInclTax", price(price2num($price_min_ttc, 'MU'), 0, $langs, 0, 0, -1, $conf->currency));
                     setEventMessages($mesg, null, 'errors');
                     $error++;
@@ -1492,10 +1492,10 @@ if (empty($reshook)) {
         // Check if we have a foreign currency
         // If so, we update the pu_equiv as the equivalent price in base currency
         if ($pu_ht == '' && $pu_ht_devise != '' && $currency_tx != '') {
-            $pu_equivalent = (float) $pu_ht_devise * (float) $currency_tx;
+            $pu_equivalent = (float)$pu_ht_devise * (float)$currency_tx;
         }
         if ($pu_ttc == '' && $pu_ttc_devise != '' && $currency_tx != '') {
-            $pu_equivalent_ttc = (float) $pu_ttc_devise * (float) $currency_tx;
+            $pu_equivalent_ttc = (float)$pu_ttc_devise * (float)$currency_tx;
         }
 
         // TODO $pu_equivalent or $pu_equivalent_ttc must be calculated from the one not null taking into account all taxes
@@ -1549,12 +1549,12 @@ if (empty($reshook)) {
 
             // Check price is not lower than minimum
             if ($usermustrespectpricemin) {
-                if ($pu_equivalent && $price_min && (((float) price2num($pu_equivalent) * (1 - (float) $remise_percent / 100)) < (float) price2num($price_min)) && $price_base_type == 'HT') {
+                if ($pu_equivalent && $price_min && (((float)price2num($pu_equivalent) * (1 - (float)$remise_percent / 100)) < (float)price2num($price_min)) && $price_base_type == 'HT') {
                     $mesg = $langs->trans("CantBeLessThanMinPrice", price(price2num($price_min, 'MU'), 0, $langs, 0, 0, -1, $conf->currency));
                     setEventMessages($mesg, null, 'errors');
                     $error++;
                     $action = 'editline';
-                } elseif ($pu_equivalent_ttc && $price_min_ttc && (((float) price2num($pu_equivalent_ttc) * (1 - (float) $remise_percent / 100)) < (float) price2num($price_min_ttc)) && $price_base_type == 'TTC') {
+                } elseif ($pu_equivalent_ttc && $price_min_ttc && (((float)price2num($pu_equivalent_ttc) * (1 - (float)$remise_percent / 100)) < (float)price2num($price_min_ttc)) && $price_base_type == 'TTC') {
                     $mesg = $langs->trans("CantBeLessThanMinPriceInclTax", price(price2num($price_min_ttc, 'MU'), 0, $langs, 0, 0, -1, $conf->currency));
                     setEventMessages($mesg, null, 'errors');
                     $error++;
@@ -1834,9 +1834,9 @@ if ($action == 'create') {
 
             $soc = $objectsrc->thirdparty;
 
-            $cond_reglement_id  = (!empty($objectsrc->cond_reglement_id) ? $objectsrc->cond_reglement_id : (!empty($soc->cond_reglement_id) ? $soc->cond_reglement_id : 0));
-            $mode_reglement_id  = (!empty($objectsrc->mode_reglement_id) ? $objectsrc->mode_reglement_id : (!empty($soc->mode_reglement_id) ? $soc->mode_reglement_id : 0));
-            $warehouse_id       = (!empty($objectsrc->warehouse_id) ? $objectsrc->warehouse_id : (!empty($soc->warehouse_id) ? $soc->warehouse_id : 0));
+            $cond_reglement_id = (!empty($objectsrc->cond_reglement_id) ? $objectsrc->cond_reglement_id : (!empty($soc->cond_reglement_id) ? $soc->cond_reglement_id : 0));
+            $mode_reglement_id = (!empty($objectsrc->mode_reglement_id) ? $objectsrc->mode_reglement_id : (!empty($soc->mode_reglement_id) ? $soc->mode_reglement_id : 0));
+            $warehouse_id = (!empty($objectsrc->warehouse_id) ? $objectsrc->warehouse_id : (!empty($soc->warehouse_id) ? $soc->warehouse_id : 0));
 
             // Replicate extrafields
             $objectsrc->fetch_optionals();
@@ -1852,13 +1852,13 @@ if ($action == 'create') {
             }
         }
     } else {
-        $cond_reglement_id  = empty($soc->cond_reglement_id) ? $cond_reglement_id : $soc->cond_reglement_id;
-        $deposit_percent    = empty($soc->deposit_percent) ? $deposit_percent : $soc->deposit_percent;
-        $mode_reglement_id  = empty($soc->mode_reglement_id) ? $mode_reglement_id : $soc->mode_reglement_id;
-        $fk_account         = empty($soc->fk_account) ? $fk_account : $soc->fk_account;
+        $cond_reglement_id = empty($soc->cond_reglement_id) ? $cond_reglement_id : $soc->cond_reglement_id;
+        $deposit_percent = empty($soc->deposit_percent) ? $deposit_percent : $soc->deposit_percent;
+        $mode_reglement_id = empty($soc->mode_reglement_id) ? $mode_reglement_id : $soc->mode_reglement_id;
+        $fk_account = empty($soc->fk_account) ? $fk_account : $soc->fk_account;
         $shipping_method_id = $soc->shipping_method_id;
-        $warehouse_id       = $soc->fk_warehouse;
-        $remise_percent     = $soc->remise_percent;
+        $warehouse_id = $soc->fk_warehouse;
+        $remise_percent = $soc->remise_percent;
 
         if (isModEnabled("multicurrency") && !empty($soc->multicurrency_code)) {
             $currency_code = $soc->multicurrency_code;
@@ -1975,7 +1975,7 @@ if ($action == 'create') {
 
             $thirdparty = $soc;
             $discount_type = 0;
-            $backtopage = $_SERVER["PHP_SELF"] . '?socid=' . $thirdparty->id . '&action=' . $action . '&origin=' . urlencode((string) (GETPOST('origin'))) . '&originid=' . urlencode((string) (GETPOSTINT('originid')));
+            $backtopage = $_SERVER["PHP_SELF"] . '?socid=' . $thirdparty->id . '&action=' . $action . '&origin=' . urlencode((string)(GETPOST('origin'))) . '&originid=' . urlencode((string)(GETPOSTINT('originid')));
             include DOL_DOCUMENT_ROOT . '/core/tpl/object_discounts.tpl.php';
             print '</td></tr>';
         }
@@ -2029,7 +2029,7 @@ if ($action == 'create') {
 
         // Warehouse
         if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_PROPAL')) {
-                        $formproduct = new FormProduct($db);
+            $formproduct = new FormProduct($db);
             print '<tr class="field_warehouse_id"><td class="titlefieldcreate">' . $langs->trans('Warehouse') . '</td><td class="valuefieldcreate">';
             print img_picto('', 'stock', 'class="pictofixedwidth"') . $formproduct->selectWarehouses($warehouse_id, 'warehouse_id', '', 1, 0, 0, '', 0, 0, array(), 'maxwidth500 widthcentpercentminusxx');
             print '</td></tr>';
@@ -2468,7 +2468,7 @@ if ($action == 'create') {
         $nbMandated = 0;
         foreach ($object->lines as $line) {
             $res = $line->fetch_product();
-            if ($res  > 0) {
+            if ($res > 0) {
                 if ($line->product->isService() && $line->product->isMandatoryPeriod() && (empty($line->date_start) || empty($line->date_end))) {
                     $nbMandated++;
                     break;
@@ -2731,7 +2731,7 @@ if ($action == 'create') {
         // Warehouse
         if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_PROPAL')) {
             $langs->load('stocks');
-                        $formproduct = new FormProduct($db);
+            $formproduct = new FormProduct($db);
             print '<tr class="field_warehouse_id"><td class="titlefieldcreate">';
             $editenable = $usercancreate;
             print $form->editfieldkey("Warehouse", 'warehouse', '', $object, $editenable);
@@ -2821,7 +2821,7 @@ if ($action == 'create') {
             $arrayoutstandingbills = $soc->getOutstandingBills();
             print($arrayoutstandingbills['opened'] > $soc->outstanding_limit ? img_warning() : '');
             print price($arrayoutstandingbills['opened']) . ' / ';
-            print price($soc->outstanding_limit, 0, $langs, 1, - 1, - 1, $conf->currency);
+            print price($soc->outstanding_limit, 0, $langs, 1, -1, -1, $conf->currency);
             print '</td>';
             print '</tr>';
         }
@@ -3205,7 +3205,7 @@ if ($action == 'create') {
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/comm/propal/agenda.php?id=' . $object->id);
 
         // List of actions on element
-                $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, 'propal', $socid, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for thirdparty
 
         print '</div></div>';

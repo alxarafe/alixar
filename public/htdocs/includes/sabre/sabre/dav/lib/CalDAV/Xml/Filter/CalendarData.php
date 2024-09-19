@@ -56,7 +56,7 @@ class CalendarData implements XmlDeserializable
             'version' => $reader->getAttribute('version') ?: '2.0',
         ];
 
-        $elems = (array) $reader->parseInnerTree();
+        $elems = (array)$reader->parseInnerTree();
         foreach ($elems as $elem) {
             switch ($elem['name']) {
                 case '{' . Plugin::NS_CALDAV . '}expand':

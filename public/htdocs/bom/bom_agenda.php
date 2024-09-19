@@ -38,12 +38,12 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/bom/lib/bom.lib.php';
 $langs->loadLangs(array('mrp', 'other'));
 
 // Get parameters
-$id     = GETPOSTINT('id');
-$socid  = GETPOSTINT('socid');
-$ref    = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id');
+$socid = GETPOSTINT('socid');
+$ref = GETPOST('ref', 'alpha');
 
-$action     = GETPOST('action', 'aZ09');
-$cancel     = GETPOST('cancel', 'aZ09');
+$action = GETPOST('action', 'aZ09');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 if (GETPOST('actioncode', 'array')) {
@@ -120,7 +120,6 @@ if (empty($reshook)) {
         $search_agenda_label = '';
     }
 }
-
 
 
 /*
@@ -203,7 +202,6 @@ if ($object->id > 0) {
     print dol_get_fiche_end();
 
 
-
     // Actions buttons
 
     $objthirdparty = $object;
@@ -241,7 +239,7 @@ if ($object->id > 0) {
             $param .= '&contextpage=' . urlencode($contextpage);
         }
         if ($limit > 0 && $limit != $conf->liste_limit) {
-            $param .= '&limit=' . ((int) $limit);
+            $param .= '&limit=' . ((int)$limit);
         }
 
 

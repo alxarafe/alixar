@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2010-2018 Regis Houssin <regis.houssin@inodbox.com>
+/* Copyright (C) 2010-2018  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,7 @@ $titre = $langs->trans("CardProduct" . $object->type);
 print dol_get_fiche_head($head, 'card', $titre, -1, 'product');
 
 $linkback = '<a href="' . constant('BASE_URL') . 'product/list.php?restore_lastsearch_values=1&type=' . $object->type . '">' . $langs->trans("BackToList") . '</a>';
-$object->next_prev_filter = "fk_product_type = " . ((int) $object->type);
+$object->next_prev_filter = "fk_product_type = " . ((int)$object->type);
 
 $shownav = 1;
 if ($user->socid && !in_array('product', explode(',', getDolGlobalString('MAIN_MODULES_FOR_EXTERNAL')))) {
@@ -49,57 +49,58 @@ dol_banner_tab($object, 'ref', $linkback, $shownav, 'ref');
 
 <table class="border allwidth">
 
-<tr>
-<td width="15%"><?php echo $langs->trans("Ref"); ?></td>
-<td colspan="2"><?php echo dol_escape_htmltag($object->ref); ?></td>
-</tr>
+    <tr>
+        <td width="15%"><?php echo $langs->trans("Ref"); ?></td>
+        <td colspan="2"><?php echo dol_escape_htmltag($object->ref); ?></td>
+    </tr>
 
-<tr>
-<td><?php echo $langs->trans("Label") ?></td>
-<td><?php echo dol_escape_htmltag($object->label); ?></td>
+    <tr>
+        <td><?php echo $langs->trans("Label") ?></td>
+        <td><?php echo dol_escape_htmltag($object->label); ?></td>
 
-<?php if ($object->photos) { ?>
-<td valign="middle" align="center" width="30%" rowspan="<?php echo $object->nblines; ?>">
-    <?php echo $object->photos; ?>
-</td>
-<?php } ?>
+        <?php if ($object->photos) { ?>
+            <td valign="middle" align="center" width="30%" rowspan="<?php echo $object->nblines; ?>">
+                <?php echo $object->photos; ?>
+            </td>
+        <?php } ?>
 
-</tr>
+    </tr>
 
-<tr>
-<td class="tdtop"><?php echo $langs->trans("Description"); ?></td>
-<td colspan="2"><?php echo dol_escape_htmltag($object->description); ?></td>
-</tr>
+    <tr>
+        <td class="tdtop"><?php echo $langs->trans("Description"); ?></td>
+        <td colspan="2"><?php echo dol_escape_htmltag($object->description); ?></td>
+    </tr>
 
-<tr>
-<td><?php echo $langs->trans("Nature"); ?></td>
-<td colspan="2"><?php echo dol_escape_htmltag($object->finished); ?></td>
-</tr>
+    <tr>
+        <td><?php echo $langs->trans("Nature"); ?></td>
+        <td colspan="2"><?php echo dol_escape_htmltag($object->finished); ?></td>
+    </tr>
 
-<tr>
-<td><?php echo $langs->trans("Weight"); ?></td>
-<td colspan="2"><?php echo dol_escape_htmltag($object->weight); ?></td>
-</tr>
+    <tr>
+        <td><?php echo $langs->trans("Weight"); ?></td>
+        <td colspan="2"><?php echo dol_escape_htmltag($object->weight); ?></td>
+    </tr>
 
-<tr>
-<td><?php echo $langs->trans("Length"); ?></td>
-<td colspan="2"><?php echo dol_escape_htmltag($object->length); ?></td>
-</tr>
+    <tr>
+        <td><?php echo $langs->trans("Length"); ?></td>
+        <td colspan="2"><?php echo dol_escape_htmltag($object->length); ?></td>
+    </tr>
 
-<tr>
-<td><?php echo $langs->trans("Surface"); ?></td>
-<td colspan="2"><?php echo dol_escape_htmltag($object->surface); ?></td>
-</tr>
+    <tr>
+        <td><?php echo $langs->trans("Surface"); ?></td>
+        <td colspan="2"><?php echo dol_escape_htmltag($object->surface); ?></td>
+    </tr>
 
-<tr>
-<td><?php echo $langs->trans("Volume"); ?></td>
-<td colspan="2"><?php echo dol_escape_htmltag($object->volume); ?></td>
-</tr>
+    <tr>
+        <td><?php echo $langs->trans("Volume"); ?></td>
+        <td colspan="2"><?php echo dol_escape_htmltag($object->volume); ?></td>
+    </tr>
 
-<tr>
-<td class="tdtop"><?php echo $langs->trans("Note"); ?></td>
-<td colspan="2" class="valeur sensiblehtmlcontent"><?php echo dol_string_onlythesehtmltags(dol_htmlentitiesbr($object->note)); ?></td>
-</tr>
+    <tr>
+        <td class="tdtop"><?php echo $langs->trans("Note"); ?></td>
+        <td colspan="2"
+            class="valeur sensiblehtmlcontent"><?php echo dol_string_onlythesehtmltags(dol_htmlentitiesbr($object->note)); ?></td>
+    </tr>
 
 </table>
 

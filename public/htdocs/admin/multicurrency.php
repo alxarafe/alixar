@@ -155,7 +155,7 @@ if ($resql) {
 }
 
 $TCurrency = array();
-$sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "multicurrency WHERE entity = " . ((int) $conf->entity);
+$sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "multicurrency WHERE entity = " . ((int)$conf->entity);
 $resql = $db->query($sql);
 if ($resql) {
     while ($obj = $db->fetch_object($resql)) {

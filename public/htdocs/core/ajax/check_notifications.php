@@ -62,7 +62,7 @@ if ($action == 'stopreminder') {
     // Set the reminder as done
     $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'actioncomm_reminder SET status = 1';
     $sql .= ' WHERE status = 0 AND rowid IN (' . $db->sanitize($db->escape($listofreminderid)) . ')';
-    $sql .= ' AND fk_user = ' . ((int) $user->id) . ' AND entity = ' . ((int) $conf->entity);
+    $sql .= ' AND fk_user = ' . ((int)$user->id) . ' AND entity = ' . ((int)$conf->entity);
     $resql = $db->query($sql);
     if (!$resql) {
         dol_print_error($db);
@@ -74,7 +74,7 @@ if ($action == 'stopreminder') {
     // Clean database
     $sql = 'DELETE FROM ' . MAIN_DB_PREFIX . 'actioncomm_reminder';
     $sql .= " WHERE dateremind < '" . $db->idate(dol_time_plus_duree(dol_now(), -1, 'm')) . "'";
-    $sql .= " AND fk_user = " . ((int) $user->id) . ' AND entity = ' . ((int) $conf->entity);
+    $sql .= " AND fk_user = " . ((int)$user->id) . ' AND entity = ' . ((int)$conf->entity);
     $resql = $db->query($sql);
     if (!$resql) {
         dol_print_error($db);
@@ -121,17 +121,16 @@ if (empty($_SESSION['auto_check_events_not_before']) || $time >= $_SESSION['auto
     // WARNING: Any change in sessions after that will not be saved !
     session_write_close();
 
-    
 
     //dol_syslog('$_SESSION[auto_check_events_not_before]='.(empty($_SESSION['auto_check_events_not_before']) ? '' : $_SESSION['auto_check_events_not_before']));
     dol_syslog('dolnotif_nb_test_for_page=' . GETPOST('dolnotif_nb_test_for_page'));
 
     $sql = 'SELECT a.id as id_agenda, a.code, a.datep, a.label, a.location, ar.rowid as id_reminder, ar.dateremind, ar.fk_user as id_user_reminder';
     $sql .= ' FROM ' . MAIN_DB_PREFIX . 'actioncomm as a';
-    $sql .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'actioncomm_reminder as ar ON a.id = ar.fk_actioncomm AND ar.fk_user = ' . ((int) $user->id);
+    $sql .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'actioncomm_reminder as ar ON a.id = ar.fk_actioncomm AND ar.fk_user = ' . ((int)$user->id);
     $sql .= " AND ar.typeremind = 'browser' AND ar.dateremind < '" . $db->idate(dol_now()) . "'";
     $sql .= " AND ar.status = 0";
-    $sql .= " AND ar.entity = " . ((int) $conf->entity);  // No sharing of entity for alerts
+    $sql .= " AND ar.entity = " . ((int)$conf->entity);  // No sharing of entity for alerts
     $sql .= $db->order('datep', 'ASC');
     $sql .= $db->plimit(10); // Avoid too many notification at once
 

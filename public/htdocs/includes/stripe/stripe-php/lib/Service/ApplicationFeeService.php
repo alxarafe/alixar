@@ -13,9 +13,9 @@ class ApplicationFeeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\ApplicationFee>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\ApplicationFee>
      */
     public function all($params = null, $opts = null)
     {
@@ -33,9 +33,9 @@ class ApplicationFeeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\ApplicationFeeRefund>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\ApplicationFeeRefund>
      */
     public function allRefunds($parentId, $params = null, $opts = null)
     {
@@ -58,9 +58,9 @@ class ApplicationFeeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\ApplicationFeeRefund
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\ApplicationFeeRefund
      */
     public function createRefund($parentId, $params = null, $opts = null)
     {
@@ -75,9 +75,9 @@ class ApplicationFeeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\ApplicationFee
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\ApplicationFee
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -94,9 +94,9 @@ class ApplicationFeeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\ApplicationFeeRefund
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\ApplicationFeeRefund
      */
     public function retrieveRefund($parentId, $id, $params = null, $opts = null)
     {
@@ -114,9 +114,9 @@ class ApplicationFeeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\ApplicationFeeRefund
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\ApplicationFeeRefund
      */
     public function updateRefund($parentId, $id, $params = null, $opts = null)
     {

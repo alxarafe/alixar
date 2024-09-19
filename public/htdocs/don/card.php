@@ -165,7 +165,7 @@ if (empty($reshook)) {
     // Action update object
     if ($action == 'update') {
         if (!empty($cancel)) {
-            header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . urlencode((string) ($id)));
+            header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . urlencode((string)($id)));
             exit;
         }
 
@@ -245,18 +245,18 @@ if (empty($reshook)) {
 
         if (!$error) {
             $object->socid = GETPOSTINT("socid");
-            $object->firstname = (string) GETPOST("firstname", 'alpha');
-            $object->lastname = (string) GETPOST("lastname", 'alpha');
-            $object->societe = (string) GETPOST("societe", 'alpha');
-            $object->address = (string) GETPOST("address", 'alpha');
+            $object->firstname = (string)GETPOST("firstname", 'alpha');
+            $object->lastname = (string)GETPOST("lastname", 'alpha');
+            $object->societe = (string)GETPOST("societe", 'alpha');
+            $object->address = (string)GETPOST("address", 'alpha');
             $object->amount = price2num(GETPOST("amount", 'alpha'), '', 2);
-            $object->zip = (string) GETPOST("zipcode", 'alpha');
-            $object->town = (string) GETPOST("town", 'alpha');
+            $object->zip = (string)GETPOST("zipcode", 'alpha');
+            $object->town = (string)GETPOST("town", 'alpha');
             $object->country_id = GETPOSTINT('country_id');
-            $object->email = (string) GETPOST('email', 'alpha');
+            $object->email = (string)GETPOST('email', 'alpha');
             $object->date = $donation_date;
-            $object->note_private = (string) GETPOST("note_private", 'restricthtml');
-            $object->note_public = (string) GETPOST("note_public", 'restricthtml');
+            $object->note_private = (string)GETPOST("note_private", 'restricthtml');
+            $object->note_public = (string)GETPOST("note_public", 'restricthtml');
             $object->public = $public_donation;
             $object->fk_project = GETPOSTINT("fk_project");
             $object->modepaymentid = GETPOSTINT('modepayment');
@@ -718,7 +718,6 @@ if (!empty($id) && $action == 'edit') {
 }
 
 
-
 /* ************************************************************ */
 /*                                                              */
 /* Donation card in view mode                                   */
@@ -851,7 +850,7 @@ if (!empty($id) && $action != 'edit') {
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "bank as b ON p.fk_bank = b.rowid";
     $sql .= ", " . MAIN_DB_PREFIX . "c_paiement as c ";
     $sql .= ", " . MAIN_DB_PREFIX . "don as d";
-    $sql .= " WHERE d.rowid = " . ((int) $id);
+    $sql .= " WHERE d.rowid = " . ((int)$id);
     $sql .= " AND p.fk_donation = d.rowid";
     $sql .= " AND d.entity IN (" . getEntity('donation') . ")";
     $sql .= " AND p.fk_typepayment = c.id";

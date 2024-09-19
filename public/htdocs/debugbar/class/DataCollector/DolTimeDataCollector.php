@@ -33,7 +33,7 @@ class DolTimeDataCollector extends TimeDataCollector
     /**
      *  Return widget settings
      *
-     *  @return array  Array
+     * @return array  Array
      */
     public function getWidgets()
     {

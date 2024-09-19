@@ -67,7 +67,6 @@ $staticcontratligne = new ContratLigne($db);
 $productstatic = new Product($db);
 
 
-
 /*
  * Action
  */
@@ -113,10 +112,10 @@ $sql .= " WHERE cd.fk_contrat = c.rowid AND c.fk_soc = s.rowid";
 $sql .= " AND (cd.statut != 4 OR (cd.statut = 4 AND (cd.date_fin_validite is null or cd.date_fin_validite >= '" . $db->idate($now) . "')))";
 $sql .= " AND c.entity IN (" . getEntity('contract', 0) . ")";
 if ($user->socid) {
-    $sql .= ' AND c.fk_soc = ' . ((int) $user->socid);
+    $sql .= ' AND c.fk_soc = ' . ((int)$user->socid);
 }
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 $sql .= " GROUP BY cd.statut";
 $resql = $db->query($sql);
@@ -150,10 +149,10 @@ $sql .= " WHERE cd.fk_contrat = c.rowid AND c.fk_soc = s.rowid";
 $sql .= " AND (cd.statut = 4 AND cd.date_fin_validite < '" . $db->idate($now) . "')";
 $sql .= " AND c.entity IN (" . getEntity('contract', 0) . ")";
 if ($user->socid) {
-    $sql .= ' AND c.fk_soc = ' . ((int) $user->socid);
+    $sql .= ' AND c.fk_soc = ' . ((int)$user->socid);
 }
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 $sql .= " GROUP BY cd.statut";
 $resql = $db->query($sql);
@@ -165,9 +164,9 @@ if ($resql) {
     while ($i < $num) {
         $obj = $db->fetch_object($resql);
         if ($obj) {
-            $nb[$obj->status . ((string) true)] = $obj->nb;
+            $nb[$obj->status . ((string)true)] = $obj->nb;
             if ($obj->status != 5) {
-                $vals[$obj->status . ((string) true)] = $obj->nb;
+                $vals[$obj->status . ((string)true)] = $obj->nb;
                 $totalinprocess += $obj->nb;
             }
             $total += $obj->nb;
@@ -189,8 +188,8 @@ print '<tr class="liste_titre"><th colspan="2">' . $langs->trans("Statistics") .
 $listofstatus = array(0, 4, 4, 5);
 $bool = false;
 foreach ($listofstatus as $status) {
-    $bool_str = (string) $bool;
-    $dataseries[] = array($staticcontratligne->LibStatut($status, 1, ($bool ? 1 : 0)), (isset($nb[$status . $bool_str]) ? (int) $nb[$status . $bool_str] : 0));
+    $bool_str = (string)$bool;
+    $dataseries[] = array($staticcontratligne->LibStatut($status, 1, ($bool ? 1 : 0)), (isset($nb[$status . $bool_str]) ? (int)$nb[$status . $bool_str] : 0));
     if ($status == ContratLigne::STATUS_INITIAL) {
         $colorseries[$status . $bool_str] = '-' . $badgeStatus0;
     }
@@ -207,7 +206,7 @@ foreach ($listofstatus as $status) {
     if (empty($conf->use_javascript_ajax)) {
         print '<tr class="oddeven">';
         print '<td>' . $staticcontratligne->LibStatut($status, 0, ($bool ? 1 : 0)) . '</td>';
-        print '<td class="right"><a href="services_list.php?search_status=' . ((int) $status) . ($bool ? '&filter=expired' : '') . '">' . ($nb[$status . $bool_str] ? $nb[$status . $bool_str] : 0) . ' ' . $staticcontratligne->LibStatut($status, 3, ($bool ? 1 : 0)) . '</a></td>';
+        print '<td class="right"><a href="services_list.php?search_status=' . ((int)$status) . ($bool ? '&filter=expired' : '') . '">' . ($nb[$status . $bool_str] ? $nb[$status . $bool_str] : 0) . ' ' . $staticcontratligne->LibStatut($status, 3, ($bool ? 1 : 0)) . '</a></td>';
         print "</tr>\n";
     }
     if ($status == 4 && !$bool) {
@@ -234,11 +233,11 @@ if (!empty($conf->use_javascript_ajax)) {
 $listofstatus = array(0, 4, 4, 5);
 $bool = false;
 foreach ($listofstatus as $status) {
-    $bool_str = (string) $bool;
+    $bool_str = (string)$bool;
     if (empty($conf->use_javascript_ajax)) {
         print '<tr class="oddeven">';
         print '<td>' . $staticcontratligne->LibStatut($status, 0, ($bool ? 1 : 0)) . '</td>';
-        print '<td class="right"><a href="services_list.php?search_status=' . ((int) $status) . ($bool ? '&filter=expired' : '') . '">' . ($nb[$status . $bool_str] ? $nb[$status . $bool_str] : 0) . ' ' . $staticcontratligne->LibStatut($status, 3, ($bool ? 1 : 0)) . '</a></td>';
+        print '<td class="right"><a href="services_list.php?search_status=' . ((int)$status) . ($bool ? '&filter=expired' : '') . '">' . ($nb[$status . $bool_str] ? $nb[$status . $bool_str] : 0) . ' ' . $staticcontratligne->LibStatut($status, 3, ($bool ? 1 : 0)) . '</a></td>';
         if ($status == 4 && !$bool) {
             $bool = true;
         } else {
@@ -264,10 +263,10 @@ if (isModEnabled('contract') && $user->hasRight('contrat', 'lire')) {
     $sql .= " AND c.entity IN (" . getEntity('contract', 0) . ")";
     $sql .= " AND c.statut = 0";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -343,10 +342,10 @@ $sql .= " WHERE c.fk_soc = s.rowid";
 $sql .= " AND c.entity IN (" . getEntity('contract', 0) . ")";
 $sql .= " AND c.statut > 0";
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if ($socid) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 $sql .= " GROUP BY c.rowid, c.ref, c.datec, c.tms, c.statut,";
 $sql .= " s.nom, s.name_alias, s.logo, s.rowid, s.client, s.fournisseur, s.code_client, s.code_fournisseur, s.code_compta, s.code_compta_fournisseur";
@@ -433,10 +432,10 @@ $sql .= " WHERE c.entity IN (" . getEntity('contract', 0) . ")";
 $sql .= " AND cd.fk_contrat = c.rowid";
 $sql .= " AND c.fk_soc = s.rowid";
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if ($socid) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 $sql .= " ORDER BY cd.tms DESC";
 
@@ -527,10 +526,10 @@ $sql .= " AND cd.statut = 0";
 $sql .= " AND cd.fk_contrat = c.rowid";
 $sql .= " AND c.fk_soc = s.rowid";
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if ($socid) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 $sql .= " ORDER BY cd.tms DESC";
 
@@ -621,10 +620,10 @@ $sql .= " AND cd.date_fin_validite < '" . $db->idate($now) . "'";
 $sql .= " AND cd.fk_contrat = c.rowid";
 $sql .= " AND c.fk_soc = s.rowid";
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if ($socid) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 $sql .= " ORDER BY cd.tms DESC";
 

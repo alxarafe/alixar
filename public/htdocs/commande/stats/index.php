@@ -273,7 +273,6 @@ if (!$mesg) {
 }
 
 
-
 // Show array
 $data = $stats->getAllByYear();
 $arrayyears = array();

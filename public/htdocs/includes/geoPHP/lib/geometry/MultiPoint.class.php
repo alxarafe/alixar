@@ -21,6 +21,6 @@ class MultiPoint extends Collection
     // --------------------------------
     public function explode()
     {
-        return null; 
-}
+        return null;
+    }
 }

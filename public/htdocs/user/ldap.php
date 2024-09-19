@@ -171,7 +171,6 @@ if (getDolGlobalInt('LDAP_SYNCHRO_ACTIVE') === Ldap::SYNCHRO_DOLIBARR_TO_LDAP) {
 }
 
 
-
 // Affichage attributes LDAP
 print load_fiche_titre($langs->trans("LDAPInformationsForThisUser"));
 

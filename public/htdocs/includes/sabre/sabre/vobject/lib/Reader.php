@@ -35,8 +35,8 @@ class Reader
      * You can either supply a string, or a readable stream for input.
      *
      * @param string|resource $data
-     * @param int             $options
-     * @param string          $charset
+     * @param int $options
+     * @param string $charset
      *
      * @return Document
      */
@@ -60,7 +60,7 @@ class Reader
      * input.
      *
      * @param string|resource|array $data
-     * @param int                   $options
+     * @param int $options
      *
      * @return Document
      */
@@ -81,7 +81,7 @@ class Reader
      * You can either supply a string, or a readable stream for input.
      *
      * @param string|resource $data
-     * @param int             $options
+     * @param int $options
      *
      * @return Document
      */

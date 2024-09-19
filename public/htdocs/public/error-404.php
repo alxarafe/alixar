@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-  <head>
+<head>
     <title>Dolibarr 404 error page</title>
-  </head>
+</head>
 
-  <body>
+<body>
 
-    <div>
+<div>
 
     <!-- <div data-role="header" data-theme="b">
             <h1>Introduction</h1>
@@ -15,22 +15,22 @@
     -->
     <div>
 
-    <h2>Error</h2>
+        <h2>Error</h2>
 
-    <br>
-    You requested a website or a page that does not exists.
+        <br>
+        You requested a website or a page that does not exists.
 
-    <br>
-    <br>
-    la pagina o el recurso solicitado no existe.
+        <br>
+        <br>
+        la pagina o el recurso solicitado no existe.
 
-    <br>
-    <?php print isset($_SERVER["HTTP_REFERER"]) ? 'You come from ' . htmlentities($_SERVER["HTTP_REFERER"], ENT_COMPAT, 'UTF-8') . '.' : ''; ?>
+        <br>
+        <?php print isset($_SERVER["HTTP_REFERER"]) ? 'You come from ' . htmlentities($_SERVER["HTTP_REFERER"], ENT_COMPAT, 'UTF-8') . '.' : ''; ?>
 
-    <hr>
+        <hr>
 
     </div>
-    </div>
+</div>
 
-  </body>
+</body>
 </html>

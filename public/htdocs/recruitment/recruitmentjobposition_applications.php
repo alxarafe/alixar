@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
 
 /**
  *      \file       recruitmentjobposition_applications.php
@@ -138,9 +145,6 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
 }
 
-
-
-
 /*
  * View
  */
@@ -205,7 +209,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     // Print form confirm
     print $formconfirm;
 
-
     // Object card
     // ------------------------------------------------------------
     $linkback = '<a href="' . dol_buildpath('/recruitment/recruitmentjobposition_list.php', 1) . '?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
@@ -250,9 +253,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     }
     $morehtmlref .= '</div>';
 
-
     dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref);
-
 
     print '<div class="fichecenter">';
     print '<div class="fichehalfleft">';

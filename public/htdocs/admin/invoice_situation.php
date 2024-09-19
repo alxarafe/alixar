@@ -128,12 +128,11 @@ $item->fieldInputOverride = $form->getSelectConditionsPaiements($conf->global->I
 include DOL_DOCUMENT_ROOT . '/core/actions_setmoduleoptions.inc.php';
 
 
-
 /*
  * View
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $help_yrl = 'EN:Invoice_Configuration|FR:Configuration_module_facture|ES:ConfiguracionFactura';
 

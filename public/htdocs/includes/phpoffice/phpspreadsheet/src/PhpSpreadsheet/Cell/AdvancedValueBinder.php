@@ -16,9 +16,9 @@ class AdvancedValueBinder extends DefaultValueBinder implements IValueBinder
      * @param Cell $cell Cell to bind value to
      * @param mixed $value Value to bind in cell
      *
+     * @return bool
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      *
-     * @return bool
      */
     public function bindValue(Cell $cell, $value = null)
     {
@@ -45,7 +45,7 @@ class AdvancedValueBinder extends DefaultValueBinder implements IValueBinder
 
             // Check for number in scientific format
             if (preg_match('/^' . Calculation::CALCULATION_REGEXP_NUMBER . '$/', $value)) {
-                $cell->setValueExplicit((float) $value, DataType::TYPE_NUMERIC);
+                $cell->setValueExplicit((float)$value, DataType::TYPE_NUMERIC);
 
                 return true;
             }
@@ -57,7 +57,7 @@ class AdvancedValueBinder extends DefaultValueBinder implements IValueBinder
                 if ($matches[1] == '-') {
                     $value = 0 - $value;
                 }
-                $cell->setValueExplicit((float) $value, DataType::TYPE_NUMERIC);
+                $cell->setValueExplicit((float)$value, DataType::TYPE_NUMERIC);
                 // Set style
                 $cell->getWorksheet()->getStyle($cell->getCoordinate())
                     ->getNumberFormat()->setFormatCode('??/??');
@@ -69,7 +69,7 @@ class AdvancedValueBinder extends DefaultValueBinder implements IValueBinder
                 if ($matches[1] == '-') {
                     $value = 0 - $value;
                 }
-                $cell->setValueExplicit((float) $value, DataType::TYPE_NUMERIC);
+                $cell->setValueExplicit((float)$value, DataType::TYPE_NUMERIC);
                 // Set style
                 $cell->getWorksheet()->getStyle($cell->getCoordinate())
                     ->getNumberFormat()->setFormatCode('# ??/??');
@@ -80,7 +80,7 @@ class AdvancedValueBinder extends DefaultValueBinder implements IValueBinder
             // Check for percentage
             if (preg_match('/^\-?\d*\.?\d*\s?\%$/', $value)) {
                 // Convert value to number
-                $value = (float) str_replace('%', '', $value) / 100;
+                $value = (float)str_replace('%', '', $value) / 100;
                 $cell->setValueExplicit($value, DataType::TYPE_NUMERIC);
                 // Set style
                 $cell->getWorksheet()->getStyle($cell->getCoordinate())
@@ -95,7 +95,7 @@ class AdvancedValueBinder extends DefaultValueBinder implements IValueBinder
             $thousandsSeparator = StringHelper::getThousandsSeparator();
             if (preg_match('/^' . preg_quote($currencyCode, '/') . ' *(\d{1,3}(' . preg_quote($thousandsSeparator, '/') . '\d{3})*|(\d+))(' . preg_quote($decimalSeparator, '/') . '\d{2})?$/', $value)) {
                 // Convert value to number
-                $value = (float) trim(str_replace([$currencyCode, $thousandsSeparator, $decimalSeparator], ['', '', '.'], $value));
+                $value = (float)trim(str_replace([$currencyCode, $thousandsSeparator, $decimalSeparator], ['', '', '.'], $value));
                 $cell->setValueExplicit($value, DataType::TYPE_NUMERIC);
                 // Set style
                 $cell->getWorksheet()->getStyle($cell->getCoordinate())
@@ -106,7 +106,7 @@ class AdvancedValueBinder extends DefaultValueBinder implements IValueBinder
                 return true;
             } elseif (preg_match('/^\$ *(\d{1,3}(\,\d{3})*|(\d+))(\.\d{2})?$/', $value)) {
                 // Convert value to number
-                $value = (float) trim(str_replace(['$', ','], '', $value));
+                $value = (float)trim(str_replace(['$', ','], '', $value));
                 $cell->setValueExplicit($value, DataType::TYPE_NUMERIC);
                 // Set style
                 $cell->getWorksheet()->getStyle($cell->getCoordinate())

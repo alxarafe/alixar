@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2008-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2012	Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2008-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2012	Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -30,7 +30,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 /**
  *  Define head array for tabs of paypal tools setup pages
  *
- *  @return         Array of head
+ * @return         Array of head
  */
 function paypaladmin_prepare_head()
 {
@@ -61,12 +61,12 @@ function paypaladmin_prepare_head()
 /**
  * Send redirect to paypal to browser
  *
- * @param   float   $paymentAmount      Amount
- * @param   string  $currencyCodeType   Currency code
- * @param   string  $paymentType        Payment type
- * @param   string  $returnURL          Url to use if payment is OK
- * @param   string  $cancelURL          Url to use if payment is KO
- * @param   string  $tag                Full tag
+ * @param float $paymentAmount Amount
+ * @param string $currencyCodeType Currency code
+ * @param string $paymentType Payment type
+ * @param string $returnURL Url to use if payment is OK
+ * @param string $cancelURL Url to use if payment is KO
+ * @param string $tag Full tag
  * @return  string                      No return (a redirect is done) if OK, or Error message if KO
  */
 function print_paypal_redirect($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL, $tag)
@@ -181,24 +181,24 @@ function print_paypal_redirect($paymentAmount, $currencyCodeType, $paymentType, 
  *      desc:               Product description
  * See https://developer.paypal.com/docs/classic/api/merchant/SetExpressCheckout_API_Operation_NVP/
  *
- * @param   double          $paymentAmount      Payment amount
- * @param   string          $currencyCodeType   Currency
- * @param   string          $paymentType        Payment type
- * @param   string          $returnURL          Return Url
- * @param   string          $cancelURL          Cancel Url
- * @param   string          $tag                Full tag
- * @param   string          $solutionType       Type ('Mark' or 'Sole')
- * @param   string          $landingPage        Landing page ('Login' or 'Billing')
- * @param   string          $shipToName         Ship to name
- * @param   string          $shipToStreet       Ship to street
- * @param   string          $shipToCity         Ship to city
- * @param   string          $shipToState        Ship to state
- * @param   string          $shipToCountryCode  Ship to country code
- * @param   string          $shipToZip          Ship to zip
- * @param   string          $shipToStreet2      Ship to street2
- * @param   string          $phoneNum           Phone
- * @param   string          $email              Email
- * @param   string          $desc               Description
+ * @param double $paymentAmount Payment amount
+ * @param string $currencyCodeType Currency
+ * @param string $paymentType Payment type
+ * @param string $returnURL Return Url
+ * @param string $cancelURL Cancel Url
+ * @param string $tag Full tag
+ * @param string $solutionType Type ('Mark' or 'Sole')
+ * @param string $landingPage Landing page ('Login' or 'Billing')
+ * @param string $shipToName Ship to name
+ * @param string $shipToStreet Ship to street
+ * @param string $shipToCity Ship to city
+ * @param string $shipToState Ship to state
+ * @param string $shipToCountryCode Ship to country code
+ * @param string $shipToZip Ship to zip
+ * @param string $shipToStreet2 Ship to street2
+ * @param string $phoneNum Phone
+ * @param string $email Email
+ * @param string $desc Description
  * @return  array                               Array
  */
 function callSetExpressCheckout($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL, $tag, $solutionType, $landingPage, $shipToName, $shipToStreet, $shipToCity, $shipToState, $shipToCountryCode, $shipToZip, $shipToStreet2, $phoneNum, $email = '', $desc = '')
@@ -235,16 +235,16 @@ function callSetExpressCheckout($paymentAmount, $currencyCodeType, $paymentType,
         $paymentType = 'Sale';
     }
 
-    $nvpstr = $nvpstr . "&AMT=" . urlencode((string) ($paymentAmount)); // Total for all elements
+    $nvpstr = $nvpstr . "&AMT=" . urlencode((string)($paymentAmount)); // Total for all elements
 
     $nvpstr = $nvpstr . "&" . $paypalprefix . "INVNUM=" . urlencode($tag);
-    $nvpstr = $nvpstr . "&" . $paypalprefix . "AMT=" . urlencode((string) ($paymentAmount)); // AMT deprecated by paypal -> PAYMENTREQUEST_n_AMT
-    $nvpstr = $nvpstr . "&" . $paypalprefix . "ITEMAMT=" . urlencode((string) ($paymentAmount)); // AMT deprecated by paypal -> PAYMENTREQUEST_n_AMT
+    $nvpstr = $nvpstr . "&" . $paypalprefix . "AMT=" . urlencode((string)($paymentAmount)); // AMT deprecated by paypal -> PAYMENTREQUEST_n_AMT
+    $nvpstr = $nvpstr . "&" . $paypalprefix . "ITEMAMT=" . urlencode((string)($paymentAmount)); // AMT deprecated by paypal -> PAYMENTREQUEST_n_AMT
     $nvpstr = $nvpstr . "&" . $paypalprefix . "PAYMENTACTION=" . urlencode($paymentType); // PAYMENTACTION deprecated by paypal -> PAYMENTREQUEST_n_PAYMENTACTION
     $nvpstr = $nvpstr . "&" . $paypalprefix . "CURRENCYCODE=" . urlencode($currencyCodeType); // CURRENCYCODE deprecated by paypal -> PAYMENTREQUEST_n_CURRENCYCODE
 
     $nvpstr = $nvpstr . "&" . $paypalprefix . "L_PAYMENTREQUEST_0_QTY0=1";
-    $nvpstr = $nvpstr . "&" . $paypalprefix . "L_PAYMENTREQUEST_0_AMT0=" . urlencode((string) ($paymentAmount));
+    $nvpstr = $nvpstr . "&" . $paypalprefix . "L_PAYMENTREQUEST_0_AMT0=" . urlencode((string)($paymentAmount));
     $nvpstr = $nvpstr . "&" . $paypalprefix . "L_PAYMENTREQUEST_0_NAME0=" . urlencode($desc);
     $nvpstr = $nvpstr . "&" . $paypalprefix . "L_PAYMENTREQUEST_0_NUMBER0=0";
 
@@ -304,8 +304,8 @@ function callSetExpressCheckout($paymentAmount, $currencyCodeType, $paymentType,
 /**
  *  Prepares the parameters for the GetExpressCheckoutDetails API Call.
  *
- *  @param  string  $token      Token
- *  @return array               The NVP Collection object of the GetExpressCheckoutDetails Call Response.
+ * @param string $token Token
+ * @return array               The NVP Collection object of the GetExpressCheckoutDetails Call Response.
  */
 function getDetails($token)
 {
@@ -347,14 +347,14 @@ function getDetails($token)
 /**
  *  Validate payment
  *
- *  @param  string  $token              Token
- *  @param  string  $paymentType        Type
- *  @param  string  $currencyCodeType   Currency
- *  @param  string  $payerID            Payer ID
- *  @param  string  $ipaddress          IP Address
- *  @param  string  $FinalPaymentAmt    Amount
- *  @param  string  $tag                Full tag
- *  @return array
+ * @param string $token Token
+ * @param string $paymentType Type
+ * @param string $currencyCodeType Currency
+ * @param string $payerID Payer ID
+ * @param string $ipaddress IP Address
+ * @param string $FinalPaymentAmt Amount
+ * @param string $tag Full tag
+ * @return array
  */
 function confirmPayment($token, $paymentType, $currencyCodeType, $payerID, $ipaddress, $FinalPaymentAmt, $tag)
 {
@@ -408,7 +408,7 @@ function confirmPayment($token, $paymentType, $currencyCodeType, $payerID, $ipad
  *  creditCardNumber:   buyers credit card number without any spaces, dashes or any other characters
  *  expDate:            credit card expiration date
  *  cvv2:               Card Verification Value
- *  @return     array   The NVP Collection object of the DoDirectPayment Call Response.
+ * @return     array   The NVP Collection object of the DoDirectPayment Call Response.
  */
 /*
 function DirectPayment($paymentType, $paymentAmount, $creditCardType, $creditCardNumber, $expDate, $cvv2, $firstName, $lastName, $street, $city, $state, $zip, $countryCode, $currencyCode, $tag)
@@ -446,8 +446,8 @@ function DirectPayment($paymentType, $paymentAmount, $creditCardType, $creditCar
 /**
  * hash_call: Function to perform the API call to PayPal using API signature
  *
- * @param   string  $methodName     is name of API  method.
- * @param   string  $nvpStr         is nvp string.
+ * @param string $methodName is name of API  method.
+ * @param string $nvpStr is nvp string.
  * @return  array                   returns an associative array containing the response from the server.
  */
 function hash_call($methodName, $nvpStr)
@@ -505,7 +505,7 @@ function hash_call($methodName, $nvpStr)
     // Turning on or off the ssl target certificate
     if ($ssl_verifypeer < 0) {
         global $dolibarr_main_prod;
-        $ssl_verifypeer =  ($dolibarr_main_prod ? true : false);
+        $ssl_verifypeer = ($dolibarr_main_prod ? true : false);
     }
     if (getDolGlobalString('MAIN_CURL_DISABLE_VERIFYPEER')) {
         $ssl_verifypeer = 0;
@@ -572,7 +572,7 @@ function hash_call($methodName, $nvpStr)
  * This function will take NVPString and convert it to an Associative Array and it will decode the response.
  * It is useful to search for a particular key and displaying arrays.
  *
- * @param   string  $nvpstr         NVPString
+ * @param string $nvpstr NVPString
  * @return  array                   nvpArray = Associative Array
  */
 function deformatNVP($nvpstr)
@@ -599,7 +599,7 @@ function deformatNVP($nvpstr)
 /**
  *  Get API errors
  *
- *  @return array       Array of errors
+ * @return array       Array of errors
  */
 function getApiError()
 {

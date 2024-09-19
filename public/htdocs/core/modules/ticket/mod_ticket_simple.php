@@ -62,8 +62,8 @@ class mod_ticket_simple extends ModeleNumRefTicket
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -74,7 +74,7 @@ class mod_ticket_simple extends ModeleNumRefTicket
     /**
      *  Return an example of numbering module values
      *
-     *     @return string      Example
+     * @return string      Example
      */
     public function getExample()
     {
@@ -85,8 +85,8 @@ class mod_ticket_simple extends ModeleNumRefTicket
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -121,9 +121,9 @@ class mod_ticket_simple extends ModeleNumRefTicket
     /**
      *  Return next value
      *
-     *  @param  Societe $objsoc     Object third party
-     *  @param  Ticket  $ticket     Object ticket
-     *  @return string|-1           Value if OK, -1 if KO
+     * @param Societe $objsoc Object third party
+     * @param Ticket $ticket Object ticket
+     * @return string|-1           Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $ticket)
     {

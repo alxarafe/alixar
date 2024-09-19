@@ -23,12 +23,12 @@ class AutoLoader
      * Build the instance of the autoloader
      *
      * @param string $namespace The prefixed namespace this instance will load
-     * @param string $path      The filesystem path to the root of the namespace
+     * @param string $path The filesystem path to the root of the namespace
      */
     public function __construct($namespace, $path)
     {
         $this->namespace = ltrim($namespace, '\\');
-        $this->path      = rtrim($path, '/\\') . DIRECTORY_SEPARATOR;
+        $this->path = rtrim($path, '/\\') . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -43,11 +43,11 @@ class AutoLoader
         $class = ltrim($class, '\\');
 
         if (strpos($class, $this->namespace) === 0) {
-            $nsparts   = explode('\\', $class);
-            $class     = array_pop($nsparts);
+            $nsparts = explode('\\', $class);
+            $class = array_pop($nsparts);
             $nsparts[] = '';
-            $path      = $this->path . implode(DIRECTORY_SEPARATOR, $nsparts);
-            $path     .= str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+            $path = $this->path . implode(DIRECTORY_SEPARATOR, $nsparts);
+            $path .= str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
 
             if (file_exists($path)) {
                 require $path;

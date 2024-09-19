@@ -35,7 +35,7 @@ class MkCol extends PropPatch
      * Creates the MKCOL object.
      *
      * @param string[] $resourceType list of resourcetype values
-     * @param array    $mutations    list of new properties values
+     * @param array $mutations list of new properties values
      */
     public function __construct(array $resourceType, array $mutations)
     {
@@ -66,6 +66,6 @@ class MkCol extends PropPatch
      */
     public function hasResourceType($resourceType)
     {
-        return 0 === count(array_diff((array) $resourceType, $this->resourceType));
+        return 0 === count(array_diff((array)$resourceType, $this->resourceType));
     }
 }

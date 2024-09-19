@@ -64,8 +64,8 @@ class mod_pacific extends ModeleNumRefFicheinter
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -76,7 +76,7 @@ class mod_pacific extends ModeleNumRefFicheinter
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -87,8 +87,8 @@ class mod_pacific extends ModeleNumRefFicheinter
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -125,9 +125,9 @@ class mod_pacific extends ModeleNumRefFicheinter
     /**
      *  Return next free value
      *
-     *  @param  Societe|string      $objsoc     Object thirdparty
-     *  @param  Fichinter|string    $object     Object we need next value for
-     *  @return string                          Value if KO, <0 if KO
+     * @param Societe|string $objsoc Object thirdparty
+     * @param Fichinter|string $object Object we need next value for
+     * @return string                          Value if KO, <0 if KO
      */
     public function getNextValue($objsoc = '', $object = '')
     {
@@ -169,10 +169,10 @@ class mod_pacific extends ModeleNumRefFicheinter
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc     Object third party
-     *  @param  Fichinter   $objforref  Object for number to search
-     *  @return string                  Next free value
-     *  @deprecated see getNextValue
+     * @param Societe $objsoc Object third party
+     * @param Fichinter $objforref Object for number to search
+     * @return string                  Next free value
+     * @deprecated see getNextValue
      */
     public function getNumRef($objsoc, $objforref)
     {

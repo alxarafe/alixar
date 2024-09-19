@@ -62,8 +62,8 @@ class mod_expensereport_jade extends ModeleNumRefExpenseReport
     /**
      *  Return description of numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -75,7 +75,7 @@ class mod_expensereport_jade extends ModeleNumRefExpenseReport
     /**
      *  Returns an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -87,8 +87,8 @@ class mod_expensereport_jade extends ModeleNumRefExpenseReport
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -123,8 +123,8 @@ class mod_expensereport_jade extends ModeleNumRefExpenseReport
     /**
      *  Return next free value
      *
-     *  @param  Object      $object     Object we need next value for
-     *  @return string|0                Next value if OK, 0 if KO
+     * @param Object $object Object we need next value for
+     * @return string|0                Next value if OK, 0 if KO
      */
     public function getNextValue($object)
     {
@@ -155,12 +155,12 @@ class mod_expensereport_jade extends ModeleNumRefExpenseReport
                 }
             } else {
                 $newref = 1;
-                while (strlen((string) $newref) < $num_car) {
+                while (strlen((string)$newref) < $num_car) {
                     $newref = "0" . $newref;
                 }
             }
 
-            $ref_number_int = (int) $newref;
+            $ref_number_int = (int)$newref;
 
             $user_author_infos = dolGetFirstLastname($fuser->firstname, $fuser->lastname);
 
@@ -170,7 +170,7 @@ class mod_expensereport_jade extends ModeleNumRefExpenseReport
             }
             $newref = str_replace(' ', '_', $user_author_infos) . $expld_car . $prefix . $newref . $expld_car . dol_print_date($object->date_debut, '%y%m%d');
 
-            $sqlbis = 'UPDATE ' . MAIN_DB_PREFIX . 'expensereport SET ref_number_int = ' . ((int) $ref_number_int) . ' WHERE rowid = ' . ((int) $object->id);
+            $sqlbis = 'UPDATE ' . MAIN_DB_PREFIX . 'expensereport SET ref_number_int = ' . ((int)$ref_number_int) . ' WHERE rowid = ' . ((int)$object->id);
             $resqlbis = $db->query($sqlbis);
             if (!$resqlbis) {
                 dol_print_error($resqlbis);

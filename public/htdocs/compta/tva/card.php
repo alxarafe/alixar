@@ -185,7 +185,7 @@ if (empty($reshook)) {
         $object->datev = $datev;
         $object->datep = $datep;
 
-        $amount = (float) price2num(GETPOST("amount", 'alpha'));
+        $amount = (float)price2num(GETPOST("amount", 'alpha'));
         if ($refund == 1) {
             $amount = price2num(-1 * $amount);
         }
@@ -227,16 +227,16 @@ if (empty($reshook)) {
 
                 // Create a line of payments
                 $paiement = new PaymentVAT($db);
-                $paiement->chid         = $object->id;
-                $paiement->datepaye     = $datep;
-                $paiement->amounts      = array($object->id => $amount); // Tableau de montant
+                $paiement->chid = $object->id;
+                $paiement->datepaye = $datep;
+                $paiement->amounts = array($object->id => $amount); // Tableau de montant
                 $paiement->paiementtype = GETPOST("type_payment", 'alphanohtml');
-                $paiement->num_payment  = GETPOST("num_payment", 'alphanohtml');
+                $paiement->num_payment = GETPOST("num_payment", 'alphanohtml');
                 $paiement->note = GETPOST("note", 'restricthtml');
                 $paiement->note_private = GETPOST("note", 'restricthtml');
 
                 if (!$error) {
-                    $paymentid = $paiement->create($user, (int) GETPOST('closepaidtva'));
+                    $paymentid = $paiement->create($user, (int)GETPOST('closepaidtva'));
                     if ($paymentid < 0) {
                         $error++;
                         setEventMessages($paiement->error, null, 'errors');
@@ -398,7 +398,8 @@ if ($action == 'create') {
 
     if (!empty($conf->use_javascript_ajax)) {
         print "\n" . '<script type="text/javascript">';
-        print /** @lang JavaScript */'
+        print /** @lang JavaScript */
+            '
 			$(document).ready(function () {
 				let onAutoCreatePaiementChange = function () {
 					if($("#auto_create_paiement").is(":checked")) {
@@ -685,7 +686,7 @@ if ($id > 0) {
     $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'bank_account as ba ON b.fk_account = ba.rowid';
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_paiement as c ON p.fk_typepaiement = c.id";
     $sql .= ", " . MAIN_DB_PREFIX . "tva as tva";
-    $sql .= " WHERE p.fk_tva = " . ((int) $id);
+    $sql .= " WHERE p.fk_tva = " . ((int)$id);
     $sql .= " AND p.fk_tva = tva.rowid";
     $sql .= " AND tva.entity IN (" . getEntity('tax') . ")";
     $sql .= " ORDER BY dp DESC";
@@ -809,8 +810,8 @@ if ($id > 0) {
         if (
             $object->paye == 0
             && (
-            (round($resteapayer) <= 0 && $object->amount > 0)
-            || (round($resteapayer) >= 0 && $object->amount < 0)
+                (round($resteapayer) <= 0 && $object->amount > 0)
+                || (round($resteapayer) >= 0 && $object->amount < 0)
             )
             && $user->hasRight('tax', 'charges', 'creer')
         ) {
@@ -829,7 +830,6 @@ if ($id > 0) {
         }
     }
     print '</div>' . "\n";
-
 
 
     // Select mail models is same action as presend

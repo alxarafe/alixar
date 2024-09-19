@@ -12,9 +12,9 @@ class PromotionCodeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\PromotionCode>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\PromotionCode>
      */
     public function all($params = null, $opts = null)
     {
@@ -28,9 +28,9 @@ class PromotionCodeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\PromotionCode
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\PromotionCode
      */
     public function create($params = null, $opts = null)
     {
@@ -47,9 +47,9 @@ class PromotionCodeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\PromotionCode
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\PromotionCode
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -64,9 +64,9 @@ class PromotionCodeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\PromotionCode
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\PromotionCode
      */
     public function update($id, $params = null, $opts = null)
     {

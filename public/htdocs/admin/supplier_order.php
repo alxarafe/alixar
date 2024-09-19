@@ -99,7 +99,7 @@ if ($action == 'specimen') {  // For orders
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/supplier_order/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -213,7 +213,7 @@ if ($action == 'specimen') {  // For orders
 
 $form = new Form($db);
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-supplier_order');
 
@@ -553,7 +553,7 @@ print "</tr>\n";
 
 
 // Disallow to classify billed a supplier order without invoice
-print '<tr class="oddeven"><td>' . $langs->trans("SupplierOrderClassifyBilledWithoutInvoice") . '&nbsp;' ;
+print '<tr class="oddeven"><td>' . $langs->trans("SupplierOrderClassifyBilledWithoutInvoice") . '&nbsp;';
 print $form->textwithpicto('', $langs->trans("SupplierOrderClassifyBilledWithoutInvoiceHelp"), 1, 'help') . '</td>';
 print '<td class="left" colspan="2">';
 print ajax_constantonoff('SUPPLIER_ORDER_DISABLE_CLASSIFY_BILLED_FROM_SUPPLIER_ORDER');

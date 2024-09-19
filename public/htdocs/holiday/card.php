@@ -954,7 +954,6 @@ if (empty($reshook)) {
 }
 
 
-
 /*
  * View
  */
@@ -1094,7 +1093,7 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
                 print '$( document ).ready(function() {
 					jQuery("#fuserid").change(function() {
 						console.log("We change to user id "+jQuery("#fuserid").val());
-						if (jQuery("#fuserid").val() == ' . ((int) $user->id) . ') {
+						if (jQuery("#fuserid").val() == ' . ((int)$user->id) . ') {
 							jQuery(".leaveuserbalance").show();
 						} else {
 							jQuery(".leaveuserbalance").hide();
@@ -1370,7 +1369,7 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
                 print '<td>';
                 $htmlhelp = $langs->trans('NbUseDaysCPHelp');
                 $includesaturday = getDolGlobalInt('MAIN_NON_WORKING_DAYS_INCLUDE_SATURDAY', 1);
-                $includesunday   = getDolGlobalInt('MAIN_NON_WORKING_DAYS_INCLUDE_SUNDAY', 1);
+                $includesunday = getDolGlobalInt('MAIN_NON_WORKING_DAYS_INCLUDE_SUNDAY', 1);
                 if ($includesaturday) {
                     $htmlhelp .= '<br>' . $langs->trans("DayIsANonWorkingDay", $langs->trans("Saturday"));
                 }

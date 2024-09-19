@@ -573,7 +573,7 @@ if ($object->id > 0) {
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'product_fournisseur_price as pfp';
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "product as p ON p.rowid = pfp.fk_product";
         $sql .= ' WHERE p.entity IN (' . getEntity('product') . ')';
-        $sql .= ' AND pfp.fk_soc = ' . ((int) $object->id);
+        $sql .= ' AND pfp.fk_soc = ' . ((int)$object->id);
         $sql .= $db->order('pfp.tms', 'desc');
         $sql .= $db->plimit($MAXLIST);
 
@@ -644,7 +644,7 @@ if ($object->id > 0) {
 
         $sql = "SELECT p.rowid, p.ref, p.date_valid as dc, p.fk_statut, p.total_ht, p.total_tva, p.total_ttc";
         $sql .= " FROM " . MAIN_DB_PREFIX . "supplier_proposal as p ";
-        $sql .= " WHERE p.fk_soc = " . ((int) $object->id);
+        $sql .= " WHERE p.fk_soc = " . ((int)$object->id);
         $sql .= " AND p.entity IN (" . getEntity('supplier_proposal') . ")";
         $sql .= " ORDER BY p.date_valid DESC";
         $sql .= $db->plimit($MAXLIST);
@@ -714,7 +714,7 @@ if ($object->id > 0) {
         $sql2 .= ', ' . MAIN_DB_PREFIX . 'commande_fournisseur as c';
         $sql2 .= ' WHERE c.fk_soc = s.rowid';
         $sql2 .= " AND c.entity IN (" . getEntity('commande_fournisseur') . ")";
-        $sql2 .= ' AND s.rowid = ' . ((int) $object->id);
+        $sql2 .= ' AND s.rowid = ' . ((int)$object->id);
         // Show orders we can bill
         if (!getDolGlobalString('SUPPLIER_ORDER_TO_INVOICE_STATUS')) {
             $sql2 .= " AND c.fk_statut IN (" . $db->sanitize(CommandeFournisseur::STATUS_RECEIVED_COMPLETELY) . ")"; //  Must match filter in htdocs/fourn/commande/list.php
@@ -737,7 +737,7 @@ if ($object->id > 0) {
         // TODO move to DAO class
         $sql = "SELECT count(p.rowid) as total";
         $sql .= " FROM " . MAIN_DB_PREFIX . "commande_fournisseur as p";
-        $sql .= " WHERE p.fk_soc = " . ((int) $object->id);
+        $sql .= " WHERE p.fk_soc = " . ((int)$object->id);
         $sql .= " AND p.entity IN (" . getEntity('commande_fournisseur') . ")";
         $resql = $db->query($sql);
         if ($resql) {
@@ -745,9 +745,9 @@ if ($object->id > 0) {
             $num = $object_count->total;
         }
 
-        $sql  = "SELECT p.rowid,p.ref, p.date_commande as date, p.fk_statut, p.total_ht, p.total_tva, p.total_ttc";
+        $sql = "SELECT p.rowid,p.ref, p.date_commande as date, p.fk_statut, p.total_ht, p.total_tva, p.total_ttc";
         $sql .= " FROM " . MAIN_DB_PREFIX . "commande_fournisseur as p";
-        $sql .= " WHERE p.fk_soc = " . ((int) $object->id);
+        $sql .= " WHERE p.fk_soc = " . ((int)$object->id);
         $sql .= " AND p.entity IN (" . getEntity('commande_fournisseur') . ")";
         $sql .= " ORDER BY p.date_commande DESC";
         $sql .= $db->plimit($MAXLIST);
@@ -816,7 +816,7 @@ if ($object->id > 0) {
         $sql .= ' SUM(pf.amount) as am';
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'facture_fourn as f';
         $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'paiementfourn_facturefourn as pf ON f.rowid=pf.fk_facturefourn';
-        $sql .= ' WHERE f.fk_soc = ' . ((int) $object->id);
+        $sql .= ' WHERE f.fk_soc = ' . ((int)$object->id);
         $sql .= " AND f.entity IN (" . getEntity('facture_fourn') . ")";
         $sql .= ' GROUP BY f.rowid,f.libelle,f.ref,f.ref_supplier,f.fk_statut,f.datef,f.total_ht,f.total_tva,f.total_ttc,f.paye';
         $sql .= ' ORDER BY f.datef DESC';
