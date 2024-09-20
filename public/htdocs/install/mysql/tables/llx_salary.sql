@@ -19,28 +19,28 @@
 
 create table llx_salary
 (
-  rowid           integer AUTO_INCREMENT PRIMARY KEY,
-  ref             varchar(30) NULL,           -- payment reference number (currently NULL because there is no numbering manager yet)
-  ref_ext         varchar(255),				  -- reference into an external system (not used by dolibarr)
-  tms             timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  datec           datetime,                   -- Create date
-  fk_user         integer NOT NULL,
-  datep           date,                       -- payment date
-  datev           date,                       -- value date (this field should not be here, only into bank tables)
-  salary          double(24,8),               -- salary of user when payment was done
-  amount          double(24,8) NOT NULL DEFAULT 0,
-  fk_projet       integer DEFAULT NULL,
-  fk_typepayment  integer NOT NULL,			  -- default expected payment
-  num_payment     varchar(50),                -- num cheque or other (deprecated, now stored into the payment)
-  label           varchar(255),
-  datesp          date,                       -- date start period
-  dateep          date,                       -- date end period
-  entity          integer DEFAULT 1 NOT NULL, -- multi company id
-  note            text,
-  note_public     text,
-  fk_bank         integer,
-  paye            smallint default 0 NOT NULL,
-  fk_account      integer,
-  fk_user_author  integer,                    -- user creating
-  fk_user_modif   integer                     -- user making last change
+    rowid          integer AUTO_INCREMENT PRIMARY KEY,
+    ref            varchar(30) NULL,             -- payment reference number (currently NULL because there is no numbering manager yet)
+    ref_ext        varchar(255),                 -- reference into an external system (not used by dolibarr)
+    tms            timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    datec          datetime,                     -- Create date
+    fk_user        integer             NOT NULL,
+    datep          date,                         -- payment date
+    datev          date,                         -- value date (this field should not be here, only into bank tables)
+    salary double(24,8),                         -- salary of user when payment was done
+    amount double(24,8) NOT NULL DEFAULT 0,
+    fk_projet      integer   DEFAULT NULL,
+    fk_typepayment integer             NOT NULL, -- default expected payment
+    num_payment    varchar(50),                  -- num cheque or other (deprecated, now stored into the payment)
+    label          varchar(255),
+    datesp         date,                         -- date start period
+    dateep         date,                         -- date end period
+    entity         integer   DEFAULT 1 NOT NULL, -- multi company id
+    note           text,
+    note_public    text,
+    fk_bank        integer,
+    paye           smallint  default 0 NOT NULL,
+    fk_account     integer,
+    fk_user_author integer,                      -- user creating
+    fk_user_modif  integer                       -- user making last change
 )ENGINE=innodb;

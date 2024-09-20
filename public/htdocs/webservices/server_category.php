@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2012      JF FERRY             <jfefe@aternatik.fr>
+/* Copyright (C) 2006-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       JF FERRY                    <jfefe@aternatik.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Categories\Classes\Categorie;
 
 /**
  *       \file       htdocs/webservices/server_category.php
@@ -51,7 +53,6 @@ require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ws.lib.php';
 require_once DOL_DOCUMENT_ROOT . "/categories/class/categorie.class.php";
 
-
 dol_syslog("Call Dolibarr webservices interfaces");
 
 // Enable and test if module web services is enabled
@@ -70,7 +71,6 @@ $server->decode_utf8 = false;
 $ns = 'http://www.dolibarr.org/ns/';
 $server->configureWSDL('WebServicesDolibarrCategorie', $ns);
 $server->wsdl->schemaTargetNamespace = $ns;
-
 
 // Define WSDL content
 $server->wsdl->addComplexType(
@@ -199,7 +199,6 @@ $server->register(
     $styleuse,
     'WS to get category'
 );
-
 
 /**
  * Get category infos and children

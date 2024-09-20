@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2013-2016  Olivier Geffroy         <jeff@jeffinfo.com>
- * Copyright (C) 2013-2016  Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2013-2024  Alexandre Spangaro      <alexandre@inoveasya.solutions>
- * Copyright (C) 2022  		Lionel Vessiller        <lvessiller@open-dsi.fr>
- * Copyright (C) 2016-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2022  		Progiseize         		<a.bisotti@progiseiea-conseil.com>
- * Copyright (C) 2024       MDW                     <mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2013-2016  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2016  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2024  Alexandre Spangaro          <alexandre@inoveasya.solutions>
+ * Copyright (C) 2022  		Lionel Vessiller            <lvessiller@open-dsi.fr>
+ * Copyright (C) 2016-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2022  		Progiseize         		    <a.bisotti@progiseiea-conseil.com>
+ * Copyright (C) 2024       MDW                         <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,10 +24,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Accountancy\Classes\BookKeeping;
 use Dolibarr\Code\Accountancy\Classes\BookKeepingLine;
 use Dolibarr\Code\Accountancy\Classes\Lettering;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 
 /**
  * \file        htdocs/accountancy/bookkeeping/list.php
@@ -37,7 +46,6 @@ use Dolibarr\Code\Accountancy\Classes\Lettering;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -59,45 +67,45 @@ $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'bo
 $search_mvt_num = GETPOST('search_mvt_num', 'alpha');
 $search_doc_type = GETPOST("search_doc_type", 'alpha');
 $search_doc_ref = GETPOST("search_doc_ref", 'alpha');
-$search_date_startyear =  GETPOSTINT('search_date_startyear');
-$search_date_startmonth =  GETPOSTINT('search_date_startmonth');
-$search_date_startday =  GETPOSTINT('search_date_startday');
-$search_date_endyear =  GETPOSTINT('search_date_endyear');
-$search_date_endmonth =  GETPOSTINT('search_date_endmonth');
-$search_date_endday =  GETPOSTINT('search_date_endday');
+$search_date_startyear = GETPOSTINT('search_date_startyear');
+$search_date_startmonth = GETPOSTINT('search_date_startmonth');
+$search_date_startday = GETPOSTINT('search_date_startday');
+$search_date_endyear = GETPOSTINT('search_date_endyear');
+$search_date_endmonth = GETPOSTINT('search_date_endmonth');
+$search_date_endday = GETPOSTINT('search_date_endday');
 $search_date_start = dol_mktime(0, 0, 0, $search_date_startmonth, $search_date_startday, $search_date_startyear);
 $search_date_end = dol_mktime(23, 59, 59, $search_date_endmonth, $search_date_endday, $search_date_endyear);
 $search_doc_date = dol_mktime(0, 0, 0, GETPOSTINT('doc_datemonth'), GETPOSTINT('doc_dateday'), GETPOSTINT('doc_dateyear'));
-$search_date_creation_startyear =  GETPOSTINT('search_date_creation_startyear');
-$search_date_creation_startmonth =  GETPOSTINT('search_date_creation_startmonth');
-$search_date_creation_startday =  GETPOSTINT('search_date_creation_startday');
-$search_date_creation_endyear =  GETPOSTINT('search_date_creation_endyear');
-$search_date_creation_endmonth =  GETPOSTINT('search_date_creation_endmonth');
-$search_date_creation_endday =  GETPOSTINT('search_date_creation_endday');
+$search_date_creation_startyear = GETPOSTINT('search_date_creation_startyear');
+$search_date_creation_startmonth = GETPOSTINT('search_date_creation_startmonth');
+$search_date_creation_startday = GETPOSTINT('search_date_creation_startday');
+$search_date_creation_endyear = GETPOSTINT('search_date_creation_endyear');
+$search_date_creation_endmonth = GETPOSTINT('search_date_creation_endmonth');
+$search_date_creation_endday = GETPOSTINT('search_date_creation_endday');
 $search_date_creation_start = dol_mktime(0, 0, 0, $search_date_creation_startmonth, $search_date_creation_startday, $search_date_creation_startyear);
 $search_date_creation_end = dol_mktime(23, 59, 59, $search_date_creation_endmonth, $search_date_creation_endday, $search_date_creation_endyear);
-$search_date_modification_startyear =  GETPOSTINT('search_date_modification_startyear');
-$search_date_modification_startmonth =  GETPOSTINT('search_date_modification_startmonth');
-$search_date_modification_startday =  GETPOSTINT('search_date_modification_startday');
-$search_date_modification_endyear =  GETPOSTINT('search_date_modification_endyear');
-$search_date_modification_endmonth =  GETPOSTINT('search_date_modification_endmonth');
-$search_date_modification_endday =  GETPOSTINT('search_date_modification_endday');
+$search_date_modification_startyear = GETPOSTINT('search_date_modification_startyear');
+$search_date_modification_startmonth = GETPOSTINT('search_date_modification_startmonth');
+$search_date_modification_startday = GETPOSTINT('search_date_modification_startday');
+$search_date_modification_endyear = GETPOSTINT('search_date_modification_endyear');
+$search_date_modification_endmonth = GETPOSTINT('search_date_modification_endmonth');
+$search_date_modification_endday = GETPOSTINT('search_date_modification_endday');
 $search_date_modification_start = dol_mktime(0, 0, 0, $search_date_modification_startmonth, $search_date_modification_startday, $search_date_modification_startyear);
 $search_date_modification_end = dol_mktime(23, 59, 59, $search_date_modification_endmonth, $search_date_modification_endday, $search_date_modification_endyear);
-$search_date_export_startyear =  GETPOSTINT('search_date_export_startyear');
-$search_date_export_startmonth =  GETPOSTINT('search_date_export_startmonth');
-$search_date_export_startday =  GETPOSTINT('search_date_export_startday');
-$search_date_export_endyear =  GETPOSTINT('search_date_export_endyear');
-$search_date_export_endmonth =  GETPOSTINT('search_date_export_endmonth');
-$search_date_export_endday =  GETPOSTINT('search_date_export_endday');
+$search_date_export_startyear = GETPOSTINT('search_date_export_startyear');
+$search_date_export_startmonth = GETPOSTINT('search_date_export_startmonth');
+$search_date_export_startday = GETPOSTINT('search_date_export_startday');
+$search_date_export_endyear = GETPOSTINT('search_date_export_endyear');
+$search_date_export_endmonth = GETPOSTINT('search_date_export_endmonth');
+$search_date_export_endday = GETPOSTINT('search_date_export_endday');
 $search_date_export_start = dol_mktime(0, 0, 0, $search_date_export_startmonth, $search_date_export_startday, $search_date_export_startyear);
 $search_date_export_end = dol_mktime(23, 59, 59, $search_date_export_endmonth, $search_date_export_endday, $search_date_export_endyear);
-$search_date_validation_startyear =  GETPOSTINT('search_date_validation_startyear');
-$search_date_validation_startmonth =  GETPOSTINT('search_date_validation_startmonth');
-$search_date_validation_startday =  GETPOSTINT('search_date_validation_startday');
-$search_date_validation_endyear =  GETPOSTINT('search_date_validation_endyear');
-$search_date_validation_endmonth =  GETPOSTINT('search_date_validation_endmonth');
-$search_date_validation_endday =  GETPOSTINT('search_date_validation_endday');
+$search_date_validation_startyear = GETPOSTINT('search_date_validation_startyear');
+$search_date_validation_startmonth = GETPOSTINT('search_date_validation_startmonth');
+$search_date_validation_startday = GETPOSTINT('search_date_validation_startday');
+$search_date_validation_endyear = GETPOSTINT('search_date_validation_endyear');
+$search_date_validation_endmonth = GETPOSTINT('search_date_validation_endmonth');
+$search_date_validation_endday = GETPOSTINT('search_date_validation_endday');
 $search_date_validation_start = dol_mktime(0, 0, 0, $search_date_validation_startmonth, $search_date_validation_startday, $search_date_validation_startyear);
 $search_date_validation_end = dol_mktime(23, 59, 59, $search_date_validation_endmonth, $search_date_validation_endday, $search_date_validation_endyear);
 // Due date start
@@ -116,21 +124,21 @@ $search_account_category = GETPOSTINT('search_account_category');
 
 $search_accountancy_code = GETPOST("search_accountancy_code", 'alpha');
 $search_accountancy_code_start = GETPOST('search_accountancy_code_start', 'alpha');
-if ($search_accountancy_code_start == - 1) {
+if ($search_accountancy_code_start == -1) {
     $search_accountancy_code_start = '';
 }
 $search_accountancy_code_end = GETPOST('search_accountancy_code_end', 'alpha');
-if ($search_accountancy_code_end == - 1) {
+if ($search_accountancy_code_end == -1) {
     $search_accountancy_code_end = '';
 }
 
 $search_accountancy_aux_code = GETPOST("search_accountancy_aux_code", 'alpha');
 $search_accountancy_aux_code_start = GETPOST('search_accountancy_aux_code_start', 'alpha');
-if ($search_accountancy_aux_code_start == - 1) {
+if ($search_accountancy_aux_code_start == -1) {
     $search_accountancy_aux_code_start = '';
 }
 $search_accountancy_aux_code_end = GETPOST('search_accountancy_aux_code_end', 'alpha');
-if ($search_accountancy_aux_code_end == - 1) {
+if ($search_accountancy_aux_code_end == -1) {
     $search_accountancy_aux_code_end = '';
 }
 $search_mvt_label = GETPOST('search_mvt_label', 'alpha');
@@ -317,7 +325,7 @@ if (empty($reshook)) {
         $search_date_due_start = '';
         // Due date end
         $search_date_due_end_day = '';
-        $search_date_due_end_month =  '';
+        $search_date_due_end_month = '';
         $search_date_due_end_year = '';
         $search_date_due_end = '';
         $search_debit = '';
@@ -333,17 +341,17 @@ if (empty($reshook)) {
     if (!empty($search_date_start)) {
         $filter['t.doc_date>='] = $search_date_start;
         $tmp = dol_getdate($search_date_start);
-        $param .= '&search_date_startmonth=' . ((int) $tmp['mon']) . '&search_date_startday=' . ((int) $tmp['mday']) . '&search_date_startyear=' . ((int) $tmp['year']);
+        $param .= '&search_date_startmonth=' . ((int)$tmp['mon']) . '&search_date_startday=' . ((int)$tmp['mday']) . '&search_date_startyear=' . ((int)$tmp['year']);
     }
     if (!empty($search_date_end)) {
         $filter['t.doc_date<='] = $search_date_end;
         $tmp = dol_getdate($search_date_end);
-        $param .= '&search_date_endmonth=' . ((int) $tmp['mon']) . '&search_date_endday=' . ((int) $tmp['mday']) . '&search_date_endyear=' . ((int) $tmp['year']);
+        $param .= '&search_date_endmonth=' . ((int)$tmp['mon']) . '&search_date_endday=' . ((int)$tmp['mday']) . '&search_date_endyear=' . ((int)$tmp['year']);
     }
     if (!empty($search_doc_date)) {
         $filter['t.doc_date'] = $search_doc_date;
         $tmp = dol_getdate($search_doc_date);
-        $param .= '&doc_datemonth=' . ((int) $tmp['mon']) . '&doc_dateday=' . ((int) $tmp['mday']) . '&doc_dateyear=' . ((int) $tmp['year']);
+        $param .= '&doc_datemonth=' . ((int)$tmp['mon']) . '&doc_dateday=' . ((int)$tmp['mday']) . '&doc_dateyear=' . ((int)$tmp['year']);
     }
     if (!empty($search_doc_type)) {
         $filter['t.doc_type'] = $search_doc_type;
@@ -354,10 +362,9 @@ if (empty($reshook)) {
         $param .= '&search_doc_ref=' . urlencode($search_doc_ref);
     }
     if ($search_account_category != '-1' && !empty($search_account_category)) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountancycategory.class.php';
         $accountingcategory = new AccountancyCategory($db);
 
-        $listofaccountsforgroup = $accountingcategory->getCptsCat(0, 'fk_accounting_category = ' . ((int) $search_account_category));
+        $listofaccountsforgroup = $accountingcategory->getCptsCat(0, 'fk_accounting_category = ' . ((int)$search_account_category));
         $listofaccountsforgroup2 = array();
         if (is_array($listofaccountsforgroup)) {
             foreach ($listofaccountsforgroup as $tmpval) {
@@ -365,7 +372,7 @@ if (empty($reshook)) {
             }
         }
         $filter['t.search_accounting_code_in'] = implode(',', $listofaccountsforgroup2);
-        $param .= '&search_account_category=' . urlencode((string) ($search_account_category));
+        $param .= '&search_account_category=' . urlencode((string)($search_account_category));
     }
     if (!empty($search_accountancy_code)) {
         $filter['t.numero_compte'] = $search_accountancy_code;
@@ -407,47 +414,47 @@ if (empty($reshook)) {
     }
     if (!empty($search_mvt_num)) {
         $filter['t.piece_num'] = $search_mvt_num;
-        $param .= '&search_mvt_num=' . urlencode((string) ($search_mvt_num));
+        $param .= '&search_mvt_num=' . urlencode((string)($search_mvt_num));
     }
     if (!empty($search_date_creation_start)) {
         $filter['t.date_creation>='] = $search_date_creation_start;
         $tmp = dol_getdate($search_date_creation_start);
-        $param .= '&search_date_creation_startmonth=' . ((int) $tmp['mon']) . '&search_date_creation_startday=' . ((int) $tmp['mday']) . '&search_date_creation_startyear=' . ((int) $tmp['year']);
+        $param .= '&search_date_creation_startmonth=' . ((int)$tmp['mon']) . '&search_date_creation_startday=' . ((int)$tmp['mday']) . '&search_date_creation_startyear=' . ((int)$tmp['year']);
     }
     if (!empty($search_date_creation_end)) {
         $filter['t.date_creation<='] = $search_date_creation_end;
         $tmp = dol_getdate($search_date_creation_end);
-        $param .= '&search_date_creation_endmonth=' . ((int) $tmp['mon']) . '&search_date_creation_endday=' . ((int) $tmp['mday']) . '&search_date_creation_endyear=' . ((int) $tmp['year']);
+        $param .= '&search_date_creation_endmonth=' . ((int)$tmp['mon']) . '&search_date_creation_endday=' . ((int)$tmp['mday']) . '&search_date_creation_endyear=' . ((int)$tmp['year']);
     }
     if (!empty($search_date_modification_start)) {
         $filter['t.tms>='] = $search_date_modification_start;
         $tmp = dol_getdate($search_date_modification_start);
-        $param .= '&search_date_modification_startmonth=' . ((int) $tmp['mon']) . '&search_date_modification_startday=' . ((int) $tmp['mday']) . '&search_date_modification_startyear=' . ((int) $tmp['year']);
+        $param .= '&search_date_modification_startmonth=' . ((int)$tmp['mon']) . '&search_date_modification_startday=' . ((int)$tmp['mday']) . '&search_date_modification_startyear=' . ((int)$tmp['year']);
     }
     if (!empty($search_date_modification_end)) {
         $filter['t.tms<='] = $search_date_modification_end;
         $tmp = dol_getdate($search_date_modification_end);
-        $param .= '&search_date_modification_endmonth=' . ((int) $tmp['mon']) . '&search_date_modification_endday=' . ((int) $tmp['mday']) . '&search_date_modification_endyear=' . ((int) $tmp['year']);
+        $param .= '&search_date_modification_endmonth=' . ((int)$tmp['mon']) . '&search_date_modification_endday=' . ((int)$tmp['mday']) . '&search_date_modification_endyear=' . ((int)$tmp['year']);
     }
     if (!empty($search_date_export_start)) {
         $filter['t.date_export>='] = $search_date_export_start;
         $tmp = dol_getdate($search_date_export_start);
-        $param .= '&search_date_export_startmonth=' . ((int) $tmp['mon']) . '&search_date_export_startday=' . ((int) $tmp['mday']) . '&search_date_export_startyear=' . ((int) $tmp['year']);
+        $param .= '&search_date_export_startmonth=' . ((int)$tmp['mon']) . '&search_date_export_startday=' . ((int)$tmp['mday']) . '&search_date_export_startyear=' . ((int)$tmp['year']);
     }
     if (!empty($search_date_export_end)) {
         $filter['t.date_export<='] = $search_date_export_end;
         $tmp = dol_getdate($search_date_export_end);
-        $param .= '&search_date_export_endmonth=' . ((int) $tmp['mon']) . '&search_date_export_endday=' . ((int) $tmp['mday']) . '&search_date_export_endyear=' . ((int) $tmp['year']);
+        $param .= '&search_date_export_endmonth=' . ((int)$tmp['mon']) . '&search_date_export_endday=' . ((int)$tmp['mday']) . '&search_date_export_endyear=' . ((int)$tmp['year']);
     }
     if (!empty($search_date_validation_start)) {
         $filter['t.date_validated>='] = $search_date_validation_start;
         $tmp = dol_getdate($search_date_validation_start);
-        $param .= '&search_date_validation_startmonth=' . ((int) $tmp['mon']) . '&search_date_validation_startday=' . ((int) $tmp['mday']) . '&search_date_validation_startyear=' . ((int) $tmp['year']);
+        $param .= '&search_date_validation_startmonth=' . ((int)$tmp['mon']) . '&search_date_validation_startday=' . ((int)$tmp['mday']) . '&search_date_validation_startyear=' . ((int)$tmp['year']);
     }
     if (!empty($search_date_validation_end)) {
         $filter['t.date_validated<='] = $search_date_validation_end;
         $tmp = dol_getdate($search_date_validation_end);
-        $param .= '&search_date_validation_endmonth=' . ((int) $tmp['mon']) . '&search_date_validation_endday=' . ((int) $tmp['mday']) . '&search_date_validation_endyear=' . ((int) $tmp['year']);
+        $param .= '&search_date_validation_endmonth=' . ((int)$tmp['mon']) . '&search_date_validation_endday=' . ((int)$tmp['mday']) . '&search_date_validation_endyear=' . ((int)$tmp['year']);
     }
     // Due date start
     if (!empty($search_date_due_start)) {
@@ -674,7 +681,7 @@ if (count($filter) > 0) {
         } elseif ($key == 't.subledger_account<=') {
             $sqlwhere[] = "t.subledger_account <= '" . $db->escape($value) . "'";
         } elseif ($key == 't.fk_doc' || $key == 't.fk_docdet' || $key == 't.piece_num') {
-            $sqlwhere[] = $db->sanitize($key) . ' = ' . ((int) $value);
+            $sqlwhere[] = $db->sanitize($key) . ' = ' . ((int)$value);
         } elseif ($key == 't.subledger_account' || $key == 't.numero_compte') {
             $sqlwhere[] = $db->sanitize($key) . " LIKE '" . $db->escape($db->escapeforlike($value)) . "%'";
         } elseif ($key == 't.subledger_account') {
@@ -784,7 +791,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 
 // List of mass actions available
@@ -1250,7 +1257,7 @@ while ($i < min($num, $limit)) {
         } elseif ($line->doc_type === 'expense_report') {
             $langs->loadLangs(array('trips'));
 
-                    $objectstatic = new ExpenseReport($db);
+            $objectstatic = new ExpenseReport($db);
             $objectstatic->fetch($line->fk_doc);
             //$modulepart = 'expensereport';
 

@@ -12,9 +12,9 @@ class ReceivedDebitService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Treasury\ReceivedDebit>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Treasury\ReceivedDebit>
      */
     public function all($params = null, $opts = null)
     {
@@ -29,9 +29,9 @@ class ReceivedDebitService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Treasury\ReceivedDebit
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Treasury\ReceivedDebit
      */
     public function retrieve($id, $params = null, $opts = null)
     {

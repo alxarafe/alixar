@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2007-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021		Florian Henry			<florian.henry@scopen.fr>
- * Copyright (C) 2023       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2007-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021		Florian Henry			    <florian.henry@scopen.fr>
+ * Copyright (C) 2023       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,12 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *    \file       htdocs/eventorganization/conferenceorbooth_list.php
@@ -267,8 +273,6 @@ if (empty($reshook)) {
         }
     }
 }
-
-
 
 /*
  * View

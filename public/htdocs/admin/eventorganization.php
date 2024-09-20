@@ -19,6 +19,12 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  * \file    htdocs/admin/eventorganization.php
@@ -51,7 +57,7 @@ $scandir = GETPOST('scan_dir', 'alpha');
 $type = 'myobject';
 
 $arrayofparameters = array(
-    'EVENTORGANIZATION_TASK_LABEL' => array('type' => 'textarea','enabled' => 1, 'css' => ''),
+    'EVENTORGANIZATION_TASK_LABEL' => array('type' => 'textarea', 'enabled' => 1, 'css' => ''),
     'EVENTORGANIZATION_CATEG_THIRDPARTY_CONF' => array('type' => 'category:' . Categorie::TYPE_CUSTOMER, 'enabled' => 1, 'css' => ''),
     'EVENTORGANIZATION_CATEG_THIRDPARTY_BOOTH' => array('type' => 'category:' . Categorie::TYPE_CUSTOMER, 'enabled' => 1, 'css' => ''),
     'EVENTORGANIZATION_FILTERATTENDEES_CAT' => array('type' => 'category:' . Categorie::TYPE_CUSTOMER, 'enabled' => 1, 'css' => ''),
@@ -70,7 +76,7 @@ $arrayofparameters = array(
 $error = 0;
 $setupnotempty = 0;
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 // Access control
 if (empty($user->admin)) {
@@ -78,13 +84,12 @@ if (empty($user->admin)) {
 }
 
 
-
 /*
  * Actions
  */
 
 if ($cancel) {
-    $action  = '';
+    $action = '';
 }
 
 include DOL_DOCUMENT_ROOT . '/core/actions_setmoduleoptions.inc.php';
@@ -151,8 +156,6 @@ if ($action == 'updateMask') {
     }
 }*/
 
-
-
 /*
  * View
  */
@@ -198,12 +201,11 @@ if ($action == 'edit') {
                 print getDolGlobalString($constname);
                 print "</textarea>\n";
             } elseif ($val['type'] == 'html') {
-                            $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
+                $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
                 $doleditor->Create();
             } elseif ($val['type'] == 'yesno') {
                 print $form->selectyesno($constname, getDolGlobalString($constname), 1);
             } elseif (preg_match('/emailtemplate:/', $val['type'])) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $formmail = new FormMail($db);
 
                 $tmp = explode(':', $val['type']);
@@ -281,7 +283,6 @@ if ($action == 'edit') {
                     print ajax_constantonoff($constname);
                 } elseif (preg_match('/emailtemplate:/', $val['type'])) {
                     if (getDolGlobalString($constname)) {
-                        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                         $formmail = new FormMail($db);
 
                         $tmp = explode(':', $val['type']);

@@ -89,9 +89,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\PaymentMethod> list of PaymentMethods
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\PaymentMethod> list of PaymentMethods
      */
     public static function allPaymentMethods($id, $params = null, $opts = null)
     {
@@ -108,9 +108,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Customer the retrieved customer
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Customer the retrieved customer
      */
     public function retrievePaymentMethod($payment_method, $params = null, $opts = null)
     {
@@ -126,9 +126,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\SearchResult<Customer> the customer search results
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SearchResult<Customer> the customer search results
      */
     public static function search($params = null, $opts = null)
     {
@@ -145,9 +145,9 @@ class Customer extends ApiResource
      * @param null|array|string $opts
      * @param mixed $cashBalanceId
      *
+     * @return \Stripe\CashBalance
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\CashBalance
      */
     public static function retrieveCashBalance($id, $cashBalanceId, $params = null, $opts = null)
     {
@@ -160,14 +160,15 @@ class Customer extends ApiResource
      * @param null|array|string $opts
      * @param mixed $cashBalanceId
      *
+     * @return \Stripe\CashBalance
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\CashBalance
      */
     public static function updateCashBalance($id, $cashBalanceId, $params = null, $opts = null)
     {
         return self::_updateNestedResource($id, static::PATH_CASH_BALANCE, $params, $opts);
     }
+
     const PATH_BALANCE_TRANSACTIONS = '/balance_transactions';
 
     /**
@@ -175,9 +176,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\CustomerBalanceTransaction> the list of customer balance transactions
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\CustomerBalanceTransaction> the list of customer balance transactions
      */
     public static function allBalanceTransactions($id, $params = null, $opts = null)
     {
@@ -189,9 +190,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\CustomerBalanceTransaction
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\CustomerBalanceTransaction
      */
     public static function createBalanceTransaction($id, $params = null, $opts = null)
     {
@@ -204,9 +205,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\CustomerBalanceTransaction
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\CustomerBalanceTransaction
      */
     public static function retrieveBalanceTransaction($id, $balanceTransactionId, $params = null, $opts = null)
     {
@@ -219,14 +220,15 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\CustomerBalanceTransaction
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\CustomerBalanceTransaction
      */
     public static function updateBalanceTransaction($id, $balanceTransactionId, $params = null, $opts = null)
     {
         return self::_updateNestedResource($id, static::PATH_BALANCE_TRANSACTIONS, $balanceTransactionId, $params, $opts);
     }
+
     const PATH_CASH_BALANCE_TRANSACTIONS = '/cash_balance_transactions';
 
     /**
@@ -234,9 +236,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\CustomerCashBalanceTransaction> the list of customer cash balance transactions
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\CustomerCashBalanceTransaction> the list of customer cash balance transactions
      */
     public static function allCashBalanceTransactions($id, $params = null, $opts = null)
     {
@@ -249,14 +251,15 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\CustomerCashBalanceTransaction
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\CustomerCashBalanceTransaction
      */
     public static function retrieveCashBalanceTransaction($id, $cashBalanceTransactionId, $params = null, $opts = null)
     {
         return self::_retrieveNestedResource($id, static::PATH_CASH_BALANCE_TRANSACTIONS, $cashBalanceTransactionId, $params, $opts);
     }
+
     const PATH_SOURCES = '/sources';
 
     /**
@@ -264,9 +267,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\BankAccount|\Stripe\Card|\Stripe\Source> the list of payment sources (BankAccount, Card or Source)
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\BankAccount|\Stripe\Card|\Stripe\Source> the list of payment sources (BankAccount, Card or Source)
      */
     public static function allSources($id, $params = null, $opts = null)
     {
@@ -278,9 +281,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\BankAccount|\Stripe\Card|\Stripe\Source
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\BankAccount|\Stripe\Card|\Stripe\Source
      */
     public static function createSource($id, $params = null, $opts = null)
     {
@@ -293,9 +296,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\BankAccount|\Stripe\Card|\Stripe\Source
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\BankAccount|\Stripe\Card|\Stripe\Source
      */
     public static function deleteSource($id, $sourceId, $params = null, $opts = null)
     {
@@ -308,9 +311,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\BankAccount|\Stripe\Card|\Stripe\Source
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\BankAccount|\Stripe\Card|\Stripe\Source
      */
     public static function retrieveSource($id, $sourceId, $params = null, $opts = null)
     {
@@ -323,14 +326,15 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\BankAccount|\Stripe\Card|\Stripe\Source
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\BankAccount|\Stripe\Card|\Stripe\Source
      */
     public static function updateSource($id, $sourceId, $params = null, $opts = null)
     {
         return self::_updateNestedResource($id, static::PATH_SOURCES, $sourceId, $params, $opts);
     }
+
     const PATH_TAX_IDS = '/tax_ids';
 
     /**
@@ -338,9 +342,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\TaxId> the list of tax ids
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\TaxId> the list of tax ids
      */
     public static function allTaxIds($id, $params = null, $opts = null)
     {
@@ -352,9 +356,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\TaxId
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TaxId
      */
     public static function createTaxId($id, $params = null, $opts = null)
     {
@@ -367,9 +371,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\TaxId
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TaxId
      */
     public static function deleteTaxId($id, $taxIdId, $params = null, $opts = null)
     {
@@ -382,9 +386,9 @@ class Customer extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\TaxId
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TaxId
      */
     public static function retrieveTaxId($id, $taxIdId, $params = null, $opts = null)
     {

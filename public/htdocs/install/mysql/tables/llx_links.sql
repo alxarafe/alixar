@@ -20,11 +20,11 @@
 
 create table llx_links
 (
-  rowid             INTEGER AUTO_INCREMENT PRIMARY KEY,
-  entity            INTEGER DEFAULT 1 NOT NULL,     -- multi company id
-  datea             DATETIME NOT NULL,              -- date start
-  url               VARCHAR(255) NOT NULL,          -- link url
-  label             VARCHAR(255) NOT NULL,          -- link label
-  objecttype        VARCHAR(255) NOT NULL,          -- object type in Dolibarr
-  objectid          INTEGER NOT NULL
+    rowid      INTEGER AUTO_INCREMENT PRIMARY KEY,
+    entity     INTEGER DEFAULT 1 NOT NULL, -- multi company id
+    datea      DATETIME          NOT NULL, -- date start
+    url        VARCHAR(255)      NOT NULL, -- link url
+    label      VARCHAR(255)      NOT NULL, -- link label
+    objecttype VARCHAR(255)      NOT NULL, -- object type in Dolibarr
+    objectid   INTEGER           NOT NULL
 )ENGINE=innodb;

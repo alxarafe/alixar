@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2019 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2006-2010 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2018	   Ferran Marcet        <fmarcet@2byte.es>
- * Copyright (C) 2021      Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2023      Gauthier VERDOL      <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2024		MDW						<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2018	    Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2021       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2023       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2024		MDW						    <mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,13 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/projet/tasks/list.php
@@ -33,7 +40,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
@@ -388,11 +394,11 @@ if (!$user->hasRight('projet', 'all', 'lire')) {
     $sql .= " AND p.rowid IN (" . $db->sanitize($projectsListId ? $projectsListId : '0') . ")"; // public and assigned to projects, or restricted to company for external users
 }
 if (is_object($projectstatic) && $projectstatic->id > 0) {
-    $sql .= " AND p.rowid = " . ((int) $projectstatic->id);
+    $sql .= " AND p.rowid = " . ((int)$projectstatic->id);
 }
 // No need to check company, as filtering of projects must be done by getProjectsAuthorizedForUser
 if ($socid) {
-    $sql .= "  AND (p.fk_soc IS NULL OR p.fk_soc = 0 OR p.fk_soc = " . ((int) $socid) . ")";
+    $sql .= "  AND (p.fk_soc IS NULL OR p.fk_soc = 0 OR p.fk_soc = " . ((int)$socid) . ")";
 }
 if ($search_project_ref) {
     $sql .= natural_search('p.ref', $search_project_ref);
@@ -447,14 +453,14 @@ if ($search_projectstatus >= 0) {
     if ($search_projectstatus == 99) {
         $sql .= " AND p.fk_statut <> 2";
     } else {
-        $sql .= " AND p.fk_statut = " . ((int) $search_projectstatus);
+        $sql .= " AND p.fk_statut = " . ((int)$search_projectstatus);
     }
 }
 if ($search_project_user > 0) {
-    $sql .= " AND ecp.fk_c_type_contact IN (" . $db->sanitize(implode(',', array_keys($listofprojectcontacttype))) . ") AND ecp.element_id = p.rowid AND ecp.fk_socpeople = " . ((int) $search_project_user);
+    $sql .= " AND ecp.fk_c_type_contact IN (" . $db->sanitize(implode(',', array_keys($listofprojectcontacttype))) . ") AND ecp.element_id = p.rowid AND ecp.fk_socpeople = " . ((int)$search_project_user);
 }
 if ($search_task_user > 0) {
-    $sql .= " AND ect.fk_c_type_contact IN (" . $db->sanitize(implode(',', array_keys($listoftaskcontacttype))) . ") AND ect.element_id = t.rowid AND ect.fk_socpeople = " . ((int) $search_task_user);
+    $sql .= " AND ect.fk_c_type_contact IN (" . $db->sanitize(implode(',', array_keys($listoftaskcontacttype))) . ") AND ect.element_id = t.rowid AND ect.fk_socpeople = " . ((int)$search_task_user);
 }
 // Search for tag/category ($searchCategoryProjectList is an array of ID)
 $searchCategoryProjectList = array($search_categ);
@@ -467,9 +473,9 @@ if (!empty($searchCategoryProjectList)) {
             $searchCategoryProjectSqlList[] = "NOT EXISTS (SELECT ck.fk_project FROM " . MAIN_DB_PREFIX . "categorie_project as ck WHERE p.rowid = ck.fk_project)";
         } elseif (intval($searchCategoryProject) > 0) {
             if ($searchCategoryProjectOperator == 0) {
-                $searchCategoryProjectSqlList[] = " EXISTS (SELECT ck.fk_project FROM " . MAIN_DB_PREFIX . "categorie_project as ck WHERE p.rowid = ck.fk_project AND ck.fk_categorie = " . ((int) $searchCategoryProject) . ")";
+                $searchCategoryProjectSqlList[] = " EXISTS (SELECT ck.fk_project FROM " . MAIN_DB_PREFIX . "categorie_project as ck WHERE p.rowid = ck.fk_project AND ck.fk_categorie = " . ((int)$searchCategoryProject) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryProject);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryProject);
             }
         }
     }
@@ -491,7 +497,7 @@ if ($searchCategoryCustomerOperator == 1) {
     $existsCategoryCustomerList = array();
     foreach ($searchCategoryCustomerList as $searchCategoryCustomer) {
         if (intval($searchCategoryCustomer) == -2) {
-            $sqlCategoryCustomerNotExists  = " NOT EXISTS (";
+            $sqlCategoryCustomerNotExists = " NOT EXISTS (";
             $sqlCategoryCustomerNotExists .= " SELECT cat_cus.fk_soc";
             $sqlCategoryCustomerNotExists .= " FROM " . $db->prefix() . "categorie_societe AS cat_cus";
             $sqlCategoryCustomerNotExists .= " WHERE cat_cus.fk_soc = p.fk_soc";
@@ -523,7 +529,7 @@ if ($searchCategoryCustomerOperator == 1) {
             $sqlCategoryCustomerNotExists .= " )";
             $searchCategoryCustomerSqlList[] = $sqlCategoryCustomerNotExists;
         } elseif (intval($searchCategoryCustomer) > 0) {
-            $searchCategoryCustomerSqlList[] = "p.fk_soc IN (SELECT fk_soc FROM " . $db->prefix() . "categorie_societe WHERE fk_categorie = " . ((int) $searchCategoryCustomer) . ")";
+            $searchCategoryCustomerSqlList[] = "p.fk_soc IN (SELECT fk_soc FROM " . $db->prefix() . "categorie_societe WHERE fk_categorie = " . ((int)$searchCategoryCustomer) . ")";
         }
     }
     if (!empty($searchCategoryCustomerSqlList)) {
@@ -609,43 +615,43 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($search_date_startday) {
-    $param .= '&search_date_startday=' . urlencode((string) ($search_date_startday));
+    $param .= '&search_date_startday=' . urlencode((string)($search_date_startday));
 }
 if ($search_date_startmonth) {
-    $param .= '&search_date_startmonth=' . urlencode((string) ($search_date_startmonth));
+    $param .= '&search_date_startmonth=' . urlencode((string)($search_date_startmonth));
 }
 if ($search_date_startyear) {
-    $param .= '&search_date_startyear=' . urlencode((string) ($search_date_startyear));
+    $param .= '&search_date_startyear=' . urlencode((string)($search_date_startyear));
 }
 if ($search_date_endday) {
-    $param .= '&search_date_endday=' . urlencode((string) ($search_date_endday));
+    $param .= '&search_date_endday=' . urlencode((string)($search_date_endday));
 }
 if ($search_date_endmonth) {
-    $param .= '&search_date_endmonth=' . urlencode((string) ($search_date_endmonth));
+    $param .= '&search_date_endmonth=' . urlencode((string)($search_date_endmonth));
 }
 if ($search_date_endyear) {
-    $param .= '&search_date_endyear=' . urlencode((string) ($search_date_endyear));
+    $param .= '&search_date_endyear=' . urlencode((string)($search_date_endyear));
 }
 if ($search_datelimit_startday) {
-    $param .= '&search_datelimit_startday=' . urlencode((string) ($search_datelimit_startday));
+    $param .= '&search_datelimit_startday=' . urlencode((string)($search_datelimit_startday));
 }
 if ($search_datelimit_startmonth) {
-    $param .= '&search_datelimit_startmonth=' . urlencode((string) ($search_datelimit_startmonth));
+    $param .= '&search_datelimit_startmonth=' . urlencode((string)($search_datelimit_startmonth));
 }
 if ($search_datelimit_startyear) {
-    $param .= '&search_datelimit_startyear=' . urlencode((string) ($search_datelimit_startyear));
+    $param .= '&search_datelimit_startyear=' . urlencode((string)($search_datelimit_startyear));
 }
 if ($search_datelimit_endday) {
-    $param .= '&search_datelimit_endday=' . urlencode((string) ($search_datelimit_endday));
+    $param .= '&search_datelimit_endday=' . urlencode((string)($search_datelimit_endday));
 }
 if ($search_datelimit_endmonth) {
-    $param .= '&search_datelimit_endmonth=' . urlencode((string) ($search_datelimit_endmonth));
+    $param .= '&search_datelimit_endmonth=' . urlencode((string)($search_datelimit_endmonth));
 }
 if ($search_datelimit_endyear) {
-    $param .= '&search_datelimit_endyear=' . urlencode((string) ($search_datelimit_endyear));
+    $param .= '&search_datelimit_endyear=' . urlencode((string)($search_datelimit_endyear));
 }
 if ($search_task_budget_amount) {
     $param .= '&search_task_budget_amount=' . urlencode($search_task_budget_amount);
@@ -690,7 +696,7 @@ if ((is_numeric($search_opp_status) && $search_opp_status >= 0) || in_array($sea
     $param .= '&search_opp_status=' . urlencode($search_opp_status);
 }
 if ($search_project_user != '') {
-    $param .= '&search_project_user=' . urlencode((string) ($search_project_user));
+    $param .= '&search_project_user=' . urlencode((string)($search_project_user));
 }
 if ($search_task_user > 0) {
     $param .= '&search_task_user=' . urlencode($search_task_user);
@@ -1459,7 +1465,7 @@ while ($i < $imaxinloop) {
             if (!empty($arrayfields['t.progress_summary']['checked'])) {
                 print '<td class="center">';
                 //if ($obj->progress != '') {
-                    print getTaskProgressView($object, false, false);
+                print getTaskProgressView($object, false, false);
                 //}
                 print '</td>';
                 if (!$i) {
@@ -1632,7 +1638,7 @@ if (
         } elseif (isset($totalarray['totalbilledfield']) && $totalarray['totalbilledfield'] == $i) {
             print '<td class="center">' . convertSecondToTime($totalarray['totalbilled'], $plannedworkloadoutputformat) . '</td>';
         } elseif (isset($totalarray['totalbudget_amountfield']) && $totalarray['totalbudget_amountfield'] == $i) {
-            print '<td class="center">' . price((float) $totalarray['totalbudgetamount'], 0, $langs, 1, 0, 0, $conf->currency) . '</td>';
+            print '<td class="center">' . price((float)$totalarray['totalbudgetamount'], 0, $langs, 1, 0, 0, $conf->currency) . '</td>';
         } elseif (!empty($totalarray['pos'][$i])) {
             print '<td class="right">';
             if (isset($totalarray['type']) && $totalarray['type'][$i] == 'duration') {

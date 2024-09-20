@@ -22,7 +22,9 @@
 
 namespace Dolibarr\Code\Mrp\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObjectLine;
+use DoliDB;
 
 /**
  * \file        mrp/class/mo.class.php

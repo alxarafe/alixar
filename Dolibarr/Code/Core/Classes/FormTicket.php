@@ -26,6 +26,11 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
 /**
@@ -34,7 +39,6 @@ use DoliDB;
  *    \brief      File of class to generate the form for creating a new ticket.
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
 
 if (!class_exists('FormCompany')) {
     include DOL_DOCUMENT_ROOT . '/core/class/html.formcompany.class.php';
@@ -489,7 +493,6 @@ class FormTicket
             $toolbarname = 'dolibarr_details';
             print '<div class="warning hideonsmartphone">' . (getDolGlobalString("TICKET_PUBLIC_TEXT_HELP_MESSAGE", $langs->trans('TicketPublicPleaseBeAccuratelyDescribe'))) . '</div>';
         }
-        include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
         $uselocalbrowser = true;
         $doleditor = new DolEditor('message', $msg, '100%', 230, $toolbarname, 'In', true, $uselocalbrowser, getDolGlobalInt('FCKEDITOR_ENABLE_TICKET'), ROWS_8, '90%');
         $doleditor->Create();
@@ -510,7 +513,6 @@ class FormTicket
 
         // Categories
         if (isModEnabled('category')) {
-            include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
             $cate_arbo = $form->select_all_categories(Categorie::TYPE_TICKET, '', 'parent', 64, 0, 3);
 
             if (count($cate_arbo)) {
@@ -1738,7 +1740,6 @@ class FormTicket
         print '<tr><td colspan="2">';
         //$toolbarname = 'dolibarr_details';
         $toolbarname = 'dolibarr_notes';
-        include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
         $doleditor = new DolEditor('message', $defaultmessage, '100%', 200, $toolbarname, '', false, $uselocalbrowser, getDolGlobalInt('FCKEDITOR_ENABLE_TICKET'), ROWS_5, '90%');
         $doleditor->Create();
         print '</td></tr>';

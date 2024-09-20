@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2018       Quentin Vial-Gouteyron  <quentin.vial-gouteyron@atm-consulting.fr>
- * Copyright (C) 2019-2024  Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2018       Quentin Vial-Gouteyron      <quentin.vial-gouteyron@atm-consulting.fr>
+ * Copyright (C) 2019-2024  Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,13 +19,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Reception\Classes\ModelNumRefReception;
+use Dolibarr\Code\Reception\Classes\Reception;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/core/modules/reception/mod_reception_moonstone.php
  *  \ingroup    reception
  *  \brief      File of class to manage reception numbering rules Moonstone
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/reception/modules_reception.php';
 
 /**
  *  Class to manage reception numbering rules Moonstone
@@ -39,8 +43,8 @@ class mod_reception_moonstone extends ModelNumRefReception
     /**
      *  Return default description of numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -76,7 +80,7 @@ class mod_reception_moonstone extends ModelNumRefReception
     /**
      *  Return numbering example
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -99,9 +103,9 @@ class mod_reception_moonstone extends ModelNumRefReception
     /**
      *  Return next value
      *
-     *  @param  Societe         $objsoc     Third party object
-     *  @param  Reception|null  $reception  Reception object
-     *  @return string|0                    Value if OK, 0 if KO
+     * @param Societe $objsoc Third party object
+     * @param Reception|null $reception Reception object
+     * @return string|0                    Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $reception)
     {
@@ -124,6 +128,6 @@ class mod_reception_moonstone extends ModelNumRefReception
 
         $numFinal = get_next_value($db, $mask, 'reception', 'ref', '', $objsoc, $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

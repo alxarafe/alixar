@@ -28,24 +28,25 @@ use OAuth\Common\Http\Uri\UriInterface;
 class Hubic extends AbstractService
 {
     // Scopes
-    const SCOPE_USAGE_GET       = 'usage.r';
-    const SCOPE_ACCOUNT_GET     = 'account.r';
+    const SCOPE_USAGE_GET = 'usage.r';
+    const SCOPE_ACCOUNT_GET = 'account.r';
     const SCOPE_GETALLLINKS_GET = 'getAllLinks.r';
     const SCOPE_CREDENTIALS_GET = 'credentials.r';
     const SCOPE_SPONSORCODE_GET = 'sponsorCode.r';
-    const SCOPE_ACTIVATE_POST   = 'activate.w';
-    const SCOPE_SPONSORED_GET   = 'sponsored.r';
-    const SCOPE_LINKS_GET       = 'links.r';
-    const SCOPE_LINKS_POST      = 'links.rw';
-    const SCOPE_LINKS_ALL       = 'links.drw';
+    const SCOPE_ACTIVATE_POST = 'activate.w';
+    const SCOPE_SPONSORED_GET = 'sponsored.r';
+    const SCOPE_LINKS_GET = 'links.r';
+    const SCOPE_LINKS_POST = 'links.rw';
+    const SCOPE_LINKS_ALL = 'links.drw';
 
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct(
             $credentials,
             $httpClient,
@@ -125,9 +126,9 @@ class Hubic extends AbstractService
         $parameters = array_merge(
             $additionalParameters,
             array(
-                'type'          => 'web_server',
-                'client_id'     => $this->credentials->getConsumerId(),
-                'redirect_uri'  => $this->credentials->getCallbackUrl(),
+                'type' => 'web_server',
+                'client_id' => $this->credentials->getConsumerId(),
+                'redirect_uri' => $this->credentials->getCallbackUrl(),
                 'response_type' => 'code',
             )
         );

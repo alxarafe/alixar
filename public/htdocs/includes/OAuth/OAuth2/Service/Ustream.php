@@ -17,16 +17,17 @@ class Ustream extends AbstractService
      *
      * @var string
      */
-    const SCOPE_OFFLINE     = 'offline';
+    const SCOPE_OFFLINE = 'offline';
     const SCOPE_BROADCASTER = 'broadcaster';
 
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage, $scopes, $baseApiUri, true);
 
         if (null === $baseApiUri) {

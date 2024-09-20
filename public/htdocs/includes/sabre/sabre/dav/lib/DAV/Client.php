@@ -276,7 +276,7 @@ class Client extends HTTP\Client
             list(
                 $namespace,
                 $elementName
-            ) = \Sabre\Xml\Service::parseClarkNotation($property);
+                ) = \Sabre\Xml\Service::parseClarkNotation($property);
 
             if ('DAV:' === $namespace) {
                 $element = $dom->createElement('d:' . $elementName);
@@ -299,7 +299,7 @@ class Client extends HTTP\Client
 
         $response = $this->send($request);
 
-        if ((int) $response->getStatus() >= 400) {
+        if ((int)$response->getStatus() >= 400) {
             throw new HTTP\ClientHttpException($response);
         }
 
@@ -408,13 +408,13 @@ class Client extends HTTP\Client
      * Note that it is no longer recommended to use this method, use the send()
      * method instead.
      *
-     * @param string               $method
-     * @param string               $url
+     * @param string $method
+     * @param string $url
      * @param string|resource|null $body
      *
+     * @return array
      * @throws clientException, in case a curl error occurred
      *
-     * @return array
      */
     public function request($method, $url = '', $body = null, array $headers = [])
     {
@@ -424,7 +424,7 @@ class Client extends HTTP\Client
 
         return [
             'body' => $response->getBodyAsString(),
-            'statusCode' => (int) $response->getStatus(),
+            'statusCode' => (int)$response->getStatus(),
             'headers' => array_change_key_case($response->getHeaders()),
         ];
     }
@@ -441,7 +441,7 @@ class Client extends HTTP\Client
     {
         return Uri\resolve(
             $this->baseUri,
-            (string) $url
+            (string)$url
         );
     }
 

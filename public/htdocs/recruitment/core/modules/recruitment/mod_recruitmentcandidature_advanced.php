@@ -22,6 +22,10 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Recruitement\Classes\ModeleNumRefRecruitmentCandidature;
+
 /**
  * \file       htdocs/core/modules/recruitment/mod_recruitmentcandidaturen_advanced.php
  * \ingroup    recruitment
@@ -29,7 +33,6 @@
  */
 
 dol_include_once('/recruitment/core/modules/recruitment/modules_recruitmentcandidature.php');
-
 
 /**
  *  Class to manage the Advanced numbering rule for Job application

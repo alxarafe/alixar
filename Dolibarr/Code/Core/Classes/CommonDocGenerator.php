@@ -29,6 +29,20 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Core\Base\CommonObjectLine;
+use DoliDB;
+use stdClass;
+
 /**
  *      \file       htdocs/core/class/commondocgenerator.class.php
  *      \ingroup    core
@@ -1405,7 +1419,6 @@ abstract class CommonDocGenerator
 
         return $extrafieldOutputContent;
     }
-
 
     /**
      *  display extrafields columns content

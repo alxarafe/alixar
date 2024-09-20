@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2009 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2009       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Comm\Classes\Mailing;
+
 /**
  *      \file       htdocs/core/lib/emailing.lib.php
  *      \brief      Library file with function for emailing module
@@ -26,7 +28,7 @@
 /**
  * Prepare array with list of tabs
  *
- * @param   Mailing $object     Object related to tabs
+ * @param Mailing $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function emailing_prepare_head(Mailing $object)

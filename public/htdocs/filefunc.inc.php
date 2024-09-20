@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2002-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2003      Xavier Dutoit        <doli@sydesy.com>
- * Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Sebastien Di Cintio  <sdicintio@ressource-toi.org>
- * Copyright (C) 2004      Benoit Mortier       <benoit.mortier@opensides.be>
- * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2005 	   Simon Tosser         <simon@kornog-computing.com>
- * Copyright (C) 2006 	   Andre Cianfarani     <andre.cianfarani@acdeveloppement.net>
- * Copyright (C) 2010      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015      Bahfir Abbes         <bafbes@gmail.com>
+/* Copyright (C) 2002-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003       Xavier Dutoit               <doli@sydesy.com>
+ * Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Sebastien Di Cintio         <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2005 	    Simon Tosser                <simon@kornog-computing.com>
+ * Copyright (C) 2006 	    Andre Cianfarani            <andre.cianfarani@acdeveloppement.net>
+ * Copyright (C) 2010       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Bahfir Abbes                <bafbes@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -42,7 +42,6 @@ if (!defined('DOL_VERSION')) {
 if (!defined('DEFAULT_DB_PREFIX')) {
     define('DEFAULT_DB_PREFIX', 'alx_');
 }
-
 if (!defined('EURO')) {
     define('EURO', chr(128));
 }
@@ -66,7 +65,6 @@ if (!defined('LOG_DEBUG')) {
 if (defined('DOL_INC_FOR_VERSION_ERROR')) {
     return;
 }
-
 
 /**
  * Replace session_start()
@@ -124,7 +122,6 @@ function dol_session_rotate($sessionname = '')
     $newsessionid = session_id();
     //var_dump("oldsessionid=".$oldsessionid." - newsessionid=".$newsessionid);
 }
-
 
 // Define vars
 $conffiletoshowshort = "conf.php";

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017-2021 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2017-2021  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,14 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
 
 /**
  *      \file       knowledgerecord_card.php
@@ -41,7 +49,7 @@ $cancel = GETPOST('cancel', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'knowledgerecordcard'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');
-$lineid   = GETPOSTINT('lineid');
+$lineid = GETPOSTINT('lineid');
 
 // Initialize technical objects
 $object = new KnowledgeRecord($db);
@@ -547,7 +555,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/knowledgemanagement/knowledgerecord_agenda.php?id=' . $object->id);
 
         // List of actions on element
-                $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element . '@' . $object->module, (is_object($object->thirdparty) ? $object->thirdparty->id : 0), 1, '', $MAXEVENT, '', $morehtmlcenter);
 
         print '</div></div>';

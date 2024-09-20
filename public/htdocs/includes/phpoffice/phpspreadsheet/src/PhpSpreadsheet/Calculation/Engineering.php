@@ -721,11 +721,11 @@ class Engineering
      *
      * Parses a complex number into its real and imaginary parts, and an I or J suffix
      *
-     * @deprecated 2.0.0 No longer used by internal code. Please use the Complex\Complex class instead
-     *
      * @param string $complexNumber The complex number
      *
      * @return mixed[] Indexed on "real", "imaginary" and "suffix"
+     * @deprecated 2.0.0 No longer used by internal code. Please use the Complex\Complex class instead
+     *
      */
     public static function parseComplex($complexNumber)
     {
@@ -750,7 +750,7 @@ class Engineering
     {
         if ($places !== null) {
             if (is_numeric($places)) {
-                $places = (int) $places;
+                $places = (int)$places;
             } else {
                 return Functions::VALUE();
             }
@@ -776,8 +776,6 @@ class Engineering
      *    Excel Function:
      *        BESSELI(x,ord)
      *
-     * @category Engineering Functions
-     *
      * @param float $x The value at which to evaluate the function.
      *                                If x is nonnumeric, BESSELI returns the #VALUE! error value.
      * @param int $ord The order of the Bessel function.
@@ -786,6 +784,8 @@ class Engineering
      *                                If $ord < 0, BESSELI returns the #NUM! error value.
      *
      * @return float|string Result, or a string containing an error
+     * @category Engineering Functions
+     *
      */
     public static function BESSELI($x, $ord)
     {
@@ -831,8 +831,6 @@ class Engineering
      *    Excel Function:
      *        BESSELJ(x,ord)
      *
-     * @category Engineering Functions
-     *
      * @param float $x The value at which to evaluate the function.
      *                                If x is nonnumeric, BESSELJ returns the #VALUE! error value.
      * @param int $ord The order of the Bessel function. If n is not an integer, it is truncated.
@@ -840,6 +838,8 @@ class Engineering
      *                                If $ord < 0, BESSELJ returns the #NUM! error value.
      *
      * @return float|string Result, or a string containing an error
+     * @category Engineering Functions
+     *
      */
     public static function BESSELJ($x, $ord)
     {
@@ -924,8 +924,6 @@ class Engineering
      *    Excel Function:
      *        BESSELK(x,ord)
      *
-     * @category Engineering Functions
-     *
      * @param float $x The value at which to evaluate the function.
      *                                If x is nonnumeric, BESSELK returns the #VALUE! error value.
      * @param int $ord The order of the Bessel function. If n is not an integer, it is truncated.
@@ -933,6 +931,8 @@ class Engineering
      *                                If $ord < 0, BESSELK returns the #NUM! error value.
      *
      * @return float|string Result, or a string containing an error
+     * @category Engineering Functions
+     *
      */
     public static function BESSELK($x, $ord)
     {
@@ -1013,8 +1013,6 @@ class Engineering
      *    Excel Function:
      *        BESSELY(x,ord)
      *
-     * @category Engineering Functions
-     *
      * @param float $x The value at which to evaluate the function.
      *                                If x is nonnumeric, BESSELK returns the #VALUE! error value.
      * @param int $ord The order of the Bessel function. If n is not an integer, it is truncated.
@@ -1022,6 +1020,8 @@ class Engineering
      *                                If $ord < 0, BESSELK returns the #NUM! error value.
      *
      * @return float|string Result, or a string containing an error
+     * @category Engineering Functions
+     *
      */
     public static function BESSELY($x, $ord)
     {
@@ -1067,8 +1067,6 @@ class Engineering
      * Excel Function:
      *        BIN2DEC(x)
      *
-     * @category Engineering Functions
-     *
      * @param string $x The binary number (as a string) that you want to convert. The number
      *                                cannot contain more than 10 characters (10 bits). The most significant
      *                                bit of number is the sign bit. The remaining 9 bits are magnitude bits.
@@ -1077,6 +1075,8 @@ class Engineering
      *                                10 characters (10 bits), BIN2DEC returns the #NUM! error value.
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function BINTODEC($x)
     {
@@ -1084,7 +1084,7 @@ class Engineering
 
         if (is_bool($x)) {
             if (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE) {
-                $x = (int) $x;
+                $x = (int)$x;
             } else {
                 return Functions::VALUE();
             }
@@ -1092,7 +1092,7 @@ class Engineering
         if (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_GNUMERIC) {
             $x = floor($x);
         }
-        $x = (string) $x;
+        $x = (string)$x;
         if (strlen($x) > preg_match_all('/[01]/', $x, $out)) {
             return Functions::NAN();
         }
@@ -1116,8 +1116,6 @@ class Engineering
      * Excel Function:
      *        BIN2HEX(x[,places])
      *
-     * @category Engineering Functions
-     *
      * @param string $x The binary number (as a string) that you want to convert. The number
      *                                cannot contain more than 10 characters (10 bits). The most significant
      *                                bit of number is the sign bit. The remaining 9 bits are magnitude bits.
@@ -1132,6 +1130,8 @@ class Engineering
      *                                If places is negative, BIN2HEX returns the #NUM! error value.
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function BINTOHEX($x, $places = null)
     {
@@ -1141,7 +1141,7 @@ class Engineering
         // Argument X
         if (is_bool($x)) {
             if (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE) {
-                $x = (int) $x;
+                $x = (int)$x;
             } else {
                 return Functions::VALUE();
             }
@@ -1149,7 +1149,7 @@ class Engineering
         if (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_GNUMERIC) {
             $x = floor($x);
         }
-        $x = (string) $x;
+        $x = (string)$x;
         if (strlen($x) > preg_match_all('/[01]/', $x, $out)) {
             return Functions::NAN();
         }
@@ -1159,7 +1159,7 @@ class Engineering
             //    Two's Complement
             return str_repeat('F', 8) . substr(strtoupper(dechex(bindec(substr($x, -9)))), -2);
         }
-        $hexVal = (string) strtoupper(dechex(bindec($x)));
+        $hexVal = (string)strtoupper(dechex(bindec($x)));
 
         return self::nbrConversionFormat($hexVal, $places);
     }
@@ -1171,8 +1171,6 @@ class Engineering
      *
      * Excel Function:
      *        BIN2OCT(x[,places])
-     *
-     * @category Engineering Functions
      *
      * @param string $x The binary number (as a string) that you want to convert. The number
      *                                cannot contain more than 10 characters (10 bits). The most significant
@@ -1188,6 +1186,8 @@ class Engineering
      *                                If places is negative, BIN2OCT returns the #NUM! error value.
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function BINTOOCT($x, $places = null)
     {
@@ -1196,7 +1196,7 @@ class Engineering
 
         if (is_bool($x)) {
             if (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE) {
-                $x = (int) $x;
+                $x = (int)$x;
             } else {
                 return Functions::VALUE();
             }
@@ -1204,7 +1204,7 @@ class Engineering
         if (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_GNUMERIC) {
             $x = floor($x);
         }
-        $x = (string) $x;
+        $x = (string)$x;
         if (strlen($x) > preg_match_all('/[01]/', $x, $out)) {
             return Functions::NAN();
         }
@@ -1214,7 +1214,7 @@ class Engineering
             //    Two's Complement
             return str_repeat('7', 7) . substr(strtoupper(decoct(bindec(substr($x, -9)))), -3);
         }
-        $octVal = (string) decoct(bindec($x));
+        $octVal = (string)decoct(bindec($x));
 
         return self::nbrConversionFormat($octVal, $places);
     }
@@ -1226,8 +1226,6 @@ class Engineering
      *
      * Excel Function:
      *        DEC2BIN(x[,places])
-     *
-     * @category Engineering Functions
      *
      * @param string $x The decimal integer you want to convert. If number is negative,
      *                                valid place values are ignored and DEC2BIN returns a 10-character
@@ -1247,6 +1245,8 @@ class Engineering
      *                                If places is zero or negative, DEC2BIN returns the #NUM! error value.
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function DECTOBIN($x, $places = null)
     {
@@ -1255,17 +1255,17 @@ class Engineering
 
         if (is_bool($x)) {
             if (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE) {
-                $x = (int) $x;
+                $x = (int)$x;
             } else {
                 return Functions::VALUE();
             }
         }
-        $x = (string) $x;
+        $x = (string)$x;
         if (strlen($x) > preg_match_all('/[-0123456789.]/', $x, $out)) {
             return Functions::VALUE();
         }
 
-        $x = (string) floor($x);
+        $x = (string)floor($x);
         if ($x < -512 || $x > 511) {
             return Functions::NAN();
         }
@@ -1288,8 +1288,6 @@ class Engineering
      * Excel Function:
      *        DEC2HEX(x[,places])
      *
-     * @category Engineering Functions
-     *
      * @param string $x The decimal integer you want to convert. If number is negative,
      *                                places is ignored and DEC2HEX returns a 10-character (40-bit)
      *                                hexadecimal number in which the most significant bit is the sign
@@ -1308,6 +1306,8 @@ class Engineering
      *                                If places is zero or negative, DEC2HEX returns the #NUM! error value.
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function DECTOHEX($x, $places = null)
     {
@@ -1316,16 +1316,16 @@ class Engineering
 
         if (is_bool($x)) {
             if (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE) {
-                $x = (int) $x;
+                $x = (int)$x;
             } else {
                 return Functions::VALUE();
             }
         }
-        $x = (string) $x;
+        $x = (string)$x;
         if (strlen($x) > preg_match_all('/[-0123456789.]/', $x, $out)) {
             return Functions::VALUE();
         }
-        $x = (string) floor($x);
+        $x = (string)floor($x);
         $r = strtoupper(dechex($x));
         if (strlen($r) == 8) {
             //    Two's Complement
@@ -1342,8 +1342,6 @@ class Engineering
      *
      * Excel Function:
      *        DEC2OCT(x[,places])
-     *
-     * @category Engineering Functions
      *
      * @param string $x The decimal integer you want to convert. If number is negative,
      *                                places is ignored and DEC2OCT returns a 10-character (30-bit)
@@ -1363,6 +1361,8 @@ class Engineering
      *                                If places is zero or negative, DEC2OCT returns the #NUM! error value.
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function DECTOOCT($x, $places = null)
     {
@@ -1372,16 +1372,16 @@ class Engineering
 
         if (is_bool($x)) {
             if (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE) {
-                $x = (int) $x;
+                $x = (int)$x;
             } else {
                 return Functions::VALUE();
             }
         }
-        $x = (string) $x;
+        $x = (string)$x;
         if (strlen($x) > preg_match_all('/[-0123456789.]/', $x, $out)) {
             return Functions::VALUE();
         }
-        $x = (string) floor($x);
+        $x = (string)floor($x);
         $r = decoct($x);
         if (strlen($r) == 11) {
             //    Two's Complement
@@ -1398,8 +1398,6 @@ class Engineering
      *
      * Excel Function:
      *        HEX2BIN(x[,places])
-     *
-     * @category Engineering Functions
      *
      * @param string $x the hexadecimal number you want to convert.
      *                  Number cannot contain more than 10 characters.
@@ -1419,6 +1417,8 @@ class Engineering
      *                                    If places is negative, HEX2BIN returns the #NUM! error value.
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function HEXTOBIN($x, $places = null)
     {
@@ -1428,7 +1428,7 @@ class Engineering
         if (is_bool($x)) {
             return Functions::VALUE();
         }
-        $x = (string) $x;
+        $x = (string)$x;
         if (strlen($x) > preg_match_all('/[0123456789ABCDEF]/', strtoupper($x), $out)) {
             return Functions::NAN();
         }
@@ -1444,8 +1444,6 @@ class Engineering
      * Excel Function:
      *        HEX2DEC(x)
      *
-     * @category Engineering Functions
-     *
      * @param string $x The hexadecimal number you want to convert. This number cannot
      *                                contain more than 10 characters (40 bits). The most significant
      *                                bit of number is the sign bit. The remaining 39 bits are magnitude
@@ -1455,6 +1453,8 @@ class Engineering
      *                                #NUM! error value.
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function HEXTODEC($x)
     {
@@ -1463,7 +1463,7 @@ class Engineering
         if (is_bool($x)) {
             return Functions::VALUE();
         }
-        $x = (string) $x;
+        $x = (string)$x;
         if (strlen($x) > preg_match_all('/[0123456789ABCDEF]/', strtoupper($x), $out)) {
             return Functions::NAN();
         }
@@ -1495,8 +1495,6 @@ class Engineering
      * Excel Function:
      *        HEX2OCT(x[,places])
      *
-     * @category Engineering Functions
-     *
      * @param string $x The hexadecimal number you want to convert. Number cannot
      *                                    contain more than 10 characters. The most significant bit of
      *                                    number is the sign bit. The remaining 39 bits are magnitude
@@ -1519,6 +1517,8 @@ class Engineering
      *                                    If places is negative, HEX2OCT returns the #NUM! error value.
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function HEXTOOCT($x, $places = null)
     {
@@ -1528,7 +1528,7 @@ class Engineering
         if (is_bool($x)) {
             return Functions::VALUE();
         }
-        $x = (string) $x;
+        $x = (string)$x;
         if (strlen($x) > preg_match_all('/[0123456789ABCDEF]/', strtoupper($x), $out)) {
             return Functions::NAN();
         }
@@ -1548,8 +1548,6 @@ class Engineering
      *
      * Excel Function:
      *        OCT2BIN(x[,places])
-     *
-     * @category Engineering Functions
      *
      * @param string $x The octal number you want to convert. Number may not
      *                                    contain more than 10 characters. The most significant
@@ -1575,6 +1573,8 @@ class Engineering
      *                                    value.
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function OCTTOBIN($x, $places = null)
     {
@@ -1584,7 +1584,7 @@ class Engineering
         if (is_bool($x)) {
             return Functions::VALUE();
         }
-        $x = (string) $x;
+        $x = (string)$x;
         if (preg_match_all('/[01234567]/', $x, $out) != strlen($x)) {
             return Functions::NAN();
         }
@@ -1600,8 +1600,6 @@ class Engineering
      * Excel Function:
      *        OCT2DEC(x)
      *
-     * @category Engineering Functions
-     *
      * @param string $x The octal number you want to convert. Number may not contain
      *                                more than 10 octal characters (30 bits). The most significant
      *                                bit of number is the sign bit. The remaining 29 bits are
@@ -1611,6 +1609,8 @@ class Engineering
      *                                #NUM! error value.
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function OCTTODEC($x)
     {
@@ -1619,13 +1619,13 @@ class Engineering
         if (is_bool($x)) {
             return Functions::VALUE();
         }
-        $x = (string) $x;
+        $x = (string)$x;
         if (preg_match_all('/[01234567]/', $x, $out) != strlen($x)) {
             return Functions::NAN();
         }
         $binX = '';
         foreach (str_split($x) as $char) {
-            $binX .= str_pad(decbin((int) $char), 3, '0', STR_PAD_LEFT);
+            $binX .= str_pad(decbin((int)$char), 3, '0', STR_PAD_LEFT);
         }
         if (strlen($binX) == 30 && $binX[0] == '1') {
             for ($i = 0; $i < 30; ++$i) {
@@ -1646,8 +1646,6 @@ class Engineering
      * Excel Function:
      *        OCT2HEX(x[,places])
      *
-     * @category Engineering Functions
-     *
      * @param string $x The octal number you want to convert. Number may not contain
      *                                    more than 10 octal characters (30 bits). The most significant
      *                                    bit of number is the sign bit. The remaining 29 bits are
@@ -1667,6 +1665,8 @@ class Engineering
      *                                    If places is negative, OCT2HEX returns the #NUM! error value.
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function OCTTOHEX($x, $places = null)
     {
@@ -1676,7 +1676,7 @@ class Engineering
         if (is_bool($x)) {
             return Functions::VALUE();
         }
-        $x = (string) $x;
+        $x = (string)$x;
         if (preg_match_all('/[01234567]/', $x, $out) != strlen($x)) {
             return Functions::NAN();
         }
@@ -1693,14 +1693,14 @@ class Engineering
      * Excel Function:
      *        COMPLEX(realNumber,imaginary[,suffix])
      *
-     * @category Engineering Functions
-     *
      * @param float $realNumber the real coefficient of the complex number
      * @param float $imaginary the imaginary coefficient of the complex number
      * @param string $suffix The suffix for the imaginary component of the complex number.
      *                                        If omitted, the suffix is assumed to be "i".
      *
      * @return string
+     * @category Engineering Functions
+     *
      */
     public static function COMPLEX($realNumber = 0.0, $imaginary = 0.0, $suffix = 'i')
     {
@@ -1714,7 +1714,7 @@ class Engineering
         ) {
             $complex = new Complex($realNumber, $imaginary, $suffix);
 
-            return (string) $complex;
+            return (string)$complex;
         }
 
         return Functions::VALUE();
@@ -1728,12 +1728,12 @@ class Engineering
      * Excel Function:
      *        IMAGINARY(complexNumber)
      *
-     * @category Engineering Functions
-     *
      * @param string $complexNumber the complex number for which you want the imaginary
      *                                         coefficient
      *
      * @return float
+     * @category Engineering Functions
+     *
      */
     public static function IMAGINARY($complexNumber)
     {
@@ -1750,11 +1750,11 @@ class Engineering
      * Excel Function:
      *        IMREAL(complexNumber)
      *
-     * @category Engineering Functions
-     *
      * @param string $complexNumber the complex number for which you want the real coefficient
      *
      * @return float
+     * @category Engineering Functions
+     *
      */
     public static function IMREAL($complexNumber)
     {
@@ -1823,7 +1823,7 @@ class Engineering
     {
         $complexNumber = Functions::flattenSingleValue($complexNumber);
 
-        return (string) (new Complex($complexNumber))->conjugate();
+        return (string)(new Complex($complexNumber))->conjugate();
     }
 
     /**
@@ -1842,7 +1842,7 @@ class Engineering
     {
         $complexNumber = Functions::flattenSingleValue($complexNumber);
 
-        return (string) (new Complex($complexNumber))->cos();
+        return (string)(new Complex($complexNumber))->cos();
     }
 
     /**
@@ -1861,7 +1861,7 @@ class Engineering
     {
         $complexNumber = Functions::flattenSingleValue($complexNumber);
 
-        return (string) (new Complex($complexNumber))->cosh();
+        return (string)(new Complex($complexNumber))->cosh();
     }
 
     /**
@@ -1880,7 +1880,7 @@ class Engineering
     {
         $complexNumber = Functions::flattenSingleValue($complexNumber);
 
-        return (string) (new Complex($complexNumber))->cot();
+        return (string)(new Complex($complexNumber))->cot();
     }
 
     /**
@@ -1899,7 +1899,7 @@ class Engineering
     {
         $complexNumber = Functions::flattenSingleValue($complexNumber);
 
-        return (string) (new Complex($complexNumber))->csc();
+        return (string)(new Complex($complexNumber))->csc();
     }
 
     /**
@@ -1918,7 +1918,7 @@ class Engineering
     {
         $complexNumber = Functions::flattenSingleValue($complexNumber);
 
-        return (string) (new Complex($complexNumber))->csch();
+        return (string)(new Complex($complexNumber))->csch();
     }
 
     /**
@@ -1937,7 +1937,7 @@ class Engineering
     {
         $complexNumber = Functions::flattenSingleValue($complexNumber);
 
-        return (string) (new Complex($complexNumber))->sin();
+        return (string)(new Complex($complexNumber))->sin();
     }
 
     /**
@@ -1956,7 +1956,7 @@ class Engineering
     {
         $complexNumber = Functions::flattenSingleValue($complexNumber);
 
-        return (string) (new Complex($complexNumber))->sinh();
+        return (string)(new Complex($complexNumber))->sinh();
     }
 
     /**
@@ -1975,7 +1975,7 @@ class Engineering
     {
         $complexNumber = Functions::flattenSingleValue($complexNumber);
 
-        return (string) (new Complex($complexNumber))->sec();
+        return (string)(new Complex($complexNumber))->sec();
     }
 
     /**
@@ -1994,7 +1994,7 @@ class Engineering
     {
         $complexNumber = Functions::flattenSingleValue($complexNumber);
 
-        return (string) (new Complex($complexNumber))->sech();
+        return (string)(new Complex($complexNumber))->sech();
     }
 
     /**
@@ -2013,7 +2013,7 @@ class Engineering
     {
         $complexNumber = Functions::flattenSingleValue($complexNumber);
 
-        return (string) (new Complex($complexNumber))->tan();
+        return (string)(new Complex($complexNumber))->tan();
     }
 
     /**
@@ -2037,7 +2037,7 @@ class Engineering
             return '0';
         }
 
-        return (string) (new Complex($complexNumber))->sqrt();
+        return (string)(new Complex($complexNumber))->sqrt();
     }
 
     /**
@@ -2061,7 +2061,7 @@ class Engineering
             return Functions::NAN();
         }
 
-        return (string) (new Complex($complexNumber))->ln();
+        return (string)(new Complex($complexNumber))->ln();
     }
 
     /**
@@ -2085,7 +2085,7 @@ class Engineering
             return Functions::NAN();
         }
 
-        return (string) (new Complex($complexNumber))->log10();
+        return (string)(new Complex($complexNumber))->log10();
     }
 
     /**
@@ -2109,7 +2109,7 @@ class Engineering
             return Functions::NAN();
         }
 
-        return (string) (new Complex($complexNumber))->log2();
+        return (string)(new Complex($complexNumber))->log2();
     }
 
     /**
@@ -2128,7 +2128,7 @@ class Engineering
     {
         $complexNumber = Functions::flattenSingleValue($complexNumber);
 
-        return (string) (new Complex($complexNumber))->exp();
+        return (string)(new Complex($complexNumber))->exp();
     }
 
     /**
@@ -2153,7 +2153,7 @@ class Engineering
             return Functions::VALUE();
         }
 
-        return (string) (new Complex($complexNumber))->pow($realNumber);
+        return (string)(new Complex($complexNumber))->pow($realNumber);
     }
 
     /**
@@ -2175,7 +2175,7 @@ class Engineering
         $complexDivisor = Functions::flattenSingleValue($complexDivisor);
 
         try {
-            return (string) (new Complex($complexDividend))->divideby(new Complex($complexDivisor));
+            return (string)(new Complex($complexDividend))->divideby(new Complex($complexDivisor));
         } catch (ComplexException $e) {
             return Functions::NAN();
         }
@@ -2200,7 +2200,7 @@ class Engineering
         $complexNumber2 = Functions::flattenSingleValue($complexNumber2);
 
         try {
-            return (string) (new Complex($complexNumber1))->subtract(new Complex($complexNumber2));
+            return (string)(new Complex($complexNumber1))->subtract(new Complex($complexNumber2));
         } catch (ComplexException $e) {
             return Functions::NAN();
         }
@@ -2233,7 +2233,7 @@ class Engineering
             return Functions::NAN();
         }
 
-        return (string) $returnValue;
+        return (string)$returnValue;
     }
 
     /**
@@ -2263,7 +2263,7 @@ class Engineering
             return Functions::NAN();
         }
 
-        return (string) $returnValue;
+        return (string)$returnValue;
     }
 
     /**
@@ -2287,7 +2287,7 @@ class Engineering
         $a = Functions::flattenSingleValue($a);
         $b = Functions::flattenSingleValue($b);
 
-        return (int) ($a == $b);
+        return (int)($a == $b);
     }
 
     /**
@@ -2311,7 +2311,7 @@ class Engineering
         $number = Functions::flattenSingleValue($number);
         $step = Functions::flattenSingleValue($step);
 
-        return (int) ($number >= $step);
+        return (int)($number >= $step);
     }
 
     //
@@ -2347,9 +2347,9 @@ class Engineering
      *
      * @param mixed $value
      *
+     * @return int
      * @throws Exception
      *
-     * @return int
      */
     private static function validateBitwiseArgument($value)
     {
@@ -2358,8 +2358,8 @@ class Engineering
         if (is_int($value)) {
             return $value;
         } elseif (is_numeric($value)) {
-            if ($value == (int) ($value)) {
-                $value = (int) ($value);
+            if ($value == (int)($value)) {
+                $value = (int)($value);
                 if (($value > pow(2, 48) - 1) || ($value < 0)) {
                     throw new Exception(Functions::NAN());
                 }
@@ -2381,12 +2381,12 @@ class Engineering
      * Excel Function:
      *        BITAND(number1, number2)
      *
-     * @category Engineering Functions
-     *
      * @param int $number1
      * @param int $number2
      *
      * @return int|string
+     * @category Engineering Functions
+     *
      */
     public static function BITAND($number1, $number2)
     {
@@ -2408,12 +2408,12 @@ class Engineering
      * Excel Function:
      *        BITOR(number1, number2)
      *
-     * @category Engineering Functions
-     *
      * @param int $number1
      * @param int $number2
      *
      * @return int|string
+     * @category Engineering Functions
+     *
      */
     public static function BITOR($number1, $number2)
     {
@@ -2435,12 +2435,12 @@ class Engineering
      * Excel Function:
      *        BITXOR(number1, number2)
      *
-     * @category Engineering Functions
-     *
      * @param int $number1
      * @param int $number2
      *
      * @return int|string
+     * @category Engineering Functions
+     *
      */
     public static function BITXOR($number1, $number2)
     {
@@ -2462,12 +2462,12 @@ class Engineering
      * Excel Function:
      *        BITLSHIFT(number, shift_amount)
      *
-     * @category Engineering Functions
-     *
      * @param int $number
      * @param int $shiftAmount
      *
      * @return int|string
+     * @category Engineering Functions
+     *
      */
     public static function BITLSHIFT($number, $shiftAmount)
     {
@@ -2495,12 +2495,12 @@ class Engineering
      * Excel Function:
      *        BITRSHIFT(number, shift_amount)
      *
-     * @category Engineering Functions
-     *
      * @param int $number
      * @param int $shiftAmount
      *
      * @return int|string
+     * @category Engineering Functions
+     *
      */
     public static function BITRSHIFT($number, $shiftAmount)
     {

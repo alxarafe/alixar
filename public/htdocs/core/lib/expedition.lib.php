@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2006-2012  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007		Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2010-2012	Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010		Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015 Claudio Aschieri				<c.aschieri@19.coop>
+/* Copyright (C) 2006-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007		Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2010-2012	Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010		Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Claudio Aschieri            <c.aschieri@19.coop>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,9 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+
 /**
  *  \file       htdocs/core/lib/expedition.lib.php
  *  \brief      Function for expedition module
@@ -32,7 +35,7 @@
 /**
  * Prepare array with list of tabs
  *
- * @param   Expedition  $object     Object related to tabs
+ * @param Expedition $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function expedition_prepare_head(Expedition $object)
@@ -71,7 +74,7 @@ function expedition_prepare_head(Expedition $object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array                       head array with tabs
+ * @return array                       head array with tabs
  */
 function expedition_admin_prepare_head()
 {

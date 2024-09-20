@@ -1,21 +1,21 @@
 <?php
 
-/* Copyright (C) 2003-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005		Marc Barilley / Ocebo	<marc@ocebo.com>
- * Copyright (C) 2005-2015	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2006		Andre Cianfarani		<acianfa@free.fr>
- * Copyright (C) 2010-2013	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2011-2023	Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2012-2023	Christophe Battarel		<christophe.battarel@altairis.fr>
- * Copyright (C) 2012-2016	Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2012       Cedric Salvador      	<csalvador@gpcsolutions.fr>
- * Copyright (C) 2013		Florian Henry			<florian.henry@open-concept.pro>
- * Copyright (C) 2014       Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2015       Jean-François Ferry		<jfefe@aternatik.fr>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2022	    Gauthier VERDOL     	<gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2023-2024	Benjamin Falière		<benjamin.faliere@altairis.fr>
+/* Copyright (C) 2003-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005		Marc Barilley / Ocebo	    <marc@ocebo.com>
+ * Copyright (C) 2005-2015	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2006		Andre Cianfarani		    <acianfa@free.fr>
+ * Copyright (C) 2010-2013	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2011-2023	Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2012-2023	Christophe Battarel		    <christophe.battarel@altairis.fr>
+ * Copyright (C) 2012-2016	Marcos García			    <marcosgdf@gmail.com>
+ * Copyright (C) 2012       Cedric Salvador      	    <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013		Florian Henry			    <florian.henry@open-concept.pro>
+ * Copyright (C) 2014       Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2015       Jean-François Ferry		    <jfefe@aternatik.fr>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2022	    Gauthier VERDOL     	    <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2023-2024	Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -33,8 +33,27 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Adherents\Classes\Adherent;
-use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Commande\Classes\ModelePDFCommandes;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormMargin;
+use Dolibarr\Code\Core\Classes\FormOrder;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Notify;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\Variants\Classes\ProductCombination;
 
 /**
  *   \file      htdocs/commande/card.php
@@ -44,10 +63,6 @@ use Dolibarr\Code\Comm\Classes\Propal;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formorder.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/commande/modules_commande.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
 
@@ -56,7 +71,7 @@ if (isModEnabled("propal")) {
 }
 
 if (isModEnabled('project')) {
-    }
+}
 
 if (isModEnabled('variants')) {
 }
@@ -76,20 +91,20 @@ if (isModEnabled('productbatch')) {
 }
 
 
-$id        = (GETPOSTINT('id') ? GETPOSTINT('id') : GETPOSTINT('orderid'));
-$ref       =  GETPOST('ref', 'alpha');
-$socid     =  GETPOSTINT('socid');
-$action    =  GETPOST('action', 'aZ09');
-$cancel    =  GETPOST('cancel', 'alpha');
-$confirm   =  GETPOST('confirm', 'alpha');
+$id = (GETPOSTINT('id') ? GETPOSTINT('id') : GETPOSTINT('orderid'));
+$ref = GETPOST('ref', 'alpha');
+$socid = GETPOSTINT('socid');
+$action = GETPOST('action', 'aZ09');
+$cancel = GETPOST('cancel', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 $backtopage = GETPOST('backtopage', 'alpha');
 
-$lineid    =  GETPOSTINT('lineid');
-$contactid =  GETPOSTINT('contactid');
-$projectid =  GETPOSTINT('projectid');
-$origin    =  GETPOST('origin', 'alpha');
-$originid  = (GETPOSTINT('originid') ? GETPOSTINT('originid') : GETPOSTINT('origin_id'));    // For backward compatibility
-$rank      = (GETPOSTINT('rank') > 0) ? GETPOSTINT('rank') : -1;
+$lineid = GETPOSTINT('lineid');
+$contactid = GETPOSTINT('contactid');
+$projectid = GETPOSTINT('projectid');
+$origin = GETPOST('origin', 'alpha');
+$originid = (GETPOSTINT('originid') ? GETPOSTINT('originid') : GETPOSTINT('origin_id'));    // For backward compatibility
+$rank = (GETPOSTINT('rank') > 0) ? GETPOSTINT('rank') : -1;
 
 // PDF
 $hidedetails = (GETPOSTINT('hidedetails') ? GETPOSTINT('hidedetails') : (getDolGlobalString('MAIN_GENERATE_DOCUMENTS_HIDE_DETAILS') ? 1 : 0));
@@ -116,23 +131,23 @@ $extrafields->fetch_name_optionals_label($object->table_element);
 include DOL_DOCUMENT_ROOT . '/core/actions_fetchobject.inc.php';     // Must be include, not include_once
 
 // Permissions / Rights
-$usercanread    =  $user->hasRight("commande", "lire");
-$usercancreate  =  $user->hasRight("commande", "creer");
-$usercandelete  =  $user->hasRight("commande", "supprimer");
+$usercanread = $user->hasRight("commande", "lire");
+$usercancreate = $user->hasRight("commande", "creer");
+$usercandelete = $user->hasRight("commande", "supprimer");
 
 // Advanced permissions
-$usercanclose       =  ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && !empty($usercancreate)) || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('commande', 'order_advance', 'close')));
-$usercanvalidate    =  ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $usercancreate) || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('commande', 'order_advance', 'validate')));
-$usercancancel      =  ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $usercancreate) || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('commande', 'order_advance', 'annuler')));
-$usercansend        =   (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') || $user->hasRight('commande', 'order_advance', 'send'));
-$usercangeneretedoc =   (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') || $user->hasRight('commande', 'order_advance', 'generetedoc'));
+$usercanclose = ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && !empty($usercancreate)) || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('commande', 'order_advance', 'close')));
+$usercanvalidate = ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $usercancreate) || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('commande', 'order_advance', 'validate')));
+$usercancancel = ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $usercancreate) || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('commande', 'order_advance', 'annuler')));
+$usercansend = (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') || $user->hasRight('commande', 'order_advance', 'send'));
+$usercangeneretedoc = (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') || $user->hasRight('commande', 'order_advance', 'generetedoc'));
 
-$usermustrespectpricemin    = ((getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && !$user->hasRight('produit', 'ignore_price_min_advance')) || !getDolGlobalString('MAIN_USE_ADVANCED_PERMS'));
+$usermustrespectpricemin = ((getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && !$user->hasRight('produit', 'ignore_price_min_advance')) || !getDolGlobalString('MAIN_USE_ADVANCED_PERMS'));
 $usercancreatepurchaseorder = ($user->hasRight('fournisseur', 'commande', 'creer') || $user->hasRight('supplier_order', 'creer'));
 
-$permissionnote    = $usercancreate;     //  Used by the include of actions_setnotes.inc.php
+$permissionnote = $usercancreate;     //  Used by the include of actions_setnotes.inc.php
 $permissiondellink = $usercancreate;     //  Used by the include of actions_dellink.inc.php
-$permissiontoadd   = $usercancreate;     //  Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
+$permissiontoadd = $usercancreate;     //  Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
 
 
 $error = 0;
@@ -321,7 +336,7 @@ if (empty($reshook)) {
             $object->fk_incoterms = GETPOSTINT('incoterm_id');
             $object->location_incoterms = GETPOST('location_incoterms', 'alpha');
             $object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
-            $object->multicurrency_tx = (float) price2num(GETPOST('originmulticurrency_tx'));
+            $object->multicurrency_tx = (float)price2num(GETPOST('originmulticurrency_tx'));
             // Fill array 'array_options' with data from add form
             if (!$error) {
                 $ret = $extrafields->setOptionalsFromPost(null, $object);
@@ -700,7 +715,7 @@ if (empty($reshook)) {
         $pu_ht = '';
         $pu_ttc = '';
         $pu_ht_devise = '';
-        $pu_ttc_devise  = '';
+        $pu_ttc_devise = '';
 
         if (GETPOST('price_ht') !== '') {
             $price_ht = price2num(GETPOST('price_ht'), 'MU', 2);
@@ -834,7 +849,6 @@ if (empty($reshook)) {
                     }
                 } elseif (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
                     // If price per customer
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productcustomerprice.class.php';
 
                     $prodcustprice = new ProductCustomerPrice($db);
 
@@ -845,8 +859,8 @@ if (empty($reshook)) {
                         if (count($prodcustprice->lines) > 0) {
                             $pu_ht = price($prodcustprice->lines[0]->price);
                             $pu_ttc = price($prodcustprice->lines[0]->price_ttc);
-                            $price_min =  price($prodcustprice->lines[0]->price_min);
-                            $price_min_ttc =  price($prodcustprice->lines[0]->price_min_ttc);
+                            $price_min = price($prodcustprice->lines[0]->price_min);
+                            $price_min_ttc = price($prodcustprice->lines[0]->price_min_ttc);
                             $price_base_type = $prodcustprice->lines[0]->price_base_type;
                             $tva_tx = $prodcustprice->lines[0]->tva_tx;
                             if ($prodcustprice->lines[0]->default_vat_code && !preg_match('/\(.*\)/', $tva_tx)) {
@@ -903,16 +917,16 @@ if (empty($reshook)) {
                     }
                 }
 
-                $tmpvat = (float) price2num(preg_replace('/\s*\(.*\)/', '', $tva_tx));
-                $tmpprodvat = (float) price2num(preg_replace('/\s*\(.*\)/', '', (string) $prod->tva_tx));
+                $tmpvat = (float)price2num(preg_replace('/\s*\(.*\)/', '', $tva_tx));
+                $tmpprodvat = (float)price2num(preg_replace('/\s*\(.*\)/', '', (string)$prod->tva_tx));
 
                 // Set unit price to use
                 if (!empty($price_ht) || $price_ht === '0') {
                     $pu_ht = price2num($price_ht, 'MU');
-                    $pu_ttc = price2num((float) $pu_ht * (1 + ($tmpvat / 100)), 'MU');
+                    $pu_ttc = price2num((float)$pu_ht * (1 + ($tmpvat / 100)), 'MU');
                 } elseif (!empty($price_ttc) || $price_ttc === '0') {
                     $pu_ttc = price2num($price_ttc, 'MU');
-                    $pu_ht = price2num((float) $pu_ttc / (1 + ($tmpvat / 100)), 'MU');
+                    $pu_ht = price2num((float)$pu_ttc / (1 + ($tmpvat / 100)), 'MU');
                 } elseif ($tmpvat != $tmpprodvat) {
                     // Is this still used ?
                     if ($price_base_type != 'HT') {
@@ -1041,10 +1055,10 @@ if (empty($reshook)) {
             // Check if we have a foreign currency
             // If so, we update the pu_equiv as the equivalent price in base currency
             if ($pu_ht == '' && $pu_ht_devise != '' && $currency_tx != '') {
-                $pu_equivalent = (float) $pu_ht_devise * (float) $currency_tx;
+                $pu_equivalent = (float)$pu_ht_devise * (float)$currency_tx;
             }
             if ($pu_ttc == '' && $pu_ttc_devise != '' && $currency_tx != '') {
-                $pu_equivalent_ttc = (float) $pu_ttc_devise * (float) $currency_tx;
+                $pu_equivalent_ttc = (float)$pu_ttc_devise * (float)$currency_tx;
             }
 
             // TODO $pu_equivalent or $pu_equivalent_ttc must be calculated from the one defined
@@ -1062,11 +1076,11 @@ if (empty($reshook)) {
 
             // Check price is not lower than minimum
             if ($usermustrespectpricemin) {
-                if ($pu_equivalent && $price_min && (((float) price2num($pu_equivalent) * (1 - $remise_percent / 100)) < (float) price2num($price_min)) && $price_base_type == 'HT') {
+                if ($pu_equivalent && $price_min && (((float)price2num($pu_equivalent) * (1 - $remise_percent / 100)) < (float)price2num($price_min)) && $price_base_type == 'HT') {
                     $mesg = $langs->trans("CantBeLessThanMinPrice", price(price2num($price_min, 'MU'), 0, $langs, 0, 0, -1, $conf->currency));
                     setEventMessages($mesg, null, 'errors');
                     $error++;
-                } elseif ($pu_equivalent_ttc && $price_min_ttc && (((float) price2num($pu_equivalent_ttc) * (1 - $remise_percent / 100)) < (float) price2num($price_min_ttc)) && $price_base_type == 'TTC') {
+                } elseif ($pu_equivalent_ttc && $price_min_ttc && (((float)price2num($pu_equivalent_ttc) * (1 - $remise_percent / 100)) < (float)price2num($price_min_ttc)) && $price_base_type == 'TTC') {
                     $mesg = $langs->trans("CantBeLessThanMinPriceInclTax", price(price2num($price_min_ttc, 'MU'), 0, $langs, 0, 0, -1, $conf->currency));
                     setEventMessages($mesg, null, 'errors');
                     $error++;
@@ -1171,10 +1185,10 @@ if (empty($reshook)) {
         // Check if we have a foreign currency
         // If so, we update the pu_equiv as the equivalent price in base currency
         if ($pu_ht == '' && $pu_ht_devise != '' && $currency_tx != '') {
-            $pu_equivalent = (float) $pu_ht_devise * (float) $currency_tx;
+            $pu_equivalent = (float)$pu_ht_devise * (float)$currency_tx;
         }
         if ($pu_ttc == '' && $pu_ttc_devise != '' && $currency_tx != '') {
-            $pu_equivalent_ttc = (float) $pu_ttc_devise * (float) $currency_tx;
+            $pu_equivalent_ttc = (float)$pu_ttc_devise * (float)$currency_tx;
         }
 
         // TODO $pu_equivalent or $pu_equivalent_ttc must be calculated from the one not null taking into account all taxes
@@ -1231,12 +1245,12 @@ if (empty($reshook)) {
 
             // Check price is not lower than minimum
             if ($usermustrespectpricemin) {
-                if ($pu_equivalent && $price_min && (((float) price2num($pu_equivalent) * (1 - $remise_percent / 100)) < (float) price2num($price_min)) && $price_base_type == 'HT') {
+                if ($pu_equivalent && $price_min && (((float)price2num($pu_equivalent) * (1 - $remise_percent / 100)) < (float)price2num($price_min)) && $price_base_type == 'HT') {
                     $mesg = $langs->trans("CantBeLessThanMinPrice", price(price2num($price_min, 'MU'), 0, $langs, 0, 0, -1, $conf->currency));
                     setEventMessages($mesg, null, 'errors');
                     $error++;
                     $action = 'editline';
-                } elseif ($pu_equivalent_ttc && $price_min_ttc && (((float) price2num($pu_equivalent_ttc) * (1 - $remise_percent / 100)) < (float) price2num($price_min_ttc)) && $price_base_type == 'TTC') {
+                } elseif ($pu_equivalent_ttc && $price_min_ttc && (((float)price2num($pu_equivalent_ttc) * (1 - $remise_percent / 100)) < (float)price2num($price_min_ttc)) && $price_base_type == 'TTC') {
                     $mesg = $langs->trans("CantBeLessThanMinPriceInclTax", price(price2num($price_min_ttc, 'MU'), 0, $langs, 0, 0, -1, $conf->currency));
                     setEventMessages($mesg, null, 'errors');
                     $error++;
@@ -1363,7 +1377,7 @@ if (empty($reshook)) {
                 $error = 0;
                 $deposit = null;
 
-                $deposit_percent_from_payment_terms = (float) getDictionaryValue('c_payment_term', 'deposit_percent', $object->cond_reglement_id);
+                $deposit_percent_from_payment_terms = (float)getDictionaryValue('c_payment_term', 'deposit_percent', $object->cond_reglement_id);
 
                 if (
                     GETPOST('generate_deposit', 'alpha') == 'on' && !empty($deposit_percent_from_payment_terms)
@@ -1389,7 +1403,7 @@ if (empty($reshook)) {
                 }
 
                 // Define output language
-                if (! $error) {
+                if (!$error) {
                     $db->commit();
 
                     if (!getDolGlobalString('MAIN_DISABLE_PDF_AUTOUPDATE')) {
@@ -1760,13 +1774,13 @@ if ($action == 'create' && $usercancreate) {
             $ref_client = (!empty($objectsrc->ref_client) ? $objectsrc->ref_client : '');
 
             $soc = $objectsrc->thirdparty;
-            $cond_reglement_id  = (!empty($objectsrc->cond_reglement_id) ? $objectsrc->cond_reglement_id : (!empty($soc->cond_reglement_id) ? $soc->cond_reglement_id : 0));
-            $deposit_percent    = (!empty($objectsrc->deposit_percent) ? $objectsrc->deposit_percent : (!empty($soc->deposit_percent) ? $soc->deposit_percent : null));
-            $mode_reglement_id  = (!empty($objectsrc->mode_reglement_id) ? $objectsrc->mode_reglement_id : (!empty($soc->mode_reglement_id) ? $soc->mode_reglement_id : 0));
-            $fk_account         = (!empty($objectsrc->fk_account) ? $objectsrc->fk_account : (!empty($soc->fk_account) ? $soc->fk_account : 0));
+            $cond_reglement_id = (!empty($objectsrc->cond_reglement_id) ? $objectsrc->cond_reglement_id : (!empty($soc->cond_reglement_id) ? $soc->cond_reglement_id : 0));
+            $deposit_percent = (!empty($objectsrc->deposit_percent) ? $objectsrc->deposit_percent : (!empty($soc->deposit_percent) ? $soc->deposit_percent : null));
+            $mode_reglement_id = (!empty($objectsrc->mode_reglement_id) ? $objectsrc->mode_reglement_id : (!empty($soc->mode_reglement_id) ? $soc->mode_reglement_id : 0));
+            $fk_account = (!empty($objectsrc->fk_account) ? $objectsrc->fk_account : (!empty($soc->fk_account) ? $soc->fk_account : 0));
             $availability_id = (!empty($objectsrc->availability_id) ? $objectsrc->availability_id : 0);
             $shipping_method_id = (!empty($objectsrc->shipping_method_id) ? $objectsrc->shipping_method_id : (!empty($soc->shipping_method_id) ? $soc->shipping_method_id : 0));
-            $warehouse_id       = (!empty($objectsrc->warehouse_id) ? $objectsrc->warehouse_id : (!empty($soc->warehouse_id) ? $soc->warehouse_id : 0));
+            $warehouse_id = (!empty($objectsrc->warehouse_id) ? $objectsrc->warehouse_id : (!empty($soc->warehouse_id) ? $soc->warehouse_id : 0));
             $demand_reason_id = (!empty($objectsrc->demand_reason_id) ? $objectsrc->demand_reason_id : (!empty($soc->demand_reason_id) ? $soc->demand_reason_id : 0));
             //$remise_percent       = (!empty($objectsrc->remise_percent) ? $objectsrc->remise_percent : (!empty($soc->remise_percent) ? $soc->remise_percent : 0));
             //$remise_absolue       = (!empty($objectsrc->remise_absolue) ? $objectsrc->remise_absolue : (!empty($soc->remise_absolue) ? $soc->remise_absolue : 0));
@@ -1790,17 +1804,17 @@ if ($action == 'create' && $usercancreate) {
             $srccontactslist = $objectsrc->liste_contact(-1, 'external', 1);
         }
     } else {
-        $cond_reglement_id  = empty($soc->cond_reglement_id) ? $cond_reglement_id : $soc->cond_reglement_id;
-        $deposit_percent    = empty($soc->deposit_percent) ? $deposit_percent : $soc->deposit_percent;
-        $mode_reglement_id  = empty($soc->mode_reglement_id) ? $mode_reglement_id : $soc->mode_reglement_id;
-        $fk_account         = empty($soc->mode_reglement_id) ? $fk_account : $soc->fk_account;
-        $availability_id    = 0;
+        $cond_reglement_id = empty($soc->cond_reglement_id) ? $cond_reglement_id : $soc->cond_reglement_id;
+        $deposit_percent = empty($soc->deposit_percent) ? $deposit_percent : $soc->deposit_percent;
+        $mode_reglement_id = empty($soc->mode_reglement_id) ? $mode_reglement_id : $soc->mode_reglement_id;
+        $fk_account = empty($soc->mode_reglement_id) ? $fk_account : $soc->fk_account;
+        $availability_id = 0;
         $shipping_method_id = $soc->shipping_method_id;
-        $warehouse_id       = $soc->fk_warehouse;
-        $demand_reason_id   = $soc->demand_reason_id;
+        $warehouse_id = $soc->fk_warehouse;
+        $demand_reason_id = $soc->demand_reason_id;
         //$remise_percent     = $soc->remise_percent;
         //$remise_absolue     = 0;
-        $dateorder          = !getDolGlobalString('MAIN_AUTOFILL_DATE_ORDER') ? -1 : '';
+        $dateorder = !getDolGlobalString('MAIN_AUTOFILL_DATE_ORDER') ? -1 : '';
 
         if (isModEnabled("multicurrency") && !empty($soc->multicurrency_code)) {
             $currency_code = $soc->multicurrency_code;
@@ -1920,7 +1934,7 @@ if ($action == 'create' && $usercancreate) {
 
             $thirdparty = $soc;
             $discount_type = 0;
-            $backtopage = $_SERVER["PHP_SELF"] . '?socid=' . $thirdparty->id . '&action=' . $action . '&origin=' . urlencode((string) (GETPOST('origin'))) . '&originid=' . urlencode((string) (GETPOSTINT('originid')));
+            $backtopage = $_SERVER["PHP_SELF"] . '?socid=' . $thirdparty->id . '&action=' . $action . '&origin=' . urlencode((string)(GETPOST('origin'))) . '&originid=' . urlencode((string)(GETPOSTINT('originid')));
             include DOL_DOCUMENT_ROOT . '/core/tpl/object_discounts.tpl.php';
 
             print '</td></tr>';
@@ -1976,7 +1990,7 @@ if ($action == 'create' && $usercancreate) {
 
         // Warehouse
         if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER')) {
-                        $formproduct = new FormProduct($db);
+            $formproduct = new FormProduct($db);
             print '<tr><td>' . $langs->trans('Warehouse') . '</td><td>';
             print img_picto('', 'stock', 'class="pictofixedwidth"') . $formproduct->selectWarehouses((GETPOSTISSET('warehouse_id') ? GETPOST('warehouse_id') : $warehouse_id), 'warehouse_id', '', 1, 0, 0, '', 0, 0, array(), 'maxwidth500 widthcentpercentminusxx');
             print '</td></tr>';
@@ -2020,7 +2034,7 @@ if ($action == 'create' && $usercancreate) {
         // Other attributes
         $parameters = array();
         if (!empty($origin) && !empty($originid) && is_object($objectsrc)) {
-            $parameters['objectsrc'] =  $objectsrc;
+            $parameters['objectsrc'] = $objectsrc;
         }
         $parameters['socid'] = $socid;
 
@@ -2043,7 +2057,6 @@ if ($action == 'create' && $usercancreate) {
         // Template to use by default
         print '<tr><td>' . $langs->trans('DefaultModel') . '</td>';
         print '<td>';
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/commande/modules_commande.php';
         $liste = ModelePDFCommandes::liste_modeles($db);
         $preselected = getDolGlobalString('COMMANDE_ADDON_PDF');
         print img_picto('', 'pdf', 'class="pictofixedwidth"');
@@ -2218,7 +2231,7 @@ if ($action == 'create' && $usercancreate) {
             $formquestion = array();
             if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_VALIDATE_ORDER') && $qualified_for_stock_change) {
                 $langs->load("stocks");
-                                $formproduct = new FormProduct($db);
+                $formproduct = new FormProduct($db);
                 $forcecombo = 0;
                 if ($conf->browser->name == 'ie') {
                     $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -2235,7 +2248,7 @@ if ($action == 'create' && $usercancreate) {
             $nbMandated = 0;
             foreach ($object->lines as $line) {
                 $res = $line->fetch_product();
-                if ($res  > 0) {
+                if ($res > 0) {
                     if ($line->product->isService() && $line->product->isMandatoryPeriod() && (empty($line->date_start) || empty($line->date_end))) {
                         $nbMandated++;
                         break;
@@ -2256,7 +2269,7 @@ if ($action == 'create' && $usercancreate) {
                 // Suggestion to create invoice during order validation is not enabled by default.
                 // Such choice should be managed by the workflow module and trigger. This option generates conflicts with some setup.
                 // It may also break step of creating an order when invoicing must be done from proposals and not from orders
-                $deposit_percent_from_payment_terms = (float) getDictionaryValue('c_payment_term', 'deposit_percent', $object->cond_reglement_id);
+                $deposit_percent_from_payment_terms = (float)getDictionaryValue('c_payment_term', 'deposit_percent', $object->cond_reglement_id);
 
                 if (!empty($deposit_percent_from_payment_terms) && isModEnabled('invoice') && $user->hasRight('facture', 'creer')) {
 
@@ -2377,7 +2390,7 @@ if ($action == 'create' && $usercancreate) {
             $formquestion = array();
             if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_VALIDATE_ORDER') && $qualified_for_stock_change) {
                 $langs->load("stocks");
-                                $formproduct = new FormProduct($db);
+                $formproduct = new FormProduct($db);
                 $forcecombo = 0;
                 if ($conf->browser->name == 'ie') {
                     $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -2415,7 +2428,7 @@ if ($action == 'create' && $usercancreate) {
             $formquestion = array();
             if (isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_VALIDATE_ORDER') && $qualified_for_stock_change) {
                 $langs->load("stocks");
-                                $formproduct = new FormProduct($db);
+                $formproduct = new FormProduct($db);
                 $forcecombo = 0;
                 if ($conf->browser->name == 'ie') {
                     $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -2517,7 +2530,7 @@ if ($action == 'create' && $usercancreate) {
                 print '</td><td class="valuefield">';
                 $arrayoutstandingbills = $soc->getOutstandingBills();
                 print price($arrayoutstandingbills['opened']) . ' / ';
-                print price($soc->outstanding_limit, 0, '', 1, - 1, - 1, $conf->currency);
+                print price($soc->outstanding_limit, 0, '', 1, -1, -1, $conf->currency);
                 print '</td>';
                 print '</tr>';
             }
@@ -2623,7 +2636,7 @@ if ($action == 'create' && $usercancreate) {
             // Warehouse
             if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER')) {
                 $langs->load('stocks');
-                                $formproduct = new FormProduct($db);
+                $formproduct = new FormProduct($db);
                 print '<tr><td>';
                 $editenable = $usercancreate;
                 print $form->editfieldkey("Warehouse", 'warehouse', '', $object, $editenable);
@@ -2980,7 +2993,7 @@ if ($action == 'create' && $usercancreate) {
                 // Create a purchase order
 
 
-                if (! getDolGlobalInt('COMMANDE_DISABLE_ADD_PURCHASE_ORDER')) {
+                if (!getDolGlobalInt('COMMANDE_DISABLE_ADD_PURCHASE_ORDER')) {
                     $arrayforbutaction[] = array('lang' => 'orders', 'enabled' => (isModEnabled("supplier_order") && $object->statut > Commande::STATUS_DRAFT), 'perm' => $usercancreatepurchaseorder, 'label' => 'AddPurchaseOrder', 'url' => '/fourn/commande/card.php?action=create&amp;origin=' . $object->element . '&amp;originid=' . $object->id);
                 }
 
@@ -3051,7 +3064,7 @@ if ($action == 'create' && $usercancreate) {
                  }*/
 
                 $actionButtonsParameters = [
-                    "areDropdownButtons"    => !getDolGlobalInt("MAIN_REMOVE_DROPDOWN_CREATE_BUTTONS_ON_ORDER")
+                    "areDropdownButtons" => !getDolGlobalInt("MAIN_REMOVE_DROPDOWN_CREATE_BUTTONS_ON_ORDER")
                 ];
 
                 if ($numlines > 0) {

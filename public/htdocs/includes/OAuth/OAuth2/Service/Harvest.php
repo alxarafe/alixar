@@ -15,11 +15,12 @@ class Harvest extends AbstractService
 {
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage, $scopes, $baseApiUri);
 
         if (null === $baseApiUri) {
@@ -35,8 +36,8 @@ class Harvest extends AbstractService
         $parameters = array_merge(
             $additionalParameters,
             array(
-                'client_id'     => $this->credentials->getConsumerId(),
-                'redirect_uri'  => $this->credentials->getCallbackUrl(),
+                'client_id' => $this->credentials->getConsumerId(),
+                'redirect_uri' => $this->credentials->getCallbackUrl(),
                 'state' => 'optional-csrf-token',
                 'response_type' => 'code',
             )
@@ -82,7 +83,7 @@ class Harvest extends AbstractService
     {
         $data = json_decode($responseBody, true);
 
-        if (null === $data || ! is_array($data)) {
+        if (null === $data || !is_array($data)) {
             throw new TokenResponseException('Unable to parse response.');
         } elseif (isset($data['error'])) {
             throw new TokenResponseException('Error in retrieving token: "' . $data['error'] . '"');
@@ -118,9 +119,9 @@ class Harvest extends AbstractService
         }
 
         $parameters = array(
-            'grant_type'    => 'refresh_token',
-            'type'          => 'web_server',
-            'client_id'     => $this->credentials->getConsumerId(),
+            'grant_type' => 'refresh_token',
+            'type' => 'web_server',
+            'client_id' => $this->credentials->getConsumerId(),
             'client_secret' => $this->credentials->getConsumerSecret(),
             'refresh_token' => $refreshToken,
         );

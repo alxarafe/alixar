@@ -24,47 +24,47 @@
 
 create table llx_bank_account
 (
-  rowid						integer AUTO_INCREMENT PRIMARY KEY,
-  datec						datetime,
-  tms						timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  ref						varchar(12) NOT NULL,
-  label						varchar(30) NOT NULL,
-  entity					integer DEFAULT 1 NOT NULL, -- multi company id
-  fk_user_author			integer,
-  fk_user_modif				integer,
-  bank						varchar(60),
-  code_banque				varchar(128),
-  code_guichet				varchar(6),
-  number					varchar(255),
-  cle_rib					varchar(5),
-  bic						varchar(11),                -- 11 according to ISO 9362
-  bic_intermediate          varchar(11),                -- 11 according to ISO 9362. Same as bic but for intermediate bank
-  iban_prefix				varchar(34),				-- full iban. 34 according to ISO 13616
-  country_iban				varchar(2),					-- deprecated
-  cle_iban					varchar(2),
-  domiciliation				varchar(255),
-  pti_in_ctti               smallint DEFAULT 0,
-  state_id					integer        DEFAULT NULL,
-  fk_pays					integer        NOT NULL,
-  proprio					varchar(60),
-  owner_address				varchar(255),
-  owner_zip					varchar(25),
-  owner_town				varchar(50),
-  owner_country_id			integer DEFAULT NULL,
-  courant					smallint DEFAULT 0 NOT NULL,
-  clos						smallint DEFAULT 0 NOT NULL,
-  rappro					smallint DEFAULT 1,
-  url						varchar(128),
-  account_number			varchar(32),				-- bank accountancy number
-  fk_accountancy_journal	integer,					-- bank accountancy journal
-  currency_code				varchar(3) NOT NULL,
-  min_allowed				integer DEFAULT 0,
-  min_desired				integer DEFAULT 0,
-  comment					text,						-- TODO rename in note_private
-  note_public				text,
-  model_pdf					varchar(255),
-  import_key				varchar(14),
-  extraparams			    varchar(255),				-- for other parameters with json format
-  ics						varchar(32),                -- Creditor Identifier CI
-  ics_transfer              varchar(32)                 -- Creditor Identifier CI for transfer
+    rowid                  integer AUTO_INCREMENT PRIMARY KEY,
+    datec                  datetime,
+    tms                    timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    ref                    varchar(12)         NOT NULL,
+    label                  varchar(30)         NOT NULL,
+    entity                 integer   DEFAULT 1 NOT NULL, -- multi company id
+    fk_user_author         integer,
+    fk_user_modif          integer,
+    bank                   varchar(60),
+    code_banque            varchar(128),
+    code_guichet           varchar(6),
+    number                 varchar(255),
+    cle_rib                varchar(5),
+    bic                    varchar(11),                  -- 11 according to ISO 9362
+    bic_intermediate       varchar(11),                  -- 11 according to ISO 9362. Same as bic but for intermediate bank
+    iban_prefix            varchar(34),                  -- full iban. 34 according to ISO 13616
+    country_iban           varchar(2),                   -- deprecated
+    cle_iban               varchar(2),
+    domiciliation          varchar(255),
+    pti_in_ctti            smallint  DEFAULT 0,
+    state_id               integer   DEFAULT NULL,
+    fk_pays                integer             NOT NULL,
+    proprio                varchar(60),
+    owner_address          varchar(255),
+    owner_zip              varchar(25),
+    owner_town             varchar(50),
+    owner_country_id       integer   DEFAULT NULL,
+    courant                smallint  DEFAULT 0 NOT NULL,
+    clos                   smallint  DEFAULT 0 NOT NULL,
+    rappro                 smallint  DEFAULT 1,
+    url                    varchar(128),
+    account_number         varchar(32),                  -- bank accountancy number
+    fk_accountancy_journal integer,                      -- bank accountancy journal
+    currency_code          varchar(3)          NOT NULL,
+    min_allowed            integer   DEFAULT 0,
+    min_desired            integer   DEFAULT 0,
+    comment                text,                         -- TODO rename in note_private
+    note_public            text,
+    model_pdf              varchar(255),
+    import_key             varchar(14),
+    extraparams            varchar(255),                 -- for other parameters with json format
+    ics                    varchar(32),                  -- Creditor Identifier CI
+    ics_transfer           varchar(32)                   -- Creditor Identifier CI for transfer
 )ENGINE=innodb;

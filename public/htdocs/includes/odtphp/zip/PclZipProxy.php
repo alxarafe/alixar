@@ -1,11 +1,13 @@
 <?php
 
-if (! defined('ODTPHP_PATHTOPCLZIP')) define('ODTPHP_PATHTOPCLZIP', 'pclzip/');
+if (!defined('ODTPHP_PATHTOPCLZIP')) define('ODTPHP_PATHTOPCLZIP', 'pclzip/');
 require_once ODTPHP_PATHTOPCLZIP . 'pclzip.lib.php';
 require_once 'ZipInterface.php';
+
 class PclZipProxyException extends Exception
 {
 }
+
 /**
  * Proxy class for the PclZip library
  * You need PHP 5.2 at least
@@ -23,6 +25,7 @@ class PclZipProxy implements ZipInterface
     protected $openned = false;
     protected $filename;
     protected $pclzip;
+
     /**
      * Class constructor
      *
@@ -30,9 +33,9 @@ class PclZipProxy implements ZipInterface
      */
     public function __construct($forcedir = '')
     {
-        if (! class_exists('PclZip')) {
+        if (!class_exists('PclZip')) {
             throw new PclZipProxyException('PclZip class not loaded - PclZip library
-			 is required for using PclZipProxy'); ;
+			 is required for using PclZipProxy');;
         }
         if ($forcedir) $this->tmpdir = preg_replace('|[//\/]$|', '', $forcedir);    // $this->tmpdir must not contains / at the end
     }

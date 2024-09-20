@@ -206,13 +206,13 @@ class KML extends GeoAdapter
         switch ($type) {
             case 'point':
                 return $this->pointToKML($geom);
-            break;
+                break;
             case 'linestring':
                 return $this->linestringToKML($geom);
-            break;
+                break;
             case 'polygon':
                 return $this->polygonToKML($geom);
-            break;
+                break;
             case 'multipoint':
             case 'multilinestring':
             case 'multipolygon':

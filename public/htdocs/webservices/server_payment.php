@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2006-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2006-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /*
  * The payment webservice was initially created by Nicolas Nunge <me@nikkow.eu>
@@ -54,8 +57,6 @@ require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ws.lib.php';
 
-use Dolibarr\Code\User\Classes\User;
-
 
 dol_syslog("Call Dolibarr webservices interfaces");
 
@@ -72,10 +73,10 @@ if (!getDolGlobalString('MAIN_MODULE_WEBSERVICES')) {
 }
 
 // Create the soap Object
-$server                              = new nusoap_server();
-$server->soap_defencoding            = 'UTF-8';
-$server->decode_utf8                 = false;
-$ns                                  = 'http://www.dolibarr.org/ns/';
+$server = new nusoap_server();
+$server->soap_defencoding = 'UTF-8';
+$server->decode_utf8 = false;
+$ns = 'http://www.dolibarr.org/ns/';
 $server->configureWSDL('WebServicesDolibarrPayment', $ns);
 $server->wsdl->schemaTargetNamespace = $ns;
 
@@ -88,11 +89,11 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'dolibarrkey'       => array('name' => 'dolibarrkey', 'type' => 'xsd:string'),
-       'sourceapplication' => array('name' => 'sourceapplication', 'type' => 'xsd:string'),
-       'login'             => array('name' => 'login', 'type' => 'xsd:string'),
-        'password'          => array('name' => 'password', 'type' => 'xsd:string'),
-        'entity'            => array('name' => 'entity', 'type' => 'xsd:string')
+        'dolibarrkey' => array('name' => 'dolibarrkey', 'type' => 'xsd:string'),
+        'sourceapplication' => array('name' => 'sourceapplication', 'type' => 'xsd:string'),
+        'login' => array('name' => 'login', 'type' => 'xsd:string'),
+        'password' => array('name' => 'password', 'type' => 'xsd:string'),
+        'entity' => array('name' => 'entity', 'type' => 'xsd:string')
     )
 );
 // Define WSDL Return object
@@ -103,7 +104,7 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'result_code'  => array('name' => 'result_code', 'type' => 'xsd:string'),
+        'result_code' => array('name' => 'result_code', 'type' => 'xsd:string'),
         'result_label' => array('name' => 'result_label', 'type' => 'xsd:string'),
     )
 );
@@ -116,15 +117,15 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'amount'          => array('name' => 'amount', 'type' => 'xsd:double'),
-        'num_payment'     => array('name' => 'num_payment', 'type' => 'xsd:string'),
-        'thirdparty_id'   => array('name' => 'thirdparty_id', 'type' => 'xsd:int'),
-               'bank_account'    => array('name' => 'bank_account', 'type' => 'xsd:int'),
-               'payment_mode_id' => array('name' => 'payment_mode_id', 'type' => 'xsd:int'),
-               'invoice_id'      => array('name' => 'invoice_id', 'type' => 'xsd:int'),
-               'int_label'       => array('name' => 'int_label', 'type' => 'xsd:string'),
-               'emitter'         => array('name' => 'emitter', 'type' => 'xsd:string'),
-               'bank_source'     => array('name' => 'bank_source', 'type' => 'xsd:string'),
+        'amount' => array('name' => 'amount', 'type' => 'xsd:double'),
+        'num_payment' => array('name' => 'num_payment', 'type' => 'xsd:string'),
+        'thirdparty_id' => array('name' => 'thirdparty_id', 'type' => 'xsd:int'),
+        'bank_account' => array('name' => 'bank_account', 'type' => 'xsd:int'),
+        'payment_mode_id' => array('name' => 'payment_mode_id', 'type' => 'xsd:int'),
+        'invoice_id' => array('name' => 'invoice_id', 'type' => 'xsd:int'),
+        'int_label' => array('name' => 'int_label', 'type' => 'xsd:string'),
+        'emitter' => array('name' => 'emitter', 'type' => 'xsd:string'),
+        'bank_source' => array('name' => 'bank_source', 'type' => 'xsd:string'),
     )
 );
 
@@ -153,8 +154,8 @@ $server->register(
 /**
  * Create a payment
  *
- * @param      array           $authentication         Array of authentication information
- * @param      array{id:int,thirdparty_id:int|string,amount:float|string,num_payment:string,bank_account:int|string,payment_mode_id?:int|string,invoice_id?:int|string,int_label?:string,emitter:string,bank_source:string} $payment    Payment
+ * @param array $authentication Array of authentication information
+ * @param array{id:int,thirdparty_id:int|string,amount:float|string,num_payment:string,bank_account:int|string,payment_mode_id?:int|string,invoice_id?:int|string,int_label?:string,emitter:string,bank_source:string} $payment Payment
  * @return     array{result:array{result_code:string,result_label:string},id?:int}  Array result
  */
 function createPayment($authentication, $payment)
@@ -164,7 +165,7 @@ function createPayment($authentication, $payment)
     $now = dol_now();
 
     dol_syslog("Function: createPayment login=" . $authentication['login'] . " id=" . $payment->id .
-               ", ref=" . $payment->ref . ", ref_ext=" . $payment->ref_ext);
+        ", ref=" . $payment->ref . ", ref_ext=" . $payment->ref_ext);
 
     if ($authentication['entity']) {
         $conf->entity = $authentication['entity'];
@@ -172,15 +173,15 @@ function createPayment($authentication, $payment)
 
     // Init and check authentication
     $objectresp = array();
-    $errorcode  = '';
+    $errorcode = '';
     $errorlabel = '';
-    $error      = 0;
-    $fuser      = check_authentication($authentication, $error, $errorcode, $errorlabel);
+    $error = 0;
+    $fuser = check_authentication($authentication, $error, $errorcode, $errorlabel);
 
     // Check parameters
     if (empty($payment['amount']) && empty($payment['thirdparty_id'])) {
         $error++;
-        $errorcode  = 'KO';
+        $errorcode = 'KO';
         $errorlabel = "You must specify the amount and the third party's ID.";
     }
 
@@ -188,13 +189,13 @@ function createPayment($authentication, $payment)
         $soc = new Societe($db);
         $soc->fetch($payment['thirdparty_id']);
 
-        $new_payment              = new Paiement($db);
+        $new_payment = new Paiement($db);
         $new_payment->num_payment = $payment['num_payment'];
-        $new_payment->fk_account  = intval($payment['bank_account']);
-        $new_payment->paiementid  = !empty($payment['payment_mode_id']) ? intval($payment['payment_mode_id']) : $soc->mode_reglement_id;
-        $new_payment->datepaye    = $now;
-        $new_payment->author      = $payment['thirdparty_id'];
-        $new_payment->amounts     = array($payment['invoice_id'] => (float) $payment['amount']);
+        $new_payment->fk_account = intval($payment['bank_account']);
+        $new_payment->paiementid = !empty($payment['payment_mode_id']) ? intval($payment['payment_mode_id']) : $soc->mode_reglement_id;
+        $new_payment->datepaye = $now;
+        $new_payment->author = $payment['thirdparty_id'];
+        $new_payment->amounts = array($payment['invoice_id'] => (float)$payment['amount']);
 
         $db->begin();
         $result = $new_payment->create($fuser, true);

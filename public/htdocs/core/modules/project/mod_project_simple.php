@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2012  Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2010		Laurent Destailleur	<eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010		Laurent Destailleur	        <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,14 +21,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\ModeleNumRefProjects;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/project/mod_project_simple.php
  *  \ingroup    project
  *  \brief      File with class to manage the numbering module Simple for project references
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
-
 
 /**
  *  Class to manage the numbering module Simple for project references
@@ -60,12 +63,11 @@ class mod_project_simple extends ModeleNumRefProjects
      */
     public $name = 'Simple';
 
-
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -73,24 +75,22 @@ class mod_project_simple extends ModeleNumRefProjects
         return $langs->trans("SimpleNumRefModelDesc", $this->prefix);
     }
 
-
     /**
      *  Return an example of numbering module values
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
         return $this->prefix . "0501-0001";
     }
 
-
     /**
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object Object we need next value for
-     *  @return boolean                 false if KO (there is a conflict), true if OK
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                 false if KO (there is a conflict), true if OK
      */
     public function canBeActivated($object)
     {
@@ -121,13 +121,12 @@ class mod_project_simple extends ModeleNumRefProjects
         }
     }
 
-
     /**
      *  Return next value
      *
-     *  @param   Societe    $objsoc     Object third party
-     *  @param   Project    $project    Object project
-     *  @return string|-1               Value if OK, -1 if KO
+     * @param Societe $objsoc Object third party
+     * @param Project $project Object project
+     * @return string|-1               Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $project)
     {

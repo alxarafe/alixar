@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2004  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2018       Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2019      Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2023-2024	William Mead			<william.mead@manchenumerique.fr>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2018       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2019       Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2023-2024	William Mead			    <william.mead@manchenumerique.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,6 +25,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ContratLigne;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/contrat/services_list.php
  *      \ingroup    contrat
@@ -32,18 +40,15 @@
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once DOL_DOCUMENT_ROOT . "/contrat/class/contrat.class.php";
-require_once DOL_DOCUMENT_ROOT . "/product/class/product.class.php";
-require_once DOL_DOCUMENT_ROOT . "/societe/class/societe.class.php";
 
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'contracts', 'companies'));
 
 // Get parameters
 $massaction = GETPOST('massaction', 'alpha');
-$toselect   = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
-$optioncss  = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
-$mode       = GETPOST('mode', 'aZ'); // The output mode ('list', 'kanban', 'hierarchy', 'calendar', ...)
+$toselect = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
+$optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
+$mode = GETPOST('mode', 'aZ'); // The output mode ('list', 'kanban', 'hierarchy', 'calendar', ...)
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : str_replace('_', '', basename(dirname(__FILE__)) . basename(__FILE__, '.php')) . $mode; // To manage different context of search
 
 // Load variable for pagination
@@ -108,7 +113,6 @@ $opcloturemonth = GETPOSTINT('opcloturemonth');
 $opclotureday = GETPOSTINT('opclotureday');
 $opclotureyear = GETPOSTINT('opclotureyear');
 $filter_opcloture = GETPOST('filter_opcloture', 'alpha');
-
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $object = new ContratLigne($db);
@@ -287,11 +291,11 @@ if ($search_product_category > 0) {
 $sql .= " WHERE c.entity IN (" . getEntity($object->element) . ")";
 $sql .= " AND c.rowid = cd.fk_contrat";
 if ($search_product_category > 0) {
-    $sql .= " AND cp.fk_categorie = " . ((int) $search_product_category);
+    $sql .= " AND cp.fk_categorie = " . ((int)$search_product_category);
 }
 $sql .= " AND c.fk_soc = s.rowid";
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if ($search_status == "0") {
     $sql .= " AND cd.statut = 0";
@@ -333,7 +337,7 @@ if ($search_service) {
     $sql .= natural_search(array("p.ref", "p.description", "cd.description"), $search_service);
 }
 if ($socid > 0) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 
 $filter_dateouvertureprevue = '';
@@ -446,7 +450,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -491,16 +495,16 @@ if (!empty($filter_opcloture) && $filter_opcloture != -1) {
     $param .= '&amp;filter_opcloture=' . urlencode($filter_opcloture);
 }
 if ($filter_dateouvertureprevue_start != '') {
-    $param .= '&amp;opouvertureprevueday=' . ((int) $opouvertureprevueday) . '&amp;opouvertureprevuemonth=' . ((int) $opouvertureprevuemonth) . '&amp;opouvertureprevueyear=' . ((int) $opouvertureprevueyear);
+    $param .= '&amp;opouvertureprevueday=' . ((int)$opouvertureprevueday) . '&amp;opouvertureprevuemonth=' . ((int)$opouvertureprevuemonth) . '&amp;opouvertureprevueyear=' . ((int)$opouvertureprevueyear);
 }
 if ($filter_date1_start != '') {
-    $param .= '&amp;op1day=' . ((int) $op1day) . '&amp;op1month=' . ((int) $op1month) . '&amp;op1year=' . ((int) $op1year);
+    $param .= '&amp;op1day=' . ((int)$op1day) . '&amp;op1month=' . ((int)$op1month) . '&amp;op1year=' . ((int)$op1year);
 }
 if ($filter_date2_start != '') {
-    $param .= '&amp;op2day=' . ((int) $op2day) . '&amp;op2month=' . ((int) $op2month) . '&amp;op2year=' . ((int) $op2year);
+    $param .= '&amp;op2day=' . ((int)$op2day) . '&amp;op2month=' . ((int)$op2month) . '&amp;op2year=' . ((int)$op2year);
 }
 if ($filter_datecloture_start != '') {
-    $param .= '&amp;opclotureday=' . ((int) $op2day) . '&amp;opcloturemonth=' . ((int) $op2month) . '&amp;opclotureyear=' . ((int) $op2year);
+    $param .= '&amp;opclotureday=' . ((int)$op2day) . '&amp;opcloturemonth=' . ((int)$op2month) . '&amp;opclotureyear=' . ((int)$op2year);
 }
 // Add $param from extra fields
 include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_list_search_param.tpl.php';
@@ -546,7 +550,6 @@ $moreforfilter = '';
 
 // If the user can view categories of products
 if (isModEnabled('category') && ($user->hasRight('produit', 'lire') || $user->hasRight('service', 'lire'))) {
-    include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('IncludingProductWithTag');
     $cate_arbo = $form->select_all_categories(Categorie::TYPE_PRODUCT, null, 'parent', null, null, 1);
@@ -782,7 +785,6 @@ if (!getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
     $totalarray['nbfield']++;
 }
 print '</tr>' . "\n";
-
 
 // Loop on record
 // --------------------------------------------------------------------

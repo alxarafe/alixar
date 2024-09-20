@@ -49,8 +49,10 @@
     "symfony/var-dumper": "^6.4",
     "tecnickcom/tcpdf": "^6.6",
     "webklex/php-imap": "^4.1",
+    "luracast/restler": "^5.0",
+    "ext-curl": "*",
     "ext-dom": "*",
-    "luracast/restler": "^5.0"
+    "ext-simplexml": "*"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.0",

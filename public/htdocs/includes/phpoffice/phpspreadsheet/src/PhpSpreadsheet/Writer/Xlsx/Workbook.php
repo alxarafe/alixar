@@ -18,9 +18,9 @@ class Workbook extends WriterPart
      * @param Spreadsheet $spreadsheet
      * @param bool $recalcRequired Indicate whether formulas should be recalculated before writing
      *
+     * @return string XML Output
      * @throws WriterException
      *
-     * @return string XML Output
      */
     public function writeWorkbook(Spreadsheet $spreadsheet, $recalcRequired = false)
     {

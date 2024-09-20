@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2015       ATM Consulting          <support@atm-consulting.fr>
- * Copyright (C) 2019-2020  Open-DSI                <support@open-dsi.fr>
+/* Copyright (C) 2015       ATM Consulting              <support@atm-consulting.fr>
+ * Copyright (C) 2019-2020  Open-DSI                    <support@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\IntracommReport\Classes\IntracommReport;
 
 /**
  *  \file       htdocs/intracommreport/card.php
@@ -38,7 +42,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/intracommreport/class/intracommreport.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("intracommreport"));
@@ -94,8 +97,6 @@ if (empty($conf->intracommreport->enabled)) {
 if (!$permissiontoread) {
     accessforbidden();
 }
-
-
 
 /*
  * 	Actions

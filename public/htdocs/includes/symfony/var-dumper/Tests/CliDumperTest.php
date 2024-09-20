@@ -46,7 +46,7 @@ class CliDumperTest extends TestCase
         $out = ob_get_clean();
         $out = preg_replace('/[ \t]+$/m', '', $out);
         $intMax = PHP_INT_MAX;
-        $res = (int) $var['res'];
+        $res = (int)$var['res'];
 
         $r = defined('HHVM_VERSION') ? '' : '#%d';
         $this->assertStringMatchesFormat(
@@ -133,7 +133,7 @@ EOTXT
 
     public function testJsonCast()
     {
-        $var = (array) json_decode('{"0":{},"1":null}');
+        $var = (array)json_decode('{"0":{},"1":null}');
         foreach ($var as &$v) {
         }
         $var[] = &$v;
@@ -170,7 +170,7 @@ EOTXT
 
     public function testObjectCast()
     {
-        $var = (object) array(1 => 1);
+        $var = (object)array(1 => 1);
         $var->{1} = 2;
 
         if (\PHP_VERSION_ID >= 70200) {
@@ -214,7 +214,7 @@ EOTXT
         ob_start();
         $dumper->dump($data);
         $out = ob_get_clean();
-        $res = (int) $var;
+        $res = (int)$var;
 
         $this->assertStringMatchesFormat(
             <<<EOTXT
@@ -287,7 +287,7 @@ EOTXT
                 }
             };'),
         ));
-        $ref = (int) $out;
+        $ref = (int)$out;
 
         $data = $cloner->cloneVar($out);
         $dumper->dump($data, $out);
@@ -342,7 +342,7 @@ EOTXT
 
     public function testRefsInProperties()
     {
-        $var = (object) array('foo' => 'foo');
+        $var = (object)array('foo' => 'foo');
         $var->bar = &$var->foo;
 
         $dumper = new CliDumper();

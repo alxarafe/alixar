@@ -1,5 +1,6 @@
 <?php
-/* Copyright (C) 2011      Juanjo Menent        <jmenent@2byte.es>
+
+/* Copyright (C) 2011       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,9 +23,7 @@ if (empty($conf) || !is_object($conf)) {
     exit(1);
 }
 
-
 print "<!-- BEGIN PHP TEMPLATE fichinter/tpl/linkedobjectblock.tpl.php -->\n";
-
 
 global $user;
 

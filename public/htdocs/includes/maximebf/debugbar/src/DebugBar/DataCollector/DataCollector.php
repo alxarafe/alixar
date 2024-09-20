@@ -79,11 +79,11 @@ abstract class DataCollector implements DataCollectorInterface
      * Get an Xdebug Link to a file
      *
      * @param string $file
-     * @param int    $line
+     * @param int $line
      *
      * @return array {
-     * @var string   $url
-     * @var bool     $ajax should be used to open the url instead of a normal links
+     * @var string $url
+     * @var bool $ajax should be used to open the url instead of a normal links
      * }
      */
     public function getXdebugLink($file, $line = 1)
@@ -97,8 +97,8 @@ abstract class DataCollector implements DataCollectorInterface
             return ['url' => $url, 'ajax' => $this->getXdebugShouldUseAjax()];
         }
     }
-  
-    /**  
+
+    /**
      * Sets the default variable dumper used by all collectors subclassing this class
      *
      * @param DebugBarVarDumper $varDumper
@@ -190,10 +190,10 @@ abstract class DataCollector implements DataCollectorInterface
     public function setXdebugLinkTemplate($xdebugLinkTemplate, $shouldUseAjax = false)
     {
         if ($xdebugLinkTemplate === 'idea') {
-            $this->xdebugLinkTemplate  = 'http://localhost:63342/api/file/?file=%f&line=%l';
+            $this->xdebugLinkTemplate = 'http://localhost:63342/api/file/?file=%f&line=%l';
             $this->xdebugShouldUseAjax = true;
         } else {
-            $this->xdebugLinkTemplate  = $xdebugLinkTemplate;
+            $this->xdebugLinkTemplate = $xdebugLinkTemplate;
             $this->xdebugShouldUseAjax = $shouldUseAjax;
         }
     }

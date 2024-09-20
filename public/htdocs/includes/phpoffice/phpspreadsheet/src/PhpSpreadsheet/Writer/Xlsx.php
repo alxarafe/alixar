@@ -425,9 +425,9 @@ class Xlsx extends BaseWriter
     /**
      * Get Spreadsheet object.
      *
+     * @return Spreadsheet
      * @throws WriterException
      *
-     * @return Spreadsheet
      */
     public function getSpreadsheet()
     {

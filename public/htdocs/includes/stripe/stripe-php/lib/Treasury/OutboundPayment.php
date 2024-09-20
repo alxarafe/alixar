@@ -54,9 +54,9 @@ class OutboundPayment extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Treasury\OutboundPayment the canceled outbound payment
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Treasury\OutboundPayment the canceled outbound payment
      */
     public function cancel($params = null, $opts = null)
     {

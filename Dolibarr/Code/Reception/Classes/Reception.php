@@ -32,8 +32,20 @@
 
 namespace Dolibarr\Code\Reception\Classes;
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Core\Traits\CommonIncoterm;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseurDispatch;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseurLigne;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+use stdClass;
 
 /**
  *  \file       htdocs/reception/class/reception.class.php
@@ -714,7 +726,6 @@ class Reception extends CommonObject
      */
     public function getStatusDispatch()
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 
         $status = CommandeFournisseur::STATUS_RECEIVED_PARTIALLY;
 
@@ -1182,7 +1193,6 @@ class Reception extends CommonObject
 		// phpcs:enable
         $this->lines = array();
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 
         $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "receptiondet_batch";
         $sql .= " WHERE fk_reception = " . ((int) $this->id);

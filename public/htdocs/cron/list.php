@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2012      Nicolas Villa aka Boyquotes http://informetic.fr
- * Copyright (C) 2013      Florian Henry       <florian.henry@open-concept.pro>
- * Copyright (C) 2013-2021 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2019-2024 Frédéric France     <frederic.france@free.fr>
+/* Copyright (C) 2012       Nicolas Villa aka Boyquotes http://informetic.fr
+ * Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2021  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Cron\Classes\Cronjob;
 
 /**
  *  \file       htdocs/cron/list.php
@@ -39,7 +43,7 @@ $langs->loadLangs(array("admin", "cron", "bills", "members"));
 $action = GETPOST('action', 'aZ09');
 $massaction = GETPOST('massaction', 'alpha'); // The bulk action (combo box choice into lists)
 $confirm = GETPOST('confirm', 'alpha');
-$toselect   = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
+$toselect = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'cronjoblist'; // To manage different context of search
 
 $id = GETPOSTINT('id');
@@ -189,7 +193,7 @@ if (empty($reshook)) {
                 $param .= '&contextpage=' . urlencode($contextpage);
             }
             if ($limit > 0 && $limit != $conf->liste_limit) {
-                $param .= '&limit=' . ((int) $limit);
+                $param .= '&limit=' . ((int)$limit);
             }
             if ($search_label) {
                 $param .= '&search_label=' . urlencode($search_label);
@@ -231,7 +235,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View
@@ -300,7 +303,7 @@ if ($search_lastresult != '') {
     $sql .= natural_search("t.lastresult", $search_lastresult, 1);
 }
 if (GETPOSTISSET('search_processing')) {
-    $sql .= " AND t.processing = " . ((int) $search_processing);
+    $sql .= " AND t.processing = " . ((int)$search_processing);
 }
 // Manage filter
 if (is_array($filter) && count($filter) > 0) {
@@ -346,7 +349,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($search_status) {
     $param .= '&search_status=' . urlencode($search_status);
@@ -538,7 +541,7 @@ if ($num > 0) {
         $object->status = $obj->status;
         $object->priority = $obj->priority;
         $object->processing = $obj->processing;
-        $object->lastresult = (string) $obj->lastresult;
+        $object->lastresult = (string)$obj->lastresult;
         $object->datestart = $db->jdate($obj->datestart);
         $object->dateend = $db->jdate($obj->dateend);
         $object->module_name = $obj->module_name;

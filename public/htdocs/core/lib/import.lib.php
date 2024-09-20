@@ -31,8 +31,8 @@
 /**
  * Function to return list of tabs for import pages
  *
- * @param   string      $param      Params to add on url links
- * @param   int         $maxstep    Limit steps to maxstep or no limit if 0
+ * @param string $param Params to add on url links
+ * @param int $maxstep Limit steps to maxstep or no limit if 0
  * @return  array                   Array of tabs
  */
 function import_prepare_head($param, $maxstep = 0)

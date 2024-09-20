@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2008-2015  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2015	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2015       Jean-François Ferry		<jfefe@aternatik.fr>
- * Copyright (C) 2016       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2021		Frédéric France			<frederic.france@netlogic.fr>
+/* Copyright (C) 2008-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2015	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2015       Jean-François Ferry		    <jfefe@aternatik.fr>
+ * Copyright (C) 2016       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2021		Frédéric France			    <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormOther;
 
 /**
  *      \file       htdocs/admin/agenda_extsites.php

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2014	   Floran Henry  <florian.henry@open-concept.pro>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014	    Floran Henry                <florian.henry@open-concept.pro>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,14 +22,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ModelNumRefContracts;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/core/modules/contract/mod_contract_olive.php
  *  \ingroup    contract
  *  \brief      File of class to manage contract numbering rules Olive
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/contract/modules_contract.php';
-
 
 /**
  *  Class to manage contract numbering rules Olive
@@ -52,11 +55,12 @@ class mod_contract_olive extends ModelNumRefContracts
         $this->code_modifiable_null = 1;
         $this->code_auto = 0;
     }
+
     /**
      *  Return description of module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -69,7 +73,7 @@ class mod_contract_olive extends ModelNumRefContracts
     /**
      *  Return numbering example
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -79,8 +83,8 @@ class mod_contract_olive extends ModelNumRefContracts
     /**
      * Return an example of result returned by getNextValue
      *
-     * @param   Societe     $objsoc     Object thirdparty
-     * @param   Contrat     $contract   Object contract
+     * @param Societe $objsoc Object thirdparty
+     * @param Contrat $contract Object contract
      * @return  string                  Return next value
      */
     public function getNextValue($objsoc, $contract)
@@ -92,11 +96,11 @@ class mod_contract_olive extends ModelNumRefContracts
     /**
      *  Check validity of code according to its rules
      *
-     *  @param  DoliDB      $db     Database handler
-     *  @param  string      $code   Code to check/correct
-     *  @param  Product     $product    Object product
-     *  @param  int         $type   0 = product , 1 = service
-     *  @return int                 0 if OK
+     * @param DoliDB $db Database handler
+     * @param string $code Code to check/correct
+     * @param Product $product Object product
+     * @param int $type 0 = product , 1 = service
+     * @return int                 0 if OK
      *                              -1 ErrorBadProductCodeSyntax
      *                              -2 ErrorProductCodeRequired
      *                              -3 ErrorProductCodeAlreadyUsed

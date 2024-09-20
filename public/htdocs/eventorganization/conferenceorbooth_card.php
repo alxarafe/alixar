@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021		Florian Henry			<florian.henry@scopen.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021		Florian Henry			    <florian.henry@scopen.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,12 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
+use Dolibarr\Code\Projet\Classes\Project;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorbooth.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/lib/eventorganization_conferenceorbooth.lib.php';
@@ -103,7 +109,6 @@ if (!$permissiontoread) {
     accessforbidden();
 }
 
-
 /*
  * Actions
  */
@@ -159,7 +164,6 @@ if (empty($reshook)) {
     $trackid = 'conferenceorbooth' . $object->id;
     include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
 }
-
 
 /*
  * View

@@ -41,15 +41,13 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
@@ -86,7 +84,6 @@ $hookmanager->initHooks(array('ticketpubliclist', 'globalcard'));
 if (!isModEnabled('ticket')) {
     httponly_accessforbidden('Module Ticket not enabled');
 }
-
 
 
 /*
@@ -233,7 +230,7 @@ if ($action == "view_ticketlist") {
 
         $param = '&action=view_ticketlist';
         if (!empty($entity) && isModEnabled('multicompany')) {
-            $param .= '&entity=' . ((int) $entity);
+            $param .= '&entity=' . ((int)$entity);
         }
 
         $param .= '&token=' . newToken();
@@ -269,7 +266,7 @@ if ($action == "view_ticketlist") {
         if (isset($extrafields->attributes[$object->table_element]['label']) && is_array($extrafields->attributes[$object->table_element]['label']) && count($extrafields->attributes[$object->table_element]['label'])) {
             foreach ($extrafields->attributes[$object->table_element]['label'] as $key => $val) {
                 if ($extrafields->attributes[$object->table_element]['type'][$key] != 'separate') {
-                    $enabled = abs((int) dol_eval($extrafields->attributes[$object->table_element]['list'][$key], 1, 1, '2'));
+                    $enabled = abs((int)dol_eval($extrafields->attributes[$object->table_element]['list'][$key], 1, 1, '2'));
                     $enabled = (($enabled == 0 || $enabled == 3) ? 0 : $enabled);
                     $arrayfields["ef." . $key] = array('label' => $extrafields->attributes[$object->table_element]['label'][$key], 'checked' => ($extrafields->attributes[$object->table_element]['list'][$key] < 0) ? 0 : 1, 'position' => $extrafields->attributes[$object->table_element]['pos'][$key], 'enabled' => $enabled && $extrafields->attributes[$object->table_element]['perms'][$key]);
                 }
@@ -295,14 +292,14 @@ if ($action == "view_ticketlist") {
             // -1 value = all so no filter
             if ($search_fk_user_assign > 0) {
                 $filter['t.fk_user_assign'] = $search_fk_user_assign;
-                $param .= '&search_fk_user_assign=' . urlencode((string) ($search_fk_user_assign));
+                $param .= '&search_fk_user_assign=' . urlencode((string)($search_fk_user_assign));
             }
         }
         if (!empty($search_fk_user_create)) {
             // -1 value = all so no filter
             if ($search_fk_user_create > 0) {
                 $filter['t.fk_user_create'] = $search_fk_user_create;
-                $param .= '&search_fk_user_create=' . urlencode((string) ($search_fk_user_create));
+                $param .= '&search_fk_user_create=' . urlencode((string)($search_fk_user_create));
             }
         }
         if ((isset($search_fk_status) && $search_fk_status != '') && $search_fk_status != '-1' && $search_fk_status != 'non_closed') {
@@ -399,7 +396,7 @@ if ($action == "view_ticketlist") {
                     if (is_array($value) && count($value) > 0) {
                         $sql .= " AND " . $key . " IN (" . $db->sanitize(implode(',', $value)) . ")";
                     } else {
-                        $sql .= " AND " . $key . " = " . ((int) $value);
+                        $sql .= " AND " . $key . " = " . ((int)$value);
                     }
                 } else {
                     $sql .= " AND " . $key . " LIKE '%" . $db->escape($value) . "%'";

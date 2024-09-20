@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2018       Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2022       Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2018       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/compta/stats/byratecountry.php
  *      \brief      VAT by rate
@@ -29,8 +39,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/report.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/tax.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/localtax/class/localtax.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("other", "compta", "banks", "bills", "companies", "product", "trips", "admin", "accountancy"));
@@ -127,8 +135,6 @@ if ($user->socid) {
     $socid = $user->socid;
 }
 $result = restrictedArea($user, 'tax', '', '', 'charges');
-
-
 
 /*
  * View
@@ -299,7 +305,7 @@ if ($modecompta == 'CREANCES-DETTES') {
         if ($j > 12) {
             $j -= 12;
         }
-        print '<td width="60" class="right">' . $langs->trans('MonthShort' . str_pad((string) $j, 2, '0', STR_PAD_LEFT)) . '</td>';
+        print '<td width="60" class="right">' . $langs->trans('MonthShort' . str_pad((string)$j, 2, '0', STR_PAD_LEFT)) . '</td>';
         $i++;
     }
     print '<td width="60" class="right"><b>' . $langs->trans("TotalHT") . '</b></td></tr>';
@@ -309,7 +315,7 @@ if ($modecompta == 'CREANCES-DETTES') {
     $sql .= " fd.product_type AS product_type,";
     $sql .= " cc.code, cc.label AS country,";
     for ($i = 1; $i <= 12; $i++) {
-        $sql .= " SUM(" . $db->ifsql("MONTH(f.datef)=" . $i, "fd.total_ht", "0") . ") AS month" . str_pad((string) $i, 2, "0", STR_PAD_LEFT) . ",";
+        $sql .= " SUM(" . $db->ifsql("MONTH(f.datef)=" . $i, "fd.total_ht", "0") . ") AS month" . str_pad((string)$i, 2, "0", STR_PAD_LEFT) . ",";
     }
     $sql .= "  SUM(fd.total_ht) as total";
     $sql .= " FROM " . MAIN_DB_PREFIX . "facturedet as fd";
@@ -349,7 +355,7 @@ if ($modecompta == 'CREANCES-DETTES') {
                 if ($j > 12) {
                     $j -= 12;
                 }
-                $monthj = 'month' . str_pad((string) $j, 2, '0', STR_PAD_LEFT);
+                $monthj = 'month' . str_pad((string)$j, 2, '0', STR_PAD_LEFT);
                 print '<td class="right" width="6%">' . price($obj->$monthj) . '</td>';
                 $totalpermonth[$j] = (empty($totalpermonth[$j]) ? 0 : $totalpermonth[$j]) + $obj->$monthj;
             }
@@ -368,7 +374,7 @@ if ($modecompta == 'CREANCES-DETTES') {
             if ($j > 12) {
                 $j -= 12;
             }
-            $monthj = 'month' . str_pad((string) $j, 2, '0', STR_PAD_LEFT);
+            $monthj = 'month' . str_pad((string)$j, 2, '0', STR_PAD_LEFT);
             print '<td class="right" width="6%">' . price((empty($totalpermonth[$j]) ? 0 : $totalpermonth[$j])) . '</td>';
         }
         print '<td class="right" width="6%"><b>' . price((empty($totalpermonth['total']) ? 0 : $totalpermonth['total'])) . '</b></td>';
@@ -386,7 +392,7 @@ if ($modecompta == 'CREANCES-DETTES') {
         if ($j > 12) {
             $j -= 12;
         }
-        print '<td width="60" class="right">' . $langs->trans('MonthShort' . str_pad((string) $j, 2, '0', STR_PAD_LEFT)) . '</td>';
+        print '<td width="60" class="right">' . $langs->trans('MonthShort' . str_pad((string)$j, 2, '0', STR_PAD_LEFT)) . '</td>';
         $i++;
     }
     print '<td width="60" class="right"><b>' . $langs->trans("TotalHT") . '</b></td></tr>';
@@ -396,7 +402,7 @@ if ($modecompta == 'CREANCES-DETTES') {
     $sql2 .= " ffd.product_type AS product_type,";
     $sql2 .= " cc.code, cc.label AS country,";
     for ($i = 1; $i <= 12; $i++) {
-        $sql2 .= " SUM(" . $db->ifsql("MONTH(ff.datef)=" . $i, "ffd.total_ht", "0") . ") AS month" . str_pad((string) $i, 2, "0", STR_PAD_LEFT) . ",";
+        $sql2 .= " SUM(" . $db->ifsql("MONTH(ff.datef)=" . $i, "ffd.total_ht", "0") . ") AS month" . str_pad((string)$i, 2, "0", STR_PAD_LEFT) . ",";
     }
     $sql2 .= "  SUM(ffd.total_ht) as total";
     $sql2 .= " FROM " . MAIN_DB_PREFIX . "facture_fourn_det as ffd";
@@ -436,7 +442,7 @@ if ($modecompta == 'CREANCES-DETTES') {
                 if ($j > 12) {
                     $j -= 12;
                 }
-                $monthj = 'month' . str_pad((string) $j, 2, '0', STR_PAD_LEFT);
+                $monthj = 'month' . str_pad((string)$j, 2, '0', STR_PAD_LEFT);
                 print '<td class="right" width="6%">' . price($obj->$monthj) . '</td>';
                 $totalpermonth[$j] = (empty($totalpermonth[$j]) ? 0 : $totalpermonth[$j]) + $obj->$monthj;
             }
@@ -455,7 +461,7 @@ if ($modecompta == 'CREANCES-DETTES') {
             if ($j > 12) {
                 $j -= 12;
             }
-            $monthj = 'month' . str_pad((string) $j, 2, '0', STR_PAD_LEFT);
+            $monthj = 'month' . str_pad((string)$j, 2, '0', STR_PAD_LEFT);
             print '<td class="right" width="6%">' . price(empty($totalpermonth[$j]) ? 0 : $totalpermonth[$j]) . '</td>';
         }
         print '<td class="right" width="6%"><b>' . price(empty($totalpermonth['total']) ? 0 : $totalpermonth['total']) . '</b></td>';

@@ -1,9 +1,10 @@
 <?php
 
-/* Copyright (C) 2023-2024  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2023-2024	Lionel Vessiller		<lvessiller@easya.solutions>
+/* Copyright (C) 2023-2024  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023-2024	Lionel Vessiller		    <lvessiller@easya.solutions>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormSetup;
 
 /**
  * \file    htdocs/webportal/admin/setup.php
@@ -57,11 +61,7 @@ if (!$user->admin) {
 // Set this to 1 to use the factory to manage constants. Warning, the generated module will be compatible with version v15+ only
 $useFormSetup = 1;
 
-if (!class_exists('FormSetup')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formsetup.class.php';
-}
 $formSetup = new FormSetup($db);
-
 
 // root url
 
@@ -70,13 +70,10 @@ $item = $formSetup->newItem('WEBPORTAL_ROOT_URL')->setAsString();
 $item->nameText = $langs->transnoentities('UrlPublicInterfaceLabelAdmin');
 $item->fieldAttr = array('placeholder' => 'https://');
 $item->helpText = $langs->transnoentities('UrlPublicInterfaceHelpAdmin');
-require_once __DIR__ . '/../class/context.class.php';
 //$context = Context::getInstance();
 //$item->fieldOutputOverride = '<a target="_blank" href="'.Context::getRootConfigUrl().'" >'.img_picto('', 'globe', 'class="pictofixedwidth"').Context::getRootConfigUrl().'</a>';
 
-
 $formSetup->newItem('WEBPORTAL_TITLE')->defaultFieldValue = getDolGlobalString('MAIN_INFO_SOCIETE_NOM');
-
 
 // Enable access for the proposals
 if (isModEnabled('propal')) {

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2010 Regis Houssin  <regis.houssin@inodbox.com>
+/* Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,14 +19,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\ModeleNumRefProjects;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *   \file       htdocs/core/modules/project/mod_project_universal.php
  *   \ingroup    project
  *   \brief      File containing the Universal project reference numbering model class
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
-
 
 /**
  *  Class to manage the numbering module Universal for project references
@@ -36,7 +39,7 @@ class mod_project_universal extends ModeleNumRefProjects
     /**
      * @var DoliDB $db
      */
-    public $db;
+    //public $db;
 
     /**
      * Dolibarr version of the loaded document
@@ -61,12 +64,11 @@ class mod_project_universal extends ModeleNumRefProjects
      */
     public $name = 'Universal';
 
-
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -107,7 +109,7 @@ class mod_project_universal extends ModeleNumRefProjects
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -127,9 +129,9 @@ class mod_project_universal extends ModeleNumRefProjects
     /**
      *  Return next value
      *
-     *  @param   Societe        $objsoc     Object third party
-     *  @param   Project        $project    Object project
-     *  @return  string|0                   Value if OK, 0 if KO
+     * @param Societe $objsoc Object third party
+     * @param Project $project Object project
+     * @return  string|0                   Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $project)
     {
@@ -151,6 +153,6 @@ class mod_project_universal extends ModeleNumRefProjects
         $date = (empty($project->date_c) ? dol_now() : $project->date_c);
         $numFinal = get_next_value($db, $mask, 'projet', 'ref', '', (is_object($objsoc) ? $objsoc : ''), $date, 'next', false, null, $entity);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

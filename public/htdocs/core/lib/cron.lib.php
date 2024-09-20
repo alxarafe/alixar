@@ -1,7 +1,7 @@
 <?php
 
 /* Copyright (C) 2012 Nicolas Villa aka Boyquotes http://informetic.fr
- * Copyright (C) 2013 Florian Henry <florian.henry@opn-concept.pro>
+ * Copyright (C) 2013       Florian Henry               <florian.henry@opn-concept.pro>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,12 +18,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Cron\Classes\Cronjob;
+
 /**
  *  \file       core/lib/cron.lib.php
  *  \brief      Function for module cron
  *  \ingroup    cron
  */
-
 
 /**
  * Return array of tabs to used on pages to setup cron module.
@@ -57,7 +58,7 @@ function cronadmin_prepare_head()
 /**
  * Return array of tabs to used on a cron job
  *
- * @param   Cronjob $object     Object cron
+ * @param Cronjob $object Object cron
  * @return  array               Array of tabs
  */
 function cron_prepare_head(Cronjob $object)

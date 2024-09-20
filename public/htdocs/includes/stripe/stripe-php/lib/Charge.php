@@ -136,9 +136,9 @@ class Charge extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Charge the captured charge
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Charge the captured charge
      */
     public function capture($params = null, $opts = null)
     {
@@ -153,9 +153,9 @@ class Charge extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\SearchResult<Charge> the charge search results
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SearchResult<Charge> the charge search results
      */
     public static function search($params = null, $opts = null)
     {

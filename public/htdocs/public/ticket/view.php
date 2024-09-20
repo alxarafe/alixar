@@ -43,15 +43,13 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
@@ -61,11 +59,11 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 $langs->loadLangs(array("companies", "other", "ticket"));
 
 // Get parameters
-$action   = GETPOST('action', 'aZ09');
+$action = GETPOST('action', 'aZ09');
 $cancel = GETPOST('cancel', 'aZ09');
 
 $track_id = GETPOST('track_id', 'alpha');
-$email    = GETPOST('email', 'email');
+$email = GETPOST('email', 'email');
 $suffix = "";
 
 if (GETPOST('btn_view_ticket')) {
@@ -218,7 +216,6 @@ if (!empty($object->dao->id)) {
     $trackid = 'tic' . $object->dao->id;
 }
 include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
-
 
 
 /*
@@ -397,7 +394,7 @@ if ($action == "view_ticket" || $action == "presend" || $action == "close" || $a
             $baseurl = getDolGlobalString('TICKET_URL_PUBLIC_INTERFACE', constant('BASE_URL') . '/public/ticket/');
 
             $formticket->param = array('track_id' => $object->dao->track_id, 'fk_user_create' => '-1',
-                                       'returnurl' => $baseurl . 'view.php' . (!empty($entity) && isModEnabled('multicompany') ? '?entity=' . $entity : ''));
+                'returnurl' => $baseurl . 'view.php' . (!empty($entity) && isModEnabled('multicompany') ? '?entity=' . $entity : ''));
 
             $formticket->withfile = 2;
             $formticket->withcancel = 1;

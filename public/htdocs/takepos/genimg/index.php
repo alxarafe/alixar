@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018   Andreu Bisquerra    <jove@bisquerra.com>
+/* Copyright (C) 2018       Andreu Bisquerra            <jove@bisquerra.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Product\Classes\Product;
 
 // This page return an image of public photos of a category or product.
 // Test to check image can be publicly viewed is done inside the viewimage.php wrapper.
@@ -82,7 +83,6 @@ if ($query == "cat") {
     header('Location: ../../public/theme/common/nophoto.png');
     exit;
 } elseif ($query == "pro") {
-    require_once DOL_DOCUMENT_ROOT . "/product/class/product.class.php";
 
     $objProd = new Product($db);
     $objProd->fetch($id);

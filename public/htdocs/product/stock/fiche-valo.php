@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2008-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2006       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2008-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Entrepot;
 
 /**
  *  \file       htdocs/product/stock/fiche-valo.php
@@ -112,10 +115,6 @@ if ($id > 0) {
     $file = $conf->stock->dir_temp . '/entrepot-' . $entrepot->id . '-' . ($year) . '.png';
 
     // TODO Build graph in $file from a table called llx_stock_log
-
-
-
-
 
 
     if (file_exists($file)) {

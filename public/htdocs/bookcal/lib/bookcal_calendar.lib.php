@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2023 Alice Adminson <aadminson@example.com>
+/* Copyright (C) 2023       Alice Adminson              <aadminson@example.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +18,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\BookCal\Classes\Calendar;
+use Dolibarr\Code\Core\Classes\Link;
+
 /**
  * \file    htdocs/bookcal/lib/bookcal_calendar.lib.php
  * \ingroup bookcal
@@ -26,7 +30,7 @@
 /**
  * Prepare array of tabs for Calendar
  *
- * @param   Calendar    $object     Calendar
+ * @param Calendar $object Calendar
  * @return  array                   Array of tabs
  */
 function calendarPrepareHead($object)
@@ -84,7 +88,7 @@ function calendarPrepareHead($object)
 
     if ($showtabofpagedocument) {
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-            $upload_dir = $conf->bookcal->dir_output . "/calendar/" . dol_sanitizeFileName($object->ref);
+        $upload_dir = $conf->bookcal->dir_output . "/calendar/" . dol_sanitizeFileName($object->ref);
         $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
         $nbLinks = Link::count($db, $object->element, $object->id);
         $head[$h][0] = constant('BASE_URL') . '/bookcal/calendar_document.php?id=' . $object->id;

@@ -105,8 +105,6 @@ if ($filtertype != 1) {
 }
 
 
-
-
 print '<td class="linecoledit" style="width: 10px"></td>'; // No width to allow autodim
 
 print '<td class="linecoldelete" style="width: 10px"></td>';

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2008-2024 Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2008-2024  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -65,6 +65,7 @@ function llxHeaderVierge()
 {
     print '<html><title>Export agenda cal</title><body>';
 }
+
 /**
  * Footer function
  *
@@ -78,7 +79,7 @@ function llxFooterVierge()
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }

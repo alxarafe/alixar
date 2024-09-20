@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2020 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2020       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Recruitement\Classes\RecruitmentCandidature;
+use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
 use Dolibarr\Code\User\Classes\User;
 
 /**
@@ -28,8 +35,6 @@ use Dolibarr\Code\User\Classes\User;
 // Load Dolibarr environment
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentjobposition.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentcandidature.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/lib/recruitment_recruitmentcandidature.lib.php';
 
 // Load translation files required by the page
@@ -86,7 +91,6 @@ $upload_dir = $conf->recruitment->multidir_output[isset($object->entity) ? $obje
 //if ($user->socid > 0) $socid = $user->socid;
 $isdraft = (($object->status == $object::STATUS_DRAFT) ? 1 : 0);
 $result = restrictedArea($user, 'recruitment', $object->id, 'recruitment_recruitmentcandidature', 'recruitmentjobposition', '', 'rowid', $isdraft);
-
 
 /*
  * Actions
@@ -253,9 +257,6 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
 }
 
-
-
-
 /*
  * View
  *
@@ -267,7 +268,7 @@ $formfile = new FormFile($db);
 $formproject = new FormProjets($db);
 
 if ($action == 'create') {
-    $title    = $langs->trans('NewCandidature');
+    $title = $langs->trans('NewCandidature');
     $help_url = '';
 } else {
     $title = $object->ref . " - " . $langs->trans('Card');
@@ -647,7 +648,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/recruitment/recruitmentcandidature_agenda.php?id=' . $object->id);
 
         // List of actions on element
-                $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element . '@recruitment', (is_object($object->thirdparty) ? $object->thirdparty->id : 0), 1, '', $MAXEVENT, '', $morehtmlcenter);
 
         print '</div></div>';

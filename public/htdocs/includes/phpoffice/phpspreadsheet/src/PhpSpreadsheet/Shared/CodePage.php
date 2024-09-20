@@ -12,9 +12,9 @@ class CodePage
      *
      * @param int $codePage Microsoft Code Page Indentifier
      *
+     * @return string Code Page Name
      * @throws PhpSpreadsheetException
      *
-     * @return string Code Page Name
      */
     public static function numberToName($codePage)
     {

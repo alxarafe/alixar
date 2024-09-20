@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2022       Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2019       Thibault FOUCART     <support@ptibogxiv.net>
+/* Copyright (C) 2022       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2019       Thibault FOUCART            <support@ptibogxiv.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use OAuth\Common\Storage\DoliStorage;
+use OAuth\Common\Consumer\Credentials;
+
 /**
  *      \file       htdocs/core/modules/oauth/stripelive_oauthcallback.php
  *      \ingroup    oauth
@@ -27,8 +30,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/OAuth/bootstrap.php';
-use OAuth\Common\Storage\DoliStorage;
-use OAuth\Common\Consumer\Credentials;
 
 // Define $urlwithroot
 $urlwithouturlroot = preg_replace('/' . preg_quote(DOL_URL_ROOT, '/') . '$/i', '', trim($dolibarr_main_url_root));
@@ -92,7 +93,7 @@ if (GETPOST('state')) {
 //$apiService = $serviceFactory->createService('StripeTest', $credentials, $storage, $requestedpermissionsarray);
 
 $servicesuffix = ($keyforprovider ? '-' . $keyforprovider : '');
-$sql = "INSERT INTO " . MAIN_DB_PREFIX . "oauth_token SET service = 'StripeLive" . $db->escape($servicesuffix) . "', entity = " . ((int) $conf->entity);
+$sql = "INSERT INTO " . MAIN_DB_PREFIX . "oauth_token SET service = 'StripeLive" . $db->escape($servicesuffix) . "', entity = " . ((int)$conf->entity);
 $db->query($sql);
 
 // access type needed to have oauth provider refreshing token

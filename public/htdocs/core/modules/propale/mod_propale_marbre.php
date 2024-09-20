@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,14 +21,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Propale\Classes\ModeleNumRefPropales;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *      \file       htdocs/core/modules/propale/mod_propale_marbre.php
  *      \ingroup    propale
  *      \brief      File of class to manage commercial proposal numbering rules Marbre
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/propale/modules_propale.php';
-
 
 /**
  *  Class to manage business proposition rules Marbre
@@ -60,12 +63,11 @@ class mod_propale_marbre extends ModeleNumRefPropales
      */
     public $name = 'Marbre';
 
-
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -73,24 +75,22 @@ class mod_propale_marbre extends ModeleNumRefPropales
         return $langs->trans("SimpleNumRefModelDesc", $this->prefix);
     }
 
-
     /**
      *  Return an example of numbering module values
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
         return $this->prefix . "0501-0001";
     }
 
-
     /**
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object Object we need next value for
-     *  @return boolean                 false if KO (there is a conflict), true if OK
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                 false if KO (there is a conflict), true if OK
      */
     public function canBeActivated($object)
     {
@@ -126,9 +126,9 @@ class mod_propale_marbre extends ModeleNumRefPropales
     /**
      *  Return next value
      *
-     *  @param  Societe     $objsoc     Object third party
-     *  @param  Propal      $propal     Object commercial proposal
-     *  @return string|-1               Next value, -1 if KO
+     * @param Societe $objsoc Object third party
+     * @param Propal $propal Object commercial proposal
+     * @return string|-1               Next value, -1 if KO
      */
     public function getNextValue($objsoc, $propal)
     {
@@ -170,10 +170,10 @@ class mod_propale_marbre extends ModeleNumRefPropales
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc         Object third party
-     *  @param  Propal      $objforref      Object for number to search
-     *  @return string|-1                   Next free value, -1 if KO
-     *  @deprecated see getNextValue
+     * @param Societe $objsoc Object third party
+     * @param Propal $objforref Object for number to search
+     * @return string|-1                   Next free value, -1 if KO
+     * @deprecated see getNextValue
      */
     public function getNumRef($objsoc, $objforref)
     {

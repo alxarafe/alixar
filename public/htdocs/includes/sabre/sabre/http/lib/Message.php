@@ -54,7 +54,7 @@ abstract class Message implements MessageInterface
         }
         if (is_string($body) || null === $body) {
             $stream = fopen('php://temp', 'r+');
-            fwrite($stream, (string) $body);
+            fwrite($stream, (string)$body);
             rewind($stream);
 
             return $stream;
@@ -89,7 +89,7 @@ abstract class Message implements MessageInterface
          */
         $contentLength = $this->getHeader('Content-Length');
         if (null !== $contentLength && (is_int($contentLength) || ctype_digit($contentLength))) {
-            return stream_get_contents($body, (int) $contentLength);
+            return stream_get_contents($body, (int)$contentLength);
         }
 
         return stream_get_contents($body);
@@ -198,7 +198,7 @@ abstract class Message implements MessageInterface
      */
     public function setHeader(string $name, $value)
     {
-        $this->headers[strtolower($name)] = [$name, (array) $value];
+        $this->headers[strtolower($name)] = [$name, (array)$value];
     }
 
     /**
@@ -231,12 +231,12 @@ abstract class Message implements MessageInterface
         if (isset($this->headers[$lName])) {
             $this->headers[$lName][1] = array_merge(
                 $this->headers[$lName][1],
-                (array) $value
+                (array)$value
             );
         } else {
             $this->headers[$lName] = [
                 $name,
-                (array) $value,
+                (array)$value,
             ];
         }
     }

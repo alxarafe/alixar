@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2012-2013 Philippe Berthet     <berthet@systune.be>
- * Copyright (C) 2004-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2013-2015 Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2015-2017 Ferran Marcet		<fmarcet@2byte.es>
+/* Copyright (C) 2012-2013  Philippe Berthet            <berthet@systune.be>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2013-2015  Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015-2017  Ferran Marcet		        <fmarcet@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,8 +21,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ContratLigne;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/contact/consumption.php
@@ -34,9 +47,6 @@ use Dolibarr\Code\Comm\Classes\Propal;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contact.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
 
 $optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : str_replace('_', '', basename(dirname(__FILE__)) . basename(__FILE__, '.php')); // To manage different context of search
@@ -105,7 +115,6 @@ $reshook = $hookmanager->executeHooks('doActions', $parameters, $object, $action
 if ($reshook < 0) {
     setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 }
-
 
 /*
  * View
@@ -210,7 +219,7 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $sql_select = 'SELECT f.rowid as doc_id, f.ref as doc_number, \'1\' as doc_type, f.datec as dateprint, f.fk_statut as status, tc.libelle as type_contact_label, ';
     $tables_from = MAIN_DB_PREFIX . 'fichinterdet d';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'fichinter as f ON d.fk_fichinter=f.rowid';
-    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=f.rowid AND ec.fk_socpeople = ' . ((int) $object->id);
+    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=f.rowid AND ec.fk_socpeople = ' . ((int)$object->id);
     $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . "c_type_contact tc ON (ec.fk_c_type_contact=tc.rowid and tc.element='fichinter' and tc.source='external' and tc.active=1)";
     $where = ' WHERE f.entity IN (' . getEntity('intervention') . ')';
     $dateprint = 'f.datec';
@@ -221,7 +230,7 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $tables_from = MAIN_DB_PREFIX . 'facturedet d';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'facture as f ON d.fk_facture=f.rowid';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'product p ON d.fk_product=p.rowid';
-    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=f.rowid AND ec.fk_socpeople = ' . ((int) $object->id);
+    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=f.rowid AND ec.fk_socpeople = ' . ((int)$object->id);
     $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . "c_type_contact tc ON (ec.fk_c_type_contact=tc.rowid and tc.element='facture' and tc.source='external' and tc.active=1)";
     $where = " WHERE f.entity IN (" . getEntity('invoice') . ")";
     $dateprint = 'f.datef';
@@ -233,7 +242,7 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $tables_from = MAIN_DB_PREFIX . 'propaldet d';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'propal as c ON d.fk_propal=c.rowid';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'product p ON d.fk_product=p.rowid';
-    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=c.rowid AND ec.fk_socpeople = ' . ((int) $object->id);
+    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=c.rowid AND ec.fk_socpeople = ' . ((int)$object->id);
     $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . "c_type_contact tc ON (ec.fk_c_type_contact=tc.rowid and tc.element='propal' and tc.source='external' and tc.active=1)";
     $where = ' WHERE c.entity IN (' . getEntity('propal') . ')';
     $dateprint = 'c.datep';
@@ -245,7 +254,7 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $tables_from = MAIN_DB_PREFIX . 'commandedet d';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'commande as c ON d.fk_commande=c.rowid';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'product p ON d.fk_product=p.rowid';
-    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=c.rowid AND ec.fk_socpeople = ' . ((int) $object->id);
+    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=c.rowid AND ec.fk_socpeople = ' . ((int)$object->id);
     $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . "c_type_contact tc ON (ec.fk_c_type_contact=tc.rowid and tc.element='commande' and tc.source='external' and tc.active=1)";
     $where = ' WHERE c.entity IN (' . getEntity('order') . ')';
     $dateprint = 'c.date_commande';
@@ -257,7 +266,7 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $tables_from = MAIN_DB_PREFIX . 'facture_fourn_det d';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'facture_fourn as f ON d.fk_facture_fourn=f.rowid';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'product p ON d.fk_product=p.rowid';
-    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=f.rowid AND ec.fk_socpeople = ' . ((int) $object->id);
+    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=f.rowid AND ec.fk_socpeople = ' . ((int)$object->id);
     $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . "c_type_contact tc ON (ec.fk_c_type_contact=tc.rowid and tc.element='invoice_supplier' and tc.source='external' and tc.active=1)";
     $where = ' WHERE f.entity IN (' . getEntity($documentstatic->element) . ')';
     $dateprint = 'f.datef';
@@ -281,7 +290,7 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $tables_from = MAIN_DB_PREFIX . 'commande_fournisseurdet d';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'commande_fournisseur as c ON d.fk_commande=c.rowid';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'product p ON d.fk_product=p.rowid';
-    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=c.rowid AND ec.fk_socpeople = ' . ((int) $object->id);
+    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=c.rowid AND ec.fk_socpeople = ' . ((int)$object->id);
     $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . "c_type_contact tc ON (ec.fk_c_type_contact=tc.rowid and tc.element='order_supplier' and tc.source='external' and tc.active=1)";
     $where = ' WHERE c.entity IN (' . getEntity($documentstatic->element) . ')';
     $dateprint = 'c.date_valid';
@@ -294,7 +303,7 @@ if ($type_element == 'fichinter') {     // Customer : show products from invoice
     $tables_from = MAIN_DB_PREFIX . 'contratdet d';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'contrat as c ON d.fk_contrat=c.rowid';
     $tables_from .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'product p ON d.fk_product=p.rowid';
-    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=c.rowid AND ec.fk_socpeople = ' . ((int) $object->id);
+    $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . 'element_contact ec ON ec.element_id=c.rowid AND ec.fk_socpeople = ' . ((int)$object->id);
     $tables_from .= ' INNER JOIN ' . MAIN_DB_PREFIX . "c_type_contact tc ON (ec.fk_c_type_contact=tc.rowid and tc.element='contrat' and tc.source='external' and tc.active=1)";
     $where = ' WHERE c.entity IN (' . getEntity('contrat') . ')';
     $dateprint = 'c.date_valid';
@@ -365,7 +374,7 @@ $param .= "&month=" . urlencode($month);
 $param .= "&year=" . urlencode($year);
 $param .= "&sprod_fulldescr=" . urlencode($sprod_fulldescr);
 if (!empty($socid)) {
-    $param .= "&socid=" . urlencode((string) ($socid));
+    $param .= "&socid=" . urlencode((string)($socid));
 }
 $param .= "&type_element=" . urlencode($type_element);
 
@@ -379,12 +388,12 @@ if ($sql_select) {
 
     $num = $db->num_rows($resql);
 
-    $param = (!empty($socid) ? "&socid=" . urlencode((string) ($socid)) : "") . "&type_element=" . urlencode((string) ($type_element)) . "&id=" . urlencode((string) ($id));
+    $param = (!empty($socid) ? "&socid=" . urlencode((string)($socid)) : "") . "&type_element=" . urlencode((string)($type_element)) . "&id=" . urlencode((string)($id));
     if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($sprod_fulldescr) {
         $param .= "&sprod_fulldescr=" . urlencode($sprod_fulldescr);
@@ -393,10 +402,10 @@ if ($sql_select) {
         $param .= "&sref=" . urlencode($sref);
     }
     if ($month) {
-        $param .= "&month=" . urlencode((string) ($month));
+        $param .= "&month=" . urlencode((string)($month));
     }
     if ($year) {
-        $param .= "&year=" . urlencode((string) ($year));
+        $param .= "&year=" . urlencode((string)($year));
     }
     if ($optioncss != '') {
         $param .= '&optioncss=' . urlencode($optioncss);
@@ -545,26 +554,26 @@ if ($sql_select) {
                 if ($objp->description == '(CREDIT_NOTE)' && $objp->fk_remise_except > 0) {
                     $discount = new DiscountAbsolute($db);
                     $discount->fetch($objp->fk_remise_except);
-                    echo($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromCreditNote", $discount->getNomUrl(0));
+                    echo ($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromCreditNote", $discount->getNomUrl(0));
                 }
                 if ($objp->description == '(EXCESS RECEIVED)' && $objp->fk_remise_except > 0) {
                     $discount = new DiscountAbsolute($db);
                     $discount->fetch($objp->fk_remise_except);
-                    echo($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromExcessReceived", $discount->getNomUrl(0));
+                    echo ($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromExcessReceived", $discount->getNomUrl(0));
                 } elseif ($objp->description == '(EXCESS PAID)' && $objp->fk_remise_except > 0) {
                     $discount = new DiscountAbsolute($db);
                     $discount->fetch($objp->fk_remise_except);
-                    echo($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromExcessPaid", $discount->getNomUrl(0));
+                    echo ($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromExcessPaid", $discount->getNomUrl(0));
                 } elseif ($objp->description == '(DEPOSIT)' && $objp->fk_remise_except > 0) {
                     $discount = new DiscountAbsolute($db);
                     $discount->fetch($objp->fk_remise_except);
-                    echo($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromDeposit", $discount->getNomUrl(0));
+                    echo ($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromDeposit", $discount->getNomUrl(0));
                     // Add date of deposit
                     if (getDolGlobalString('INVOICE_ADD_DEPOSIT_DATE')) {
                         echo ' (' . dol_print_date($discount->datec) . ')';
                     }
                 } else {
-                    echo($txt ? ' - ' : '') . dol_htmlentitiesbr($objp->description);
+                    echo ($txt ? ' - ' : '') . dol_htmlentitiesbr($objp->description);
                 }
             }
         } else {

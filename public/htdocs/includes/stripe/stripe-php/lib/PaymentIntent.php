@@ -80,9 +80,9 @@ class PaymentIntent extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\PaymentIntent the applied payment intent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\PaymentIntent the applied payment intent
      */
     public function applyCustomerBalance($params = null, $opts = null)
     {
@@ -97,9 +97,9 @@ class PaymentIntent extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\PaymentIntent the canceled payment intent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\PaymentIntent the canceled payment intent
      */
     public function cancel($params = null, $opts = null)
     {
@@ -114,9 +114,9 @@ class PaymentIntent extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\PaymentIntent the captured payment intent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\PaymentIntent the captured payment intent
      */
     public function capture($params = null, $opts = null)
     {
@@ -131,9 +131,9 @@ class PaymentIntent extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\PaymentIntent the confirmed payment intent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\PaymentIntent the confirmed payment intent
      */
     public function confirm($params = null, $opts = null)
     {
@@ -148,9 +148,9 @@ class PaymentIntent extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\PaymentIntent the incremented payment intent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\PaymentIntent the incremented payment intent
      */
     public function incrementAuthorization($params = null, $opts = null)
     {
@@ -165,9 +165,9 @@ class PaymentIntent extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\PaymentIntent the verified payment intent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\PaymentIntent the verified payment intent
      */
     public function verifyMicrodeposits($params = null, $opts = null)
     {
@@ -182,9 +182,9 @@ class PaymentIntent extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\SearchResult<PaymentIntent> the payment intent search results
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SearchResult<PaymentIntent> the payment intent search results
      */
     public static function search($params = null, $opts = null)
     {

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2012	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2019       Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2012	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2019       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *      \file       htdocs/salaries/admin/salaries_extrafields.php
@@ -46,14 +49,11 @@ if (!$user->admin) {
     accessforbidden();
 }
 
-
 /*
  * Actions
  */
 
 require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
-
-
 
 /*
  * View

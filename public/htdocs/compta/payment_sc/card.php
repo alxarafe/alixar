@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2014  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005       Marc Barilley / Ocebo   <marc@ocebo.com>
- * Copyright (C) 2005-2009  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2022       Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Compta\Classes\PaymentSocialContribution;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/compta/payment_sc/card.php
  *      \ingroup    tax
@@ -30,9 +35,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/paymentsocialcontribution.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/facture/modules_facture.php';
 if (isModEnabled("bank")) {
 }
 
@@ -177,7 +179,7 @@ $sql = 'SELECT f.rowid as scid, f.libelle as label, f.paye, f.amount as sc_amoun
 $sql .= ' FROM ' . MAIN_DB_PREFIX . 'paiementcharge as pf,' . MAIN_DB_PREFIX . 'chargesociales as f, ' . MAIN_DB_PREFIX . 'c_chargesociales as pc';
 $sql .= ' WHERE pf.fk_charge = f.rowid AND f.fk_type = pc.id';
 $sql .= ' AND f.entity = ' . $conf->entity;
-$sql .= ' AND pf.rowid = ' . ((int) $object->id);
+$sql .= ' AND pf.rowid = ' . ((int)$object->id);
 
 dol_syslog("compta/payment_sc/card.php", LOG_DEBUG);
 $resql = $db->query($sql);
@@ -234,7 +236,6 @@ if ($resql) {
 } else {
     dol_print_error($db);
 }
-
 
 
 /*

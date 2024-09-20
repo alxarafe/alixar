@@ -909,7 +909,6 @@ class Notify
                                 break;
                         }
 
-                        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                         $formmail = new FormMail($this->db);
                         $arraydefaultmessage = null;
 
@@ -1218,7 +1217,6 @@ class Notify
                 $mailTemplateLabel = getDolGlobalString($notifcode . '_TEMPLATE');
                 $emailTemplate = null;
                 if (!empty($mailTemplateLabel)) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                     $formmail = new FormMail($this->db);
                     $emailTemplate = $formmail->getEMailTemplate($this->db, $object_type . '_send', $user, $outputlangs, 0, 1, $mailTemplateLabel);
                 }

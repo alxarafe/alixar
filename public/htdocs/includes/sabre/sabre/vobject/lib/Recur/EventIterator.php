@@ -89,8 +89,8 @@ class EventIterator implements \Iterator
      * The $uid parameter is only required for the first method.
      *
      * @param Component|array $input
-     * @param string|null     $uid
-     * @param DateTimeZone    $timeZone reference timezone for floating dates and
+     * @param string|null $uid
+     * @param DateTimeZone $timeZone reference timezone for floating dates and
      *                                  times
      */
     public function __construct($input, $uid = null, DateTimeZone $timeZone = null)
@@ -107,7 +107,7 @@ class EventIterator implements \Iterator
             $events = [$input];
         } else {
             // Calendar + UID mode.
-            $uid = (string) $uid;
+            $uid = (string)$uid;
             if (!$uid) {
                 throw new InvalidArgumentException('The UID argument is required when a VCALENDAR is passed to this constructor');
             }
@@ -121,9 +121,7 @@ class EventIterator implements \Iterator
             if (!isset($vevent->{'RECURRENCE-ID'})) {
                 $this->masterEvent = $vevent;
             } else {
-                $this->exceptions[
-                    $vevent->{'RECURRENCE-ID'}->getDateTime($this->timeZone)->getTimeStamp()
-                ] = true;
+                $this->exceptions[$vevent->{'RECURRENCE-ID'}->getDateTime($this->timeZone)->getTimeStamp()] = true;
                 $this->overriddenEvents[] = $vevent;
             }
         }
@@ -306,7 +304,7 @@ class EventIterator implements \Iterator
             throw new MaxInstancesExceededException('Recurring events are only allowed to generate ' . Settings::$maxRecurrences);
         }
 
-        return (bool) $this->currentDate;
+        return (bool)$this->currentDate;
     }
 
     /**

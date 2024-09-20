@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2004-2023  Laurent Destailleur      <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2024  Alexandre Spangaro       <aspangaro@easya.solutions>
+/* Copyright (C) 2004-2023  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,6 +21,10 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormCompany;
 
 /**
  *      \file       htdocs/accountancy/admin/categories_list.php
@@ -32,9 +36,7 @@ use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("errors", "admin", "companies", "resource", "holiday", "accountancy", "hrm"));
@@ -899,7 +901,7 @@ if ($resql) {
                 print '</td>';
 
                 // Active
-                print '<td class="center" class="nowrap">';
+                print '<td class="center nowrap">';
                 if ($canbedisabled) {
                     print '<a href="' . $url . 'action=' . $acts[$obj->active] . '">' . $actl[$obj->active] . '</a>';
                 } else {

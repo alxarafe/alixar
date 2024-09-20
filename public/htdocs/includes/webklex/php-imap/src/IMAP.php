@@ -158,7 +158,7 @@ class IMAP
      * @const integer IMAP_GC_ENV
      * @const integer IMAP_GC_TEXTS
      */
-    
+
     const NIL = 0;
     const IMAP_OPENTIMEOUT = 1;
     const IMAP_READTIMEOUT = 2;

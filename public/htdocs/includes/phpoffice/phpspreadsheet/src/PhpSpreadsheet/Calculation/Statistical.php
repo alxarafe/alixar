@@ -43,16 +43,16 @@ class Statistical
     /**
      * Incomplete beta function.
      *
-     * @author Jaco van Kooten
-     * @author Paul Meagher
-     *
-     * The computation is based on formulas from Numerical Recipes, Chapter 6.4 (W.H. Press et al, 1992).
-     *
      * @param mixed $x require 0<=x<=1
      * @param mixed $p require p>0
      * @param mixed $q require q>0
      *
      * @return float 0 if x<0, p<=0, q<=0 or p+q>2.55E305 and 1 if x>1 to avoid errors and over/underflow
+     * @author Jaco van Kooten
+     * @author Paul Meagher
+     *
+     * The computation is based on formulas from Numerical Recipes, Chapter 6.4 (W.H. Press et al, 1992).
+     *
      */
     private static function incompleteBeta($x, $p, $q)
     {
@@ -107,13 +107,13 @@ class Statistical
      * Evaluates of continued fraction part of incomplete beta function.
      * Based on an idea from Numerical Recipes (W.H. Press et al, 1992).
      *
-     * @author Jaco van Kooten
-     *
      * @param mixed $x
      * @param mixed $p
      * @param mixed $q
      *
      * @return float
+     * @author Jaco van Kooten
+     *
      */
     private static function betaFraction($x, $p, $q)
     {
@@ -165,8 +165,7 @@ class Statistical
     /**
      * logGamma function.
      *
-     * @version 1.1
-     *
+     * @return float MAX_VALUE for x < 0.0 or when overflow would occur, i.e. x > 2.55E305
      * @author Jaco van Kooten
      *
      * Original author was Jaco van Kooten. Ported to PHP by Paul Meagher.
@@ -204,7 +203,8 @@ class Statistical
      * The computation is believed to be free of underflow and overflow.
      * </p>
      *
-     * @return float MAX_VALUE for x < 0.0 or when overflow would occur, i.e. x > 2.55E305
+     * @version 1.1
+     *
      */
 
     // Function cache for logGamma
@@ -499,20 +499,20 @@ class Statistical
             $q = sqrt(-2 * log($p));
 
             return ((((($c[1] * $q + $c[2]) * $q + $c[3]) * $q + $c[4]) * $q + $c[5]) * $q + $c[6]) /
-                    (((($d[1] * $q + $d[2]) * $q + $d[3]) * $q + $d[4]) * $q + 1);
+                (((($d[1] * $q + $d[2]) * $q + $d[3]) * $q + $d[4]) * $q + 1);
         } elseif ($p_low <= $p && $p <= $p_high) {
             //    Rational approximation for central region.
             $q = $p - 0.5;
             $r = $q * $q;
 
             return ((((($a[1] * $r + $a[2]) * $r + $a[3]) * $r + $a[4]) * $r + $a[5]) * $r + $a[6]) * $q /
-                   ((((($b[1] * $r + $b[2]) * $r + $b[3]) * $r + $b[4]) * $r + $b[5]) * $r + 1);
+                ((((($b[1] * $r + $b[2]) * $r + $b[3]) * $r + $b[4]) * $r + $b[5]) * $r + 1);
         } elseif ($p_high < $p && $p < 1) {
             //    Rational approximation for upper region.
             $q = sqrt(-2 * log(1 - $p));
 
             return -((((($c[1] * $q + $c[2]) * $q + $c[3]) * $q + $c[4]) * $q + $c[5]) * $q + $c[6]) /
-                     (((($d[1] * $q + $d[2]) * $q + $d[3]) * $q + $d[4]) * $q + 1);
+                (((($d[1] * $q + $d[2]) * $q + $d[3]) * $q + $d[4]) * $q + 1);
         }
         //    If 0 < p < 1, return a null value
         return Functions::NULL();
@@ -535,7 +535,7 @@ class Statistical
             ((!Functions::isCellValue($k) && (Functions::getCompatibilityMode() === Functions::COMPATIBILITY_EXCEL)) ||
                 (Functions::getCompatibilityMode() === Functions::COMPATIBILITY_OPENOFFICE))
         ) {
-            $arg = (int) $arg;
+            $arg = (int)$arg;
         }
 
         return $arg;
@@ -551,8 +551,8 @@ class Statistical
     {
         if (
             ((is_numeric($arg)) && (!is_string($arg))) ||
-                ((is_numeric($arg)) && (!Functions::isCellValue($k)) &&
-                    (Functions::getCompatibilityMode() !== Functions::COMPATIBILITY_GNUMERIC))
+            ((is_numeric($arg)) && (!Functions::isCellValue($k)) &&
+                (Functions::getCompatibilityMode() !== Functions::COMPATIBILITY_GNUMERIC))
         ) {
             return true;
         }
@@ -569,11 +569,11 @@ class Statistical
      * Excel Function:
      *        AVEDEV(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string
+     * @category Statistical Functions
+     *
      */
     public static function AVEDEV(...$args)
     {
@@ -620,11 +620,11 @@ class Statistical
      * Excel Function:
      *        AVERAGE(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string
+     * @category Statistical Functions
+     *
      */
     public static function AVERAGE(...$args)
     {
@@ -661,11 +661,11 @@ class Statistical
      * Excel Function:
      *        AVERAGEA(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string
+     * @category Statistical Functions
+     *
      */
     public static function AVERAGEA(...$args)
     {
@@ -681,7 +681,7 @@ class Statistical
             } else {
                 if ((is_numeric($arg)) || (is_bool($arg)) || ((is_string($arg) && ($arg != '')))) {
                     if (is_bool($arg)) {
-                        $arg = (int) $arg;
+                        $arg = (int)$arg;
                     } elseif (is_string($arg)) {
                         $arg = 0;
                     }
@@ -706,13 +706,13 @@ class Statistical
      * Excel Function:
      *        AVERAGEIF(value1[,value2[, ...]],condition)
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param mixed $aArgs Data values
      * @param string $condition the criteria that defines which cells will be checked
      * @param mixed[] $averageArgs Data values
      *
      * @return float|string
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function AVERAGEIF($aArgs, $condition, $averageArgs = [])
     {
@@ -1059,11 +1059,11 @@ class Statistical
      * Excel Function:
      *        COUNT(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return int
+     * @category Statistical Functions
+     *
      */
     public static function COUNT(...$args)
     {
@@ -1092,11 +1092,11 @@ class Statistical
      * Excel Function:
      *        COUNTA(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return int
+     * @category Statistical Functions
+     *
      */
     public static function COUNTA(...$args)
     {
@@ -1122,11 +1122,11 @@ class Statistical
      * Excel Function:
      *        COUNTBLANK(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return int
+     * @category Statistical Functions
+     *
      */
     public static function COUNTBLANK(...$args)
     {
@@ -1152,12 +1152,12 @@ class Statistical
      * Excel Function:
      *        COUNTIF(value1[,value2[, ...]],condition)
      *
-     * @category Statistical Functions
-     *
      * @param mixed $aArgs Data values
      * @param string $condition the criteria that defines which cells will be counted
      *
      * @return int
+     * @category Statistical Functions
+     *
      */
     public static function COUNTIF($aArgs, $condition)
     {
@@ -1194,11 +1194,11 @@ class Statistical
      * Excel Function:
      *        COUNTIFS(criteria_range1, criteria1, [criteria_range2, criteria2]…)
      *
-     * @category Statistical Functions
-     *
      * @param mixed $args Criterias
      *
      * @return int
+     * @category Statistical Functions
+     *
      */
     public static function COUNTIFS(...$args)
     {
@@ -1313,7 +1313,7 @@ class Statistical
         $alpha = Functions::flattenSingleValue($alpha);
 
         if ((is_numeric($trials)) && (is_numeric($probability)) && (is_numeric($alpha))) {
-            $trials = (int) $trials;
+            $trials = (int)$trials;
             if ($trials < 0) {
                 return Functions::NAN();
             } elseif (($probability < 0.0) || ($probability > 1.0)) {
@@ -1422,11 +1422,11 @@ class Statistical
      * Excel Function:
      *        DEVSQ(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string
+     * @category Statistical Functions
+     *
      */
     public static function DEVSQ(...$args)
     {
@@ -1443,9 +1443,9 @@ class Statistical
                 if (
                     (is_bool($arg)) &&
                     ((!Functions::isCellValue($k)) ||
-                    (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE))
+                        (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE))
                 ) {
-                    $arg = (int) $arg;
+                    $arg = (int)$arg;
                 }
                 if ((is_numeric($arg)) && (!is_string($arg))) {
                     if ($returnValue === null) {
@@ -1715,11 +1715,11 @@ class Statistical
      * Excel Function:
      *        GEOMEAN(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string
+     * @category Statistical Functions
+     *
      */
     public static function GEOMEAN(...$args)
     {
@@ -1753,7 +1753,7 @@ class Statistical
         $yValues = Functions::flattenArray($yValues);
         $xValues = Functions::flattenArray($xValues);
         $newValues = Functions::flattenArray($newValues);
-        $const = ($const === null) ? true : (bool) Functions::flattenSingleValue($const);
+        $const = ($const === null) ? true : (bool)Functions::flattenSingleValue($const);
 
         $bestFitExponential = Trend::calculate(Trend::TREND_EXPONENTIAL, $yValues, $xValues, $const);
         if (empty($newValues)) {
@@ -1777,11 +1777,11 @@ class Statistical
      * Excel Function:
      *        HARMEAN(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string
+     * @category Statistical Functions
+     *
      */
     public static function HARMEAN(...$args)
     {
@@ -1845,8 +1845,8 @@ class Statistical
             }
 
             return MathTrig::COMBIN($populationSuccesses, $sampleSuccesses) *
-                   MathTrig::COMBIN($populationNumber - $populationSuccesses, $sampleNumber - $sampleSuccesses) /
-                   MathTrig::COMBIN($populationNumber, $sampleNumber);
+                MathTrig::COMBIN($populationNumber - $populationSuccesses, $sampleNumber - $sampleSuccesses) /
+                MathTrig::COMBIN($populationNumber, $sampleNumber);
         }
 
         return Functions::VALUE();
@@ -1934,12 +1934,12 @@ class Statistical
      * Excel Function:
      *        LARGE(value1[,value2[, ...]],entry)
      *
-     * @category Statistical Functions
-     *
      * @param mixed $args Data values
      * @param int $entry Position (ordered from the largest) in the array or range of data to return
      *
      * @return float|string The result, or a string containing an error
+     * @category Statistical Functions
+     *
      */
     public static function LARGE(...$args)
     {
@@ -1984,8 +1984,8 @@ class Statistical
      */
     public static function LINEST($yValues, $xValues = null, $const = true, $stats = false)
     {
-        $const = ($const === null) ? true : (bool) Functions::flattenSingleValue($const);
-        $stats = ($stats === null) ? false : (bool) Functions::flattenSingleValue($stats);
+        $const = ($const === null) ? true : (bool)Functions::flattenSingleValue($const);
+        $stats = ($stats === null) ? false : (bool)Functions::flattenSingleValue($stats);
         if ($xValues === null) {
             $xValues = range(1, count(Functions::flattenArray($yValues)));
         }
@@ -2023,9 +2023,9 @@ class Statistical
         }
 
         return [
-                $bestFitLinear->getSlope(),
-                $bestFitLinear->getIntersect(),
-            ];
+            $bestFitLinear->getSlope(),
+            $bestFitLinear->getIntersect(),
+        ];
     }
 
     /**
@@ -2043,8 +2043,8 @@ class Statistical
      */
     public static function LOGEST($yValues, $xValues = null, $const = true, $stats = false)
     {
-        $const = ($const === null) ? true : (bool) Functions::flattenSingleValue($const);
-        $stats = ($stats === null) ? false : (bool) Functions::flattenSingleValue($stats);
+        $const = ($const === null) ? true : (bool)Functions::flattenSingleValue($const);
+        $stats = ($stats === null) ? false : (bool)Functions::flattenSingleValue($stats);
         if ($xValues === null) {
             $xValues = range(1, count(Functions::flattenArray($yValues)));
         }
@@ -2088,9 +2088,9 @@ class Statistical
         }
 
         return [
-                $bestFitExponential->getSlope(),
-                $bestFitExponential->getIntersect(),
-            ];
+            $bestFitExponential->getSlope(),
+            $bestFitExponential->getIntersect(),
+        ];
     }
 
     /**
@@ -2163,11 +2163,11 @@ class Statistical
      * Excel Function:
      *        MAX(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float
+     * @category Statistical Functions
+     *
      */
     public static function MAX(...$args)
     {
@@ -2199,11 +2199,11 @@ class Statistical
      * Excel Function:
      *        MAXA(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float
+     * @category Statistical Functions
+     *
      */
     public static function MAXA(...$args)
     {
@@ -2215,7 +2215,7 @@ class Statistical
             // Is it a numeric value?
             if ((is_numeric($arg)) || (is_bool($arg)) || ((is_string($arg) && ($arg != '')))) {
                 if (is_bool($arg)) {
-                    $arg = (int) $arg;
+                    $arg = (int)$arg;
                 } elseif (is_string($arg)) {
                     $arg = 0;
                 }
@@ -2240,11 +2240,11 @@ class Statistical
      * Excel Function:
      *        MAXIFS(max_range, criteria_range1, criteria1, [criteria_range2, criteria2], ...)
      *
-     * @category Statistical Functions
-     *
      * @param mixed $args Data range and criterias
      *
      * @return float
+     * @category Statistical Functions
+     *
      */
     public static function MAXIFS(...$args)
     {
@@ -2299,11 +2299,11 @@ class Statistical
      * Excel Function:
      *        MEDIAN(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string The result, or a string containing an error
+     * @category Statistical Functions
+     *
      */
     public static function MEDIAN(...$args)
     {
@@ -2343,11 +2343,11 @@ class Statistical
      * Excel Function:
      *        MIN(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float
+     * @category Statistical Functions
+     *
      */
     public static function MIN(...$args)
     {
@@ -2379,11 +2379,11 @@ class Statistical
      * Excel Function:
      *        MINA(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float
+     * @category Statistical Functions
+     *
      */
     public static function MINA(...$args)
     {
@@ -2395,7 +2395,7 @@ class Statistical
             // Is it a numeric value?
             if ((is_numeric($arg)) || (is_bool($arg)) || ((is_string($arg) && ($arg != '')))) {
                 if (is_bool($arg)) {
-                    $arg = (int) $arg;
+                    $arg = (int)$arg;
                 } elseif (is_string($arg)) {
                     $arg = 0;
                 }
@@ -2420,11 +2420,11 @@ class Statistical
      * Excel Function:
      *        MINIFS(min_range, criteria_range1, criteria1, [criteria_range2, criteria2], ...)
      *
-     * @category Statistical Functions
-     *
      * @param mixed $args Data range and criterias
      *
      * @return float
+     * @category Statistical Functions
+     *
      */
     public static function MINIFS(...$args)
     {
@@ -2481,7 +2481,7 @@ class Statistical
         foreach ($data as $datum) {
             $found = false;
             foreach ($frequencyArray as $key => $value) {
-                if ((string) $value['value'] == (string) $datum) {
+                if ((string)$value['value'] == (string)$datum) {
                     ++$frequencyArray[$key]['frequency'];
                     $found = true;
 
@@ -2517,11 +2517,11 @@ class Statistical
      * Excel Function:
      *        MODE(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string The result, or a string containing an error
+     * @category Statistical Functions
+     *
      */
     public static function MODE(...$args)
     {
@@ -2691,12 +2691,12 @@ class Statistical
      * Excel Function:
      *        PERCENTILE(value1[,value2[, ...]],entry)
      *
-     * @category Statistical Functions
-     *
      * @param mixed $args Data values
      * @param float $entry Percentile value in the range 0..1, inclusive.
      *
      * @return float|string The result, or a string containing an error
+     * @category Statistical Functions
+     *
      */
     public static function PERCENTILE(...$args)
     {
@@ -2750,7 +2750,7 @@ class Statistical
     {
         $valueSet = Functions::flattenArray($valueSet);
         $value = Functions::flattenSingleValue($value);
-        $significance = ($significance === null) ? 3 : (int) Functions::flattenSingleValue($significance);
+        $significance = ($significance === null) ? 3 : (int)Functions::flattenSingleValue($significance);
 
         foreach ($valueSet as $key => $valueEntry) {
             if (!is_numeric($valueEntry)) {
@@ -2861,12 +2861,12 @@ class Statistical
      * Excel Function:
      *        QUARTILE(value1[,value2[, ...]],entry)
      *
-     * @category Statistical Functions
-     *
      * @param mixed $args Data values
      * @param int $entry Quartile value in the range 1..3, inclusive.
      *
      * @return float|string The result, or a string containing an error
+     * @category Statistical Functions
+     *
      */
     public static function QUARTILE(...$args)
     {
@@ -2902,7 +2902,7 @@ class Statistical
     {
         $value = Functions::flattenSingleValue($value);
         $valueSet = Functions::flattenArray($valueSet);
-        $order = ($order === null) ? 0 : (int) Functions::flattenSingleValue($order);
+        $order = ($order === null) ? 0 : (int)Functions::flattenSingleValue($order);
 
         foreach ($valueSet as $key => $valueEntry) {
             if (!is_numeric($valueEntry)) {
@@ -3031,12 +3031,12 @@ class Statistical
      * Excel Function:
      *        SMALL(value1[,value2[, ...]],entry)
      *
-     * @category Statistical Functions
-     *
      * @param mixed $args Data values
      * @param int $entry Position (ordered from the smallest) in the array or range of data to return
      *
      * @return float|string The result, or a string containing an error
+     * @category Statistical Functions
+     *
      */
     public static function SMALL(...$args)
     {
@@ -3103,11 +3103,11 @@ class Statistical
      * Excel Function:
      *        STDEV(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string The result, or a string containing an error
+     * @category Statistical Functions
+     *
      */
     public static function STDEV(...$args)
     {
@@ -3124,7 +3124,7 @@ class Statistical
                     (is_bool($arg)) &&
                     ((!Functions::isCellValue($k)) || (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE))
                 ) {
-                    $arg = (int) $arg;
+                    $arg = (int)$arg;
                 }
                 // Is it a numeric value?
                 if ((is_numeric($arg)) && (!is_string($arg))) {
@@ -3154,11 +3154,11 @@ class Statistical
      * Excel Function:
      *        STDEVA(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string
+     * @category Statistical Functions
+     *
      */
     public static function STDEVA(...$args)
     {
@@ -3178,7 +3178,7 @@ class Statistical
                     // Is it a numeric value?
                     if ((is_numeric($arg)) || (is_bool($arg)) || ((is_string($arg) & ($arg != '')))) {
                         if (is_bool($arg)) {
-                            $arg = (int) $arg;
+                            $arg = (int)$arg;
                         } elseif (is_string($arg)) {
                             $arg = 0;
                         }
@@ -3208,11 +3208,11 @@ class Statistical
      * Excel Function:
      *        STDEVP(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string
+     * @category Statistical Functions
+     *
      */
     public static function STDEVP(...$args)
     {
@@ -3228,7 +3228,7 @@ class Statistical
                     (is_bool($arg)) &&
                     ((!Functions::isCellValue($k)) || (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE))
                 ) {
-                    $arg = (int) $arg;
+                    $arg = (int)$arg;
                 }
                 // Is it a numeric value?
                 if ((is_numeric($arg)) && (!is_string($arg))) {
@@ -3257,11 +3257,11 @@ class Statistical
      * Excel Function:
      *        STDEVPA(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string
+     * @category Statistical Functions
+     *
      */
     public static function STDEVPA(...$args)
     {
@@ -3281,7 +3281,7 @@ class Statistical
                     // Is it a numeric value?
                     if ((is_numeric($arg)) || (is_bool($arg)) || ((is_string($arg) & ($arg != '')))) {
                         if (is_bool($arg)) {
-                            $arg = (int) $arg;
+                            $arg = (int)$arg;
                         } elseif (is_string($arg)) {
                             $arg = 0;
                         }
@@ -3472,7 +3472,7 @@ class Statistical
         $yValues = Functions::flattenArray($yValues);
         $xValues = Functions::flattenArray($xValues);
         $newValues = Functions::flattenArray($newValues);
-        $const = ($const === null) ? true : (bool) Functions::flattenSingleValue($const);
+        $const = ($const === null) ? true : (bool)Functions::flattenSingleValue($const);
 
         $bestFitLinear = Trend::calculate(Trend::TREND_LINEAR, $yValues, $xValues, $const);
         if (empty($newValues)) {
@@ -3497,12 +3497,12 @@ class Statistical
      * Excel Function:
      *        TRIMEAN(value1[,value2[, ...]], $discard)
      *
-     * @category Statistical Functions
-     *
      * @param mixed $args Data values
      * @param float $discard Percentage to discard
      *
      * @return float|string
+     * @category Statistical Functions
+     *
      */
     public static function TRIMMEAN(...$args)
     {
@@ -3543,11 +3543,11 @@ class Statistical
      * Excel Function:
      *        VAR(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float
+     * @category Statistical Functions
+     *
      */
     public static function VARFunc(...$args)
     {
@@ -3560,7 +3560,7 @@ class Statistical
         $aCount = 0;
         foreach ($aArgs as $arg) {
             if (is_bool($arg)) {
-                $arg = (int) $arg;
+                $arg = (int)$arg;
             }
             // Is it a numeric value?
             if ((is_numeric($arg)) && (!is_string($arg))) {
@@ -3587,11 +3587,11 @@ class Statistical
      * Excel Function:
      *        VARA(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float
+     * @category Statistical Functions
+     *
      */
     public static function VARA(...$args)
     {
@@ -3616,7 +3616,7 @@ class Statistical
                 // Is it a numeric value?
                 if ((is_numeric($arg)) || (is_bool($arg)) || ((is_string($arg) & ($arg != '')))) {
                     if (is_bool($arg)) {
-                        $arg = (int) $arg;
+                        $arg = (int)$arg;
                     } elseif (is_string($arg)) {
                         $arg = 0;
                     }
@@ -3644,11 +3644,11 @@ class Statistical
      * Excel Function:
      *        VARP(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float
+     * @category Statistical Functions
+     *
      */
     public static function VARP(...$args)
     {
@@ -3662,7 +3662,7 @@ class Statistical
         $aCount = 0;
         foreach ($aArgs as $arg) {
             if (is_bool($arg)) {
-                $arg = (int) $arg;
+                $arg = (int)$arg;
             }
             // Is it a numeric value?
             if ((is_numeric($arg)) && (!is_string($arg))) {
@@ -3689,11 +3689,11 @@ class Statistical
      * Excel Function:
      *        VARPA(value1[,value2[, ...]])
      *
-     * @category Statistical Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float
+     * @category Statistical Functions
+     *
      */
     public static function VARPA(...$args)
     {
@@ -3718,7 +3718,7 @@ class Statistical
                 // Is it a numeric value?
                 if ((is_numeric($arg)) || (is_bool($arg)) || ((is_string($arg) & ($arg != '')))) {
                     if (is_bool($arg)) {
-                        $arg = (int) $arg;
+                        $arg = (int)$arg;
                     } elseif (is_string($arg)) {
                         $arg = 0;
                     }

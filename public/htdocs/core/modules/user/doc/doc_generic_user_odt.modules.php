@@ -1,24 +1,32 @@
 <?php
 
-/* Copyright (C) 2010-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2012		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2010-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <https://www.gnu.org/licenses/>.
-* or see https://www.gnu.org/
-*/
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * or see https://www.gnu.org/
+ */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\ModelePDFUser;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  \file       htdocs/core/modules/user/doc/doc_generic_user_odt.modules.php
@@ -26,12 +34,10 @@
  *  \brief      File of class to build ODT documents for third parties
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/user/modules_user.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/doc.lib.php';
-
 
 /**
  *  Class to build documents using ODF templates generator
@@ -48,7 +54,7 @@ class doc_generic_user_odt extends ModelePDFUser
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -93,8 +99,8 @@ class doc_generic_user_odt extends ModelePDFUser
     /**
      *  Return description of a module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Description
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Description
      */
     public function info($langs)
     {
@@ -215,21 +221,22 @@ class doc_generic_user_odt extends ModelePDFUser
         return $texte;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build a document on disk using the generic odt module.
      *
-     *  @param      User        $object             Object source to build document
-     *  @param      Translate   $outputlangs        Lang output object
-     *  @param      string      $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int         $hidedetails        Do not show line details
-     *  @param      int         $hidedesc           Do not show desc
-     *  @param      int         $hideref            Do not show ref
-     *  @return     int                             1 if OK, <=0 if KO
+     * @param User $object Object source to build document
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                             1 if OK, <=0 if KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath, $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $hookmanager;
 
         if (empty($srctemplatepath)) {
@@ -341,9 +348,9 @@ class doc_generic_user_odt extends ModelePDFUser
                     $odfHandler = new Odf(
                         $srctemplatepath,
                         array(
-                            'PATH_TO_TMP'     => $conf->user->dir_temp,
-                            'ZIP_PROXY'       => 'PclZipProxy', // PhpZipProxy or PclZipProxy. Got "bad compression method" error when using PhpZipProxy.
-                            'DELIMITER_LEFT'  => '{',
+                            'PATH_TO_TMP' => $conf->user->dir_temp,
+                            'ZIP_PROXY' => 'PclZipProxy', // PhpZipProxy or PclZipProxy. Got "bad compression method" error when using PhpZipProxy.
+                            'DELIMITER_LEFT' => '{',
                             'DELIMITER_RIGHT' => '}'
                         )
                     );
@@ -437,18 +444,19 @@ class doc_generic_user_odt extends ModelePDFUser
         return -1;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * get substitution array for object
      *
-     * @param CommonObject  $object         user
-     * @param Translate     $outputlangs    translation object
-     * @param string        $array_key      key for array
+     * @param CommonObject $object user
+     * @param Translate $outputlangs translation object
+     * @param string $array_key key for array
      * @return array                        array of substitutions
      */
     public function get_substitutionarray_object($object, $outputlangs, $array_key = 'object')
     {
-		// phpcs:enable
+        // phpcs:enable
         if (!$object instanceof User) {
             dol_syslog("Expected User object, got " . gettype($object), LOG_ERR);
             return array();

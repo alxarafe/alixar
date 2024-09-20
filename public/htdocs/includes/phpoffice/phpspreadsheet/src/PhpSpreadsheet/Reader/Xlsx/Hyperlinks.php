@@ -20,7 +20,7 @@ class Hyperlinks
     {
         foreach ($relsWorksheet->Relationship as $element) {
             if ($element['Type'] == 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink') {
-                $this->hyperlinks[(string) $element['Id']] = (string) $element['Target'];
+                $this->hyperlinks[(string)$element['Id']] = (string)$element['Target'];
             }
         }
     }
@@ -40,18 +40,18 @@ class Hyperlinks
         foreach (Coordinate::extractAllCellReferencesInRange($hyperlink['ref']) as $cellReference) {
             $cell = $worksheet->getCell($cellReference);
             if (isset($linkRel['id'])) {
-                $hyperlinkUrl = $this->hyperlinks[(string) $linkRel['id']];
+                $hyperlinkUrl = $this->hyperlinks[(string)$linkRel['id']];
                 if (isset($hyperlink['location'])) {
-                    $hyperlinkUrl .= '#' . (string) $hyperlink['location'];
+                    $hyperlinkUrl .= '#' . (string)$hyperlink['location'];
                 }
                 $cell->getHyperlink()->setUrl($hyperlinkUrl);
             } elseif (isset($hyperlink['location'])) {
-                $cell->getHyperlink()->setUrl('sheet://' . (string) $hyperlink['location']);
+                $cell->getHyperlink()->setUrl('sheet://' . (string)$hyperlink['location']);
             }
 
             // Tooltip
             if (isset($hyperlink['tooltip'])) {
-                $cell->getHyperlink()->setTooltip((string) $hyperlink['tooltip']);
+                $cell->getHyperlink()->setTooltip((string)$hyperlink['tooltip']);
             }
         }
     }

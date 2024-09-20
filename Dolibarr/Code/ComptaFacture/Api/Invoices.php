@@ -1098,7 +1098,6 @@ class Invoices extends DolibarrApi
      */
     public function getDiscount($id)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 
         if (!DolibarrApiAccess::$user->hasRight('facture', 'lire')) {
             throw new RestException(403);
@@ -1141,7 +1140,6 @@ class Invoices extends DolibarrApi
      */
     public function markAsCreditAvailable($id)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 
         if (!DolibarrApiAccess::$user->hasRight('facture', 'creer')) {
             throw new RestException(403);
@@ -1358,7 +1356,6 @@ class Invoices extends DolibarrApi
      */
     public function useCreditNote($id, $discountid)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 
         if (!DolibarrApiAccess::$user->hasRight('facture', 'creer')) {
             throw new RestException(403);

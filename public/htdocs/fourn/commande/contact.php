@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005      Patrick Rouillon     <patrick@rouillon.net>
- * Copyright (C) 2005-2009 Destailleur Laurent  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2017      Ferran Marcet       	 <fmarcet@2byte.es>
- * Copyright (C) 2023      Christian Foellmann  <christian@foellmann.de>
+/* Copyright (C) 2005       Patrick Rouillon            <patrick@rouillon.net>
+ * Copyright (C) 2005-2009  Destailleur Laurent         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2017       Ferran Marcet       	    <fmarcet@2byte.es>
+ * Copyright (C) 2023       Christian Foellmann         <christian@foellmann.de>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -28,6 +28,11 @@
  */
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -38,8 +43,8 @@ if (isModEnabled('project')) {
 // Load translation files required by the page
 $langs->loadLangs(array("facture", "orders", "sendings", "companies"));
 
-$id     = GETPOSTINT('id');
-$ref    = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
 
 // Security check
@@ -51,8 +56,8 @@ $hookmanager->initHooks(array('ordersuppliercardcontact', 'ordersuppliercontactc
 
 $object = new CommandeFournisseur($db);
 
-$usercancreate  = ($user->hasRight("fournisseur", "commande", "creer") || $user->hasRight("supplier_order", "creer"));
-$permissiontoadd    = $usercancreate; // Used by the include of actions_addupdatedelete.inc.php
+$usercancreate = ($user->hasRight("fournisseur", "commande", "creer") || $user->hasRight("supplier_order", "creer"));
+$permissiontoadd = $usercancreate; // Used by the include of actions_addupdatedelete.inc.php
 
 /*
  * Actions
@@ -74,8 +79,8 @@ if (empty($reshook)) {
 
         if ($result > 0 && $id > 0) {
             $contactid = (GETPOST('userid') ? GETPOST('userid') : GETPOST('contactid'));
-            $typeid    = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
-            $result    = $object->add_contact($contactid, $typeid, GETPOST("source", 'aZ09'));
+            $typeid = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
+            $result = $object->add_contact($contactid, $typeid, GETPOST("source", 'aZ09'));
         }
 
         if ($result >= 0) {
@@ -109,7 +114,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View
@@ -172,7 +176,6 @@ if ($id > 0 || !empty($ref)) {
             }
         }
         $morehtmlref .= '</div>';
-
 
         dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref, '', 0, '', '', 1);
 

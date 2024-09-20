@@ -189,19 +189,19 @@ class UnifontGlyphFactory implements ColumnFormatGlyphFactory
 
     public function __construct(array $unifontFile)
     {
-        $this -> unifontFile = $unifontFile;
+        $this->unifontFile = $unifontFile;
     }
 
     public function getGlyph($codePoint)
     {
         // Binary search for correct line.
         $min = 0;
-        $max = count($this -> unifontFile) - 1;
+        $max = count($this->unifontFile) - 1;
         $foundId = 0;
         // Bias toward low side if file is > 255.
-        $m = min(count($this -> unifontFile) - 1, 255);
+        $m = min(count($this->unifontFile) - 1, 255);
         while ($min <= $max) {
-            $thisCodePoint = hexdec(substr($this -> unifontFile[$m], 0, 4));
+            $thisCodePoint = hexdec(substr($this->unifontFile[$m], 0, 4));
             if ($codePoint === $thisCodePoint) {
                 $foundId = $m;
                 break;
@@ -212,7 +212,7 @@ class UnifontGlyphFactory implements ColumnFormatGlyphFactory
             }
             $m = floor(($min + $max) / 2);
         }
-        $unifontLine = $this -> unifontFile[$foundId];
+        $unifontLine = $this->unifontFile[$foundId];
 
         // Convert to column format
         $binStr = unpack("C*", pack("H*", substr($unifontLine, 5)));
@@ -226,8 +226,8 @@ class UnifontGlyphFactory implements ColumnFormatGlyphFactory
         }
         // Write to obj
         $glyph = new ColumnFormatGlyph();
-        $glyph -> width = $width;
-        $glyph -> data = $colFormat;
+        $glyph->width = $width;
+        $glyph->data = $colFormat;
         return $glyph;
     }
 }

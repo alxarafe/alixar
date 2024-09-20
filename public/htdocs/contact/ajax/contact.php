@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2006       Andre Cianfarani        <acianfa@free.fr>
- * Copyright (C) 2005-2012 	Regis Houssin        	<regis.houssin@inodbox.com>
- * Copyright (C) 2007-2019 	Laurent Destailleur  	<eldy@users.sourceforge.net>
- * Copyright (C) 2024		MDW						<mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2005-2012 	Regis Houssin        	    <regis.houssin@inodbox.com>
+ * Copyright (C) 2007-2019 	Laurent Destailleur  	    <eldy@users.sourceforge.net>
+ * Copyright (C) 2024		MDW						    <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *       \file       htdocs/contact/ajax/contact.php
@@ -46,9 +47,6 @@ if (!defined('NOREQUIRESOC')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
 
 $htmlname = GETPOST('htmlname', 'aZ09');
 $outjson = (GETPOSTINT('outjson') ? GETPOSTINT('outjson') : 0);

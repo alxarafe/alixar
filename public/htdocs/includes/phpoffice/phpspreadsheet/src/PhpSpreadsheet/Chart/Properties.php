@@ -132,15 +132,15 @@ abstract class Properties
 
     protected function getTrueAlpha($alpha)
     {
-        return (string) 100 - $alpha . '000';
+        return (string)100 - $alpha . '000';
     }
 
     protected function setColorProperties($color, $alpha, $type)
     {
         return [
-            'type' => (string) $type,
-            'value' => (string) $color,
-            'alpha' => (string) $this->getTrueAlpha($alpha),
+            'type' => (string)$type,
+            'value' => (string)$color,
+            'alpha' => (string)$this->getTrueAlpha($alpha),
         ];
     }
 

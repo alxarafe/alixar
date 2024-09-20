@@ -13,9 +13,9 @@ class DocumentGenerator
     /**
      * @param array[] $phpSpreadsheetFunctions
      *
+     * @return string
      * @throws ReflectionException
      *
-     * @return string
      */
     public static function generateFunctionListByCategory(array $phpSpreadsheetFunctions): string
     {
@@ -39,9 +39,9 @@ class DocumentGenerator
     }
 
     /**
+     * @return array
      * @throws ReflectionException
      *
-     * @return array
      */
     private static function getCategories(): array
     {
@@ -82,9 +82,9 @@ class DocumentGenerator
     /**
      * @param array[] $phpSpreadsheetFunctions
      *
+     * @return string
      * @throws ReflectionException
      *
-     * @return string
      */
     public static function generateFunctionListByName(array $phpSpreadsheetFunctions): string
     {

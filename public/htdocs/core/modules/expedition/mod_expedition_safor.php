@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2011      Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2011       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -20,13 +20,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Expedition\Classes\ModelNumRefExpedition;
+
 /**
  *  \file       htdocs/core/modules/expedition/mod_expedition_safor.php
  *  \ingroup    expedition
  *  \brief      File of class to manage shipments numbering rules Safor
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expedition/modules_expedition.php';
 
 /**
  *  Class to manage expedition numbering rules Safor
@@ -62,8 +62,8 @@ class mod_expedition_safor extends ModelNumRefExpedition
     /**
      *  Return default description of numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -75,7 +75,7 @@ class mod_expedition_safor extends ModelNumRefExpedition
     /**
      *  Return numbering example
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -86,8 +86,8 @@ class mod_expedition_safor extends ModelNumRefExpedition
     /**
      *  Test if existing numbers make problems with numbering
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -122,9 +122,9 @@ class mod_expedition_safor extends ModelNumRefExpedition
     /**
      *  Return next value
      *
-     *  @param  Societe     $objsoc     Third party object
-     *  @param  Expedition  $shipment   Shipment object
-     *  @return string|-1               Value if OK, -1 if KO
+     * @param Societe $objsoc Third party object
+     * @param Expedition $shipment Shipment object
+     * @return string|-1               Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $shipment)
     {

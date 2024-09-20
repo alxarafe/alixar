@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2024	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2010-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2024       Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2024	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,12 @@
  */
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/projet/tasks/contact.php
@@ -143,19 +149,18 @@ if (!empty($project_ref) && !empty($withproject)) {
  * View
  */
 $form = new Form($db);
-$formcompany   = new FormCompany($db);
+$formcompany = new FormCompany($db);
 $contactstatic = new Contact($db);
 $userstatic = new User($db);
 $result = $projectstatic->fetch($object->fk_project);
 
 $title = $object->ref . ' - ' . $langs->trans("Contacts");
 if (!empty($withproject)) {
-    $title .= ' | ' . $langs->trans("Project") . (!empty($projectstatic->ref) ? ': ' . $projectstatic->ref : '')  ;
+    $title .= ' | ' . $langs->trans("Project") . (!empty($projectstatic->ref) ? ': ' . $projectstatic->ref : '');
 }
 $help_url = '';
 
 llxHeader('', $title, $help_url);
-
 
 /* *************************************************************************** */
 /*                                                                             */
@@ -330,7 +335,7 @@ if ($id > 0 || !empty($ref)) {
             $projectsListId = $projectstatic->getProjectsAuthorizedForUser($user, 0, 1);
             $object->next_prev_filter = "fk_projet IN (" . $db->sanitize($projectsListId) . ")";
         } else {
-            $object->next_prev_filter = "fk_projet = " . ((int) $projectstatic->id);
+            $object->next_prev_filter = "fk_projet = " . ((int)$projectstatic->id);
         }
 
         $morehtmlref = '';

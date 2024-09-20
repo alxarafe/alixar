@@ -21,6 +21,7 @@
 use Dolibarr\Code\BookCal\Classes\Availabilities;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
 
@@ -78,7 +79,7 @@ if (empty($action) && empty($id) && empty($ref)) {
 include DOL_DOCUMENT_ROOT . '/core/actions_fetchobject.inc.php'; // Must be include, not include_once.
 
 //avoid warning on missing/undef entity
-$object->entity                 = (GETPOSTISSET('entity') ? GETPOSTINT('entity') : $conf->entity);
+$object->entity = (GETPOSTISSET('entity') ? GETPOSTINT('entity') : $conf->entity);
 
 // There is several ways to check permission.
 // Set $enablepermissioncheck to 1 to enable a minimum low level of checks
@@ -110,10 +111,6 @@ if (!isModEnabled('bookcal')) {
 if (!$permissiontoread) {
     accessforbidden();
 }
-
-
-
-
 
 
 /*
@@ -183,8 +180,8 @@ if (empty($reshook)) {
     }
 
 
-        // Actions cancel, add, update, update_extras, confirm_validate, confirm_delete, confirm_deleteline, confirm_clone, confirm_close, confirm_setdraft, confirm_reopen
-        include DOL_DOCUMENT_ROOT . '/core/actions_addupdatedelete.inc.php';
+    // Actions cancel, add, update, update_extras, confirm_validate, confirm_delete, confirm_deleteline, confirm_clone, confirm_close, confirm_setdraft, confirm_reopen
+    include DOL_DOCUMENT_ROOT . '/core/actions_addupdatedelete.inc.php';
 
     // Actions when linking object each other
     include DOL_DOCUMENT_ROOT . '/core/actions_dellink.inc.php';
@@ -211,8 +208,6 @@ if (empty($reshook)) {
     $trackid = 'availabilities' . $object->id;
     include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
 }
-
-
 
 
 /*
@@ -601,7 +596,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', dol_buildpath('/bookcal/availabilities_agenda.php', 1) . '?id=' . $object->id);
 
         // List of actions on element
-                $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element . '@' . $object->module, (is_object($object->thirdparty) ? $object->thirdparty->id : 0), 1, '', $MAXEVENT, '', $morehtmlcenter);
 
         print '</div></div>';

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2008-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2017 Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2021      Thibault FOUCART     <support@ptibogxiv.net>
- * Copyright (C) 2022      Alexandre Spangaro   <aspangaro@open-dsi.fr>
+/* Copyright (C) 2008-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2017  Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2021       Thibault FOUCART            <support@ptibogxiv.net>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\dolReceiptPrinter;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Stripe\Classes\Stripe;
 
 /**
  *  \file       htdocs/takepos/admin/terminal.php
@@ -33,7 +38,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permi
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/takepos.lib.php";
-require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 
 $terminal = GETPOSTINT('terminal');
 // If socid provided by ajax company selector
@@ -160,7 +164,6 @@ if (GETPOST('action', 'alpha') == 'set') {
         setEventMessages($langs->trans("Error"), null, 'errors');
     }
 }
-
 
 /*
  * View
@@ -350,7 +353,7 @@ if (isModEnabled('stock')) {
 }
 
 if (isModEnabled('project')) {
-        $formproject = new FormProjets($db);
+    $formproject = new FormProjets($db);
     print '<tr class="oddeven"><td>' . $langs->trans("CashDeskDefaultProject") . '</td><td>';
     print img_picto('', 'project', 'class="pictofixedwidth"');
     // select_projects($socid = -1, $selected = '', $htmlname = 'projectid', $maxlength = 16, $option_only = 0, $show_empty = 1, $discard_closed = 0, $forcefocus = 0, $disabled = 0, $mode = 0, $filterkey = '', $nooutput = 0, $forceaddid = 0, $morecss = '', $htmlid = '', $morefilter = '')
@@ -361,7 +364,6 @@ if (isModEnabled('project')) {
 
 if (isModEnabled('receiptprinter')) {
     // Select printer to use with terminal
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolreceiptprinter.class.php';
     $printer = new dolReceiptPrinter($db);
 
     $printer->listprinters();
@@ -393,7 +395,6 @@ if (isModEnabled('receiptprinter')) {
 
 if (isModEnabled('receiptprinter') || getDolGlobalString('TAKEPOS_PRINT_METHOD') == "receiptprinter" || getDolGlobalString('TAKEPOS_PRINT_METHOD') == "takeposconnector") {
     // Select printer to use with terminal
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolreceiptprinter.class.php';
     $printer = new dolReceiptPrinter($db);
     $printer->listPrintersTemplates();
     $templates = array();
@@ -425,7 +426,7 @@ if (getDolGlobalString('TAKEPOS_ADDON') == "terminal") {
     print $langs->trans("BillsNumberingModule");
     print '<td colspan="2">';
     $array = array(0 => $langs->trans("Default"));
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $dir = dol_buildpath($reldir . "core/modules/facture/");
         if (is_dir($dir)) {
@@ -508,7 +509,6 @@ $variablename = 'TAKEPOS_HEADER' . $terminaltouse;
 if (!getDolGlobalInt('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
     print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
 } else {
-    include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
     print $doleditor->Create();
 }
@@ -524,7 +524,6 @@ $variablename = 'TAKEPOS_FOOTER' . $terminaltouse;
 if (!getDolGlobalInt('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
     print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
 } else {
-    include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
     print $doleditor->Create();
 }

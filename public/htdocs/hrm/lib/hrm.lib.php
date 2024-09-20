@@ -1,11 +1,12 @@
 <?php
 
-/* Copyright (C) 2020 jean-pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
- * Copyright (C) 2022       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2020       jean-pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
+ * Copyright (C) 2022       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +27,8 @@
  * \ingroup hrm
  * \brief   Library files with common functions for Workstation
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
 
 /**
  * Prepare admin pages header

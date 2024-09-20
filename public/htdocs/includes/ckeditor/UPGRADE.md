@@ -1,5 +1,6 @@
 To upgrade ckeditor:
-- Go on web site. 
+
+- Go on web site.
 - Choose profile "Online builder"
 - Choose Custom - Full package
 - Add plugin SourceDialog (for "source" button on edit inline)

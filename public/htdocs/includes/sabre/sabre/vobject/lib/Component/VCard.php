@@ -88,7 +88,7 @@ class VCard extends VObject\Document
         'ROLE' => VObject\Property\FlatText::class,
         'LOGO' => VObject\Property\Binary::class,
         // 'AGENT'   => 'Sabre\\VObject\\Property\\',      // Todo: is an embedded vCard. Probably rare, so
-                                 // not supported at the moment
+        // not supported at the moment
         'ORG' => VObject\Property\Text::class,
         'NOTE' => VObject\Property\FlatText::class,
         'REV' => VObject\Property\VCard\TimeStamp::class,
@@ -146,7 +146,7 @@ class VCard extends VObject\Document
     public function getDocumentType()
     {
         if (!$this->version) {
-            $version = (string) $this->VERSION;
+            $version = (string)$this->VERSION;
 
             switch ($version) {
                 case '2.1':
@@ -230,7 +230,7 @@ class VCard extends VObject\Document
 
         $version = $this->select('VERSION');
         if (1 === count($version)) {
-            $version = (string) $this->VERSION;
+            $version = (string)$this->VERSION;
             if ('2.1' !== $version && '3.0' !== $version && '4.0' !== $version) {
                 $warnings[] = [
                     'level' => 3,
@@ -278,7 +278,7 @@ class VCard extends VObject\Document
                 // We're going to try to see if we can use the contents of the
                 // N property.
                 if (isset($this->N)) {
-                    $value = explode(';', (string) $this->N);
+                    $value = explode(';', (string)$this->N);
                     if (isset($value[1]) && $value[1]) {
                         $this->FN = $value[1] . ' ' . $value[0];
                     } else {
@@ -286,19 +286,19 @@ class VCard extends VObject\Document
                     }
                     $repaired = true;
 
-                // Otherwise, the ORG property may work
+                    // Otherwise, the ORG property may work
                 } elseif (isset($this->ORG)) {
-                    $this->FN = (string) $this->ORG;
+                    $this->FN = (string)$this->ORG;
                     $repaired = true;
 
-                // Otherwise, the NICKNAME property may work
+                    // Otherwise, the NICKNAME property may work
                 } elseif (isset($this->NICKNAME)) {
-                    $this->FN = (string) $this->NICKNAME;
+                    $this->FN = (string)$this->NICKNAME;
                     $repaired = true;
 
-                // Otherwise, the EMAIL property may work
+                    // Otherwise, the EMAIL property may work
                 } elseif (isset($this->EMAIL)) {
-                    $this->FN = (string) $this->EMAIL;
+                    $this->FN = (string)$this->EMAIL;
                     $repaired = true;
                 }
             }

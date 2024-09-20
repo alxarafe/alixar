@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2003		Jean-Louis Bergamo		<jlb@j1b.org>
- * Copyright (C) 2004-2011	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2012		Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2014		Florian Henry			<florian.henry@open-concept.pro>
- * Copyright (C) 2015		Jean-François Ferry		<jfefe@aternatik.fr>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003		Jean-Louis Bergamo		    <jlb@j1b.org>
+ * Copyright (C) 2004-2011	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2014		Florian Henry			    <florian.henry@open-concept.pro>
+ * Copyright (C) 2015		Jean-François Ferry		    <jfefe@aternatik.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,8 +29,10 @@
  */
 
 // Load Dolibarr environment
-require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
 
+require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/knowledgemanagement/lib/knowledgemanagement.lib.php';
 
 // Load translation files required by the page
@@ -56,7 +58,6 @@ if (!$user->admin) {
  */
 
 require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
-
 
 
 /*

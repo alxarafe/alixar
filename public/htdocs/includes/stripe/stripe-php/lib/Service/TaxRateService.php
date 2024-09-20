@@ -13,9 +13,9 @@ class TaxRateService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\TaxRate>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\TaxRate>
      */
     public function all($params = null, $opts = null)
     {
@@ -28,9 +28,9 @@ class TaxRateService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\TaxRate
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TaxRate
      */
     public function create($params = null, $opts = null)
     {
@@ -44,9 +44,9 @@ class TaxRateService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\TaxRate
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TaxRate
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -60,9 +60,9 @@ class TaxRateService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\TaxRate
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TaxRate
      */
     public function update($id, $params = null, $opts = null)
     {

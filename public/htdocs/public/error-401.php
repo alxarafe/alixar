@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-  <head>
+<head>
     <title>Dolibarr 401 error page</title>
-  </head>
+</head>
 
-  <body>
+<body>
 
-    <div>
+<div>
 
     <!-- <div data-role="header" data-theme="b">
             <h1>Introduction</h1>
@@ -15,23 +15,23 @@
     -->
     <div>
 
-    <h1>Error</h1>
+        <h1>Error</h1>
 
-    <br>
-    Sorry. You are not allowed access to this resource.
+        <br>
+        Sorry. You are not allowed access to this resource.
 
-    <br>
-    <br>
+        <br>
+        <br>
 
-    No esta autorizado para acceder a este recurso.
+        No esta autorizado para acceder a este recurso.
 
-    <br>
-    <?php print isset($_SERVER["HTTP_REFERER"]) ? 'You arrived from ' . htmlentities($_SERVER["HTTP_REFERER"], ENT_COMPAT, 'UTF-8') . '.' : ''; ?>
+        <br>
+        <?php print isset($_SERVER["HTTP_REFERER"]) ? 'You arrived from ' . htmlentities($_SERVER["HTTP_REFERER"], ENT_COMPAT, 'UTF-8') . '.' : ''; ?>
 
-    <hr>
+        <hr>
 
     </div>
-    </div>
+</div>
 
-  </body>
+</body>
 </html>

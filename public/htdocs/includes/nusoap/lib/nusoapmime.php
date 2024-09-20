@@ -89,7 +89,7 @@ class nusoap_client_mime extends nusoap_client
      */
     function addAttachment($data, $filename = '', $contenttype = 'application/octet-stream', $cid = false)
     {
-        if (! $cid) {
+        if (!$cid) {
             $cid = md5(uniqid(time()));
         }
 
@@ -143,18 +143,18 @@ class nusoap_client_mime extends nusoap_client
             unset($params);
 
             $params['content_type'] = 'text/xml';
-            $params['encoding']     = '8bit';
-            $params['charset']      = $this->soap_defencoding;
+            $params['encoding'] = '8bit';
+            $params['charset'] = $this->soap_defencoding;
             $mimeMessage->addSubpart($soapmsg, $params);
 
             foreach ($this->requestAttachments as $att) {
                 unset($params);
 
                 $params['content_type'] = $att['contenttype'];
-                $params['encoding']     = 'base64';
-                $params['disposition']  = 'attachment';
-                $params['dfilename']    = $att['filename'];
-                $params['cid']          = $att['cid'];
+                $params['encoding'] = 'base64';
+                $params['disposition'] = 'attachment';
+                $params['dfilename'] = $att['filename'];
+                $params['cid'] = $att['cid'];
 
                 if ($att['data'] == '' && $att['filename'] <> '') {
                     if ($fd = fopen($att['filename'], 'rb')) {
@@ -223,8 +223,8 @@ class nusoap_client_mime extends nusoap_client
     /**
      * processes SOAP message returned from server
      *
-     * @param   array   $headers    The HTTP headers
-     * @param   string  $data       unprocessed response data from server
+     * @param array $headers The HTTP headers
+     * @param string $data unprocessed response data from server
      * @return  mixed   value of the message, decoded into a PHP type
      * @access   private
      */
@@ -328,7 +328,7 @@ class nusoap_server_mime extends nusoap_server
      */
     function addAttachment($data, $filename = '', $contenttype = 'application/octet-stream', $cid = false)
     {
-        if (! $cid) {
+        if (!$cid) {
             $cid = md5(uniqid(time()));
         }
 
@@ -382,18 +382,18 @@ class nusoap_server_mime extends nusoap_server
             unset($params);
 
             $params['content_type'] = 'text/xml';
-            $params['encoding']     = '8bit';
-            $params['charset']      = $this->soap_defencoding;
+            $params['encoding'] = '8bit';
+            $params['charset'] = $this->soap_defencoding;
             $mimeMessage->addSubpart($soapmsg, $params);
 
             foreach ($this->responseAttachments as $att) {
                 unset($params);
 
                 $params['content_type'] = $att['contenttype'];
-                $params['encoding']     = 'base64';
-                $params['disposition']  = 'attachment';
-                $params['dfilename']    = $att['filename'];
-                $params['cid']          = $att['cid'];
+                $params['encoding'] = 'base64';
+                $params['disposition'] = 'attachment';
+                $params['dfilename'] = $att['filename'];
+                $params['cid'] = $att['cid'];
 
                 if ($att['data'] == '' && $att['filename'] <> '') {
                     if ($fd = fopen($att['filename'], 'rb')) {
@@ -462,8 +462,8 @@ class nusoap_server_mime extends nusoap_server
     /**
      * processes SOAP message received from client
      *
-     * @param   array   $headers    The HTTP headers
-     * @param   string  $data       unprocessed request data from client
+     * @param array $headers The HTTP headers
+     * @param string $data unprocessed request data from client
      * @return  mixed   value of the message, decoded into a PHP type
      * @access   private
      */
@@ -513,6 +513,7 @@ class nusoap_server_mime extends nusoap_server
 /*
  *	For backwards compatiblity
  */
+
 class nusoapservermime extends nusoap_server_mime
 {
 }

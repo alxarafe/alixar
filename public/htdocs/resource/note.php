@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Resource\Classes\Dolresource;
+
 /**
  *  \file       htdocs/resource/note.php
  *  \ingroup    fichinter

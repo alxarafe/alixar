@@ -210,7 +210,7 @@ abstract class Node implements \IteratorAggregate, \ArrayAccess, \Countable, \Js
      *
      * This method just forwards the request to the inner iterator
      *
-     * @param int   $offset
+     * @param int $offset
      * @param mixed $value
      */
     #[\ReturnTypeWillChange]
@@ -220,9 +220,9 @@ abstract class Node implements \IteratorAggregate, \ArrayAccess, \Countable, \Js
         $iterator->offsetSet($offset, $value);
 
         // @codeCoverageIgnoreStart
-    //
-    // This method always throws an exception, so we ignore the closing
-    // brace
+        //
+        // This method always throws an exception, so we ignore the closing
+        // brace
     }
 
     // @codeCoverageIgnoreEnd
@@ -241,9 +241,9 @@ abstract class Node implements \IteratorAggregate, \ArrayAccess, \Countable, \Js
         $iterator->offsetUnset($offset);
 
         // @codeCoverageIgnoreStart
-    //
-    // This method always throws an exception, so we ignore the closing
-    // brace
+        //
+        // This method always throws an exception, so we ignore the closing
+        // brace
     }
 
     // @codeCoverageIgnoreEnd

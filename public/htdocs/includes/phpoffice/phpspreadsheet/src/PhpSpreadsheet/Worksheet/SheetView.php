@@ -77,9 +77,9 @@ class SheetView
      *
      * @param int $pValue
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setZoomScale($pValue)
     {
@@ -110,9 +110,9 @@ class SheetView
      *
      * @param int $pValue
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setZoomScaleNormal($pValue)
     {
@@ -163,9 +163,9 @@ class SheetView
      *
      * @param string $pValue
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setView($pValue)
     {

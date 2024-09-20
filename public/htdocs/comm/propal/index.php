@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2004  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2019		Nicolas ZABOURI			<info@inovea-conseil.com>
- * Copyright (C) 2020		Tobias Sekan			<tobias.sekan@startmail.com>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2019		Nicolas ZABOURI			    <info@inovea-conseil.com>
+ * Copyright (C) 2020		Tobias Sekan			    <tobias.sekan@startmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,10 @@
  */
 
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/comm/propal/index.php
@@ -97,12 +101,12 @@ if (isModEnabled("propal")) {
         if ($search_sale == -2) {
             $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc)";
         } elseif ($search_sale > 0) {
-            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
         }
     }
     // Search on socid
     if ($socid) {
-        $sql .= " AND p.fk_soc = " . ((int) $socid);
+        $sql .= " AND p.fk_soc = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -178,12 +182,12 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search on socid
 if ($socid) {
-    $sql .= " AND c.fk_soc = " . ((int) $socid);
+    $sql .= " AND c.fk_soc = " . ((int)$socid);
 }
 $sql .= " ORDER BY c.tms DESC";
 
@@ -269,12 +273,12 @@ if (isModEnabled("propal") && $user->hasRight('propal', 'lire')) {
         if ($search_sale == -2) {
             $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc)";
         } elseif ($search_sale > 0) {
-            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
         }
     }
     // Search on socid
     if ($socid) {
-        $sql .= " AND p.fk_soc = " . ((int) $socid);
+        $sql .= " AND p.fk_soc = " . ((int)$socid);
     }
     $sql .= " ORDER BY p.rowid DESC";
 

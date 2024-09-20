@@ -20,6 +20,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
 /**

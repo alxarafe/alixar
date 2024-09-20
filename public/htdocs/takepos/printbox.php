@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2018 Andreu Bisquerra  <jove@bisquerra.com>
- * Copyright (C) 2020 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2018       Andreu Bisquerra            <jove@bisquerra.com>
+ * Copyright (C) 2020       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -77,26 +77,33 @@ top_htmlhead($head, '', 0, 0, $arrayofjs, $arrayofcss);
     function Save() {
         console.log("We click so we call page receipt.php with facid=<?php echo $facid; ?>");
         parent.$.colorbox.close();
-        $.colorbox({ href:"receipt.php?facid=<?php echo $facid; ?>&action=<?php echo $action; ?>&token=<?php echo newToken(); ?>&label="+$('#label').val()+"&qty="+$('#qty').val(), width:"40%", height:"90%", transition:"none", iframe:"true", title:'<?php echo dol_escape_js($langs->trans("PrintTicket")); ?>'});
+        $.colorbox({
+            href: "receipt.php?facid=<?php echo $facid; ?>&action=<?php echo $action; ?>&token=<?php echo newToken(); ?>&label=" + $('#label').val() + "&qty=" + $('#qty').val(),
+            width: "40%",
+            height: "90%",
+            transition: "none",
+            iframe: "true",
+            title: '<?php echo dol_escape_js($langs->trans("PrintTicket")); ?>'
+        });
     }
 
-    jQuery(document).ready(function(){
+    jQuery(document).ready(function () {
         $('#label').focus()
     });
 </script>
 
 <br>
 <center>
-<?php
-if ($action == "without_details") {
-    $label_default = getDolGlobalString('TAKEPOS_PRINT_WITHOUT_DETAILS_LABEL_DEFAULT');
-    $qty_default = 1;
+    <?php
+    if ($action == "without_details") {
+        $label_default = getDolGlobalString('TAKEPOS_PRINT_WITHOUT_DETAILS_LABEL_DEFAULT');
+        $qty_default = 1;
 
-    print '<input type="text" id="label" name="label" class="takepospay" value="' . $label_default . '" style="width:40%;" placeholder="' . $langs->trans('Label') . '">';
-    print '<input type="text" id="qty" name="qty" class="takepospay" value="' . $qty_default . '" style="width:10%;" placeholder="' . $langs->trans('Qty') . '">';
-}
-?>
-<input type="button" class="button takepospay clearboth" value="OK" onclick="Save();">
+        print '<input type="text" id="label" name="label" class="takepospay" value="' . $label_default . '" style="width:40%;" placeholder="' . $langs->trans('Label') . '">';
+        print '<input type="text" id="qty" name="qty" class="takepospay" value="' . $qty_default . '" style="width:10%;" placeholder="' . $langs->trans('Qty') . '">';
+    }
+    ?>
+    <input type="button" class="button takepospay clearboth" value="OK" onclick="Save();">
 </center>
 
 </body>

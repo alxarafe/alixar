@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2013-2016  Olivier Geffroy         <jeff@jeffinfo.com>
- * Copyright (C) 2013-2016  Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2013-2024  Alexandre Spangaro      <alexandre@inovea-conseil.com>
- * Copyright (C) 2022       Lionel Vessiller        <lvessiller@open-dsi.fr>
- * Copyright (C) 2016-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2022       Progiseize              <a.bisotti@progiseize.fr>
- * Copyright (C) 2024       MDW                     <mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2013-2016  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2016  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2024  Alexandre Spangaro          <alexandre@inovea-conseil.com>
+ * Copyright (C) 2022       Lionel Vessiller            <lvessiller@open-dsi.fr>
+ * Copyright (C) 2016-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2022       Progiseize                  <a.bisotti@progiseize.fr>
+ * Copyright (C) 2024       MDW                         <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,11 +24,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
 use Dolibarr\Code\Accountancy\Classes\AccountancyExport;
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Accountancy\Classes\BookKeeping;
 use Dolibarr\Code\Accountancy\Classes\BookKeepingLine;
-use Dolibarr\Code\Accountancy\Classes\Lettering;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  * \file        htdocs/accountancy/bookkeeping/export.php
@@ -39,7 +48,6 @@ use Dolibarr\Code\Accountancy\Classes\Lettering;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 
@@ -345,7 +353,6 @@ if (empty($reshook)) {
         $param .= '&search_doc_ref=' . urlencode($search_doc_ref);
     }
     if ($search_account_category != '-1' && !empty($search_account_category)) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountancycategory.class.php';
         $accountingcategory = new AccountancyCategory($db);
 
         $listofaccountsforgroup = $accountingcategory->getCptsCat(0, 'fk_accounting_category = ' . ((int) $search_account_category));

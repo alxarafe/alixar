@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015	   Charlene Benke        <charlene@patas-monkey.com>
- * Copyright (C) 2019      Nicolas ZABOURI      <info@inovea-conseil.com>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015	    Charlene Benke              <charlene@patas-monkey.com>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
 
 /**
  *  \file       htdocs/fichinter/index.php
@@ -50,7 +56,6 @@ if ($user->socid > 0) {
 }
 
 $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
-
 
 /*
  * View

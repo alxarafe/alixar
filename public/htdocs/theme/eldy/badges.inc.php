@@ -3,9 +3,9 @@ if (!defined('ISLOADEDBYSTEELSHEET')) {
     die('Must be call by steelsheet');
 }
 ?>
-/* Badge style is based on bootstrap framework */
+    /* Badge style is based on bootstrap framework */
 
-.badge {
+    .badge {
     display: inline-block;
     padding: .1em .35em;
     font-size: 80%;
@@ -20,191 +20,191 @@ if (!defined('ISLOADEDBYSTEELSHEET')) {
     border-style: solid;
     border-color: rgba(255,255,255,0);
     box-sizing: border-box;
-}
+    }
 
-.badge-status {
+    .badge-status {
     font-size: 0.95em;
     padding: .19em .35em;           /* more than 0.19 generate a change into height of lines */
-}
-.tabBar .arearef .statusref .badge-status, .tabBar .arearefnobottom .statusref .badge-status {
+    }
+    .tabBar .arearef .statusref .badge-status, .tabBar .arearefnobottom .statusref .badge-status {
     font-size: 1.1em;
     padding: .4em .4em;
-}
-/* Force values for small screen 767 */
-@media only screen and (max-width: 767px)
-{
-    .tabBar .arearef .statusref .badge-status, .tabBar .arearefnobottom .statusref .badge-status {
-        font-size: 0.95em;
-        padding: .3em .2em;
     }
-}
+    /* Force values for small screen 767 */
+    @media only screen and (max-width: 767px)
+    {
+    .tabBar .arearef .statusref .badge-status, .tabBar .arearefnobottom .statusref .badge-status {
+    font-size: 0.95em;
+    padding: .3em .2em;
+    }
+    }
 
-.badge-pill, .tabs .badge {
+    .badge-pill, .tabs .badge {
     padding-right: .5em;
     padding-left: .5em;
     border-radius: 0.25rem;
-}
+    }
 
-.badge-dot {
+    .badge-dot {
     padding: 0;
     border-radius: 50%;
     padding: 0.45em;
     vertical-align: text-top;
-}
+    }
 
-a.badge:focus, a.badge:hover {
+    a.badge:focus, a.badge:hover {
     text-decoration: none;
-}
+    }
 
-.liste_titre .badge:not(.nochangebackground) {
+    .liste_titre .badge:not(.nochangebackground) {
     background-color: <?php print $badgeSecondary; ?>;
     color: #fff;
-}
+    }
 
-span.badgeneutral {
+    span.badgeneutral {
     padding: 2px 7px 2px 7px;
     background-color: #e4e4e4;
     color: #666;
     border-radius: 10px;
     white-space: nowrap;
-}
+    }
 
 
-/* PRIMARY */
-.badge-primary{
+    /* PRIMARY */
+    .badge-primary{
     color: #fff !important;
     background-color: <?php print $badgePrimary; ?>;
-}
-a.badge-primary.focus, a.badge-primary:focus {
+    }
+    a.badge-primary.focus, a.badge-primary:focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem <?php print colorHexToRgb($badgePrimary, 0.5); ?>;
-}
-a.badge-primary:focus, a.badge-primary:hover {
+    }
+    a.badge-primary:focus, a.badge-primary:hover {
     color: #fff !important;
     background-color: <?php print colorDarker($badgePrimary, 10); ?>;
-}
+    }
 
-/* SECONDARY */
-.badge-secondary, .tabs .badge {
+    /* SECONDARY */
+    .badge-secondary, .tabs .badge {
     color: #fff !important;
     background-color: <?php print $badgeSecondary; ?>;
-}
-a.badge-secondary.focus, a.badge-secondary:focus {
+    }
+    a.badge-secondary.focus, a.badge-secondary:focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem <?php print colorHexToRgb($badgeSecondary, 0.5); ?>;
-}
-a.badge-secondary:focus, a.badge-secondary:hover {
+    }
+    a.badge-secondary:focus, a.badge-secondary:hover {
     color: #fff !important;
     background-color: <?php print colorDarker($badgeSecondary, 10); ?>;
-}
+    }
 
-/* SUCCESS */
-.badge-success {
+    /* SUCCESS */
+    .badge-success {
     color: #fff !important;
     background-color: <?php print $badgeSuccess; ?>;
-}
-a.badge-success.focus, a.badge-success:focus {
+    }
+    a.badge-success.focus, a.badge-success:focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem <?php print colorHexToRgb($badgeSuccess, 0.5); ?>;
-}
-a.badge-success:focus, a.badge-success:hover {
+    }
+    a.badge-success:focus, a.badge-success:hover {
     color: #fff !important;
     background-color: <?php print colorDarker($badgeSuccess, 10); ?>;
-}
+    }
 
-/* DANGER */
-.badge-danger {
+    /* DANGER */
+    .badge-danger {
     color: #fff !important;
     background-color: <?php print $badgeDanger; ?>;
-}
-a.badge-danger.focus, a.badge-danger:focus {
+    }
+    a.badge-danger.focus, a.badge-danger:focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem <?php print colorHexToRgb($badgeDanger, 0.5); ?>;
-}
-a.badge-danger:focus, a.badge-danger:hover {
+    }
+    a.badge-danger:focus, a.badge-danger:hover {
     color: #fff !important;
     background-color: <?php print colorDarker($badgeDanger, 10); ?>;
-}
+    }
 
-/* WARNING */
-.badge-warning {
+    /* WARNING */
+    .badge-warning {
     color: #fff !important;
     background-color: <?php print $badgeWarning; ?>;
-}
-a.badge-warning.focus, a.badge-warning:focus {
+    }
+    a.badge-warning.focus, a.badge-warning:focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem <?php print colorHexToRgb($badgeWarning, 0.5); ?>;
-}
-a.badge-warning:focus, a.badge-warning:hover {
+    }
+    a.badge-warning:focus, a.badge-warning:hover {
     color: #212529 !important;
     background-color: <?php print colorDarker($badgeWarning, 10); ?>;
-}
+    }
 
-/* WARNING colorblind */
-body[class*="colorblind-"] .badge-warning {
-      background-color: <?php print $colorblind_deuteranopes_badgeWarning; ?>;
-  }
-body[class*="colorblind-"] a.badge-warning.focus,body[class^="colorblind-"] a.badge-warning:focus {
+    /* WARNING colorblind */
+    body[class*="colorblind-"] .badge-warning {
+    background-color: <?php print $colorblind_deuteranopes_badgeWarning; ?>;
+    }
+    body[class*="colorblind-"] a.badge-warning.focus,body[class^="colorblind-"] a.badge-warning:focus {
     box-shadow: 0 0 0 0.2rem <?php print colorHexToRgb($colorblind_deuteranopes_badgeWarning, 0.5); ?>;
-}
-body[class*="colorblind-"] a.badge-warning:focus, a.badge-warning:hover {
+    }
+    body[class*="colorblind-"] a.badge-warning:focus, a.badge-warning:hover {
     background-color: <?php print colorDarker($colorblind_deuteranopes_badgeWarning, 10); ?>;
-}
+    }
 
-/* INFO */
-.badge-info {
+    /* INFO */
+    .badge-info {
     color: #fff !important;
     background-color: <?php print $badgeInfo; ?>;
-}
-a.badge-info.focus, a.badge-info:focus {
+    }
+    a.badge-info.focus, a.badge-info:focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem <?php print colorHexToRgb($badgeInfo, 0.5); ?>;
-}
-a.badge-info:focus, a.badge-info:hover {
+    }
+    a.badge-info:focus, a.badge-info:hover {
     color: #fff !important;
     background-color: <?php print colorDarker($badgeInfo, 10); ?>;
-}
+    }
 
-/* LIGHT */
-.badge-light {
+    /* LIGHT */
+    .badge-light {
     color: #212529 !important;
     background-color: <?php print $badgeLight; ?>;
-}
-a.badge-light.focus, a.badge-light:focus {
+    }
+    a.badge-light.focus, a.badge-light:focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem <?php print colorHexToRgb($badgeLight, 0.5); ?>;
-}
-a.badge-light:focus, a.badge-light:hover {
+    }
+    a.badge-light:focus, a.badge-light:hover {
     color: #212529 !important;
     background-color: <?php print colorDarker($badgeLight, 10); ?>;
-}
+    }
 
-/* DARK */
-.badge-dark {
+    /* DARK */
+    .badge-dark {
     color: #fff !important;
     background-color: <?php print $badgeDark; ?>;
-}
-a.badge-dark.focus, a.badge-dark:focus {
+    }
+    a.badge-dark.focus, a.badge-dark:focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem <?php print colorHexToRgb($badgeDark, 0.5); ?>;
-}
-a.badge-dark:focus, a.badge-dark:hover {
+    }
+    a.badge-dark:focus, a.badge-dark:hover {
     color: #fff !important;
     background-color: <?php print colorDarker($badgeDark, 10); ?>;
-}
-
-
-@media only screen and (max-width: 570px)
-{
-    span.badge.badge-status {
-        overflow: hidden;
-        max-width: 130px;
-        text-overflow: ellipsis;
     }
-}
 
 
-/* STATUS BADGES */
+    @media only screen and (max-width: 570px)
+    {
+    span.badge.badge-status {
+    overflow: hidden;
+    max-width: 130px;
+    text-overflow: ellipsis;
+    }
+    }
+
+
+    /* STATUS BADGES */
 <?php
 for ($i = 0; $i <= 10; $i++) {
     /* Default Status */
@@ -221,10 +221,10 @@ _createStatusBadgeCss('4b', '', "STATUS4b");
 /**
  * Create status badge
  *
- * @param string $statusName            name of status
- * @param string $statusVarNamePrefix   a prefix for var ${$statusVarNamePrefix.'badgeStatus'.$statusName}
- * @param string $commentLabel          a comment label
- * @param string $cssPrefix             a css prefix
+ * @param string $statusName name of status
+ * @param string $statusVarNamePrefix a prefix for var ${$statusVarNamePrefix.'badgeStatus'.$statusName}
+ * @param string $commentLabel a comment label
+ * @param string $cssPrefix a css prefix
  * @return void
  */
 function _createStatusBadgeCss($statusName, $statusVarNamePrefix = '', $commentLabel = '', $cssPrefix = '')
@@ -243,22 +243,22 @@ function _createStatusBadgeCss($statusName, $statusVarNamePrefix = '', $commentL
             $thisBadgeTextColor = ${$statusVarNamePrefix . 'badgeStatus_textColor' . $statusName};
         }
 
-        if (in_array((string) $statusName, $TBadgeBorderOnly)) {
+        if (in_array((string)$statusName, $TBadgeBorderOnly)) {
             $thisBadgeTextColor = '#212529';
             $thisBadgeBackgroundColor = "";
         }
 
-        if (in_array((string) $statusName, array('0', '5', '9'))) {
+        if (in_array((string)$statusName, array('0', '5', '9'))) {
             $thisBadgeTextColor = '#999999';
         }
-        if (in_array((string) $statusName, array('6'))) {
+        if (in_array((string)$statusName, array('6'))) {
             $thisBadgeTextColor = '#777777';
         }
 
         // badge-statusX
         print $cssPrefix . ".badge-status" . $statusName . " {\n";
         print "        color: " . $thisBadgeTextColor . " !important;\n";
-        if (in_array((string) $statusName, $TBadgeBorderOnly)) {
+        if (in_array((string)$statusName, $TBadgeBorderOnly)) {
             print "        border-color: " . $thisBadgeBorderColor . " !important;\n";
         }
         if ($thisBadgeBackgroundColor != '') {
@@ -281,7 +281,7 @@ function _createStatusBadgeCss($statusName, $statusVarNamePrefix = '', $commentL
         print $cssPrefix . ".badge-status" . $statusName . ":focus, " . $cssPrefix . ".badge-status" . $statusName . ":hover {\n";
         print "    color: " . $thisBadgeTextColor . " !important;\n";
         //print "    background-color: " . colorDarker($thisBadgeBackgroundColor, 10) . ";\n";
-        if (in_array((string) $statusName, $TBadgeBorderOnly)) {
+        if (in_array((string)$statusName, $TBadgeBorderOnly)) {
             print "        border-color: " . colorDarker($thisBadgeBorderColor, 10) . " !important;\n";
         }
         print "}\n";

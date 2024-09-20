@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2018 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013      Juanjo Menent		<jmenent@2byte.es>
+/* Copyright (C) 2005-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2018  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -22,13 +22,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Facture\Classes\ModeleNumRefFactures;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/facture/mod_facture_mars.php
  *  \ingroup    invoice
  *  \brief      File containing class for numbering module Mars
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/facture/modules_facture.php';
 
 /**
  *  Class to manage invoice numbering rules Mars
@@ -62,7 +66,7 @@ class mod_facture_mars extends ModeleNumRefFactures
     {
         global $conf, $mysoc;
 
-        if ((float) $conf->global->MAIN_VERSION_LAST_INSTALL >= 16.0 && $mysoc->country_code != 'FR') {
+        if ((float)$conf->global->MAIN_VERSION_LAST_INSTALL >= 16.0 && $mysoc->country_code != 'FR') {
             $this->prefixinvoice = 'IN'; // We use correct standard code "IN = Invoice"
             $this->prefixreplacement = 'IR';
             $this->prefixdeposit = 'ID';
@@ -77,8 +81,8 @@ class mod_facture_mars extends ModeleNumRefFactures
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -90,7 +94,7 @@ class mod_facture_mars extends ModeleNumRefFactures
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -101,8 +105,8 @@ class mod_facture_mars extends ModeleNumRefFactures
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -162,9 +166,9 @@ class mod_facture_mars extends ModeleNumRefFactures
     /**
      * Return next value not used or last value used
      *
-     * @param   Societe     $objsoc     Object third party
-     * @param   Facture     $invoice    Object invoice
-     * @param   string      $mode       'next' for next value or 'last' for last value
+     * @param Societe $objsoc Object third party
+     * @param Facture $invoice Object invoice
+     * @param string $mode 'next' for next value or 'last' for last value
      * @return  string|int              Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $invoice, $mode = 'next')
@@ -247,11 +251,11 @@ class mod_facture_mars extends ModeleNumRefFactures
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc         Object third party
-     *  @param  Facture     $objforref      Object for number to search
-     *  @param  string      $mode           'next' for next value or 'last' for last value
-     *  @return string                      Next free value
-     *  @deprecated see getNextValue
+     * @param Societe $objsoc Object third party
+     * @param Facture $objforref Object for number to search
+     * @param string $mode 'next' for next value or 'last' for last value
+     * @return string                      Next free value
+     * @deprecated see getNextValue
      */
     public function getNumRef($objsoc, $objforref, $mode = 'next')
     {

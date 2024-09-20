@@ -38,7 +38,7 @@ if (!defined('NOBROWSERNOTIF')) {
 }
 
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -51,9 +51,7 @@ if (!defined('USESUFFIXINLOG')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/stripe/stripe-php/init.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 
 
 // You can find your endpoint's secret in your webhook settings
@@ -241,7 +239,7 @@ if ($event->type == 'payout.created') {
             $typeto = 'VIR';
 
             if (!$error) {
-                $bank_line_id_from = $accountfrom->addline($dateo, $typefrom, $label, -1 * (float) price2num($amount), '', '', $user);
+                $bank_line_id_from = $accountfrom->addline($dateo, $typefrom, $label, -1 * (float)price2num($amount), '', '', $user);
             }
             if (!($bank_line_id_from > 0)) {
                 $error++;
@@ -393,7 +391,7 @@ if ($event->type == 'payout.created') {
         $s = new \Stripe\StripeClient($stripeacc);
 
         $paymentmethodstripe = $s->paymentMethods->retrieve($paymentmethodstripeid);
-        $paymentTypeCode =  $paymentmethodstripe->type;
+        $paymentTypeCode = $paymentmethodstripe->type;
         if ($paymentTypeCode == "ban" || $paymentTypeCode == "sepa_debit") {
             $paymentTypeCode = "PRE";
         } elseif ($paymentTypeCode == "card") {
@@ -527,11 +525,11 @@ if ($event->type == 'payout.created') {
                 $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_demande as dp";
                 $sql .= " JOIN " . MAIN_DB_PREFIX . "prelevement_bons as pb"; // Here we join to prevent modification of a prelevement bon already credited
                 $sql .= " ON pb.rowid = dp.fk_prelevement_bons";
-                $sql .= " WHERE dp.fk_facture = " . ((int) $invoice_id);
+                $sql .= " WHERE dp.fk_facture = " . ((int)$invoice_id);
                 $sql .= " AND dp.sourcetype = 'facture'";
                 $sql .= " AND dp.ext_payment_id = '" . $db->escape($TRANSACTIONID) . "'";
                 $sql .= " AND dp.traite = 1";
-                $sql .= " AND statut = " . ((int) $bon::STATUS_TRANSFERED); // To be sure that it's not already credited
+                $sql .= " AND statut = " . ((int)$bon::STATUS_TRANSFERED); // To be sure that it's not already credited
                 $result = $db->query($sql);
                 if ($result) {
                     if ($db->num_rows($result)) {
@@ -549,12 +547,12 @@ if ($event->type == 'payout.created') {
 
                 if (!$error && !empty($idbon)) {
                     $sql = "UPDATE " . MAIN_DB_PREFIX . "prelevement_bons";
-                    $sql .= " SET fk_user_credit = " . ((int) $user->id);
-                    $sql .= ", statut = " . ((int) $bon::STATUS_CREDITED);
+                    $sql .= " SET fk_user_credit = " . ((int)$user->id);
+                    $sql .= ", statut = " . ((int)$bon::STATUS_CREDITED);
                     $sql .= ", date_credit = '" . $db->idate($now) . "'";
                     $sql .= ", credite = 1";
-                    $sql .= " WHERE rowid = " . ((int) $idbon);
-                    $sql .= " AND statut = " . ((int) $bon::STATUS_TRANSFERED);
+                    $sql .= " WHERE rowid = " . ((int)$idbon);
+                    $sql .= " AND statut = " . ((int)$bon::STATUS_TRANSFERED);
 
                     $result = $db->query($sql);
                     if (!$result) {
@@ -567,7 +565,7 @@ if ($event->type == 'payout.created') {
                 if (!$error && !empty($idbon)) {
                     $sql = "UPDATE " . MAIN_DB_PREFIX . "prelevement_lignes";
                     $sql .= " SET statut = 2";
-                    $sql .= " WHERE fk_prelevement_bons = " . ((int) $idbon);
+                    $sql .= " WHERE fk_prelevement_bons = " . ((int)$idbon);
                     $result = $db->query($sql);
                     if (!$result) {
                         $postactionmessages[] = $db->lasterror();
@@ -644,7 +642,7 @@ if ($event->type == 'payout.created') {
     if ($objpaymentmodetype == 'sepa_debit') {
         $db->begin();
 
-                $actioncomm = new ActionComm($db);
+        $actioncomm = new ActionComm($db);
 
         if ($objinvoiceid > 0) {
             $invoice = new Facture($db);
@@ -675,7 +673,7 @@ if ($event->type == 'payout.created') {
             $error++;
         }
 
-        if (! $error) {
+        if (!$error) {
             $db->commit();
         } else {
             $db->rollback();
@@ -686,8 +684,6 @@ if ($event->type == 'payout.created') {
 } elseif ($event->type == 'checkout.session.completed') {       // Called when making payment with new Checkout method ($conf->global->STRIPE_USE_NEW_CHECKOUT is on).
     // TODO: create fees
 } elseif ($event->type == 'payment_method.attached') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companypaymentmode.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
     $societeaccount = new SocieteAccount($db);
 
     $companypaymentmode = new CompanyPaymentMode($db);
@@ -697,21 +693,21 @@ if ($event->type == 'payout.created') {
         // If the payment mode attached is to a stripe account owned by an external customer in societe_account (so a thirdparty that has a Stripe account),
         // we can create the payment mode
         $companypaymentmode->stripe_card_ref = $db->escape($event->data->object->id);
-        $companypaymentmode->fk_soc          = $idthirdparty;
-        $companypaymentmode->bank            = null;
-        $companypaymentmode->label           = '';
-        $companypaymentmode->number          = $db->escape($event->data->object->id);
-        $companypaymentmode->last_four       = $db->escape($event->data->object->card->last4);
-        $companypaymentmode->card_type       = $db->escape($event->data->object->card->branding);
-        $companypaymentmode->proprio         = $db->escape($event->data->object->billing_details->name);
-        $companypaymentmode->exp_date_month  = $db->escape($event->data->object->card->exp_month);
-        $companypaymentmode->exp_date_year   = $db->escape($event->data->object->card->exp_year);
-        $companypaymentmode->cvn             = null;
-        $companypaymentmode->datec           = $db->escape($event->data->object->created);
-        $companypaymentmode->default_rib     = 0;
-        $companypaymentmode->type            = $db->escape($event->data->object->type);
-        $companypaymentmode->country_code    = $db->escape($event->data->object->card->country);
-        $companypaymentmode->status          = $servicestatus;
+        $companypaymentmode->fk_soc = $idthirdparty;
+        $companypaymentmode->bank = null;
+        $companypaymentmode->label = '';
+        $companypaymentmode->number = $db->escape($event->data->object->id);
+        $companypaymentmode->last_four = $db->escape($event->data->object->card->last4);
+        $companypaymentmode->card_type = $db->escape($event->data->object->card->branding);
+        $companypaymentmode->proprio = $db->escape($event->data->object->billing_details->name);
+        $companypaymentmode->exp_date_month = $db->escape($event->data->object->card->exp_month);
+        $companypaymentmode->exp_date_year = $db->escape($event->data->object->card->exp_year);
+        $companypaymentmode->cvn = null;
+        $companypaymentmode->datec = $db->escape($event->data->object->created);
+        $companypaymentmode->default_rib = 0;
+        $companypaymentmode->type = $db->escape($event->data->object->type);
+        $companypaymentmode->country_code = $db->escape($event->data->object->card->country);
+        $companypaymentmode->status = $servicestatus;
 
         // TODO Check that a payment mode $companypaymentmode->stripe_card_ref does not exists yet to avoid to create duplicates
         // so we can remove the test on STRIPE_NO_DUPLICATE_CHECK
@@ -729,24 +725,23 @@ if ($event->type == 'payout.created') {
         }
     }
 } elseif ($event->type == 'payment_method.updated') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companypaymentmode.class.php';
     $companypaymentmode = new CompanyPaymentMode($db);
     $companypaymentmode->fetch(0, '', 0, '', " AND stripe_card_ref = '" . $db->escape($event->data->object->id) . "'");
     if ($companypaymentmode->id > 0) {
         // If we found a payment mode with the ID
-        $companypaymentmode->bank            = null;
-        $companypaymentmode->label           = '';
-        $companypaymentmode->number          = $db->escape($event->data->object->id);
-        $companypaymentmode->last_four       = $db->escape($event->data->object->card->last4);
-        $companypaymentmode->proprio         = $db->escape($event->data->object->billing_details->name);
-        $companypaymentmode->exp_date_month  = $db->escape($event->data->object->card->exp_month);
-        $companypaymentmode->exp_date_year   = $db->escape($event->data->object->card->exp_year);
-        $companypaymentmode->cvn             = null;
-        $companypaymentmode->datec           = $db->escape($event->data->object->created);
-        $companypaymentmode->default_rib     = 0;
-        $companypaymentmode->type            = $db->escape($event->data->object->type);
-        $companypaymentmode->country_code    = $db->escape($event->data->object->card->country);
-        $companypaymentmode->status          = $servicestatus;
+        $companypaymentmode->bank = null;
+        $companypaymentmode->label = '';
+        $companypaymentmode->number = $db->escape($event->data->object->id);
+        $companypaymentmode->last_four = $db->escape($event->data->object->card->last4);
+        $companypaymentmode->proprio = $db->escape($event->data->object->billing_details->name);
+        $companypaymentmode->exp_date_month = $db->escape($event->data->object->card->exp_month);
+        $companypaymentmode->exp_date_year = $db->escape($event->data->object->card->exp_year);
+        $companypaymentmode->cvn = null;
+        $companypaymentmode->datec = $db->escape($event->data->object->created);
+        $companypaymentmode->default_rib = 0;
+        $companypaymentmode->type = $db->escape($event->data->object->type);
+        $companypaymentmode->country_code = $db->escape($event->data->object->card->country);
+        $companypaymentmode->status = $servicestatus;
 
         $db->begin();
         if (!$error) {
@@ -763,7 +758,7 @@ if ($event->type == 'payout.created') {
     }
 } elseif ($event->type == 'payment_method.detached') {
     $db->begin();
-    $sql = "DELETE FROM " . MAIN_DB_PREFIX . "societe_rib WHERE number = '" . $db->escape($event->data->object->id) . "' and status = " . ((int) $servicestatus);
+    $sql = "DELETE FROM " . MAIN_DB_PREFIX . "societe_rib WHERE number = '" . $db->escape($event->data->object->id) . "' and status = " . ((int)$servicestatus);
     $db->query($sql);
     $db->commit();
 } elseif ($event->type == 'charge.succeeded') {

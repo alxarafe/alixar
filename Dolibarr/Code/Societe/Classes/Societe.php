@@ -42,11 +42,19 @@ namespace Dolibarr\Code\Societe\Classes;
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Interfaces;
+use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Core\Traits\CommonIncoterm;
 use Dolibarr\Code\Core\Traits\CommonPeople;
 use Dolibarr\Code\Core\Traits\CommonSocialNetworks;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
@@ -836,12 +844,10 @@ class Societe extends CommonObject
 
     public $partnerships = array();
 
-
     /**
      * @var Account|string Default BAN account
      */
     public $bank_account;
-
 
     const STATUS_CEASED = 0;
     const STATUS_INACTIVITY = 1;
@@ -2460,7 +2466,6 @@ class Societe extends CommonObject
                 $vatrate = preg_replace('/\s*\(.*\)/', '', $vatrate); // Remove code into vatrate.
             }
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 
             $discount = new DiscountAbsolute($this->db);
             $discount->fk_soc = $this->id;
@@ -2506,7 +2511,6 @@ class Societe extends CommonObject
      */
     public function getAvailableDiscounts($user = null, $filter = '', $maxvalue = 0, $discount_type = 0)
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 
         $discountstatic = new DiscountAbsolute($this->db);
         $result = $discountstatic->getAvailableDiscounts($this, $user, $filter, $maxvalue, $discount_type);
@@ -3344,7 +3348,6 @@ class Societe extends CommonObject
                 return $bac->getRibLabel(true);
             } elseif ($mode == 'rum') {
                 if (empty($bac->rum)) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
                     $prelevement = new BonPrelevement($this->db);
                     $bac->fetch_thirdparty();
                     $bac->rum = $prelevement->buildRumNumber($bac->thirdparty->code_client, $bac->datec, $bac->id);
@@ -5390,7 +5393,6 @@ class Societe extends CommonObject
             }
 
             // Merge categories
-            include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
             $static_cat = new Categorie($this->db);
 
             $custcats_ori = $static_cat->containing($soc_origin->id, 'customer', 'id');

@@ -28,10 +28,10 @@
 
 namespace Dolibarr\Core\Base;
 
-use Dolibarr\Lib\Modules;
-use InfoBox;
-use Menubase;
-use User;
+use Dolibarr\Code\Core\Classes\InfoBox;
+use Dolibarr\Code\Core\Classes\Menubase;
+use Dolibarr\Code\User\Classes\User;
+use DoliDB;
 
 /**
  * \file           htdocs/core/modules/DolibarrModules.class.php

@@ -25,7 +25,9 @@
 
 namespace Dolibarr\Code\Hrm\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObjectLine;
+use DoliDB;
 
 /**
  * \file        class/evaluationdet.class.php
@@ -34,7 +36,6 @@ use Dolibarr\Core\Base\CommonObjectLine;
  */
 
 // Put here all includes required by your class file
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skillrank.class.php';
 
 
 /**

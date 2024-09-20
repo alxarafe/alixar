@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2019       Nicolas ZABOURI         <info@inovea-conseil.com>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Don\Classes\Don;
 
 /**
  *  \file       htdocs/don/index.php
@@ -136,7 +140,7 @@ print "</tr>\n";
 
 $listofstatus = array(0, 1, -1, 2);
 foreach ($listofstatus as $status) {
-    $dataseries[] = array($donstatic->LibStatut($status, 1), (isset($nb[$status]) ? (int) $nb[$status] : 0));
+    $dataseries[] = array($donstatic->LibStatut($status, 1), (isset($nb[$status]) ? (int)$nb[$status] : 0));
     if ($status == Don::STATUS_DRAFT) {
         $colorseries[$status] = '-' . $badgeStatus0;
     }

@@ -81,20 +81,21 @@
 -- (371, 1, 'economic', '2026-12', '2026-12-31 23:59:59', 8.33000000, 490.14000000, '2818', '68112', '2022-03-09 14:15:49', NULL),
 -- (372, 1, 'economic', '2027-01', '2027-01-31 23:59:59', 9.86000000, 500.00000000, '2818', '68112', '2022-03-09 14:15:49', NULL);
 
-CREATE TABLE llx_asset_depreciation(
-    rowid                           integer         AUTO_INCREMENT PRIMARY KEY NOT NULL,
+CREATE TABLE llx_asset_depreciation
+(
+    rowid                   integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
 
-    fk_asset                        integer         NOT NULL,
-    depreciation_mode               varchar(255)	NOT NULL,	-- (economic, fiscal or other)
+    fk_asset                integer      NOT NULL,
+    depreciation_mode       varchar(255) NOT NULL, -- (economic, fiscal or other)
 
-    ref                             varchar(255)	NOT NULL,
-    depreciation_date               datetime		NOT NULL,
-    depreciation_ht                 double(24,8)	NOT NULL,
-    cumulative_depreciation_ht      double(24,8)	NOT NULL,
+    ref                     varchar(255) NOT NULL,
+    depreciation_date       datetime     NOT NULL,
+    depreciation_ht double(24,8)	NOT NULL,
+    cumulative_depreciation_ht double(24,8)	NOT NULL,
 
-    accountancy_code_debit          varchar(32),
-    accountancy_code_credit         varchar(32),
+    accountancy_code_debit  varchar(32),
+    accountancy_code_credit varchar(32),
 
-    tms                             timestamp       DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_modif                   integer
+    tms                     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_user_modif           integer
 ) ENGINE=innodb;

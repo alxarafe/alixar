@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2007-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2020      Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2007-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2020       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Resource\Classes\Dolresource;
+use Dolibarr\Code\Resource\Classes\FormResource;
+use Dolibarr\Code\User\Classes\UserGroup;
+use Dolibarr\Code\Workstation\Classes\Workstation;
+use Dolibarr\Code\Workstation\Classes\WorkstationResource;
+use Dolibarr\Code\Workstation\Classes\WorkstationUserGroup;
 
 /**
  *      \file       htdocs/workstation/workstation_list.php
@@ -157,7 +168,6 @@ $permissiontodelete = $user->hasRight('workstation', 'workstation', 'delete');
 // Security check
 restrictedArea($user, $object->element, 0, $object->table_element, 'workstation');
 
-
 /*
  * Actions
  */
@@ -206,8 +216,6 @@ if (empty($reshook)) {
     $uploaddir = $conf->workstation->dir_output;
     include DOL_DOCUMENT_ROOT . '/core/actions_massactions.inc.php';
 }
-
-
 
 /*
  * View

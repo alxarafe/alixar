@@ -43,9 +43,9 @@ if (!isset($absolute_creditnote)) {
 
 
 // Relative and absolute discounts
-$addrelativediscount = '<a class="editfielda" href="' . constant('BASE_URL') . 'comm/remise.php?id=' . ((int) $thirdparty->id) . '&backtopage=' . urlencode($backtopage) . '&action=create&token=' . newToken() . (!empty($discount_type) ? '&discount_type=1' : '') . '">' . img_edit($langs->trans("EditRelativeDiscount")) . '</a>';
-$addabsolutediscount = '<a class="editfielda" href="' . constant('BASE_URL') . 'comm/remx.php?id=' . ((int) $thirdparty->id) . '&backtopage=' . urlencode($backtopage) . '&action=create&token=' . newToken() . '">' . img_edit($langs->trans("EditGlobalDiscounts")) . '</a>';
-$viewabsolutediscount = '<a class="editfielda" href="' . constant('BASE_URL') . 'comm/remx.php?id=' . ((int) $thirdparty->id) . '&backtopage=' . urlencode($backtopage) . '">' . $langs->trans("ViewAvailableGlobalDiscounts") . '</a>';
+$addrelativediscount = '<a class="editfielda" href="' . constant('BASE_URL') . 'comm/remise.php?id=' . ((int)$thirdparty->id) . '&backtopage=' . urlencode($backtopage) . '&action=create&token=' . newToken() . (!empty($discount_type) ? '&discount_type=1' : '') . '">' . img_edit($langs->trans("EditRelativeDiscount")) . '</a>';
+$addabsolutediscount = '<a class="editfielda" href="' . constant('BASE_URL') . 'comm/remx.php?id=' . ((int)$thirdparty->id) . '&backtopage=' . urlencode($backtopage) . '&action=create&token=' . newToken() . '">' . img_edit($langs->trans("EditGlobalDiscounts")) . '</a>';
+$viewabsolutediscount = '<a class="editfielda" href="' . constant('BASE_URL') . 'comm/remx.php?id=' . ((int)$thirdparty->id) . '&backtopage=' . urlencode($backtopage) . '">' . $langs->trans("ViewAvailableGlobalDiscounts") . '</a>';
 
 $fixedDiscount = $thirdparty->remise_percent;
 if (!empty($discount_type)) {

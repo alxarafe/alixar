@@ -32,7 +32,7 @@ use Dolibarr\Code\Resource\Classes\Dolresource;
 /**
  * Prepare head for tabs
  *
- * @param   Dolresource $object     Object
+ * @param Dolresource $object Object
  * @return  array               Array of head entries
  */
 function resource_prepare_head($object)

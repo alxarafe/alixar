@@ -84,9 +84,9 @@ class SetupIntent extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\SetupIntent the canceled setup intent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SetupIntent the canceled setup intent
      */
     public function cancel($params = null, $opts = null)
     {
@@ -101,9 +101,9 @@ class SetupIntent extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\SetupIntent the confirmed setup intent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SetupIntent the confirmed setup intent
      */
     public function confirm($params = null, $opts = null)
     {
@@ -118,9 +118,9 @@ class SetupIntent extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\SetupIntent the verified setup intent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SetupIntent the verified setup intent
      */
     public function verifyMicrodeposits($params = null, $opts = null)
     {

@@ -21,7 +21,9 @@
 
 namespace Dolibarr\Code\Societe\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        class/companypaymentmode.class.php
@@ -194,7 +196,6 @@ class CompanyPaymentMode extends CommonObject
 
     public $import_key;
     // END MODULEBUILDER PROPERTIES
-
 
     /**
      * Constructor

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2015      Alexandre Spangaro <aspangaro@open-dsi.fr>
+/* Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Hrm\Classes\Establishment;
+
 /**
  *  \file           htdocs/hrm/establishment/info.php
  *  \brief          Page to show info of an establishment
@@ -32,9 +36,9 @@ $langs->loadLangs(array('admin', 'hrm'));
 
 // Get parameters
 $id = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
-$cancel     = GETPOST('cancel', 'aZ09');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 if (GETPOST('actioncode', 'array')) {
@@ -118,7 +122,6 @@ if (empty($reshook)) {
         $search_agenda_label = '';
     }
 }
-
 
 
 /*

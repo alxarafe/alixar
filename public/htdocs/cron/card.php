@@ -1,10 +1,10 @@
 <?php
 
 /* Copyright (C) 2012       Nicolas Villa aka Boyquotes http://informetic.fr
- * Copyright (C) 2013       Florian Henry           <florian.henry@open-concpt.pro>
- * Copyright (C) 2013-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2023  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2024		William Mead			<william.mead@manchenumerique.fr>
+ * Copyright (C) 2013       Florian Henry               <florian.henry@open-concpt.pro>
+ * Copyright (C) 2013-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2023  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2024		William Mead			    <william.mead@manchenumerique.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCron;
+use Dolibarr\Code\Cron\Classes\Cronjob;
+
 /**
  *  \file       htdocs/cron/card.php
  *  \ingroup    cron
@@ -30,10 +35,7 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
 // Cron job libraries
-require_once DOL_DOCUMENT_ROOT . "/core/class/html.formcron.class.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/cron.lib.php';
 
 // Load translation files required by the page
@@ -55,7 +57,6 @@ if (!$user->hasRight('cron', 'create')) {
 $permissiontoadd = $user->hasRight('cron', 'create');
 $permissiontoexecute = $user->hasRight('cron', 'execute');
 $permissiontodelete = $user->hasRight('cron', 'delete');
-
 
 /*
  * Actions
@@ -249,8 +250,6 @@ if ($action == 'confirm_clone' && $confirm == 'yes' && $permissiontoadd) {
         }
     }
 }
-
-
 
 /*
  * View
@@ -575,7 +574,7 @@ if (($action == "create") || ($action == "edit")) {
         $langs->load($reg[1]);
     }
 
-    $labeltoshow =  preg_replace('/:.*$/', '', $object->label);
+    $labeltoshow = preg_replace('/:.*$/', '', $object->label);
 
     $morehtmlref = '<div class="refidno">';
     $morehtmlref .= $langs->trans($labeltoshow);

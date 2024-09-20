@@ -5,7 +5,7 @@
  * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2008       Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
  * Copyright (C) 2019-2024  Frédéric France             <frederic.france@free.fr>
- * Copyright (C) 2020 		Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2020 		Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,14 +23,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Workstation\Classes\ModeleNumRefWorkstation;
+use Dolibarr\Code\Workstation\Classes\Workstation;
+
 /**
  * \file       htdocs/core/modules/workstation/mod_workstation_advanced.php
  * \ingroup    workstation
  * \brief      File containing class for advanced numbering model of Workstation
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/workstation/modules_workstation.php';
-
 
 /**
  *  Class to manage customer Bom numbering rules advanced
@@ -57,8 +59,8 @@ class mod_workstation_advanced extends ModeleNumRefWorkstation
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -98,7 +100,7 @@ class mod_workstation_advanced extends ModeleNumRefWorkstation
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -126,8 +128,8 @@ class mod_workstation_advanced extends ModeleNumRefWorkstation
     /**
      *  Return next free value
      *
-     *  @param  Workstation $object     Object we need next value for
-     *  @return string|0                Next value if OK, 0 if KO
+     * @param Workstation $object Object we need next value for
+     * @return string|0                Next value if OK, 0 if KO
      */
     public function getNextValue($object)
     {
@@ -147,6 +149,6 @@ class mod_workstation_advanced extends ModeleNumRefWorkstation
 
         $numFinal = get_next_value($db, $mask, 'workstation_workstation', 'ref', '', null, $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2020   Andreu Bisquerra    <jove@bisquerra.com>
- * Copyright (C) 2024	Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2020       Andreu Bisquerra            <jove@bisquerra.com>
+ * Copyright (C) 2024	    Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify

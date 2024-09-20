@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@capnetworks.com>
- * Copyright (C) 2010      François Legastelois <flegastelois@teclib.com>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@capnetworks.com>
+ * Copyright (C) 2010       François Legastelois        <flegastelois@teclib.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -22,6 +22,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/projet/activity/permonth.php
  *  \ingroup    projet
@@ -31,7 +42,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('projects', 'users', 'companies'));
@@ -65,7 +75,7 @@ $month = GETPOSTINT('remonth') ? GETPOSTINT('remonth') : (GETPOSTINT("month") ? 
 $day = GETPOSTINT('reday') ? GETPOSTINT('reday') : (GETPOSTINT("day") ? GETPOSTINT("day") : date("d"));
 $week = GETPOSTINT("week") ? GETPOSTINT("week") : date("W");
 
-$day = (int) $day;
+$day = (int)$day;
 
 //$search_categ = GETPOST("search_categ", 'alpha');
 $search_usertoprocessid = GETPOSTINT('search_usertoprocessid');
@@ -81,14 +91,14 @@ $sortorder = GETPOST('sortorder', 'aZ09comma');
 $startdayarray = dol_get_prev_month($month, $year);
 
 $prev = $startdayarray;
-$prev_year  = $prev['year'];
+$prev_year = $prev['year'];
 $prev_month = $prev['month'];
-$prev_day   = 1;
+$prev_day = 1;
 
 $next = dol_get_next_month($month, $year);
-$next_year  = $next['year'];
+$next_year = $next['year'];
 $next_month = $next['month'];
-$next_day   = 1;
+$next_day = 1;
 $TWeek = getWeekNumbersOfMonth($month, $year);
 $firstdaytoshow = dol_mktime(0, 0, 0, $month, 1, $year);
 $TFirstDays = getFirstDayOfEachWeek($TWeek, $year);
@@ -137,7 +147,7 @@ $arrayfields['timeconsumed'] = array('label' => 'TimeConsumed', 'checked' => 1, 
 if (!empty($extrafields->attributes['projet_task']['label']) && is_array($extrafields->attributes['projet_task']['label']) && count($extrafields->attributes['projet_task']['label']) > 0) {
     foreach ($extrafields->attributes['projet_task']['label'] as $key => $val) {
         if (!empty($extrafields->attributes['projet_task']['list'][$key])) {
-            $arrayfields["efpt." . $key] = array('label' => $extrafields->attributes['projet_task']['label'][$key], 'checked' => (($extrafields->attributes['projet_task']['list'][$key] < 0) ? 0 : 1), 'position' => $extrafields->attributes['projet_task']['pos'][$key], 'enabled' => (abs((int) $extrafields->attributes['projet_task']['list'][$key]) != 3 && $extrafields->attributes['projet_task']['perms'][$key]));
+            $arrayfields["efpt." . $key] = array('label' => $extrafields->attributes['projet_task']['label'][$key], 'checked' => (($extrafields->attributes['projet_task']['list'][$key] < 0) ? 0 : 1), 'position' => $extrafields->attributes['projet_task']['pos'][$key], 'enabled' => (abs((int)$extrafields->attributes['projet_task']['list'][$key]) != 3 && $extrafields->attributes['projet_task']['perms'][$key]));
         }
     }
 }
@@ -215,7 +225,7 @@ if ($action == 'addtime' && $user->hasRight('projet', 'lire') && GETPOST('assign
         if ($result >= 0 || $result == -2) {    // Contact add ok or already contact of task
             // Test if we are already contact of the project (should be rare but sometimes we can add as task contact without being contact of project, like when admin user has been removed from contact of project)
             $sql = 'SELECT ec.rowid FROM ' . MAIN_DB_PREFIX . 'element_contact as ec, ' . MAIN_DB_PREFIX . 'c_type_contact as tc WHERE tc.rowid = ec.fk_c_type_contact';
-            $sql .= ' AND ec.fk_socpeople = ' . ((int) $idfortaskuser) . " AND ec.element_id = " . ((int) $object->fk_project) . " AND tc.element = 'project' AND source = 'internal'";
+            $sql .= ' AND ec.fk_socpeople = ' . ((int)$idfortaskuser) . " AND ec.element_id = " . ((int)$object->fk_project) . " AND tc.element = 'project' AND source = 'internal'";
             $resql = $db->query($sql);
             if ($resql) {
                 $obj = $db->fetch_object($resql);
@@ -325,9 +335,9 @@ if ($action == 'addtime' && $user->hasRight('projet', 'lire') && GETPOST('formfi
 
             $param = '';
             $param .= ($mode ? '&mode=' . urlencode($mode) : '');
-            $param .= ($projectid ? 'id=' . urlencode((string) ($projectid)) : '');
+            $param .= ($projectid ? 'id=' . urlencode((string)($projectid)) : '');
             $param .= ($search_usertoprocessid ? '&search_usertoprocessid=' . urlencode($search_usertoprocessid) : '');
-            $param .= ($day ? '&day=' . urlencode((string) ($day)) : '') . ($month ? '&month=' . urlencode((string) ($month)) : '') . ($year ? '&year=' . urlencode((string) ($year)) : '');
+            $param .= ($day ? '&day=' . urlencode((string)($day)) : '') . ($month ? '&month=' . urlencode((string)($month)) : '') . ($year ? '&year=' . urlencode((string)($year)) : '');
             $param .= ($search_project_ref ? '&search_project_ref=' . urlencode($search_project_ref) : '');
             $param .= ($search_usertoprocessid > 0 ? '&search_usertoprocessid=' . urlencode($search_usertoprocessid) : '');
             $param .= ($search_thirdparty ? '&search_thirdparty=' . urlencode($search_thirdparty) : '');
@@ -350,8 +360,6 @@ if ($action == 'addtime' && $user->hasRight('projet', 'lire') && GETPOST('formfi
         }
     }
 }
-
-
 
 /*
  * View
@@ -768,7 +776,7 @@ if ($conf->use_javascript_ajax) {
 				});' . "\n";
 
     foreach ($TWeek as $week_number) {
-        print "    updateTotal(" . ((int) $week_number) . ", '" . dol_escape_js($modeinput) . "');";
+        print "    updateTotal(" . ((int)$week_number) . ", '" . dol_escape_js($modeinput) . "');";
     }
     print "\n});\n";
     print '</script>';

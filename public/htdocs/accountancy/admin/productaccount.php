@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2013-2014  Olivier Geffroy     <jeff@jeffinfo.com>
- * Copyright (C) 2013-2024  Alexandre Spangaro  <aspangaro@easya.solutions>
- * Copyright (C) 2014       Florian Henry       <florian.henry@open-concept.pro>
- * Copyright (C) 2014       Juanjo Menent       <jmenent@2byte.es>
- * Copyright (C) 2015       Ari Elbaz (elarifr) <github@accedinfo.com>
- * Copyright (C) 2021       Gauthier VERDOL     <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2013-2014  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2014       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2014       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Ari Elbaz (elarifr)         <github@accedinfo.com>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -26,6 +26,9 @@
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormCategory;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  * \file        htdocs/accountancy/admin/productaccount.php
@@ -34,8 +37,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/report.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';

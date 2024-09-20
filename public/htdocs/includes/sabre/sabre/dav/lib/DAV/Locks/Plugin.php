@@ -132,7 +132,7 @@ class Plugin extends DAV\ServerPlugin
      * for any possible locks and return those as well.
      *
      * @param string $uri
-     * @param bool   $returnChildLocks
+     * @param bool $returnChildLocks
      *
      * @return array
      */
@@ -353,7 +353,7 @@ class Plugin extends DAV\ServerPlugin
 
         if ($header) {
             if (0 === stripos($header, 'second-')) {
-                $header = (int) (substr($header, 7));
+                $header = (int)(substr($header, 7));
             } elseif (0 === stripos($header, 'infinite')) {
                 $header = LockInfo::TIMEOUT_INFINITE;
             } else {

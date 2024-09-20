@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2006 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2018 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2014-2021 Charlene Benke		<charlene.r@benke.fr>
- * Copyright (C) 2015      Jean-François Ferry	<jfefe@aternatik.fr>
- * Copyright (C) 2016      Ferran Marcet        <fmarcet@2byte.es>
- * Copyright (C) 2019	   Nicolas ZABOURI	<info@inovea-conseil.com>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2014-2021  Charlene Benke		        <charlene.r@benke.fr>
+ * Copyright (C) 2015       Jean-François Ferry	        <jfefe@aternatik.fr>
+ * Copyright (C) 2016       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2019	    Nicolas ZABOURI	            <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,8 +23,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\InfoBox;
 use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
@@ -36,16 +40,12 @@ use Dolibarr\Code\Societe\Classes\Societe;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-
-
 // Load translation files required by the page
 $langs->load("companies");
-
 
 // Initialize technical object to manage hooks. Note that conf->hooks_modules contains array
 $hookmanager = new HookManager($db);
 $hookmanager->initHooks(array('thirdpartiesindex'));
-
 
 $socid = GETPOSTINT('socid');
 if ($user->socid) {
@@ -67,7 +67,6 @@ $resultboxes = FormOther::getBoxesArea($user, "3");
 
 if (GETPOST('addbox')) {
     // Add box (when submit is done from a form when ajax disabled)
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/infobox.class.php';
     $zone = GETPOSTINT('areacode');
     $userid = GETPOSTINT('userid');
     $boxorder = GETPOST('boxorder', 'aZ09');
@@ -79,7 +78,6 @@ if (GETPOST('addbox')) {
 }
 
 $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
-
 
 /*
  * View
@@ -96,10 +94,10 @@ print load_fiche_titre($transAreaType, $resultboxes['selectboxlist'], 'companies
 // Statistics area
 
 $third = array(
-        'customer' => 0,
-        'prospect' => 0,
-        'supplier' => 0,
-        'other' => 0
+    'customer' => 0,
+    'prospect' => 0,
+    'supplier' => 0,
+    'other' => 0
 );
 $total = 0;
 
@@ -110,7 +108,7 @@ if (!$user->hasRight('societe', 'client', 'voir')) {
 }
 $sql .= ' WHERE s.entity IN (' . getEntity('societe') . ')';
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if (!$user->hasRight('fournisseur', 'lire')) {
     $sql .= " AND (s.fournisseur <> 1 OR s.client <> 0)"; // client=0, fournisseur=0 must be visible
@@ -120,7 +118,7 @@ $parameters = array('socid' => $socid);
 $reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters, $thirdparty_static); // Note that $action and $object may have been modified by hook
 if (empty($reshook)) {
     if ($socid > 0) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
 }
 $sql .= $hookmanager->resPrint;
@@ -294,7 +292,7 @@ $sql .= ", s.entity";
 $sql .= ", s.canvas, s.tms as date_modification, s.status as status";
 $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s";
 if (getDolGlobalString('MAIN_COMPANY_PERENTITY_SHARED')) {
-    $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "societe_perentity as spe ON spe.fk_soc = s.rowid AND spe.entity = " . ((int) $conf->entity);
+    $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "societe_perentity as spe ON spe.fk_soc = s.rowid AND spe.entity = " . ((int)$conf->entity);
 }
 // TODO Replace this
 if (!$user->hasRight('societe', 'client', 'voir')) {
@@ -302,7 +300,7 @@ if (!$user->hasRight('societe', 'client', 'voir')) {
 }
 $sql .= ' WHERE s.entity IN (' . getEntity('societe') . ')';
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if (!$user->hasRight('fournisseur', 'lire')) {
     $sql .= " AND (s.fournisseur != 1 OR s.client != 0)";
@@ -312,7 +310,7 @@ $parameters = array('socid' => $socid);
 $reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters, $thirdparty_static); // Note that $action and $object may have been modified by hook
 if (empty($reshook)) {
     if ($socid > 0) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
 }
 $sql .= $hookmanager->resPrint;
@@ -395,7 +393,6 @@ if ($result) {
 }
 
 
-
 /*
  * Latest modified contacts
  */
@@ -417,7 +414,7 @@ $sql .= ", sp.rowid as cid, sp.canvas as ccanvas, sp.email as cemail, sp.firstna
 $sql .= ", sp.address as caddress, sp.phone as cphone";
 $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "socpeople as sp";
 if (getDolGlobalString('MAIN_COMPANY_PERENTITY_SHARED')) {
-    $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "societe_perentity as spe ON spe.fk_soc = s.rowid AND spe.entity = " . ((int) $conf->entity);
+    $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "societe_perentity as spe ON spe.fk_soc = s.rowid AND spe.entity = " . ((int)$conf->entity);
 }
 // TODO Replace this
 if (!$user->hasRight('societe', 'client', 'voir')) {
@@ -425,7 +422,7 @@ if (!$user->hasRight('societe', 'client', 'voir')) {
 }
 $sql .= ' WHERE s.entity IN (' . getEntity('societe') . ') AND sp.fk_soc = s.rowid';
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if (!$user->hasRight('fournisseur', 'lire')) {
     $sql .= " AND (s.fournisseur != 1 OR s.client != 0)";
@@ -435,7 +432,7 @@ $parameters = array('socid' => $socid);
 $reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters, $thirdparty_static); // Note that $action and $object may have been modified by hook
 if (empty($reshook)) {
     if ($socid > 0) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
 }
 $sql .= $hookmanager->resPrint;

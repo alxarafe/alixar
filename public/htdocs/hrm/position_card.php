@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Hrm\Classes\Job;
+use Dolibarr\Code\Hrm\Classes\Position;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *    \file       htdocs/hrm/position_card.php
  *    \ingroup    hrm
@@ -29,17 +38,13 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/position.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_position.lib.php';
-//dol_include_once('/hrm/position.php');
 
 // Get Parameters
-$action     = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'add', 'create', 'edit', 'update', 'view', ...
+$action = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'add', 'create', 'edit', 'update', 'view', ...
 $backtopage = GETPOST('backtopage', 'alpha');
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');
-$id     = GETPOSTINT('id');
+$id = GETPOSTINT('id');
 
 // Initialize technical objects
 $form = new Form($db);
@@ -71,12 +76,11 @@ if (!$permissiontoread || ($action === 'create' && !$permissiontoadd)) {
 $langs->loadLangs(array("hrm", "other"));
 
 
-
 // Get parameters
-$id     = GETPOSTINT('id');
+$id = GETPOSTINT('id');
 $fk_job = GETPOSTINT('fk_job');
 
-$ref    = GETPOST('ref', 'alpha');
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
 $confirm = GETPOST('confirm', 'alpha');
 $cancel = GETPOST('cancel', 'aZ09');
@@ -183,12 +187,11 @@ if (empty($reshook)) {
 displayPositionCard($object);
 
 
-
 /**
  *      Show the card of a position
  *
- *      @param  Position         $object          Position object
- *      @return void
+ * @param Position $object Position object
+ * @return void
  */
 function displayPositionCard(&$object)
 {
@@ -392,7 +395,7 @@ if ($action !== 'edit' && $action !== 'create') {
     $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/hrm/position_agenda.php?id=' . $object->id);
 
     // List of actions on element
-        $formactions = new FormActions($db);
+    $formactions = new FormActions($db);
     $somethingshown = $formactions->showactions($object, $object->element . '@' . $object->module, (is_object($object->thirdparty) ? $object->thirdparty->id : 0), 1, '', $MAXEVENT, '', $morehtmlcenter);
 
     print '</div></div>';

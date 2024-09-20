@@ -28,7 +28,7 @@ class ResourceCaster
     public static function castDba($dba, array $a, Stub $stub, $isNested)
     {
         $list = dba_list();
-        $a['file'] = $list[(int) $dba];
+        $a['file'] = $list[(int)$dba];
 
         return $a;
     }

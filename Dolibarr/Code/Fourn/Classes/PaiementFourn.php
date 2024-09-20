@@ -30,6 +30,7 @@
 
 namespace Dolibarr\Code\Fourn\Classes;
 
+use Dolibarr\Code\Compta\Classes\Paiement;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 use DoliDB;
 
@@ -38,7 +39,6 @@ use DoliDB;
  *      \ingroup    fournisseur, facture
  *      \brief      File of class to manage payments of suppliers invoices
  */
-
 
 /**
  *  Class to manage payments for supplier invoices
@@ -298,7 +298,6 @@ class PaiementFourn extends Paiement
                                         $multicurrency_amount_ht = $multicurrency_amount_tva = $multicurrency_amount_ttc = array();
 
                                         // Insert one discount by VAT rate category
-                                        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
                                         $discount = new DiscountAbsolute($this->db);
                                         $discount->fetch('', 0, $invoice->id);
                                         if (empty($discount->id)) {    // If the invoice was not yet converted into a discount (this may have been done manually before we come here)

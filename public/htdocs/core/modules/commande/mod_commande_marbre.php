@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,13 +21,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Commande\Classes\ModeleNumRefCommandes;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/commande/mod_commande_marbre.php
  *  \ingroup    order
  *  \brief      File of class to manage Sales Order numbering rules Marbre
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/commande/modules_commande.php';
 
 /**
  *  Class to manage Sales Order numbering rules Marbre
@@ -60,7 +64,7 @@ class mod_commande_marbre extends ModeleNumRefCommandes
     {
         global $conf, $mysoc;
 
-        if ((float) $conf->global->MAIN_VERSION_LAST_INSTALL >= 16.0 && $mysoc->country_code != 'FR') {
+        if ((float)$conf->global->MAIN_VERSION_LAST_INSTALL >= 16.0 && $mysoc->country_code != 'FR') {
             $this->prefix = 'SO'; // We use correct standard code "SO = Sale Order"
         }
     }
@@ -68,8 +72,8 @@ class mod_commande_marbre extends ModeleNumRefCommandes
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -81,7 +85,7 @@ class mod_commande_marbre extends ModeleNumRefCommandes
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -93,8 +97,8 @@ class mod_commande_marbre extends ModeleNumRefCommandes
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -129,9 +133,9 @@ class mod_commande_marbre extends ModeleNumRefCommandes
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc     Object thirdparty
-     *  @param  Commande    $object     Object we need next value for
-     *  @return string|-1               Value if OK, -1 if KO
+     * @param Societe $objsoc Object thirdparty
+     * @param Commande $object Object we need next value for
+     * @return string|-1               Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $object)
     {

@@ -62,9 +62,9 @@ if (!empty($id) && !empty($action) && !empty($htmlname)) {
         $showempty = 0;
     }
 
-    $return['value']    = $form->selectcontacts($id, '', $htmlname, $showempty, '', '', 0, '', true);
+    $return['value'] = $form->selectcontacts($id, '', $htmlname, $showempty, '', '', 0, '', true);
     $return['num'] = $form->num;
-    $return['error']    = $form->error;
+    $return['error'] = $form->error;
 
     echo json_encode($return);
 }

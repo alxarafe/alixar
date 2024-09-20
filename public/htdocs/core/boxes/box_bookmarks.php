@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2015      Frederic France      <frederic.france@free.fr>
+/* Copyright (C) 2005-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,13 +18,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+
 /**
  *      \file       htdocs/core/boxes/box_bookmarks.php
  *      \ingroup    bookmark
  *      \brief      Module to generate box of bookmarks list
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
 
 /**
  * Class to manage the box to show bookmarks
@@ -39,8 +39,8 @@ class box_bookmarks extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -54,8 +54,8 @@ class box_bookmarks extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -79,7 +79,7 @@ class box_bookmarks extends ModeleBoxes
         if ($user->hasRight('bookmark', 'lire')) {
             $sql = "SELECT b.title, b.url, b.target, b.favicon";
             $sql .= " FROM " . MAIN_DB_PREFIX . "bookmark as b";
-            $sql .= " WHERE fk_user = " . ((int) $user->id);
+            $sql .= " WHERE fk_user = " . ((int)$user->id);
             $sql .= " AND b.entity = " . $conf->entity;
             $sql .= $this->db->order("position", "ASC");
             $sql .= $this->db->plimit($max, 0);
@@ -142,10 +142,10 @@ class box_bookmarks extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

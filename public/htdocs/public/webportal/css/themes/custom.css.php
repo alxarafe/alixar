@@ -65,7 +65,7 @@ header("X-Frame-Options: SAMEORIGIN");
 $webPortalTheme = new WebPortalTheme();
 
 ?>
-[data-theme="custom"], :root{
+[data-theme="custom"], :root {
     --primary-color-hue: <?php print $webPortalTheme->primaryColorHsl['h']; ?>;
     --primary-color-saturation: <?php print $webPortalTheme->primaryColorHsl['s']; ?>%;
     --primary-color-lightness: <?php print $webPortalTheme->primaryColorHsl['l']; ?>%;
@@ -73,16 +73,17 @@ $webPortalTheme = new WebPortalTheme();
 }
 
 .login-page {
-    <?php
-    if (!empty($webPortalTheme->loginBackground)) {
-        print '--login-background: rgba(0, 0, 0, 0.4) url("' . $webPortalTheme->loginBackground . '");' . "\n";
-    }
-
-    if (!empty($webPortalTheme->loginLogoUrl)) {
-        print '--login-logo: url("' . $webPortalTheme->loginLogoUrl . '"); /* for relative path, must be relative to the css file or use full url starting by http:// */' . "\n";
-    }
-    ?>
+<?php
+if (!empty($webPortalTheme->loginBackground)) {
+    print '--login-background: rgba(0, 0, 0, 0.4) url("' . $webPortalTheme->loginBackground . '");' . "\n";
 }
+
+if (!empty($webPortalTheme->loginLogoUrl)) {
+    print '--login-logo: url("' . $webPortalTheme->loginLogoUrl . '"); /* for relative path, must be relative to the css file or use full url starting by http:// */' . "\n";
+}
+?>
+}
+
 <?php
 
 print '/* Here, the content of the common custom CSS defined into Home - Setup - Display - CSS' . "*/\n";

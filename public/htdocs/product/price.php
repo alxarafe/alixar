@@ -1,19 +1,19 @@
 <?php
 
-/* Copyright (C) 2001-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2014	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2017	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2006		Andre Cianfarani		<acianfa@free.fr>
- * Copyright (C) 2014		Florian Henry			<florian.henry@open-concept.pro>
- * Copyright (C) 2014-2018	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2014-2019 	Philippe Grand 		    <philippe.grand@atoo-net.com>
- * Copyright (C) 2014		Ion agorria				<ion@agorria.com>
- * Copyright (C) 2015-2023	Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2015		Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2016		Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2018-2020  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2018		Nicolas ZABOURI			<info@inovea-conseil.com>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2014	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005		Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2017	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2006		Andre Cianfarani		    <acianfa@free.fr>
+ * Copyright (C) 2014		Florian Henry			    <florian.henry@open-concept.pro>
+ * Copyright (C) 2014-2018	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2014-2019 	Philippe Grand 		        <philippe.grand@atoo-net.com>
+ * Copyright (C) 2014		Ion agorria				    <ion@agorria.com>
+ * Copyright (C) 2015-2023	Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015		Marcos García			    <marcosgdf@gmail.com>
+ * Copyright (C) 2016		Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2018-2020  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2018		Nicolas ZABOURI			    <info@inovea-conseil.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -31,6 +31,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\PriceParser;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
+
 /**
  * \file htdocs/product/price.php
  * \ingroup product
@@ -41,8 +46,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/price.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_expression.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
 
 if (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productcustomerprice.class.php';
@@ -151,7 +154,7 @@ if (empty($reshook)) {
             $sql = "SELECT t.rowid, t.type_vat, t.code, t.recuperableonly, t.localtax1, t.localtax2, t.localtax1_type, t.localtax2_type";
             $sql .= " FROM " . MAIN_DB_PREFIX . "c_tva as t, " . MAIN_DB_PREFIX . "c_country as c";
             $sql .= " WHERE t.fk_pays = c.rowid AND c.code = '" . $db->escape($mysoc->country_code) . "'";
-            $sql .= " AND t.taux = " . ((float) $tva_tx) . " AND t.active = 1";
+            $sql .= " AND t.taux = " . ((float)$tva_tx) . " AND t.active = 1";
             $sql .= " AND t.code = '" . $db->escape($vatratecode) . "'";
             $sql .= " AND t.type_vat IN (0, 1)";    // Use only VAT rates type all or i.e. the sales type VAT rates.
             $sql .= " AND t.entity IN (" . getEntity('c_tva') . ")";
@@ -171,7 +174,7 @@ if (empty($reshook)) {
             $sql = "SELECT t.rowid, t.code, t.recuperableonly, t.localtax1, t.localtax2, t.localtax1_type, t.localtax2_type";
             $sql .= " FROM " . MAIN_DB_PREFIX . "c_tva as t, " . MAIN_DB_PREFIX . "c_country as c";
             $sql .= " WHERE t.fk_pays = c.rowid AND c.code = '" . $db->escape($mysoc->country_code) . "'";
-            $sql .= " AND t.taux = " . ((float) $tva_tx) . " AND t.active = 1";
+            $sql .= " AND t.taux = " . ((float)$tva_tx) . " AND t.active = 1";
             $sql .= " AND t.code = ''";
             $sql .= " AND t.entity IN (" . getEntity('c_tva') . ")";
             $resql = $db->query($sql);
@@ -275,7 +278,6 @@ if (empty($reshook)) {
 
             if ($object->fk_price_expression != 0) {
                 //Check the expression validity by parsing it
-                require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
                 $priceparser = new PriceParser($db);
 
                 if ($priceparser->parseProduct($object) < 0) {
@@ -298,7 +300,7 @@ if (empty($reshook)) {
             $newlocaltax2_type = GETPOST('localtax2_type', 'array');
 
             //Shall we generate prices using price rules?
-            $object->price_autogen = (int) (GETPOST('usePriceRules') == 'on');
+            $object->price_autogen = (int)(GETPOST('usePriceRules') == 'on');
 
             $produit_multiprices_limit = getDolGlobalInt('PRODUIT_MULTIPRICES_LIMIT');
             for ($i = 1; $i <= $produit_multiprices_limit; $i++) {
@@ -329,7 +331,7 @@ if (empty($reshook)) {
                     $sql = "SELECT t.rowid, t.code, t.recuperableonly, t.localtax1, t.localtax2, t.localtax1_type, t.localtax2_type";
                     $sql .= " FROM " . MAIN_DB_PREFIX . "c_tva as t, " . MAIN_DB_PREFIX . "c_country as c";
                     $sql .= " WHERE t.fk_pays = c.rowid AND c.code = '" . $db->escape($mysoc->country_code) . "'";
-                    $sql .= " AND t.taux = " . ((float) $tva_tx) . " AND t.active = 1";
+                    $sql .= " AND t.taux = " . ((float)$tva_tx) . " AND t.active = 1";
                     $sql .= " AND t.code ='" . $db->escape($vatratecode) . "'";
                     $sql .= " AND t.entity IN (" . getEntity('c_tva') . ")";
                     $resql = $db->query($sql);
@@ -354,7 +356,7 @@ if (empty($reshook)) {
                     $sql = "SELECT t.rowid, t.code, t.recuperableonly, t.localtax1, t.localtax2, t.localtax1_type, t.localtax2_type";
                     $sql .= " FROM " . MAIN_DB_PREFIX . "c_tva as t, " . MAIN_DB_PREFIX . "c_country as c";
                     $sql .= " WHERE t.fk_pays = c.rowid AND c.code = '" . $db->escape($mysoc->country_code) . "'";
-                    $sql .= " AND t.taux = " . ((float) $tva_tx) . " AND t.active = 1";
+                    $sql .= " AND t.taux = " . ((float)$tva_tx) . " AND t.active = 1";
                     $sql .= " AND t.code = ''";
                     $resql = $db->query($sql);
                     if ($resql) {
@@ -413,7 +415,7 @@ if (empty($reshook)) {
                 $sql = "SELECT t.rowid, t.code, t.recuperableonly, t.localtax1, t.localtax2, t.localtax1_type, t.localtax2_type";
                 $sql .= " FROM " . MAIN_DB_PREFIX . "c_tva as t, " . MAIN_DB_PREFIX . "c_country as c";
                 $sql .= " WHERE t.fk_pays = c.rowid AND c.code = '" . $db->escape($mysoc->country_code) . "'";
-                $sql .= " AND t.taux = " . ((float) $tva_tx) . " AND t.active = 1";
+                $sql .= " AND t.taux = " . ((float)$tva_tx) . " AND t.active = 1";
                 $sql .= " AND t.code ='" . $db->escape($vatratecode) . "'";
                 $sql .= " AND t.entity IN (" . getEntity('c_tva') . ")";
                 $resql = $db->query($sql);
@@ -438,7 +440,7 @@ if (empty($reshook)) {
                 $sql = "SELECT t.rowid, t.code, t.recuperableonly, t.localtax1, t.localtax2, t.localtax1_type, t.localtax2_type";
                 $sql .= " FROM " . MAIN_DB_PREFIX . "c_tva as t, " . MAIN_DB_PREFIX . "c_country as c";
                 $sql .= " WHERE t.fk_pays = c.rowid AND c.code = '" . $db->escape($mysoc->country_code) . "'";
-                $sql .= " AND t.taux = " . ((float) $tva_tx) . " AND t.active = 1";
+                $sql .= " AND t.taux = " . ((float)$tva_tx) . " AND t.active = 1";
                 $sql .= " AND t.code = ''";
                 $resql = $db->query($sql);
                 if ($resql) {
@@ -480,7 +482,7 @@ if (empty($reshook)) {
                 $newvattx = price2num($val['vat_tx']);
 
                 if (getDolGlobalString('PRODUCT_MINIMUM_RECOMMENDED_PRICE') && $newprice_min < $maxpricesupplier) {
-                    setEventMessages($langs->trans("MinimumPriceLimit", price($maxpricesupplier, 0, '', 1, - 1, - 1, 'auto')), null, 'errors');
+                    setEventMessages($langs->trans("MinimumPriceLimit", price($maxpricesupplier, 0, '', 1, -1, -1, 'auto')), null, 'errors');
                     $error++;
                     break;
                 }
@@ -570,21 +572,21 @@ if (empty($reshook)) {
         if (!$error) {
             // Calcul du prix HT et du prix unitaire
             if ($object->price_base_type == 'TTC') {
-                $price = (float) price2num($newprice) / (1 + ($object->tva_tx / 100));
+                $price = (float)price2num($newprice) / (1 + ($object->tva_tx / 100));
             }
 
             $price = price2num($newprice, 'MU');
-            $unitPrice = price2num((float) $price / (float) $quantity, 'MU');
+            $unitPrice = price2num((float)$price / (float)$quantity, 'MU');
 
             // Ajout / mise à jour
             if ($rowid > 0) {
                 $sql = "UPDATE " . MAIN_DB_PREFIX . "product_price_by_qty SET";
-                $sql .= " price=" . ((float) $price) . ",";
-                $sql .= " unitprice=" . ((float) $unitPrice) . ",";
-                $sql .= " quantity=" . ((float) $quantity) . ",";
-                $sql .= " remise_percent=" . ((float) $remise_percent) . ",";
-                $sql .= " remise=" . ((float) $remise);
-                $sql .= " WHERE rowid = " . ((int) $rowid);
+                $sql .= " price=" . ((float)$price) . ",";
+                $sql .= " unitprice=" . ((float)$unitPrice) . ",";
+                $sql .= " quantity=" . ((float)$quantity) . ",";
+                $sql .= " remise_percent=" . ((float)$remise_percent) . ",";
+                $sql .= " remise=" . ((float)$remise);
+                $sql .= " WHERE rowid = " . ((int)$rowid);
 
                 $result = $db->query($sql);
                 if (!$result) {
@@ -592,7 +594,7 @@ if (empty($reshook)) {
                 }
             } else {
                 $sql = "INSERT INTO " . MAIN_DB_PREFIX . "product_price_by_qty (fk_product_price,price,unitprice,quantity,remise_percent,remise) values (";
-                $sql .= ((int) $priceid) . ',' . ((float) $price) . ',' . ((float) $unitPrice) . ',' . ((float) $quantity) . ',' . ((float) $remise_percent) . ',' . ((float) $remise) . ')';
+                $sql .= ((int)$priceid) . ',' . ((float)$price) . ',' . ((float)$unitPrice) . ',' . ((float)$quantity) . ',' . ((float)$remise_percent) . ',' . ((float)$remise) . ')';
 
                 $result = $db->query($sql);
                 if (!$result) {
@@ -610,7 +612,7 @@ if (empty($reshook)) {
         $rowid = GETPOSTINT('rowid');
         if (!empty($rowid)) {
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "product_price_by_qty";
-            $sql .= " WHERE rowid = " . ((int) $rowid);
+            $sql .= " WHERE rowid = " . ((int)$rowid);
 
             $result = $db->query($sql);
         } else {
@@ -622,7 +624,7 @@ if (empty($reshook)) {
         $priceid = GETPOSTINT('priceid');
         if (!empty($rowid)) {
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "product_price_by_qty";
-            $sql .= " WHERE fk_product_price = " . ((int) $priceid);
+            $sql .= " WHERE fk_product_price = " . ((int)$priceid);
 
             $result = $db->query($sql);
         } else {
@@ -672,7 +674,7 @@ if (empty($reshook)) {
             $sql = "SELECT t.rowid, t.code, t.recuperableonly, t.localtax1, t.localtax2, t.localtax1_type, t.localtax2_type";
             $sql .= " FROM " . MAIN_DB_PREFIX . "c_tva as t, " . MAIN_DB_PREFIX . "c_country as c";
             $sql .= " WHERE t.fk_pays = c.rowid AND c.code = '" . $db->escape($mysoc->country_code) . "'";
-            $sql .= " AND t.taux = " . ((float) $tva_tx) . " AND t.active = 1";
+            $sql .= " AND t.taux = " . ((float)$tva_tx) . " AND t.active = 1";
             $sql .= " AND t.code ='" . $db->escape($vatratecode) . "'";
             $sql .= " AND t.entity IN (" . getEntity('c_tva') . ")";
             $resql = $db->query($sql);
@@ -697,7 +699,7 @@ if (empty($reshook)) {
             $sql = "SELECT t.rowid, t.code, t.recuperableonly, t.localtax1, t.localtax2, t.localtax1_type, t.localtax2_type";
             $sql .= " FROM " . MAIN_DB_PREFIX . "c_tva as t, " . MAIN_DB_PREFIX . "c_country as c";
             $sql .= " WHERE t.fk_pays = c.rowid AND c.code = '" . $db->escape($mysoc->country_code) . "'";
-            $sql .= " AND t.taux = " . ((float) $tva_tx) . " AND t.active = 1";
+            $sql .= " AND t.taux = " . ((float)$tva_tx) . " AND t.active = 1";
             $sql .= " AND t.code = ''";
             $resql = $db->query($sql);
             if ($resql) {
@@ -796,7 +798,7 @@ if (empty($reshook)) {
             $sql = "SELECT t.rowid, t.code, t.recuperableonly, t.localtax1, t.localtax2, t.localtax1_type, t.localtax2_type";
             $sql .= " FROM " . MAIN_DB_PREFIX . "c_tva as t, " . MAIN_DB_PREFIX . "c_country as c";
             $sql .= " WHERE t.fk_pays = c.rowid AND c.code = '" . $db->escape($mysoc->country_code) . "'";
-            $sql .= " AND t.taux = " . ((float) $tva_tx) . " AND t.active = 1";
+            $sql .= " AND t.taux = " . ((float)$tva_tx) . " AND t.active = 1";
             $sql .= " AND t.code ='" . $db->escape($vatratecode) . "'";
             $sql .= " AND t.entity IN (" . getEntity('c_tva') . ")";
             $resql = $db->query($sql);
@@ -821,7 +823,7 @@ if (empty($reshook)) {
             $sql = "SELECT t.rowid, t.code, t.recuperableonly, t.localtax1, t.localtax2, t.localtax1_type, t.localtax2_type";
             $sql .= " FROM " . MAIN_DB_PREFIX . "c_tva as t, " . MAIN_DB_PREFIX . "c_country as c";
             $sql .= " WHERE t.fk_pays = c.rowid AND c.code = '" . $db->escape($mysoc->country_code) . "'";
-            $sql .= " AND t.taux = " . ((float) $tva_tx) . " AND t.active = 1";
+            $sql .= " AND t.taux = " . ((float)$tva_tx) . " AND t.active = 1";
             $sql .= " AND t.code = ''";
             $resql = $db->query($sql);
             if ($resql) {
@@ -897,7 +899,7 @@ $picto = ($object->type == Product::TYPE_SERVICE ? 'service' : 'product');
 print dol_get_fiche_head($head, 'price', $titre, -1, $picto);
 
 $linkback = '<a href="' . constant('BASE_URL') . 'product/list.php?restore_lastsearch_values=1&type=' . $object->type . '">' . $langs->trans("BackToList") . '</a>';
-$object->next_prev_filter = "fk_product_type = " . ((int) $object->type);
+$object->next_prev_filter = "fk_product_type = " . ((int)$object->type);
 
 $shownav = 1;
 if ($user->socid && !in_array('product', explode(',', getDolGlobalString('MAIN_MODULES_FOR_EXTERNAL')))) {
@@ -1353,7 +1355,6 @@ print '<div class="clearboth"></div>';
 print dol_get_fiche_end();
 
 
-
 /*
  * Action bar
  */
@@ -1408,7 +1409,6 @@ if (
 
     print "\n</div>\n";
 }
-
 
 
 /*
@@ -1491,13 +1491,14 @@ if ($action == 'edit_price' && $object->getRights()->creer) {
             ?>
 
             <script type="text/javascript">
-                jQuery(document).ready(function() {
-                    jQuery("#expression_editor").click(function() {
+                jQuery(document).ready(function () {
+                    jQuery("#expression_editor").click(function () {
                         window.location = "<?php echo DOL_URL_ROOT ?>/product/dynamic_price/editor.php?id=<?php echo $id ?>&tab=price&eid=" + $("#eid").val();
                     });
                     jQuery("#eid").change(on_change);
                     on_change();
                 });
+
                 function on_change() {
                     if ($("#eid").val() == 0) {
                         jQuery("#price_numeric").show();
@@ -1691,11 +1692,11 @@ if ((!getDolGlobalString('PRODUIT_CUSTOMER_PRICES') || $action == 'showlog_defau
     $sql .= " ,p.price_label";
     $sql .= " FROM " . MAIN_DB_PREFIX . "product_price as p,";
     $sql .= " " . MAIN_DB_PREFIX . "user as u";
-    $sql .= " WHERE fk_product = " . ((int) $object->id);
+    $sql .= " WHERE fk_product = " . ((int)$object->id);
     $sql .= " AND p.entity IN (" . getEntity('productprice') . ")";
     $sql .= " AND p.fk_user_author = u.rowid";
     if (!empty($socid) && getDolGlobalString('PRODUIT_MULTIPRICES')) {
-        $sql .= " AND p.price_level = " . ((int) $soc->price_level);
+        $sql .= " AND p.price_level = " . ((int)$soc->price_level);
     }
     $sql .= " ORDER BY p.date_price DESC, p.rowid DESC, p.price_level ASC";
     // $sql .= $db->plimit();
@@ -2143,7 +2144,6 @@ if (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
             print '<td class="left">' . $langs->trans("MinimumRecommendedPrice", price($maxpricesupplier, 0, '', 1, -1, -1, 'auto')) . ' ' . img_warning() . '</td>';
         }
         print '</tr>';
-
 
 
         // Price Label

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2012-2013  Christophe Battarel <christophe.battarel@altairis.fr>
- * Copyright (C) 2014		Ferran Marcet		<fmarcet@2byte.es>
- * Copyright (C) 2015       Marcos García       <marcosgdf@gmail.com>
+/* Copyright (C) 2012-2013  Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2014		Ferran Marcet		        <fmarcet@2byte.es>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/margin/agentMargins.php
@@ -64,12 +69,12 @@ if (!$sortfield) {
 
 $startdate = $enddate = '';
 
-$startdateday   = GETPOSTINT('startdateday');
+$startdateday = GETPOSTINT('startdateday');
 $startdatemonth = GETPOSTINT('startdatemonth');
-$startdateyear  = GETPOSTINT('startdateyear');
-$enddateday     = GETPOSTINT('enddateday');
-$enddatemonth   = GETPOSTINT('enddatemonth');
-$enddateyear    = GETPOSTINT('enddateyear');
+$startdateyear = GETPOSTINT('startdateyear');
+$enddateday = GETPOSTINT('enddateday');
+$enddatemonth = GETPOSTINT('enddatemonth');
+$enddateyear = GETPOSTINT('enddateyear');
 
 if (!empty($startdatemonth)) {
     $startdate = dol_mktime(0, 0, 0, $startdatemonth, $startdateday, $startdateyear);
@@ -90,8 +95,6 @@ $hookmanager->initHooks(array('marginagentlist'));
  */
 
 // None
-
-
 
 /*
  * View
@@ -175,9 +178,9 @@ $sql .= ' AND s.entity IN (' . getEntity('societe') . ')';
 $sql .= " AND d.fk_facture = f.rowid";
 if ($agentid > 0) {
     if (getDolGlobalString('AGENT_CONTACT_TYPE')) {
-        $sql .= " AND ((e.fk_socpeople IS NULL AND sc.fk_user = " . ((int) $agentid) . ") OR (e.fk_socpeople IS NOT NULL AND e.fk_socpeople = " . ((int) $agentid) . "))";
+        $sql .= " AND ((e.fk_socpeople IS NULL AND sc.fk_user = " . ((int)$agentid) . ") OR (e.fk_socpeople IS NOT NULL AND e.fk_socpeople = " . ((int)$agentid) . "))";
     } else {
-        $sql .= " AND sc.fk_user = " . ((int) $agentid);
+        $sql .= " AND sc.fk_user = " . ((int)$agentid);
     }
 }
 if (!empty($startdate)) {
@@ -208,22 +211,22 @@ if (!empty($agentid)) {
     $param .= "&amp;agentid=" . urlencode($agentid);
 }
 if (!empty($startdateday)) {
-    $param .= "&amp;startdateday=" . urlencode((string) ($startdateday));
+    $param .= "&amp;startdateday=" . urlencode((string)($startdateday));
 }
 if (!empty($startdatemonth)) {
-    $param .= "&amp;startdatemonth=" . urlencode((string) ($startdatemonth));
+    $param .= "&amp;startdatemonth=" . urlencode((string)($startdatemonth));
 }
 if (!empty($startdateyear)) {
-    $param .= "&amp;startdateyear=" . urlencode((string) ($startdateyear));
+    $param .= "&amp;startdateyear=" . urlencode((string)($startdateyear));
 }
 if (!empty($enddateday)) {
-    $param .= "&amp;enddateday=" . urlencode((string) ($enddateday));
+    $param .= "&amp;enddateday=" . urlencode((string)($enddateday));
 }
 if (!empty($enddatemonth)) {
-    $param .= "&amp;enddatemonth=" . urlencode((string) ($enddatemonth));
+    $param .= "&amp;enddatemonth=" . urlencode((string)($enddatemonth));
 }
 if (!empty($enddateyear)) {
-    $param .= "&amp;enddateyear=" . urlencode((string) ($enddateyear));
+    $param .= "&amp;enddateyear=" . urlencode((string)($enddateyear));
 }
 
 
@@ -293,9 +296,9 @@ if ($result) {
             $seller_nb = 1;
             if ($objp->socid > 0) {
                 // sql nb sellers
-                $sql_seller  = "SELECT COUNT(sc.rowid) as nb";
+                $sql_seller = "SELECT COUNT(sc.rowid) as nb";
                 $sql_seller .= " FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc";
-                $sql_seller .= " WHERE sc.fk_soc = " . ((int) $objp->socid);
+                $sql_seller .= " WHERE sc.fk_soc = " . ((int)$objp->socid);
                 $sql_seller .= " LIMIT 1";
 
                 $resql_seller = $db->query($sql_seller);

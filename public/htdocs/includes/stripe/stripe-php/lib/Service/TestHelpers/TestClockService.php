@@ -14,9 +14,9 @@ class TestClockService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\TestHelpers\TestClock
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TestHelpers\TestClock
      */
     public function advance($id, $params = null, $opts = null)
     {
@@ -29,9 +29,9 @@ class TestClockService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\TestHelpers\TestClock>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\TestHelpers\TestClock>
      */
     public function all($params = null, $opts = null)
     {
@@ -44,9 +44,9 @@ class TestClockService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\TestHelpers\TestClock
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TestHelpers\TestClock
      */
     public function create($params = null, $opts = null)
     {
@@ -60,9 +60,9 @@ class TestClockService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\TestHelpers\TestClock
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TestHelpers\TestClock
      */
     public function delete($id, $params = null, $opts = null)
     {
@@ -76,9 +76,9 @@ class TestClockService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\TestHelpers\TestClock
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TestHelpers\TestClock
      */
     public function retrieve($id, $params = null, $opts = null)
     {

@@ -12,9 +12,9 @@ class StringValueBinder implements IValueBinder
      * @param Cell $cell Cell to bind value to
      * @param mixed $value Value to bind in cell
      *
+     * @return bool
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      *
-     * @return bool
      */
     public function bindValue(Cell $cell, $value)
     {
@@ -23,7 +23,7 @@ class StringValueBinder implements IValueBinder
             $value = StringHelper::sanitizeUTF8($value);
         }
 
-        $cell->setValueExplicit((string) $value, DataType::TYPE_STRING);
+        $cell->setValueExplicit((string)$value, DataType::TYPE_STRING);
 
         // Done!
         return true;

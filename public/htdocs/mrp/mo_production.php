@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2019-2020  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2023 		Christian Humpel     <christian.humpel@gmail.com>
- * Copyright (C) 2023 		Vincent de Grandpré  <vincent@de-grandpre.quebec>
+/* Copyright (C) 2019-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023 		Christian Humpel            <christian.humpel@gmail.com>
+ * Copyright (C) 2023 		Vincent de Grandpré         <vincent@de-grandpre.quebec>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,6 +21,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Mrp\Classes\MoLine;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Workstation\Classes\Workstation;
+
 /**
  *    \file       mo_production.php
  *    \ingroup    mrp
@@ -36,14 +52,14 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp_mo.lib.php';
 $langs->loadLangs(array("mrp", "stocks", "other", "product", "productbatch"));
 
 // Get parameters
-$id          = GETPOSTINT('id');
-$ref         = GETPOST('ref', 'alpha');
-$action      = GETPOST('action', 'aZ09');
-$confirm     = GETPOST('confirm', 'alpha');
-$cancel      = GETPOST('cancel', 'aZ09');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
+$action = GETPOST('action', 'aZ09');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'mocard'; // To manage different context of search
-$backtopage  = GETPOST('backtopage', 'alpha');
-$lineid      = GETPOSTINT('lineid');
+$backtopage = GETPOST('backtopage', 'alpha');
+$lineid = GETPOSTINT('lineid');
 $fk_movement = GETPOSTINT('fk_movement');
 $fk_default_warehouse = GETPOSTINT('fk_default_warehouse');
 
@@ -232,7 +248,7 @@ if (empty($reshook)) {
         $stockmove = new MouvementStock($db);
 
         $labelmovement = GETPOST('inventorylabel', 'alphanohtml');
-        $codemovement  = GETPOST('inventorycode', 'alphanohtml');
+        $codemovement = GETPOST('inventorycode', 'alphanohtml');
 
         $db->begin();
         $pos = 0;
@@ -244,7 +260,7 @@ if (empty($reshook)) {
 
                 $i = 1;
                 while (GETPOSTISSET('qty-' . $line->id . '-' . $i)) {
-                    $qtytoprocess = (float) price2num(GETPOST('qty-' . $line->id . '-' . $i));
+                    $qtytoprocess = (float)price2num(GETPOST('qty-' . $line->id . '-' . $i));
 
                     if ($qtytoprocess != 0) {
                         // Check warehouse is set if we should have to
@@ -318,7 +334,7 @@ if (empty($reshook)) {
 
                 $i = 1;
                 while (GETPOSTISSET('qtytoproduce-' . $line->id . '-' . $i)) {
-                    $qtytoprocess = (float) price2num(GETPOST('qtytoproduce-' . $line->id . '-' . $i));
+                    $qtytoprocess = (float)price2num(GETPOST('qtytoproduce-' . $line->id . '-' . $i));
                     $pricetoprocess = GETPOST('pricetoproduce-' . $line->id . '-' . $i) ? price2num(GETPOST('pricetoproduce-' . $line->id . '-' . $i)) : 0;
 
                     if ($qtytoprocess != 0) {
@@ -489,8 +505,6 @@ if (empty($reshook)) {
     }
 }
 
-
-
 /*
  * View
  */
@@ -569,7 +583,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $formquestion = array();
         if (isModEnabled('mrp')) {
             $langs->load("mrp");
-                        $formproduct = new FormProduct($db);
+            $formproduct = new FormProduct($db);
             $forcecombo = 0;
             if ($conf->browser->name == 'ie') {
                 $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -1209,7 +1223,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
                         // Action Edit line
                         if ($object->status == Mo::STATUS_DRAFT) {
-                            $href = $_SERVER["PHP_SELF"] . '?id=' . ((int) $object->id) . '&action=editline&token=' . newToken() . '&lineid=' . ((int) $line->id);
+                            $href = $_SERVER["PHP_SELF"] . '?id=' . ((int)$object->id) . '&action=editline&token=' . newToken() . '&lineid=' . ((int)$line->id);
                             print '<td class="center">';
                             print '<a class="reposition editfielda" href="' . $href . '">';
                             print img_picto($langs->trans('TooltipEditAndRevertStockMovement'), 'edit');
@@ -1219,7 +1233,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
                         // Action delete line
                         if ($permissiontodelete) {
-                            $href = $_SERVER["PHP_SELF"] . '?id=' . ((int) $object->id) . '&action=deleteline&token=' . newToken() . '&lineid=' . ((int) $line->id);
+                            $href = $_SERVER["PHP_SELF"] . '?id=' . ((int)$object->id) . '&action=deleteline&token=' . newToken() . '&lineid=' . ((int)$line->id);
                             print '<td class="center">';
                             print '<a class="reposition" href="' . $href . '">';
                             print img_picto($langs->trans('TooltipDeleteAndRevertStockMovement'), 'delete');
@@ -1294,7 +1308,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
                         // Action Edit line
                         if ($object->status == Mo::STATUS_DRAFT) {
-                            $href = $_SERVER["PHP_SELF"] . '?id=' . ((int) $object->id) . '&action=editline&token=' . newToken() . '&lineid=' . ((int) $line2['rowid']);
+                            $href = $_SERVER["PHP_SELF"] . '?id=' . ((int)$object->id) . '&action=editline&token=' . newToken() . '&lineid=' . ((int)$line2['rowid']);
                             print '<td class="center">';
                             print '<a class="reposition" href="' . $href . '">';
                             print img_picto($langs->trans('TooltipEditAndRevertStockMovement'), 'edit');
@@ -1304,7 +1318,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
                         // Action delete line
                         if ($permissiontodelete) {
-                            $href = $_SERVER["PHP_SELF"] . '?id=' . ((int) $object->id) . '&action=deleteline&token=' . newToken() . '&lineid=' . ((int) $line2['rowid']) . '&fk_movement=' . ((int) $line2['fk_stock_movement']);
+                            $href = $_SERVER["PHP_SELF"] . '?id=' . ((int)$object->id) . '&action=deleteline&token=' . newToken() . '&lineid=' . ((int)$line2['rowid']) . '&fk_movement=' . ((int)$line2['fk_stock_movement']);
                             print '<td class="center">';
                             print '<a class="reposition" href="' . $href . '">';
                             print img_picto($langs->trans('TooltipDeleteAndRevertStockMovement'), 'delete');
@@ -1384,7 +1398,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
                         // Split
                         $type = 'batch';
                         print '<td align="right" class="split">';
-                        print ' ' . img_picto($langs->trans('AddStockLocationLine'), 'split.png', 'class="splitbutton" onClick="addDispatchLine(' . ((int) $line->id) . ', \'' . dol_escape_js($type) . '\', \'qtymissingconsume\')"');
+                        print ' ' . img_picto($langs->trans('AddStockLocationLine'), 'split.png', 'class="splitbutton" onClick="addDispatchLine(' . ((int)$line->id) . ', \'' . dol_escape_js($type) . '\', \'qtymissingconsume\')"');
                         print '</td>';
 
                         // Split All
@@ -1829,115 +1843,115 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         print "</form>\n";
     } ?>
 
-        <script  type="text/javascript" language="javascript">
+    <script type="text/javascript" language="javascript">
 
-            $(document).ready(function() {
-                //Consumption : When a warehouse is selected, only the lot/serial numbers that are available in it are offered
-                updateselectbatchbywarehouse();
-                //Consumption : When a lot/serial number is selected and it is only available in one warehouse, the warehouse is automatically selected
-                updateselectwarehousebybatch();
-            });
+        $(document).ready(function () {
+            //Consumption : When a warehouse is selected, only the lot/serial numbers that are available in it are offered
+            updateselectbatchbywarehouse();
+            //Consumption : When a lot/serial number is selected and it is only available in one warehouse, the warehouse is automatically selected
+            updateselectwarehousebybatch();
+        });
 
-            function updateselectbatchbywarehouse() {
-                $(document).on('change', "select[name*='idwarehouse']", function () {
-                    console.log("We change warehouse so we update the list of possible batch number");
+        function updateselectbatchbywarehouse() {
+            $(document).on('change', "select[name*='idwarehouse']", function () {
+                console.log("We change warehouse so we update the list of possible batch number");
 
-                    var selectwarehouse = $(this);
+                var selectwarehouse = $(this);
 
-                    var selectbatch_name = selectwarehouse.attr('name').replace('idwarehouse', 'batch');
-                    var selectbatch = $("datalist[id*='" + selectbatch_name + "']");
-                    var selectedbatch = selectbatch.val();
+                var selectbatch_name = selectwarehouse.attr('name').replace('idwarehouse', 'batch');
+                var selectbatch = $("datalist[id*='" + selectbatch_name + "']");
+                var selectedbatch = selectbatch.val();
 
-                    var product_element_name = selectwarehouse.attr('name').replace('idwarehouse', 'product');
+                var product_element_name = selectwarehouse.attr('name').replace('idwarehouse', 'product');
 
-                    $.ajax({
-                        type: "POST",
-                        url: "<?php echo constant('BASE_URL') . '/mrp/ajax/interface.php'; ?>",
-                        data: {
-                            action: "updateselectbatchbywarehouse",
-                            permissiontoproduce: <?php echo $permissiontoproduce ?>,
-                            warehouse_id: $(this).val(),
-                            token: '<?php echo currentToken(); ?>',
-                            product_id: $("input[name='" + product_element_name + "']").val()
-                        }
-                    }).done(function (data) {
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo constant('BASE_URL') . '/mrp/ajax/interface.php'; ?>",
+                    data: {
+                        action: "updateselectbatchbywarehouse",
+                        permissiontoproduce: <?php echo $permissiontoproduce ?>,
+                        warehouse_id: $(this).val(),
+                        token: '<?php echo currentToken(); ?>',
+                        product_id: $("input[name='" + product_element_name + "']").val()
+                    }
+                }).done(function (data) {
 
-                        selectbatch.empty();
+                    selectbatch.empty();
 
-                        if (typeof data == "object") {
-                            console.log("data is already type object, no need to parse it");
-                        } else {
-                            console.log("data is type "+(typeof data));
-                            data = JSON.parse(data);
-                        }
-
-                        selectbatch.append($('<option>', {
-                            value: '',
-                        }));
-
-                        $.each(data, function (key, value) {
-
-                            if(selectwarehouse.val() == -1) {
-                                var label = " (<?php echo $langs->trans('Stock total') ?> : " + value + ")";
-                            } else {
-                                var label =  " (<?php echo $langs->trans('Stock') ?> : " + value + ")";
-                            }
-
-                            if(key === selectedbatch) {
-                                var option ='<option value="'+key+'" selected>'+ label +'</option>';
-                            } else {
-                                var option ='<option value="'+key+'">'+ label +'</option>';
-                            }
-
-                            selectbatch.append(option);
-                        });
-                    });
-                });
-            }
-
-            function updateselectwarehousebybatch() {
-                $(document).on('change', 'input[name*=batch]', function(){
-                    console.log("We change batch so we update the list of possible warehouses");
-
-                    var selectbatch = $(this);
-
-                    var selectwarehouse_name = selectbatch.attr('name').replace('batch', 'idwarehouse');
-                    var selectwarehouse = $("select[name*='" + selectwarehouse_name + "']");
-                    var selectedwarehouse = selectwarehouse.val();
-
-                    if(selectedwarehouse != -1){
-                        return;
+                    if (typeof data == "object") {
+                        console.log("data is already type object, no need to parse it");
+                    } else {
+                        console.log("data is type " + (typeof data));
+                        data = JSON.parse(data);
                     }
 
-                    var product_element_name = selectbatch.attr('name').replace('batch', 'product');
+                    selectbatch.append($('<option>', {
+                        value: '',
+                    }));
 
-                    $.ajax({
-                        type: "POST",
-                        url: "<?php echo constant('BASE_URL') . '/mrp/ajax/interface.php'; ?>",
-                        data: {
-                            action: "updateselectwarehousebybatch",
-                            permissiontoproduce: <?php echo $permissiontoproduce ?>,
-                            batch: $(this).val(),
-                            token: '<?php echo currentToken(); ?>',
-                            product_id: $("input[name='" + product_element_name + "']").val()
-                        }
-                    }).done(function (data) {
+                    $.each(data, function (key, value) {
 
-                        if (typeof data == "object") {
-                            console.log("data is already type object, no need to parse it");
+                        if (selectwarehouse.val() == -1) {
+                            var label = " (<?php echo $langs->trans('Stock total') ?> : " + value + ")";
                         } else {
-                            console.log("data is type "+(typeof data));
-                            data = JSON.parse(data);
+                            var label = " (<?php echo $langs->trans('Stock') ?> : " + value + ")";
                         }
 
-                        if(data != 0){
-                            selectwarehouse.val(data).change();
+                        if (key === selectedbatch) {
+                            var option = '<option value="' + key + '" selected>' + label + '</option>';
+                        } else {
+                            var option = '<option value="' + key + '">' + label + '</option>';
                         }
+
+                        selectbatch.append(option);
                     });
                 });
-            }
+            });
+        }
 
-        </script>
+        function updateselectwarehousebybatch() {
+            $(document).on('change', 'input[name*=batch]', function () {
+                console.log("We change batch so we update the list of possible warehouses");
+
+                var selectbatch = $(this);
+
+                var selectwarehouse_name = selectbatch.attr('name').replace('batch', 'idwarehouse');
+                var selectwarehouse = $("select[name*='" + selectwarehouse_name + "']");
+                var selectedwarehouse = selectwarehouse.val();
+
+                if (selectedwarehouse != -1) {
+                    return;
+                }
+
+                var product_element_name = selectbatch.attr('name').replace('batch', 'product');
+
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo constant('BASE_URL') . '/mrp/ajax/interface.php'; ?>",
+                    data: {
+                        action: "updateselectwarehousebybatch",
+                        permissiontoproduce: <?php echo $permissiontoproduce ?>,
+                        batch: $(this).val(),
+                        token: '<?php echo currentToken(); ?>',
+                        product_id: $("input[name='" + product_element_name + "']").val()
+                    }
+                }).done(function (data) {
+
+                    if (typeof data == "object") {
+                        console.log("data is already type object, no need to parse it");
+                    } else {
+                        console.log("data is type " + (typeof data));
+                        data = JSON.parse(data);
+                    }
+
+                    if (data != 0) {
+                        selectwarehouse.val(data).change();
+                    }
+                });
+            });
+        }
+
+    </script>
 
     <?php
 }

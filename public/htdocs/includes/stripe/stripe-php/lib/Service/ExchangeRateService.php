@@ -13,9 +13,9 @@ class ExchangeRateService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\ExchangeRate>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\ExchangeRate>
      */
     public function all($params = null, $opts = null)
     {
@@ -30,9 +30,9 @@ class ExchangeRateService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\ExchangeRate
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\ExchangeRate
      */
     public function retrieve($id, $params = null, $opts = null)
     {

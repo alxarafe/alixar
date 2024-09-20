@@ -32,9 +32,9 @@ class Content extends WriterPart
     /**
      * Write content.xml to XML format.
      *
+     * @return string XML Output
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      *
-     * @return string XML Output
      */
     public function write()
     {

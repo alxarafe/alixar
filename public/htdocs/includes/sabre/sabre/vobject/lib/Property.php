@@ -61,11 +61,11 @@ abstract class Property extends Node
      *
      * Parameters must be specified in key=>value syntax.
      *
-     * @param Component         $root       The root document
-     * @param string            $name
+     * @param Component $root The root document
+     * @param string $name
      * @param string|array|null $value
-     * @param array             $parameters List of parameters
-     * @param string            $group      The vcard property group
+     * @param array $parameters List of parameters
+     * @param string $group The vcard property group
      */
     public function __construct(Component $root, $name, $value = null, array $parameters = [], $group = null)
     {
@@ -155,7 +155,7 @@ abstract class Property extends Node
      * combined.
      * If nameless parameter is added, we try to guess its name.
      *
-     * @param string            $name
+     * @param string $name
      * @param string|array|null $value
      */
     public function add($name, $value = null)
@@ -296,7 +296,7 @@ abstract class Property extends Node
         return array_merge(
             [
                 strtolower($this->name),
-                (object) $parameters,
+                (object)$parameters,
                 strtolower($this->getValueType()),
             ],
             $this->getJsonValue()
@@ -359,7 +359,7 @@ abstract class Property extends Node
         $valueType = strtolower($this->getValueType());
 
         foreach ($this->getJsonValue() as $values) {
-            foreach ((array) $values as $value) {
+            foreach ((array)$values as $value) {
                 $writer->writeElement($valueType, $value);
             }
         }
@@ -376,7 +376,7 @@ abstract class Property extends Node
      */
     public function __toString()
     {
-        return (string) $this->getValue();
+        return (string)$this->getValue();
     }
 
     /* ArrayAccess interface {{{ */
@@ -434,7 +434,7 @@ abstract class Property extends Node
      * Creates a new parameter.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      */
     #[\ReturnTypeWillChange]
     public function offsetSet($name, $value)
@@ -558,7 +558,7 @@ abstract class Property extends Node
                     'node' => $this,
                 ];
             } else {
-                $encoding = (string) $encoding;
+                $encoding = (string)$encoding;
 
                 $allowedEncoding = [];
 

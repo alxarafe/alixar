@@ -18,19 +18,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+
 /**
  *  \file       htdocs/core/boxes/box_task.php
  *  \ingroup    Projet
  *  \brief      Module to Task activity of the current year
  */
 
-use Dolibarr\Code\Core\Classes\Form;
-use Dolibarr\Code\Projet\Classes\Project;
-use Dolibarr\Code\Projet\Classes\Task;
-
-include_once DOL_DOCUMENT_ROOT . "/core/boxes/modules_boxes.php";
 require_once DOL_DOCUMENT_ROOT . "/core/lib/date.lib.php";
-
 
 /**
  * Class to manage the box to show last task
@@ -47,8 +46,8 @@ class box_task extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param = '')
     {
@@ -66,8 +65,8 @@ class box_task extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -150,10 +149,10 @@ class box_task extends ModeleBoxes
             $sql .= " JOIN " . MAIN_DB_PREFIX . "projet as p ON (pt.fk_projet = p.rowid)";
 
             if ($filterValue === 'im_task_contact') {
-                $sql .= " JOIN " . MAIN_DB_PREFIX . "element_contact as ec ON (ec.element_id = pt.rowid AND ec.fk_socpeople = " . ((int) $user->id) . ")";
+                $sql .= " JOIN " . MAIN_DB_PREFIX . "element_contact as ec ON (ec.element_id = pt.rowid AND ec.fk_socpeople = " . ((int)$user->id) . ")";
                 $sql .= " JOIN " . MAIN_DB_PREFIX . "c_type_contact  as tc ON (ec.fk_c_type_contact = tc.rowid AND tc.element = 'project_task' AND tc.source = 'internal' )";
             } elseif ($filterValue === 'im_project_contact') {
-                $sql .= " JOIN " . MAIN_DB_PREFIX . "element_contact as ec ON (ec.element_id = p.rowid AND ec.fk_socpeople = " . ((int) $user->id) . ")";
+                $sql .= " JOIN " . MAIN_DB_PREFIX . "element_contact as ec ON (ec.element_id = p.rowid AND ec.fk_socpeople = " . ((int)$user->id) . ")";
                 $sql .= " JOIN " . MAIN_DB_PREFIX . "c_type_contact  as tc ON (ec.fk_c_type_contact = tc.rowid AND tc.element = 'project' AND tc.source = 'internal' )";
             }
 
@@ -206,10 +205,10 @@ class box_task extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

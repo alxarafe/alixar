@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017-2021  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2017-2021  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Compta\Classes;
+
 /**
  *  \file       htdocs/compta/bank/class/paymentvarious.class.php
  *  \ingroup    bank
@@ -27,6 +29,7 @@
 
 // Put here all includes required by your class file
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 
 /**

@@ -20,12 +20,19 @@
 
 namespace Dolibarr\Code\Comm\Classes;
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Societe\Classes\Client;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+
 /**
  *  \file       comm/mailing/class/advtargetemailing.class.php
  *  \ingroup    mailing
  *  \brief      This file is an example CRUD class file (Create/Read/Update/Delete)
  */
-
 
 /**
  * Class to manage advanced emailing target selector

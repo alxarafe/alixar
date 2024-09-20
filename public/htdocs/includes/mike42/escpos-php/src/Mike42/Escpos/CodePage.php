@@ -79,8 +79,8 @@ class CodePage
     /**
      * Get a 128-entry array of unicode code-points from this code page.
      *
-     * @throws InvalidArgumentException Where the data is now known or computable.
      * @return array Data for this encoding.
+     * @throws InvalidArgumentException Where the data is now known or computable.
      */
     public function getDataArray(): array
     {
@@ -159,18 +159,18 @@ class CodePage
         $missingChar = chr(self::MISSING_CHAR_CODE);
         // Throws a lot of warnings for ambiguous code pages, but fallbacks seem fine.
         $converter = @new \UConverter("UTF-8", $encodingName);
-        $converter -> setSubstChars($missingChar);
+        $converter->setSubstChars($missingChar);
         // Loop through 128 code points
         $intArray = array_fill(0, 128, self::MISSING_CHAR_CODE);
         for ($char = 128; $char <= 255; $char++) {
             // Try to identify the UTF-8 character at this position in the code page
             $encodingChar = chr($char);
-            $utf8 = $converter ->convert($encodingChar, false);
+            $utf8 = $converter->convert($encodingChar, false);
             if ($utf8 === $missingChar) {
                 // Cannot be mapped to unicode
                 continue;
             }
-            $reverse = $converter ->convert($utf8, true);
+            $reverse = $converter->convert($utf8, true);
             if ($reverse !== $encodingChar) {
                 // Avoid conversions which don't reverse well (eg. multi-byte code pages)
                 continue;
@@ -187,10 +187,10 @@ class CodePage
     {
         $text = implode("", $data); // Join lines
         $codePointIterator = \IntlBreakIterator::createCodePointInstance();
-        $codePointIterator -> setText($text);
+        $codePointIterator->setText($text);
         $ret = array_fill(0, 128, self::MISSING_CHAR_CODE);
-        for ($i = 0; ($codePointIterator -> next() > 0) && ($i < 128); $i++) {
-            $codePoint = $codePointIterator -> getLastCodePoint();
+        for ($i = 0; ($codePointIterator->next() > 0) && ($i < 128); $i++) {
+            $codePoint = $codePointIterator->getLastCodePoint();
             $ret[$i] = $codePoint;
         }
         assert(count($ret) == 128);

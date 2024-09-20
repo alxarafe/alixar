@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Compta\Classes;
+
 /**
  *  \file       htdocs/compta/prelevement/class/rejetprelevement.class.php
  *  \ingroup    prelevement
@@ -123,7 +125,6 @@ class RejetPrelevement
         $bankaccount = ($this->type == 'bank-transfer' ? getDolGlobalString('PAYMENTBYBANKTRANSFER_ID_BANKACCOUNT') : getDolGlobalString('PRELEVEMENT_ID_BANKACCOUNT'));
         $facs = $this->getListInvoices(1);
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/ligneprelevement.class.php';
         $lipre = new LignePrelevement($this->db);
         $lipre->fetch($id);
 

@@ -74,7 +74,7 @@ abstract class Protocol implements ProtocolInterface
         // so add them back in manually if we can
         if (defined('STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT')) {
             $cryptoMethod = STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
-        }elseif (defined('STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT')) {
+        } elseif (defined('STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT')) {
             $cryptoMethod = STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT;
         }
 
@@ -104,9 +104,9 @@ abstract class Protocol implements ProtocolInterface
 
     /**
      * Set SSL certificate validation
+     * @return $this
      * @var int $cert_validation
      *
-     * @return $this
      */
     public function setCertValidation($cert_validation)
     {
@@ -126,9 +126,9 @@ abstract class Protocol implements ProtocolInterface
 
     /**
      * Set connection proxy settings
+     * @return $this
      * @var array $options
      *
-     * @return $this
      */
     public function setProxy($options)
     {
@@ -153,9 +153,9 @@ abstract class Protocol implements ProtocolInterface
 
     /**
      * Prepare socket options
+     * @return array
      * @var string $transport
      *
-     * @return array
      */
     private function defaultSocketOptions($transport)
     {
@@ -163,7 +163,7 @@ abstract class Protocol implements ProtocolInterface
         if ($this->encryption != false) {
             $options["ssl"] = [
                 'verify_peer_name' => $this->getCertValidation(),
-                'verify_peer'      => $this->getCertValidation(),
+                'verify_peer' => $this->getCertValidation(),
             ];
         }
 

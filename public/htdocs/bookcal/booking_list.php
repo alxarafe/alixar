@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2002-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004       Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2004-2016  Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2010-2014  Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2017       Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2023-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2002-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004       Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2004-2016  Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2014  Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2017       Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2023-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\BookCal\Classes\Calendar;
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *  \file       htdocs/bookcal/booking_list.php
  *  \ingroup    bookcal
@@ -31,15 +36,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bookcal/lib/bookcal_calendar.lib.php';
-
-// load module libraries
-require_once __DIR__ . '/class/calendar.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("agenda", "other"));
@@ -102,7 +101,6 @@ if ($reshook < 0) {
     setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 }
 
-
 /*
  * View
  */
@@ -113,7 +111,6 @@ $now = dol_now();
 $title = $langs->trans('Calendar') . " - " . $langs->trans('Bookings');
 
 llxHeader('', $title, $helpurl);
-
 
 if ($object->id > 0) {
     $head = calendarPrepareHead($object);
@@ -191,7 +188,7 @@ if ($object->id > 0) {
     $sql = "SELECT ac.id, ac.ref, ac.datep as date_start, ac.datep2 as date_end, ac.label, acr.fk_element";
     $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm as ac";
     $sql .= " JOIN " . MAIN_DB_PREFIX . "actioncomm_resources as acr on acr.fk_actioncomm = ac.id";
-    $sql .= " WHERE ac.fk_bookcal_calendar = " . ((int) $object->id);
+    $sql .= " WHERE ac.fk_bookcal_calendar = " . ((int)$object->id);
     $sql .= " AND ac.code = 'AC_RDV'";
     $sql .= " AND acr.element_type = 'socpeople'";
     $resql = $db->query($sql);

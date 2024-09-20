@@ -41,7 +41,7 @@ class ICalendar implements SplitterInterface
      * The splitter should receive an readable file stream as its input.
      *
      * @param resource $input
-     * @param int      $options parser options, see the OPTIONS constants
+     * @param int $options parser options, see the OPTIONS constants
      */
     public function __construct($input, $options = 0)
     {
@@ -58,7 +58,7 @@ class ICalendar implements SplitterInterface
 
             // Get all timezones
             if ('VTIMEZONE' === $component->name) {
-                $this->vtimezones[(string) $component->TZID] = $component;
+                $this->vtimezones[(string)$component->TZID] = $component;
                 continue;
             }
 
@@ -66,7 +66,7 @@ class ICalendar implements SplitterInterface
             if (!$component->UID) {
                 $component->UID = sha1(microtime()) . '-vobjectimport';
             }
-            $uid = (string) $component->UID;
+            $uid = (string)$component->UID;
 
             // Take care of recurring events
             if (!array_key_exists($uid, $this->objects)) {

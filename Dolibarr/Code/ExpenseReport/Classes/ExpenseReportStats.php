@@ -23,14 +23,13 @@
 namespace Dolibarr\Code\ExpenseReport\Classes;
 
 use Dolibarr\Code\Core\Classes\Stats;
+use DoliDB;
 
 /**
  *       \file       htdocs/expensereport/class/expensereportstats.class.php
  *       \ingroup    expensereport
  *       \brief      File of lass to manage the statistics of the expensereports et expense notes
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/stats.class.php';
 
 /**
  *  Class to manage the statistics of the expensereports and expense notes

@@ -76,9 +76,9 @@ class PaymentLink extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\LineItem> list of LineItems
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\LineItem> list of LineItems
      */
     public static function allLineItems($id, $params = null, $opts = null)
     {

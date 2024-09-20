@@ -41,7 +41,7 @@ class VCard implements SplitterInterface
      * The splitter should receive an readable file stream as its input.
      *
      * @param resource $input
-     * @param int      $options parser options, see the OPTIONS constants
+     * @param int $options parser options, see the OPTIONS constants
      */
     public function __construct($input, $options = 0)
     {

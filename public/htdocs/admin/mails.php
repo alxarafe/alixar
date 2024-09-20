@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2007-2020  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2013		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2016		Jonathan TISSEAU		<jonathan.tisseau@86dev.fr>
- * Copyright (C) 2023		Anthony Berton			<anthony.berton@bb2a.fr>
+/* Copyright (C) 2007-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2013		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2016		Jonathan TISSEAU		    <jonathan.tisseau@86dev.fr>
+ * Copyright (C) 2023		Anthony Berton			    <anthony.berton@bb2a.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,6 +27,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -68,7 +70,6 @@ $substitutionarrayfortest = array(
     '__CHECK_READ__' => '<img src="' . DOL_MAIN_URL_ROOT . '/public/emailing/mailing-read.php?tag=undefinedtag&securitykey=' . dol_hash(getDolGlobalString('MAILING_EMAIL_UNSUBSCRIBE_KEY') . "-undefinedtag", 'md5') . '" width="1" height="1" style="width:1px;height:1px" border="0" />',
 );
 complete_substitutions_array($substitutionarrayfortest, $langs);
-
 
 
 /*
@@ -148,8 +149,6 @@ if ($action == 'presend' && GETPOST('trackid', 'alphanohtml') == 'test') {
 if ($action == 'presend' && GETPOST('trackid', 'alphanohtml') == 'testhtml') {
     $action = 'testhtml';
 }
-
-
 
 /*
  * View
@@ -370,7 +369,7 @@ if ($action == 'edit') {
     print '<tr class="oddeven"><td>' . $langs->trans("MAIN_MAIL_SENDMODE") . '</td><td>';
 
     // SuperAdministrator access only
-    if (!isModEnabled('multicompany')  || ($user->admin && !$user->entity)) {
+    if (!isModEnabled('multicompany') || ($user->admin && !$user->entity)) {
         print $form->selectarray('MAIN_MAIL_SENDMODE', $listofmethods, getDolGlobalString('MAIN_MAIL_SENDMODE', 'mail'));
     } else {
         $text = $listofmethods[getDolGlobalString('MAIN_MAIL_SENDMODE')];
@@ -512,7 +511,7 @@ if ($action == 'edit') {
         print '<tr class="oddeven smtp_oauth_service"><td>' . $langs->trans("MAIN_MAIL_SMTPS_OAUTH_SERVICE") . '</td><td>';
 
         // SuperAdministrator access only
-        if (!isModEnabled('multicompany')  || ($user->admin && !$user->entity)) {
+        if (!isModEnabled('multicompany') || ($user->admin && !$user->entity)) {
             print $form->selectarray('MAIN_MAIL_SMTPS_OAUTH_SERVICE', $oauthservices, $conf->global->MAIN_MAIL_SMTPS_OAUTH_SERVICE);
         } else {
             $text = $oauthservices[getDolGlobalString('MAIN_MAIL_SMTPS_OAUTH_SERVICE')];
@@ -891,7 +890,7 @@ if ($action == 'edit') {
         $liste['user'] = $langs->trans('UserEmail');
         $liste['company'] = $langs->trans('CompanyEmail') . ' (' . (!getDolGlobalString('MAIN_INFO_SOCIETE_MAIL') ? $langs->trans("NotDefined") : $conf->global->MAIN_INFO_SOCIETE_MAIL) . ')';
         $sql = 'SELECT rowid, label, email FROM ' . MAIN_DB_PREFIX . 'c_email_senderprofile';
-        $sql .= ' WHERE active = 1 AND (private = 0 OR private = ' . ((int) $user->id) . ')';
+        $sql .= ' WHERE active = 1 AND (private = 0 OR private = ' . ((int)$user->id) . ')';
         $resql = $db->query($sql);
         if ($resql) {
             $num = $db->num_rows($resql);
@@ -1083,7 +1082,6 @@ if ($action == 'edit') {
         print '<div id="formmailaftertstconnect" name="formmailaftertstconnect"></div>';
         print load_fiche_titre($langs->trans("DoTestServerAvailability"));
 
-        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
         $mail = new CMailFile('', '', '', '', array(), array(), array(), '', '', 0, '', '', '', '', $trackid, $sendcontext);
         $result = $mail->check_server_port($server, $port);
         if ($result) {
@@ -1108,7 +1106,6 @@ if ($action == 'edit') {
         print dol_get_fiche_head(array(), '', '', -1);
 
         // Cree l'objet formulaire mail
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
         $formmail = new FormMail($db);
         $formmail->trackid = (($action == 'testhtml') ? "testhtml" : "test");
         $formmail->fromname = (GETPOSTISSET('fromname') ? GETPOST('fromname') : getDolGlobalString('MAIN_MAIL_EMAIL_FROM'));

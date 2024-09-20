@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2013-2014  Olivier Geffroy         <jeff@jeffinfo.com>
- * Copyright (C) 2013-2024	Alexandre Spangaro		<alexandre@inovea-conseil.com>
- * Copyright (C) 2014-2015	Ari Elbaz (elarifr)		<github@accedinfo.com>
- * Copyright (C) 2013-2014	Florian Henry			<florian.henry@open-concept.pro>
- * Copyright (C) 2014		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2016	  	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2013-2014  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2024	Alexandre Spangaro		    <alexandre@inovea-conseil.com>
+ * Copyright (C) 2014-2015	Ari Elbaz (elarifr)		    <github@accedinfo.com>
+ * Copyright (C) 2013-2014	Florian Henry			    <florian.henry@open-concept.pro>
+ * Copyright (C) 2014		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2016	  	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,11 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  * \file        htdocs/accountancy/expensereport/list.php
@@ -32,10 +37,6 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\User\Classes\User;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
@@ -253,6 +254,7 @@ $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_type_fees as f ON f.id = erd.fk_c_ty
 $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "user as u ON u.rowid = er.fk_user_author";
 $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "accounting_account as aa ON f.accountancy_code = aa.account_number AND aa.fk_pcg_version = '" . $db->escape($chartaccountcode) . "' AND aa.entity = " . $conf->entity;
 $sql .= " WHERE er.fk_statut IN (" . ExpenseReport::STATUS_APPROVED . ", " . ExpenseReport::STATUS_CLOSED . ") AND erd.fk_code_ventilation <= 0";
+
 // Add search filter like
 if (strlen($search_lineid)) {
     $sql .= natural_search("er.rowid", $search_lineid, 1);

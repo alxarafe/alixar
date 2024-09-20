@@ -81,9 +81,9 @@ class Root extends PPS
      *
      * @param resource|string $filename the name of the file or stream where to save the OLE container
      *
+     * @return bool true on success
      * @throws WriterException
      *
-     * @return bool true on success
      */
     public function save($filename)
     {
@@ -158,7 +158,7 @@ class Root extends PPS
                 $raList[$i]->Size = $raList[$i]->getDataLen();
                 if ($raList[$i]->Size < OLE::OLE_DATA_SIZE_SMALL) {
                     $iSBcnt += floor($raList[$i]->Size / $this->smallBlockSize)
-                                  + (($raList[$i]->Size % $this->smallBlockSize) ? 1 : 0);
+                        + (($raList[$i]->Size % $this->smallBlockSize) ? 1 : 0);
                 } else {
                     $iBBcnt += (floor($raList[$i]->Size / $this->bigBlockSize) +
                         (($raList[$i]->Size % $this->bigBlockSize) ? 1 : 0));
@@ -169,7 +169,7 @@ class Root extends PPS
         $iSlCnt = floor($this->bigBlockSize / OLE::OLE_LONG_INT_SIZE);
         $iSBDcnt = floor($iSBcnt / $iSlCnt) + (($iSBcnt % $iSlCnt) ? 1 : 0);
         $iBBcnt += (floor($iSmallLen / $this->bigBlockSize) +
-                      (($iSmallLen % $this->bigBlockSize) ? 1 : 0));
+            (($iSmallLen % $this->bigBlockSize) ? 1 : 0));
         $iCnt = count($raList);
         $iBdCnt = $this->bigBlockSize / OLE::OLE_PPS_SIZE;
         $iPPScnt = (floor($iCnt / $iBdCnt) + (($iCnt % $iBdCnt) ? 1 : 0));
@@ -182,9 +182,9 @@ class Root extends PPS
      *
      * @param int $i2 The argument
      *
+     * @return float
      * @see save()
      *
-     * @return float
      */
     private static function adjust2($i2)
     {
@@ -297,8 +297,8 @@ class Root extends PPS
                     // Set For PPS
                     $raList[$i]->startBlock = $iStBlk;
                     $iStBlk +=
-                            (floor($raList[$i]->Size / $this->bigBlockSize) +
-                                (($raList[$i]->Size % $this->bigBlockSize) ? 1 : 0));
+                        (floor($raList[$i]->Size / $this->bigBlockSize) +
+                            (($raList[$i]->Size % $this->bigBlockSize) ? 1 : 0));
                 }
             }
         }
@@ -326,7 +326,7 @@ class Root extends PPS
                 }
                 if ($raList[$i]->Size < OLE::OLE_DATA_SIZE_SMALL) {
                     $iSmbCnt = floor($raList[$i]->Size / $this->smallBlockSize)
-                                  + (($raList[$i]->Size % $this->smallBlockSize) ? 1 : 0);
+                        + (($raList[$i]->Size % $this->smallBlockSize) ? 1 : 0);
                     // Add to SBD
                     $jB = $iSmbCnt - 1;
                     for ($j = 0; $j < $jB; ++$j) {

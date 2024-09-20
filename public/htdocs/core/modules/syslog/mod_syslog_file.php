@@ -17,7 +17,7 @@ class mod_syslog_file extends LogHandler
     /**
      *  Return name of logger
      *
-     *  @return string      Name of logger
+     * @return string      Name of logger
      */
     public function getName()
     {
@@ -61,7 +61,7 @@ class mod_syslog_file extends LogHandler
     /**
      *  Return array of configuration data
      *
-     *  @return array       Return array of configuration data
+     * @return array       Return array of configuration data
      */
     public function configure()
     {
@@ -80,7 +80,7 @@ class mod_syslog_file extends LogHandler
     /**
      *  Return if configuration is valid
      *
-     *  @return bool        true if ok
+     * @return bool        true if ok
      */
     public function checkConfiguration()
     {
@@ -100,7 +100,7 @@ class mod_syslog_file extends LogHandler
     /**
      * Return the parsed logfile path
      *
-     * @param   string  $suffixinfilename   When output is a file, append this suffix into default log filename.
+     * @param string $suffixinfilename When output is a file, append this suffix into default log filename.
      * @return  string
      */
     private function getFilename($suffixinfilename = '')
@@ -132,8 +132,8 @@ class mod_syslog_file extends LogHandler
     /**
      * Export the message
      *
-     * @param   array   $content            Array containing the info about the message
-     * @param   string  $suffixinfilename   When output is a file, append this suffix into default log filename.
+     * @param array $content Array containing the info about the message
+     * @param string $suffixinfilename When output is a file, append this suffix into default log filename.
      * @return  void
      * @phan-suppress PhanPluginDuplicateArrayKey
      */
@@ -182,7 +182,7 @@ class mod_syslog_file extends LogHandler
             $message = dol_print_date(dol_now('gmt'), 'standard', 'gmt') . $delay . " " . sprintf("%-7s", $logLevels[$content['level']]) . " " . sprintf("%-15s", $content['ip']);
             $message .= " " . sprintf("%7s", dol_trunc($content['ospid'], 7, 'right', 'UTF-8', 1));
             $message .= " " . sprintf("%6s", dol_trunc($content['osuser'], 6, 'right', 'UTF-8', 1));
-            $message .= " " . ($this->ident > 0 ? str_pad(((string) ''), ((int) $this->ident), ((string) ' ')) : '') . $content['message'];
+            $message .= " " . ($this->ident > 0 ? str_pad(((string)''), ((int)$this->ident), ((string)' ')) : '') . $content['message'];
             fwrite($filefd, $message . "\n");
             fclose($filefd);
             dolChmod($logfile);

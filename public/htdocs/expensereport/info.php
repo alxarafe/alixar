@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 
 /**
  *  \file       htdocs/expensereport/info.php

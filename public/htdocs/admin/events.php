@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2008-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2013	   Juanjo Menent		<jmenent@2byte.es>
+/* Copyright (C) 2008-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2013	    Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Events;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/admin/events.php
  *      \ingroup    core
@@ -28,8 +31,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/events.class.php';
-
 
 if (!$user->admin) {
     accessforbidden();
@@ -57,7 +58,6 @@ $pagenext = $page + 1;
 $securityevent = new Events($db);
 $eventstolog = $securityevent->eventstolog;
 
-
 /*
  *	Actions
  */
@@ -79,8 +79,6 @@ if ($action == "save") {
     $db->commit();
     setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
 }
-
-
 
 /*
  * View
@@ -142,7 +140,6 @@ print "</form>\n";
 
 $s = $langs->trans("SeeReportPage", '{s1}' . $langs->transnoentities("Home") . ' - ' . $langs->transnoentities("AdminTools") . ' - ' . $langs->transnoentities("Audit") . '{s2}');
 print str_replace('{s2}', '</a>', str_replace('{s1}', '<a href="' . constant('BASE_URL') . '/admin/tools/listevents.php" target="_blank">', $s));
-
 
 
 // End of page

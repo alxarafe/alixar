@@ -95,7 +95,7 @@ class WKT extends GeoAdapter
         $lines = array();
         foreach ($parts as $part) {
             if (!$this->beginsWith($part, '(')) $part = '(' . $part;
-            if (!$this->endsWith($part, ')'))   $part = $part . ')';
+            if (!$this->endsWith($part, ')')) $part = $part . ')';
             $lines[] = $this->parseLineString($part);
         }
         return new Polygon($lines);
@@ -128,7 +128,7 @@ class WKT extends GeoAdapter
         foreach ($parts as $part) {
             // Repair the string if the explode broke it
             if (!$this->beginsWith($part, '(')) $part = '(' . $part;
-            if (!$this->endsWith($part, ')'))   $part = $part . ')';
+            if (!$this->endsWith($part, ')')) $part = $part . ')';
             $lines[] = $this->parseLineString($part);
         }
         return new MultiLineString($lines);
@@ -146,7 +146,7 @@ class WKT extends GeoAdapter
         foreach ($parts as $part) {
             // Repair the string if the explode broke it
             if (!$this->beginsWith($part, '((')) $part = '((' . $part;
-            if (!$this->endsWith($part, '))'))   $part = $part . '))';
+            if (!$this->endsWith($part, '))')) $part = $part . '))';
             $polys[] = $this->parsePolygon($part);
         }
         return new MultiPolygon($polys);
@@ -252,7 +252,7 @@ class WKT extends GeoAdapter
             case 'MultiLineString':
             case 'MultiPolygon':
                 foreach ($geometry->getComponents() as $component) {
-                        $parts[] = '(' . $this->extractData($component) . ')';
+                    $parts[] = '(' . $this->extractData($component) . ')';
                 }
                 return implode(', ', $parts);
             case 'GeometryCollection':

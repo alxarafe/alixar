@@ -18,9 +18,9 @@ trait Request
     {
         if ($params && !\is_array($params)) {
             $message = 'You must pass an array as the first argument to Stripe API '
-               . 'method calls.  (HINT: an example call to create a charge '
-               . "would be: \"Stripe\\Charge::create(['amount' => 100, "
-               . "'currency' => 'usd', 'source' => 'tok_1234'])\")";
+                . 'method calls.  (HINT: an example call to create a charge '
+                . "would be: \"Stripe\\Charge::create(['amount' => 100, "
+                . "'currency' => 'usd', 'source' => 'tok_1234'])\")";
 
             throw new \Stripe\Exception\InvalidArgumentException($message);
         }
@@ -32,9 +32,9 @@ trait Request
      * @param array $params list of parameters for the request
      * @param null|array|string $options
      *
+     * @return array tuple containing (the JSON response, $options)
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return array tuple containing (the JSON response, $options)
      */
     protected function _request($method, $url, $params = [], $options = null)
     {
@@ -66,9 +66,9 @@ trait Request
      * @param array $params list of parameters for the request
      * @param null|array|string $options
      *
+     * @return array tuple containing (the JSON response, $options)
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return array tuple containing (the JSON response, $options)
      */
     protected static function _staticRequest($method, $url, $params, $options)
     {

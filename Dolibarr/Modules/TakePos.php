@@ -37,7 +37,6 @@ use DoliDB;
 use Societe;
 use stdClass;
 
-include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
 
 
 /**

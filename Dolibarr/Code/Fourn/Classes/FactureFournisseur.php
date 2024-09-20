@@ -427,7 +427,6 @@ class FactureFournisseur extends CommonInvoice
         if ($this->fac_rec > 0) {
             $this->fk_fac_rec_source = $this->fac_rec;
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture-rec.class.php';
             $_facrec = new FactureFournisseurRec($this->db);
             $result = $_facrec->fetch($this->fac_rec);
             $result = $_facrec->fetchObjectLinked(null, '', null, '', 'OR', 1, 'sourcetype', 0); // This load $_facrec->linkedObjectsIds
@@ -3458,7 +3457,6 @@ class FactureFournisseur extends CommonInvoice
         }
 
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
         $formmail = new FormMail($this->db);
 
         $now = dol_now();

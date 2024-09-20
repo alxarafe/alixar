@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2003-2005 Rodolphe Quiedeville     <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2007 Laurent Destailleur  	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin       		<regis.houssin@inodbox.com>
- * Copyright (C) 2012	   Andreu Bisquerra Gaya	<jove@bisquerra.com>
- * Copyright (C) 2012	   David Rodriguez Martinez <davidrm146@gmail.com>
- * Copyright (C) 2012	   Juanjo Menent			<jmenent@2byte.es>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2007  Laurent Destailleur  	    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin       		<regis.houssin@inodbox.com>
+ * Copyright (C) 2012	    Andreu Bisquerra Gaya	    <jove@bisquerra.com>
+ * Copyright (C) 2012	    David Rodriguez Martinez    <davidrm146@gmail.com>
+ * Copyright (C) 2012	    Juanjo Menent			    <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/commande/customer.php
  *  \ingroup    compta
@@ -30,9 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
 
 $action = GETPOST('action', 'aZ09');
 
@@ -106,12 +105,12 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search on socid
 if ($socid) {
-    $sql .= " AND c.fk_soc = " . ((int) $socid);
+    $sql .= " AND c.fk_soc = " . ((int)$socid);
 }
 $sql .= " AND c.fk_statut in (1, 2) AND c.facture = 0";
 $sql .= " GROUP BY s.nom";

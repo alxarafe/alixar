@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2003-2004  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2009	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005		Marc Barilley / Ocebo	<marc@ocebo.com>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2013		Cédric Salvador			<csalvador@gpcsolutions.fr>
- * Copyright (C) 2016		Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2017		Ferran Marcet       	<fmarcet@2byte.es>
- * Copyright (C) 2021		Frédéric France			<frederic.france@netlogic.fr>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2009	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005		Marc Barilley / Ocebo	    <marc@ocebo.com>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2013		Cédric Salvador			    <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2016		Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2017		Ferran Marcet       	    <fmarcet@2byte.es>
+ * Copyright (C) 2021		Frédéric France			    <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *       \file       htdocs/fourn/facture/document.php
  *       \ingroup    invoice, fournisseur
@@ -35,8 +39,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
-if (isModEnabled('project')) {
-}
 
 $langs->loadLangs(array('bills', 'other', 'companies'));
 

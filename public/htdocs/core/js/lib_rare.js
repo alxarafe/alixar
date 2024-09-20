@@ -23,7 +23,7 @@
 // won't yet work with non-even tzs
 function fetchTimezone() {
     var localclock = new Date(),
-    // returns negative offset from GMT in minutes
+        // returns negative offset from GMT in minutes
         tzRaw = localclock.getTimezoneOffset(),
         tzHour = Math.floor(Math.abs(tzRaw) / 60),
         tzMin = Math.abs(tzRaw) % 60;

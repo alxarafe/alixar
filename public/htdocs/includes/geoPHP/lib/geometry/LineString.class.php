@@ -94,8 +94,9 @@ class LineString extends Collection
         for ($i = 0; $i < $this->numPoints() - 1; $i++) {
             $point = $points[$i];
             $next_point = $points[$i + 1];
-            if (!is_object($next_point)) {continue;
-}
+            if (!is_object($next_point)) {
+                continue;
+            }
             // Great circle method
             $lat1 = deg2rad($point->getY());
             $lat2 = deg2rad($next_point->getY());
@@ -103,15 +104,15 @@ class LineString extends Collection
             $lon2 = deg2rad($next_point->getX());
             $dlon = $lon2 - $lon1;
             $length +=
-            $radius *
-            atan2(
-            sqrt(
-              pow(cos($lat2) * sin($dlon), 2) +
-                pow(cos($lat1) * sin($lat2) - sin($lat1) * cos($lat2) * cos($dlon), 2)
-              ),
-            sin($lat1) * sin($lat2) +
-              cos($lat1) * cos($lat2) * cos($dlon)
-              );
+                $radius *
+                atan2(
+                    sqrt(
+                        pow(cos($lat2) * sin($dlon), 2) +
+                        pow(cos($lat1) * sin($lat2) - sin($lat1) * cos($lat2) * cos($dlon), 2)
+                    ),
+                    sin($lat1) * sin($lat2) +
+                    cos($lat1) * cos($lat2) * cos($dlon)
+                );
         }
         // Returns length in meters.
         return $length;
@@ -124,14 +125,15 @@ class LineString extends Collection
         for ($i = 0; $i < $this->numPoints() - 1; $i++) {
             $point = $points[$i];
             $next_point = $points[$i + 1];
-            if (!is_object($next_point)) {continue;
-}
+            if (!is_object($next_point)) {
+                continue;
+            }
             $degree = rad2deg(
-            acos(
-              sin(deg2rad($point->getY())) * sin(deg2rad($next_point->getY())) +
-            cos(deg2rad($point->getY())) * cos(deg2rad($next_point->getY())) *
-              cos(deg2rad(abs($point->getX() - $next_point->getX())))
-            )
+                acos(
+                    sin(deg2rad($point->getY())) * sin(deg2rad($next_point->getY())) +
+                    cos(deg2rad($point->getY())) * cos(deg2rad($next_point->getY())) *
+                    cos(deg2rad(abs($point->getX() - $next_point->getX())))
+                )
             );
             $degrees += $degree;
         }
@@ -185,8 +187,10 @@ class LineString extends Collection
         $p3_x = $segment->endPoint()->x();
         $p3_y = $segment->endPoint()->y();
 
-        $s1_x = $p1_x - $p0_x;     $s1_y = $p1_y - $p0_y;
-        $s2_x = $p3_x - $p2_x;     $s2_y = $p3_y - $p2_y;
+        $s1_x = $p1_x - $p0_x;
+        $s1_y = $p1_y - $p0_y;
+        $s2_x = $p3_x - $p2_x;
+        $s2_y = $p3_y - $p2_y;
 
         $fps = (-$s2_x * $s1_y) + ($s1_x * $s2_y);
         $fpt = (-$s2_x * $s1_y) + ($s1_x * $s2_y);
@@ -196,7 +200,7 @@ class LineString extends Collection
         }
 
         $s = (-$s1_y * ($p0_x - $p2_x) + $s1_x * ($p0_y - $p2_y)) / $fps;
-        $t = ( $s2_x * ($p0_y - $p2_y) - $s2_y * ($p0_x - $p2_x)) / $fpt;
+        $t = ($s2_x * ($p0_y - $p2_y) - $s2_y * ($p0_x - $p2_x)) / $fpt;
 
         if ($s > 0 && $s < 1 && $t > 0 && $t < 1) {
             // Collision detected

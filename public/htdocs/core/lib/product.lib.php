@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2006-2015  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2007       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2009-2010  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2015       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2015-2016	Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2023	   	Gauthier VERDOL			<gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2024	   	Jean-Rémi TAPONIER		<jean-remi@netlogic.fr>
+/* Copyright (C) 2006-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2009-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2015-2016	Marcos García			    <marcosgdf@gmail.com>
+ * Copyright (C) 2023	   	Gauthier VERDOL			    <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2024	   	Jean-Rémi TAPONIER		    <jean-remi@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\CUnits;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\Variants\Classes\ProductCombination;
+
 /**
  * \file       htdocs/core/lib/product.lib.php
  * \brief      Ensemble de functions de base pour le module produit et service
@@ -33,7 +42,7 @@
 /**
  * Prepare array with list of tabs
  *
- * @param   Product $object     Object related to tabs
+ * @param Product $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function product_prepare_head($object)
@@ -238,7 +247,7 @@ function product_prepare_head($object)
 /**
  * Prepare array with list of tabs
  *
- * @param   ProductLot  $object     Object related to tabs
+ * @param ProductLot $object Object related to tabs
  * @return  array                   Array of tabs to show
  */
 function productlot_prepare_head($object)
@@ -312,12 +321,11 @@ function productlot_prepare_head($object)
 }
 
 
-
 /**
-*  Return array head with list of tabs to view object information.
-*
-*  @return  array               head array with tabs
-*/
+ *  Return array head with list of tabs to view object information.
+ *
+ * @return  array               head array with tabs
+ */
 function product_admin_prepare_head()
 {
     global $langs, $conf, $user, $db;
@@ -373,7 +381,6 @@ function product_admin_prepare_head()
 }
 
 
-
 /**
  * Return array head with list of tabs to view object information.
  *
@@ -415,12 +422,11 @@ function product_lot_admin_prepare_head()
 }
 
 
-
 /**
  * Show stats for company
  *
- * @param   Product     $product    Product object
- * @param   int         $socid      Thirdparty id
+ * @param Product $product Product object
+ * @param int $socid Thirdparty id
  * @return  integer                 NB of lines shown into array
  */
 function show_stats_for_company($product, $socid)
@@ -698,8 +704,8 @@ function show_stats_for_company($product, $socid)
 /**
  * Show stats for product batch
  *
- * @param   Productlot  $batch  Product batch object
- * @param   int         $socid  Thirdparty id
+ * @param Productlot $batch Product batch object
+ * @param int $socid Thirdparty id
  * @return  integer             NB of lines shown into array
  */
 function show_stats_for_batch($batch, $socid)
@@ -819,13 +825,13 @@ function show_stats_for_batch($batch, $socid)
  *  Return translation label of a unit key.
  *  Function kept for backward compatibility.
  *
- *  @param  string      $scale              Scale of unit: '0', '-3', '6', ...
- *  @param  string      $measuring_style    Style of unit: weight, volume,...
- *  @param  int         $unit               ID of unit (rowid in llx_c_units table)
- *  @param  int         $use_short_label    1=Use short label ('g' instead of 'gram'). Short labels are not translated.
- *  @param  Translate   $outputlangs        Language object
- *  @return string                          Unit string
- *  @see    measuringUnitString() formproduct->selectMeasuringUnits()
+ * @param string $scale Scale of unit: '0', '-3', '6', ...
+ * @param string $measuring_style Style of unit: weight, volume,...
+ * @param int $unit ID of unit (rowid in llx_c_units table)
+ * @param int $use_short_label 1=Use short label ('g' instead of 'gram'). Short labels are not translated.
+ * @param Translate $outputlangs Language object
+ * @return string                          Unit string
+ * @see    measuringUnitString() formproduct->selectMeasuringUnits()
  */
 function measuring_units_string($scale = '', $measuring_style = '', $unit = 0, $use_short_label = 0, $outputlangs = null)
 {
@@ -835,13 +841,13 @@ function measuring_units_string($scale = '', $measuring_style = '', $unit = 0, $
 /**
  *  Return translation label of a unit key
  *
- *  @param  int         $unit               ID of unit (rowid in llx_c_units table)
- *  @param  string      $measuring_style    Style of unit: 'weight', 'volume', ..., '' = 'net_measure' for option PRODUCT_ADD_NET_MEASURE
- *  @param  string      $scale              Scale of unit: '0', '-3', '6', ...
- *  @param  int         $use_short_label    1=Use very short label ('g' instead of 'gram'), not translated. 2=Use translated short label.
- *  @param  Translate   $outputlangs        Language object
- *  @return string|-1                       Unit string if OK, -1 if KO
- *  @see    formproduct->selectMeasuringUnits()
+ * @param int $unit ID of unit (rowid in llx_c_units table)
+ * @param string $measuring_style Style of unit: 'weight', 'volume', ..., '' = 'net_measure' for option PRODUCT_ADD_NET_MEASURE
+ * @param string $scale Scale of unit: '0', '-3', '6', ...
+ * @param int $use_short_label 1=Use very short label ('g' instead of 'gram'), not translated. 2=Use translated short label.
+ * @param Translate $outputlangs Language object
+ * @return string|-1                       Unit string if OK, -1 if KO
+ * @see    formproduct->selectMeasuringUnits()
  */
 function measuringUnitString($unit, $measuring_style = '', $scale = '', $use_short_label = 0, $outputlangs = null)
 {
@@ -900,9 +906,9 @@ function measuringUnitString($unit, $measuring_style = '', $scale = '', $use_sho
 /**
  *  Transform a given unit scale into the square of that unit, if known.
  *
- *  @param  int     $unit            Unit scale key (-3,-2,-1,0,98,99...)
- *  @return int                      Squared unit key (-6,-4,-2,0,98,99...)
- *  @see    formproduct->selectMeasuringUnits
+ * @param int $unit Unit scale key (-3,-2,-1,0,98,99...)
+ * @return int                      Squared unit key (-6,-4,-2,0,98,99...)
+ * @see    formproduct->selectMeasuringUnits
  */
 function measuring_units_squared($unit)
 {
@@ -920,9 +926,9 @@ function measuring_units_squared($unit)
 /**
  *  Transform a given unit scale into the cube of that unit, if known
  *
- *  @param  int     $unit            Unit scale key (-3,-2,-1,0,98,99...)
- *  @return int                      Cubed unit key (-9,-6,-3,0,88,89...)
- *  @see    formproduct->selectMeasuringUnits
+ * @param int $unit Unit scale key (-3,-2,-1,0,98,99...)
+ * @return int                      Cubed unit key (-9,-6,-3,0,88,89...)
+ * @see    formproduct->selectMeasuringUnits
  */
 function measuring_units_cubed($unit)
 {

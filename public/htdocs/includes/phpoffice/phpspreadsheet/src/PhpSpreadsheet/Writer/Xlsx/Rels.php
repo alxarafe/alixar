@@ -14,9 +14,9 @@ class Rels extends WriterPart
      *
      * @param Spreadsheet $spreadsheet
      *
+     * @return string XML Output
      * @throws WriterException
      *
-     * @return string XML Output
      */
     public function writeRelationships(Spreadsheet $spreadsheet)
     {
@@ -89,9 +89,9 @@ class Rels extends WriterPart
      *
      * @param Spreadsheet $spreadsheet
      *
+     * @return string XML Output
      * @throws WriterException
      *
-     * @return string XML Output
      */
     public function writeWorkbookRelationships(Spreadsheet $spreadsheet)
     {
@@ -172,9 +172,9 @@ class Rels extends WriterPart
      * @param int $pWorksheetId
      * @param bool $includeCharts Flag indicating if we should write charts
      *
+     * @return string XML Output
      * @throws WriterException
      *
-     * @return string XML Output
      */
     public function writeWorksheetRelationships(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet, $pWorksheetId = 1, $includeCharts = false)
     {
@@ -212,7 +212,7 @@ class Rels extends WriterPart
             $rId = ++$d;
 
             if (isset($drawingOriginalIds[$relPath])) {
-                $rId = (int) (substr($drawingOriginalIds[$relPath], 3));
+                $rId = (int)(substr($drawingOriginalIds[$relPath], 3));
             }
 
             $this->writeRelationship(
@@ -301,9 +301,9 @@ class Rels extends WriterPart
      * @param int &$chartRef Chart ID
      * @param bool $includeCharts Flag indicating if we should write charts
      *
+     * @return string XML Output
      * @throws WriterException
      *
-     * @return string XML Output
      */
     public function writeDrawingRelationships(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet, &$chartRef, $includeCharts = false)
     {
@@ -372,9 +372,9 @@ class Rels extends WriterPart
      *
      * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet
      *
+     * @return string XML Output
      * @throws WriterException
      *
-     * @return string XML Output
      */
     public function writeHeaderFooterDrawingRelationships(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet)
     {
@@ -444,9 +444,9 @@ class Rels extends WriterPart
      * @param \PhpOffice\PhpSpreadsheet\Worksheet\Drawing $drawing
      * @param $i
      *
+     * @return int
      * @throws WriterException
      *
-     * @return int
      */
     private function writeDrawingHyperLink($objWriter, $drawing, $i)
     {

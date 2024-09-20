@@ -41,15 +41,28 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Comm\Classes\CActionComm;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\DolGeoIP;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\Website\Classes\Website;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file           htdocs/core/lib/functions.lib.php
  *  \brief          A set of functions for Dolibarr
  *                  This file contains all frequently used functions.
  */
-
-use Dolibarr\Code\Core\Classes\Translate;
-use Dolibarr\Code\User\Classes\User;
-use Dolibarr\Core\Base\CommonObject;
 
 include_once DOL_DOCUMENT_ROOT . '/core/lib/json.lib.php';
 
@@ -4399,7 +4412,6 @@ function dolGetCountryCodeFromIp($ip)
         $datafile = getDolGlobalString('GEOIPMAXMIND_COUNTRY_DATAFILE');
         //$ip='24.24.24.24';
         //$datafile='/usr/share/GeoIP/GeoIP.dat';    Note that this must be downloaded datafile (not same than datafile provided with ubuntu packages)
-        include_once DOL_DOCUMENT_ROOT . '/core/class/dolgeoip.class.php';
         $geoip = new DolGeoIP('country', $datafile);
         //print 'ip='.$ip.' databaseType='.$geoip->gi->databaseType." GEOIP_CITY_EDITION_REV1=".GEOIP_CITY_EDITION_REV1."\n";
         $countrycode = $geoip->getCountryCodeFromIP($ip);
@@ -4426,7 +4438,6 @@ function dol_user_country()
         $datafile = getDolGlobalString('GEOIPMAXMIND_COUNTRY_DATAFILE');
         //$ip='24.24.24.24';
         //$datafile='E:\Mes Sites\Web\Admin1\awstats\maxmind\GeoIP.dat';
-        include_once DOL_DOCUMENT_ROOT . '/core/class/dolgeoip.class.php';
         $geoip = new DolGeoIP('country', $datafile);
         $countrycode = $geoip->getCountryCodeFromIP($ip);
         $ret = $countrycode;
@@ -13617,7 +13628,7 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
 
     global $param, $massactionbutton;
 
-    
+
     // Check parameters
     if (!is_object($filterobj) && !is_object($objcon)) {
         dol_print_error(null, 'BadParameter');
@@ -13919,10 +13930,9 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
     if (isModEnabled('agenda') || (isModEnabled('mailing') && !empty($objcon->email))) {
         $delay_warning = $conf->global->MAIN_DELAY_ACTIONS_TODO * 24 * 60 * 60;
 
-                include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
-        
-        $formactions = new FormActions($db);
+        include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
 
+        $formactions = new FormActions($db);
         $actionstatic = new ActionComm($db);
         $userstatic = new User($db);
         $contactstatic = new Contact($db);

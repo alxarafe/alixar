@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2020   Tobias Sekan    <tobias.sekan@startmail.com>
+/* Copyright (C) 2020       Tobias Sekan                <tobias.sekan@startmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 
 /**
  *  \file       htdocs/fourn/facture/index.php
-*   \ingroup    facture
+ *   \ingroup    facture
  *  \brief      Home page of customer invoices area
  */
 
@@ -52,7 +52,6 @@ restrictedArea($user, 'fournisseur', 0, '', 'facture');
  */
 
 // None
-
 
 
 /*

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2011 Laurent Destailleur  <eldy@users.sourceforge.org>
- * Copyright (C) 2011      Regis Houssin  		<regis.houssin@inodbox.com>
+/* Copyright (C) 2010-2011  Laurent Destailleur         <eldy@users.sourceforge.org>
+ * Copyright (C) 2011       Regis Houssin  		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify

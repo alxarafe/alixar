@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2015       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\Don\Classes\PaymentDonation;
+
 /**
  *      \file       htdocs/don/payment/card.php
  *      \ingroup    donations
@@ -26,10 +31,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/paymentdonation.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/facture/modules_facture.php';
-if (isModEnabled("bank")) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("bills", "banks", "companies", "donations"));
@@ -71,7 +72,6 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('don', '
         $db->rollback();
     }
 }
-
 
 
 /*
@@ -140,7 +140,6 @@ if (isModEnabled("bank")) {
 
 print '</table>';
 
-
 /*
  * List of donations paid
  */
@@ -150,7 +149,7 @@ $sql = 'SELECT d.rowid as did, d.paid, d.amount as d_amount, pd.amount';
 $sql .= ' FROM ' . MAIN_DB_PREFIX . 'payment_donation as pd,' . MAIN_DB_PREFIX . 'don as d';
 $sql .= ' WHERE pd.fk_donation = d.rowid';
 $sql .= ' AND d.entity = ' . $conf->entity;
-$sql .= ' AND pd.rowid = ' . ((int) $id);
+$sql .= ' AND pd.rowid = ' . ((int)$id);
 
 dol_syslog("don/payment/card.php", LOG_DEBUG);
 $resql = $db->query($sql);
@@ -215,13 +214,12 @@ if (empty($action)) {
         if (!$disable_delete) {
             print dolGetButtonAction($langs->trans('Delete'), '', 'delete', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=delete&token=' . newToken(), '', 1);
         } else {
-            print dolGetButtonAction($langs->trans("CantRemovePaymentWithOneInvoicePaid"), $langs->trans('Delete'), '', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '#', '', 1, [ 'attr' => ['classOverride' => 'butActionRefused']]);
+            print dolGetButtonAction($langs->trans("CantRemovePaymentWithOneInvoicePaid"), $langs->trans('Delete'), '', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '#', '', 1, ['attr' => ['classOverride' => 'butActionRefused']]);
         }
     }
 }
 
 print '</div>';
-
 
 
 llxFooter();

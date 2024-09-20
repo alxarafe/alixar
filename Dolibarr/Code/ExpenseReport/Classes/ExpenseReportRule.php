@@ -23,6 +23,7 @@
 namespace Dolibarr\Code\ExpenseReport\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *  \file       htdocs/expensereport/class/expensereport_ik.class.php
@@ -129,7 +130,6 @@ class ExpenseReportRule extends CommonObject
         'is_for_all' => array('type' => 'integer', 'label' => 'IsForAll', 'enabled' => 1, 'visible' => -1, 'position' => 100),
         'entity' => array('type' => 'integer', 'label' => 'Entity', 'enabled' => 1, 'visible' => -2, 'position' => 110),
     );
-
 
     /**
      *  Constructor

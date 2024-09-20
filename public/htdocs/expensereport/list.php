@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017	Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004     	Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2009	Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015       Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2018       Ferran Marcet	     <fmarcet@2byte.es>
- * Copyright (C) 2018       Charlene Benke       <charlie@patas-monkey.com>
- * Copyright (C) 2019       Juanjo Menent		 <jmenent@2byte.es>
- * Copyright (C) 2019-2021  Frédéric France      <frederic.france@netlogic.fr>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017	Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004     	Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2009	Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018       Ferran Marcet	            <fmarcet@2byte.es>
+ * Copyright (C) 2018       Charlene Benke              <charlie@patas-monkey.com>
+ * Copyright (C) 2019       Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2019-2021  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,10 +32,17 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormExpenseReport;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\User\Classes\User;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formexpensereport.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 
 // Load translation files required by the page
@@ -180,7 +187,6 @@ $permissiontoread = $user->hasRight('expensereport', 'lire');
 $permissiontodelete = $user->hasRight('expensereport', 'supprimer');
 
 $objectuser = new User($db);
-
 
 /*
  * Actions

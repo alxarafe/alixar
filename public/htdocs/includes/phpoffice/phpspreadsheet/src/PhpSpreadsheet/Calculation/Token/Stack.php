@@ -49,7 +49,8 @@ class Stack
         $storeKey = null,
         $onlyIf = null,
         $onlyIfNot = null
-    ) {
+    )
+    {
         $stackItem = $this->getStackItem($type, $value, $reference, $storeKey, $onlyIf, $onlyIfNot);
 
         $this->stack[$this->count++] = $stackItem;
@@ -69,7 +70,8 @@ class Stack
         $storeKey = null,
         $onlyIf = null,
         $onlyIfNot = null
-    ) {
+    )
+    {
         $stackItem = [
             'type' => $type,
             'value' => $value,

@@ -13,9 +13,9 @@ class InvoiceItemService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\InvoiceItem>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\InvoiceItem>
      */
     public function all($params = null, $opts = null)
     {
@@ -30,9 +30,9 @@ class InvoiceItemService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\InvoiceItem
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\InvoiceItem
      */
     public function create($params = null, $opts = null)
     {
@@ -48,9 +48,9 @@ class InvoiceItemService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\InvoiceItem
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\InvoiceItem
      */
     public function delete($id, $params = null, $opts = null)
     {
@@ -64,9 +64,9 @@ class InvoiceItemService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\InvoiceItem
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\InvoiceItem
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -82,9 +82,9 @@ class InvoiceItemService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\InvoiceItem
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\InvoiceItem
      */
     public function update($id, $params = null, $opts = null)
     {

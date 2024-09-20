@@ -90,7 +90,7 @@ class Sapi
             $output = fopen('php://output', 'wb');
             if (is_resource($body) && 'stream' == get_resource_type($body)) {
                 // a workaround to make PHP more possible to use mmap based copy, see https://github.com/sabre-io/http/pull/119
-                $left = (int) $contentLength;
+                $left = (int)$contentLength;
                 // copy with 4MiB chunks
                 $chunk_size = 4 * 1024 * 1024;
                 stream_set_chunk_size($output, $chunk_size);
@@ -100,7 +100,7 @@ class Sapi
                 if (null !== $contentRange && preg_match('/^bytes\s([0-9]+)-([0-9]+)\//i', $contentRange, $matches)) {
                     // 4kB should be the default page size on most architectures
                     $pageSize = 4096;
-                    $offset = (int) $matches[1];
+                    $offset = (int)$matches[1];
                     $delta = ($offset % $pageSize) > 0 ? ($pageSize - $offset % $pageSize) : 0;
                     if ($delta > 0) {
                         $left -= stream_copy_to_stream($body, $output, min($delta, $left));
@@ -124,7 +124,7 @@ class Sapi
                     $left -= $copied;
                 }
             } else {
-                fwrite($output, $body, (int) $contentLength);
+                fwrite($output, $body, (int)$contentLength);
             }
         } else {
             file_put_contents('php://output', $body);
@@ -152,7 +152,7 @@ class Sapi
         $hostName = 'localhost';
 
         foreach ($serverArray as $key => $value) {
-            $key = (string) $key;
+            $key = (string)$key;
             switch ($key) {
                 case 'SERVER_PROTOCOL':
                     if ('HTTP/1.0' === $value) {

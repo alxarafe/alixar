@@ -64,9 +64,9 @@ class File extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\File the created file
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\File the created file
      */
     public static function create($params = null, $opts = null)
     {

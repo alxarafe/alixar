@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2016      Ion Agorria          <ion@agorria.com>
+/* Copyright (C) 2006-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2016       Ion Agorria                 <ion@agorria.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,7 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *       \file       htdocs/webservices/server_project.php

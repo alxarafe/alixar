@@ -1375,7 +1375,6 @@ public $demand_reason;
             if ($objsoc->id > 0 && !empty($object->lines)) {
                 if ($update_prices === true && getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
                     // If price per customer
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productcustomerprice.class.php';
                 }
 
                 foreach ($object->lines as $line) {

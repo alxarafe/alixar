@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2004-2014 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2008      Raphael Bertrand     <raphael.bertrand@resultic.fr>
- * Copyright (C) 2010-2015 Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2012      Christophe Battarel  <christophe.battarel@altairis.fr>
- * Copyright (C) 2012      Cedric Salvador      <csalvador@gpcsolutions.fr>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2017-2018 Ferran Marcet        <fmarcet@2byte.es>
- * Copyright (C) 2018-2024  Frédéric France      <frederic.france@free.fr>
- * Copyright (C) 2019      Pierre Ardoin      	<mapiolca@me.com>
+/* Copyright (C) 2004-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008       Raphael Bertrand            <raphael.bertrand@resultic.fr>
+ * Copyright (C) 2010-2015  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2012       Cedric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2017-2018  Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2019       Pierre Ardoin      	        <mapiolca@me.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -28,13 +28,21 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Propalmergepdfproduct;
+use Dolibarr\Code\Propale\Classes\ModelePDFPropales;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/core/modules/propale/doc/pdf_azur.modules.php
  *  \ingroup    propale
  *  \brief      File of Class to generate PDF proposal with Azur template
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/propale/modules_propale.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
@@ -85,7 +93,7 @@ class pdf_azur extends ModelePDFPropales
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -164,21 +172,22 @@ class pdf_azur extends ModelePDFPropales
         $this->atleastonediscount = 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build pdf onto disk
      *
-     *  @param      Propal      $object             Object to generate
-     *  @param      Translate   $outputlangs        Lang output object
-     *  @param      string      $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int         $hidedetails        Do not show line details
-     *  @param      int         $hidedesc           Do not show desc
-     *  @param      int         $hideref            Do not show ref
-     *  @return     int                             1=OK, 0=KO
+     * @param Propal $object Object to generate
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                             1=OK, 0=KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath = '', $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $db, $hookmanager, $nblines;
 
         dol_syslog("write_file outputlangs->defaultlang=" . (is_object($outputlangs) ? $outputlangs->defaultlang : 'null'));
@@ -628,7 +637,7 @@ class pdf_azur extends ModelePDFPropales
                         $localtax2ligne -= ($localtax2ligne * $object->remise_percent) / 100;
                     }*/
 
-                    $vatrate = (string) $object->lines[$i]->tva_tx;
+                    $vatrate = (string)$object->lines[$i]->tva_tx;
 
                     // Retrieve type from database for backward compatibility with old records
                     if (
@@ -855,611 +864,18 @@ class pdf_azur extends ModelePDFPropales
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-    /**
-     *  Show payments table
-     *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Propal      $object         Object proposal
-     *  @param  int         $posy           Position y in PDF
-     *  @param  Translate   $outputlangs    Object langs for output
-     *  @return int                         Return integer <0 if KO, >0 if OK
-     */
-    protected function _tableau_versements(&$pdf, $object, $posy, $outputlangs)
-    {
-		// phpcs:enable
-        return 1;
-    }
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-    /**
-     *   Show miscellaneous information (payment mode, payment term, ...)
-     *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     Propal      $object         Object to show
-     *   @param     int         $posy           Y
-     *   @param     Translate   $outputlangs    Langs object
-     *   @return    int
-     */
-    protected function _tableau_info(&$pdf, $object, $posy, $outputlangs)
-    {
-		// phpcs:enable
-        global $conf, $mysoc;
-        $default_font_size = pdf_getPDFFontSize($outputlangs);
-
-        $pdf->SetFont('', '', $default_font_size - 1);
-
-        $diffsizetitle = (!getDolGlobalString('PDF_DIFFSIZE_TITLE') ? 3 : $conf->global->PDF_DIFFSIZE_TITLE);
-
-        // If France, show VAT mention if not applicable
-        if ($this->emetteur->country_code == 'FR' && empty($mysoc->tva_assuj)) {
-            $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
-            $pdf->SetXY($this->marge_gauche, $posy);
-            $pdf->MultiCell(100, 3, $outputlangs->transnoentities("VATIsNotUsedForInvoice"), 0, 'L', 0);
-
-            $posy = $pdf->GetY() + 4;
-        }
-
-        $posxval = 52;
-        if (getDolGlobalString('MAIN_PDF_DELIVERY_DATE_TEXT')) {
-            $displaydate = "daytext";
-        } else {
-            $displaydate = "day";
-        }
-
-        // Show shipping date
-        if (!empty($object->delivery_date)) {
-            $outputlangs->load("sendings");
-            $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
-            $pdf->SetXY($this->marge_gauche, $posy);
-            $titre = $outputlangs->transnoentities("DateDeliveryPlanned") . ':';
-            $pdf->MultiCell(80, 4, $titre, 0, 'L');
-            $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
-            $pdf->SetXY($posxval, $posy);
-            $dlp = dol_print_date($object->delivery_date, $displaydate, false, $outputlangs, true);
-            $pdf->MultiCell(80, 4, $dlp, 0, 'L');
-
-            $posy = $pdf->GetY() + 1;
-        } elseif ($object->availability_code || $object->availability) {    // Show availability conditions
-            $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
-            $pdf->SetXY($this->marge_gauche, $posy);
-            $titre = $outputlangs->transnoentities("AvailabilityPeriod") . ':';
-            $pdf->MultiCell(80, 4, $titre, 0, 'L');
-            $pdf->SetTextColor(0, 0, 0);
-            $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
-            $pdf->SetXY($posxval, $posy);
-            $lib_availability = ($outputlangs->transnoentities("AvailabilityType" . $object->availability_code) != 'AvailabilityType' . $object->availability_code) ? $outputlangs->transnoentities("AvailabilityType" . $object->availability_code) : $outputlangs->convToOutputCharset($object->availability);
-            $lib_availability = str_replace('\n', "\n", $lib_availability);
-            $pdf->MultiCell(80, 4, $lib_availability, 0, 'L');
-
-            $posy = $pdf->GetY() + 1;
-        }
-
-        // Show delivery mode
-        if (!getDolGlobalString('PROPOSAL_PDF_HIDE_DELIVERYMODE') && $object->shipping_method_id > 0) {
-            $outputlangs->load("sendings");
-
-            $shipping_method_id = $object->shipping_method_id;
-            if (getDolGlobalString('SOCIETE_ASK_FOR_SHIPPING_METHOD') && !empty($this->emetteur->shipping_method_id)) {
-                $shipping_method_id = $this->emetteur->shipping_method_id;
-            }
-            $shipping_method_code = dol_getIdFromCode($this->db, $shipping_method_id, 'c_shipment_mode', 'rowid', 'code');
-            $shipping_method_label = dol_getIdFromCode($this->db, $shipping_method_id, 'c_shipment_mode', 'rowid', 'libelle');
-
-            $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
-            $pdf->SetXY($this->marge_gauche, $posy);
-            $titre = $outputlangs->transnoentities("SendingMethod") . ':';
-            $pdf->MultiCell(43, 4, $titre, 0, 'L');
-
-            $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
-            $pdf->SetXY($posxval, $posy);
-            $lib_condition_paiement = ($outputlangs->transnoentities("SendingMethod" . strtoupper($shipping_method_code)) != "SendingMethod" . strtoupper($shipping_method_code)) ? $outputlangs->trans("SendingMethod" . strtoupper($shipping_method_code)) : $shipping_method_label;
-            $lib_condition_paiement = str_replace('\n', "\n", $lib_condition_paiement);
-            $pdf->MultiCell(67, 4, $lib_condition_paiement, 0, 'L');
-
-            $posy = $pdf->GetY() + 1;
-        }
-
-        // Show payments conditions
-        if (!getDolGlobalString('PROPOSAL_PDF_HIDE_PAYMENTTERM') && $object->cond_reglement_code) {
-            $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
-            $pdf->SetXY($this->marge_gauche, $posy);
-            $titre = $outputlangs->transnoentities("PaymentConditions") . ':';
-            $pdf->MultiCell(43, 4, $titre, 0, 'L');
-
-            $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
-            $pdf->SetXY($posxval, $posy);
-            $lib_condition_paiement = $outputlangs->transnoentities("PaymentCondition" . $object->cond_reglement_code) != 'PaymentCondition' . $object->cond_reglement_code ? $outputlangs->transnoentities("PaymentCondition" . $object->cond_reglement_code) : $outputlangs->convToOutputCharset($object->cond_reglement_doc ? $object->cond_reglement_doc : $object->cond_reglement_label);
-            $lib_condition_paiement = str_replace('\n', "\n", $lib_condition_paiement);
-            if ($object->deposit_percent > 0) {
-                $lib_condition_paiement = str_replace('__DEPOSIT_PERCENT__', $object->deposit_percent, $lib_condition_paiement);
-            }
-            $pdf->MultiCell(67, 4, $lib_condition_paiement, 0, 'L');
-
-            $posy = $pdf->GetY() + 3;
-        }
-
-        if (!getDolGlobalString('PROPOSAL_PDF_HIDE_PAYMENTMODE')) {
-            // Show payment mode
-            if (
-                $object->mode_reglement_code
-                && $object->mode_reglement_code != 'CHQ'
-                && $object->mode_reglement_code != 'VIR'
-            ) {
-                $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
-                $pdf->SetXY($this->marge_gauche, $posy);
-                $titre = $outputlangs->transnoentities("PaymentMode") . ':';
-                $pdf->MultiCell(80, 5, $titre, 0, 'L');
-                $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
-                $pdf->SetXY($posxval, $posy);
-                $lib_mode_reg = $outputlangs->transnoentities("PaymentType" . $object->mode_reglement_code) != 'PaymentType' . $object->mode_reglement_code ? $outputlangs->transnoentities("PaymentType" . $object->mode_reglement_code) : $outputlangs->convToOutputCharset($object->mode_reglement);
-                $pdf->MultiCell(80, 5, $lib_mode_reg, 0, 'L');
-
-                $posy = $pdf->GetY() + 2;
-            }
-
-            // Show payment mode CHQ
-            if (empty($object->mode_reglement_code) || $object->mode_reglement_code == 'CHQ') {
-                // Si mode reglement non force ou si force a CHQ
-                if (getDolGlobalInt('FACTURE_CHQ_NUMBER')) {
-                    if (getDolGlobalInt('FACTURE_CHQ_NUMBER') > 0) {
-                        $account = new Account($this->db);
-                        $account->fetch(getDolGlobalInt('FACTURE_CHQ_NUMBER'));
-
-                        $pdf->SetXY($this->marge_gauche, $posy);
-                        $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
-                        $pdf->MultiCell(100, 3, $outputlangs->transnoentities('PaymentByChequeOrderedTo', $account->owner_name), 0, 'L', 0);
-                        $posy = $pdf->GetY() + 1;
-
-                        if (!getDolGlobalString('MAIN_PDF_HIDE_CHQ_ADDRESS')) {
-                            $pdf->SetXY($this->marge_gauche, $posy);
-                            $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
-                            $pdf->MultiCell(100, 3, $outputlangs->convToOutputCharset($account->owner_address), 0, 'L', 0);
-                            $posy = $pdf->GetY() + 2;
-                        }
-                    }
-                    if ($conf->global->FACTURE_CHQ_NUMBER == -1) {
-                        $pdf->SetXY($this->marge_gauche, $posy);
-                        $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
-                        $pdf->MultiCell(100, 3, $outputlangs->transnoentities('PaymentByChequeOrderedTo', $this->emetteur->name), 0, 'L', 0);
-                        $posy = $pdf->GetY() + 1;
-
-                        if (!getDolGlobalString('MAIN_PDF_HIDE_CHQ_ADDRESS')) {
-                            $pdf->SetXY($this->marge_gauche, $posy);
-                            $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
-                            $pdf->MultiCell(100, 3, $outputlangs->convToOutputCharset($this->emetteur->getFullAddress()), 0, 'L', 0);
-                            $posy = $pdf->GetY() + 2;
-                        }
-                    }
-                }
-            }
-
-            // If payment mode not forced or forced to VIR, show payment with BAN
-            if (empty($object->mode_reglement_code) || $object->mode_reglement_code == 'VIR') {
-                if (!empty($object->fk_account) || !empty($object->fk_bank) || getDolGlobalInt('FACTURE_RIB_NUMBER')) {
-                    $bankid = (empty($object->fk_account) ? $conf->global->FACTURE_RIB_NUMBER : $object->fk_account);
-                    if (!empty($object->fk_bank)) {
-                        $bankid = $object->fk_bank; // For backward compatibility when object->fk_account is forced with object->fk_bank
-                    }
-                    $account = new Account($this->db);
-                    $account->fetch($bankid);
-
-                    $curx = $this->marge_gauche;
-                    $cury = $posy;
-
-                    $posy = pdf_bank($pdf, $outputlangs, $curx, $cury, $account, 0, $default_font_size);
-
-                    $posy += 2;
-                }
-            }
-        }
-
-        return $posy;
-    }
-
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-    /**
-     *  Show total to pay
-     *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Propal      $object         Object propal
-     *  @param  int         $deja_regle     Amount already paid
-     *  @param  int         $posy           Start position
-     *  @param  Translate   $outputlangs    Object langs
-     *  @param  Translate   $outputlangsbis Object lang for output bis
-     *  @return int                         Position for continuation
-     */
-    protected function _tableau_tot(&$pdf, $object, $deja_regle, $posy, $outputlangs, $outputlangsbis = null)
-    {
-		// phpcs:enable
-        global $conf, $mysoc;
-        $default_font_size = pdf_getPDFFontSize($outputlangs);
-
-        $tab2_top = $posy;
-        $tab2_hl = 4;
-        $pdf->SetFont('', '', $default_font_size - 1);
-
-        // Total table
-        $col1x = 120;
-        $col2x = 170;
-        if ($this->page_largeur < 210) { // To work with US executive format
-            $col2x -= 20;
-        }
-        $largcol2 = ($this->page_largeur - $this->marge_droite - $col2x);
-
-        $useborder = 0;
-        $index = 0;
-
-        // Total HT
-        $pdf->SetFillColor(255, 255, 255);
-        $pdf->SetXY($col1x, $tab2_top);
-        $pdf->MultiCell($col2x - $col1x, $tab2_hl, $outputlangs->transnoentities("TotalHT"), 0, 'L', 1);
-
-        $total_ht = ((isModEnabled("multicurrency") && isset($object->multicurrency_tx) && $object->multicurrency_tx != 1) ? $object->multicurrency_total_ht : $object->total_ht);
-        $pdf->SetXY($col2x, $tab2_top);
-        $pdf->MultiCell($largcol2, $tab2_hl, price($total_ht + (!empty($object->remise) ? $object->remise : 0), 0, $outputlangs), 0, 'R', 1);
-
-        // Show VAT by rates and total
-        $pdf->SetFillColor(248, 248, 248);
-
-        $total_ttc = (isModEnabled("multicurrency") && $object->multicurrency_tx != 1) ? $object->multicurrency_total_ttc : $object->total_ttc;
-
-        $this->atleastoneratenotnull = 0;
-        if (!getDolGlobalString('MAIN_GENERATE_DOCUMENTS_WITHOUT_VAT')) {
-            $tvaisnull = ((!empty($this->tva) && count($this->tva) == 1 && isset($this->tva['0.000']) && is_float($this->tva['0.000'])) ? true : false);
-            if (getDolGlobalString('MAIN_GENERATE_DOCUMENTS_WITHOUT_VAT_IFNULL') && $tvaisnull) {
-                // Nothing to do
-            } else {
-                //Local tax 1 before VAT
-                //if (!empty($conf->global->FACTURE_LOCAL_TAX1_OPTION) && $conf->global->FACTURE_LOCAL_TAX1_OPTION=='localtax1on')
-                //{
-                foreach ($this->localtax1 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('1', '3', '5'))) {
-                        continue;
-                    }
-
-                    foreach ($localtax_rate as $tvakey => $tvaval) {
-                        if ($tvakey != 0) {    // On affiche pas taux 0
-                            //$this->atleastoneratenotnull++;
-
-                            $index++;
-                            $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
-
-                            $tvacompl = '';
-                            if (preg_match('/\*/', $tvakey)) {
-                                $tvakey = str_replace('*', '', $tvakey);
-                                $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
-                            }
-                            $totalvat = $outputlangs->transcountrynoentities("TotalLT1", $mysoc->country_code) . ' ';
-                            $totalvat .= vatrate(abs($tvakey), 1) . $tvacompl;
-                            $pdf->MultiCell($col2x - $col1x, $tab2_hl, $totalvat, 0, 'L', 1);
-
-                            $total_localtax = ((isModEnabled("multicurrency") && isset($object->multicurrency_tx) && $object->multicurrency_tx != 1) ? price2num($tvaval * $object->multicurrency_tx, 'MT') : $tvaval);
-
-                            $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
-                            $pdf->MultiCell($largcol2, $tab2_hl, price($total_localtax, 0, $outputlangs), 0, 'R', 1);
-                        }
-                    }
-                }
-                //}
-                //Local tax 2 before VAT
-                //if (!empty($conf->global->FACTURE_LOCAL_TAX2_OPTION) && $conf->global->FACTURE_LOCAL_TAX2_OPTION=='localtax2on')
-                //{
-                foreach ($this->localtax2 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('1', '3', '5'))) {
-                        continue;
-                    }
-
-                    foreach ($localtax_rate as $tvakey => $tvaval) {
-                        if ($tvakey != 0) {    // On affiche pas taux 0
-                            //$this->atleastoneratenotnull++;
-
-                            $index++;
-                            $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
-
-                            $tvacompl = '';
-                            if (preg_match('/\*/', $tvakey)) {
-                                $tvakey = str_replace('*', '', $tvakey);
-                                $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
-                            }
-                            $totalvat = $outputlangs->transcountrynoentities("TotalLT2", $mysoc->country_code) . ' ';
-                            $totalvat .= vatrate(abs($tvakey), 1) . $tvacompl;
-                            $pdf->MultiCell($col2x - $col1x, $tab2_hl, $totalvat, 0, 'L', 1);
-
-                            $total_localtax = ((isModEnabled("multicurrency") && isset($object->multicurrency_tx) && $object->multicurrency_tx != 1) ? price2num($tvaval * $object->multicurrency_tx, 'MT') : $tvaval);
-
-                            $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
-                            $pdf->MultiCell($largcol2, $tab2_hl, price($total_localtax, 0, $outputlangs), 0, 'R', 1);
-                        }
-                    }
-                }
-                //}
-
-                // VAT
-                foreach ($this->tva_array as $tvakey => $tvaval) {
-                    if ($tvakey != 0) {    // On affiche pas taux 0
-                        $this->atleastoneratenotnull++;
-
-                        $index++;
-                        $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
-
-                        $tvacompl = '';
-                        if (preg_match('/\*/', $tvakey)) {
-                            $tvakey = str_replace('*', '', $tvakey);
-                            $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
-                        }
-                        $totalvat = $outputlangs->transcountrynoentities("TotalVAT", $mysoc->country_code) . (is_object($outputlangsbis) ? ' / ' . $outputlangsbis->transcountrynoentities("TotalVAT", $mysoc->country_code) : '');
-                        $totalvat .= ' ';
-                        if (getDolGlobalString('PDF_VAT_LABEL_IS_CODE_OR_RATE') == 'rateonly') {
-                            $totalvat .= vatrate($tvaval['vatrate'], 1) . $tvacompl;
-                        } elseif (getDolGlobalString('PDF_VAT_LABEL_IS_CODE_OR_RATE') == 'codeonly') {
-                            $totalvat .= ($tvaval['vatcode'] ? $tvaval['vatcode'] : vatrate($tvaval['vatrate'], 1)) . $tvacompl;
-                        } else {
-                            $totalvat .= vatrate($tvaval['vatrate'], 1) . ($tvaval['vatcode'] ? ' (' . $tvaval['vatcode'] . ')' : '') . $tvacompl;
-                        }
-                        $pdf->MultiCell($col2x - $col1x, $tab2_hl, $totalvat, 0, 'L', 1);
-
-                        $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
-                        $pdf->MultiCell($largcol2, $tab2_hl, price(price2num($tvaval['amount'], 'MT'), 0, $outputlangs), 0, 'R', 1);
-                    }
-                }
-
-                //Local tax 1 after VAT
-                //if (!empty($conf->global->FACTURE_LOCAL_TAX1_OPTION) && $conf->global->FACTURE_LOCAL_TAX1_OPTION=='localtax1on')
-                //{
-                foreach ($this->localtax1 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('2', '4', '6'))) {
-                        continue;
-                    }
-
-                    foreach ($localtax_rate as $tvakey => $tvaval) {
-                        if ($tvakey != 0) {    // On affiche pas taux 0
-                            //$this->atleastoneratenotnull++;
-
-                            $index++;
-                            $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
-
-                            $tvacompl = '';
-                            if (preg_match('/\*/', $tvakey)) {
-                                $tvakey = str_replace('*', '', $tvakey);
-                                $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
-                            }
-                            $totalvat = $outputlangs->transcountrynoentities("TotalLT1", $mysoc->country_code) . ' ';
-
-                            $totalvat .= vatrate(abs($tvakey), 1) . $tvacompl;
-                            $pdf->MultiCell($col2x - $col1x, $tab2_hl, $totalvat, 0, 'L', 1);
-
-                            $total_localtax = ((isModEnabled("multicurrency") && isset($object->multicurrency_tx) && $object->multicurrency_tx != 1) ? price2num($tvaval * $object->multicurrency_tx, 'MT') : $tvaval);
-
-                            $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
-                            $pdf->MultiCell($largcol2, $tab2_hl, price($total_localtax, 0, $outputlangs), 0, 'R', 1);
-                        }
-                    }
-                }
-                //}
-                //Local tax 2 after VAT
-                //if (!empty($conf->global->FACTURE_LOCAL_TAX2_OPTION) && $conf->global->FACTURE_LOCAL_TAX2_OPTION=='localtax2on')
-                //{
-                foreach ($this->localtax2 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('2', '4', '6'))) {
-                        continue;
-                    }
-
-                    foreach ($localtax_rate as $tvakey => $tvaval) {
-                        // retrieve global local tax
-                        if ($tvakey != 0) {    // On affiche pas taux 0
-                            //$this->atleastoneratenotnull++;
-
-                            $index++;
-                            $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
-
-                            $tvacompl = '';
-                            if (preg_match('/\*/', $tvakey)) {
-                                $tvakey = str_replace('*', '', $tvakey);
-                                $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
-                            }
-                            $totalvat = $outputlangs->transcountrynoentities("TotalLT2", $mysoc->country_code) . ' ';
-
-                            $totalvat .= vatrate(abs($tvakey), 1) . $tvacompl;
-                            $pdf->MultiCell($col2x - $col1x, $tab2_hl, $totalvat, 0, 'L', 1);
-
-                            $total_localtax = ((isModEnabled("multicurrency") && isset($object->multicurrency_tx) && $object->multicurrency_tx != 1) ? price2num($tvaval * $object->multicurrency_tx, 'MT') : $tvaval);
-
-                            $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
-                            $pdf->MultiCell($largcol2, $tab2_hl, price($total_localtax, 0, $outputlangs), 0, 'R', 1);
-                        }
-                    }
-                }
-                //}
-
-                // Total TTC
-                $index++;
-                $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
-                $pdf->SetTextColor(0, 0, 60);
-                $pdf->SetFillColor(224, 224, 224);
-                $pdf->MultiCell($col2x - $col1x, $tab2_hl, $outputlangs->transnoentities("TotalTTC"), $useborder, 'L', 1);
-
-                $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
-                $pdf->MultiCell($largcol2, $tab2_hl, price($total_ttc, 0, $outputlangs), $useborder, 'R', 1);
-            }
-        }
-
-        $pdf->SetTextColor(0, 0, 0);
-
-        $resteapayer = 0;
-        /*
-        $resteapayer = $object->total_ttc - $deja_regle;
-        if (!empty($object->paye)) $resteapayer=0;
-        */
-
-        if ($deja_regle > 0) {
-            $index++;
-
-            $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
-            $pdf->MultiCell($col2x - $col1x, $tab2_hl, $outputlangs->transnoentities("AlreadyPaid"), 0, 'L', 0);
-
-            $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
-            $pdf->MultiCell($largcol2, $tab2_hl, price($deja_regle, 0, $outputlangs), 0, 'R', 0);
-
-            /*
-            if ($object->close_code == 'discount_vat') {
-                $index++;
-                $pdf->SetFillColor(255,255,255);
-
-                $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
-                $pdf->MultiCell($col2x-$col1x, $tab2_hl, $outputlangs->transnoentities("EscompteOfferedShort"), $useborder, 'L', 1);
-
-                $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
-                $pdf->MultiCell($largcol2, $tab2_hl, price($object->total_ttc - $deja_regle, 0, $outputlangs), $useborder, 'R', 1);
-
-                $resteapayer=0;
-            }
-            */
-
-            $index++;
-            $pdf->SetTextColor(0, 0, 60);
-            $pdf->SetFillColor(224, 224, 224);
-            $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
-            $pdf->MultiCell($col2x - $col1x, $tab2_hl, $outputlangs->transnoentities("RemainderToPay"), $useborder, 'L', 1);
-
-            $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
-            $pdf->MultiCell($largcol2, $tab2_hl, price($resteapayer, 0, $outputlangs), $useborder, 'R', 1);
-
-            $pdf->SetFont('', '', $default_font_size - 1);
-            $pdf->SetTextColor(0, 0, 0);
-        }
-
-        $index++;
-        return ($tab2_top + ($tab2_hl * $index));
-    }
-
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-    /**
-     *   Show table for lines
-     *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     float|int   $tab_top        Top position of table
-     *   @param     float|int   $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y (not used)
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @param     string      $currency       Currency code
-     *   @return    void
-     */
-    protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0, $currency = '')
-    {
-        global $conf;
-
-        // Force to disable hidetop and hidebottom
-        $hidebottom = 0;
-        if ($hidetop) {
-            $hidetop = -1;
-        }
-
-        $currency = !empty($currency) ? $currency : $conf->currency;
-        $default_font_size = pdf_getPDFFontSize($outputlangs);
-
-        // Amount in (at tab_top - 1)
-        $pdf->SetTextColor(0, 0, 0);
-        $pdf->SetFont('', '', $default_font_size - 2);
-
-        if (empty($hidetop)) {
-            $titre = $outputlangs->transnoentities("AmountInCurrency", $outputlangs->transnoentitiesnoconv("Currency" . $currency));
-            $pdf->SetXY($this->page_largeur - $this->marge_droite - ($pdf->GetStringWidth($titre) + 3), $tab_top - 4);
-            $pdf->MultiCell(($pdf->GetStringWidth($titre) + 3), 2, $titre);
-
-            //$conf->global->MAIN_PDF_TITLE_BACKGROUND_COLOR='230,230,230';
-            if (getDolGlobalString('MAIN_PDF_TITLE_BACKGROUND_COLOR')) {
-                $pdf->Rect($this->marge_gauche, $tab_top, $this->page_largeur - $this->marge_droite - $this->marge_gauche, 5, 'F', null, explode(',', getDolGlobalString('MAIN_PDF_TITLE_BACKGROUND_COLOR')));
-            }
-        }
-
-        $pdf->SetDrawColor(128, 128, 128);
-        $pdf->SetFont('', '', $default_font_size - 1);
-
-        // Output Rect
-        $this->printRect($pdf, $this->marge_gauche, $tab_top, $this->page_largeur - $this->marge_gauche - $this->marge_droite, $tab_height, $hidetop, $hidebottom); // Rect takes a length in 3rd parameter and 4th parameter
-
-        if (empty($hidetop)) {
-            $pdf->line($this->marge_gauche, $tab_top + 5, $this->page_largeur - $this->marge_droite, $tab_top + 5); // line takes a position y in 2nd parameter and 4th parameter
-
-            $pdf->SetXY($this->posxdesc - 1, $tab_top + 1);
-            $pdf->MultiCell(108, 2, $outputlangs->transnoentities("Designation"), '', 'L');
-        }
-
-        if (getDolGlobalString('MAIN_GENERATE_PROPOSALS_WITH_PICTURE')) {
-            $pdf->line($this->posxpicture - 1, $tab_top, $this->posxpicture - 1, $tab_top + $tab_height);
-            if (empty($hidetop)) {
-                //$pdf->SetXY($this->posxpicture-1, $tab_top+1);
-                //$pdf->MultiCell($this->posxtva-$this->posxpicture-1,2, $outputlangs->transnoentities("Photo"),'','C');
-            }
-        }
-
-        if (!getDolGlobalString('MAIN_GENERATE_DOCUMENTS_WITHOUT_VAT') && !getDolGlobalString('MAIN_GENERATE_DOCUMENTS_WITHOUT_VAT_COLUMN')) {
-            $pdf->line($this->posxtva - 1, $tab_top, $this->posxtva - 1, $tab_top + $tab_height);
-            if (empty($hidetop)) {
-                // Not do -3 and +3 instead of -1 -1 to have more space for text 'Sales tax'
-                $pdf->SetXY($this->posxtva - 3, $tab_top + 1);
-                $pdf->MultiCell($this->posxup - $this->posxtva + 3, 2, $outputlangs->transnoentities("VAT"), '', 'C');
-            }
-        }
-
-        $pdf->line($this->posxup - 1, $tab_top, $this->posxup - 1, $tab_top + $tab_height);
-        if (empty($hidetop)) {
-            $pdf->SetXY($this->posxup - 1, $tab_top + 1);
-            $pdf->MultiCell($this->posxqty - $this->posxup - 1, 2, $outputlangs->transnoentities("PriceUHT"), '', 'C');
-        }
-
-        $pdf->line($this->posxqty - 1, $tab_top, $this->posxqty - 1, $tab_top + $tab_height);
-        if (empty($hidetop)) {
-            $pdf->SetXY($this->posxqty - 1, $tab_top + 1);
-            $pdf->MultiCell($this->posxunit - $this->posxqty - 1, 2, $outputlangs->transnoentities("Qty"), '', 'C');
-        }
-
-        if (getDolGlobalInt('PRODUCT_USE_UNITS')) {
-            $pdf->line($this->posxunit - 1, $tab_top, $this->posxunit - 1, $tab_top + $tab_height);
-            if (empty($hidetop)) {
-                $pdf->SetXY($this->posxunit - 1, $tab_top + 1);
-                $pdf->MultiCell(
-                    $this->posxdiscount - $this->posxunit - 1,
-                    2,
-                    $outputlangs->transnoentities("Unit"),
-                    '',
-                    'C'
-                );
-            }
-        }
-
-        $pdf->line($this->posxdiscount - 1, $tab_top, $this->posxdiscount - 1, $tab_top + $tab_height);
-        if (empty($hidetop)) {
-            if ($this->atleastonediscount) {
-                $pdf->SetXY($this->posxdiscount - 1, $tab_top + 1);
-                $pdf->MultiCell($this->postotalht - $this->posxdiscount + 1, 2, $outputlangs->transnoentities("ReductionShort"), '', 'C');
-            }
-        }
-        if ($this->atleastonediscount) {
-            $pdf->line($this->postotalht, $tab_top, $this->postotalht, $tab_top + $tab_height);
-        }
-        if (empty($hidetop)) {
-            $pdf->SetXY($this->postotalht - 1, $tab_top + 1);
-            $pdf->MultiCell(30, 2, $outputlangs->transnoentities("TotalHTShort"), '', 'C');
-        }
-    }
-
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Propal      $object         Object to show
-     *  @param  int         $showaddress    0=no, 1=yes
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @param  Translate   $outputlangsbis Object lang for output bis
-     *  @return float|int                   Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param Propal $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @param Translate $outputlangsbis Object lang for output bis
+     * @return float|int                   Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs, $outputlangsbis = null)
     {
@@ -1682,7 +1098,7 @@ class pdf_azur extends ModelePDFPropales
 
             $carac_client_name = pdfBuildThirdpartyName($thirdparty, $outputlangs);
 
-            $mode =  'target';
+            $mode = 'target';
             $carac_client = pdf_build_address($outputlangs, $this->emetteur, $object->thirdparty, ($usecontact ? $object->contact : ''), $usecontact, $mode, $object);
 
             // Show recipient
@@ -1725,15 +1141,133 @@ class pdf_azur extends ModelePDFPropales
         return $top_shift;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
+    /**
+     *   Show table for lines
+     *
+     * @param TCPDF $pdf Object PDF
+     * @param float|int $tab_top Top position of table
+     * @param float|int $tab_height Height of table (rectangle)
+     * @param int $nexY Y (not used)
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop 1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
+     * @param int $hidebottom Hide bottom bar of array
+     * @param string $currency Currency code
+     * @return    void
+     */
+    protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0, $currency = '')
+    {
+        global $conf;
+
+        // Force to disable hidetop and hidebottom
+        $hidebottom = 0;
+        if ($hidetop) {
+            $hidetop = -1;
+        }
+
+        $currency = !empty($currency) ? $currency : $conf->currency;
+        $default_font_size = pdf_getPDFFontSize($outputlangs);
+
+        // Amount in (at tab_top - 1)
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->SetFont('', '', $default_font_size - 2);
+
+        if (empty($hidetop)) {
+            $titre = $outputlangs->transnoentities("AmountInCurrency", $outputlangs->transnoentitiesnoconv("Currency" . $currency));
+            $pdf->SetXY($this->page_largeur - $this->marge_droite - ($pdf->GetStringWidth($titre) + 3), $tab_top - 4);
+            $pdf->MultiCell(($pdf->GetStringWidth($titre) + 3), 2, $titre);
+
+            //$conf->global->MAIN_PDF_TITLE_BACKGROUND_COLOR='230,230,230';
+            if (getDolGlobalString('MAIN_PDF_TITLE_BACKGROUND_COLOR')) {
+                $pdf->Rect($this->marge_gauche, $tab_top, $this->page_largeur - $this->marge_droite - $this->marge_gauche, 5, 'F', null, explode(',', getDolGlobalString('MAIN_PDF_TITLE_BACKGROUND_COLOR')));
+            }
+        }
+
+        $pdf->SetDrawColor(128, 128, 128);
+        $pdf->SetFont('', '', $default_font_size - 1);
+
+        // Output Rect
+        $this->printRect($pdf, $this->marge_gauche, $tab_top, $this->page_largeur - $this->marge_gauche - $this->marge_droite, $tab_height, $hidetop, $hidebottom); // Rect takes a length in 3rd parameter and 4th parameter
+
+        if (empty($hidetop)) {
+            $pdf->line($this->marge_gauche, $tab_top + 5, $this->page_largeur - $this->marge_droite, $tab_top + 5); // line takes a position y in 2nd parameter and 4th parameter
+
+            $pdf->SetXY($this->posxdesc - 1, $tab_top + 1);
+            $pdf->MultiCell(108, 2, $outputlangs->transnoentities("Designation"), '', 'L');
+        }
+
+        if (getDolGlobalString('MAIN_GENERATE_PROPOSALS_WITH_PICTURE')) {
+            $pdf->line($this->posxpicture - 1, $tab_top, $this->posxpicture - 1, $tab_top + $tab_height);
+            if (empty($hidetop)) {
+                //$pdf->SetXY($this->posxpicture-1, $tab_top+1);
+                //$pdf->MultiCell($this->posxtva-$this->posxpicture-1,2, $outputlangs->transnoentities("Photo"),'','C');
+            }
+        }
+
+        if (!getDolGlobalString('MAIN_GENERATE_DOCUMENTS_WITHOUT_VAT') && !getDolGlobalString('MAIN_GENERATE_DOCUMENTS_WITHOUT_VAT_COLUMN')) {
+            $pdf->line($this->posxtva - 1, $tab_top, $this->posxtva - 1, $tab_top + $tab_height);
+            if (empty($hidetop)) {
+                // Not do -3 and +3 instead of -1 -1 to have more space for text 'Sales tax'
+                $pdf->SetXY($this->posxtva - 3, $tab_top + 1);
+                $pdf->MultiCell($this->posxup - $this->posxtva + 3, 2, $outputlangs->transnoentities("VAT"), '', 'C');
+            }
+        }
+
+        $pdf->line($this->posxup - 1, $tab_top, $this->posxup - 1, $tab_top + $tab_height);
+        if (empty($hidetop)) {
+            $pdf->SetXY($this->posxup - 1, $tab_top + 1);
+            $pdf->MultiCell($this->posxqty - $this->posxup - 1, 2, $outputlangs->transnoentities("PriceUHT"), '', 'C');
+        }
+
+        $pdf->line($this->posxqty - 1, $tab_top, $this->posxqty - 1, $tab_top + $tab_height);
+        if (empty($hidetop)) {
+            $pdf->SetXY($this->posxqty - 1, $tab_top + 1);
+            $pdf->MultiCell($this->posxunit - $this->posxqty - 1, 2, $outputlangs->transnoentities("Qty"), '', 'C');
+        }
+
+        if (getDolGlobalInt('PRODUCT_USE_UNITS')) {
+            $pdf->line($this->posxunit - 1, $tab_top, $this->posxunit - 1, $tab_top + $tab_height);
+            if (empty($hidetop)) {
+                $pdf->SetXY($this->posxunit - 1, $tab_top + 1);
+                $pdf->MultiCell(
+                    $this->posxdiscount - $this->posxunit - 1,
+                    2,
+                    $outputlangs->transnoentities("Unit"),
+                    '',
+                    'C'
+                );
+            }
+        }
+
+        $pdf->line($this->posxdiscount - 1, $tab_top, $this->posxdiscount - 1, $tab_top + $tab_height);
+        if (empty($hidetop)) {
+            if ($this->atleastonediscount) {
+                $pdf->SetXY($this->posxdiscount - 1, $tab_top + 1);
+                $pdf->MultiCell($this->postotalht - $this->posxdiscount + 1, 2, $outputlangs->transnoentities("ReductionShort"), '', 'C');
+            }
+        }
+        if ($this->atleastonediscount) {
+            $pdf->line($this->postotalht, $tab_top, $this->postotalht, $tab_top + $tab_height);
+        }
+        if (empty($hidetop)) {
+            $pdf->SetXY($this->postotalht - 1, $tab_top + 1);
+            $pdf->MultiCell(30, 2, $outputlangs->transnoentities("TotalHTShort"), '', 'C');
+        }
+    }
+
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *      Show footer of page. Need this->emetteur object
      *
-     *      @param  TCPDF       $pdf                PDF
-     *      @param  Propal      $object             Object to show
-     *      @param  Translate   $outputlangs        Object lang for output
-     *      @param  int         $hidefreetext       1=Hide free text
-     *      @return int                             Return height of bottom margin including footer text
+     * @param TCPDF $pdf PDF
+     * @param Propal $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return int                             Return height of bottom margin including footer text
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {
@@ -1741,20 +1275,484 @@ class pdf_azur extends ModelePDFPropales
         return pdf_pagefoot($pdf, $outputlangs, 'PROPOSAL_FREE_TEXT', $this->emetteur, $this->marge_basse, $this->marge_gauche, $this->page_hauteur, $object, $showdetails, $hidefreetext, $this->page_largeur, $this->watermark);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
+    /**
+     *   Show miscellaneous information (payment mode, payment term, ...)
+     *
+     * @param TCPDF $pdf Object PDF
+     * @param Propal $object Object to show
+     * @param int $posy Y
+     * @param Translate $outputlangs Langs object
+     * @return    int
+     */
+    protected function _tableau_info(&$pdf, $object, $posy, $outputlangs)
+    {
+        // phpcs:enable
+        global $conf, $mysoc;
+        $default_font_size = pdf_getPDFFontSize($outputlangs);
+
+        $pdf->SetFont('', '', $default_font_size - 1);
+
+        $diffsizetitle = (!getDolGlobalString('PDF_DIFFSIZE_TITLE') ? 3 : $conf->global->PDF_DIFFSIZE_TITLE);
+
+        // If France, show VAT mention if not applicable
+        if ($this->emetteur->country_code == 'FR' && empty($mysoc->tva_assuj)) {
+            $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
+            $pdf->SetXY($this->marge_gauche, $posy);
+            $pdf->MultiCell(100, 3, $outputlangs->transnoentities("VATIsNotUsedForInvoice"), 0, 'L', 0);
+
+            $posy = $pdf->GetY() + 4;
+        }
+
+        $posxval = 52;
+        if (getDolGlobalString('MAIN_PDF_DELIVERY_DATE_TEXT')) {
+            $displaydate = "daytext";
+        } else {
+            $displaydate = "day";
+        }
+
+        // Show shipping date
+        if (!empty($object->delivery_date)) {
+            $outputlangs->load("sendings");
+            $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
+            $pdf->SetXY($this->marge_gauche, $posy);
+            $titre = $outputlangs->transnoentities("DateDeliveryPlanned") . ':';
+            $pdf->MultiCell(80, 4, $titre, 0, 'L');
+            $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
+            $pdf->SetXY($posxval, $posy);
+            $dlp = dol_print_date($object->delivery_date, $displaydate, false, $outputlangs, true);
+            $pdf->MultiCell(80, 4, $dlp, 0, 'L');
+
+            $posy = $pdf->GetY() + 1;
+        } elseif ($object->availability_code || $object->availability) {    // Show availability conditions
+            $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
+            $pdf->SetXY($this->marge_gauche, $posy);
+            $titre = $outputlangs->transnoentities("AvailabilityPeriod") . ':';
+            $pdf->MultiCell(80, 4, $titre, 0, 'L');
+            $pdf->SetTextColor(0, 0, 0);
+            $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
+            $pdf->SetXY($posxval, $posy);
+            $lib_availability = ($outputlangs->transnoentities("AvailabilityType" . $object->availability_code) != 'AvailabilityType' . $object->availability_code) ? $outputlangs->transnoentities("AvailabilityType" . $object->availability_code) : $outputlangs->convToOutputCharset($object->availability);
+            $lib_availability = str_replace('\n', "\n", $lib_availability);
+            $pdf->MultiCell(80, 4, $lib_availability, 0, 'L');
+
+            $posy = $pdf->GetY() + 1;
+        }
+
+        // Show delivery mode
+        if (!getDolGlobalString('PROPOSAL_PDF_HIDE_DELIVERYMODE') && $object->shipping_method_id > 0) {
+            $outputlangs->load("sendings");
+
+            $shipping_method_id = $object->shipping_method_id;
+            if (getDolGlobalString('SOCIETE_ASK_FOR_SHIPPING_METHOD') && !empty($this->emetteur->shipping_method_id)) {
+                $shipping_method_id = $this->emetteur->shipping_method_id;
+            }
+            $shipping_method_code = dol_getIdFromCode($this->db, $shipping_method_id, 'c_shipment_mode', 'rowid', 'code');
+            $shipping_method_label = dol_getIdFromCode($this->db, $shipping_method_id, 'c_shipment_mode', 'rowid', 'libelle');
+
+            $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
+            $pdf->SetXY($this->marge_gauche, $posy);
+            $titre = $outputlangs->transnoentities("SendingMethod") . ':';
+            $pdf->MultiCell(43, 4, $titre, 0, 'L');
+
+            $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
+            $pdf->SetXY($posxval, $posy);
+            $lib_condition_paiement = ($outputlangs->transnoentities("SendingMethod" . strtoupper($shipping_method_code)) != "SendingMethod" . strtoupper($shipping_method_code)) ? $outputlangs->trans("SendingMethod" . strtoupper($shipping_method_code)) : $shipping_method_label;
+            $lib_condition_paiement = str_replace('\n', "\n", $lib_condition_paiement);
+            $pdf->MultiCell(67, 4, $lib_condition_paiement, 0, 'L');
+
+            $posy = $pdf->GetY() + 1;
+        }
+
+        // Show payments conditions
+        if (!getDolGlobalString('PROPOSAL_PDF_HIDE_PAYMENTTERM') && $object->cond_reglement_code) {
+            $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
+            $pdf->SetXY($this->marge_gauche, $posy);
+            $titre = $outputlangs->transnoentities("PaymentConditions") . ':';
+            $pdf->MultiCell(43, 4, $titre, 0, 'L');
+
+            $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
+            $pdf->SetXY($posxval, $posy);
+            $lib_condition_paiement = $outputlangs->transnoentities("PaymentCondition" . $object->cond_reglement_code) != 'PaymentCondition' . $object->cond_reglement_code ? $outputlangs->transnoentities("PaymentCondition" . $object->cond_reglement_code) : $outputlangs->convToOutputCharset($object->cond_reglement_doc ? $object->cond_reglement_doc : $object->cond_reglement_label);
+            $lib_condition_paiement = str_replace('\n', "\n", $lib_condition_paiement);
+            if ($object->deposit_percent > 0) {
+                $lib_condition_paiement = str_replace('__DEPOSIT_PERCENT__', $object->deposit_percent, $lib_condition_paiement);
+            }
+            $pdf->MultiCell(67, 4, $lib_condition_paiement, 0, 'L');
+
+            $posy = $pdf->GetY() + 3;
+        }
+
+        if (!getDolGlobalString('PROPOSAL_PDF_HIDE_PAYMENTMODE')) {
+            // Show payment mode
+            if (
+                $object->mode_reglement_code
+                && $object->mode_reglement_code != 'CHQ'
+                && $object->mode_reglement_code != 'VIR'
+            ) {
+                $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
+                $pdf->SetXY($this->marge_gauche, $posy);
+                $titre = $outputlangs->transnoentities("PaymentMode") . ':';
+                $pdf->MultiCell(80, 5, $titre, 0, 'L');
+                $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
+                $pdf->SetXY($posxval, $posy);
+                $lib_mode_reg = $outputlangs->transnoentities("PaymentType" . $object->mode_reglement_code) != 'PaymentType' . $object->mode_reglement_code ? $outputlangs->transnoentities("PaymentType" . $object->mode_reglement_code) : $outputlangs->convToOutputCharset($object->mode_reglement);
+                $pdf->MultiCell(80, 5, $lib_mode_reg, 0, 'L');
+
+                $posy = $pdf->GetY() + 2;
+            }
+
+            // Show payment mode CHQ
+            if (empty($object->mode_reglement_code) || $object->mode_reglement_code == 'CHQ') {
+                // Si mode reglement non force ou si force a CHQ
+                if (getDolGlobalInt('FACTURE_CHQ_NUMBER')) {
+                    if (getDolGlobalInt('FACTURE_CHQ_NUMBER') > 0) {
+                        $account = new Account($this->db);
+                        $account->fetch(getDolGlobalInt('FACTURE_CHQ_NUMBER'));
+
+                        $pdf->SetXY($this->marge_gauche, $posy);
+                        $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
+                        $pdf->MultiCell(100, 3, $outputlangs->transnoentities('PaymentByChequeOrderedTo', $account->owner_name), 0, 'L', 0);
+                        $posy = $pdf->GetY() + 1;
+
+                        if (!getDolGlobalString('MAIN_PDF_HIDE_CHQ_ADDRESS')) {
+                            $pdf->SetXY($this->marge_gauche, $posy);
+                            $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
+                            $pdf->MultiCell(100, 3, $outputlangs->convToOutputCharset($account->owner_address), 0, 'L', 0);
+                            $posy = $pdf->GetY() + 2;
+                        }
+                    }
+                    if ($conf->global->FACTURE_CHQ_NUMBER == -1) {
+                        $pdf->SetXY($this->marge_gauche, $posy);
+                        $pdf->SetFont('', 'B', $default_font_size - $diffsizetitle);
+                        $pdf->MultiCell(100, 3, $outputlangs->transnoentities('PaymentByChequeOrderedTo', $this->emetteur->name), 0, 'L', 0);
+                        $posy = $pdf->GetY() + 1;
+
+                        if (!getDolGlobalString('MAIN_PDF_HIDE_CHQ_ADDRESS')) {
+                            $pdf->SetXY($this->marge_gauche, $posy);
+                            $pdf->SetFont('', '', $default_font_size - $diffsizetitle);
+                            $pdf->MultiCell(100, 3, $outputlangs->convToOutputCharset($this->emetteur->getFullAddress()), 0, 'L', 0);
+                            $posy = $pdf->GetY() + 2;
+                        }
+                    }
+                }
+            }
+
+            // If payment mode not forced or forced to VIR, show payment with BAN
+            if (empty($object->mode_reglement_code) || $object->mode_reglement_code == 'VIR') {
+                if (!empty($object->fk_account) || !empty($object->fk_bank) || getDolGlobalInt('FACTURE_RIB_NUMBER')) {
+                    $bankid = (empty($object->fk_account) ? $conf->global->FACTURE_RIB_NUMBER : $object->fk_account);
+                    if (!empty($object->fk_bank)) {
+                        $bankid = $object->fk_bank; // For backward compatibility when object->fk_account is forced with object->fk_bank
+                    }
+                    $account = new Account($this->db);
+                    $account->fetch($bankid);
+
+                    $curx = $this->marge_gauche;
+                    $cury = $posy;
+
+                    $posy = pdf_bank($pdf, $outputlangs, $curx, $cury, $account, 0, $default_font_size);
+
+                    $posy += 2;
+                }
+            }
+        }
+
+        return $posy;
+    }
+
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
+    /**
+     *  Show total to pay
+     *
+     * @param TCPDF $pdf Object PDF
+     * @param Propal $object Object propal
+     * @param int $deja_regle Amount already paid
+     * @param int $posy Start position
+     * @param Translate $outputlangs Object langs
+     * @param Translate $outputlangsbis Object lang for output bis
+     * @return int                         Position for continuation
+     */
+    protected function _tableau_tot(&$pdf, $object, $deja_regle, $posy, $outputlangs, $outputlangsbis = null)
+    {
+        // phpcs:enable
+        global $conf, $mysoc;
+        $default_font_size = pdf_getPDFFontSize($outputlangs);
+
+        $tab2_top = $posy;
+        $tab2_hl = 4;
+        $pdf->SetFont('', '', $default_font_size - 1);
+
+        // Total table
+        $col1x = 120;
+        $col2x = 170;
+        if ($this->page_largeur < 210) { // To work with US executive format
+            $col2x -= 20;
+        }
+        $largcol2 = ($this->page_largeur - $this->marge_droite - $col2x);
+
+        $useborder = 0;
+        $index = 0;
+
+        // Total HT
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->SetXY($col1x, $tab2_top);
+        $pdf->MultiCell($col2x - $col1x, $tab2_hl, $outputlangs->transnoentities("TotalHT"), 0, 'L', 1);
+
+        $total_ht = ((isModEnabled("multicurrency") && isset($object->multicurrency_tx) && $object->multicurrency_tx != 1) ? $object->multicurrency_total_ht : $object->total_ht);
+        $pdf->SetXY($col2x, $tab2_top);
+        $pdf->MultiCell($largcol2, $tab2_hl, price($total_ht + (!empty($object->remise) ? $object->remise : 0), 0, $outputlangs), 0, 'R', 1);
+
+        // Show VAT by rates and total
+        $pdf->SetFillColor(248, 248, 248);
+
+        $total_ttc = (isModEnabled("multicurrency") && $object->multicurrency_tx != 1) ? $object->multicurrency_total_ttc : $object->total_ttc;
+
+        $this->atleastoneratenotnull = 0;
+        if (!getDolGlobalString('MAIN_GENERATE_DOCUMENTS_WITHOUT_VAT')) {
+            $tvaisnull = ((!empty($this->tva) && count($this->tva) == 1 && isset($this->tva['0.000']) && is_float($this->tva['0.000'])) ? true : false);
+            if (getDolGlobalString('MAIN_GENERATE_DOCUMENTS_WITHOUT_VAT_IFNULL') && $tvaisnull) {
+                // Nothing to do
+            } else {
+                //Local tax 1 before VAT
+                //if (!empty($conf->global->FACTURE_LOCAL_TAX1_OPTION) && $conf->global->FACTURE_LOCAL_TAX1_OPTION=='localtax1on')
+                //{
+                foreach ($this->localtax1 as $localtax_type => $localtax_rate) {
+                    if (in_array((string)$localtax_type, array('1', '3', '5'))) {
+                        continue;
+                    }
+
+                    foreach ($localtax_rate as $tvakey => $tvaval) {
+                        if ($tvakey != 0) {    // On affiche pas taux 0
+                            //$this->atleastoneratenotnull++;
+
+                            $index++;
+                            $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
+
+                            $tvacompl = '';
+                            if (preg_match('/\*/', $tvakey)) {
+                                $tvakey = str_replace('*', '', $tvakey);
+                                $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
+                            }
+                            $totalvat = $outputlangs->transcountrynoentities("TotalLT1", $mysoc->country_code) . ' ';
+                            $totalvat .= vatrate(abs($tvakey), 1) . $tvacompl;
+                            $pdf->MultiCell($col2x - $col1x, $tab2_hl, $totalvat, 0, 'L', 1);
+
+                            $total_localtax = ((isModEnabled("multicurrency") && isset($object->multicurrency_tx) && $object->multicurrency_tx != 1) ? price2num($tvaval * $object->multicurrency_tx, 'MT') : $tvaval);
+
+                            $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
+                            $pdf->MultiCell($largcol2, $tab2_hl, price($total_localtax, 0, $outputlangs), 0, 'R', 1);
+                        }
+                    }
+                }
+                //}
+                //Local tax 2 before VAT
+                //if (!empty($conf->global->FACTURE_LOCAL_TAX2_OPTION) && $conf->global->FACTURE_LOCAL_TAX2_OPTION=='localtax2on')
+                //{
+                foreach ($this->localtax2 as $localtax_type => $localtax_rate) {
+                    if (in_array((string)$localtax_type, array('1', '3', '5'))) {
+                        continue;
+                    }
+
+                    foreach ($localtax_rate as $tvakey => $tvaval) {
+                        if ($tvakey != 0) {    // On affiche pas taux 0
+                            //$this->atleastoneratenotnull++;
+
+                            $index++;
+                            $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
+
+                            $tvacompl = '';
+                            if (preg_match('/\*/', $tvakey)) {
+                                $tvakey = str_replace('*', '', $tvakey);
+                                $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
+                            }
+                            $totalvat = $outputlangs->transcountrynoentities("TotalLT2", $mysoc->country_code) . ' ';
+                            $totalvat .= vatrate(abs($tvakey), 1) . $tvacompl;
+                            $pdf->MultiCell($col2x - $col1x, $tab2_hl, $totalvat, 0, 'L', 1);
+
+                            $total_localtax = ((isModEnabled("multicurrency") && isset($object->multicurrency_tx) && $object->multicurrency_tx != 1) ? price2num($tvaval * $object->multicurrency_tx, 'MT') : $tvaval);
+
+                            $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
+                            $pdf->MultiCell($largcol2, $tab2_hl, price($total_localtax, 0, $outputlangs), 0, 'R', 1);
+                        }
+                    }
+                }
+                //}
+
+                // VAT
+                foreach ($this->tva_array as $tvakey => $tvaval) {
+                    if ($tvakey != 0) {    // On affiche pas taux 0
+                        $this->atleastoneratenotnull++;
+
+                        $index++;
+                        $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
+
+                        $tvacompl = '';
+                        if (preg_match('/\*/', $tvakey)) {
+                            $tvakey = str_replace('*', '', $tvakey);
+                            $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
+                        }
+                        $totalvat = $outputlangs->transcountrynoentities("TotalVAT", $mysoc->country_code) . (is_object($outputlangsbis) ? ' / ' . $outputlangsbis->transcountrynoentities("TotalVAT", $mysoc->country_code) : '');
+                        $totalvat .= ' ';
+                        if (getDolGlobalString('PDF_VAT_LABEL_IS_CODE_OR_RATE') == 'rateonly') {
+                            $totalvat .= vatrate($tvaval['vatrate'], 1) . $tvacompl;
+                        } elseif (getDolGlobalString('PDF_VAT_LABEL_IS_CODE_OR_RATE') == 'codeonly') {
+                            $totalvat .= ($tvaval['vatcode'] ? $tvaval['vatcode'] : vatrate($tvaval['vatrate'], 1)) . $tvacompl;
+                        } else {
+                            $totalvat .= vatrate($tvaval['vatrate'], 1) . ($tvaval['vatcode'] ? ' (' . $tvaval['vatcode'] . ')' : '') . $tvacompl;
+                        }
+                        $pdf->MultiCell($col2x - $col1x, $tab2_hl, $totalvat, 0, 'L', 1);
+
+                        $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
+                        $pdf->MultiCell($largcol2, $tab2_hl, price(price2num($tvaval['amount'], 'MT'), 0, $outputlangs), 0, 'R', 1);
+                    }
+                }
+
+                //Local tax 1 after VAT
+                //if (!empty($conf->global->FACTURE_LOCAL_TAX1_OPTION) && $conf->global->FACTURE_LOCAL_TAX1_OPTION=='localtax1on')
+                //{
+                foreach ($this->localtax1 as $localtax_type => $localtax_rate) {
+                    if (in_array((string)$localtax_type, array('2', '4', '6'))) {
+                        continue;
+                    }
+
+                    foreach ($localtax_rate as $tvakey => $tvaval) {
+                        if ($tvakey != 0) {    // On affiche pas taux 0
+                            //$this->atleastoneratenotnull++;
+
+                            $index++;
+                            $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
+
+                            $tvacompl = '';
+                            if (preg_match('/\*/', $tvakey)) {
+                                $tvakey = str_replace('*', '', $tvakey);
+                                $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
+                            }
+                            $totalvat = $outputlangs->transcountrynoentities("TotalLT1", $mysoc->country_code) . ' ';
+
+                            $totalvat .= vatrate(abs($tvakey), 1) . $tvacompl;
+                            $pdf->MultiCell($col2x - $col1x, $tab2_hl, $totalvat, 0, 'L', 1);
+
+                            $total_localtax = ((isModEnabled("multicurrency") && isset($object->multicurrency_tx) && $object->multicurrency_tx != 1) ? price2num($tvaval * $object->multicurrency_tx, 'MT') : $tvaval);
+
+                            $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
+                            $pdf->MultiCell($largcol2, $tab2_hl, price($total_localtax, 0, $outputlangs), 0, 'R', 1);
+                        }
+                    }
+                }
+                //}
+                //Local tax 2 after VAT
+                //if (!empty($conf->global->FACTURE_LOCAL_TAX2_OPTION) && $conf->global->FACTURE_LOCAL_TAX2_OPTION=='localtax2on')
+                //{
+                foreach ($this->localtax2 as $localtax_type => $localtax_rate) {
+                    if (in_array((string)$localtax_type, array('2', '4', '6'))) {
+                        continue;
+                    }
+
+                    foreach ($localtax_rate as $tvakey => $tvaval) {
+                        // retrieve global local tax
+                        if ($tvakey != 0) {    // On affiche pas taux 0
+                            //$this->atleastoneratenotnull++;
+
+                            $index++;
+                            $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
+
+                            $tvacompl = '';
+                            if (preg_match('/\*/', $tvakey)) {
+                                $tvakey = str_replace('*', '', $tvakey);
+                                $tvacompl = " (" . $outputlangs->transnoentities("NonPercuRecuperable") . ")";
+                            }
+                            $totalvat = $outputlangs->transcountrynoentities("TotalLT2", $mysoc->country_code) . ' ';
+
+                            $totalvat .= vatrate(abs($tvakey), 1) . $tvacompl;
+                            $pdf->MultiCell($col2x - $col1x, $tab2_hl, $totalvat, 0, 'L', 1);
+
+                            $total_localtax = ((isModEnabled("multicurrency") && isset($object->multicurrency_tx) && $object->multicurrency_tx != 1) ? price2num($tvaval * $object->multicurrency_tx, 'MT') : $tvaval);
+
+                            $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
+                            $pdf->MultiCell($largcol2, $tab2_hl, price($total_localtax, 0, $outputlangs), 0, 'R', 1);
+                        }
+                    }
+                }
+                //}
+
+                // Total TTC
+                $index++;
+                $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
+                $pdf->SetTextColor(0, 0, 60);
+                $pdf->SetFillColor(224, 224, 224);
+                $pdf->MultiCell($col2x - $col1x, $tab2_hl, $outputlangs->transnoentities("TotalTTC"), $useborder, 'L', 1);
+
+                $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
+                $pdf->MultiCell($largcol2, $tab2_hl, price($total_ttc, 0, $outputlangs), $useborder, 'R', 1);
+            }
+        }
+
+        $pdf->SetTextColor(0, 0, 0);
+
+        $resteapayer = 0;
+        /*
+        $resteapayer = $object->total_ttc - $deja_regle;
+        if (!empty($object->paye)) $resteapayer=0;
+        */
+
+        if ($deja_regle > 0) {
+            $index++;
+
+            $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
+            $pdf->MultiCell($col2x - $col1x, $tab2_hl, $outputlangs->transnoentities("AlreadyPaid"), 0, 'L', 0);
+
+            $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
+            $pdf->MultiCell($largcol2, $tab2_hl, price($deja_regle, 0, $outputlangs), 0, 'R', 0);
+
+            /*
+            if ($object->close_code == 'discount_vat') {
+                $index++;
+                $pdf->SetFillColor(255,255,255);
+
+                $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
+                $pdf->MultiCell($col2x-$col1x, $tab2_hl, $outputlangs->transnoentities("EscompteOfferedShort"), $useborder, 'L', 1);
+
+                $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
+                $pdf->MultiCell($largcol2, $tab2_hl, price($object->total_ttc - $deja_regle, 0, $outputlangs), $useborder, 'R', 1);
+
+                $resteapayer=0;
+            }
+            */
+
+            $index++;
+            $pdf->SetTextColor(0, 0, 60);
+            $pdf->SetFillColor(224, 224, 224);
+            $pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
+            $pdf->MultiCell($col2x - $col1x, $tab2_hl, $outputlangs->transnoentities("RemainderToPay"), $useborder, 'L', 1);
+
+            $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
+            $pdf->MultiCell($largcol2, $tab2_hl, price($resteapayer, 0, $outputlangs), $useborder, 'R', 1);
+
+            $pdf->SetFont('', '', $default_font_size - 1);
+            $pdf->SetTextColor(0, 0, 0);
+        }
+
+        $index++;
+        return ($tab2_top + ($tab2_hl * $index));
+    }
+
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show area for the customer to sign
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Propal      $object         Object invoice
-     *  @param  int         $posy           Position depart
-     *  @param  Translate   $outputlangs    Object langs
-     *  @return int                         Position pour suite
+     * @param TCPDF $pdf Object PDF
+     * @param Propal $object Object invoice
+     * @param int $posy Position depart
+     * @param Translate $outputlangs Object langs
+     * @return int                         Position pour suite
      */
     protected function _signature_area(&$pdf, $object, $posy, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         $default_font_size = pdf_getPDFFontSize($outputlangs);
         $tab_top = $posy + 4;
         $tab_hl = 4;
@@ -1777,5 +1775,23 @@ class pdf_azur extends ModelePDFPropales
         }
 
         return ($tab_hl * 7);
+    }
+
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
+    /**
+     *  Show payments table
+     *
+     * @param TCPDF $pdf Object PDF
+     * @param Propal $object Object proposal
+     * @param int $posy Position y in PDF
+     * @param Translate $outputlangs Object langs for output
+     * @return int                         Return integer <0 if KO, >0 if OK
+     */
+    protected function _tableau_versements(&$pdf, $object, $posy, $outputlangs)
+    {
+        // phpcs:enable
+        return 1;
     }
 }

@@ -24,7 +24,7 @@
  *      \brief      List of PHP sessions
  */
 
-if (! defined('CSRFCHECK_WITH_TOKEN')) {
+if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');        // Force use of CSRF protection with tokens even for GET
 }
 
@@ -89,7 +89,6 @@ if ($action == 'confirm_unlock' && $user->admin) {
         dol_print_error($db);
     }
 }
-
 
 
 /*

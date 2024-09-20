@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010-2012 Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2012  Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Salaries\Classes\Salary;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *     \file       htdocs/compta/prelevement/factures.php
  *     \ingroup    prelevement
@@ -30,8 +39,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/prelevement.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/rejetprelevement.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories', 'bills', 'companies', 'withdrawals', 'salaries', 'suppliers'));
@@ -80,7 +87,6 @@ if ($type == 'bank-transfer') {
 } else {
     $result = restrictedArea($user, 'prelevement', '', '', 'bons');
 }
-
 
 /*
  * View
@@ -214,10 +220,10 @@ if ($salaryBonPl) {
     $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "user as u ON f.fk_user = u.rowid";
     $sql .= " WHERE 1 = 1";
     if ($object->id > 0) {
-        $sql .= " AND p.rowid = " . ((int) $object->id);
+        $sql .= " AND p.rowid = " . ((int)$object->id);
     }
     if ($userid > 0) {
-        $sql .= " AND u.rowid = " . ((int) $userid);
+        $sql .= " AND u.rowid = " . ((int)$userid);
     }
 } else {
     $sql = "SELECT pf.rowid, p.type,";
@@ -249,10 +255,10 @@ if ($salaryBonPl) {
         $sql .= " AND f.entity IN (" . getEntity('supplier_invoice') . ")";
     }
     if ($object->id > 0) {
-        $sql .= " AND p.rowid = " . ((int) $object->id);
+        $sql .= " AND p.rowid = " . ((int)$object->id);
     }
     if ($socid > 0) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
     $sql .= $db->order($sortfield, $sortorder);
 }
@@ -273,9 +279,9 @@ if ($resql) {
     $num = $db->num_rows($resql);
     $i = 0;
 
-    $param = "&id=" . ((int) $id);
+    $param = "&id=" . ((int)$id);
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
 
     // Lines of title fields

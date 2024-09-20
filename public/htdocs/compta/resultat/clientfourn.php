@@ -1,16 +1,16 @@
 <?php
 
-/* Copyright (C) 2002-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2012       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2012-2014  Raphaël Dourseanud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2014-2106  Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2014       Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2014       Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2020       Maxime DEMAREST         <maxime@indelog.fr>
- * Copyright (C) 2021       Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2002-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2012-2014  Raphaël Dourseanud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2014-2106  Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2014       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2014       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2020       Maxime DEMAREST             <maxime@indelog.fr>
+ * Copyright (C) 2021       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -38,9 +38,9 @@ use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Loan\Classes\Loan;
 use Dolibarr\Code\User\Classes\User;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/report.lib.php';
@@ -162,7 +162,6 @@ if (isModEnabled('accounting')) {
     $result = restrictedArea($user, 'accounting', '', '', 'comptarapport');
 }
 $hookmanager->initHooks(['customersupplierreportlist']);
-
 
 /*
  * View
@@ -437,7 +436,7 @@ if ($modecompta == 'BOOKKEEPING') {
     }
     $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     $sql .= " GROUP BY name, socid";
     $sql .= $db->order($sortfield, $sortorder);
@@ -666,9 +665,9 @@ if ($modecompta == 'BOOKKEEPING') {
         }
     }
 
-    $sql .= " AND f.entity = " . ((int) $conf->entity);
+    $sql .= " AND f.entity = " . ((int)$conf->entity);
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     $sql .= " GROUP BY name, socid";
     $sql .= $db->order($sortfield, $sortorder);
@@ -1238,7 +1237,6 @@ if ($modecompta == 'BOOKKEEPING') {
         dol_syslog('get loan payments', LOG_DEBUG);
         $result = $db->query($sql);
         if ($result) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
             $loan_static = new Loan($db);
             while ($obj = $db->fetch_object($result)) {
                 $loan_static->id = $obj->id;
@@ -1533,7 +1531,6 @@ $parameters["date_end"] = $date_end;
 $hookmanager->initHooks(array('externalbalance'));
 $reshook = $hookmanager->executeHooks('addBalanceLine', $parameters, $object, $action); // Note that $action and $object may have been modified by some hooks
 print $hookmanager->resPrint;
-
 
 
 // Total

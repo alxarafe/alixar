@@ -1,8 +1,9 @@
 <?php
 
-/* Copyright (C) 2018-2018 Andre Schild        <a.schild@aarboard.ch>
- * Copyright (C) 2005-2010 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin       <regis.houssin@inodbox.com>
+/* Copyright (C) 2018-2018  Andre Schild                <a.schild@aarboard.ch>
+ * Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This file is an example to follow to add your own email selector inside
  * the Dolibarr email tool.
@@ -11,6 +12,9 @@
  * Code that need to be changed in this file are marked by "CHANGE THIS" tag.
  */
 
+use Dolibarr\Code\Mailing\Classes\MailingTargets;
+use Dolibarr\Code\Partnerships\Classes\Partnership;
+
 /**
  *  \file       htdocs/core/modules/mailings/partnership.modules.php
  *  \ingroup    mailing
@@ -18,7 +22,6 @@
  */
 
 // Load Dolibarr Environment
-include_once DOL_DOCUMENT_ROOT . '/core/modules/mailings/modules_mailings.php';
 
 
 /**
@@ -45,7 +48,7 @@ class mailing_partnership extends MailingTargets
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -56,16 +59,17 @@ class mailing_partnership extends MailingTargets
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *    This is the main function that returns the array of emails
      *
-     *    @param    int     $mailing_id     Id of mailing. No need to use it.
-     *    @return   int                     Return integer <0 if error, number of emails added if ok
+     * @param int $mailing_id Id of mailing. No need to use it.
+     * @return   int                     Return integer <0 if error, number of emails added if ok
      */
     public function add_to_target($mailing_id)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs;
 
         $cibles = array();
@@ -75,7 +79,7 @@ class mailing_partnership extends MailingTargets
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "partnership as p, " . MAIN_DB_PREFIX . "c_partnership_type as pt";
         $sql .= " WHERE s.email <> ''";
         $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
-        $sql .= " AND s.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int) $mailing_id) . ")";
+        $sql .= " AND s.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int)$mailing_id) . ")";
         $sql .= " AND p.fk_soc = s.rowid";
         $sql .= " AND pt.rowid = p.fk_type";
         if (GETPOSTINT('filter') > 0) {
@@ -85,7 +89,7 @@ class mailing_partnership extends MailingTargets
             $sql .= " AND p.status = " . GETPOSTINT('filter_status_partnership');
         }
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
 
         $sql .= " UNION ";
@@ -94,7 +98,7 @@ class mailing_partnership extends MailingTargets
         $sql .= " FROM " . MAIN_DB_PREFIX . "adherent as s, " . MAIN_DB_PREFIX . "partnership as p, " . MAIN_DB_PREFIX . "c_partnership_type as pt";
         $sql .= " WHERE s.email <> ''";
         $sql .= " AND s.entity IN (" . getEntity('member') . ")";
-        $sql .= " AND s.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int) $mailing_id) . ")";
+        $sql .= " AND s.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int)$mailing_id) . ")";
         $sql .= " AND p.fk_member = s.rowid";
         $sql .= " AND pt.rowid = p.fk_type";
         if (GETPOSTINT('filter') > 0) {
@@ -104,7 +108,7 @@ class mailing_partnership extends MailingTargets
             $sql .= " AND p.status = " . GETPOSTINT('filter_status_partnership');
         }
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
 
         $sql .= " ORDER BY email";
@@ -128,14 +132,14 @@ class mailing_partnership extends MailingTargets
                     }
                     $otherTxt .= $addDescription;
                     $cibles[$j] = array(
-                                'email' => $obj->email,
-                                'fk_contact' => $obj->fk_contact,
-                                'lastname' => $obj->name, // For a thirdparty, we must use name
-                                'firstname' => '', // For a thirdparty, lastname is ''
-                                'other' => $otherTxt,
-                                'source_url' => $this->url($obj->id, $obj->source),
-                                'source_id' => $obj->id,
-                                'source_type' => $obj->source
+                        'email' => $obj->email,
+                        'fk_contact' => $obj->fk_contact,
+                        'lastname' => $obj->name, // For a thirdparty, we must use name
+                        'firstname' => '', // For a thirdparty, lastname is ''
+                        'other' => $otherTxt,
+                        'source_url' => $this->url($obj->id, $obj->source),
+                        'source_id' => $obj->id,
+                        'source_type' => $obj->source
                     );
                     $old = $obj->email;
                     $j++;
@@ -159,7 +163,7 @@ class mailing_partnership extends MailingTargets
      *  array of SQL request that returns two field:
      *  One called "label", One called "nb".
      *
-     *  @return     array       Array with SQL requests
+     * @return     array       Array with SQL requests
      */
     public function getSqlArrayForStats()
     {
@@ -176,8 +180,8 @@ class mailing_partnership extends MailingTargets
      *  For example if this selector is used to extract 500 different
      *  emails from a text file, this function must return 500.
      *
-     *  @param      string          $sql        Requete sql de comptage
-     *  @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
+     * @param string $sql Requete sql de comptage
+     * @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
      */
     public function getNbOfRecipients($sql = '')
     {
@@ -188,7 +192,7 @@ class mailing_partnership extends MailingTargets
         $sql .= " WHERE s.rowid = p.fk_soc AND s.email <> ''";
         $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
 
         $sql .= " UNION ";
@@ -198,7 +202,7 @@ class mailing_partnership extends MailingTargets
         $sql .= " WHERE s.rowid = p.fk_member AND s.email <> ''";
         $sql .= " AND s.entity IN (" . getEntity('member') . ")";
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
 
         //print $sql;
@@ -211,7 +215,7 @@ class mailing_partnership extends MailingTargets
      *  This is to add a form filter to provide variant of selector
      *  If used, the HTML select must be called "filter"
      *
-     *  @return     string      A html select zone
+     * @return     string      A html select zone
      */
     public function formFilter()
     {
@@ -270,17 +274,17 @@ class mailing_partnership extends MailingTargets
     /**
      *  Can include an URL link on each record provided by selector shown on target page.
      *
-     *  @param  int     $id         ID
-     *  @param  string  $sourcetype Source type
-     *  @return string              Url link
+     * @param int $id ID
+     * @param string $sourcetype Source type
+     * @return string              Url link
      */
     public function url($id, $sourcetype = 'thirdparty')
     {
         if ($sourcetype == 'thirdparty') {
-            return '<a href="' . constant('BASE_URL') . 'societe/card.php?socid=' . ((int) $id) . '">' . img_object('', "societe") . '</a>';
+            return '<a href="' . constant('BASE_URL') . 'societe/card.php?socid=' . ((int)$id) . '">' . img_object('', "societe") . '</a>';
         }
         if ($sourcetype == 'member') {
-            return '<a href="' . constant('BASE_URL') . '/adherent/card.php?id=' . ((int) $id) . '">' . img_object('', "member") . '</a>';
+            return '<a href="' . constant('BASE_URL') . '/adherent/card.php?id=' . ((int)$id) . '">' . img_object('', "member") . '</a>';
         }
 
         return '';

@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010      François Legastelois <flegastelois@teclib.com>
- * Copyright (C) 2018-2024  Frédéric France      <frederic.france@free.fr>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010       François Legastelois        <flegastelois@teclib.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/projet/activity/perday.php
  *  \ingroup    projet
@@ -31,7 +42,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('projects', 'users', 'companies'));
@@ -65,7 +75,7 @@ $month = GETPOSTINT('remonth') ? GETPOSTINT('remonth') : (GETPOSTINT("month") ? 
 $day = GETPOSTINT('reday') ? GETPOSTINT('reday') : (GETPOSTINT("day") ? GETPOSTINT("day") : (GETPOSTINT("addtimeday") ? GETPOSTINT("addtimeday") : date("d")));
 $week = GETPOSTINT("week") ? GETPOSTINT("week") : date("W");
 
-$day = (int) $day;
+$day = (int)$day;
 
 //$search_categ = GETPOST("search_categ", 'alpha');
 $search_usertoprocessid = GETPOSTINT('search_usertoprocessid');
@@ -138,7 +148,7 @@ $arrayfields['timeconsumed'] = array('label' => 'TimeConsumed', 'checked' => 1, 
 if (!empty($extrafields->attributes[$object->table_element]['label']) && is_array($extrafields->attributes[$object->table_element]['label']) && count($extrafields->attributes[$object->table_element]['label']) > 0) {
     foreach ($extrafields->attributes[$object->table_element]['label'] as $key => $val) {
         if (!empty($extrafields->attributes[$object->table_element]['list'][$key])) {
-            $arrayfields["efpt." . $key] = array('label' => $extrafields->attributes[$object->table_element]['label'][$key], 'checked' => (($extrafields->attributes[$object->table_element]['list'][$key] < 0) ? 0 : 1), 'position' => $extrafields->attributes[$object->table_element]['pos'][$key], 'enabled' => (abs((int) $extrafields->attributes[$object->table_element]['list'][$key]) != 3 && $extrafields->attributes[$object->table_element]['perms'][$key]));
+            $arrayfields["efpt." . $key] = array('label' => $extrafields->attributes[$object->table_element]['label'][$key], 'checked' => (($extrafields->attributes[$object->table_element]['list'][$key] < 0) ? 0 : 1), 'position' => $extrafields->attributes[$object->table_element]['pos'][$key], 'enabled' => (abs((int)$extrafields->attributes[$object->table_element]['list'][$key]) != 3 && $extrafields->attributes[$object->table_element]['perms'][$key]));
         }
     }
 }
@@ -212,7 +222,7 @@ if ($action == 'addtime' && $user->hasRight('projet', 'lire') && GETPOST('assign
         if ($result >= 0 || $result == -2) {    // Contact add ok or already contact of task
             // Test if we are already contact of the project (should be rare but sometimes we can add as task contact without being contact of project, like when admin user has been removed from contact of project)
             $sql = 'SELECT ec.rowid FROM ' . MAIN_DB_PREFIX . 'element_contact as ec, ' . MAIN_DB_PREFIX . 'c_type_contact as tc WHERE tc.rowid = ec.fk_c_type_contact';
-            $sql .= ' AND ec.fk_socpeople = ' . ((int) $idfortaskuser) . " AND ec.element_id = " . ((int) $object->fk_project) . " AND tc.element = 'project' AND source = 'internal'";
+            $sql .= ' AND ec.fk_socpeople = ' . ((int)$idfortaskuser) . " AND ec.element_id = " . ((int)$object->fk_project) . " AND tc.element = 'project' AND source = 'internal'";
             $resql = $db->query($sql);
             if ($resql) {
                 $obj = $db->fetch_object($resql);
@@ -327,8 +337,6 @@ if ($action == 'addtime' && $user->hasRight('projet', 'lire') && GETPOST('formfi
     }
 }
 
-
-
 /*
  * View
  */
@@ -344,14 +352,14 @@ $thirdpartystatic = new Societe($db);
 $holiday = new Holiday($db);
 
 $prev = dol_getdate($daytoparse - (24 * 3600));
-$prev_year  = $prev['year'];
+$prev_year = $prev['year'];
 $prev_month = $prev['mon'];
-$prev_day   = $prev['mday'];
+$prev_day = $prev['mday'];
 
 $next = dol_getdate($daytoparse + (24 * 3600));
-$next_year  = $next['year'];
+$next_year = $next['year'];
 $next_month = $next['mon'];
-$next_day   = $next['mday'];
+$next_day = $next['mday'];
 
 $title = $langs->trans("TimeSpent");
 

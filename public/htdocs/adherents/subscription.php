@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2004  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2002-2003  Jean-Louis Bergamo      <jlb@j1b.org>
- * Copyright (C) 2004-2018  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2012-2017  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2016  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2019       Thibault FOUCART        <support@ptibogxiv.net>
- * Copyright (C) 2023		Waël Almoman			<info@almoman.com>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2002-2003  Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2004-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012-2017  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2016  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2019       Thibault FOUCART            <support@ptibogxiv.net>
+ * Copyright (C) 2023		Waël Almoman			    <info@almoman.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,18 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Adherents\Classes\Subscription;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Modules\User;
 
 /**
  *       \file       htdocs/adherents/subscription.php
@@ -36,7 +48,6 @@ use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
 
 $langs->loadLangs(array("companies", "bills", "members", "users", "mails", 'other'));
 
@@ -361,7 +372,6 @@ if ($user->hasRight('adherent', 'cotisation', 'creer') && $action == 'subscripti
                     $msg = '';
 
                     // Send subscription email
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                     $formmail = new FormMail($db);
                     // Set output language
                     $outputlangs = new Translate('', $conf);
@@ -1150,7 +1160,6 @@ if (($action == 'addsubscription' || $action == 'create_thirdparty') && $user->h
         $msg = '';
 
         // Send subscription email
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
         $formmail = new FormMail($db);
         // Set output language
         $outputlangs = new Translate('', $conf);

@@ -38,8 +38,8 @@ class Collection extends BaseCollection implements IACL
     /**
      * Constructor.
      *
-     * @param string      $path  on-disk path
-     * @param array       $acl   ACL rules
+     * @param string $path on-disk path
+     * @param array $acl ACL rules
      * @param string|null $owner principal owner string
      */
     public function __construct($path, array $acl, $owner = null)
@@ -57,9 +57,9 @@ class Collection extends BaseCollection implements IACL
      *
      * @param string $name
      *
+     * @return \Sabre\DAV\INode
      * @throws NotFound
      *
-     * @return \Sabre\DAV\INode
      */
     public function getChild($name)
     {

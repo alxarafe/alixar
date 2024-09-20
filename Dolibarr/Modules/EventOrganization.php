@@ -482,7 +482,6 @@ class EventOrganization extends DolibarrModules
 
 
         // Insert some vars
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
         $formmail = new FormMail($this->db);
 
         if (!is_object($user)) {

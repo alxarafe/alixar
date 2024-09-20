@@ -25,6 +25,10 @@
  *  \brief      File to manage triggers Mailman and Spip
  */
 
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/dolibarrtriggers.class.php';
 
 
@@ -53,11 +57,11 @@ class InterfaceMailmanSpipsynchro extends DolibarrTriggers
      * Function called when a Dolibarr business event is done.
      * All functions "runTrigger" are triggered if file is inside directory htdocs/core/triggers or htdocs/module/code/triggers (and declared)
      *
-     * @param string        $action     Event action code
-     * @param Object        $object     Object
-     * @param User          $user       Object user
-     * @param Translate     $langs      Object langs
-     * @param Conf         $conf       Object conf
+     * @param string $action Event action code
+     * @param Object $object Object
+     * @param User $user Object user
+     * @param Translate $langs Object langs
+     * @param Conf $conf Object conf
      * @return int                      Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)

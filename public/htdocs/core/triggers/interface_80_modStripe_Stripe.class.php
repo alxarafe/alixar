@@ -50,7 +50,7 @@ class InterfaceStripe extends DolibarrTriggers
     /**
      *   Constructor
      *
-     *   @param DoliDB $db Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -68,11 +68,11 @@ class InterfaceStripe extends DolibarrTriggers
      * All functions "runTrigger" are triggered if file
      * is inside directory core/triggers
      *
-     * @param   string          $action     Event action code
-     * @param   CommonObject    $object     Object
-     * @param   User            $user       Object user
-     * @param   Translate       $langs      Object langs
-     * @param   Conf            $conf       Object conf
+     * @param string $action Event action code
+     * @param CommonObject $object Object
+     * @param User $user Object user
+     * @param Translate $langs Object langs
+     * @param Conf $conf Object conf
      * @return  int                         Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
@@ -211,7 +211,7 @@ class InterfaceStripe extends DolibarrTriggers
             }
 
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "societe_account";
-            $sql .= " WHERE site='stripe' AND fk_soc = " . ((int) $object->id);
+            $sql .= " WHERE site='stripe' AND fk_soc = " . ((int)$object->id);
             $this->db->query($sql);
         }
 

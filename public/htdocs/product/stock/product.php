@@ -1,16 +1,16 @@
 <?php
 
-/* Copyright (C) 2001-2007 Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2020 Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne             <eric.seigne@ryxeo.com>
- * Copyright (C) 2005      Simon TOSSER            <simon@kornog-computing.com>
- * Copyright (C) 2005-2009 Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2013      Cédric Salvador         <csalvador.gpcsolutions.fr>
- * Copyright (C) 2013-2018 Juanjo Menent	       <jmenent@2byte.es>
- * Copyright (C) 2014-2015 Cédric Gross            <c.gross@kreiz-it.fr>
- * Copyright (C) 2015      Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2021	   Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005       Simon TOSSER                <simon@kornog-computing.com>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador.gpcsolutions.fr>
+ * Copyright (C) 2013-2018  Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2014-2015  Cédric Gross                <c.gross@kreiz-it.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2021	    Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,6 +27,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Canvas;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productbatch;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\Product\Classes\ProductStockEntrepot;
+use Dolibarr\Code\Variants\Classes\ProductCombination;
+use Dolibarr\Code\Variants\Classes\ProductCombination2ValuePair;
+
 /**
  *  \file       htdocs/product/stock/product.php
  *  \ingroup    product stock
@@ -36,14 +51,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productstockentrepot.class.php';
-if (isModEnabled('productbatch')) {
-}
-if (isModEnabled('project')) {
-    }
-
-if (isModEnabled('variants')) {
-}
 
 // Load translation files required by the page
 $langs->loadlangs(array('products', 'suppliers', 'orders', 'bills', 'stocks', 'sendings', 'margins'));
@@ -57,7 +64,7 @@ $cancel = GETPOST('cancel', 'alpha');
 
 $id = GETPOSTINT('id');
 $ref = GETPOST('ref', 'alpha');
-$stocklimit = (float) GETPOST('seuil_stock_alerte');
+$stocklimit = (float)GETPOST('seuil_stock_alerte');
 $desiredstock = GETPOST('desiredstock');
 $cancel = GETPOST('cancel', 'alpha');
 $fieldid = GETPOSTISSET("ref") ? 'ref' : 'rowid';
@@ -95,7 +102,6 @@ $modulepart = 'product';
 $canvas = !empty($object->canvas) ? $object->canvas : GETPOST("canvas");
 $objcanvas = null;
 if (!empty($canvas)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
     $objcanvas = new Canvas($db, $action);
     $objcanvas->getCanvas('stockproduct', 'card', $canvas);
 }
@@ -143,7 +149,7 @@ if ($reshook < 0) {
 if ($action == 'setcost_price') {
     if ($id) {
         $result = $object->fetch($id);
-        $object->cost_price = (float) price2num($cost_price);
+        $object->cost_price = (float)price2num($cost_price);
         $result = $object->update($object->id, $user);
         if ($result > 0) {
             setEventMessages($langs->trans("RecordSaved"), null, 'mesgs');
@@ -182,9 +188,9 @@ if ($action == 'addlimitstockwarehouse' && $user->hasRight('produit', 'creer')) 
         } else {
             // Create
             $pse->fk_entrepot = GETPOSTINT('fk_entrepot');
-            $pse->fk_product         = $id;
+            $pse->fk_product = $id;
             $pse->seuil_stock_alerte = GETPOST('seuil_stock_alerte');
-            $pse->desiredstock       = GETPOST('desiredstock');
+            $pse->desiredstock = GETPOST('desiredstock');
             if ($pse->create($user) > 0) {
                 setEventMessages($langs->trans('ProductStockWarehouseCreated'), null, 'mesgs');
             }
@@ -514,8 +520,6 @@ if ($action == 'updateline' && GETPOST('save') == $langs->trans("Save")) {
     exit;
 }
 
-
-
 /*
  * View
  */
@@ -551,18 +555,17 @@ if ($id > 0 || $ref) {
     if (!empty($conf->use_javascript_ajax)) {
         ?>
         <script type="text/javascript">
-            $(document).ready(function() {
-                $(".collapse_batch").click(function() {
+            $(document).ready(function () {
+                $(".collapse_batch").click(function () {
                     console.log("We click on collapse_batch");
                     var id_entrepot = $(this).attr('id').replace('ent', '');
 
-                    if($(this).text().indexOf('+') > 0) {
+                    if ($(this).text().indexOf('+') > 0) {
                         $(".batch_warehouse" + id_entrepot).show();
                         $(this).html('(-)');
                         jQuery("#show_all").hide();
                         jQuery("#hide_all").show();
-                    }
-                    else {
+                    } else {
                         $(".batch_warehouse" + id_entrepot).hide();
                         $(this).html('(+)');
                     }
@@ -570,7 +573,7 @@ if ($id > 0 || $ref) {
                     return false;
                 });
 
-                $("#show_all").click(function() {
+                $("#show_all").click(function () {
                     console.log("We click on show_all");
                     $("[class^=batch_warehouse]").show();
                     $("[class^=collapse_batch]").html('(-)');
@@ -579,7 +582,7 @@ if ($id > 0 || $ref) {
                     return false;
                 });
 
-                $("#hide_all").click(function() {
+                $("#hide_all").click(function () {
                     console.log("We click on hide_all");
                     $("[class^=batch_warehouse]").hide();
                     $("[class^=collapse_batch]").html('(+)');
@@ -650,7 +653,6 @@ if ($id > 0 || $ref) {
                 print $form->editfieldval($text, 'cost_price', $object->cost_price, $object, $usercancreate, 'amount:6');
             }
             print '</td></tr>';
-
 
 
             // AWP
@@ -867,7 +869,7 @@ if ($id > 0 || $ref) {
             if ($user->hasRight('stock', 'mouvement', 'lire')) {
                 $sql = "SELECT max(m.datem) as datem";
                 $sql .= " FROM " . MAIN_DB_PREFIX . "stock_mouvement as m";
-                $sql .= " WHERE m.fk_product = " . ((int) $object->id);
+                $sql .= " WHERE m.fk_product = " . ((int)$object->id);
                 $resqlbis = $db->query($sql);
                 if ($resqlbis) {
                     $obj = $db->fetch_object($resqlbis);
@@ -1004,7 +1006,7 @@ if (!$variants || getDolGlobalString('VARIANT_ALLOW_STOCK_MOVEMENT_ON_VARIANT_PA
     $sql .= " WHERE ps.reel != 0";
     $sql .= " AND ps.fk_entrepot = e.rowid";
     $sql .= " AND e.entity IN (" . getEntity('stock') . ")";
-    $sql .= " AND ps.fk_product = " . ((int) $object->id);
+    $sql .= " AND ps.fk_product = " . ((int)$object->id);
     $sql .= " ORDER BY e.ref";
 
     $entrepotstatic = new Entrepot($db);
@@ -1366,7 +1368,8 @@ if (!$variants || getDolGlobalString('VARIANT_ALLOW_STOCK_MOVEMENT_ON_VARIANT_PA
                     <td style="text-align: center;"><?php echo $prodstatic->getLibStatut(2, 1) ?></td>
                     <td class="right"><?php echo $prodstatic->stock_reel ?></td>
                     <td class="right">
-                        <a class="paddingleft paddingright editfielda" href="<?php echo dol_buildpath('/product/stock/product.php?id=' . $currcomb->fk_product_child, 2) ?>"><?php echo img_edit() ?></a>
+                        <a class="paddingleft paddingright editfielda"
+                           href="<?php echo dol_buildpath('/product/stock/product.php?id=' . $currcomb->fk_product_child, 2) ?>"><?php echo img_edit() ?></a>
                     </td>
                     <?php
                     ?>

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004-2023 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2019 Nicolas ZABOURI	<info@inovea-conseil.com>
- * Copyright (C) 2023      Alexandre Janniaux   <alexandre.janniaux@gmail.com>
+/* Copyright (C) 2004-2023  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2019  Nicolas ZABOURI	            <info@inovea-conseil.com>
+ * Copyright (C) 2023       Alexandre Janniaux          <alexandre.janniaux@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -24,6 +24,8 @@
  * htdocs/modulebuilder/index.php?module=Inventory@/pathtodolibarr/htdocs/product
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *       \file       htdocs/modulebuilder/index.php
  *       \brief      Home page for module builder module
@@ -41,7 +43,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/modulebuilder.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/utils.class.php';
 
 // Load translation files required by the page
@@ -5810,7 +5811,6 @@ if ($module == 'initmodule') {
 
         if ($tab == 'triggers') {
             print '<!-- tab=triggers -->' . "\n";
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/interfaces.class.php';
 
             $interfaces = new Interfaces($db);
             $triggers = $interfaces->getTriggersList(array('/' . strtolower($module) . '/core/triggers'));
@@ -5969,8 +5969,6 @@ if ($module == 'initmodule') {
 
         if ($tab == 'widgets') {
             print '<!-- tab=widgets -->' . "\n";
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/boxes/modules_boxes.php';
-
             $widgets = ModeleBoxes::getWidgetsList(array('/' . strtolower($module) . '/core/boxes'));
 
             if ($action != 'editfile' || empty($file)) {
@@ -6021,7 +6019,6 @@ if ($module == 'initmodule') {
 
         if ($tab == 'emailings') {
             print '<!-- tab=emailings -->' . "\n";
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/mailings/modules_mailings.php';
 
             $emailingselectors = MailingTargets::getEmailingSelectorsList(array('/' . strtolower($module) . '/core/modules/mailings'));
 

@@ -30,12 +30,12 @@
 /**
  * Connect to FTP server
  *
- * @param   string  $ftp_server     Server name
- * @param   string  $ftp_port       Server port
- * @param   string  $ftp_user       FTP user
- * @param   string  $ftp_password   FTP password
- * @param   string  $section        Directory
- * @param   integer $ftp_passive    Use a passive mode
+ * @param string $ftp_server Server name
+ * @param string $ftp_port Server port
+ * @param string $ftp_user FTP user
+ * @param string $ftp_password FTP password
+ * @param string $section Directory
+ * @param integer $ftp_passive Use a passive mode
  * @return  array                   Result of connect
  */
 function dol_ftp_connect($ftp_server, $ftp_port, $ftp_user, $ftp_password, $section, $ftp_passive = 0)
@@ -57,13 +57,13 @@ function dol_ftp_connect($ftp_server, $ftp_port, $ftp_user, $ftp_password, $sect
         $connecttimeout = (!getDolGlobalString('FTP_CONNECT_TIMEOUT') ? 40 : $conf->global->FTP_CONNECT_TIMEOUT);
         if (getDolGlobalString('FTP_CONNECT_WITH_SFTP')) {
             dol_syslog('Try to connect with ssh2_connect');
-            $tmp_conn_id = ssh2_connect($ftp_server, (int) $ftp_port);
+            $tmp_conn_id = ssh2_connect($ftp_server, (int)$ftp_port);
         } elseif (getDolGlobalString('FTP_CONNECT_WITH_SSL')) {
             dol_syslog('Try to connect with ftp_ssl_connect');
-            $connect_id = ftp_ssl_connect($ftp_server, (int) $ftp_port, $connecttimeout);
+            $connect_id = ftp_ssl_connect($ftp_server, (int)$ftp_port, $connecttimeout);
         } else {
             dol_syslog('Try to connect with ftp_connect');
-            $connect_id = ftp_connect($ftp_server, (int) $ftp_port, $connecttimeout);
+            $connect_id = ftp_connect($ftp_server, (int)$ftp_port, $connecttimeout);
         }
         if (!empty($connect_id) || !empty($tmp_conn_id)) {
             if ($ftp_user) {
@@ -123,8 +123,8 @@ function dol_ftp_connect($ftp_server, $ftp_port, $ftp_user, $ftp_password, $sect
 /**
  * Tell if an entry is a FTP directory
  *
- * @param       resource    $connect_id     Connection handler
- * @param       string      $dir            Directory
+ * @param resource $connect_id Connection handler
+ * @param string $dir Directory
  * @return      int         1=directory, 0=not a directory
  */
 function ftp_isdir($connect_id, $dir)
@@ -140,7 +140,7 @@ function ftp_isdir($connect_id, $dir)
 /**
  * Tell if an entry is a FTP directory
  *
- * @param       resource    $connect_id     Connection handler
+ * @param resource $connect_id Connection handler
  * @return      boolean                     Result of closing
  */
 function dol_ftp_close($connect_id)
@@ -159,9 +159,9 @@ function dol_ftp_close($connect_id)
 /**
  * Delete a FTP file
  *
- * @param       resource    $connect_id     Connection handler
- * @param       string      $file           File
- * @param       string      $newsection         $newsection
+ * @param resource $connect_id Connection handler
+ * @param string $file File
+ * @param string $newsection $newsection
  * @return      bool
  */
 function dol_ftp_delete($connect_id, $file, $newsection)
@@ -189,10 +189,10 @@ function dol_ftp_delete($connect_id, $file, $newsection)
 /**
  * Download a FTP file
  *
- * @param       resource    $connect_id     Connection handler
- * @param       string      $localfile      The local file path
- * @param       string      $file                   The remote file path
- * @param       string      $newsection         $newsection
+ * @param resource $connect_id Connection handler
+ * @param string $localfile The local file path
+ * @param string $file The remote file path
+ * @param string $newsection $newsection
  * @return      bool|resource
  */
 function dol_ftp_get($connect_id, $localfile, $file, $newsection)
@@ -218,10 +218,10 @@ function dol_ftp_get($connect_id, $localfile, $file, $newsection)
 /**
  * Upload a FTP file
  *
- * @param       resource    $connect_id     Connection handler
- * @param       string      $file           File name
- * @param       string      $localfile      The path to the local file
- * @param       string      $newsection     $newsection
+ * @param resource $connect_id Connection handler
+ * @param string $file File name
+ * @param string $localfile The path to the local file
+ * @param string $newsection $newsection
  * @return      bool
  */
 function dol_ftp_put($connect_id, $file, $localfile, $newsection)
@@ -247,9 +247,9 @@ function dol_ftp_put($connect_id, $file, $localfile, $newsection)
 /**
  * Remove FTP directory
  *
- * @param       resource    $connect_id     Connection handler
- * @param       string      $file           File
- * @param       string      $newsection         $newsection
+ * @param resource $connect_id Connection handler
+ * @param string $file File
+ * @param string $newsection $newsection
  * @return      bool
  */
 function dol_ftp_rmdir($connect_id, $file, $newsection)
@@ -276,9 +276,9 @@ function dol_ftp_rmdir($connect_id, $file, $newsection)
 /**
  * Remove FTP directory
  *
- * @param       resource    $connect_id     Connection handler
- * @param       string      $newdir         Dir create
- * @param       string      $newsection     $newsection
+ * @param resource $connect_id Connection handler
+ * @param string $newdir Dir create
+ * @param string $newsection $newsection
  * @return      bool|string
  */
 function dol_ftp_mkdir($connect_id, $newdir, $newsection)

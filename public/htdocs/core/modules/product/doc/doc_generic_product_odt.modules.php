@@ -1,23 +1,31 @@
 <?php
 
-/* Copyright (C) 2010-2012  Laurent Destailleur     <eldy@products.sourceforge.net>
- * Copyright (C) 2012       Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2010-2012  Laurent Destailleur         <eldy@products.sourceforge.net>
+ * Copyright (C) 2012       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <https://www.gnu.org/licenses/>.
-* or see https://www.gnu.org/
-*/
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * or see https://www.gnu.org/
+ */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\Product\Classes\ModelePDFProduct;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *  \file       htdocs/core/modules/product/doc/doc_generic_product_odt.modules.php
@@ -25,7 +33,6 @@
  *  \brief      File of class to build ODT documents for products/services
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product/modules_product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -47,7 +54,7 @@ class doc_generic_product_odt extends ModelePDFProduct
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -92,8 +99,8 @@ class doc_generic_product_odt extends ModelePDFProduct
     /**
      *  Return description of a module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Description
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Description
      */
     public function info($langs)
     {
@@ -187,21 +194,22 @@ class doc_generic_product_odt extends ModelePDFProduct
         return $texte;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build a document on disk using the generic odt module.
      *
-     *  @param      Product     $object             Object source to build document
-     *  @param      Translate   $outputlangs        Lang output object
-     *  @param      string      $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int         $hidedetails        Do not show line details
-     *  @param      int         $hidedesc           Do not show desc
-     *  @param      int         $hideref            Do not show ref
-     *  @return     int                             1 if OK, <=0 if KO
+     * @param Product $object Object source to build document
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                             1 if OK, <=0 if KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath, $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $product, $langs, $conf, $mysoc, $hookmanager, $user;
 
         if (empty($srctemplatepath)) {
@@ -313,11 +321,11 @@ class doc_generic_product_odt extends ModelePDFProduct
                 }
                 // Make substitution
                 $substitutionarray = array(
-                '__FROM_NAME__' => $this->emetteur->name,
-                '__FROM_EMAIL__' => $this->emetteur->email,
-                '__TOTAL_TTC__' => $object->total_ttc,
-                '__TOTAL_HT__' => $object->total_ht,
-                '__TOTAL_VAT__' => $object->total_tva
+                    '__FROM_NAME__' => $this->emetteur->name,
+                    '__FROM_EMAIL__' => $this->emetteur->email,
+                    '__TOTAL_TTC__' => $object->total_ttc,
+                    '__TOTAL_HT__' => $object->total_ht,
+                    '__TOTAL_VAT__' => $object->total_tva
                 );
                 complete_substitutions_array($substitutionarray, $langs, $object);
                 // Call the ODTSubstitution hook
@@ -337,9 +345,9 @@ class doc_generic_product_odt extends ModelePDFProduct
                     $odfHandler = new Odf(
                         $srctemplatepath,
                         array(
-                            'PATH_TO_TMP'     => $conf->product->dir_temp,
-                            'ZIP_PROXY'       => 'PclZipProxy', // PhpZipProxy or PclZipProxy. Got "bad compression method" error when using PhpZipProxy.
-                            'DELIMITER_LEFT'  => '{',
+                            'PATH_TO_TMP' => $conf->product->dir_temp,
+                            'ZIP_PROXY' => 'PclZipProxy', // PhpZipProxy or PclZipProxy. Got "bad compression method" error when using PhpZipProxy.
+                            'DELIMITER_LEFT' => '{',
                             'DELIMITER_RIGHT' => '}'
                         )
                     );

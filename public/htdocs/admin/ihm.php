@@ -30,6 +30,11 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormOther;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
@@ -337,9 +342,9 @@ llxHeader(
     0,
     0,
     array(
-    '/includes/ace/src/ace.js',
-    '/includes/ace/src/ext-statusbar.js',
-    '/includes/ace/src/ext-language_tools.js',
+        '/includes/ace/src/ace.js',
+        '/includes/ace/src/ext-statusbar.js',
+        '/includes/ace/src/ext-language_tools.js',
     ),
     array(),
     '',
@@ -356,7 +361,6 @@ print '<span class="opacitymedium">' . $langs->trans("DisplayDesc") . "</span><b
 print "<br>\n";
 
 //WYSIWYG Editor
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
 print '<form enctype="multipart/form-data" method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
 print '<input type="hidden" name="token" value="' . newToken() . '">';

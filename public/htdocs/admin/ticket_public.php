@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2013-2018  Jean-François FERRY    <hello@librethic.io>
- * Copyright (C) 2016		Christophe Battarel	<christophe@altairis.fr>
+/* Copyright (C) 2013-2018  Jean-François FERRY         <hello@librethic.io>
+ * Copyright (C) 2016		Christophe Battarel	        <christophe@altairis.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +25,11 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
-require_once DOL_DOCUMENT_ROOT . "/ticket/class/ticket.class.php";
 require_once DOL_DOCUMENT_ROOT . "/core/lib/ticket.lib.php";
 
 // Load translation files required by the page
@@ -218,7 +221,7 @@ if ($action != '') {
  * View
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $form = new Form($db);
 
@@ -256,7 +259,6 @@ print $enabledisablehtml;
 print '<input type="hidden" id="TICKET_ENABLE_PUBLIC_INTERFACE" name="TICKET_ENABLE_PUBLIC_INTERFACE" value="' . (!getDolGlobalInt('TICKET_ENABLE_PUBLIC_INTERFACE') ? 0 : 1) . '">';
 
 print dol_get_fiche_end();
-
 
 
 if (getDolGlobalInt('TICKET_ENABLE_PUBLIC_INTERFACE')) {

@@ -84,7 +84,7 @@ class Drawing
         }
 
         // Round pixels to closest integer
-        $colWidth = (int) round($colWidth);
+        $colWidth = (int)round($colWidth);
 
         return $colWidth;
     }
@@ -111,7 +111,7 @@ class Drawing
     public static function pointsToPixels($pValue)
     {
         if ($pValue != 0) {
-            return (int) ceil($pValue * 1.333333333);
+            return (int)ceil($pValue * 1.333333333);
         }
 
         return 0;
@@ -126,7 +126,7 @@ class Drawing
      */
     public static function degreesToAngle($pValue)
     {
-        return (int) round($pValue * 60000);
+        return (int)round($pValue * 60000);
     }
 
     /**

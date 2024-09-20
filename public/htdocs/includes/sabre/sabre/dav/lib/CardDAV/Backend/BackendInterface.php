@@ -62,7 +62,7 @@ interface BackendInterface
      * in any format, including ints, strings, arrays or objects.
      *
      * @param string $principalUri
-     * @param string $url          just the 'basename' of the url
+     * @param string $url just the 'basename' of the url
      *
      * @return mixed
      */
@@ -105,7 +105,7 @@ interface BackendInterface
      *
      * If the card does not exist, you must return false.
      *
-     * @param mixed  $addressBookId
+     * @param mixed $addressBookId
      * @param string $cardUri
      *
      * @return array
@@ -146,7 +146,7 @@ interface BackendInterface
      *
      * If you don't return an ETag, you can just return null.
      *
-     * @param mixed  $addressBookId
+     * @param mixed $addressBookId
      * @param string $cardUri
      * @param string $cardData
      *
@@ -174,7 +174,7 @@ interface BackendInterface
      *
      * If you don't return an ETag, you can just return null.
      *
-     * @param mixed  $addressBookId
+     * @param mixed $addressBookId
      * @param string $cardUri
      * @param string $cardData
      *
@@ -185,7 +185,7 @@ interface BackendInterface
     /**
      * Deletes a card.
      *
-     * @param mixed  $addressBookId
+     * @param mixed $addressBookId
      * @param string $cardUri
      *
      * @return bool

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2009	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2019		Alexandre Spangaro		<aspangaro@open-dsi.fr>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2009	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2019		Alexandre Spangaro		    <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,15 +20,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Accountancy\Classes\BookKeeping;
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 
 /**
  *      \file       htdocs/core/boxes/box_accountancy_suspense_account.php
  *      \ingroup    Accountancy
  *      \brief      Module to generated widget of suspense account
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
 
 
 /**
@@ -44,8 +42,8 @@ class box_accountancy_suspense_account extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -59,7 +57,7 @@ class box_accountancy_suspense_account extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @return void
+     * @return void
      */
     public function loadBox()
     {
@@ -111,10 +109,10 @@ class box_accountancy_suspense_account extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

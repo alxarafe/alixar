@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2022       Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Frederic France      <frederic.france@free.fr>
+/* Copyright (C) 2022       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\User\Classes\User;
+use OAuth\Common\Http\Uri\UriFactory;
 
 // This page is used as callback for token generation of an OAUTH request.
 // This page can also be used to make the process to login and get token as described here:
@@ -42,6 +45,7 @@ if (!defined('NOLOGIN') && $forlogin) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/OAuth/bootstrap.php';
+
 use OAuth\Common\Storage\DoliStorage;
 use OAuth\Common\Consumer\Credentials;
 
@@ -65,7 +69,7 @@ if (!GETPOSTISSET('keyforprovider') && !empty($_SESSION["oauthkeyforproviderbefo
 /**
  * Create a new instance of the URI class with the current URI, stripping the query string
  */
-$uriFactory = new \OAuth\Common\Http\Uri\UriFactory();
+$uriFactory = new UriFactory();
 //$currentUri = $uriFactory->createFromSuperGlobalArray($_SERVER);
 //$currentUri->setQuery('');
 $currentUri = $uriFactory->createFromAbsolute($urlwithroot . '/core/modules/oauth/google_oauthcallback.php');

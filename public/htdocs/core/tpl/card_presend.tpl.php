@@ -135,7 +135,6 @@ if ($action == 'presend') {
     print dol_get_fiche_head('', '', '', -1);
 
     // Create form for email
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
     $formmail = new FormMail($db);
 
     $formmail->param['langsmodels'] = (empty($newlang) ? $langs->defaultlang : $newlang);
@@ -269,7 +268,7 @@ if ($action == 'presend') {
             $emailsendersignature = '';
         } elseif (preg_match('/senderprofile_(\d+)/', $formmail->fromtype, $reg)) {
             $sql = "SELECT rowid, label, email, signature FROM " . $db->prefix() . "c_email_senderprofile";
-            $sql .= " WHERE rowid = " . ((int) $reg[1]);
+            $sql .= " WHERE rowid = " . ((int)$reg[1]);
             $resql = $db->query($sql);
             if ($resql) {
                 $obj = $db->fetch_object($resql);

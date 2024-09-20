@@ -32,11 +32,16 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\Tva;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Salaries\Classes\Salary;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'bills', 'categories', 'companies', 'salaries'));

@@ -112,11 +112,11 @@ if ($massaction == 'preupdateprice') {
     $valuefield .= '</div>';
 
     $formquestion[] = array(
-                'type' => 'other',
-                'name' => 'pricerate',
-                'label' => $langs->trans("Rate"),
-                'value' => $valuefield
-            );
+        'type' => 'other',
+        'name' => 'pricerate',
+        'label' => $langs->trans("Rate"),
+        'value' => $valuefield
+    );
 
     print $form->formconfirm($_SERVER["PHP_SELF"], $langs->trans("ConfirmUpdatePrice"), $langs->trans("ConfirmUpdatePriceQuestion", count($toselect)), "updateprice", $formquestion, 1, 0, 200, 500, 1);
 }
@@ -130,11 +130,11 @@ if ($massaction == 'presetsupervisor') {
     $valuefield .= '</div>';
 
     $formquestion[] = array(
-                'type' => 'other',
-                'name' => 'supervisortoset',
-                'label' => $langs->trans("Supervisor"),
-                'value' => $valuefield
-            );
+        'type' => 'other',
+        'name' => 'supervisortoset',
+        'label' => $langs->trans("Supervisor"),
+        'value' => $valuefield
+    );
 
     print $form->formconfirm($_SERVER["PHP_SELF"], $langs->trans("ConfirmSetSupervisor"), $langs->trans("ConfirmSetSupervisorQuestion", count($toselect)), "setsupervisor", $formquestion, 1, 0, 200, 500, 1);
 }
@@ -156,11 +156,11 @@ if ($massaction == 'preaffectuser') {
     $valuefieldtasksrole .= '</div>';
 
     $formquestion[] = array(
-                'type' => 'other',
-                'name' => 'usertoaffect',
-                'label' => $langs->trans("User"),
-                'value' => $valuefielduser
-            );
+        'type' => 'other',
+        'name' => 'usertoaffect',
+        'label' => $langs->trans("User"),
+        'value' => $valuefielduser
+    );
     $formquestion[] = array(
         'type' => 'other',
         'name' => 'projectrole',
@@ -214,7 +214,6 @@ if ($massaction == 'presend') {
     print dol_get_fiche_head(null, '', '');
 
     // Create mail form
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
     $formmail = new FormMail($db);
     $formmail->withform = -1;
     $formmail->fromtype = (GETPOST('fromtype') ? GETPOST('fromtype') : (getDolGlobalString('MAIN_MAIL_DEFAULT_FROMTYPE') ? $conf->global->MAIN_MAIL_DEFAULT_FROMTYPE : 'user'));
@@ -369,11 +368,10 @@ if ($massaction == 'edit_extrafields') {
         $outputShowOutputFields .= '</div>';
 
 
-
         $formquestion[] = array(
             'type' => 'other',
             'value' => $outputShowOutputFields
-            );
+        );
 
         print $form->formconfirm($_SERVER["PHP_SELF"], $langs->trans("ConfirmEditExtrafield"), $langs->trans("ConfirmEditExtrafieldQuestion", count($toselect)), "confirm_edit_value_extrafields", $formquestion, 1, 0, 200, 500, 1);
     } else {
@@ -391,9 +389,9 @@ if ($massaction == 'presetcommercial') {
     $formquestion = array();
     $userlist = $form->select_dolusers('', '', 0, null, 0, '', '', 0, 0, 0, 'AND u.statut = 1', 0, '', '', 0, 1);
     $formquestion[] = array('type' => 'other',
-            'name' => 'affectedcommercial',
-            'label' => $form->editfieldkey('AllocateCommercial', 'commercial_id', '', $object, 0),
-            'value' => $form->multiselectarray('commercial', $userlist, null, 0, 0, 'quatrevingtpercent widthcentpercentminusx', 0, 0, '', '', '', 1));
+        'name' => 'affectedcommercial',
+        'label' => $form->editfieldkey('AllocateCommercial', 'commercial_id', '', $object, 0),
+        'value' => $form->multiselectarray('commercial', $userlist, null, 0, 0, 'quatrevingtpercent widthcentpercentminusx', 0, 0, '', '', '', 1));
     print $form->formconfirm($_SERVER["PHP_SELF"], $langs->trans("ConfirmAllocateCommercial"), $langs->trans("ConfirmAllocateCommercialQuestion", count($toselect)), "affectcommercial", $formquestion, 1, 0, 200, 500, 1);
 }
 if ($massaction == 'unsetcommercial') {

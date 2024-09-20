@@ -34,6 +34,7 @@
 
 namespace Dolibarr\Code\Fourn\Classes;
 
+use Dolibarr\Code\Core\Classes\CommonOrderLine;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 use DoliDB;
 
@@ -42,9 +43,6 @@ use DoliDB;
  *  \ingroup    fournisseur,commande
  *  \brief      File of class to manage suppliers orders
  */
-
-if (isModEnabled('productbatch')) {
-}
 
 /**
  *  Class to manage line orders

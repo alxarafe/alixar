@@ -15,9 +15,9 @@ use PhpOffice\PhpSpreadsheet\Calculation\Exception as CalculationException;
  *    of simultaneous linear equations.  This will fail if isFullRank()
  *    returns false.
  *
- *    @author  Paul Meagher
+ * @author  Paul Meagher
  *
- *    @version 1.1
+ * @version 1.1
  */
 class QRDecomposition
 {

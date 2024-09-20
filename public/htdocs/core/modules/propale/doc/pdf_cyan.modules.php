@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2004-2014 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2008      Raphael Bertrand     <raphael.bertrand@resultic.fr>
- * Copyright (C) 2010-2015 Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2012      Christophe Battarel   <christophe.battarel@altairis.fr>
- * Copyright (C) 2012      Cedric Salvador      <csalvador@gpcsolutions.fr>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2017      Ferran Marcet        <fmarcet@2byte.es>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
+/* Copyright (C) 2004-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008       Raphael Bertrand            <raphael.bertrand@resultic.fr>
+ * Copyright (C) 2010-2015  Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2012       Cedric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2017       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -27,17 +27,24 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Propalmergepdfproduct;
+use Dolibarr\Code\Propale\Classes\ModelePDFPropales;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/core/modules/propale/doc/pdf_cyan.modules.php
  *  \ingroup    propale
  *  \brief      File of Class to generate PDF proposal with Cyan template
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/propale/modules_propale.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-
 
 /**
  *  Class to generate PDF proposal Cyan
@@ -84,7 +91,7 @@ class pdf_cyan extends ModelePDFPropales
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -142,21 +149,22 @@ class pdf_cyan extends ModelePDFPropales
         $this->atleastonediscount = 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build pdf onto disk
      *
-     *  @param      Propal      $object             Object to generate
-     *  @param      Translate   $outputlangs        Lang output object
-     *  @param      string      $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int         $hidedetails        Do not show line details
-     *  @param      int         $hidedesc           Do not show desc
-     *  @param      int         $hideref            Do not show ref
-     *  @return     int                             1=OK, 0=KO
+     * @param Propal $object Object to generate
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                             1=OK, 0=KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath = '', $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $db, $hookmanager, $nblines;
 
         dol_syslog("write_file outputlangs->defaultlang=" . (is_object($outputlangs) ? $outputlangs->defaultlang : 'null'));
@@ -754,7 +762,7 @@ class pdf_cyan extends ModelePDFPropales
                         $localtax2ligne -= ($localtax2ligne * $object->remise_percent) / 100;
                     }*/
 
-                    $vatrate = (string) $object->lines[$i]->tva_tx;
+                    $vatrate = (string)$object->lines[$i]->tva_tx;
 
                     // Retrieve type from database for backward compatibility with old records
                     if (
@@ -977,11 +985,11 @@ class pdf_cyan extends ModelePDFPropales
     /**
      *   Show miscellaneous information (payment mode, payment term, ...)
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     Propal      $object         Object to show
-     *   @param     int         $posy           Y
-     *   @param     Translate   $outputlangs    Langs object
-     *   @return    int                         Pos y
+     * @param TCPDF $pdf Object PDF
+     * @param Propal $object Object to show
+     * @param int $posy Y
+     * @param Translate $outputlangs Langs object
+     * @return    int                         Pos y
      */
     public function drawInfoTable(&$pdf, $object, $posy, $outputlangs)
     {
@@ -1162,13 +1170,13 @@ class pdf_cyan extends ModelePDFPropales
     /**
      *  Show total to pay
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Propal      $object         Object proposal
-     *  @param  int         $deja_regle     Amount already paid (in the currency of invoice)
-     *  @param  int         $posy           Position depart
-     *  @param  Translate   $outputlangs    Object langs
-     *  @param  Translate   $outputlangsbis Object lang for output bis
-     *  @return int                         Position pour suite
+     * @param TCPDF $pdf Object PDF
+     * @param Propal $object Object proposal
+     * @param int $deja_regle Amount already paid (in the currency of invoice)
+     * @param int $posy Position depart
+     * @param Translate $outputlangs Object langs
+     * @param Translate $outputlangsbis Object lang for output bis
+     * @return int                         Position pour suite
      */
     protected function drawTotalTable(&$pdf, $object, $deja_regle, $posy, $outputlangs, $outputlangsbis = null)
     {
@@ -1222,7 +1230,7 @@ class pdf_cyan extends ModelePDFPropales
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX1_OPTION) && $conf->global->FACTURE_LOCAL_TAX1_OPTION=='localtax1on')
                 //{
                 foreach ($this->localtax1 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('1', '3', '5'))) {
+                    if (in_array((string)$localtax_type, array('1', '3', '5'))) {
                         continue;
                     }
 
@@ -1255,7 +1263,7 @@ class pdf_cyan extends ModelePDFPropales
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX2_OPTION) && $conf->global->FACTURE_LOCAL_TAX2_OPTION=='localtax2on')
                 //{
                 foreach ($this->localtax2 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('1', '3', '5'))) {
+                    if (in_array((string)$localtax_type, array('1', '3', '5'))) {
                         continue;
                     }
 
@@ -1312,7 +1320,7 @@ class pdf_cyan extends ModelePDFPropales
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX1_OPTION) && $conf->global->FACTURE_LOCAL_TAX1_OPTION=='localtax1on')
                 //{
                 foreach ($this->localtax1 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('2', '4', '6'))) {
+                    if (in_array((string)$localtax_type, array('2', '4', '6'))) {
                         continue;
                     }
 
@@ -1346,7 +1354,7 @@ class pdf_cyan extends ModelePDFPropales
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX2_OPTION) && $conf->global->FACTURE_LOCAL_TAX2_OPTION=='localtax2on')
                 //{
                 foreach ($this->localtax2 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('2', '4', '6'))) {
+                    if (in_array((string)$localtax_type, array('2', '4', '6'))) {
                         continue;
                     }
 
@@ -1449,20 +1457,21 @@ class pdf_cyan extends ModelePDFPropales
         return ($tab2_top + ($tab2_hl * $index));
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     float|int   $tab_top        Top position of table
-     *   @param     float|int   $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y (not used)
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @param     string      $currency       Currency code
-     *   @param     Translate   $outputlangsbis Langs object bis
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param float|int $tab_top Top position of table
+     * @param float|int $tab_height Height of table (rectangle)
+     * @param int $nexY Y (not used)
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop 1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
+     * @param int $hidebottom Hide bottom bar of array
+     * @param string $currency Currency code
+     * @param Translate $outputlangsbis Langs object bis
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0, $currency = '', $outputlangsbis = null)
     {
@@ -1518,16 +1527,17 @@ class pdf_cyan extends ModelePDFPropales
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Propal      $object         Object to show
-     *  @param  int         $showaddress    0=no, 1=yes
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @param  Translate   $outputlangsbis Object lang for output bis
-     *  @return float|int                   Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param Propal $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @param Translate $outputlangsbis Object lang for output bis
+     * @return float|int                   Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs, $outputlangsbis = null)
     {
@@ -1809,15 +1819,16 @@ class pdf_cyan extends ModelePDFPropales
         return $top_shift;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *      Show footer of page. Need this->emetteur object
      *
-     *      @param  TCPDF       $pdf                PDF
-     *      @param  Propal      $object             Object to show
-     *      @param  Translate   $outputlangs        Object lang for output
-     *      @param  int         $hidefreetext       1=Hide free text
-     *      @return int                             Return height of bottom margin including footer text
+     * @param TCPDF $pdf PDF
+     * @param Propal $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return int                             Return height of bottom margin including footer text
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {
@@ -1828,11 +1839,11 @@ class pdf_cyan extends ModelePDFPropales
     /**
      *  Show area for the customer to sign
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Propal      $object         Object proposal
-     *  @param  int         $posy           Position depart
-     *  @param  Translate   $outputlangs    Object langs
-     *  @return int                         Position pour suite
+     * @param TCPDF $pdf Object PDF
+     * @param Propal $object Object proposal
+     * @param int $posy Position depart
+     * @param Translate $outputlangs Object langs
+     * @return int                         Position pour suite
      */
     protected function drawSignatureArea(&$pdf, $object, $posy, $outputlangs)
     {
@@ -1865,12 +1876,12 @@ class pdf_cyan extends ModelePDFPropales
     /**
      *      Define Array Column Field
      *
-     *      @param  Propal          $object         object proposal
-     *      @param  Translate       $outputlangs    langs
-     *      @param  int             $hidedetails    Do not show line details
-     *      @param  int             $hidedesc       Do not show desc
-     *      @param  int             $hideref        Do not show ref
-     *      @return void
+     * @param Propal $object object proposal
+     * @param Translate $outputlangs langs
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return void
      */
     public function defineColumnField($object, $outputlangs, $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {

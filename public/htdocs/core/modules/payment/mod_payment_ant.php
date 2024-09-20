@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2015      Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2015       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,14 +18,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Payment\Classes\ModeleNumRefPayments;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  * \file       htdocs/core/modules/payment/mod_payment_ant.php
  * \ingroup    payment
  * \brief      File containing class for numbering module Ant
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/payment/modules_payment.php';
-
 
 /**
  *  Class to manage customer payment numbering rules Ant
@@ -59,8 +61,8 @@ class mod_payment_ant extends ModeleNumRefPayments
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -100,7 +102,7 @@ class mod_payment_ant extends ModeleNumRefPayments
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -120,9 +122,9 @@ class mod_payment_ant extends ModeleNumRefPayments
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc     Object thirdparty
-     *  @param  Object      $object     Object we need next value for
-     *  @return string|0                Value if OK, 0 if KO
+     * @param Societe $objsoc Object thirdparty
+     * @param Object $object Object we need next value for
+     * @return string|0                Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $object)
     {
@@ -140,21 +142,21 @@ class mod_payment_ant extends ModeleNumRefPayments
 
         $numFinal = get_next_value($db, $mask, 'paiement', 'ref', '', $objsoc, $object->datepaye);
 
-        return  $numFinal;
+        return $numFinal;
     }
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc     Object third party
-     *  @param  string      $objforref  Object for number to search
-     *  @return string|0                Next free value, 0 if KO
+     * @param Societe $objsoc Object third party
+     * @param string $objforref Object for number to search
+     * @return string|0                Next free value, 0 if KO
      */
     public function commande_get_num($objsoc, $objforref)
     {
-		// phpcs:enable
+        // phpcs:enable
         return $this->getNextValue($objsoc, $objforref);
     }
 }

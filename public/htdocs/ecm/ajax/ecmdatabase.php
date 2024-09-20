@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2012   Regis Houssin   <regis.houssin@inodbox.com>
+/* Copyright (C) 2012       Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,8 @@
  *       \file       htdocs/ecm/ajax/ecmdatabase.php
  *       \brief      File to build/refresh the ecm database for directories
  */
+
+use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1'); // Disables token renewal
@@ -56,7 +58,6 @@ if (isset($action) && !empty($action)) {
     $error = 0;
 
     if ($action == 'build' && !empty($element)) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmdirectory.class.php';
 
         $ecmdirstatic = new EcmDirectory($db);
         $ecmdirtmp = new EcmDirectory($db);
@@ -126,10 +127,10 @@ if (isset($action) && !empty($action)) {
                 }
 
                 if ($fk_parent >= 0) {
-                    $ecmdirtmp->ref                = 'NOTUSEDYET';
-                    $ecmdirtmp->label              = dol_basename($dirdesc['fullname']);
-                    $ecmdirtmp->description        = '';
-                    $ecmdirtmp->fk_parent          = $fk_parent;
+                    $ecmdirtmp->ref = 'NOTUSEDYET';
+                    $ecmdirtmp->label = dol_basename($dirdesc['fullname']);
+                    $ecmdirtmp->description = '';
+                    $ecmdirtmp->fk_parent = $fk_parent;
 
                     $txt = "We create directory " . $ecmdirtmp->label . " with parent " . $fk_parent;
                     dol_syslog($txt);
@@ -137,10 +138,10 @@ if (isset($action) && !empty($action)) {
                     $id = $ecmdirtmp->create($user);
                     if ($id > 0) {
                         $newdirsql = array('id' => $id,
-                                'id_mere' => $ecmdirtmp->fk_parent,
-                                'label' => $ecmdirtmp->label,
-                                'description' => $ecmdirtmp->description,
-                                'fullrelativename' => $relativepathmissing);
+                            'id_mere' => $ecmdirtmp->fk_parent,
+                            'label' => $ecmdirtmp->label,
+                            'description' => $ecmdirtmp->description,
+                            'fullrelativename' => $relativepathmissing);
                         $sqltree[] = $newdirsql; // We complete fulltree for following loops
                         //var_dump($sqltree);
                         $adirwascreated = 1;

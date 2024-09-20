@@ -1,10 +1,11 @@
 <?php
 
-/* Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +21,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Hrm\Classes\Evaluation;
+
 /**
  * \file    lib/hrm_evaluation.lib.php
  * \ingroup hrm
@@ -29,7 +33,7 @@
 /**
  * Prepare array of tabs for Evaluation
  *
- * @param   Evaluation  $object     Evaluation
+ * @param Evaluation $object Evaluation
  * @return  array<array<int,string>>    Array of tabs
  */
 function evaluationPrepareHead($object)
@@ -130,7 +134,7 @@ function GetLegendSkills()
 }
 
 /**
- * @param  object $obj Object needed to be represented
+ * @param object $obj Object needed to be represented
  * @return string
  */
 function getRankOrderResults($obj)
@@ -165,7 +169,7 @@ function getRankOrderResults($obj)
 /**
  * Grouped rows with same ref in array
  *
- * @param   object[]  $objects   all rows retrieve from sql query
+ * @param object[] $objects all rows retrieve from sql query
  * @return  array<object>|int           Object by groiup, -1 if error (empty or bad argument)
  */
 function getGroupedEval($objects)

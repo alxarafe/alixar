@@ -1,21 +1,21 @@
 <?php
 
-/* Copyright (C) 2002-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2013	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2013-2019	Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2013		Florian Henry			<florian.henry@open-concept.pro>
- * Copyright (C) 2013		Cédric Salvador			<csalvador@gpcsolutions.fr>
- * Copyright (C) 2015		Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2015-2007	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2015		Abbes Bahfir			<bafbes@gmail.com>
- * Copyright (C) 2015-2016	Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2017		Josep Lluís Amador		<joseplluis@lliuretic.cat>
- * Copyright (C) 2018-2022	Charlene Benke			<charlene@patas-monkey.com>
- * Copyright (C) 2018-2024  Frédéric France			<frederic.france@free.fr>
- * Copyright (C) 2019-2023	Alexandre Spangaro		<aspangaro@easya.solutions>
+/* Copyright (C) 2002-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2013	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2019	Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2013		Florian Henry			    <florian.henry@open-concept.pro>
+ * Copyright (C) 2013		Cédric Salvador			    <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015		Marcos García			    <marcosgdf@gmail.com>
+ * Copyright (C) 2015-2007	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2015		Abbes Bahfir			    <bafbes@gmail.com>
+ * Copyright (C) 2015-2016	Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2017		Josep Lluís Amador		    <joseplluis@lliuretic.cat>
+ * Copyright (C) 2018-2022	Charlene Benke			    <charlene@patas-monkey.com>
+ * Copyright (C) 2018-2024  Frédéric France			    <frederic.france@free.fr>
+ * Copyright (C) 2019-2023	Alexandre Spangaro		    <aspangaro@easya.solutions>
  * Copyright (C) 2023		Nick Fragoulis
- * Copyright (C) 2023		Joachim Kueter		    <git-jk@bloxera.com>
+ * Copyright (C) 2023		Joachim Kueter		        <git-jk@bloxera.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -34,6 +34,19 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\Fournisseur;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *       \file       htdocs/fourn/facture/list.php
@@ -45,7 +58,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'bills', 'companies', 'projects'));
@@ -366,7 +378,7 @@ if (empty($reshook)) {
                     $rsql .= " , u.rowid as user_id, u.lastname, u.firstname, u.login";
                     $rsql .= " FROM " . MAIN_DB_PREFIX . "prelevement_demande as pfd";
                     $rsql .= " , " . MAIN_DB_PREFIX . "user as u";
-                    $rsql .= " WHERE fk_facture_fourn = " . ((int) $objecttmp->id);
+                    $rsql .= " WHERE fk_facture_fourn = " . ((int)$objecttmp->id);
                     $rsql .= " AND pfd.fk_user_demande = u.rowid";
                     $rsql .= " AND pfd.traite = 0";
                     $rsql .= " ORDER BY pfd.date_demande DESC";
@@ -409,7 +421,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View
@@ -501,7 +512,7 @@ $sql .= $hookmanager->resPrint;
 $sql .= ' WHERE f.fk_soc = s.rowid';
 $sql .= ' AND f.entity IN (' . getEntity('facture_fourn') . ')';
 if ($socid > 0) {
-    $sql .= ' AND s.rowid = ' . ((int) $socid);
+    $sql .= ' AND s.rowid = ' . ((int)$socid);
 }
 if ($search_ref) {
     if (is_numeric($search_ref)) {
@@ -615,13 +626,13 @@ if ($search_login) {
     $sql .= natural_search(array('u.login', 'u.lastname', 'u.firstname'), $search_login);
 }
 if ($search_status != '' && $search_status >= 0) {
-    $sql .= " AND f.fk_statut = " . ((int) $search_status);
+    $sql .= " AND f.fk_statut = " . ((int)$search_status);
 }
 if ($search_paymentmode > 0) {
-    $sql .= " AND f.fk_mode_reglement = " . ((int) $search_paymentmode);
+    $sql .= " AND f.fk_mode_reglement = " . ((int)$search_paymentmode);
 }
 if ($search_paymentcond > 0) {
-    $sql .= " AND f.fk_cond_reglement = " . ((int) $search_paymentcond);
+    $sql .= " AND f.fk_cond_reglement = " . ((int)$search_paymentcond);
 }
 if ($search_date_start) {
     $sql .= " AND f.datef >= '" . $db->idate($search_date_start) . "'";
@@ -646,7 +657,7 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 $searchCategorySupplierList = $search_categ_sup ? array($search_categ_sup) : array();
@@ -660,9 +671,9 @@ if (!empty($searchCategorySupplierList)) {
             $searchCategorySupplierSqlList[] = "NOT EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_fournisseur as ck WHERE s.rowid = ck.fk_soc)";
         } elseif (intval($searchCategorySupplier) > 0) {
             if ($searchCategorySupplierOperator == 0) {
-                $searchCategorySupplierSqlList[] = " EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_fournisseur as ck WHERE s.rowid = ck.fk_soc AND ck.fk_categorie = " . ((int) $searchCategorySupplier) . ")";
+                $searchCategorySupplierSqlList[] = " EXISTS (SELECT ck.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_fournisseur as ck WHERE s.rowid = ck.fk_soc AND ck.fk_categorie = " . ((int)$searchCategorySupplier) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategorySupplier);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategorySupplier);
             }
         }
     }
@@ -690,9 +701,9 @@ if (!empty($searchCategoryProductList)) {
             $searchCategoryProductSqlList[] = "NOT EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "facture_fourn_det as fd WHERE fd.fk_facture_fourn = f.rowid AND fd.fk_product = ck.fk_product)";
         } elseif (intval($searchCategoryProduct) > 0) {
             if ($searchCategoryProductOperator == 0) {
-                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "facture_fourn_det as fd WHERE fd.fk_facture_fourn = f.rowid AND fd.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int) $searchCategoryProduct) . ")";
+                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "facture_fourn_det as fd WHERE fd.fk_facture_fourn = f.rowid AND fd.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int)$searchCategoryProduct) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryProduct);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryProduct);
             }
         }
     }
@@ -721,7 +732,7 @@ if ($search_sale > 0) {
     $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = ".((int) $search_sale);
 }*/
 if ($search_user > 0) {
-    $sql .= " AND ec.fk_c_type_contact = tc.rowid AND tc.element='invoice_supplier' AND tc.source='internal' AND ec.element_id = f.rowid AND ec.fk_socpeople = " . ((int) $search_user);
+    $sql .= " AND ec.fk_c_type_contact = tc.rowid AND tc.element='invoice_supplier' AND tc.source='internal' AND ec.element_id = f.rowid AND ec.fk_socpeople = " . ((int)$search_user);
 }
 // Add where from extra fields
 include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_list_search_sql.tpl.php';
@@ -832,7 +843,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -847,22 +858,22 @@ if ($search_date_end) {
     $param .= buildParamDate('search_date_end', null, '', 'tzserver');
 }
 if ($search_datelimit_startday) {
-    $param .= '&search_datelimit_startday=' . urlencode((string) ($search_datelimit_startday));
+    $param .= '&search_datelimit_startday=' . urlencode((string)($search_datelimit_startday));
 }
 if ($search_datelimit_startmonth) {
-    $param .= '&search_datelimit_startmonth=' . urlencode((string) ($search_datelimit_startmonth));
+    $param .= '&search_datelimit_startmonth=' . urlencode((string)($search_datelimit_startmonth));
 }
 if ($search_datelimit_startyear) {
-    $param .= '&search_datelimit_startyear=' . urlencode((string) ($search_datelimit_startyear));
+    $param .= '&search_datelimit_startyear=' . urlencode((string)($search_datelimit_startyear));
 }
 if ($search_datelimit_endday) {
-    $param .= '&search_datelimit_endday=' . urlencode((string) ($search_datelimit_endday));
+    $param .= '&search_datelimit_endday=' . urlencode((string)($search_datelimit_endday));
 }
 if ($search_datelimit_endmonth) {
-    $param .= '&search_datelimit_endmonth=' . urlencode((string) ($search_datelimit_endmonth));
+    $param .= '&search_datelimit_endmonth=' . urlencode((string)($search_datelimit_endmonth));
 }
 if ($search_datelimit_endyear) {
-    $param .= '&search_datelimit_endyear=' . urlencode((string) ($search_datelimit_endyear));
+    $param .= '&search_datelimit_endyear=' . urlencode((string)($search_datelimit_endyear));
 }
 if ($search_ref) {
     $param .= '&search_ref=' . urlencode($search_ref);
@@ -928,13 +939,13 @@ if ($search_status >= 0) {
     $param .= "&search_status=" . urlencode($search_status);
 }
 if ($search_paymentmode) {
-    $param .= '&search_paymentmode=' . urlencode((string) ($search_paymentmode));
+    $param .= '&search_paymentmode=' . urlencode((string)($search_paymentmode));
 }
 if ($search_paymentcond) {
-    $param .= '&search_paymentcond=' . urlencode((string) ($search_paymentcond));
+    $param .= '&search_paymentcond=' . urlencode((string)($search_paymentcond));
 }
 if ($show_files) {
-    $param .= '&show_files=' . urlencode((string) ($show_files));
+    $param .= '&show_files=' . urlencode((string)($show_files));
 }
 if ($option) {
     $param .= "&search_option=" . urlencode($option);
@@ -975,7 +986,7 @@ $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
 $url = constant('BASE_URL') . '/fourn/facture/card.php?action=create';
 if (!empty($socid)) {
-    $url .= '&socid=' . urlencode((string) ($socid));
+    $url .= '&socid=' . urlencode((string)($socid));
 }
 
 $i = 0;
@@ -1037,7 +1048,6 @@ if ($user->hasRight("user", "user", "lire")) {
 }
 // If the user can view prospects other than his'
 if (isModEnabled('category') && $user->hasRight('categorie', 'lire') && ($user->hasRight('produit', 'lire') || $user->hasRight('service', 'lire'))) {
-    include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('IncludingProductWithTag');
     $cate_arbo = $form->select_all_categories(Categorie::TYPE_PRODUCT, null, 'parent', null, null, 1);

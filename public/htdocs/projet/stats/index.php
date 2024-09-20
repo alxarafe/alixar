@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2014-2015 Florian HENRY       <florian.henry@open-concept.pro>
- * Copyright (C) 2015-2021 Laurent Destailleur <ldestailleur@users.sourceforge.net>
+/* Copyright (C) 2014-2015  Florian HENRY               <florian.henry@open-concept.pro>
+ * Copyright (C) 2015-2021  Laurent Destailleur         <ldestailleur@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Projet\Classes\ProjectStats;
+
 /**
  *       \file       htdocs/projet/stats/index.php
  *       \ingroup    project
@@ -27,7 +32,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/projectstats.class.php';
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');
 $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height');
@@ -54,7 +58,6 @@ if (!$user->hasRight('projet', 'lire')) {
     accessforbidden();
 }
 
-
 /*
  * View
  */
@@ -73,7 +76,6 @@ $dir = $conf->project->dir_output . '/temp';
 print load_fiche_titre($title, '', 'project');
 
 dol_mkdir($dir);
-
 
 $stats_project = new ProjectStats($db);
 if (!empty($userid) && $userid != -1) {

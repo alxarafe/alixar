@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville  <rodolphe@quiedeville.org>
- * Copyright (C) 2005      Marc Barilley / Ocebo <marc@ocebo.com>
- * Copyright (C) 2006-2010 Laurent Destailleur   <eldy@users.sourceforge.net>
- * Copyright (C) 2014      Marcos García         <marcosgdf@gmail.com>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2006-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\SupplierPayment\Classes\ModelePDFSuppliersPayments;
+
 /**
  *    \file       htdocs/fourn/paiement/card.php
  *    \ingroup    invoice, fournisseur
@@ -32,15 +40,13 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 
-
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'bills', 'companies', 'suppliers'));
 
-
 // Get Parameters
-$id         = GETPOSTINT('id');
-$action     = GETPOST('action', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
+$id = GETPOSTINT('id');
+$action = GETPOST('action', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 
 $socid = 0;
 
@@ -103,10 +109,10 @@ if (
     $action == 'confirm_validate' &&
     $confirm == 'yes' &&
     ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') &&
-    ($user->hasRight("fournisseur", "facture", "creer") ||
-    $user->hasRight("supplier_invoice", "creer"))) ||
-    (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') &&
-    $user->hasRight("fournisseur", "supplier_invoice_advance", "validate")))
+            ($user->hasRight("fournisseur", "facture", "creer") ||
+                $user->hasRight("supplier_invoice", "creer"))) ||
+        (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') &&
+            $user->hasRight("fournisseur", "supplier_invoice_advance", "validate")))
 ) {
     $db->begin();
 
@@ -280,7 +286,7 @@ if ($result > 0) {
     $sql .= ' pf.amount, s.nom as name, s.rowid as socid';
     $sql .= ' FROM ' . MAIN_DB_PREFIX . 'paiementfourn_facturefourn as pf,' . MAIN_DB_PREFIX . 'facture_fourn as f,' . MAIN_DB_PREFIX . 'societe as s';
     $sql .= ' WHERE pf.fk_facturefourn = f.rowid AND f.fk_soc = s.rowid';
-    $sql .= ' AND pf.fk_paiementfourn = ' . ((int) $object->id);
+    $sql .= ' AND pf.fk_paiementfourn = ' . ((int)$object->id);
     $resql = $db->query($sql);
     if ($resql) {
         $num = $db->num_rows($resql);
@@ -395,7 +401,6 @@ if ($result > 0) {
         print '<div class="fichecenter"><div class="fichehalfleft">';
 
         // Generated documents
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/supplier_payment/modules_supplier_payment.php';
         $modellist = ModelePDFSuppliersPayments::liste_modeles($db);
         if (is_array($modellist)) {
             $ref = dol_sanitizeFileName($object->ref);

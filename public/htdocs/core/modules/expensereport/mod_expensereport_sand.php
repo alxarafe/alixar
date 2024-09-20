@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017 Maxime Kohlhaas <support@atm-consulting.fr>
+/* Copyright (C) 2017       Maxime Kohlhaas             <support@atm-consulting.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,14 +19,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\ExpenseReport\Classes\ModeleNumRefExpenseReport;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  * \file       htdocs/core/modules/expensereport/mod_expensereport_sand.php
  * \ingroup    expensereport
  * \brief      Fichier contenant la class du modele de numerotation de reference de note de frais Sand
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expensereport/modules_expensereport.php';
-
 
 /**
  *  Class to manage expense report numbering rules Sand
@@ -60,8 +63,8 @@ class mod_expensereport_sand extends ModeleNumRefExpenseReport
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -102,7 +105,7 @@ class mod_expensereport_sand extends ModeleNumRefExpenseReport
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -123,8 +126,8 @@ class mod_expensereport_sand extends ModeleNumRefExpenseReport
     /**
      *  Return next free value
      *
-     *  @param  ExpenseReport   $object     Object we need next value for
-     *  @return string|0                    Next value if OK, 0 if KO
+     * @param ExpenseReport $object Object we need next value for
+     * @return string|0                    Next value if OK, 0 if KO
      */
     public function getNextValue($object)
     {

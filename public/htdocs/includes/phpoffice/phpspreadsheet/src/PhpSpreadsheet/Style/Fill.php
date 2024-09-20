@@ -139,9 +139,9 @@ class Fill extends Supervisor
      *
      * @param array $pStyles Array containing style information
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function applyFromArray(array $pStyles)
     {
@@ -250,9 +250,9 @@ class Fill extends Supervisor
      *
      * @param Color $pValue
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setStartColor(Color $pValue)
     {
@@ -284,9 +284,9 @@ class Fill extends Supervisor
      *
      * @param Color $pValue
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setEndColor(Color $pValue)
     {

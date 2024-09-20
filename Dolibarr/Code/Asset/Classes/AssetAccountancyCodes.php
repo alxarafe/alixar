@@ -25,7 +25,9 @@ namespace Dolibarr\Code\Asset\Classes;
  * \brief       This file is a class file for AssetAccountancyCodes
  */
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * Class for AssetAccountancyCodes
@@ -245,7 +247,6 @@ class AssetAccountancyCodes extends CommonObject
 
         if (!$error && $asset_id > 0) {
             // Calculation of depreciation lines (reversal and future)
-            require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/asset.class.php';
             $asset = new Asset($this->db);
             $result = $asset->fetch($asset_id);
             if ($result > 0) {

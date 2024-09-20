@@ -26,20 +26,21 @@ class DeviantArt extends AbstractService
      * @link https://www.deviantart.com/developers/authentication
      * @link https://www.deviantart.com/developers/http/v1/20150217
      */
-    const SCOPE_FEED                       = 'feed';
-    const SCOPE_BROWSE                     = 'browse';
-    const SCOPE_COMMENT                    = 'comment.post';
-    const SCOPE_STASH                      = 'stash';
-    const SCOPE_USER                       = 'user';
-    const SCOPE_USERMANAGE                 = 'user.manage';
+    const SCOPE_FEED = 'feed';
+    const SCOPE_BROWSE = 'browse';
+    const SCOPE_COMMENT = 'comment.post';
+    const SCOPE_STASH = 'stash';
+    const SCOPE_USER = 'user';
+    const SCOPE_USERMANAGE = 'user.manage';
 
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage, $scopes, $baseApiUri);
 
         if (null === $baseApiUri) {

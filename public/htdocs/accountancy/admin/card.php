@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2013-2014  Olivier Geffroy     <jeff@jeffinfo.com>
- * Copyright (C) 2013-2024  Alexandre Spangaro  <aspangaro@easya.solutions>
- * Copyright (C) 2014       Florian Henry       <florian.henry@open-concept.pro>
+/* Copyright (C) 2013-2014  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2014       Florian Henry               <florian.henry@open-concept.pro>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,8 @@
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountancySystem;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
 
 /**
  *  \file       htdocs/accountancy/admin/card.php
@@ -32,7 +34,6 @@ use Dolibarr\Code\Accountancy\Classes\AccountancySystem;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 
 $error = 0;
 

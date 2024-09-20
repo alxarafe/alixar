@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2017       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2017		Olivier Geffroy			<jeff@jeffinfo.com>
- * Copyright (C) 2017		Saasprov				<saasprov@gmail.com>
- * Copyright (C) 2018-2022  Thibault FOUCART		<support@ptibogxiv.net>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2017       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2017		Olivier Geffroy			    <jeff@jeffinfo.com>
+ * Copyright (C) 2017		Saasprov				    <saasprov@gmail.com>
+ * Copyright (C) 2018-2022  Thibault FOUCART		    <support@ptibogxiv.net>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Stripe\Classes\Stripe;
+
 /**
  * \file       htdocs/stripe/admin/stripe.php
  * \ingroup    stripe
@@ -32,8 +37,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/lib/stripe.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 
 $servicename = 'Stripe';
 
@@ -169,7 +172,6 @@ if ($action == "setlive") {
     }
 }
 //TODO: import script for stripe account saving in alone or connect mode for stripe.class.php
-
 
 /*
  *	View
@@ -622,7 +624,6 @@ print info_admin($langs->trans("ExampleOfTestCreditCard", '4242424242424242 (no 
 if (getDolGlobalString('STRIPE_SEPA_DIRECT_DEBIT')) {
     print info_admin($langs->trans("ExampleOfTestBankAcountForSEPA", 'AT611904300234573201 (pending->succeed) or AT861904300235473202 (pending->failed)'));
 }
-
 
 
 if (!empty($conf->use_javascript_ajax)) {

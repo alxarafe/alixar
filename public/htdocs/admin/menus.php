@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
 
 /**
  *      \file       htdocs/admin/menus.php
@@ -42,7 +45,7 @@ if (!$user->admin) {
 
 $dirstandard = array();
 $dirsmartphone = array();
-$dirmenus = array_merge(array("/core/menus/"), (array) $conf->modules_parts['menus']);
+$dirmenus = array_merge(array("/core/menus/"), (array)$conf->modules_parts['menus']);
 foreach ($dirmenus as $dirmenu) {
     $dirstandard[] = $dirmenu . 'standard';
     $dirsmartphone[] = $dirmenu . 'smartphone';
@@ -86,7 +89,7 @@ if ($action == 'update' && !$cancel) {
     // Initialize menu handlers
     foreach ($listofmenuhandler as $key => $val) {
         // Load sql init_menu_handler.sql file
-        $dirmenus = array_merge(array("/core/menus/"), (array) $conf->modules_parts['menus']);
+        $dirmenus = array_merge(array("/core/menus/"), (array)$conf->modules_parts['menus']);
         foreach ($dirmenus as $dirmenu) {
             $file = 'init_menu_' . $key . '.sql';
             $fullpath = dol_buildpath($dirmenu . $file);

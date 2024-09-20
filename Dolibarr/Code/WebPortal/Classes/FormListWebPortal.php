@@ -32,7 +32,6 @@ use DoliDB;
  */
 
 use Dolibarr\Code\Societe\Classes\Societe;
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/webportal/class/html.formwebportal.class.php';
 
 /**

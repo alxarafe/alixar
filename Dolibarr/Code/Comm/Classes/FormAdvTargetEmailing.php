@@ -21,6 +21,9 @@
 
 namespace Dolibarr\Code\Comm\Classes;
 
+use Dolibarr\Code\Core\Classes\Form;
+use DoliDB;
+
 /**
  * \file    comm/mailing/class/html.formadvtargetemailing.class.php
  * \ingroup mailing

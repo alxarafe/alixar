@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2010-2011  Regis Houssin   <regis.houssin@inodbox.com>
- * Copyright (C) 2013		Juanjo Menent   <jmenent@2byte.es>
- * Copyright (C) 2014       Marcos García   <marcosgdf@gmail.com>
- * Copyright (C) 2013-2020	Charlene BENKE	<charlie@patas-monkey.com>
+/* Copyright (C) 2010-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013		Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2013-2020	Charlene BENKE	            <charlie@patas-monkey.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Mrp\Classes\Mo;
 
 // Protection to avoid direct call of template
 if (empty($conf) || !is_object($conf)) {
@@ -73,7 +75,7 @@ if ($object->element == 'mo') {
 
             // we want to make the link via element_element for delete action
             $sql = " Select rowid from " . MAIN_DB_PREFIX . "element_element";
-            $sql .= " WHERE  fk_source = " . (int) $object->id . " and fk_target = '" . dol_escape_htmltag($key) . "'";
+            $sql .= " WHERE  fk_source = " . (int)$object->id . " and fk_target = '" . dol_escape_htmltag($key) . "'";
 
             $resql = $db->query($sql);
             $k = 0;

@@ -23,6 +23,12 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\PropaleStats;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormPropal;
 
 /**
  *      \file       htdocs/comm/propal/stats/index.php
@@ -32,7 +38,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formpropal.class.php';
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');
 $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height');
@@ -73,7 +78,6 @@ if ($mode == 'customer' && !$user->hasRight('propal', 'lire')) {
 if ($mode == 'supplier' && !$user->hasRight('supplier_proposal', 'lire')) {
     accessforbidden();
 }
-
 
 /*
  * View

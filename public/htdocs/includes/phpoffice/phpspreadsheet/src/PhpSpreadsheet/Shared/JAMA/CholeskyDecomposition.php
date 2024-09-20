@@ -14,10 +14,10 @@ use PhpOffice\PhpSpreadsheet\Calculation\Exception as CalculationException;
  *    returns a partial decomposition and sets an internal flag that may
  *    be queried by the isSPD() method.
  *
- *    @author Paul Meagher
- *    @author Michael Bommarito
+ * @author Paul Meagher
+ * @author Michael Bommarito
  *
- *    @version 1.2
+ * @version 1.2
  */
 class CholeskyDecomposition
 {

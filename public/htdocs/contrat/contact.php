@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005       Patrick Rouillon    <patrick@rouillon.net>
- * Copyright (C) 2005-2009	Destailleur Laurent	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2017      Ferran Marcet       	 <fmarcet@2byte.es>
- * Copyright (C) 2023       Christian Foellmann <christian@foellmann.de>
+/* Copyright (C) 2005       Patrick Rouillon            <patrick@rouillon.net>
+ * Copyright (C) 2005-2009	Destailleur Laurent	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2017       Ferran Marcet       	    <fmarcet@2byte.es>
+ * Copyright (C) 2023       Christian Foellmann         <christian@foellmann.de>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/contrat/contact.php
  *      \ingroup    contrat
@@ -32,6 +35,9 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contract.lib.php';
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
 
 if (isModEnabled('project')) {
 }
@@ -55,10 +61,9 @@ $object = new Contrat($db);
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $hookmanager->initHooks(array('contractcontactcard', 'globalcard'));
 
-$permissiontoadd   = $user->hasRight('contrat', 'creer');     //  Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
+$permissiontoadd = $user->hasRight('contrat', 'creer');     //  Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
 
 $result = restrictedArea($user, 'contrat', $object->id);
-
 
 /*
  * Actions
@@ -77,8 +82,8 @@ if (empty($reshook)) {
 
         if ($result > 0 && $id > 0) {
             $contactid = (GETPOST('userid') ? GETPOST('userid') : GETPOST('contactid'));
-            $typeid    = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
-            $result    = $object->add_contact($contactid, $typeid, GETPOST("source", 'aZ09'));
+            $typeid = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
+            $result = $object->add_contact($contactid, $typeid, GETPOST("source", 'aZ09'));
         }
 
         if ($result >= 0) {
@@ -193,9 +198,7 @@ if ($id > 0 || !empty($ref)) {
         }
         $morehtmlref .= '</div>';
 
-
         dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'none', $morehtmlref);
-
 
         print '<div class="fichecenter">';
         print '<div class="underbanner clearboth"></div>';

@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@capnetworks.com>
- * Copyright (C) 2013      Charles-Fr BENKE     <charles.fr@benke.fr>
- * Copyright (C) 2015      Jean-François Ferry	<jfefe@aternatik.fr>
- * Copyright (C) 2016      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2018      Andreu Bisquerra		<jove@bisquerra.com>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@capnetworks.com>
+ * Copyright (C) 2013       Charles-Fr BENKE            <charles.fr@benke.fr>
+ * Copyright (C) 2015       Jean-François Ferry	        <jfefe@aternatik.fr>
+ * Copyright (C) 2016       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018       Andreu Bisquerra		    <jove@bisquerra.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,6 +24,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\CashControl;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/compta/cashcontrol/cashcontrol_card.php
  *      \ingroup    cashdesk|takepos
@@ -33,7 +37,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/cashcontrol/class/cashcontrol.class.php';
 
 $langs->loadLangs(array("install", "cashdesk", "admin", "banks"));
 
@@ -257,7 +260,6 @@ if ($action == 'confirm_delete' && !empty($permissiontodelete)) {
     }
 }
 
-
 /*
  * View
  */
@@ -311,7 +313,7 @@ if ($action == "create" || $action == "start" || $action == 'close') {
 
             if ($bankid > 0) {
                 $sql = "SELECT SUM(amount) as total FROM " . MAIN_DB_PREFIX . "bank";
-                $sql .= " WHERE fk_account = " . ((int) $bankid);
+                $sql .= " WHERE fk_account = " . ((int)$bankid);
                 if ($syear && !$smonth) {
                     $sql .= " AND dateo < '" . $db->idate(dol_get_first_day($syear, 1)) . "'";
                 } elseif ($syear && $smonth && !$sday) {
@@ -618,7 +620,6 @@ if (empty($action) || $action == "view" || $action == "close") {
         $morehtmlref = '<div class="refidno">';
         $morehtmlref .= '</div>';
 
-
         dol_banner_tab($object, 'id', $linkback, 1, 'rowid', 'rowid', $morehtmlref);
 
         print '<div class="fichecenter">';
@@ -682,17 +683,17 @@ if (empty($action) || $action == "view" || $action == "close") {
             print '<div class="tabsAction">';
 
             // Print ticket
-            print '<div class="inline-block divButAction"><a target="_blank" rel="noopener noreferrer" class="butAction" href="report.php?id=' . ((int) $id) . '">' . $langs->trans('PrintReport') . '</a></div>';
+            print '<div class="inline-block divButAction"><a target="_blank" rel="noopener noreferrer" class="butAction" href="report.php?id=' . ((int)$id) . '">' . $langs->trans('PrintReport') . '</a></div>';
 
             // Print ticket (no detail)
-            print '<div class="inline-block divButAction"><a target="_blank" rel="noopener noreferrer" class="butAction" href="report.php?id=' . ((int) $id) . '&summaryonly=1">' . $langs->trans('PrintReportNoDetail') . '</a></div>';
+            print '<div class="inline-block divButAction"><a target="_blank" rel="noopener noreferrer" class="butAction" href="report.php?id=' . ((int)$id) . '&summaryonly=1">' . $langs->trans('PrintReportNoDetail') . '</a></div>';
 
             if ($object->status == CashControl::STATUS_DRAFT) {
-                print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . ((int) $id) . '&action=close&token=' . newToken() . '&contextpage=' . $contextpage . '">' . $langs->trans('Close') . '</a></div>';
+                print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . ((int)$id) . '&action=close&token=' . newToken() . '&contextpage=' . $contextpage . '">' . $langs->trans('Close') . '</a></div>';
 
-                print '<div class="inline-block divButAction"><a class="butActionDelete" href="' . $_SERVER["PHP_SELF"] . '?id=' . ((int) $id) . '&action=confirm_delete&token=' . newToken() . '">' . $langs->trans('Delete') . '</a></div>';
+                print '<div class="inline-block divButAction"><a class="butActionDelete" href="' . $_SERVER["PHP_SELF"] . '?id=' . ((int)$id) . '&action=confirm_delete&token=' . newToken() . '">' . $langs->trans('Delete') . '</a></div>';
             } else {
-                print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . ((int) $id) . '&action=reopen&token=' . newToken() . '">' . $langs->trans('ReOpen') . '</a></div>';
+                print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . ((int)$id) . '&action=reopen&token=' . newToken() . '">' . $langs->trans('ReOpen') . '</a></div>';
             }
 
             print '</div>';

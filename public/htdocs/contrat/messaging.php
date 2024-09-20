@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005      Brice Davoleau       <brice.davoleau@gmail.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2006-2019 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007      Patrick Raguin  		<patrick.raguin@gmail.com>
- * Copyright (C) 2010      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005       Brice Davoleau              <brice.davoleau@gmail.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007       Patrick Raguin  		    <patrick.raguin@gmail.com>
+ * Copyright (C) 2010       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *  \file       htdocs/contrat/messaging.php
  *  \ingroup    contrat
@@ -38,8 +42,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contract.lib.php';
 // Load translation files required by the page
 $langs->loadLangs(array('agenda', 'contracts', 'companies'));
 
-$action     = GETPOST('action', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
+$action = GETPOST('action', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'contratagenda';
 
 if (GETPOST('actioncode', 'array')) {
@@ -54,8 +58,8 @@ if (GETPOST('actioncode', 'array')) {
 $search_rowid = GETPOST('search_rowid');
 $search_agenda_label = GETPOST('search_agenda_label');
 
-$id         = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
 
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
 $sortfield = GETPOST('sortfield', 'aZ09comma');
@@ -121,7 +125,6 @@ if (empty($reshook)) {
         $search_agenda_label = '';
     }
 }
-
 
 
 /*
@@ -221,7 +224,6 @@ print '</div>';
 print dol_get_fiche_end();
 
 
-
 // Actions buttons
 
 $morehtmlright = '';
@@ -240,12 +242,12 @@ if (isModEnabled('agenda')) {
 if (isModEnabled('agenda') && ($user->hasRight('agenda', 'myactions', 'read') || $user->hasRight('agenda', 'allactions', 'read'))) {
     print '<br>';
 
-    $param = '&id=' . urlencode((string) ($id));
+    $param = '&id=' . urlencode((string)($id));
     if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
 
     // Try to know count of actioncomm from cache

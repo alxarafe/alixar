@@ -2,7 +2,7 @@
 
 ## Features
 
-Provides AI (Artificial Intelligence) features in different part of the application. Need external AI API. 
+Provides AI (Artificial Intelligence) features in different part of the application. Need external AI API.
 
 ## Licenses
 

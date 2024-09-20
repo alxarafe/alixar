@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2013       Antoine Iauch           <aiauch@gpcsolutions.fr>
- * Copyright (C) 2013-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2022       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2024       Charlene Benke      	<charlene@patas-monkey.com>
+/* Copyright (C) 2013       Antoine Iauch               <aiauch@gpcsolutions.fr>
+ * Copyright (C) 2013-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2024       Charlene Benke      	    <charlene@patas-monkey.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *     \file        htdocs/compta/stats/cabyprodserv.php
  *     \brief       Page reporting Turnover billed by Products & Services
@@ -34,6 +36,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/tax.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
 
 
 // Load translation files required by the page
@@ -226,7 +230,6 @@ foreach ($allparams as $key => $value) {
     $paramslink .= '&' . urlencode($key) . '=' . urlencode($value);
 }
 
-
 /*
  * View
  */
@@ -327,7 +330,7 @@ if ($modecompta == 'CREANCES-DETTES') {
         $sql .= " AND f.datef >= '" . $db->idate($date_start) . "' AND f.datef <= '" . $db->idate($date_end) . "'";
     }
     if ($selected_type >= 0) {
-        $sql .= " AND l.product_type = " . ((int) $selected_type);
+        $sql .= " AND l.product_type = " . ((int)$selected_type);
     }
 
     // Search for tag/category ($searchCategoryProductList is an array of ID)
@@ -348,9 +351,9 @@ if ($modecompta == 'CREANCES-DETTES') {
                 $searchCategoryProductSqlList[] = "NOT EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck WHERE l.fk_product = ck.fk_product)";
             } elseif (intval($searchCategoryProduct) > 0) {
                 if ($searchCategoryProductOperator == 0) {
-                    $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck WHERE l.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int) $searchCategoryProduct) . ")";
+                    $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck WHERE l.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int)$searchCategoryProduct) . ")";
                 } else {
-                    $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryProduct);
+                    $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryProduct);
                 }
             }
         }
@@ -379,9 +382,9 @@ if ($modecompta == 'CREANCES-DETTES') {
                 $searchCategorySocieteSqlList[] = "NOT EXISTS (SELECT cs.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as cs WHERE f.fk_soc = cs.fk_soc)";
             } elseif (intval($searchCategorySociete) > 0) {
                 if ($searchCategorySocieteOperator == 0) {
-                    $searchCategorySocieteSqlList[] = " EXISTS (SELECT cs.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as cs WHERE f.fk_soc = cs.fk_soc AND cs.fk_categorie = " . ((int) $searchCategorySociete) . ")";
+                    $searchCategorySocieteSqlList[] = " EXISTS (SELECT cs.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as cs WHERE f.fk_soc = cs.fk_soc AND cs.fk_categorie = " . ((int)$searchCategorySociete) . ")";
                 } else {
-                    $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategorySociete);
+                    $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategorySociete);
                 }
             }
         }
@@ -400,11 +403,11 @@ if ($modecompta == 'CREANCES-DETTES') {
     }
 
     if ($selected_soc > 0) {
-        $sql .= " AND f.fk_soc = " . ((int) $selected_soc);
+        $sql .= " AND f.fk_soc = " . ((int)$selected_soc);
     }
 
     if ($typent_id > 0) {
-        $sql .= " AND soc.fk_typent = " . ((int) $typent_id);
+        $sql .= " AND soc.fk_typent = " . ((int)$typent_id);
     }
 
     $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2007-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2022 Alice Adminson <aadminson@example.com>
+/* Copyright (C) 2007-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022       Alice Adminson              <aadminson@example.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\BookCal\Classes\Availabilities;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *   \file       htdocs/bookcal/availabilities_note.php
  *   \ingroup    bookcal
@@ -33,9 +37,9 @@ $langs->loadLangs(array("agenda", "companies"));
 
 // Get parameters
 $id = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
-$cancel     = GETPOST('cancel', 'aZ09');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 // Initialize technical objects
@@ -91,7 +95,6 @@ if ($reshook < 0) {
 if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_setnotes.inc.php'; // Must be include, not include_once
 }
-
 
 /*
  * View

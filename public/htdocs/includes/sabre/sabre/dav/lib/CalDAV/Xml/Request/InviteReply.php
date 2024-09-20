@@ -69,7 +69,7 @@ class InviteReply implements XmlDeserializable
      * @param string $calendarUri
      * @param string $inReplyTo
      * @param string $summary
-     * @param int    $status
+     * @param int $status
      */
     public function __construct($href, $calendarUri, $inReplyTo, $summary, $status)
     {

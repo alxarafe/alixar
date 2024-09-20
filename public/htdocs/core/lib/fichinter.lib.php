@@ -1,12 +1,11 @@
 <?php
 
-/* Copyright (C) 2006-2007  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2007		Rodolphe Quiedeville	<rodolphe@quiedeville.org>
- * Copyright (C) 2012		Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2016		Gilles Poirier 		   <glgpoirier@gmail.com>
- * Copyright (C) 2018		charlene Benke 		   <charlie@patas-monkey.com>
+/* Copyright (C) 2006-2007  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007		Rodolphe Quiedeville	    <rodolphe@quiedeville.org>
+ * Copyright (C) 2012		Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2016		Gilles Poirier 		        <glgpoirier@gmail.com>
+ * Copyright (C) 2018		charlene Benke 		        <charlie@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
-
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -30,10 +29,14 @@
  *  \ingroup    fichinter
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Resource\Classes\Dolresource;
+
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function fichinter_prepare_head($object)
@@ -134,7 +137,7 @@ function fichinter_prepare_head($object)
         } else {
             $sql = "SELECT COUNT(id) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm";
-            $sql .= " WHERE fk_element = " . ((int) $object->id);
+            $sql .= " WHERE fk_element = " . ((int)$object->id);
             $sql .= " AND elementtype = 'fichinter'";
             $resql = $db->query($sql);
             if ($resql) {
@@ -165,7 +168,7 @@ function fichinter_prepare_head($object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function fichinter_admin_prepare_head()
 {
@@ -215,7 +218,7 @@ function fichinter_admin_prepare_head()
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function fichinter_rec_prepare_head($object)

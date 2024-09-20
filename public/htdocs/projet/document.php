@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2010 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2013 Cédric Salvador      <csalvador@gpcsolutions.fr>
+/* Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *  \file       htdocs/projet/document.php
  *  \ingroup    project
@@ -36,11 +39,11 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 $langs->loadLangs(array('projects', 'other'));
 $hookmanager->initHooks(array('projectcarddocument'));
 
-$action     = GETPOST('action', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
-$id         = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
-$mine       = (GETPOST('mode', 'alpha') == 'mine' ? 1 : 0);
+$action = GETPOST('action', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
+$mine = (GETPOST('mode', 'alpha') == 'mine' ? 1 : 0);
 //if (! $user->rights->projet->all->lire) $mine=1;  // Special for projects
 
 $object = new Project($db);
@@ -55,10 +58,10 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // Get parameters
-$limit      = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
-$sortfield  = GETPOST('sortfield', 'aZ09comma');
-$sortorder  = GETPOST('sortorder', 'aZ09comma');
-$page       = GETPOSTISSET('pageplusone') ? (GETPOST('pageplusone') - 1) : GETPOSTINT("page");
+$limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
+$sortfield = GETPOST('sortfield', 'aZ09comma');
+$sortorder = GETPOST('sortorder', 'aZ09comma');
+$page = GETPOSTISSET('pageplusone') ? (GETPOST('pageplusone') - 1) : GETPOSTINT("page");
 if (empty($page) || $page == -1) {
     $page = 0;
 }     // If $page is not defined, or '' or -1
@@ -134,7 +137,7 @@ if ($object->id > 0) {
 
     if (!empty($_SESSION['pageforbacktolist']) && !empty($_SESSION['pageforbacktolist']['project'])) {
         $tmpurl = $_SESSION['pageforbacktolist']['project'];
-        $tmpurl = preg_replace('/__SOCID__/', (string) $object->socid, $tmpurl);
+        $tmpurl = preg_replace('/__SOCID__/', (string)$object->socid, $tmpurl);
         $linkback = '<a href="' . $tmpurl . (preg_match('/\?/', $tmpurl) ? '&' : '?') . 'restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
     } else {
         $linkback = '<a href="' . constant('BASE_URL') . '/projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';

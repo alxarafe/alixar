@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2019		Nicolas ZABOURI		<info@inovea-conseil.com>
- * Copyright (C) 2020		Tobias Sekan			<tobias.sekan@startmail.com>
+/* Copyright (C) 2003-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016	Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2019		Nicolas ZABOURI		        <info@inovea-conseil.com>
+ * Copyright (C) 2020		Tobias Sekan			    <tobias.sekan@startmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
 
 /**
  *  \file       htdocs/product/stock/index.php
@@ -41,7 +46,6 @@ $langs->loadLangs(array('stocks', 'productbatch'));
 // Security check
 $result = restrictedArea($user, 'stock');
 
-
 /*
  * View
  */
@@ -58,7 +62,6 @@ print load_fiche_titre($langs->trans("StocksArea"), '', 'stock');
 //print '<table border="0" width="100%" class="notopnoleftnoright">';
 //print '<tr><td valign="top" width="30%" class="notopnoleft">';
 print '<div class="fichecenter"><div class="fichethirdleft">';
-
 
 if (getDolGlobalString('MAIN_SEARCH_FORM_ON_HOME_AREAS')) {     // This may be useless due to the global search combo
     print '<form method="post" action="' . constant('BASE_URL') . '/product/stock/list.php">';

@@ -23,7 +23,7 @@
 
 namespace Dolibarr\Code\Fourn\Classes;
 
-use ReceptionLineBatch;
+use Dolibarr\Code\Reception\Classes\ReceptionLineBatch;
 
 /**
  *  \file       htdocs/fourn/class/fournisseur.commande.dispatch.class.php
@@ -31,10 +31,6 @@ use ReceptionLineBatch;
  *  \brief      This file is an example for a CRUD class file (Create/Read/Update/Delete)
  *              Initially built by build_class_from_table on 2015-02-24 10:38
  */
-
-// Put here all includes required by your class file
-require_once DOL_DOCUMENT_ROOT . "/reception/class/receptionlinebatch.class.php";
-
 
 /**
  *  Class to manage table ReceptionLineBatch.

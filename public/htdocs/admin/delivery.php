@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2003-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Sebastien Di Cintio  <sdicintio@ressource-toi.org>
- * Copyright (C) 2004      Benoit Mortier       <benoit.mortier@opensides.be>
- * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2014 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2013 Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2011-2018 Philippe Grand       <philippe.grand@atoo-net.com>
- * Copyright (C) 2015	   Claudio Aschieri		<c.aschieri@19.coop>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Sebastien Di Cintio         <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2014  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2013  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2011-2018  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2015	    Claudio Aschieri		    <c.aschieri@19.coop>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -27,6 +27,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Delivery\Classes\Delivery;
+
 /**
  *      \file       htdocs/admin/delivery.php
  *      \ingroup    delivery
@@ -37,7 +41,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/expedition.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/delivery/class/delivery.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "sendings", "deliveries", "other"));
@@ -46,11 +49,11 @@ if (!$user->admin) {
     accessforbidden();
 }
 
-$action  = GETPOST('action', 'alpha');
-$value   = GETPOST('value', 'alpha');
+$action = GETPOST('action', 'alpha');
+$value = GETPOST('value', 'alpha');
 $modulepart = GETPOST('modulepart', 'aZ09');    // Used by actions_setmoduleoptions.inc.php
 
-$label   = GETPOST('label', 'alpha');
+$label = GETPOST('label', 'alpha');
 $scandir = GETPOST('scan_dir', 'alpha');
 $type = 'delivery';
 
@@ -97,7 +100,7 @@ if ($action == 'activate_delivery') {
 if ($action == 'updateMask') {
     $maskconstdelivery = GETPOST('maskconstdelivery', 'aZ09');
     $maskdelivery = GETPOST('maskdelivery', 'alpha');
-    if ($maskconstdelivery && preg_match('/_MASK$/', $maskconstdelivery)) {
+    if ($maskconstdelivery && str_ends_with($maskconstdelivery, '_MASK')) {
         $res = dolibarr_set_const($db, $maskconstdelivery, $maskdelivery, 'chaine', 0, '', $conf->entity);
     }
 
@@ -136,7 +139,7 @@ if ($action == 'specimen') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/delivery/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -199,12 +202,11 @@ if ($action == 'setmod') {
 }
 
 
-
 /*
  * View
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-delivery');
 
@@ -229,7 +231,6 @@ if (!getDolGlobalString('MAIN_SUBMODULE_DELIVERY')) {
 print '<br><span class="opacitymedium">' . info_admin($langs->trans("NoNeedForDeliveryReceipts"), 0, 1) . '</span>';
 print '<br>';
 print '<br>';
-
 
 
 if (getDolGlobalString('MAIN_SUBMODULE_DELIVERY')) {
@@ -306,7 +307,7 @@ if (getDolGlobalString('MAIN_SUBMODULE_DELIVERY')) {
                             if ("$nextval" != $langs->trans("NotAvailable")) {  // Keep " on nextval
                                 $htmltooltip .= '' . $langs->trans("NextValue") . ': ';
                                 if ($nextval) {
-                                    if (preg_match('/^Error/', $nextval) || $nextval == 'NotConfigured') {
+                                    if (str_starts_with($nextval, 'Error') || $nextval == 'NotConfigured') {
                                         $nextval = $langs->trans($nextval);
                                     }
                                     $htmltooltip .= $nextval . '<br>';
@@ -494,7 +495,6 @@ if (getDolGlobalString('MAIN_SUBMODULE_DELIVERY')) {
     if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
         print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
     } else {
-        include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
         $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
         print $doleditor->Create();
     }

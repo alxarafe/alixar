@@ -1,7 +1,8 @@
 <?php
 
-// Copyright (C) 2014 Cedric GROSS      <c.gross@kreiz-it.fr>
-// Copyright (C) 2017 Francis Appels    <francis.appels@z-application.com>
+// Copyright (C) 2014       Cedric GROSS                <c.gross@kreiz-it.fr>
+// Copyright (C) 2017       Francis Appels              <francis.appels@z-application.com>
+// Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -69,27 +70,26 @@ if (empty($dolibarr_nocache)) {
 function addDispatchLine(index, type, mode) {
     mode = mode || 'qtymissing'
 
-    console.log("fourn/js/lib_dispatch.js.php addDispatchLine Split line type="+type+" index="+index+" mode="+mode);
+    console.log("fourn/js/lib_dispatch.js.php addDispatchLine Split line type=" + type + " index=" + index + " mode=" + mode);
 
-    var $row0 = $("tr[name='"+type+'_0_'+index+"']");
+    var $row0 = $("tr[name='" + type + '_0_' + index + "']");
     var $dpopt = $row0.find('.hasDatepicker').first().datepicker('option', 'all'); // get current datepicker options to apply the same to the cloned datepickers
     var $row = $row0.clone(true);       // clone first batch line to jQuery object
-    var nbrTrs = $("tr[name^='"+type+"_'][name$='_"+index+"']").length; // count nb of tr line with attribute name that starts with 'batch_' or 'dispatch_', and end with _index
-    var qtyOrdered = parseFloat($("#qty_ordered_0_"+index).val());      // Qty ordered is same for all rows
+    var nbrTrs = $("tr[name^='" + type + "_'][name$='_" + index + "']").length; // count nb of tr line with attribute name that starts with 'batch_' or 'dispatch_', and end with _index
+    var qtyOrdered = parseFloat($("#qty_ordered_0_" + index).val());      // Qty ordered is same for all rows
 
-    var qty = parseFloat($("#qty_"+(nbrTrs - 1)+"_"+index).val());
+    var qty = parseFloat($("#qty_" + (nbrTrs - 1) + "_" + index).val());
     if (isNaN(qty)) {
         qty = '';
     }
 
-    console.log("fourn/js/lib_dispatch.js.php addDispatchLine Split line nbrTrs="+nbrTrs+" qtyOrdered="+qtyOrdered+" qty="+qty);
+    console.log("fourn/js/lib_dispatch.js.php addDispatchLine Split line nbrTrs=" + nbrTrs + " qtyOrdered=" + qtyOrdered + " qty=" + qty);
 
     var qtyDispatched;
 
     if (mode === 'lessone') {
         qtyDispatched = parseFloat($("#qty_dispatched_0_" + index).val()) + 1;
-    }
-    else {
+    } else {
         qtyDispatched = parseFloat($("#qty_dispatched_0_" + index).val()) + qty;
         // If user did not reduced the qty to dispatch on old line, we keep only 1 on old line and the rest on new line
         if (qtyDispatched == qtyOrdered && qtyDispatched > 1) {
@@ -97,7 +97,7 @@ function addDispatchLine(index, type, mode) {
             mode = 'lessone';
         }
     }
-    console.log("qtyDispatched=" + qtyDispatched + " qtyOrdered=" + qtyOrdered+ " qty=" + qty);
+    console.log("qtyDispatched=" + qtyDispatched + " qtyOrdered=" + qtyOrdered + " qty=" + qty);
 
     if (qty <= 1) {
         window.alert("Remain quantity to dispatch is too low to be split");
@@ -107,7 +107,7 @@ function addDispatchLine(index, type, mode) {
         if (newlineqty <= 0) {
             newlineqty = qty - 1;
             oldlineqty = 1;
-            $("#qty_"+(nbrTrs - 1)+"_"+index).val(oldlineqty);
+            $("#qty_" + (nbrTrs - 1) + "_" + index).val(oldlineqty);
         }
 
         //replace tr suffix nbr
@@ -128,7 +128,7 @@ function addDispatchLine(index, type, mode) {
         $row.find("select[name='" + 'entrepot_' + nbrTrs + '_' + index + "']").select2();
         // Copy selected option to new select
         let $prevRow = $("tr[name^='" + type + "_'][name$='_" + index + "']:last")
-        let $prevEntr = Number($prevRow.find("select[name='" + 'entrepot_' + (nbrTrs-1) + '_' + index + "']").val())
+        let $prevEntr = Number($prevRow.find("select[name='" + 'entrepot_' + (nbrTrs - 1) + '_' + index + "']").val())
         $row.find("select[name='" + 'entrepot_' + nbrTrs + '_' + index + "']").val($prevEntr)
         // TODO find solution to keep new tr's after page refresh
         //clear value
@@ -143,8 +143,8 @@ function addDispatchLine(index, type, mode) {
         $(".csswarehouse_" + nbrTrs + "_" + index + ":first-child").parent("span.selection").parent(".select2").detach();
 
         /*  Suffix of lines are:  _ trs.length _ index  */
-        $("#qty_"+nbrTrs+"_"+index).focus();
-        $("#qty_dispatched_0_"+index).val(oldlineqty);
+        $("#qty_" + nbrTrs + "_" + index).focus();
+        $("#qty_dispatched_0_" + index).val(oldlineqty);
 
         //hide all buttons then show only the last one
         $("tr[name^='" + type + "_'][name$='_" + index + "'] .splitbutton").hide();
@@ -166,12 +166,11 @@ function addDispatchLine(index, type, mode) {
             }
         });
 
-        if (mode === 'lessone')
-        {
+        if (mode === 'lessone') {
             qty = 1; // keep 1 in old line
-            $("#qty_"+(nbrTrs-1)+"_"+index).val(qty);
+            $("#qty_" + (nbrTrs - 1) + "_" + index).val(qty);
         }
-        $("#qty_"+nbrTrs+"_"+index).val(newlineqty);
+        $("#qty_" + nbrTrs + "_" + index).val(newlineqty);
         // Store arbitrary data for dispatch qty input field change event
         $("#qty_" + (nbrTrs - 1) + "_" + index).data('qty', qty);
         $("#qty_" + (nbrTrs - 1) + "_" + index).data('type', type);
@@ -202,9 +201,9 @@ function onChangeDispatchLineQty(element) {
     var type = $(element).data('type'),
         qty = parseFloat($(element).data('expected')),
         changedQty, nbrTrs, dispatchingQty, qtyOrdered, qtyDispatched;
-        id = $(element).attr("id");
-        id = id.split("_");
-        index = id[2];
+    id = $(element).attr("id");
+    id = id.split("_");
+    index = id[2];
 
     if (index >= 0 && type && qty >= 0) {
         nbrTrs = $("tr[name^='" + type + "_'][name$='_" + index + "']").length;

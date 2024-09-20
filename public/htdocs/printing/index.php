@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2014-2018  Frederic France         <frederic.france@netlogic.fr>
- * Copyright (C) 2016       Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2014-2018  Frederic France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2016       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Printing\Classes\PrintingDriver;
+
 /**
  *  \file       htdocs/printing/index.php
  *  \ingroup    printing
@@ -26,7 +28,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-include_once DOL_DOCUMENT_ROOT . '/core/modules/printing/modules_printing.php';
 
 // Load translation files required by the page
 $langs->load("printing");

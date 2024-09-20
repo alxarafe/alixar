@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2002       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2007  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2022       Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2002       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2007  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,15 +21,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Compta\Classes;
+
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+
 /**
  *      \file       htdocs/compta/sociales/class/paymentsocialcontribution.class.php
  *      \ingroup    invoice
  *      \brief      File of class to manage payment of social contributions
  */
-
-use Dolibarr\Core\Base\CommonObject;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
-
 
 /**
  *  Class to manage payments of social contributions
@@ -147,7 +149,6 @@ class PaymentSocialContribution extends CommonObject
      * @var integer|string paiementtype
      */
     public $paiementtype;
-
 
     /**
      *  Constructor
@@ -351,7 +352,6 @@ class PaymentSocialContribution extends CommonObject
             return -1;
         }
     }
-
 
     /**
      *  Update database

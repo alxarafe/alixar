@@ -106,7 +106,7 @@ print '</td></tr>' . "\n";
 print '<tr><td>' . $langs->trans('CustomerCode');
 if (!empty($array_query['cust_code'])) {
     print img_picto($langs->trans('AdvTgtUse'), 'ok.png@advtargetemailing');
-    $cust_code_str = (string) $array_query['cust_code'];
+    $cust_code_str = (string)$array_query['cust_code'];
 } else {
     $cust_code_str = null;
 }
@@ -515,7 +515,7 @@ if (!getDolGlobalString('MAIN_EXTRAFIELDS_DISABLED')) {
                 print $form->selectarray(
                     'options_' . $key . '_cnct',
                     array(
-                        ''  => '',
+                        '' => '',
                         '1' => $langs->trans('Yes'),
                         '0' => $langs->trans('No')
                     ),

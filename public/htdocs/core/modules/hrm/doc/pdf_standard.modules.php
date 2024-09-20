@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2015       Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2016-2023  Philippe Grand          <philippe.grand@atoo-net.com>
- * Copyright (C) 2018-2020  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2018       Francis Appels          <francis.appels@z-application.com>
- * Copyright (C) 2019       Markus Welters          <markus@welters.de>
- * Copyright (C) 2019       Rafael Ingenleuf        <ingenleuf@welters.de>
- * Copyright (C) 2020       Marc Guenneugues        <marc.guenneugues@simicar.fr>
+/* Copyright (C) 2015       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2016-2023  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2018-2020  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2018       Francis Appels              <francis.appels@z-application.com>
+ * Copyright (C) 2019       Markus Welters              <markus@welters.de>
+ * Copyright (C) 2019       Rafael Ingenleuf            <ingenleuf@welters.de>
+ * Copyright (C) 2020       Marc Guenneugues            <marc.guenneugues@simicar.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -26,13 +26,14 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Hrm\Classes\ModelePDFEvaluation;
+
 /**
  *  \file       htdocs/core/modules/hrm/doc/pdf_standard.modules.php
  *  \ingroup    hrm
  *  \brief      File of class to generate evaluation report from standard model
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/hrm/modules_evaluation.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -85,7 +86,7 @@ class pdf_standard extends ModelePDFEvaluation
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -131,21 +132,22 @@ class pdf_standard extends ModelePDFEvaluation
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build pdf onto disk
      *
-     *  @param  Evaluation      $object             Object to generate
-     *  @param  Translate       $outputlangs        Lang output object
-     *  @param  string          $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param  int             $hidedetails        Do not show line details
-     *  @param  int             $hidedesc           Do not show desc
-     *  @param  int             $hideref            Do not show ref
-     *  @return int                                 1=OK, 0=KO
+     * @param Evaluation $object Object to generate
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return int                                 1=OK, 0=KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath = '', $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $db, $hookmanager, $nblines;
 
         if (!is_object($outputlangs)) {
@@ -293,7 +295,6 @@ class pdf_standard extends ModelePDFEvaluation
                     $pdf->startTransaction();
 
                     $this->printLine($pdf, $object, $i, $curY, $default_font_size, $outputlangs, $hidedetails);
-
 
 
                     $pageposafter = $pdf->getPage();
@@ -452,13 +453,13 @@ class pdf_standard extends ModelePDFEvaluation
     }
 
     /**
-     * @param   TCPDF           $pdf                Object PDF
-     * @param   Evaluation      $object             Object to show
-     * @param   int             $linenumber         line number
-     * @param   int             $curY               current y position
-     * @param   int             $default_font_size  default font size
-     * @param   Translate       $outputlangs        Object lang for output
-     * @param   int             $hidedetails        Hide details (0=no, 1=yes, 2=just special lines)
+     * @param TCPDF $pdf Object PDF
+     * @param Evaluation $object Object to show
+     * @param int $linenumber line number
+     * @param int $curY current y position
+     * @param int $default_font_size default font size
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidedetails Hide details (0=no, 1=yes, 2=just special lines)
      * @return  void
      */
     protected function printLine(&$pdf, $object, $linenumber, $curY, $default_font_size, $outputlangs, $hidedetails = 0)
@@ -509,21 +510,21 @@ class pdf_standard extends ModelePDFEvaluation
         $pdf->writeHTMLCell($this->posxrankemp - $this->posxskill - 0.8, 4, $this->posxskill - 1, $curY, $comment, 0, 1);
 
 
-
         // Line num
         $pdf->SetXY($this->posxpiece, $curY);
         $pdf->writeHTMLCell($this->posxskill - $this->posxpiece - 0.8, 3, $this->posxpiece - 1, $curY, $linenumber + 1, 0, 1, 0, 0, 'C');
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF           $pdf            Object PDF
-     *  @param  Evaluation      $object         Object to show
-     *  @param  int             $showaddress    0=no, 1=yes
-     *  @param  Translate       $outputlangs    Object lang for output
-     *  @return float|int                       Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param Evaluation $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @return float|int                       Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs)
     {
@@ -632,19 +633,20 @@ class pdf_standard extends ModelePDFEvaluation
         return 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     int         $tab_top        Tab top
-     *   @param     int         $tab_height     Tab height
-     *   @param     int         $nexY           next y
-     *   @param     Translate   $outputlangs    Output langs
-     *   @param     int         $hidetop        1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @param     string      $currency       Currency code
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param int $tab_top Tab top
+     * @param int $tab_height Tab height
+     * @param int $nexY next y
+     * @param Translate $outputlangs Output langs
+     * @param int $hidetop 1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
+     * @param int $hidebottom Hide bottom bar of array
+     * @param string $currency Currency code
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0, $currency = '')
     {
@@ -708,15 +710,16 @@ class pdf_standard extends ModelePDFEvaluation
 
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show footer of page. Need this->emetteur object
      *
-     *  @param  TCPDF           $pdf                PDF
-     *  @param  Evaluation      $object             Object to show
-     *  @param  Translate       $outputlangs        Object lang for output
-     *  @param  int             $hidefreetext       1=Hide free text
-     *  @return int                                 Return height of bottom margin including footer text
+     * @param TCPDF $pdf PDF
+     * @param Evaluation $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return int                                 Return height of bottom margin including footer text
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {

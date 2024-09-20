@@ -15,11 +15,12 @@ class Redmine extends AbstractService
 {
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        SignatureInterface $signature,
-        UriInterface $baseApiUri
-    ) {
+        SignatureInterface   $signature,
+        UriInterface         $baseApiUri
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage, $signature, $baseApiUri);
 
         if (null === $baseApiUri) {

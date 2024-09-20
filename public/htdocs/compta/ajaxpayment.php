@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2011 Auguria <anthony.poiret@auguria.net>
+/* Copyright (C) 2011       Auguria                     <anthony.poiret@auguria.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -72,7 +72,7 @@ if (is_array($amounts)) {
 if (is_array($remains)) {
     foreach ($remains as $key => $value) {
         $value = price2num($value);
-        $remains[$key] = ($invoice_type == 2 ? -1 : 1) * (float) $value;
+        $remains[$key] = ($invoice_type == 2 ? -1 : 1) * (float)$value;
         if (empty($value)) {
             unset($remains[$key]);
         }
@@ -84,7 +84,7 @@ if (is_array($remains)) {
 }
 
 // Treatment
-$result = ($amountPayment != '') ? ((float) $amountPayment - array_sum($amounts)) : array_sum($amounts); // Remaining amountPayment
+$result = ($amountPayment != '') ? ((float)$amountPayment - array_sum($amounts)) : array_sum($amounts); // Remaining amountPayment
 $toJsonArray = array();
 $totalRemaining = price2num(array_sum($remains));
 $toJsonArray['label'] = $amountPayment == '' ? '' : $langs->transnoentities('RemainingAmountPayment');
@@ -112,8 +112,8 @@ if ($currentInvId) {                                                            
 
         if ($result >= 0) {         // then we need to calculate the amount to breakdown
             $amountToBreakdown = ($result - $currentRemain >= 0 ?
-                                        $currentRemain : // Remain can be fully paid
-                                        $currentRemain + ($result - $currentRemain)); // Remain can only partially be paid
+                $currentRemain : // Remain can be fully paid
+                $currentRemain + ($result - $currentRemain)); // Remain can only partially be paid
             $currentAmount = $amountToBreakdown; // In both cases, amount will take breakdown value
             $result -= $amountToBreakdown; // And canceled subtraction has been replaced by breakdown
         }   // else there's no need to calc anything, just reset the field (result is still < 0)

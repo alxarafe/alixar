@@ -22,13 +22,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       htdocs/fourn/facture/contact.php
  *      \ingroup    invoice, fournisseur
  *      \brief      Onglet de gestion des contacts des factures
  */
-
-use Dolibarr\Code\Contact\Classes\Contact;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -36,8 +41,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
 
 $langs->loadLangs(array("bills", "other", "companies"));
 
-$id     = (GETPOSTINT('id') ? GETPOSTINT('id') : GETPOSTINT('facid'));
-$ref    = GETPOST('ref', 'alpha');
+$id = (GETPOSTINT('id') ? GETPOSTINT('id') : GETPOSTINT('facid'));
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
 
 // Security check
@@ -45,7 +50,7 @@ if ($user->socid) {
     $socid = $user->socid;
 }
 $result = restrictedArea($user, 'fournisseur', $id, 'facture_fourn', 'facture');
-$hookmanager->initHooks(array('invoicesuppliercardcontact','invoicesuppliercontactcard', 'globalcard'));
+$hookmanager->initHooks(array('invoicesuppliercardcontact', 'invoicesuppliercontactcard', 'globalcard'));
 
 $object = new FactureFournisseur($db);
 
@@ -72,8 +77,8 @@ if (empty($reshook)) {
 
         if ($result > 0 && $id > 0) {
             $contactid = (GETPOST('userid') ? GETPOST('userid') : GETPOST('contactid'));
-            $typeid    = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
-            $result    = $object->add_contact($contactid, $typeid, GETPOST("source", 'aZ09'));
+            $typeid = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
+            $result = $object->add_contact($contactid, $typeid, GETPOST("source", 'aZ09'));
         }
 
         if ($result >= 0) {
@@ -107,7 +112,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View

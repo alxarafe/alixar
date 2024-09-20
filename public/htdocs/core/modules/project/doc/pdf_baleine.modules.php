@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2012 Regis Houssin  <regis.houssin@inodbox.com>
- * Copyright (C) 2018      Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2018       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,23 +20,26 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\ModelePDFProjects;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+
 /**
  *  \file       htdocs/core/modules/project/doc/pdf_baleine.modules.php
  *  \ingroup    project
  *  \brief      File of the class allowing to generate projects with the baleine model
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
-
 /**
  *  Class to manage generation of project document Baleine
  */
-
 class pdf_baleine extends ModelePDFProjects
 {
     /**
@@ -84,7 +87,7 @@ class pdf_baleine extends ModelePDFProjects
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -136,17 +139,18 @@ class pdf_baleine extends ModelePDFProjects
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build pdf project onto disk
      *
-     *  @param  Project     $object         Object project a generer
-     *  @param  Translate   $outputlangs    Lang output object
-     *  @return int                         1 if OK, <=0 if KO
+     * @param Project $object Object project a generer
+     * @param Translate $outputlangs Lang output object
+     * @return int                         1 if OK, <=0 if KO
      */
     public function write_file($object, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $hookmanager, $langs, $user;
 
         if (!is_object($outputlangs)) {
@@ -299,7 +303,7 @@ class pdf_baleine extends ModelePDFProjects
                     $progress = ($object->lines[$i]->progress ? $object->lines[$i]->progress . '%' : '');
                     $datestart = dol_print_date($object->lines[$i]->date_start, 'day');
                     $dateend = dol_print_date($object->lines[$i]->date_end, 'day');
-                    $planned_workload = convertSecondToTime((int) $object->lines[$i]->planned_workload, 'allhourmin');
+                    $planned_workload = convertSecondToTime((int)$object->lines[$i]->planned_workload, 'allhourmin');
 
                     $showpricebeforepagebreak = 1;
 
@@ -500,18 +504,19 @@ class pdf_baleine extends ModelePDFProjects
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     float|int   $tab_top        Top position of table
-     *   @param     float|int   $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        Hide top bar of array
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param float|int $tab_top Top position of table
+     * @param float|int $tab_height Height of table (rectangle)
+     * @param int $nexY Y
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop Hide top bar of array
+     * @param int $hidebottom Hide bottom bar of array
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0)
     {
@@ -553,15 +558,16 @@ class pdf_baleine extends ModelePDFProjects
         $pdf->MultiCell($this->page_largeur - $this->marge_droite - $this->posxdateend, 3, $outputlangs->trans("End"), 0, 'C');
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Project     $object         Object to show
-     *  @param  int         $showaddress    0=no, 1=yes
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @return float|int                   Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param Project $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @return float|int                   Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs)
     {
@@ -647,15 +653,16 @@ class pdf_baleine extends ModelePDFProjects
         return 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show footer of page. Need this->emetteur object
      *
-     *  @param  TCPDF       $pdf                PDF
-     *  @param  Project     $object             Object to show
-     *  @param  Translate   $outputlangs        Object lang for output
-     *  @param  int         $hidefreetext       1=Hide free text
-     *  @return integer
+     * @param TCPDF $pdf PDF
+     * @param Project $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return integer
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {

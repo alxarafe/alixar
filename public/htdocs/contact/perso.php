@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *       \file       htdocs/contact/perso.php
  *       \ingroup    societe
@@ -29,9 +34,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contact.lib.php';
 
 // Load translation files required by the page
@@ -298,8 +300,8 @@ if ($action == 'edit') {
 
         print ' &nbsp; ';
         //var_dump($birthdatearray);
-        $ageyear = (int) convertSecondToTime($now - $object->birthday, 'year') - 1970;
-        $agemonth = (int) convertSecondToTime($now - $object->birthday, 'month') - 1;
+        $ageyear = (int)convertSecondToTime($now - $object->birthday, 'year') - 1970;
+        $agemonth = (int)convertSecondToTime($now - $object->birthday, 'month') - 1;
         if ($ageyear >= 2) {
             print '(' . $ageyear . ' ' . $langs->trans("DurationYears") . ')';
         } elseif ($agemonth >= 2) {

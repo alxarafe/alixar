@@ -27,12 +27,12 @@
  *  Build a file from an array of events
  *  All input params and data must be encoded in $conf->charset_output
  *
- *  @param      string  $format             "vcal" or "ical"
- *  @param      string  $title              Title of export
- *  @param      string  $desc               Description of export
- *  @param      array   $events_array       Array of events ("uid","startdate","duration","enddate","title","summary","category","email","url","desc","author")
- *  @param      string  $outputfile         Output file
- *  @return     int                         Return integer < 0 if KO, Nb of events in file if OK
+ * @param string $format "vcal" or "ical"
+ * @param string $title Title of export
+ * @param string $desc Description of export
+ * @param array $events_array Array of events ("uid","startdate","duration","enddate","title","summary","category","email","url","desc","author")
+ * @param string $outputfile Output file
+ * @return     int                         Return integer < 0 if KO, Nb of events in file if OK
  */
 function build_calfile($format, $title, $desc, $events_array, $outputfile)
 {
@@ -53,7 +53,7 @@ function build_calfile($format, $title, $desc, $events_array, $outputfile)
     if ($calfileh) {
         include_once DOL_DOCUMENT_ROOT . "/core/lib/date.lib.php";
 
-        $now      = dol_now();
+        $now = dol_now();
         $encoding = "";
 
         if ($format === "vcal") {
@@ -87,30 +87,30 @@ function build_calfile($format, $title, $desc, $events_array, $outputfile)
 
             // TODO: avoid use extra event array, use objects direct thahtwas created before
 
-            $uid           = $event["uid"];
-            $type          = $event["type"];
-            $startdate     = $event["startdate"];
-            $duration      = $event["duration"];
-            $enddate       = $event["enddate"];
-            $summary       = $event["summary"];
-            $category      = $event["category"];
-            $priority      = $event["priority"];
-            $fulldayevent  = $event["fulldayevent"];
-            $location      = $event["location"];
-            $email         = $event["email"];
-            $url           = $event["url"];
-            $transparency  = $event["transparency"];
-            $description   = dol_string_nohtmltag(preg_replace("/<br[\s\/]?>/i", "\n", $event["desc"]), 0);
-            $created       = $event["created"];
-            $modified      = $event["modified"];
+            $uid = $event["uid"];
+            $type = $event["type"];
+            $startdate = $event["startdate"];
+            $duration = $event["duration"];
+            $enddate = $event["enddate"];
+            $summary = $event["summary"];
+            $category = $event["category"];
+            $priority = $event["priority"];
+            $fulldayevent = $event["fulldayevent"];
+            $location = $event["location"];
+            $email = $event["email"];
+            $url = $event["url"];
+            $transparency = $event["transparency"];
+            $description = dol_string_nohtmltag(preg_replace("/<br[\s\/]?>/i", "\n", $event["desc"]), 0);
+            $created = $event["created"];
+            $modified = $event["modified"];
             $assignedUsers = $event["assignedUsers"];
             //print $fulldayevent.' '.dol_print_date($startdate, 'dayhour', 'gmt');
 
             // Format
-            $summary     = format_cal($format, $summary);
+            $summary = format_cal($format, $summary);
             $description = format_cal($format, $description);
-            $category    = format_cal($format, $category);
-            $location    = format_cal($format, $location);
+            $category = format_cal($format, $category);
+            $location = format_cal($format, $location);
 
             // Output the vCard/iCal VEVENT object
             /*
@@ -201,7 +201,7 @@ function build_calfile($format, $title, $desc, $events_array, $outputfile)
                 fwrite($calfileh, "DTSTAMP:" . dol_print_date($now, "dayhourxcard", 'gmt') . "\n");
 
                 // Start date
-                $prefix     = "";
+                $prefix = "";
                 $startdatef = dol_print_date($startdate, "dayhourxcard", 'gmt');
 
                 if ($fulldayevent) {
@@ -211,7 +211,7 @@ function build_calfile($format, $title, $desc, $events_array, $outputfile)
                     // the default behaviour but there is no way to change keeping old saved date compatible.
                     $tzforfullday = getDolGlobalString('MAIN_STORE_FULL_EVENT_IN_GMT');
                     // Local time should be used to prevent users in time zones earlier than GMT from being one day earlier
-                    $prefix     = ";VALUE=DATE";
+                    $prefix = ";VALUE=DATE";
                     if ($tzforfullday) {
                         $startdatef = dol_print_date($startdate, "dayxcard", 'gmt');
                     } else {
@@ -235,11 +235,11 @@ function build_calfile($format, $title, $desc, $events_array, $outputfile)
                     }
                 }
 
-                $prefix   = "";
+                $prefix = "";
                 $enddatef = dol_print_date($enddate, "dayhourxcard", 'gmt');
 
                 if ($fulldayevent) {
-                    $prefix   = ";VALUE=DATE";
+                    $prefix = ";VALUE=DATE";
                     // We add 1 second so we reach the +1 day needed for full day event (DTEND must be next day after event)
                     // This is mention in https://datatracker.ietf.org/doc/html/rfc5545:
                     // "The "DTEND" property for a "VEVENT" calendar component specifies the non-inclusive end of the event."
@@ -314,15 +314,15 @@ function build_calfile($format, $title, $desc, $events_array, $outputfile)
  *  Build a file from an array of events.
  *  All input data must be encoded in $conf->charset_output
  *
- *  @param      string  $format             "rss"
- *  @param      string  $title              Title of export
- *  @param      string  $desc               Description of export
- *  @param      array   $events_array       Array of events ("uid","startdate","summary","url","desc","author","category","image") or Array of WebsitePage
- *  @param      string  $outputfile         Output file
- *  @param      string  $filter             (optional) Filter
- *  @param      string  $url                Url (If empty, forge URL for agenda RSS export)
- *  @param      string  $langcode           Language code to show in header
- *  @return     int                         Return integer < 0 if KO, Nb of events in file if OK
+ * @param string $format "rss"
+ * @param string $title Title of export
+ * @param string $desc Description of export
+ * @param array $events_array Array of events ("uid","startdate","summary","url","desc","author","category","image") or Array of WebsitePage
+ * @param string $outputfile Output file
+ * @param string $filter (optional) Filter
+ * @param string $url Url (If empty, forge URL for agenda RSS export)
+ * @param string $langcode Language code to show in header
+ * @return     int                         Return integer < 0 if KO, Nb of events in file if OK
  */
 function build_rssfile($format, $title, $desc, $events_array, $outputfile, $filter = '', $url = '', $langcode = '')
 {
@@ -357,7 +357,7 @@ function build_rssfile($format, $title, $desc, $events_array, $outputfile, $filt
 
         // Define $urlwithroot
         $urlwithouturlroot = preg_replace("/" . preg_quote(DOL_URL_ROOT, "/") . "$/i", "", trim($dolibarr_main_url_root));
-        $urlwithroot       = $urlwithouturlroot . DOL_URL_ROOT; // This is to use external domain name found into config file
+        $urlwithroot = $urlwithouturlroot . DOL_URL_ROOT; // This is to use external domain name found into config file
         //$urlwithroot=DOL_MAIN_URL_ROOT;                       // This is to use same domain name than current
 
         // Url
@@ -390,7 +390,7 @@ function build_rssfile($format, $title, $desc, $events_array, $outputfile, $filt
                 if (is_object($event) && get_class($event) == 'WebsitePage') {
                     // Convert object WebsitePage into an array $event
                     $tmpevent = array();
-                    $tmpevent['uid'] = (string) $event->id;
+                    $tmpevent['uid'] = (string)$event->id;
                     $tmpevent['startdate'] = $event->date_creation;
                     $tmpevent['summary'] = $event->title;
                     $tmpevent['url'] = $event->fullpageurl ? $event->fullpageurl : $event->pageurl . '.php';
@@ -405,14 +405,14 @@ function build_rssfile($format, $title, $desc, $events_array, $outputfile, $filt
                     $event = $tmpevent;
                 }
 
-                $uid          = $event["uid"];
-                $startdate    = $event["startdate"];
-                $summary      = $event["summary"];
-                $description  = $event["desc"];
-                $url          = empty($event["url"]) ? '' : $event["url"];
-                $author       = $event["author"];
-                $category     = empty($event["category"]) ? null : $event["category"];
-                $image        = '';
+                $uid = $event["uid"];
+                $startdate = $event["startdate"];
+                $summary = $event["summary"];
+                $description = $event["desc"];
+                $url = empty($event["url"]) ? '' : $event["url"];
+                $author = $event["author"];
+                $category = empty($event["category"]) ? null : $event["category"];
+                $image = '';
                 if (!empty($event["image"])) {
                     $image = $event["image"];
                 } else {
@@ -484,9 +484,9 @@ function build_rssfile($format, $title, $desc, $events_array, $outputfile, $filt
 /**
  *  Encode for cal export
  *
- *  @param      string  $format     "vcal" or "ical"
- *  @param      string  $string     String to encode
- *  @return     string              String encoded
+ * @param string $format "vcal" or "ical"
+ * @param string $string String to encode
+ * @return     string              String encoded
  */
 function format_cal($format, $string)
 {
@@ -513,12 +513,12 @@ function format_cal($format, $string)
  *  Cut string after 75 chars. Add CRLF+Space.
  *  line must be encoded in UTF-8
  *
- *  @param      string    $line     String to convert
- *  @return     string              String converted
+ * @param string $line String to convert
+ * @return     string              String converted
  */
 function calEncode($line)
 {
-    $out     = "";
+    $out = "";
     $newpara = "";
 
     // If mb_ functions exists, it"s better to use them
@@ -567,14 +567,14 @@ function calEncode($line)
 /**
  *  Encode into vcal format
  *
- *  @param      string  $str        String to convert
- *  @param      int     $forcal     (optional) 1 = For cal
- *  @return     string              String converted
+ * @param string $str String to convert
+ * @param int $forcal (optional) 1 = For cal
+ * @return     string              String converted
  */
 function quotedPrintEncode($str, $forcal = 0)
 {
     $lines = preg_split("/\r\n/", $str);
-    $out   = "";
+    $out = "";
 
     foreach ($lines as $line) {
         $newpara = "";
@@ -583,7 +583,7 @@ function quotedPrintEncode($str, $forcal = 0)
         $strlength = strlen($line);
 
         for ($j = 0; $j < $strlength; $j++) {
-            $char  = substr($line, $j, 1);
+            $char = substr($line, $j, 1);
             $ascii = ord($char);
 
             if ($ascii < 32 || $ascii === 61 || $ascii > 126) {
@@ -614,8 +614,8 @@ function quotedPrintEncode($str, $forcal = 0)
 /**
  *  Decode vcal format
  *
- *  @param      string  $str    String to convert
- *  @return     string          String converted
+ * @param string $str String to convert
+ * @return     string          String converted
  */
 function quotedPrintDecode($str)
 {

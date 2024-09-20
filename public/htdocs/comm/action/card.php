@@ -39,6 +39,7 @@ use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 
@@ -271,7 +272,7 @@ if (empty($reshook) && (GETPOST('addassignedtoresource') || GETPOST('updateassig
 // Link to a project
 if (
     empty($reshook) && $action == 'classin' && ($user->hasRight('agenda', 'allactions', 'create') ||
-    (($object->authorid == $user->id || $object->userownerid == $user->id) && $user->hasRight('agenda', 'myactions', 'create')))
+        (($object->authorid == $user->id || $object->userownerid == $user->id) && $user->hasRight('agenda', 'myactions', 'create')))
 ) {
     //$object->fetch($id);
     $object->setProject(GETPOSTINT('projectid'));
@@ -408,7 +409,7 @@ if (empty($reshook) && $action == 'add') {
         $object->datep = $datep;
         $object->datef = $datef;
         $object->percentage = $percentage;
-        $object->duree = (((int) GETPOST('dureehour') * 60) + (int) GETPOST('dureemin')) * 60;
+        $object->duree = (((int)GETPOST('dureehour') * 60) + (int)GETPOST('dureemin')) * 60;
 
         $transparency = (GETPOST("transparency") == 'on' ? 1 : 0);
 
@@ -482,7 +483,6 @@ if (empty($reshook) && $action == 'add') {
     }
 
 
-
     if (!$error) {
         $db->begin();
 
@@ -500,10 +500,10 @@ if (empty($reshook) && $action == 'add') {
             $selectedrecurrulefreq = $reg1[1];
         }
         if ($object->recurrule && preg_match('/FREQ=MONTHLY.*BYMONTHDAY(\d+)/i', $object->recurrule, $reg2)) {
-            $selectedrecurrulebymonthday = (int) $reg2[1];
+            $selectedrecurrulebymonthday = (int)$reg2[1];
         }
         if ($object->recurrule && preg_match('/FREQ=WEEKLY.*BYDAY(\d+)/i', $object->recurrule, $reg3)) {
-            $selectedrecurrulebyday = (int) $reg3[1];
+            $selectedrecurrulebyday = (int)$reg3[1];
         }
 
         // Is event recurrent ?
@@ -803,15 +803,15 @@ if (empty($reshook) && $action == 'update') {
             $object->type_code = GETPOST("actioncode", 'aZ09');
         }
 
-        $object->label       = GETPOST("label", "alphanohtml");
-        $object->datep       = $datep;
-        $object->datef       = $datef;
-        $object->percentage  = $percentage;
-        $object->priority    = GETPOSTINT("priority");
+        $object->label = GETPOST("label", "alphanohtml");
+        $object->datep = $datep;
+        $object->datef = $datef;
+        $object->percentage = $percentage;
+        $object->priority = GETPOSTINT("priority");
         $object->fulldayevent = GETPOST("fullday") ? 1 : 0;
-        $object->location    = GETPOST('location', "alphanohtml");
-        $object->socid       = GETPOSTINT("socid");
-        $socpeopleassigned   = GETPOST("socpeopleassigned", 'array');
+        $object->location = GETPOST('location', "alphanohtml");
+        $object->socid = GETPOSTINT("socid");
+        $socpeopleassigned = GETPOST("socpeopleassigned", 'array');
         $object->socpeopleassigned = array();
         foreach ($socpeopleassigned as $cid) {
             $object->socpeopleassigned[$cid] = array('id' => $cid);
@@ -821,7 +821,7 @@ if (empty($reshook) && $action == 'update') {
             reset($object->socpeopleassigned);
             $object->contact_id = key($object->socpeopleassigned);
         }
-        $object->fk_project  = GETPOSTINT("projectid");
+        $object->fk_project = GETPOSTINT("projectid");
         $object->note_private = trim(GETPOST("note", "restricthtml"));
 
         if (GETPOST("elementtype", 'alpha')) {
@@ -905,14 +905,14 @@ if (empty($reshook) && $action == 'update') {
                 $eventDateStart = $object->datep;
                 $eventDateEnd = $object->datef;
 
-                $sql  = "SELECT er.rowid, r.ref as r_ref, ac.id as ac_id, ac.label as ac_label";
+                $sql = "SELECT er.rowid, r.ref as r_ref, ac.id as ac_id, ac.label as ac_label";
                 $sql .= " FROM " . MAIN_DB_PREFIX . "element_resources as er";
                 $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "resource as r ON r.rowid = er.resource_id AND er.resource_type = 'dolresource'";
                 $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "actioncomm as ac ON ac.id = er.element_id AND er.element_type = '" . $db->escape($object->element) . "'";
-                $sql .= " WHERE ac.id <> " . ((int) $object->id);
+                $sql .= " WHERE ac.id <> " . ((int)$object->id);
                 $sql .= " AND er.resource_id IN (";
                 $sql .= " SELECT resource_id FROM " . MAIN_DB_PREFIX . "element_resources";
-                $sql .= " WHERE element_id = " . ((int) $object->id);
+                $sql .= " WHERE element_id = " . ((int)$object->id);
                 $sql .= " AND element_type = '" . $db->escape($object->element) . "'";
                 $sql .= " AND busy = 1";
                 $sql .= ")";
@@ -1090,14 +1090,14 @@ if (empty($reshook) && GETPOST('actionmove', 'alpha') == 'mupdate') {
                 $eventDateStart = $object->datep;
                 $eventDateEnd = $object->datef;
 
-                $sql  = "SELECT er.rowid, r.ref as r_ref, ac.id as ac_id, ac.label as ac_label";
+                $sql = "SELECT er.rowid, r.ref as r_ref, ac.id as ac_id, ac.label as ac_label";
                 $sql .= " FROM " . MAIN_DB_PREFIX . "element_resources as er";
                 $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "resource as r ON r.rowid = er.resource_id AND er.resource_type = 'dolresource'";
                 $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "actioncomm as ac ON ac.id = er.element_id AND er.element_type = '" . $db->escape($object->element) . "'";
-                $sql .= " WHERE ac.id <> " . ((int) $object->id);
+                $sql .= " WHERE ac.id <> " . ((int)$object->id);
                 $sql .= " AND er.resource_id IN (";
                 $sql .= " SELECT resource_id FROM " . MAIN_DB_PREFIX . "element_resources";
-                $sql .= " WHERE element_id = " . ((int) $object->id);
+                $sql .= " WHERE element_id = " . ((int)$object->id);
                 $sql .= " AND element_type = '" . $db->escape($object->element) . "'";
                 $sql .= " AND busy = 1";
                 $sql .= ")";
@@ -1309,10 +1309,10 @@ if ($action == 'create') {
             $selectedrecurrulefreq = $reg[1];
         }
         if ($object->recurrule && preg_match('/FREQ=MONTHLY.*BYMONTHDAY(\d+)/i', $object->recurrule, $reg)) {
-            $selectedrecurrulebymonthday = (int) $reg[1];
+            $selectedrecurrulebymonthday = (int)$reg[1];
         }
         if ($object->recurrule && preg_match('/FREQ=WEEKLY.*BYDAY(\d+)/i', $object->recurrule, $reg)) {
-            $selectedrecurrulebyday = (int) $reg[1];
+            $selectedrecurrulebyday = (int)$reg[1];
         }
 
         print $form->selectarray('recurrulefreq', $arrayrecurrulefreq, $selectedrecurrulefreq, 0, 0, 0, '', 0, 0, 0, '', 'marginrightonly');
@@ -1608,7 +1608,7 @@ if ($action == 'create') {
         }
         //var_dump('origin='.$origin.' originid='.$originid.' hasPermissionOnLinkedObject='.$hasPermissionOnLinkedObject);
 
-        if (! in_array($origin, array('societe', 'project', 'task', 'user'))) {
+        if (!in_array($origin, array('societe', 'project', 'task', 'user'))) {
             // We do not use link for object that already contains a hard coded field to make links with agenda events
             print '<tr><td class="titlefieldcreate">' . $langs->trans("LinkedObject") . '</td>';
             print '<td colspan="3">';
@@ -1744,21 +1744,21 @@ if ($id > 0) {
         $datep = dol_mktime($fulldayevent ? '00' : $aphour, $fulldayevent ? '00' : $apmin, 0, GETPOSTINT("apmonth"), GETPOSTINT("apday"), GETPOSTINT("apyear"), 'tzuserrel');
         $datef = dol_mktime($fulldayevent ? '23' : $p2hour, $fulldayevent ? '59' : $p2min, $fulldayevent ? '59' : '0', GETPOSTINT("p2month"), GETPOSTINT("p2day"), GETPOSTINT("p2year"), 'tzuserrel');
 
-        $object->type_id     = dol_getIdFromCode($db, GETPOST("actioncode", 'aZ09'), 'c_actioncomm');
-        $object->label       = GETPOST("label", "alphanohtml");
-        $object->datep       = $datep;
-        $object->datef       = $datef;
-        $object->percentage  = $percentage;
-        $object->priority    = GETPOST("priority", "alphanohtml");
+        $object->type_id = dol_getIdFromCode($db, GETPOST("actioncode", 'aZ09'), 'c_actioncomm');
+        $object->label = GETPOST("label", "alphanohtml");
+        $object->datep = $datep;
+        $object->datef = $datef;
+        $object->percentage = $percentage;
+        $object->priority = GETPOST("priority", "alphanohtml");
         $object->fulldayevent = GETPOST("fullday") ? 1 : 0;
-        $object->location    = GETPOST('location', "alphanohtml");
-        $object->socid       = GETPOSTINT("socid");
-        $socpeopleassigned   = GETPOST("socpeopleassigned", 'array');
+        $object->location = GETPOST('location', "alphanohtml");
+        $object->socid = GETPOSTINT("socid");
+        $socpeopleassigned = GETPOST("socpeopleassigned", 'array');
         foreach ($socpeopleassigned as $tmpid) {
             $object->socpeopleassigned[$id] = array('id' => $tmpid);
         }
-        $object->contact_id   = GETPOSTINT("contactid");
-        $object->fk_project  = GETPOSTINT("projectid");
+        $object->contact_id = GETPOSTINT("contactid");
+        $object->fk_project = GETPOSTINT("projectid");
 
         $object->note_private = GETPOST("note", 'restricthtml');
     }
@@ -1792,7 +1792,7 @@ if ($id > 0) {
 
     // Confirmation suppression action
     if ($action == 'delete') {
-        print $form->formconfirm("card.php?id=" . urlencode((string) ($id)), $langs->trans("DeleteAction"), $langs->trans("ConfirmDeleteAction"), "confirm_delete", '', '', 1);
+        print $form->formconfirm("card.php?id=" . urlencode((string)($id)), $langs->trans("DeleteAction"), $langs->trans("ConfirmDeleteAction"), "confirm_delete", '', '', 1);
     }
 
     if ($action == 'edit') {
@@ -1834,7 +1834,7 @@ if ($id > 0) {
         if ($backtopage) {
             print '<input type="hidden" name="backtopage" value="' . ($backtopage != '1' ? $backtopage : '') . '">';
         }
-        if (!getDolGlobalString('AGENDA_USE_EVENT_TYPE') && ! preg_match('/^TICKET_MSG_PRIVATE/', $object->code)) {
+        if (!getDolGlobalString('AGENDA_USE_EVENT_TYPE') && !preg_match('/^TICKET_MSG_PRIVATE/', $object->code)) {
             print '<input type="hidden" name="actioncode" value="' . $object->type_code . '">';
         }
 
@@ -2123,7 +2123,7 @@ if ($id > 0) {
         // Description
         print '<tr><td class="tdtop">' . $langs->trans("Description") . '</td><td>';
         // Editeur wysiwyg
-            $doleditor = new DolEditor('note', $object->note_private, '', 120, 'dolibarr_notes', 'In', true, true, isModEnabled('fckeditor'), ROWS_4, '90%');
+        $doleditor = new DolEditor('note', $object->note_private, '', 120, 'dolibarr_notes', 'In', true, true, isModEnabled('fckeditor'), ROWS_4, '90%');
         $doleditor->Create();
         print '</td></tr>';
 

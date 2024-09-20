@@ -17,4 +17,5 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_ecm_directories_extrafields ADD UNIQUE INDEX uk_ecm_directories_extrafields (fk_object);
+ALTER TABLE llx_ecm_directories_extrafields
+    ADD UNIQUE INDEX uk_ecm_directories_extrafields (fk_object);

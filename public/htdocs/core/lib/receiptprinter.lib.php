@@ -25,12 +25,11 @@
  */
 
 
-
 /**
  *  Define head array for tabs of receipt printer setup pages
  *
- *  @param  string  $mode       Mode
- *  @return                     Array of head
+ * @param string $mode Mode
+ * @return                     Array of head
  */
 function receiptprinteradmin_prepare_head($mode)
 {

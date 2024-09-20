@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2021       Christophe Battarel  <christophe.battarel@altairis.fr>
+/* Copyright (C) 2021       Christophe Battarel         <christophe.battarel@altairis.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Productlot;
 
 /**
  *  \file      htdocs/product/admin/product_lot.php
@@ -117,7 +120,7 @@ if ($action == 'updateMaskLot') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/product_batch/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -163,7 +166,7 @@ if ($action == 'updateMaskLot') {
 
 $form = new Form($db);
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 llxHeader("", $langs->trans("ProductLotSetup"), '', '', 0, 0, '', '', '', 'mod-product page-admin_product_lot');
 

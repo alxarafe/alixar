@@ -160,16 +160,16 @@ class Xf
         // Flags to indicate if attributes have been set.
         $atr_num = ($this->numberFormatIndex != 0) ? 1 : 0;
         $atr_fnt = ($this->fontIndex != 0) ? 1 : 0;
-        $atr_alc = ((int) $this->_style->getAlignment()->getWrapText()) ? 1 : 0;
+        $atr_alc = ((int)$this->_style->getAlignment()->getWrapText()) ? 1 : 0;
         $atr_bdr = (self::mapBorderStyle($this->_style->getBorders()->getBottom()->getBorderStyle()) ||
-                        self::mapBorderStyle($this->_style->getBorders()->getTop()->getBorderStyle()) ||
-                        self::mapBorderStyle($this->_style->getBorders()->getLeft()->getBorderStyle()) ||
-                        self::mapBorderStyle($this->_style->getBorders()->getRight()->getBorderStyle())) ? 1 : 0;
+            self::mapBorderStyle($this->_style->getBorders()->getTop()->getBorderStyle()) ||
+            self::mapBorderStyle($this->_style->getBorders()->getLeft()->getBorderStyle()) ||
+            self::mapBorderStyle($this->_style->getBorders()->getRight()->getBorderStyle())) ? 1 : 0;
         $atr_pat = (($this->foregroundColor != 0x40) ||
-                        ($this->backgroundColor != 0x41) ||
-                        self::mapFillType($this->_style->getFill()->getFillType())) ? 1 : 0;
+            ($this->backgroundColor != 0x41) ||
+            self::mapFillType($this->_style->getFill()->getFillType())) ? 1 : 0;
         $atr_prot = self::mapLocked($this->_style->getProtection()->getLocked())
-                        | self::mapHidden($this->_style->getProtection()->getHidden());
+            | self::mapHidden($this->_style->getProtection()->getHidden());
 
         // Zero the default border colour if the border has not been set.
         if (self::mapBorderStyle($this->_style->getBorders()->getBottom()->getBorderStyle()) == 0) {
@@ -195,7 +195,7 @@ class Xf
         $ifmt = $this->numberFormatIndex; // Index to FORMAT record
 
         $align = $this->mapHAlign($this->_style->getAlignment()->getHorizontal()); // Alignment
-        $align |= (int) $this->_style->getAlignment()->getWrapText() << 3;
+        $align |= (int)$this->_style->getAlignment()->getWrapText() << 3;
         $align |= self::mapVAlign($this->_style->getAlignment()->getVertical()) << 4;
         $align |= $this->textJustLast << 7;
 
@@ -218,9 +218,9 @@ class Xf
 
         $diagonalDirection = $this->_style->getBorders()->getDiagonalDirection();
         $diag_tl_to_rb = $diagonalDirection == Borders::DIAGONAL_BOTH
-                            || $diagonalDirection == Borders::DIAGONAL_DOWN;
+            || $diagonalDirection == Borders::DIAGONAL_DOWN;
         $diag_tr_to_lb = $diagonalDirection == Borders::DIAGONAL_BOTH
-                            || $diagonalDirection == Borders::DIAGONAL_UP;
+            || $diagonalDirection == Borders::DIAGONAL_UP;
         $border1 |= $diag_tl_to_rb << 30;
         $border1 |= $diag_tr_to_lb << 31;
 
@@ -234,7 +234,7 @@ class Xf
 
         //BIFF8 options: identation, shrinkToFit and  text direction
         $biff8_options = $this->_style->getAlignment()->getIndent();
-        $biff8_options |= (int) $this->_style->getAlignment()->getShrinkToFit() << 4;
+        $biff8_options |= (int)$this->_style->getAlignment()->getShrinkToFit() << 4;
 
         $data = pack('vvvC', $ifnt, $ifmt, $style, $align);
         $data .= pack('CCC', self::mapTextRotation($this->_style->getAlignment()->getTextRotation()), $biff8_options, $used_attrib);

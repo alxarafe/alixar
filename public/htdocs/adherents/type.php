@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2003		Jean-Louis Bergamo		<jlb@j1b.org>
- * Copyright (C) 2004-2011	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2017	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2013		Florian Henry			<florian.henry@open-concept.pro>
- * Copyright (C) 2015		Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2019-2022	Thibault Foucart		<support@ptibogxiv.net>
- * Copyright (C) 2020		Josep Lluís Amador		<joseplluis@lliuretic.cat>
- * Copyright (C) 2021		Waël Almoman			<info@almoman.com>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003		Jean-Louis Bergamo		    <jlb@j1b.org>
+ * Copyright (C) 2004-2011	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2017	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2013		Florian Henry			    <florian.henry@open-concept.pro>
+ * Copyright (C) 2015		Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2019-2022	Thibault Foucart		    <support@ptibogxiv.net>
+ * Copyright (C) 2020		Josep Lluís Amador		    <joseplluis@lliuretic.cat>
+ * Copyright (C) 2021		Waël Almoman			    <info@almoman.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -245,7 +245,6 @@ if ($action == 'confirm_delete' && $user->hasRight('adherent', 'configurer')) {
         $action = '';
     }
 }
-
 
 /*
  * View

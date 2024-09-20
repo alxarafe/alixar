@@ -15,22 +15,23 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see https://www.gnu.org/licenses/.
 
-CREATE TABLE llx_hrm_job_user(
+CREATE TABLE llx_hrm_job_user
+(
     -- BEGIN MODULEBUILDER FIELDS
-	rowid integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-	-- ref varchar(128) NOT NULL,
-	description text,
-	date_creation datetime NOT NULL,
-	tms timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	fk_contrat integer,
-	fk_user integer,
-	fk_job integer NOT NULL,
-	date_start datetime,
-	date_end datetime,
-	abort_comment varchar(255),
-    note_public text,
-    note_private text,
+    rowid         integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    -- ref varchar(128) NOT NULL,
+    description   text,
+    date_creation datetime NOT NULL,
+    tms           timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_contrat    integer,
+    fk_user       integer,
+    fk_job        integer  NOT NULL,
+    date_start    datetime,
+    date_end      datetime,
+    abort_comment varchar(255),
+    note_public   text,
+    note_private  text,
     fk_user_creat integer,
     fk_user_modif integer
-	-- END MODULEBUILDER FIELDS
+    -- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;

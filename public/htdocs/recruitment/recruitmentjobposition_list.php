@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2007-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2007-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
+
 /**
  *      \file       recruitmentjobposition_list.php
  *      \ingroup    recruitment
@@ -28,7 +34,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/lib/recruitment_recruitmentjobposition.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentjobposition.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("recruitment", "other"));

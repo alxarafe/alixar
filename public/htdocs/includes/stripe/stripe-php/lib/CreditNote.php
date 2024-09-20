@@ -66,9 +66,9 @@ class CreditNote extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\CreditNote the previewed credit note
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\CreditNote the previewed credit note
      */
     public static function preview($params = null, $opts = null)
     {
@@ -84,9 +84,9 @@ class CreditNote extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\CreditNoteLineItem> list of CreditNoteLineItems
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\CreditNoteLineItem> list of CreditNoteLineItems
      */
     public static function previewLines($params = null, $opts = null)
     {
@@ -102,9 +102,9 @@ class CreditNote extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\CreditNote the voided credit note
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\CreditNote the voided credit note
      */
     public function voidCreditNote($params = null, $opts = null)
     {
@@ -122,9 +122,9 @@ class CreditNote extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\CreditNoteLineItem> the list of credit note line items
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\CreditNoteLineItem> the list of credit note line items
      */
     public static function allLines($id, $params = null, $opts = null)
     {

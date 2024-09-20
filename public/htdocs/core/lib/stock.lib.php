@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2009 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2009       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,10 +23,12 @@
  * \brief      Library file with function for stock module
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function stock_prepare_head($object)
@@ -88,7 +90,7 @@ function stock_prepare_head($object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function stock_admin_prepare_head()
 {

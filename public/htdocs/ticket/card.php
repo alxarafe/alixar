@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2013-2016 Jean-François FERRY  <hello@librethic.io>
- * Copyright (C) 2016      Christophe Battarel  <christophe@altairis.fr>
- * Copyright (C) 2018      Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021-2024 Frédéric France		<frederic.france@netlogic.fr>
- * Copyright (C) 2021      Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2022-2023 Charlene Benke       <charlene@patas-monkey.com>
- * Copyright (C) 2023      Benjamin Falière		<benjamin.faliere@altairis.fr>
+/* Copyright (C) 2013-2016  Jean-François FERRY         <hello@librethic.io>
+ * Copyright (C) 2016       Christophe Battarel         <christophe@altairis.fr>
+ * Copyright (C) 2018       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021-2024  Frédéric France		        <frederic.france@netlogic.fr>
+ * Copyright (C) 2021       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2022-2023  Charlene Benke              <charlene@patas-monkey.com>
+ * Copyright (C) 2023       Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024	   Irvine FLEITH		<irvine.fleith@atm-consulting.fr>
+ * Copyright (C) 2024	    Irvine FLEITH		        <irvine.fleith@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,6 +27,20 @@
 
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormContract;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\FormTicket;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\ActionsTicket;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *   \file       htdocs/ticket/card.php
@@ -36,15 +50,12 @@ use Dolibarr\Code\Contact\Classes\Contact;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 if (isModEnabled('project')) {
     include_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
     include_once DOL_DOCUMENT_ROOT . '/core/lib/project.lib.php';
-    include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
 }
 if (isModEnabled('contract')) {
     include_once DOL_DOCUMENT_ROOT . '/core/class/html.formcontract.class.php';
@@ -56,16 +67,16 @@ if (isModEnabled('contract')) {
 $langs->loadLangs(array("companies", "other", "ticket"));
 
 // Get parameters
-$id        = GETPOSTINT('id');
-$ref       = GETPOST('ref', 'alpha');
-$track_id  = GETPOST('track_id', 'alpha', 3);
-$socid     = GETPOSTINT('socid');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
+$track_id = GETPOST('track_id', 'alpha', 3);
+$socid = GETPOSTINT('socid');
 $contactid = GETPOSTINT('contactid');
 $projectid = GETPOSTINT('projectid');
 $notifyTiers = GETPOST("notify_tiers_at_create", 'alpha');
 
-$action    = GETPOST('action', 'aZ09');
-$cancel    = GETPOST('cancel', 'alpha');
+$action = GETPOST('action', 'aZ09');
+$cancel = GETPOST('cancel', 'alpha');
 $backtopage = GETPOST('backtopage', 'alpha');
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');
 
@@ -82,7 +93,6 @@ if (GETPOST('actioncode', 'array')) {
 } else {
     $actioncode = GETPOST("actioncode", "alpha", 3) ? GETPOST("actioncode", "alpha", 3) : (GETPOST("actioncode") == '0' ? '0' : getDolGlobalString('AGENDA_DEFAULT_FILTER_TYPE_FOR_OBJECT'));
 }
-
 
 // Initialize technical object to manage hooks of ticket. Note that conf->hooks_modules contains array array
 $hookmanager->initHooks(array('ticketcard', 'globalcard'));
@@ -139,12 +149,11 @@ $result = restrictedArea($user, 'ticket', $object->id);
 $triggermodname = 'TICKET_MODIFY';
 
 // Permissions
-$permissiontoread   = $user->hasRight('ticket', 'read');
-$permissiontoadd    = $user->hasRight('ticket', 'write');
+$permissiontoread = $user->hasRight('ticket', 'read');
+$permissiontoadd = $user->hasRight('ticket', 'write');
 $permissiontodelete = $user->hasRight('ticket', 'delete');
 
 $upload_dir = $conf->ticket->dir_output;
-
 
 
 /*
@@ -674,7 +683,6 @@ if (empty($reshook)) {
     }
 }
 
-
 /*
  * View
  */
@@ -875,9 +883,9 @@ if ($action == 'create' || $action == 'presend') {
         }
 
         if (!$user->socid && getDolGlobalString('TICKET_LIMIT_VIEW_ASSIGNED_ONLY')) {
-            $object->next_prev_filter = "te.fk_user_assign = " . ((int) $user->id);
+            $object->next_prev_filter = "te.fk_user_assign = " . ((int)$user->id);
         } elseif ($user->socid > 0) {
-            $object->next_prev_filter = "te.fk_soc = " . ((int) $user->socid);
+            $object->next_prev_filter = "te.fk_soc = " . ((int)$user->socid);
         }
 
         $head = ticket_prepare_head($object);
@@ -969,8 +977,8 @@ if ($action == 'create' || $action == 'presend') {
                         $morehtmlref .= $formcontract->formSelectContract($_SERVER["PHP_SELF"] . '?id=' . $object->id, $object->socid, $object->fk_contract, 'contratid', 0, 1, 1, 1);
                     } else {
                         $morehtmlref .= '<a class="editfielda" href="' . $_SERVER["PHP_SELF"] . '?action=edit_contrat&token=' . newToken() . '&id=' . $object->id . '">';
-                        $morehtmlref .=  img_edit($langs->trans('SetContract'));
-                        $morehtmlref .=  '</a>';
+                        $morehtmlref .= img_edit($langs->trans('SetContract'));
+                        $morehtmlref .= '</a>';
                     }
                 } else {
                     if (!empty($object->fk_contract)) {

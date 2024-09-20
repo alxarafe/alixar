@@ -12,9 +12,9 @@ class Settings extends WriterPart
      *
      * @param Spreadsheet $spreadsheet
      *
+     * @return string XML Output
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      *
-     * @return string XML Output
      */
     public function write(Spreadsheet $spreadsheet = null)
     {

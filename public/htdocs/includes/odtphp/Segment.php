@@ -1,6 +1,7 @@
 <?php
 
 require 'SegmentIterator.php';
+
 class SegmentException extends Exception
 {
 }
@@ -29,19 +30,20 @@ class Segment implements IteratorAggregate, Countable
     /**
      * Constructor
      *
-     * @param string $name  name of the segment to construct
-     * @param string $xml   XML tree of the segment
-     * @param string $odf   odf
+     * @param string $name name of the segment to construct
+     * @param string $xml XML tree of the segment
+     * @param string $odf odf
      */
     public function __construct($name, $xml, $odf)
     {
-        $this->name = (string) $name;
-        $this->xml = (string) $xml;
+        $this->name = (string)$name;
+        $this->xml = (string)$xml;
         $this->odf = $odf;
         $zipHandler = $this->odf->getConfig('ZIP_PROXY');
         $this->file = new $zipHandler($this->odf->getConfig('PATH_TO_TMP'));
         $this->_analyseChildren($this->xml);
     }
+
     /**
      * Returns the name of the segment
      *
@@ -51,6 +53,7 @@ class Segment implements IteratorAggregate, Countable
     {
         return $this->name;
     }
+
     /**
      * Does the segment have children ?
      *
@@ -60,6 +63,7 @@ class Segment implements IteratorAggregate, Countable
     {
         return $this->getIterator()->hasChildren();
     }
+
     /**
      * Countable interface
      *
@@ -69,6 +73,7 @@ class Segment implements IteratorAggregate, Countable
     {
         return count($this->children);
     }
+
     /**
      * IteratorAggregate interface
      *
@@ -78,6 +83,7 @@ class Segment implements IteratorAggregate, Countable
     {
         return new RecursiveIteratorIterator(new SegmentIterator($this->children), 1);
     }
+
     /**
      * Replace variables of the template in the XML code
      * All the children are also called
@@ -102,7 +108,7 @@ class Segment implements IteratorAggregate, Countable
         preg_match_all($reg, $this->xml, $matches, PREG_SET_ORDER);
         //var_dump($tmpvars);exit;
         foreach ($matches as $match) {   // For each match, if there is no entry into this->vars, we add it
-            if (! empty($match[1]) && ! isset($tmpvars[$match[1]])) {
+            if (!empty($match[1]) && !isset($tmpvars[$match[1]])) {
                 $tmpvars[$match[1]] = '';     // Not defined, so we set it to '', we just need entry into this->vars for next loop
             }
         }
@@ -117,8 +123,7 @@ class Segment implements IteratorAggregate, Countable
                 // Remove everything between the ELSE tag (if it exists) and the ENDIF tag
                 $reg = '@(\[!--\sELSE\s' . $key . '\s--\](.*))?\[!--\sENDIF\s' . $key . '\s--\]@smU'; // U modifier = all quantifiers are non-greedy
                 $this->xml = preg_replace($reg, '', $this->xml);
-            }
-            // Else the value is false, then two cases: no ELSE and we're done, or there is at least one place where there is an ELSE clause, then we replace it
+            } // Else the value is false, then two cases: no ELSE and we're done, or there is at least one place where there is an ELSE clause, then we replace it
             else {
                 // Find all conditional blocks for this variable: from IF to ELSE and to ENDIF
                 $reg = '@\[!--\sIF\s' . $key . '\s--\](.*)(\[!--\sELSE\s' . $key . '\s--\](.*))?\[!--\sENDIF\s' . $key . '\s--\]@smU'; // U modifier = all quantifiers are non-greedy
@@ -157,17 +162,17 @@ class Segment implements IteratorAggregate, Countable
     }
 
     /**
-    * Function to replace macros for invoice short and long month, invoice year
-    *
-    * Substitution occur when the invoice is generated, not considering the invoice date
-    * so do not (re)generate in a diferent date than the one that the invoice belongs to
-    * Perhaps it would be better to use the invoice issued date but I still do not know
-    * how to get it here
-    *
-    * Miguel Erill 09/04/2017
-    *
-    * @param    string  $value  String to convert
-    */
+     * Function to replace macros for invoice short and long month, invoice year
+     *
+     * Substitution occur when the invoice is generated, not considering the invoice date
+     * so do not (re)generate in a diferent date than the one that the invoice belongs to
+     * Perhaps it would be better to use the invoice issued date but I still do not know
+     * how to get it here
+     *
+     * Miguel Erill 09/04/2017
+     *
+     * @param string $value String to convert
+     */
     public function macroReplace($text)
     {
         include_once DOL_DOCUMENT_ROOT . '/core/lib/date.lib.php';
@@ -177,14 +182,14 @@ class Segment implements IteratorAggregate, Countable
         $dateinonemontharray = dol_get_next_month($hoy['mon'], $hoy['year']);
         $nextMonth = $dateinonemontharray['month'];
 
-        $patterns = array( '/__CURRENTDAY__/u','/__CURENTWEEKDAY__/u',
-                         '/__CURRENTMONTH__/u','/__CURRENTMONTHLONG__/u',
-                         '/__NEXTMONTH__/u','/__NEXTMONTHLONG__/u',
-                         '/__CURRENTYEAR__/u','/__NEXTYEAR__/u' );
-        $values = array( $hoy['mday'], $langs->transnoentitiesnoconv($hoy['wday']),
-                       $hoy['mon'], monthArray($langs)[$hoy['mon']],
-                       $nextMonth, monthArray($langs)[$nextMonth],
-                       $hoy['year'], $hoy['year'] + 1 );
+        $patterns = array('/__CURRENTDAY__/u', '/__CURENTWEEKDAY__/u',
+            '/__CURRENTMONTH__/u', '/__CURRENTMONTHLONG__/u',
+            '/__NEXTMONTH__/u', '/__NEXTMONTHLONG__/u',
+            '/__CURRENTYEAR__/u', '/__NEXTYEAR__/u');
+        $values = array($hoy['mday'], $langs->transnoentitiesnoconv($hoy['wday']),
+            $hoy['mon'], monthArray($langs)[$hoy['mon']],
+            $nextMonth, monthArray($langs)[$nextMonth],
+            $hoy['year'], $hoy['year'] + 1);
 
         $text = preg_replace($patterns, $values, $text);
 
@@ -194,7 +199,7 @@ class Segment implements IteratorAggregate, Countable
     /**
      * Analyse the XML code in order to find children
      *
-     * @param string $xml   Xml
+     * @param string $xml Xml
      * @return Segment
      */
     protected function _analyseChildren($xml)
@@ -215,12 +220,12 @@ class Segment implements IteratorAggregate, Countable
     /**
      * Assign a template variable to replace
      *
-     * @param string $key       Key
-     * @param string $value     Value
-     * @param string $encode    Encode
-     * @param string $charset   Charset
-     * @throws SegmentException
+     * @param string $key Key
+     * @param string $value Value
+     * @param string $encode Encode
+     * @param string $charset Charset
      * @return Segment
+     * @throws SegmentException
      */
     public function setVars($key, $value, $encode = true, $charset = 'ISO-8859')
     {
@@ -240,8 +245,8 @@ class Segment implements IteratorAggregate, Countable
      *
      * @param string $key name of the variable within the template
      * @param string $value path to the picture
-     * @throws OdfException
      * @return Segment
+     * @throws OdfException
      */
     public function setImage($key, $value)
     {
@@ -266,10 +271,11 @@ IMG;
         $this->setVars($key, $xml, false);
         return $this;
     }
+
     /**
      * Shortcut to retrieve a child
      *
-     * @param string $prop      Prop
+     * @param string $prop Prop
      * @return Segment
      * @throws SegmentException
      */
@@ -281,11 +287,12 @@ IMG;
             throw new SegmentException('child ' . $prop . ' does not exist');
         }
     }
+
     /**
      * Proxy for setVars
      *
-     * @param string $meth      Meth
-     * @param array $args       Args
+     * @param string $meth Meth
+     * @param array $args Args
      * @return Segment
      */
     public function __call($meth, $args)
@@ -296,6 +303,7 @@ IMG;
             throw new SegmentException("method $meth nor var $meth exist");
         }
     }
+
     /**
      * Returns the parsed XML
      *

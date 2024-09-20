@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Copyright (C) 2015   Charlie BENKE       <charlie@patas-monkey.com>
- * Copyright (C) 2019   Alexandre Spangaro  <aspangaro@open-dsi.fr>
- * Copyright (C) 2021       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2023       Frédéric France         <frederic.france@netlogic.fr>
+ * Copyright (C) 2015       Charlie BENKE               <charlie@patas-monkey.com>
+ * Copyright (C) 2019       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2023       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
 
 /**
  * Returns an array with the tabs for the "salaries" section
@@ -45,7 +48,7 @@ function salaries_prepare_head($object)
         $nbStandingOrders = 0;
         $sql = "SELECT COUNT(pfd.rowid) as nb";
         $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_demande as pfd";
-        $sql .= " WHERE pfd.fk_salary = " . ((int) $object->id);
+        $sql .= " WHERE pfd.fk_salary = " . ((int)$object->id);
         $sql .= " AND type = 'ban'";
         $resql = $db->query($sql);
         if ($resql) {
@@ -99,7 +102,7 @@ function salaries_prepare_head($object)
 /**
  *  Return array head with list of tabs to view object information
  *
- *  @return array       head
+ * @return array       head
  */
 function salaries_admin_prepare_head()
 {

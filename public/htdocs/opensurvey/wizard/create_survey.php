@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2013-2014 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2014      Marcos García       <marcosgdf@gmail.com>
- * Copyright (C) 2015-2016 Alexandre Spangaro  <aspangaro@open-dsi.fr>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2013-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015-2016  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *  \file       htdocs/opensurvey/wizard/create_survey.php
  *  \ingroup    opensurvey
@@ -30,7 +33,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once DOL_DOCUMENT_ROOT . "/core/lib/files.lib.php";
-require_once DOL_DOCUMENT_ROOT . "/core/class/doleditor.class.php";
 require_once DOL_DOCUMENT_ROOT . "/opensurvey/lib/opensurvey.lib.php";
 
 // Security check

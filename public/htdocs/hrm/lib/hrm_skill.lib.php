@@ -1,9 +1,10 @@
 <?php
 
-/* Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Hrm\Classes\Skill;
+
 /**
  * \file    lib/hrm_skill.lib.php
  * \ingroup hrm
@@ -28,7 +32,7 @@
 /**
  * Prepare array of tabs for Skill
  *
- * @param   Skill   $object     Skill
+ * @param Skill $object Skill
  * @return  array                   Array of tabs
  */
 function skillPrepareHead($object)

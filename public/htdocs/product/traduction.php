@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005-2018 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2007      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2010-2012 Destailleur Laurent 	<eldy@users.sourceforge.net>
- * Copyright (C) 2014 	   Henry Florian 		<florian.henry@open-concept.pro>
- * Copyright (C) 2023 	   Benjamin Falière		<benjamin.faliere@altairis.fr>
+/* Copyright (C) 2005-2018  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2010-2012  Destailleur Laurent 	    <eldy@users.sourceforge.net>
+ * Copyright (C) 2014 	    Henry Florian 		        <florian.henry@open-concept.pro>
+ * Copyright (C) 2023 	    Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *  \file       htdocs/product/traduction.php
@@ -224,7 +229,6 @@ dol_banner_tab($object, 'ref', $linkback, $shownav, 'ref', '', '', '', 0, '', ''
 print dol_get_fiche_end();
 
 
-
 /*
  * Action bar
  */
@@ -244,7 +248,6 @@ if (empty($reshook)) {
 }
 
 print "\n" . '</div>' . "\n";
-
 
 
 if ($action == 'edit') {
@@ -313,7 +316,6 @@ if ($action == 'edit') {
         print '<div class="opacitymedium">' . $langs->trans('NoTranslation') . '</div>';
     }
 }
-
 
 
 /*

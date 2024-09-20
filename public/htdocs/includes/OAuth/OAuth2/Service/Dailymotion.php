@@ -23,36 +23,37 @@ class Dailymotion extends AbstractService
      *
      * @var string
      */
-    const SCOPE_EMAIL         = 'email',
-          SCOPE_PROFILE       = 'userinfo',
-          SCOPE_VIDEOS        = 'manage_videos',
-          SCOPE_COMMENTS      = 'manage_comments',
-          SCOPE_PLAYLIST      = 'manage_playlists',
-          SCOPE_TILES         = 'manage_tiles',
-          SCOPE_SUBSCRIPTIONS = 'manage_subscriptions',
-          SCOPE_FRIENDS       = 'manage_friends',
-          SCOPE_FAVORITES     = 'manage_favorites',
-          SCOPE_GROUPS        = 'manage_groups';
+    const SCOPE_EMAIL = 'email',
+        SCOPE_PROFILE = 'userinfo',
+        SCOPE_VIDEOS = 'manage_videos',
+        SCOPE_COMMENTS = 'manage_comments',
+        SCOPE_PLAYLIST = 'manage_playlists',
+        SCOPE_TILES = 'manage_tiles',
+        SCOPE_SUBSCRIPTIONS = 'manage_subscriptions',
+        SCOPE_FRIENDS = 'manage_friends',
+        SCOPE_FAVORITES = 'manage_favorites',
+        SCOPE_GROUPS = 'manage_groups';
 
     /**
      * Dialog form factors
      *
      * @var string
      */
-    const DISPLAY_PAGE   = 'page',
-          DISPLAY_POPUP  = 'popup',
-          DISPLAY_MOBILE = 'mobile';
+    const DISPLAY_PAGE = 'page',
+        DISPLAY_POPUP = 'popup',
+        DISPLAY_MOBILE = 'mobile';
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage, $scopes, $baseApiUri);
 
         if (null === $baseApiUri) {

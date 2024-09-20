@@ -55,13 +55,13 @@ if (!function_exists('dol_getprefix')) {
      *  or two instances in same virtual servers.
      *  This function must not use dol_hash (that is used for password hash) and need to have all context $conf loaded.
      *
-     *  @param  string  $mode                   '' (prefix for session name) or 'email' (prefix for email id)
-     *  @return string                          A calculated prefix
+     * @param string $mode '' (prefix for session name) or 'email' (prefix for email id)
+     * @return string                          A calculated prefix
      */
     function dol_getprefix($mode = '')
     {
         global $dolibarr_main_instance_unique_id,
-        $dolibarr_main_cookie_cryptkey; // This is loaded by filefunc.inc.php
+               $dolibarr_main_cookie_cryptkey; // This is loaded by filefunc.inc.php
 
         $tmp_instance_unique_id = empty($dolibarr_main_instance_unique_id) ?
             (empty($dolibarr_main_cookie_cryptkey) ? '' :
@@ -82,7 +82,6 @@ include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 use Dolibarr\Code\User\Classes\User;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/public/webportal/lib/webportal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/webportal/class/context.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/webportal/class/webportalmember.class.php';

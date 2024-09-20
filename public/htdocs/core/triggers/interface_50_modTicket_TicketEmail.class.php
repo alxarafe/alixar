@@ -45,7 +45,7 @@ class InterfaceTicketEmail extends DolibarrTriggers
     /**
      *   Constructor
      *
-     *   @param DoliDB $db Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -62,12 +62,12 @@ class InterfaceTicketEmail extends DolibarrTriggers
      *      Function called when a Dolibarr business event is done.
      *      All functions "runTrigger" are triggered if file is inside directory htdocs/core/triggers
      *
-     *      @param  string    $action Event action code
-     *      @param  Ticket    $object Object
-     *      @param  User      $user   Object user
-     *      @param  Translate $langs  Object langs
-     *      @param  Conf      $conf   Object conf
-     *      @return int                     Return integer <0 if KO, 0 if no triggered ran, >0 if OK
+     * @param string $action Event action code
+     * @param Ticket $object Object
+     * @param User $user Object user
+     * @param Translate $langs Object langs
+     * @param Conf $conf Object conf
+     * @return int                     Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
     {
@@ -124,7 +124,6 @@ class InterfaceTicketEmail extends DolibarrTriggers
                                     $old_MAIN_MAIL_AUTOCOPY_TO = getDolGlobalString('MAIN_MAIL_AUTOCOPY_TO');
                                     $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
                                 }
-                                include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
                                 $mailfile = new CMailFile($subject, $sendto, $from, $message, $filepath, $mimetype, $filename, '', '', 0, -1);
                                 if ($mailfile->error) {
                                     setEventMessages($mailfile->error, $mailfile->errors, 'errors');
@@ -272,7 +271,7 @@ class InterfaceTicketEmail extends DolibarrTriggers
                         // Refuse email if not
                         $contact = new Contact($this->db);
                         $res = $contact->fetch($contactid);
-                        if (! in_array($contact, $linked_contacts)) {
+                        if (!in_array($contact, $linked_contacts)) {
                             $error_msg = $langs->trans('Error') . ': ';
                             $error_msg .= $langs->transnoentities('TicketWrongContact');
                             setEventMessages($error_msg, [], 'errors');
@@ -308,11 +307,11 @@ class InterfaceTicketEmail extends DolibarrTriggers
     /**
      * Composes and sends a message concerning a ticket, to be sent to admin address.
      *
-     * @param string    $sendto         Addresses to send the mail, format "first@address.net, second@address.net," etc.
-     * @param string    $base_subject   email subject. Non-translated string.
-     * @param string    $body           email body (first line). Non-translated string.
-     * @param Ticket    $object         the ticket thet the email refers to
-     * @param Translate $langs          the translation object
+     * @param string $sendto Addresses to send the mail, format "first@address.net, second@address.net," etc.
+     * @param string $base_subject email subject. Non-translated string.
+     * @param string $body email body (first line). Non-translated string.
+     * @param Ticket $object the ticket thet the email refers to
+     * @param Translate $langs the translation object
      * @return void
      */
     private function composeAndSendAdminMessage($sendto, $base_subject, $body, Ticket $object, Translate $langs)
@@ -364,7 +363,6 @@ class InterfaceTicketEmail extends DolibarrTriggers
             $old_MAIN_MAIL_AUTOCOPY_TO = getDolGlobalString('MAIN_MAIL_AUTOCOPY_TO');
             $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
         }
-        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($subject, $sendto, $from, $message_admin, $filepath, $mimetype, $filename, '', '', 0, -1, '', '', $trackid, '', 'ticket');
         if ($mailfile->error) {
             dol_syslog($mailfile->error, LOG_DEBUG);
@@ -379,12 +377,12 @@ class InterfaceTicketEmail extends DolibarrTriggers
     /**
      * Composes and sends a message concerning a ticket, to be sent to customer addresses.
      *
-     * @param string    $sendto         Addresses to send the mail, format "first@address.net, second@address.net, " etc.
-     * @param string    $base_subject   email subject. Non-translated string.
-     * @param string    $body           email body (first line). Non-translated string.
-     * @param string    $see_ticket     string indicating the ticket public address
-     * @param Ticket    $object         the ticket thet the email refers to
-     * @param Translate $langs          the translation object
+     * @param string $sendto Addresses to send the mail, format "first@address.net, second@address.net, " etc.
+     * @param string $base_subject email subject. Non-translated string.
+     * @param string $body email body (first line). Non-translated string.
+     * @param string $see_ticket string indicating the ticket public address
+     * @param Ticket $object the ticket thet the email refers to
+     * @param Translate $langs the translation object
      * @return void
      */
     private function composeAndSendCustomerMessage($sendto, $base_subject, $body, $see_ticket, Ticket $object, Translate $langs)
@@ -410,11 +408,11 @@ class InterfaceTicketEmail extends DolibarrTriggers
             foreach ($extrafields->attributes[$object->table_element]['label'] as $key => $value) {
                 $enabled = 1;
                 if ($enabled && isset($extrafields->attributes[$object->table_element]['list'][$key])) {
-                    $enabled = (int) dol_eval($extrafields->attributes[$object->table_element]['list'][$key], 1);
+                    $enabled = (int)dol_eval($extrafields->attributes[$object->table_element]['list'][$key], 1);
                 }
                 $perms = 1;
                 if ($perms && isset($extrafields->attributes[$object->table_element]['perms'][$key])) {
-                    $perms = (int) dol_eval($extrafields->attributes[$object->table_element]['perms'][$key], 1);
+                    $perms = (int)dol_eval($extrafields->attributes[$object->table_element]['perms'][$key], 1);
                 }
 
                 $qualified = true;
@@ -454,7 +452,6 @@ class InterfaceTicketEmail extends DolibarrTriggers
             $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
         }
 
-        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($subject, $sendto, $from, $message_customer, $filepath, $mimetype, $filename, '', '', 0, -1, '', '', $trackid, '', 'ticket');
         if ($mailfile->error) {
             dol_syslog($mailfile->error, LOG_DEBUG);

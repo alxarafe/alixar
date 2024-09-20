@@ -156,8 +156,8 @@ class Broker
      * people. If the user was an attendee, we need to make sure that the
      * organizer gets the 'declined' message.
      *
-     * @param VCalendar|string      $calendar
-     * @param string|array          $userHref
+     * @param VCalendar|string $calendar
+     * @param string|array $userHref
      * @param VCalendar|string|null $oldCalendar
      *
      * @return array
@@ -182,7 +182,7 @@ class Broker
             ];
         }
 
-        $userHref = (array) $userHref;
+        $userHref = (array)$userHref;
 
         if (!is_null($calendar)) {
             if (is_string($calendar)) {
@@ -849,12 +849,12 @@ class Broker
                 }
                 $organizerForceSend =
                     isset($vevent->ORGANIZER['SCHEDULE-FORCE-SEND']) ?
-                    strtoupper($vevent->ORGANIZER['SCHEDULE-FORCE-SEND']) :
-                    null;
+                        strtoupper($vevent->ORGANIZER['SCHEDULE-FORCE-SEND']) :
+                        null;
                 $organizerScheduleAgent =
                     isset($vevent->ORGANIZER['SCHEDULE-AGENT']) ?
-                    strtoupper((string) $vevent->ORGANIZER['SCHEDULE-AGENT']) :
-                    'SERVER';
+                        strtoupper((string)$vevent->ORGANIZER['SCHEDULE-AGENT']) :
+                        'SERVER';
             }
             if (is_null($sequence) && isset($vevent->SEQUENCE)) {
                 $sequence = $vevent->SEQUENCE->getValue();
@@ -903,13 +903,13 @@ class Broker
                     }
                     $partStat =
                         isset($attendee['PARTSTAT']) ?
-                        strtoupper($attendee['PARTSTAT']) :
-                        'NEEDS-ACTION';
+                            strtoupper($attendee['PARTSTAT']) :
+                            'NEEDS-ACTION';
 
                     $forceSend =
                         isset($attendee['SCHEDULE-FORCE-SEND']) ?
-                        strtoupper($attendee['SCHEDULE-FORCE-SEND']) :
-                        null;
+                            strtoupper($attendee['SCHEDULE-FORCE-SEND']) :
+                            null;
 
                     if (isset($attendees[$attendee->getNormalizedValue()])) {
                         $attendees[$attendee->getNormalizedValue()]['instances'][$recurId] = [
@@ -926,7 +926,7 @@ class Broker
                                     'partstat' => $partStat,
                                 ],
                             ],
-                            'name' => isset($attendee['CN']) ? (string) $attendee['CN'] : null,
+                            'name' => isset($attendee['CN']) ? (string)$attendee['CN'] : null,
                             'forceSend' => $forceSend,
                         ];
                     }

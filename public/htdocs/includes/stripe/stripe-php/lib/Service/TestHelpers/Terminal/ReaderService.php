@@ -14,9 +14,9 @@ class ReaderService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Reader
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Reader
      */
     public function presentPaymentMethod($id, $params = null, $opts = null)
     {

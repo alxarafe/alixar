@@ -40,15 +40,14 @@ if (!defined('NOBROWSERNOTIF')) {
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/vcard.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "other", "recruitment"));
 
 // Get parameters
-$action   = GETPOST('action', 'aZ09');
-$mode     = GETPOST('mode', 'aZ09');
-$cancel   = GETPOST('cancel', 'alpha');
+$action = GETPOST('action', 'aZ09');
+$mode = GETPOST('mode', 'aZ09');
+$cancel = GETPOST('cancel', 'alpha');
 $backtopage = '';
 
 $id = GETPOSTINT('id');
@@ -255,7 +254,6 @@ if (!getDolUserInt('USER_PUBLIC_HIDE_COMPANY', 0, $object)) {
 }
 
 
-
 print '</div>';
 /*if (empty($conf->global->MAIN_HIDE_POWERED_BY)) {
     print '<div class="poweredbypublicpayment opacitymedium right"><a class="poweredbyhref" href="https://www.dolibarr.org?utm_medium=website&utm_source=poweredby" target="dolibarr" rel="noopener">'.$langs->trans("PoweredBy").'<br><img class="poweredbyimg" src="'.DOL_URL_ROOT.'/theme/alixar_rectangular_logo.svg" width="80px"></a></div>';
@@ -274,7 +272,6 @@ $urlforqrcode = $object->getOnlineVirtualCardUrl('vcard');
 $socialnetworksdict = getArrayOfSocialNetworks();
 
 
-
 // Show barcode
 $showbarcode = GETPOST('nobarcode') ? 0 : 1;
 if ($showbarcode) {
@@ -282,7 +279,7 @@ if ($showbarcode) {
 
     print '<br>';
     print '<div class="floatleft inline-block valignmiddle paddingleft paddingright">';
-    print '<img style="max-width: 100%" src="' . $dolibarr_main_url_root . '/viewimage.php?modulepart=barcode&entity=' . ((int) $conf->entity) . '&generator=tcpdfbarcode&encoding=QRCODE&code=' . urlencode($qrcodecontent) . '">';
+    print '<img style="max-width: 100%" src="' . $dolibarr_main_url_root . '/viewimage.php?modulepart=barcode&entity=' . ((int)$conf->entity) . '&generator=tcpdfbarcode&encoding=QRCODE&code=' . urlencode($qrcodecontent) . '">';
     print '</div>';
     print '<br>';
 }

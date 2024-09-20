@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2013	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2006		Andre Cianfarani		<acianfa@free.fr>
- * Copyright (C) 2015       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2023	    Alexandre Spangaro		<aspangaro@open-dsi.fr>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005		Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2013	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2006		Andre Cianfarani		    <acianfa@free.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2023	    Alexandre Spangaro		    <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  * \file    htdocs/societe/price.php
  * \ingroup product
@@ -34,25 +40,21 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
-use Dolibarr\Code\Societe\Classes\Societe;
-
 if (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productcustomerprice.class.php';
 
     $prodcustprice = new ProductCustomerPrice($db);
 }
 
-
 // Load translation files required by the page
 $langs->loadLangs(array("products", "companies", "bills"));
 
-
 // Get parameters
-$action         = GETPOST('action', 'aZ09');
-$search_prod    = GETPOST('search_prod', 'alpha');
-$cancel         = GETPOST('cancel', 'alpha');
-$search_label   = GETPOST('search_label', 'alpha');
-$search_price   = GETPOST('search_price');
+$action = GETPOST('action', 'aZ09');
+$search_prod = GETPOST('search_prod', 'alpha');
+$cancel = GETPOST('cancel', 'alpha');
+$search_label = GETPOST('search_label', 'alpha');
+$search_price = GETPOST('search_price');
 $search_price_ttc = GETPOST('search_price_ttc');
 
 // Security check
@@ -122,7 +124,7 @@ if (empty($reshook)) {
                 $sql = "SELECT t.rowid, t.code, t.recuperableonly, t.localtax1, t.localtax2, t.localtax1_type, t.localtax2_type";
                 $sql .= " FROM " . MAIN_DB_PREFIX . "c_tva as t, " . MAIN_DB_PREFIX . "c_country as c";
                 $sql .= " WHERE t.fk_pays = c.rowid AND c.code = '" . $db->escape($mysoc->country_code) . "'";
-                $sql .= " AND t.taux = " . ((float) $tva_tx) . " AND t.active = 1";
+                $sql .= " AND t.taux = " . ((float)$tva_tx) . " AND t.active = 1";
                 $sql .= " AND t.code = '" . $db->escape($vatratecode) . "'";
                 $sql .= " AND t.entity IN (" . getEntity('c_tva') . ")";
                 $resql = $db->query($sql);
@@ -254,7 +256,6 @@ print '</table>';
 print '</div>';
 
 print dol_get_fiche_end();
-
 
 
 if (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
@@ -544,11 +545,11 @@ if (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
         foreach ($prodcustprice->fields as $key => $val) {
             // If $val['visible']==0, then we never show the field
             if (!empty($val['visible'])) {
-                $visible = (int) dol_eval($val['visible'], 1, 1, '1');
+                $visible = (int)dol_eval($val['visible'], 1, 1, '1');
                 $arrayfields['t.' . $key] = array(
                     'label' => $val['label'],
                     'checked' => (($visible < 0) ? 0 : 1),
-                    'enabled' => (abs($visible) != 3 && (int) dol_eval($val['enabled'], 1, 1, '1')),
+                    'enabled' => (abs($visible) != 3 && (int)dol_eval($val['enabled'], 1, 1, '1')),
                     'position' => $val['position'],
                     'help' => isset($val['help']) ? $val['help'] : ''
                 );

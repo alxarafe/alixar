@@ -47,7 +47,7 @@ if (!defined('NOIPCHECK')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -110,7 +110,7 @@ if ($type == 'global') {
         $errors = array_merge($errors, $project->errors);
     } else {
         $sql = "SELECT COUNT(*) as nb FROM " . MAIN_DB_PREFIX . "eventorganization_conferenceorboothattendee";
-        $sql .= " WHERE fk_project = " . ((int) $project->id);
+        $sql .= " WHERE fk_project = " . ((int)$project->id);
         $sql .= " AND status IN (0, 1)";
 
         $resql = $db->query($sql);
@@ -127,7 +127,7 @@ if ($type == 'global') {
 
 // Security check
 $securekeyreceived = GETPOST('securekey', 'alpha');
-$securekeytocompare = dol_hash(getDolGlobalString('EVENTORGANIZATION_SECUREKEY') . 'conferenceorbooth' . ((int) $id), 'md5');
+$securekeytocompare = dol_hash(getDolGlobalString('EVENTORGANIZATION_SECUREKEY') . 'conferenceorbooth' . ((int)$id), 'md5');
 
 // We check if the securekey collected is OK
 if ($securekeytocompare != $securekeyreceived) {
@@ -154,12 +154,12 @@ if (empty($conf->eventorganization->enabled)) {
 /**
  * Show header for new member
  *
- * @param   string      $title              Title
- * @param   string      $head               Head array
- * @param   int         $disablejs          More content into html header
- * @param   int         $disablehead        More content into html header
- * @param   array       $arrayofjs          Array of complementary js files
- * @param   array       $arrayofcss         Array of complementary css files
+ * @param string $title Title
+ * @param string $head Head array
+ * @param int $disablejs More content into html header
+ * @param int $disablehead More content into html header
+ * @param array $arrayofjs Array of complementary js files
+ * @param array $arrayofcss Array of complementary css files
  * @return  void
  */
 function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $arrayofjs = [], $arrayofcss = [])
@@ -215,7 +215,6 @@ function llxFooterVierge()
 }
 
 
-
 /*
  * Actions
  */
@@ -228,7 +227,7 @@ if ($reshook < 0) {
 }
 
 // Action called when page is submitted
-if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conference->status == 2  || !empty($project->id) && $project->status == Project::STATUS_VALIDATED)) {
+if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conference->status == 2 || !empty($project->id) && $project->status == Project::STATUS_VALIDATED)) {
     $error = 0;
 
     $urlback = '';
@@ -240,7 +239,7 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
         $errmsg .= $langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("Email")) . "<br>\n";
     }
     // If the price has been set, name is required for the invoice
-    if (!GETPOST("societe") && !empty((float) $project->price_registration)) {
+    if (!GETPOST("societe") && !empty((float)$project->price_registration)) {
         $error++;
         $errmsg .= $langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("Company")) . "<br>\n";
     }
@@ -261,10 +260,10 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
         $filter = array();
 
         if ($type == 'global') {
-            $filter = "(t.fk_project:=:" . ((int) $id) . ") AND (t.email:=:'" . $db->escape($email) . "')";
+            $filter = "(t.fk_project:=:" . ((int)$id) . ") AND (t.email:=:'" . $db->escape($email) . "')";
         }
         if ($type == 'conf') {
-            $filter = "(t.fk_actioncomm:=:" . ((int) $id) . ") AND (t.email:=:'" . $db->escape($email) . "')";
+            $filter = "(t.fk_actioncomm:=:" . ((int)$id) . ") AND (t.email:=:'" . $db->escape($email) . "')";
         }
 
         // Check if there is already an attendee into table eventorganization_conferenceorboothattendee for same event (or conference/booth)
@@ -330,7 +329,7 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
         // If the registration has already been paid for this attendee
         if (!empty($confattendee->date_subscription) && !empty($confattendee->amount)) {
             $securekeyurl = dol_hash(getDolGlobalString('EVENTORGANIZATION_SECUREKEY') . 'conferenceorbooth' . $id, 'master');
-            $redirection = $dolibarr_main_url_root . '/public/eventorganization/subscriptionok.php?id=' . ((int) $id) . '&securekey=' . urlencode($securekeyurl);
+            $redirection = $dolibarr_main_url_root . '/public/eventorganization/subscriptionok.php?id=' . ((int)$id) . '&securekey=' . urlencode($securekeyurl);
 
             $mesg = $langs->trans("RegistrationAndPaymentWereAlreadyRecorded", $email);
             setEventMessages($mesg, null, 'mesgs');
@@ -437,7 +436,7 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
         }
 
         // If price is empty, no need to create a thirdparty, so we force $resultfetchthirdparty as if we have already found thirdp party.
-        if (empty((float) $project->price_registration)) {
+        if (empty((float)$project->price_registration)) {
             $resultfetchthirdparty = 1;
         }
 
@@ -449,18 +448,18 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
         } elseif ($resultfetchthirdparty == 0) {    // No thirdparty found + a payment is expected
             // Creation of a new thirdparty
             if (!empty($societe)) {
-                $thirdparty->name     = $societe;
+                $thirdparty->name = $societe;
             } else {
-                $thirdparty->name     = $genericcompanyname;
+                $thirdparty->name = $genericcompanyname;
             }
-            $thirdparty->address      = GETPOST("address");
-            $thirdparty->zip          = GETPOST("zipcode");
-            $thirdparty->town         = GETPOST("town");
-            $thirdparty->client       = $thirdparty::PROSPECT;
-            $thirdparty->fournisseur  = 0;
-            $thirdparty->country_id   = GETPOSTINT("country_id");
-            $thirdparty->state_id     = GETPOSTINT("state_id");
-            $thirdparty->email        = ($emailcompany ? $emailcompany : $email);
+            $thirdparty->address = GETPOST("address");
+            $thirdparty->zip = GETPOST("zipcode");
+            $thirdparty->town = GETPOST("town");
+            $thirdparty->client = $thirdparty::PROSPECT;
+            $thirdparty->fournisseur = 0;
+            $thirdparty->country_id = GETPOSTINT("country_id");
+            $thirdparty->state_id = GETPOSTINT("state_id");
+            $thirdparty->email = ($emailcompany ? $emailcompany : $email);
 
             // Load object modCodeTiers
             $module = getDolGlobalString('SOCIETE_CODECLIENT_ADDON', 'mod_codeclient_leopard');
@@ -487,10 +486,10 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
                 $errors = array_merge($errors, $thirdparty->errors);
             } else {
                 $thirdparty->country_code = getCountry($thirdparty->country_id, 2, $db, $langs);
-                $thirdparty->country      = getCountry($thirdparty->country_code, 0, $db, $langs);
+                $thirdparty->country = getCountry($thirdparty->country_code, 0, $db, $langs);
 
                 // Update attendee country to match country of thirdparty
-                $confattendee->fk_soc     = $thirdparty->id;
+                $confattendee->fk_soc = $thirdparty->id;
                 $confattendee->update($user);
             }
         }
@@ -498,7 +497,7 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
 
     if (!$error) {
         // If the registration needs a payment
-        if (!empty((float) $project->price_registration)) {
+        if (!empty((float)$project->price_registration)) {
             $outputlangs = $langs;
 
             // TODO Use default language of $thirdparty->default_lang to build $outputlang
@@ -571,7 +570,7 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
 
                 // If there is no lines yet, we add one
                 if (empty($facture->lines)) {
-                    $pu_ttc = (float) $project->price_registration;
+                    $pu_ttc = (float)$project->price_registration;
                     $pu_ht = 0;
                     $price_base_type = 'TTC';
 
@@ -595,7 +594,7 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
                 // Now we redirect to the payment page
                 $sourcetouse = 'organizedeventregistration';
                 $reftouse = $facture->id;
-                $redirection = $dolibarr_main_url_root . '/public/payment/newpayment.php?source=' . urlencode((string) ($sourcetouse)) . '&ref=' . urlencode((string) ($reftouse));
+                $redirection = $dolibarr_main_url_root . '/public/payment/newpayment.php?source=' . urlencode((string)($sourcetouse)) . '&ref=' . urlencode((string)($reftouse));
                 if (getDolGlobalString('PAYMENT_SECURITY_TOKEN')) {
                     if (getDolGlobalString('PAYMENT_SECURITY_TOKEN_UNIQUE')) {
                         $redirection .= '&securekey=' . dol_hash(getDolGlobalString('PAYMENT_SECURITY_TOKEN') . $sourcetouse . $reftouse, 2); // Use the source in the hash to avoid duplicates if the references are identical
@@ -617,7 +616,6 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
             $confattendee->setStatut(1);
 
             // Sending mail
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
             $formmail = new FormMail($db);
             // Set output language
             $outputlangs = new Translate('', $conf);
@@ -634,7 +632,7 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
 
             if (!empty($labeltouse) && is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
                 $subject = $arraydefaultmessage->topic;
-                $msg     = $arraydefaultmessage->content;
+                $msg = $arraydefaultmessage->content;
             }
 
             $substitutionarray = getCommonSubstitutionArray($outputlangs, 0, null, $thirdparty);
@@ -659,7 +657,7 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
             }
 
             $securekeyurl = dol_hash(getDolGlobalString('EVENTORGANIZATION_SECUREKEY') . 'conferenceorbooth' . $id, 2);
-            $redirection = $dolibarr_main_url_root . '/public/eventorganization/subscriptionok.php?id=' . ((int) $id) . '&securekey=' . urlencode($securekeyurl);
+            $redirection = $dolibarr_main_url_root . '/public/eventorganization/subscriptionok.php?id=' . ((int)$id) . '&securekey=' . urlencode($securekeyurl);
 
             header("Location: " . $redirection);
             exit;
@@ -760,7 +758,6 @@ if ($maxattendees && $currentnbofattendees >= $maxattendees) {
 }
 
 
-
 dol_htmloutput_errors($errmsg, $errors);
 
 if ((!empty($conference->id) && $conference->status == ConferenceOrBooth::STATUS_CONFIRMED) || (!empty($project->id) && $project->status == Project::STATUS_VALIDATED)) {
@@ -814,16 +811,16 @@ if ((!empty($conference->id) && $conference->status == ConferenceOrBooth::STATUS
 
         // Company
         print '<tr id="trcompany" class="trcompany"><td>';
-        if (!empty((float) $project->price_registration)) {
+        if (!empty((float)$project->price_registration)) {
             print '<span class="fieldrequired">';
         }
         print $langs->trans("Company");
-        if (!empty((float) $project->price_registration)) {
+        if (!empty((float)$project->price_registration)) {
             print '</span>';
         }
         print '</td><td>';
         print img_picto('', 'company', 'class="pictofixedwidth"');
-        print '<input type="text" name="societe" class="minwidth200 widthcentpercentminusx maxwidth300" value="' . dol_escape_htmltag(GETPOST('societe')) . '"' . (empty((float) $project->price_registration) ? '' : ' required') . '></td></tr>' . "\n";
+        print '<input type="text" name="societe" class="minwidth200 widthcentpercentminusx maxwidth300" value="' . dol_escape_htmltag(GETPOST('societe')) . '"' . (empty((float)$project->price_registration) ? '' : ' required') . '></td></tr>' . "\n";
 
         // Email company for invoice
         if ($project->price_registration) {

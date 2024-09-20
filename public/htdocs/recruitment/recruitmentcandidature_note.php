@@ -1,7 +1,6 @@
 <?php
 
-/* Copyright (C) 2007-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) ---Put here your own copyright and developer email---
+/* Copyright (C) 2007-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +17,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Recruitement\Classes\RecruitmentCandidature;
+
 /**
  *  \file       recruitmentcandidature_note.php
  *  \ingroup    recruitment
@@ -26,7 +29,6 @@
 
 // Load Dolibarr environment
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentcandidature.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/lib/recruitment_recruitmentcandidature.lib.php';
 
 // Load translation files required by the page
@@ -74,7 +76,6 @@ if ($reshook < 0) {
 if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_setnotes.inc.php'; // Must be include, not include_once
 }
-
 
 /*
  * View

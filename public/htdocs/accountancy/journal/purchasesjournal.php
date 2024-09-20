@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2007-2010  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2007-2010  Jean Heimburger         <jean@tiaris.info>
- * Copyright (C) 2011       Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2012       Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2013-2024  Alexandre Spangaro      <alexandre@inovea-conseil.com>
- * Copyright (C) 2013-2016  Olivier Geffroy         <jeff@jeffinfo.com>
- * Copyright (C) 2013-2016  Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2018       Eric Seigne             <eric.seigne@cap-rel.fr>
- * Copyright (C) 2024       MDW                     <mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2007-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007-2010  Jean Heimburger             <jean@tiaris.info>
+ * Copyright (C) 2011       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2012       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2024  Alexandre Spangaro          <alexandre@inovea-conseil.com>
+ * Copyright (C) 2013-2016  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2016  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2018       Eric Seigne                 <eric.seigne@cap-rel.fr>
+ * Copyright (C) 2024       MDW                         <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -30,6 +30,10 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Accountancy\Classes\BookKeeping;
 use Dolibarr\Code\Accountancy\Classes\Lettering;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\Fournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  * \file        htdocs/accountancy/journal/purchasesjournal.php

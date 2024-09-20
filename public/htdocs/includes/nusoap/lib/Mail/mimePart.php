@@ -25,8 +25,8 @@
  * - Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * - Neither the name of the authors, nor the names of its contributors 
- *   may be used to endorse or promote products derived from this 
+ * - Neither the name of the authors, nor the names of its contributors
+ *   may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
@@ -77,92 +77,92 @@
 class Mail_mimePart
 {
     /**
-    * The encoding type of this part
-    *
-    * @var string
-    * @access private
-    */
+     * The encoding type of this part
+     *
+     * @var string
+     * @access private
+     */
     var $_encoding;
 
     /**
-    * An array of subparts
-    *
-    * @var array
-    * @access private
-    */
+     * An array of subparts
+     *
+     * @var array
+     * @access private
+     */
     var $_subparts;
 
     /**
-    * The output of this part after being built
-    *
-    * @var string
-    * @access private
-    */
+     * The output of this part after being built
+     *
+     * @var string
+     * @access private
+     */
     var $_encoded;
 
     /**
-    * Headers for this part
-    *
-    * @var array
-    * @access private
-    */
+     * Headers for this part
+     *
+     * @var array
+     * @access private
+     */
     var $_headers;
 
     /**
-    * The body of this part (not encoded)
-    *
-    * @var string
-    * @access private
-    */
+     * The body of this part (not encoded)
+     *
+     * @var string
+     * @access private
+     */
     var $_body;
 
     /**
-    * The location of file with body of this part (not encoded)
-    *
-    * @var string
-    * @access private
-    */
+     * The location of file with body of this part (not encoded)
+     *
+     * @var string
+     * @access private
+     */
     var $_body_file;
 
     /**
-    * The end-of-line sequence
-    *
-    * @var string
-    * @access private
-    */
+     * The end-of-line sequence
+     *
+     * @var string
+     * @access private
+     */
     var $_eol = "\r\n";
 
 
     /**
-    * Constructor.
-    *
-    * Sets up the object.
-    *
-    * @param string $body   The body of the mime part if any.
-    * @param array  $params An associative array of optional parameters:
-    *     content_type      - The content type for this part eg multipart/mixed
-    *     encoding          - The encoding to use, 7bit, 8bit,
-    *                         base64, or quoted-printable
-    *     charset           - Content character set
-    *     cid               - Content ID to apply
-    *     disposition       - Content disposition, inline or attachment
-    *     filename          - Filename parameter for content disposition
-    *     description       - Content description
-    *     name_encoding     - Encoding of the attachment name (Content-Type)
-    *                         By default filenames are encoded using RFC2231
-    *                         Here you can set RFC2047 encoding (quoted-printable
-    *                         or base64) instead
-    *     filename_encoding - Encoding of the attachment filename (Content-Disposition)
-    *                         See 'name_encoding'
-    *     headers_charset   - Charset of the headers e.g. filename, description.
-    *                         If not set, 'charset' will be used
-    *     eol               - End of line sequence. Default: "\r\n"
-    *     headers           - Hash array with additional part headers. Array keys can be
-    *                         in form of <header_name>:<parameter_name>
-    *     body_file         - Location of file with part's body (instead of $body)
-    *
-    * @access public
-    */
+     * Constructor.
+     *
+     * Sets up the object.
+     *
+     * @param string $body The body of the mime part if any.
+     * @param array $params An associative array of optional parameters:
+     *     content_type      - The content type for this part eg multipart/mixed
+     *     encoding          - The encoding to use, 7bit, 8bit,
+     *                         base64, or quoted-printable
+     *     charset           - Content character set
+     *     cid               - Content ID to apply
+     *     disposition       - Content disposition, inline or attachment
+     *     filename          - Filename parameter for content disposition
+     *     description       - Content description
+     *     name_encoding     - Encoding of the attachment name (Content-Type)
+     *                         By default filenames are encoded using RFC2231
+     *                         Here you can set RFC2047 encoding (quoted-printable
+     *                         or base64) instead
+     *     filename_encoding - Encoding of the attachment filename (Content-Disposition)
+     *                         See 'name_encoding'
+     *     headers_charset   - Charset of the headers e.g. filename, description.
+     *                         If not set, 'charset' will be used
+     *     eol               - End of line sequence. Default: "\r\n"
+     *     headers           - Hash array with additional part headers. Array keys can be
+     *                         in form of <header_name>:<parameter_name>
+     *     body_file         - Location of file with part's body (instead of $body)
+     *
+     * @access public
+     */
     function Mail_mimePart($body = '', $params = array())
     {
         if (!empty($params['eol'])) {
@@ -178,27 +178,27 @@ class Mail_mimePart
 
         foreach ($params as $key => $value) {
             switch ($key) {
-            case 'encoding':
+                case 'encoding':
                     $this->_encoding = $value;
                     $headers['Content-Transfer-Encoding'] = $value;
-                break;
+                    break;
 
-            case 'cid':
+                case 'cid':
                     $headers['Content-ID'] = '<' . $value . '>';
-                break;
+                    break;
 
-            case 'location':
+                case 'location':
                     $headers['Content-Location'] = $value;
-                break;
+                    break;
 
-            case 'body_file':
+                case 'body_file':
                     $this->_body_file = $value;
-                break;
+                    break;
 
-            // for backward compatibility
-            case 'dfilename':
+                // for backward compatibility
+                case 'dfilename':
                     $params['filename'] = $value;
-                break;
+                    break;
             }
         }
 
@@ -226,7 +226,7 @@ class Mail_mimePart
         }
 
         // header values encoding parameters
-        $h_charset  = !empty($params['headers_charset']) ? $params['headers_charset'] : 'US-ASCII';
+        $h_charset = !empty($params['headers_charset']) ? $params['headers_charset'] : 'US-ASCII';
         $h_language = !empty($params['language']) ? $params['language'] : null;
         $h_encoding = !empty($params['name_encoding']) ? $params['name_encoding'] : null;
 
@@ -268,7 +268,7 @@ class Mail_mimePart
             $items = explode(':', $key);
             if (count($items) == 2) {
                 $header = $items[0];
-                $param  = $items[1];
+                $param = $items[1];
                 if (isset($headers[$header])) {
                     $headers[$header] .= ';' . $this->_eol;
                 }
@@ -285,9 +285,9 @@ class Mail_mimePart
         }
 
         // Assign stuff to member variables
-        $this->_encoded  = array();
-        $this->_headers  = $headers;
-        $this->_body     = $body;
+        $this->_encoded = array();
+        $this->_headers = $headers;
+        $this->_body = $body;
     }
 
     /**
@@ -311,7 +311,7 @@ class Mail_mimePart
 
             $this->_headers['Content-Type'] .= ";$eol boundary=\"$boundary\"";
 
-            $encoded['body'] = ''; 
+            $encoded['body'] = '';
 
             for ($i = 0; $i < count($this->_subparts); $i++) {
                 $encoded['body'] .= '--' . $boundary . $eol;
@@ -356,8 +356,8 @@ class Mail_mimePart
      * Encodes and saves the email into file. File must exist.
      * Data will be appended to the file.
      *
-     * @param string  $filename  Output file location
-     * @param string  $boundary  Pre-defined boundary string
+     * @param string $filename Output file location
+     * @param string $boundary Pre-defined boundary string
      * @param boolean $skip_head True if you don't want to save headers
      *
      * @return array An associative array containing message headers
@@ -396,8 +396,8 @@ class Mail_mimePart
     /**
      * Encodes given email part into file
      *
-     * @param string  $fh        Output file handle
-     * @param string  $boundary  Pre-defined boundary string
+     * @param string $fh Output file handle
+     * @param string $boundary Pre-defined boundary string
      * @param boolean $skip_head True if you don't want to save headers
      *
      * @return array True on sucess or PEAR error object
@@ -451,8 +451,8 @@ class Mail_mimePart
      * Adds a subpart to current mime part and returns
      * a reference to it
      *
-     * @param string $body   The body of the subpart, if any.
-     * @param array  $params The parameters for the subpart, same
+     * @param string $body The body of the subpart, if any.
+     * @param array $params The parameters for the subpart, same
      *                       as the $params argument for constructor.
      *
      * @return Mail_mimePart A reference to the part you just added. In PHP4, it is
@@ -470,7 +470,7 @@ class Mail_mimePart
     /**
      * Returns encoded data based upon encoding passed to it
      *
-     * @param string $data     The data to encode.
+     * @param string $data The data to encode.
      * @param string $encoding The encoding type to use, 7bit, base64,
      *                         or quoted-printable.
      *
@@ -480,28 +480,28 @@ class Mail_mimePart
     function _getEncodedData($data, $encoding)
     {
         switch ($encoding) {
-        case 'quoted-printable':
-            return $this->_quotedPrintableEncode($data);
-            break;
+            case 'quoted-printable':
+                return $this->_quotedPrintableEncode($data);
+                break;
 
-        case 'base64':
-            return rtrim(chunk_split(base64_encode($data), 76, $this->_eol));
-            break;
+            case 'base64':
+                return rtrim(chunk_split(base64_encode($data), 76, $this->_eol));
+                break;
 
-        case '8bit':
-        case '7bit':
-        default:
-            return $data;
+            case '8bit':
+            case '7bit':
+            default:
+                return $data;
         }
     }
 
     /**
      * Returns encoded data based upon encoding passed to it
      *
-     * @param string   $filename Data file location
-     * @param string   $encoding The encoding type to use, 7bit, base64,
+     * @param string $filename Data file location
+     * @param string $encoding The encoding type to use, 7bit, base64,
      *                           or quoted-printable.
-     * @param resource $fh       Output file handle. If set, data will be
+     * @param resource $fh Output file handle. If set, data will be
      *                           stored into it instead of returning it
      *
      * @return string Encoded data or PEAR error object
@@ -522,7 +522,7 @@ class Mail_mimePart
         $data = '';
 
         switch ($encoding) {
-        case 'quoted-printable':
+            case 'quoted-printable':
                 while (!feof($fd)) {
                     $buffer = $this->_quotedPrintableEncode(fgets($fd));
                     if ($fh) {
@@ -530,10 +530,10 @@ class Mail_mimePart
                     } else {
                         $data .= $buffer;
                     }
-                    }
-            break;
+                }
+                break;
 
-        case 'base64':
+            case 'base64':
                 while (!feof($fd)) {
                     // Should read in a multiple of 57 bytes so that
                     // the output is 76 bytes per line. Don't use big chunks
@@ -550,12 +550,12 @@ class Mail_mimePart
                     } else {
                         $data .= $buffer;
                     }
-                    }
-            break;
+                }
+                break;
 
-        case '8bit':
-        case '7bit':
-        default:
+            case '8bit':
+            case '7bit':
+            default:
                 while (!feof($fd)) {
                     $buffer = fread($fd, 1048576); // 1 MB
                     if ($fh) {
@@ -563,7 +563,7 @@ class Mail_mimePart
                     } else {
                         $data .= $buffer;
                     }
-                    }
+                }
         }
 
         fclose($fd);
@@ -576,8 +576,8 @@ class Mail_mimePart
     /**
      * Encodes data to quoted-printable standard.
      *
-     * @param string $input    The data to encode
-     * @param int    $line_max Optional max line length. Should
+     * @param string $input The data to encode
+     * @param int $line_max Optional max line length. Should
      *                         not be more than 76 chars
      *
      * @return string Encoded data
@@ -598,7 +598,7 @@ class Mail_mimePart
             return $input;
         }
         */
-        $lines  = preg_split("/\r?\n/", $input);
+        $lines = preg_split("/\r?\n/", $input);
         $escape = '=';
         $output = '';
 
@@ -608,7 +608,7 @@ class Mail_mimePart
 
             while (isset($line[$i])) {
                 $char = $line[$i];
-                $dec  = ord($char);
+                $dec = ord($char);
                 $i++;
 
                 if (($dec == 32) && (!isset($line[$i]))) {
@@ -620,7 +620,7 @@ class Mail_mimePart
                     $char = $escape . sprintf('%02X', $dec);
                 } elseif (
                     ($dec == 46) && (($newline == '')
-                    || ((strlen($newline) + strlen("=2E")) >= $line_max))
+                        || ((strlen($newline) + strlen("=2E")) >= $line_max))
                 ) {
                     // Bug #9722: convert full-stop at bol,
                     // some Windows servers need this, won't break anything (cipri)
@@ -634,8 +634,8 @@ class Mail_mimePart
                 // EOL is not counted
                 if ((strlen($newline) + strlen($char)) >= $line_max) {
                     // soft line break; " =\r\n" is okay
-                    $output  .= $newline . $escape . $eol;
-                    $newline  = '';
+                    $output .= $newline . $escape . $eol;
+                    $newline = '';
                 }
                 $newline .= $char;
             } // end of for
@@ -650,13 +650,13 @@ class Mail_mimePart
     /**
      * Encodes the parameter of a header.
      *
-     * @param string $name      The name of the header-parameter
-     * @param string $value     The value of the paramter
-     * @param string $charset   The characterset of $value
-     * @param string $language  The language used in $value
-     * @param string $encoding  Parameter encoding. If not set, parameter value
+     * @param string $name The name of the header-parameter
+     * @param string $value The value of the paramter
+     * @param string $charset The characterset of $value
+     * @param string $language The language used in $value
+     * @param string $encoding Parameter encoding. If not set, parameter value
      *                          is encoded according to RFC2231
-     * @param int    $maxLength The maximum length of a line. Defauls to 75
+     * @param int $maxLength The maximum length of a line. Defauls to 75
      *
      * @return string
      *
@@ -669,7 +669,8 @@ class Mail_mimePart
         $language = null,
         $encoding = null,
         $maxLength = 75
-    ) {
+    )
+    {
         // RFC 2045:
         // value needs encoding if contains non-ASCII chars or is longer than 78 chars
         if (!preg_match('#[^\x20-\x7E]#', $value)) {
@@ -732,11 +733,11 @@ class Mail_mimePart
     /**
      * Encodes header parameter as per RFC2047 if needed
      *
-     * @param string $name      The parameter name
-     * @param string $value     The parameter value
-     * @param string $charset   The parameter charset
-     * @param string $encoding  Encoding type (quoted-printable or base64)
-     * @param int    $maxLength Encoded parameter max length. Default: 76
+     * @param string $name The parameter name
+     * @param string $value The parameter value
+     * @param string $charset The parameter charset
+     * @param string $encoding Encoding type (quoted-printable or base64)
+     * @param int $maxLength Encoded parameter max length. Default: 76
      *
      * @return string Parameter line
      * @access private
@@ -747,7 +748,8 @@ class Mail_mimePart
         $charset,
         $encoding = 'quoted-printable',
         $maxLength = 76
-    ) {
+    )
+    {
         // WARNING: RFC 2047 says: "An 'encoded-word' MUST NOT be used in
         // parameter of a MIME Content-Type or Content-Disposition field",
         // but... it's supported by many clients/servers
@@ -762,7 +764,7 @@ class Mail_mimePart
             $add_len = strlen($prefix . $suffix) + strlen($name) + 6;
             $len = $add_len + strlen($value);
 
-            while ($len > $maxLength) { 
+            while ($len > $maxLength) {
                 // We can cut base64-encoded string every 4 characters
                 $real_len = floor(($maxLength - $add_len) / 4) * 4;
                 $_quote = substr($value, 0, $real_len);
@@ -805,11 +807,11 @@ class Mail_mimePart
     /**
      * Encodes a header as per RFC2047
      *
-     * @param string $name     The header name
-     * @param string $value    The header data to encode
-     * @param string $charset  Character set name
+     * @param string $name The header name
+     * @param string $value The header data to encode
+     * @param string $charset Character set name
      * @param string $encoding Encoding name (base64 or quoted-printable)
-     * @param string $eol      End-of-line sequence. Default: "\r\n"
+     * @param string $eol End-of-line sequence. Default: "\r\n"
      *
      * @return string          Encoded header data (without a name)
      * @access public
@@ -821,7 +823,8 @@ class Mail_mimePart
         $charset = 'ISO-8859-1',
         $encoding = 'quoted-printable',
         $eol = "\r\n"
-    ) {
+    )
+    {
         // Structured headers
         $comma_headers = array(
             'from', 'to', 'cc', 'bcc', 'sender', 'reply-to',
@@ -953,7 +956,7 @@ class Mail_mimePart
      * Explode quoted string
      *
      * @param string $delimiter Delimiter expression string for preg_match()
-     * @param string $string    Input string
+     * @param string $string Input string
      *
      * @return array            String tokens array
      * @access private
@@ -982,11 +985,11 @@ class Mail_mimePart
     /**
      * Encodes a header value as per RFC2047
      *
-     * @param string $value      The header data to encode
-     * @param string $charset    Character set name
-     * @param string $encoding   Encoding name (base64 or quoted-printable)
-     * @param int    $prefix_len Prefix length. Default: 0
-     * @param string $eol        End-of-line sequence. Default: "\r\n"
+     * @param string $value The header data to encode
+     * @param string $charset Character set name
+     * @param string $encoding Encoding name (base64 or quoted-printable)
+     * @param int $prefix_len Prefix length. Default: 0
+     * @param string $eol End-of-line sequence. Default: "\r\n"
      *
      * @return string            Encoded header data
      * @access public
@@ -1112,11 +1115,11 @@ class Mail_mimePart
      * This method makes sure that encoded-word represents an integral
      * number of characters as per RFC2047.
      *
-     * @param string $str        String to encode
-     * @param string $charset    Character set name
-     * @param string $encoding   Encoding name (base64 or quoted-printable)
-     * @param int    $prefix_len Prefix length. Default: 0
-     * @param string $eol        End-of-line sequence. Default: "\r\n"
+     * @param string $str String to encode
+     * @param string $charset Character set name
+     * @param string $encoding Encoding name (base64 or quoted-printable)
+     * @param int $prefix_len Prefix length. Default: 0
+     * @param string $eol End-of-line sequence. Default: "\r\n"
      *
      * @return string     Encoded string
      * @access public
@@ -1137,14 +1140,14 @@ class Mail_mimePart
         // A multi-octet character may not be split across adjacent encoded-words
         // So, we'll loop over each character
         // mb_stlen() with wrong charset will generate a warning here and return null
-        $length      = mb_strlen($str, $charset);
-        $result      = '';
+        $length = mb_strlen($str, $charset);
+        $result = '';
         $line_length = $prefix_len;
 
         if ($encoding == 'B') {
             // base64
             $start = 0;
-            $prev  = '';
+            $prev = '';
 
             for ($i = 1; $i <= $length; $i++) {
                 // See #17311
@@ -1198,7 +1201,7 @@ class Mail_mimePart
                     $line_length = 0;
                 }
 
-                $result      .= $char;
+                $result .= $char;
                 $line_length += $char_len;
             }
         }

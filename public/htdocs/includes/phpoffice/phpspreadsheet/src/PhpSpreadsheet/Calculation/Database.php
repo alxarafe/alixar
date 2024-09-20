@@ -130,8 +130,6 @@ class Database
      * Excel Function:
      *        DAVERAGE(database,field,criteria)
      *
-     * @category Database Functions
-     *
      * @param mixed[] $database The range of cells that makes up the list or database.
      *                                        A database is a list of related data in which rows of related
      *                                        information are records, and columns of data are fields. The
@@ -148,6 +146,8 @@ class Database
      *                                        column.
      *
      * @return float|string
+     * @category Database Functions
+     *
      */
     public static function DAVERAGE($database, $field, $criteria)
     {
@@ -174,8 +174,6 @@ class Database
      * Excel Function:
      *        DAVERAGE(database,field,criteria)
      *
-     * @category Database Functions
-     *
      * @param mixed[] $database The range of cells that makes up the list or database.
      *                                        A database is a list of related data in which rows of related
      *                                        information are records, and columns of data are fields. The
@@ -195,6 +193,8 @@ class Database
      *
      * @TODO    The field argument is optional. If field is omitted, DCOUNT counts all records in the
      *            database that match the criteria.
+     * @category Database Functions
+     *
      */
     public static function DCOUNT($database, $field, $criteria)
     {
@@ -217,8 +217,6 @@ class Database
      * Excel Function:
      *        DCOUNTA(database,[field],criteria)
      *
-     * @category Database Functions
-     *
      * @param mixed[] $database The range of cells that makes up the list or database.
      *                                        A database is a list of related data in which rows of related
      *                                        information are records, and columns of data are fields. The
@@ -238,6 +236,8 @@ class Database
      *
      * @TODO    The field argument is optional. If field is omitted, DCOUNTA counts all records in the
      *            database that match the criteria.
+     * @category Database Functions
+     *
      */
     public static function DCOUNTA($database, $field, $criteria)
     {
@@ -269,8 +269,6 @@ class Database
      * Excel Function:
      *        DGET(database,field,criteria)
      *
-     * @category Database Functions
-     *
      * @param mixed[] $database The range of cells that makes up the list or database.
      *                                        A database is a list of related data in which rows of related
      *                                        information are records, and columns of data are fields. The
@@ -287,6 +285,8 @@ class Database
      *                                        column.
      *
      * @return mixed
+     * @category Database Functions
+     *
      */
     public static function DGET($database, $field, $criteria)
     {
@@ -313,8 +313,6 @@ class Database
      * Excel Function:
      *        DMAX(database,field,criteria)
      *
-     * @category Database Functions
-     *
      * @param mixed[] $database The range of cells that makes up the list or database.
      *                                        A database is a list of related data in which rows of related
      *                                        information are records, and columns of data are fields. The
@@ -331,6 +329,8 @@ class Database
      *                                        column.
      *
      * @return float
+     * @category Database Functions
+     *
      */
     public static function DMAX($database, $field, $criteria)
     {
@@ -354,8 +354,6 @@ class Database
      * Excel Function:
      *        DMIN(database,field,criteria)
      *
-     * @category Database Functions
-     *
      * @param mixed[] $database The range of cells that makes up the list or database.
      *                                        A database is a list of related data in which rows of related
      *                                        information are records, and columns of data are fields. The
@@ -372,6 +370,8 @@ class Database
      *                                        column.
      *
      * @return float
+     * @category Database Functions
+     *
      */
     public static function DMIN($database, $field, $criteria)
     {
@@ -394,8 +394,6 @@ class Database
      * Excel Function:
      *        DPRODUCT(database,field,criteria)
      *
-     * @category Database Functions
-     *
      * @param mixed[] $database The range of cells that makes up the list or database.
      *                                        A database is a list of related data in which rows of related
      *                                        information are records, and columns of data are fields. The
@@ -412,6 +410,8 @@ class Database
      *                                        column.
      *
      * @return float
+     * @category Database Functions
+     *
      */
     public static function DPRODUCT($database, $field, $criteria)
     {
@@ -435,8 +435,6 @@ class Database
      * Excel Function:
      *        DSTDEV(database,field,criteria)
      *
-     * @category Database Functions
-     *
      * @param mixed[] $database The range of cells that makes up the list or database.
      *                                        A database is a list of related data in which rows of related
      *                                        information are records, and columns of data are fields. The
@@ -453,6 +451,8 @@ class Database
      *                                        column.
      *
      * @return float|string
+     * @category Database Functions
+     *
      */
     public static function DSTDEV($database, $field, $criteria)
     {
@@ -476,8 +476,6 @@ class Database
      * Excel Function:
      *        DSTDEVP(database,field,criteria)
      *
-     * @category Database Functions
-     *
      * @param mixed[] $database The range of cells that makes up the list or database.
      *                                        A database is a list of related data in which rows of related
      *                                        information are records, and columns of data are fields. The
@@ -494,6 +492,8 @@ class Database
      *                                        column.
      *
      * @return float|string
+     * @category Database Functions
+     *
      */
     public static function DSTDEVP($database, $field, $criteria)
     {
@@ -516,8 +516,6 @@ class Database
      * Excel Function:
      *        DSUM(database,field,criteria)
      *
-     * @category Database Functions
-     *
      * @param mixed[] $database The range of cells that makes up the list or database.
      *                                        A database is a list of related data in which rows of related
      *                                        information are records, and columns of data are fields. The
@@ -534,6 +532,8 @@ class Database
      *                                        column.
      *
      * @return float
+     * @category Database Functions
+     *
      */
     public static function DSUM($database, $field, $criteria)
     {
@@ -557,8 +557,6 @@ class Database
      * Excel Function:
      *        DVAR(database,field,criteria)
      *
-     * @category Database Functions
-     *
      * @param mixed[] $database The range of cells that makes up the list or database.
      *                                        A database is a list of related data in which rows of related
      *                                        information are records, and columns of data are fields. The
@@ -575,6 +573,8 @@ class Database
      *                                        column.
      *
      * @return float
+     * @category Database Functions
+     *
      */
     public static function DVAR($database, $field, $criteria)
     {
@@ -598,8 +598,6 @@ class Database
      * Excel Function:
      *        DVARP(database,field,criteria)
      *
-     * @category Database Functions
-     *
      * @param mixed[] $database The range of cells that makes up the list or database.
      *                                        A database is a list of related data in which rows of related
      *                                        information are records, and columns of data are fields. The
@@ -616,6 +614,8 @@ class Database
      *                                        column.
      *
      * @return float
+     * @category Database Functions
+     *
      */
     public static function DVARP($database, $field, $criteria)
     {

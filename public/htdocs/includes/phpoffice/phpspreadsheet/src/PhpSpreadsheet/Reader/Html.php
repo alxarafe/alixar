@@ -205,9 +205,9 @@ class Html extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function load($pFilename)
     {
@@ -288,7 +288,7 @@ class Html extends BaseReader
             //    TODO
             $this->dataArray[$row][$column] = 'RICH TEXT: ' . $cellContent;
         }
-        $cellContent = (string) '';
+        $cellContent = (string)'';
     }
 
     /**
@@ -308,7 +308,7 @@ class Html extends BaseReader
                     $cellContent .= $domText;
                 }
                 //    but if we have a rich text run instead, we need to append it correctly
-                    //    TODO
+                //    TODO
             } elseif ($child instanceof DOMElement) {
                 $attributeArray = [];
                 foreach ($child->attributes as $attribute) {
@@ -370,8 +370,8 @@ class Html extends BaseReader
                             $this->flushCell($sheet, $column, $row, $cellContent);
                         }
                         ++$row;
-                        // Add a break after a horizontal rule, simply by allowing the code to dropthru
-                        // no break
+                    // Add a break after a horizontal rule, simply by allowing the code to dropthru
+                    // no break
                     case 'br':
                         if ($this->tableLevel > 0) {
                             //    If we're inside a table, replace with a \n and set the cell to wrap
@@ -502,10 +502,10 @@ class Html extends BaseReader
                         if (isset($attributeArray['rowspan'], $attributeArray['colspan'])) {
                             //create merging rowspan and colspan
                             $columnTo = $column;
-                            for ($i = 0; $i < (int) $attributeArray['colspan'] - 1; ++$i) {
+                            for ($i = 0; $i < (int)$attributeArray['colspan'] - 1; ++$i) {
                                 ++$columnTo;
                             }
-                            $range = $column . $row . ':' . $columnTo . ($row + (int) $attributeArray['rowspan'] - 1);
+                            $range = $column . $row . ':' . $columnTo . ($row + (int)$attributeArray['rowspan'] - 1);
                             foreach (Coordinate::extractAllCellReferencesInRange($range) as $value) {
                                 $this->rowspan[$value] = true;
                             }
@@ -513,7 +513,7 @@ class Html extends BaseReader
                             $column = $columnTo;
                         } elseif (isset($attributeArray['rowspan'])) {
                             //create merging rowspan
-                            $range = $column . $row . ':' . $column . ($row + (int) $attributeArray['rowspan'] - 1);
+                            $range = $column . $row . ':' . $column . ($row + (int)$attributeArray['rowspan'] - 1);
                             foreach (Coordinate::extractAllCellReferencesInRange($range) as $value) {
                                 $this->rowspan[$value] = true;
                             }
@@ -521,7 +521,7 @@ class Html extends BaseReader
                         } elseif (isset($attributeArray['colspan'])) {
                             //create merging colspan
                             $columnTo = $column;
-                            for ($i = 0; $i < (int) $attributeArray['colspan'] - 1; ++$i) {
+                            for ($i = 0; $i < (int)$attributeArray['colspan'] - 1; ++$i) {
                                 ++$columnTo;
                             }
                             $sheet->mergeCells($column . $row . ':' . $columnTo . $row);
@@ -581,9 +581,9 @@ class Html extends BaseReader
      * @param string $pFilename
      * @param Spreadsheet $spreadsheet
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function loadIntoExisting($pFilename, Spreadsheet $spreadsheet)
     {
@@ -630,9 +630,9 @@ class Html extends BaseReader
      * @param DOMDocument $document
      * @param Spreadsheet $spreadsheet
      *
+     * @return Spreadsheet
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      *
-     * @return Spreadsheet
      */
     private function loadDocument(DOMDocument $document, Spreadsheet $spreadsheet): Spreadsheet
     {
@@ -762,7 +762,7 @@ class Html extends BaseReader
 
                 case 'font-size':
                     $cellStyle->getFont()->setSize(
-                        (float) $styleValue
+                        (float)$styleValue
                     );
 
                     break;
@@ -833,7 +833,7 @@ class Html extends BaseReader
 
                 case 'text-indent':
                     $cellStyle->getAlignment()->setIndent(
-                        (int) str_replace(['px'], '', $styleValue)
+                        (int)str_replace(['px'], '', $styleValue)
                     );
 
                     break;
@@ -859,9 +859,9 @@ class Html extends BaseReader
 
     /**
      * @param Worksheet $sheet
-     * @param string    $column
-     * @param int       $row
-     * @param array     $attributes
+     * @param string $column
+     * @param int $row
+     * @param array $attributes
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
@@ -872,9 +872,9 @@ class Html extends BaseReader
         }
 
         $src = urldecode($attributes['src']);
-        $width = isset($attributes['width']) ? (float) $attributes['width'] : null;
-        $height = isset($attributes['height']) ? (float) $attributes['height'] : null;
-        $name = isset($attributes['alt']) ? (float) $attributes['alt'] : null;
+        $width = isset($attributes['width']) ? (float)$attributes['width'] : null;
+        $height = isset($attributes['height']) ? (float)$attributes['height'] : null;
+        $name = isset($attributes['alt']) ? (float)$attributes['alt'] : null;
 
         $drawing = new Drawing();
         $drawing->setPath($src);
@@ -889,11 +889,11 @@ class Html extends BaseReader
         }
 
         if ($width) {
-            $drawing->setWidth((int) $width);
+            $drawing->setWidth((int)$width);
         }
 
         if ($height) {
-            $drawing->setHeight((int) $height);
+            $drawing->setHeight((int)$height);
         }
 
         $sheet->getColumnDimension($column)->setWidth(
@@ -908,7 +908,7 @@ class Html extends BaseReader
     /**
      * Map html border style to PhpSpreadsheet border style.
      *
-     * @param  string $style
+     * @param string $style
      *
      * @return null|string
      */
@@ -949,7 +949,7 @@ class Html extends BaseReader
     }
 
     /**
-     * @param Style  $cellStyle
+     * @param Style $cellStyle
      * @param string $styleValue
      * @param string $type
      */

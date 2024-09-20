@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2003-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2012	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2012-2015	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2018-2022  Philippe Grand          <philippe.grand@atoo-net.com>
+/* Copyright (C) 2003-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2012	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2012-2015	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2018-2022  Philippe Grand              <philippe.grand@atoo-net.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,17 @@
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/expedition/shipment.php
@@ -224,7 +235,6 @@ $title = $object->ref . " - " . $langs->trans('Shipments');
 $help_url = 'EN:Customers_Orders|FR:Commandes_Clients|ES:Pedidos de clientes|DE:Modul_Kundenaufträge';
 llxHeader('', $title, $help_url);
 
-
 if ($id > 0 || !empty($ref)) {
     $object = new Commande($db);
     if ($object->fetch($id, $ref) > 0) {
@@ -242,7 +252,6 @@ if ($id > 0 || !empty($ref)) {
 
         $head = commande_prepare_head($object);
         print dol_get_fiche_head($head, 'shipping', $langs->trans("CustomerOrder"), -1, 'order');
-
 
         $formconfirm = '';
 

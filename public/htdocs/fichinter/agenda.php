@@ -1,7 +1,6 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) ---Put here your own copyright and developer email---
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,7 +17,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  *  \file       htdocs/fichinter/agenda.php
@@ -116,8 +118,6 @@ if (empty($reshook)) {
         $search_agenda_label = '';
     }
 }
-
-
 
 /*
  *	View

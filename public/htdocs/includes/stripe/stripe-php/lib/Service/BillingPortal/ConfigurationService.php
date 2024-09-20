@@ -13,9 +13,9 @@ class ConfigurationService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\BillingPortal\Configuration>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\BillingPortal\Configuration>
      */
     public function all($params = null, $opts = null)
     {
@@ -29,9 +29,9 @@ class ConfigurationService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\BillingPortal\Configuration
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\BillingPortal\Configuration
      */
     public function create($params = null, $opts = null)
     {
@@ -46,9 +46,9 @@ class ConfigurationService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\BillingPortal\Configuration
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\BillingPortal\Configuration
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -62,9 +62,9 @@ class ConfigurationService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\BillingPortal\Configuration
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\BillingPortal\Configuration
      */
     public function update($id, $params = null, $opts = null)
     {

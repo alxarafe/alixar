@@ -69,9 +69,9 @@ class PaymentMethod extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\PaymentMethod the attached payment method
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\PaymentMethod the attached payment method
      */
     public function attach($params = null, $opts = null)
     {
@@ -86,9 +86,9 @@ class PaymentMethod extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\PaymentMethod the detached payment method
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\PaymentMethod the detached payment method
      */
     public function detach($params = null, $opts = null)
     {

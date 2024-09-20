@@ -16,4 +16,5 @@
 --
 -- ========================================================================
 
-ALTER TABLE llx_c_typent ADD UNIQUE INDEX uk_c_typent(code);
+ALTER TABLE llx_c_typent
+    ADD UNIQUE INDEX uk_c_typent(code);

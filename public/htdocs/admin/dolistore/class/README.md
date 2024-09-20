@@ -8,7 +8,6 @@ https://github.com/PrestaShop/PrestaShop-webservice-lib/blob/master/PSWebService
 
 https://www.gnu.org/licenses/license-list.html#OSL
 
-
 ## Local changes
 
 - Change `executeRequest` to public method because

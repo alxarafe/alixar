@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2010-2018 Regis Houssin  <regis.houssin@inodbox.com>
+/* Copyright (C) 2010-2018  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,12 +18,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/product/canvas/product/actions_card_product.class.php
  *  \ingroup    produit
  *  \brief      File with class of actions for canvas product
  */
-
 
 
 /**
@@ -73,39 +74,40 @@ class ActionsCardProduct
     /**
      *    Constructor
      *
-     *    @param    DoliDB  $db             Database handler
-     *    @param    string  $dirmodule      Name of directory of module
-     *    @param    string  $targetmodule   Name of directory where canvas is stored
-     *    @param    string  $canvas         Name of canvas
-     *    @param    string  $card           Name of tab (sub-canvas)
+     * @param DoliDB $db Database handler
+     * @param string $dirmodule Name of directory of module
+     * @param string $targetmodule Name of directory where canvas is stored
+     * @param string $canvas Name of canvas
+     * @param string $card Name of tab (sub-canvas)
      */
     public function __construct($db, $dirmodule, $targetmodule, $canvas, $card)
     {
-        $this->db               = $db;
+        $this->db = $db;
         $this->dirmodule = $dirmodule;
-        $this->targetmodule     = $targetmodule;
-        $this->canvas           = $canvas;
-        $this->card             = $card;
+        $this->targetmodule = $targetmodule;
+        $this->canvas = $canvas;
+        $this->card = $card;
 
         $this->name = "product";
         $this->definition = "Product canvas (default)";
-        $this->fieldListName    = "product_default";
+        $this->fieldListName = "product_default";
         $this->next_prev_filter = "canvas='product'";
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *    Assign custom values for canvas (for example into this->tpl to be used by templates)
      *
-     *    @param    string  $action    Type of action
-     *    @param    integer $id         Id of object
-     *    @param    string  $ref        Ref of object
-     *    @return   void
+     * @param string $action Type of action
+     * @param integer $id Id of object
+     * @param string $ref Ref of object
+     * @return   void
      */
     public function assign_values(&$action, $id = 0, $ref = '')
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs, $user, $mysoc, $canvas;
         global $form, $formproduct;
 
@@ -258,7 +260,7 @@ class ActionsCardProduct
     /**
      *  Fetch field list
      *
-     *  @return void
+     * @return void
      */
     private function getFieldListCanvas() // @phpstan-ignore-line
     {
@@ -284,14 +286,14 @@ class ActionsCardProduct
 
                 $fieldlist["id"] = $obj->rowid;
                 $fieldlist["name"] = $obj->name;
-                $fieldlist["alias"]     = $obj->alias;
-                $fieldlist["title"]     = $langs->trans($obj->title);
-                $fieldlist["align"]     = $obj->align;
+                $fieldlist["alias"] = $obj->alias;
+                $fieldlist["title"] = $langs->trans($obj->title);
+                $fieldlist["align"] = $obj->align;
                 $fieldlist["sort"] = $obj->sort;
-                $fieldlist["search"]    = $obj->search;
-                $fieldlist["visible"]   = $obj->visible;
-                $fieldlist["enabled"]   = verifCond($obj->enabled);
-                $fieldlist["order"]     = $obj->rang;
+                $fieldlist["search"] = $obj->search;
+                $fieldlist["visible"] = $obj->visible;
+                $fieldlist["enabled"] = verifCond($obj->enabled);
+                $fieldlist["order"] = $obj->rang;
 
                 array_push($this->field_list, $fieldlist);
 

@@ -160,11 +160,11 @@ class GeoRSS extends GeoAdapter
         foreach ($box_elements as $box) {
             $parts = explode(' ', trim($box->firstChild->nodeValue));
             $components = array(
-            new Point($parts[3], $parts[2]),
-            new Point($parts[3], $parts[0]),
-            new Point($parts[1], $parts[0]),
-            new Point($parts[1], $parts[2]),
-            new Point($parts[3], $parts[2]),
+                new Point($parts[3], $parts[2]),
+                new Point($parts[3], $parts[0]),
+                new Point($parts[1], $parts[0]),
+                new Point($parts[1], $parts[2]),
+                new Point($parts[3], $parts[2]),
             );
             $exterior_ring = new LineString($components);
             $polygons[] = new Polygon(array($exterior_ring));
@@ -191,13 +191,13 @@ class GeoRSS extends GeoAdapter
         switch ($type) {
             case 'point':
                 return $this->pointToGeoRSS($geom);
-            break;
+                break;
             case 'linestring':
                 return $this->linestringToGeoRSS($geom);
-            break;
+                break;
             case 'polygon':
                 return $this->PolygonToGeoRSS($geom);
-            break;
+                break;
             case 'multipoint':
             case 'multilinestring':
             case 'multipolygon':

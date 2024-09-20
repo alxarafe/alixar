@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2011-2022  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2015-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2021       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2011-2022  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,13 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Salaries\Classes\PaymentSalary;
+use Dolibarr\Code\Salaries\Classes\Salary;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *      \file       htdocs/salaries/list.php

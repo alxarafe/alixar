@@ -1,5 +1,6 @@
 <?php
-/* Copyright (C) 2010-2011 Regis Houssin <regis.houssin@inodbox.com>
+
+/* Copyright (C) 2010-2011  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +22,6 @@ if (empty($conf) || !is_object($conf)) {
     print "Error, template page can't be called as URL";
     exit(1);
 }
-
 
 $soc = $GLOBALS['objcanvas']->control->object;
 
@@ -46,255 +46,259 @@ print dol_get_fiche_head($head, 'card', $langs->trans("ThirdParty"), 0, 'company
 
 <table class="border allwidth">
 
-<tr>
-    <td width="20%"><?php echo $langs->trans('ThirdPartyName'); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['showrefnav']; ?></td>
-</tr>
+    <tr>
+        <td width="20%"><?php echo $langs->trans('ThirdPartyName'); ?></td>
+        <td colspan="3"><?php echo $this->control->tpl['showrefnav']; ?></td>
+    </tr>
 
-<?php if (getDolGlobalString('SOCIETE_USEPREFIX')) { ?>
-<tr>
-    <td><?php echo $langs->trans('Prefix'); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['prefix_comm']; ?></td>
-</tr>
-<?php } ?>
-
-<?php if ($this->control->tpl['client']) { ?>
-<tr>
-    <td><?php echo $langs->trans('CustomerCode'); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['code_client']; ?>
-    <?php if ($this->control->tpl['checkcustomercode'] != 0) { ?>
-    <span class="error">(<?php echo $langs->trans("WrongCustomerCode"); ?>)</span>
+    <?php if (getDolGlobalString('SOCIETE_USEPREFIX')) { ?>
+        <tr>
+            <td><?php echo $langs->trans('Prefix'); ?></td>
+            <td colspan="3"><?php echo $this->control->tpl['prefix_comm']; ?></td>
+        </tr>
     <?php } ?>
-    </td>
-</tr>
-<?php } ?>
 
-<?php if ($this->control->tpl['fournisseur']) { ?>
-<tr>
-    <td><?php echo $langs->trans('SupplierCode'); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['code_fournisseur']; ?>
-    <?php if ($this->control->tpl['checksuppliercode'] != 0) { ?>
-    <span class="error">(<?php echo $langs->trans("WrongSupplierCode"); ?>)</span>
+    <?php if ($this->control->tpl['client']) { ?>
+        <tr>
+            <td><?php echo $langs->trans('CustomerCode'); ?></td>
+            <td colspan="3"><?php echo $this->control->tpl['code_client']; ?>
+                <?php if ($this->control->tpl['checkcustomercode'] != 0) { ?>
+                    <span class="error">(<?php echo $langs->trans("WrongCustomerCode"); ?>)</span>
+                <?php } ?>
+            </td>
+        </tr>
     <?php } ?>
-    </td>
-</tr>
-<?php } ?>
 
-<?php if (isModEnabled('barcode')) { ?>
-<tr>
-    <td><?php echo $langs->trans('Gencod'); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['barcode']; ?></td>
-</tr>
-<?php } ?>
+    <?php if ($this->control->tpl['fournisseur']) { ?>
+        <tr>
+            <td><?php echo $langs->trans('SupplierCode'); ?></td>
+            <td colspan="3"><?php echo $this->control->tpl['code_fournisseur']; ?>
+                <?php if ($this->control->tpl['checksuppliercode'] != 0) { ?>
+                    <span class="error">(<?php echo $langs->trans("WrongSupplierCode"); ?>)</span>
+                <?php } ?>
+            </td>
+        </tr>
+    <?php } ?>
 
-<tr>
-    <td class="tdtop"><?php echo $langs->trans('Address'); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['address']; ?></td>
-</tr>
+    <?php if (isModEnabled('barcode')) { ?>
+        <tr>
+            <td><?php echo $langs->trans('Gencod'); ?></td>
+            <td colspan="3"><?php echo $this->control->tpl['barcode']; ?></td>
+        </tr>
+    <?php } ?>
 
-<tr>
-    <td width="25%"><?php echo $langs->trans('Zip'); ?></td>
-    <td width="25%"><?php echo $this->control->tpl['zip']; ?></td>
-    <td width="25%"><?php echo $langs->trans('Town'); ?></td>
-    <td width="25%"><?php echo $this->control->tpl['town']; ?></td>
-</tr>
+    <tr>
+        <td class="tdtop"><?php echo $langs->trans('Address'); ?></td>
+        <td colspan="3"><?php echo $this->control->tpl['address']; ?></td>
+    </tr>
 
-<tr>
-    <td><?php echo $langs->trans("Country"); ?></td>
-    <td colspan="3" class="nowrap"><?php echo $this->control->tpl['country']; ?></td>
-</tr>
+    <tr>
+        <td width="25%"><?php echo $langs->trans('Zip'); ?></td>
+        <td width="25%"><?php echo $this->control->tpl['zip']; ?></td>
+        <td width="25%"><?php echo $langs->trans('Town'); ?></td>
+        <td width="25%"><?php echo $this->control->tpl['town']; ?></td>
+    </tr>
 
-<tr>
-    <td><?php echo $langs->trans('State'); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['departement']; ?></td>
-</tr>
+    <tr>
+        <td><?php echo $langs->trans("Country"); ?></td>
+        <td colspan="3" class="nowrap"><?php echo $this->control->tpl['country']; ?></td>
+    </tr>
 
-<tr>
-    <td><?php echo $langs->trans('Phone'); ?></td>
-    <td><?php echo $this->control->tpl['phone']; ?></td>
-    <td><?php echo $langs->trans('PhoneMobile'); ?></td>
-    <td><?php echo $this->control->tpl['phone_mobile']; ?></td>
-    <td><?php echo $langs->trans('Fax'); ?></td>
-    <td><?php echo $this->control->tpl['fax']; ?></td>
-</tr>
+    <tr>
+        <td><?php echo $langs->trans('State'); ?></td>
+        <td colspan="3"><?php echo $this->control->tpl['departement']; ?></td>
+    </tr>
 
-<tr>
-    <td><?php echo $langs->trans('EMail'); ?></td>
-    <td><?php echo $this->control->tpl['email']; ?></td>
-    <td><?php echo $langs->trans('Web'); ?></td>
-    <td><?php echo $this->control->tpl['url']; ?></td>
-</tr>
+    <tr>
+        <td><?php echo $langs->trans('Phone'); ?></td>
+        <td><?php echo $this->control->tpl['phone']; ?></td>
+        <td><?php echo $langs->trans('PhoneMobile'); ?></td>
+        <td><?php echo $this->control->tpl['phone_mobile']; ?></td>
+        <td><?php echo $langs->trans('Fax'); ?></td>
+        <td><?php echo $this->control->tpl['fax']; ?></td>
+    </tr>
 
-<?php
-for ($i = 1; $i <= 4; $i++) {
-    if ($this->control->tpl['langprofid' . $i] != '-') {
-        if ($i == 1 || $i == 3) {
-            echo '<tr>';
-        }
-        echo '<td>' . $this->control->tpl['langprofid' . $i] . '</td>';
-        echo '<td>' . $this->control->tpl['profid' . $i];
-        if ($this->control->tpl['profid' . $i]) {
-            if ($this->control->tpl['checkprofid' . $i] > 0) {
-                echo ' &nbsp; ' . $this->control->tpl['urlprofid' . $i];
-            } else {
-                echo ' <span class="error">(' . $langs->trans("ErrorWrongValue") . ')</span>';
+    <tr>
+        <td><?php echo $langs->trans('EMail'); ?></td>
+        <td><?php echo $this->control->tpl['email']; ?></td>
+        <td><?php echo $langs->trans('Web'); ?></td>
+        <td><?php echo $this->control->tpl['url']; ?></td>
+    </tr>
+
+    <?php
+    for ($i = 1; $i <= 4; $i++) {
+        if ($this->control->tpl['langprofid' . $i] != '-') {
+            if ($i == 1 || $i == 3) {
+                echo '<tr>';
+            }
+            echo '<td>' . $this->control->tpl['langprofid' . $i] . '</td>';
+            echo '<td>' . $this->control->tpl['profid' . $i];
+            if ($this->control->tpl['profid' . $i]) {
+                if ($this->control->tpl['checkprofid' . $i] > 0) {
+                    echo ' &nbsp; ' . $this->control->tpl['urlprofid' . $i];
+                } else {
+                    echo ' <span class="error">(' . $langs->trans("ErrorWrongValue") . ')</span>';
+                }
+            }
+            echo '</td>';
+            if ($i == 2 || $i == 4) {
+                echo '</tr>';
+            }
+        } else {
+            if ($i == 1 || $i == 3) {
+                echo '<tr>';
+            }
+            echo '<td>&nbsp;</td>';
+            echo '<td>&nbsp;</td>';
+            if ($i == 2 || $i == 4) {
+                echo '</tr>';
             }
         }
-        echo '</td>';
-        if ($i == 2 || $i == 4) {
-            echo '</tr>';
-        }
-    } else {
-        if ($i == 1 || $i == 3) {
-            echo '<tr>';
-        }
-        echo '<td>&nbsp;</td>';
-        echo '<td>&nbsp;</td>';
-        if ($i == 2 || $i == 4) {
-            echo '</tr>';
-        }
-    }
-}
-?>
-
-<tr>
-    <td><?php echo $langs->trans('VATIsUsed'); ?></td>
-    <td><?php echo $this->control->tpl['tva_assuj']; ?></td>
-    <td class="nowrap"><?php echo $langs->trans('VATIntra'); ?></td>
-    <td><?php echo $this->control->tpl['tva_intra']; ?></td>
-</tr>
-
-<?php if (!empty($this->control->tpl['localtax'])) {
-    echo $this->control->tpl['localtax'];
-} ?>
-
-<tr>
-    <td><?php echo $langs->trans('Capital'); ?></td>
-    <td colspan="3">
-    <?php
-    if ($this->control->tpl['capital']) {
-        echo $this->control->tpl['capital'] . ' ' . $langs->trans("Currency" . $conf->currency);
-    } else {
-        echo '&nbsp;';
     }
     ?>
-    </td>
-</tr>
 
-<tr>
-    <td><?php echo $langs->trans('JuridicalStatus'); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['forme_juridique']; ?></td>
-</tr>
+    <tr>
+        <td><?php echo $langs->trans('VATIsUsed'); ?></td>
+        <td><?php echo $this->control->tpl['tva_assuj']; ?></td>
+        <td class="nowrap"><?php echo $langs->trans('VATIntra'); ?></td>
+        <td><?php echo $this->control->tpl['tva_intra']; ?></td>
+    </tr>
 
-<tr>
-    <td><?php echo $langs->trans("ThirdPartyType"); ?></td>
-    <td><?php echo $this->control->tpl['typent']; ?></td>
-    <td><?php echo $langs->trans("Staff"); ?></td>
-    <td><?php echo $this->control->tpl['effectif']; ?></td>
-</tr>
+    <?php if (!empty($this->control->tpl['localtax'])) {
+        echo $this->control->tpl['localtax'];
+    } ?>
 
-<?php if (getDolGlobalInt('MAIN_MULTILANGS')) { ?>
-<tr>
-    <td><?php echo $langs->trans("DefaultLang"); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['default_lang']; ?></td>
-</tr>
-<?php } ?>
+    <tr>
+        <td><?php echo $langs->trans('Capital'); ?></td>
+        <td colspan="3">
+            <?php
+            if ($this->control->tpl['capital']) {
+                echo $this->control->tpl['capital'] . ' ' . $langs->trans("Currency" . $conf->currency);
+            } else {
+                echo '&nbsp;';
+            }
+            ?>
+        </td>
+    </tr>
 
-<tr>
-    <td>
-    <table class="nobordernopadding allwidth">
+    <tr>
+        <td><?php echo $langs->trans('JuridicalStatus'); ?></td>
+        <td colspan="3"><?php echo $this->control->tpl['forme_juridique']; ?></td>
+    </tr>
+
+    <tr>
+        <td><?php echo $langs->trans("ThirdPartyType"); ?></td>
+        <td><?php echo $this->control->tpl['typent']; ?></td>
+        <td><?php echo $langs->trans("Staff"); ?></td>
+        <td><?php echo $this->control->tpl['effectif']; ?></td>
+    </tr>
+
+    <?php if (getDolGlobalInt('MAIN_MULTILANGS')) { ?>
         <tr>
-            <td><?php echo $langs->trans('RIB'); ?></td>
-            <td class="right">
-            <?php if ($user->hasRight('societe', 'creer')) { ?>
-            <a href="<?php echo constant('BASE_URL') . '/societe/paymentmodes.php?socid=' . $this->control->tpl['id']; ?>"><?php echo $this->control->tpl['image_edit']; ?></a>
-            <?php } else { ?>
-            &nbsp;
-            <?php } ?>
-            </td>
+            <td><?php echo $langs->trans("DefaultLang"); ?></td>
+            <td colspan="3"><?php echo $this->control->tpl['default_lang']; ?></td>
         </tr>
-    </table>
-    </td>
-    <td colspan="3"><?php echo $this->control->tpl['display_rib']; ?></td>
-</tr>
+    <?php } ?>
 
-<tr>
-    <td>
-    <table class="nobordernopadding allwidth">
+    <tr>
+        <td>
+            <table class="nobordernopadding allwidth">
+                <tr>
+                    <td><?php echo $langs->trans('RIB'); ?></td>
+                    <td class="right">
+                        <?php if ($user->hasRight('societe', 'creer')) { ?>
+                            <a href="<?php echo constant('BASE_URL') . '/societe/paymentmodes.php?socid=' . $this->control->tpl['id']; ?>"><?php echo $this->control->tpl['image_edit']; ?></a>
+                        <?php } else { ?>
+                            &nbsp;
+                        <?php } ?>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td colspan="3"><?php echo $this->control->tpl['display_rib']; ?></td>
+    </tr>
+
+    <tr>
+        <td>
+            <table class="nobordernopadding allwidth">
+                <tr>
+                    <td><?php echo $langs->trans('ParentCompany'); ?></td>
+                    <td class="right">
+                        &nbsp;
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td colspan="3"><?php echo $this->control->tpl['parent_company']; ?></td>
+    </tr>
+
+    <tr>
+        <td>
+            <table class="nobordernopadding allwidth">
+                <tr>
+                    <td><?php echo $langs->trans('SalesRepresentatives'); ?></td>
+                    <td class="right">
+                        <?php if ($user->hasRight('societe', 'creer')) { ?>
+                            <a href="<?php echo constant('BASE_URL') . '/societe/commerciaux.php?socid=' . $this->control->tpl['id']; ?>"><?php echo $this->control->tpl['image_edit']; ?></a>
+                        <?php } else { ?>
+                            &nbsp;
+                        <?php } ?>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td colspan="3"><?php echo $this->control->tpl['sales_representatives']; ?></td>
+    </tr>
+
+    <?php if (isModEnabled('member')) { ?>
         <tr>
-            <td><?php echo $langs->trans('ParentCompany'); ?></td>
-            <td class="right">
-            &nbsp;
-            </td>
+            <td width="25%" valign="top"><?php echo $langs->trans("LinkedToDolibarrMember"); ?></td>
+            <td colspan="3"><?php echo $this->control->tpl['linked_member']; ?></td>
         </tr>
-    </table>
-    </td>
-    <td colspan="3"><?php echo $this->control->tpl['parent_company']; ?></td>
-</tr>
-
-<tr>
-    <td>
-    <table class="nobordernopadding allwidth">
-        <tr>
-            <td><?php echo $langs->trans('SalesRepresentatives'); ?></td>
-            <td class="right">
-            <?php if ($user->hasRight('societe', 'creer')) { ?>
-            <a href="<?php echo constant('BASE_URL') . '/societe/commerciaux.php?socid=' . $this->control->tpl['id']; ?>"><?php echo $this->control->tpl['image_edit']; ?></a>
-            <?php } else { ?>
-            &nbsp;
-            <?php } ?>
-            </td>
-        </tr>
-    </table>
-    </td>
-    <td colspan="3"><?php echo $this->control->tpl['sales_representatives']; ?></td>
-</tr>
-
-<?php if (isModEnabled('member')) { ?>
-<tr>
-    <td width="25%" valign="top"><?php echo $langs->trans("LinkedToDolibarrMember"); ?></td>
-    <td colspan="3"><?php echo $this->control->tpl['linked_member']; ?></td>
-</tr>
-<?php } ?>
+    <?php } ?>
 
 </table>
 
 <?php print dol_get_fiche_end(); ?>
 
 <div class="tabsAction">
-<?php if ($user->hasRight('societe', 'creer')) { ?>
-<a class="butAction" href="<?php echo $_SERVER["PHP_SELF"] . '?socid=' . $this->control->tpl['id'] . '&action=edit&token=' . newToken() . '&canvas=' . urlencode($canvas); ?>"><?php echo $langs->trans("Modify"); ?></a>
-<?php } ?>
-
-<?php if ($user->hasRight('societe', 'supprimer')) { ?>
-    <?php if ($conf->use_javascript_ajax) { ?>
-        <span id="action-delete" class="butActionDelete"><?php echo $langs->trans('Delete'); ?></span>
-    <?php } else { ?>
-        <a class="butActionDelete" href="<?php echo $_SERVER["PHP_SELF"] . '?socid=' . $this->control->tpl['id'] . '&action=delete&token=' . newToken() . '&canvas=' . urlencode($canvas); ?>"><?php echo $langs->trans('Delete'); ?></a>
+    <?php if ($user->hasRight('societe', 'creer')) { ?>
+        <a class="butAction"
+           href="<?php echo $_SERVER["PHP_SELF"] . '?socid=' . $this->control->tpl['id'] . '&action=edit&token=' . newToken() . '&canvas=' . urlencode($canvas); ?>"><?php echo $langs->trans("Modify"); ?></a>
     <?php } ?>
-<?php } ?>
+
+    <?php if ($user->hasRight('societe', 'supprimer')) { ?>
+        <?php if ($conf->use_javascript_ajax) { ?>
+            <span id="action-delete" class="butActionDelete"><?php echo $langs->trans('Delete'); ?></span>
+        <?php } else { ?>
+            <a class="butActionDelete"
+               href="<?php echo $_SERVER["PHP_SELF"] . '?socid=' . $this->control->tpl['id'] . '&action=delete&token=' . newToken() . '&canvas=' . urlencode($canvas); ?>"><?php echo $langs->trans('Delete'); ?></a>
+        <?php } ?>
+    <?php } ?>
 </div>
 
 <br>
 
-<table class="allwidth"><tr><td valign="top" width="50%">
-<div id="builddoc"></div>
+<table class="allwidth">
+    <tr>
+        <td valign="top" width="50%">
+            <div id="builddoc"></div>
 
-<?php
-/*
- * Generated documents
- */
-$filedir = $conf->societe->multidir_output[$this->control->tpl['entity']] . '/' . $socid;
-$urlsource = $_SERVER["PHP_SELF"] . "?socid=" . $socid;
-$genallowed = $user->hasRight('societe', 'lire');
-$delallowed = $user->hasRight('societe', 'creer');
+            <?php
+            /*
+             * Generated documents
+             */
+            $filedir = $conf->societe->multidir_output[$this->control->tpl['entity']] . '/' . $socid;
+            $urlsource = $_SERVER["PHP_SELF"] . "?socid=" . $socid;
+            $genallowed = $user->hasRight('societe', 'lire');
+            $delallowed = $user->hasRight('societe', 'creer');
 
-print $formfile->showdocuments('company', $socid, $filedir, $urlsource, $genallowed, $delallowed, '', 0, 0, 0, 28, 0, '', 0, '', $objcanvas->control->object->default_lang);
-?>
+            print $formfile->showdocuments('company', $socid, $filedir, $urlsource, $genallowed, $delallowed, '', 0, 0, 0, 28, 0, '', 0, '', $objcanvas->control->object->default_lang);
+            ?>
 
-</td>
-<td></td>
-</tr>
+        </td>
+        <td></td>
+    </tr>
 </table>
 
 <br>

@@ -124,9 +124,9 @@ class Folder
         $this->events["folder"] = $client->getDefaultEvents("folder");
 
         $this->setDelimiter($delimiter);
-        $this->path      = $folder_name;
-        $this->full_name  = $this->decodeName($folder_name);
-        $this->name      = $this->getSimpleName($this->delimiter, $this->full_name);
+        $this->path = $folder_name;
+        $this->full_name = $this->decodeName($folder_name);
+        $this->name = $this->getSimpleName($this->delimiter, $this->full_name);
 
         $this->parseAttributes($attributes);
     }
@@ -223,9 +223,9 @@ class Folder
     protected function parseAttributes($attributes)
     {
         $this->no_inferiors = in_array('\NoInferiors', $attributes) ? true : false;
-        $this->no_select    = in_array('\NoSelect', $attributes) ? true : false;
-        $this->marked       = in_array('\Marked', $attributes) ? true : false;
-        $this->referral     = in_array('\Referral', $attributes) ? true : false;
+        $this->no_select = in_array('\NoSelect', $attributes) ? true : false;
+        $this->marked = in_array('\Marked', $attributes) ? true : false;
+        $this->referral = in_array('\Referral', $attributes) ? true : false;
         $this->has_children = in_array('\HasChildren', $attributes) ? true : false;
     }
 
@@ -244,7 +244,7 @@ class Folder
     {
         $this->client->checkConnection();
         $status = $this->client->getConnection()->renameFolder($this->full_name, $new_name);
-        if($expunge) $this->client->expunge();
+        if ($expunge) $this->client->expunge();
 
         $folder = $this->client->getFolder($new_name);
         $event = $this->getEvent("folder", "moved");
@@ -290,7 +290,7 @@ class Folder
          */
 
         if ($internal_date != null) {
-            if ($internal_date instanceof Carbon){
+            if ($internal_date instanceof Carbon) {
                 $internal_date = $internal_date->format('d-M-Y H:i:s O');
             }
         }
@@ -326,7 +326,7 @@ class Folder
     public function delete($expunge = true)
     {
         $status = $this->client->getConnection()->deleteFolder($this->path);
-        if($expunge) $this->client->expunge();
+        if ($expunge) $this->client->expunge();
 
         $event = $this->getEvent("folder", "deleted");
         $event::dispatch($this);
@@ -390,7 +390,7 @@ class Folder
             try {
                 $line = $connection->nextLine();
                 if (($pos = strpos($line, "EXISTS")) !== false) {
-                    $msgn = (int) substr($line, 2, $pos - 2);
+                    $msgn = (int)substr($line, 2, $pos - 2);
                     $connection->done();
 
                     $this->client->openFolder($this->path, true);
@@ -403,8 +403,8 @@ class Folder
 
                     $connection->idle();
                 }
-            }catch (Exceptions\RuntimeException $e) {
-                if(strpos($e->getMessage(), "connection closed") === false) {
+            } catch (Exceptions\RuntimeException $e) {
+                if (strpos($e->getMessage(), "connection closed") === false) {
                     throw $e;
                 }
                 if ($auto_reconnect === true) {
@@ -458,7 +458,7 @@ class Folder
      */
     public function setDelimiter($delimiter)
     {
-        if(in_array($delimiter, [null, '', ' ', false]) === true) {
+        if (in_array($delimiter, [null, '', ' ', false]) === true) {
             $delimiter = ClientManager::get('options.delimiter', '/');
         }
 

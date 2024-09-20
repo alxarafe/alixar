@@ -4,36 +4,46 @@ div.divsearchfield {
     padding-left: 2px;
 }
 
-.margeCoteGauche,.margeCote{
-    padding-right: 20px!important;
+.margeCoteGauche, .margeCote {
+    padding-right: 20px !important;
 }
-.margeCote,.margeCoteDroite{
-    padding-left: 20px!important;
+
+.margeCote, .margeCoteDroite {
+    padding-left: 20px !important;
 }
-.nomargesupinf{
+
+.nomargesupinf {
     margin-top: 0;
     margin-bottom: 0;
 }
-#category-tree-left{
+
+#category-tree-left {
     display: none;
     vertical-align: top;
     width: 24%;
 }
-#listing-content{
+
+#listing-content {
     box-sizing: border-box;
     display: inline-block;
     width: 100%;
 }
-.tree{
+
+.tree {
     margin: 0px 0px 0px 0px;
-    padding:0px;
-    list-style: none; line-height: 2em; font-family: Arial;
+    padding: 0px;
+    list-style: none;
+    line-height: 2em;
+    font-family: Arial;
 }
-.tree li{
+
+.tree li {
     font-size: 16px;
-    position: relative;list-style: none;
+    position: relative;
+    list-style: none;
 }
-.tree li:before{
+
+.tree li:before {
     position: absolute;
     left: -15px;
     top: -4px;
@@ -44,7 +54,8 @@ div.divsearchfield {
     border-bottom: 1px solid #ddd;
     width: 10px;
 }
-.tree li:after{
+
+.tree li:after {
     position: absolute;
     left: -15px;
     bottom: -7px;
@@ -54,25 +65,29 @@ div.divsearchfield {
     height: 100%;
 }
 
-.tree li.root{
+.tree li.root {
     margin: 0px 0px 0px 0px;
 }
-.tree li.root:before{
+
+.tree li.root:before {
     display: none;
 }
 
-.tree li.root:after{
+.tree li.root:after {
     display: none;
 }
-.tree li:last-child:after{
+
+.tree li:last-child:after {
     display: none
 }
-.newAppParent{
+
+.newAppParent {
     position: relative;
     overflow: hidden;
     min-height: 100px;
 }
-.newApp, .updatedApp{
+
+.newApp, .updatedApp {
     background-color: orange;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.35);
     box-sizing: border-box;
@@ -89,15 +104,19 @@ div.divsearchfield {
     transform: rotate(-45deg);
     width: 150px;
 }
-.updatedApp{
+
+.updatedApp {
     background-color: greenyellow;
 }
+
 .notcompatible {
     color: red;
 }
+
 .compatibleafterupdate {
     color: orange;
 }
+
 .compatible {
     background-image: url("../img/compatible.png");
     background-position: left center;
@@ -108,47 +127,58 @@ div.divsearchfield {
     line-height: 32px;
     padding-left: 35px;
 }
+
 tr.app {
-    height:250px;
+    height: 250px;
 }
+
 tr.app td {
-	border-bottom: 1px solid #888;
+    border-bottom: 1px solid #888;
 }
+
 div#newsDoli.tabBar {
     margin-top: 50px;
     margin-right: 30px;
 }
+
 .selected {
-    text-decoration: underline!important;
+    text-decoration: underline !important;
 }
+
 .searchDolistore, .searchDolistore:hover {
     padding-left: 30px;
     padding-right: 30px;
     font-weight: bold;
 }
+
 .searchDolistore:hover {
-    text-decoration: underline!important;
+    text-decoration: underline !important;
 }
 
-.score{
+.score {
     font-size: 16px;
     font-weight: bold;
 }
-.formReviewArea{
-    display:none;
+
+.formReviewArea {
+    display: none;
 }
-.formReview div.divsearchfield{
+
+.formReview div.divsearchfield {
     float: none;
 }
-.input100{
+
+.input100 {
     box-sizing: border-box;
     width: 100%;
 }
-.input50{
+
+.input50 {
     box-sizing: border-box;
     width: 49%;
 }
-textarea.row4{
+
+textarea.row4 {
     min-height: 100px;
 }
 
@@ -158,31 +188,37 @@ textarea.row4{
     overflow-y: scroll;
 }
 
-.reviewRow{
+.reviewRow {
     margin-bottom: 20px;
 }
+
 .reviewRow .reviewMarge {
-    float:left;
+    float: left;
     width: 220px;
     padding: 0 20px 20px 0;
 }
+
 .reviewRow .score {
     font-size: 48px;
     display: block;
     text-align: center;
 }
+
 .reviewRow .reviewDate {
-    color:grey;
+    color: grey;
 }
-.reviewRow:after{
+
+.reviewRow:after {
     clear: both;
-    content:'';
+    content: '';
     display: block;
 }
-h2.appTitle small{
+
+h2.appTitle small {
     font-weight: normal;
 }
-tr.NotCompatible{
+
+tr.NotCompatible {
     /* IE 8 */
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=25)";
 
@@ -198,7 +234,8 @@ tr.NotCompatible{
     /* Good browsers */
     opacity: 0.25;
 }
-tr.NotCompatible:hover{
+
+tr.NotCompatible:hover {
     /* IE 8 */
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
 
@@ -214,19 +251,23 @@ tr.NotCompatible:hover{
     /* Good browsers */
     opacity: 1;
 }
+
 @media only screen and (min-width: 1150px) {
-    #categorieArea{
-        display:none;
+    #categorieArea {
+        display: none;
     }
-    #category-tree-left{
-        display:inline-block;
+
+    #category-tree-left {
+        display: inline-block;
     }
-    #listing-content{
+
+    #listing-content {
         width: 75%;
         float: right;
     }
 }
-span.details{
+
+span.details {
     font-size: 12px;
     margin-left: 10px;
     vertical-align: super;

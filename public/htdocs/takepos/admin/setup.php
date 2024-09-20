@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2008-2011  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2017  Juanjo Menent       <jmenent@2byte.es>
- * Copyright (C) 2021       Nicolas ZABOURI     <info@inovea-conseil.com>
- * Copyright (C) 2022       Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2008-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2017  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2021       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,11 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *  \file       htdocs/takepos/admin/setup.php
@@ -122,7 +127,6 @@ if ($action != '') {
     }
 }
 
-
 /*
  * View
  */
@@ -141,7 +145,7 @@ print dol_get_fiche_head($head, 'setup', 'TakePOS', -1, 'cash-register');
 
 // Numbering modules
 $now = dol_now();
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 print load_fiche_titre($langs->trans('CashDeskRefNumberingModules'), '', '');
 
@@ -345,7 +349,6 @@ print "</td></tr>\n";
 print '<tr class="oddeven"><td>';
 print $langs->trans('EmailTemplate');
 print '<td>';
-include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
 $formmail = new FormMail($db);
 $nboftemplates = $formmail->fetchAllEMailTemplate('facture_send', $user, null, -1); // We set lang=null to get in priority record with no lang
 //$arraydefaultmessage = $formmail->getEMailTemplate($db, $tmp[1], $user, null, 0, 1, '');

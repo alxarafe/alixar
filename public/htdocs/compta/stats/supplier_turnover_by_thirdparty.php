@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2020       Maxime Kohlhaas         <maxime@atm-consulting.fr>
- * Copyright (C) 2023       Ferran Marcet           <fmarcet@2byte.es>
+/* Copyright (C) 2020       Maxime Kohlhaas             <maxime@atm-consulting.fr>
+ * Copyright (C) 2023       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *    \file        htdocs/compta/stats/supplier_turnover_by_thirdparty.php
  *    \brief       Page reporting purchase turnover by thirdparty
@@ -31,6 +33,8 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/report.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/tax.lib.php';
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 
 // Load translation files required by the page
@@ -85,12 +89,12 @@ $nbofyear = 1;
 $year = GETPOSTINT("year");
 $month = GETPOSTINT("month");
 if (empty($year)) {
-    $year_current = (int) dol_print_date(dol_now(), "%Y");
-    $month_current = (int) dol_print_date(dol_now(), "%m");
+    $year_current = (int)dol_print_date(dol_now(), "%Y");
+    $month_current = (int)dol_print_date(dol_now(), "%m");
     $year_start = $year_current - ($nbofyear - 1);
 } else {
     $year_current = $year;
-    $month_current = (int) dol_print_date(dol_now(), "%m");
+    $month_current = (int)dol_print_date(dol_now(), "%m");
     $year_start = $year - $nbofyear + (getDolGlobalInt('SOCIETE_FISCAL_MONTH_START') > 1 ? 0 : 1);
 }
 $date_start = dol_mktime(0, 0, 0, $date_startmonth, $date_startday, $date_startyear, 'tzserver');   // We use timezone of server so report is same from everywhere
@@ -295,9 +299,9 @@ if ($modecompta == 'CREANCES-DETTES') {
     if ($selected_cat === -2) { // Without any category
         $sql .= " AND cs.fk_soc is null";
     } elseif ($selected_cat) {  // Into a specific category
-        $sql .= " AND (c.rowid = " . ((int) $selected_cat);
+        $sql .= " AND (c.rowid = " . ((int)$selected_cat);
         if ($subcat) {
-            $sql .= " OR c.fk_parent = " . ((int) $selected_cat);
+            $sql .= " OR c.fk_parent = " . ((int)$selected_cat);
         }
         $sql .= ")";
         $sql .= " AND cs.fk_categorie = c.rowid AND cs.fk_soc = s.rowid";
@@ -322,9 +326,9 @@ if ($modecompta == 'CREANCES-DETTES') {
     if ($selected_cat === -2) { // Without any category
         $sql .= " AND cs.fk_soc is null";
     } elseif ($selected_cat) {  // Into a specific category
-        $sql .= " AND (c.rowid = " . ((int) $selected_cat);
+        $sql .= " AND (c.rowid = " . ((int)$selected_cat);
         if ($subcat) {
-            $sql .= " OR c.fk_parent = " . ((int) $selected_cat);
+            $sql .= " OR c.fk_parent = " . ((int)$selected_cat);
         }
         $sql .= ")";
         $sql .= " AND cs.fk_categorie = c.rowid AND cs.fk_soc = s.rowid";
@@ -340,11 +344,11 @@ if (!empty($search_town)) {
     $sql .= natural_search('s.town', $search_town);
 }
 if ($search_country > 0) {
-    $sql .= ' AND s.fk_pays = ' . ((int) $search_country);
+    $sql .= ' AND s.fk_pays = ' . ((int)$search_country);
 }
 $sql .= " AND f.entity IN (" . getEntity('supplier_invoice') . ")";
 if ($socid) {
-    $sql .= " AND f.fk_soc = " . ((int) $socid);
+    $sql .= " AND f.fk_soc = " . ((int)$socid);
 }
 $sql .= " GROUP BY s.rowid, s.nom, s.zip, s.town, s.fk_pays";
 $sql .= " ORDER BY s.rowid";
@@ -369,7 +373,7 @@ if ($resql) {
         $address_town[$obj->socid] = $obj->town;
         $address_pays[$obj->socid] = getCountry($obj->fk_pays);
 
-        $catotal_ht +=  (empty($obj->amount) ? 0 : $obj->amount);
+        $catotal_ht += (empty($obj->amount) ? 0 : $obj->amount);
         $catotal += $obj->amount_ttc;
 
         $i++;

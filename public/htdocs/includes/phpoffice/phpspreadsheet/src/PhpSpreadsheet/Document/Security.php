@@ -55,9 +55,9 @@ class Security
      */
     public function isSecurityEnabled()
     {
-        return  $this->lockRevision ||
-                $this->lockStructure ||
-                $this->lockWindows;
+        return $this->lockRevision ||
+            $this->lockStructure ||
+            $this->lockWindows;
     }
 
     /**

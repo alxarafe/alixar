@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005      Brice Davoleau       <brice.davoleau@gmail.com>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2006-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007      Patrick Raguin  		<patrick.raguin@gmail.com>
- * Copyright (C) 2010      Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005       Brice Davoleau              <brice.davoleau@gmail.com>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007       Patrick Raguin  		    <patrick.raguin@gmail.com>
+ * Copyright (C) 2010       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,8 +23,9 @@
  */
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Adherents\Classes\AdherentType;
 use Dolibarr\Code\Contact\Classes\Contact;
-use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *    \file       htdocs/adherents/agenda.php

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2013	Laurent Destailleur		<eldy@users.sourceforge.org>
- * Copyright (C) 2011-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2011-2012  Juanjo Menent			<jmenent@2byte.es>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2013	Laurent Destailleur		    <eldy@users.sourceforge.org>
+ * Copyright (C) 2011-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2012  Juanjo Menent			    <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  * \file       htdocs/paypal/admin/paypal.php
  * \ingroup    paypal
@@ -31,7 +34,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/paypal/lib/paypal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
 $servicename = 'PayPal';
 

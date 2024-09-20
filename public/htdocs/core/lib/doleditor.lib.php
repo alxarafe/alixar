@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2006-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2010-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2015		Alexandre Spangaro	<aspangaro@open-dsi.fr>
+/* Copyright (C) 2006-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2015		Alexandre Spangaro	        <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *      \file       htdocs/core/lib/doleditor.lib.php
@@ -29,9 +31,9 @@
 /**
  *  Show list of ckeditor's themes.
  *
- *  @param  User|null   $fuser              User concerned or null for global theme
- *  @param  int         $edit               1 to add edit form
- *  @return void
+ * @param User|null $fuser User concerned or null for global theme
+ * @param int $edit 1 to add edit form
+ * @return void
  */
 function show_skin($fuser, $edit = 0)
 {
@@ -44,7 +46,7 @@ function show_skin($fuser, $edit = 0)
     $dirskins = array('/includes/ckeditor/ckeditor/skins');
     if (!empty($conf->modules_parts['theme'])) {        // Using this feature slow down application
         foreach ($conf->modules_parts['theme'] as $reldir) {
-            $dirskins = array_merge($dirskins, (array) ($reldir . 'theme'));
+            $dirskins = array_merge($dirskins, (array)($reldir . 'theme'));
         }
     }
     $dirskins = array_unique($dirskins);
@@ -90,7 +92,7 @@ function show_skin($fuser, $edit = 0)
                 while (($subdir = readdir($handle)) !== false) {
                     if (
                         is_dir($dirskin . "/" . $subdir) && substr($subdir, 0, 1) != '.'
-                            && substr($subdir, 0, 3) != 'CVS' && !preg_match('/common|phones/i', $subdir)
+                        && substr($subdir, 0, 3) != 'CVS' && !preg_match('/common|phones/i', $subdir)
                     ) {
                         // Disable not stable themes (dir ends with _exp or _dev)
                         if (getDolGlobalInt('MAIN_FEATURES_LEVEL') < 2 && preg_match('/_dev$/i', $subdir)) {

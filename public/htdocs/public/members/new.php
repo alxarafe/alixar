@@ -60,7 +60,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -106,12 +106,12 @@ $user->loadDefaultValues();
 /**
  * Show header for new member
  *
- * @param   string      $title              Title
- * @param   string      $head               Head array
- * @param   int         $disablejs          More content into html header
- * @param   int         $disablehead        More content into html header
- * @param   array       $arrayofjs          Array of complementary js files
- * @param   array       $arrayofcss         Array of complementary css files
+ * @param string $title Title
+ * @param string $head Head array
+ * @param int $disablejs More content into html header
+ * @param int $disablehead More content into html header
+ * @param array $arrayofjs Array of complementary js files
+ * @param array $arrayofcss Array of complementary css files
  * @return  void
  */
 function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $arrayofjs = [], $arrayofcss = [])
@@ -172,7 +172,6 @@ function llxFooterVierge()
     print "</body>\n";
     print "</html>\n";
 }
-
 
 
 /*
@@ -272,28 +271,28 @@ if (empty($reshook) && $action == 'add') {
     if (!$error) {
         // E-mail looks OK and login does not exist
         $adh = new Adherent($db);
-        $adh->statut      = -1;
-        $adh->public      = $public;
-        $adh->firstname   = GETPOST('firstname');
-        $adh->lastname    = GETPOST('lastname');
-        $adh->gender      = GETPOST('gender');
+        $adh->statut = -1;
+        $adh->public = $public;
+        $adh->firstname = GETPOST('firstname');
+        $adh->lastname = GETPOST('lastname');
+        $adh->gender = GETPOST('gender');
         $adh->civility_id = GETPOST('civility_id');
-        $adh->societe     = GETPOST('societe');
-        $adh->address     = GETPOST('address');
-        $adh->zip         = GETPOST('zipcode');
-        $adh->town        = GETPOST('town');
-        $adh->email       = GETPOST('email');
+        $adh->societe = GETPOST('societe');
+        $adh->address = GETPOST('address');
+        $adh->zip = GETPOST('zipcode');
+        $adh->town = GETPOST('town');
+        $adh->email = GETPOST('email');
         if (!getDolGlobalString('ADHERENT_LOGIN_NOT_REQUIRED')) {
-            $adh->login       = GETPOST('login');
-            $adh->pass        = GETPOST('pass1');
+            $adh->login = GETPOST('login');
+            $adh->pass = GETPOST('pass1');
         }
-        $adh->photo       = GETPOST('photo');
-        $adh->country_id  = getDolGlobalInt("MEMBER_NEWFORM_FORCECOUNTRYCODE", GETPOSTINT('country_id'));
-        $adh->state_id    = GETPOSTINT('state_id');
-        $adh->typeid      = getDolGlobalInt("MEMBER_NEWFORM_FORCETYPE", GETPOSTINT('typeid'));
+        $adh->photo = GETPOST('photo');
+        $adh->country_id = getDolGlobalInt("MEMBER_NEWFORM_FORCECOUNTRYCODE", GETPOSTINT('country_id'));
+        $adh->state_id = GETPOSTINT('state_id');
+        $adh->typeid = getDolGlobalInt("MEMBER_NEWFORM_FORCETYPE", GETPOSTINT('typeid'));
         $adh->note_private = GETPOST('note_private');
-        $adh->morphy      = getDolGlobalString("MEMBER_NEWFORM_FORCEMORPHY", GETPOST('morphy'));
-        $adh->birth       = $birthday;
+        $adh->morphy = getDolGlobalString("MEMBER_NEWFORM_FORCEMORPHY", GETPOST('morphy'));
+        $adh->birth = $birthday;
 
         $adh->ip = getUserRemoteIP();
 
@@ -347,7 +346,6 @@ if (empty($reshook) && $action == 'add') {
                     $msg = '';
 
                     // Send subscription email
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                     $formmail = new FormMail($db);
                     // Set output language
                     $outputlangs = new Translate('', $conf);
@@ -364,7 +362,7 @@ if (empty($reshook) && $action == 'add') {
 
                     if (!empty($labeltouse) && is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
                         $subject = $arraydefaultmessage->topic;
-                        $msg     = $arraydefaultmessage->content;
+                        $msg = $arraydefaultmessage->content;
                     }
 
                     $substitutionarray = getCommonSubstitutionArray($outputlangs, 0, null, $object);
@@ -459,7 +457,7 @@ if (empty($reshook) && $action == 'add') {
                     }
                 } else {
                     if (!empty($entity)) {
-                        $urlback .= '&entity=' . ((int) $entity);
+                        $urlback .= '&entity=' . ((int)$entity);
                     }
                 }
             } else {
@@ -496,7 +494,6 @@ if (empty($reshook) && $action == 'added') {
     llxFooterVierge();
     exit;
 }
-
 
 
 /*

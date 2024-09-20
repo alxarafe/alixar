@@ -74,8 +74,8 @@ interface SyncSupport extends BackendInterface
      *
      * @param string $addressBookId
      * @param string $syncToken
-     * @param int    $syncLevel
-     * @param int    $limit
+     * @param int $syncLevel
+     * @param int $limit
      *
      * @return array|null
      */

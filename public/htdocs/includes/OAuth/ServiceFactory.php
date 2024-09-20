@@ -26,7 +26,7 @@ use OAuth\OAuth1\Signature\Signature;
 class ServiceFactory
 {
     /**
-     *@var ClientInterface
+     * @var ClientInterface
      */
     protected $httpClient;
 
@@ -62,7 +62,7 @@ class ServiceFactory
      * Register a custom service to classname mapping.
      *
      * @param string $serviceName Name of the service
-     * @param string $className   Class to instantiate
+     * @param string $className Class to instantiate
      *
      * @return ServiceFactory
      *
@@ -92,12 +92,12 @@ class ServiceFactory
      *
      * It will first try to build an OAuth2 service and if none found it will try to build an OAuth1 service
      *
-     * @param string                $serviceName Name of service to create
-     * @param CredentialsInterface  $credentials
+     * @param string $serviceName Name of service to create
+     * @param CredentialsInterface $credentials
      * @param TokenStorageInterface $storage
-     * @param array|null            $scopes      If creating an oauth2 service, array of scopes
-     * @param UriInterface|null     $baseApiUri
-     * @param string                $apiVersion version of the api call
+     * @param array|null $scopes If creating an oauth2 service, array of scopes
+     * @param UriInterface|null $baseApiUri
+     * @param string $apiVersion version of the api call
      *
      * @return ServiceInterface
      */
@@ -108,7 +108,8 @@ class ServiceFactory
         $scopes = array(),
         UriInterface $baseApiUri = null,
         $apiVersion = ""
-    ) {
+    )
+    {
         if (!$this->httpClient) {
             // for backwards compatibility.
             $this->httpClient = new StreamClient();
@@ -136,7 +137,7 @@ class ServiceFactory
      * Gets the fully qualified name of the service
      *
      * @param string $serviceName The name of the service of which to get the fully qualified name
-     * @param string $type        The type of the service to get (either OAuth1 or OAuth2)
+     * @param string $type The type of the service to get (either OAuth1 or OAuth2)
      *
      * @return string The fully qualified name of the service
      */
@@ -154,11 +155,11 @@ class ServiceFactory
     /**
      * Builds v2 services
      *
-     * @param string                $serviceName The fully qualified service name
-     * @param CredentialsInterface  $credentials
+     * @param string $serviceName The fully qualified service name
+     * @param CredentialsInterface $credentials
      * @param TokenStorageInterface $storage
-     * @param array|null            $scopes      Array of scopes for the service
-     * @param UriInterface|null     $baseApiUri
+     * @param array|null $scopes Array of scopes for the service
+     * @param UriInterface|null $baseApiUri
      *
      * @return ServiceInterface
      *
@@ -171,7 +172,8 @@ class ServiceFactory
         array $scopes,
         UriInterface $baseApiUri = null,
         $apiVersion = ""
-    ) {
+    )
+    {
         return new $serviceName(
             $credentials,
             $this->httpClient,
@@ -185,8 +187,8 @@ class ServiceFactory
     /**
      * Resolves scopes for v2 services
      *
-     * @param string  $serviceName The fully qualified service name
-     * @param array   $scopes      List of scopes for the service
+     * @param string $serviceName The fully qualified service name
+     * @param array $scopes List of scopes for the service
      *
      * @return array List of resolved scopes
      */
@@ -212,11 +214,11 @@ class ServiceFactory
     /**
      * Builds v1 services
      *
-     * @param string                $serviceName The fully qualified service name
-     * @param CredentialsInterface  $credentials
+     * @param string $serviceName The fully qualified service name
+     * @param CredentialsInterface $credentials
      * @param TokenStorageInterface $storage
-     * @param array                 $scopes
-     * @param UriInterface          $baseApiUri
+     * @param array $scopes
+     * @param UriInterface $baseApiUri
      *
      * @return ServiceInterface
      *
@@ -228,7 +230,8 @@ class ServiceFactory
         TokenStorageInterface $storage,
         $scopes,
         UriInterface $baseApiUri = null
-    ) {
+    )
+    {
         if (!empty($scopes)) {
             throw new Exception(
                 'Scopes passed to ServiceFactory::createService but an OAuth1 service was requested.'

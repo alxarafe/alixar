@@ -164,7 +164,7 @@ class Part
     {
         if ($this->header === null) {
             $body = $this->findHeaders();
-        }else{
+        } else {
             $body = $this->raw;
         }
 
@@ -176,11 +176,11 @@ class Part
         $this->name = $this->header->get("name");
         $this->filename = $this->header->get("filename");
 
-        if(!empty($this->header->get("id"))) {
+        if (!empty($this->header->get("id"))) {
             $this->id = $this->header->get("id");
-        } else if(!empty($this->header->get("x_attachment_id"))){
+        } else if (!empty($this->header->get("x_attachment_id"))) {
             $this->id = $this->header->get("x_attachment_id");
-        } else if(!empty($this->header->get("content_id"))){
+        } else if (!empty($this->header->get("content_id"))) {
             $this->id = strtr($this->header->get("content_id"), [
                 '<' => '',
                 '>' => ''
@@ -188,7 +188,7 @@ class Part
         }
 
         $content_types = $this->header->get("content_type");
-        if(!empty($content_types)){
+        if (!empty($content_types)) {
             $this->subtype = $this->parseSubtype($content_types);
             $content_type = $content_types;
             if (is_array($content_types)) {
@@ -220,7 +220,7 @@ class Part
 
         $this->header = new Header($headers);
 
-        return (string) $body;
+        return (string)$body;
     }
 
     /**
@@ -232,14 +232,14 @@ class Part
     private function parseSubtype($content_type)
     {
         if (is_array($content_type)) {
-            foreach ($content_type as $part){
-                if ((strpos($part, "/")) !== false){
+            foreach ($content_type as $part) {
+                if ((strpos($part, "/")) !== false) {
                     return $this->parseSubtype($part);
                 }
             }
             return null;
         }
-        if (($pos = strpos($content_type, "/")) !== false){
+        if (($pos = strpos($content_type, "/")) !== false) {
             return substr($content_type, $pos + 1);
         }
         return null;
@@ -251,7 +251,7 @@ class Part
     private function parseDisposition()
     {
         $content_disposition = $this->header->get("content_disposition");
-        if($content_disposition !== null) {
+        if ($content_disposition !== null) {
             $this->ifdisposition = true;
             $this->disposition = (is_array($content_disposition)) ? implode(' ', $content_disposition) : $content_disposition;
         }
@@ -263,7 +263,7 @@ class Part
     private function parseDescription()
     {
         $content_description = $this->header->get("content_description");
-        if($content_description !== null) {
+        if ($content_description !== null) {
             $this->ifdescription = true;
             $this->description = $content_description;
         }
@@ -275,7 +275,7 @@ class Part
     private function parseEncoding()
     {
         $encoding = $this->header->get("content_transfer_encoding");
-        if($encoding !== null) {
+        if ($encoding !== null) {
             switch (strtolower($encoding)) {
                 case "quoted-printable":
                     $this->encoding = IMAP::MESSAGE_ENC_QUOTED_PRINTABLE;

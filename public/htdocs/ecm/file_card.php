@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2008-2020 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2008-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Ecm\Classes\EcmDirectory;
+use Dolibarr\Code\Ecm\Classes\EcmFiles;
+
 /**
  *  \file       htdocs/ecm/file_card.php
  *  \ingroup    ecm
@@ -25,8 +30,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmdirectory.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmfiles.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ecm.lib.php';
 
@@ -68,7 +71,7 @@ if (!$section) {
     dol_print_error(null, 'Error, section parameter missing');
     exit;
 }
-$urlfile = (string) dol_sanitizePathName(GETPOST("urlfile"), '_', 0);
+$urlfile = (string)dol_sanitizePathName(GETPOST("urlfile"), '_', 0);
 if (!$urlfile) {
     dol_print_error(null, "ErrorParamNotDefined");
     exit;
@@ -229,7 +232,6 @@ if ($action == 'update' && $permissiontoadd) {
         $db->rollback();
     }
 }
-
 
 
 /*

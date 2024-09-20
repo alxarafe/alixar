@@ -175,13 +175,13 @@ SQL;
     {
         $stmt = $this->pdo->prepare('DELETE FROM ' . $this->tableName . "  WHERE path = ? OR path LIKE ? ESCAPE '='");
         $childPath = strtr(
-            $path,
-            [
-                '=' => '==',
-                '%' => '=%',
-                '_' => '=_',
-            ]
-        ) . '/%';
+                $path,
+                [
+                    '=' => '==',
+                    '%' => '=%',
+                    '_' => '=_',
+                ]
+            ) . '/%';
 
         $stmt->execute([$path, $childPath]);
     }

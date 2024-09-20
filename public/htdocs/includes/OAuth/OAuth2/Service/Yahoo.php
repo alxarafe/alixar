@@ -9,41 +9,39 @@ use OAuth\Common\Http\Uri\Uri;
 class Yahoo extends AbstractService
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function getAuthorizationEndpoint()
     {
         return new Uri('https://api.login.yahoo.com/oauth2/request_auth');
     }
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function getAccessTokenEndpoint()
     {
         return new Uri('https://api.login.yahoo.com/oauth2/get_token');
     }
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected function getAuthorizationMethod()
     {
         return static::AUTHORIZATION_METHOD_HEADER_BEARER;
     }
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected function parseAccessTokenResponse($responseBody)
     {
         $data = json_decode($responseBody, true);
 
-        if (null === $data || !is_array($data))
-        {
+        if (null === $data || !is_array($data)) {
             throw new TokenResponseException('Unable to parse response.');
-        } elseif (isset($data['error']))
-        {
+        } elseif (isset($data['error'])) {
             throw new TokenResponseException('Error in retrieving token: "' . $data['error'] . '"');
         }
 
@@ -51,8 +49,7 @@ class Yahoo extends AbstractService
         $token->setAccessToken($data['access_token']);
         $token->setLifetime($data['expires_in']);
 
-        if (isset($data['refresh_token']))
-        {
+        if (isset($data['refresh_token'])) {
             $token->setRefreshToken($data['refresh_token']);
             unset($data['refresh_token']);
         }
@@ -66,8 +63,8 @@ class Yahoo extends AbstractService
     }
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected function getExtraOAuthHeaders()
     {
         $encodedCredentials = base64_encode($this->credentials->getConsumerId() . ':' . $this->credentials->getConsumerSecret());

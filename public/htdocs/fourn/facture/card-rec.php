@@ -28,6 +28,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\FactureFournisseur\Classes\ModelePDFSuppliersInvoices;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseurLigneRec;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseurRec;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *    \file       htdocs/fourn/facture/card-rec.php
  *    \ingroup    invoice fournisseurs
@@ -35,14 +51,7 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture-rec.class.php';
-if (isModEnabled('project')) {
-    include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
-}
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 
 // Load translation files required by the page
@@ -84,10 +93,10 @@ if (empty($page) || $page == -1) {
     $page = 0;
 }     // If $page is not defined, or '' or -1
 $offset = $limit * $page;
-if (! $sortorder) {
+if (!$sortorder) {
     $sortorder = 'DESC';
 }
-if (! $sortfield) {
+if (!$sortfield) {
     $sortfield = 'f.titre';
 }
 $pageprev = $page - 1;
@@ -96,7 +105,7 @@ $pagenext = $page + 1;
 $object = new FactureFournisseurRec($db);
 if (($id > 0 || $title) && $action != 'create' && $action != 'add') {
     $ret = $object->fetch($id, $title);
-    if (! $ret) {
+    if (!$ret) {
         setEventMessages($langs->trans("ErrorRecordNotFound"), null, 'errors');
     }
 }
@@ -140,7 +149,7 @@ if (GETPOST('cancel', 'alpha')) {
     $action = 'list';
     $massaction = '';
 }
-if (! GETPOST('confirmmassaction', 'alpha') && $massaction != 'presend' && $massaction != 'confirm_presend') {
+if (!GETPOST('confirmmassaction', 'alpha') && $massaction != 'presend' && $massaction != 'confirm_presend') {
     $massaction = '';
 }
 
@@ -167,7 +176,7 @@ if (empty($reshook)) {
 
     // Create predefined invoice
     if ($action == 'add') {
-        if (! GETPOST('title', 'alphanohtml')) {
+        if (!GETPOST('title', 'alphanohtml')) {
             setEventMessages($langs->transnoentities("ErrorFieldRequired", $langs->trans("Title")), null, 'errors');
             $action = "create";
             $error++;
@@ -190,24 +199,24 @@ if (empty($reshook)) {
             }
         }
 
-        if (! $error) {
-            $object->subtype               = GETPOSTINT('subtype');
-            $object->title                 = GETPOST('title', 'alphanohtml');
-            $object->libelle               = GETPOST('libelle', 'alpha');   // deprecated
-            $object->label                 = GETPOST('libelle', 'alpha');
-            $object->fk_project            = GETPOSTINT('projectid');
-            $object->ref_supplier          = GETPOST('ref_supplier', 'alphanohtml');
+        if (!$error) {
+            $object->subtype = GETPOSTINT('subtype');
+            $object->title = GETPOST('title', 'alphanohtml');
+            $object->libelle = GETPOST('libelle', 'alpha');   // deprecated
+            $object->label = GETPOST('libelle', 'alpha');
+            $object->fk_project = GETPOSTINT('projectid');
+            $object->ref_supplier = GETPOST('ref_supplier', 'alphanohtml');
 
-            $object->note_private          = GETPOST('note_private', 'restricthtml');
-            $object->note_public           = GETPOST('note_public', 'restricthtml');
-            $object->model_pdf             = GETPOST('modelpdf', 'alpha');
-            $object->usenewprice           = GETPOST('usenewprice', 'alpha');
+            $object->note_private = GETPOST('note_private', 'restricthtml');
+            $object->note_public = GETPOST('note_public', 'restricthtml');
+            $object->model_pdf = GETPOST('modelpdf', 'alpha');
+            $object->usenewprice = GETPOST('usenewprice', 'alpha');
 
-            $object->frequency             = $frequency;
-            $object->unit_frequency        = GETPOST('unit_frequency', 'alpha');
-            $object->nb_gen_max            = $nb_gen_max;
-            $object->auto_validate         = GETPOSTINT('auto_validate');
-            $object->generate_pdf          = GETPOSTINT('generate_pdf');
+            $object->frequency = $frequency;
+            $object->unit_frequency = GETPOST('unit_frequency', 'alpha');
+            $object->nb_gen_max = $nb_gen_max;
+            $object->auto_validate = GETPOSTINT('auto_validate');
+            $object->generate_pdf = GETPOSTINT('generate_pdf');
 
             $date_next_execution = dol_mktime($rehour, $remin, 0, $remonth, $reday, $reyear);
             $object->date_when = $date_next_execution;
@@ -216,7 +225,6 @@ if (empty($reshook)) {
             if ($ret < 0) {
                 $error++;
             }
-
 
             $db->begin();
 
@@ -239,7 +247,7 @@ if (empty($reshook)) {
                 $action = "create";
             }
 
-            if (! $error) {
+            if (!$error) {
                 $db->commit();
 
                 header("Location: " . $_SERVER['PHP_SELF'] . '?facid=' . $object->id);
@@ -336,7 +344,7 @@ if (empty($reshook)) {
             $error++;
         }
 
-        if (! $error) {
+        if (!$error) {
             $db->commit();
         } else {
             $db->rollback();
@@ -353,7 +361,7 @@ if (empty($reshook)) {
             $error++;
         }
 
-        if (! $error) {
+        if (!$error) {
             $db->commit();
         } else {
             $db->rollback();
@@ -412,7 +420,7 @@ if (empty($reshook)) {
             $error++;
         }
 
-        if (! $error) {
+        if (!$error) {
             $result = $object->insertExtraFields('BILLREC_MODIFY');
             if ($result < 0) {
                 setEventMessages($object->error, $object->errors, 'errors');
@@ -463,7 +471,7 @@ if (empty($reshook)) {
             setEventMessages($langs->trans('ErrorFieldRequired', $langs->transnoentitiesnoconv('Type')), null, 'errors');
             $error++;
         }
-        if ($prod_entry_mode == 'free' && (empty($idprod) || $idprod < 0) && (! ($price_ht >= 0) || $price_ht == '')) {    // Unit price can be 0 but not ''
+        if ($prod_entry_mode == 'free' && (empty($idprod) || $idprod < 0) && (!($price_ht >= 0) || $price_ht == '')) {    // Unit price can be 0 but not ''
             setEventMessages($langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("UnitPriceHT")), null, 'errors');
             $error++;
         }
@@ -490,7 +498,7 @@ if (empty($reshook)) {
             }
             $reg = array();
             if (preg_match('/^idprod_([0-9]+)$/', GETPOST('idprodfournprice', 'alpha'), $reg)) {
-                $idprod = (int) $reg[1];
+                $idprod = (int)$reg[1];
                 $res = $productsupplier->fetch($idprod); // Load product from its id
                 // Call to init some price properties of $productsupplier
                 // So if a supplier price already exists for another thirdparty (first one found), we use it as reference price
@@ -512,7 +520,7 @@ if (empty($reshook)) {
             }
         }
 
-        if (! $error && ($qty >= 0) && (!empty($product_desc) || (!empty($idprod) && $idprod > 0))) {
+        if (!$error && ($qty >= 0) && (!empty($product_desc) || (!empty($idprod) && $idprod > 0))) {
             $ret = $object->fetch($id);
             if ($ret < 0) {
                 dol_print_error($db, $object->error);
@@ -560,7 +568,7 @@ if (empty($reshook)) {
                 $tva_npr = $datapriceofproduct['tva_npr'];
 
                 $tmpvat = price2num(preg_replace('/\s*\(.*\)/', '', $tva_tx));
-                $tmpprodvat = price2num(preg_replace('/\s*\(.*\)/', '', (string) $prod->tva_tx));
+                $tmpprodvat = price2num(preg_replace('/\s*\(.*\)/', '', (string)$prod->tva_tx));
 
                 // if price ht was forced (ie: from gui when calculated by margin rate and cost price). TODO Why this ?
                 if (!empty($price_ht)) {
@@ -673,10 +681,10 @@ if (empty($reshook)) {
             }
 
             //To set vars in float type to avoid non-numeric warnings
-            $pu_ht = (float) price2num($pu_ht);
-            $remise_percent = (float) price2num($remise_percent);
+            $pu_ht = (float)price2num($pu_ht);
+            $remise_percent = (float)price2num($remise_percent);
 
-            $price_min = (float) price2num($price_min);
+            $price_min = (float)price2num($price_min);
             if ($usercanproductignorepricemin && (!empty($price_min) && ($pu_ht * (1 - $remise_percent / 100) < $price_min))) {
                 $mesg = $langs->trans("CantBeLessThanMinPrice", price(price2num($price_min, 'MU'), 0, $langs, 0, 0, -1, $conf->currency));
                 setEventMessages($mesg, null, 'errors');
@@ -728,8 +736,8 @@ if (empty($reshook)) {
                 $action = '';
             }
         }
-    } elseif ($action == 'updateline' && $usercancreate && ! GETPOST('cancel', 'alpha')) {
-        if (! $object->fetch($id) > 0) {
+    } elseif ($action == 'updateline' && $usercancreate && !GETPOST('cancel', 'alpha')) {
+        if (!$object->fetch($id) > 0) {
             dol_print_error($db);
         }
         $object->fetch_thirdparty();
@@ -780,7 +788,7 @@ if (empty($reshook)) {
 
         // Define special_code for special lines
         $special_code = GETPOSTINT('special_code');
-        if (! GETPOST('qty', 'alpha')) {
+        if (!GETPOST('qty', 'alpha')) {
             $special_code = 3;
         }
 
@@ -826,7 +834,7 @@ if (empty($reshook)) {
         $date_end_fill = !empty(GETPOSTINT('date_end_fill')) ? GETPOSTINT('date_end_fill') : 'NULL';
 
         // Update line
-        if (! $error) {
+        if (!$error) {
             $result = $object->updateline(GETPOSTINT('lineid'), GETPOSTINT('productid'), $ref_fourn, $label, $description, $pu_ht, $qty, $remise_percent, $vat_rate, $localtax1_rate, $localtax1_rate, 'HT', $type, $date_start_fill, $date_end_fill, $info_bits, $special_code, -1);
             if ($result >= 0) {
                 $object->fetch($object->id); // Reload lines
@@ -1017,7 +1025,6 @@ if ($action == 'create') {
 
         // Model pdf
         print "<tr><td>" . $langs->trans('Model') . "</td><td>";
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/supplier_invoice/modules_facturefournisseur.php';
         $list = ModelePDFSuppliersInvoices::liste_modeles($db);
         print $form->selectarray('modelpdf', $list, $conf->global->INVOICE_SUPPLIER_ADDON_PDF);
         print "</td></tr>";
@@ -1410,7 +1417,6 @@ if ($action == 'create') {
         print '</tr></table>';
         print '</td><td>';
         if ($action == 'editmodelpdf') {
-            include_once DOL_DOCUMENT_ROOT . '/core/modules/supplier_invoice/modules_facturefournisseur.php';
             $list = array();
             $models = ModelePDFSuppliersInvoices::liste_modeles($db);
             foreach ($models as $k => $model) {
@@ -1485,8 +1491,8 @@ if ($action == 'create') {
             print $form->editfieldval($langs->trans("NextDateToExecution"), 'date_when', $object->date_when, $object, $usercancreate, 'day', $object->date_when, null, '', '', 0, 'strikeIfMaxNbGenReached');
         }
         //var_dump(dol_print_date($object->date_when+60, 'dayhour').' - '.dol_print_date($now, 'dayhour'));
-        if (! $object->isMaxNbGenReached()) {
-            if (! $object->suspended && $action != 'editdate_when' && $object->frequency > 0 && $object->date_when && $object->date_when < $now) {
+        if (!$object->isMaxNbGenReached()) {
+            if (!$object->suspended && $action != 'editdate_when' && $object->frequency > 0 && $object->date_when && $object->date_when < $now) {
                 print img_warning($langs->trans("Late"));
             }
         } else {

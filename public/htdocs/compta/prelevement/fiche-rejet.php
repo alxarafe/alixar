@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005      Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010-2012 Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2012  Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\RejetPrelevement;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       htdocs/compta/prelevement/fiche-rejet.php
  *      \ingroup    prelevement
@@ -30,10 +39,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/prelevement.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-
-use Dolibarr\Code\Societe\Classes\Societe;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/rejetprelevement.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("banks", "categories", 'withdrawals', 'bills'));
@@ -77,8 +82,6 @@ if ($type == 'bank-transfer') {
 } else {
     $result = restrictedArea($user, 'prelevement', '', '', 'bons');
 }
-
-
 
 /*
  * View
@@ -211,7 +214,7 @@ $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_bons as p";
 $sql .= " , " . MAIN_DB_PREFIX . "prelevement_lignes as pl";
 $sql .= " , " . MAIN_DB_PREFIX . "societe as s";
 $sql .= " , " . MAIN_DB_PREFIX . "prelevement_rejet as pr";
-$sql .= " WHERE p.rowid=" . ((int) $object->id);
+$sql .= " WHERE p.rowid=" . ((int)$object->id);
 $sql .= " AND pl.fk_prelevement_bons = p.rowid";
 $sql .= " AND p.entity IN (" . getEntity('facture') . ")";
 $sql .= " AND pl.fk_soc = s.rowid";

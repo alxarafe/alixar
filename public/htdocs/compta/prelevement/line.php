@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2012  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2010-2013  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2013  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -28,10 +28,15 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\LignePrelevement;
+use Dolibarr\Code\Compta\Classes\RejetPrelevement;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/ligneprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/rejetprelevement.class.php';
 
 // Load translation files required by the page
 $langs->loadlangs(array('banks', 'categories', 'bills', 'companies', 'withdrawals'));
@@ -111,7 +116,7 @@ if ($action == 'confirm_rejet' && $permissiontoadd) {
                 $result = $rej->create($user, $id, GETPOSTINT('motif'), $daterej, $lipre->bon_rowid, GETPOSTINT('facturer'));
 
                 if ($result > 0) {
-                    header("Location: line.php?id=" . urlencode((string) ($id)) . '&type=' . urlencode((string) ($type)));
+                    header("Location: line.php?id=" . urlencode((string)($id)) . '&type=' . urlencode((string)($type)));
                     exit;
                 }
             }
@@ -119,11 +124,10 @@ if ($action == 'confirm_rejet' && $permissiontoadd) {
             $action = "rejet";
         }
     } else {
-        header("Location: line.php?id=" . urlencode((string) ($id)) . '&type=' . urlencode((string) ($type)));
+        header("Location: line.php?id=" . urlencode((string)($id)) . '&type=' . urlencode((string)($type)));
         exit;
     }
 }
-
 
 /*
  * View
@@ -147,7 +151,7 @@ llxHeader('', $title);
 $head = array();
 
 $h = 0;
-$head[$h][0] = constant('BASE_URL') . '/compta/prelevement/line.php?id=' . ((int) $id) . '&type=' . urlencode($type);
+$head[$h][0] = constant('BASE_URL') . '/compta/prelevement/line.php?id=' . ((int)$id) . '&type=' . urlencode($type);
 $head[$h][1] = $title;
 $hselected = $h;
 $h++;
@@ -304,9 +308,9 @@ if ($id) {
         $sql .= " AND pf.fk_facture = f.rowid";
     }
     $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
-    $sql .= " AND pl.rowid = " . ((int) $id);
+    $sql .= " AND pl.rowid = " . ((int)$id);
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
 
     // Count total nb of records
@@ -341,7 +345,7 @@ if ($id) {
         $num = $db->num_rows($result);
         $i = 0;
 
-        $urladd = "&id=" . urlencode((string) ($id));
+        $urladd = "&id=" . urlencode((string)($id));
         $title = $langs->trans("Bills");
         if ($type == 'bank-transfer') {
             $title = $langs->trans("SupplierInvoices");

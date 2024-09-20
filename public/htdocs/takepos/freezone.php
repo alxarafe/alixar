@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2018 Andreu Bisquerra  <jove@bisquerra.com>
- * Copyright (C) 2020 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2018       Andreu Bisquerra            <jove@bisquerra.com>
+ * Copyright (C) 2020       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/takepos/freezone.php
@@ -44,8 +48,6 @@ if (!defined('NOREQUIREAJAX')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
-
-use Dolibarr\Code\Societe\Classes\Societe;
 
 global $mysoc;
 
@@ -103,55 +105,56 @@ top_htmlhead('', '', 0, 0, $arrayofjs, $arrayofcss);
      * @param   {string}    rate        VAT rate
      */
     function ApplyVATRate(id, rate) {
-        console.log("Save selected VAT Rate into vatRate variable with value "+rate);
+        console.log("Save selected VAT Rate into vatRate variable with value " + rate);
         vatRate = rate;
         jQuery('button.vat_rate').removeClass('selected');
-        jQuery('#vat_rate_'+id).addClass('selected');
+        jQuery('#vat_rate_' + id).addClass('selected');
     }
 
     /**
      * Save (validate)
      */
     function Save() {
-        console.log("We click so we call page invoice.php with invoiceid=<?php echo $invoiceid; ?>, place=<?php echo $place; ?>, amount="+$("#number").val()+", tva_tx="+vatRate);
-        parent.$("#poslines").load("invoice.php?action=freezone&token=<?php echo newToken(); ?>&invoiceid=<?php echo $invoiceid; ?>&place=<?php echo $place; ?>&number="+$("#number").val()+"&tva_tx="+vatRate, {desc:$("#desc").val()});
+        console.log("We click so we call page invoice.php with invoiceid=<?php echo $invoiceid; ?>, place=<?php echo $place; ?>, amount=" + $("#number").val() + ", tva_tx=" + vatRate);
+        parent.$("#poslines").load("invoice.php?action=freezone&token=<?php echo newToken(); ?>&invoiceid=<?php echo $invoiceid; ?>&place=<?php echo $place; ?>&number=" + $("#number").val() + "&tva_tx=" + vatRate, {desc: $("#desc").val()});
         parent.$.colorbox.close();
     }
 
-    $( document ).ready(function() {
+    $(document).ready(function () {
         $('#desc').focus()
     });
 </script>
 
 <br>
 <center>
-<form>
-<input type="text" id="desc" name="desc" class="takepospay" style="width:40%;" placeholder="<?php echo $langs->trans('Description'); ?>">
-<?php
-if ($action == "freezone") {
-    echo '<input type="text" id="number" name="number" class="takepospay" style="width:15%;" placeholder="' . $langs->trans(getDolGlobalString("TAKEPOS_CHANGE_PRICE_HT") ? 'AmountHT' : 'AmountTTC') . '">';
-}
-if ($action == "addnote") {
-    echo '<input type="hidden" id="number" name="number" value="' . $idline . '">';
-}
-?>
-<input type="hidden" name="place" class="takepospay" value="<?php echo $place; ?>">
-<input type="submit" class="button takepospay clearboth" value="OK" onclick="Save(); return false;">
-</form>
-<?php
-if ($action == 'freezone' && !getDolGlobalString("TAKEPOS_USE_DEFAULT_VATRATE_FOR_FREEZONE")) {
+    <form>
+        <input type="text" id="desc" name="desc" class="takepospay" style="width:40%;"
+               placeholder="<?php echo $langs->trans('Description'); ?>">
+        <?php
+        if ($action == "freezone") {
+            echo '<input type="text" id="number" name="number" class="takepospay" style="width:15%;" placeholder="' . $langs->trans(getDolGlobalString("TAKEPOS_CHANGE_PRICE_HT") ? 'AmountHT' : 'AmountTTC') . '">';
+        }
+        if ($action == "addnote") {
+            echo '<input type="hidden" id="number" name="number" value="' . $idline . '">';
+        }
+        ?>
+        <input type="hidden" name="place" class="takepospay" value="<?php echo $place; ?>">
+        <input type="submit" class="button takepospay clearboth" value="OK" onclick="Save(); return false;">
+    </form>
+    <?php
+    if ($action == 'freezone' && !getDolGlobalString("TAKEPOS_USE_DEFAULT_VATRATE_FOR_FREEZONE")) {
 
-    $form = new Form($db);
-    $num = $form->load_cache_vatrates("'" . $mysoc->country_code . "'");
-    if ($num > 0) {
-        print '<br><br>';
-        print $langs->trans('VAT') . ' : ';
-        foreach ($form->cache_vatrates as $rate) {
-            print '<button type="button" class="button item_value vat_rate' . ($rate['txtva'] == $vatRateDefault ? ' selected' : '') . '" id="vat_rate_' . $rate['rowid'] . '" onclick="ApplyVATRate(\'' . $rate['rowid'] . '\', \'' . $rate['txtva'] . '\');">' . $rate['txtva'] . ' %</button>';
+        $form = new Form($db);
+        $num = $form->load_cache_vatrates("'" . $mysoc->country_code . "'");
+        if ($num > 0) {
+            print '<br><br>';
+            print $langs->trans('VAT') . ' : ';
+            foreach ($form->cache_vatrates as $rate) {
+                print '<button type="button" class="button item_value vat_rate' . ($rate['txtva'] == $vatRateDefault ? ' selected' : '') . '" id="vat_rate_' . $rate['rowid'] . '" onclick="ApplyVATRate(\'' . $rate['rowid'] . '\', \'' . $rate['txtva'] . '\');">' . $rate['txtva'] . ' %</button>';
+            }
         }
     }
-}
-?>
+    ?>
 </center>
 
 </body>

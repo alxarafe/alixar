@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2014	   Florian Henry		<florian.henry@open-concept.pro>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2014	    Florian Henry		        <florian.henry@open-concept.pro>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOrder;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  * \file htdocs/product/stats/commande_fournisseur.php
  * \ingroup product service commande
@@ -28,7 +35,6 @@
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formorder.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('orders', 'products', 'companies'));
@@ -81,7 +87,6 @@ if (GETPOST('button_removefilter_x', 'alpha') || GETPOST('button_removefilter', 
 }
 
 $result = restrictedArea($user, 'produit|service', $fieldvalue, 'product&product', '', '', $fieldtype);
-
 
 /*
  * View
@@ -161,7 +166,7 @@ if ($id > 0 || !empty($ref)) {
             $sql .= " WHERE c.fk_soc = s.rowid";
             $sql .= " AND c.entity IN (" . getEntity('supplier_order') . ")";
             $sql .= " AND d.fk_commande = c.rowid";
-            $sql .= " AND d.fk_product = " . ((int) $product->id);
+            $sql .= " AND d.fk_product = " . ((int)$product->id);
             if (!empty($search_month)) {
                 $sql .= " AND MONTH(c.date_commande) IN (" . $db->sanitize($search_month) . ")";
             }
@@ -169,10 +174,10 @@ if ($id > 0 || !empty($ref)) {
                 $sql .= " AND YEAR(c.date_commande) IN (" . $db->sanitize($search_year) . ")";
             }
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             if ($socid) {
-                $sql .= " AND c.fk_soc = " . ((int) $socid);
+                $sql .= " AND c.fk_soc = " . ((int)$socid);
             }
 
             if ($search_status != '') {
@@ -201,13 +206,13 @@ if ($id > 0 || !empty($ref)) {
                 $option = '&id=' . $product->id;
 
                 if ($limit > 0 && $limit != $conf->liste_limit) {
-                    $option .= '&limit=' . ((int) $limit);
+                    $option .= '&limit=' . ((int)$limit);
                 }
                 if (!empty($search_month)) {
-                    $option .= '&search_month=' . urlencode((string) ($search_month));
+                    $option .= '&search_month=' . urlencode((string)($search_month));
                 }
                 if (!empty($search_year)) {
-                    $option .= '&search_year=' . urlencode((string) ($search_year));
+                    $option .= '&search_year=' . urlencode((string)($search_year));
                 }
 
                 if ($search_status != '') {
@@ -227,14 +232,14 @@ if ($id > 0 || !empty($ref)) {
                 print_barre_liste($langs->trans("SuppliersOrders"), $page, $_SERVER["PHP_SELF"], $option, $sortfield, $sortorder, '', $num, $totalofrecords, '', 0, '', '', $limit, 0, 0, 1);
 
                 if (!empty($page)) {
-                    $option .= '&page=' . urlencode((string) ($page));
+                    $option .= '&page=' . urlencode((string)($page));
                 }
 
                 print '<div class="liste_titre liste_titre_bydiv centpercent">';
                 print '<div class="divsearchfield">';
                 print $langs->trans('Period') . ' (' . $langs->trans("OrderDate") . ') - ';
                 print $langs->trans('Month') . ':<input class="flat" type="text" size="4" name="search_month" value="' . ($search_month > 0 ? $search_month : '') . '"> ';
-                print $langs->trans('Year') . ':' . $formother->selectyear($search_year ? $search_year : - 1, 'search_year', 1, 20, 5);
+                print $langs->trans('Year') . ':' . $formother->selectyear($search_year ? $search_year : -1, 'search_year', 1, 20, 5);
                 print $langs->trans('Status');
                 $formorder->selectSupplierOrderStatus($search_status, 1, 'search_status');
                 print '<div style="vertical-align: middle; display: inline-block">';

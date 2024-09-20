@@ -31,9 +31,9 @@
  * Check validity of user/password/entity
  * If test is ko, reason must be filled into $_SESSION["dol_loginmesg"]
  *
- * @param   string  $usertotest     Login
- * @param   string  $passwordtotest Password
- * @param   int     $entitytotest   Numero of instance (always 1 if module multicompany not enabled)
+ * @param string $usertotest Login
+ * @param string $passwordtotest Password
+ * @param int $entitytotest Numero of instance (always 1 if module multicompany not enabled)
  * @return  string                  Login if OK, '' if KO
  */
 function check_user_password_ldap($usertotest, $passwordtotest, $entitytotest)
@@ -85,7 +85,6 @@ function check_user_password_ldap($usertotest, $passwordtotest, $entitytotest)
             print "DEBUG: Logging LDAP steps<br>\n";
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ldap.class.php';
         $ldap = new Ldap();
         $ldap->server = explode(',', $ldaphost);
         $ldap->serverPort = $ldapport;

@@ -1,6 +1,7 @@
 <?php
 
-/* Copyright (C) 2022   Open-Dsi        <support@open-dsi.fr>
+/* Copyright (C) 2022       Open-Dsi                    <support@open-dsi.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  * \file    /variants/lib/variants.lib.php
  * \ingroup variants
  * \brief   Library files with common functions for Variants
  */
-
 
 /**
  * Prepare array with list of tabs

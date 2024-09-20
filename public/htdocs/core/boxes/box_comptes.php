@@ -21,6 +21,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Compta\Classes\Account;
 
 /**
@@ -29,25 +30,23 @@ use Dolibarr\Code\Compta\Classes\Account;
  *      \brief      Module to generate box for bank accounts
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 /**
  * Class to manage the box to show bank accounts
  */
 class box_comptes extends ModeleBoxes
 {
-    public $boxcode  = "currentaccounts";
-    public $boximg   = "bank_account";
+    public $boxcode = "currentaccounts";
+    public $boximg = "bank_account";
     public $boxlabel = "BoxCurrentAccounts";
-    public $depends  = array("banque"); // Box active if module banque active
+    public $depends = array("banque"); // Box active if module banque active
 
     public $enabled = 1;
 
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param = '')
     {
@@ -67,8 +66,8 @@ class box_comptes extends ModeleBoxes
     /**
      *  Load data into info_box_contents array to show array later.
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -137,8 +136,8 @@ class box_comptes extends ModeleBoxes
                     $this->info_box_contents[$line][] = array(
                         'td' => 'class="nowraponall right amount"',
                         'text' => '<a href="' . constant('BASE_URL') . '/compta/bank/bankentries_list.php?id=' . $account_static->id . '">'
-                                    . price($solde, 0, $langs, 1, -1, -1, $objp->currency_code)
-                                    . '</a>',
+                            . price($solde, 0, $langs, 1, -1, -1, $objp->currency_code)
+                            . '</a>',
                         'asis' => 1,
                     );
 
@@ -183,10 +182,10 @@ class box_comptes extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

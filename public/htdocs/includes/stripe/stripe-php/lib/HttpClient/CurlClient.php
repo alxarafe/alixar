@@ -169,14 +169,14 @@ class CurlClient implements ClientInterface, StreamingClientInterface
 
     public function setTimeout($seconds)
     {
-        $this->timeout = (int) \max($seconds, 0);
+        $this->timeout = (int)\max($seconds, 0);
 
         return $this;
     }
 
     public function setConnectTimeout($seconds)
     {
-        $this->connectTimeout = (int) \max($seconds, 0);
+        $this->connectTimeout = (int)\max($seconds, 0);
 
         return $this;
     }
@@ -462,7 +462,7 @@ class CurlClient implements ClientInterface, StreamingClientInterface
             if ($shouldRetry) {
                 ++$numRetries;
                 $sleepSeconds = $this->sleepTime($numRetries, $lastRHeaders);
-                \usleep((int) ($sleepSeconds * 1000000));
+                \usleep((int)($sleepSeconds * 1000000));
             } else {
                 break;
             }
@@ -521,7 +521,7 @@ class CurlClient implements ClientInterface, StreamingClientInterface
             if ($shouldRetry) {
                 ++$numRetries;
                 $sleepSeconds = $this->sleepTime($numRetries, $rheaders);
-                \usleep((int) ($sleepSeconds * 1000000));
+                \usleep((int)($sleepSeconds * 1000000));
             } else {
                 break;
             }
@@ -549,24 +549,24 @@ class CurlClient implements ClientInterface, StreamingClientInterface
             case \CURLE_COULDNT_RESOLVE_HOST:
             case \CURLE_OPERATION_TIMEOUTED:
                 $msg = "Could not connect to Stripe ({$url}).  Please check your "
-                 . 'internet connection and try again.  If this problem persists, '
-                 . "you should check Stripe's service status at "
-                 . 'https://twitter.com/stripestatus, or';
+                    . 'internet connection and try again.  If this problem persists, '
+                    . "you should check Stripe's service status at "
+                    . 'https://twitter.com/stripestatus, or';
 
                 break;
 
             case \CURLE_SSL_CACERT:
             case \CURLE_SSL_PEER_CERTIFICATE:
                 $msg = "Could not verify Stripe's SSL certificate.  Please make sure "
-                 . 'that your network is not intercepting certificates.  '
-                 . "(Try going to {$url} in your browser.)  "
-                 . 'If this problem persists,';
+                    . 'that your network is not intercepting certificates.  '
+                    . "(Try going to {$url} in your browser.)  "
+                    . 'If this problem persists,';
 
                 break;
 
             default:
                 $msg = 'Unexpected error communicating with Stripe.  '
-                 . 'If this problem persists,';
+                    . 'If this problem persists,';
         }
         $msg .= ' let us know at support@stripe.com.';
 
@@ -663,7 +663,7 @@ class CurlClient implements ClientInterface, StreamingClientInterface
         $sleepSeconds = \max(Stripe::getInitialNetworkRetryDelay(), $sleepSeconds);
 
         // And never sleep less than the time the API asks us to wait, assuming it's a reasonable ask.
-        $retryAfter = isset($rheaders['retry-after']) ? (float) ($rheaders['retry-after']) : 0.0;
+        $retryAfter = isset($rheaders['retry-after']) ? (float)($rheaders['retry-after']) : 0.0;
         if (\floor($retryAfter) === $retryAfter && $retryAfter <= Stripe::getMaxRetryAfter()) {
             $sleepSeconds = \max($sleepSeconds, $retryAfter);
         }

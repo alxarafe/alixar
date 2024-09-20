@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2013      Florian Henry	  	<florian.henry@open-concept.pro>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013       Florian Henry	  	        <florian.henry@open-concept.pro>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *   \file       htdocs/product/note.php
@@ -124,7 +127,7 @@ if ($id > 0 || !empty($ref)) {
     print dol_get_fiche_head($head, 'note', $titre, -1, $picto);
 
     $linkback = '<a href="' . constant('BASE_URL') . 'product/list.php?restore_lastsearch_values=1&type=' . $object->type . '">' . $langs->trans("BackToList") . '</a>';
-    $object->next_prev_filter = "fk_product_type = " . ((int) $object->type);
+    $object->next_prev_filter = "fk_product_type = " . ((int)$object->type);
 
     $shownav = 1;
     if ($user->socid && !in_array('product', explode(',', getDolGlobalString('MAIN_MODULES_FOR_EXTERNAL')))) {

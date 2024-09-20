@@ -35,6 +35,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  *  \file       htdocs/main.inc.php
  *  \ingroup    core
@@ -44,7 +48,6 @@
 //@ini_set('memory_limit', '128M'); // This may be useless if memory is hard limited by your PHP
 
 // For optional tuning. Enabled if environment variable MAIN_SHOW_TUNING_INFO is defined.
-use Dolibarr\Code\Core\Classes\Form;
 
 $micro_start_time = 0;
 if (!empty($_SERVER['MAIN_SHOW_TUNING_INFO'])) {
@@ -3034,7 +3037,7 @@ function top_menu_bookmark()
     }
 
     if (!defined('JS_JQUERY_DISABLE_DROPDOWN') && !empty($conf->use_javascript_ajax)) {     // This may be set by some pages that use different jquery version to avoid errors
-        include_once DOL_DOCUMENT_ROOT . '/bookmarks/bookmarks.lib.php';
+        include_once DOL_DOCUMENT_ROOT . '/bookmarks/lib/bookmarks.lib.php';
         $langs->load("bookmarks");
 
         if (getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER')) {

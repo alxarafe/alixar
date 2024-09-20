@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2001-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2020      Open-Dsi        		<support@open-dsi.fr>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2020       Open-Dsi        		    <support@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *      \file       htdocs/comm/prospect/index.php
@@ -44,7 +46,6 @@ if ($user->socid) {
     $socid = $user->socid;
 }
 $result = restrictedArea($user, 'propal', $socid, '');
-
 
 
 /*
@@ -95,12 +96,12 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = s.rowid)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = s.rowid AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = s.rowid AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search on socid
 if ($socid) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 $sql .= " GROUP BY st.id";
 $sql .= " ORDER BY st.id";
@@ -148,12 +149,12 @@ if (isModEnabled("propal") && $user->hasRight('propal', 'lire')) {
         if ($search_sale == -2) {
             $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = s.rowid)";
         } elseif ($search_sale > 0) {
-            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = s.rowid AND sc.fk_user = " . ((int) $search_sale) . ")";
+            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = s.rowid AND sc.fk_user = " . ((int)$search_sale) . ")";
         }
     }
     // Search on socid
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -220,12 +221,12 @@ if (isModEnabled("propal") && $user->hasRight('propal', 'lire')) {
         if ($search_sale == -2) {
             $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc)";
         } elseif ($search_sale > 0) {
-            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
         }
     }
     // Search on socid
     if ($socid) {
-        $sql .= " AND p.fk_soc = " . ((int) $socid);
+        $sql .= " AND p.fk_soc = " . ((int)$socid);
     }
     $sql .= " ORDER BY p.rowid DESC";
     $sql .= $db->plimit(5, 0);
@@ -286,12 +287,12 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = s.rowid)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = s.rowid AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = s.rowid AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search on socid
 if ($socid) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 $sql .= " ORDER BY s.tms ASC";
 $sql .= $db->plimit(15, 0);

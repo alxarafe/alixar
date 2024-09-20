@@ -20,6 +20,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\Societe\Classes\Societe;
@@ -29,9 +30,6 @@ use Dolibarr\Code\Societe\Classes\Societe;
  *      \ingroup    shipment
  *      \brief      Module for generating the display of the shipment box
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 
 /**
  * Class to manage the box to show last shipments
@@ -46,8 +44,8 @@ class box_shipments extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -61,8 +59,8 @@ class box_shipments extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -102,10 +100,10 @@ class box_shipments extends ModeleBoxes
                 $sql .= " AND e.fk_statut = 1";
             }
             if ($user->socid > 0) {
-                $sql .= " AND s.rowid = " . ((int) $user->socid);
+                $sql .= " AND s.rowid = " . ((int)$user->socid);
             }
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND sc.fk_user = " . ((int)$user->id);
             } else {
                 $sql .= " ORDER BY e.tms DESC, e.date_delivery DESC, e.ref DESC";
             }
@@ -165,7 +163,7 @@ class box_shipments extends ModeleBoxes
 
                 if ($num == 0) {
                     $this->info_box_contents[$line][0] = array(
-                    'td' => 'class="center"',
+                        'td' => 'class="center"',
                         'text' => '<span class="opacitymedium">' . $langs->trans("NoRecordedShipments") . '</span>'
                     );
                 }
@@ -189,10 +187,10 @@ class box_shipments extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005-2015  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Charlie BENKE        <charlie@patas-monkey.com>
- * Copyright (C) 2017-2019  Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2021		Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2005-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Charlie BENKE               <charlie@patas-monkey.com>
+ * Copyright (C) 2017-2019  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2021		Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,15 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Salaries\Classes\Salary;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/salaries/info.php
@@ -35,15 +44,10 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/salaries.lib.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fourn.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
 if (isModEnabled('project')) {
     }
 
@@ -63,8 +67,6 @@ $socid = GETPOSTINT('socid');
 if ($user->socid) {
     $socid = $user->socid;
 }
-
-
 
 $object = new Salary($db);
 $extrafields = new ExtraFields($db);
@@ -118,7 +120,6 @@ if ($id > 0 || !empty($ref)) {
 $hookmanager->initHooks(array('directdebitcard', 'globalcard'));
 
 restrictedArea($user, 'salaries', $object->id, 'salary', '');
-
 
 /*
  * Actions
@@ -177,9 +178,6 @@ if ($action == "delete" && $permissiontodelete) {
     }
 }
 
-
-
-
 /*
  * View
  */
@@ -205,7 +203,6 @@ $morehtmlref = '<div class="refidno">';
 
 $userstatic = new User($db);
 $userstatic->fetch($object->fk_user);
-
 
 // Label
 if ($action != 'editlabel') {
@@ -510,15 +507,14 @@ print '</div>';
 
 print '<div>';
 
-
 /*
  * Withdraw receipts
  */
 $bprev = new BonPrelevement($db);
 
 /*
-     * Withdrawals
-     */
+ * Withdrawals
+ */
 
 print '<div class="div-table-responsive-no-min">';
 print '<table class="noborder centpercent">';

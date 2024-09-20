@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2002      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2007 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2016-2024  Frédéric France      <frederic.france@free.fr>
- * Copyright (C) 2017      Alexandre Spangaro	<aspangaro@open-dsi.fr>
- * Copyright (C) 2021      Gauthier VERDOL		<gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2002       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2007  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2016-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2017       Alexandre Spangaro	        <aspangaro@open-dsi.fr>
+ * Copyright (C) 2021       Gauthier VERDOL		        <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,13 +22,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Compta\Classes;
+
 /**
  *      \file       htdocs/compta/sociales/class/chargesociales.class.php
  *      \ingroup    invoice
  *      \brief      File for the ChargesSociales class
  */
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 
 /**

@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2013  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2017       Patrick Delcroix        <pmpdelcroix@gmail.com>
- * Copyright (C) 2019       Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2022       Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2013  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2017       Patrick Delcroix            <pmpdelcroix@gmail.com>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Compta\Classes\PaymentVarious;
+use Dolibarr\Code\Compta\Classes\RemiseCheque;
+use Dolibarr\Code\Compta\Classes\Tva;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Don\Classes\PaymentDonation;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Loan\Classes\PaymentLoan;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/compta/bank/releve.php
  *      \ingroup    banque
@@ -33,14 +47,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 
-use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/cheque/class/remisecheque.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/paymentdonation.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/paymentloan.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
 //show files
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
@@ -121,7 +127,7 @@ $sql = "SELECT b.num_releve as num";
 $sql .= " FROM " . MAIN_DB_PREFIX . "bank as b";
 $sql .= " WHERE b.num_releve < '" . $db->escape($numref) . "'";
 $sql .= " AND b.num_releve <> ''";
-$sql .= " AND b.fk_account = " . ((int) $object->id);
+$sql .= " AND b.fk_account = " . ((int)$object->id);
 $sql .= " ORDER BY b.num_releve DESC";
 $sql .= $db->plimit(1);
 
@@ -143,7 +149,7 @@ if ($resql) {
 $sql = "SELECT b.num_releve as num";
 $sql .= " FROM " . MAIN_DB_PREFIX . "bank as b";
 $sql .= " WHERE b.num_releve > '" . $db->escape($numref) . "'";
-$sql .= " AND b.fk_account = " . ((int) $object->id);
+$sql .= " AND b.fk_account = " . ((int)$object->id);
 $sql .= " ORDER BY b.num_releve ASC";
 $sql .= $db->plimit(1);
 
@@ -174,7 +180,7 @@ $sql .= " WHERE b.num_releve = '" . $db->escape($numref) . "'";
 if (empty($numref)) {
     $sql .= " OR b.num_releve is null";
 }
-$sql .= " AND b.fk_account = " . ((int) $object->id);
+$sql .= " AND b.fk_account = " . ((int)$object->id);
 $sql .= " AND b.fk_account = ba.rowid";
 $sql .= " AND ba.entity IN (" . getEntity($object->element) . ")";
 $sql .= $db->order("b.datev, b.datec", "ASC"); // We add date of creation to have correct order when everything is done the same day
@@ -189,7 +195,7 @@ $sqlrequestforbankline = $sql;
 if ($action == 'confirm_editbankreceipt' && !empty($oldbankreceipt) && !empty($newbankreceipt)) {
     // Test to check newbankreceipt does not exists yet
     $sqltest = "SELECT b.rowid FROM " . MAIN_DB_PREFIX . "bank as b, " . MAIN_DB_PREFIX . "bank_account as ba";
-    $sqltest .= " WHERE b.fk_account = ba.rowid AND ba.entity = " . ((int) $conf->entity);
+    $sqltest .= " WHERE b.fk_account = ba.rowid AND ba.entity = " . ((int)$conf->entity);
     $sqltest .= " AND num_releve = '" . $db->escape($newbankreceipt) . "'";
     $sqltest .= $db->plimit(1); // Need the first one only
 
@@ -207,7 +213,7 @@ if ($action == 'confirm_editbankreceipt' && !empty($oldbankreceipt) && !empty($n
     // Update bank receipt name
     if (!$error) {
         $sqlupdate = "UPDATE " . MAIN_DB_PREFIX . "bank SET num_releve = '" . $db->escape($newbankreceipt) . "'";
-        $sqlupdate .= " WHERE num_releve = '" . $db->escape($oldbankreceipt) . "' AND fk_account = " . ((int) $id);
+        $sqlupdate .= " WHERE num_releve = '" . $db->escape($oldbankreceipt) . "' AND fk_account = " . ((int)$id);
 
         $resql = $db->query($sqlupdate);
         if (!$resql) {
@@ -217,7 +223,6 @@ if ($action == 'confirm_editbankreceipt' && !empty($oldbankreceipt) && !empty($n
 
     $action = 'view';
 }
-
 
 /*
  * View
@@ -246,7 +251,7 @@ if ($limit > 0 && $limit != $conf->liste_limit) {
     $param .= '&limit=' . $limit;
 }
 if ($id > 0) {
-    $param .= '&id=' . urlencode((string) ($id));
+    $param .= '&id=' . urlencode((string)($id));
 }
 
 if (empty($numref)) {
@@ -268,7 +273,7 @@ if (empty($numref)) {
     // List of all standing receipts
     $sql = "SELECT DISTINCT(b.num_releve) as numr";
     $sql .= " FROM " . MAIN_DB_PREFIX . "bank as b";
-    $sql .= " WHERE b.fk_account = " . ((int) $object->id);
+    $sql .= " WHERE b.fk_account = " . ((int)$object->id);
     $sql .= " AND b.num_releve IS NOT NULL AND b.num_releve <> '' AND b.num_releve <> '0'";
     $sql .= $db->order($sortfield, $sortorder);
 
@@ -385,7 +390,7 @@ if (empty($numref)) {
             $sql .= " FROM " . MAIN_DB_PREFIX . "bank as b";
             $sql .= " WHERE b.num_releve < '" . $db->escape($objp->numr) . "'";
             $sql .= " AND b.num_releve <> ''";
-            $sql .= " AND b.fk_account = " . ((int) $object->id);
+            $sql .= " AND b.fk_account = " . ((int)$object->id);
             $resqlstart = $db->query($sql);
             if ($resqlstart) {
                 $obj = $db->fetch_object($resqlstart);
@@ -398,7 +403,7 @@ if (empty($numref)) {
             $sql = "SELECT sum(b.amount) as amount";
             $sql .= " FROM " . MAIN_DB_PREFIX . "bank as b";
             $sql .= " WHERE b.num_releve = '" . $db->escape($objp->numr) . "'";
-            $sql .= " AND b.fk_account = " . ((int) $object->id);
+            $sql .= " AND b.fk_account = " . ((int)$object->id);
             $resqlend = $db->query($sql);
             if ($resqlend) {
                 $obj = $db->fetch_object($resqlend);
@@ -443,11 +448,11 @@ if (empty($numref)) {
     $morehtmlright = '';
     $morehtmlright .= '<div class="pagination"><ul>';
     if ($foundprevious) {
-        $morehtmlright .= '<li class="pagination"><a class="paginationnext" href="' . $_SERVER["PHP_SELF"] . '?num=' . urlencode($foundprevious) . '&amp;ve=' . urlencode($ve) . '&amp;account=' . ((int) $object->id) . '"><i class="fa fa-chevron-left" title="' . dol_escape_htmltag($langs->trans("Previous")) . '"></i></a></li>';
+        $morehtmlright .= '<li class="pagination"><a class="paginationnext" href="' . $_SERVER["PHP_SELF"] . '?num=' . urlencode($foundprevious) . '&amp;ve=' . urlencode($ve) . '&amp;account=' . ((int)$object->id) . '"><i class="fa fa-chevron-left" title="' . dol_escape_htmltag($langs->trans("Previous")) . '"></i></a></li>';
     }
     $morehtmlright .= '<li class="pagination"><span class="active">' . $langs->trans("AccountStatement") . " " . $numref . '</span></li>';
     if ($foundnext) {
-        $morehtmlright .= '<li class="pagination"><a class="paginationnext" href="' . $_SERVER["PHP_SELF"] . '?num=' . urlencode($foundnext) . '&amp;ve=' . urlencode($ve) . '&amp;account=' . ((int) $object->id) . '"><i class="fa fa-chevron-right" title="' . dol_escape_htmltag($langs->trans("Next")) . '"></i></a></li>';
+        $morehtmlright .= '<li class="pagination"><a class="paginationnext" href="' . $_SERVER["PHP_SELF"] . '?num=' . urlencode($foundnext) . '&amp;ve=' . urlencode($ve) . '&amp;account=' . ((int)$object->id) . '"><i class="fa fa-chevron-right" title="' . dol_escape_htmltag($langs->trans("Next")) . '"></i></a></li>';
     }
     $morehtmlright .= '</ul></div>';
 
@@ -476,7 +481,7 @@ if (empty($numref)) {
     $sql .= " FROM " . MAIN_DB_PREFIX . "bank as b";
     $sql .= " WHERE b.num_releve < '" . $db->escape($numref) . "'";
     $sql .= " AND b.num_releve <> ''";
-    $sql .= " AND b.fk_account = " . ((int) $object->id);
+    $sql .= " AND b.fk_account = " . ((int)$object->id);
 
     $resql = $db->query($sql);
     if ($resql) {
@@ -663,8 +668,8 @@ if (empty($numref)) {
                 $sql .= " FROM " . MAIN_DB_PREFIX . "bank_categ as ct";
                 $sql .= ", " . MAIN_DB_PREFIX . "bank_class as cl";
                 $sql .= " WHERE ct.rowid = cl.fk_categ";
-                $sql .= " AND ct.entity = " . ((int) $conf->entity);
-                $sql .= " AND cl.lineid = " . ((int) $objp->rowid);
+                $sql .= " AND ct.entity = " . ((int)$conf->entity);
+                $sql .= " AND cl.lineid = " . ((int)$objp->rowid);
 
                 $resc = $db->query($sql);
                 if ($resc) {

@@ -53,7 +53,7 @@ if (!defined('USESUFFIXINLOG')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -80,7 +80,6 @@ $langs->loadLangs(array("admin", "cron", "dict"));
 if (empty($conf->cron->enabled)) {
     httponly_accessforbidden('Module Cron not enabled');
 }
-
 
 
 /*
@@ -193,7 +192,7 @@ if (is_array($object->lines) && (count($object->lines) > 0)) {
         }
 
         //If date_next_jobs is less of current date, execute the program, and store the execution time of the next execution in database
-        $datenextrunok = (empty($line->datenextrun) || (int) $line->datenextrun < $now);
+        $datenextrunok = (empty($line->datenextrun) || (int)$line->datenextrun < $now);
         $datestartok = (empty($line->datestart) || $line->datestart <= $now);
         $dateendok = (empty($line->dateend) || $line->dateend >= $now);
         if ($datenextrunok && $datestartok && $dateendok) {

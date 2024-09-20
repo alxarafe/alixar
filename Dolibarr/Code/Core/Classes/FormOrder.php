@@ -20,15 +20,14 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
-use CommandeFournisseur;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 
 /**
  *  \file       htdocs/core/class/html.formorder.class.php
  *  \ingroup    core
  *  \brief      File of predefined functions for HTML forms for order module
  */
-
-use Dolibarr\Code\Adherents\Classes\Adherent;
 
 /**
  *  Class to manage HTML output components for orders

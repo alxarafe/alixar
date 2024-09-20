@@ -25,7 +25,9 @@
 
 namespace Dolibarr\Code\Hrm\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        class/skillrank.class.php

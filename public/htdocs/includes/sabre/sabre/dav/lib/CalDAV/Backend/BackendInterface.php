@@ -125,7 +125,7 @@ interface BackendInterface
      *
      * This method must return null if the object did not exist.
      *
-     * @param mixed  $calendarId
+     * @param mixed $calendarId
      * @param string $objectUri
      *
      * @return array|null
@@ -159,7 +159,7 @@ interface BackendInterface
      * calendar-data. If the result of a subsequent GET to this object is not
      * the exact same as this request body, you should omit the ETag.
      *
-     * @param mixed  $calendarId
+     * @param mixed $calendarId
      * @param string $objectUri
      * @param string $calendarData
      *
@@ -180,7 +180,7 @@ interface BackendInterface
      * calendar-data. If the result of a subsequent GET to this object is not
      * the exact same as this request body, you should omit the ETag.
      *
-     * @param mixed  $calendarId
+     * @param mixed $calendarId
      * @param string $objectUri
      * @param string $calendarData
      *
@@ -193,7 +193,7 @@ interface BackendInterface
      *
      * The object uri is only the basename, or filename and not a full path.
      *
-     * @param mixed  $calendarId
+     * @param mixed $calendarId
      * @param string $objectUri
      */
     public function deleteCalendarObject($calendarId, $objectUri);

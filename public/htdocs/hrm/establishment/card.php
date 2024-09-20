@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2015      Alexandre Spangaro   <aspangaro@open-dsi.fr>
+/* Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Hrm\Classes\Establishment;
 
 /**
  *  \file           htdocs/hrm/establishment/card.php
@@ -39,8 +43,8 @@ $id = GETPOSTINT('id');
 
 // List of status
 static $tmpstatus2label = array(
-        '0' => 'CloseEtablishment',
-        '1' => 'OpenEtablishment'
+    '0' => 'CloseEtablishment',
+    '1' => 'OpenEtablishment'
 );
 $status2label = array('');
 foreach ($tmpstatus2label as $key => $val) {
@@ -131,12 +135,12 @@ if ($action == 'confirm_delete' && $confirm == "yes") {
         if (empty($error)) {
             $object->label = GETPOST('label', 'alphanohtml');
             $object->address = GETPOST('address', 'alpha');
-            $object->zip            = GETPOST('zipcode', 'alpha');
-            $object->town           = GETPOST('town', 'alpha');
-            $object->country_id     = GETPOSTINT('country_id');
+            $object->zip = GETPOST('zipcode', 'alpha');
+            $object->town = GETPOST('town', 'alpha');
+            $object->country_id = GETPOSTINT('country_id');
             $object->fk_user_mod = $user->id;
-            $object->status         = GETPOSTINT('status');
-            $object->entity         = GETPOSTINT('entity') > 0 ? GETPOSTINT('entity') : $conf->entity;
+            $object->status = GETPOSTINT('status');
+            $object->entity = GETPOSTINT('entity') > 0 ? GETPOSTINT('entity') : $conf->entity;
 
             $result = $object->update($user);
 
@@ -222,8 +226,8 @@ if ($action == 'create') {
     print '<td>' . $form->editfieldkey('Town', 'town', '', $object, 0) . '</td>';
     print '<td>';
     print $formcompany->select_ziptown(GETPOSTISSET('town') ? GETPOST('town', 'alpha') : $object->town, 'town', array(
-            'zipcode',
-            'selectcountry_id'
+        'zipcode',
+        'selectcountry_id'
     ));
     print '</td>';
     print '</tr>';
@@ -306,12 +310,12 @@ if ((!empty($id) || !empty($ref)) && $action == 'edit') {
             print $formcompany->select_ziptown($object->zip, 'zipcode', array(
                     'town',
                     'selectcountry_id'
-            ), 6) . '</tr>';
+                ), 6) . '</tr>';
             print '<tr><td>' . $form->editfieldkey('Town', 'town', '', $object, 0) . '</td><td>';
             print $formcompany->select_ziptown($object->town, 'town', array(
                     'zipcode',
                     'selectcountry_id'
-            )) . '</td></tr>';
+                )) . '</td></tr>';
 
             // Country
             print '<tr><td>' . $form->editfieldkey('Country', 'selectcountry_id', '', $object, 0) . '</td>';

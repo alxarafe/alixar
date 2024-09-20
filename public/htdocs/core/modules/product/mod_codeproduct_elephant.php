@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011      Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011       Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,14 +23,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\ModeleProductCode;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *       \file       htdocs/core/modules/product/mod_codeproduct_elephant.php
  *       \ingroup    product
  *       \brief      File of class to manage product code with elephant rule
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product/modules_product.class.php';
-
 
 /**
  *  Class to manage product code with elephant rule
@@ -44,15 +45,14 @@ class mod_codeproduct_elephant extends ModeleProductCode
     // variables not inherited
 
     /**
-     *  @var string         String de recherche
+     * @var string         String de recherche
      */
     public $searchcode;
 
     /**
-     *  @var int            Nombre de chiffres du compteur
+     * @var int            Nombre de chiffres du compteur
      */
     public $numbitcounter;
-
 
     /**
      *  Constructor
@@ -67,12 +67,11 @@ class mod_codeproduct_elephant extends ModeleProductCode
         $this->prefixIsRequired = 0;
     }
 
-
     /**
      *  Return description of module
      *
-     *  @param  Translate   $langs      Object langs
-     *  @return string                  Description of module
+     * @param Translate $langs Object langs
+     * @return string                  Description of module
      */
     public function info($langs)
     {
@@ -120,9 +119,9 @@ class mod_codeproduct_elephant extends ModeleProductCode
     /**
      * Return an example of result returned by getNextValue
      *
-     * @param   Translate       $langs      Object langs
-     * @param   Product|string  $objproduct Object product
-     * @param   int             $type       Type of third party (1:customer, 2:supplier, -1:autodetect)
+     * @param Translate $langs Object langs
+     * @param Product|string $objproduct Object product
+     * @param int $type Type of third party (1:customer, 2:supplier, -1:autodetect)
      * @return  string                      Return string example
      */
     public function getExample($langs, $objproduct = '', $type = -1)
@@ -162,8 +161,8 @@ class mod_codeproduct_elephant extends ModeleProductCode
     /**
      * Return next value
      *
-     * @param   Product     $objproduct     Object product
-     * @param   int         $type       Produit ou service (0:product, 1:service)
+     * @param Product $objproduct Object product
+     * @param int $type Produit ou service (0:product, 1:service)
      * @return  string|-1               Value if OK, '' if module not configured, -1 if KO
      */
     public function getNextValue($objproduct = null, $type = -1)
@@ -205,19 +204,20 @@ class mod_codeproduct_elephant extends ModeleProductCode
 
         $numFinal = get_next_value($db, $mask, 'product', $field, $where, '', $now);
 
-        return  $numFinal;
+        return $numFinal;
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *   Check if mask/numbering use prefix
      *
-     *   @return    int         0 or 1
+     * @return    int         0 or 1
      */
     public function verif_prefixIsUsed()
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf;
 
         $mask = getDolGlobalString('PRODUCT_ELEPHANT_MASK_PRODUCT');
@@ -237,11 +237,11 @@ class mod_codeproduct_elephant extends ModeleProductCode
     /**
      *  Check validity of code according to its rules
      *
-     *  @param  DoliDB      $db         Database handler
-     *  @param  string      $code       Code to check/correct
-     *  @param  Product     $product    Object product
-     *  @param  int         $type       0 = product , 1 = service
-     *  @return int                     0 if OK
+     * @param DoliDB $db Database handler
+     * @param string $code Code to check/correct
+     * @param Product $product Object product
+     * @param int $type 0 = product , 1 = service
+     * @return int                     0 if OK
      *                                  -1 ErrorBadCustomerCodeSyntax
      *                                  -2 ErrorCustomerCodeRequired
      *                                  -3 ErrorCustomerCodeAlreadyUsed
@@ -287,18 +287,19 @@ class mod_codeproduct_elephant extends ModeleProductCode
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Indicate if the code is available or not (by another third party)
      *
-     *  @param  DoliDB      $db         Handler access base
-     *  @param  string      $code       Code a verifier
-     *  @param  Product     $product        Object product
-     *  @return int                     0 if available, <0 if KO
+     * @param DoliDB $db Handler access base
+     * @param string $code Code a verifier
+     * @param Product $product Object product
+     * @return int                     0 if available, <0 if KO
      */
     public function verif_dispo($db, $code, $product)
     {
-		// phpcs:enable
+        // phpcs:enable
         $sql = "SELECT ref FROM " . MAIN_DB_PREFIX . "product";
         $sql .= " WHERE ref = '" . $db->escape($code) . "'";
         if ($product->id > 0) {

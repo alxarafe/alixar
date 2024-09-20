@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2010-2012  Regis Houssin       <regis.houssin@inodbox.com>
  * Copyright (C) 2010-2014	Laurent Destailleur	<eldy@users.sourceforge.net>
  * Copyright (C) 2012-2013	Christophe Battarel	<christophe.battarel@altairis.fr>
@@ -214,60 +215,59 @@ print '</tr>';
 
 <script>
 
-/* JQuery for product free or predefined select */
-jQuery(document).ready(function() {
-    /* When changing predefined product, we reload list of supplier prices required for margin combo */
-    $("#idprod").change(function()
-    {
-        console.log("#idprod change triggered");
+    /* JQuery for product free or predefined select */
+    jQuery(document).ready(function () {
+        /* When changing predefined product, we reload list of supplier prices required for margin combo */
+        $("#idprod").change(function () {
+            console.log("#idprod change triggered");
 
-          /* To set focus */
-          if (jQuery('#idprod').val() > 0)
-            {
-            /* focus work on a standard textarea but not if field was replaced with CKEDITOR */
-            jQuery('#dp_desc').focus();
-            /* focus if CKEDITOR */
-            if (typeof CKEDITOR == "object" && typeof CKEDITOR.instances != "undefined")
-            {
-                var editor = CKEDITOR.instances['dp_desc'];
-                   if (editor) { editor.focus(); }
+            /* To set focus */
+            if (jQuery('#idprod').val() > 0) {
+                /* focus work on a standard textarea but not if field was replaced with CKEDITOR */
+                jQuery('#dp_desc').focus();
+                /* focus if CKEDITOR */
+                if (typeof CKEDITOR == "object" && typeof CKEDITOR.instances != "undefined") {
+                    var editor = CKEDITOR.instances['dp_desc'];
+                    if (editor) {
+                        editor.focus();
+                    }
+                }
             }
-            }
-    });
+        });
 
-    //change unit selected if we change service selected
-    <?php if ($filtertype == 1) { ?>
-    $('#idprodservice').change(function(){
-        var idproduct = $(this).val();
+        //change unit selected if we change service selected
+        <?php if ($filtertype == 1) { ?>
+        $('#idprodservice').change(function () {
+            var idproduct = $(this).val();
 
             $.ajax({
-                url : "<?php echo dol_buildpath('/bom/ajax/ajax.php', 1); ?>"
-                ,type: 'POST'
-                ,data: {
+                url: "<?php echo dol_buildpath('/bom/ajax/ajax.php', 1); ?>"
+                , type: 'POST'
+                , data: {
                     'action': 'getDurationUnitByProduct'
-                    ,'token' : "<?php echo newToken() ?>"
-                    ,'idproduct' : idproduct
+                    , 'token': "<?php echo newToken() ?>"
+                    , 'idproduct': idproduct
                 }
-            }).done(function(data) {
+            }).done(function (data) {
 
                 console.log(data);
                 $("#fk_unit").val(data).change();
             });
 
             $.ajax({
-                url : "<?php echo dol_buildpath('/bom/ajax/ajax.php', 1); ?>"
-                ,type: 'POST'
-                ,data: {
+                url: "<?php echo dol_buildpath('/bom/ajax/ajax.php', 1); ?>"
+                , type: 'POST'
+                , data: {
                     'action': 'getWorkstationByProduct'
-                    ,'token' :  "<?php echo newToken() ?>"
-                    ,'idproduct' : idproduct
+                    , 'token': "<?php echo newToken() ?>"
+                    , 'idproduct': idproduct
                 }
-            }).done(function(data) {
+            }).done(function (data) {
                 $('#idworkstations').val(data.defaultWk).select2();
             });
+        });
+        <?php } ?>
     });
-    <?php } ?>
-});
 
 </script>
 

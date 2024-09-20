@@ -381,7 +381,7 @@ class CorePlugin extends ServerPlugin
             // multi-status.
             $ok = true;
             foreach ($result as $prop => $code) {
-                if ((int) $code > 299) {
+                if ((int)$code > 299) {
                     $ok = false;
                 }
             }

@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2013-2022 Laurent Destaileur   <ely@users.sourceforge.net>
- * Copyright (C) 2014	   Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2013-2022  Laurent Destaileur          <ely@users.sourceforge.net>
+ * Copyright (C) 2014	    Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +18,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/product/stock/massstockmove.php
  *  \ingroup    stock
@@ -26,12 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
-require_once DOL_DOCUMENT_ROOT . '/product/stock/class/entrepot.class.php';
-require_once DOL_DOCUMENT_ROOT . '/core/class/html.form.class.php';
-require_once DOL_DOCUMENT_ROOT . '/core/class/html.formother.class.php';
-require_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.commande.class.php';
-require_once DOL_DOCUMENT_ROOT . '/product/class/html.formproduct.class.php';
 require_once DOL_DOCUMENT_ROOT . '/core/modules/import/import_csv.modules.php';
 require_once DOL_DOCUMENT_ROOT . '/core/lib/files.lib.php';
 require_once DOL_DOCUMENT_ROOT . '/core/lib/import.lib.php';
@@ -531,7 +531,6 @@ if ($action == 'confirm_deletefile' && $confirm == 'yes') {
     exit;
 }
 
-
 /*
  * View
  */
@@ -703,7 +702,7 @@ if (isModEnabled('productbatch')) {
     print '</td>';
 }
 // Qty
-print '<td class="right"><input type="text" class="flat maxwidth50 right" name="qty" value="' . price2num((float) $qty, 'MS') . '"></td>';
+print '<td class="right"><input type="text" class="flat maxwidth50 right" name="qty" value="' . price2num((float)$qty, 'MS') . '"></td>';
 // Button to add line
 print '<td class="right"><input type="submit" class="button" name="addline" value="' . dol_escape_htmltag($titletoadd) . '"></td>';
 
@@ -757,7 +756,7 @@ foreach ($listofdata as $key => $val) {
             print dol_escape_htmltag($val['batch']);
             print '</td>';
         }
-        print '<td class="right">' . price2num((float) $val['qty'], 'MS') . '</td>';
+        print '<td class="right">' . price2num((float)$val['qty'], 'MS') . '</td>';
         print '<td class="right"><a href="' . $_SERVER["PHP_SELF"] . '?action=delline&token=' . newToken() . '&idline=' . $val['id'] . '">' . img_delete($langs->trans("Remove")) . '</a></td>';
         print '</tr>';
     }

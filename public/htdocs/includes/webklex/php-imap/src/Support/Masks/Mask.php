@@ -45,7 +45,7 @@ class Mask
     {
         $this->parent = $parent;
 
-        if(method_exists($this->parent, 'getAttributes')){
+        if (method_exists($this->parent, 'getAttributes')) {
             $this->attributes = array_merge($this->attributes, $this->parent->getAttributes());
         }
 
@@ -57,7 +57,7 @@ class Mask
      */
     protected function boot()
     {
-}
+    }
 
     /**
      * Call dynamic attribute setter and getter methods and inherit the parent calls
@@ -69,23 +69,23 @@ class Mask
      */
     public function __call($method, $arguments)
     {
-        if(strtolower(substr($method, 0, 3)) === 'get') {
+        if (strtolower(substr($method, 0, 3)) === 'get') {
             $name = Str::snake(substr($method, 3));
 
-            if(isset($this->attributes[$name])) {
+            if (isset($this->attributes[$name])) {
                 return $this->attributes[$name];
             }
-        }elseif (strtolower(substr($method, 0, 3)) === 'set') {
+        } elseif (strtolower(substr($method, 0, 3)) === 'set') {
             $name = Str::snake(substr($method, 3));
 
-            if(isset($this->attributes[$name])) {
+            if (isset($this->attributes[$name])) {
                 $this->attributes[$name] = array_pop($arguments);
 
                 return $this->attributes[$name];
             }
         }
 
-        if(method_exists($this->parent, $method) === true){
+        if (method_exists($this->parent, $method) === true) {
             return call_user_func_array([$this->parent, $method], $arguments);
         }
 
@@ -114,7 +114,7 @@ class Mask
      */
     public function __get($name)
     {
-        if(isset($this->attributes[$name])) {
+        if (isset($this->attributes[$name])) {
             return $this->attributes[$name];
         }
 

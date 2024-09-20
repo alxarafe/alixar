@@ -1,15 +1,13 @@
 [![Build Status](https://travis-ci.com/jsGanttImproved/jsgantt-improved.svg?branch=master)](https://travis-ci.com/jsGanttImproved/jsgantt-improved)
 
-
-A fully featured gantt chart component built entirely in Javascript, CSS and AJAX. It is lightweight and there is no need of external libraries or additional images. 
-
+A fully featured gantt chart component built entirely in Javascript, CSS and AJAX. It is lightweight and there is no
+need of external libraries or additional images.
 
 ![Demo Image](/docs/demo.gif)
 
-
 Start using with including the files `jsgantt.js` and `jsgantt.css` that are inside `docs/` folder.
 
-Or install and use in JS 
+Or install and use in JS
 
 `npm install jsgantt-improved`
 
@@ -17,19 +15,15 @@ Import in your JS `import {JSGantt} from 'jsgantt-improved';`
 
 See the [FULL DOCUMENTATION](./Documentation.md) for more details in all features.
 
-For **Angular** use the component [ng-gantt](https://github.com/jsGanttImproved/ng-gantt) 
+For **Angular** use the component [ng-gantt](https://github.com/jsGanttImproved/ng-gantt)
 
-For **React** use the component [react-jsgantt](https://github.com/jsGanttImproved/react-jsgantt) 
-
+For **React** use the component [react-jsgantt](https://github.com/jsGanttImproved/react-jsgantt)
 
 For **Vue** , see this example: https://stackblitz.com/edit/vue-jsgantt
 
-
 For **.NET** , see this example: [.NET Documentation](./docs/DotNet.md)
 
-
 ## Example
-
 
 You can view a Solo live example at:
 
@@ -38,7 +32,6 @@ You can view a Solo live example at:
 Or use a live coding example at Codenpen:
 
 * https://codepen.io/mariomol/pen/mQzBPV
-
 
 ## Easy to Use
 
@@ -108,23 +101,23 @@ g.Draw();
 
 ## Features
 
-  * Tasks & Collapsible Task Groups
-  * Dependencies and Highlight when hover a task
-  * Edit data in gantt table with list of responsible
-  * Task Completion
-  * Table with Additional Columns
-  * Task Styling or as HTML tags
-  * Milestones
-  * Resources
-  * Costs
-  * Plan Start and End Dates
-  * Gantt with Planned vs Executed
-  * Dynamic Loading of Tasks
-  * Dynamic change of format: Hour, Day, Week, Month, Quarter
-  * Load Gantt from JSON and XML
+* Tasks & Collapsible Task Groups
+* Dependencies and Highlight when hover a task
+* Edit data in gantt table with list of responsible
+* Task Completion
+* Table with Additional Columns
+* Task Styling or as HTML tags
+* Milestones
+* Resources
+* Costs
+* Plan Start and End Dates
+* Gantt with Planned vs Executed
+* Dynamic Loading of Tasks
+* Dynamic change of format: Hour, Day, Week, Month, Quarter
+* Load Gantt from JSON and XML
     * From external files (including experimental support for MS Project XML files)
     * From JavaScript Strings
-  * Support for Internationalization 
+* Support for Internationalization
 
 ## Documentation
 
@@ -132,15 +125,14 @@ See the [Documentation](./Documentation.md) wiki page or the included ``docs/ind
 
 Project based on https://code.google.com/p/jsgantt/.
 
-
 ## Want to Collaborate?
 
 Its easy to get it set:
 
 * Clone this repo
-* Install lib dependencies: `npm i` 
-* Install global dependencies: `npm i -g browserify nodemon onchange` 
-* Run the demo, This will start a `localhost:8080` with a live  example:  `npm start`. 
+* Install lib dependencies: `npm i`
+* Install global dependencies: `npm i -g browserify nodemon onchange`
+* Run the demo, This will start a `localhost:8080` with a live example:  `npm start`.
 * Use `npm run watch` or do your change in `src` and restart this command refresh the changes.
 
 For testing use `npm run test` with e2e tests.

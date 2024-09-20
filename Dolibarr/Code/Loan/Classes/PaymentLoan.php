@@ -449,7 +449,6 @@ class PaymentLoan extends CommonObject
 
         // Set loan unpaid if loan has no other payment
         if (!$error) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
             $loan = new Loan($this->db);
             $loan->fetch($this->fk_loan);
             $sum_payment = $loan->getSumPayment();
@@ -599,7 +598,6 @@ class PaymentLoan extends CommonObject
 
         // Set loan payment started if no set
         if (!$error) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
             $loan = new Loan($this->db);
             $loan->fetch($fk_loan);
             if ($loan->paid == $loan::STATUS_UNPAID) {

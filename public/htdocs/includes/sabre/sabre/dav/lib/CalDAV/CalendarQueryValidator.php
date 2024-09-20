@@ -286,7 +286,7 @@ class CalendarQueryValidator
                 // expensive one too.
                 if ('VEVENT' === $component->parent->name && $component->parent->RRULE) {
                     // Fire up the iterator!
-                    $it = new VObject\Recur\EventIterator($component->parent->parent, (string) $component->parent->UID);
+                    $it = new VObject\Recur\EventIterator($component->parent->parent, (string)$component->parent->UID);
                     while ($it->valid()) {
                         $expandedEvent = $it->getEventObject();
 
@@ -301,7 +301,7 @@ class CalendarQueryValidator
                                     return true;
                                 }
 
-                                if ('DATE-TIME' === (string) $expandedAlarm->TRIGGER['VALUE']) {
+                                if ('DATE-TIME' === (string)$expandedAlarm->TRIGGER['VALUE']) {
                                     // This is an alarm with a non-relative trigger
                                     // time, likely created by a buggy client. The
                                     // implication is that every alarm in this
@@ -336,7 +336,7 @@ class CalendarQueryValidator
                     return $component->isInTimeRange($start, $end);
                 }
 
-                // no break
+            // no break
             case 'VFREEBUSY':
                 throw new \Sabre\DAV\Exception\NotImplemented('time-range filters are currently not supported on ' . $component->name . ' components');
             case 'COMPLETED':

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2011-2019      Juanjo Menent       <jmenent@2byte.es>
- * Copyright (C) 2018			Charlene Benke		<charlie@patas-monkey.com>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2011-2019  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2018		Charlene Benke		        <charlie@patas-monkey.com>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,13 +20,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\Holiday\Classes\ModelNumRefHolidays;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/core/modules/holiday/mod_holiday_immaculate.php
  *  \ingroup    holiday
  *  \brief      File of class to manage holiday numbering rules Immaculate
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/holiday/modules_holiday.php';
 
 /**
  *  Class to manage holiday numbering rules Immaculate
@@ -48,8 +52,8 @@ class mod_holiday_immaculate extends ModelNumRefHolidays
     /**
      *  Return default description of numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -85,7 +89,7 @@ class mod_holiday_immaculate extends ModelNumRefHolidays
     /**
      *  Return numbering example
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -105,9 +109,9 @@ class mod_holiday_immaculate extends ModelNumRefHolidays
     /**
      *  Return next value
      *
-     *  @param  Societe     $objsoc     third party object
-     *  @param  Holiday     $holiday    holiday object
-     *  @return string|0                Value if OK, 0 if KO
+     * @param Societe $objsoc third party object
+     * @param Holiday $holiday holiday object
+     * @return string|0                Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $holiday)
     {
@@ -124,6 +128,6 @@ class mod_holiday_immaculate extends ModelNumRefHolidays
 
         $numFinal = get_next_value($db, $mask, 'holiday', 'ref', '', $objsoc, $holiday->date_create);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

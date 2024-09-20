@@ -40,8 +40,8 @@ interface IPatchSupport extends DAV\IFile
      * time.
      *
      * @param resource|string $data
-     * @param int             $rangeType
-     * @param int             $offset
+     * @param int $rangeType
+     * @param int $offset
      *
      * @return string|null
      */

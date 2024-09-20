@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (c) 2012 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (c) 2012       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+
 /**
  *      \file       htdocs/adherents/stats/byproperties.php
  *      \ingroup    member
@@ -27,7 +29,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
 
 $graphwidth = 700;
 $mapratio = 0.5;

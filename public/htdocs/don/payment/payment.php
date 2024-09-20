@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2015       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\Don\Classes\PaymentDonation;
+
 /**
  *  \file       htdocs/don/payment/payment.php
  *  \ingroup    donations
@@ -27,7 +31,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/paymentdonation.class.php';
 
 $langs->load("bills");
 
@@ -43,7 +46,6 @@ if ($user->socid > 0) {
 }
 
 $object = new Don($db);
-
 
 /*
  * Actions
@@ -95,12 +97,12 @@ if ($action == 'add_payment') {
 
             // Create a line of payments
             $payment = new PaymentDonation($db);
-            $payment->chid         = $chid;
-            $payment->datep     = $datepaid;
-            $payment->amounts      = $amounts; // Tableau de montant
-            $payment->paymenttype  = GETPOSTINT("paymenttype");
-            $payment->num_payment  = GETPOST("num_payment", 'alphanohtml');
-            $payment->note_public  = GETPOST("note_public", 'restricthtml');
+            $payment->chid = $chid;
+            $payment->datep = $datepaid;
+            $payment->amounts = $amounts; // Tableau de montant
+            $payment->paymenttype = GETPOSTINT("paymenttype");
+            $payment->num_payment = GETPOST("num_payment", 'alphanohtml');
+            $payment->note_public = GETPOST("note_public", 'restricthtml');
 
             if (!$error) {
                 $paymentid = $payment->create($user);
@@ -146,7 +148,7 @@ llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-donation page-payment');
 
 $sql = "SELECT sum(p.amount) as total";
 $sql .= " FROM " . MAIN_DB_PREFIX . "payment_donation as p";
-$sql .= " WHERE p.fk_donation = " . ((int) $chid);
+$sql .= " WHERE p.fk_donation = " . ((int)$chid);
 $resql = $db->query($sql);
 if ($resql) {
     $obj = $db->fetch_object($resql);

@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2005       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2010-2023  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2010-2012  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2018       Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2019       Markus Welters          <markus@welters.de>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2010-2023  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2012  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2018       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2019       Markus Welters              <markus@welters.de>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,6 +24,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Salaries\Classes\Salary;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/compta/prelevement/create.php
  *  \ingroup    prelevement
@@ -32,9 +40,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
-
-use Dolibarr\Code\Societe\Classes\Societe;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -46,7 +51,7 @@ $langs->loadLangs(array('banks', 'categories', 'withdrawals', 'companies', 'bill
 // Get supervariables
 $action = GETPOST('action', 'aZ09');
 $massaction = GETPOST('massaction', 'alpha'); // The bulk action (combo box choice into lists)
-$toselect   = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
+$toselect = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
 $mode = GETPOST('mode', 'alpha') ? GETPOST('mode', 'alpha') : 'real';
 
 $type = GETPOST('type', 'aZ09');
@@ -131,7 +136,6 @@ if (empty($reshook)) {
             $error++;
         }
 
-
         $bprev = new BonPrelevement($db);
 
         if (!$error) {
@@ -185,7 +189,7 @@ if (empty($reshook)) {
                     setEventMessages($texttoshow, null);
                 }
 
-                header("Location: " . constant('BASE_URL') . '/compta/prelevement/card.php?id=' . urlencode((string) ($bprev->id)) . '&type=' . urlencode((string) ($type)));
+                header("Location: " . constant('BASE_URL') . '/compta/prelevement/card.php?id=' . urlencode((string)($bprev->id)) . '&type=' . urlencode((string)($type)));
                 exit;
             }
         }
@@ -216,8 +220,7 @@ if ($type != 'bank-transfer') {
 $bprev = new BonPrelevement($db);
 $arrayofselected = is_array($toselect) ? $toselect : array();
 // List of mass actions available
-$arrayofmassactions = array(
-);
+$arrayofmassactions = array();
 if (GETPOSTINT('nomassaction') || in_array($massaction, array('presend', 'predelete'))) {
     $arrayofmassactions = array();
 }
@@ -420,7 +423,7 @@ if ($sourcetype != 'salary') {
         $sql .= " AND pd.fk_facture = f.rowid";
     }
     if ($socid > 0) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
 } else {
     $sql = "SELECT s.ref, s.rowid, s.amount, CONCAT(u.lastname, ' ', u.firstname) as name, u.rowid as uid,";
@@ -460,13 +463,13 @@ if ($resql) {
 
     $param = '';
     if ($type) {
-        $param .= '&type=' . urlencode((string) $type);
+        $param .= '&type=' . urlencode((string)$type);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($socid) {
-        $param .= '&socid=' . urlencode((string) ($socid));
+        $param .= '&socid=' . urlencode((string)($socid));
     }
     if ($option) {
         $param .= "&option=" . urlencode($option);

@@ -34,7 +34,8 @@ class CardException extends ApiErrorException
         $stripeCode = null,
         $declineCode = null,
         $stripeParam = null
-    ) {
+    )
+    {
         $instance = parent::factory($message, $httpStatus, $httpBody, $jsonBody, $httpHeaders, $stripeCode);
         $instance->setDeclineCode($declineCode);
         $instance->setStripeParam($stripeParam);

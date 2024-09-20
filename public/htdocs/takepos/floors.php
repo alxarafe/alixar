@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018   Andreu Bisquerra    <jove@bisquerra.com>
+/* Copyright (C) 2018       Andreu Bisquerra            <jove@bisquerra.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
 
 /**
  *  \file       htdocs/takepos/floors.php
@@ -60,13 +62,12 @@ if (!$user->hasRight('takepos', 'run')) {
     accessforbidden();
 }
 
-
 /*
  * Actions
  */
 
 if ($action == "getTables") {
-    $sql = "SELECT rowid, entity, label, leftpos, toppos, floor FROM " . MAIN_DB_PREFIX . "takepos_floor_tables WHERE floor = " . ((int) $floor) . " AND entity IN (" . getEntity('takepos') . ")";
+    $sql = "SELECT rowid, entity, label, leftpos, toppos, floor FROM " . MAIN_DB_PREFIX . "takepos_floor_tables WHERE floor = " . ((int)$floor) . " AND entity IN (" . getEntity('takepos') . ")";
     $resql = $db->query($sql);
     $rows = array();
     while ($row = $db->fetch_array($resql)) {
@@ -91,9 +92,9 @@ if ($action == "update") {
         $top = 95;
     }
     if ($left > 3 or $top > 4) {
-        $db->query("UPDATE " . MAIN_DB_PREFIX . "takepos_floor_tables SET leftpos = " . ((int) $left) . ", toppos = " . ((int) $top) . " WHERE rowid = " . ((int) $place));
+        $db->query("UPDATE " . MAIN_DB_PREFIX . "takepos_floor_tables SET leftpos = " . ((int)$left) . ", toppos = " . ((int)$top) . " WHERE rowid = " . ((int)$place));
     } else {
-        $db->query("DELETE from " . MAIN_DB_PREFIX . "takepos_floor_tables WHERE rowid = " . ((int) $place));
+        $db->query("DELETE from " . MAIN_DB_PREFIX . "takepos_floor_tables WHERE rowid = " . ((int)$place));
     }
 }
 
@@ -102,11 +103,11 @@ if ($action == "updatename") {
     if (strlen($newname) > 3) {
         $newname = substr($newname, 0, 3); // Only 3 chars
     }
-    $resql = $db->query("UPDATE " . MAIN_DB_PREFIX . "takepos_floor_tables SET label='" . $db->escape($newname) . "' WHERE rowid = " . ((int) $place));
+    $resql = $db->query("UPDATE " . MAIN_DB_PREFIX . "takepos_floor_tables SET label='" . $db->escape($newname) . "' WHERE rowid = " . ((int)$place));
 }
 
 if ($action == "add") {
-    $sql = "INSERT INTO " . MAIN_DB_PREFIX . "takepos_floor_tables(entity, label, leftpos, toppos, floor) VALUES (" . $conf->entity . ", '', '45', '45', " . ((int) $floor) . ")";
+    $sql = "INSERT INTO " . MAIN_DB_PREFIX . "takepos_floor_tables(entity, label, leftpos, toppos, floor) VALUES (" . $conf->entity . ", '', '45', '45', " . ((int)$floor) . ")";
     $asdf = $db->query($sql);
     $db->query("UPDATE " . MAIN_DB_PREFIX . "takepos_floor_tables SET label = rowid WHERE label = ''"); // No empty table names
 }
@@ -130,112 +131,115 @@ top_htmlhead($head, $title, 0, 0, '', $arrayofcss);
 <body style="overflow: hidden">
 
 <style type="text/css">
-div.tablediv{
-    background-image:url(img/table.gif);
-    -moz-background-size:100% 100%;
-    -webkit-background-size:100% 100%;
-    background-size:100% 100%;
-    height:10%;
-    width:10%;
-    text-align: center;
-    font-size:300%;
-    color:white;
-}
+    div.tablediv {
+        background-image: url(img/table.gif);
+        -moz-background-size: 100% 100%;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+        height: 10%;
+        width: 10%;
+        text-align: center;
+        font-size: 300%;
+        color: white;
+    }
 
-/* Color when a table has a pending order/invoice */
-div.red{
-    color:red;
-}
+    /* Color when a table has a pending order/invoice */
+    div.red {
+        color: red;
+    }
 </style>
 
 <script>
-var DragDrop='<?php echo $langs->trans("DragDrop"); ?>';
+    var DragDrop = '<?php echo $langs->trans("DragDrop"); ?>';
 
-function updateplace(idplace, left, top) {
-    console.log("updateplace idplace="+idplace+" left="+left+" top="+top);
-    $.ajax({
-        type: "POST",
-        url: "<?php echo constant('BASE_URL') . '/takepos/floors.php'; ?>",
-        data: { action: "update", left: left, top: top, place: idplace, token: '<?php echo currentToken(); ?>' }
-    }).done(function( msg ) {
-        window.location.href='floors.php?mode=edit&floor=<?php echo urlencode((string) ($floor)); ?>';
-    });
-}
+    function updateplace(idplace, left, top) {
+        console.log("updateplace idplace=" + idplace + " left=" + left + " top=" + top);
+        $.ajax({
+            type: "POST",
+            url: "<?php echo constant('BASE_URL') . '/takepos/floors.php'; ?>",
+            data: {action: "update", left: left, top: top, place: idplace, token: '<?php echo currentToken(); ?>'}
+        }).done(function (msg) {
+            window.location.href = 'floors.php?mode=edit&floor=<?php echo urlencode((string)($floor)); ?>';
+        });
+    }
 
-function updatename(rowid) {
-    var after=$("#tablename"+rowid).text();
-    console.log("updatename rowid="+rowid+" after="+after);
-    $.ajax({
-        type: "POST",
-        url: "<?php echo constant('BASE_URL') . '/takepos/floors.php'; ?>",
-        data: { action: "updatename", place: rowid, newname: after, token: '<?php echo currentToken(); ?>' }
-    }).done(function( msg ) {
-        window.location.href='floors.php?mode=edit&floor=<?php echo urlencode((string) ($floor)); ?>';
-    });
-}
+    function updatename(rowid) {
+        var after = $("#tablename" + rowid).text();
+        console.log("updatename rowid=" + rowid + " after=" + after);
+        $.ajax({
+            type: "POST",
+            url: "<?php echo constant('BASE_URL') . '/takepos/floors.php'; ?>",
+            data: {action: "updatename", place: rowid, newname: after, token: '<?php echo currentToken(); ?>'}
+        }).done(function (msg) {
+            window.location.href = 'floors.php?mode=edit&floor=<?php echo urlencode((string)($floor)); ?>';
+        });
+    }
 
-function LoadPlace(place){
-    parent.location.href='index.php?place='+place;
-}
+    function LoadPlace(place) {
+        parent.location.href = 'index.php?place=' + place;
+    }
 
 
-$( document ).ready(function() {
-    $.getJSON('./floors.php?action=getTables&token=<?php echo newToken();?>&floor=<?php echo $floor; ?>', function(data) {
-        $.each(data, function(key, val) {
-            <?php if ($mode == "edit") {?>
-            $('body').append('<div class="tablediv" contenteditable onblur="updatename('+val.rowid+');" style="position: absolute; left: '+val.leftpos+'%; top: '+val.toppos+'%;" id="tablename'+val.rowid+'">'+val.label+'</div>');
-            $( "#tablename"+val.rowid ).draggable(
-                {
-                    start: function() {
-                    $("#add").html("<?php echo $langs->trans("Delete"); ?>");
-                    },
-                    stop: function() {
-                    var left=$(this).offset().left*100/$(window).width();
-                    var top=$(this).offset().top*100/$(window).height();
-                    updateplace($(this).attr('id').substr(9), left, top);
+    $(document).ready(function () {
+        $.getJSON('./floors.php?action=getTables&token=<?php echo newToken();?>&floor=<?php echo $floor; ?>', function (data) {
+            $.each(data, function (key, val) {
+                <?php if ($mode == "edit") {?>
+                $('body').append('<div class="tablediv" contenteditable onblur="updatename(' + val.rowid + ');" style="position: absolute; left: ' + val.leftpos + '%; top: ' + val.toppos + '%;" id="tablename' + val.rowid + '">' + val.label + '</div>');
+                $("#tablename" + val.rowid).draggable(
+                    {
+                        start: function () {
+                            $("#add").html("<?php echo $langs->trans("Delete"); ?>");
+                        },
+                        stop: function () {
+                            var left = $(this).offset().left * 100 / $(window).width();
+                            var top = $(this).offset().top * 100 / $(window).height();
+                            updateplace($(this).attr('id').substr(9), left, top);
+                        }
                     }
-                }
-            );
-            //simultaneous draggable and contenteditable
-            $('#'+val.label).draggable().bind('click', function(){
-                $(this).focus();
-            })
-            <?php } else {?>
-            $('body').append('<div class="tablediv '+val.occupied+'" onclick="LoadPlace('+val.rowid+');" style="position: absolute; left: '+val.leftpos+'%; top: '+val.toppos+'%;" id="tablename'+val.rowid+'">'+val.label+'</div>');
-            <?php } ?>
+                );
+                //simultaneous draggable and contenteditable
+                $('#' + val.label).draggable().bind('click', function () {
+                    $(this).focus();
+                })
+                <?php } else {?>
+                $('body').append('<div class="tablediv ' + val.occupied + '" onclick="LoadPlace(' + val.rowid + ');" style="position: absolute; left: ' + val.leftpos + '%; top: ' + val.toppos + '%;" id="tablename' + val.rowid + '">' + val.label + '</div>');
+                <?php } ?>
+            });
         });
     });
-});
 
 </script>
 
-<?php if ($user->admin) {?>
-<div style="position: absolute; left: 0.1%; top: 0.8%; width:8%; height:11%;">
-    <?php if ($mode == "edit") {?>
-<a id="add" onclick="window.location.href='floors.php?mode=edit&action=add&token=<?php echo newToken() ?>&floor=<?php echo $floor; ?>';"><?php echo $langs->trans("AddTable"); ?></a>
-    <?php } else { ?>
-<a onclick="window.location.href='floors.php?mode=edit&token=<?php echo newToken() ?>&floor=<?php echo $floor; ?>';"><?php echo $langs->trans("Edit"); ?></a>
-    <?php } ?>
-</div>
+<?php if ($user->admin) { ?>
+    <div style="position: absolute; left: 0.1%; top: 0.8%; width:8%; height:11%;">
+        <?php if ($mode == "edit") { ?>
+            <a id="add"
+               onclick="window.location.href='floors.php?mode=edit&action=add&token=<?php echo newToken() ?>&floor=<?php echo $floor; ?>';"><?php echo $langs->trans("AddTable"); ?></a>
+        <?php } else { ?>
+            <a onclick="window.location.href='floors.php?mode=edit&token=<?php echo newToken() ?>&floor=<?php echo $floor; ?>';"><?php echo $langs->trans("Edit"); ?></a>
+        <?php } ?>
+    </div>
 <?php }
 ?>
 
 <div style="position: absolute; left: 25%; bottom: 8%; width:50%; height:3%;">
     <center>
-    <h1>
-    <?php if ($floor > 1) { ?>
-    <img class="valignmiddle" src="./img/arrow-prev.png" width="5%" onclick="location.href='floors.php?floor=<?php if ($floor > 1) {
-        $floor--;
-        echo $floor;
-        $floor++;
-                                                                                                             } else {
-                                                                                                                 echo "1";
-                                                                                                             } ?>';">
-    <?php } ?>
-    <span class="valignmiddle"><?php echo $langs->trans("Floor") . " " . $floor; ?></span>
-    <img src="./img/arrow-next.png" class="valignmiddle" width="5%" onclick="location.href='floors.php?floor=<?php $floor++;
-    echo $floor; ?>';">
-    </h1>
+        <h1>
+            <?php if ($floor > 1) { ?>
+                <img class="valignmiddle" src="./img/arrow-prev.png" width="5%"
+                     onclick="location.href='floors.php?floor=<?php if ($floor > 1) {
+                         $floor--;
+                         echo $floor;
+                         $floor++;
+                     } else {
+                         echo "1";
+                     } ?>';">
+            <?php } ?>
+            <span class="valignmiddle"><?php echo $langs->trans("Floor") . " " . $floor; ?></span>
+            <img src="./img/arrow-next.png" class="valignmiddle" width="5%"
+                 onclick="location.href='floors.php?floor=<?php $floor++;
+                 echo $floor; ?>';">
+        </h1>
     </center>
 </div>
 

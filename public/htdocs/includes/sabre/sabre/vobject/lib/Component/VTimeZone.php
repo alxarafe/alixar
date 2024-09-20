@@ -26,7 +26,7 @@ class VTimeZone extends VObject\Component
      */
     public function getTimeZone()
     {
-        return VObject\TimeZoneUtil::getTimeZone((string) $this->TZID, $this->root);
+        return VObject\TimeZoneUtil::getTimeZone((string)$this->TZID, $this->root);
     }
 
     /**

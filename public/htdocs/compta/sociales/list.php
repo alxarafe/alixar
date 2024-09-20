@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2016       Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2020       Pierre Ardoin           <mapiolca@me.com>
- * Copyright (C) 2020       Tobias Sekan            <tobias.sekan@startmail.com>
- * Copyright (C) 2021       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021-2023  Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2016       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2020       Pierre Ardoin               <mapiolca@me.com>
+ * Copyright (C) 2020       Tobias Sekan                <tobias.sekan@startmail.com>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021-2023  Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,6 +25,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormSocialContrib;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/compta/sociales/list.php
  *  \ingroup    tax
@@ -33,8 +41,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formsocialcontrib.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 // Load translation files required by the page
@@ -43,7 +49,7 @@ $langs->loadLangs(array('compta', 'banks', 'bills', 'hrm', 'projects'));
 $action = GETPOST('action', 'aZ09');
 $massaction = GETPOST('massaction', 'alpha');
 $confirm = GETPOST('confirm', 'alpha');
-$toselect   = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
+$toselect = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
 $optioncss = GETPOST('optioncss', 'alpha');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'sclist';
 $mode = GETPOST('mode', 'alpha');
@@ -97,16 +103,16 @@ if (!$sortorder) {
 $filtre = GETPOSTINT("filtre");
 
 $arrayfields = array(
-    'cs.rowid'      => array('label' => "Ref", 'checked' => 1, 'position' => 10),
-    'cs.libelle'    => array('label' => "Label", 'checked' => 1, 'position' => 20),
-    'cs.fk_type'    => array('label' => "Type", 'checked' => 1, 'position' => 30),
-    'cs.date_ech'   => array('label' => "Date", 'checked' => 1, 'position' => 40),
-    'cs.periode'    => array('label' => "PeriodEndDate", 'checked' => 1, 'position' => 50),
-    'p.ref'         => array('label' => "ProjectRef", 'checked' => 1, 'position' => 60, 'enabled' => (isModEnabled('project'))),
-    'cs.fk_user'    => array('label' => "Employee", 'checked' => 1, 'position' => 70),
-    'cs.fk_mode_reglement'  => array('checked' => -1, 'position' => 80, 'label' => "DefaultPaymentMode"),
-    'cs.amount'     => array('label' => "Amount", 'checked' => 1, 'position' => 100),
-    'cs.paye'       => array('label' => "Status", 'checked' => 1, 'position' => 110),
+    'cs.rowid' => array('label' => "Ref", 'checked' => 1, 'position' => 10),
+    'cs.libelle' => array('label' => "Label", 'checked' => 1, 'position' => 20),
+    'cs.fk_type' => array('label' => "Type", 'checked' => 1, 'position' => 30),
+    'cs.date_ech' => array('label' => "Date", 'checked' => 1, 'position' => 40),
+    'cs.periode' => array('label' => "PeriodEndDate", 'checked' => 1, 'position' => 50),
+    'p.ref' => array('label' => "ProjectRef", 'checked' => 1, 'position' => 60, 'enabled' => (isModEnabled('project'))),
+    'cs.fk_user' => array('label' => "Employee", 'checked' => 1, 'position' => 70),
+    'cs.fk_mode_reglement' => array('checked' => -1, 'position' => 80, 'label' => "DefaultPaymentMode"),
+    'cs.amount' => array('label' => "Amount", 'checked' => 1, 'position' => 100),
+    'cs.paye' => array('label' => "Status", 'checked' => 1, 'position' => 110),
 );
 
 if (isModEnabled("bank")) {
@@ -220,7 +226,7 @@ if (isModEnabled('project')) {
 $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "paiementcharge as pc ON pc.fk_charge = cs.rowid";
 $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "user as u ON (cs.fk_user = u.rowid)";
 $sql .= " WHERE cs.fk_type = c.id";
-$sql .= " AND cs.entity = " . ((int) $conf->entity);
+$sql .= " AND cs.entity = " . ((int)$conf->entity);
 // Search criteria
 if ($search_ref) {
     $sql .= " AND cs.ref = '" . $db->escape($search_ref) . "'";
@@ -237,16 +243,16 @@ if (!empty($search_users)) {
     $sql .= ' AND cs.fk_user IN (' . $db->sanitize(implode(', ', $search_users)) . ')';
 }
 if (!empty($search_type) && $search_type > 0) {
-    $sql .= ' AND cs.fk_mode_reglement=' . ((int) $search_type);
+    $sql .= ' AND cs.fk_mode_reglement=' . ((int)$search_type);
 }
 if (!empty($search_account) && $search_account > 0) {
-    $sql .= ' AND cs.fk_account=' . ((int) $search_account);
+    $sql .= ' AND cs.fk_account=' . ((int)$search_account);
 }
 if ($search_amount) {
     $sql .= natural_search("cs.amount", $search_amount, 1);
 }
 if ($search_status != '' && $search_status >= 0) {
-    $sql .= " AND cs.paye = " . ((int) $search_status);
+    $sql .= " AND cs.paye = " . ((int)$search_status);
 }
 if ($search_date_start) {
     $sql .= " AND cs.date_ech >= '" . $db->idate($search_date_start) . "'";
@@ -261,7 +267,7 @@ if ($search_date_limit_end) {
     $sql .= " AND cs.periode <= '" . $db->idate($search_date_limit_end) . "'";
 }
 if ($search_typeid > 0) {
-    $sql .= " AND cs.fk_type = " . ((int) $search_typeid);
+    $sql .= " AND cs.fk_type = " . ((int)$search_typeid);
 }
 $sql .= " GROUP BY cs.rowid, cs.fk_type, cs.fk_user, cs.amount, cs.date_ech, cs.libelle, cs.paye, cs.periode, cs.fk_account, c.libelle, c.accountancy_code, ba.label, ba.ref, ba.number, ba.account_number, ba.iban_prefix, ba.bic, ba.currency_code, ba.clos, pay.code";
 if (isModEnabled('project')) {
@@ -314,7 +320,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($search_ref) {
     $param .= '&search_ref=' . urlencode($search_ref);
@@ -329,7 +335,7 @@ if ($search_amount) {
     $param .= '&search_amount=' . urlencode($search_amount);
 }
 if ($search_typeid) {
-    $param .= '&search_typeid=' . urlencode((string) ($search_typeid));
+    $param .= '&search_typeid=' . urlencode((string)($search_typeid));
 }
 if ($search_users) {
     foreach ($search_users as $id_user) {
@@ -337,7 +343,7 @@ if ($search_users) {
     }
 }
 if ($search_type) {
-    $param .= '&search_type=' . urlencode((string) ($search_type));
+    $param .= '&search_type=' . urlencode((string)($search_type));
 }
 if ($search_account) {
     $param .= '&search_account=' . $search_account;
@@ -346,40 +352,40 @@ if ($search_status != '' && $search_status != '-1') {
     $param .= '&search_status=' . urlencode($search_status);
 }
 if ($search_date_startday) {
-    $param .= '&search_date_startday=' . urlencode((string) ($search_date_startday));
+    $param .= '&search_date_startday=' . urlencode((string)($search_date_startday));
 }
 if ($search_date_startmonth) {
-    $param .= '&search_date_startmonth=' . urlencode((string) ($search_date_startmonth));
+    $param .= '&search_date_startmonth=' . urlencode((string)($search_date_startmonth));
 }
 if ($search_date_startyear) {
-    $param .= '&search_date_startyear=' . urlencode((string) ($search_date_startyear));
+    $param .= '&search_date_startyear=' . urlencode((string)($search_date_startyear));
 }
 if ($search_date_endday) {
-    $param .= '&search_date_endday=' . urlencode((string) ($search_date_endday));
+    $param .= '&search_date_endday=' . urlencode((string)($search_date_endday));
 }
 if ($search_date_endmonth) {
-    $param .= '&search_date_endmonth=' . urlencode((string) ($search_date_endmonth));
+    $param .= '&search_date_endmonth=' . urlencode((string)($search_date_endmonth));
 }
 if ($search_date_endyear) {
-    $param .= '&search_date_endyear=' . urlencode((string) ($search_date_endyear));
+    $param .= '&search_date_endyear=' . urlencode((string)($search_date_endyear));
 }
 if ($search_date_limit_startday) {
-    $param .= '&search_date_limit_startday=' . urlencode((string) ($search_date_limit_startday));
+    $param .= '&search_date_limit_startday=' . urlencode((string)($search_date_limit_startday));
 }
 if ($search_date_limit_startmonth) {
-    $param .= '&search_date_limit_startmonth=' . urlencode((string) ($search_date_limit_startmonth));
+    $param .= '&search_date_limit_startmonth=' . urlencode((string)($search_date_limit_startmonth));
 }
 if ($search_date_limit_startyear) {
-    $param .= '&search_date_limit_startyear=' . urlencode((string) ($search_date_limit_startyear));
+    $param .= '&search_date_limit_startyear=' . urlencode((string)($search_date_limit_startyear));
 }
 if ($search_date_limit_endday) {
-    $param .= '&search_date_limit_endday=' . urlencode((string) ($search_date_limit_endday));
+    $param .= '&search_date_limit_endday=' . urlencode((string)($search_date_limit_endday));
 }
 if ($search_date_limit_endmonth) {
-    $param .= '&search_date_limit_endmonth=' . urlencode((string) ($search_date_limit_endmonth));
+    $param .= '&search_date_limit_endmonth=' . urlencode((string)($search_date_limit_endmonth));
 }
 if ($search_date_limit_endyear) {
-    $param .= '&search_date_limit_endyear=' . urlencode((string) ($search_date_limit_endyear));
+    $param .= '&search_date_limit_endyear=' . urlencode((string)($search_date_limit_endyear));
 }
 
 $url = constant('BASE_URL') . '/compta/sociales/card.php?action=create';

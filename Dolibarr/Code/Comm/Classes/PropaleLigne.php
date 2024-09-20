@@ -39,16 +39,15 @@
 
 namespace Dolibarr\Code\Comm\Classes;
 
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObjectLine;
+use DoliDB;
+
 /**
  *  \file       htdocs/comm/propal/class/propal.class.php
  *  \brief      File of class to manage proposals
  */
-
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
-
-use Dolibarr\Core\Base\CommonObject;
-use Dolibarr\Core\Base\CommonObjectLine;
-use Dolibarr\Code\Contact\Classes\Contact;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 

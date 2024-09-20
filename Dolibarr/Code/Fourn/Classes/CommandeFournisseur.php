@@ -37,6 +37,7 @@ namespace Dolibarr\Code\Fourn\Classes;
 use Dolibarr\Code\Core\Classes\CommonOrder;
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use DoliDB;
 
 /**
  *  \file       htdocs/fourn/class/fournisseur.commande.class.php
@@ -3519,7 +3520,6 @@ class CommandeFournisseur extends CommonOrder
     public function calcAndSetStatusDispatch(User $user, $closeopenorder = 1, $comment = '')
     {
         if (isModEnabled("supplier_order")) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 
             $qtydelivered = array();
             $qtywished = array();

@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2010-2012  Regis Houssin       <regis.houssin@inodbox.com>
  * Copyright (C) 2010-2012	Laurent Destailleur	<eldy@users.sourceforge.net>
  * Copyright (C) 2012		Christophe Battarel	<christophe.battarel@altairis.fr>
@@ -81,7 +82,8 @@ $coldisplay++;
 
     <input type="hidden" name="lineid" value="<?php echo $line->id; ?>">
     <input type="hidden" id="product_type" name="type" value="<?php echo $line->product_type; ?>">
-    <input type="hidden" id="product_id" name="productid" value="<?php echo(!empty($line->fk_product) ? $line->fk_product : 0); ?>" />
+    <input type="hidden" id="product_id" name="productid"
+           value="<?php echo(!empty($line->fk_product) ? $line->fk_product : 0); ?>"/>
     <input type="hidden" id="special_code" name="special_code" value="<?php echo $line->special_code; ?>">
     <input type="hidden" id="fk_parent_line" name="fk_parent_line" value="<?php echo $line->fk_parent_line; ?>">
 

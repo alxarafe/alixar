@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2010-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2012		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2014		Marcos García		<marcosgdf@gmail.com>
- * Copyright (C) 2016		Charlie Benke		<charlie@patas-monkey.com>
- * Copyright (C) 2018-2019  Philippe Grand      <philippe.grand@atoo-net.com>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
+/* Copyright (C) 2010-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2014		Marcos García		        <marcosgdf@gmail.com>
+ * Copyright (C) 2016		Charlie Benke		        <charlie@patas-monkey.com>
+ * Copyright (C) 2018-2019  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,18 +23,22 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Bom\Classes\ModelePDFBom;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  *  \file       htdocs/core/modules/bom/doc/doc_generic_bom_odt.modules.php
  *  \ingroup    bom
  *  \brief      File of class to build ODT documents for BOMs
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/bom/modules_bom.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/doc.lib.php';
-
 
 /**
  *  Class to build documents using ODF templates generator
@@ -50,7 +54,7 @@ class doc_generic_bom_odt extends ModelePDFBom
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -89,8 +93,8 @@ class doc_generic_bom_odt extends ModelePDFBom
     /**
      *  Return description of a module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Description
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Description
      */
     public function info($langs)
     {
@@ -187,21 +191,22 @@ class doc_generic_bom_odt extends ModelePDFBom
         return $texte;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build a document on disk using the generic odt module.
      *
-     *  @param      BOM         $object             Object source to build document
-     *  @param      Translate   $outputlangs        Lang output object
-     *  @param      string      $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int         $hidedetails        Do not show line details
-     *  @param      int         $hidedesc           Do not show desc
-     *  @param      int         $hideref            Do not show ref
-     *  @return     int                             1 if OK, <=0 if KO
+     * @param BOM $object Object source to build document
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                             1 if OK, <=0 if KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath, $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $hookmanager;
 
         if (empty($srctemplatepath)) {
@@ -333,10 +338,10 @@ class doc_generic_bom_odt extends ModelePDFBom
                     $odfHandler = new Odf(
                         $srctemplatepath,
                         array(
-                        'PATH_TO_TMP'     => $conf->bom->dir_temp,
-                        'ZIP_PROXY'       => 'PclZipProxy', // PhpZipProxy or PclZipProxy. Got "bad compression method" error when using PhpZipProxy.
-                        'DELIMITER_LEFT'  => '{',
-                        'DELIMITER_RIGHT' => '}'
+                            'PATH_TO_TMP' => $conf->bom->dir_temp,
+                            'ZIP_PROXY' => 'PclZipProxy', // PhpZipProxy or PclZipProxy. Got "bad compression method" error when using PhpZipProxy.
+                            'DELIMITER_LEFT' => '{',
+                            'DELIMITER_RIGHT' => '}'
                         )
                     );
                 } catch (Exception $e) {

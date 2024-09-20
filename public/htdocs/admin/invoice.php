@@ -33,6 +33,10 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
@@ -102,7 +106,7 @@ if ($action == 'updateMask') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/facture/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -276,7 +280,7 @@ if ($action == 'updateMask') {
  * View
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 llxHeader("", $langs->trans("BillsSetup"), 'EN:Invoice_Configuration|FR:Configuration_module_facture|ES:ConfiguracionFactura', '', 0, 0, '', '', '', 'mod-admin page-invoice');
 
@@ -801,7 +805,6 @@ $variablename = 'INVOICE_FREE_TEXT';
 if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
     print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
 } else {
-    include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
     print $doleditor->Create();
 }
@@ -825,7 +828,7 @@ print "</td></tr>\n";
 print '</form>';
 
 
-print '<tr class="oddeven"><td>' . $langs->trans("InvoiceCheckPosteriorDate") . '&nbsp;' ;
+print '<tr class="oddeven"><td>' . $langs->trans("InvoiceCheckPosteriorDate") . '&nbsp;';
 print $form->textwithpicto('', $langs->trans("InvoiceCheckPosteriorDateHelp"), 1, 'help') . '</td>';
 print '<td class="left" colspan="2">';
 print ajax_constantonoff('INVOICE_CHECK_POSTERIOR_DATE');

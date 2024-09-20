@@ -28,8 +28,8 @@
 /**
  * Remove PHP code part from a string.
  *
- * @param   string  $str            String to clean
- * @param   string  $replacewith    String to use as replacement
+ * @param string $str String to clean
+ * @param string $replacewith String to use as replacement
  * @return  string                  Result string without php code
  * @see dolKeepOnlyPhpCode()
  */
@@ -73,7 +73,7 @@ function dolStripPhpCode($str, $replacewith = '')
 /**
  * Keep only PHP code part from a HTML string page.
  *
- * @param   string  $str            String to clean
+ * @param string $str String to clean
  * @return  string                  Result string with php code only
  * @see dolStripPhpCode(), checkPHPCode()
  */
@@ -114,11 +114,11 @@ function dolKeepOnlyPhpCode($str)
  * Convert a page content to have correct links (based on DOL_URL_ROOT) into an html content. It replaces also dynamic content with '...php...'
  * Used to output the page on the Preview from backoffice.
  *
- * @param   Website     $website            Web site object
- * @param   string      $content            Content to replace
- * @param   int         $removephppart      0=Replace PHP sections with a PHP badge. 1=Remove completely PHP sections.
- * @param   string      $contenttype        Content type
- * @param   int         $containerid        Contenair id
+ * @param Website $website Web site object
+ * @param string $content Content to replace
+ * @param int $removephppart 0=Replace PHP sections with a PHP badge. 1=Remove completely PHP sections.
+ * @param string $contenttype Content type
+ * @param int $containerid Contenair id
  * @return  string                          html content
  * @see dolWebsiteOutput() for function used to replace content in a web server context
  */
@@ -228,7 +228,7 @@ function dolWebsiteReplacementOfLinks($website, $content, $removephppart = 0, $c
 
 /**
  * Converts smiley string into the utf8 sequence.
- * @param   string      $content            Content to replace
+ * @param string $content Content to replace
  * @return  string                          Replacement of all smiley strings with their utf8 code
  * @see dolWebsiteOutput()
  */
@@ -277,9 +277,9 @@ function dolReplaceSmileyCodeWithUTF8($content)
  * Render a string of an HTML content and output it.
  * Used to output the page when viewed from a server (Dolibarr or Apache).
  *
- * @param   string  $content        Content string
- * @param   string  $contenttype    Content type
- * @param   int     $containerid    Contenair id
+ * @param string $content Content string
+ * @param string $contenttype Content type
+ * @param int $containerid Contenair id
  * @return  void
  * @see dolWebsiteReplacementOfLinks()  for function used to replace content in the backoffice context.
  */
@@ -446,9 +446,9 @@ function dolWebsiteOutput($content, $contenttype = 'html', $containerid = 0)
 /**
  * Increase the website counter of page access.
  *
- * @param   int     $websiteid          ID of website
- * @param   string  $websitepagetype    Type of page ('blogpost', 'page', ...)
- * @param   int     $websitepageid      ID of page
+ * @param int $websiteid ID of website
+ * @param string $websitepagetype Type of page ('blogpost', 'page', ...)
+ * @param int $websitepageid ID of page
  * @return  int                         Return integer <0 if KO, >0 if OK
  */
 function dolWebsiteIncrementCounter($websiteid, $websitepagetype, $websitepageid)
@@ -466,11 +466,11 @@ function dolWebsiteIncrementCounter($websiteid, $websitepagetype, $websitepageid
             // if last access was done during previous month, we save pageview_month into pageviews_previous_month
             $sql .= " pageviews_previous_month = " . $db->ifsql("lastaccess < '" . $db->idate(dol_mktime(0, 0, 0, $tmpnow['mon'], 1, $tmpnow['year'], 'gmt', 0), 'gmt') . "'", 'pageviews_month', 'pageviews_previous_month') . ",";
             $sql .= " lastaccess = '" . $db->idate(dol_now('gmt'), 'gmt') . "',";
-            $sql .= " lastpageid = " . ((int) $websitepageid);
-            $sql .= " WHERE rowid = " . ((int) $websiteid);
+            $sql .= " lastpageid = " . ((int)$websitepageid);
+            $sql .= " WHERE rowid = " . ((int)$websiteid);
 
             $resql = $db->query($sql);
-            if (! $resql) {
+            if (!$resql) {
                 return -1;
             }
         }
@@ -483,7 +483,7 @@ function dolWebsiteIncrementCounter($websiteid, $websitepagetype, $websitepageid
 /**
  * Format img tags to introduce viewimage on img src.
  *
- * @param   string  $content    Content string
+ * @param string $content Content string
  * @return  void
  * @see dolWebsiteOutput()
  */
@@ -510,11 +510,11 @@ function dolWebsiteSaveContent($content)
 /**
  * Make a redirect to another container.
  *
- * @param   string  $containerref       Ref of container to redirect to (Example: 'mypage' or 'mypage.php').
- * @param   string  $containeraliasalt  Ref of alternative aliases to redirect to.
- * @param   int     $containerid        Id of container.
- * @param   int     $permanent          0=Use temporary redirect 302, 1=Use permanent redirect 301
- * @param   array   $parameters         Array of parameters to append to the URL.
+ * @param string $containerref Ref of container to redirect to (Example: 'mypage' or 'mypage.php').
+ * @param string $containeraliasalt Ref of alternative aliases to redirect to.
+ * @param int $containerid Id of container.
+ * @param int $permanent 0=Use temporary redirect 302, 1=Use permanent redirect 301
+ * @param array $parameters Array of parameters to append to the URL.
  * @return  void
  */
 function redirectToContainer($containerref, $containeraliasalt = '', $containerid = 0, $permanent = 0, $parameters = array())
@@ -526,7 +526,6 @@ function redirectToContainer($containerref, $containeraliasalt = '', $containeri
 
     // We make redirect using the alternative alias, we must find the real $containerref
     if ($containeraliasalt) {
-        include_once DOL_DOCUMENT_ROOT . '/website/class/websitepage.class.php';
         $tmpwebsitepage = new WebsitePage($db);
         // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
         $result = $tmpwebsitepage->fetch(0, $website->id, '', $containeraliasalt);
@@ -550,7 +549,6 @@ function redirectToContainer($containerref, $containeraliasalt = '', $containeri
     if (defined('USEDOLIBARRSERVER')) { // When page called from Dolibarr server
         // Check new container exists
         if (!$containeraliasalt) {  // If containeraliasalt set, we already did the test
-            include_once DOL_DOCUMENT_ROOT . '/website/class/websitepage.class.php';
             $tmpwebsitepage = new WebsitePage($db);
             // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
             $result = $tmpwebsitepage->fetch(0, $website->id, $containerref);
@@ -596,7 +594,7 @@ function redirectToContainer($containerref, $containeraliasalt = '', $containeri
  * Clean an HTML page to report only content, so we can include it into another page.
  * It outputs content of file sanitized from html and body part.
  *
- * @param   string  $containerref       Path to file to include (must be a page from website root. Example: 'mypage.php' means 'mywebsite/mypage.php')
+ * @param string $containerref Path to file to include (must be a page from website root. Example: 'mypage.php' means 'mywebsite/mypage.php')
  * @return  void
  */
 function includeContainer($containerref)
@@ -618,7 +616,7 @@ function includeContainer($containerref)
     }
     $includehtmlcontentopened++;
     if ($includehtmlcontentopened > $MAXLEVEL) {
-        print 'ERROR: RECURSIVE CONTENT LEVEL. Depth of recursive call is more than the limit of ' . ((int) $MAXLEVEL) . ".\n";
+        print 'ERROR: RECURSIVE CONTENT LEVEL. Depth of recursive call is more than the limit of ' . ((int)$MAXLEVEL) . ".\n";
         return;
     }
 
@@ -649,8 +647,8 @@ function includeContainer($containerref)
  * <?php getStructureData('blogpost'); ?>
  * <?php getStructureData('software', array('name'=>'Name', 'os'=>'Windows', 'price'=>10)); ?>
  *
- * @param   string      $type               'blogpost', 'product', 'software', 'organization', 'qa',  ...
- * @param   array       $data               Array of data parameters for structured data
+ * @param string $type 'blogpost', 'product', 'software', 'organization', 'qa',  ...
+ * @param array $data Array of data parameters for structured data
  * @return  string                          HTML content
  */
 function getStructuredData($type, $data = array())
@@ -857,7 +855,7 @@ function getStructuredData($type, $data = array())
 /**
  * Return HTML content to add as header card for an article, news or Blog Post or home page.
  *
- * @param   array   $params                 Array of parameters
+ * @param array $params Array of parameters
  * @return  string                          HTML content
  */
 function getSocialNetworkHeaderCards($params = null)
@@ -992,7 +990,7 @@ function getSocialNetworkSharingLinks()
 /**
  * Return HTML content to add structured data for an article, news or Blog Post.
  *
- * @param   Object  $object     Object
+ * @param Object $object Object
  * @return  int                 HTML img content or '' if no image found
  * @see getImagePublicURLOfObject()
  */
@@ -1009,7 +1007,7 @@ function getNbOfImagePublicURLOfObject($object)
     $sql = "SELECT COUNT(rowid) as nb";
     $sql .= " FROM " . MAIN_DB_PREFIX . "ecm_files";
     $sql .= " WHERE entity IN (" . getEntity($object->element) . ")";
-    $sql .= " AND src_object_type = '" . $db->escape($object->element) . "' AND src_object_id = " . ((int) $object->id);  // Filter on object
+    $sql .= " AND src_object_type = '" . $db->escape($object->element) . "' AND src_object_id = " . ((int)$object->id);  // Filter on object
     $sql .= " AND " . $db->regexpsql('filename', $regexforimg, 1);
     $sql .= " AND share IS NOT NULL";   // Only image that are public
 
@@ -1027,9 +1025,9 @@ function getNbOfImagePublicURLOfObject($object)
 /**
  * Return HTML content to add structured data for an article, news or Blog Post.
  *
- * @param   Object  $object         Object
- * @param   int     $no             Numero of image (if there is several images. 1st one by default)
- * @param   string  $extName        Extension to differentiate thumb file name ('', '_small', '_mini')
+ * @param Object $object Object
+ * @param int $no Numero of image (if there is several images. 1st one by default)
+ * @param string $extName Extension to differentiate thumb file name ('', '_small', '_mini')
  * @return  string                  HTML img content or '' if no image found
  * @see getNbOfImagePublicURLOfObject()
  */
@@ -1046,7 +1044,7 @@ function getImagePublicURLOfObject($object, $no = 1, $extName = '')
     $sql = "SELECT rowid, ref, share, filename, cover, position";
     $sql .= " FROM " . MAIN_DB_PREFIX . "ecm_files";
     $sql .= " WHERE entity IN (" . getEntity($object->element) . ")";
-    $sql .= " AND src_object_type = '" . $db->escape($object->element) . "' AND src_object_id = " . ((int) $object->id);  // Filter on object
+    $sql .= " AND src_object_type = '" . $db->escape($object->element) . "' AND src_object_id = " . ((int)$object->id);  // Filter on object
     $sql .= " AND " . $db->regexpsql('filename', $regexforimg, 1);
     $sql .= $db->order("cover,position,rowid", "ASC,ASC,ASC");
 
@@ -1105,15 +1103,15 @@ function getImagePublicURLOfObject($object, $no = 1, $extName = '')
  * Return list of containers object that match a criteria.
  * WARNING: This function can be used by websites.
  *
- * @param   string      $type               Type of container to search into (Example: '', 'page', 'blogpost', 'page,blogpost', ...)
- * @param   string      $algo               Algorithm used for search (Example: 'meta' is searching into meta information like title and description, 'content', 'sitefiles', or any combination 'meta,content,sitefiles')
- * @param   string      $searchstring       Search string
- * @param   int         $max                Max number of answers
- * @param   string      $sortfield          Sort Fields
- * @param   string      $sortorder          Sort order ('DESC' or 'ASC')
- * @param   string      $langcode           Language code ('' or 'en', 'fr', 'es', ...)
- * @param   array       $otherfilters       Other filters
- * @param   int         $status             0 or 1, or -1 for both
+ * @param string $type Type of container to search into (Example: '', 'page', 'blogpost', 'page,blogpost', ...)
+ * @param string $algo Algorithm used for search (Example: 'meta' is searching into meta information like title and description, 'content', 'sitefiles', or any combination 'meta,content,sitefiles')
+ * @param string $searchstring Search string
+ * @param int $max Max number of answers
+ * @param string $sortfield Sort Fields
+ * @param string $sortorder Sort order ('DESC' or 'ASC')
+ * @param string $langcode Language code ('' or 'en', 'fr', 'es', ...)
+ * @param array $otherfilters Other filters
+ * @param int $status 0 or 1, or -1 for both
  * @return  array                           Array with results of search
  */
 function getPagesFromSearchCriterias($type, $algo, $searchstring, $max = 25, $sortfield = 'date_creation', $sortorder = 'DESC', $langcode = '', $otherfilters = [], $status = 1)
@@ -1143,30 +1141,29 @@ function getPagesFromSearchCriterias($type, $algo, $searchstring, $max = 25, $so
         $arrayresult['message'] = $weblangs->trans("ErrorSearchCriteriaTooSmall");
     } else {
     */
-        $tmparrayoftype = explode(',', $type);
-        /*foreach ($tmparrayoftype as $tmptype) {
-            if (!in_array($tmptype, array('', 'page', 'blogpost'))) {
-                $error++;
-                $arrayresult['code'] = 'KO';
-                $arrayresult['message'] = 'Bad value for parameter type';
-                break;
-            }
-        }*/
+    $tmparrayoftype = explode(',', $type);
+    /*foreach ($tmparrayoftype as $tmptype) {
+        if (!in_array($tmptype, array('', 'page', 'blogpost'))) {
+            $error++;
+            $arrayresult['code'] = 'KO';
+            $arrayresult['message'] = 'Bad value for parameter type';
+            break;
+        }
+    }*/
     //}
 
     $searchdone = 0;
     $found = 0;
 
     if (!$error && (empty($max) || ($found < $max)) && (preg_match('/meta/', $algo) || preg_match('/content/', $algo))) {
-        include_once DOL_DOCUMENT_ROOT . '/website/class/websitepage.class.php';
 
         $sql = 'SELECT wp.rowid FROM ' . MAIN_DB_PREFIX . 'website_page as wp';
         if (is_array($otherfilters) && !empty($otherfilters['category'])) {
             $sql .= ', ' . MAIN_DB_PREFIX . 'categorie_website_page as cwp';
         }
-        $sql .= " WHERE wp.fk_website = " . ((int) $website->id);
+        $sql .= " WHERE wp.fk_website = " . ((int)$website->id);
         if ($status >= 0) {
-            $sql .= " AND wp.status = " . ((int) $status);
+            $sql .= " AND wp.status = " . ((int)$status);
         }
         if ($langcode) {
             $sql .= " AND wp.lang = '" . $db->escape($langcode) . "'";
@@ -1190,7 +1187,7 @@ function getPagesFromSearchCriterias($type, $algo, $searchstring, $max = 25, $so
         }
         $sql .= $searchalgo;
         if (is_array($otherfilters) && !empty($otherfilters['category'])) {
-            $sql .= ' AND cwp.fk_website_page = wp.rowid AND cwp.fk_categorie = ' . ((int) $otherfilters['category']);
+            $sql .= ' AND cwp.fk_website_page = wp.rowid AND cwp.fk_categorie = ' . ((int)$otherfilters['category']);
         }
         $sql .= ")";
         $sql .= $db->order($sortfield, $sortorder);
@@ -1277,14 +1274,14 @@ function getPagesFromSearchCriterias($type, $algo, $searchstring, $max = 25, $so
  * Download all images found into page content $tmp.
  * If $modifylinks is set, links to images will be replace with a link to viewimage wrapper.
  *
- * @param   Website     $object         Object website
- * @param   WebsitePage $objectpage     Object website page
- * @param   string      $urltograb      URL to grab (example: http://www.nltechno.com/ or http://www.nltechno.com/dir1/ or http://www.nltechno.com/dir1/mapage1)
- * @param   string      $tmp            Content to parse
- * @param   string      $action         Var $action
- * @param   int         $modifylinks    0=Do not modify content, 1=Replace links with a link to viewimage
- * @param   int         $grabimages     0=Do not grab images, 1=Grab images
- * @param   string      $grabimagesinto 'root' or 'subpage'
+ * @param Website $object Object website
+ * @param WebsitePage $objectpage Object website page
+ * @param string $urltograb URL to grab (example: http://www.nltechno.com/ or http://www.nltechno.com/dir1/ or http://www.nltechno.com/dir1/mapage1)
+ * @param string $tmp Content to parse
+ * @param string $action Var $action
+ * @param int $modifylinks 0=Do not modify content, 1=Replace links with a link to viewimage
+ * @param int $grabimages 0=Do not grab images, 1=Grab images
+ * @param string $grabimagesinto 'root' or 'subpage'
  * @return  void
  */
 function getAllImages($object, $objectpage, $urltograb, &$tmp, &$action, $modifylinks = 0, $grabimages = 1, $grabimagesinto = 'subpage')

@@ -21,13 +21,13 @@
 
 namespace Dolibarr\Code\Stripe\Classes;
 
-use Dolibarr\Core\Base\CommonObject;
-
-// Put here all includes required by your class file
+use Dolibarr\Code\Societe\Classes\SocieteAccount;
 use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Code\Adherents\Classes\Adherent;
-require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/config.php'; // This set stripe global env
+use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+use Exception;
 
+require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/config.php'; // This set stripe global env
 
 /**
  *  Stripe class
@@ -168,7 +168,6 @@ class Stripe extends CommonObject
         $societeaccount = new SocieteAccount($this->db);
         return $societeaccount->getCustomerAccount($id, 'stripe', $status, $site_account); // Get thirdparty cus_...
     }
-
 
     /**
      * Get the Stripe customer of a thirdparty (with option to create it in Stripe if not linked yet).

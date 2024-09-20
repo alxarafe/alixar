@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2013-2020 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2013-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolGraph;
+
 // variable $listofopplabel and $listofoppstatus should be defined
 
 if (getDolGlobalString('PROJECT_USE_OPPORTUNITIES')) {
@@ -28,7 +30,7 @@ if (getDolGlobalString('PROJECT_USE_OPPORTUNITIES')) {
         $sql .= " AND p.rowid IN (" . $db->sanitize($projectsListId) . ")";
     }
     if ($socid > 0) {
-        $sql .= "  AND (p.fk_soc IS NULL OR p.fk_soc = 0 OR p.fk_soc = " . ((int) $socid) . ")";
+        $sql .= "  AND (p.fk_soc IS NULL OR p.fk_soc = 0 OR p.fk_soc = " . ((int)$socid) . ")";
     }
     $sql .= " GROUP BY p.fk_opp_status, cls.code";
     $resql = $db->query($sql);
@@ -99,11 +101,11 @@ if (getDolGlobalString('PROJECT_USE_OPPORTUNITIES')) {
             //$labelStatus .= ' ('.$langs->trans("Coeff").': '.price2num($listofoppstatus[$status]).')';
             //$labelStatus .= ' - '.price2num($listofoppstatus[$status]).'%';
 
-            $dataseries[] = array($labelStatus, (isset($valsamount[$status]) ? (float) $valsamount[$status] : 0));
+            $dataseries[] = array($labelStatus, (isset($valsamount[$status]) ? (float)$valsamount[$status] : 0));
             if (!$conf->use_javascript_ajax) {
                 print '<tr class="oddeven">';
                 print '<td>' . $labelStatus . '</td>';
-                print '<td class="right"><a href="list.php?statut=' . $status . '">' . price((isset($valsamount[$status]) ? (float) $valsamount[$status] : 0), 0, '', 1, -1, -1, $conf->currency) . '</a></td>';
+                print '<td class="right"><a href="list.php?statut=' . $status . '">' . price((isset($valsamount[$status]) ? (float)$valsamount[$status] : 0), 0, '', 1, -1, -1, $conf->currency) . '</a></td>';
                 print "</tr>\n";
             }
         }

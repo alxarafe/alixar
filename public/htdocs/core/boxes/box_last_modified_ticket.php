@@ -1,9 +1,10 @@
 <?php
 
 /* Module descriptor for ticket system
- * Copyright (C) 2013-2016  Jean-François FERRY     <hello@librethic.io>
- *               2016       Christophe Battarel     <christophe@altairis.fr>
- * Copyright (C) 2019-2021  Frédéric France         <frederic.france@netlogic.fr>
+ * Copyright (C) 2013-2016  Jean-François FERRY         <hello@librethic.io>
+ *               2016       Christophe Battarel         <christophe@altairis.fr>
+ * Copyright (C) 2019-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+
 /**
  *     \file        core/boxes/box_last_modified_ticket.php
  *     \ingroup     ticket
  *     \brief       This box shows latest modified tickets
  */
 
-require_once DOL_DOCUMENT_ROOT . "/core/boxes/modules_boxes.php";
 
 /**
  * Class to manage the box to show last modified tickets
@@ -33,14 +37,14 @@ require_once DOL_DOCUMENT_ROOT . "/core/boxes/modules_boxes.php";
 class box_last_modified_ticket extends ModeleBoxes
 {
     public $boxcode = "box_last_modified_ticket";
-    public $boximg  = "ticket";
+    public $boximg = "ticket";
     public $boxlabel;
     public $depends = array("ticket");
 
     /**
      * Constructor
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param = '')
     {
@@ -54,8 +58,8 @@ class box_last_modified_ticket extends ModeleBoxes
     /**
      * Load data into info_box_contents array to show array later.
      *
-     *     @param  int $max Maximum number of records to load
-     *     @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -88,7 +92,7 @@ class box_last_modified_ticket extends ModeleBoxes
             //          $sql.= " AND e.rowid = er.fk_event";
             //if (empty($user->rights->societe->client->voir) && !$user->socid) $sql.= " WHERE s.rowid = sc.fk_soc AND sc.fk_user = " .((int) $user->id);
             if ($user->socid) {
-                $sql .= " AND t.fk_soc = " . ((int) $user->socid);
+                $sql .= " AND t.fk_soc = " . ((int)$user->socid);
             }
 
             $sql .= " ORDER BY t.tms DESC, t.rowid DESC";
@@ -192,10 +196,10 @@ class box_last_modified_ticket extends ModeleBoxes
     /**
      *     Method to show box
      *
-     *     @param  array $head     Array with properties of box title
-     *     @param  array $contents Array with properties of box lines
-     *     @param  int   $nooutput No print, only return string
-     *     @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

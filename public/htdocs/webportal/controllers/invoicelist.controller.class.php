@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2023-2024  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2023-2024	Lionel Vessiller		<lvessiller@easya.solutions>
+/* Copyright (C) 2023-2024  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023-2024	Lionel Vessiller		    <lvessiller@easya.solutions>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\WebPortal\Classes\Context;
+use Dolibarr\Code\WebPortal\Classes\Controller;
+use Dolibarr\Code\WebPortal\Classes\FormListWebPortal;
 
 /**
  * \file        htdocs/webportal/controllers/invoicelist.controller.class.php

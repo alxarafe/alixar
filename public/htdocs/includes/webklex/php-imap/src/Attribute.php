@@ -35,8 +35,8 @@ class Attribute implements ArrayAccess
 
     /**
      * Attribute constructor.
-     * @param string   $name
-     * @param array|mixed      $value
+     * @param string $name
+     * @param array|mixed $value
      */
     public function __construct($name, $value = null)
     {
@@ -101,7 +101,7 @@ class Attribute implements ArrayAccess
     /**
      * Determine if a value exists at an offset.
      *
-     * @param  mixed  $key
+     * @param mixed $key
      * @return bool
      */
     public function offsetExists($key)
@@ -112,7 +112,7 @@ class Attribute implements ArrayAccess
     /**
      * Get a value at a given offset.
      *
-     * @param  mixed  $key
+     * @param mixed $key
      * @return mixed
      */
     public function offsetGet($key)
@@ -123,8 +123,8 @@ class Attribute implements ArrayAccess
     /**
      * Set the value at a given offset.
      *
-     * @param  mixed  $key
-     * @param  mixed  $value
+     * @param mixed $key
+     * @param mixed $value
      * @return void
      */
     public function offsetSet($key, $value)
@@ -139,7 +139,7 @@ class Attribute implements ArrayAccess
     /**
      * Unset the value at a given offset.
      *
-     * @param  string  $key
+     * @param string $key
      * @return void
      */
     public function offsetUnset($key)
@@ -158,7 +158,7 @@ class Attribute implements ArrayAccess
     {
         if (is_array($value)) {
             return $this->merge($value, $strict);
-        }elseif ($value !== null) {
+        } elseif ($value !== null) {
             $this->attach($value, $strict);
         }
 
@@ -210,7 +210,7 @@ class Attribute implements ArrayAccess
             if ($this->contains($value) === false) {
                 $this->values[] = $value;
             }
-        }else{
+        } else {
             $this->values[] = $value;
         }
     }

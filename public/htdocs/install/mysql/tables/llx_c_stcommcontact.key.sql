@@ -16,4 +16,5 @@
 --
 -- ========================================================================
 
-ALTER TABLE llx_c_stcommcontact ADD UNIQUE INDEX uk_c_stcommcontact(code);
+ALTER TABLE llx_c_stcommcontact
+    ADD UNIQUE INDEX uk_c_stcommcontact(code);

@@ -30,12 +30,15 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormSetup;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Libraries
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formsetup.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('admin', 'errors', 'other', 'bills'));
@@ -125,12 +128,11 @@ $item->fieldInputOverride = $form->getSelectConditionsPaiements($conf->global->I
 include DOL_DOCUMENT_ROOT . '/core/actions_setmoduleoptions.inc.php';
 
 
-
 /*
  * View
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $help_yrl = 'EN:Invoice_Configuration|FR:Configuration_module_facture|ES:ConfiguracionFactura';
 

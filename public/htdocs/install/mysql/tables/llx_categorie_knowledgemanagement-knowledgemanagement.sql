@@ -13,8 +13,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see https://www.gnu.org/licenses/.
 
-create table llx_categorie_knowledgemanagement(
-  fk_categorie  integer NOT NULL,
-  fk_knowledgemanagement   integer NOT NULL,
-  import_key    varchar(14)
+create table llx_categorie_knowledgemanagement
+(
+    fk_categorie           integer NOT NULL,
+    fk_knowledgemanagement integer NOT NULL,
+    import_key             varchar(14)
 )ENGINE=innodb;

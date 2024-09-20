@@ -1,26 +1,26 @@
 <?php
 
-/* Copyright (C) 2001-2007  Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016	Laurent Destailleur	 <eldy@users.sourceforge.net>
- * Copyright (C) 2005		Eric Seigne		     <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2015	Regis Houssin		 <regis.houssin@capnetworks.com>
- * Copyright (C) 2006		Andre Cianfarani	 <acianfa@free.fr>
- * Copyright (C) 2006		Auguria SARL		 <info@auguria.org>
- * Copyright (C) 2010-2015	Juanjo Menent		 <jmenent@2byte.es>
- * Copyright (C) 2013-2016	Marcos García		 <marcosgdf@gmail.com>
- * Copyright (C) 2012-2013	Cédric Salvador		 <csalvador@gpcsolutions.fr>
- * Copyright (C) 2011-2023	Alexandre Spangaro	 <aspangaro@open-dsi.fr>
- * Copyright (C) 2014		Cédric Gross		 <c.gross@kreiz-it.fr>
- * Copyright (C) 2014-2015	Ferran Marcet		 <fmarcet@2byte.es>
- * Copyright (C) 2015		Jean-François Ferry	 <jfefe@aternatik.fr>
- * Copyright (C) 2015		Raphaël Doursenaud	 <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2016-2022	Charlene Benke		 <charlene@patas-monkey.com>
- * Copyright (C) 2016		Meziane Sof		     <virtualsof@yahoo.fr>
- * Copyright (C) 2017		Josep Lluís Amador	 <joseplluis@lliuretic.cat>
- * Copyright (C) 2019-2022  Frédéric France      <frederic.france@netlogic.fr>
- * Copyright (C) 2019-2020  Thibault FOUCART     <support@ptibogxiv.net>
- * Copyright (C) 2020  		Pierre Ardoin     	 <mapiolca@me.com>
- * Copyright (C) 2022  		Vincent de Grandpré  <vincent@de-grandpre.quebec>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016	Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2005		Eric Seigne		            <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2015	Regis Houssin		        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2006		Andre Cianfarani	        <acianfa@free.fr>
+ * Copyright (C) 2006		Auguria SARL		        <info@auguria.org>
+ * Copyright (C) 2010-2015	Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2013-2016	Marcos García		        <marcosgdf@gmail.com>
+ * Copyright (C) 2012-2013	Cédric Salvador		        <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2011-2023	Alexandre Spangaro	        <aspangaro@open-dsi.fr>
+ * Copyright (C) 2014		Cédric Gross		        <c.gross@kreiz-it.fr>
+ * Copyright (C) 2014-2015	Ferran Marcet		        <fmarcet@2byte.es>
+ * Copyright (C) 2015		Jean-François Ferry	        <jfefe@aternatik.fr>
+ * Copyright (C) 2015		Raphaël Doursenaud	        <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2016-2022	Charlene Benke		        <charlene@patas-monkey.com>
+ * Copyright (C) 2016		Meziane Sof		            <virtualsof@yahoo.fr>
+ * Copyright (C) 2017		Josep Lluís Amador	        <joseplluis@lliuretic.cat>
+ * Copyright (C) 2019-2022  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2019-2020  Thibault FOUCART            <support@ptibogxiv.net>
+ * Copyright (C) 2020  		Pierre Ardoin     	        <mapiolca@me.com>
+ * Copyright (C) 2022  		Vincent de Grandpré         <vincent@de-grandpre.quebec>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -39,9 +39,15 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
-use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *  \file       htdocs/product/card.php
@@ -51,27 +57,11 @@ use Dolibarr\Code\Comm\Classes\Propal;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/genericobject.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product/modules_product.class.php';
 
-
-
-
-if (isModEnabled('propal')) {
-}
-if (isModEnabled('invoice')) {
-}
-if (isModEnabled('order')) {
-}
 if (isModEnabled('accounting')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-}
-if (isModEnabled('bom')) {
-}
-if (isModEnabled('workstation')) {
 }
 
 // Load translation files required by the page
@@ -93,7 +83,7 @@ $errors = array();
 $refalreadyexists = 0;
 
 // Get parameters
-$id  = GETPOSTINT('id');
+$id = GETPOSTINT('id');
 if (getDolGlobalString('MAIN_SECURITY_ALLOW_UNSECURED_REF_LABELS')) {
     $ref = (GETPOSTISSET('ref') ? GETPOST('ref', 'nohtml') : null);
 } else {
@@ -172,7 +162,6 @@ $modulepart = 'product';
 $canvas = !empty($object->canvas) ? $object->canvas : GETPOST("canvas");
 $objcanvas = null;
 if (!empty($canvas)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
     $objcanvas = new Canvas($db, $action);
     $objcanvas->getCanvas('product', 'card', $canvas);
 }
@@ -196,7 +185,7 @@ if ($object->id > 0) {
 $hookmanager->initHooks(array('productcard', 'globalcard'));
 
 // Permissions
-$usercanread   = (($object->type == Product::TYPE_PRODUCT && $user->hasRight('produit', 'read')) || ($object->type == Product::TYPE_SERVICE && $user->hasRight('service', 'lire')));
+$usercanread = (($object->type == Product::TYPE_PRODUCT && $user->hasRight('produit', 'read')) || ($object->type == Product::TYPE_SERVICE && $user->hasRight('service', 'lire')));
 $usercancreate = (($object->type == Product::TYPE_PRODUCT && $user->hasRight('produit', 'creer')) || ($object->type == Product::TYPE_SERVICE && $user->hasRight('service', 'creer')));
 $usercandelete = (($object->type == Product::TYPE_PRODUCT && $user->hasRight('produit', 'supprimer')) || ($object->type == Product::TYPE_SERVICE && $user->hasRight('service', 'supprimer')));
 
@@ -505,11 +494,11 @@ if (empty($reshook)) {
         if (!$error) {
             $units = GETPOSTINT('units');
 
-            $object->entity             = $conf->entity;
-            $object->ref                = $ref;
-            $object->label              = GETPOST('label', $label_security_check);
-            $object->price_base_type    = GETPOST('price_base_type', 'aZ09');
-            $object->mandatory_period   = !empty(GETPOST("mandatoryperiod", 'alpha')) ? 1 : 0;
+            $object->entity = $conf->entity;
+            $object->ref = $ref;
+            $object->label = GETPOST('label', $label_security_check);
+            $object->price_base_type = GETPOST('price_base_type', 'aZ09');
+            $object->mandatory_period = !empty(GETPOST("mandatoryperiod", 'alpha')) ? 1 : 0;
             if ($object->price_base_type == 'TTC') {
                 $object->price_ttc = GETPOST('price');
             } else {
@@ -540,7 +529,7 @@ if (empty($reshook)) {
                 $sql = "SELECT t.rowid, t.code, t.recuperableonly, t.localtax1, t.localtax2, t.localtax1_type, t.localtax2_type";
                 $sql .= " FROM " . MAIN_DB_PREFIX . "c_tva as t, " . MAIN_DB_PREFIX . "c_country as c";
                 $sql .= " WHERE t.fk_pays = c.rowid AND c.code = '" . $db->escape($mysoc->country_code) . "'";
-                $sql .= " AND t.taux = " . ((float) $tva_tx) . " AND t.active = 1";
+                $sql .= " AND t.taux = " . ((float)$tva_tx) . " AND t.active = 1";
                 $sql .= " AND t.code = '" . $db->escape($vatratecode) . "'";
                 $sql .= " AND t.entity IN (" . getEntity('c_tva') . ")";
                 $resql = $db->query($sql);
@@ -562,8 +551,8 @@ if (empty($reshook)) {
             $object->localtax1_type = $localtax1_type;
             $object->localtax2_type = $localtax2_type;
 
-            $object->type                    = $type;
-            $object->status                  = GETPOST('statut');
+            $object->type = $type;
+            $object->status = GETPOST('statut');
             $object->status_buy = GETPOST('statut_buy');
             $object->status_batch = GETPOST('status_batch');
             $object->sell_or_eat_by_mandatory = GETPOSTINT('sell_or_eat_by_mandatory');
@@ -581,38 +570,38 @@ if (empty($reshook)) {
                 $mesg = 'Failed to get bar code type information ';
                 setEventMessages($mesg . $stdobject->error, $stdobject->errors, 'errors');
             }
-            $object->barcode_type_code      = $stdobject->barcode_type_code;
-            $object->barcode_type_coder     = $stdobject->barcode_type_coder;
-            $object->barcode_type_label     = $stdobject->barcode_type_label;
+            $object->barcode_type_code = $stdobject->barcode_type_code;
+            $object->barcode_type_coder = $stdobject->barcode_type_coder;
+            $object->barcode_type_label = $stdobject->barcode_type_label;
 
-            $object->description             = dol_htmlcleanlastbr(GETPOST('desc', 'restricthtml'));
+            $object->description = dol_htmlcleanlastbr(GETPOST('desc', 'restricthtml'));
             $object->url = GETPOST('url');
-            $object->note_private            = dol_htmlcleanlastbr(GETPOST('note_private', 'restricthtml'));
-            $object->note                    = $object->note_private; // deprecated
-            $object->customcode              = GETPOST('customcode', 'alphanohtml');
+            $object->note_private = dol_htmlcleanlastbr(GETPOST('note_private', 'restricthtml'));
+            $object->note = $object->note_private; // deprecated
+            $object->customcode = GETPOST('customcode', 'alphanohtml');
             $object->country_id = GETPOSTINT('country_id');
             $object->state_id = GETPOSTINT('state_id');
-            $object->lifetime               = GETPOSTINT('lifetime');
-            $object->qc_frequency           = GETPOSTINT('qc_frequency');
-            $object->duration_value          = $duration_value;
-            $object->duration_unit           = $duration_unit;
-            $object->fk_default_warehouse    = GETPOSTINT('fk_default_warehouse');
-            $object->fk_default_workstation  = GETPOSTINT('fk_default_workstation');
-            $object->seuil_stock_alerte      = GETPOST('seuil_stock_alerte') ? GETPOST('seuil_stock_alerte') : 0;
-            $object->desiredstock          = GETPOST('desiredstock') ? GETPOST('desiredstock') : 0;
-            $object->canvas                  = GETPOST('canvas');
-            $object->net_measure           = GETPOST('net_measure');
-            $object->net_measure_units     = GETPOST('net_measure_units'); // This is not the fk_unit but the power of unit
-            $object->weight                  = GETPOST('weight');
-            $object->weight_units            = GETPOST('weight_units'); // This is not the fk_unit but the power of unit
-            $object->length                  = GETPOST('size');
-            $object->length_units            = GETPOST('size_units'); // This is not the fk_unit but the power of unit
+            $object->lifetime = GETPOSTINT('lifetime');
+            $object->qc_frequency = GETPOSTINT('qc_frequency');
+            $object->duration_value = $duration_value;
+            $object->duration_unit = $duration_unit;
+            $object->fk_default_warehouse = GETPOSTINT('fk_default_warehouse');
+            $object->fk_default_workstation = GETPOSTINT('fk_default_workstation');
+            $object->seuil_stock_alerte = GETPOST('seuil_stock_alerte') ? GETPOST('seuil_stock_alerte') : 0;
+            $object->desiredstock = GETPOST('desiredstock') ? GETPOST('desiredstock') : 0;
+            $object->canvas = GETPOST('canvas');
+            $object->net_measure = GETPOST('net_measure');
+            $object->net_measure_units = GETPOST('net_measure_units'); // This is not the fk_unit but the power of unit
+            $object->weight = GETPOST('weight');
+            $object->weight_units = GETPOST('weight_units'); // This is not the fk_unit but the power of unit
+            $object->length = GETPOST('size');
+            $object->length_units = GETPOST('size_units'); // This is not the fk_unit but the power of unit
             $object->width = GETPOST('sizewidth');
-            $object->height                  = GETPOST('sizeheight');
-            $object->surface                 = GETPOST('surface');
-            $object->surface_units           = GETPOST('surface_units'); // This is not the fk_unit but the power of unit
-            $object->volume                  = GETPOST('volume');
-            $object->volume_units            = GETPOST('volume_units'); // This is not the fk_unit but the power of unit
+            $object->height = GETPOST('sizeheight');
+            $object->surface = GETPOST('surface');
+            $object->surface_units = GETPOST('surface_units'); // This is not the fk_unit but the power of unit
+            $object->volume = GETPOST('volume');
+            $object->volume_units = GETPOST('volume_units'); // This is not the fk_unit but the power of unit
             $finished = GETPOSTINT('finished');
             if ($finished >= 0) {
                 $object->finished = $finished;
@@ -700,8 +689,8 @@ if (empty($reshook)) {
                 $object->setCategories($categories);
 
                 if (!empty($backtopage)) {
-                    $backtopage = preg_replace('/__ID__/', (string) $object->id, $backtopage); // New method to autoselect parent project after a New on another form object creation
-                    $backtopage = preg_replace('/--IDFORBACKTOPAGE--/', (string) $object->id, $backtopage); // New method to autoselect parent after a New on another form object creation
+                    $backtopage = preg_replace('/__ID__/', (string)$object->id, $backtopage); // New method to autoselect parent project after a New on another form object creation
+                    $backtopage = preg_replace('/--IDFORBACKTOPAGE--/', (string)$object->id, $backtopage); // New method to autoselect parent after a New on another form object creation
                     if (preg_match('/\?/', $backtopage)) {
                         $backtopage .= '&productid=' . $object->id; // Old method
                     }
@@ -746,52 +735,52 @@ if (empty($reshook)) {
                 $object->oldcopy = dol_clone($object, 1);
 
                 if (!getDolGlobalString('PRODUCT_GENERATE_REF_AFTER_FORM')) {
-                    $object->ref                = $ref;
+                    $object->ref = $ref;
                 }
-                $object->label                  = GETPOST('label', $label_security_check);
+                $object->label = GETPOST('label', $label_security_check);
 
                 $desc = dol_htmlcleanlastbr(preg_replace('/&nbsp;$/', '', GETPOST('desc', 'restricthtml')));
-                $object->description            = $desc;
+                $object->description = $desc;
 
                 $object->url = GETPOST('url');
                 if (getDolGlobalString('MAIN_DISABLE_NOTES_TAB')) {
                     $object->note_private = dol_htmlcleanlastbr(GETPOST('note_private', 'restricthtml'));
                     $object->note = $object->note_private;
                 }
-                $object->customcode             = GETPOST('customcode', 'alpha');
+                $object->customcode = GETPOST('customcode', 'alpha');
                 $object->country_id = GETPOSTINT('country_id');
                 $object->state_id = GETPOSTINT('state_id');
-                $object->lifetime               = GETPOSTINT('lifetime');
-                $object->qc_frequency           = GETPOSTINT('qc_frequency');
-                $object->status                 = GETPOSTINT('statut');
-                $object->status_buy             = GETPOSTINT('statut_buy');
+                $object->lifetime = GETPOSTINT('lifetime');
+                $object->qc_frequency = GETPOSTINT('qc_frequency');
+                $object->status = GETPOSTINT('statut');
+                $object->status_buy = GETPOSTINT('statut_buy');
                 $object->status_batch = GETPOST('status_batch', 'aZ09');
                 $object->sell_or_eat_by_mandatory = GETPOSTINT('sell_or_eat_by_mandatory');
                 $object->batch_mask = GETPOST('batch_mask', 'alpha');
-                $object->fk_default_warehouse   = GETPOSTINT('fk_default_warehouse');
-                $object->fk_default_workstation   = GETPOSTINT('fk_default_workstation');
+                $object->fk_default_warehouse = GETPOSTINT('fk_default_warehouse');
+                $object->fk_default_workstation = GETPOSTINT('fk_default_workstation');
                 // removed from update view so GETPOST always empty
                 /*
                 $object->seuil_stock_alerte     = GETPOST('seuil_stock_alerte');
                 $object->desiredstock           = GETPOST('desiredstock');
                 */
-                $object->duration_value         = GETPOSTINT('duration_value');
-                $object->duration_unit          = GETPOST('duration_unit', 'alpha');
+                $object->duration_value = GETPOSTINT('duration_value');
+                $object->duration_unit = GETPOST('duration_unit', 'alpha');
 
-                $object->canvas                 = GETPOST('canvas');
-                $object->net_measure            = GETPOST('net_measure');
-                $object->net_measure_units      = GETPOST('net_measure_units'); // This is not the fk_unit but the power of unit
-                $object->weight                 = GETPOST('weight');
-                $object->weight_units           = GETPOST('weight_units'); // This is not the fk_unit but the power of unit
-                $object->length                 = GETPOST('size');
-                $object->length_units           = GETPOST('size_units'); // This is not the fk_unit but the power of unit
+                $object->canvas = GETPOST('canvas');
+                $object->net_measure = GETPOST('net_measure');
+                $object->net_measure_units = GETPOST('net_measure_units'); // This is not the fk_unit but the power of unit
+                $object->weight = GETPOST('weight');
+                $object->weight_units = GETPOST('weight_units'); // This is not the fk_unit but the power of unit
+                $object->length = GETPOST('size');
+                $object->length_units = GETPOST('size_units'); // This is not the fk_unit but the power of unit
                 $object->width = GETPOST('sizewidth');
                 $object->height = GETPOST('sizeheight');
 
-                $object->surface                = GETPOST('surface');
-                $object->surface_units          = GETPOST('surface_units'); // This is not the fk_unit but the power of unit
-                $object->volume                 = GETPOST('volume');
-                $object->volume_units           = GETPOST('volume_units'); // This is not the fk_unit but the power of unit
+                $object->surface = GETPOST('surface');
+                $object->surface_units = GETPOST('surface_units'); // This is not the fk_unit but the power of unit
+                $object->volume = GETPOST('volume');
+                $object->volume_units = GETPOST('volume_units'); // This is not the fk_unit but the power of unit
 
                 $finished = GETPOSTINT('finished');
                 if ($finished >= 0) {
@@ -826,9 +815,9 @@ if (empty($reshook)) {
                     $mesg = 'Failed to get bar code type information ';
                     setEventMessages($mesg . $stdobject->error, $stdobject->errors, 'errors');
                 }
-                $object->barcode_type_code      = $stdobject->barcode_type_code;
-                $object->barcode_type_coder     = $stdobject->barcode_type_coder;
-                $object->barcode_type_label     = $stdobject->barcode_type_label;
+                $object->barcode_type_code = $stdobject->barcode_type_code;
+                $object->barcode_type_coder = $stdobject->barcode_type_coder;
+                $object->barcode_type_label = $stdobject->barcode_type_label;
 
                 $accountancy_code_sell = GETPOST('accountancy_code_sell', 'alpha');
                 $accountancy_code_sell_intra = GETPOST('accountancy_code_sell_intra', 'alpha');
@@ -868,9 +857,8 @@ if (empty($reshook)) {
                     $object->accountancy_code_buy_export = $accountancy_code_buy_export;
                 }
                 if ($object->isService()) {
-                    $object->mandatory_period =  (!empty($checkmandatory)) ? 1 : 0 ;
+                    $object->mandatory_period = (!empty($checkmandatory)) ? 1 : 0;
                 }
-
 
 
                 // Fill array 'array_options' with data from add form
@@ -1176,7 +1164,7 @@ if (empty($reshook)) {
                 );
 
                 if ($result > 0) {
-                    header("Location: " . constant('BASE_URL') . "/commande/card.php?id=" . urlencode((string) ($commande->id)));
+                    header("Location: " . constant('BASE_URL') . "/commande/card.php?id=" . urlencode((string)($commande->id)));
                     exit;
                 }
             } elseif (GETPOST('factureid') > 0) {
@@ -1231,8 +1219,6 @@ if (empty($reshook)) {
         }
     }
 }
-
-
 
 /*
  * View
@@ -1306,7 +1292,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
     // -----------------------------------------
     if ($action == 'create' && $usercancreate) {
         //WYSIWYG Editor
-    
+
         if (!empty($conf->use_javascript_ajax)) {
             print '<script type="text/javascript">';
             print '$(document).ready(function () {
@@ -1478,7 +1464,6 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                         $fk_barcode_type = 0;
                     }
                 }
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formbarcode.class.php';
                 $formbarcode = new FormBarCode($db);
                 print $formbarcode->selectBarcodeType($fk_barcode_type, 'fk_barcode_type', 1);
                 print '</td>';
@@ -1876,7 +1861,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
         // Card in edit mode
         if ($action == 'edit' && $usercancreate) {
             //WYSIWYG Editor
-        
+
             if (!empty($conf->use_javascript_ajax)) {
                 print '<script type="text/javascript">';
                 print '$(document).ready(function () {
@@ -2097,7 +2082,6 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                             $fk_barcode_type = getDolGlobalString('PRODUIT_DEFAULT_BARCODE_TYPE');
                         }
                     }
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formbarcode.class.php';
                     $formbarcode = new FormBarCode($db);
                     print $formbarcode->selectBarcodeType($fk_barcode_type, 'fk_barcode_type', 1);
                     print '</td></tr>';
@@ -2134,7 +2118,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                     print '<tr><td>' . $langs->trans("DefaultWarehouse") . '</td><td>';
                     print img_picto($langs->trans("DefaultWarehouse"), 'stock', 'class="pictofixedwidth"');
                     print $formproduct->selectWarehouses((GETPOSTISSET('fk_default_warehouse') ? GETPOST('fk_default_warehouse') : $object->fk_default_warehouse), 'fk_default_warehouse', 'warehouseopen', 1, 0, 0, '', 0, 0, array(), 'maxwidth500 widthcentpercentminusxx');
-                    print ' <a href="' . constant('BASE_URL') . '/product/stock/card.php?action=create&amp;backtopage=' . urlencode($_SERVER['PHP_SELF'] . '?action=edit&id=' . ((int) $object->id)) . '">';
+                    print ' <a href="' . constant('BASE_URL') . '/product/stock/card.php?action=create&amp;backtopage=' . urlencode($_SERVER['PHP_SELF'] . '?action=edit&id=' . ((int)$object->id)) . '">';
                     print '<span class="fa fa-plus-circle valignmiddle paddingleft" title="' . $langs->trans("AddWarehouse") . '"></span></a>';
                     print '</td></tr>';
                     /*
@@ -2189,7 +2173,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
 
                 if (!$object->isService() && isModEnabled('bom')) {
                     print '<tr><td>' . $form->textwithpicto($langs->trans("DefaultBOM"), $langs->trans("DefaultBOMDesc", $langs->transnoentitiesnoconv("Finished"))) . '</td><td>';
-                    $bomkey = "Bom:bom/class/bom.class.php:0:(t.status:=:1) AND (t.fk_product:=:" . ((int) $object->id) . ')';
+                    $bomkey = "Bom:bom/class/bom.class.php:0:(t.status:=:1) AND (t.fk_product:=:" . ((int)$object->id) . ')';
                     print $form->selectForForms($bomkey, 'fk_default_bom', (GETPOSTISSET('fk_default_bom') ? GETPOST('fk_default_bom') : $object->fk_default_bom), 1);
                     print '</td></tr>';
                 }
@@ -2424,7 +2408,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
             print dol_get_fiche_head($head, 'card', $titre, -1, $picto);
 
             $linkback = '<a href="' . constant('BASE_URL') . '/product/list.php?restore_lastsearch_values=1&type=' . $object->type . '">' . $langs->trans("BackToList") . '</a>';
-            $object->next_prev_filter = "fk_product_type:=:" . ((int) $object->type);
+            $object->next_prev_filter = "fk_product_type:=:" . ((int)$object->type);
 
             $shownav = 1;
             if ($user->socid && !in_array('product', explode(',', getDolGlobalString('MAIN_MODULES_FOR_EXTERNAL')))) {
@@ -2466,7 +2450,6 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                     print '</tr></table>';
                     print '</td><td>';
                     if ($action == 'editbarcodetype' || $action == 'editbarcode') {
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formbarcode.class.php';
                         $formbarcode = new FormBarCode($db);
                     }
 
@@ -2518,7 +2501,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
                         print '</td></tr>';
                         if (
                             (($object->status_batch == '1' && getDolGlobalString('PRODUCTBATCH_LOT_USE_PRODUCT_MASKS') && getDolGlobalString('PRODUCTBATCH_LOT_ADDON') == 'mod_lot_advanced')
-                            || ($object->status_batch == '2' && getDolGlobalString('PRODUCTBATCH_SN_ADDON') == 'mod_sn_advanced' && getDolGlobalString('PRODUCTBATCH_SN_USE_PRODUCT_MASKS')))
+                                || ($object->status_batch == '2' && getDolGlobalString('PRODUCTBATCH_SN_ADDON') == 'mod_sn_advanced' && getDolGlobalString('PRODUCTBATCH_SN_USE_PRODUCT_MASKS')))
                         ) {
                             print '<tr><td>' . $langs->trans("ManageLotMask") . '</td><td>';
                             print $object->batch_mask;
@@ -3087,7 +3070,7 @@ if ($action != 'create' && $action != 'edit' && $action != 'delete') {
     $morehtmlcenter .= '</div>';
 
     // List of actions on element
-        $formactions = new FormActions($db);
+    $formactions = new FormActions($db);
     $somethingshown = $formactions->showactions($object, 'product', 0, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for product
 
     print '</div></div>';

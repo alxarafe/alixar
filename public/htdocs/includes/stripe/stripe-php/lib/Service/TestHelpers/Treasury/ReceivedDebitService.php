@@ -14,9 +14,9 @@ class ReceivedDebitService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Treasury\ReceivedDebit
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Treasury\ReceivedDebit
      */
     public function create($params = null, $opts = null)
     {

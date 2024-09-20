@@ -19,13 +19,13 @@
 
 create table llx_deliverydet
 (
-  rowid             integer AUTO_INCREMENT PRIMARY KEY,
-  fk_delivery       integer,
-  fk_origin_line    integer,                         -- Correspondance de la ligne avec le document d'origine (propal, commande)
-  fk_product        integer,
-  description       text,
-  qty               real,                            -- quantity
-  subprice          double(24,8) DEFAULT 0,          -- prix unitaire
-  total_ht          double(24,8) DEFAULT 0,          -- Total HT de la ligne toute quantite
-  rang              integer      DEFAULT 0
+    rowid          integer AUTO_INCREMENT PRIMARY KEY,
+    fk_delivery    integer,
+    fk_origin_line integer,          -- Correspondance de la ligne avec le document d'origine (propal, commande)
+    fk_product     integer,
+    description    text,
+    qty            real,             -- quantity
+    subprice double(24,8) DEFAULT 0, -- prix unitaire
+    total_ht double(24,8) DEFAULT 0, -- Total HT de la ligne toute quantite
+    rang           integer DEFAULT 0
 )ENGINE=innodb;

@@ -267,13 +267,13 @@ class DateAndOrTime extends Property
             }
 
             // # 4.3.2
-        // value-time = element time {
-        //     xsd:string { pattern = "(\d\d(\d\d(\d\d)?)?|-\d\d(\d\d?)|--\d\d)"
-        //                          ~ "(Z|[+\-]\d\d(\d\d)?)?" }
-        //   }
+            // value-time = element time {
+            //     xsd:string { pattern = "(\d\d(\d\d(\d\d)?)?|-\d\d(\d\d?)|--\d\d)"
+            //                          ~ "(Z|[+\-]\d\d(\d\d)?)?" }
+            //   }
         } elseif (
             (!$d('year') && !$d('month') && !$d('date'))
-                  && ($d('hour') || $d('minute') || $d('second'))
+            && ($d('hour') || $d('minute') || $d('second'))
         ) {
             if ($d('hour')) {
                 $value .= $r('hour') . $r('minute') . $r('second');
@@ -285,11 +285,11 @@ class DateAndOrTime extends Property
 
             $value .= $r('timezone');
 
-        // # 4.3.3
-        // value-date-time = element date-time {
-        //     xsd:string { pattern = "(\d{8}|--\d{4}|---\d\d)T\d\d(\d\d(\d\d)?)?"
-        //                          ~ "(Z|[+\-]\d\d(\d\d)?)?" }
-        //   }
+            // # 4.3.3
+            // value-date-time = element date-time {
+            //     xsd:string { pattern = "(\d{8}|--\d{4}|---\d\d)T\d\d(\d\d(\d\d)?)?"
+            //                          ~ "(Z|[+\-]\d\d(\d\d)?)?" }
+            //   }
         } elseif ($d('date') && $d('hour')) {
             if ($d('year') && $d('month') && $d('date')) {
                 $value .= $r('year') . $r('month') . $r('date');
@@ -300,7 +300,7 @@ class DateAndOrTime extends Property
             }
 
             $value .= 'T' . $r('hour') . $r('minute') . $r('second') .
-                      $r('timezone');
+                $r('timezone');
         }
 
         $writer->writeElement($valueType, $value);

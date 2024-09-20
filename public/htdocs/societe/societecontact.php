@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2005       Patrick Rouillon    <patrick@rouillon.net>
- * Copyright (C) 2005-2011	Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2015	Philippe Grand      <philippe.grand@atoo-net.com>
- * Copyright (C) 2014       Charles-Fr Benke	<charles.fr@benke.fr>
- * Copyright (C) 2015       Marcos García       <marcosgdf@gmail.com>
+/* Copyright (C) 2005       Patrick Rouillon            <patrick@rouillon.net>
+ * Copyright (C) 2005-2011	Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2015	Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2014       Charles-Fr Benke	        <charles.fr@benke.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,13 @@
  */
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Adherents\Classes\AdherentType;
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *     \file        htdocs/societe/societecontact.php
@@ -68,13 +74,11 @@ if ($user->socid) {
 }
 $result = restrictedArea($user, 'societe', $id, '');
 
-
 // Initialize objects
 $object = new Societe($db);
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $hookmanager->initHooks(array('contactthirdparty', 'globalcard'));
-
 
 /*
  * Actions
@@ -128,13 +132,11 @@ if ($action == 'addcontact' && $user->hasRight('societe', 'creer')) {
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
 llxHeader('', $langs->trans("ThirdParty"), $help_url);
 
-
 $form = new Form($db);
 $formcompany = new FormCompany($db);
 $formother = new FormOther($db);
 $contactstatic = new Contact($db);
 $userstatic = new User($db);
-
 
 // View and edit
 
@@ -218,7 +220,7 @@ if ($id > 0 || !empty($ref)) {
             $sql .= " t.libelle as type_label, t.subscription";
             $sql .= " FROM " . MAIN_DB_PREFIX . "adherent as d";
             $sql .= ", " . MAIN_DB_PREFIX . "adherent_type as t";
-            $sql .= " WHERE d.fk_soc = " . ((int) $id);
+            $sql .= " WHERE d.fk_soc = " . ((int)$id);
             $sql .= " AND d.fk_adherent_type = t.rowid";
 
             dol_syslog("get list sql=" . $sql);

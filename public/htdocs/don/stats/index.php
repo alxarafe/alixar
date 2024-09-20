@@ -20,7 +20,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Don\Classes\DonationStats;
 
 /**
  *  \file       htdocs/don/stats/index.php
@@ -30,7 +34,6 @@ use Dolibarr\Code\Core\Classes\DolGraph;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/donstats.class.php';
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');
 $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height');
@@ -118,7 +121,8 @@ $px2 = new DolGraph();
 $mesg = $px2->isGraphKo();
 if (!$mesg) {
     $px2->SetData($data);
-    $i = $startyear;$legend = array();
+    $i = $startyear;
+    $legend = array();
     while ($i <= $endyear) {
         $legend[] = $i;
         $i++;
@@ -294,7 +298,7 @@ foreach ($data as $val) {
     print '<td class="right">' . $val['nb'] . '</td>';
     print '<td class="right opacitylow" style="' . ($greennb ? 'color: green;' : 'color: red;') . '">' . (!empty($val['nb_diff']) && $val['nb_diff'] < 0 ? '' : '+') . round(!empty($val['nb_diff']) ? $val['nb_diff'] : 0) . '%</td>';
     print '<td class="right"><span class="amount">' . price(price2num($val['total'], 'MT'), 1) . '</span></td>';
-    print '<td class="right opacitylow" style="' . ($greentotal ? 'color: green;' : 'color: red;') . '">' . ( !empty($val['total_diff']) && $val['total_diff'] < 0 ? '' : '+') . round(!empty($val['total_diff']) ? $val['total_diff'] : 0) . '%</td>';
+    print '<td class="right opacitylow" style="' . ($greentotal ? 'color: green;' : 'color: red;') . '">' . (!empty($val['total_diff']) && $val['total_diff'] < 0 ? '' : '+') . round(!empty($val['total_diff']) ? $val['total_diff'] : 0) . '%</td>';
     print '<td class="right"><span class="amount">' . price(price2num($val['avg'], 'MT'), 1) . '</span></td>';
     print '<td class="right opacitylow" style="' . ($greenavg ? 'color: green;' : 'color: red;') . '">' . (!empty($val['avg_diff']) && $val['avg_diff'] < 0 ? '' : '+') . round(!empty($val['avg_diff']) ? $val['avg_diff'] : 0) . '%</td>';
     print '</tr>';

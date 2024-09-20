@@ -1,17 +1,19 @@
 <?php
 
-/* Copyright (C) 2001-2004  Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2020  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010  Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2012-2016  Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015-2021  Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2015       Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2016       Josep Lluís Amador   <joseplluis@lliuretic.cat>
- * Copyright (C) 2021-2023  Gauthier VERDOL      <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021       Noé Cendrier         <noe.cendrier@altairis.fr>
- * Copyright (C) 2023      	Frédéric France      wfrederic.france@free.fr>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012-2016  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015-2021  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2016       Josep Lluís Amador          <joseplluis@lliuretic.cat>
+ * Copyright (C) 2021-2023  Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Noé Cendrier                <noe.cendrier@altairis.fr>
+ * Copyright (C) 2023      	Frédéric France             <wfrederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -28,6 +30,19 @@
 
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\CommonInvoice;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\Loan\Classes\LoanSchedule;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\Misc;
 
 /**
  *      \file       htdocs/projet/element.php
@@ -39,35 +54,6 @@ use Dolibarr\Code\Comm\Classes\Propal;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-
-if (isModEnabled('agenda')) {
-    }
-if (isModEnabled('bank')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
-}
-if (isModEnabled('deplacement')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
-}
-if (isModEnabled('don')) {
-}
-if (isModEnabled('shipping')) {
-}
-if (isModEnabled('expensereport')) {
-}
-if (isModEnabled('invoice')) {
-}
-if (isModEnabled('intervention')) {
-}
-if (isModEnabled('loan')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loanschedule.class.php';
-}
-if (isModEnabled('stock')) {
-}
-if (isModEnabled('stocktransfer')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransfer.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransferline.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('projects', 'companies', 'suppliers', 'compta'));
@@ -182,7 +168,7 @@ print dol_get_fiche_head($head, 'element', $langs->trans("Project"), -1, ($objec
 
 if (!empty($_SESSION['pageforbacktolist']) && !empty($_SESSION['pageforbacktolist']['project'])) {
     $tmpurl = $_SESSION['pageforbacktolist']['project'];
-    $tmpurl = preg_replace('/__SOCID__/', (string) $object->socid, $tmpurl);
+    $tmpurl = preg_replace('/__SOCID__/', (string)$object->socid, $tmpurl);
     $linkback = '<a href="' . $tmpurl . (preg_match('/\?/', $tmpurl) ? '&' : '?') . 'restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 } else {
     $linkback = '<a href="' . constant('BASE_URL') . '/projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
@@ -614,20 +600,20 @@ $listofreferent = array(
         'testnew' => $user->hasRight('banque', 'modifier'),
         'test' => isModEnabled("bank") && $user->hasRight('banque', 'lire') && !getDolGlobalString('BANK_USE_OLD_VARIOUS_PAYMENT')
     ),
-        /* No need for this, available on dedicated tab "Agenda/Events"
-         'agenda'=>array(
-         'name'=>"Agenda",
-         'title'=>"ListActionsAssociatedProject",
-         'class'=>'ActionComm',
-         'table'=>'actioncomm',
-         'datefieldname'=>'datep',
-         'disableamount'=>1,
-         'urlnew'=>DOL_URL_ROOT.'/comm/action/card.php?action=create&projectid='.$id.'&socid='.$socid.'&backtopage='.urlencode($_SERVER['PHP_SELF'].'?id='.$id),
-         'lang'=>'agenda',
-         'buttonnew'=>'AddEvent',
-         'testnew'=>$user->rights->agenda->myactions->create,
-        'test'=> isModEnabled('agenda') && $user->hasRight('agenda', 'myactions', 'read')),
-        */
+    /* No need for this, available on dedicated tab "Agenda/Events"
+     'agenda'=>array(
+     'name'=>"Agenda",
+     'title'=>"ListActionsAssociatedProject",
+     'class'=>'ActionComm',
+     'table'=>'actioncomm',
+     'datefieldname'=>'datep',
+     'disableamount'=>1,
+     'urlnew'=>DOL_URL_ROOT.'/comm/action/card.php?action=create&projectid='.$id.'&socid='.$socid.'&backtopage='.urlencode($_SERVER['PHP_SELF'].'?id='.$id),
+     'lang'=>'agenda',
+     'buttonnew'=>'AddEvent',
+     'testnew'=>$user->rights->agenda->myactions->create,
+    'test'=> isModEnabled('agenda') && $user->hasRight('agenda', 'myactions', 'read')),
+    */
 );
 
 // Change rules for profit/benefit calculation
@@ -683,7 +669,6 @@ if ($action == "addelement") {
 $elementuser = new User($db);
 
 
-
 $showdatefilter = 0;
 // Show the filter on date on top of element list
 if (!$showdatefilter) {
@@ -706,7 +691,6 @@ if (!$showdatefilter) {
 
     $showdatefilter++;
 }
-
 
 
 // Show balance for whole project
@@ -781,7 +765,8 @@ foreach ($listofreferent as $key => $value) {
     $margin = empty($value['margin']) ? 0 : $value['margin'];
     $project_field = empty($value['project_field']) ? '' : $value['project_field'];
     if ($qualified && isset($margin)) {     // If this element must be included into profit calculation ($margin is 'minus' or 'add')
-        $element = new $classname($db);
+        //$element = new $classname($db);
+        $element = Misc::getCodeLibClass($classname, $db);
 
         $elementarray = $object->get_element_list($key, $tablename, $datefieldname, $dates, $datee, !empty($project_field) ? $project_field : 'fk_projet');
 
@@ -872,7 +857,7 @@ foreach ($listofreferent as $key => $value) {
                     if (preg_replace('/^(\d+\.)\s\(.*\)/', $defaultvat, $reg)) {
                         $defaultvat = $reg[1];
                     }
-                    $total_ttc_by_line = price2num($total_ht_by_line * (1 + ((float) $defaultvat / 100)), 'MT');
+                    $total_ttc_by_line = price2num($total_ht_by_line * (1 + ((float)$defaultvat / 100)), 'MT');
                 } elseif ($key == 'loan') {
                     $total_ttc_by_line = $total_ht_by_line; // For loan there is actually no taxe managed in Dolibarr
                 } else {
@@ -951,9 +936,8 @@ print '</tr>';
 
 // and the cost per attendee
 if ($object->usage_organize_event) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
     $conforboothattendee = new ConferenceOrBoothAttendee($db);
-    $result = $conforboothattendee->fetchAll('', '', 0, 0, '(t.fk_project:=:' . ((int) $object->id) . ') AND (t.status:=:' . ConferenceOrBoothAttendee::STATUS_VALIDATED . ')');
+    $result = $conforboothattendee->fetchAll('', '', 0, 0, '(t.fk_project:=:' . ((int)$object->id) . ') AND (t.status:=:' . ConferenceOrBoothAttendee::STATUS_VALIDATED . ')');
 
     if (!is_array($result) && $result < 0) {
         setEventMessages($conforboothattendee->error, $conforboothattendee->errors, 'errors');
@@ -1026,7 +1010,8 @@ foreach ($listofreferent as $key => $value) {
         // If we want the project task array to have details of users
         //if ($key == 'project_task') $key = 'project_task_time';
 
-        $element = new $classname($db);
+        //$element = new $classname($db);
+        $element = Misc::getCodeLibClass($classname, $db);
 
         $addform = '';
 
@@ -1637,11 +1622,10 @@ llxFooter();
 $db->close();
 
 
-
 /**
  * Return if we should do a group by customer with sub-total
  *
- * @param   string  $tablename      Name of table
+ * @param string $tablename Name of table
  * @return  boolean                 True to tell to make a group by sub-total
  */
 function canApplySubtotalOn($tablename)
@@ -1657,7 +1641,7 @@ function canApplySubtotalOn($tablename)
 /**
  * sortElementsByClientName
  *
- * @param   array       $elementarray   Element array
+ * @param array $elementarray Element array
  * @return  array                       Element array sorted
  */
 function sortElementsByClientName($elementarray)

@@ -26,7 +26,7 @@ interface BackendInterface
      * any locks in the subtree of the uri for locks.
      *
      * @param string $uri
-     * @param bool   $returnChildLocks
+     * @param bool $returnChildLocks
      *
      * @return array
      */

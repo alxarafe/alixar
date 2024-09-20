@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005-2009  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2006		Marc Barilley		<marc@ocebo.com>
- * Copyright (C) 2011-2013  Philippe Grand      <philippe.grand@atoo-net.com>
- * Copyright (C) 2022-2023  Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2005-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2006		Marc Barilley		        <marc@ocebo.com>
+ * Copyright (C) 2011-2013  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2022-2023  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2023 	    Nick Fragoulis
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,11 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+
 /**
  *      \file       htdocs/core/lib/fourn.lib.php
  *      \brief      Functions used by supplier invoice module
@@ -32,7 +37,7 @@
 /**
  * Prepare array with list of tabs
  *
- * @param   FactureFournisseur  $object     Object related to tabs
+ * @param FactureFournisseur $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function facturefourn_prepare_head(FactureFournisseur $object)
@@ -63,7 +68,7 @@ function facturefourn_prepare_head(FactureFournisseur $object)
         $nbStandingOrders = 0;
         $sql = "SELECT COUNT(pfd.rowid) as nb";
         $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_demande as pfd";
-        $sql .= " WHERE pfd.fk_facture_fourn = " . ((int) $object->id);
+        $sql .= " WHERE pfd.fk_facture_fourn = " . ((int)$object->id);
         $sql .= " AND type = 'ban'";
         $resql = $db->query($sql);
         if ($resql) {
@@ -135,7 +140,7 @@ function facturefourn_prepare_head(FactureFournisseur $object)
 /**
  * Prepare array with list of tabs
  *
- * @param   CommandeFournisseur $object     Object related to tabs
+ * @param CommandeFournisseur $object Object related to tabs
  * @return  array                           Array of tabs to show
  */
 function ordersupplier_prepare_head(CommandeFournisseur $object)
@@ -178,10 +183,10 @@ function ordersupplier_prepare_head(CommandeFournisseur $object)
             $dispachedLines = $object->getDispachedLines(1);
             $nbDispachedLines = count($dispachedLines);
 
-            for ($line = 0 ; $line < $nbDispachedLines; $line++) {
+            for ($line = 0; $line < $nbDispachedLines; $line++) {
                 $sumQtyAllreadyDispatched = $sumQtyAllreadyDispatched + $dispachedLines[$line]['qty'];
             }
-            for ($line = 0 ; $line < $nbLinesOrdered; $line++) {
+            for ($line = 0; $line < $nbLinesOrdered; $line++) {
                 //If line is a product of conf to manage stocks for services
                 if ($object->lines[$line]->product_type == 0 || getDolGlobalString('STOCK_SUPPORTS_SERVICES')) {
                     $sumQtyOrdered = $sumQtyOrdered + $object->lines[$line]->qty;
@@ -248,7 +253,7 @@ function ordersupplier_prepare_head(CommandeFournisseur $object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function supplierorder_admin_prepare_head()
 {

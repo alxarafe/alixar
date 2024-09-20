@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2012       Regis Houssin           <regis.houssin@inodbox.com>
  * Copyright (C) 2013       Laurent Destailleur     <eldy@users.sourceforge.net>
  * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
@@ -53,7 +54,7 @@ print '		$("#hide-' . $blocname . '").show();' . "\n";
 print '});' . "\n";
 
 print 'function setShowHide(status) {' . "\n";
-print '		var id			= ' . ((int) $object->id) . ";\n";
+print '		var id			= ' . ((int)$object->id) . ";\n";
 print "		var element		= '" . dol_escape_js($object->element) . "';\n";
 print "		var htmlelement	= '" . dol_escape_js($blocname) . "';\n";
 print '		var type		= "showhide";' . "\n";

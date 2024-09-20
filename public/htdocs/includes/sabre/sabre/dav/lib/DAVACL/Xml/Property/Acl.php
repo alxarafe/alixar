@@ -168,7 +168,7 @@ class Acl implements Element, HtmlOutput
 
         $privileges = [];
 
-        foreach ((array) $reader->parseInnerTree($elementMap) as $element) {
+        foreach ((array)$reader->parseInnerTree($elementMap) as $element) {
             if ('{DAV:}ace' !== $element['name']) {
                 continue;
             }

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville        <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010 Laurent Destailleur         <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2007 Regis Houssin               <regis.houssin@inodbox.com>
- * Copyright (C) 2008      Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2007  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008       Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,14 +21,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Propale\Classes\ModeleNumRefPropales;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  * \file       htdocs/core/modules/propale/mod_propale_saphir.php
  * \ingroup    propale
  * \brief      File that contains the numbering module rules Saphir
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/propale/modules_propale.php';
-
 
 /**
  * Class of file that contains the numbering module rules Saphir
@@ -62,8 +65,8 @@ class mod_propale_saphir extends ModeleNumRefPropales
     /**
      *  Return description of module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -104,7 +107,7 @@ class mod_propale_saphir extends ModeleNumRefPropales
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -127,9 +130,9 @@ class mod_propale_saphir extends ModeleNumRefPropales
     /**
      *  Return next value
      *
-     *  @param  Societe     $objsoc     Object third party
-     *  @param  Propal      $propal     Object commercial proposal
-     *  @return string|0                Value if OK, 0 if KO
+     * @param Societe $objsoc Object third party
+     * @param Propal $propal Object commercial proposal
+     * @return string|0                Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $propal)
     {
@@ -152,6 +155,6 @@ class mod_propale_saphir extends ModeleNumRefPropales
 
         $numFinal = get_next_value($db, $mask, 'propal', 'ref', '', $objsoc, $date, 'next', false, null, $entity);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

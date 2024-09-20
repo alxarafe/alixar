@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2002-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2002-2003	Jean-Louis Bergamo		<jlb@j1b.org>
- * Copyright (C) 2004-2020	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2004		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2017	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2012		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2020		Tobias Sekan			<tobias.sekan@startmail.com>
+/* Copyright (C) 2002-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2002-2003	Jean-Louis Bergamo		    <jlb@j1b.org>
+ * Copyright (C) 2004-2020	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2017	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2012		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2020		Tobias Sekan			    <tobias.sekan@startmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\DolibarrModules;
 
 /**
  *      \file       htdocs/user/perms.php
@@ -141,7 +145,6 @@ if (empty($reshook)) {
     }
 }
 
-
 /*
  *	View
  */
@@ -158,7 +161,6 @@ $head = user_prepare_head($object);
 $title = $langs->trans("User");
 print dol_get_fiche_head($head, 'rights', $title, -1, 'user');
 
-
 $db->begin();
 
 $modules = DolibarrModules::setPerms($db, $langs, $entity);
@@ -170,8 +172,8 @@ $permsuser = array();
 
 $sql = "SELECT DISTINCT ur.fk_id";
 $sql .= " FROM " . MAIN_DB_PREFIX . "user_rights as ur";
-$sql .= " WHERE ur.entity = " . ((int) $entity);
-$sql .= " AND ur.fk_user = " . ((int) $object->id);
+$sql .= " WHERE ur.entity = " . ((int)$entity);
+$sql .= " AND ur.fk_user = " . ((int)$object->id);
 
 dol_syslog("get user perms", LOG_DEBUG);
 $result = $db->query($sql);
@@ -194,13 +196,13 @@ $permsgroupbyentity = array();
 $sql = "SELECT DISTINCT gr.fk_id, gu.entity";   // fk_id are permission id and entity is entity of the group
 $sql .= " FROM " . MAIN_DB_PREFIX . "usergroup_rights as gr,";
 $sql .= " " . MAIN_DB_PREFIX . "usergroup_user as gu";  // all groups of a user
-$sql .= " WHERE gr.entity = " . ((int) $entity);
+$sql .= " WHERE gr.entity = " . ((int)$entity);
 // The entity on the table gu=usergroup_user should be useless and should never be used because it is already into gr and r.
 // but when using MULTICOMPANY_TRANSVERSE_MODE, we may have inserted record that make rubbish result here due to the duplicate record of
 // other entities, so we are forced to add a filter on gu here
 $sql .= " AND gu.entity IN (0," . $conf->entity . ")";
 $sql .= " AND gr.fk_usergroup = gu.fk_usergroup";
-$sql .= " AND gu.fk_user = " . ((int) $object->id);
+$sql .= " AND gu.fk_user = " . ((int)$object->id);
 
 dol_syslog("get user perms", LOG_DEBUG);
 $result = $db->query($sql);
@@ -221,7 +223,6 @@ if ($result) {
 }
 
 
-
 /*
  * Part to add/remove permissions
  */
@@ -236,7 +237,7 @@ $morehtmlref = '<a href="' . constant('BASE_URL') . 'user/vcard.php?id=' . $obje
 $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
 $morehtmlref .= '</a>';
 
-$urltovirtualcard = '/user/virtualcard.php?id=' . ((int) $object->id);
+$urltovirtualcard = '/user/virtualcard.php?id=' . ((int)$object->id);
 $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl") . ' - ' . $object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
 dol_banner_tab($object, 'id', $linkback, $user->hasRight("user", "user", "read") || $user->admin, 'rowid', 'ref', $morehtmlref);
@@ -337,7 +338,7 @@ print '</tr>' . "\n";
 $sql = "SELECT r.id, r.libelle as label, r.module, r.perms, r.subperms, r.module_position, r.bydefault";
 $sql .= " FROM " . MAIN_DB_PREFIX . "rights_def as r";
 $sql .= " WHERE r.libelle NOT LIKE 'tou%'"; // On ignore droits "tous"
-$sql .= " AND r.entity = " . ((int) $entity);
+$sql .= " AND r.entity = " . ((int)$entity);
 $sql .= " ORDER BY r.family_position, r.module_position, r.module, r.id";
 
 $result = $db->query($sql);
@@ -385,9 +386,9 @@ if ($result) {
                     $newmoduleposition += 100000;
                 }
 
-                $sqlupdate = 'UPDATE ' . MAIN_DB_PREFIX . "rights_def SET module_position = " . ((int) $newmoduleposition) . ",";
-                $sqlupdate .= " family_position = " . ((int) $familyposition);
-                $sqlupdate .= " WHERE module_position = " . ((int) $obj->module_position) . " AND module = '" . $db->escape($obj->module) . "'";
+                $sqlupdate = 'UPDATE ' . MAIN_DB_PREFIX . "rights_def SET module_position = " . ((int)$newmoduleposition) . ",";
+                $sqlupdate .= " family_position = " . ((int)$familyposition);
+                $sqlupdate .= " WHERE module_position = " . ((int)$obj->module_position) . " AND module = '" . $db->escape($obj->module) . "'";
 
                 $db->query($sqlupdate);
             }
@@ -396,12 +397,11 @@ if ($result) {
 }
 
 
-
 //print "xx".$conf->global->MAIN_USE_ADVANCED_PERMS;
 $sql = "SELECT r.id, r.libelle as label, r.module, r.perms, r.subperms, r.module_position, r.bydefault";
 $sql .= " FROM " . MAIN_DB_PREFIX . "rights_def as r";
 $sql .= " WHERE r.libelle NOT LIKE 'tou%'"; // On ignore droits "tous"
-$sql .= " AND r.entity = " . ((int) $entity);
+$sql .= " AND r.entity = " . ((int)$entity);
 if (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) {
     $sql .= " AND r.perms NOT LIKE '%_advance'"; // Hide advanced perms if option is not enabled
 }
@@ -474,7 +474,7 @@ if ($result) {
         } else {
             $ishidden = 0;
         }
-        $isexpanded = ! $ishidden;
+        $isexpanded = !$ishidden;
         //var_dump("isexpanded=".$isexpanded);
 
         $permsgroupbyentitypluszero = array();
@@ -498,7 +498,7 @@ if ($result) {
             } else {
                 $ishidden = 0;
             }
-            $isexpanded = ! $ishidden;
+            $isexpanded = !$ishidden;
             //var_dump('$obj->module='.$obj->module.' isexpanded='.$isexpanded);
 
             // Break detected, we get objMod

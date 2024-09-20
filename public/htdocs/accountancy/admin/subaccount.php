@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2013-2016  Olivier Geffroy         <jeff@jeffinfo.com>
- * Copyright (C) 2013-2024  Alexandre Spangaro      <aspangaro@easya.solutions>
- * Copyright (C) 2016-2018  Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2013-2016  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2016-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
@@ -149,7 +151,7 @@ if (strlen(trim($search_subaccount))) {
     $weremovedsomezero = 0;
     if (strlen($search_subaccount_tmp) <= $lengthpaddingaccount) {
         for ($i = 0; $i < $lengthpaddingaccount; $i++) {
-            if (preg_match('/0$/', $search_subaccount_tmp)) {
+            if (str_ends_with($search_subaccount_tmp, '0')) {
                 $weremovedsomezero++;
                 $search_subaccount_tmp = preg_replace('/0$/', '', $search_subaccount_tmp);
             }
@@ -162,7 +164,7 @@ if (strlen(trim($search_subaccount))) {
             $search_subaccount_tmp_clean = $search_subaccount_tmp;
             $search_subaccount_clean = $search_subaccount;
             $startchar = '%';
-            if (strpos($search_subaccount_tmp, '^') === 0) {
+            if (str_starts_with($search_subaccount_tmp, '^')) {
                 $startchar = '';
                 $search_subaccount_tmp_clean = preg_replace('/^\^/', '', $search_subaccount_tmp);
                 $search_subaccount_clean = preg_replace('/^\^/', '', $search_subaccount);
@@ -243,7 +245,7 @@ if (strlen(trim($search_subaccount))) {
     $weremovedsomezero = 0;
     if (strlen($search_subaccount_tmp) <= $lengthpaddingaccount) {
         for ($i = 0; $i < $lengthpaddingaccount; $i++) {
-            if (preg_match('/0$/', $search_subaccount_tmp)) {
+            if (str_ends_with($search_subaccount_tmp, '0')) {
                 $weremovedsomezero++;
                 $search_subaccount_tmp = preg_replace('/0$/', '', $search_subaccount_tmp);
             }

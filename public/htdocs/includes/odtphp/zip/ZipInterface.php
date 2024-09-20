@@ -19,6 +19,7 @@ interface ZipInterface
      * @return true if openning has succeeded
      */
     public function open($filename);
+
     /**
      * Retrieve the content of a file within the archive from its name
      *
@@ -26,6 +27,7 @@ interface ZipInterface
      * @return the content of the file in a string
      */
     public function getFromName($name);
+
     /**
      * Add a file within the archive from a string
      *
@@ -34,6 +36,7 @@ interface ZipInterface
      * @return true if the file has been successful added
      */
     public function addFromString($localname, $contents);
+
     /**
      * Add a file within the archive from a file
      *
@@ -42,6 +45,7 @@ interface ZipInterface
      * @return true if the file has been successful added
      */
     public function addFile($filename, $localname = null);
+
     /**
      * Close the Zip archive
      * @return true

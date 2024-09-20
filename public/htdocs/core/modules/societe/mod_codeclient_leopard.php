@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2014 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,14 +21,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\ModeleThirdPartyCode;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *       \file       htdocs/core/modules/societe/mod_codeclient_leopard.php
  *       \ingroup    societe
  *       \brief      Fichier de la class des gestion leopard des codes clients
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/societe/modules_societe.class.php';
-
 
 /**
  *  Class to manage numbering of thirdparties code
@@ -50,7 +51,7 @@ class mod_codeclient_leopard extends ModeleThirdPartyCode
     /**
      *  Constructor
      *
-     *  @param DoliDB       $db     Database object
+     * @param DoliDB $db Database object
      */
     public function __construct($db)
     {
@@ -67,8 +68,8 @@ class mod_codeclient_leopard extends ModeleThirdPartyCode
     /**
      *  Return description of module
      *
-     *  @param  Translate   $langs  Object langs
-     *  @return string              Description of module
+     * @param Translate $langs Object langs
+     * @return string              Description of module
      */
     public function info($langs)
     {
@@ -79,9 +80,9 @@ class mod_codeclient_leopard extends ModeleThirdPartyCode
     /**
      * Return an example of result returned by getNextValue
      *
-     * @param   Translate       $langs      Object langs
-     * @param   Societe|string  $objsoc     Object thirdparty
-     * @param   int             $type       Type of third party (1:customer, 2:supplier, -1:autodetect)
+     * @param Translate $langs Object langs
+     * @param Societe|string $objsoc Object thirdparty
+     * @param int $type Type of third party (1:customer, 2:supplier, -1:autodetect)
      * @return  string                      Return string example
      */
     public function getExample($langs, $objsoc = '', $type = -1)
@@ -92,8 +93,8 @@ class mod_codeclient_leopard extends ModeleThirdPartyCode
     /**
      * Return an example of result returned by getNextValue
      *
-     * @param   Societe|string  $objsoc     Object thirdparty
-     * @param   int             $type       Type of third party (1:customer, 2:supplier, -1:autodetect)
+     * @param Societe|string $objsoc Object thirdparty
+     * @param int $type Type of third party (1:customer, 2:supplier, -1:autodetect)
      * @return  string                      Return next value
      */
     public function getNextValue($objsoc = '', $type = -1)
@@ -105,11 +106,11 @@ class mod_codeclient_leopard extends ModeleThirdPartyCode
     /**
      *  Check validity of code according to its rules
      *
-     *  @param  DoliDB      $db     Database handler
-     *  @param  string      $code   Code to check/correct
-     *  @param  Societe     $soc    Object third party
-     *  @param  int         $type   0 = customer/prospect , 1 = supplier
-     *  @return int                 0 if OK
+     * @param DoliDB $db Database handler
+     * @param string $code Code to check/correct
+     * @param Societe $soc Object third party
+     * @param int $type 0 = customer/prospect , 1 = supplier
+     * @return int                 0 if OK
      *                              -1 ErrorBadCustomerCodeSyntax
      *                              -2 ErrorCustomerCodeRequired
      *                              -3 ErrorCustomerCodeAlreadyUsed

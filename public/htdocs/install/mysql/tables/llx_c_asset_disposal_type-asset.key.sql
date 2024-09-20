@@ -15,4 +15,5 @@
 -- along with this program.  If not, see https://www.gnu.org/licenses/.
 -- ========================================================================
 
-ALTER TABLE llx_c_asset_disposal_type ADD UNIQUE INDEX uk_c_asset_disposal_type(code, entity);
+ALTER TABLE llx_c_asset_disposal_type
+    ADD UNIQUE INDEX uk_c_asset_disposal_type(code, entity);

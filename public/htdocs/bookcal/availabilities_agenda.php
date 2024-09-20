@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2022 Alice Adminson <aadminson@example.com>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022       Alice Adminson              <aadminson@example.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\BookCal\Classes\Availabilities;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *  \file       htdocs/bookcal/availabilities_agenda.php
  *  \ingroup    bookcal
@@ -26,9 +30,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bookcal/lib/bookcal_availabilities.lib.php';
@@ -111,7 +112,6 @@ if (!$permissiontoread) {
     accessforbidden();
 }
 
-
 /*
  *  Actions
  */
@@ -135,8 +135,6 @@ if (empty($reshook)) {
         $search_agenda_label = '';
     }
 }
-
-
 
 /*
  *	View
@@ -214,20 +212,19 @@ if ($object->id > 0) {
     print dol_get_fiche_end();
 
 
-
     // Actions buttons
 
     $objthirdparty = $object;
     $objcon = new stdClass();
 
-    $out = '&origin=' . urlencode((string) ($object->element . '@' . $object->module)) . '&originid=' . urlencode((string) ($object->id));
+    $out = '&origin=' . urlencode((string)($object->element . '@' . $object->module)) . '&originid=' . urlencode((string)($object->id));
     $urlbacktopage = $_SERVER['PHP_SELF'] . '?id=' . $object->id;
     $out .= '&backtopage=' . urlencode($urlbacktopage);
     $permok = $user->hasRight('agenda', 'myactions', 'create');
     if ((!empty($objthirdparty->id) || !empty($objcon->id)) && $permok) {
         //$out.='<a href="'.DOL_URL_ROOT.'/comm/action/card.php?action=create';
         if (get_class($objthirdparty) == 'Societe') {
-            $out .= '&socid=' . urlencode((string) ($objthirdparty->id));
+            $out .= '&socid=' . urlencode((string)($objthirdparty->id));
         }
         $out .= (!empty($objcon->id) ? '&contactid=' . urlencode($objcon->id) : '');
         //$out.=$langs->trans("AddAnAction").' ';

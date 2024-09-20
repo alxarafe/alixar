@@ -24,7 +24,9 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        core/class/emailsenderprofile.class.php

@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2003 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2020 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2014      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2015      Jean-François Ferry	<jfefe@aternatik.fr>
+/* Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Jean-François Ferry	        <jfefe@aternatik.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  * \file       htdocs/product/popuprop.php
@@ -89,10 +92,10 @@ print load_fiche_titre($title, '', 'product');
 
 $param = '';
 $title = $langs->trans("ListProductServiceByPopularity");
-if ((string) $type == '1') {
+if ((string)$type == '1') {
     $title = $langs->trans("ListServiceByPopularity");
 }
-if ((string) $type == '0') {
+if ((string)$type == '0') {
     $title = $langs->trans("ListProductByPopularity");
 }
 
@@ -114,10 +117,10 @@ $h++;
 
 $head[$h][0] = constant('BASE_URL') . '/product/popuprop.php';
 $head[$h][1] = $langs->trans("ProductsServicesPerPopularity");
-if ((string) $type == '0') {
+if ((string)$type == '0') {
     $head[$h][1] = $langs->trans("ProductsPerPopularity");
 }
-if ((string) $type == '1') {
+if ((string)$type == '1') {
     $head[$h][1] = $langs->trans("ServicesPerPopularity");
 }
 $head[$h][2] = 'popularity';
@@ -147,7 +150,7 @@ $sql .= ", " . MAIN_DB_PREFIX . "product as p";
 $sql .= ' WHERE p.entity IN (' . getEntity('product') . ')';
 $sql .= " AND p.rowid = pd.fk_product";
 if ($type !== '') {
-    $sql .= " AND fk_product_type = " . ((int) $type);
+    $sql .= " AND fk_product_type = " . ((int)$type);
 }
 $sql .= " GROUP BY p.rowid, p.label, p.ref, p.fk_product_type, p.tobuy, p.tosell, p.tobatch, p.barcode";
 
@@ -188,7 +191,7 @@ $arrayofmode = array(
     'propal' => 'Proposals',
     'commande' => 'Orders',
     'facture' => 'Facture'
-    );
+);
 $title .= ' ' . $form->selectarray('mode', $arrayofmode, $mode, 1, 0, 0, '', 1);
 $title .= ' <input type="submit" class="button small" name="refresh" value="' . $langs->trans("Refresh") . '">';
 
@@ -223,7 +226,7 @@ if ($mode && $mode != '-1') {
         if (getDolGlobalInt('MAIN_MULTILANGS')) { // si l'option est active
             $sql = "SELECT label";
             $sql .= " FROM " . MAIN_DB_PREFIX . "product_lang";
-            $sql .= " WHERE fk_product = " . ((int) $prodid);
+            $sql .= " WHERE fk_product = " . ((int)$prodid);
             $sql .= " AND lang = '" . $db->escape($langs->getDefaultLang()) . "'";
             $sql .= " LIMIT 1";
 

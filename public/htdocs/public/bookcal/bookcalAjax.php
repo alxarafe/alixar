@@ -91,7 +91,7 @@ if ($action == 'verifyavailability') {
         $availabilitytab = array();
         $sql = "SELECT ba.rowid as id, ba.duration, ba.startHour, ba.endHour, ba.start, ba.end";
         $sql .= " FROM " . MAIN_DB_PREFIX . "bookcal_availabilities as ba";
-        $sql .= " WHERE ba.fk_bookcal_calendar = " . ((int) $id);
+        $sql .= " WHERE ba.fk_bookcal_calendar = " . ((int)$id);
         $sql .= " AND ba.status = 1";
         $resql = $db->query($sql);
         if ($resql) {
@@ -150,7 +150,7 @@ if ($action == 'verifyavailability') {
             $sql .= " AND b.datep < '" . $db->idate($datetocheckbooking_end) . "'";
             $sql .= " AND b.code = 'AC_RDV'";
             $sql .= " AND b.status = 0";
-            $sql .= " AND b.fk_bookcal_calendar = " . ((int) $id);
+            $sql .= " AND b.fk_bookcal_calendar = " . ((int)$id);
             $resql = $db->query($sql);
             if ($resql) {
                 $num = $db->num_rows($resql);

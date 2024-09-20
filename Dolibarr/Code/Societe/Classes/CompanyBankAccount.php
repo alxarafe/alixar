@@ -25,6 +25,8 @@
 
 namespace Dolibarr\Code\Societe\Classes;
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
 /**
@@ -32,8 +34,6 @@ use DoliDB;
  *  \ingroup    societe
  *  \brief      File of class to manage bank accounts description of third parties
  */
-
-
 
 /**
  *  Class to manage bank accounts description of third parties

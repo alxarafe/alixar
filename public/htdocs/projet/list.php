@@ -1,17 +1,17 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005      Marc Bariley / Ocebo <marc@ocebo.com>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013      Cédric Salvador      <csalvador@gpcsolutions.fr>
- * Copyright (C) 2015 	   Claudio Aschieri     <c.aschieri@19.coop>
- * Copyright (C) 2018 	   Ferran Marcet	    <fmarcet@2byte.es>
- * Copyright (C) 2019 	   Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2020	   Tobias Sean			<tobias.sekan@startmail.com>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Marc Bariley / Ocebo        <marc@ocebo.com>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015 	    Claudio Aschieri            <c.aschieri@19.coop>
+ * Copyright (C) 2018 	    Ferran Marcet	            <fmarcet@2byte.es>
+ * Copyright (C) 2019 	    Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2020	    Tobias Sean			        <tobias.sekan@startmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
- * Copyright (C) 2024		Benjamin Falière	<benjamin.faliere@altairis.fr>
+ * Copyright (C) 2024		Benjamin Falière	        <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,18 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCategory;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/projet/list.php
@@ -40,7 +52,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
 }
 
 // Load translation files required by the page
@@ -133,12 +144,12 @@ if ($mine) {
     $mine = 0;
 }
 
-$search_sday    = GETPOSTINT('search_sday');
-$search_smonth  = GETPOSTINT('search_smonth');
-$search_syear   = GETPOSTINT('search_syear');
-$search_eday    = GETPOSTINT('search_eday');
-$search_emonth  = GETPOSTINT('search_emonth');
-$search_eyear   = GETPOSTINT('search_eyear');
+$search_sday = GETPOSTINT('search_sday');
+$search_smonth = GETPOSTINT('search_smonth');
+$search_syear = GETPOSTINT('search_syear');
+$search_eday = GETPOSTINT('search_eday');
+$search_emonth = GETPOSTINT('search_emonth');
+$search_eyear = GETPOSTINT('search_eyear');
 
 $search_date_start_startmonth = GETPOSTINT('search_date_start_startmonth');
 $search_date_start_startyear = GETPOSTINT('search_date_start_startyear');
@@ -223,11 +234,11 @@ $arrayfields = array();
 foreach ($object->fields as $key => $val) {
     // If $val['visible']==0, then we never show the field
     if (!empty($val['visible'])) {
-        $visible = (int) dol_eval($val['visible'], 1, 1, '1');
+        $visible = (int)dol_eval($val['visible'], 1, 1, '1');
         $arrayfields['p.' . $key] = array(
             'label' => $val['label'],
             'checked' => (($visible < 0) ? 0 : 1),
-            'enabled' => (abs($visible) != 3 && (int) dol_eval($val['enabled'], 1, 1, '1')),
+            'enabled' => (abs($visible) != 3 && (int)dol_eval($val['enabled'], 1, 1, '1')),
             'position' => $val['position'],
             'help' => isset($val['help']) ? $val['help'] : ''
         );
@@ -453,7 +464,6 @@ if (empty($reshook)) {
     }
 }
 
-
 /*
  * View
  */
@@ -560,7 +570,7 @@ if (!$user->hasRight('projet', 'all', 'lire')) {
 }
 // No need to check if company is external user, as filtering of projects must be done by getProjectsAuthorizedForUser
 if ($socid > 0) {
-    $sql .= " AND (p.fk_soc = " . ((int) $socid) . ")"; // This filter if when we use a hard coded filter on company on url (not related to filter for external users)
+    $sql .= " AND (p.fk_soc = " . ((int)$socid) . ")"; // This filter if when we use a hard coded filter on company on url (not related to filter for external users)
 }
 if ($search_ref) {
     $sql .= natural_search('p.ref', $search_ref);
@@ -627,7 +637,7 @@ if ($search_status != '' && $search_status != '-1') {
 }
 if ($search_opp_status) {
     if (is_numeric($search_opp_status) && $search_opp_status > 0) {
-        $sql .= " AND p.fk_opp_status = " . ((int) $search_opp_status);
+        $sql .= " AND p.fk_opp_status = " . ((int)$search_opp_status);
     }
     if ($search_opp_status == 'all') {
         $sql .= " AND (p.fk_opp_status IS NOT NULL AND p.fk_opp_status <> -1)";
@@ -643,7 +653,7 @@ if ($search_opp_status) {
     }
 }
 if ($search_public != '') {
-    $sql .= " AND p.public = " . ((int) $search_public);
+    $sql .= " AND p.public = " . ((int)$search_public);
 }
 // No check is done on company permission because readability is managed by public status of project and assignment.
 //if (! $user->rights->societe->client->voir && ! $socid) $sql.= " AND ((s.rowid = sc.fk_soc AND sc.fk_user = ".((int) $user->id).") OR (s.rowid IS NULL))";
@@ -652,14 +662,14 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 if ($search_project_user > 0) {
-    $sql .= " AND EXISTS (SELECT ecp.rowid FROM " . MAIN_DB_PREFIX . "element_contact as ecp WHERE ecp.fk_c_type_contact IN (" . $db->sanitize(implode(',', array_keys($listofprojectcontacttype))) . ") AND ecp.element_id = p.rowid AND ecp.fk_socpeople = " . ((int) $search_project_user) . ")";
+    $sql .= " AND EXISTS (SELECT ecp.rowid FROM " . MAIN_DB_PREFIX . "element_contact as ecp WHERE ecp.fk_c_type_contact IN (" . $db->sanitize(implode(',', array_keys($listofprojectcontacttype))) . ") AND ecp.element_id = p.rowid AND ecp.fk_socpeople = " . ((int)$search_project_user) . ")";
 }
 if ($search_project_contact > 0) {
-    $sql .= " AND EXISTS (SELECT ecp_contact.rowid FROM " . MAIN_DB_PREFIX . "element_contact as ecp_contact WHERE ecp_contact.fk_c_type_contact IN (" . $db->sanitize(implode(',', array_keys($listofprojectcontacttypeexternal))) . ") AND ecp_contact.element_id = p.rowid AND ecp_contact.fk_socpeople = " . ((int) $search_project_contact) . ")";
+    $sql .= " AND EXISTS (SELECT ecp_contact.rowid FROM " . MAIN_DB_PREFIX . "element_contact as ecp_contact WHERE ecp_contact.fk_c_type_contact IN (" . $db->sanitize(implode(',', array_keys($listofprojectcontacttypeexternal))) . ") AND ecp_contact.element_id = p.rowid AND ecp_contact.fk_socpeople = " . ((int)$search_project_contact) . ")";
 }
 if ($search_opp_amount != '') {
     $sql .= natural_search('p.opp_amount', $search_opp_amount, 1);
@@ -714,9 +724,9 @@ if (!empty($searchCategoryProjectList)) {
             $searchCategoryProjectSqlList[] = "NOT EXISTS (SELECT ck.fk_project FROM " . MAIN_DB_PREFIX . "categorie_project as ck WHERE p.rowid = ck.fk_project)";
         } elseif (intval($searchCategoryProject) > 0) {
             if ($searchCategoryProjectOperator == 0) {
-                $searchCategoryProjectSqlList[] = " EXISTS (SELECT ck.fk_project FROM " . MAIN_DB_PREFIX . "categorie_project as ck WHERE p.rowid = ck.fk_project AND ck.fk_categorie = " . ((int) $searchCategoryProject) . ")";
+                $searchCategoryProjectSqlList[] = " EXISTS (SELECT ck.fk_project FROM " . MAIN_DB_PREFIX . "categorie_project as ck WHERE p.rowid = ck.fk_project AND ck.fk_categorie = " . ((int)$searchCategoryProject) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryProject);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryProject);
             }
         }
     }
@@ -738,7 +748,7 @@ if ($searchCategoryCustomerOperator == 1) {
     $existsCategoryCustomerList = array();
     foreach ($searchCategoryCustomerList as $searchCategoryCustomer) {
         if (intval($searchCategoryCustomer) == -2) {
-            $sqlCategoryCustomerNotExists  = " NOT EXISTS (";
+            $sqlCategoryCustomerNotExists = " NOT EXISTS (";
             $sqlCategoryCustomerNotExists .= " SELECT cat_cus.fk_soc";
             $sqlCategoryCustomerNotExists .= " FROM " . $db->prefix() . "categorie_societe AS cat_cus";
             $sqlCategoryCustomerNotExists .= " WHERE cat_cus.fk_soc = p.fk_soc";
@@ -770,7 +780,7 @@ if ($searchCategoryCustomerOperator == 1) {
             $sqlCategoryCustomerNotExists .= " )";
             $searchCategoryCustomerSqlList[] = $sqlCategoryCustomerNotExists;
         } elseif (intval($searchCategoryCustomer) > 0) {
-            $searchCategoryCustomerSqlList[] = "p.fk_soc IN (SELECT fk_soc FROM " . $db->prefix() . "categorie_societe WHERE fk_categorie = " . ((int) $searchCategoryCustomer) . ")";
+            $searchCategoryCustomerSqlList[] = "p.fk_soc IN (SELECT fk_soc FROM " . $db->prefix() . "categorie_societe WHERE fk_categorie = " . ((int)$searchCategoryCustomer) . ")";
         }
     }
     if (!empty($searchCategoryCustomerSqlList)) {
@@ -844,127 +854,127 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
 }
 if ($socid) {
-    $param .= '&socid=' . urlencode((string) $socid);
+    $param .= '&socid=' . urlencode((string)$socid);
 }
 if ($search_all != '') {
     $param .= '&search_all=' . urlencode($search_all);
 }
 if ($search_sday) {
-    $param .= '&search_sday=' . urlencode((string) ($search_sday));
+    $param .= '&search_sday=' . urlencode((string)($search_sday));
 }
 if ($search_smonth) {
-    $param .= '&search_smonth=' . urlencode((string) ($search_smonth));
+    $param .= '&search_smonth=' . urlencode((string)($search_smonth));
 }
 if ($search_syear) {
-    $param .= '&search_syear=' . urlencode((string) ($search_syear));
+    $param .= '&search_syear=' . urlencode((string)($search_syear));
 }
 if ($search_eday) {
-    $param .= '&search_eday=' . urlencode((string) ($search_eday));
+    $param .= '&search_eday=' . urlencode((string)($search_eday));
 }
 if ($search_emonth) {
-    $param .= '&search_emonth=' . urlencode((string) ($search_emonth));
+    $param .= '&search_emonth=' . urlencode((string)($search_emonth));
 }
 if ($search_eyear) {
-    $param .= '&search_eyear=' . urlencode((string) ($search_eyear));
+    $param .= '&search_eyear=' . urlencode((string)($search_eyear));
 }
 if ($search_date_start_startmonth) {
-    $param .= '&search_date_start_startmonth=' . urlencode((string) ($search_date_start_startmonth));
+    $param .= '&search_date_start_startmonth=' . urlencode((string)($search_date_start_startmonth));
 }
 if ($search_date_start_startyear) {
-    $param .= '&search_date_start_startyear=' . urlencode((string) ($search_date_start_startyear));
+    $param .= '&search_date_start_startyear=' . urlencode((string)($search_date_start_startyear));
 }
 if ($search_date_start_startday) {
-    $param .= '&search_date_start_startday=' . urlencode((string) ($search_date_start_startday));
+    $param .= '&search_date_start_startday=' . urlencode((string)($search_date_start_startday));
 }
 if ($search_date_start_start) {
     $param .= '&search_date_start_start=' . urlencode($search_date_start_start);
 }
 if ($search_date_start_endmonth) {
-    $param .= '&search_date_start_endmonth=' . urlencode((string) ($search_date_start_endmonth));
+    $param .= '&search_date_start_endmonth=' . urlencode((string)($search_date_start_endmonth));
 }
 if ($search_date_start_endyear) {
-    $param .= '&search_date_start_endyear=' . urlencode((string) ($search_date_start_endyear));
+    $param .= '&search_date_start_endyear=' . urlencode((string)($search_date_start_endyear));
 }
 if ($search_date_start_endday) {
-    $param .= '&search_date_start_endday=' . urlencode((string) ($search_date_start_endday));
+    $param .= '&search_date_start_endday=' . urlencode((string)($search_date_start_endday));
 }
 if ($search_date_start_end) {
     $param .= '&search_date_start_end=' . urlencode($search_date_start_end);
 }
 if ($search_date_end_startmonth) {
-    $param .= '&search_date_end_startmonth=' . urlencode((string) ($search_date_end_startmonth));
+    $param .= '&search_date_end_startmonth=' . urlencode((string)($search_date_end_startmonth));
 }
 if ($search_date_end_startyear) {
-    $param .= '&search_date_end_startyear=' . urlencode((string) ($search_date_end_startyear));
+    $param .= '&search_date_end_startyear=' . urlencode((string)($search_date_end_startyear));
 }
 if ($search_date_end_startday) {
-    $param .= '&search_date_end_startday=' . urlencode((string) ($search_date_end_startday));
+    $param .= '&search_date_end_startday=' . urlencode((string)($search_date_end_startday));
 }
 if ($search_date_end_start) {
     $param .= '&search_date_end_start=' . urlencode($search_date_end_start);
 }
 if ($search_date_end_endmonth) {
-    $param .= '&search_date_end_endmonth=' . urlencode((string) ($search_date_end_endmonth));
+    $param .= '&search_date_end_endmonth=' . urlencode((string)($search_date_end_endmonth));
 }
 if ($search_date_end_endyear) {
-    $param .= '&search_date_end_endyear=' . urlencode((string) ($search_date_end_endyear));
+    $param .= '&search_date_end_endyear=' . urlencode((string)($search_date_end_endyear));
 }
 if ($search_date_end_endday) {
-    $param .= '&search_date_end_endday=' . urlencode((string) ($search_date_end_endday));
+    $param .= '&search_date_end_endday=' . urlencode((string)($search_date_end_endday));
 }
 if ($search_date_end_end) {
     $param .= '&search_date_end_end=' . urlencode($search_date_end_end);
 }
 if ($search_date_creation_startmonth) {
-    $param .= '&search_date_creation_startmonth=' . urlencode((string) ($search_date_creation_startmonth));
+    $param .= '&search_date_creation_startmonth=' . urlencode((string)($search_date_creation_startmonth));
 }
 if ($search_date_creation_startyear) {
-    $param .= '&search_date_creation_startyear=' . urlencode((string) ($search_date_creation_startyear));
+    $param .= '&search_date_creation_startyear=' . urlencode((string)($search_date_creation_startyear));
 }
 if ($search_date_creation_startday) {
-    $param .= '&search_date_creation_startday=' . urlencode((string) ($search_date_creation_startday));
+    $param .= '&search_date_creation_startday=' . urlencode((string)($search_date_creation_startday));
 }
 if ($search_date_creation_start) {
     $param .= '&search_date_creation_start=' . urlencode($search_date_creation_start);
 }
 if ($search_date_creation_endmonth) {
-    $param .= '&search_date_creation_endmonth=' . urlencode((string) ($search_date_creation_endmonth));
+    $param .= '&search_date_creation_endmonth=' . urlencode((string)($search_date_creation_endmonth));
 }
 if ($search_date_creation_endyear) {
-    $param .= '&search_date_creation_endyear=' . urlencode((string) ($search_date_creation_endyear));
+    $param .= '&search_date_creation_endyear=' . urlencode((string)($search_date_creation_endyear));
 }
 if ($search_date_creation_endday) {
-    $param .= '&search_date_creation_endday=' . urlencode((string) ($search_date_creation_endday));
+    $param .= '&search_date_creation_endday=' . urlencode((string)($search_date_creation_endday));
 }
 if ($search_date_creation_end) {
     $param .= '&search_date_creation_end=' . urlencode($search_date_creation_end);
 }
 if ($search_date_modif_startmonth) {
-    $param .= '&search_date_modif_startmonth=' . urlencode((string) ($search_date_modif_startmonth));
+    $param .= '&search_date_modif_startmonth=' . urlencode((string)($search_date_modif_startmonth));
 }
 if ($search_date_modif_startyear) {
-    $param .= '&search_date_modif_startyear=' . urlencode((string) ($search_date_modif_startyear));
+    $param .= '&search_date_modif_startyear=' . urlencode((string)($search_date_modif_startyear));
 }
 if ($search_date_modif_startday) {
-    $param .= '&search_date_modif_startday=' . urlencode((string) ($search_date_modif_startday));
+    $param .= '&search_date_modif_startday=' . urlencode((string)($search_date_modif_startday));
 }
 if ($search_date_modif_start) {
     $param .= '&search_date_modif_start=' . urlencode($search_date_modif_start);
 }
 if ($search_date_modif_endmonth) {
-    $param .= '&search_date_modif_endmonth=' . urlencode((string) ($search_date_modif_endmonth));
+    $param .= '&search_date_modif_endmonth=' . urlencode((string)($search_date_modif_endmonth));
 }
 if ($search_date_modif_endyear) {
-    $param .= '&search_date_modif_endyear=' . urlencode((string) ($search_date_modif_endyear));
+    $param .= '&search_date_modif_endyear=' . urlencode((string)($search_date_modif_endyear));
 }
 if ($search_date_modif_endday) {
-    $param .= '&search_date_modif_endday=' . urlencode((string) ($search_date_modif_endday));
+    $param .= '&search_date_modif_endday=' . urlencode((string)($search_date_modif_endday));
 }
 if ($search_date_modif_end) {
     $param .= '&search_date_modif_end=' . urlencode($search_date_modif_end);
@@ -1002,10 +1012,10 @@ if ($search_project_user > 0) {
     $param .= '&search_project_user=' . urlencode($search_project_user);
 }
 if ($search_project_contact > 0) {
-    $param .= '&search_project_contact=' . urlencode((string) ($search_project_contact));
+    $param .= '&search_project_contact=' . urlencode((string)($search_project_contact));
 }
 if ($search_sale > 0) {
-    $param .= '&search_sale=' . urlencode((string) ($search_sale));
+    $param .= '&search_sale=' . urlencode((string)($search_sale));
 }
 if ($search_opp_amount != '') {
     $param .= '&search_opp_amount=' . urlencode($search_opp_amount);
@@ -1081,7 +1091,7 @@ if (!empty($socid)) {
 }
 if ($search_usage_event_organization == 1) {
     $url .= '&usage_organize_event=1';
-    if (((int) $search_usage_opportunity) < 1) {
+    if (((int)$search_usage_opportunity) < 1) {
         $url .= '&usage_opportunity=0';
     }
 }

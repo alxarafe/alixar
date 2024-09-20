@@ -36,7 +36,6 @@ if (!$user->admin) {
 }
 
 
-
 /*
  * View
  */

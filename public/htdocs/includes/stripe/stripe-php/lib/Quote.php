@@ -84,9 +84,9 @@ class Quote extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Quote the accepted quote
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Quote the accepted quote
      */
     public function accept($params = null, $opts = null)
     {
@@ -101,9 +101,9 @@ class Quote extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Quote the canceled quote
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Quote the canceled quote
      */
     public function cancel($params = null, $opts = null)
     {
@@ -118,9 +118,9 @@ class Quote extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Quote the finalized quote
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Quote the finalized quote
      */
     public function finalizeQuote($params = null, $opts = null)
     {
@@ -136,9 +136,9 @@ class Quote extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\LineItem> list of LineItems
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\LineItem> list of LineItems
      */
     public static function allComputedUpfrontLineItems($id, $params = null, $opts = null)
     {
@@ -155,9 +155,9 @@ class Quote extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\LineItem> list of LineItems
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\LineItem> list of LineItems
      */
     public static function allLineItems($id, $params = null, $opts = null)
     {

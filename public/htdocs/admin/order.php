@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2003-2006 Rodolphe Quiedeville         <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2013 Laurent Destailleur          <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Sebastien Di Cintio          <sdicintio@ressource-toi.org>
- * Copyright (C) 2004      Benoit Mortier               <benoit.mortier@opensides.be>
- * Copyright (C) 2004      Andre Cianfarani             <acianfa@free.fr>
- * Copyright (C) 2005-2014 Regis Houssin                <regis.houssin@inodbox.com>
- * Copyright (C) 2008 	   Raphael Bertrand (Resultic)  <raphael.bertrand@resultic.fr>
- * Copyright (C) 2011-2013 Juanjo Menent			    <jmenent@2byte.es>
- * Copyright (C) 2011-2016 Philippe Grand			    <philippe.grand@atoo-net.com>
- * Copyright (C) 2013 	   Florian Henry			    <florian.henry@open-concept.pro>
+/* Copyright (C) 2003-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Sebastien Di Cintio         <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2004       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2005-2014  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008 	    Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
+ * Copyright (C) 2011-2013  Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2011-2016  Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2013 	    Florian Henry			    <florian.henry@open-concept.pro>
  * Copyright (C) 2021-2024  Frédéric France				<frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -28,6 +28,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *  \file       htdocs/admin/order.php
  *  \ingroup    order
@@ -38,7 +42,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
 
 // Load translation files required by the page
@@ -91,7 +94,7 @@ if ($action == 'updateMask') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/commande/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -249,14 +252,13 @@ if ($action == 'updateMask') {
 } */
 
 
-
 /*
  * View
  */
 
 $form = new Form($db);
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 llxHeader("", $langs->trans("OrdersSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-order');
 
@@ -657,7 +659,6 @@ $variablename = 'ORDER_FREE_TEXT';
 if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
     print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
 } else {
-    include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
     print $doleditor->Create();
 }
@@ -689,7 +690,7 @@ print '</form>';
 
 // Disallow to classify billed an order without invoice, only if module invoice is enable
 if (isModEnabled('invoice')) {
-    print '<tr class="oddeven"><td>' . $langs->trans("InvoiceClassifyBilledSupplierOrderWithoutInvoice") . '&nbsp;' ;
+    print '<tr class="oddeven"><td>' . $langs->trans("InvoiceClassifyBilledSupplierOrderWithoutInvoice") . '&nbsp;';
     print $form->textwithpicto('', $langs->trans("InvoiceClassifyBilledSupplierOrderWithoutInvoiceHelp"), 1, 'help') . '</td>';
     print '<td class="left" colspan="2">';
     print ajax_constantonoff('ORDER_DISABLE_CLASSIFY_BILLED_FROM_ORDER');

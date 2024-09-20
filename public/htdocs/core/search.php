@@ -140,7 +140,6 @@ if (GETPOST('search_group') != '') {
 }
 
 
-
 // If we are here, search was called with no supported criteria
 if (!empty($_SERVER['HTTP_REFERER'])) {
     header("Location: " . $_SERVER['HTTP_REFERER']);

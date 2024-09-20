@@ -67,8 +67,7 @@ class VEvent extends VObject\Component
         }
 
         return
-            ($start < $effectiveEnd) && ($end > $effectiveStart)
-        ;
+            ($start < $effectiveEnd) && ($end > $effectiveStart);
     }
 
     /**

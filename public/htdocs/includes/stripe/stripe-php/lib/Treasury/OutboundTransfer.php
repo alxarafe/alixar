@@ -54,9 +54,9 @@ class OutboundTransfer extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Treasury\OutboundTransfer the canceled outbound transfer
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Treasury\OutboundTransfer the canceled outbound transfer
      */
     public function cancel($params = null, $opts = null)
     {

@@ -157,7 +157,7 @@ if ($langs->trans("DIRECTION") == 'rtl') {
 } else {
     print 'background-position-x: 10px;';
 }
-    print '
+print '
         background-position-y: 18px;
         padding: 1em 15px 1em 40px;
 		display: block;
@@ -193,9 +193,9 @@ if ($langs->trans("DIRECTION") == 'rtl') {
 } else {
     print 'background-position-x: 10px;';
 }
-    print 'background-position-y: 1px;';
-    print 'padding-left: 20px;';
-    print '
+print 'background-position-y: 1px;';
+print 'padding-left: 20px;';
+print '
 	}
     li.lilevel1 a, li.lilevel1 {
         color: #000;
@@ -273,7 +273,7 @@ if (GETPOST('menu', 'aZ09')) {
 }
 if (!class_exists('MenuManager')) {
     $menufound = 0;
-    $dirmenus = array_merge(array("/core/menus/"), (array) $conf->modules_parts['menus']);
+    $dirmenus = array_merge(array("/core/menus/"), (array)$conf->modules_parts['menus']);
     foreach ($dirmenus as $dirmenu) {
         $menufound = dol_include_once($dirmenu . "standard/" . $file_menu);
         if ($menufound) {

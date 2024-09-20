@@ -27,6 +27,7 @@ namespace Dolibarr\Code\Asset\Classes;
  */
 
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * Class for AssetDepreciationOptions
@@ -498,7 +499,6 @@ class AssetDepreciationOptions extends CommonObject
 
         if (!$error && $this->fk_asset > 0) {
             // Calculation of depreciation lines (reversal and future)
-            require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/asset.class.php';
             $asset = new Asset($this->db);
             $result = $asset->fetch($this->fk_asset);
             if ($result > 0) {

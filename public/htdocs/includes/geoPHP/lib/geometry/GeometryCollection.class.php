@@ -17,8 +17,8 @@ class GeometryCollection extends Collection
         $array = array();
         foreach ($this->components as $component) {
             $array[] = array(
-            'type' => $component->geometryType(),
-            'components' => $component->asArray(),
+                'type' => $component->geometryType(),
+                'components' => $component->asArray(),
             );
         }
         return $array;
@@ -27,10 +27,11 @@ class GeometryCollection extends Collection
     // Not valid for this geomettry
     public function boundary()
     {
-        return null; 
-}
+        return null;
+    }
+
     public function isSimple()
     {
-        return null; 
-}
+        return null;
+    }
 }

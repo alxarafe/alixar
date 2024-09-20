@@ -25,11 +25,10 @@
  */
 
 
-
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function shipping_prepare_head($object)
@@ -61,7 +60,7 @@ function shipping_prepare_head($object)
             // Take first element of array
             $tmp = reset($object->linkedObjectsIds['delivery']);
 
-            $head[$h][0] = constant('BASE_URL') . "/delivery/card.php?id=" . ((int) $tmp);
+            $head[$h][0] = constant('BASE_URL') . "/delivery/card.php?id=" . ((int)$tmp);
             $head[$h][1] = $langs->trans("DeliveryCard");
             $head[$h][2] = 'delivery';
             $h++;
@@ -75,7 +74,7 @@ function shipping_prepare_head($object)
             $objectsrc->fetch($object->origin_id);
         }
         $nbContact = count($objectsrc->liste_contact(-1, 'internal')) + count($objectsrc->liste_contact(-1, 'external'));
-        $head[$h][0] = constant('BASE_URL') . "/expedition/contact.php?id=" . ((int) $object->id);
+        $head[$h][0] = constant('BASE_URL') . "/expedition/contact.php?id=" . ((int)$object->id);
         $head[$h][1] = $langs->trans("ContactsAddresses");
         if ($nbContact > 0) {
             $head[$h][1] .= '<span class="badge marginleftonlyshort">' . $nbContact . '</span>';
@@ -126,7 +125,7 @@ function shipping_prepare_head($object)
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function delivery_prepare_head($object)
@@ -224,9 +223,9 @@ function delivery_prepare_head($object)
 /**
  * List sendings and receive receipts
  *
- * @param   string      $origin         Origin ('commande', ...)
- * @param   int         $origin_id      Origin id
- * @param   string      $filter         Filter (Do not use a string from a user input)
+ * @param string $origin Origin ('commande', ...)
+ * @param int $origin_id Origin id
+ * @param string $filter Filter (Do not use a string from a user input)
  * @return  int                         Return integer <0 if KO, >0 if OK
  */
 function show_list_sending_receive($origin, $origin_id, $filter = '')
@@ -249,7 +248,7 @@ function show_list_sending_receive($origin, $origin_id, $filter = '')
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "product as p ON obj.fk_product = p.rowid";
     //TODO Add link to expeditiondet_batch
     $sql .= " WHERE e.entity IN (" . getEntity('expedition') . ")";
-    $sql .= " AND obj.fk_" . $origin . " = " . ((int) $origin_id);
+    $sql .= " AND obj.fk_" . $origin . " = " . ((int)$origin_id);
     $sql .= " AND obj.rowid = ed.fk_elementdet";
     $sql .= " AND ed.fk_expedition = e.rowid";
     if ($filter) {

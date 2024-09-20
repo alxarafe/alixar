@@ -1,18 +1,18 @@
 <?php
 
-/* Copyright (C) 2001-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005       Marc Barilley / Ocebo   <marc@ocebo.com>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2012       Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2013       Christophe Battarel     <christophe.battarel@altairis.fr>
- * Copyright (C) 2013       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2015-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2015       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2016-2021  Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2018-2023  Charlene Benke	        <charlene@patas-monkey.com>
- * Copyright (C) 2021-2023 	Anthony Berton			<anthony.berton@bb2a.fr>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2016-2021  Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018-2023  Charlene Benke	            <charlene@patas-monkey.com>
+ * Copyright (C) 2021-2023 	Anthony Berton			    <anthony.berton@bb2a.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -31,6 +31,19 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCategory;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormMargin;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/commande/list.php
@@ -41,15 +54,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
-if (isModEnabled('margin')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
-}
-use Dolibarr\Code\Adherents\Classes\Adherent;
-
-if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("orders", 'sendings', 'deliveries', 'companies', 'compta', 'bills', 'stocks', 'products'));
@@ -195,7 +199,7 @@ $arrayfields = array(
     'typent.code' => array('label' => "ThirdPartyType", 'checked' => $checkedtypetiers, 'position' => 55),
     'c.date_commande' => array('label' => "OrderDateShort", 'checked' => 1, 'position' => 60),
     'c.date_delivery' => array('label' => "DateDeliveryPlanned", 'checked' => 1, 'enabled' => !getDolGlobalString('ORDER_DISABLE_DELIVERY_DATE'), 'position' => 65),
-    'c.fk_shipping_method' => array('label' => "SendingMethod", 'checked' => -1, 'position' => 66 , 'enabled' => isModEnabled('shipping')),
+    'c.fk_shipping_method' => array('label' => "SendingMethod", 'checked' => -1, 'position' => 66, 'enabled' => isModEnabled('shipping')),
     'c.fk_cond_reglement' => array('label' => "PaymentConditionsShort", 'checked' => -1, 'position' => 67),
     'c.fk_mode_reglement' => array('label' => "PaymentMode", 'checked' => -1, 'position' => 68),
     'c.fk_input_reason' => array('label' => "Channel", 'checked' => -1, 'position' => 69),
@@ -219,7 +223,7 @@ $arrayfields = array(
     'c.date_cloture' => array('label' => "DateClosing", 'checked' => 0, 'position' => 130),
     'c.note_public' => array('label' => 'NotePublic', 'checked' => 0, 'enabled' => (!getDolGlobalString('MAIN_LIST_ALLOW_PUBLIC_NOTES')), 'position' => 135),
     'c.note_private' => array('label' => 'NotePrivate', 'checked' => 0, 'enabled' => (!getDolGlobalString('MAIN_LIST_ALLOW_PRIVATE_NOTES')), 'position' => 140),
-    'shippable' => array('label' => "Shippable", 'checked' => 1,'enabled' => (isModEnabled('shipping')), 'position' => 990),
+    'shippable' => array('label' => "Shippable", 'checked' => 1, 'enabled' => (isModEnabled('shipping')), 'position' => 990),
     'c.facture' => array('label' => "Billed", 'checked' => 1, 'enabled' => (!getDolGlobalString('WORKFLOW_BILL_ON_SHIPMENT')), 'position' => 995),
     'c.import_key' => array('type' => 'varchar(14)', 'label' => 'ImportId', 'enabled' => 1, 'visible' => -2, 'position' => 999),
     'c.fk_statut' => array('label' => "Status", 'checked' => 1, 'position' => 1000)
@@ -448,7 +452,7 @@ if (!empty($disablelinefree)) {
     $sql .= " AND cdet.fk_product IS NOT NULL";
 }
 if ($socid > 0) {
-    $sql .= ' AND s.rowid = ' . ((int) $socid);
+    $sql .= ' AND s.rowid = ' . ((int)$socid);
 }
 if ($search_id) {
     $sql .= natural_search('cdet.rowid', $search_id);
@@ -457,7 +461,7 @@ if ($search_refProduct) {
     $sql .= natural_search('pr.ref', $search_refProduct);
 }
 if ($search_descProduct) {
-    $sql .= natural_search(array('pr.label','cdet.description'), $search_descProduct);
+    $sql .= natural_search(array('pr.label', 'cdet.description'), $search_descProduct);
 }
 if ($search_ref) {
     $sql .= natural_search('c.ref', $search_ref);
@@ -469,14 +473,14 @@ if ($search_all) {
     $sql .= natural_search(array_keys($fieldstosearchall), $search_all);
 }
 if ($search_billed != '' && $search_billed >= 0) {
-    $sql .= ' AND c.facture = ' . ((int) $search_billed);
+    $sql .= ' AND c.facture = ' . ((int)$search_billed);
 }
 if ($search_status != '') {
     if ($search_status <= 3 && $search_status >= -1) {  // status from -1 to 3 are real status (other are virtual combination)
         if ($search_status == 1 && !isModEnabled('shipping')) {
             $sql .= ' AND c.fk_statut IN (1,2)'; // If module expedition disabled, we include order with status "sent" into "validated"
         } else {
-            $sql .= ' AND c.fk_statut = ' . ((int) $search_status); // draft, validated, in process or canceled
+            $sql .= ' AND c.fk_statut = ' . ((int)$search_status); // draft, validated, in process or canceled
         }
     }
     if ($search_status == -2) { // To process
@@ -533,7 +537,7 @@ if ($search_company_alias) {
     $sql .= natural_search('s.name_alias', $search_company_alias);
 }
 if ($search_user > 0) {
-    $sql .= " AND ec.fk_c_type_contact = tc.rowid AND tc.element='commande' AND tc.source='internal' AND ec.element_id = c.rowid AND ec.fk_socpeople = " . ((int) $search_user);
+    $sql .= " AND ec.fk_c_type_contact = tc.rowid AND tc.element='commande' AND tc.source='internal' AND ec.element_id = c.rowid AND ec.fk_socpeople = " . ((int)$search_user);
 }
 if ($search_total_ht != '') {
     $sql .= natural_search('cdet.total_ht', $search_total_ht, 1);
@@ -572,29 +576,29 @@ if ($search_project != '') {
     $sql .= natural_search("p.title", $search_project);
 }
 if ($search_categ_cus > 0) {
-    $sql .= " AND cc.fk_categorie = " . ((int) $search_categ_cus);
+    $sql .= " AND cc.fk_categorie = " . ((int)$search_categ_cus);
 }
 if ($search_categ_cus == -2) {
     $sql .= " AND cc.fk_categorie IS NULL";
 }
 if ($search_fk_cond_reglement > 0) {
-    $sql .= " AND c.fk_cond_reglement = " . ((int) $search_fk_cond_reglement);
+    $sql .= " AND c.fk_cond_reglement = " . ((int)$search_fk_cond_reglement);
 }
 if ($search_fk_shipping_method > 0) {
-    $sql .= " AND c.fk_shipping_method = " . ((int) $search_fk_shipping_method);
+    $sql .= " AND c.fk_shipping_method = " . ((int)$search_fk_shipping_method);
 }
 if ($search_fk_mode_reglement > 0) {
-    $sql .= " AND c.fk_mode_reglement = " . ((int) $search_fk_mode_reglement);
+    $sql .= " AND c.fk_mode_reglement = " . ((int)$search_fk_mode_reglement);
 }
 if ($search_fk_input_reason > 0) {
-    $sql .= " AND c.fk_input_reason = " . ((int) $search_fk_input_reason);
+    $sql .= " AND c.fk_input_reason = " . ((int)$search_fk_input_reason);
 }
 // Search on sale representative
 if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search for tag/category ($searchCategoryProductList is an array of ID)
@@ -607,9 +611,9 @@ if (!empty($searchCategoryProductList)) {
             $searchCategoryProjectSqlList[] = "NOT EXISTS (SELECT cp.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as cp WHERE cdet.fk_product = cp.fk_product)";
         } elseif (intval($searchCategoryProject) > 0) {
             if ($searchCategoryProductOperator == 0) {
-                $searchCategoryProjectSqlList[] = " EXISTS (SELECT cp.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as cp WHERE cdet.fk_product = cp.fk_product AND cp.fk_categorie = " . ((int) $searchCategoryProject) . ")";
+                $searchCategoryProjectSqlList[] = " EXISTS (SELECT cp.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as cp WHERE cdet.fk_product = cp.fk_product AND cp.fk_categorie = " . ((int)$searchCategoryProject) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryProject);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryProject);
             }
         }
     }
@@ -713,13 +717,13 @@ if ($resql) {
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($search_all) {
         $param .= '&search_all=' . urlencode($search_all);
     }
     if ($socid > 0) {
-        $param .= '&socid=' . urlencode((string) ($socid));
+        $param .= '&socid=' . urlencode((string)($socid));
     }
     if ($search_id) {
         $param .= '&search_id=' . urlencode($search_id);
@@ -765,7 +769,7 @@ if ($resql) {
         $param .= '&search_ref_customer=' . urlencode($search_ref_customer);
     }
     if ($search_user > 0) {
-        $param .= '&search_user=' . urlencode((string) ($search_user));
+        $param .= '&search_user=' . urlencode((string)($search_user));
     }
     if ($search_sale > 0) {
         $param .= '&search_sale=' . urlencode($search_sale);
@@ -780,7 +784,7 @@ if ($resql) {
         $param .= '&search_total_ttc=' . urlencode($search_total_ttc);
     }
     if ($search_warehouse != '') {
-        $param .= '&search_warehouse=' . urlencode((string) ($search_warehouse));
+        $param .= '&search_warehouse=' . urlencode((string)($search_warehouse));
     }
     if ($search_login) {
         $param .= '&search_login=' . urlencode($search_login);
@@ -813,10 +817,10 @@ if ($resql) {
         $param .= '&search_state=' . urlencode($search_state);
     }
     if ($search_country != '') {
-        $param .= '&search_country=' . urlencode((string) ($search_country));
+        $param .= '&search_country=' . urlencode((string)($search_country));
     }
     if ($search_type_thirdparty && $search_type_thirdparty != '-1') {
-        $param .= '&search_type_thirdparty=' . urlencode((string) ($search_type_thirdparty));
+        $param .= '&search_type_thirdparty=' . urlencode((string)($search_type_thirdparty));
     }
     if (!empty($search_product_category_array)) {
         foreach ($search_product_category_array as $tmpval) {
@@ -824,10 +828,10 @@ if ($resql) {
         }
     }
     if (($search_categ_cus > 0) || ($search_categ_cus == -2)) {
-        $param .= '&search_categ_cus=' . urlencode((string) ($search_categ_cus));
+        $param .= '&search_categ_cus=' . urlencode((string)($search_categ_cus));
     }
     if ($show_files) {
-        $param .= '&show_files=' . urlencode((string) ($show_files));
+        $param .= '&show_files=' . urlencode((string)($show_files));
     }
     if ($optioncss != '') {
         $param .= '&optioncss=' . urlencode($optioncss);
@@ -836,16 +840,16 @@ if ($resql) {
         $param .= '&search_billed=' . urlencode($search_billed);
     }
     if ($search_fk_cond_reglement > 0) {
-        $param .= '&search_fk_cond_reglement=' . urlencode((string) ($search_fk_cond_reglement));
+        $param .= '&search_fk_cond_reglement=' . urlencode((string)($search_fk_cond_reglement));
     }
     if ($search_fk_shipping_method > 0) {
-        $param .= '&search_fk_shipping_method=' . urlencode((string) ($search_fk_shipping_method));
+        $param .= '&search_fk_shipping_method=' . urlencode((string)($search_fk_shipping_method));
     }
     if ($search_fk_mode_reglement > 0) {
-        $param .= '&search_fk_mode_reglement=' . urlencode((string) ($search_fk_mode_reglement));
+        $param .= '&search_fk_mode_reglement=' . urlencode((string)($search_fk_mode_reglement));
     }
     if ($search_fk_input_reason > 0) {
-        $param .= '&search_fk_input_reason=' . urlencode((string) ($search_fk_input_reason));
+        $param .= '&search_fk_input_reason=' . urlencode((string)($search_fk_input_reason));
     }
     if (!empty($productobuy)) {
         $param .= '&productobuy=' . urlencode($productobuy);
@@ -949,7 +953,7 @@ if ($resql) {
         $moreforfilter .= '</div>';
     }
     if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER')) {
-                $formproduct = new FormProduct($db);
+        $formproduct = new FormProduct($db);
         $moreforfilter .= '<div class="divsearchfield">';
         $tmptitle = $langs->trans('Warehouse');
         $moreforfilter .= img_picto($tmptitle, 'stock', 'class="pictofixedwidth"') . $formproduct->selectWarehouses($search_warehouse, 'search_warehouse', '', 1, 0, 0, $tmptitle, 0, 0, array(), 'maxwidth250 widthcentpercentminusx');
@@ -1471,7 +1475,7 @@ if ($resql) {
     $with_margin_info = false;
     if (
         isModEnabled('margin') && (
-        !empty($arrayfields['total_pa']['checked'])
+            !empty($arrayfields['total_pa']['checked'])
             || !empty($arrayfields['total_margin']['checked'])
             || !empty($arrayfields['total_margin_rate']['checked'])
             || !empty($arrayfields['total_mark_rate']['checked'])
@@ -2092,7 +2096,7 @@ if ($resql) {
                     $generic_commande->loadExpeditions();   // Load array ->expeditions
 
                     if (isset($generic_commande->expeditions[$obj->rowid])) {
-                        $reliquat =  $obj->qty - $generic_commande->expeditions[$obj->rowid];
+                        $reliquat = $obj->qty - $generic_commande->expeditions[$obj->rowid];
                     } else {
                         $reliquat = $obj->qty;
                     }

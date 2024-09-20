@@ -17,5 +17,6 @@
 
 
 -- BEGIN MODULEBUILDER INDEXES
-ALTER TABLE llx_hrm_evaluationdet_extrafields ADD UNIQUE INDEX uk_evaluationdet_fk_object (fk_object);
+ALTER TABLE llx_hrm_evaluationdet_extrafields
+    ADD UNIQUE INDEX uk_evaluationdet_fk_object (fk_object);
 -- END MODULEBUILDER INDEXES

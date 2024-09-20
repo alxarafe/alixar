@@ -21,6 +21,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *       \file       htdocs/user/param_ihm.php
  *       \brief      Page to show user setup for display
@@ -48,7 +52,7 @@ if (!isset($id) || empty($id)) {
 if ($id) {
     // $user est le user qui edite, $id est l'id de l'utilisateur edite
     $caneditfield = ((($user->id == $id) && $user->hasRight("user", "self", "write"))
-    || (($user->id != $id) && $user->hasRight("user", "user", "write")));
+        || (($user->id != $id) && $user->hasRight("user", "user", "write")));
 }
 
 // Security check
@@ -83,7 +87,6 @@ $formadmin = new FormAdmin($db);
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $hookmanager->initHooks(array('usercard', 'userihm', 'globalcard'));
-
 
 /*
  * Actions
@@ -246,7 +249,7 @@ if (!getDolGlobalString('MAIN_NO_BOOKMARKS_FOR_LANDING_PAGES')) {
     $sql .= " WHERE b.entity IN (" . getEntity('bookmark') . ")";
     $sql .= " AND b.url NOT LIKE 'http%'";
     if (!$object->admin) {
-        $sql .= " AND (b.fk_user = " . ((int) $object->id) . " OR b.fk_user is NULL OR b.fk_user = 0)";
+        $sql .= " AND (b.fk_user = " . ((int)$object->id) . " OR b.fk_user is NULL OR b.fk_user = 0)";
     }
     $resql = $db->query($sql);
     if ($resql) {
@@ -428,7 +431,7 @@ if ($action == 'edit') {
     $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
     $morehtmlref .= '</a>';
 
-    $urltovirtualcard = '/user/virtualcard.php?id=' . ((int) $object->id);
+    $urltovirtualcard = '/user/virtualcard.php?id=' . ((int)$object->id);
     $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl") . ' - ' . $object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
     dol_banner_tab($object, 'id', $linkback, $user->hasRight("user", "user", "read") || $user->admin, 'rowid', 'ref', $morehtmlref);

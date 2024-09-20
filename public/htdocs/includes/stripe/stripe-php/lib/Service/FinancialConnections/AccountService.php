@@ -12,9 +12,9 @@ class AccountService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\FinancialConnections\Account>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\FinancialConnections\Account>
      */
     public function all($params = null, $opts = null)
     {
@@ -28,9 +28,9 @@ class AccountService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\FinancialConnections\AccountOwner>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\FinancialConnections\AccountOwner>
      */
     public function allOwners($id, $params = null, $opts = null)
     {
@@ -46,9 +46,9 @@ class AccountService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\FinancialConnections\Account
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\FinancialConnections\Account
      */
     public function disconnect($id, $params = null, $opts = null)
     {
@@ -62,9 +62,9 @@ class AccountService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\FinancialConnections\Account
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\FinancialConnections\Account
      */
     public function refresh($id, $params = null, $opts = null)
     {
@@ -78,9 +78,9 @@ class AccountService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\FinancialConnections\Account
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\FinancialConnections\Account
      */
     public function retrieve($id, $params = null, $opts = null)
     {

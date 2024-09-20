@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2006-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,11 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
+
 /**
  * \file       htdocs/core/lib/propal.lib.php
  * \brief      Ensemble de functions de base pour le module propal
@@ -28,7 +33,7 @@
 /**
  * Prepare array with list of tabs
  *
- * @param   object  $object     Object related to tabs
+ * @param object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function propal_prepare_head($object)
@@ -46,7 +51,7 @@ function propal_prepare_head($object)
 
     if (
         (empty($conf->commande->enabled) && ((isModEnabled("shipping") && getDolGlobalInt('MAIN_SUBMODULE_EXPEDITION') && $user->hasRight('expedition', 'lire'))
-        || (getDolGlobalInt('MAIN_SUBMODULE_DELIVERY') && $user->hasRight('expedition', 'delivery', 'lire'))))
+                || (getDolGlobalInt('MAIN_SUBMODULE_DELIVERY') && $user->hasRight('expedition', 'delivery', 'lire'))))
     ) {
         $langs->load("sendings");
         $text = '';
@@ -125,7 +130,7 @@ function propal_prepare_head($object)
         } else {
             $sql = "SELECT COUNT(id) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm";
-            $sql .= " WHERE fk_element = " . ((int) $object->id);
+            $sql .= " WHERE fk_element = " . ((int)$object->id);
             $sql .= " AND elementtype = 'propal'";
             $resql = $db->query($sql);
             if ($resql) {
@@ -156,7 +161,7 @@ function propal_prepare_head($object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function propal_admin_prepare_head()
 {
@@ -204,11 +209,10 @@ function propal_admin_prepare_head()
 }
 
 
-
 /**
  * Return a HTML table that contains a pie chart of customer proposals
  *
- * @param   int     $socid      (Optional) Show only results from the customer with this id
+ * @param int $socid (Optional) Show only results from the customer with this id
  * @return  string              A HTML table that contains a pie chart of customer invoices
  */
 function getCustomerProposalPieChart($socid = 0)
@@ -234,10 +238,10 @@ function getCustomerProposalPieChart($socid = 0)
     $sql .= " WHERE p.entity IN (" . getEntity($propalstatic->element) . ")";
     $sql .= " AND p.fk_soc = s.rowid";
     if ($user->socid) {
-        $sql .= ' AND p.fk_soc = ' . ((int) $user->socid);
+        $sql .= ' AND p.fk_soc = ' . ((int)$user->socid);
     }
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     $sql .= " AND p.fk_statut IN (" . $db->sanitize(implode(" ,", $listofstatus)) . ")";
     $sql .= " GROUP BY p.fk_statut";
@@ -269,12 +273,12 @@ function getCustomerProposalPieChart($socid = 0)
         $result = '<div class="div-table-responsive-no-min">';
         $result .= '<table class="noborder nohover centpercent">';
 
-        $result .=  '<tr class="liste_titre">';
-        $result .=  '<td colspan="2">' . $langs->trans("Statistics") . ' - ' . $langs->trans("Proposals") . '</td>';
-        $result .=  '</tr>';
+        $result .= '<tr class="liste_titre">';
+        $result .= '<td colspan="2">' . $langs->trans("Statistics") . ' - ' . $langs->trans("Proposals") . '</td>';
+        $result .= '</tr>';
 
         foreach ($listofstatus as $status) {
-            $dataseries[] = array($propalstatic->LibStatut($status, 1), (isset($vals[$status]) ? (int) $vals[$status] : 0));
+            $dataseries[] = array($propalstatic->LibStatut($status, 1), (isset($vals[$status]) ? (int)$vals[$status] : 0));
             if ($status == Propal::STATUS_DRAFT) {
                 $colorseries[$status] = '-' . $badgeStatus0;
             }
@@ -292,16 +296,16 @@ function getCustomerProposalPieChart($socid = 0)
             }
 
             if (empty($conf->use_javascript_ajax)) {
-                $result .=  '<tr class="oddeven">';
-                $result .=  '<td>' . $propalstatic->LibStatut($status, 0) . '</td>';
-                $result .=  '<td class="right"><a href="list.php?statut=' . $status . '">' . (isset($vals[$status]) ? $vals[$status] : 0) . '</a></td>';
-                $result .=  "</tr>\n";
+                $result .= '<tr class="oddeven">';
+                $result .= '<td>' . $propalstatic->LibStatut($status, 0) . '</td>';
+                $result .= '<td class="right"><a href="list.php?statut=' . $status . '">' . (isset($vals[$status]) ? $vals[$status] : 0) . '</a></td>';
+                $result .= "</tr>\n";
             }
         }
 
         if ($conf->use_javascript_ajax) {
-            $result .=  '<tr>';
-            $result .=  '<td align="center" colspan="2">';
+            $result .= '<tr>';
+            $result .= '<td align="center" colspan="2">';
 
             $dolgraph = new DolGraph();
             $dolgraph->SetData($dataseries);
@@ -312,10 +316,10 @@ function getCustomerProposalPieChart($socid = 0)
             $dolgraph->setHeight('150');
             $dolgraph->setWidth('300');
             $dolgraph->draw('idgraphthirdparties');
-            $result .=  $dolgraph->show($total ? 0 : 1);
+            $result .= $dolgraph->show($total ? 0 : 1);
 
-            $result .=  '</td>';
-            $result .=  '</tr>';
+            $result .= '</td>';
+            $result .= '</tr>';
         }
 
         //if ($totalinprocess != $total)
@@ -326,14 +330,14 @@ function getCustomerProposalPieChart($socid = 0)
         //  print '</tr>';
         //}
 
-        $result .=  '<tr class="liste_total">';
-        $result .=  '<td>' . $langs->trans("Total") . '</td>';
-        $result .=  '<td class="right">' . $total . '</td>';
-        $result .=  '</tr>';
+        $result .= '<tr class="liste_total">';
+        $result .= '<td>' . $langs->trans("Total") . '</td>';
+        $result .= '<td class="right">' . $total . '</td>';
+        $result .= '</tr>';
 
-        $result .=  '</table>';
-        $result .=  '</div>';
-        $result .=  '<br>';
+        $result .= '</table>';
+        $result .= '</div>';
+        $result .= '<br>';
     } else {
         dol_print_error($db);
     }

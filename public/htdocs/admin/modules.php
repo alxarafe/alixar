@@ -27,13 +27,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Core\Base\DolibarrModules;
+
 /**
  *  \file       htdocs/admin/modules.php
  *  \brief      Page to activate/disable all modules
  */
-
-use Dolibarr\Core\Base\DolibarrModules;
-use Dolibarr\Lib\Modules;
 
 if (!defined('CSRFCHECK_WITH_TOKEN') && (empty($_GET['action']) || $_GET['action'] != 'reset')) {   // We force security except to disable modules so we can do it if a problem occurs on a module
     define('CSRFCHECK_WITH_TOKEN', '1'); // Force use of CSRF protection with tokens even for GET
@@ -398,7 +398,7 @@ $i = 0; // is a sequencer of modules found
 $j = 0; // j is module number. Automatically affected if module number not defined.
 $modNameLoaded = array();
 
-$allModules =DolibarrModules::getModules($modulesdir);
+$allModules = DolibarrModules::getModules($modulesdir);
 $main_features_level = getDolGlobalInt('MAIN_FEATURES_LEVEL');
 foreach ($allModules as $modName => $filename) {
     $dir = dirname($filename) . DIRECTORY_SEPARATOR;

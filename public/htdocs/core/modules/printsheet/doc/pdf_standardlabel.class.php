@@ -2,10 +2,10 @@
 
 /* Copyright (C) 2003       Steve Dillon
  * Copyright (C) 2003       Laurent Passebecq
- * Copyright (C) 2001-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2002-2003  Jean-Louis Bergamo      <jlb@j1b.org>
- * Copyright (C) 2006-2013  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Francis Appels          <francis.appels@yahoo.com>
+ * Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2002-2003  Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2006-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Francis Appels              <francis.appels@yahoo.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,13 +22,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\CommonStickerGenerator;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  *  \file       htdocs/core/modules/printsheet/doc/pdf_standardlabel.class.php
  *  \ingroup    core
  *  \brief      Fichier de la class permettant d'editer au format PDF des etiquettes au format Avery ou personnalise
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonstickergenerator.class.php';
 
 /**
  *  Class to generate stick sheet with format Avery or other personalised
@@ -38,9 +39,9 @@ class pdf_standardlabel extends CommonStickerGenerator
     /**
      * Output a sticker on page at position _COUNTX, _COUNTY (_COUNTX and _COUNTY start from 0)
      *
-     * @param   TCPDF       $pdf            PDF reference
-     * @param   Translate   $outputlangs    Output langs
-     * @param   array       $param          Associative array containing label content and optional parameters
+     * @param TCPDF $pdf PDF reference
+     * @param Translate $outputlangs Output langs
+     * @param array $param Associative array containing label content and optional parameters
      * @return  void
      */
     public function addSticker(&$pdf, $outputlangs, $param)
@@ -48,24 +49,25 @@ class pdf_standardlabel extends CommonStickerGenerator
         // use this method in future refactoring
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Output a sticker on page at position _COUNTX, _COUNTY (_COUNTX and _COUNTY start from 0)
      * - %LOGO% is replace with company logo
      * - %PHOTO% is replace with photo provided as parameter
      *
-     * @param   TCPDF       $pdf            PDF reference
-     * @param   string      $textleft       Text left
-     * @param   string      $header         Header
-     * @param   string      $footer         Footer
-     * @param   Translate   $outputlangs    Output langs
-     * @param   string      $textright      Text right
-     * @param   string      $photo          Photo (full path to image file used as replacement for key %PHOTOS% into left, right, header or footer text)
+     * @param TCPDF $pdf PDF reference
+     * @param string $textleft Text left
+     * @param string $header Header
+     * @param string $footer Footer
+     * @param Translate $outputlangs Output langs
+     * @param string $textright Text right
+     * @param string $photo Photo (full path to image file used as replacement for key %PHOTOS% into left, right, header or footer text)
      * @return  void
      */
     public function Add_PDF_label(&$pdf, $textleft, $header, $footer, $outputlangs, $textright = '', $photo = '')
     {
-		// phpcs:enable
+        // phpcs:enable
         global $mysoc, $conf, $langs;
         global $forceimgscalewidth, $forceimgscaleheight;
 
@@ -225,20 +227,21 @@ class pdf_standardlabel extends CommonStickerGenerator
 
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build PDF on disk, then output on HTTP stream.
      *
-     *  @param  array       $arrayofrecords     Array of record information (array('textleft'=>,'textheader'=>, ..., 'id'=>,'photo'=>)
-     *  @param  Translate   $outputlangs        Lang object for output language
-     *  @param  string      $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param  string      $outputdir          Output directory for pdf file
-     *  @param  string      $filename           Short file name of PDF output file
-     *  @return int                             1=OK, 0=KO
+     * @param array $arrayofrecords Array of record information (array('textleft'=>,'textheader'=>, ..., 'id'=>,'photo'=>)
+     * @param Translate $outputlangs Lang object for output language
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param string $outputdir Output directory for pdf file
+     * @param string $filename Short file name of PDF output file
+     * @return int                             1=OK, 0=KO
      */
     public function write_file($arrayofrecords, $outputlangs, $srctemplatepath, $outputdir = '', $filename = 'tmp_address_sheet.pdf')
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $conf, $langs, $mysoc, $_Avery_Labels;
 
         $this->code = $srctemplatepath;

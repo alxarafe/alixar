@@ -41,7 +41,6 @@ if (!defined('NOIPCHECK')) {
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once DOL_DOCUMENT_ROOT . "/core/lib/files.lib.php";
-require_once DOL_DOCUMENT_ROOT . "/opensurvey/class/opensurveysondage.class.php";
 require_once DOL_DOCUMENT_ROOT . "/opensurvey/lib/opensurvey.lib.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
@@ -222,7 +221,6 @@ if (GETPOST("boutonp") || GETPOST("boutonp.x") || GETPOST("boutonp_x")) {       
 
                     //Linked user may not have an email set
                     if ($email) {
-                        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
 
                         $application = ($conf->global->MAIN_APPLICATION_TITLE ? $conf->global->MAIN_APPLICATION_TITLE : 'Dolibarr ERP/CRM');
 
@@ -298,7 +296,6 @@ if ($idcomment) {
 
     $resql = $object->deleteComment($idcomment);
 }
-
 
 
 /*
@@ -513,7 +510,7 @@ while ($compteur < $num) {
             //print 'xx'.$i."-".$car.'-'.$listofanswers[$i]['format'].'zz';
 
             if (empty($listofanswers[$i]['format']) || !in_array($listofanswers[$i]['format'], array('yesno', 'foragainst'))) {
-                if (((string) $car) == "1") {
+                if (((string)$car) == "1") {
                     print '<td class="ok">OK</td>' . "\n";
                 } else {
                     print '<td class="non">KO</td>' . "\n";
@@ -522,14 +519,14 @@ while ($compteur < $num) {
                 if (!isset($sumfor[$i])) {
                     $sumfor[$i] = 0;
                 }
-                if (((string) $car) == "1") {
+                if (((string)$car) == "1") {
                     $sumfor[$i]++;
                 }
             }
             if (!empty($listofanswers[$i]['format']) && $listofanswers[$i]['format'] == 'yesno') {
-                if (((string) $car) == "1") {
+                if (((string)$car) == "1") {
                     print '<td class="ok">' . $langs->trans("Yes") . '</td>' . "\n";
-                } elseif (((string) $car) == "0") {
+                } elseif (((string)$car) == "0") {
                     print '<td class="non">' . $langs->trans("No") . '</td>' . "\n";
                 } else {
                     print '<td class="vide">&nbsp;</td>' . "\n";
@@ -541,17 +538,17 @@ while ($compteur < $num) {
                 if (!isset($sumagainst[$i])) {
                     $sumagainst[$i] = 0;
                 }
-                if (((string) $car) == "1") {
+                if (((string)$car) == "1") {
                     $sumfor[$i]++;
                 }
-                if (((string) $car) == "0") {
+                if (((string)$car) == "0") {
                     $sumagainst[$i]++;
                 }
             }
             if (!empty($listofanswers[$i]['format']) && $listofanswers[$i]['format'] == 'foragainst') {
-                if (((string) $car) == "1") {
+                if (((string)$car) == "1") {
                     print '<td class="ok">' . $langs->trans("For") . '</td>' . "\n";
-                } elseif (((string) $car) == "0") {
+                } elseif (((string)$car) == "0") {
                     print '<td class="non">' . $langs->trans("Against") . '</td>' . "\n";
                 } else {
                     print '<td class="vide">&nbsp;</td>' . "\n";
@@ -563,10 +560,10 @@ while ($compteur < $num) {
                 if (!isset($sumagainst[$i])) {
                     $sumagainst[$i] = 0;
                 }
-                if (((string) $car) == "1") {
+                if (((string)$car) == "1") {
                     $sumfor[$i]++;
                 }
-                if (((string) $car) == "0") {
+                if (((string)$car) == "0") {
                     $sumagainst[$i]++;
                 }
             }
@@ -598,7 +595,7 @@ while ($compteur < $num) {
             for ($i = 0; $i < $nbcolonnes; $i++) {
                 $car = substr($ensemblereponses, $i, 1);
                 if (empty($listofanswers[$i]['format']) || !in_array($listofanswers[$i]['format'], array('yesno', 'foragainst'))) {
-                    if (((string) $car) == "1") {
+                    if (((string)$car) == "1") {
                         print '<td class="ok">OK</td>' . "\n";
                     } else {
                         print '<td class="non">KO</td>' . "\n";
@@ -607,14 +604,14 @@ while ($compteur < $num) {
                     if (!isset($sumfor[$i])) {
                         $sumfor[$i] = 0;
                     }
-                    if (((string) $car) == "1") {
+                    if (((string)$car) == "1") {
                         $sumfor[$i]++;
                     }
                 }
                 if (!empty($listofanswers[$i]['format']) && $listofanswers[$i]['format'] == 'yesno') {
-                    if (((string) $car) == "1") {
+                    if (((string)$car) == "1") {
                         print '<td class="ok">' . $langs->trans("For") . '</td>' . "\n";
-                    } elseif (((string) $car) == "0") {
+                    } elseif (((string)$car) == "0") {
                         print '<td class="non">' . $langs->trans("Against") . '</td>' . "\n";
                     } else {
                         print '<td class="vide">&nbsp;</td>' . "\n";
@@ -626,17 +623,17 @@ while ($compteur < $num) {
                     if (!isset($sumagainst[$i])) {
                         $sumagainst[$i] = 0;
                     }
-                    if (((string) $car) == "1") {
+                    if (((string)$car) == "1") {
                         $sumfor[$i]++;
                     }
-                    if (((string) $car) == "0") {
+                    if (((string)$car) == "0") {
                         $sumagainst[$i]++;
                     }
                 }
                 if (!empty($listofanswers[$i]['format']) && $listofanswers[$i]['format'] == 'foragainst') {
-                    if (((string) $car) == "1") {
+                    if (((string)$car) == "1") {
                         print '<td class="ok">' . $langs->trans("For") . '</td>' . "\n";
-                    } elseif (((string) $car) == "0") {
+                    } elseif (((string)$car) == "0") {
                         print '<td class="non">' . $langs->trans("Against") . '</td>' . "\n";
                     } else {
                         print '<td class="vide">&nbsp;</td>' . "\n";
@@ -648,10 +645,10 @@ while ($compteur < $num) {
                     if (!isset($sumagainst[$i])) {
                         $sumagainst[$i] = 0;
                     }
-                    if (((string) $car) == "1") {
+                    if (((string)$car) == "1") {
                         $sumfor[$i]++;
                     }
-                    if (((string) $car) == "0") {
+                    if (((string)$car) == "0") {
                         $sumagainst[$i]++;
                     }
                 }

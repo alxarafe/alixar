@@ -1,17 +1,17 @@
 <?php
 
-/* Copyright (C) 2004-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2004       Benoit Mortier          <benoit.mortier@opensides.be>
- * Copyright (C) 2005-2017  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2007       Franky Van Liedekerke   <franky.van.liedekerke@telenet.be>
- * Copyright (C) 2013       Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2013-2016  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2014       Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2018-2023  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2019       Josep Lluís Amador      <joseplluis@lliuretic.cat>
- * Copyright (C) 2020       Open-Dsi     			<support@open-dsi.fr>
+/* Copyright (C) 2004-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2017  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007       Franky Van Liedekerke       <franky.van.liedekerke@telenet.be>
+ * Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2016  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2014       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2018-2023  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2019       Josep Lluís Amador          <joseplluis@lliuretic.cat>
+ * Copyright (C) 2020       Open-Dsi     			    <support@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -29,6 +29,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Canvas;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *       \file       htdocs/contact/card.php
  *       \ingroup    societe
@@ -38,17 +50,11 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-use Dolibarr\Code\Contact\Classes\Contact;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contact.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
-use Dolibarr\Code\User\Classes\User;
-
-use Dolibarr\Code\Categories\Classes\Categorie;
 
 
 // Load translation files required by the page
@@ -79,7 +85,6 @@ $object->getCanvas($id);
 $objcanvas = null;
 $canvas = (!empty($object->canvas) ? $object->canvas : GETPOST("canvas"));
 if (!empty($canvas)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
     $objcanvas = new Canvas($db, $action);
     $objcanvas->getCanvas('contact', 'contactcard', $canvas);
 }
@@ -210,32 +215,32 @@ if (empty($reshook)) {
 
         $object->entity = (GETPOSTISSET('entity') ? GETPOSTINT('entity') : $conf->entity);
         $object->socid = $socid;
-        $object->lastname = (string) GETPOST("lastname", 'alpha');
-        $object->firstname = (string) GETPOST("firstname", 'alpha');
-        $object->civility_code = (string) GETPOST("civility_code", 'alpha');
-        $object->poste = (string) GETPOST("poste", 'alpha');
-        $object->address = (string) GETPOST("address", 'alpha');
-        $object->zip = (string) GETPOST("zipcode", 'alpha');
-        $object->town = (string) GETPOST("town", 'alpha');
+        $object->lastname = (string)GETPOST("lastname", 'alpha');
+        $object->firstname = (string)GETPOST("firstname", 'alpha');
+        $object->civility_code = (string)GETPOST("civility_code", 'alpha');
+        $object->poste = (string)GETPOST("poste", 'alpha');
+        $object->address = (string)GETPOST("address", 'alpha');
+        $object->zip = (string)GETPOST("zipcode", 'alpha');
+        $object->town = (string)GETPOST("town", 'alpha');
         $object->country_id = GETPOSTINT("country_id");
         $object->state_id = GETPOSTINT("state_id");
         $object->socialnetworks = array();
         if (isModEnabled('socialnetworks')) {
             foreach ($socialnetworks as $key => $value) {
                 if (GETPOSTISSET($key) && GETPOST($key, 'alphanohtml') != '') {
-                    $object->socialnetworks[$key] = (string) GETPOST($key, 'alphanohtml');
+                    $object->socialnetworks[$key] = (string)GETPOST($key, 'alphanohtml');
                 }
             }
         }
-        $object->email = (string) GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
+        $object->email = (string)GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
         $object->no_email = GETPOSTINT("no_email");
-        $object->phone_pro = (string) GETPOST("phone_pro", 'alpha');
-        $object->phone_perso = (string) GETPOST("phone_perso", 'alpha');
-        $object->phone_mobile = (string) GETPOST("phone_mobile", 'alpha');
-        $object->fax = (string) GETPOST("fax", 'alpha');
+        $object->phone_pro = (string)GETPOST("phone_pro", 'alpha');
+        $object->phone_perso = (string)GETPOST("phone_perso", 'alpha');
+        $object->phone_mobile = (string)GETPOST("phone_mobile", 'alpha');
+        $object->fax = (string)GETPOST("fax", 'alpha');
         $object->priv = GETPOSTINT("priv");
-        $object->note_public = (string) GETPOST("note_public", 'restricthtml');
-        $object->note_private = (string) GETPOST("note_private", 'restricthtml');
+        $object->note_public = (string)GETPOST("note_public", 'restricthtml');
+        $object->note_private = (string)GETPOST("note_private", 'restricthtml');
         $object->roles = GETPOST("roles", 'array');
 
         $object->statut = 1; //Default status to Actif
@@ -308,7 +313,7 @@ if (empty($reshook)) {
         if (empty($error) && $id > 0) {
             $db->commit();
             if (!empty($backtopage)) {
-                $url = str_replace('__ID__', (string) $id, $backtopage);
+                $url = str_replace('__ID__', (string)$id, $backtopage);
             } else {
                 $url = 'card.php?id=' . $id;
             }
@@ -408,34 +413,34 @@ if (empty($reshook)) {
             $object->oldcopy = clone $object;
 
             $object->socid = $socid;
-            $object->lastname = (string) GETPOST("lastname", 'alpha');
-            $object->firstname = (string) GETPOST("firstname", 'alpha');
-            $object->civility_code = (string) GETPOST("civility_code", 'alpha');
-            $object->poste = (string) GETPOST("poste", 'alpha');
+            $object->lastname = (string)GETPOST("lastname", 'alpha');
+            $object->firstname = (string)GETPOST("firstname", 'alpha');
+            $object->civility_code = (string)GETPOST("civility_code", 'alpha');
+            $object->poste = (string)GETPOST("poste", 'alpha');
 
-            $object->address = (string) GETPOST("address", 'alpha');
-            $object->zip = (string) GETPOST("zipcode", 'alpha');
-            $object->town = (string) GETPOST("town", 'alpha');
+            $object->address = (string)GETPOST("address", 'alpha');
+            $object->zip = (string)GETPOST("zipcode", 'alpha');
+            $object->town = (string)GETPOST("town", 'alpha');
             $object->state_id = GETPOSTINT("state_id");
             $object->country_id = GETPOSTINT("country_id");
 
-            $object->email = (string) GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
+            $object->email = (string)GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
             $object->no_email = GETPOSTINT("no_email");
             $object->socialnetworks = array();
             if (isModEnabled('socialnetworks')) {
                 foreach ($socialnetworks as $key => $value) {
                     if (GETPOSTISSET($key) && GETPOST($key, 'alphanohtml') != '') {
-                        $object->socialnetworks[$key] = (string) GETPOST($key, 'alphanohtml');
+                        $object->socialnetworks[$key] = (string)GETPOST($key, 'alphanohtml');
                     }
                 }
             }
-            $object->phone_pro = (string) GETPOST("phone_pro", 'alpha');
-            $object->phone_perso = (string) GETPOST("phone_perso", 'alpha');
-            $object->phone_mobile = (string) GETPOST("phone_mobile", 'alpha');
-            $object->fax = (string) GETPOST("fax", 'alpha');
-            $object->priv = (string) GETPOSTINT("priv");
-            $object->note_public = (string) GETPOST("note_public", 'restricthtml');
-            $object->note_private = (string) GETPOST("note_private", 'restricthtml');
+            $object->phone_pro = (string)GETPOST("phone_pro", 'alpha');
+            $object->phone_perso = (string)GETPOST("phone_perso", 'alpha');
+            $object->phone_mobile = (string)GETPOST("phone_mobile", 'alpha');
+            $object->fax = (string)GETPOST("fax", 'alpha');
+            $object->priv = (string)GETPOSTINT("priv");
+            $object->note_public = (string)GETPOST("note_public", 'restricthtml');
+            $object->note_private = (string)GETPOST("note_private", 'restricthtml');
 
             $object->roles = GETPOST("roles", 'array'); // Note GETPOSTISSET("role") is null when combo is empty
 
@@ -557,7 +562,6 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
 }
 
-
 /*
  *	View
  */
@@ -641,7 +645,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
             if ($object->country_id) {
                 $tmparray = getCountry($object->country_id, 'all');
                 $object->country_code = $tmparray['code'];
-                $object->country      = $tmparray['label'];
+                $object->country = $tmparray['label'];
             }
 
             $linkback = '';
@@ -943,7 +947,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
             if (GETPOSTISSET("country_id") || $object->country_id) {
                 $tmparray = getCountry($object->country_id, 'all');
                 $object->country_code = $tmparray['code'];
-                $object->country      = $tmparray['label'];
+                $object->country = $tmparray['label'];
             }
 
             $objsoc = new Societe($db);

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2010  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009  Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2021 		Gauthier VERDOL 	<gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2021 		Gauthier VERDOL 	        <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -22,14 +22,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\StockTransfer;
+use Dolibarr\Code\StockTransfer\Classes\ModeleNumRefStockTransfer;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/stocktransfer/mod_stocktransfer_standard.php
  *  \ingroup    stocktransfer
  *  \brief      File of class to manage StockTransfer numbering rules standard
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/stocktransfer/modules_stocktransfer.php';
-
 
 /**
  * Class to manage the Standard numbering rule for Stock
@@ -58,8 +60,8 @@ class mod_stocktransfer_standard extends ModeleNumRefStockTransfer
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -71,7 +73,7 @@ class mod_stocktransfer_standard extends ModeleNumRefStockTransfer
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -83,8 +85,8 @@ class mod_stocktransfer_standard extends ModeleNumRefStockTransfer
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -123,8 +125,8 @@ class mod_stocktransfer_standard extends ModeleNumRefStockTransfer
     /**
      *  Return next free value
      *
-     *  @param  StockTransfer   $object     Object we need next value for
-     *  @return string|-1                   Value if OK, -1 if KO
+     * @param StockTransfer $object Object we need next value for
+     * @return string|-1                   Value if OK, -1 if KO
      */
     public function getNextValue($object)
     {

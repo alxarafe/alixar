@@ -22,10 +22,10 @@
 /**
  * Return string with full online Url to accept and sign a quote
  *
- * @param   string          $type       Type of URL ('proposal', ...)
- * @param   string          $ref        Ref of object
- * @param   CommonObject    $obj        object (needed to make multicompany good links)
- * @param   string          $mode       Mode
+ * @param string $type Type of URL ('proposal', ...)
+ * @param string $ref Ref of object
+ * @param CommonObject $obj object (needed to make multicompany good links)
+ * @param string $mode Mode
  * @return  string                      Url string
  */
 function showOnlineSignatureUrl($type, $ref, $obj = null, $mode = '')
@@ -59,11 +59,11 @@ function showOnlineSignatureUrl($type, $ref, $obj = null, $mode = '')
 /**
  * Return string with full Url
  *
- * @param   int             $mode               0=True url, 1=Url formatted with colors
- * @param   string          $type               Type of URL ('proposal', ...)
- * @param   string          $ref                Ref of object
- * @param   int             $localorexternal    0=Url for browser, 1=Url for external access
- * @param   CommonObject    $obj                object (needed to make multicompany good links)
+ * @param int $mode 0=True url, 1=Url formatted with colors
+ * @param string $type Type of URL ('proposal', ...)
+ * @param string $ref Ref of object
+ * @param int $localorexternal 0=Url for browser, 1=Url for external access
+ * @param CommonObject $obj object (needed to make multicompany good links)
  * @return  string                              Url string
  */
 function getOnlineSignatureUrl($mode, $type, $ref = '', $localorexternal = 1, $obj = null)
@@ -148,7 +148,7 @@ function getOnlineSignatureUrl($mode, $type, $ref = '', $localorexternal = 1, $o
         if ($mode == 1) {
             $out .= "hash('" . $securekeyseed . "' + '" . $type . "' + contract_ref)";
         } else {
-            $out .= '&securekey=' . dol_hash($securekeyseed . $type . $ref . (isModEnabled('multicompany') ? (empty($obj->entity) ? '' : (int) $obj->entity) : ''), '0');
+            $out .= '&securekey=' . dol_hash($securekeyseed . $type . $ref . (isModEnabled('multicompany') ? (empty($obj->entity) ? '' : (int)$obj->entity) : ''), '0');
         }
     } elseif ($type == 'fichinter') {
         $securekeyseed = getDolGlobalString('FICHINTER_ONLINE_SIGNATURE_SECURITY_TOKEN');
@@ -163,7 +163,7 @@ function getOnlineSignatureUrl($mode, $type, $ref = '', $localorexternal = 1, $o
         if ($mode == 1) {
             $out .= "hash('" . $securekeyseed . "' + '" . $type . "' + fichinter_ref)";
         } else {
-            $out .= '&securekey=' . dol_hash($securekeyseed . $type . $ref . (isModEnabled('multicompany') ? (empty($obj->entity) ? '' : (int) $obj->entity) : ''), '0');
+            $out .= '&securekey=' . dol_hash($securekeyseed . $type . $ref . (isModEnabled('multicompany') ? (empty($obj->entity) ? '' : (int)$obj->entity) : ''), '0');
         }
     } else {    // For example $type = 'societe_rib'
         $securekeyseed = getDolGlobalString(dol_strtoupper($type) . '_ONLINE_SIGNATURE_SECURITY_TOKEN');
@@ -184,7 +184,7 @@ function getOnlineSignatureUrl($mode, $type, $ref = '', $localorexternal = 1, $o
 
     // For multicompany
     if (!empty($out) && isModEnabled('multicompany')) {
-        $out .= "&entity=" . (empty($obj->entity) ? '' : (int) $obj->entity); // Check the entity because we may have the same reference in several entities
+        $out .= "&entity=" . (empty($obj->entity) ? '' : (int)$obj->entity); // Check the entity because we may have the same reference in several entities
     }
 
     return $out;

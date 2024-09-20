@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2014	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2015		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2018-2022	Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2019-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2014	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2015		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2018-2022	Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,6 +24,19 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productbatch;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/product/stock/movement_list.php
@@ -45,14 +58,14 @@ if (isModEnabled('productbatch')) {
 
 $action = GETPOST('action', 'aZ09');
 $massaction = GETPOST('massaction', 'alpha'); // The bulk action (combo box choice into lists)
-$confirm    = GETPOST('confirm', 'alpha'); // Result of a confirmation
+$confirm = GETPOST('confirm', 'alpha'); // Result of a confirmation
 $cancel = GETPOST('cancel', 'alpha');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : str_replace('_', '', basename(dirname(__FILE__)) . basename(__FILE__, '.php')); // To manage different context of search
-$toselect   = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
+$toselect = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
 $backtopage = GETPOST("backtopage", "alpha");
-$optioncss  = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
+$optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
 $show_files = GETPOST('show_files', 'aZ');
-$mode       = GETPOST('mode', 'aZ'); // The output mode ('list', 'kanban', 'hierarchy', 'calendar', ...)
+$mode = GETPOST('mode', 'aZ'); // The output mode ('list', 'kanban', 'hierarchy', 'calendar', ...)
 
 $id = GETPOSTINT('id');
 $ref = GETPOST('ref', 'alpha');
@@ -149,13 +162,11 @@ if (getDolGlobalString('PRODUCT_DISABLE_EATBY')) {
     unset($arrayfields['pl.eatby']);
 }
 
-
 $tmpwarehouse = new Entrepot($db);
 if ($id > 0 || !empty($ref)) {
     $tmpwarehouse->fetch($id, $ref);
     $id = $tmpwarehouse->id;
 }
-
 
 // Security check
 //$result=restrictedArea($user, 'stock', $id, 'entrepot&stock');
@@ -593,7 +604,7 @@ if ($action == 'confirm_reverse' && $confirm == "yes" && $permissiontoadd) {
     $sql .= " FROM " . MAIN_DB_PREFIX . "stock_mouvement";
     $sql .= " WHERE rowid IN (";
     foreach ($toselect as $id) {
-        $sql .= ((int) $id) . ",";
+        $sql .= ((int)$id) . ",";
     }
     $sql = rtrim($sql, ',');
     $sql .= ")";
@@ -681,7 +692,7 @@ $sql .= $hookmanager->resPrint;
 
 $sql .= " WHERE m.fk_product = p.rowid";
 if ($msid > 0) {
-    $sql .= " AND m.rowid = " . ((int) $msid);
+    $sql .= " AND m.rowid = " . ((int)$msid);
 }
 $sql .= " AND m.fk_entrepot = e.rowid";
 $sql .= " AND e.entity IN (" . getEntity('stock') . ")";
@@ -689,7 +700,7 @@ if (!getDolGlobalString('STOCK_SUPPORTS_SERVICES')) {
     $sql .= " AND p.fk_product_type = 0";
 }
 if ($id > 0) {
-    $sql .= " AND e.rowid = " . ((int) $id);
+    $sql .= " AND e.rowid = " . ((int)$id);
 }
 if (!empty($search_date_start)) {
     $sql .= " AND m.datem >= '" . $db->idate($search_date_start) . "'";
@@ -698,7 +709,7 @@ if (!empty($search_date_end)) {
     $sql .= " AND m.datem <= '" . $db->idate($search_date_end) . "'";
 }
 if ($idproduct > 0) {
-    $sql .= " AND p.rowid = " . ((int) $idproduct);
+    $sql .= " AND p.rowid = " . ((int)$idproduct);
 }
 if (!empty($search_ref)) {
     $sql .= natural_search('m.rowid', $search_ref, 1);
@@ -914,7 +925,7 @@ if ($warehouse->id > 0) {
     // Last movement
     $sql = "SELECT MAX(m.datem) as datem";
     $sql .= " FROM " . MAIN_DB_PREFIX . "stock_mouvement as m";
-    $sql .= " WHERE m.fk_entrepot = " . ((int) $warehouse->id);
+    $sql .= " WHERE m.fk_entrepot = " . ((int)$warehouse->id);
     $resqlbis = $db->query($sql);
     if ($resqlbis) {
         $objbis = $db->fetch_object($resqlbis);
@@ -995,31 +1006,31 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($id > 0) {
-    $param .= '&id=' . urlencode((string) ($id));
+    $param .= '&id=' . urlencode((string)($id));
 }
 if ($show_files) {
-    $param .= '&show_files=' . urlencode((string) ($show_files));
+    $param .= '&show_files=' . urlencode((string)($show_files));
 }
 if ($search_date_startday) {
-    $param .= '&search_date_startday=' . urlencode((string) ($search_date_startday));
+    $param .= '&search_date_startday=' . urlencode((string)($search_date_startday));
 }
 if ($search_date_startmonth) {
-    $param .= '&search_date_startmonth=' . urlencode((string) ($search_date_startmonth));
+    $param .= '&search_date_startmonth=' . urlencode((string)($search_date_startmonth));
 }
 if ($search_date_startyear) {
-    $param .= '&search_date_startyear=' . urlencode((string) ($search_date_startyear));
+    $param .= '&search_date_startyear=' . urlencode((string)($search_date_startyear));
 }
 if ($search_date_endday) {
-    $param .= '&search_date_endday=' . urlencode((string) ($search_date_endday));
+    $param .= '&search_date_endday=' . urlencode((string)($search_date_endday));
 }
 if ($search_date_endmonth) {
-    $param .= '&search_date_endmonth=' . urlencode((string) ($search_date_endmonth));
+    $param .= '&search_date_endmonth=' . urlencode((string)($search_date_endmonth));
 }
 if ($search_date_endyear) {
-    $param .= '&search_date_endyear=' . urlencode((string) ($search_date_endyear));
+    $param .= '&search_date_endyear=' . urlencode((string)($search_date_endyear));
 }
 if ($search_movement) {
     $param .= '&search_movement=' . urlencode($search_movement);
@@ -1046,10 +1057,10 @@ if ($search_user) {
     $param .= '&search_user=' . urlencode($search_user);
 }
 if ($idproduct > 0) {
-    $param .= '&idproduct=' . urlencode((string) ($idproduct));
+    $param .= '&idproduct=' . urlencode((string)($idproduct));
 }
 if ($search_fk_project != '' && $search_fk_project != '-1') {
-    $param .= '&search_fk_project=' . urlencode((string) ($search_fk_project));
+    $param .= '&search_fk_project=' . urlencode((string)($search_fk_project));
 }
 // Add $param from extra fields
 include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_list_search_param.tpl.php';
@@ -1402,7 +1413,7 @@ while ($i < $imaxinloop) {
         // TODO Use a cache
         $sql = "SELECT label";
         $sql .= " FROM " . MAIN_DB_PREFIX . "product_lang";
-        $sql .= " WHERE fk_product = " . ((int) $obj->rowid);
+        $sql .= " WHERE fk_product = " . ((int)$obj->rowid);
         $sql .= " AND lang = '" . $db->escape($langs->getDefaultLang()) . "'";
         $sql .= " LIMIT 1";
 
@@ -1491,8 +1502,7 @@ while ($i < $imaxinloop) {
         if (!empty($arrayfields['m.rowid']['checked'])) {
             print '<td class="nowraponall">';
             //print img_picto($langs->trans("StockMovement"), 'movement', 'class="pictofixedwidth"');
-            print $object->getNomUrl(1);
-            ;
+            print $object->getNomUrl(1);;
             print '</td>'; // This is primary not movement id
         }
         // Date

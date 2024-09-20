@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005      Brice Davoleau       <brice.davoleau@gmail.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2006-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007      Patrick Raguin  		<patrick.raguin@gmail.com>
- * Copyright (C) 2010      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2018      Florain Henry        <florian.henry@open-concept.pro
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005       Brice Davoleau              <brice.davoleau@gmail.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007       Patrick Raguin  		    <patrick.raguin@gmail.com>
+ * Copyright (C) 2010       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018       Florain Henry               <florian.henry@open-concept.pro
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,9 @@
  */
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Resource\Classes\Dolresource;
 
 /**
  *  \file       htdocs/resource/agenda.php
@@ -94,7 +97,6 @@ if (!$user->hasRight('resource', 'read')) {
     accessforbidden();
 }
 
-
 /*
  *	Actions
  */
@@ -118,8 +120,6 @@ if (empty($reshook)) {
         $search_agenda_label = '';
     }
 }
-
-
 
 /*
  *	View

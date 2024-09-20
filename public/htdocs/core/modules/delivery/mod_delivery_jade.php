@@ -28,14 +28,11 @@
  *   \brief      Fichier contenant la class du modele de numerotation de reference de bon de livraison Jade
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/delivery/modules_delivery.php';
-
 
 /**
  *  \class      mod_delivery_jade
  *  \brief      Class du modele de numerotation de reference de bon de livraison Jade
  */
-
 class mod_delivery_jade extends ModeleNumRefDeliveryOrder
 {
     /**
@@ -67,8 +64,8 @@ class mod_delivery_jade extends ModeleNumRefDeliveryOrder
     /**
      *   Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -79,7 +76,7 @@ class mod_delivery_jade extends ModeleNumRefDeliveryOrder
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -90,8 +87,8 @@ class mod_delivery_jade extends ModeleNumRefDeliveryOrder
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -129,9 +126,9 @@ class mod_delivery_jade extends ModeleNumRefDeliveryOrder
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc     Object thirdparty
-     *  @param  Delivery    $object     Object we need next value for
-     *  @return string|-1               Value if OK, -1 if KO
+     * @param Societe $objsoc Object thirdparty
+     * @param Delivery $object Object we need next value for
+     * @return string|-1               Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $object)
     {

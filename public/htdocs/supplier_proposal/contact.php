@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005      Patrick Rouillon     <patrick@rouillon.net>
- * Copyright (C) 2005-2018 Destailleur Laurent  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2017      Ferran Marcet       	 <fmarcet@2byte.es>
- * Copyright (C) 2023      Christian Foellmann  <christian@foellmann.de>
+/* Copyright (C) 2005       Patrick Rouillon            <patrick@rouillon.net>
+ * Copyright (C) 2005-2018  Destailleur Laurent         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2017       Ferran Marcet       	    <fmarcet@2byte.es>
+ * Copyright (C) 2023       Christian Foellmann         <christian@foellmann.de>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *       \file       htdocs/supplier_proposal/contact.php
  *       \ingroup    supplier_proposal
@@ -31,9 +33,12 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+use Dolibarr\Code\User\Classes\User;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/supplier_proposal.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.dispatch.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("propal", "supplier_proposal", "facture", "orders", "sendings", "companies"));
@@ -53,7 +58,6 @@ $object = new SupplierProposal($db);
 $permissiontoedit = $user->hasRight('supplier_proposal', 'creer');
 
 $hookmanager->initHooks(array('supplier_proposalcontactcard', 'globalcard'));
-
 
 /*
  * Actions
@@ -109,7 +113,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View

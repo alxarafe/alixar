@@ -1,4 +1,3 @@
-
 ace.config.setModuleUrl('ace/ext/beautify', require('file-loader?esModule=false!./src-noconflict/ext-beautify.js'))
 ace.config.setModuleUrl('ace/ext/code_lens', require('file-loader?esModule=false!./src-noconflict/ext-code_lens.js'))
 ace.config.setModuleUrl('ace/ext/elastic_tabstops_lite', require('file-loader?esModule=false!./src-noconflict/ext-elastic_tabstops_lite.js'))

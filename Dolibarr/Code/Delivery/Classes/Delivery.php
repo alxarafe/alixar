@@ -27,7 +27,11 @@
 
 namespace Dolibarr\Code\Delivery\Classes;
 
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Core\Traits\CommonIncoterm;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
@@ -1168,98 +1172,5 @@ class Delivery extends CommonObject
         );
 
         return CommonObject::commonReplaceProduct($db, $origin_id, $dest_id, $tables);
-    }
-}
-
-
-/**
- *  Management class of delivery note lines
- */
-class DeliveryLine extends CommonObjectLine
-{
-    /**
-     * @var DoliDB Database handler.
-     */
-    public $db;
-
-    /**
-     * @var string ID to identify managed object
-     */
-    public $element = 'deliverydet';
-
-    /**
-     * @var string Name of table without prefix where object is stored
-     */
-    public $table_element = 'deliverydet';
-
-    /**
-     * @var string delivery note lines label
-     */
-    public $label;
-
-    /**
-     * @var string product description
-     */
-    public $description;
-
-    /**
-     * @deprecated
-     * @see $product_ref
-     */
-    public $ref;
-    /**
-     * @deprecated
-     * @see product_label;
-     */
-    public $libelle;
-
-    // From llx_expeditiondet
-    /**
-     * @var float Quantity
-     */
-    public $qty;
-
-    /**
-     * @var float Quantity asked
-     */
-    public $qty_asked;
-
-    /**
-     * @var float Quantity shiiped
-     */
-    public $qty_shipped;
-
-    public $fk_product;
-    public $product_desc;
-    public $product_type;
-    public $product_ref;
-    public $product_label;
-
-    public $price;
-
-    public $fk_origin_line;
-    public $origin_id;
-
-    /**
-     * @var int origin line ID
-     */
-    public $origin_line_id;
-
-    /**
-     * @var int origin line ID
-     * @deprecated
-     * @see $origin_line_id
-     */
-    public $commande_ligne_id;
-
-
-    /**
-     *  Constructor
-     *
-     *  @param  DoliDB  $db     Database handler
-     */
-    public function __construct($db)
-    {
-        $this->db = $db;
     }
 }

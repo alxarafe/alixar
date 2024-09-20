@@ -222,9 +222,9 @@ abstract class Pdf extends Html
      *
      * @param string $pValue Temporary storage directory
      *
+     * @return self
      * @throws WriterException when directory does not exist
      *
-     * @return self
      */
     public function setTempDir($pValue)
     {
@@ -242,9 +242,9 @@ abstract class Pdf extends Html
      *
      * @param string $pFilename Name of the file to save as
      *
+     * @return resource
      * @throws WriterException
      *
-     * @return resource
      */
     protected function prepareForSave($pFilename)
     {

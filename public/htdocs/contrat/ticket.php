@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2012-2023		Charlene BENKE		<charlene@patas-monkey.com>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2012-2023	Charlene BENKE		        <charlene@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       htdocs/contrat/ticket.php
  *      \ingroup    contrat
@@ -28,11 +33,7 @@
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contract.lib.php';
-if (isModEnabled('project')) {
-}
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once DOL_DOCUMENT_ROOT . "/ticket/class/ticket.class.php";
 
 $langs->loadLangs(array('companies', 'contracts', 'tickets'));
 
@@ -69,10 +70,9 @@ $result = $object->fetch($id, $ref);
 $ret = $object->fetch_thirdparty();
 $head = contract_prepare_head($object);
 
-
 dol_get_fiche_head($head, 'ticket', $langs->trans("Contract"), -1, 'contract');
 
-$linkback = '<a href="' . constant('BASE_URL') . '/contrat/list.php' . (! empty($socid) ? '?socid=' . $socid : '') . '">';
+$linkback = '<a href="' . constant('BASE_URL') . '/contrat/list.php' . (!empty($socid) ? '?socid=' . $socid : '') . '">';
 $linkback .= $langs->trans("BackToList") . '</a>';
 
 $morehtmlref = '';
@@ -133,11 +133,11 @@ $morehtmlref .= $form->editfieldval(
 // Thirdparty
 $morehtmlref .= '<br>' . $langs->trans('ThirdParty') . ' : ' . $object->thirdparty->getNomUrl(1);
 // Project
-if (! empty($conf->projet->enabled)) {
-    
+if (!empty($conf->projet->enabled)) {
+
     $langs->load("projects");
     $morehtmlref .= '<br>' . $langs->trans('Project') . ' : ';
-    if (! empty($object->fk_project)) {
+    if (!empty($object->fk_project)) {
         $proj = new Project($db);
         $proj->fetch($object->fk_project);
         $morehtmlref .= '<a href="' . constant('BASE_URL') . '/projet/card.php?id=';

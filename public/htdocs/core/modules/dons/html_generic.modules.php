@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2006	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2012		Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2012       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2014-2020  Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2015  		Benoit Bruchard			<benoitb21@gmail.com>
- * Copyright (C) 2015  		Benjamin Neumann <btdn@sigsoft.org>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2006	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2014-2020  Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015  		Benoit Bruchard			    <benoitb21@gmail.com>
+ * Copyright (C) 2015  		Benjamin Neumann            <btdn@sigsoft.org>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,15 +24,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\Don\Classes\ModeleDon;
+
 /**
  *  \file       htdocs/core/modules/dons/html_generic.modules.php
  *  \ingroup    don
  *  \brief      Form of donation
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/dons/modules_don.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-
 
 /**
  *  Class to generate document for a generic donations receipt
@@ -42,7 +45,7 @@ class html_generic extends ModeleDon
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -59,7 +62,7 @@ class html_generic extends ModeleDon
     /**
      *  Return if a module can be used or not
      *
-     *  @return boolean     true if module can be used
+     * @return boolean     true if module can be used
      */
     public function isEnabled()
     {
@@ -69,8 +72,8 @@ class html_generic extends ModeleDon
     /**
      *  Load translation files
      *
-     *  @param  Translate   $outputlangs    Lang object for output language
-     *  @return Translate   $outputlangs    Lang object for output language
+     * @param Translate $outputlangs Lang object for output language
+     * @return Translate   $outputlangs    Lang object for output language
      */
     private function loadTranslationFiles($outputlangs)
     {
@@ -87,8 +90,8 @@ class html_generic extends ModeleDon
     /**
      *  Write the object to document file to disk
      *
-     *  @param  Don         $don            Donation object
-     *  @return string                      Label for payment type
+     * @param Don $don Donation object
+     * @return string                      Label for payment type
      */
     private function getDonationPaymentType($don)
     {
@@ -110,10 +113,10 @@ class html_generic extends ModeleDon
     /**
      *  Get the contents of the file
      *
-     *  @param  Don         $don            Donation object
-     *  @param  Translate   $outputlangs    Lang object for output language
-     *  @param  string      $currency       Currency code
-     *  @return string                      Contents of the file
+     * @param Don $don Donation object
+     * @param Translate $outputlangs Lang object for output language
+     * @param string $currency Currency code
+     * @return string                      Contents of the file
      */
     private function getContents($don, $outputlangs, $currency)
     {
@@ -126,7 +129,7 @@ class html_generic extends ModeleDon
         $donmodel = DOL_DOCUMENT_ROOT . "/core/modules/dons/html_generic.html";
         $form = implode('', file($donmodel));
         $form = str_replace('__NOW__', dol_print_date($now, 'day', false, $outputlangs), $form);
-        $form = str_replace('__REF__', (string) $don->id, $form);
+        $form = str_replace('__REF__', (string)$don->id, $form);
         $form = str_replace('__DATE__', dol_print_date($don->date, 'day', false, $outputlangs), $form);
 
         $form = str_replace('__BENEFICIARY_NAME__', $mysoc->name, $form);
@@ -169,9 +172,9 @@ class html_generic extends ModeleDon
     /**
      *  Write the object to document file to disk
      *
-     *  @param  string          $path       Path for the file
-     *  @param  string          $contents   Contents of the file
-     *  @return int                         Return code
+     * @param string $path Path for the file
+     * @param string $contents Contents of the file
+     * @return int                         Return code
      */
     private function saveFile($path, $contents)
     {
@@ -184,18 +187,19 @@ class html_generic extends ModeleDon
         return 1;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Write the object to document file to disk
      *
-     *  @param  Don         $don            Donation object
-     *  @param  Translate   $outputlangs    Lang object for output language
-     *  @param  string      $currency       Currency code
-     *  @return int                         >0 if OK, <0 if KO
+     * @param Don $don Donation object
+     * @param Translate $outputlangs Lang object for output language
+     * @param string $currency Currency code
+     * @return int                         >0 if OK, <0 if KO
      */
     public function write_file($don, $outputlangs, $currency = '')
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $conf, $langs, $mysoc;
 
         $id = (!is_object($don) ? $don : '');

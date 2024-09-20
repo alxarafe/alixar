@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2019-2023  Open-DSI            <support@open-dsi.fr>
+/* Copyright (C) 2019-2023  Open-DSI                    <support@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\BookKeeping;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
 
 /**
  * \file        htdocs/accountancy/closure/index.php
@@ -29,7 +31,6 @@ use Dolibarr\Code\Accountancy\Classes\BookKeeping;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("compta", "bills", "other", "accountancy"));

@@ -1,16 +1,16 @@
 <?php
 
-/* Copyright (C) 2001-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2003       Brian Fraval            <brian@fraval.org>
- * Copyright (C) 2004-2015  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005       Eric Seigne             <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2008       Patrick Raguin          <patrick.raguin@auguria.net>
- * Copyright (C) 2010-2016  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2011-2013  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2015       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2015       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003       Brian Fraval                <brian@fraval.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008       Patrick Raguin              <patrick.raguin@auguria.net>
+ * Copyright (C) 2010-2016  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2011-2013  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -27,6 +27,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Canvas;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/societe/contact.php
@@ -59,11 +67,11 @@ $errors = array();
 
 
 // Get parameters
-$action     = (GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view');
-$cancel     = GETPOST('cancel', 'alpha');
+$action = (GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view');
+$cancel = GETPOST('cancel', 'alpha');
 $backtopage = GETPOST('backtopage', 'alpha');
-$confirm    = GETPOST('confirm');
-$socid      = GETPOSTINT('socid') ? GETPOSTINT('socid') : GETPOSTINT('id');
+$confirm = GETPOST('confirm');
+$socid = GETPOSTINT('socid') ? GETPOSTINT('socid') : GETPOSTINT('id');
 
 if ($user->socid) {
     $socid = $user->socid;
@@ -93,7 +101,6 @@ if ($object->fetch($socid) <= 0 && $action == 'view') {
 $canvas = $object->canvas ? $object->canvas : GETPOST("canvas");
 $objcanvas = null;
 if (!empty($canvas)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
     $objcanvas = new Canvas($db, $action);
     $objcanvas->getCanvas('thirdparty', 'card', $canvas);
 }
@@ -135,9 +142,9 @@ if ($action == 'confirm_delete' && $user->hasRight('societe', 'contact', 'delete
 
         $sql = "DELETE t, et FROM " . MAIN_DB_PREFIX . "socpeople AS t";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "socpeople_extrafields AS et ON t.rowid = et.fk_object";
-        $sql .= " WHERE t.fk_soc = " . ((int) $socid);
-        $sql .= " AND t.rowid = " . ((int) $id);
-        $sql .= " AND ((t.fk_user_creat = " . ((int) $user->id) . " AND t.priv = 1) OR t.priv = 0)";
+        $sql .= " WHERE t.fk_soc = " . ((int)$socid);
+        $sql .= " AND t.rowid = " . ((int)$id);
+        $sql .= " AND ((t.fk_user_creat = " . ((int)$user->id) . " AND t.priv = 1) OR t.priv = 0)";
 
         $result = $db->query($sql);
         if (!$result) {

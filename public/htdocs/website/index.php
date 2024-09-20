@@ -21,6 +21,12 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormWebsite;
+use Dolibarr\Code\Website\Classes\Website;
+use Dolibarr\Code\Website\Classes\WebsitePage;
 
 /**
  *      \file       htdocs/website/index.php
@@ -48,13 +54,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/website.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/website2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formwebsite.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/website.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/websitepage.class.php';
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
-
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "other", "website", "errors"));
@@ -79,10 +78,10 @@ $action = GETPOST('action', 'aZ09');
 $massaction = GETPOST('massaction', 'alpha'); // The bulk action (combo box choice into lists)
 $confirm = GETPOST('confirm', 'alpha');
 $cancel = GETPOST('cancel', 'alpha');
-$toselect   = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
+$toselect = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'websitelist'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha'); // Go back to a dedicated page
-$optioncss  = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
+$optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
 $dol_hide_topmenu = GETPOSTINT('dol_hide_topmenu');
 $dol_hide_leftmenu = GETPOSTINT('dol_hide_leftmenu');
 $dol_openinpopup = GETPOST('dol_openinpopup', 'aZ09');
@@ -480,7 +479,7 @@ if ($action == 'deletetemplate' && $usercanedit) {
     $dirthemes = array('/doctemplates/websites');
     if (!empty($conf->modules_parts['websitetemplates'])) {     // Using this feature slow down application
         foreach ($conf->modules_parts['websitetemplates'] as $reldir) {
-            $dirthemes = array_merge($dirthemes, (array) ($reldir . 'doctemplates/websites'));
+            $dirthemes = array_merge($dirthemes, (array)($reldir . 'doctemplates/websites'));
         }
     }
     $dirthemes = array_unique($dirthemes);
@@ -1560,7 +1559,7 @@ if ($action == 'updatecss' && $usercanedit) {
                     $error++;
                     setEventMessages($langs->trans('ErrorFaviconMustBeASquaredImage'), array(), 'errors');
                 }
-                if (! $error && ($filesize[0] != 16 && $filesize[0] != 32 && $filesize[0] != 64)) {
+                if (!$error && ($filesize[0] != 16 && $filesize[0] != 32 && $filesize[0] != 64)) {
                     $error++;
                     setEventMessages($langs->trans('ErrorFaviconSize'), array(), 'errors');
                 }
@@ -1925,7 +1924,7 @@ if ($action == 'setashome' && $usercanedit) {
 
     $object->fk_default_home = $pageid;
     $res = $object->update($user);
-    if (! ($res > 0)) {
+    if (!($res > 0)) {
         $error++;
         setEventMessages($object->error, $object->errors, 'errors');
     }
@@ -2193,7 +2192,7 @@ if ($action == 'updatemeta' && $usercanedit) {
 // Update page
 if (
     $usercanedit && (($action == 'updatesource' || $action == 'updatecontent' || $action == 'confirm_createfromclone' || $action == 'confirm_createpagefromclone')
-    || ($action == 'preview' && (GETPOST('refreshsite') || GETPOST('refreshpage') || GETPOST('preview'))))
+        || ($action == 'preview' && (GETPOST('refreshsite') || GETPOST('refreshpage') || GETPOST('preview'))))
 ) {
     $object->fetch(0, $websitekey);
     $website = $object;
@@ -2621,7 +2620,7 @@ if ($action == 'generatesitemaps' && $usercanedit) {
     if ($website->virtualhost) {
         $domainname = $website->virtualhost;
     }
-    if (! preg_match('/^http/i', $domainname)) {
+    if (!preg_match('/^http/i', $domainname)) {
         $domainname = 'https://' . $domainname;
     }
 
@@ -2726,7 +2725,7 @@ if ($action == 'generatesitemaps' && $usercanedit) {
 
                     // Add "has translation pages"
                     $sql = 'SELECT rowid as id, lang, pageurl from ' . MAIN_DB_PREFIX . 'website_page';
-                    $sql .= " WHERE status = " . ((int) WebsitePage::STATUS_VALIDATED) . ' AND fk_page IN (' . $db->sanitize($objp->rowid . ($translationof ? ", " . $translationof : "")) . ")";
+                    $sql .= " WHERE status = " . ((int)WebsitePage::STATUS_VALIDATED) . ' AND fk_page IN (' . $db->sanitize($objp->rowid . ($translationof ? ", " . $translationof : "")) . ")";
                     $resqlhastrans = $db->query($sql);
                     if ($resqlhastrans) {
                         $num_rows_hastrans = $db->num_rows($resqlhastrans);
@@ -2833,7 +2832,6 @@ if ($action == 'generatesitemaps' && $usercanedit) {
     }
     $action = 'preview';
 }
-
 
 /*
  * View
@@ -3042,10 +3040,10 @@ if (!GETPOST('hide_websitemenu')) {
             //print '</div>';
             if ($website->status == $website::STATUS_DRAFT) {
                 $text_off = 'Offline';
-                print '<a href="' . $_SERVER["PHP_SELF"] . '?action=setwebsiteonline&token=' . newToken() . '&website=' . urlencode($website->ref) . '&websitepage=' . ((int) $websitepage->id) . '">' . img_picto($langs->trans($text_off), 'switch_off') . '</a>';
+                print '<a href="' . $_SERVER["PHP_SELF"] . '?action=setwebsiteonline&token=' . newToken() . '&website=' . urlencode($website->ref) . '&websitepage=' . ((int)$websitepage->id) . '">' . img_picto($langs->trans($text_off), 'switch_off') . '</a>';
             } else {
                 $text_off = 'Online';
-                print '<a href="' . $_SERVER["PHP_SELF"] . '?action=setwebsiteoffline&token=' . newToken() . '&website=' . urlencode($website->ref) . '&websitepage=' . ((int) $websitepage->id) . '">' . img_picto($langs->trans($text_off), 'switch_on') . '</a>';
+                print '<a href="' . $_SERVER["PHP_SELF"] . '?action=setwebsiteoffline&token=' . newToken() . '&website=' . urlencode($website->ref) . '&websitepage=' . ((int)$websitepage->id) . '">' . img_picto($langs->trans($text_off), 'switch_on') . '</a>';
             }
             print '</span>';
         }
@@ -3062,7 +3060,7 @@ if (!GETPOST('hide_websitemenu')) {
 
         if ($websitekey && $websitekey != '-1' && ($action == 'preview' || $action == 'createfromclone' || $action == 'createpagefromclone' || $action == 'deletesite')) {
             // Edit website properties
-            print '<a href="' . $_SERVER["PHP_SELF"] . '?website=' . urlencode($object->ref) . '&pageid=' . ((int) $pageid) . '&action=editcss&token=' . newToken() . '" class="button bordertransp" title="' . dol_escape_htmltag($langs->trans("EditCss")) . '"' . $disabled . '><span class="fa fa-cog paddingrightonly"></span><span class="hideonsmartphone">' . dol_escape_htmltag($langs->trans("EditCss")) . '</span></a>';
+            print '<a href="' . $_SERVER["PHP_SELF"] . '?website=' . urlencode($object->ref) . '&pageid=' . ((int)$pageid) . '&action=editcss&token=' . newToken() . '" class="button bordertransp" title="' . dol_escape_htmltag($langs->trans("EditCss")) . '"' . $disabled . '><span class="fa fa-cog paddingrightonly"></span><span class="hideonsmartphone">' . dol_escape_htmltag($langs->trans("EditCss")) . '</span></a>';
 
             // Import web site
             $importlabel = $langs->trans("ImportSite");
@@ -3310,7 +3308,7 @@ if (!GETPOST('hide_websitemenu')) {
         $pagepreviousid = 0;
         $pagenextid = 0;
         if ($pageid) {
-            $sql = "SELECT MAX(rowid) as pagepreviousid FROM " . MAIN_DB_PREFIX . "website_page WHERE rowid < " . ((int) $pageid) . " AND fk_website = " . ((int) $object->id);
+            $sql = "SELECT MAX(rowid) as pagepreviousid FROM " . MAIN_DB_PREFIX . "website_page WHERE rowid < " . ((int)$pageid) . " AND fk_website = " . ((int)$object->id);
             $resql = $db->query($sql);
             if ($resql) {
                 $obj = $db->fetch_object($resql);
@@ -3320,7 +3318,7 @@ if (!GETPOST('hide_websitemenu')) {
             } else {
                 dol_print_error($db);
             }
-            $sql = "SELECT MIN(rowid) as pagenextid FROM " . MAIN_DB_PREFIX . "website_page WHERE rowid > " . ((int) $pageid) . " AND fk_website = " . ((int) $object->id);
+            $sql = "SELECT MIN(rowid) as pagenextid FROM " . MAIN_DB_PREFIX . "website_page WHERE rowid > " . ((int)$pageid) . " AND fk_website = " . ((int)$object->id);
             $resql = $db->query($sql);
             if ($resql) {
                 $obj = $db->fetch_object($resql);
@@ -3333,12 +3331,12 @@ if (!GETPOST('hide_websitemenu')) {
         }
 
         if ($pagepreviousid) {
-            print '<a class="valignmiddle" href="' . $_SERVER['PHP_SELF'] . '?website=' . urlencode($object->ref) . '&pageid=' . ((int) $pagepreviousid) . '&action=' . urlencode($action) . '&token=' . newToken() . '">' . img_previous($langs->trans("PreviousContainer")) . '</a>';
+            print '<a class="valignmiddle" href="' . $_SERVER['PHP_SELF'] . '?website=' . urlencode($object->ref) . '&pageid=' . ((int)$pagepreviousid) . '&action=' . urlencode($action) . '&token=' . newToken() . '">' . img_previous($langs->trans("PreviousContainer")) . '</a>';
         } else {
             print '<span class="valignmiddle opacitymedium">' . img_previous($langs->trans("PreviousContainer")) . '</span>';
         }
         if ($pagenextid) {
-            print '<a class="valignmiddle" href="' . $_SERVER['PHP_SELF'] . '?website=' . urlencode($object->ref) . '&pageid=' . ((int) $pagenextid) . '&action=' . urlencode($action) . '&token=' . newToken() . '">' . img_next($langs->trans("NextContainer")) . '</a>';
+            print '<a class="valignmiddle" href="' . $_SERVER['PHP_SELF'] . '?website=' . urlencode($object->ref) . '&pageid=' . ((int)$pagenextid) . '&action=' . urlencode($action) . '&token=' . newToken() . '">' . img_next($langs->trans("NextContainer")) . '</a>';
         } else {
             print '<span class="valignmiddle opacitymedium">' . img_next($langs->trans("NextContainer")) . '</span>';
         }
@@ -3409,7 +3407,7 @@ if (!GETPOST('hide_websitemenu')) {
                         array('type' => 'other', 'tdclass' => 'fieldrequired', 'name' => 'newwebsite', 'label' => $langs->trans("WebSite"), 'value' => $formwebsite->selectWebsite($object->id, 'newwebsite', 0)),
                         array('type' => 'text', 'tdclass' => 'maxwidth200 fieldrequired', 'moreattr' => 'autofocus="autofocus"', 'name' => 'newtitle', 'label' => $langs->trans("WEBSITE_TITLE"), 'value' => $langs->trans("CopyOf") . ' ' . $objectpage->title),
                         array('type' => 'text', 'tdclass' => 'maxwidth200', 'name' => 'newpageurl', 'label' => $langs->trans("WEBSITE_PAGENAME"), 'value' => '')
-                        );
+                    );
                     if (count($onlylang) > 1) {
                         $formquestion[] = array('type' => 'checkbox', 'tdclass' => 'maxwidth200', 'name' => 'is_a_translation', 'label' => $langs->trans("PageIsANewTranslation"), 'value' => 0, 'morecss' => 'margintoponly');
                     }
@@ -3605,7 +3603,7 @@ if (!GETPOST('hide_websitemenu')) {
                 } else {
                     //$disabled='';
                     //print '<input type="submit" class="button bordertransp"'.$disabled.' value="'.dol_escape_htmltag($langs->trans("SetAsHomePage")).'" name="setashome">';
-                    print '<a href="' . $_SERVER["PHP_SELF"] . '?action=setashome&token=' . newToken() . '&website=' . urlencode($website->ref) . '&pageid=' . ((int) $pageid) . '" class="button bordertransp"' . $disabled . ' title="' . dol_escape_htmltag($langs->trans("SetAsHomePage")) . '"><span class="fas fa-home valignmiddle btnTitle-icon"></span></a>';
+                    print '<a href="' . $_SERVER["PHP_SELF"] . '?action=setashome&token=' . newToken() . '&website=' . urlencode($website->ref) . '&pageid=' . ((int)$pageid) . '" class="button bordertransp"' . $disabled . ' title="' . dol_escape_htmltag($langs->trans("SetAsHomePage")) . '"><span class="fas fa-home valignmiddle btnTitle-icon"></span></a>';
                 }
                 print '<input type="submit" class="button bordertransp"' . $disabled . ' value="' . dol_escape_htmltag($langs->trans("ClonePage")) . '" name="createpagefromclone">';
 
@@ -3617,7 +3615,7 @@ if (!GETPOST('hide_websitemenu')) {
                 } else {
                     $disabled = '';
                     $title = '';
-                    $url = $_SERVER["PHP_SELF"] . '?action=delete&token=' . newToken() . '&pageid=' . ((int) $websitepage->id) . '&website=' . urlencode($website->ref);    // action=delete for webpage, deletesite for website
+                    $url = $_SERVER["PHP_SELF"] . '?action=delete&token=' . newToken() . '&pageid=' . ((int)$websitepage->id) . '&website=' . urlencode($website->ref);    // action=delete for webpage, deletesite for website
                 }
                 print '<a href="' . $url . '" class="button buttonDelete bordertransp' . ($disabled ? ' disabled' : '') . '"' . $disabled . ' title="' . dol_escape_htmltag($title) . '">' . img_picto('', 'delete', 'class=""') . '<span class="hideonsmartphone paddingleft">' . $langs->trans("Delete") . '</span></a>';
                 print '</span>';
@@ -3748,7 +3746,7 @@ if (!GETPOST('hide_websitemenu')) {
                                     field: \'editval_virtualhost\',
                                     element: \'website\',
                                     table_element: \'website\',
-                                    fk_element: ' . ((int) $object->id) . ',
+                                    fk_element: ' . ((int)$object->id) . ',
                                     value: newurl,
                                 },
                                 context: document.body
@@ -4400,7 +4398,7 @@ if ($action == 'editmeta' || $action == 'createcontainer') {    // Edit properti
     print $langs->trans('WEBSITE_PAGENAME');
     print '</td><td>';
     print '<span class="opacitymedium spanprefix hidden"></span> ';
-    print '<input type="text" class="flat minwidth300" name="WEBSITE_PAGENAME" id="WEBSITE_PAGENAME" value="' . dol_escape_htmltag((string) preg_replace('/^_[a-z]+_/', '', (string) $pageurl)) . '">';
+    print '<input type="text" class="flat minwidth300" name="WEBSITE_PAGENAME" id="WEBSITE_PAGENAME" value="' . dol_escape_htmltag((string)preg_replace('/^_[a-z]+_/', '', (string)$pageurl)) . '">';
     print '</td></tr>';
 
     print '<script type="text/javascript">
@@ -4504,7 +4502,7 @@ if ($action == 'editmeta' || $action == 'createcontainer') {    // Edit properti
     print '</td><td>';
     if ($action != 'createcontainer') {
         // Has translation pages
-        $sql = "SELECT rowid, lang from " . MAIN_DB_PREFIX . "website_page where fk_page = " . ((int) $objectpage->id);
+        $sql = "SELECT rowid, lang from " . MAIN_DB_PREFIX . "website_page where fk_page = " . ((int)$objectpage->id);
         $resql = $db->query($sql);
         if ($resql) {
             $num_rows = $db->num_rows($resql);
@@ -4521,7 +4519,7 @@ if ($action == 'editmeta' || $action == 'createcontainer') {    // Edit properti
                         }
                         $tmpstring .= $tmppage->getNomUrl(1) . ' ' . picto_from_langcode($tmppage->lang) . ' ' . $tmppage->lang;
                         // Button unlink
-                        $tmpstring .= ' <a class="paddingleft" href="' . $_SERVER["PHP_SELF"] . '?website=' . urlencode($object->ref) . '&pageid=' . ((int) $objectpage->id) . '&action=deletelang&token=' . newToken() . '&deletelangforid=' . ((int) $tmppage->id) . '">' . img_picto($langs->trans("Remove"), 'unlink') . '</a>';
+                        $tmpstring .= ' <a class="paddingleft" href="' . $_SERVER["PHP_SELF"] . '?website=' . urlencode($object->ref) . '&pageid=' . ((int)$objectpage->id) . '&action=deletelang&token=' . newToken() . '&deletelangforid=' . ((int)$tmppage->id) . '">' . img_picto($langs->trans("Remove"), 'unlink') . '</a>';
                         $translatedby++;
                         $i++;
                     }
@@ -4557,7 +4555,7 @@ if ($action == 'editmeta' || $action == 'createcontainer') {    // Edit properti
             if ($translationof > 0 && $sourcepage->lang) {
                 print picto_from_langcode($sourcepage->lang) . ' ' . $sourcepage->lang;
                 // Button unlink
-                print ' <a class="paddingleft" href="' . $_SERVER["PHP_SELF"] . '?website=' . urlencode($object->ref) . '&pageid=' . ((int) $objectpage->id) . '&action=deletelang&token=' . newToken() . '&deletelangforid=' . ((int) $objectpage->id) . '">' . img_picto($langs->trans("Remove"), 'unlink') . '</a>';
+                print ' <a class="paddingleft" href="' . $_SERVER["PHP_SELF"] . '?website=' . urlencode($object->ref) . '&pageid=' . ((int)$objectpage->id) . '&action=deletelang&token=' . newToken() . '&deletelangforid=' . ((int)$objectpage->id) . '">' . img_picto($langs->trans("Remove"), 'unlink') . '</a>';
             }
         }
     }

@@ -59,7 +59,7 @@ if (!empty($invoice_id) && !empty($action) && !empty($htmlname)) {
     $formProject = new FormProjets($db);
 
 
-    $return['value']    = $formProject->selectInvoiceAndLine($invoice_id, 0, 'invoiceid', 'invoicelineid', 'maxwidth500', array(), 1);
+    $return['value'] = $formProject->selectInvoiceAndLine($invoice_id, 0, 'invoiceid', 'invoicelineid', 'maxwidth500', array(), 1);
     //$return['num'] = $form->num;
     //$return['error']  = $form->error;
 }

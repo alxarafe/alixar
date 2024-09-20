@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2014  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2023  Alexandre Spangaro      <aspangaro@easya.solutions>
- * Copyright (C) 2011-2014  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2015       Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2021       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2023  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2011-2014  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\PaymentVAT;
+use Dolibarr\Code\Compta\Classes\Tva;
+use Dolibarr\Code\Salaries\Classes\PaymentSalary;
+
 /**
  *      \file       htdocs/compta/tva/payments.php
  *      \ingroup    compta
@@ -31,9 +37,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/paymentvat.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 // Load translation files required by the page

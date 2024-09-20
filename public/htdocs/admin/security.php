@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004-2022 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2007 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013-2015 Juanjo Menent		<jmenent@2byte.es>
+/* Copyright (C) 2004-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2007  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2015  Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *      \file       htdocs/admin/security.php
@@ -78,7 +80,7 @@ if ($action == 'activate_encrypt') {
             if (dol_hash($obj->pass)) {
                 $sql = "UPDATE " . MAIN_DB_PREFIX . "user";
                 $sql .= " SET pass_crypted = '" . dol_hash($obj->pass) . "', pass = NULL";
-                $sql .= " WHERE rowid=" . ((int) $obj->rowid);
+                $sql .= " WHERE rowid=" . ((int)$obj->rowid);
                 //print $sql;
 
                 $resql2 = $db->query($sql);
@@ -148,11 +150,11 @@ if ($action == 'updatepattern') {
     $explodePattern = explode(';', $pattern);  // List of ints separated with ';' containing counts
 
     $patternInError = false;
-    if ((int) $explodePattern[0] < 1 || (int) $explodePattern[4] < 0) {
+    if ((int)$explodePattern[0] < 1 || (int)$explodePattern[4] < 0) {
         $patternInError = true;
     }
 
-    if ((int) $explodePattern[0] < (int) $explodePattern[1] + (int) $explodePattern[2] + (int) $explodePattern[3]) {
+    if ((int)$explodePattern[0] < (int)$explodePattern[1] + (int)$explodePattern[2] + (int)$explodePattern[3]) {
         $patternInError = true;
     }
 
@@ -163,7 +165,6 @@ if ($action == 'updatepattern') {
         exit;
     }
 }
-
 
 
 /*

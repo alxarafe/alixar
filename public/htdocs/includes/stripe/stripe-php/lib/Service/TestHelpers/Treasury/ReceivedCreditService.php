@@ -14,9 +14,9 @@ class ReceivedCreditService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Treasury\ReceivedCredit
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Treasury\ReceivedCredit
      */
     public function create($params = null, $opts = null)
     {

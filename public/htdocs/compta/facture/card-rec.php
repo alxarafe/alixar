@@ -28,32 +28,45 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\FactureLigneRec;
+use Dolibarr\Code\Compta\Classes\FactureRec;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Facture\Classes\ModelePDFFactures;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/compta/facture/card-rec.php
  *  \ingroup    invoice
  *  \brief      Page to show predefined invoice
  */
 
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
-
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 if (isModEnabled('project')) {
-    include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
     //include_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
 }
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('bills', 'companies', 'compta', 'admin', 'other', 'products', 'banks'));
 
-$action     = GETPOST('action', 'alpha');
+$action = GETPOST('action', 'alpha');
 $massaction = GETPOST('massaction', 'alpha');
 $show_files = GETPOSTINT('show_files');
-$confirm    = GETPOST('confirm', 'alpha');
-$cancel     = GETPOST('cancel', 'alpha');
-$toselect   = GETPOST('toselect', 'array');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'alpha');
+$toselect = GETPOST('toselect', 'array');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'invoicetemplatelist'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');                   // if not set, a default page will be used
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha'); // if not set, $backtopage will be used
@@ -226,22 +239,22 @@ if (empty($reshook)) {
         }
 
         if (!$error) {
-            $object->subtype               = GETPOSTINT('subtype');
-            $object->title                 = GETPOST('title', 'alphanohtml');
-            $object->note_private          = GETPOST('note_private', 'restricthtml');
-            $object->note_public           = GETPOST('note_public', 'restricthtml');
-            $object->model_pdf             = GETPOST('modelpdf', 'alphanohtml');
-            $object->usenewprice           = GETPOST('usenewprice', 'alphanohtml');
+            $object->subtype = GETPOSTINT('subtype');
+            $object->title = GETPOST('title', 'alphanohtml');
+            $object->note_private = GETPOST('note_private', 'restricthtml');
+            $object->note_public = GETPOST('note_public', 'restricthtml');
+            $object->model_pdf = GETPOST('modelpdf', 'alphanohtml');
+            $object->usenewprice = GETPOST('usenewprice', 'alphanohtml');
 
-            $object->mode_reglement_id     = GETPOSTINT('mode_reglement_id');
-            $object->cond_reglement_id     = GETPOSTINT('cond_reglement_id');
+            $object->mode_reglement_id = GETPOSTINT('mode_reglement_id');
+            $object->cond_reglement_id = GETPOSTINT('cond_reglement_id');
 
-            $object->frequency             = $frequency;
-            $object->unit_frequency        = GETPOST('unit_frequency', 'alpha');
-            $object->nb_gen_max            = $nb_gen_max;
-            $object->auto_validate         = GETPOSTINT('auto_validate');
-            $object->generate_pdf          = GETPOSTINT('generate_pdf');
-            $object->fk_project            = $projectid;
+            $object->frequency = $frequency;
+            $object->unit_frequency = GETPOST('unit_frequency', 'alpha');
+            $object->nb_gen_max = $nb_gen_max;
+            $object->auto_validate = GETPOSTINT('auto_validate');
+            $object->generate_pdf = GETPOSTINT('generate_pdf');
+            $object->fk_project = $projectid;
 
             $date_next_execution = dol_mktime($rehour, $remin, 0, $remonth, $reday, $reyear);
             $object->date_when = $date_next_execution;
@@ -565,8 +578,8 @@ if (empty($reshook)) {
                 //$tva_tx = $datapriceofproduct['tva_tx'];
                 //$tva_npr = $datapriceofproduct['tva_npr'];
 
-                $tmpvat = (float) price2num(preg_replace('/\s*\(.*\)/', '', $tva_tx));
-                $tmpprodvat = price2num(preg_replace('/\s*\(.*\)/', '', (string) $prod->tva_tx));
+                $tmpvat = (float)price2num(preg_replace('/\s*\(.*\)/', '', $tva_tx));
+                $tmpprodvat = price2num(preg_replace('/\s*\(.*\)/', '', (string)$prod->tva_tx));
 
                 // if price ht was forced (ie: from gui when calculated by margin rate and cost price). TODO Why this ?
                 if (!empty($price_ht)) {
@@ -681,7 +694,7 @@ if (empty($reshook)) {
             }
 
             if ($usercanproductignorepricemin && (!empty($price_min) && (price2num($pu_ht) * (1 - price2num($remise_percent) / 100) < price2num($price_min)))) {
-                $mesg = $langs->trans("CantBeLessThanMinPrice", price(price2num($price_min, 'MU'), 0, $langs, 0, 0, - 1, $conf->currency));
+                $mesg = $langs->trans("CantBeLessThanMinPrice", price(price2num($price_min, 'MU'), 0, $langs, 0, 0, -1, $conf->currency));
                 setEventMessages($mesg, null, 'errors');
             } else {
                 // Insert line
@@ -849,8 +862,8 @@ if (empty($reshook)) {
             $typeinvoice = Facture::TYPE_STANDARD;
 
             // Check price is not lower than minimum (check is done only for standard or replacement invoices)
-            if (((getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && !$user->hasRight('produit', 'ignore_price_min_advance')) || !getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) && (($typeinvoice == Facture::TYPE_STANDARD || $typeinvoice == Facture::TYPE_REPLACEMENT) && $price_min && ((float) price2num($pu_ht) * (1 - (float) $remise_percent / 100) < (float) price2num($price_min)))) {
-                setEventMessages($langs->trans("CantBeLessThanMinPrice", price(price2num($price_min, 'MU'), 0, $langs, 0, 0, - 1, $conf->currency)), null, 'errors');
+            if (((getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && !$user->hasRight('produit', 'ignore_price_min_advance')) || !getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) && (($typeinvoice == Facture::TYPE_STANDARD || $typeinvoice == Facture::TYPE_REPLACEMENT) && $price_min && ((float)price2num($pu_ht) * (1 - (float)$remise_percent / 100) < (float)price2num($price_min)))) {
+                setEventMessages($langs->trans("CantBeLessThanMinPrice", price(price2num($price_min, 'MU'), 0, $langs, 0, 0, -1, $conf->currency)), null, 'errors');
                 $error++;
             }
         } else {
@@ -1107,7 +1120,6 @@ if ($action == 'create') {
 
         // Model pdf
         print "<tr><td>" . $langs->trans('Model') . "</td><td>";
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/facture/modules_facture.php';
         $list = ModelePDFFactures::liste_modeles($db);
         print img_picto('', 'generic', 'class="pictofixedwidth"');
         // @phan-suppress-next-line PhanPluginSuspiciousParamOrder
@@ -1343,11 +1355,11 @@ if ($action == 'create') {
         // Amount Local Taxes
         if (($mysoc->localtax1_assuj == "1" && $mysoc->useLocalTax(1)) || $object->total_localtax1 != 0) {  // Localtax1
             print '<tr><td>' . $langs->transcountry("AmountLT1", $mysoc->country_code) . '</td>';
-            print '<td class="nowrap">' . price($object->total_localtax1, 1, '', 1, - 1, - 1, $conf->currency) . '</td></tr>';
+            print '<td class="nowrap">' . price($object->total_localtax1, 1, '', 1, -1, -1, $conf->currency) . '</td></tr>';
         }
         if (($mysoc->localtax2_assuj == "1" && $mysoc->useLocalTax(2)) || $object->total_localtax2 != 0) {  // Localtax2
             print '<tr><td>' . $langs->transcountry("AmountLT2", $mysoc->country_code) . '</td>';
-            print '<td class=nowrap">' . price($object->total_localtax2, 1, '', 1, - 1, - 1, $conf->currency) . '</td></tr>';
+            print '<td class=nowrap">' . price($object->total_localtax2, 1, '', 1, -1, -1, $conf->currency) . '</td></tr>';
         }
 
         print '<tr><td>' . $langs->trans("AmountTTC") . '</td><td colspan="3">' . price($object->total_ttc, 0, $langs, 1, -1, -1, $conf->currency) . '</td>';
@@ -1517,7 +1529,6 @@ if ($action == 'create') {
         print '</tr></table>';
         print '</td><td>';
         if ($action == 'editmodelpdf') {
-            include_once DOL_DOCUMENT_ROOT . '/core/modules/facture/modules_facture.php';
             $list = array();
             $models = ModelePDFFactures::liste_modeles($db);
             foreach ($models as $k => $model) {
@@ -1779,7 +1790,6 @@ if ($action == 'create') {
         print '</div>';
 
 
-
         print '<div class="fichecenter"><div class="fichehalfleft">';
         print '<a name="builddoc"></a>'; // ancre
 
@@ -1799,7 +1809,7 @@ if ($action == 'create') {
         $morehtmlcenter = '';
 
         // List of actions on element
-                $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element, (is_object($object->thirdparty) ? $object->thirdparty->id : 0), 1, '', $MAXEVENT, '', $morehtmlcenter);
 
         print '</div>';

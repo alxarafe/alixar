@@ -220,7 +220,7 @@ if (!$error && $massaction == 'confirm_presend') {
                     if ($val == 'thirdparty') { // Id of third party or user
                         $tmparray[] = $thirdparty->name . ' <' . $thirdparty->email . '>';
                     } elseif ($val && method_exists($thirdparty, 'contact_get_property')) {     // Id of contact
-                        $tmparray[] = $thirdparty->contact_get_property((int) $val, 'email');
+                        $tmparray[] = $thirdparty->contact_get_property((int)$val, 'email');
                         //$sendtoid[] = $val;
                     }
                 }
@@ -246,7 +246,7 @@ if (!$error && $massaction == 'confirm_presend') {
                     if ($val == 'thirdparty') { // Id of third party
                         $tmparray[] = $thirdparty->name . ' <' . $thirdparty->email . '>';
                     } elseif ($val) {   // Id du contact
-                        $tmparray[] = $thirdparty->contact_get_property((int) $val, 'email');
+                        $tmparray[] = $thirdparty->contact_get_property((int)$val, 'email');
                         //$sendtoid[] = $val;  TODO Add also id of contact in CC ?
                     }
                 }
@@ -429,7 +429,7 @@ if (!$error && $massaction == 'confirm_presend') {
                     $tmp = explode(',', getDolGlobalString('MAIN_INFO_SOCIETE_MAIL_ALIASES'));
                     $from = trim($tmp[($reg[1] - 1)]);
                 } elseif (preg_match('/senderprofile_(\d+)_(\d+)/', $fromtype, $reg)) {
-                    $sql = "SELECT rowid, label, email FROM " . MAIN_DB_PREFIX . "c_email_senderprofile WHERE rowid = " . (int) $reg[1];
+                    $sql = "SELECT rowid, label, email FROM " . MAIN_DB_PREFIX . "c_email_senderprofile WHERE rowid = " . (int)$reg[1];
                     $resql = $db->query($sql);
                     $obj = $db->fetch_object($resql);
                     if ($obj) {
@@ -488,8 +488,8 @@ if (!$error && $massaction == 'confirm_presend') {
                         $objecttmp->fetch_projet();
                     }
                     $substitutionarray = getCommonSubstitutionArray($langs, 0, null, $objecttmp);
-                    $substitutionarray['__ID__']    = ($oneemailperrecipient ? implode(', ', array_keys($listofqualifiedobj)) : $objecttmp->id);
-                    $substitutionarray['__REF__']   = ($oneemailperrecipient ? implode(', ', $listofqualifiedref) : $objecttmp->ref);
+                    $substitutionarray['__ID__'] = ($oneemailperrecipient ? implode(', ', array_keys($listofqualifiedobj)) : $objecttmp->id);
+                    $substitutionarray['__REF__'] = ($oneemailperrecipient ? implode(', ', $listofqualifiedref) : $objecttmp->ref);
                     $substitutionarray['__EMAIL__'] = $thirdparty->email;
                     $substitutionarray['__CHECK_READ__'] = '<img src="' . DOL_MAIN_URL_ROOT . '/public/emailing/mailing-read.php?tag=undefined&securitykey=' . dol_hash(getDolGlobalString('MAILING_EMAIL_UNSUBSCRIBE_KEY') . "-undefined", 'md5') . '" width="1" height="1" style="width:1px;height:1px" border="0"/>';
 
@@ -614,11 +614,11 @@ if (!$error && $massaction == 'confirm_presend') {
                                 // Initialisation donnees
                                 $objectobj2->sendtoid = (empty($contactidtosend) ? 0 : $contactidtosend);
                                 $objectobj2->actionmsg = $actionmsg; // Long text
-                                $objectobj2->actionmsg2     = $actionmsg2; // Short text
-                                $objectobj2->fk_element     = $objid2;
-                                $objectobj2->elementtype    = $objectobj2->element;
+                                $objectobj2->actionmsg2 = $actionmsg2; // Short text
+                                $objectobj2->fk_element = $objid2;
+                                $objectobj2->elementtype = $objectobj2->element;
                                 if (getDolGlobalString('MAIN_MAIL_REPLACE_EVENT_TITLE_BY_EMAIL_SUBJECT')) {
-                                    $objectobj2->actionmsg2     = $subjectreplaced; // Short text
+                                    $objectobj2->actionmsg2 = $subjectreplaced; // Short text
                                 }
 
                                 $triggername = strtoupper(get_class($objectobj2)) . '_SENTBYMAIL';
@@ -950,7 +950,7 @@ if (!$error && $massaction == 'validate' && $permissiontoadd) {
     if ($objecttmp->element == 'facture') {
         if (!empty($toselect) && getDolGlobalString('INVOICE_CHECK_POSTERIOR_DATE')) {
             // order $toselect by date
-            $sql  = "SELECT rowid FROM " . MAIN_DB_PREFIX . "facture";
+            $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "facture";
             $sql .= " WHERE rowid IN (" . $db->sanitize(implode(",", $toselect)) . ")";
             $sql .= " ORDER BY datef";
 
@@ -1077,7 +1077,7 @@ if (!$error && ($massaction == 'delete' || ($action == 'delete' && $confirm == '
                 continue;
             }
 
-            if ($objectclass == 'Holiday' && ! in_array($objecttmp->statut, array(Holiday::STATUS_DRAFT, Holiday::STATUS_CANCELED, Holiday::STATUS_REFUSED))) {
+            if ($objectclass == 'Holiday' && !in_array($objecttmp->statut, array(Holiday::STATUS_DRAFT, Holiday::STATUS_CANCELED, Holiday::STATUS_REFUSED))) {
                 $langs->load("errors");
                 $nbignored++;
                 $TMsg[] = '<div class="error">' . $langs->trans('ErrorLeaveRequestMustBeDraftCanceledOrRefusedToBeDeleted', $objecttmp->ref) . '</div><br>';
@@ -1085,7 +1085,7 @@ if (!$error && ($massaction == 'delete' || ($action == 'delete' && $confirm == '
             }
 
             if ($objectclass == "Task" && $objecttmp->hasChildren() > 0) {
-                $sql = "UPDATE " . MAIN_DB_PREFIX . "projet_task SET fk_task_parent = 0 WHERE fk_task_parent = " . ((int) $objecttmp->id);
+                $sql = "UPDATE " . MAIN_DB_PREFIX . "projet_task SET fk_task_parent = 0 WHERE fk_task_parent = " . ((int)$objecttmp->id);
                 $res = $db->query($sql);
 
                 if (!$res) {

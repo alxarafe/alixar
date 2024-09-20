@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2013-2016  Jean-François FERRY     <hello@librethic.io>
- * Copyright (C) 2019       Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2021-2024	Frédéric France			<frederic.france@netlogic.fr>
- * Copyright (C) 2024		MDW						<mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2013-2016  Jean-François FERRY         <hello@librethic.io>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2021-2024	Frédéric France			    <frederic.france@netlogic.fr>
+ * Copyright (C) 2024		MDW						    <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\Ticket\Classes\TicketStats;
+
 /**
  *    \file       htdocs/ticket/index.php
  *    \ingroup    ticket
@@ -28,9 +34,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticketstats.class.php';
-
 
 $hookmanager = new HookManager($db);
 
@@ -72,14 +75,11 @@ if (!$user->hasRight('ticket', 'read') && !$user->hasRight('knowledgemanagement'
 
 $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
 
-
 /*
  * Actions
  */
 
 // None
-
-
 
 /*
  * View
@@ -165,16 +165,16 @@ $sql .= ' WHERE t.entity IN (' . getEntity('ticket') . ')';
 $sql .= dolSqlDateFilter('datec', 0, 0, $endyear);
 
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND t.fk_soc = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND t.fk_soc = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 
 // External users restriction
 if ($user->socid > 0) {
-    $sql .= " AND t.fk_soc= " . ((int) $user->socid);
+    $sql .= " AND t.fk_soc= " . ((int)$user->socid);
 } else {
     // For internals users,
     if (getDolGlobalString('TICKET_LIMIT_VIEW_ASSIGNED_ONLY') && !$user->hasRight('ticket', 'manage')) {
-        $sql .= " AND t.fk_user_assign = " . ((int) $user->id);
+        $sql .= " AND t.fk_user_assign = " . ((int)$user->id);
     }
 }
 $sql .= " GROUP BY t.fk_statut";
@@ -341,15 +341,15 @@ if ($user->hasRight('ticket', 'read')) {
     $sql .= ' WHERE t.entity IN (' . getEntity('ticket') . ')';
     $sql .= " AND t.fk_statut = 0";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND t.fk_soc = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND t.fk_soc = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
 
     if ($user->socid > 0) {
-        $sql .= " AND t.fk_soc= " . ((int) $user->socid);
+        $sql .= " AND t.fk_soc= " . ((int)$user->socid);
     } else {
         // Restricted to assigned user only
         if (getDolGlobalString('TICKET_LIMIT_VIEW_ASSIGNED_ONLY') && !$user->hasRight('ticket', 'manage')) {
-            $sql .= " AND t.fk_user_assign = " . ((int) $user->id);
+            $sql .= " AND t.fk_user_assign = " . ((int)$user->id);
         }
     }
     $sql .= $db->order("t.datec", "DESC");

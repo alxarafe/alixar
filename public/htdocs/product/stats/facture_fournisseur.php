@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2018 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013	   Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2014	   Florian Henry		<florian.henry@open-concept.pro>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013	    Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2014	    Florian Henry		        <florian.henry@open-concept.pro>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  * \file        htdocs/product/stats/facture_fournisseur.php
@@ -153,7 +159,7 @@ if ($id > 0 || !empty($ref)) {
             $sql .= " WHERE f.fk_soc = s.rowid";
             $sql .= " AND f.entity IN (" . getEntity('facture_fourn') . ")";
             $sql .= " AND d.fk_facture_fourn = f.rowid";
-            $sql .= " AND d.fk_product = " . ((int) $product->id);
+            $sql .= " AND d.fk_product = " . ((int)$product->id);
             if (!empty($search_month)) {
                 $sql .= ' AND MONTH(f.datef) IN (' . $db->sanitize($search_month) . ')';
             }
@@ -161,10 +167,10 @@ if ($id > 0 || !empty($ref)) {
                 $sql .= ' AND YEAR(f.datef) IN (' . $db->sanitize($search_year) . ')';
             }
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             if ($socid) {
-                $sql .= " AND f.fk_soc = " . ((int) $socid);
+                $sql .= " AND f.fk_soc = " . ((int)$socid);
             }
             $sql .= " ORDER BY $sortfield $sortorder ";
 
@@ -188,13 +194,13 @@ if ($id > 0 || !empty($ref)) {
                 $option .= '&id=' . $product->id;
 
                 if ($limit > 0 && $limit != $conf->liste_limit) {
-                    $option .= '&limit=' . ((int) $limit);
+                    $option .= '&limit=' . ((int)$limit);
                 }
                 if (!empty($search_month)) {
-                    $option .= '&search_month=' . urlencode((string) ($search_month));
+                    $option .= '&search_month=' . urlencode((string)($search_month));
                 }
                 if (!empty($search_year)) {
-                    $option .= '&search_year=' . urlencode((string) ($search_year));
+                    $option .= '&search_year=' . urlencode((string)($search_year));
                 }
 
                 print '<form method="post" action="' . $_SERVER['PHP_SELF'] . '?id=' . $product->id . '" name="search_form">' . "\n";
@@ -210,14 +216,14 @@ if ($id > 0 || !empty($ref)) {
                 print_barre_liste($langs->trans("SuppliersInvoices"), $page, $_SERVER["PHP_SELF"], $option, $sortfield, $sortorder, '', $num, $totalofrecords, '', 0, '', '', $limit, 0, 0, 1);
 
                 if (!empty($page)) {
-                    $option .= '&page=' . urlencode((string) ($page));
+                    $option .= '&page=' . urlencode((string)($page));
                 }
 
                 print '<div class="liste_titre liste_titre_bydiv centpercent">';
                 print '<div class="divsearchfield">';
                 print $langs->trans('Period') . ' (' . $langs->trans("DateInvoice") . ') - ';
                 print $langs->trans('Month') . ':<input class="flat" type="text" size="4" name="search_month" value="' . ($search_month > 0 ? $search_month : '') . '"> ';
-                print $langs->trans('Year') . ':' . $formother->selectyear($search_year ? $search_year : - 1, 'search_year', 1, 20, 5);
+                print $langs->trans('Year') . ':' . $formother->selectyear($search_year ? $search_year : -1, 'search_year', 1, 20, 5);
                 print '<div style="vertical-align: middle; display: inline-block">';
                 print '<input type="image" class="liste_titre" name="button_search" src="' . img_picto($langs->trans("Search"), 'search.png', '', '', 1) . '" value="' . dol_escape_htmltag($langs->trans("Search")) . '" title="' . dol_escape_htmltag($langs->trans("Search")) . '">';
                 print '<input type="image" class="liste_titre" name="button_removefilter" src="' . img_picto($langs->trans("Search"), 'searchclear.png', '', '', 1) . '" value="' . dol_escape_htmltag($langs->trans("RemoveFilter")) . '" title="' . dol_escape_htmltag($langs->trans("RemoveFilter")) . '">';

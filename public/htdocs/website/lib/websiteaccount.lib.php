@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Societe\Classes\SocieteAccount;
+
 /**
  * \file    htdocs/website/lib/websiteaccount.lib.php
  * \ingroup website
@@ -26,7 +29,7 @@
 /**
  * Prepare array of tabs for SocieteAccount
  *
- * @param   SocieteAccount  $object     SocieteAccount
+ * @param SocieteAccount $object SocieteAccount
  * @return  array                       Array of tabs
  */
 function websiteaccountPrepareHead($object)

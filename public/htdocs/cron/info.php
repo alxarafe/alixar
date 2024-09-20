@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2013   Florian Henry   <florian.henry@open-concept.pro>
+/* Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Cron\Classes\Cronjob;
 
 /**
  *  \file           htdocs/cron/info.php
@@ -39,7 +42,6 @@ if (!$user->hasRight('cron', 'read')) {
 $id = GETPOSTINT('id');
 
 $object = new Cronjob($db);
-
 
 /*
  * View

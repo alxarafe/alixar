@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2002-2007      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010      Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010           Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2013-2016      Jean-François Ferry  <hello@librethic.io>
+/* Copyright (C) 2002-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013-2016  Jean-François Ferry         <hello@librethic.io>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/ticket/document.php
  *  \ingroup    ticket
@@ -34,7 +39,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/company.lib.php";
 if (isModEnabled('project')) {
-    include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
     include_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
     include_once DOL_DOCUMENT_ROOT . '/core/lib/project.lib.php';
 }
@@ -42,12 +46,12 @@ if (isModEnabled('project')) {
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "other", "ticket", "mails"));
 
-$id       = GETPOSTINT('id');
+$id = GETPOSTINT('id');
 $socid = GETPOSTINT('socid');
-$ref      = GETPOST('ref', 'alpha');
+$ref = GETPOST('ref', 'alpha');
 $track_id = GETPOST('track_id', 'alpha');
-$action   = GETPOST('action', 'alpha');
-$confirm  = GETPOST('confirm', 'alpha');
+$action = GETPOST('action', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 
 // Store current page url
 $url_page_current = constant('BASE_URL') . '/ticket/document.php';
@@ -117,7 +121,6 @@ if ($action == 'set_thirdparty' && $user->hasRight('ticket', 'write')) {
     }
 }
 
-
 /*
  * View
  */
@@ -140,9 +143,9 @@ if ($object->id) {
     }
 
     if (!$user->socid && getDolGlobalString('TICKET_LIMIT_VIEW_ASSIGNED_ONLY')) {
-        $object->next_prev_filter = "te.fk_user_assign = " . ((int) $user->id);
+        $object->next_prev_filter = "te.fk_user_assign = " . ((int)$user->id);
     } elseif ($user->socid > 0) {
-        $object->next_prev_filter = "te.fk_soc = " . ((int) $user->socid);
+        $object->next_prev_filter = "te.fk_soc = " . ((int)$user->socid);
     }
 
     $head = ticket_prepare_head($object);
@@ -213,7 +216,7 @@ if ($object->id) {
     $filearray = dol_dir_list($upload_dir, "files", 0, '', '\.meta$', $sortfield, (strtolower($sortorder) == 'desc' ? SORT_DESC : SORT_ASC), 1);
     // same as above for every messages
     $sql = 'SELECT id FROM ' . MAIN_DB_PREFIX . 'actioncomm';
-    $sql .= " WHERE fk_element = " . (int) $object->id . " AND elementtype = 'ticket'";
+    $sql .= " WHERE fk_element = " . (int)$object->id . " AND elementtype = 'ticket'";
     $resql = $db->query($sql);
     if ($resql) {
         $file_msg_array = array();

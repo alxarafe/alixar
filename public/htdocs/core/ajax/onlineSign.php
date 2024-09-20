@@ -52,7 +52,7 @@ if (!defined('NOIPCHECK')) {
 if (!defined('NOBROWSERNOTIF')) {
     define('NOBROWSERNOTIF', '1');
 }
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));  // Keep $_GET and $_POST here. GETPOST not yet defined.
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));  // Keep $_GET and $_POST here. GETPOST not yet defined.
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -219,7 +219,7 @@ if ($action == "importSignature") {
                                 // TODO Get position of box from PDF template
 
                                 if (getDolGlobalString("PROPAL_SIGNATURE_XFORIMGSTART")) {
-                                            $param['xforimgstart'] = getDolGlobalString("PROPAL_SIGNATURE_XFORIMGSTART");
+                                    $param['xforimgstart'] = getDolGlobalString("PROPAL_SIGNATURE_XFORIMGSTART");
                                 } else {
                                     $param['xforimgstart'] = (empty($s['w']) ? 120 : round($s['w'] / 2) + 15);
                                 }
@@ -259,13 +259,13 @@ if ($action == "importSignature") {
                 $online_sign_ip = getUserRemoteIP();
 
                 $sql = "UPDATE " . MAIN_DB_PREFIX . "propal";
-                $sql .= " SET fk_statut = " . ((int) $object::STATUS_SIGNED) . ", note_private = '" . $db->escape($object->note_private) . "',";
+                $sql .= " SET fk_statut = " . ((int)$object::STATUS_SIGNED) . ", note_private = '" . $db->escape($object->note_private) . "',";
                 $sql .= " date_signature = '" . $db->idate(dol_now()) . "',";
                 $sql .= " online_sign_ip = '" . $db->escape($online_sign_ip) . "'";
                 if ($online_sign_name) {
                     $sql .= ", online_sign_name = '" . $db->escape($online_sign_name) . "'";
                 }
-                $sql .= " WHERE rowid = " . ((int) $object->id);
+                $sql .= " WHERE rowid = " . ((int)$object->id);
 
                 dol_syslog(__FILE__, LOG_DEBUG);
                 $resql = $db->query($sql);
@@ -305,7 +305,7 @@ if ($action == "importSignature") {
                 }
             }
         } elseif ($mode == 'contract') {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
+            require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
             $object = new Contrat($db);
             $object->fetch(0, $ref);
 
@@ -745,7 +745,7 @@ if ($action == "importSignature") {
                 }
                 //$sql .= ", last_main_doc = '" . $db->escape($object->element'..') . "'";
 
-                $sql .= " WHERE rowid = " . ((int) $object->id);
+                $sql .= " WHERE rowid = " . ((int)$object->id);
 
                 dol_syslog(__FILE__, LOG_DEBUG);
                 $resql = $db->query($sql);
@@ -904,8 +904,8 @@ if ($action == "importSignature") {
                 $db->begin();
 
                 $sql = "UPDATE " . MAIN_DB_PREFIX . "expedition";
-                $sql .= " SET signed_status = " . ((int) $object::STATUS_SIGNED) ;
-                $sql .= " WHERE rowid = " . ((int) $object->id);
+                $sql .= " SET signed_status = " . ((int)$object::STATUS_SIGNED);
+                $sql .= " WHERE rowid = " . ((int)$object->id);
 
                 dol_syslog(__FILE__, LOG_DEBUG);
                 $resql = $db->query($sql);
@@ -940,9 +940,9 @@ echo $response;
 /**
  * Output the signature file into the PDF object.
  *
- * @param   TCPDF       $pdf        PDF handler
- * @param   Translate   $langs      Language
- * @param   array       $params     Array of params
+ * @param TCPDF $pdf PDF handler
+ * @param Translate $langs Language
+ * @param array $params Array of params
  * @return  void
  */
 function dolPrintSignatureImage(TCPDF $pdf, $langs, $params)

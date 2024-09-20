@@ -28,7 +28,9 @@ namespace Dolibarr\Code\Asset\Classes;
  * \brief       This file is a CRUD class file for Asset (Create/Read/Update/Delete)
  */
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * Class for Asset
@@ -539,7 +541,6 @@ class Asset extends CommonObject
 
         // Get depreciation options
         //---------------------------
-        require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/assetdepreciationoptions.class.php';
         $options_model = new AssetDepreciationOptions($this->db);
         $result = $options_model->fetchDeprecationOptions(0, $this->fk_asset_model);
         if ($result < 0) {
@@ -574,7 +575,6 @@ class Asset extends CommonObject
         // Get accountancy codes
         //---------------------------
         if (!$error) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/assetaccountancycodes.class.php';
             $accountancy_codes_model = new AssetAccountancyCodes($this->db);
             $result = $accountancy_codes_model->fetchAccountancyCodes(0, $this->fk_asset_model);
             if ($result < 0) {
@@ -821,7 +821,6 @@ class Asset extends CommonObject
 
         // Get depreciation options
         //---------------------------
-        require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/assetdepreciationoptions.class.php';
         $options = new AssetDepreciationOptions($this->db);
         $result = $options->fetchDeprecationOptions($this->id);
         if ($result < 0) {
@@ -832,7 +831,6 @@ class Asset extends CommonObject
 
         // Get accountancy codes
         //---------------------------
-        require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/assetaccountancycodes.class.php';
         $accountancy_codes = new AssetAccountancyCodes($this->db);
         $result = $accountancy_codes->fetchAccountancyCodes($this->id);
         if ($result < 0) {
@@ -1117,7 +1115,6 @@ class Asset extends CommonObject
 
         $this->db->begin();
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/assetdepreciationoptions.class.php';
         $options = new AssetDepreciationOptions($this->db);
 
         // Get last depreciation lines save in bookkeeping

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2010 Regis Houssin  <regis.houssin@inodbox.com>
+/* Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,13 +18,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\ModeleNumRefTicket;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+
 /**
  *    \file       htdocs/core/modules/ticket/mod_ticket_universal.php
  *    \ingroup    ticket
  *    \brief      File with class to manage the numbering module Universal for Ticket references
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/ticket/modules_ticket.php';
 
 /**
  *  Class to manage the numbering module Universal for Ticket references
@@ -33,32 +37,32 @@ class mod_ticket_universal extends ModeleNumRefTicket
 {
     /**
      *  Dolibarr version of the loaded document
-     *  @var string
+     * @var string
      */
     public $version = 'dolibarr';  // 'development', 'experimental', 'dolibarr'
 
     /**
-     *  @var string Error code (or message)
+     * @var string Error code (or message)
      */
     public $error = '';
 
     /**
-     *  @var string Nom du modele
-     *  @deprecated
-     *  @see $name
+     * @var string Nom du modele
+     * @deprecated
+     * @see $name
      */
     public $nom = 'Universal';
 
     /**
-     *  @var string model name
+     * @var string model name
      */
     public $name = 'Universal';
 
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -99,7 +103,7 @@ class mod_ticket_universal extends ModeleNumRefTicket
     /**
      *  Return an example of numbering
      *
-     *  @return string      Example
+     * @return string      Example
      */
     public function getExample()
     {
@@ -119,9 +123,9 @@ class mod_ticket_universal extends ModeleNumRefTicket
     /**
      *  Return next value
      *
-     *  @param  Societe $objsoc     Object third party
-     *  @param  Ticket  $ticket     Object ticket
-     *  @return string|0            Next value if OK, 0 if KO
+     * @param Societe $objsoc Object third party
+     * @param Ticket $ticket Object ticket
+     * @return string|0            Next value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $ticket)
     {

@@ -50,7 +50,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/bookcal/class/calendar.class.php';
 
 // Security check
 if (!isModEnabled('bookcal')) {
@@ -90,16 +89,16 @@ $nowmonth = $nowarray['mon'];
 $nowday = $nowarray['mday'];
 
 $prev = dol_get_prev_month($month, $year);
-$prev_year  = $prev['year'];
+$prev_year = $prev['year'];
 $prev_month = $prev['month'];
 $next = dol_get_next_month($month, $year);
-$next_year  = $next['year'];
+$next_year = $next['year'];
 $next_month = $next['month'];
 
 $max_day_in_prev_month = idate("t", dol_mktime(0, 0, 0, $prev_month, 1, $prev_year, 'gmt')); // Nb of days in previous month
 $max_day_in_month = idate("t", dol_mktime(0, 0, 0, $month, 1, $year)); // Nb of days in next month
 // tmpday is a negative or null cursor to know how many days before the 1st to show on month view (if tmpday=0, 1st is monday)
-$tmpday = - idate("w", dol_mktime(12, 0, 0, $month, 1, $year, 'gmt')) + 2; // idate('w') is 0 for sunday
+$tmpday = -idate("w", dol_mktime(12, 0, 0, $month, 1, $year, 'gmt')) + 2; // idate('w') is 0 for sunday
 $tmpday += ((isset($conf->global->MAIN_START_WEEK) ? $conf->global->MAIN_START_WEEK : 1) - 1);
 if ($tmpday >= 1) {
     $tmpday -= 7; // If tmpday is 0 we start with sunday, if -6, we start with monday of previous week.
@@ -123,12 +122,12 @@ $errmsg = '';
 /**
  * Show header for booking
  *
- * @param   string      $title              Title
- * @param   string      $head               Head array
- * @param   int         $disablejs          More content into html header
- * @param   int         $disablehead        More content into html header
- * @param   array       $arrayofjs          Array of complementary js files
- * @param   array       $arrayofcss         Array of complementary css files
+ * @param string $title Title
+ * @param string $head Head array
+ * @param int $disablejs More content into html header
+ * @param int $disablehead More content into html header
+ * @param array $arrayofjs Array of complementary js files
+ * @param array $arrayofcss Array of complementary css files
  * @return  void
  */
 function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $arrayofjs = [], $arrayofcss = [])
@@ -162,7 +161,7 @@ function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $
     if (getDolGlobalString('BOOKCAL_PUBLIC_INTERFACE_TOPIC')) {
         print '<div class="clearboth"></div><strong>' . (getDolGlobalString('BOOKCAL_PUBLIC_INTERFACE_TOPIC') ? getDolGlobalString('BOOKCAL_PUBLIC_INTERFACE_TOPIC') : $langs->trans("BookCalSystem")) . '</strong>';
     }
-    if (empty($urllogo) && ! getDolGlobalString('BOOKCAL_PUBLIC_INTERFACE_TOPIC')) {
+    if (empty($urllogo) && !getDolGlobalString('BOOKCAL_PUBLIC_INTERFACE_TOPIC')) {
         print $mysoc->name;
     }
     print '</div>';
@@ -269,9 +268,9 @@ if ($action == 'add') {
             $sql = "INSERT INTO " . MAIN_DB_PREFIX . "actioncomm_resources";
             $sql .= "(fk_actioncomm, element_type, fk_element, answer_status, mandatory, transparency";
             $sql .= ") VALUES (";
-            $sql .= (int) $actioncomm->id;
+            $sql .= (int)$actioncomm->id;
             $sql .= ", 'socpeople'";
-            $sql .= ", " . (int) $contact->id;
+            $sql .= ", " . (int)$contact->id;
             $sql .= ", 0, 0, 0)";
             $resql = $db->query($sql);
             if (!$resql) {
@@ -423,7 +422,7 @@ if ($action == 'afteradd') {
         // Load into an array all days with availabilities of the calendar for the current month $todayarray['mon'] and $todayarray['year']
         $arrayofavailabledays = array();
 
-        $arrayofavailabilities = $availability->fetchAll('', '', 0, 0, '(status:=:1) AND (fk_bookcal_calendar:=:' . ((int) $id) . ')');
+        $arrayofavailabilities = $availability->fetchAll('', '', 0, 0, '(status:=:1) AND (fk_bookcal_calendar:=:' . ((int)$id) . ')');
         if ($arrayofavailabilities < 0) {
             setEventMessages($availability->error, $availability->errors, 'errors');
         } else {
@@ -611,10 +610,10 @@ llxFooter('', 'public');
 /**
  * Show event of a particular day
  *
- * @param   int     $day                    Day
- * @param   int     $month                  Month
- * @param   int     $year                   Year
- * @param   int     $today                  Today's day
+ * @param int $day Day
+ * @param int $month Month
+ * @param int $year Year
+ * @param int $today Today's day
  * @return  void
  */
 function show_bookcal_day_events($day, $month, $year, $today = 0)

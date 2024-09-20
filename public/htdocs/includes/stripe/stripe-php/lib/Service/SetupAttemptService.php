@@ -12,9 +12,9 @@ class SetupAttemptService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\SetupAttempt>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\SetupAttempt>
      */
     public function all($params = null, $opts = null)
     {

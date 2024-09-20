@@ -1,21 +1,21 @@
 <?php
 
-/* Copyright (C) 2002-2006 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2002-2003 Jean-Louis Bergamo   <jlb@j1b.org>
- * Copyright (C) 2004-2022 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2021 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2005      Lionel Cousteix      <etm_ltd@tiscali.co.uk>
- * Copyright (C) 2011      Herve Prot           <herve.prot@symeos.com>
- * Copyright (C) 2012-2018 Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2013      Florian Henry        <florian.henry@open-concept.pro>
- * Copyright (C) 2013-2016 Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2015-2017 Jean-François Ferry  <jfefe@aternatik.fr>
- * Copyright (C) 2015      Ari Elbaz (elarifr)  <github@accedinfo.com>
- * Copyright (C) 2015-2018 Charlene Benke       <charlie@patas-monkey.com>
- * Copyright (C) 2016      Raphaël Doursenaud   <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2018-2023 Frédéric France      <frederic.france@netlogic.fr>
- * Copyright (C) 2018      David Beniamine      <David.Beniamine@Tetras-Libre.fr>
+/* Copyright (C) 2002-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2002-2003  Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2004-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2021  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2005       Lionel Cousteix             <etm_ltd@tiscali.co.uk>
+ * Copyright (C) 2011       Herve Prot                  <herve.prot@symeos.com>
+ * Copyright (C) 2012-2018  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2016  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015-2017  Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2015       Ari Elbaz (elarifr)         <github@accedinfo.com>
+ * Copyright (C) 2015-2018  Charlene Benke              <charlie@patas-monkey.com>
+ * Copyright (C) 2016       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2018-2023  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2018       David Beniamine             <David.Beniamine@Tetras-Libre.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -36,6 +36,18 @@
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\Ldap;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\User\Classes\UserGroup;
 
@@ -51,21 +63,16 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security2.lib.php';
-if (isModEnabled('ldap')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ldap.class.php';
-}
-if (isModEnabled('stock')) {
-    }
 
 // Load translation files required by page
 $langs->loadLangs(array('users', 'companies', 'ldap', 'admin', 'hrm', 'stocks', 'other'));
 
 $id = GETPOSTINT('id');
-$action     = GETPOST('action', 'aZ09');
+$action = GETPOST('action', 'aZ09');
 $mode = GETPOST('mode', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 $group = GETPOSTINT("group", 3);
-$cancel     = GETPOST('cancel', 'alpha');
+$cancel = GETPOST('cancel', 'alpha');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'useracard'; // To manage different context of search
 
 if (empty($id) && $action != 'create') {
@@ -561,22 +568,22 @@ if (empty($reshook)) {
                         $contact->fetch($contactid);
 
                         $sql = "UPDATE " . MAIN_DB_PREFIX . "user";
-                        $sql .= " SET fk_socpeople=" . ((int) $contactid);
+                        $sql .= " SET fk_socpeople=" . ((int)$contactid);
                         if (!empty($contact->socid)) {
-                            $sql .= ", fk_soc=" . ((int) $contact->socid);
+                            $sql .= ", fk_soc=" . ((int)$contact->socid);
                         } elseif ($socid > 0) {
                             $sql .= ", fk_soc = null";
                             setEventMessages($langs->trans("WarningUserDifferentContactSocid"), null, 'warnings'); // Add message if post socid != $contact->socid
                         }
-                        $sql .= " WHERE rowid = " . ((int) $object->id);
+                        $sql .= " WHERE rowid = " . ((int)$object->id);
                     } elseif ($socid > 0) {
                         $sql = "UPDATE " . MAIN_DB_PREFIX . "user";
-                        $sql .= " SET fk_socpeople=NULL, fk_soc=" . ((int) $socid);
-                        $sql .= " WHERE rowid = " . ((int) $object->id);
+                        $sql .= " SET fk_socpeople=NULL, fk_soc=" . ((int)$socid);
+                        $sql .= " WHERE rowid = " . ((int)$object->id);
                     } else {
                         $sql = "UPDATE " . MAIN_DB_PREFIX . "user";
                         $sql .= " SET fk_socpeople=NULL, fk_soc=NULL";
-                        $sql .= " WHERE rowid = " . ((int) $object->id);
+                        $sql .= " WHERE rowid = " . ((int)$object->id);
                     }
                     dol_syslog("usercard::update", LOG_DEBUG);
                     $resql = $db->query($sql);
@@ -764,7 +771,6 @@ if (empty($reshook)) {
     $permissiontoadd = $user->hasRight("user", "user", "write");
     include DOL_DOCUMENT_ROOT . '/core/actions_builddoc.inc.php';
 }
-
 
 /*
  * View
@@ -1532,7 +1538,7 @@ if ($action == 'create' || $action == 'adduserldap') {
             $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard") . ' (' . $langs->trans("AddToContacts") . ')', 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
             $morehtmlref .= '</a>';
 
-            $urltovirtualcard = '/user/virtualcard.php?id=' . ((int) $object->id);
+            $urltovirtualcard = '/user/virtualcard.php?id=' . ((int)$object->id);
             $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl") . ' - ' . $object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
             dol_banner_tab($object, 'id', $linkback, $user->hasRight("user", "user", "read") || $user->admin, 'rowid', 'ref', $morehtmlref);
@@ -2095,7 +2101,6 @@ if ($action == 'create' || $action == 'adduserldap') {
             print "</div>\n";
 
 
-
             // Select mail models is same action as presend
             if (GETPOST('modelselected')) {
                 $action = 'presend';
@@ -2169,7 +2174,7 @@ if ($action == 'create' || $action == 'adduserldap') {
                                 print '</td>';
                                 print '<td class="right">';
                                 if ($caneditgroup) {
-                                    print '<a class="reposition" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&action=removegroup&token=' . newToken() . '&group=' . ((int) $group->id) . '">';
+                                    print '<a class="reposition" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&action=removegroup&token=' . newToken() . '&group=' . ((int)$group->id) . '">';
                                     print img_picto($langs->trans("RemoveFromGroup"), 'unlink');
                                     print '</a>';
                                 } else {
@@ -2277,8 +2282,8 @@ if ($action == 'create' || $action == 'adduserldap') {
                     $user->admin                                // Need to be admin to allow downgrade of an admin
                     && ($user->id != $object->id)                   // Don't downgrade ourself
                     && (
-                    (!isModEnabled('multicompany') && $nbAdmin >= 1)
-                    || (isModEnabled('multicompany') && (($object->entity > 0 || ($user->entity == 0 && $object->entity == 0)) || $nbSuperAdmin > 1))    // Don't downgrade a superadmin if alone
+                        (!isModEnabled('multicompany') && $nbAdmin >= 1)
+                        || (isModEnabled('multicompany') && (($object->entity > 0 || ($user->entity == 0 && $object->entity == 0)) || $nbSuperAdmin > 1))    // Don't downgrade a superadmin if alone
                     )
                 ) {
                     print $form->selectyesno('admin', $object->admin, 1, false, 0, 1);
@@ -2835,7 +2840,7 @@ if ($action == 'create' || $action == 'adduserldap') {
             print '<tr><td class="tdtop">' . $langs->trans("Signature") . '</td>';
             print '<td>';
             if ($caneditfield) {
-            
+
                 $doleditor = new DolEditor('signature', $object->signature, '', 138, 'dolibarr_notes', 'In', false, $acceptlocallinktomedia, !getDolGlobalString('FCKEDITOR_ENABLE_USERSIGN') ? 0 : 1, ROWS_4, '90%');
                 print $doleditor->Create(1);
             } else {

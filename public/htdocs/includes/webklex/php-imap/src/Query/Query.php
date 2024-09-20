@@ -234,9 +234,9 @@ class Query
         }
 
         return [
-            "uids"     => $uids,
-            "flags"    => $flags,
-            "headers"  => $headers,
+            "uids" => $uids,
+            "flags" => $flags,
+            "headers" => $headers,
             "contents" => $contents,
         ];
     }
@@ -259,15 +259,15 @@ class Query
     {
         try {
             return Message::make($uid, $msglist, $this->getClient(), $header, $content, $flags, $this->getFetchOptions(), $this->sequence);
-        }catch (MessageNotFoundException $e) {
+        } catch (MessageNotFoundException $e) {
             $this->setError($uid, $e);
-        }catch (RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $this->setError($uid, $e);
-        }catch (MessageFlagException $e) {
+        } catch (MessageFlagException $e) {
             $this->setError($uid, $e);
-        }catch (InvalidMessageDateException $e) {
+        } catch (InvalidMessageDateException $e) {
             $this->setError($uid, $e);
-        }catch (MessageContentFetchingException $e) {
+        } catch (MessageContentFetchingException $e) {
             $this->setError($uid, $e);
         }
 
@@ -776,9 +776,9 @@ class Query
     }
 
     /**
+     * @return Query
      * @var boolean $state
      *
-     * @return Query
      */
     public function softFail($state = true)
     {
@@ -786,9 +786,9 @@ class Query
     }
 
     /**
+     * @return Query
      * @var boolean $state
      *
-     * @return Query
      */
     public function setSoftFail($state = true)
     {
@@ -831,9 +831,9 @@ class Query
 
     /**
      * Check if there are any errors / exceptions present
+     * @return boolean
      * @var integer|null $uid
      *
-     * @return boolean
      */
     public function hasErrors($uid = null)
     {
@@ -845,9 +845,9 @@ class Query
 
     /**
      * Check if there is an error / exception present
+     * @return boolean
      * @var integer $uid
      *
-     * @return boolean
      */
     public function hasError($uid)
     {
@@ -876,9 +876,9 @@ class Query
 
     /**
      * Get a specific error / exception
+     * @return Exception|null
      * @var integer $uid
      *
-     * @return Exception|null
      */
     public function error($uid)
     {
@@ -887,9 +887,9 @@ class Query
 
     /**
      * Get a specific error / exception
+     * @return Exception|null
      * @var integer $uid
      *
-     * @return Exception|null
      */
     public function getError($uid)
     {

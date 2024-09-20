@@ -19,6 +19,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Code\Loan\Classes\LoanSchedule;
+use Dolibarr\Code\Loan\Classes\PaymentLoan;
+
 /**
  *      \file       htdocs/loan/payment/payment.php
  *      \ingroup    Loan
@@ -27,9 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loanschedule.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/paymentloan.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/loan.lib.php';
 
 $langs->loadLangs(array("bills", "loan"));
@@ -115,16 +117,16 @@ if ($action == 'add_payment') {
     if (!$error) {
         $paymentid = 0;
 
-        $pay_amount_capital = (float) price2num(GETPOST('amount_capital'));
-        $pay_amount_insurance = (float) price2num(GETPOST('amount_insurance'));
+        $pay_amount_capital = (float)price2num(GETPOST('amount_capital'));
+        $pay_amount_insurance = (float)price2num(GETPOST('amount_insurance'));
         // User can't set interest him self if schedule is set (else value in schedule can be incoherent)
         if (!empty($line)) {
             $pay_amount_interest = $line->amount_interest;
         } else {
-            $pay_amount_interest = (float) price2num(GETPOST('amount_interest'));
+            $pay_amount_interest = (float)price2num(GETPOST('amount_interest'));
         }
-        $remaindertopay = (float) price2num(GETPOST('remaindertopay'));
-        $amount = (float) price2num($pay_amount_capital + $pay_amount_insurance + $pay_amount_interest, 'MT');
+        $remaindertopay = (float)price2num(GETPOST('remaindertopay'));
+        $amount = (float)price2num($pay_amount_capital + $pay_amount_insurance + $pay_amount_interest, 'MT');
 
         // This term is already paid
         if (!empty($line) && !empty($line->fk_bank)) {
@@ -147,17 +149,17 @@ if ($action == 'add_payment') {
 
             // Create a line of payments
             $payment = new PaymentLoan($db);
-            $payment->chid              = $chid;
-            $payment->datep             = $datepaid;
-            $payment->label             = $loan->label;
-            $payment->amount_capital    = $pay_amount_capital;
-            $payment->amount_insurance  = $pay_amount_insurance;
-            $payment->amount_interest   = $pay_amount_interest;
-            $payment->fk_bank           = GETPOSTINT('accountid');
-            $payment->paymenttype       = GETPOSTINT('paymenttype');
-            $payment->num_payment       = GETPOST('num_payment', 'alphanohtml');
-            $payment->note_private      = GETPOST('note_private', 'restricthtml');
-            $payment->note_public       = GETPOST('note_public', 'restricthtml');
+            $payment->chid = $chid;
+            $payment->datep = $datepaid;
+            $payment->label = $loan->label;
+            $payment->amount_capital = $pay_amount_capital;
+            $payment->amount_insurance = $pay_amount_insurance;
+            $payment->amount_interest = $pay_amount_interest;
+            $payment->fk_bank = GETPOSTINT('accountid');
+            $payment->paymenttype = GETPOSTINT('paymenttype');
+            $payment->num_payment = GETPOST('num_payment', 'alphanohtml');
+            $payment->note_private = GETPOST('note_private', 'restricthtml');
+            $payment->note_public = GETPOST('note_public', 'restricthtml');
 
             if (!$error) {
                 $paymentid = $payment->create($user);
@@ -241,7 +243,7 @@ if ($action == 'create') {
 
     $sql = "SELECT SUM(amount_capital) as total";
     $sql .= " FROM " . MAIN_DB_PREFIX . "payment_loan";
-    $sql .= " WHERE fk_loan = " . ((int) $chid);
+    $sql .= " WHERE fk_loan = " . ((int)$chid);
     $resql = $db->query($sql);
     if ($resql) {
         $obj = $db->fetch_object($resql);

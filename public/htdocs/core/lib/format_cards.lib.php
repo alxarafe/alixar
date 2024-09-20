@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2006-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2006      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2007      Patrick Raguin       <patrick.raguin@gmail.com>
+/* Copyright (C) 2006-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2007       Patrick Raguin              <patrick.raguin@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,7 @@
  *  \ingroup    core
  */
 
+global $db;
 global $_Avery_Labels;
 
 // Unit of metric are defined into field 'metric' in mm.

@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2002-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2015 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2013      Cédric Salvador      <csalvador@gpcsolutions.fr>
+/* Copyright (C) 2002-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2015  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -28,6 +28,9 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\User\Classes\User;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -61,9 +64,9 @@ if (getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) {
 if ($id) {
     // $user est le user qui edite, $id est l'id de l'utilisateur edite
     $caneditfield = ((($user->id == $id) && $user->hasRight("user", "self", "write"))
-    || (($user->id != $id) && $user->hasRight("user", "user", "write")));
+        || (($user->id != $id) && $user->hasRight("user", "user", "write")));
     $caneditpassword = ((($user->id == $id) && $user->hasRight("user", "self", "password"))
-    || (($user->id != $id) && $user->hasRight("user", "user", "password")));
+        || (($user->id != $id) && $user->hasRight("user", "user", "password")));
 }
 
 $permissiontoadd = $caneditfield;   // Used by the include of actions_addupdatedelete.inc.php and actions_linkedfiles
@@ -113,7 +116,6 @@ if ($id > 0 || !empty($ref)) {
 $hookmanager->initHooks(array('usercard', 'userdoc', 'globalcard'));
 
 
-
 /*
  * Actions
  */
@@ -128,13 +130,11 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_linkedfiles.inc.php';
 }
 
-
 /*
  * View
  */
 
 $form = new Form($db);
-
 
 $person_name = !empty($object->firstname) ? $object->lastname . ", " . $object->firstname : $object->lastname;
 $title = $person_name . " - " . $langs->trans('Documents');
@@ -161,7 +161,7 @@ if ($object->id) {
     $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
     $morehtmlref .= '</a>';
 
-    $urltovirtualcard = '/user/virtualcard.php?id=' . ((int) $object->id);
+    $urltovirtualcard = '/user/virtualcard.php?id=' . ((int)$object->id);
     $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl") . ' - ' . $object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
     dol_banner_tab($object, 'id', $linkback, $user->hasRight("user", "user", "read") || $user->admin, 'rowid', 'ref', $morehtmlref);

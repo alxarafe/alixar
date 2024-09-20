@@ -44,8 +44,8 @@ class SimpleFile extends File
      * The name of the node must be passed, as well as the contents of the
      * file.
      *
-     * @param string      $name
-     * @param string      $contents
+     * @param string $name
+     * @param string $contents
      * @param string|null $mimeType
      */
     public function __construct($name, $contents, $mimeType = null)

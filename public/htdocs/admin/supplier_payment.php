@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2015  Juanjo Menent                <jmenent@2byte.es>
- * Copyright (C) 2016  Laurent Destailleur          <eldy@users.sourceforge.net>
- * Copyright (C) 2020  Maxime DEMAREST              <maxime@indelog.fr>
+/* Copyright (C) 2015       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2016       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2020       Maxime DEMAREST             <maxime@indelog.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -20,6 +20,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *      \file       htdocs/admin/supplier_payment.php
@@ -106,7 +110,7 @@ if ($action == 'updateMask') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/supplier_payment/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -150,7 +154,7 @@ if ($action == 'updateMask') {
  * View
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 llxHeader('', $langs->trans("SupplierPaymentSetup"), 'EN:Supplier_Payment_Configuration|FR:Configuration_module_paiement_fournisseur', '', 0, 0, '', '', '', 'mod-admin page-supplier_payment');
 

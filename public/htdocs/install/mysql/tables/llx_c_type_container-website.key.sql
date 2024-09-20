@@ -17,5 +17,6 @@
 -- ========================================================================
 
 
-ALTER TABLE llx_c_type_container ADD UNIQUE INDEX uk_c_type_container_id (code, entity);
+ALTER TABLE llx_c_type_container
+    ADD UNIQUE INDEX uk_c_type_container_id (code, entity);
 

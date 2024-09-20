@@ -17,6 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Contrat\Classes\Contrat;
 use Dolibarr\Code\Societe\Classes\Societe;
 
@@ -25,8 +26,6 @@ use Dolibarr\Code\Societe\Classes\Societe;
  *      \ingroup    contracts
  *      \brief      Module to show the box of last expired services
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
 
 /**
  * Class to manage the box to show expired services
@@ -41,8 +40,8 @@ class box_services_expired extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -56,8 +55,8 @@ class box_services_expired extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -83,10 +82,10 @@ class box_services_expired extends ModeleBoxes
             $sql .= " AND c.entity = " . $conf->entity;
             $sql .= " AND c.fk_soc=s.rowid AND cd.fk_contrat=c.rowid AND c.statut > 0";
             if ($user->socid) {
-                $sql .= ' AND c.fk_soc = ' . ((int) $user->socid);
+                $sql .= ' AND c.fk_soc = ' . ((int)$user->socid);
             }
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             $sql .= " GROUP BY c.rowid, c.ref, c.statut, c.date_contrat, c.ref_customer, c.ref_supplier, s.nom, s.rowid";
             $sql .= ", s.email, s.client, s.fournisseur, s.code_client, s.code_fournisseur, s.code_compta, s.code_compta_fournisseur";
@@ -182,10 +181,10 @@ class box_services_expired extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

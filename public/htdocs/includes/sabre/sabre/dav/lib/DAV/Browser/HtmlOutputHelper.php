@@ -75,7 +75,7 @@ class HtmlOutputHelper
      */
     public function h($input)
     {
-        return htmlspecialchars((string) $input, ENT_COMPAT, 'UTF-8');
+        return htmlspecialchars((string)$input, ENT_COMPAT, 'UTF-8');
     }
 
     /**

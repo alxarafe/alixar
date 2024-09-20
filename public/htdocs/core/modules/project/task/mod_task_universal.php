@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2010 Regis Houssin  <regis.houssin@inodbox.com>
+/* Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,14 +19,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\ModeleNumRefTask;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/core/modules/project/mod_project_universal.php
  *  \ingroup    project
  *  \brief      Fichier contenant la class du modele de numerotation de reference de projet Universal
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/task/modules_task.php';
-
 
 /**
  *  Class du modele de numerotation de reference de projet Universal
@@ -60,8 +63,8 @@ class mod_task_universal extends ModeleNumRefTask
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -102,7 +105,7 @@ class mod_task_universal extends ModeleNumRefTask
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -122,9 +125,9 @@ class mod_task_universal extends ModeleNumRefTask
     /**
      *  Return next value
      *
-     *  @param  Societe|string  $objsoc     Object third party
-     *  @param  Task|string     $object     Object task
-     *  @return string|0                    Value if OK, 0 if KO
+     * @param Societe|string $objsoc Object third party
+     * @param Task|string $object Object task
+     * @return string|0                    Value if OK, 0 if KO
      */
     public function getNextValue($objsoc = '', $object = '')
     {
@@ -142,6 +145,6 @@ class mod_task_universal extends ModeleNumRefTask
         $date = empty($object->date_c) ? dol_now() : $object->date_c;
         $numFinal = get_next_value($db, $mask, 'projet_task', 'ref', '', (is_object($objsoc) ? $objsoc->code_client : ''), $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

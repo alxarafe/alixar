@@ -25,7 +25,9 @@
 
 namespace Dolibarr\Code\Hrm\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        htdocs/hrm/class/skill.class.php
@@ -164,8 +166,6 @@ class Skill extends CommonObject
     //  * @var SkillLine[]     Array of subtable lines
     //  */
     // public $lines = array();
-
-
 
     /**
      * Constructor

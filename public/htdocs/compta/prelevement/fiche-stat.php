@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2010-2012 Juanjo Menent   <jmenent@2byte.es>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2012  Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\LignePrelevement;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/compta/prelevement/fiche-stat.php
  *  \ingroup    prelevement
@@ -29,8 +35,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/prelevement.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/ligneprelevement.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("banks", "categories", 'withdrawals', 'bills'));
@@ -70,8 +74,6 @@ if ($type == 'bank-transfer') {
 } else {
     $result = restrictedArea($user, 'prelevement', '', '', 'bons');
 }
-
-
 
 /*
  * View
@@ -194,7 +196,7 @@ if ($id > 0 || $ref) {
 
     $sql = "SELECT sum(pl.amount), pl.statut";
     $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_lignes as pl";
-    $sql .= " WHERE pl.fk_prelevement_bons = " . ((int) $object->id);
+    $sql .= " WHERE pl.fk_prelevement_bons = " . ((int)$object->id);
     $sql .= " GROUP BY pl.statut";
 
     $resql = $db->query($sql);

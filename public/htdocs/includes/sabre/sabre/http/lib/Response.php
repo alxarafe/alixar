@@ -100,8 +100,8 @@ class Response extends Message implements ResponseInterface
      * Creates the response object.
      *
      * @param string|int $status
-     * @param array      $headers
-     * @param resource   $body
+     * @param array $headers
+     * @param resource $body
      */
     public function __construct($status = 500, array $headers = null, $body = null)
     {
@@ -156,8 +156,8 @@ class Response extends Message implements ResponseInterface
             list(
                 $statusCode,
                 $statusText
-            ) = explode(' ', $status, 2);
-            $statusCode = (int) $statusCode;
+                ) = explode(' ', $status, 2);
+            $statusCode = (int)$statusCode;
         }
         if ($statusCode < 100 || $statusCode > 999) {
             throw new \InvalidArgumentException('The HTTP status code must be exactly 3 digits');

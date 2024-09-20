@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2007 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010	   Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2012      Christophe Battarel   <christophe.battarel@altairis.fr>
- * Copyright (C) 2013      Cédric Salvador       <csalvador@gpcsolutions.fr>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2007  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010	    Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *    \file       htdocs/fourn/product/list.php
  *    \ingroup    product
@@ -31,6 +35,8 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
+use Dolibarr\Code\Fourn\Classes\Fournisseur;
+use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
 
 
@@ -38,10 +44,10 @@ use Dolibarr\Code\Societe\Classes\Societe;
 $langs->loadLangs(array('products', 'suppliers'));
 
 // Get Parameters
-$action     = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'create'/'add', 'edit'/'update', 'view', ...
-$toselect   = GETPOST('toselect', 'array:int'); // Array of ids of elements selected into a list
+$action = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'create'/'add', 'edit'/'update', 'view', ...
+$toselect = GETPOST('toselect', 'array:int'); // Array of ids of elements selected into a list
 $optioncss = GETPOST('optioncss', 'alpha');
-$mode       = GETPOST('mode', 'aZ'); // The output mode ('list', 'kanban', 'hierarchy', 'calendar', ...)
+$mode = GETPOST('mode', 'aZ'); // The output mode ('list', 'kanban', 'hierarchy', 'calendar', ...)
 
 $sref = GETPOST('sref', 'alphanohtml');
 $sRefSupplier = GETPOST('srefsupplier');
@@ -175,10 +181,10 @@ if ($snom) {
     $sql .= natural_search('p.label', $snom);
 }
 if ($catid) {
-    $sql .= " AND cp.fk_categorie = " . ((int) $catid);
+    $sql .= " AND cp.fk_categorie = " . ((int)$catid);
 }
 if ($fourn_id > 0) {
-    $sql .= " AND ppf.fk_soc = " . ((int) $fourn_id);
+    $sql .= " AND ppf.fk_soc = " . ((int)$fourn_id);
 }
 
 // Add WHERE filters from hooks
@@ -255,7 +261,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);

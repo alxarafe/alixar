@@ -325,7 +325,7 @@ class Html extends BaseWriter
      */
     public function setGenerateSheetNavigationBlock($pValue)
     {
-        $this->generateSheetNavigationBlock = (bool) $pValue;
+        $this->generateSheetNavigationBlock = (bool)$pValue;
 
         return $this;
     }
@@ -347,9 +347,9 @@ class Html extends BaseWriter
      *
      * @param bool $pIncludeStyles Include styles?
      *
+     * @return string
      * @throws WriterException
      *
-     * @return string
      */
     public function generateHTMLHeader($pIncludeStyles = false)
     {
@@ -402,9 +402,9 @@ class Html extends BaseWriter
     /**
      * Generate sheet data.
      *
+     * @return string
      * @throws WriterException
      *
-     * @return string
      */
     public function generateSheetData()
     {
@@ -518,9 +518,9 @@ class Html extends BaseWriter
     /**
      * Generate sheet tabs.
      *
+     * @return string
      * @throws WriterException
      *
-     * @return string
      */
     public function generateNavigation()
     {
@@ -747,9 +747,9 @@ class Html extends BaseWriter
      *
      * @param bool $generateSurroundingHTML Generate surrounding HTML tags? (&lt;style&gt; and &lt;/style&gt;)
      *
+     * @return string
      * @throws WriterException
      *
-     * @return string
      */
     public function generateStyles($generateSurroundingHTML = true)
     {
@@ -786,9 +786,9 @@ class Html extends BaseWriter
      *
      * @param bool $generateSurroundingHTML Generate surrounding HTML style? (html { })
      *
+     * @return array
      * @throws WriterException
      *
-     * @return array
      */
     public function buildCSS($generateSurroundingHTML = true)
     {
@@ -987,7 +987,7 @@ class Html extends BaseWriter
         if ($textAlign = $this->mapHAlign($pStyle->getHorizontal())) {
             $css['text-align'] = $textAlign;
             if (in_array($textAlign, ['left', 'right'])) {
-                $css['padding-' . $textAlign] = (string) ((int) $pStyle->getIndent() * 9) . 'px';
+                $css['padding-' . $textAlign] = (string)((int)$pStyle->getIndent() * 9) . 'px';
             }
         }
 
@@ -1162,9 +1162,9 @@ class Html extends BaseWriter
      * @param int $pRow Row number (0-based)
      * @param string $cellType eg: 'td'
      *
+     * @return string
      * @throws WriterException
      *
-     * @return string
      */
     private function generateRow(Worksheet $pSheet, array $pValues, $pRow, $cellType)
     {

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2011   Regis Houssin   <regis.houssin@inodbox.com>
- * Copyright (C) 2022       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2011       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2022       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,10 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
+
 /**
  *      \file       htdocs/core/lib/expensereport.lib.php
  *      \brief      Functions for module expensereport
@@ -28,7 +32,7 @@
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function expensereport_prepare_head($object)
@@ -94,7 +98,7 @@ function expensereport_prepare_head($object)
  * Returns an array with the tabs for the "Expense report payment" section
  * It loads tabs from modules looking for the entity payment
  *
- * @param   PaymentExpenseReport    $object     Current payment object
+ * @param PaymentExpenseReport $object Current payment object
  * @return  array                               Tabs for the payment section
  */
 function payment_expensereport_prepare_head(PaymentExpenseReport $object)
@@ -128,7 +132,7 @@ function payment_expensereport_prepare_head(PaymentExpenseReport $object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function expensereport_admin_prepare_head()
 {

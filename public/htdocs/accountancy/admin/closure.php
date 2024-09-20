@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2019-2024  Alexandre Spangaro      <aspangaro@easya.solutions>
+/* Copyright (C) 2019-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,11 +25,13 @@
  * \brief       Setup page to configure accounting expert module
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("compta", "admin", "accountancy"));

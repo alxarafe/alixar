@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013      Florian Henry		<florian.henry@open-concept.pro>
- * Copyright (C) 2017      Ferran Marcet       	 <fmarcet@2byte.es>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Florian Henry		        <florian.henry@open-concept.pro>
+ * Copyright (C) 2017       Ferran Marcet       	    <fmarcet@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *  \file       htdocs/commande/note.php
  *  \ingroup    order
@@ -30,9 +34,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
-use Dolibarr\Code\Adherents\Classes\Adherent;
-if (isModEnabled('project')) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'bills', 'orders'));
@@ -53,17 +54,15 @@ $hookmanager->initHooks(array('ordernote'));
 
 $result = restrictedArea($user, 'commande', $id, '');
 
-$usercancreate  =  $user->hasRight("commande", "creer");
+$usercancreate = $user->hasRight("commande", "creer");
 
 $permissionnote = $user->hasRight('commande', 'creer'); // Used by the include of actions_setnotes.inc.php
-
 
 $object = new Commande($db);
 if (!$object->fetch($id, $ref) > 0) {
     dol_print_error($db);
     exit;
 }
-
 
 /*
  * Actions

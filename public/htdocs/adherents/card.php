@@ -92,7 +92,6 @@ $object->getCanvas($id);
 $canvas = $object->canvas ? $object->canvas : GETPOST("canvas");
 $objcanvas = null;
 if (!empty($canvas)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
     $objcanvas = new Canvas($db, $action);
     $objcanvas->getCanvas('adherent', 'membercard', $canvas);
 }
@@ -666,7 +665,6 @@ if (empty($reshook)) {
                 $msg = '';
 
                 // Send subscription email
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $formmail = new FormMail($db);
                 // Set output language
                 $outputlangs = new Translate('', $conf);
@@ -734,7 +732,6 @@ if (empty($reshook)) {
                     $msg = '';
 
                     // Send subscription email
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                     $formmail = new FormMail($db);
                     // Set output language
                     $outputlangs = new Translate('', $conf);
@@ -801,7 +798,6 @@ if (empty($reshook)) {
                     $msg = '';
 
                     // Send subscription email
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                     $formmail = new FormMail($db);
                     // Set output language
                     $outputlangs = new Translate('', $conf);
@@ -1528,7 +1524,6 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
             $msg = '';
 
             // Send subscription email
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
             $formmail = new FormMail($db);
             // Set output language
             $outputlangs = new Translate('', $conf);
@@ -1592,7 +1587,6 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
             $msg = '';
 
             // Send subscription email
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
             $formmail = new FormMail($db);
             // Set output language
             $outputlangs = new Translate('', $conf);
@@ -1653,7 +1647,6 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
             $msg = '';
 
             // Send subscription email
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
             $formmail = new FormMail($db);
             // Set output language
             $outputlangs = new Translate('', $conf);

@@ -30,7 +30,7 @@ class MathTrig
             return $factorArray;
         }
 
-        return [(int) $value];
+        return [(int)$value];
     }
 
     private static function romanCut($num, $n)
@@ -46,16 +46,16 @@ class MathTrig
      * Excel Function:
      *        ARABIC(text)
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param string $roman
      *
      * @return int|string the arabic numberal contrived from the roman numeral
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function ARABIC($roman)
     {
         // An empty string should return 0
-        $roman = substr(trim(strtoupper((string) Functions::flattenSingleValue($roman))), 0, 255);
+        $roman = substr(trim(strtoupper((string)Functions::flattenSingleValue($roman))), 0, 255);
         if ($roman === '') {
             return 0;
         }
@@ -136,12 +136,12 @@ class MathTrig
      * Excel Function:
      *        ATAN2(xCoordinate,yCoordinate)
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param float $xCoordinate the x-coordinate of the point
      * @param float $yCoordinate the y-coordinate of the point
      *
      * @return float|string the inverse tangent of the specified x- and y-coordinates, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function ATAN2($xCoordinate = null, $yCoordinate = null)
     {
@@ -155,8 +155,8 @@ class MathTrig
             ((is_numeric($xCoordinate)) || (is_bool($xCoordinate))) &&
             ((is_numeric($yCoordinate))) || (is_bool($yCoordinate))
         ) {
-            $xCoordinate = (float) $xCoordinate;
-            $yCoordinate = (float) $yCoordinate;
+            $xCoordinate = (float)$xCoordinate;
+            $yCoordinate = (float)$yCoordinate;
 
             if (($xCoordinate == 0) && ($yCoordinate == 0)) {
                 return Functions::DIV0();
@@ -176,13 +176,13 @@ class MathTrig
      * Excel Function:
      *        BASE(Number, Radix [Min_length])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param float $number
      * @param float $radix
      * @param int $minLength
      *
      * @return string the text representation with the given radix (base)
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function BASE($number, $radix, $minLength = null)
     {
@@ -192,15 +192,15 @@ class MathTrig
 
         if (is_numeric($number) && is_numeric($radix) && ($minLength === null || is_numeric($minLength))) {
             // Truncate to an integer
-            $number = (int) $number;
-            $radix = (int) $radix;
-            $minLength = (int) $minLength;
+            $number = (int)$number;
+            $radix = (int)$radix;
+            $minLength = (int)$minLength;
 
             if ($number < 0 || $number >= 2 ** 53 || $radix < 2 || $radix > 36) {
                 return Functions::NAN(); // Numeric range constraints
             }
 
-            $outcome = strtoupper((string) base_convert($number, 10, $radix));
+            $outcome = strtoupper((string)base_convert($number, 10, $radix));
             if ($minLength !== null) {
                 $outcome = str_pad($outcome, $minLength, '0', STR_PAD_LEFT); // String padding
             }
@@ -222,12 +222,12 @@ class MathTrig
      * Excel Function:
      *        CEILING(number[,significance])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param float $number the number you want to round
      * @param float $significance the multiple to which you want to round
      *
      * @return float|string Rounded Number, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function CEILING($number, $significance = null)
     {
@@ -263,12 +263,12 @@ class MathTrig
      * Excel Function:
      *        COMBIN(numObjs,numInSet)
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param int $numObjs Number of different objects
      * @param int $numInSet Number of objects in each combination
      *
      * @return int|string Number of combinations, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function COMBIN($numObjs, $numInSet)
     {
@@ -300,11 +300,11 @@ class MathTrig
      * Excel Function:
      *        EVEN(number)
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param float $number Number to round
      *
      * @return int|string Rounded Number, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function EVEN($number)
     {
@@ -313,13 +313,13 @@ class MathTrig
         if ($number === null) {
             return 0;
         } elseif (is_bool($number)) {
-            $number = (int) $number;
+            $number = (int)$number;
         }
 
         if (is_numeric($number)) {
             $significance = 2 * self::SIGN($number);
 
-            return (int) self::CEILING($number, $significance);
+            return (int)self::CEILING($number, $significance);
         }
 
         return Functions::VALUE();
@@ -334,11 +334,11 @@ class MathTrig
      * Excel Function:
      *        FACT(factVal)
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param float $factVal Factorial Value
      *
      * @return int|string Factorial, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function FACT($factVal)
     {
@@ -375,11 +375,11 @@ class MathTrig
      * Excel Function:
      *        FACTDOUBLE(factVal)
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param float $factVal Factorial Value
      *
      * @return int|string Double Factorial, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function FACTDOUBLE($factVal)
     {
@@ -410,12 +410,12 @@ class MathTrig
      * Excel Function:
      *        FLOOR(number[,significance])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param float $number Number to round
      * @param float $significance Significance
      *
      * @return float|string Rounded Number, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function FLOOR($number, $significance = null)
     {
@@ -454,13 +454,13 @@ class MathTrig
      * Excel Function:
      *        FLOOR.MATH(number[,significance[,mode]])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param float $number Number to round
      * @param float $significance Significance
      * @param int $mode direction to round negative numbers
      *
      * @return float|string Rounded Number, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function FLOORMATH($number, $significance = null, $mode = 0)
     {
@@ -495,12 +495,12 @@ class MathTrig
      * Excel Function:
      *        FLOOR.PRECISE(number[,significance])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param float $number Number to round
      * @param float $significance Significance
      *
      * @return float|string Rounded Number, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function FLOORPRECISE($number, $significance = 1)
     {
@@ -535,11 +535,11 @@ class MathTrig
      * Excel Function:
      *        GCD(number1[,number2[, ...]])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return int|mixed|string Greatest Common Divisor, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function GCD(...$args)
     {
@@ -553,9 +553,9 @@ class MathTrig
             }
         }
 
-        $gcd = (int) array_pop($args);
+        $gcd = (int)array_pop($args);
         do {
-            $gcd = self::evaluateGCD($gcd, (int) array_pop($args));
+            $gcd = self::evaluateGCD($gcd, (int)array_pop($args));
         } while (!empty($args));
 
         return $gcd;
@@ -569,11 +569,11 @@ class MathTrig
      * Excel Function:
      *        INT(number)
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param float $number Number to cast to an integer
      *
      * @return int|string Integer value, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function INT($number)
     {
@@ -582,10 +582,10 @@ class MathTrig
         if ($number === null) {
             return 0;
         } elseif (is_bool($number)) {
-            return (int) $number;
+            return (int)$number;
         }
         if (is_numeric($number)) {
-            return (int) floor($number);
+            return (int)floor($number);
         }
 
         return Functions::VALUE();
@@ -602,11 +602,11 @@ class MathTrig
      * Excel Function:
      *        LCM(number1[,number2[, ...]])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return int|string Lowest Common Multiplier, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function LCM(...$args)
     {
@@ -639,7 +639,7 @@ class MathTrig
             }
         }
         foreach ($allPoweredFactors as $allPoweredFactor) {
-            $returnValue *= (int) $allPoweredFactor;
+            $returnValue *= (int)$allPoweredFactor;
         }
 
         return $returnValue;
@@ -653,17 +653,17 @@ class MathTrig
      * Excel Function:
      *        LOG(number[,base])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param float $number The positive real number for which you want the logarithm
      * @param float $base The base of the logarithm. If base is omitted, it is assumed to be 10.
      *
      * @return float|string The result, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function logBase($number = null, $base = 10)
     {
         $number = Functions::flattenSingleValue($number);
-        $base = ($base === null) ? 10 : (float) Functions::flattenSingleValue($base);
+        $base = ($base === null) ? 10 : (float)Functions::flattenSingleValue($base);
 
         if ((!is_numeric($base)) || (!is_numeric($number))) {
             return Functions::VALUE();
@@ -683,11 +683,11 @@ class MathTrig
      * Excel Function:
      *        MDETERM(array)
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param array $matrixValues A matrix of values
      *
      * @return float|string The result, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function MDETERM($matrixValues)
     {
@@ -735,11 +735,11 @@ class MathTrig
      * Excel Function:
      *        MINVERSE(array)
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param array $matrixValues A matrix of values
      *
      * @return array|string The result, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function MINVERSE($matrixValues)
     {
@@ -855,8 +855,8 @@ class MathTrig
      */
     public static function MOD($a = 1, $b = 1)
     {
-        $a = (float) Functions::flattenSingleValue($a);
-        $b = (float) Functions::flattenSingleValue($b);
+        $a = (float)Functions::flattenSingleValue($a);
+        $b = (float)Functions::flattenSingleValue($b);
 
         if ($b == 0.0) {
             return Functions::DIV0();
@@ -965,7 +965,7 @@ class MathTrig
                 $result += $significance;
             }
 
-            return (int) $result;
+            return (int)$result;
         }
 
         return Functions::VALUE();
@@ -1007,11 +1007,11 @@ class MathTrig
      * Excel Function:
      *        PRODUCT(value1[,value2[, ...]])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function PRODUCT(...$args)
     {
@@ -1047,11 +1047,11 @@ class MathTrig
      * Excel Function:
      *        QUOTIENT(value1[,value2[, ...]])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function QUOTIENT(...$args)
     {
@@ -1075,7 +1075,7 @@ class MathTrig
         }
 
         // Return
-        return (int) $returnValue;
+        return (int)$returnValue;
     }
 
     /**
@@ -1101,11 +1101,11 @@ class MathTrig
     public static function ROMAN($aValue, $style = 0)
     {
         $aValue = Functions::flattenSingleValue($aValue);
-        $style = ($style === null) ? 0 : (int) Functions::flattenSingleValue($style);
+        $style = ($style === null) ? 0 : (int)Functions::flattenSingleValue($style);
         if ((!is_numeric($aValue)) || ($aValue < 0) || ($aValue >= 4000)) {
             return Functions::VALUE();
         }
-        $aValue = (int) $aValue;
+        $aValue = (int)$aValue;
         if ($aValue == 0) {
             return '';
         }
@@ -1238,7 +1238,7 @@ class MathTrig
         $number = Functions::flattenSingleValue($number);
 
         if (is_bool($number)) {
-            return (int) $number;
+            return (int)$number;
         }
         if (is_numeric($number)) {
             if ($number == 0.0) {
@@ -1375,11 +1375,11 @@ class MathTrig
      * Excel Function:
      *        SUM(value1[,value2[, ...]])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function SUM(...$args)
     {
@@ -1404,13 +1404,13 @@ class MathTrig
      * Excel Function:
      *        SUMIF(value1[,value2[, ...]],condition)
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param mixed $aArgs Data values
      * @param string $condition the criteria that defines which cells will be summed
      * @param mixed $sumArgs
      *
      * @return float
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function SUMIF($aArgs, $condition, $sumArgs = [])
     {
@@ -1452,12 +1452,12 @@ class MathTrig
      *    Excel Function:
      *        SUMIFS(value1[,value2[, ...]],condition)
      *
-     *    @category Mathematical and Trigonometric Functions
-     *
      * @param mixed $args Data values
      * @param string $condition the criteria that defines which cells will be summed
      *
      * @return float
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function SUMIFS(...$args)
     {
@@ -1510,11 +1510,11 @@ class MathTrig
      * Excel Function:
      *        SUMPRODUCT(value1[,value2[, ...]])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float|string The result, or a string containing an error
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function SUMPRODUCT(...$args)
     {
@@ -1555,11 +1555,11 @@ class MathTrig
      * Excel Function:
      *        SUMSQ(value1[,value2[, ...]])
      *
-     * @category Mathematical and Trigonometric Functions
-     *
      * @param mixed ...$args Data values
      *
      * @return float
+     * @category Mathematical and Trigonometric Functions
+     *
      */
     public static function SUMSQ(...$args)
     {
@@ -1681,11 +1681,11 @@ class MathTrig
         // Truncate
         $adjust = pow(10, $digits);
 
-        if (($digits > 0) && (rtrim((int) ((abs($value) - abs((int) $value)) * $adjust), '0') < $adjust / 10)) {
+        if (($digits > 0) && (rtrim((int)((abs($value) - abs((int)$value)) * $adjust), '0') < $adjust / 10)) {
             return $value;
         }
 
-        return ((int) ($value * $adjust)) / $adjust;
+        return ((int)($value * $adjust)) / $adjust;
     }
 
     /**

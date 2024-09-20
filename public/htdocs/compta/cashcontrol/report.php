@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2020  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010  Regis Houssin        <regis.houssin@capnetworks.com>
- * Copyright (C) 2012       Vinícius Nogueira    <viniciusvgn@gmail.com>
- * Copyright (C) 2014       Florian Henry        <florian.henry@open-cooncept.pro>
- * Copyright (C) 2015       Jean-François Ferry  <jfefe@aternatik.fr>
- * Copyright (C) 2016       Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2017       Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2018       Andreu Bisquerra	 <jove@bisquerra.com>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@capnetworks.com>
+ * Copyright (C) 2012       Vinícius Nogueira           <viniciusvgn@gmail.com>
+ * Copyright (C) 2014       Florian Henry               <florian.henry@open-cooncept.pro>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2016       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2017       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018       Andreu Bisquerra	        <jove@bisquerra.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,6 +25,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\CashControl;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/compta/cashcontrol/report.php
@@ -43,8 +48,6 @@ $optioncss = "print";
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/cashcontrol/class/cashcontrol.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/cashcontrol/class/cashcontrol.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 
@@ -70,9 +73,9 @@ $arrayfields = array(
     'b.credit' => array('label' => $langs->trans("Credit"), 'checked' => 1, 'position' => 605),
 );
 
-$syear  = $object->year_close;
+$syear = $object->year_close;
 $smonth = $object->month_close;
-$sday   = $object->day_close;
+$sday = $object->day_close;
 
 $posmodule = $object->posmodule;
 $terminalid = $object->posnumber;
@@ -380,7 +383,7 @@ if ($resql) {
     }
 
     //$cash = $amountpertype['LIQ'] + $object->opening;
-    $newcash = price2num($cash + (float) $object->opening, 'MT');
+    $newcash = price2num($cash + (float)$object->opening, 'MT');
 
     print '<div style="text-align: right">';
     print '<h2>';
@@ -426,7 +429,7 @@ if ($resql) {
 
     print "<br>";
 
-    print $langs->trans("Total") . ' (' . $totalqty . ' ' . $langs->trans("Articles") . ') : <div class="inline-block amount width100"></div><div class="inline-block amount width100">' . price((float) $cash + (float) $cheque + (float) $bank + (float) $other) . '</div>';
+    print $langs->trans("Total") . ' (' . $totalqty . ' ' . $langs->trans("Articles") . ') : <div class="inline-block amount width100"></div><div class="inline-block amount width100">' . price((float)$cash + (float)$cheque + (float)$bank + (float)$other) . '</div>';
 
     print '<br>' . $langs->trans("TotalVAT") . ' : <div class="inline-block amount width100"></div><div class="inline-block amount width100">' . price($totalvat) . '</div>';
 

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2014     Ion Agorria         <ion@agorria.com>
+/* Copyright (C) 2014       Ion Agorria                 <ion@agorria.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\PriceExpression;
+use Dolibarr\Code\Product\Classes\PriceGlobalVariable;
+use Dolibarr\Code\Product\Classes\PriceParser;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/product/dynamic_price/editor.php
  *  \ingroup    product
@@ -26,9 +33,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_expression.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_global_variable.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'accountancy')); //"Back" translation is on this accountancy file
@@ -69,7 +73,6 @@ if ($action == 'add') {
         $result = $price_expression->find_title($title);
         if ($result == 0) { //No existing entry found with title, ok
             // Check the expression validity by parsing it
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
             $priceparser = new PriceParser($db);
             $price_result = $priceparser->testExpression($id, $expression);
             if ($price_result < 0) { //Expression is not valid
@@ -98,7 +101,6 @@ if ($action == 'update') {
         $result = $price_expression->find_title($title);
         if ($result == 0 || $result == $eid) { //No existing entry found with title or existing one is the current one, ok
             // Check the expression validity by parsing it
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
             $priceparser = new PriceParser($db);
             $price_result = $priceparser->testExpression($id, $expression);
             if ($price_result < 0) { //Expression is not valid
@@ -179,7 +181,6 @@ foreach ($price_globals->listGlobalVariables() as $entry) {
 
 //Price expression editor
 print '<tr><td class="fieldrequired">' . $form->textwithpicto($langs->trans("PriceExpressionEditor"), $help_text, 1) . '</td><td>';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 $doleditor = new DolEditor('expression', isset($price_expression->expression) ? $price_expression->expression : '', '', 300, '', '', false, false, false, ROWS_4, '90%');
 $doleditor->Create();
 print '</td></tr>';

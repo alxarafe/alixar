@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2015 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2012	   Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015      Jean-François Ferry	<jfefe@aternatik.fr>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2018-2024  Frédéric France      <frederic.france@free.fr>
- * Copyright (C) 2023      Maxime Nicolas          <maxime@oarces.com>
- * Copyright (C) 2023      Benjamin GREMBI         <benjamin@oarces.com>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2015  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012	    Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Jean-François Ferry	        <jfefe@aternatik.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2023       Maxime Nicolas              <maxime@oarces.com>
+ * Copyright (C) 2023       Benjamin GREMBI             <benjamin@oarces.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,6 +25,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *    \file       htdocs/compta/bank/transfer.php
@@ -89,7 +92,7 @@ if ($action == 'add' && $user->hasRight('banque', 'transfer')) {
         $type[$i] = GETPOSTINT($i . '_type');
 
         $tabnum[$i] = 0;
-        if (!empty($label[$i]) || !($amount[$i] <= 0) || !($accountfrom[$i] < 0) || !($accountto[$i]  < 0)) {
+        if (!empty($label[$i]) || !($amount[$i] <= 0) || !($accountfrom[$i] < 0) || !($accountto[$i] < 0)) {
             $tabnum[$i] = 1;
             $maxtab = $i;
         }
@@ -166,7 +169,7 @@ if ($action == 'add' && $user->hasRight('banque', 'transfer')) {
                 }
 
                 if (!$error) {
-                    $bank_line_id_from = $tmpaccountfrom->addline($dateo[$n], $typefrom, $label[$n], price2num(-1 * (float) $amount[$n]), '', '', $user);
+                    $bank_line_id_from = $tmpaccountfrom->addline($dateo[$n], $typefrom, $label[$n], price2num(-1 * (float)$amount[$n]), '', '', $user);
                 }
                 if (!($bank_line_id_from > 0)) {
                     $error++;
@@ -213,7 +216,6 @@ if ($action == 'add' && $user->hasRight('banque', 'transfer')) {
         $db->rollback();
     }
 }
-
 
 /*
  * View
@@ -300,7 +302,7 @@ print '<th class="right">' . $langs->trans("Amount") . '</th>';
 print '<td class="hideobject multicurrency right">' . $langs->trans("AmountToOthercurrency") . '</td>';
 print '</tr>';
 
-for ($i = 1 ; $i < $MAXLINES; $i++) {
+for ($i = 1; $i < $MAXLINES; $i++) {
     $label = '';
     $amount = '';
     $amountto = '';

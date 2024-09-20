@@ -31,15 +31,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Compta\Classes;
+
 /**
  *  \file       htdocs/compta/paiement/class/paiement.class.php
  *  \ingroup    invoice
  *  \brief      File of class to manage payments of customers invoices
  */
 
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
-
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 /**
  *  Class to manage payments of customer invoices

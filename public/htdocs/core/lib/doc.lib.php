@@ -33,12 +33,12 @@
 /**
  *  Return line description translated in outputlangs and encoded into UTF8
  *
- *  @param  Object      $line                Object of line
- *  @param  Translate   $outputlangs         Object langs for output
- *  @param  int         $hideref             Hide reference
- *  @param  int         $hidedesc            Hide description
- *  @param  int         $issupplierline      Is it a line for a supplier object ?
- *  @return string                           String with line
+ * @param Object $line Object of line
+ * @param Translate $outputlangs Object langs for output
+ * @param int $hideref Hide reference
+ * @param int $hidedesc Hide description
+ * @param int $issupplierline Is it a line for a supplier object ?
+ * @return string                           String with line
  */
 function doc_getlinedesc($line, $outputlangs, $hideref = 0, $hidedesc = 0, $issupplierline = 0)
 {

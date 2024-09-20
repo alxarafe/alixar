@@ -44,7 +44,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -112,12 +112,12 @@ if (empty($conf->eventorganization->enabled)) {
 /**
  * Show header for new member
  *
- * @param   string      $title              Title
- * @param   string      $head               Head array
- * @param   int         $disablejs          More content into html header
- * @param   int         $disablehead        More content into html header
- * @param   array       $arrayofjs          Array of complementary js files
- * @param   array       $arrayofcss         Array of complementary css files
+ * @param string $title Title
+ * @param string $head Head array
+ * @param int $disablejs More content into html header
+ * @param int $disablehead More content into html header
+ * @param array $arrayofjs Array of complementary js files
+ * @param array $arrayofcss Array of complementary css files
  * @return  void
  */
 function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $arrayofjs = [], $arrayofcss = [])
@@ -174,7 +174,6 @@ function llxFooterVierge()
 }
 
 
-
 /*
  * Actions
  */
@@ -202,7 +201,7 @@ if (empty($reshook) && $action == 'add') {
         $error++;
         $errmsg .= $langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("Email")) . "<br>\n";
     }
-    if (!GETPOST("country_id") && !empty((float) $project->price_booth)) {
+    if (!GETPOST("country_id") && !empty((float)$project->price_booth)) {
         $error++;
         $errmsg .= $langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("Country")) . "<br>\n";
     }
@@ -239,18 +238,18 @@ if (empty($reshook) && $action == 'add') {
             $genericcompanyname = 'Unknown company';
 
             if (!empty($societe)) {
-                $thirdparty->name     = $societe;
+                $thirdparty->name = $societe;
             } else {
-                $thirdparty->name     = $genericcompanyname;
+                $thirdparty->name = $genericcompanyname;
             }
-            $thirdparty->address      = GETPOST("address");
-            $thirdparty->zip          = GETPOST("zipcode");
-            $thirdparty->town         = GETPOST("town");
-            $thirdparty->client       = $thirdparty::PROSPECT;
-            $thirdparty->fournisseur  = 0;
-            $thirdparty->country_id   = GETPOSTINT("country_id");
-            $thirdparty->state_id     = GETPOSTINT("state_id");
-            $thirdparty->email        = ($emailcompany ? $emailcompany : $email);
+            $thirdparty->address = GETPOST("address");
+            $thirdparty->zip = GETPOST("zipcode");
+            $thirdparty->town = GETPOST("town");
+            $thirdparty->client = $thirdparty::PROSPECT;
+            $thirdparty->fournisseur = 0;
+            $thirdparty->country_id = GETPOSTINT("country_id");
+            $thirdparty->state_id = GETPOSTINT("state_id");
+            $thirdparty->email = ($emailcompany ? $emailcompany : $email);
 
             // Load object modCodeTiers
             $module = getDolGlobalString('SOCIETE_CODECLIENT_ADDON', 'mod_codeclient_leopard');
@@ -277,7 +276,7 @@ if (empty($reshook) && $action == 'add') {
                 $errors = array_merge($errors, $thirdparty->errors);
             } else {
                 $thirdparty->country_code = getCountry($thirdparty->country_id, 2, $db, $langs);
-                $thirdparty->country      = getCountry($thirdparty->country_code, 0, $db, $langs);
+                $thirdparty->country = getCountry($thirdparty->country_code, 0, $db, $langs);
             }
         }
         // From there we have a thirdparty, now looking for the contact
@@ -287,11 +286,11 @@ if (empty($reshook) && $action == 'add') {
             if ($resultcontact <= 0) {
                 // Need to create a contact
                 $contact->socid = $thirdparty->id;
-                $contact->lastname = (string) GETPOST("lastname", 'alpha');
-                $contact->firstname = (string) GETPOST("firstname", 'alpha');
-                $contact->address = (string) GETPOST("address", 'alpha');
-                $contact->zip = (string) GETPOST("zipcode", 'alpha');
-                $contact->town = (string) GETPOST("town", 'alpha');
+                $contact->lastname = (string)GETPOST("lastname", 'alpha');
+                $contact->firstname = (string)GETPOST("firstname", 'alpha');
+                $contact->address = (string)GETPOST("address", 'alpha');
+                $contact->zip = (string)GETPOST("zipcode", 'alpha');
+                $contact->town = (string)GETPOST("town", 'alpha');
                 $contact->country_id = GETPOSTINT("country_id");
                 $contact->state_id = GETPOSTINT("state_id");
                 $contact->email = $email;
@@ -407,7 +406,7 @@ if (empty($reshook) && $action == 'add') {
                     $errmsg .= $conforbooth->error;
                 } else {
                     // If this is a paying booth, we have to redirect to payment page and create an invoice
-                    if (!empty((float) $project->price_booth)) {
+                    if (!empty((float)$project->price_booth)) {
                         $productforinvoicerow = new Product($db);
                         $resultprod = $productforinvoicerow->fetch(getDolGlobalString('SERVICE_BOOTH_LOCATION'));
                         if ($resultprod < 0) {
@@ -445,7 +444,7 @@ if (empty($reshook) && $action == 'add') {
                         if (!$error) {
                             // Add line to draft invoice
                             $vattouse = get_default_tva($mysoc, $thirdparty, $productforinvoicerow->id);
-                            $result = $facture->addline($langs->trans("BoothLocationFee", $conforbooth->label, dol_print_date($conforbooth->datep, '%d/%m/%y %H:%M:%S'), dol_print_date($conforbooth->datep2, '%d/%m/%y %H:%M:%S')), (float) $project->price_booth, 1, $vattouse, 0, 0, $productforinvoicerow->id, 0, dol_now(), '', 0, 0, '', 'HT', 0, 1);
+                            $result = $facture->addline($langs->trans("BoothLocationFee", $conforbooth->label, dol_print_date($conforbooth->datep, '%d/%m/%y %H:%M:%S'), dol_print_date($conforbooth->datep2, '%d/%m/%y %H:%M:%S')), (float)$project->price_booth, 1, $vattouse, 0, 0, $productforinvoicerow->id, 0, dol_now(), '', 0, 0, '', 'HT', 0, 1);
                             if ($result <= 0) {
                                 $contact->error = $facture->error;
                                 $contact->errors = $facture->errors;
@@ -481,7 +480,6 @@ if (empty($reshook) && $action == 'add') {
         $db->commit();
 
         // Sending mail
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
         $formmail = new FormMail($db);
         // Set output language
         $outputlangs = new Translate('', $conf);
@@ -498,7 +496,7 @@ if (empty($reshook) && $action == 'add') {
 
         if (!empty($labeltouse) && is_object($arraydefaultmessage) && $arraydefaultmessage->id > 0) {
             $subject = $arraydefaultmessage->topic;
-            $msg     = $arraydefaultmessage->content;
+            $msg = $arraydefaultmessage->content;
         }
 
         $substitutionarray = getCommonSubstitutionArray($outputlangs, 0, null, $thirdparty);

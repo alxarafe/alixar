@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) ---Put here your own copyright and developer email---
- * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+/* Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Mrp\Classes\Mo;
+
 /**
  * \file    lib/mrp_mo.lib.php
  * \ingroup mrp
@@ -26,7 +28,7 @@
 /**
  * Prepare array of tabs for Mo
  *
- * @param   Mo  $object     Mo
+ * @param Mo $object Mo
  * @return  array                   Array of tabs
  */
 function moPrepareHead($object)

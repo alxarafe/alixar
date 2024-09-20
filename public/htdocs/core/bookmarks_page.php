@@ -78,7 +78,6 @@ $arrayofcss = array();
 top_htmlhead($head, $title, 0, 0, $arrayofjs, $arrayofcss);
 
 
-
 print '<body>' . "\n";
 print '<div>';
 //print '<br>';
@@ -98,7 +97,7 @@ if (empty($conf->bookmark->enabled)) {
 } else {
     // Menu with list of bookmarks
     $sql = "SELECT rowid, title, url, target FROM " . MAIN_DB_PREFIX . "bookmark";
-    $sql .= " WHERE (fk_user = " . ((int) $user->id) . " OR fk_user is NULL OR fk_user = 0)";
+    $sql .= " WHERE (fk_user = " . ((int)$user->id) . " OR fk_user is NULL OR fk_user = 0)";
     $sql .= " AND entity IN (" . getEntity('bookmarks') . ")";
     $sql .= " ORDER BY position";
     if ($resql = $db->query($sql)) {

@@ -25,15 +25,15 @@
 
 namespace Dolibarr\Code\Hrm\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *    \file        htdocs/hrm/class/evaluation.class.php
  *    \ingroup     hrm
  *    \brief       This file is a CRUD class file for Evaluation (Create/Read/Update/Delete)
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/evaluationdet.class.php';
 
 /**
  * Class for Evaluation
@@ -225,7 +225,6 @@ class Evaluation extends CommonObject
         $resultcreate = $this->createCommon($user, $notrigger);
 
         if ($resultcreate > 0) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skillrank.class.php';
             $skillRank = new SkillRank($this->db);
             $TRequiredRanks = $skillRank->fetchAll('ASC', 't.rowid', 0, 0, '(fk_object:=:' . ((int) $this->fk_job) . ") AND (objecttype:=:'job')");
 

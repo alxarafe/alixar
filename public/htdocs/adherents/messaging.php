@@ -24,6 +24,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *  \file       htdocs/adherents/messaging.php
  *  \ingroup    adherent
@@ -32,10 +36,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
-use Dolibarr\Code\Adherents\Classes\Adherent;
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 

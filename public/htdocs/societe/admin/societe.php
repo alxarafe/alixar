@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004       Eric Seigne             <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2011  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2012  Juanjo Menent           <jmenent@2byte.es>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2012  Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -22,6 +22,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
 
 /**
  *  \file       htdocs/societe/admin/societe.php
@@ -45,7 +48,6 @@ if (!$user->admin) {
 }
 
 $formcompany = new FormCompany($db);
-
 
 
 /*
@@ -116,7 +118,7 @@ if ($action == 'set') {
 
     $type = 'company';
     $sql = "INSERT INTO " . MAIN_DB_PREFIX . "document_model (nom, type, entity, libelle, description)";
-    $sql .= " VALUES ('" . $db->escape($value) . "', '" . $db->escape($type) . "', " . ((int) $conf->entity) . ", ";
+    $sql .= " VALUES ('" . $db->escape($value) . "', '" . $db->escape($type) . "', " . ((int)$conf->entity) . ", ";
     $sql .= ($label ? "'" . $db->escape($label) . "'" : 'null') . ", ";
     $sql .= (!empty($scandir) ? "'" . $db->escape($scandir) . "'" : "null");
     $sql .= ")";
@@ -131,7 +133,7 @@ if ($action == 'set') {
 if ($action == 'del') {
     $type = 'company';
     $sql = "DELETE FROM " . MAIN_DB_PREFIX . "document_model";
-    $sql .= " WHERE nom='" . $db->escape($value) . "' AND type='" . $db->escape($type) . "' AND entity=" . ((int) $conf->entity);
+    $sql .= " WHERE nom='" . $db->escape($value) . "' AND type='" . $db->escape($type) . "' AND entity=" . ((int)$conf->entity);
     $resql = $db->query($sql);
     if (!$resql) {
         dol_print_error($db);
@@ -152,12 +154,12 @@ if ($action == 'setdoc') {
     $sql_del = "DELETE FROM " . MAIN_DB_PREFIX . "document_model";
     $sql_del .= " WHERE nom = '" . $db->escape(GETPOST('value', 'alpha')) . "'";
     $sql_del .= " AND type = '" . $db->escape($type) . "'";
-    $sql_del .= " AND entity = " . ((int) $conf->entity);
+    $sql_del .= " AND entity = " . ((int)$conf->entity);
     dol_syslog("societe.php " . $sql);
     $result1 = $db->query($sql_del);
 
     $sql = "INSERT INTO " . MAIN_DB_PREFIX . "document_model (nom, type, entity, libelle, description)";
-    $sql .= " VALUES ('" . $db->escape($value) . "', '" . $db->escape($type) . "', " . ((int) $conf->entity) . ", ";
+    $sql .= " VALUES ('" . $db->escape($value) . "', '" . $db->escape($type) . "', " . ((int)$conf->entity) . ", ";
     $sql .= ($label ? "'" . $db->escape($label) . "'" : 'null') . ", ";
     $sql .= (!empty($scandir) ? "'" . $db->escape($scandir) . "'" : "null");
     $sql .= ")";
@@ -337,7 +339,6 @@ if ($action == 'setonsearchandlistgooncustomerorsuppliercard') {
     }
 }
 
-
 /*
  * 	View
  */
@@ -351,7 +352,6 @@ llxHeader('', $langs->trans("CompanySetup"), $help_url);
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("CompanySetup"), $linkback, 'title_setup');
-
 
 $head = societe_admin_prepare_head();
 
@@ -668,7 +668,7 @@ print '<td class="center">' . $langs->trans("MustBeMandatory") . '</td>';
 print '<td class="center">' . $langs->trans("MustBeInvoiceMandatory") . '</td>';
 print "</tr>\n";
 
-$profid = array('IDPROF1' => array(), 'IDPROF2' => array(), 'IDPROF3' => array(), 'IDPROF4' => array(), 'IDPROF5' => array(),'IDPROF6' => array(), 'EMAIL' => array());
+$profid = array('IDPROF1' => array(), 'IDPROF2' => array(), 'IDPROF3' => array(), 'IDPROF4' => array(), 'IDPROF5' => array(), 'IDPROF6' => array(), 'EMAIL' => array());
 $profid['IDPROF1'][0] = $langs->trans("ProfId1");
 $profid['IDPROF1'][1] = $langs->transcountry('ProfId1', $mysoc->country_code);
 $profid['IDPROF2'][0] = $langs->trans("ProfId2");
@@ -791,9 +791,9 @@ if (!$conf->use_javascript_ajax) {
 } else {
     print '<td width="60" class="right">';
     $arrval = array('0' => $langs->trans("No"),
-    '1' => $langs->trans("Yes") . ' (' . $langs->trans("NumberOfKeyToSearch", 1) . ')',
-    '2' => $langs->trans("Yes") . ' (' . $langs->trans("NumberOfKeyToSearch", 2) . ')',
-    '3' => $langs->trans("Yes") . ' (' . $langs->trans("NumberOfKeyToSearch", 3) . ')',
+        '1' => $langs->trans("Yes") . ' (' . $langs->trans("NumberOfKeyToSearch", 1) . ')',
+        '2' => $langs->trans("Yes") . ' (' . $langs->trans("NumberOfKeyToSearch", 2) . ')',
+        '3' => $langs->trans("Yes") . ' (' . $langs->trans("NumberOfKeyToSearch", 3) . ')',
     );
     print $form->selectarray("activate_COMPANY_USE_SEARCH_TO_SELECT", $arrval, getDolGlobalString('COMPANY_USE_SEARCH_TO_SELECT'), 0, 0, 0, '', 0, 0, 0, '', 'minwidth75imp');
     print '</td><td class="right">';
@@ -812,9 +812,9 @@ if (!$conf->use_javascript_ajax) {
 } else {
     print '<td width="60" class="right">';
     $arrval = array('0' => $langs->trans("No"),
-    '1' => $langs->trans("Yes") . ' (' . $langs->trans("NumberOfKeyToSearch", 1) . ')',
-    '2' => $langs->trans("Yes") . ' (' . $langs->trans("NumberOfKeyToSearch", 2) . ')',
-    '3' => $langs->trans("Yes") . ' (' . $langs->trans("NumberOfKeyToSearch", 3) . ')',
+        '1' => $langs->trans("Yes") . ' (' . $langs->trans("NumberOfKeyToSearch", 1) . ')',
+        '2' => $langs->trans("Yes") . ' (' . $langs->trans("NumberOfKeyToSearch", 2) . ')',
+        '3' => $langs->trans("Yes") . ' (' . $langs->trans("NumberOfKeyToSearch", 3) . ')',
     );
     print $form->selectarray("activate_CONTACT_USE_SEARCH_TO_SELECT", $arrval, getDolGlobalString('CONTACT_USE_SEARCH_TO_SELECT'), 0, 0, 0, '', 0, 0, 0, '', 'minwidth75imp');
     print '</td><td class="right">';
@@ -822,7 +822,6 @@ if (!$conf->use_javascript_ajax) {
     print "</td>";
 }
 print '</tr>';
-
 
 
 print '<tr class="oddeven">';

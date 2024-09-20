@@ -104,9 +104,9 @@ class Color extends Supervisor
      *
      * @param array $pStyles Array containing style information
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function applyFromArray(array $pStyles)
     {
@@ -297,9 +297,9 @@ class Color extends Supervisor
         }
 
         $rgb = strtoupper(
-            str_pad(dechex((int) $red), 2, '0', 0) .
-            str_pad(dechex((int) $green), 2, '0', 0) .
-            str_pad(dechex((int) $blue), 2, '0', 0)
+            str_pad(dechex((int)$red), 2, '0', 0) .
+            str_pad(dechex((int)$green), 2, '0', 0) .
+            str_pad(dechex((int)$blue), 2, '0', 0)
         );
 
         return (($rgba) ? 'FF' : '') . $rgb;
@@ -317,7 +317,7 @@ class Color extends Supervisor
     public static function indexedColor($pIndex, $background = false)
     {
         // Clean parameter
-        $pIndex = (int) $pIndex;
+        $pIndex = (int)$pIndex;
 
         // Indexed colors
         if (self::$indexedColors === null) {

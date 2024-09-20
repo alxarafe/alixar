@@ -27,9 +27,6 @@ use Dolibarr\Code\Core\Classes\Stats;
  *       \brief      File for class to manage the ticket stats
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/stats.class.php';
-require_once 'ticket.class.php';
-
 /**
  * Class to manage the ticket stats
  */

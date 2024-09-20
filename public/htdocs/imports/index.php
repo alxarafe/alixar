@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2005-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2005-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Imports\Classes\Import;
+use Dolibarr\Code\Imports\Classes\ModeleImports;
+
 /**
  *       \file       htdocs/imports/index.php
  *       \ingroup    import
@@ -24,7 +28,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/imports/class/import.class.php';
 
 // Load translation files required by the page
 $langs->load("exports");
@@ -35,7 +38,6 @@ if (!$user->socid == 0) {
 
 $import = new Import($db);
 $import->load_arrays($user);
-
 
 /*
  * View
@@ -50,9 +52,8 @@ print load_fiche_titre($langs->trans("ImportArea"));
 print $langs->trans("FormatedImportDesc1") . '<br>';
 print '<br>';
 
-
 print '<div class="center">';
-if (count($import->array_import_code)) {
+if (count($import->array_import_code ?? [])) {
     print dolGetButtonTitle($langs->trans('NewImport'), '', 'fa fa-plus-circle', constant('BASE_URL') . '/imports/import.php?leftmenu=import');
 }
 print '</div>';
@@ -68,7 +69,6 @@ print '<td>' . $langs->trans("LibraryShort") . '</td>';
 print '<td class="right">' . $langs->trans("LibraryVersion") . '</td>';
 print '</tr>';
 
-include_once DOL_DOCUMENT_ROOT . '/core/modules/import/modules_import.php';
 $model = new ModeleImports();
 $list = $model->listOfAvailableImportFormat($db);
 
@@ -85,7 +85,6 @@ foreach ($list as $key) {
 
 print '</table>';
 print '</div>';
-
 
 // End of page
 llxFooter();

@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2015      ATM Consulting       <support@atm-consulting.fr>
- * Copyright (C) 2019-2020 Open-DSI             <support@open-dsi.fr>
+/* Copyright (C) 2015       ATM Consulting              <support@atm-consulting.fr>
+ * Copyright (C) 2019-2020  Open-DSI                    <support@open-dsi.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
 
 /**
  *    \file       htdocs/intracommreport/admin/intracommreport.php
@@ -83,7 +87,6 @@ if ($action == 'update') {
         setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
     }
 }
-
 
 /*
  * View

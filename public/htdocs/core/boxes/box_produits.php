@@ -20,6 +20,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Product\Classes\Product;
 
 /**
@@ -27,8 +28,6 @@ use Dolibarr\Code\Product\Classes\Product;
  *  \ingroup    produits,services
  *  \brief      Module to generate box of last products/services
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
 
 /**
  * Class to manage the box to show last products
@@ -43,8 +42,8 @@ class box_produits extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -61,8 +60,8 @@ class box_produits extends ModeleBoxes
     /**
      *  Load data into info_box_contents array to show array later.
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -70,7 +69,7 @@ class box_produits extends ModeleBoxes
 
         $this->max = $max;
 
-                $productstatic = new Product($this->db);
+        $productstatic = new Product($this->db);
 
         $this->info_box_head = array(
             'text' => $langs->trans("BoxTitleLastProducts", $max) . '<a class="paddingleft" href="' . constant('BASE_URL') . 'product/list.php?sortfield=p.tms&sortorder=DESC"><span class="badge">...</span></a>',
@@ -114,7 +113,7 @@ class box_produits extends ModeleBoxes
                     if (getDolGlobalInt('MAIN_MULTILANGS')) { // si l'option est active
                         $sqld = "SELECT label";
                         $sqld .= " FROM " . MAIN_DB_PREFIX . "product_lang";
-                        $sqld .= " WHERE fk_product = " . ((int) $objp->rowid);
+                        $sqld .= " WHERE fk_product = " . ((int)$objp->rowid);
                         $sqld .= " AND lang = '" . $this->db->escape($langs->getDefaultLang()) . "'";
                         $sqld .= " LIMIT 1";
 
@@ -167,7 +166,6 @@ class box_produits extends ModeleBoxes
                             //Parse the dynamic price
                             $productstatic->fetch($objp->rowid, '', '', 1);
 
-                            require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_parser.class.php';
                             $priceparser = new PriceParser($this->db);
                             $price_result = $priceparser->parseProduct($productstatic);
                             if ($price_result >= 0) {
@@ -236,10 +234,10 @@ class box_produits extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

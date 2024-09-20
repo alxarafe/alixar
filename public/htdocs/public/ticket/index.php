@@ -43,15 +43,13 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';

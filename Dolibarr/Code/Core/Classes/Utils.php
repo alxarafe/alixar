@@ -207,7 +207,6 @@ class Utils
 
                 // Update cachenbofdoc
                 if (isModEnabled('ecm') && $choice == 'allfiles') {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmdirectory.class.php';
                     $ecmdirstatic = new EcmDirectory($this->db);
                     $result = $ecmdirstatic->refreshcachenboffile(1);
                 }
@@ -1375,7 +1374,6 @@ class Utils
         }
 
         if (!$error) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
             $mailfile = new CMailFile($subject, $sendto, $from, $message, $filepath, $mimetype, $filename, '', '', 0, -1);
             if ($mailfile->error) {
                 $error++;

@@ -1,7 +1,6 @@
 <?php
 
-/* Copyright (C) 2007-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) ---Put here your own copyright and developer email---
+/* Copyright (C) 2007-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +17,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
+
 /**
  *  \file       recruitmentjobposition_document.php
  *  \ingroup    recruitment
@@ -29,7 +33,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentjobposition.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/lib/recruitment_recruitmentjobposition.lib.php';
 
 // Load translation files required by the page
@@ -83,14 +86,11 @@ $result = restrictedArea($user, 'recruitment', $object->id, 'recruitment_recruit
 
 $permissiontoadd = $user->hasRight('recruitment', 'recruitmentjobposition', 'write'); // Used by the include of actions_addupdatedelete.inc.php
 
-
-
 /*
  * Actions
  */
 
 include DOL_DOCUMENT_ROOT . '/core/actions_linkedfiles.inc.php';
-
 
 /*
  * View

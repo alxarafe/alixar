@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2013-2016 Laurent Destailleur   <eldy@users.sourceforge.net>
- * Copyright (C) 2015-2024  Frédéric France       <frederic.france@free.fr>
- * Copyright (C) 2016      Juanjo Menent         <jmenent@2byte.es>
- * Copyright (C) 2020      Andreu Bisquerra Gaya <jove@bisquerra.com>
+/* Copyright (C) 2013-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2016       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2020       Andreu Bisquerra Gaya       <jove@bisquerra.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Abbes Bahfir		 <contact@ab1consult.com><bafbes@gmail.com>
+ * Copyright (C) 2024		Abbes Bahfir		        <contact@ab1consult.com><bafbes@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\dolReceiptPrinter;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/admin/receiptprinter.php
  *      \ingroup    printing
@@ -30,11 +34,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/receiptprinter.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolreceiptprinter.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "receiptprinter"));
@@ -65,7 +66,7 @@ if (!function_exists('gzdecode')) {
     /**
      * Gzdecode
      *
-     * @param string    $data   data to deflate
+     * @param string $data data to deflate
      * @return string           data deflated
      * @phan-suppress PhanRedefineFunctionInternal
      */

@@ -22,14 +22,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Hrm\Classes\Evaluation;
+use Dolibarr\Code\Hrm\Classes\ModeleNumRefEvaluation;
+
 /**
  * \file       htdocs/core/modules/hrm/mod_evaluation_advanced.php
  * \ingroup    hrm
  * \brief      File containing class for advanced numbering model of Evaluation
  */
-
- require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/hrm/modules_evaluation.php';
-
 
 /**
  *  Class to manage customer Bom numbering rules advanced
@@ -56,8 +58,8 @@ class mod_evaluation_advanced extends ModeleNumRefEvaluation
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -97,7 +99,7 @@ class mod_evaluation_advanced extends ModeleNumRefEvaluation
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -125,8 +127,8 @@ class mod_evaluation_advanced extends ModeleNumRefEvaluation
     /**
      *  Return next free value
      *
-     *  @param  Evaluation  $object     Object we need next value for
-     *  @return string|0                Value if OK, 0 if KO
+     * @param Evaluation $object Object we need next value for
+     * @return string|0                Value if OK, 0 if KO
      */
     public function getNextValue($object)
     {
@@ -146,6 +148,6 @@ class mod_evaluation_advanced extends ModeleNumRefEvaluation
 
         $numFinal = get_next_value($db, $mask, 'hrm_evaluation', 'ref', '', null, $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

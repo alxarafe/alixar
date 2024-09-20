@@ -27,9 +27,14 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Salaries\Classes\PaymentSalary;
+use Dolibarr\Code\Salaries\Classes\Salary;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use Dolibarr\Code\Societe\Classes\Societe;
+use DoliDB;
 
 /**
  * \file       htdocs/compta/prelevement/class/bonprelevement.class.php
@@ -192,8 +197,6 @@ class BonPrelevement extends CommonObject
     public $type;
     public $fk_bank_account;
     // END MODULEBUILDER PROPERTIES
-
-
 
     /**
      *  Constructor
@@ -980,8 +983,6 @@ class BonPrelevement extends CommonObject
 
         dol_syslog(__METHOD__ . " Bank=" . $banque . " Office=" . $agence . " mode=" . $mode . " format=" . $format, LOG_DEBUG);
 
-        require_once DOL_DOCUMENT_ROOT . "/compta/facture/class/facture.class.php";
-        require_once DOL_DOCUMENT_ROOT . "/societe/class/societe.class.php";
 
         // Check params
         if ($type != 'bank-transfer') {

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2012       Mikael Carlavan         <contact@mika-carl.fr>
- * Copyright (C) 2017       ATM Consulting          <contact@atm-consulting.fr>
- * Copyright (C) 2017       Pierre-Henry Favre      <phf@atm-consulting.fr>
- * Copyright (C) 2018-2019  Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2012       Mikael Carlavan             <contact@mika-carl.fr>
+ * Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
+ * Copyright (C) 2017       Pierre-Henry Favre          <phf@atm-consulting.fr>
+ * Copyright (C) 2018-2019  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReportRule;
 
 /**
  *      \file       htdocs/admin/expensereport_rules.php
@@ -36,14 +38,13 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/expensereport.lib.php';
 $langs->loadLangs(array("admin", "other", "trips", "errors", "dict"));
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
-$hookmanager->initHooks(array('admin', 'dictionaryadmin','expensereport_rules'));
+$hookmanager->initHooks(array('admin', 'dictionaryadmin', 'expensereport_rules'));
 
 $object = new ExpenseReportRule($db);
 
 if (!$user->admin) {
     accessforbidden();
 }
-
 
 /*
  * Action
@@ -70,7 +71,7 @@ if (empty($reshook)) {
     $code_expense_rules_type = GETPOST('code_expense_rules_type');
     $dates = dol_mktime(12, 0, 0, GETPOST('startmonth'), GETPOST('startday'), GETPOST('startyear'));
     $datee = dol_mktime(12, 0, 0, GETPOST('endmonth'), GETPOST('endday'), GETPOST('endyear'));
-    $amount = (float) price2num(GETPOST('amount'), 'MT', 2);
+    $amount = (float)price2num(GETPOST('amount'), 'MT', 2);
 
     if (!empty($id)) {
         $result = $object->fetch($id);
@@ -110,11 +111,11 @@ if (empty($reshook)) {
 
         if (empty($error)) {
             if ($apply_to == 'U') {
-                $object->fk_user = (int) $fk_user;
+                $object->fk_user = (int)$fk_user;
                 $object->fk_usergroup = 0;
                 $object->is_for_all = 0;
             } elseif ($apply_to == 'G') {
-                $object->fk_usergroup = (int) $fk_usergroup;
+                $object->fk_usergroup = (int)$fk_usergroup;
                 $object->fk_user = 0;
                 $object->is_for_all = 0;
             } elseif ($apply_to == 'A') {

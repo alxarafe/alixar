@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010-2012  Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2011		Laurent Destailleur	<eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011		Laurent Destailleur	        <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/contact/canvas/default/actions_contactcard_default.class.php
@@ -35,11 +37,11 @@ class ActionsContactCardDefault extends ActionsContactCardCommon
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db             Handler access base de donnees
-     *  @param  string  $dirmodule      Name of directory of module
-     *  @param  string  $targetmodule   Name of directory of module where canvas is stored
-     *  @param  string  $canvas         Name of canvas
-     *  @param  string  $card           Name of tab (sub-canvas)
+     * @param DoliDB $db Handler access base de donnees
+     * @param string $dirmodule Name of directory of module
+     * @param string $targetmodule Name of directory of module where canvas is stored
+     * @param string $canvas Name of canvas
+     * @param string $card Name of tab (sub-canvas)
      */
     public function __construct($db, $dirmodule, $targetmodule, $canvas, $card)
     {
@@ -53,8 +55,8 @@ class ActionsContactCardDefault extends ActionsContactCardCommon
     /**
      *  Return the title of card
      *
-     *  @param  string  $action     Code action
-     *  @return string              Title
+     * @param string $action Code action
+     * @return string              Title
      */
     private function getTitle($action)
     {
@@ -75,17 +77,18 @@ class ActionsContactCardDefault extends ActionsContactCardCommon
         return $out;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Assign custom values for canvas
      *
-     *  @param  string      $action     Type of action
-     *  @param  int         $id             Id
-     *  @return void
+     * @param string $action Type of action
+     * @param int $id Id
+     * @return void
      */
     public function assign_values(&$action, $id)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $db, $langs, $user;
         global $form;
 

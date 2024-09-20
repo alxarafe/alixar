@@ -15,8 +15,9 @@
 -- along with this program. If not, see <https://www.gnu.org/licenses/>.
 -- ============================================================================
 
-CREATE TABLE llx_opensurvey_user_formanswers (
+CREATE TABLE llx_opensurvey_user_formanswers
+(
     fk_user_survey INTEGER NOT NULL,
     fk_question INTEGER NOT NULL,
-    reponses TEXT
+    reponses    TEXT
 ) ENGINE=innodb;

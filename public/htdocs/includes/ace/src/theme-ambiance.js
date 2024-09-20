@@ -1,8 +1,8 @@
-define("ace/theme/ambiance",["require","exports","module","ace/lib/dom"], function(require, exports, module) {
+define("ace/theme/ambiance", ["require", "exports", "module", "ace/lib/dom"], function (require, exports, module) {
 
-exports.isDark = true;
-exports.cssClass = "ace-ambiance";
-exports.cssText = ".ace-ambiance .ace_gutter {\
+    exports.isDark = true;
+    exports.cssClass = "ace-ambiance";
+    exports.cssText = ".ace-ambiance .ace_gutter {\
 background-color: #3d3d3d;\
 background-image: linear-gradient(left, #3D3D3D, #333);\
 background-repeat: repeat-x;\
@@ -172,14 +172,15 @@ background: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZ
 }\
 ";
 
-var dom = require("../lib/dom");
-dom.importCssString(exports.cssText, exports.cssClass, false);
+    var dom = require("../lib/dom");
+    dom.importCssString(exports.cssText, exports.cssClass, false);
 
-});                (function() {
-                    window.require(["ace/theme/ambiance"], function(m) {
-                        if (typeof module == "object" && typeof exports == "object" && module) {
-                            module.exports = m;
-                        }
-                    });
-                })();
+});
+(function () {
+    window.require(["ace/theme/ambiance"], function (m) {
+        if (typeof module == "object" && typeof exports == "object" && module) {
+            module.exports = m;
+        }
+    });
+})();
             

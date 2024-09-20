@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2008-2014 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2022       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2008-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,17 +19,18 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+
 /**
  * \file       htdocs/core/lib/ecm.lib.php
  * \brief      Ensemble de functions de base pour le module ecm
  * \ingroup    ecm
  */
 
-
 /**
  * Prepare array with list of different ecm main dashboard
  *
- * @param   object  $object     Object related to tabs
+ * @param object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function ecm_prepare_dasboard_head($object)
@@ -85,9 +86,9 @@ function ecm_prepare_dasboard_head($object)
 /**
  * Prepare array with list of tabs
  *
- * @param   object  $object     Object related to tabs
- * @param   string  $module     Module
- * @param   string  $section    Section
+ * @param object $object Object related to tabs
+ * @param string $module Module
+ * @param string $section Section
  * @return  array               Array of tabs to show
  */
 function ecm_prepare_head($object, $module = 'ecm', $section = '')
@@ -114,7 +115,7 @@ function ecm_prepare_head($object, $module = 'ecm', $section = '')
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function ecm_file_prepare_head($object)
@@ -150,7 +151,7 @@ function ecm_file_prepare_head($object)
 /**
  * Prepare array with list of tabs
  *
- * @param   object  $object     Object related to tabs
+ * @param object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function ecm_prepare_head_fm($object)
@@ -175,7 +176,7 @@ function ecm_prepare_head_fm($object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function ecm_admin_prepare_head()
 {

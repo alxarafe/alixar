@@ -61,12 +61,12 @@ class DoliDBSqlite3 extends DoliDB
      *  Constructor.
      *  This create an opened connection to a database server and eventually to a database
      *
-     *  @param      string  $type       Type of database (mysql, pgsql...). Not used.
-     *  @param      string  $host       Address of database server
-     *  @param      string  $user       Nom de l'utilisateur autorise
-     *  @param      string  $pass       Password
-     *  @param      string  $name       Nom de la database
-     *  @param      int     $port       Port of database server
+     * @param string $type Type of database (mysql, pgsql...). Not used.
+     * @param string $host Address of database server
+     * @param string $user Nom de l'utilisateur autorise
+     * @param string $pass Password
+     * @param string $name Nom de la database
+     * @param int $port Port of database server
      */
     public function __construct($type, $host, $user, $pass, $name = '', $port = 0)
     {
@@ -140,9 +140,9 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Convert a SQL request in Mysql syntax to native syntax
      *
-     *  @param     string   $line   SQL request line to convert
-     *  @param     string   $type   Type of SQL order ('ddl' for insert, update, select, delete or 'dml' for create, alter...)
-     *  @return    string           SQL request line converted
+     * @param string $line SQL request line to convert
+     * @param string $type Type of SQL order ('ddl' for insert, update, select, delete or 'dml' for create, alter...)
+     * @return    string           SQL request line converted
      */
     public function convertSQLFromMysql($line, $type = 'ddl')
     {
@@ -297,16 +297,17 @@ class DoliDBSqlite3 extends DoliDB
         return $line;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Select a database
      *
-     *  @param      string  $database   Name of database
-     *  @return     boolean             true if OK, false if KO
+     * @param string $database Name of database
+     * @return     boolean             true if OK, false if KO
      */
     public function select_db($database)
     {
-		// phpcs:enable
+        // phpcs:enable
         dol_syslog(get_class($this) . "::select_db database=" . $database, LOG_DEBUG);
         // sqlite_select_db() does not exist
         //return sqlite_select_db($this->db,$database);
@@ -317,13 +318,13 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Connection to server
      *
-     *  @param      string          $host       database server host
-     *  @param      string          $login      login
-     *  @param      string          $passwd     password
-     *  @param      string          $name       name of database (not used for mysql, used for pgsql)
-     *  @param      integer         $port       Port of database server
-     *  @return     SQLite3|false               Database access handler
-     *  @see        close()
+     * @param string $host database server host
+     * @param string $login login
+     * @param string $passwd password
+     * @param string $name name of database (not used for mysql, used for pgsql)
+     * @param integer $port Port of database server
+     * @return     SQLite3|false               Database access handler
+     * @see        close()
      */
     public function connect($host, $login, $passwd, $name, $port = 0)
     {
@@ -356,7 +357,7 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Return version of database server
      *
-     *  @return         string      Version string
+     * @return         string      Version string
      */
     public function getVersion()
     {
@@ -367,7 +368,7 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Return version of database client driver
      *
-     *  @return         string      Version string
+     * @return         string      Version string
      */
     public function getDriverInfo()
     {
@@ -378,8 +379,8 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Close database connection
      *
-     *  @return     bool     True if disconnect successful, false otherwise
-     *  @see        connect()
+     * @return     bool     True if disconnect successful, false otherwise
+     * @see        connect()
      */
     public function close()
     {
@@ -398,12 +399,12 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Execute a SQL request and return the resultset
      *
-     *  @param  string  $query          SQL query string
-     *  @param  int     $usesavepoint   0=Default mode, 1=Run a savepoint before and a rollbock to savepoint if error (this allow to have some request with errors inside global transactions).
+     * @param string $query SQL query string
+     * @param int $usesavepoint 0=Default mode, 1=Run a savepoint before and a rollbock to savepoint if error (this allow to have some request with errors inside global transactions).
      *                                  Note that with Mysql, this parameter is not used as Myssql can already commit a transaction even if one request is in error, without using savepoints.
-     *  @param  string  $type           Type of SQL order ('ddl' for insert, update, select, delete or 'dml' for create, alter...)
-     *  @param  int     $result_mode    Result mode (not used with sqlite)
-     *  @return false|SQLite3Result     Resultset of answer
+     * @param string $type Type of SQL order ('ddl' for insert, update, select, delete or 'dml' for create, alter...)
+     * @param int $result_mode Result mode (not used with sqlite)
+     * @return false|SQLite3Result     Resultset of answer
      */
     public function query($query, $usesavepoint = 0, $type = 'auto', $result_mode = 0)
     {
@@ -513,16 +514,17 @@ class DoliDBSqlite3 extends DoliDB
         return $ret;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Returns the current line (as an object) for the resultset cursor
      *
-     *  @param  SQLite3Result   $resultset  Curseur de la requete voulue
-     *  @return false|object                Object result line or false if KO or end of cursor
+     * @param SQLite3Result $resultset Curseur de la requete voulue
+     * @return false|object                Object result line or false if KO or end of cursor
      */
     public function fetch_object($resultset)
     {
-		// phpcs:enable
+        // phpcs:enable
         // Si le resultset n'est pas fourni, on prend le dernier utilise sur cette connection
         if (!is_object($resultset)) {
             $resultset = $this->_results;
@@ -530,22 +532,23 @@ class DoliDBSqlite3 extends DoliDB
         //return $resultset->fetch(PDO::FETCH_OBJ);
         $ret = $resultset->fetchArray(SQLITE3_ASSOC);
         if ($ret) {
-            return (object) $ret;
+            return (object)$ret;
         }
         return false;
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return datas as an array
      *
-     *  @param  SQLite3Result   $resultset  Resultset of request
-     *  @return false|array                 Array or false if KO or end of cursor
+     * @param SQLite3Result $resultset Resultset of request
+     * @return false|array                 Array or false if KO or end of cursor
      */
     public function fetch_array($resultset)
     {
-		// phpcs:enable
+        // phpcs:enable
         // If resultset not provided, we take the last used by connection
         if (!is_object($resultset)) {
             $resultset = $this->_results;
@@ -555,16 +558,17 @@ class DoliDBSqlite3 extends DoliDB
         return $ret;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return datas as an array
      *
-     *  @param  SQLite3Result   $resultset  Resultset of request
-     *  @return false|array                 Array or false if KO or end of cursor
+     * @param SQLite3Result $resultset Resultset of request
+     * @return false|array                 Array or false if KO or end of cursor
      */
     public function fetch_row($resultset)
     {
-		// phpcs:enable
+        // phpcs:enable
         // If resultset not provided, we take the last used by connection
         if (!is_bool($resultset)) {
             if (!is_object($resultset)) {
@@ -577,17 +581,18 @@ class DoliDBSqlite3 extends DoliDB
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return number of lines for result of a SELECT
      *
-     *  @param  SQLite3Result   $resultset  Resulset of requests
-     *  @return int                     Nb of lines
-     *  @see    affected_rows()
+     * @param SQLite3Result $resultset Resulset of requests
+     * @return int                     Nb of lines
+     * @see    affected_rows()
      */
     public function num_rows($resultset)
     {
-		// phpcs:enable
+        // phpcs:enable
 
         // If resultset not provided, we take the last used by connection
         if (!is_object($resultset)) {
@@ -599,17 +604,18 @@ class DoliDBSqlite3 extends DoliDB
         return 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return number of lines for result of a SELECT
      *
-     *  @param  SQLite3Result   $resultset  Resulset of requests
-     *  @return int                     Nb of lines
-     *  @see    affected_rows()
+     * @param SQLite3Result $resultset Resulset of requests
+     * @return int                     Nb of lines
+     * @see    affected_rows()
      */
     public function affected_rows($resultset)
     {
-		// phpcs:enable
+        // phpcs:enable
 
         // If resultset not provided, we take the last used by connection
         if (!is_object($resultset)) {
@@ -627,8 +633,8 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Free last resultset used.
      *
-     *  @param  SQLite3Result   $resultset   Curseur de la requete voulue
-     *  @return void
+     * @param SQLite3Result $resultset Curseur de la requete voulue
+     * @return void
      */
     public function free($resultset = null)
     {
@@ -645,8 +651,8 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Escape a string to insert data
      *
-     *  @param  string  $stringtoencode     String to escape
-     *  @return string                      String escaped
+     * @param string $stringtoencode String to escape
+     * @return string                      String escaped
      */
     public function escape($stringtoencode)
     {
@@ -656,18 +662,18 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Escape a string to insert data into a like
      *
-     *  @param  string  $stringtoencode     String to escape
-     *  @return string                      String escaped
+     * @param string $stringtoencode String to escape
+     * @return string                      String escaped
      */
     public function escapeforlike($stringtoencode)
     {
-        return str_replace(array('\\', '_', '%'), array('\\\\', '\_', '\%'), (string) $stringtoencode);
+        return str_replace(array('\\', '_', '%'), array('\\\\', '\_', '\%'), (string)$stringtoencode);
     }
 
     /**
      *  Renvoie le code erreur generique de l'operation precedente.
      *
-     *  @return string      Error code (Examples: DB_ERROR_TABLE_ALREADY_EXISTS, DB_ERROR_RECORD_ALREADY_EXISTS...)
+     * @return string      Error code (Examples: DB_ERROR_TABLE_ALREADY_EXISTS, DB_ERROR_RECORD_ALREADY_EXISTS...)
      */
     public function errno()
     {
@@ -736,7 +742,7 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Renvoie le texte de l'erreur mysql de l'operation precedente.
      *
-     *  @return string  Error text
+     * @return string  Error text
      */
     public function error()
     {
@@ -748,17 +754,18 @@ class DoliDBSqlite3 extends DoliDB
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Get last ID after an insert INSERT
      *
-     * @param   string  $tab        Table name concerned by insert. Ne sert pas sous MySql mais requis pour compatibilite avec Postgresql
-     * @param   string  $fieldid    Field name
+     * @param string $tab Table name concerned by insert. Ne sert pas sous MySql mais requis pour compatibilite avec Postgresql
+     * @param string $fieldid Field name
      * @return  int                 Id of row
      */
     public function last_insert_id($tab, $fieldid = 'rowid')
     {
-		// phpcs:enable
+        // phpcs:enable
         return $this->db->lastInsertRowId();
     }
 
@@ -766,8 +773,8 @@ class DoliDBSqlite3 extends DoliDB
      * Encrypt sensitive data in database
      * Warning: This function includes the escape and add the SQL simple quotes on strings.
      *
-     * @param   string  $fieldorvalue   Field name or value to encrypt
-     * @param   int     $withQuotes     Return string including the SQL simple quotes. This param must always be 1 (Value 0 is bugged and deprecated).
+     * @param string $fieldorvalue Field name or value to encrypt
+     * @param int $withQuotes Return string including the SQL simple quotes. This param must always be 1 (Value 0 is bugged and deprecated).
      * @return  string                  XXX(field) or XXX('value') or field or 'value'
      */
     public function encrypt($fieldorvalue, $withQuotes = 1)
@@ -796,8 +803,8 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Decrypt sensitive data in database
      *
-     *  @param  string  $value          Value to decrypt
-     *  @return string                  Decrypted value if used
+     * @param string $value Value to decrypt
+     * @return string                  Decrypted value if used
      */
     public function decrypt($value)
     {
@@ -823,7 +830,8 @@ class DoliDBSqlite3 extends DoliDB
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Return connection ID
      *
@@ -831,26 +839,27 @@ class DoliDBSqlite3 extends DoliDB
      */
     public function DDLGetConnectId()
     {
-		// phpcs:enable
+        // phpcs:enable
         return '?';
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Create a new database
      *  Do not use function xxx_create_db (xxx=mysql, ...) as they are deprecated
      *  We force to create database with charset this->forcecharset and collate this->forcecollate
      *
-     *  @param  string  $database       Database name to create
-     *  @param  string  $charset        Charset used to store data
-     *  @param  string  $collation      Charset used to sort data
-     *  @param  string  $owner          Username of database owner
-     *  @return false|SQLite3Result         Resource defined if OK, null if KO
+     * @param string $database Database name to create
+     * @param string $charset Charset used to store data
+     * @param string $collation Charset used to sort data
+     * @param string $owner Username of database owner
+     * @return false|SQLite3Result         Resource defined if OK, null if KO
      */
     public function DDLCreateDb($database, $charset = '', $collation = '', $owner = '')
     {
-		// phpcs:enable
+        // phpcs:enable
         if (empty($charset)) {
             $charset = $this->forcecharset;
         }
@@ -868,17 +877,18 @@ class DoliDBSqlite3 extends DoliDB
         return $ret;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  List tables into a database
      *
-     *  @param  string      $database   Name of database
-     *  @param  string      $table      Name of table filter ('xxx%')
-     *  @return array                   List of tables in an array
+     * @param string $database Name of database
+     * @param string $table Name of table filter ('xxx%')
+     * @return array                   List of tables in an array
      */
     public function DDLListTables($database, $table = '')
     {
-		// phpcs:enable
+        // phpcs:enable
         $listtables = array();
 
         $like = '';
@@ -900,17 +910,18 @@ class DoliDBSqlite3 extends DoliDB
         return $listtables;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  List tables into a database with table type
      *
-     *  @param  string      $database   Name of database
-     *  @param  string      $table      Name of table filter ('xxx%')
-     *  @return array                   List of tables in an array
+     * @param string $database Name of database
+     * @param string $table Name of table filter ('xxx%')
+     * @return array                   List of tables in an array
      */
     public function DDLListTablesFull($database, $table = '')
     {
-		// phpcs:enable
+        // phpcs:enable
         $listtables = array();
 
         $like = '';
@@ -932,17 +943,18 @@ class DoliDBSqlite3 extends DoliDB
         return $listtables;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  List information of columns into a table.
      *
-     *  @param  string  $table      Name of table
-     *  @return array               Tableau des information des champs de la table
+     * @param string $table Name of table
+     * @return array               Tableau des information des champs de la table
      *  TODO modify for sqlite
      */
     public function DDLInfoTable($table)
     {
-		// phpcs:enable
+        // phpcs:enable
         $infotables = array();
 
         $tmptable = preg_replace('/[^a-z0-9\.\-\_]/i', '', $table);
@@ -959,22 +971,23 @@ class DoliDBSqlite3 extends DoliDB
         return $infotables;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Create a table into database
      *
-     *  @param      string  $table          Nom de la table
-     *  @param      array<string,array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string}>   $fields         Tableau associatif [nom champ][tableau des descriptions]
-     *  @param      string  $primary_key    Nom du champ qui sera la clef primaire
-     *  @param      string  $type           Type de la table
-     *  @param      array   $unique_keys    Tableau associatifs Nom de champs qui seront clef unique => valeur
-     *  @param      array   $fulltext_keys  Tableau des Nom de champs qui seront indexes en fulltext
-     *  @param      array   $keys           Tableau des champs cles noms => valeur
-     *  @return     int                     Return integer <0 if KO, >=0 if OK
+     * @param string $table Nom de la table
+     * @param array<string,array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string}> $fields Tableau associatif [nom champ][tableau des descriptions]
+     * @param string $primary_key Nom du champ qui sera la clef primaire
+     * @param string $type Type de la table
+     * @param array $unique_keys Tableau associatifs Nom de champs qui seront clef unique => valeur
+     * @param array $fulltext_keys Tableau des Nom de champs qui seront indexes en fulltext
+     * @param array $keys Tableau des champs cles noms => valeur
+     * @return     int                     Return integer <0 if KO, >=0 if OK
      */
     public function DDLCreateTable($table, $fields, $primary_key, $type, $unique_keys = null, $fulltext_keys = null, $keys = null)
     {
-		// phpcs:enable
+        // phpcs:enable
         // @TODO: $fulltext_keys parameter is unused
 
         $sqlk = array();
@@ -1001,7 +1014,7 @@ class DoliDBSqlite3 extends DoliDB
             }
             if (!is_null($field_desc['default']) && $field_desc['default'] !== '') {
                 if (in_array($field_desc['type'], array('tinyint', 'smallint', 'int', 'double'))) {
-                    $sqlfields[$i] .= " DEFAULT " . ((float) $field_desc['default']);
+                    $sqlfields[$i] .= " DEFAULT " . ((float)$field_desc['default']);
                 } elseif ($field_desc['default'] == 'null' || $field_desc['default'] == 'CURRENT_TIMESTAMP') {
                     $sqlfields[$i] .= " DEFAULT " . $this->sanitize($field_desc['default']);
                 } else {
@@ -1054,16 +1067,17 @@ class DoliDBSqlite3 extends DoliDB
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Drop a table into database
      *
-     *  @param      string  $table          Name of table
-     *  @return     int                     Return integer <0 if KO, >=0 if OK
+     * @param string $table Name of table
+     * @return     int                     Return integer <0 if KO, >=0 if OK
      */
     public function DDLDropTable($table)
     {
-		// phpcs:enable
+        // phpcs:enable
         $tmptable = preg_replace('/[^a-z0-9\.\-\_]/i', '', $table);
 
         $sql = "DROP TABLE " . $tmptable;
@@ -1075,17 +1089,18 @@ class DoliDBSqlite3 extends DoliDB
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return a pointer of line with description of a table or field
      *
-     *  @param  string      $table  Name of table
-     *  @param  string      $field  Optionnel : Name of field if we want description of field
-     *  @return bool|SQLite3Result      Resource
+     * @param string $table Name of table
+     * @param string $field Optionnel : Name of field if we want description of field
+     * @return bool|SQLite3Result      Resource
      */
     public function DDLDescTable($table, $field = "")
     {
-		// phpcs:enable
+        // phpcs:enable
         $sql = "DESC " . $table . " " . $field;
 
         dol_syslog(get_class($this) . "::DDLDescTable " . $sql, LOG_DEBUG);
@@ -1093,19 +1108,20 @@ class DoliDBSqlite3 extends DoliDB
         return $this->_results;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Create a new field into table
      *
-     *  @param  string  $table              Table name
-     *  @param  string  $field_name         Field name to add
-     *  @param  array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string} $field_desc         Associative table with description of field to insert [parameter name][parameter value]
-     *  @param  string  $field_position     Optional e.g.: "after some_field"
-     *  @return int                         Return integer <0 if KO, >0 if OK
+     * @param string $table Table name
+     * @param string $field_name Field name to add
+     * @param array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string} $field_desc Associative table with description of field to insert [parameter name][parameter value]
+     * @param string $field_position Optional e.g.: "after some_field"
+     * @return int                         Return integer <0 if KO, >0 if OK
      */
     public function DDLAddField($table, $field_name, $field_desc, $field_position = "")
     {
-		// phpcs:enable
+        // phpcs:enable
         // cles recherchees dans le tableau des descriptions (field_desc) : type,value,attribute,null,default,extra
         // ex. : $field_desc = array('type'=>'int','value'=>'11','null'=>'not null','extra'=> 'auto_increment');
         $sql = "ALTER TABLE " . $table . " ADD " . $field_name . " ";
@@ -1123,7 +1139,7 @@ class DoliDBSqlite3 extends DoliDB
         }
         if (isset($field_desc['default']) && preg_match("/^[^\s]/i", $field_desc['default'])) {
             if (in_array($field_desc['type'], array('tinyint', 'smallint', 'int', 'double'))) {
-                $sql .= " DEFAULT " . ((float) $field_desc['default']);
+                $sql .= " DEFAULT " . ((float)$field_desc['default']);
             } elseif ($field_desc['default'] == 'null' || $field_desc['default'] == 'CURRENT_TIMESTAMP') {
                 $sql .= " DEFAULT " . $this->sanitize($field_desc['default']);
             } else {
@@ -1142,18 +1158,19 @@ class DoliDBSqlite3 extends DoliDB
         return 1;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Update format of a field into a table
      *
-     *  @param  string  $table              Name of table
-     *  @param  string  $field_name         Name of field to modify
-     *  @param  array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string} $field_desc         Array with description of field format
-     *  @return int                         Return integer <0 if KO, >0 if OK
+     * @param string $table Name of table
+     * @param string $field_name Name of field to modify
+     * @param array{type:string,label:string,enabled:int<0,2>|string,position:int,notnull?:int,visible:int,noteditable?:int,default?:string,index?:int,foreignkey?:string,searchall?:int,isameasure?:int,css?:string,csslist?:string,help?:string,showoncombobox?:int,disabled?:int,arrayofkeyval?:array<int,string>,comment?:string} $field_desc Array with description of field format
+     * @return int                         Return integer <0 if KO, >0 if OK
      */
     public function DDLUpdateField($table, $field_name, $field_desc)
     {
-		// phpcs:enable
+        // phpcs:enable
         $sql = "ALTER TABLE " . $this->sanitize($table);
         $sql .= " MODIFY COLUMN " . $this->sanitize($field_name) . " " . $this->sanitize($field_desc['type']);
         if ($field_desc['type'] == 'tinyint' || $field_desc['type'] == 'int' || $field_desc['type'] == 'varchar') {
@@ -1167,17 +1184,18 @@ class DoliDBSqlite3 extends DoliDB
         return 1;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Drop a field from table
      *
-     *  @param  string  $table          Name of table
-     *  @param  string  $field_name     Name of field to drop
-     *  @return int                     Return integer <0 if KO, >0 if OK
+     * @param string $table Name of table
+     * @param string $field_name Name of field to drop
+     * @return int                     Return integer <0 if KO, >0 if OK
      */
     public function DDLDropField($table, $field_name)
     {
-		// phpcs:enable
+        // phpcs:enable
         $tmp_field_name = preg_replace('/[^a-z0-9\.\-\_]/i', '', $field_name);
 
         $sql = "ALTER TABLE " . $this->sanitize($table) . " DROP COLUMN `" . $this->sanitize($tmp_field_name) . "`";
@@ -1189,19 +1207,20 @@ class DoliDBSqlite3 extends DoliDB
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Create a user and privileges to connect to database (even if database does not exists yet)
      *
-     *  @param  string  $dolibarr_main_db_host      Ip serveur
-     *  @param  string  $dolibarr_main_db_user      Nom user a creer
-     *  @param  string  $dolibarr_main_db_pass      Password user a creer
-     *  @param  string  $dolibarr_main_db_name      Database name where user must be granted
-     *  @return int                                 Return integer <0 if KO, >=0 if OK
+     * @param string $dolibarr_main_db_host Ip serveur
+     * @param string $dolibarr_main_db_user Nom user a creer
+     * @param string $dolibarr_main_db_pass Password user a creer
+     * @param string $dolibarr_main_db_name Database name where user must be granted
+     * @return int                                 Return integer <0 if KO, >=0 if OK
      */
     public function DDLCreateUser($dolibarr_main_db_host, $dolibarr_main_db_user, $dolibarr_main_db_pass, $dolibarr_main_db_name)
     {
-		// phpcs:enable
+        // phpcs:enable
         $sql = "INSERT INTO user ";
         $sql .= "(Host,User,password,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv,Index_Priv,Alter_priv,Lock_tables_priv)";
         $sql .= " VALUES ('" . $this->escape($dolibarr_main_db_host) . "','" . $this->escape($dolibarr_main_db_user) . "',password('" . addslashes($dolibarr_main_db_pass) . "')";
@@ -1237,7 +1256,7 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Return charset used to store data in database
      *
-     *  @return     string      Charset
+     * @return     string      Charset
      */
     public function getDefaultCharacterSetDatabase()
     {
@@ -1247,7 +1266,7 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Return list of available charset that can be used to store data in database
      *
-     *  @return     array       List of Charset
+     * @return     array       List of Charset
      */
     public function getListOfCharacterSet()
     {
@@ -1261,7 +1280,7 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Return collation used in database
      *
-     *  @return     string      Collation value
+     * @return     string      Collation value
      */
     public function getDefaultCollationDatabase()
     {
@@ -1271,7 +1290,7 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Return list of available collation that can be used for database
      *
-     *  @return     array       List of Collation
+     * @return     array       List of Collation
      */
     public function getListOfCollation()
     {
@@ -1285,7 +1304,7 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Return full path of dump program
      *
-     *  @return     string      Full path of dump program
+     * @return     string      Full path of dump program
      */
     public function getPathOfDump()
     {
@@ -1304,7 +1323,7 @@ class DoliDBSqlite3 extends DoliDB
     /**
      *  Return full path of restore program
      *
-     *  @return     string      Full path of restore program
+     * @return     string      Full path of restore program
      */
     public function getPathOfRestore()
     {
@@ -1323,7 +1342,7 @@ class DoliDBSqlite3 extends DoliDB
     /**
      * Return value of server parameters
      *
-     * @param   string  $filter     Filter list on a particular value
+     * @param string $filter Filter list on a particular value
      * @return  array               Array of key-values (key=>value)
      */
     public function getServerParametersValues($filter = '')
@@ -1345,7 +1364,8 @@ class DoliDBSqlite3 extends DoliDB
                 'query_only', 'quick_check', 'read_uncommitted', 'recursive_triggers',
                 'reverse_unordered_selects', 'schema_version', 'user_version',
                 'secure_delete', 'short_column_names', 'shrink_memory', 'soft_heap_limit',
-                'synchronous', 'temp_store', /*'temp_store_directory',*/ 'threads',
+                'synchronous', 'temp_store', /*'temp_store_directory',*/
+                'threads',
                 'vdbe_addoptrace', 'vdbe_debug', 'vdbe_listing', 'vdbe_trace',
                 'wal_autocheckpoint',
             );
@@ -1370,7 +1390,7 @@ class DoliDBSqlite3 extends DoliDB
     /**
      * Return value of server status
      *
-     * @param   string  $filter     Filter list on a particular value
+     * @param string $filter Filter list on a particular value
      * @return  array               Array of key-values (key=>value)
      */
     public function getServerStatusValues($filter = '')
@@ -1396,8 +1416,8 @@ class DoliDBSqlite3 extends DoliDB
      *   - The function must be static and public.
      *   - The number of arguments is automatically determined when arg_count is < 0
      *
-     * @param   string  $name           Function name to define in Sqlite
-     * @param   int     $arg_count      Arguments count
+     * @param string $name Function name to define in Sqlite
+     * @param int $arg_count Arguments count
      * @return  void
      */
     private function addCustomFunction($name, $arg_count = -1)
@@ -1416,18 +1436,19 @@ class DoliDBSqlite3 extends DoliDB
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * calc_daynr
      *
-     * @param   int     $year       Year
-     * @param   int     $month      Month
-     * @param   int     $day        Day
+     * @param int $year Year
+     * @param int $month Month
+     * @param int $day Day
      * @return int Formatted date
      */
     private static function calc_daynr($year, $month, $day)
     {
-		// phpcs:enable
+        // phpcs:enable
         $y = $year;
         if ($y == 0 && $month == 0) {
             return 0;
@@ -1439,51 +1460,54 @@ class DoliDBSqlite3 extends DoliDB
             $num -= floor(($month * 4 + 23) / 10);
         }
         $temp = floor(($y / 100 + 1) * 3 / 4);
-        return (int) ($num + floor($y / 4) - $temp);
+        return (int)($num + floor($y / 4) - $temp);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * calc_weekday
      *
-     * @param int   $daynr                          ???
-     * @param bool  $sunday_first_day_of_week       ???
+     * @param int $daynr ???
+     * @param bool $sunday_first_day_of_week ???
      * @return int
      */
     private static function calc_weekday($daynr, $sunday_first_day_of_week)
     {
-		// phpcs:enable
-        $ret = (int) floor(($daynr + 5 + ($sunday_first_day_of_week ? 1 : 0)) % 7);
+        // phpcs:enable
+        $ret = (int)floor(($daynr + 5 + ($sunday_first_day_of_week ? 1 : 0)) % 7);
         return $ret;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * calc_days_in_year
      *
-     * @param   int     $year       Year
+     * @param int $year Year
      * @return  int                 Nb of days in year
      */
     private static function calc_days_in_year($year)
     {
-		// phpcs:enable
+        // phpcs:enable
         return (($year & 3) == 0 && ($year % 100 || ($year % 400 == 0 && $year)) ? 366 : 365);
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * calc_week
      *
-     * @param   int     $year               Year
-     * @param   int     $month              Month
-     * @param   int     $day                Day
-     * @param   int     $week_behaviour     Week behaviour, bit masks: WEEK_MONDAY_FIRST, WEEK_YEAR, WEEK_FIRST_WEEKDEAY
-     * @param   int     $calc_year          ??? Year where the week started
+     * @param int $year Year
+     * @param int $month Month
+     * @param int $day Day
+     * @param int $week_behaviour Week behaviour, bit masks: WEEK_MONDAY_FIRST, WEEK_YEAR, WEEK_FIRST_WEEKDEAY
+     * @param int $calc_year ??? Year where the week started
      * @return  int                         ??? Week number in year
      */
     private static function calc_week($year, $month, $day, $week_behaviour, &$calc_year)
     {
-		// phpcs:enable
+        // phpcs:enable
         $daynr = self::calc_daynr($year, $month, $day);
         $first_daynr = self::calc_daynr($year, 1, 1);
         $monday_first = ($week_behaviour & self::WEEK_MONDAY_FIRST) ? 1 : 0;
@@ -1516,6 +1540,6 @@ class DoliDBSqlite3 extends DoliDB
                 return 1;
             }
         }
-        return (int) floor($days / 7 + 1);
+        return (int)floor($days / 7 + 1);
     }
 }

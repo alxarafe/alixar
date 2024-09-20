@@ -69,9 +69,9 @@ class Border extends Supervisor
      * Get the shared style component for the currently active cell in currently active sheet.
      * Only used for style supervisor.
      *
+     * @return Border
      * @throws PhpSpreadsheetException
      *
-     * @return Border
      */
     public function getSharedComponent()
     {
@@ -125,9 +125,9 @@ class Border extends Supervisor
      *
      * @param array $pStyles Array containing style information
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function applyFromArray(array $pStyles)
     {
@@ -200,9 +200,9 @@ class Border extends Supervisor
      *
      * @param Color $pValue
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setColor(Color $pValue)
     {

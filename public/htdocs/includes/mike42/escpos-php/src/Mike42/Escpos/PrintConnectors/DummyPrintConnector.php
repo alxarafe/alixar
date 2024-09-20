@@ -35,24 +35,24 @@ final class DummyPrintConnector implements PrintConnector
      */
     public function __construct()
     {
-        $this -> buffer = [];
+        $this->buffer = [];
     }
 
     public function clear()
     {
-        $this -> buffer = [];
+        $this->buffer = [];
     }
-    
+
     public function __destruct()
     {
-        if ($this -> buffer !== null) {
+        if ($this->buffer !== null) {
             trigger_error("Print connector was not finalized. Did you forget to close the printer?", E_USER_NOTICE);
         }
     }
 
     public function finalize()
     {
-        $this -> buffer = null;
+        $this->buffer = null;
     }
 
     /**
@@ -60,7 +60,7 @@ final class DummyPrintConnector implements PrintConnector
      */
     public function getData()
     {
-        return implode($this -> buffer);
+        return implode($this->buffer);
     }
 
     /**
@@ -69,11 +69,11 @@ final class DummyPrintConnector implements PrintConnector
      */
     public function read($len)
     {
-        return $len >= strlen($this -> readData) ? $this -> readData : substr($this -> readData, 0, $len);
+        return $len >= strlen($this->readData) ? $this->readData : substr($this->readData, 0, $len);
     }
 
     public function write($data)
     {
-        $this -> buffer[] = $data;
+        $this->buffer[] = $data;
     }
 }

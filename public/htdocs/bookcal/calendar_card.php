@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2023 Alice Adminson <aadminson@example.com>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023       Alice Adminson              <aadminson@example.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\BookCal\Classes\Calendar;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+
 /**
  *      \file       htdocs/bookcal/calendar_card.php
  *      \ingroup    bookcal
@@ -27,8 +33,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/bookcal/class/calendar.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bookcal/lib/bookcal_calendar.lib.php';
 
 // Load translation files required by the page
@@ -37,7 +41,7 @@ $langs->loadLangs(array("agenda", "other"));
 // Get parameters
 $id = GETPOSTINT('id');
 $ref = GETPOST('ref', 'alpha');
-$lineid   = GETPOSTINT('lineid');
+$lineid = GETPOSTINT('lineid');
 
 $action = GETPOST('action', 'aZ09');
 $confirm = GETPOST('confirm', 'alpha');
@@ -80,7 +84,7 @@ if (empty($action) && empty($id) && empty($ref)) {
 // Load object
 include DOL_DOCUMENT_ROOT . '/core/actions_fetchobject.inc.php'; // Must be include, not include_once.
 
-$object->entity                 = (GETPOSTISSET('entity') ? GETPOSTINT('entity') : $conf->entity);
+$object->entity = (GETPOSTISSET('entity') ? GETPOSTINT('entity') : $conf->entity);
 
 // There is several ways to check permission.
 // Set $enablepermissioncheck to 1 to enable a minimum low level of checks
@@ -169,9 +173,6 @@ if (empty($reshook)) {
     $trackid = 'calendar' . $object->id;
     include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
 }
-
-
-
 
 /*
  * View

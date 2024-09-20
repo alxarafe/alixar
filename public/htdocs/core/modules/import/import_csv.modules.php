@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2006-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2012      Christophe Battarel  <christophe.battarel@altairis.fr>
- * Copyright (C) 2012-2016 Juanjo Menent		<jmenent@2byte.es>
+/* Copyright (C) 2006-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2012-2016  Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,14 +22,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Imports\Classes\ModeleImports;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/core/modules/import/import_csv.modules.php
  *      \ingroup    import
  *      \brief      File to load import files with CSV format
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/import/modules_import.php';
-
 
 /**
  *  Class to import CSV files
@@ -78,8 +79,8 @@ class ImportCsv extends ModeleImports
     /**
      *  Constructor
      *
-     *  @param  DoliDB      $db             Database handler
-     *  @param  string      $datatoimport   String code describing import set (ex: 'societe_1')
+     * @param DoliDB $db Database handler
+     * @param string $datatoimport String code describing import set (ex: 'societe_1')
      */
     public function __construct($db, $datatoimport)
     {
@@ -118,73 +119,78 @@ class ImportCsv extends ModeleImports
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Output header of an example file for this format
      *
-     *  @param  Translate   $outputlangs        Output language
-     *  @return string                          Empty string
+     * @param Translate $outputlangs Output language
+     * @return string                          Empty string
      */
     public function write_header_example($outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         return '';
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Output title line of an example file for this format
      *
-     *  @param  Translate   $outputlangs        Output language
-     *  @param  array       $headerlinefields   Array of fields name
-     *  @return string                          String output
+     * @param Translate $outputlangs Output language
+     * @param array $headerlinefields Array of fields name
+     * @return string                          String output
      */
     public function write_title_example($outputlangs, $headerlinefields)
     {
-		// phpcs:enable
+        // phpcs:enable
         $s = implode($this->separator, array_map('cleansep', $headerlinefields));
         return $s . "\n";
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Output record of an example file for this format
      *
-     *  @param  Translate   $outputlangs        Output language
-     *  @param  array       $contentlinevalues  Array of lines
-     *  @return string                          String output
+     * @param Translate $outputlangs Output language
+     * @param array $contentlinevalues Array of lines
+     * @return string                          String output
      */
     public function write_record_example($outputlangs, $contentlinevalues)
     {
-		// phpcs:enable
+        // phpcs:enable
         $s = implode($this->separator, array_map('cleansep', $contentlinevalues));
         return $s . "\n";
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Output footer of an example file for this format
      *
-     *  @param  Translate   $outputlangs        Output language
-     *  @return string                          Empty string
+     * @param Translate $outputlangs Output language
+     * @return string                          Empty string
      */
     public function write_footer_example($outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         return '';
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Open input file
      *
-     *  @param  string  $file       Path of filename
-     *  @return int                 Return integer <0 if KO, >=0 if OK
+     * @param string $file Path of filename
+     * @return int                 Return integer <0 if KO, >=0 if OK
      */
     public function import_open_file($file)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $langs;
         $ret = 1;
 
@@ -205,42 +211,45 @@ class ImportCsv extends ModeleImports
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return nb of records. File must be closed.
      *
-     *  @param  string  $file       Path of filename
-     *  @return     int     Return integer <0 if KO, >=0 if OK
+     * @param string $file Path of filename
+     * @return     int     Return integer <0 if KO, >=0 if OK
      */
     public function import_get_nb_of_lines($file)
     {
-		// phpcs:enable
+        // phpcs:enable
         return dol_count_nb_of_line($file);
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Input header line from file
      *
-     *  @return     int     Return integer <0 if KO, >=0 if OK
+     * @return     int     Return integer <0 if KO, >=0 if OK
      */
     public function import_read_header()
     {
-		// phpcs:enable
+        // phpcs:enable
         return 0;
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return array of next record in input file.
      *
-     *  @return     array|boolean       Array of field values. Data are UTF8 encoded. [fieldpos] => (['val']=>val, ['type']=>-1=null,0=blank,1=not empty string)
+     * @return     array|boolean       Array of field values. Data are UTF8 encoded. [fieldpos] => (['val']=>val, ['type']=>-1=null,0=blank,1=not empty string)
      */
     public function import_read_record()
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf;
 
         $arrayres = fgetcsv($this->handle, 100000, $this->separator, $this->enclosure, $this->escape);
@@ -280,35 +289,37 @@ class ImportCsv extends ModeleImports
         return $newarrayres;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Close file handle
      *
-     *  @return integer
+     * @return integer
      */
     public function import_close_file()
     {
-		// phpcs:enable
+        // phpcs:enable
         fclose($this->handle);
         return 0;
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Insert a record into database
      *
-     * @param   array   $arrayrecord                    Array of read values: [fieldpos] => (['val']=>val, ['type']=>-1=null,0=blank,1=string), [fieldpos+1]...
-     * @param   array   $array_match_file_to_database   Array of target fields where to insert data: [fieldpos] => 's.fieldname', [fieldpos+1]...
-     * @param   Object  $objimport                      Object import (contains objimport->array_import_tables, objimport->array_import_fields, objimport->array_import_convertvalue, ...)
-     * @param   int     $maxfields                      Max number of fields to use
-     * @param   string  $importid                       Import key
-     * @param   array   $updatekeys                     Array of keys to use to try to do an update first before insert. This field are defined into the module descriptor.
+     * @param array $arrayrecord Array of read values: [fieldpos] => (['val']=>val, ['type']=>-1=null,0=blank,1=string), [fieldpos+1]...
+     * @param array $array_match_file_to_database Array of target fields where to insert data: [fieldpos] => 's.fieldname', [fieldpos+1]...
+     * @param Object $objimport Object import (contains objimport->array_import_tables, objimport->array_import_fields, objimport->array_import_convertvalue, ...)
+     * @param int $maxfields Max number of fields to use
+     * @param string $importid Import key
+     * @param array $updatekeys Array of keys to use to try to do an update first before insert. This field are defined into the module descriptor.
      * @return  int                                     Return integer <0 if KO, >0 if OK
      */
     public function import_insert($arrayrecord, $array_match_file_to_database, $objimport, $maxfields, $importid, $updatekeys)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $langs, $conf, $user;
         global $thirdparty_static; // Specific to thirdparty import
         global $tablewithentity_cache; // Cache to avoid to call  desc at each rows on tables
@@ -396,7 +407,7 @@ class ImportCsv extends ModeleImports
                         // Make some tests on $newval
 
                         // Is it a required field ?
-                        if (preg_match('/\*/', $objimport->array_import_fields[0][$val]) && ((string) $newval == '')) {
+                        if (preg_match('/\*/', $objimport->array_import_fields[0][$val]) && ((string)$newval == '')) {
                             // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
                             $this->errors[$error]['lib'] = $langs->trans('ErrorMissingMandatoryValue', $key);
                             $this->errors[$error]['type'] = 'NOTNULL';
@@ -479,7 +490,7 @@ class ImportCsv extends ModeleImports
                                             //print 'We have made a '.$class.'->'.$method.' to get id from code '.$newval.'. ';
                                             if ($classinstance->id != '') { // id may be 0, it is a found value
                                                 $newval = $classinstance->id;
-                                            } elseif (! $error) {
+                                            } elseif (!$error) {
                                                 if (!empty($objimport->array_import_convertvalue[0][$val]['dict'])) {
                                                     $this->errors[$error]['lib'] = $langs->trans('ErrorFieldValueNotIn', num2Alpha($key - 1), $newval, 'code', $langs->transnoentitiesnoconv($objimport->array_import_convertvalue[0][$val]['dict']));
                                                 } elseif (!empty($objimport->array_import_convertvalue[0][$val]['element'])) {
@@ -773,7 +784,7 @@ class ImportCsv extends ModeleImports
                             $listfields[] = $fieldname;
                             // Note: arrayrecord (and 'type') is filled with ->import_read_record called by import.php page before calling import_insert
                             if (empty($newval) && $arrayrecord[($key - 1)]['type'] < 0) {
-                                $listvalues[] = ($newval == '0' ? (int) $newval : "null");
+                                $listvalues[] = ($newval == '0' ? (int)$newval : "null");
                             } elseif (empty($newval) && $arrayrecord[($key - 1)]['type'] == 0) {
                                 $listvalues[] = "''";
                             } else {
@@ -799,12 +810,12 @@ class ImportCsv extends ModeleImports
                             continue;
                         } elseif ($tmpval == 'user->id') {
                             $listfields[] = $keyfield;
-                            $listvalues[] = ((int) $user->id);
+                            $listvalues[] = ((int)$user->id);
                         } elseif (preg_match('/^lastrowid-/', $tmpval)) {
                             $tmp = explode('-', $tmpval);
                             $lastinsertid = (isset($last_insert_id_array[$tmp[1]])) ? $last_insert_id_array[$tmp[1]] : 0;
                             $listfields[] = $keyfield;
-                            $listvalues[] = (int) $lastinsertid;
+                            $listvalues[] = (int)$lastinsertid;
                             //print $tmpkey."-".$tmpval."-".$listfields."-".$listvalues."<br>";exit;
                         } elseif (preg_match('/^const-/', $tmpval)) {
                             $tmp = explode('-', $tmpval, 2);
@@ -834,9 +845,9 @@ class ImportCsv extends ModeleImports
                                         // Set $listfields and $listvalues
                                         $listfields[] = $fieldname;
                                         if ($type == 'int') {
-                                            $listvalues[] = (int) $res;
+                                            $listvalues[] = (int)$res;
                                         } elseif ($type == 'double') {
-                                            $listvalues[] = (float) $res;
+                                            $listvalues[] = (float)$res;
                                         } else {
                                             $listvalues[] = "'" . $this->db->escape($res) . "'";
                                         }
@@ -943,7 +954,7 @@ class ImportCsv extends ModeleImports
                                 if (empty($keyfield)) {
                                     $keyfield = 'rowid';
                                 }
-                                $sqlSelect .= " WHERE " . $keyfield . " = " . ((int) $lastinsertid);
+                                $sqlSelect .= " WHERE " . $keyfield . " = " . ((int)$lastinsertid);
 
                                 if (!empty($tablewithentity_cache[$tablename])) {
                                     $sqlSelect .= " AND entity IN (" . getEntity($this->getElementFromTableWithPrefix($tablename)) . ")";
@@ -971,7 +982,7 @@ class ImportCsv extends ModeleImports
                                 // We db escape social network field because he isn't in field creation
                                 if (in_array("socialnetworks", $listfields)) {
                                     $socialkey = array_search("socialnetworks", $listfields);
-                                    $tmpsql =  $listvalues[$socialkey];
+                                    $tmpsql = $listvalues[$socialkey];
                                     $listvalues[$socialkey] = "'" . $this->db->escape($tmpsql) . "'";
                                 }
 
@@ -988,7 +999,7 @@ class ImportCsv extends ModeleImports
                                 if (empty($keyfield)) {
                                     $keyfield = 'rowid';
                                 }
-                                $sqlend = " WHERE " . $keyfield . " = " . ((int) $lastinsertid);
+                                $sqlend = " WHERE " . $keyfield . " = " . ((int)$lastinsertid);
 
                                 if ($is_table_category_link) {
                                     '@phan-var-force string[] $where';
@@ -1020,7 +1031,7 @@ class ImportCsv extends ModeleImports
                             // We db escape social network field because he isn't in field creation
                             if (in_array("socialnetworks", $listfields)) {
                                 $socialkey = array_search("socialnetworks", $listfields);
-                                $tmpsql =  $listvalues[$socialkey];
+                                $tmpsql = $listvalues[$socialkey];
                                 $listvalues[$socialkey] = "'" . $this->db->escape($tmpsql) . "'";
                             }
 
@@ -1081,8 +1092,8 @@ class ImportCsv extends ModeleImports
 /**
  *  Clean a string from separator
  *
- *  @param  string  $value  Remove standard separators
- *  @return string          String without separators
+ * @param string $value Remove standard separators
+ * @return string          String without separators
  */
 function cleansep($value)
 {

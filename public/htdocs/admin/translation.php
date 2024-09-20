@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2007-2020  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2017	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2017       Frédéric France     <frederic.france@free.fr>
+/* Copyright (C) 2007-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2017	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2017       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\Translate;
 
 /**
  *       \file       htdocs/admin/translation.php
@@ -161,7 +165,7 @@ if ($action == 'add') {
     if (!$error) {
         $db->begin();
 
-        $sql = "INSERT INTO " . MAIN_DB_PREFIX . "overwrite_trans(lang, transkey, transvalue, entity) VALUES ('" . $db->escape($langcode) . "','" . $db->escape($transkey) . "','" . $db->escape($transvalue) . "', " . ((int) $conf->entity) . ")";
+        $sql = "INSERT INTO " . MAIN_DB_PREFIX . "overwrite_trans(lang, transkey, transvalue, entity) VALUES ('" . $db->escape($langcode) . "','" . $db->escape($transkey) . "','" . $db->escape($transvalue) . "', " . ((int)$conf->entity) . ")";
         $result = $db->query($sql);
         if ($result) {
             $db->commit();
@@ -183,7 +187,7 @@ if ($action == 'add') {
 
 // Delete line from delete picto
 if ($action == 'delete') {
-    $sql = "DELETE FROM " . MAIN_DB_PREFIX . "overwrite_trans WHERE rowid = " . ((int) $id);
+    $sql = "DELETE FROM " . MAIN_DB_PREFIX . "overwrite_trans WHERE rowid = " . ((int)$id);
     $result = $db->query($sql);
     if ($result) {
         setEventMessages($langs->trans("RecordDeleted"), null, 'mesgs');
@@ -191,10 +195,6 @@ if ($action == 'delete') {
         dol_print_error($db);
     }
 }
-
-
-
-
 
 /*
  * View
@@ -234,7 +234,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if (isset($optioncss) && $optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);

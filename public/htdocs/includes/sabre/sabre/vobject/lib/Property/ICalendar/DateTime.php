@@ -98,7 +98,7 @@ class DateTime extends Property
      */
     public function hasTime()
     {
-        return 'DATE' !== strtoupper((string) $this['VALUE']);
+        return 'DATE' !== strtoupper((string)$this['VALUE']);
     }
 
     /**
@@ -159,7 +159,7 @@ class DateTime extends Property
         $tzid = $this['TZID'];
 
         if ($tzid) {
-            $timeZone = TimeZoneUtil::getTimeZone((string) $tzid, $this->root);
+            $timeZone = TimeZoneUtil::getTimeZone((string)$tzid, $this->root);
         }
 
         $dts = [];
@@ -298,7 +298,7 @@ class DateTime extends Property
      * VALUE from DATE-TIME to DATE or vice-versa.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      */
     #[\ReturnTypeWillChange]
     public function offsetSet($name, $value)

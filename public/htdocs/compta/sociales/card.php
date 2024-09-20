@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2004-2020  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2013  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2016-2018  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2017-2022  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2021       Gauthier VERDOL     	<gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2004-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2013  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2016-2018  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2017-2022  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2021       Gauthier VERDOL     	    <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Compta\Classes\PaymentSocialContribution;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\FormSocialContrib;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       htdocs/compta/sociales/card.php
  *      \ingroup    tax
@@ -29,17 +41,11 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formsocialcontrib.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/paymentsocialcontribution.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/tax.lib.php';
 
-use Dolibarr\Code\User\Classes\User;
-
 if (isModEnabled('project')) {
-    include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
     include_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
 }
 if (isModEnabled('accounting')) {
@@ -98,7 +104,6 @@ if ($user->socid) {
     $socid = $user->socid;
 }
 $result = restrictedArea($user, 'tax', $object->id, 'chargesociales', 'charges');
-
 
 
 /*
@@ -205,7 +210,7 @@ if (empty($reshook)) {
             $object->periode = $dateperiod;
             $object->period = $dateperiod;
             $object->amount = $amount;
-            $object->fk_user            = $fk_user;
+            $object->fk_user = $fk_user;
             $object->mode_reglement_id = GETPOSTINT('mode_reglement_id');
             $object->fk_account = GETPOSTINT('fk_account');
             $object->fk_project = GETPOSTINT('fk_project');
@@ -325,7 +330,6 @@ if (empty($reshook)) {
     // Actions to build doc
     include DOL_DOCUMENT_ROOT . '/core/actions_builddoc.inc.php';
 }
-
 
 /*
  * View
@@ -555,7 +559,7 @@ if ($id > 0) {
             if ($permissiontoadd) {
                 $morehtmlref .= img_picto($langs->trans("Project"), 'project', 'class="pictofixedwidth"');
                 if ($action != 'classify') {
-                    $morehtmlref .= '<a class="editfielda" href="' . $_SERVER['PHP_SELF'] . '?action=classify&token=' . newToken() . '&id=' . ((int) $object->id) . '">' . img_edit($langs->transnoentitiesnoconv('SetProject')) . '</a> ';
+                    $morehtmlref .= '<a class="editfielda" href="' . $_SERVER['PHP_SELF'] . '?action=classify&token=' . newToken() . '&id=' . ((int)$object->id) . '">' . img_edit($langs->transnoentitiesnoconv('SetProject')) . '</a> ';
                 }
                 $morehtmlref .= $form->form_project($_SERVER['PHP_SELF'] . '?id=' . $object->id, (!getDolGlobalString('PROJECT_CAN_ALWAYS_LINK_TO_ALL_SUPPLIERS') ? $object->socid : -1), $object->fk_project, ($action == 'classify' ? 'fk_project' : 'none'), 0, 0, 0, 1, '', 'maxwidth300');
             } else {
@@ -681,7 +685,7 @@ if ($id > 0) {
         $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'bank_account as ba ON b.fk_account = ba.rowid';
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_paiement as c ON p.fk_typepaiement = c.id";
         $sql .= ", " . MAIN_DB_PREFIX . "chargesociales as cs";
-        $sql .= " WHERE p.fk_charge = " . ((int) $id);
+        $sql .= " WHERE p.fk_charge = " . ((int)$id);
         $sql .= " AND p.fk_charge = cs.rowid";
         $sql .= " AND cs.entity IN (" . getEntity('sc') . ")";
         $sql .= " ORDER BY dp DESC";
@@ -785,7 +789,6 @@ if ($id > 0) {
 
             print "</form>\n";
         }
-
 
 
         // Buttons for actions

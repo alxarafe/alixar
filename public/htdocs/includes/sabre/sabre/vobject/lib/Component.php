@@ -43,8 +43,8 @@ class Component extends Node
      * an iCalendar object, this may be something like CALSCALE:GREGORIAN. To
      * ensure that this does not happen, set $defaults to false.
      *
-     * @param string|null $name     such as VCALENDAR, VEVENT
-     * @param bool        $defaults
+     * @param string|null $name such as VCALENDAR, VEVENT
+     * @param bool $defaults
      */
     public function __construct(Document $root, $name, array $children = [], $defaults = true)
     {
@@ -277,7 +277,7 @@ class Component extends Node
          * space to accommodate elements. The $key is added to the $score to
          * preserve the original relative order of elements.
          *
-         * @param int   $key
+         * @param int $key
          * @param array $array
          *
          * @return int
@@ -476,7 +476,7 @@ class Component extends Node
      * a new item with the same name, always use the add() method.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      */
     public function __set($name, $value)
     {

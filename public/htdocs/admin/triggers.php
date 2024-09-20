@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2005-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2005-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Interfaces;
+
 /**
  *       \file       htdocs/admin/triggers.php
  *       \brief      Page to view triggers
@@ -24,7 +27,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/interfaces.class.php';
 
 // Load translation files required by the page
 $langs->load("admin");
@@ -36,13 +38,11 @@ if (!$user->admin) {
 $sortfield = 'file';
 $sortorder = 'ASC';
 
-
 /*
  * Action
  */
 
 // None
-
 
 /*
  * View

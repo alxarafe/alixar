@@ -34,9 +34,9 @@ include_once DOL_DOCUMENT_ROOT . '/core/lib/geturl.lib.php';
  * Check validity of user/password/entity
  * If test is ko, reason must be filled into $_SESSION["dol_loginmesg"]
  *
- * @param   string  $usertotest     Login
- * @param   string  $passwordtotest Password
- * @param   int     $entitytotest   Number of instance (always 1 if module multicompany not enabled)
+ * @param string $usertotest Login
+ * @param string $passwordtotest Password
+ * @param int $entitytotest Number of instance (always 1 if module multicompany not enabled)
  * @return  string|false            Login if OK, false if KO
  */
 function check_user_password_openid_connect($usertotest, $passwordtotest, $entitytotest)
@@ -83,11 +83,11 @@ function check_user_password_openid_connect($usertotest, $passwordtotest, $entit
 
     // Step 2: turn the authorization code into an access token, using client_secret
     $auth_param = [
-        'grant_type'    => 'authorization_code',
-        'client_id'     => getDolGlobalString('MAIN_AUTHENTICATION_OIDC_CLIENT_ID'),
+        'grant_type' => 'authorization_code',
+        'client_id' => getDolGlobalString('MAIN_AUTHENTICATION_OIDC_CLIENT_ID'),
         'client_secret' => getDolGlobalString('MAIN_AUTHENTICATION_OIDC_CLIENT_SECRET'),
-        'code'          => $auth_code,
-        'redirect_uri'  => getDolGlobalString('MAIN_AUTHENTICATION_OIDC_REDIRECT_URL')
+        'code' => $auth_code,
+        'redirect_uri' => getDolGlobalString('MAIN_AUTHENTICATION_OIDC_REDIRECT_URL')
     ];
 
     $token_response = getURLContent(getDolGlobalString('MAIN_AUTHENTICATION_OIDC_TOKEN_URL'), 'POST', http_build_query($auth_param), 1, array(), array('https'), 2);
@@ -155,7 +155,7 @@ function check_user_password_openid_connect($usertotest, $passwordtotest, $entit
     $sql = 'SELECT login, entity, datestartvalidity, dateendvalidity';
     $sql .= ' FROM ' . MAIN_DB_PREFIX . 'user';
     $sql .= " WHERE login = '" . $db->escape($userinfo_content->$login_claim) . "'";
-    $sql .= ' AND entity IN (0,' . (array_key_exists('dol_entity', $_SESSION) ? ((int) $_SESSION["dol_entity"]) : 1) . ')';
+    $sql .= ' AND entity IN (0,' . (array_key_exists('dol_entity', $_SESSION) ? ((int)$_SESSION["dol_entity"]) : 1) . ')';
 
     dol_syslog("functions_openid::check_user_password_openid", LOG_DEBUG);
 

@@ -21,7 +21,9 @@
 
 namespace Dolibarr\Code\Loan\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *      \file       htdocs/loan/class/loanschedule.class.php
@@ -502,7 +504,6 @@ class LoanSchedule extends CommonObject
      */
     private function transPayment() // @phpstan-ignore-line
     {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/loan.lib.php';
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 

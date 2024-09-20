@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2013-2014  Olivier Geffroy     <jeff@jeffinfo.com>
- * Copyright (C) 2013-2024  Alexandre Spangaro	<aspangaro@easya.solutions>
- * Copyright (C) 2014	    Florian Henry		<florian.henry@open-concept.pro>
- * Copyright (C) 2014       Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2014	    Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2015       Jean-François Ferry	<jfefe@aternatik.fr>
- * Copyright (C) 2017-2018  Frédéric France     <frederic.france@netlogic.fr>
+/* Copyright (C) 2013-2014  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2024  Alexandre Spangaro	        <aspangaro@easya.solutions>
+ * Copyright (C) 2014	    Florian Henry		        <florian.henry@open-concept.pro>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2014	    Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2015       Jean-François Ferry	        <jfefe@aternatik.fr>
+ * Copyright (C) 2017-2018  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,7 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountancyExport;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  * \file        htdocs/accountancy/admin/export.php
@@ -112,7 +113,7 @@ if ($action == 'update') {
     foreach ($listparam[$modelcsv] as $key => $value) {
         $constante = $key;
 
-        if (strpos($constante, 'ACCOUNTING') !== false) {
+        if (str_contains($constante, 'ACCOUNTING')) {
             $constvalue = GETPOST($key, 'alpha');
             if (!dolibarr_set_const($db, $constante, $constvalue, 'chaine', 0, '', $conf->entity)) {
                 $error++;

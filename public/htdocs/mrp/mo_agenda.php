@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,13 +18,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *  \file       mo_agenda.php
  *  \ingroup    mrp
  *  \brief      Page of Mo events
  */
-
-use Dolibarr\Code\Contact\Classes\Contact;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -32,15 +37,14 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp_mo.lib.php';
 
-
 // Load translation files required by the page
 $langs->loadLangs(array("mrp", "other"));
 
 // Get parameters
-$id         = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
-$action     = GETPOST('action', 'aZ09');
-$cancel     = GETPOST('cancel', 'aZ09');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
+$action = GETPOST('action', 'aZ09');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 if (GETPOST('actioncode', 'array')) {
@@ -54,10 +58,10 @@ if (GETPOST('actioncode', 'array')) {
 $search_rowid = GETPOST('search_rowid');
 $search_agenda_label = GETPOST('search_agenda_label');
 
-$limit      = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
-$sortfield  = GETPOST('sortfield', 'aZ09comma');
-$sortorder  = GETPOST('sortorder', 'aZ09comma');
-$page       = GETPOSTISSET('pageplusone') ? (GETPOST('pageplusone') - 1) : GETPOSTINT("page");
+$limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
+$sortfield = GETPOST('sortfield', 'aZ09comma');
+$sortorder = GETPOST('sortorder', 'aZ09comma');
+$page = GETPOSTISSET('pageplusone') ? (GETPOST('pageplusone') - 1) : GETPOSTINT("page");
 if (empty($page) || $page == -1) {
     $page = 0;
 }     // If $page is not defined, or '' or -1
@@ -116,7 +120,6 @@ if (empty($reshook)) {
         $search_agenda_label = '';
     }
 }
-
 
 
 /*
@@ -193,8 +196,6 @@ if ($object->id > 0) {
 
     print dol_get_fiche_end();
 
-
-
     // Actions buttons
 
     $objthirdparty = $object;
@@ -232,7 +233,7 @@ if ($object->id > 0) {
             $param .= '&contextpage=' . urlencode($contextpage);
         }
         if ($limit > 0 && $limit != $conf->liste_limit) {
-            $param .= '&limit=' . ((int) $limit);
+            $param .= '&limit=' . ((int)$limit);
         }
 
 

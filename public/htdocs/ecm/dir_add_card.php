@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2008-2017  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2008-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2015-2016	Alexandre Spangaro	<aspangaro@open-dsi.fr>
+/* Copyright (C) 2008-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2008-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2016	Alexandre Spangaro	        <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,34 +19,36 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Ecm\Classes\EcmDirectory;
+use Dolibarr\Code\Ecm\Classes\FormEcm;
+
 /**
  *  \file       htdocs/ecm/dir_add_card.php
  *  \ingroup    ecm
  *  \brief      Main page for ECM section area
  */
 
-if (! defined('DISABLE_JS_GRAHP')) {
+if (!defined('DISABLE_JS_GRAHP')) {
     define('DISABLE_JS_GRAPH', 1);
 }
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/htmlecm.form.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmdirectory.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("ecm", "companies", "other", "users", "orders", "propal", "bills", "contracts", "categories"));
 
 // Get parameters
-$socid      = GETPOSTINT('socid');
-$action     = GETPOST('action', 'alpha');
-$cancel     = GETPOST('cancel', 'aZ09');
+$socid = GETPOSTINT('socid');
+$action = GETPOST('action', 'alpha');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 
-$module  = GETPOST('module', 'alpha');
+$module = GETPOST('module', 'alpha');
 $website = GETPOST('website', 'alpha');
-$pageid  = GETPOSTINT('pageid');
+$pageid = GETPOSTINT('pageid');
 if (empty($module)) {
     $module = 'ecm';
 }
@@ -114,7 +116,6 @@ if (!$permissiontoadd) {
 }
 
 
-
 /*
  * Actions
  */
@@ -131,9 +132,9 @@ if ($action == 'add' && $permissiontoadd) {
         }
     }
 
-    $ref = (string) GETPOST("ref", 'alpha');
+    $ref = (string)GETPOST("ref", 'alpha');
     $label = dol_sanitizeFileName(GETPOST("label", 'alpha'));
-    $desc = (string) GETPOST("desc", 'alpha');
+    $desc = (string)GETPOST("desc", 'alpha');
     $catParent = GETPOST("catParent", 'alpha'); // Can be an int (with ECM) or a string (with generic filemanager)
     if ($catParent == '-1') {
         $catParent = 0;
@@ -149,10 +150,10 @@ if ($action == 'add' && $permissiontoadd) {
 
     if (!$error) {
         if ($module == 'ecm') {
-            $ecmdir->ref            = $ref;
-            $ecmdir->label          = $label;
-            $ecmdir->description    = $desc;
-            $ecmdir->fk_parent      = (int) $catParent;
+            $ecmdir->ref = $ref;
+            $ecmdir->label = $label;
+            $ecmdir->description = $desc;
+            $ecmdir->fk_parent = (int)$catParent;
 
             $id = $ecmdir->create($user);
             if ($id <= 0) {
@@ -199,9 +200,6 @@ if ($action == 'add' && $permissiontoadd) {
     $result = $ecmdir->delete($user);
     setEventMessages($langs->trans("ECMSectionWasRemoved", $ecmdir->label), null, 'mesgs');
 }
-
-
-
 
 /*
  * View

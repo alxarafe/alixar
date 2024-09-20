@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2010-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,151 +25,145 @@
 
 ?>
 
-<div id="principal_content" style="margin-left: 0;">
-    <div style="margin-left: 0; position: relative;" class="gantt" id="GanttChartDIV"></div>
+    <div id="principal_content" style="margin-left: 0;">
+        <div style="margin-left: 0; position: relative;" class="gantt" id="GanttChartDIV"></div>
 
-    <script type="text/javascript">
+        <script type="text/javascript">
 
-function DisplayHideRessources(boxName) {
-    graphFormat = g.getFormat();
-    if(boxName.checked == true) {
-        booShowRessources = 1;
-    }
-    else {
-        booShowRessources = 0;
-    }
-    reloadGraph();
-}
+            function DisplayHideRessources(boxName) {
+                graphFormat = g.getFormat();
+                if (boxName.checked == true) {
+                    booShowRessources = 1;
+                } else {
+                    booShowRessources = 0;
+                }
+                reloadGraph();
+            }
 
-function DisplayHideDurations(boxName) {
-    graphFormat = g.getFormat();
-    if(boxName.checked == true) {
-        booShowDurations = 1;
-    }
-    else {
-        booShowDurations = 0;
-    }
-    reloadGraph();
-}
+            function DisplayHideDurations(boxName) {
+                graphFormat = g.getFormat();
+                if (boxName.checked == true) {
+                    booShowDurations = 1;
+                } else {
+                    booShowDurations = 0;
+                }
+                reloadGraph();
+            }
 
-function DisplayHideComplete(boxName) {
-    graphFormat = g.getFormat();
-    if(boxName.checked == true) {
-        booShowComplete = 1;
-    }
-    else {
-        booShowComplete = 0;
-    }
-    reloadGraph();
-}
+            function DisplayHideComplete(boxName) {
+                graphFormat = g.getFormat();
+                if (boxName.checked == true) {
+                    booShowComplete = 1;
+                } else {
+                    booShowComplete = 0;
+                }
+                reloadGraph();
+            }
 
-function selectBarText(value) {
-    graphFormat = g.getFormat();
-    id=value.options[value.selectedIndex].value;
-    barText = id;
-    reloadGraph();
-}
+            function selectBarText(value) {
+                graphFormat = g.getFormat();
+                id = value.options[value.selectedIndex].value;
+                barText = id;
+                reloadGraph();
+            }
 
-function reloadGraph() {
-    g.setShowRes(booShowRessources);
-    g.setShowComp(booShowComplete);
-    g.setShowDur(booShowDurations);
-    g.setCaptionType(barText);
-    g.setFormat(graphFormat);
-    g.Draw(jQuery("#tabs").width()-40);
-}
+            function reloadGraph() {
+                g.setShowRes(booShowRessources);
+                g.setShowComp(booShowComplete);
+                g.setShowDur(booShowDurations);
+                g.setCaptionType(barText);
+                g.setFormat(graphFormat);
+                g.Draw(jQuery("#tabs").width() - 40);
+            }
 
 
-//var g = new JSGantt.GanttChart('g', document.getElementById('GanttChartDIV'), 'day');
-var g = new JSGantt.GanttChart(document.getElementById('GanttChartDIV'), 'day');
+            //var g = new JSGantt.GanttChart('g', document.getElementById('GanttChartDIV'), 'day');
+            var g = new JSGantt.GanttChart(document.getElementById('GanttChartDIV'), 'day');
 
-if (g.getDivId() != null)
+            if (g.getDivId() != null)
 //if (g)
-{
-    var booShowRessources = 1;
-    var booShowDurations = 1;
-    var booShowComplete = 1;
-    var barText = "Resource";
-    var graphFormat = "day";
+            {
+                var booShowRessources = 1;
+                var booShowDurations = 1;
+                var booShowComplete = 1;
+                var barText = "Resource";
+                var graphFormat = "day";
 
-    g.setDateInputFormat('<?php echo $dateformatinput; ?>');  // Set format of input dates ('mm/dd/yyyy', 'dd/mm/yyyy', does not work with 'yyyy-mm-dd')
-    g.setDateTaskTableDisplayFormat('<?php echo $dateformat; ?>');  // Format of date used into line
-    g.setDateTaskDisplayFormat('<?php echo $datehourformat; ?>');       // Format of date used into popup, not into line
-    g.setDayMajorDateDisplayFormat('dd mon');
-    g.setShowRes(1);        // Show/Hide Responsible (0/1)
-    g.setShowDur(1);        // Show/Hide Duration (0/1)
-    g.setShowComp(1);       // Show/Hide % Complete(0/1)
-    g.setShowStartDate(1);  // Show/Hide % Complete(0/1)
-    g.setShowEndDate(1);    // Show/Hide % Complete(0/1)
-    g.setShowTaskInfoLink(1);
-    g.setFormatArr("day","week","month") // Set format options (up to 4 : "minute","hour","day","week","month","quarter")
-    g.setCaptionType('Caption');  // Set to Show Caption (None,Caption,Resource,Duration,Complete)
-    g.setUseFade(0);
-    g.setDayColWidth(20);
-    /* g.setShowTaskInfoLink(1) */
-    g.addLang('<?php print $langs->getDefaultLang(1); ?>', vLangs['<?php print $langs->getDefaultLang(1); ?>']);
-    g.setLang('<?php print $langs->getDefaultLang(1); ?>');
+                g.setDateInputFormat('<?php echo $dateformatinput; ?>');  // Set format of input dates ('mm/dd/yyyy', 'dd/mm/yyyy', does not work with 'yyyy-mm-dd')
+                g.setDateTaskTableDisplayFormat('<?php echo $dateformat; ?>');  // Format of date used into line
+                g.setDateTaskDisplayFormat('<?php echo $datehourformat; ?>');       // Format of date used into popup, not into line
+                g.setDayMajorDateDisplayFormat('dd mon');
+                g.setShowRes(1);        // Show/Hide Responsible (0/1)
+                g.setShowDur(1);        // Show/Hide Duration (0/1)
+                g.setShowComp(1);       // Show/Hide % Complete(0/1)
+                g.setShowStartDate(1);  // Show/Hide % Complete(0/1)
+                g.setShowEndDate(1);    // Show/Hide % Complete(0/1)
+                g.setShowTaskInfoLink(1);
+                g.setFormatArr("day", "week", "month") // Set format options (up to 4 : "minute","hour","day","week","month","quarter")
+                g.setCaptionType('Caption');  // Set to Show Caption (None,Caption,Resource,Duration,Complete)
+                g.setUseFade(0);
+                g.setDayColWidth(20);
+                /* g.setShowTaskInfoLink(1) */
+                g.addLang('<?php print $langs->getDefaultLang(1); ?>', vLangs['<?php print $langs->getDefaultLang(1); ?>']);
+                g.setLang('<?php print $langs->getDefaultLang(1); ?>');
 
-    <?php
+                <?php
 
-    echo "\n";
-    echo "/* g.AddTaskItem(new JSGantt.TaskItem(task_id, 'label', 'start_date', 'end_date', 'css', 'link', milestone, 'Resources', Compl%, Group, Parent, Open, 'Dependency', 'label','note', g)); */\n";
+                echo "\n";
+                echo "/* g.AddTaskItem(new JSGantt.TaskItem(task_id, 'label', 'start_date', 'end_date', 'css', 'link', milestone, 'Resources', Compl%, Group, Parent, Open, 'Dependency', 'label','note', g)); */\n";
 
-    $level = 0;
-    $tnums = count($tasks);
-    $old_project_id = 0;
-    for ($tcursor = 0; $tcursor < $tnums; $tcursor++) {
-        $t = $tasks[$tcursor];
+                $level = 0;
+                $tnums = count($tasks);
+                $old_project_id = 0;
+                for ($tcursor = 0; $tcursor < $tnums; $tcursor++) {
+                    $t = $tasks[$tcursor];
 
-        if (empty($old_project_id) || $old_project_id != $t['task_project_id']) {
-            // Break on project, create a fictive task for project id $t['task_project_id']
-            $projecttmp = new Project($db);
-            $projecttmp->fetch($t['task_project_id']);
-            $tmpt = array(
-                'task_id' => '-' . $t['task_project_id'],
-                'task_alternate_id' => '-' . $t['task_project_id'],
-                'task_name' => $projecttmp->ref . ' ' . $projecttmp->title,
-                'task_resources' => '',
-                'task_start_date' => '',
-                'task_end_date' => '',
-                'task_is_group' => 1, 'task_position' => 0, 'task_css' => 'ggroupblack', 'task_milestone' => 0, 'task_parent' => 0, 'task_parent_alternate_id' => 0,
-                'task_notes' => '',
-                'task_planned_workload' => 0
-            );
-            constructGanttLine($tasks, $tmpt, array(), 0, $t['task_project_id']);
-            $old_project_id = $t['task_project_id'];
-        }
+                    if (empty($old_project_id) || $old_project_id != $t['task_project_id']) {
+                        // Break on project, create a fictive task for project id $t['task_project_id']
+                        $projecttmp = new Project($db);
+                        $projecttmp->fetch($t['task_project_id']);
+                        $tmpt = array(
+                            'task_id' => '-' . $t['task_project_id'],
+                            'task_alternate_id' => '-' . $t['task_project_id'],
+                            'task_name' => $projecttmp->ref . ' ' . $projecttmp->title,
+                            'task_resources' => '',
+                            'task_start_date' => '',
+                            'task_end_date' => '',
+                            'task_is_group' => 1, 'task_position' => 0, 'task_css' => 'ggroupblack', 'task_milestone' => 0, 'task_parent' => 0, 'task_parent_alternate_id' => 0,
+                            'task_notes' => '',
+                            'task_planned_workload' => 0
+                        );
+                        constructGanttLine($tasks, $tmpt, array(), 0, $t['task_project_id']);
+                        $old_project_id = $t['task_project_id'];
+                    }
 
-        if ($t["task_parent"] <= 0) {
-            constructGanttLine($tasks, $t, $task_dependencies, $level, $t['task_project_id']);
-            findChildGanttLine($tasks, $t["task_id"], $task_dependencies, $level + 1);
-        }
-    }
+                    if ($t["task_parent"] <= 0) {
+                        constructGanttLine($tasks, $t, $task_dependencies, $level, $t['task_project_id']);
+                        findChildGanttLine($tasks, $t["task_id"], $task_dependencies, $level + 1);
+                    }
+                }
 
-    echo "\n";
-    ?>
+                echo "\n";
+                ?>
 
-    g.Draw(jQuery("#tabs").width()-40);
-    setTimeout('g.DrawDependencies()',100);
-}
-else
-{
-    alert("<?php echo $langs->trans("FailedToDefinGraph"); ?>");
-}
-</script>
-</div>
-
+                g.Draw(jQuery("#tabs").width() - 40);
+                setTimeout('g.DrawDependencies()', 100);
+            } else {
+                alert("<?php echo $langs->trans("FailedToDefinGraph"); ?>");
+            }
+        </script>
+    </div>
 
 
 <?php
 /**
  * Add a gant chart line
  *
- * @param   array   $tarr                   Array of all tasks
- * @param   array   $task                   Array with properties of one task
- * @param   array   $task_dependencies      Task dependencies (array(array(0=>idtask,1=>idtasktofinishfisrt))
- * @param   int     $level                  Level
- * @param   int     $project_id             Id of project
+ * @param array $tarr Array of all tasks
+ * @param array $task Array with properties of one task
+ * @param array $task_dependencies Task dependencies (array(array(0=>idtask,1=>idtasktofinishfisrt))
+ * @param int $level Level
+ * @param int $project_id Id of project
  * @return  void
  */
 function constructGanttLine($tarr, $task, $task_dependencies, $level = 0, $project_id = null)
@@ -277,10 +271,10 @@ function constructGanttLine($tarr, $task, $task_dependencies, $level = 0, $proje
 /**
  * Find child Gantt line
  *
- * @param   array   $tarr                   tarr
- * @param   int     $parent                 Parent
- * @param   array   $task_dependencies      Task dependencies
- * @param   int     $level                  Level
+ * @param array $tarr tarr
+ * @param int $parent Parent
+ * @param array $task_dependencies Task dependencies
+ * @param int $level Level
  * @return  void
  */
 function findChildGanttLine($tarr, $parent, $task_dependencies, $level)

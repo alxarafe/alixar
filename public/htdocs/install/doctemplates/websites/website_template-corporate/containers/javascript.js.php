@@ -1,6 +1,7 @@
 <?php // BEGIN PHP
 $websitekey = basename(__DIR__);
-if (! defined('USEDOLIBARRSERVER') && ! defined('USEDOLIBARREDITOR')) { require_once __DIR__ . '/master.inc.php'; 
+if (!defined('USEDOLIBARRSERVER') && !defined('USEDOLIBARREDITOR')) {
+    require_once __DIR__ . '/master.inc.php';
 } // Load env if not already loaded
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/website.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/website.inc.php';

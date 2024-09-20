@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005-2018 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2007      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2010-2012 Destailleur Laurent <eldy@users.sourceforge.net>
- * Copyright (C) 2014 	   Henry Florian <florian.henry@open-concept.pro>
+/* Copyright (C) 2005-2018  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2010-2012  Destailleur Laurent         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014 	    Henry Florian               <florian.henry@open-concept.pro>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -28,6 +28,11 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2016  Florian HENRY    <florian.henry@atm-consulting.fr>
+/* Copyright (C) 2016       Florian HENRY               <florian.henry@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
  */
+
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  * \file        htdocs/admin/resource.php

@@ -83,13 +83,13 @@ class CapabilityProfile
      */
     protected $profileId;
 
-    
+
     /**
      * @var string $vendor
      *  Name of manufacturer.
      */
     protected $vendor;
-    
+
     /**
      *
      * @var array $encodings
@@ -155,9 +155,9 @@ class CapabilityProfile
      *
      * @param string $featureName
      *            Name of the feature to retrieve.
+     * @return mixed feature value.
      * @throws \InvalidArgumentException Where the feature does not exist.
      *         The exception will contain suggestions for the closest-named features.
-     * @return mixed feature value.
      */
     public function getFeature($featureName)
     {
@@ -277,13 +277,13 @@ class CapabilityProfile
      *
      * @param string $profileName
      *            The ID of the profile to load.
-     * @throws InvalidArgumentException Where the ID does not exist. Some similarly-named profiles will be suggested in the Exception text.
      * @return CapabilityProfile The CapabilityProfile that was requested.
+     * @throws InvalidArgumentException Where the ID does not exist. Some similarly-named profiles will be suggested in the Exception text.
      */
     public static function load(string $profileName)
     {
         self::loadCapabilitiesDataFile();
-        if (! isset(self::$profiles[$profileName])) {
+        if (!isset(self::$profiles[$profileName])) {
             $suggestionsArray = self::suggestProfileName($profileName);
             $suggestionsStr = implode(", ", $suggestionsArray);
             throw new InvalidArgumentException("The CapabilityProfile '$profileName' does not exist. Try one that does exist, such as $suggestionsStr.");

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2013       Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2014       Marcos García           <marcosgdf@gmail.com>
+/* Copyright (C) 2013       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -42,7 +42,6 @@ $_SESSION["formatsondage"] = "D";
 $erreur = false;
 $erreurNb = 0;
 $choixdate = '';
-
 
 /*
  * Actions
@@ -168,7 +167,6 @@ if (GETPOST('confirmation')) {
             }
         }
 
-
         if (!empty($errheure)) {
             setEventMessages($langs->trans("ErrorBadFormat"), null, 'errors');
         }
@@ -203,8 +201,6 @@ if (GETPOST('reset')) {
     unset($_SESSION["nbrecaseshoraires"]);
 }
 
-
-
 /*
  * View
  */
@@ -235,7 +231,6 @@ if (!isset($_SESSION["nbrecaseshoraires"])) {
         }
     }
 }
-
 
 //valeurs de la date du jour actuel
 $jourAJ = date("j");
@@ -352,7 +347,6 @@ if (is_int($_SESSION["mois"]) && $_SESSION["mois"] > 0 && $_SESSION["mois"] < 13
 } else {
     $motmois = dol_print_date(dol_now(), '%B');
 }
-
 
 // Start form
 print '<form name="formulaire" action="" method="POST">' . "\n";

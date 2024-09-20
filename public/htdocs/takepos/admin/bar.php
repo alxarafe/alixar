@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2008-2011  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2017  Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2022       Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2008-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2017  Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,9 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\FormProduct;
 
 /**
  *  \file       htdocs/takepos/admin/bar.php
@@ -100,13 +103,21 @@ print '<input type="hidden" name="token" value="' . newToken() . '">';
 print '<input type="hidden" name="action" value="set">';
 
 ?>
-<script type="text/javascript" src="<?php echo DOL_URL_ROOT ?>/takepos/js/jquery.colorbox-min.js"></script> <!-- TODO It seems we don't need this -->
-<script type="text/javascript">
-function Floors() {
-    console.log("Open box to select floor");
-    $.colorbox({href:"<?php echo DOL_URL_ROOT ?>/takepos/floors.php?mode=edit&place=0", width:"90%", height:"90%", transition:"none", iframe:"true", title:"<?php echo $langs->trans("Floors"); ?>"});
-}
-</script>
+    <script type="text/javascript"
+            src="<?php echo DOL_URL_ROOT ?>/takepos/js/jquery.colorbox-min.js"></script> <!-- TODO It seems we don't need this -->
+    <script type="text/javascript">
+        function Floors() {
+            console.log("Open box to select floor");
+            $.colorbox({
+                href: "<?php echo DOL_URL_ROOT ?>/takepos/floors.php?mode=edit&place=0",
+                width: "90%",
+                height: "90%",
+                transition: "none",
+                iframe: "true",
+                title: "<?php echo $langs->trans("Floors"); ?>"
+            });
+        }
+    </script>
 
 <?php
 

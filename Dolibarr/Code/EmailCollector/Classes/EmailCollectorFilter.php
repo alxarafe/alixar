@@ -21,7 +21,9 @@
 
 namespace Dolibarr\Code\EmailCollector\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        emailcollector/class/emailcollectorfilter.class.php

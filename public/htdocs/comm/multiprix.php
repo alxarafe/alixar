@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2001-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2006      Andre Cianfarani  <acianfa@free.fr>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/comm/multiprix.php
  *  \ingroup    societe
@@ -28,9 +31,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-
-use Dolibarr\Code\Contact\Classes\Contact;
-
 
 // Load translation files required by the page
 $langs->loadLangs(array('orders', 'companies'));
@@ -67,7 +67,6 @@ if ($action == 'setpricelevel' && $user->hasRight('societe', 'creer')) {
     exit;
 }
 
-
 /*
  * View
  */
@@ -81,7 +80,6 @@ if ($_socid > 0) {
     $objsoc = new Societe($db);
     $objsoc->id = $_socid;
     $objsoc->fetch($_socid);
-
 
     $head = societe_prepare_head($objsoc);
 
@@ -129,17 +127,14 @@ if ($_socid > 0) {
     print $form->buttonsSaveCancel("Save", '');
 
     print "</form>";
-
-
     print '<br><br>';
-
 
     /*
      * List historic of multiprices
      */
-    $sql  = "SELECT rc.rowid,rc.price_level, rc.datec as dc, u.rowid as uid, u.login";
+    $sql = "SELECT rc.rowid,rc.price_level, rc.datec as dc, u.rowid as uid, u.login";
     $sql .= " FROM " . MAIN_DB_PREFIX . "societe_prices as rc, " . MAIN_DB_PREFIX . "user as u";
-    $sql .= " WHERE rc.fk_soc = " . ((int) $objsoc->id);
+    $sql .= " WHERE rc.fk_soc = " . ((int)$objsoc->id);
     $sql .= " AND u.rowid = rc.fk_user_author";
     $sql .= " ORDER BY rc.datec DESC";
 

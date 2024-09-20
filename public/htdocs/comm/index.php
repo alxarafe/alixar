@@ -25,6 +25,7 @@
 
 use Dolibarr\Code\Comm\Classes\Propal;
 use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Contrat\Classes\Contrat;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\HookManager;
@@ -74,7 +75,6 @@ if (
 ) {
     accessforbidden();
 }
-
 
 
 /*
@@ -148,10 +148,10 @@ if (isModEnabled("propal") && $user->hasRight("propal", "lire")) {
     $sql .= " AND p.fk_soc = s.rowid";
     $sql .= " AND p.fk_statut = " . Propal::STATUS_DRAFT;
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -246,10 +246,10 @@ if (isModEnabled('supplier_proposal') && $user->hasRight("supplier_proposal", "l
     $sql .= " AND p.fk_statut = " . SupplierProposal::STATUS_DRAFT;
     $sql .= " AND p.fk_soc = s.rowid";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -343,10 +343,10 @@ if (isModEnabled('order') && $user->hasRight('commande', 'lire')) {
     $sql .= " AND c.fk_statut = " . Commande::STATUS_DRAFT;
     $sql .= " AND c.fk_soc = s.rowid";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -443,10 +443,10 @@ if ((isModEnabled("fournisseur") && !getDolGlobalString('MAIN_USE_NEW_SUPPLIERMO
     $sql .= " AND cf.fk_statut = " . CommandeFournisseur::STATUS_DRAFT;
     $sql .= " AND cf.fk_soc = s.rowid";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND cf.fk_soc = " . ((int) $socid);
+        $sql .= " AND cf.fk_soc = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -541,10 +541,10 @@ if (isModEnabled('intervention')) {
     $sql .= " AND f.fk_soc = s.rowid";
     $sql .= " AND f.fk_statut = 0";
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
 
 
@@ -623,14 +623,14 @@ if (isModEnabled("societe") && $user->hasRight('societe', 'lire')) {
     $sql .= " WHERE s.entity IN (" . getEntity($companystatic->element) . ")";
     $sql .= " AND s.client IN (" . Societe::CUSTOMER . ", " . Societe::PROSPECT . ", " . Societe::CUSTOMER_AND_PROSPECT . ")";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     // Add where from hooks
     $parameters = array('socid' => $socid);
     $reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters, $companystatic); // Note that $action and $object may have been modified by hook
     if (empty($reshook)) {
         if ($socid > 0) {
-            $sql .= " AND s.rowid = " . ((int) $socid);
+            $sql .= " AND s.rowid = " . ((int)$socid);
         }
     }
     $sql .= $hookmanager->resPrint;
@@ -733,12 +733,12 @@ if (isModEnabled('propal')) {
         if ($search_sale == -2) {
             $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc)";
         } elseif ($search_sale > 0) {
-            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
         }
     }
     // Search on socid
     if ($socid) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
     $sql .= " ORDER BY c.tms DESC";
 
@@ -825,10 +825,10 @@ if (isModEnabled('order')) {
     $sql .= " AND c.entity IN (" . getEntity('commande') . ")";
     //$sql.= " AND c.fk_statut > 2";
     if ($socid) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     $sql .= " ORDER BY c.tms DESC";
     $sql .= $db->plimit($max, 0);
@@ -912,14 +912,14 @@ if ((isModEnabled("supplier_order") || isModEnabled("supplier_invoice")) && $use
     $sql .= " WHERE s.entity IN (" . getEntity($companystatic->element) . ")";
     $sql .= " AND s.fournisseur = " . Societe::SUPPLIER;
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     // Add where from hooks
     $parameters = array('socid' => $socid);
     $reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters, $companystatic); // Note that $action and $object may have been modified by hook
     if (empty($reshook)) {
         if ($socid > 0) {
-            $sql .= " AND s.rowid = " . ((int) $socid);
+            $sql .= " AND s.rowid = " . ((int)$socid);
         }
     }
     $sql .= $hookmanager->resPrint;
@@ -1028,10 +1028,10 @@ if (isModEnabled('contract') && $user->hasRight("contrat", "lire") && 0) { // TO
     $sql .= " AND c.fk_soc = s.rowid";
     $sql .= " AND c.fk_product = p.rowid";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
     $sql .= " ORDER BY c.tms DESC";
     $sql .= $db->plimit($max + 1, 0);
@@ -1103,10 +1103,10 @@ if (isModEnabled("propal") && $user->hasRight("propal", "lire")) {
     $sql .= " AND p.fk_soc = s.rowid";
     $sql .= " AND p.fk_statut = " . Propal::STATUS_VALIDATED;
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
     $sql .= " ORDER BY p.rowid DESC";
 
@@ -1222,10 +1222,10 @@ if (isModEnabled('order') && $user->hasRight('commande', 'lire')) {
     $sql .= " AND c.fk_soc = s.rowid";
     $sql .= " AND c.fk_statut IN (" . Commande::STATUS_VALIDATED . ", " . Commande::STATUS_SHIPMENTONPROCESS . ")";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
     $sql .= " ORDER BY c.rowid DESC";
 

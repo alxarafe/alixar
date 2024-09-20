@@ -162,12 +162,12 @@ class JavascriptRenderer
             }
         }
         if (array_key_exists('disable_controls', $options)) {
-            foreach ((array) $options['disable_controls'] as $name) {
+            foreach ((array)$options['disable_controls'] as $name) {
                 $this->disableControl($name);
             }
         }
         if (array_key_exists('ignore_collectors', $options)) {
-            foreach ((array) $options['ignore_collectors'] as $name) {
+            foreach ((array)$options['ignore_collectors'] as $name) {
                 $this->ignoreCollector($name);
             }
         }
@@ -269,7 +269,7 @@ class JavascriptRenderer
     /**
      * Disable a specific vendor's assets.
      *
-     * @param  string $name "jquery", "fontawesome", "highlightjs"
+     * @param string $name "jquery", "fontawesome", "highlightjs"
      *
      * @return void
      */
@@ -638,9 +638,9 @@ class JavascriptRenderer
      * Add assets stored in files to render in the head
      *
      * @param array $cssFiles An array of filenames
-     * @param array $jsFiles  An array of filenames
+     * @param array $jsFiles An array of filenames
      * @param string $basePath Base path of those files
-     * @param string $baseUrl  Base url of those files
+     * @param string $baseUrl Base url of those files
      * @return $this
      */
     public function addAssets($cssFiles, $jsFiles, $basePath = null, $baseUrl = null)
@@ -648,8 +648,8 @@ class JavascriptRenderer
         $this->additionalAssets[] = array(
             'base_path' => $basePath,
             'base_url' => $baseUrl,
-            'css' => (array) $cssFiles,
-            'js' => (array) $jsFiles
+            'css' => (array)$cssFiles,
+            'js' => (array)$jsFiles
         );
         return $this;
     }
@@ -665,8 +665,8 @@ class JavascriptRenderer
      * added.  Inline assets from all collectors are merged together into the same array, so these
      * content IDs effectively deduplicate the inline assets.
      *
-     * @param array $inlineCss  An array map of content ID to inline CSS content (not including <style> tag)
-     * @param array $inlineJs   An array map of content ID to inline JS content (not including <script> tag)
+     * @param array $inlineCss An array map of content ID to inline CSS content (not including <style> tag)
+     * @param array $inlineJs An array map of content ID to inline JS content (not including <script> tag)
      * @param array $inlineHead An array map of content ID to arbitrary inline HTML content (typically
      *                          <style>/<script> tags); it must be embedded within the <head> element
      * @return $this
@@ -674,9 +674,9 @@ class JavascriptRenderer
     public function addInlineAssets($inlineCss, $inlineJs, $inlineHead)
     {
         $this->additionalAssets[] = array(
-            'inline_css' => (array) $inlineCss,
-            'inline_js' => (array) $inlineJs,
-            'inline_head' => (array) $inlineHead
+            'inline_css' => (array)$inlineCss,
+            'inline_js' => (array)$inlineJs,
+            'inline_head' => (array)$inlineHead
         );
         return $this;
     }
@@ -727,20 +727,20 @@ class JavascriptRenderer
                 $this->makeUriRelativeTo($basePath, $this->basePath),
                 $this->makeUriRelativeTo($baseUrl, $this->baseUrl));
             if (isset($assets['css'])) {
-                $cssFiles = array_merge($cssFiles, $this->makeUriRelativeTo((array) $assets['css'], $root));
+                $cssFiles = array_merge($cssFiles, $this->makeUriRelativeTo((array)$assets['css'], $root));
             }
             if (isset($assets['js'])) {
-                $jsFiles = array_merge($jsFiles, $this->makeUriRelativeTo((array) $assets['js'], $root));
+                $jsFiles = array_merge($jsFiles, $this->makeUriRelativeTo((array)$assets['js'], $root));
             }
 
             if (isset($assets['inline_css'])) {
-                $inlineCss = array_merge($inlineCss, (array) $assets['inline_css']);
+                $inlineCss = array_merge($inlineCss, (array)$assets['inline_css']);
             }
             if (isset($assets['inline_js'])) {
-                $inlineJs = array_merge($inlineJs, (array) $assets['inline_js']);
+                $inlineJs = array_merge($inlineJs, (array)$assets['inline_js']);
             }
             if (isset($assets['inline_head'])) {
-                $inlineHead = array_merge($inlineHead, (array) $assets['inline_head']);
+                $inlineHead = array_merge($inlineHead, (array)$assets['inline_head']);
             }
         }
 
@@ -1009,7 +1009,7 @@ class JavascriptRenderer
     public function replaceTagInBuffer($here = true, $initialize = true, $renderStackedData = true, $head = false)
     {
         $render = ($head ? $this->renderHead() : "")
-                . $this->render($initialize, $renderStackedData);
+            . $this->render($initialize, $renderStackedData);
 
         $current = ($here && ob_get_level() > 0) ? ob_get_clean() : self::REPLACEABLE_TAG;
 
@@ -1048,7 +1048,7 @@ class JavascriptRenderer
 
         $nonce = $this->getNonceAttribute();
 
-        if ($this->useRequireJs){
+        if ($this->useRequireJs) {
             return "<script type=\"text/javascript\"{$nonce}>\nrequire(['debugbar'], function(PhpDebugBar){ $js });\n</script>\n";
         } else {
             return "<script type=\"text/javascript\"{$nonce}>\n$js\n</script>\n";

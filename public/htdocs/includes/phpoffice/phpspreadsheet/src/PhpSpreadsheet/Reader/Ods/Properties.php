@@ -25,7 +25,7 @@ class Properties
                 $this->setCoreProperties($docProps, $officePropertiesDC);
             }
 
-            $officePropertyMeta = (object) [];
+            $officePropertyMeta = (object)[];
             if (isset($namespacesMeta['dc'])) {
                 $officePropertyMeta = $officePropertyData->children($namespacesMeta['meta']);
             }
@@ -38,7 +38,7 @@ class Properties
     private function setCoreProperties(DocumentProperties $docProps, \SimpleXMLElement $officePropertyDC)
     {
         foreach ($officePropertyDC as $propertyName => $propertyValue) {
-            $propertyValue = (string) $propertyValue;
+            $propertyValue = (string)$propertyValue;
             switch ($propertyName) {
                 case 'title':
                     $docProps->setTitle($propertyValue);
@@ -76,9 +76,10 @@ class Properties
         \SimpleXMLElement $propertyValue,
         $propertyName,
         DocumentProperties $docProps
-    ) {
+    )
+    {
         $propertyValueAttributes = $propertyValue->attributes($namespacesMeta['meta']);
-        $propertyValue = (string) $propertyValue;
+        $propertyValue = (string)$propertyValue;
         switch ($propertyName) {
             case 'initial-creator':
                 $docProps->setCreator($propertyValue);
@@ -106,7 +107,7 @@ class Properties
         $propertyValueType = DocumentProperties::PROPERTY_TYPE_STRING;
         foreach ($propertyValueAttributes as $key => $value) {
             if ($key == 'name') {
-                $propertyValueName = (string) $value;
+                $propertyValueName = (string)$value;
             } elseif ($key == 'value-type') {
                 switch ($value) {
                     case 'date':
