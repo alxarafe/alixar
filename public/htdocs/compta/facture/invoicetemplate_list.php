@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2002-2003 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013      Florian Henry        <florian.henry@open-concept.pro>
- * Copyright (C) 2013      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015      Jean-François Ferry  <jfefe@aternatik.fr>
- * Copyright (C) 2012      Cedric Salvador      <csalvador@gpcsolutions.fr>
- * Copyright (C) 2015-2021 Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2016      Meziane Sof          <virtualsof@yahoo.fr>
- * Copyright (C) 2023	   William Mead			<william.mead@manchenumerique.fr>
+/* Copyright (C) 2002-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2012       Cedric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015-2021  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2016       Meziane Sof                 <virtualsof@yahoo.fr>
+ * Copyright (C) 2023	    William Mead			    <william.mead@manchenumerique.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -35,28 +35,21 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'bills', 'compta', 'admin', 'other'));
 
-$action     = GETPOST('action', 'alpha');
+$action = GETPOST('action', 'alpha');
 $massaction = GETPOST('massaction', 'alpha');
 $show_files = GETPOSTINT('show_files');
-$confirm    = GETPOST('confirm', 'alpha');
-$cancel     = GETPOST('cancel', 'alpha');
-$toselect   = GETPOST('toselect', 'array');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'alpha');
+$toselect = GETPOST('toselect', 'array');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'invoicetemplatelist'; // To manage different context of search
-$optioncss  = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
-$mode       = GETPOST('mode', 'aZ'); // The output mode ('list', 'kanban', 'hierarchy', 'calendar', ...)
+$optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
+$mode = GETPOST('mode', 'aZ'); // The output mode ('list', 'kanban', 'hierarchy', 'calendar', ...)
 
 $socid = GETPOSTINT('socid');
 
@@ -317,13 +310,13 @@ $sql .= $hookmanager->resPrint;
 $sql .= " WHERE f.fk_soc = s.rowid";
 $sql .= ' AND f.entity IN (' . getEntity('invoice') . ')';
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if ($search_ref) {
     $sql .= natural_search('f.titre', $search_ref);
 }
 if ($socid) {
-    $sql .= ' AND s.rowid = ' . (int) $socid;
+    $sql .= ' AND s.rowid = ' . (int)$socid;
 }
 if ($search_societe) {
     $sql .= natural_search('s.nom', $search_societe);
@@ -441,46 +434,46 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($socid > 0) {
-    $param .= '&socid=' . urlencode((string) ($socid));
+    $param .= '&socid=' . urlencode((string)($socid));
 }
 if ($search_date_startday) {
-    $param .= '&search_date_startday=' . urlencode((string) ($search_date_startday));
+    $param .= '&search_date_startday=' . urlencode((string)($search_date_startday));
 }
 if ($search_date_startmonth) {
-    $param .= '&search_date_startmonth=' . urlencode((string) ($search_date_startmonth));
+    $param .= '&search_date_startmonth=' . urlencode((string)($search_date_startmonth));
 }
 if ($search_date_startyear) {
-    $param .= '&search_date_startyear=' . urlencode((string) ($search_date_startyear));
+    $param .= '&search_date_startyear=' . urlencode((string)($search_date_startyear));
 }
 if ($search_date_endday) {
-    $param .= '&search_date_endday=' . urlencode((string) ($search_date_endday));
+    $param .= '&search_date_endday=' . urlencode((string)($search_date_endday));
 }
 if ($search_date_endmonth) {
-    $param .= '&search_date_endmonth=' . urlencode((string) ($search_date_endmonth));
+    $param .= '&search_date_endmonth=' . urlencode((string)($search_date_endmonth));
 }
 if ($search_date_endyear) {
-    $param .= '&search_date_endyear=' . urlencode((string) ($search_date_endyear));
+    $param .= '&search_date_endyear=' . urlencode((string)($search_date_endyear));
 }
 if ($search_date_when_startday) {
-    $param .= '&search_date_when_startday=' . urlencode((string) ($search_date_when_startday));
+    $param .= '&search_date_when_startday=' . urlencode((string)($search_date_when_startday));
 }
 if ($search_date_when_startmonth) {
-    $param .= '&search_date_when_startmonth=' . urlencode((string) ($search_date_when_startmonth));
+    $param .= '&search_date_when_startmonth=' . urlencode((string)($search_date_when_startmonth));
 }
 if ($search_date_when_startyear) {
-    $param .= '&search_date_when_startyear=' . urlencode((string) ($search_date_when_startyear));
+    $param .= '&search_date_when_startyear=' . urlencode((string)($search_date_when_startyear));
 }
 if ($search_date_when_endday) {
-    $param .= '&search_date_when_endday=' . urlencode((string) ($search_date_when_endday));
+    $param .= '&search_date_when_endday=' . urlencode((string)($search_date_when_endday));
 }
 if ($search_date_when_endmonth) {
-    $param .= '&search_date_when_endmonth=' . urlencode((string) ($search_date_when_endmonth));
+    $param .= '&search_date_when_endmonth=' . urlencode((string)($search_date_when_endmonth));
 }
 if ($search_date_when_endyear) {
-    $param .= '&search_date_when_endyear=' . urlencode((string) ($search_date_when_endyear));
+    $param .= '&search_date_when_endyear=' . urlencode((string)($search_date_when_endyear));
 }
 if ($search_ref) {
     $param .= '&search_ref=' . urlencode($search_ref);

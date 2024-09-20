@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2001-2003 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004      Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories'));
@@ -40,8 +39,8 @@ if (!$user->hasRight('banque', 'lire')) {
 /**
  *  Get result of sql for field amount
  *
- *  @param  string  $sql    SQL string
- *  @return int             Amount
+ * @param string $sql SQL string
+ * @return int             Amount
  */
 function valeur($sql)
 {

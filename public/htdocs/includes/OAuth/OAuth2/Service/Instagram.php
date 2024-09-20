@@ -16,18 +16,19 @@ class Instagram extends AbstractService
      * Defined scopes
      * @link http://instagram.com/developer/authentication/#scope
      */
-    const SCOPE_BASIC         = 'basic';
-    const SCOPE_COMMENTS      = 'comments';
+    const SCOPE_BASIC = 'basic';
+    const SCOPE_COMMENTS = 'comments';
     const SCOPE_RELATIONSHIPS = 'relationships';
-    const SCOPE_LIKES         = 'likes';
+    const SCOPE_LIKES = 'likes';
 
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage, $scopes, $baseApiUri, true);
 
         if (null === $baseApiUri) {

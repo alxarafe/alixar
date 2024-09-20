@@ -1,8 +1,9 @@
 <?php
 
-/* Copyright (C) 2004-2017  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2024		MDW					<mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2024		MDW					        <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +19,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\Misc;
+
 /**
  * \file    htdocs/admin/knowledgemanagement.php
  * \ingroup knowledgemanagement
@@ -32,7 +41,6 @@ global $langs, $user;
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once DOL_DOCUMENT_ROOT . "/knowledgemanagement/lib/knowledgemanagement.lib.php";
-require_once DOL_DOCUMENT_ROOT . "/knowledgemanagement/class/knowledgerecord.class.php";
 
 // Translations
 $langs->loadLangs(array("admin", "knowledgemanagement"));
@@ -111,7 +119,7 @@ if ($action == 'updateMask') {
     // Search template files
     $file = '';
     $className = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/knowledgemanagement/doc/pdf_" . $modele . "_" . strtolower($tmpobjectkey) . ".modules.php", 0);
         if (file_exists($file)) {
@@ -181,14 +189,13 @@ if ($action == 'updateMask') {
 }
 
 
-
 /*
  * View
  */
 
 $form = new Form($db);
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $page_name = "KnowledgeManagementSetup";
 llxHeader('', $langs->trans($page_name), '', '', 0, 0, '', '', '', 'mod-admin page-knowledgemanagement');
@@ -227,13 +234,11 @@ if ($action == 'edit') {
                 print getDolGlobalString($constname);
                 print "</textarea>\n";
             } elseif ($val['type'] == 'html') {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
                 $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
                 $doleditor->Create();
             } elseif ($val['type'] == 'yesno') {
                 print $form->selectyesno($constname, getDolGlobalString($constname), 1);
             } elseif (preg_match('/emailtemplate:/', $val['type'])) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $formmail = new FormMail($db);
 
                 $tmp = explode(':', $val['type']);
@@ -253,15 +258,12 @@ if ($action == 'edit') {
                 }
                 print $form->selectarray($constname, $arrayofmessagename, getDolGlobalString($constname), 'None', 0, 0, '', 0, 0, 0, '', '', 1);
             } elseif (preg_match('/category:/', $val['type'])) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
                 $formother = new FormOther($db);
 
                 $tmp = explode(':', $val['type']);
                 print img_picto('', 'category', 'class="pictofixedwidth"');
                 print $formother->select_categories($tmp[1], getDolGlobalString($constname), $constname, 0, $langs->trans('CustomersProspectsCategoriesShort'));
             } elseif (preg_match('/thirdparty_type/', $val['type'])) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
                 $formcompany = new FormCompany($db);
                 print $formcompany->selectProspectCustomerType(getDolGlobalString($constname), $constname);
             } else {
@@ -296,7 +298,6 @@ if ($action == 'edit') {
                 } elseif ($val['type'] == 'yesno') {
                     print ajax_constantonoff($constname);
                 } elseif (preg_match('/emailtemplate:/', $val['type'])) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                     $formmail = new FormMail($db);
 
                     $tmp = explode(':', $val['type']);
@@ -420,7 +421,7 @@ foreach ($myTmpObjects as $myTmpObjectKey => $myTmpObjectArray) {
                                 print '</td>';
 
                                 $className = $myTmpObjectArray['class'];
-                                $mytmpinstance = new $className($db);
+                                $mytmpinstance = Misc::getCodeLibClass($className, $db);
                                 $mytmpinstance->initAsSpecimen();
 
                                 // Info

@@ -1,9 +1,10 @@
 <?php
 
 /* Module descriptor for ticket system
- * Copyright (C) 2013-2016  Jean-François FERRY     <hello@librethic.io>
- *               2016       Christophe Battarel     <christophe@altairis.fr>
- * Copyright (C) 2019-2021  Frédéric France         <frederic.france@netlogic.fr>
+ * Copyright (C) 2013-2016  Jean-François FERRY         <hello@librethic.io>
+ *               2016       Christophe Battarel         <christophe@altairis.fr>
+ * Copyright (C) 2019-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+
 /**
  *     \file        htdocs/core/boxes/box_graph_nb_ticket_last_x_days.php
  *     \ingroup     ticket
  *     \brief       This box shows the number of new daily tickets the last X days
  */
-
-require_once DOL_DOCUMENT_ROOT . "/core/boxes/modules_boxes.php";
 
 /**
  * Class to manage the box to show new daily tickets
@@ -33,7 +34,7 @@ require_once DOL_DOCUMENT_ROOT . "/core/boxes/modules_boxes.php";
 class box_graph_nb_ticket_last_x_days extends ModeleBoxes
 {
     public $boxcode = "box_graph_nb_ticket_last_x_days";
-    public $boximg  = "ticket";
+    public $boximg = "ticket";
     public $boxlabel;
     public $depends = array("ticket");
 
@@ -41,8 +42,8 @@ class box_graph_nb_ticket_last_x_days extends ModeleBoxes
 
     /**
      * Constructor
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param = '')
     {
@@ -56,8 +57,8 @@ class box_graph_nb_ticket_last_x_days extends ModeleBoxes
     /**
      * Load data into info_box_contents array to show array later.
      *
-     *     @param  int $max Maximum number of records to load
-     *     @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -93,7 +94,6 @@ class box_graph_nb_ticket_last_x_days extends ModeleBoxes
         } else {
             $days = 7;
         }
-        require_once DOL_DOCUMENT_ROOT . "/ticket/class/ticket.class.php";
         $text = $langs->trans("BoxTicketLastXDays", $days) . '&nbsp;' . img_picto('', 'filter.png', 'id="idsubimgDOLUSERCOOKIE_ticket_last_days" class="linkobject"');
         $this->info_box_head = array(
             'text' => $text,
@@ -153,7 +153,6 @@ class box_graph_nb_ticket_last_x_days extends ModeleBoxes
             $stringtoshow .= '</form>';
             $stringtoshow .= '</div>';
 
-            include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
             $px1 = new DolGraph();
 
             $mesg = $px1->isGraphKo();
@@ -205,10 +204,10 @@ class box_graph_nb_ticket_last_x_days extends ModeleBoxes
     /**
      *     Method to show box
      *
-     *     @param  array $head     Array with properties of box title
-     *     @param  array $contents Array with properties of box lines
-     *     @param  int   $nooutput No print, only return string
-     *     @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

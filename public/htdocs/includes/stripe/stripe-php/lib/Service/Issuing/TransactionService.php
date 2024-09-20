@@ -14,9 +14,9 @@ class TransactionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Issuing\Transaction>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Issuing\Transaction>
      */
     public function all($params = null, $opts = null)
     {
@@ -30,9 +30,9 @@ class TransactionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Issuing\Transaction
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Issuing\Transaction
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -48,9 +48,9 @@ class TransactionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Issuing\Transaction
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Issuing\Transaction
      */
     public function update($id, $params = null, $opts = null)
     {

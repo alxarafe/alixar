@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004       Eric Seigne             <eric.seigne@ryxeo.com>
- * Copyright (C) 2004-2013  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2006-2015  Yannick Warnier         <ywarnier@beeznest.org>
- * Copyright (C) 2014       Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2019       Eric Seigne             <eric.seigne@cap-rel.fr>
- * Copyright (C) 2021-2022  Open-Dsi                <support@open-dsi.fr>
+/* Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2004-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006-2015  Yannick Warnier             <ywarnier@beeznest.org>
+ * Copyright (C) 2014       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2019       Eric Seigne                 <eric.seigne@cap-rel.fr>
+ * Copyright (C) 2021-2022  Open-Dsi                    <support@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,6 +25,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Compta\Classes\Tva;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *        \file       htdocs/compta/tva/quadri_detail.php
  *        \ingroup    tax
@@ -36,15 +47,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/report.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/tax.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/localtax/class/localtax.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/paiementfourn.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/paymentexpensereport.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("other", "compta", "banks", "bills", "companies", "product", "trips", "admin"));
@@ -693,13 +695,13 @@ if (!is_array($x_coll) || !is_array($x_paye)) {
                     ) {
                     } else {
                         if (isset($fields['payment_amount']) && $fields['ftotal_ttc']) {
-                            $ratiopaymentinvoice = ($fields['payment_amount'] / (float) $fields['ftotal_ttc']);
+                            $ratiopaymentinvoice = ($fields['payment_amount'] / (float)$fields['ftotal_ttc']);
                         }
                     }
                 }
 
                 // VAT paid
-                $temp_ht = (float) $fields['totalht'] * $ratiopaymentinvoice;
+                $temp_ht = (float)$fields['totalht'] * $ratiopaymentinvoice;
 
                 // VAT
                 $temp_vat = $fields['vat'] * $ratiopaymentinvoice;
@@ -796,7 +798,7 @@ if (!is_array($x_coll) || !is_array($x_paye)) {
                         print price($fields['totalht']);
                         if (price2num($fields['ftotal_ttc'])) {
                             //print $fields['dtotal_ttc']."/".$fields['ftotal_ttc']." - ";
-                            $ratiolineinvoice = ((float) $fields['dtotal_ttc'] / (float) $fields['ftotal_ttc']);
+                            $ratiolineinvoice = ((float)$fields['dtotal_ttc'] / (float)$fields['ftotal_ttc']);
                             //print ' ('.round($ratiolineinvoice*100,2).'%)';
                         }
                         print '</td>';
@@ -819,7 +821,7 @@ if (!is_array($x_coll) || !is_array($x_paye)) {
                             print $langs->trans("NA");
                         } else {
                             if (isset($fields['payment_amount']) && $fields['ftotal_ttc']) {
-                                $ratiopaymentinvoice = ($fields['payment_amount'] / (float) $fields['ftotal_ttc']);
+                                $ratiopaymentinvoice = ($fields['payment_amount'] / (float)$fields['ftotal_ttc']);
                             }
                             print price(price2num($fields['payment_amount'], 'MT'));
                             if (isset($fields['payment_amount'])) {
@@ -831,7 +833,7 @@ if (!is_array($x_coll) || !is_array($x_paye)) {
 
                     // VAT paid
                     print '<td class="nowrap right">';
-                    $temp_ht = (float) $fields['totalht'] * $ratiopaymentinvoice;
+                    $temp_ht = (float)$fields['totalht'] * $ratiopaymentinvoice;
                     print price(price2num($temp_ht, 'MT'), 1);
                     print '</td>';
 

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,14 +20,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\KnowledgeManagement\Classes\ModeleNumRefKnowledgeRecord;
+
 /**
  *  \file       htdocs/knowledgemanagement/core/modules/knowledgemanagement/mod_knowledgerecord_standard.php
  *  \ingroup    knowledgemanagement
  *  \brief      File of class to manage KnowledgeRecord numbering rules standard
  */
-
-dol_include_once('/knowledgemanagement/core/modules/knowledgemanagement/modules_knowledgerecord.php');
-
 
 /**
  *  Class to manage the knowledgerecord numbering rules standard

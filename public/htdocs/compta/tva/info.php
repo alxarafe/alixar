@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2016-2023  Alexandre Spangaro      <aspangaro@easya.solutions>
+/* Copyright (C) 2016-2023  Alexandre Spangaro          <aspangaro@easya.solutions>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Tva;
+
 /**
  *  \file       htdocs/compta/tva/info.php
  *  \ingroup    tax
@@ -25,7 +27,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/vat.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 

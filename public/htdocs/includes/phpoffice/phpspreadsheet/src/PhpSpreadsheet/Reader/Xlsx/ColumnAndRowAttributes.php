@@ -134,13 +134,13 @@ class ColumnAndRowAttributes extends BaseParserClass
         $columnAttributes = [];
 
         foreach ($worksheetCols->col as $column) {
-            $startColumn = Coordinate::stringFromColumnIndex((int) $column['min']);
-            $endColumn = Coordinate::stringFromColumnIndex((int) $column['max']);
+            $startColumn = Coordinate::stringFromColumnIndex((int)$column['min']);
+            $endColumn = Coordinate::stringFromColumnIndex((int)$column['max']);
             ++$endColumn;
             for ($columnAddress = $startColumn; $columnAddress !== $endColumn; ++$columnAddress) {
                 $columnAttributes[$columnAddress] = $this->readColumnRangeAttributes($column, $readDataOnly);
 
-                if ((int) ($column['max']) == 16384) {
+                if ((int)($column['max']) == 16384) {
                     break;
                 }
             }
@@ -154,7 +154,7 @@ class ColumnAndRowAttributes extends BaseParserClass
         $columnAttributes = [];
 
         if ($column['style'] && !$readDataOnly) {
-            $columnAttributes['xfIndex'] = (int) $column['style'];
+            $columnAttributes['xfIndex'] = (int)$column['style'];
         }
         if (self::boolean($column['hidden'])) {
             $columnAttributes['visible'] = false;
@@ -162,10 +162,10 @@ class ColumnAndRowAttributes extends BaseParserClass
         if (self::boolean($column['collapsed'])) {
             $columnAttributes['collapsed'] = true;
         }
-        if (((int) $column['outlineLevel']) > 0) {
-            $columnAttributes['outlineLevel'] = (int) $column['outlineLevel'];
+        if (((int)$column['outlineLevel']) > 0) {
+            $columnAttributes['outlineLevel'] = (int)$column['outlineLevel'];
         }
-        $columnAttributes['width'] = (float) $column['width'];
+        $columnAttributes['width'] = (float)$column['width'];
 
         return $columnAttributes;
     }
@@ -187,19 +187,19 @@ class ColumnAndRowAttributes extends BaseParserClass
 
         foreach ($worksheetRow as $row) {
             if ($row['ht'] && !$readDataOnly) {
-                $rowAttributes[(int) $row['r']]['rowHeight'] = (float) $row['ht'];
+                $rowAttributes[(int)$row['r']]['rowHeight'] = (float)$row['ht'];
             }
             if (self::boolean($row['hidden'])) {
-                $rowAttributes[(int) $row['r']]['visible'] = false;
+                $rowAttributes[(int)$row['r']]['visible'] = false;
             }
             if (self::boolean($row['collapsed'])) {
-                $rowAttributes[(int) $row['r']]['collapsed'] = true;
+                $rowAttributes[(int)$row['r']]['collapsed'] = true;
             }
-            if ((int) $row['outlineLevel'] > 0) {
-                $rowAttributes[(int) $row['r']]['outlineLevel'] = (int) $row['outlineLevel'];
+            if ((int)$row['outlineLevel'] > 0) {
+                $rowAttributes[(int)$row['r']]['outlineLevel'] = (int)$row['outlineLevel'];
             }
             if ($row['s'] && !$readDataOnly) {
-                $rowAttributes[(int) $row['r']]['xfIndex'] = (int) $row['s'];
+                $rowAttributes[(int)$row['r']]['xfIndex'] = (int)$row['s'];
             }
         }
 

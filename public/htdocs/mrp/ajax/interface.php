@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2019   Laurent Destailleur (eldy)  <eldy@users.sourceforge.net>
+/* Copyright (C) 2019       Laurent Destailleur (eldy)  <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -54,7 +54,6 @@ $result = restrictedArea($user, 'mrp');
 $permissiontoproduce = $user->hasRight('mrp', 'write');
 
 
-
 /*
  * View
  */
@@ -68,9 +67,9 @@ if ($action == 'updateselectbatchbywarehouse' && $permissiontoproduce) {
     $sql .= " FROM " . MAIN_DB_PREFIX . "product_batch as pb";
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "product_stock as ps on ps.rowid = pb.fk_product_stock";
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "entrepot as e on e.rowid = ps.fk_entrepot AND e.entity IN (" . getEntity('stock') . ")";
-    $sql .= " WHERE ps.fk_product = " . ((int) $fk_product);
+    $sql .= " WHERE ps.fk_product = " . ((int)$fk_product);
     if ($warehouse_id > 0) {
-        $sql .= " AND fk_entrepot = '" . ((int) $warehouse_id) . "'";
+        $sql .= " AND fk_entrepot = '" . ((int)$warehouse_id) . "'";
     }
     $sql .= " ORDER BY e.ref, pb.batch";
 
@@ -79,7 +78,7 @@ if ($action == 'updateselectbatchbywarehouse' && $permissiontoproduce) {
     if ($resql) {
         while ($obj = $db->fetch_object($resql)) {
             if (empty($TRes[$obj->batch])) {
-                $TRes[$obj->batch]  = $obj->qty;
+                $TRes[$obj->batch] = $obj->qty;
             } else {
                 $TRes[$obj->batch] += $obj->qty;
             }
@@ -94,7 +93,7 @@ if ($action == 'updateselectbatchbywarehouse' && $permissiontoproduce) {
     $sql .= " FROM " . MAIN_DB_PREFIX . "product_batch as pb";
     $sql .= " JOIN " . MAIN_DB_PREFIX . "product_stock as ps on ps.rowid = pb.fk_product_stock";
     $sql .= " JOIN " . MAIN_DB_PREFIX . "entrepot as e on e.rowid = ps.fk_entrepot AND e.entity IN (" . getEntity('stock') . ")";
-    $sql .= " WHERE ps.fk_product = " . ((int) $fk_product);
+    $sql .= " WHERE ps.fk_product = " . ((int)$fk_product);
     if ($batch) {
         $sql .= " AND pb.batch = '" . $db->escape($batch) . "'";
     }

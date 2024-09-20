@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2018  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2013       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2015       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2016       Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2019       Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2021       Noé Cendrier			<noe.cendrier@altairis.fr>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2018  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2016       Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2019       Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2021       Noé Cendrier			    <noe.cendrier@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Canvas;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
+
 /**
  *  \file       htdocs/product/reassortlot.php
  *  \ingroup    produit
@@ -32,22 +40,16 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'stocks', 'productbatch', 'categories'));
 
-$action     = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'add', 'create', 'edit', 'update', 'view', ...
+$action = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view'; // The action 'add', 'create', 'edit', 'update', 'view', ...
 $massaction = GETPOST('massaction', 'alpha'); // The bulk action (combo box choice into lists)
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'myobjectlist'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha'); // Go back to a dedicated page
-$optioncss  = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
-$mode       = GETPOST('mode', 'aZ');
+$optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
+$mode = GETPOST('mode', 'aZ');
 
 $sref = GETPOST("sref", 'alpha');
 $snom = GETPOST("snom", 'alpha');
@@ -125,7 +127,6 @@ $search[$key . '_dtend'] = dol_mktime(23, 59, 59, GETPOSTINT('search_' . $key . 
 $canvas = GETPOST("canvas");
 $objcanvas = null;
 if (!empty($canvas)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
     $objcanvas = new Canvas($db, $action);
     $objcanvas->getCanvas('product', 'list', $canvas);
 }
@@ -226,8 +227,6 @@ if (empty($reshook)) {
     */
 }
 
-
-
 /*
  * View
  */
@@ -276,7 +275,7 @@ if (!empty($search_categ) && $search_categ != '-1') {
     $sql .= " FROM " . MAIN_DB_PREFIX . "categorie_product as cp";
     $sql .= " WHERE cp.fk_product = p.rowid"; // Join for the needed table to filter by categ
     if ($search_categ > 0) {
-        $sql .= " AND cp.fk_categorie = " . ((int) $search_categ);
+        $sql .= " AND cp.fk_categorie = " . ((int)$search_categ);
     }
     $sql .= ")";
 }
@@ -292,7 +291,7 @@ if (!empty($search_warehouse_categ) && $search_warehouse_categ != '-1') {
     $sql .= " FROM " . MAIN_DB_PREFIX . "categorie_warehouse as cp";
     $sql .= " WHERE cp.fk_warehouse = e.rowid"; // Join for the needed table to filter by categ
     if ($search_warehouse_categ > 0) {
-        $sql .= " AND cp.fk_categorie = " . ((int) $search_warehouse_categ);
+        $sql .= " AND cp.fk_categorie = " . ((int)$search_warehouse_categ);
     }
     $sql .= ")";
 }
@@ -320,16 +319,16 @@ if ($snom) {
     $sql .= natural_search("p.label", $snom);
 }
 if (!empty($tosell)) {
-    $sql .= " AND p.tosell = " . ((int) $tosell);
+    $sql .= " AND p.tosell = " . ((int)$tosell);
 }
 if (!empty($tobuy)) {
-    $sql .= " AND p.tobuy = " . ((int) $tobuy);
+    $sql .= " AND p.tobuy = " . ((int)$tobuy);
 }
 if (!empty($canvas)) {
     $sql .= " AND p.canvas = '" . $db->escape($canvas) . "'";
 }
 if ($fourn_id > 0) {
-    $sql .= " AND p.rowid = pf.fk_product AND pf.fk_soc = " . ((int) $fourn_id);
+    $sql .= " AND p.rowid = pf.fk_product AND pf.fk_soc = " . ((int)$fourn_id);
 }
 if ($search_warehouse) {
     $sql .= natural_search("e.ref", $search_warehouse);
@@ -468,7 +467,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 foreach ($search as $key => $val) {
     if (is_array($search[$key]) && count($search[$key])) {
@@ -494,10 +493,10 @@ if ($tobuy) {
     $param .= "&tobuy=" . urlencode($tobuy);
 }
 if ($type != '') {
-    $param .= "&type=" . urlencode((string) ($type));
+    $param .= "&type=" . urlencode((string)($type));
 }
 if ($fourn_id) {
-    $param .= "&fourn_id=" . urlencode((string) ($fourn_id));
+    $param .= "&fourn_id=" . urlencode((string)($fourn_id));
 }
 if ($snom) {
     $param .= "&snom=" . urlencode($snom);
@@ -509,7 +508,7 @@ if ($search_batch) {
     $param .= "&search_batch=" . urlencode($search_batch);
 }
 if ($sbarcode) {
-    $param .= "&sbarcode=" . urlencode((string) ($sbarcode));
+    $param .= "&sbarcode=" . urlencode((string)($sbarcode));
 }
 if ($search_warehouse) {
     $param .= "&search_warehouse=" . urlencode($search_warehouse);
@@ -524,10 +523,10 @@ if ($search_sale) {
     $param .= "&search_sale=" . urlencode($search_sale);
 }
 if (!empty($search_categ) && $search_categ != '-1') {
-    $param .= "&search_categ=" . urlencode((string) ($search_categ));
+    $param .= "&search_categ=" . urlencode((string)($search_categ));
 }
 if (!empty($search_warehouse_categ) && $search_warehouse_categ != '-1') {
-    $param .= "&search_warehouse_categ=" . urlencode((string) ($search_warehouse_categ));
+    $param .= "&search_warehouse_categ=" . urlencode((string)($search_warehouse_categ));
 }
 if ($search_stock_physique) {
     $param .= '&search_stock_physique=' . urlencode($search_stock_physique);
@@ -717,7 +716,7 @@ while ($i < $imaxinloop) {
         // TODO Use a cache
         $sql = "SELECT label";
         $sql .= " FROM " . MAIN_DB_PREFIX . "product_lang";
-        $sql .= " WHERE fk_product = " . ((int) $objp->rowid);
+        $sql .= " WHERE fk_product = " . ((int)$objp->rowid);
         $sql .= " AND lang = '" . $db->escape($langs->getDefaultLang()) . "'";
         $sql .= " LIMIT 1";
 

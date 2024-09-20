@@ -61,9 +61,9 @@ class RichText implements IComparable
      *
      * @param string $pText Text
      *
+     * @return TextElement
      * @throws Exception
      *
-     * @return TextElement
      */
     public function createText($pText)
     {
@@ -78,9 +78,9 @@ class RichText implements IComparable
      *
      * @param string $pText Text
      *
+     * @return Run
      * @throws Exception
      *
-     * @return Run
      */
     public function createTextRun($pText)
     {

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2010-2012 Regis Houssin  <regis.houssin@inodbox.com>
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -17,6 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/contact/canvas/actions_contactcard_common.class.php
@@ -60,8 +64,8 @@ abstract class ActionsContactCardCommon
     /**
      *  Get object
      *
-     *  @param  int     $id     Object id
-     *  @return object          Object loaded
+     * @param int $id Object id
+     * @return object          Object loaded
      */
     public function getObject($id)
     {
@@ -83,17 +87,18 @@ abstract class ActionsContactCardCommon
         return $object;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Set content of ->tpl array, to use into template
      *
-     *  @param  string      $action    Type of action
-     *  @param  int         $id         Id
-     *  @return void
+     * @param string $action Type of action
+     * @param int $id Id
+     * @return void
      */
     public function assign_values(&$action, $id)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs, $user, $canvas;
         global $form, $formcompany, $objsoc;
 
@@ -159,7 +164,7 @@ abstract class ActionsContactCardCommon
             // Town
             $this->tpl['select_town'] = $formcompany->select_ziptown($this->object->town, 'town', array('zipcode', 'selectcountry_id', 'state_id'));
 
-            if (dol_strlen(trim((string) $this->object->country_id)) == 0) {
+            if (dol_strlen(trim((string)$this->object->country_id)) == 0) {
                 $this->object->country_id = $objsoc->country_id;
             }
 
@@ -270,46 +275,47 @@ abstract class ActionsContactCardCommon
 
             // Create a form array
             $formquestion = array(
-            array('label' => $langs->trans("LoginToCreate"), 'type' => 'text', 'name' => 'login', 'value' => $login),
-            array('label' => $langs->trans("Password"), 'type' => 'text', 'name' => 'password', 'value' => $password));
+                array('label' => $langs->trans("LoginToCreate"), 'type' => 'text', 'name' => 'login', 'value' => $login),
+                array('label' => $langs->trans("Password"), 'type' => 'text', 'name' => 'password', 'value' => $password));
 
             $this->tpl['action_create_user'] = $form->formconfirm($_SERVER["PHP_SELF"] . "?id=" . $this->object->id, $langs->trans("CreateDolibarrLogin"), $langs->trans("ConfirmCreateContact"), "confirm_create_user", $formquestion, 'no');
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Assign POST values into object
      *
-     *  @return     void
+     * @return     void
      */
     private function assign_post()
     {
-		// phpcs:enable
+        // phpcs:enable
         global $langs, $mysoc;
 
         $this->object->socid = GETPOSTINT("socid");
-        $this->object->lastname         = GETPOST("name");
-        $this->object->firstname        = GETPOST("firstname");
+        $this->object->lastname = GETPOST("name");
+        $this->object->firstname = GETPOST("firstname");
         $this->object->civility_id = GETPOST("civility_id");
-        $this->object->poste            = GETPOST("poste");
+        $this->object->poste = GETPOST("poste");
         $this->object->address = GETPOST("address");
         $this->object->zip = GETPOST("zipcode");
-        $this->object->town             = GETPOST("town");
+        $this->object->town = GETPOST("town");
         $this->object->country_id = GETPOST("country_id") ? GETPOST("country_id") : $mysoc->country_id;
         $this->object->state_id = GETPOST("state_id");
         $this->object->phone_pro = GETPOST("phone_pro");
         $this->object->phone_perso = GETPOST("phone_perso");
         $this->object->phone_mobile = GETPOST("phone_mobile");
         $this->object->fax = GETPOST("fax");
-        $this->object->email            = GETPOST("email");
-        $this->object->priv             = GETPOST("priv");
-        $this->object->note             = GETPOST("note", "restricthtml");
+        $this->object->email = GETPOST("email");
+        $this->object->priv = GETPOST("priv");
+        $this->object->note = GETPOST("note", "restricthtml");
         $this->object->canvas = GETPOST("canvas");
 
         // We set country_id, and country_code label of the chosen country
         if ($this->object->country_id) {
-            $sql = "SELECT code, label FROM " . MAIN_DB_PREFIX . "c_country WHERE rowid = " . ((int) $this->object->country_id);
+            $sql = "SELECT code, label FROM " . MAIN_DB_PREFIX . "c_country WHERE rowid = " . ((int)$this->object->country_id);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $obj = $this->db->fetch_object($resql);

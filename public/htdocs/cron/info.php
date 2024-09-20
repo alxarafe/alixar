@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2013   Florian Henry   <florian.henry@open-concept.pro>
+/* Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Cron\Classes\Cronjob;
+
 /**
  *  \file           htdocs/cron/info.php
  *  \brief          Page of info of a cron job
@@ -25,7 +28,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once DOL_DOCUMENT_ROOT . "/cron/class/cronjob.class.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/cron.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
@@ -40,7 +42,6 @@ if (!$user->hasRight('cron', 'read')) {
 $id = GETPOSTINT('id');
 
 $object = new Cronjob($db);
-
 
 /*
  * View

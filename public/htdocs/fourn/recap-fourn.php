@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2001-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2019 Pierre Ardoin <mapiolca@me.com>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2019       Pierre Ardoin               <mapiolca@me.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       htdocs/fourn/recap-fourn.php
  *      \ingroup    fournisseur
@@ -28,7 +33,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('bills', 'companies'));
@@ -76,7 +80,7 @@ if ($socid > 0) {
         $sql .= " f.paye as paye, f.fk_statut as statut, f.rowid as facid,";
         $sql .= " u.login, u.rowid as userid";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s," . MAIN_DB_PREFIX . "facture_fourn as f," . MAIN_DB_PREFIX . "user as u";
-        $sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int) $societe->id);
+        $sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int)$societe->id);
         $sql .= " AND f.entity IN (" . getEntity("facture_fourn") . ")"; // Recognition of the entity attributed to this invoice for Multicompany
         $sql .= " AND f.fk_user_valid = u.rowid";
         $sql .= " ORDER BY f.datef DESC";
@@ -137,7 +141,7 @@ if ($socid > 0) {
                 $sql .= " " . MAIN_DB_PREFIX . "paiementfourn as p";
                 $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "user as u ON p.fk_user_author = u.rowid";
                 $sql .= " WHERE pf.fk_paiementfourn = p.rowid";
-                $sql .= " AND pf.fk_facturefourn = " . ((int) $fac->id);
+                $sql .= " AND pf.fk_facturefourn = " . ((int)$fac->id);
 
                 $resqlp = $db->query($sql);
                 if ($resqlp) {

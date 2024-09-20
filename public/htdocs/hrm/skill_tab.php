@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2021       Grégory Blémand     <contact@atm-consulting.fr>
- * Copyright (C) 2021       Gauthier VERDOL     <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021       Greg Rastklan       <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021       Jean-Pascal BOUDET  <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021       Grégory BLEMAND     <gregory.blemand@atm-consulting.fr>
- * Copyright (C) 2024       Frédéric France     <frederic.france@free.fr>
- * Copyright (C) 2024       Alexandre Spangaro  <alexandre@inovea-conseil.com>
+/* Copyright (C) 2021       Grégory Blémand             <contact@atm-consulting.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
+ * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Alexandre Spangaro          <alexandre@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Hrm\Classes\Evaluation;
+use Dolibarr\Code\Hrm\Classes\Job;
+use Dolibarr\Code\Hrm\Classes\Skill;
+use Dolibarr\Code\Hrm\Classes\SkillRank;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *    \file       htdocs/hrm/skill_tab.php
  *    \ingroup    hrm
@@ -31,16 +40,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skill.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skillrank.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_skill.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/evaluation.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_evaluation.lib.php';
 
 // Load translation files required by the page
@@ -88,7 +88,7 @@ if (method_exists($object, 'loadPersonalConf')) {
 
 // Permissions
 $permissiontoread = $user->hasRight('hrm', 'all', 'read');
-$permissiontoadd  = $user->hasRight('hrm', 'all', 'write'); // Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
+$permissiontoadd = $user->hasRight('hrm', 'all', 'write'); // Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
 
 // Security check (enable the most restrictive one)
 if ($user->socid > 0) {
@@ -129,7 +129,7 @@ if (empty($reshook)) {
 
     // update national_registration_number
     if ($action == 'setnational_registration_number') {
-        $object->national_registration_number = (string) GETPOST('national_registration_number', 'alphanohtml');
+        $object->national_registration_number = (string)GETPOST('national_registration_number', 'alphanohtml');
         $result = $object->update($user);
         if ($result < 0) {
             setEventMessages($object->error, $object->errors, 'errors');
@@ -162,7 +162,7 @@ if (empty($reshook)) {
     } elseif ($action == 'saveSkill') {
         if (!empty($TNote)) {
             foreach ($TNote as $skillId => $rank) {
-                $TSkills = $skill->fetchAll('ASC', 't.rowid', 0, 0, '(fk_object:=:' . ((int) $id) . ") AND (objecttype:=:'" . $db->escape($objecttype) . "') AND (fk_skill:=:" . ((int) $skillId) . ')');
+                $TSkills = $skill->fetchAll('ASC', 't.rowid', 0, 0, '(fk_object:=:' . ((int)$id) . ") AND (objecttype:=:'" . $db->escape($objecttype) . "') AND (fk_skill:=:" . ((int)$skillId) . ')');
                 if (is_array($TSkills) && !empty($TSkills)) {
                     foreach ($TSkills as $tmpObj) {
                         $tmpObj->rankorder = $rank;
@@ -261,7 +261,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
         $morehtmlref .= '</a>';
 
-        $urltovirtualcard = '/user/virtualcard.php?id=' . ((int) $object->id);
+        $urltovirtualcard = '/user/virtualcard.php?id=' . ((int)$object->id);
         $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->trans("PublicVirtualCardUrl") . ' - ' . $object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
         dol_banner_tab($object, 'id', $linkback, 1, 'rowid', 'rowid', $morehtmlref, '&objecttype=' . $objecttype);
@@ -284,7 +284,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     $sql_skill = "SELECT sr.fk_object, sr.rowid, s.label,s.skill_type, sr.rankorder, sr.fk_skill";
     $sql_skill .= " FROM " . MAIN_DB_PREFIX . "hrm_skillrank AS sr";
     $sql_skill .= " JOIN " . MAIN_DB_PREFIX . "hrm_skill AS s ON sr.fk_skill = s.rowid";
-    $sql_skill .= " AND sr.fk_object = " . ((int) $id);
+    $sql_skill .= " AND sr.fk_object = " . ((int)$id);
     $result = $db->query($sql_skill);
     $numSkills = $db->num_rows($result);
     $TSkillsJob = array();
@@ -428,7 +428,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         } else {
             $sk = new Skill($db);
             foreach ($TSkillsJob as $skillElement) {
-                $sk->fetch((int) $skillElement->fk_skill);
+                $sk->fetch((int)$skillElement->fk_skill);
                 print '<tr>';
                 print '<td>';
                 print Skill::typeCodeToLabel($sk->skill_type);
@@ -462,7 +462,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         }
     }
 
-
     // liste des evaluation liées
     if ($objecttype == 'user' && $permissiontoadd) {
         $evaltmp = new Evaluation($db);
@@ -473,14 +472,14 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $sql .= ", " . MAIN_DB_PREFIX . "hrm_skill as s";
         $sql .= " WHERE e.rowid = ed.fk_evaluation";
         $sql .= " AND s.rowid = ed.fk_skill";
-        $sql .= " AND e.fk_user = " . ((int) $id);
+        $sql .= " AND e.fk_user = " . ((int)$id);
         $sql .= " AND e.status > 0";
         $resql = $db->query($sql);
         $num = $db->num_rows($resql);
 
         //num of evaluations for each user
         $sqlEval = "SELECT rowid FROM " . MAIN_DB_PREFIX . "hrm_evaluation as e";
-        $sqlEval .= " WHERE e.fk_user = " . ((int) $id);
+        $sqlEval .= " WHERE e.fk_user = " . ((int)$id);
         $rslt = $db->query($sqlEval);
         $numEval = $db->num_rows($sqlEval);
 

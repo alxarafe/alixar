@@ -160,9 +160,9 @@ class Invoice extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Invoice the finalized invoice
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Invoice the finalized invoice
      */
     public function finalizeInvoice($params = null, $opts = null)
     {
@@ -177,9 +177,9 @@ class Invoice extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Invoice the uncollectible invoice
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Invoice the uncollectible invoice
      */
     public function markUncollectible($params = null, $opts = null)
     {
@@ -194,9 +194,9 @@ class Invoice extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Invoice the paid invoice
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Invoice the paid invoice
      */
     public function pay($params = null, $opts = null)
     {
@@ -211,9 +211,9 @@ class Invoice extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Invoice the sent invoice
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Invoice the sent invoice
      */
     public function sendInvoice($params = null, $opts = null)
     {
@@ -228,9 +228,9 @@ class Invoice extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Invoice the upcoming invoice
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Invoice the upcoming invoice
      */
     public static function upcoming($params = null, $opts = null)
     {
@@ -246,9 +246,9 @@ class Invoice extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\InvoiceLineItem> list of InvoiceLineItems
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\InvoiceLineItem> list of InvoiceLineItems
      */
     public static function upcomingLines($params = null, $opts = null)
     {
@@ -264,9 +264,9 @@ class Invoice extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Invoice the voided invoice
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Invoice the voided invoice
      */
     public function voidInvoice($params = null, $opts = null)
     {
@@ -281,9 +281,9 @@ class Invoice extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\SearchResult<Invoice> the invoice search results
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SearchResult<Invoice> the invoice search results
      */
     public static function search($params = null, $opts = null)
     {
@@ -299,9 +299,9 @@ class Invoice extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\LineItem> the list of line items
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\LineItem> the list of line items
      */
     public static function allLines($id, $params = null, $opts = null)
     {

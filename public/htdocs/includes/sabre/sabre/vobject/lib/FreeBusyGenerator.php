@@ -86,8 +86,8 @@ class FreeBusyGenerator
      *
      * @param DateTimeInterface $start
      * @param DateTimeInterface $end
-     * @param mixed             $objects
-     * @param DateTimeZone      $timeZone
+     * @param mixed $objects
+     * @param DateTimeZone $timeZone
      */
     public function __construct(DateTimeInterface $start = null, DateTimeInterface $end = null, $objects = null, DateTimeZone $timeZone = null)
     {
@@ -214,8 +214,8 @@ class FreeBusyGenerator
                 // priority 9. No priority implies priority 0.
                 //
                 // Yes, I'm serious.
-                $priorityA = isset($a->PRIORITY) ? (int) $a->PRIORITY->getValue() : 0;
-                $priorityB = isset($b->PRIORITY) ? (int) $b->PRIORITY->getValue() : 0;
+                $priorityA = isset($a->PRIORITY) ? (int)$a->PRIORITY->getValue() : 0;
+                $priorityB = isset($b->PRIORITY) ? (int)$b->PRIORITY->getValue() : 0;
 
                 if (0 === $priorityA) {
                     $priorityA = 10;
@@ -305,18 +305,18 @@ class FreeBusyGenerator
                 foreach ($vavail->AVAILABLE as $available) {
                     list($availStart, $availEnd) = $available->getEffectiveStartEnd();
                     $fbData->add(
-                    $availStart->getTimeStamp(),
-                    $availEnd->getTimeStamp(),
-                    'FREE'
-                );
+                        $availStart->getTimeStamp(),
+                        $availEnd->getTimeStamp(),
+                        'FREE'
+                    );
 
                     if ($available->RRULE) {
                         // Our favourite thing: recurrence!!
 
                         $rruleIterator = new Recur\RRuleIterator(
-                        $available->RRULE->getValue(),
-                        $availStart
-                    );
+                            $available->RRULE->getValue(),
+                            $availStart
+                        );
                         $rruleIterator->fastForward($vavailStart);
 
                         $startEndDiff = $availStart->diff($availEnd);
@@ -337,10 +337,10 @@ class FreeBusyGenerator
                             }
 
                             $fbData->add(
-                            $recurStart->getTimeStamp(),
-                            $recurEnd->getTimeStamp(),
-                            'FREE'
-                        );
+                                $recurStart->getTimeStamp(),
+                                $recurEnd->getTimeStamp(),
+                                'FREE'
+                            );
 
                             $rruleIterator->next();
                         }
@@ -380,7 +380,7 @@ class FreeBusyGenerator
 
                         if ($component->RRULE) {
                             try {
-                                $iterator = new EventIterator($object, (string) $component->UID, $this->timeZone);
+                                $iterator = new EventIterator($object, (string)$component->UID, $this->timeZone);
                             } catch (NoInstancesException $e) {
                                 // This event is recurring, but it doesn't have a single
                                 // instance. We are skipping this event from the output
@@ -416,7 +416,7 @@ class FreeBusyGenerator
                             if (isset($component->DTEND)) {
                                 $endTime = $component->DTEND->getDateTime($this->timeZone);
                             } elseif (isset($component->DURATION)) {
-                                $duration = DateTimeParser::parseDuration((string) $component->DURATION);
+                                $duration = DateTimeParser::parseDuration((string)$component->DURATION);
                                 $endTime = clone $startTime;
                                 $endTime = $endTime->add($duration);
                             } elseif (!$component->DTSTART->hasTime()) {

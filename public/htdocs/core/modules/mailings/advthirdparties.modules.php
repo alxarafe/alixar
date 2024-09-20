@@ -1,25 +1,25 @@
 <?php
 
-/* Copyright (C) 2005-2010 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin       <regis.houssin@inodbox.com>
-*
-* This file is an example to follow to add your own email selector inside
-* the Dolibarr email tool.
-* Follow instructions given in README file to know what to change to build
-* your own emailing list selector.
-* Code that need to be changed in this file are marked by "CHANGE THIS" tag.
-*/
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
+ *
+ * This file is an example to follow to add your own email selector inside
+ * the Dolibarr email tool.
+ * Follow instructions given in README file to know what to change to build
+ * your own emailing list selector.
+ * Code that need to be changed in this file are marked by "CHANGE THIS" tag.
+ */
+
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Mailing\Classes\MailingTargets;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/core/modules/mailings/advthirdparties.modules.php
  *  \ingroup    mailing
  *  \brief      Example file to provide a list of recipients for mailing module
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/modules/mailings/modules_mailings.php';
-include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
-include_once DOL_DOCUMENT_ROOT . '/contact/class/contact.class.php';
-
 
 /**
  *  Class to manage a list of personalised recipients for mailing feature
@@ -44,7 +44,7 @@ class mailing_advthirdparties extends MailingTargets
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -52,19 +52,20 @@ class mailing_advthirdparties extends MailingTargets
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *    This is the main function that returns the array of emails
      *
-     *    @param    int     $mailing_id     Id of mailing. No need to use it.
-     *    @param    array   $socid          Array of id soc to add
-     *    @param    int     $type_of_target Defined in advtargetemailing.class.php
-     *    @param    array   $contactid      Array of contact id to add
-     *    @return   int                     Return integer <0 if error, number of emails added if ok
+     * @param int $mailing_id Id of mailing. No need to use it.
+     * @param array $socid Array of id soc to add
+     * @param int $type_of_target Defined in advtargetemailing.class.php
+     * @param array $contactid Array of contact id to add
+     * @return   int                     Return integer <0 if error, number of emails added if ok
      */
     public function add_to_target_spec($mailing_id, $socid, $type_of_target, $contactid)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs;
 
         dol_syslog(get_class($this) . "::add_to_target_spec socid=" . var_export($socid, true) . ' contactid=' . var_export($contactid, true));
@@ -79,7 +80,7 @@ class mailing_advthirdparties extends MailingTargets
                 $sql .= " WHERE s.entity IN (" . getEntity('societe') . ")";
                 $sql .= " AND s.rowid IN (" . $this->db->sanitize(implode(',', $socid)) . ")";
                 if (empty($this->evenunsubscribe)) {
-                    $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int) $conf->entity) . ")";
+                    $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int)$conf->entity) . ")";
                 }
                 $sql .= " ORDER BY email";
 
@@ -132,7 +133,7 @@ class mailing_advthirdparties extends MailingTargets
                     $sql .= " AND socp.fk_soc IN (" . $this->db->sanitize(implode(',', $socid)) . ")";
                 }
                 if (empty($this->evenunsubscribe)) {
-                    $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = socp.email and mu.entity = " . ((int) $conf->entity) . ")";
+                    $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = socp.email and mu.entity = " . ((int)$conf->entity) . ")";
                 }
                 $sql .= " ORDER BY email";
 
@@ -185,7 +186,7 @@ class mailing_advthirdparties extends MailingTargets
      *  array of SQL request that returns two field:
      *  One called "label", One called "nb".
      *
-     *  @return     array       Array with SQL requests
+     * @return     array       Array with SQL requests
      */
     public function getSqlArrayForStats()
     {
@@ -202,8 +203,8 @@ class mailing_advthirdparties extends MailingTargets
      *  For example if this selector is used to extract 500 different
      *  emails from a text file, this function must return 500.
      *
-     *  @param      string          $sql        Not use here
-     *  @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
+     * @param string $sql Not use here
+     * @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
      */
     public function getNbOfRecipients($sql = '')
     {
@@ -214,7 +215,7 @@ class mailing_advthirdparties extends MailingTargets
         $sql .= " WHERE s.email != ''";
         $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = s.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
 
         // La requete doit retourner un champ "nb" pour etre comprise par parent::getNbOfRecipients
@@ -225,7 +226,7 @@ class mailing_advthirdparties extends MailingTargets
      *  This is to add a form filter to provide variant of selector
      *  If used, the HTML select must be called "filter"
      *
-     *  @return     string      A html select zone
+     * @return     string      A html select zone
      */
     public function formFilter()
     {
@@ -289,9 +290,9 @@ class mailing_advthirdparties extends MailingTargets
     /**
      *  Can include an URL link on each record provided by selector shown on target page.
      *
-     *  @param  int     $id     ID
-     *  @param  string      $type   type
-     *  @return string          Url link
+     * @param int $id ID
+     * @param string $type type
+     * @return string          Url link
      */
     public function url($id, $type)
     {

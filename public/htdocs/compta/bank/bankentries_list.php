@@ -1,16 +1,16 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2024  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010  Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2012       Vinícius Nogueira    <viniciusvgn@gmail.com>
- * Copyright (C) 2014       Florian Henry        <florian.henry@open-cooncept.pro>
- * Copyright (C) 2015       Jean-François Ferry  <jfefe@aternatik.fr>
- * Copyright (C) 2016       Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2017-2019  Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2018       Ferran Marcet        <fmarcet@2byte.es>
- * Copyright (C) 2018-2024  Frédéric France      <frederic.france@free.fr>
- * Copyright (C) 2021       Gauthier VERDOL      <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2024  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       Vinícius Nogueira           <viniciusvgn@gmail.com>
+ * Copyright (C) 2014       Florian Henry               <florian.henry@open-cooncept.pro>
+ * Copyright (C) 2015       Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2016       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2017-2019  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,6 +27,31 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\BankCateg;
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Compta\Classes\PaymentSocialContribution;
+use Dolibarr\Code\Compta\Classes\PaymentVarious;
+use Dolibarr\Code\Compta\Classes\PaymentVAT;
+use Dolibarr\Code\Compta\Classes\RemiseCheque;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\Don\Classes\PaymentDonation;
+use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Code\Salaries\Classes\PaymentSalary;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/compta/bank/bankentries_list.php
  *  \ingroup    banque
@@ -36,29 +61,7 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/bankcateg.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/paymentvat.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/paymentsocialcontribution.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/paymentsalary.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/paymentdonation.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/paymentexpensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/paiementfourn.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/cheque/class/remisecheque.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("banks", "bills", "categories", "companies", "margins", "salaries", "loan", "donations", "trips", "members", "compta", "accountancy"));
@@ -152,12 +155,12 @@ $extrafields->fetch_name_optionals_label('banktransaction');
 $search_array_options = $extrafields->getOptionalsFromPost('banktransaction', '', 'search_');
 
 $arrayfields = array(
-    'b.rowid' => array('label' => $langs->trans("Ref"), 'checked' => 1,'position' => 10),
-    'b.label' => array('label' => $langs->trans("Description"), 'checked' => 1,'position' => 20),
-    'b.dateo' => array('label' => $langs->trans("DateOperationShort"), 'checked' => -1,'position' => 30),
-    'b.datev' => array('label' => $langs->trans("DateValueShort"), 'checked' => 1,'position' => 40),
-    'type' => array('label' => $langs->trans("Type"), 'checked' => 1,'position' => 50),
-    'b.num_chq' => array('label' => $langs->trans("Numero"), 'checked' => 1,'position' => 60),
+    'b.rowid' => array('label' => $langs->trans("Ref"), 'checked' => 1, 'position' => 10),
+    'b.label' => array('label' => $langs->trans("Description"), 'checked' => 1, 'position' => 20),
+    'b.dateo' => array('label' => $langs->trans("DateOperationShort"), 'checked' => -1, 'position' => 30),
+    'b.datev' => array('label' => $langs->trans("DateValueShort"), 'checked' => 1, 'position' => 40),
+    'type' => array('label' => $langs->trans("Type"), 'checked' => 1, 'position' => 50),
+    'b.num_chq' => array('label' => $langs->trans("Numero"), 'checked' => 1, 'position' => 60),
     'bu.label' => array('label' => $langs->trans("ThirdParty") . '/' . $langs->trans("User"), 'checked' => 1, 'position' => 70),
     'ba.ref' => array('label' => $langs->trans("BankAccount"), 'checked' => (($id > 0 || !empty($ref)) ? 0 : 1), 'position' => 80),
     'b.debit' => array('label' => $langs->trans("Debit"), 'checked' => 1, 'position' => 90),
@@ -290,18 +293,18 @@ if (
     }
 
     if (!$error) {
-        $param = 'action=reconcile&contextpage=banktransactionlist&id=' . ((int) $object->id) . '&search_account=' . ((int) $object->id);
+        $param = 'action=reconcile&contextpage=banktransactionlist&id=' . ((int)$object->id) . '&search_account=' . ((int)$object->id);
         if ($page) {
-            $param .= '&page=' . urlencode((string) ($page));
+            $param .= '&page=' . urlencode((string)($page));
         }
         if ($offset) {
-            $param .= '&offset=' . urlencode((string) ($offset));
+            $param .= '&offset=' . urlencode((string)($offset));
         }
         if ($limit) {
-            $param .= '&limit=' . ((int) $limit);
+            $param .= '&limit=' . ((int)$limit);
         }
         if ($search_conciliated != '' && $search_conciliated != '-1') {
-            $param .= '&search_conciliated=' . urlencode((string) ($search_conciliated));
+            $param .= '&search_conciliated=' . urlencode((string)($search_conciliated));
         }
         if ($search_thirdparty_user) {
             $param .= '&search_thirdparty=' . urlencode($search_thirdparty_user);
@@ -346,13 +349,13 @@ if (GETPOST('save') && !$cancel && $user->hasRight('banque', 'modifier')) {
     if (price2num(GETPOST("addcredit")) > 0) {
         $amount = price2num(GETPOST("addcredit"));
     } else {
-        $amount = price2num(-1 * (float) price2num(GETPOST("adddebit")));
+        $amount = price2num(-1 * (float)price2num(GETPOST("adddebit")));
     }
 
     $operation = GETPOST("operation", 'alpha');
-    $num_chq   = GETPOST("num_chq", 'alpha');
-    $label     = GETPOST("label", 'alpha');
-    $cat1      = GETPOST("cat1", 'alpha');
+    $num_chq = GETPOST("num_chq", 'alpha');
+    $label = GETPOST("label", 'alpha');
+    $cat1 = GETPOST("cat1", 'alpha');
 
     $bankaccountid = $id;
     if (GETPOSTINT('add_account') > 0) {
@@ -450,10 +453,10 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($id > 0) {
-    $param .= '&id=' . urlencode((string) ($id));
+    $param .= '&id=' . urlencode((string)($id));
 }
 if (!empty($ref)) {
     $param .= '&ref=' . urlencode($ref);
@@ -477,19 +480,19 @@ if (!empty($search_credit)) {
     $param .= '&search_credit=' . urlencode($search_credit);
 }
 if ($search_account > 0) {
-    $param .= '&search_account=' . ((int) $search_account);
+    $param .= '&search_account=' . ((int)$search_account);
 }
 if (!empty($search_num_releve)) {
     $param .= '&search_num_releve=' . urlencode($search_num_releve);
 }
 if ($search_conciliated != '' && $search_conciliated != '-1') {
-    $param .= '&search_conciliated=' . urlencode((string) ($search_conciliated));
+    $param .= '&search_conciliated=' . urlencode((string)($search_conciliated));
 }
 if ($search_fk_bordereau > 0) {
-    $param .= '$&search_fk_bordereau=' . urlencode((string) ($search_fk_bordereau));
+    $param .= '$&search_fk_bordereau=' . urlencode((string)($search_fk_bordereau));
 }
 if ($search_bid > 0) {  // Category id
-    $param .= '&search_bid=' . ((int) $search_bid);
+    $param .= '&search_bid=' . ((int)$search_bid);
 }
 if (dol_strlen($search_dt_start) > 0) {
     $param .= '&search_start_dtmonth=' . GETPOSTINT('search_start_dtmonth') . '&search_start_dtday=' . GETPOSTINT('search_start_dtday') . '&search_start_dtyear=' . GETPOSTINT('search_start_dtyear');
@@ -507,7 +510,7 @@ if ($search_req_nb) {
     $param .= '&req_nb=' . urlencode($search_req_nb);
 }
 if (GETPOSTINT("search_thirdparty")) {
-    $param .= '&thirdparty=' . urlencode((string) (GETPOSTINT("search_thirdparty")));
+    $param .= '&thirdparty=' . urlencode((string)(GETPOSTINT("search_thirdparty")));
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -540,7 +543,6 @@ llxHeader('', $title, $help_url, '', 0, 0, array(), array(), $param);
 
 if ($id > 0 || !empty($ref)) {
     // Load bank groups
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/bankcateg.class.php';
     $bankcateg = new BankCateg($db);
 
     $arrayofbankcateg = $bankcateg->fetchAll();
@@ -627,7 +629,7 @@ $sql .= $hookmanager->resPrint;
 $sql .= " WHERE b.fk_account = ba.rowid";
 $sql .= " AND ba.entity IN (" . getEntity('bank_account') . ")";
 if ($search_account > 0) {
-    $sql .= " AND b.fk_account = " . ((int) $search_account);
+    $sql .= " AND b.fk_account = " . ((int)$search_account);
 }
 // Search period criteria
 if (dol_strlen($search_dt_start) > 0) {
@@ -653,10 +655,10 @@ if ($search_num_releve) {
     $sql .= natural_search("b.num_releve", $search_num_releve);
 }
 if ($search_conciliated != '' && $search_conciliated != '-1') {
-    $sql .= " AND b.rappro = " . ((int) $search_conciliated);
+    $sql .= " AND b.rappro = " . ((int)$search_conciliated);
 }
 if ($search_fk_bordereau > 0) {
-    $sql .= " AND b.fk_bordereau = " . ((int) $search_fk_bordereau);
+    $sql .= " AND b.fk_bordereau = " . ((int)$search_fk_bordereau);
 }
 if ($search_thirdparty_user) {
     $sql .= " AND (b.rowid IN ";
@@ -694,7 +696,7 @@ if ($search_description) {
 }
 
 if ($search_bid > 0) {
-    $sql .= " AND b.rowid = l.lineid AND l.fk_categ = " . ((int) $search_bid);
+    $sql .= " AND b.rowid = l.lineid AND l.fk_categ = " . ((int)$search_bid);
 }
 if (!empty($search_type)) {
     $sql .= " AND b.fk_type = '" . $db->escape($search_type) . "'";
@@ -726,7 +728,7 @@ if (!getDolGlobalInt('MAIN_DISABLE_FULL_SCANLIST')) {
     $nbtotalofpages = ceil($nbtotalofrecords / $limit);
 }
 
-if (($id > 0 || !empty($ref)) && ((string) $page == '')) {
+if (($id > 0 || !empty($ref)) && ((string)$page == '')) {
     // We open a list of transaction of a dedicated account and no page was set by default
     // We force on last page.
     $page = ($nbtotalofpages - 1);
@@ -989,7 +991,7 @@ if ($resql) {
         $nbmax = 12; // We show last 12 receipts (so we can have more than one year)
         $listoflastreceipts = '';
         $sql = "SELECT DISTINCT num_releve FROM " . MAIN_DB_PREFIX . "bank";
-        $sql .= " WHERE fk_account = " . ((int) $object->id) . " AND num_releve IS NOT NULL";
+        $sql .= " WHERE fk_account = " . ((int)$object->id) . " AND num_releve IS NOT NULL";
         $sql .= $db->order("num_releve", "DESC");
         $sql .= $db->plimit($nbmax + 1);
 
@@ -1007,7 +1009,7 @@ if ($resql) {
                     $last_ok = 1;
                 }
                 $i++;
-                $newentreyinlist = '<a target="_blank" href="' . constant('BASE_URL') . '/compta/bank/releve.php?account=' . ((int) $id) . '&num=' . urlencode($objr->num_releve) . '">';
+                $newentreyinlist = '<a target="_blank" href="' . constant('BASE_URL') . '/compta/bank/releve.php?account=' . ((int)$id) . '&num=' . urlencode($objr->num_releve) . '">';
                 $newentreyinlist .= img_picto($objr->num_releve, 'generic', 'class="paddingright"');
                 $newentreyinlist .= dol_escape_htmltag($objr->num_releve) . '</a> &nbsp; ';
                 $listoflastreceipts = $newentreyinlist . $listoflastreceipts;
@@ -1036,7 +1038,7 @@ if ($resql) {
 
     // We can add page now to param
     if ($page != '') {
-        $param .= '&page=' . urlencode((string) ($page));
+        $param .= '&page=' . urlencode((string)($page));
     }
 
     $moreforfilter = '';
@@ -1330,7 +1332,7 @@ if ($resql) {
             $sqlforbalance .= " " . MAIN_DB_PREFIX . "bank as b";
             $sqlforbalance .= " WHERE b.fk_account = ba.rowid";
             $sqlforbalance .= " AND ba.entity IN (" . getEntity('bank_account') . ")";
-            $sqlforbalance .= " AND b.fk_account = " . ((int) $search_account);
+            $sqlforbalance .= " AND b.fk_account = " . ((int)$search_account);
             // To limit record on the page
             $sqlforbalance .= " AND (b.datev < '" . $db->idate($db->jdate($objp->dv)) . "' OR (b.datev = '" . $db->idate($db->jdate($objp->dv)) . "' AND (b.dateo < '" . $db->idate($db->jdate($objp->do)) . "' OR (b.dateo = '" . $db->idate($db->jdate($objp->do)) . "' AND b.rowid < " . $objp->rowid . "))))";
             $resqlforbalance = $db->query($sqlforbalance);
@@ -1699,8 +1701,8 @@ if ($resql) {
                     $companylinked_id = $donstatic->socid;
                     if (!$companylinked_id) {
                         $thirdstr = ($donstatic->societe !== "" ?
-                                    $donstatic->societe :
-                                    $donstatic->firstname . " " . $donstatic->lastname);
+                            $donstatic->societe :
+                            $donstatic->firstname . " " . $donstatic->lastname);
                     }
                 }
                 if ($links[$key]['type'] == 'payment_expensereport') {
@@ -1722,11 +1724,11 @@ if ($resql) {
                 print $companystatic->getNomUrl(1);
             } elseif (
                 $userlinked_id &&
-                    (($type_link == 'payment_salary' &&
-                    $user->hasRight('salaries', 'read')) ||
-                        ($type_link == 'payment_sc' &&
+                (($type_link == 'payment_salary' &&
+                        $user->hasRight('salaries', 'read')) ||
+                    ($type_link == 'payment_sc' &&
                         $user->hasRight('tax', 'charges', 'lire')) ||
-                        ($type_link == 'payment_expensereport' &&
+                    ($type_link == 'payment_expensereport' &&
                         $user->hasRight('expensereport', 'lire')))
             ) {
                 // Get object user from cache or load it

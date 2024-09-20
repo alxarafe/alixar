@@ -232,7 +232,7 @@ class Writer extends XMLWriter
         list(
             $namespace,
             $localName
-        ) = Service::parseClarkNotation($name);
+            ) = Service::parseClarkNotation($name);
 
         if (array_key_exists($namespace, $this->namespaceMap)) {
             // It's an attribute with a namespace we know

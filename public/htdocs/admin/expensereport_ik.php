@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2012      Mikael Carlavan        <contact@mika-carl.fr>
- * Copyright (C) 2017      ATM Consulting         <contact@atm-consulting.fr>
- * Copyright (C) 2017      Pierre-Henry Favre     <phf@atm-consulting.fr>
+/* Copyright (C) 2012       Mikael Carlavan             <contact@mika-carl.fr>
+ * Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
+ * Copyright (C) 2017       Pierre-Henry Favre          <phf@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReportIk;
 
 /**
  *      \file       htdocs/admin/expensereport_ik.php
@@ -30,8 +32,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/expensereport.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport_ik.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "trips", "errors", "other", "dict"));
@@ -41,8 +41,8 @@ $error = 0;
 $action = GETPOST('action', 'aZ09');
 
 $id = GETPOSTINT('id');
-$ikoffset = (float) price2num(GETPOST('ikoffset', 'alpha'));
-$coef = (float) price2num(GETPOST('coef', 'alpha'));
+$ikoffset = (float)price2num(GETPOST('ikoffset', 'alpha'));
+$coef = (float)price2num(GETPOST('coef', 'alpha'));
 $fk_c_exp_tax_cat = GETPOSTINT('fk_c_exp_tax_cat');
 $fk_range = GETPOSTINT('fk_range');
 

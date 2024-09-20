@@ -12,9 +12,9 @@ class TransactionEntryService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Treasury\TransactionEntry>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Treasury\TransactionEntry>
      */
     public function all($params = null, $opts = null)
     {
@@ -28,9 +28,9 @@ class TransactionEntryService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Treasury\TransactionEntry
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Treasury\TransactionEntry
      */
     public function retrieve($id, $params = null, $opts = null)
     {

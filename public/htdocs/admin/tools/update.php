@@ -24,7 +24,7 @@
  *      \brief      Page to make a Dolibarr online upgrade
  */
 
-if (! defined('CSRFCHECK_WITH_TOKEN')) {
+if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');        // Force use of CSRF protection with tokens even for GET
 }
 
@@ -147,9 +147,6 @@ print $langs->trans("RestoreLock", $dolibarrdataroot . '/install.lock') . '<br>'
 
 print '<br>';
 print '<br>';
-
-
-
 
 
 print $langs->trans("AddExtensionThemeModuleOrOther") . '<br>';

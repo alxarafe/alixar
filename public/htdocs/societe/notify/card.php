@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2010-2014 Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2014  Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/societe/notify/card.php
  *      \ingroup    societe notification
@@ -29,17 +33,15 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/interface_50_modNotification_Notification.class.php';
 
 $langs->loadLangs(array("companies", "mails", "admin", "other", "errors"));
 
-$socid     = GETPOSTINT("socid");
-$action    = GETPOST('action', 'aZ09');
+$socid = GETPOSTINT("socid");
+$action = GETPOST('action', 'aZ09');
 $contactid = GETPOST('contactid', 'alpha'); // May be an int or 'thirdparty'
-$actionid  = GETPOSTINT('actionid');
+$actionid = GETPOSTINT('actionid');
 $optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
 
 // Security check
@@ -71,8 +73,6 @@ $object = new Societe($db);
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $hookmanager->initHooks(array('thirdpartynotification', 'globalcard'));
-
-
 
 /*
  * Actions
@@ -106,10 +106,10 @@ if (empty($reshook)) {
             $db->begin();
 
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "notify_def";
-            $sql .= " WHERE fk_soc=" . ((int) $socid) . " AND fk_contact=" . ((int) $contactid) . " AND fk_action=" . ((int) $actionid);
+            $sql .= " WHERE fk_soc=" . ((int)$socid) . " AND fk_contact=" . ((int)$contactid) . " AND fk_action=" . ((int)$actionid);
             if ($db->query($sql)) {
                 $sql = "INSERT INTO " . MAIN_DB_PREFIX . "notify_def (datec,fk_soc, fk_contact, fk_action)";
-                $sql .= " VALUES ('" . $db->idate($now) . "'," . ((int) $socid) . "," . ((int) $contactid) . "," . ((int) $actionid) . ")";
+                $sql .= " VALUES ('" . $db->idate($now) . "'," . ((int)$socid) . "," . ((int)$contactid) . "," . ((int)$actionid) . ")";
 
                 if (!$db->query($sql)) {
                     $error++;
@@ -134,8 +134,6 @@ if (empty($reshook)) {
     }
 }
 
-
-
 /*
  *	View
  */
@@ -152,7 +150,6 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/thirdpartynameonly/', 
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
 
 llxHeader('', $title, $help_url);
-
 
 if ($result > 0) {
     $langs->load("other");
@@ -244,7 +241,7 @@ if ($result > 0) {
     $sql .= " " . MAIN_DB_PREFIX . "socpeople as c";
     $sql .= " WHERE a.rowid = n.fk_action";
     $sql .= " AND c.rowid = n.fk_contact";
-    $sql .= " AND c.fk_soc = " . ((int) $object->id);
+    $sql .= " AND c.fk_soc = " . ((int)$object->id);
 
     $resql = $db->query($sql);
     if ($resql) {
@@ -372,7 +369,6 @@ if ($result > 0) {
     }
 
 
-
     print '</table>';
     print '</div>';
     print '</form>';
@@ -388,7 +384,7 @@ if ($result > 0) {
     $sql .= " " . MAIN_DB_PREFIX . "notify as n ";
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "socpeople as c ON n.fk_contact = c.rowid";
     $sql .= " WHERE a.rowid = n.fk_action";
-    $sql .= " AND n.fk_soc = " . ((int) $object->id);
+    $sql .= " AND n.fk_soc = " . ((int)$object->id);
     $sql .= $db->order($sortfield, $sortorder);
 
     // Count total nb of records

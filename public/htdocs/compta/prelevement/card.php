@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2010  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2010-2016  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2016  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\LignePrelevement;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/compta/prelevement/card.php
  *  \ingroup    prelevement
@@ -30,9 +37,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/prelevement.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/ligneprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories', 'bills', 'companies', 'withdrawals'));
@@ -90,7 +94,6 @@ if ($type == 'bank-transfer') {
     $permissiontocreditdebit = $user->hasRight('prelevement', 'bons', 'credit');
     $permissiontodelete = $user->hasRight('prelevement', 'bons', 'read');
 }
-
 
 
 /*
@@ -188,8 +191,6 @@ if (empty($reshook)) {
         }
     }
 }
-
-
 
 /*
  * View
@@ -456,7 +457,6 @@ if ($id > 0 || $ref) {
         print '</div>';
     }
 
-
     $ligne = new LignePrelevement($db);
 
     // Lines into withdraw request
@@ -466,12 +466,12 @@ if ($id > 0 || $ref) {
         $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_lignes as pl";
         $sql .= ", " . MAIN_DB_PREFIX . "prelevement_bons as pb";
         $sql .= ", " . MAIN_DB_PREFIX . "user as u";
-        $sql .= " WHERE pl.fk_prelevement_bons = " . ((int) $id);
+        $sql .= " WHERE pl.fk_prelevement_bons = " . ((int)$id);
         $sql .= " AND pl.fk_prelevement_bons = pb.rowid";
-        $sql .= " AND pb.entity = " . ((int) $conf->entity);  // No sharing of entity here
+        $sql .= " AND pb.entity = " . ((int)$conf->entity);  // No sharing of entity here
         $sql .= " AND pl.fk_user = u.rowid";
         if ($socid) {
-            $sql .= " AND u.rowid = " . ((int) $socid);
+            $sql .= " AND u.rowid = " . ((int)$socid);
         }
         $sql .= $db->order($sortfield, $sortorder);
     } else {
@@ -480,12 +480,12 @@ if ($id > 0 || $ref) {
         $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_lignes as pl";
         $sql .= ", " . MAIN_DB_PREFIX . "prelevement_bons as pb";
         $sql .= ", " . MAIN_DB_PREFIX . "societe as s";
-        $sql .= " WHERE pl.fk_prelevement_bons = " . ((int) $id);
+        $sql .= " WHERE pl.fk_prelevement_bons = " . ((int)$id);
         $sql .= " AND pl.fk_prelevement_bons = pb.rowid";
-        $sql .= " AND pb.entity = " . ((int) $conf->entity);  // No sharing of entity here
+        $sql .= " AND pb.entity = " . ((int)$conf->entity);  // No sharing of entity here
         $sql .= " AND pl.fk_soc = s.rowid";
         if ($socid) {
-            $sql .= " AND s.rowid = " . ((int) $socid);
+            $sql .= " AND s.rowid = " . ((int)$socid);
         }
         $sql .= $db->order($sortfield, $sortorder);
     }
@@ -509,9 +509,9 @@ if ($id > 0 || $ref) {
         $num = $db->num_rows($result);
         $i = 0;
 
-        $urladd = "&id=" . urlencode((string) ($id));
+        $urladd = "&id=" . urlencode((string)($id));
         if ($limit > 0 && $limit != $conf->liste_limit) {
-            $urladd .= '&limit=' . ((int) $limit);
+            $urladd .= '&limit=' . ((int)$limit);
         }
 
         print '<form method="POST" action="' . $_SERVER ['PHP_SELF'] . '" name="search_form">' . "\n";

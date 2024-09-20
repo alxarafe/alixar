@@ -42,7 +42,7 @@ class LocalHref extends Href
             function ($href) {
                 return \Sabre\HTTP\encodePath($href);
             },
-            (array) $hrefs
+            (array)$hrefs
         ));
     }
 }

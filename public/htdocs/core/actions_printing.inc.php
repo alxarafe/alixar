@@ -32,10 +32,9 @@
 // Print file
 if ($action == 'print_file' && $user->hasRight('printing', 'read')) {
     $langs->load("printing");
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/printing/modules_printing.php';
     $objectprint = new PrintingDriver($db);
     $list = $objectprint->listDrivers($db, 10);
-    $dirmodels = array_merge(array('/core/modules/printing/'), (array) $conf->modules_parts['printing']);
+    $dirmodels = array_merge(array('/core/modules/printing/'), (array)$conf->modules_parts['printing']);
     if (!empty($list)) {
         $errorprint = 0;
         $printerfound = 0;

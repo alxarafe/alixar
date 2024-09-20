@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004-2014  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2016-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2022       Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2004-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2016-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Compta\Classes\PaymentSocialContribution;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/compta/paiement_charge.php
  *      \ingroup    tax
@@ -27,9 +31,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/paymentsocialcontribution.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("banks", "bills", "compta"));
@@ -47,7 +48,6 @@ if ($user->socid > 0) {
 }
 
 $charge = new ChargeSociales($db);
-
 
 /*
  * Actions
@@ -87,7 +87,7 @@ if ($action == 'add_payment' || ($action == 'confirm_paiement' && $confirm == 'y
         foreach ($_POST as $key => $value) {
             if (substr($key, 0, 7) == 'amount_') {
                 $other_chid = substr($key, 7);
-                $amounts[$other_chid] = (float) price2num(GETPOST($key));
+                $amounts[$other_chid] = (float)price2num(GETPOST($key));
             }
         }
 
@@ -102,12 +102,12 @@ if ($action == 'add_payment' || ($action == 'confirm_paiement' && $confirm == 'y
 
             // Create a line of payments
             $paiement = new PaymentSocialContribution($db);
-            $paiement->chid         = $chid;
-            $paiement->datepaye     = $datepaye;
-            $paiement->amounts      = $amounts; // Amount list
+            $paiement->chid = $chid;
+            $paiement->datepaye = $datepaye;
+            $paiement->amounts = $amounts; // Amount list
             $paiement->paiementtype = GETPOST("paiementtype", 'alphanohtml');
-            $paiement->num_payment  = GETPOST("num_payment", 'alphanohtml');
-            $paiement->note         = GETPOST("note", 'restricthtml');
+            $paiement->num_payment = GETPOST("num_payment", 'alphanohtml');
+            $paiement->note = GETPOST("note", 'restricthtml');
             $paiement->note_private = GETPOST("note", 'restricthtml');
 
             if (!$error) {
@@ -193,7 +193,7 @@ if ($action == 'create') {
 
     $sql = "SELECT sum(p.amount) as total";
     $sql .= " FROM " . MAIN_DB_PREFIX . "paiementcharge as p";
-    $sql .= " WHERE p.fk_charge = " . ((int) $chid);
+    $sql .= " WHERE p.fk_charge = " . ((int)$chid);
     $resql = $db->query($sql);
     if ($resql) {
         $obj = $db->fetch_object($resql);

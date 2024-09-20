@@ -12,9 +12,9 @@ class SubscriptionItemService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\SubscriptionItem>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\SubscriptionItem>
      */
     public function all($params = null, $opts = null)
     {
@@ -37,9 +37,9 @@ class SubscriptionItemService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\UsageRecordSummary>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\UsageRecordSummary>
      */
     public function allUsageRecordSummaries($parentId, $params = null, $opts = null)
     {
@@ -53,9 +53,9 @@ class SubscriptionItemService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SubscriptionItem
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SubscriptionItem
      */
     public function create($params = null, $opts = null)
     {
@@ -91,9 +91,9 @@ class SubscriptionItemService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\UsageRecord
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\UsageRecord
      */
     public function createUsageRecord($parentId, $params = null, $opts = null)
     {
@@ -108,9 +108,9 @@ class SubscriptionItemService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SubscriptionItem
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SubscriptionItem
      */
     public function delete($id, $params = null, $opts = null)
     {
@@ -124,9 +124,9 @@ class SubscriptionItemService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SubscriptionItem
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SubscriptionItem
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -140,9 +140,9 @@ class SubscriptionItemService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SubscriptionItem
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SubscriptionItem
      */
     public function update($id, $params = null, $opts = null)
     {

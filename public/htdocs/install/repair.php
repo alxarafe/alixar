@@ -35,7 +35,6 @@ if (file_exists($conffile)) {
 }
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 include_once $dolibarr_main_document_root . '/core/lib/images.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 require_once 'lib/repair.lib.php';
 
 $step = 2;
@@ -149,7 +148,7 @@ $conf->db->pass = $dolibarr_main_db_pass;
 $conf->db->dolibarr_main_db_encryption = isset($dolibarr_main_db_encryption) ? $dolibarr_main_db_encryption : 0;
 $conf->db->dolibarr_main_db_cryptkey = isset($dolibarr_main_db_cryptkey) ? $dolibarr_main_db_cryptkey : '';
 
-$db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int) $conf->db->port);
+$db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int)$conf->db->port);
 
 if ($db->connected) {
     print '<tr><td class="nowrap">';
@@ -255,14 +254,14 @@ if ($ok && GETPOST('standard', 'alpha')) {
 
     // List of tables that has an extrafield table
     $listofmodulesextra = array('societe' => 'societe', 'adherent' => 'adherent', 'product' => 'product',
-                'socpeople' => 'socpeople', 'propal' => 'propal', 'commande' => 'commande',
-                'facture' => 'facture', 'facturedet' => 'facturedet', 'facture_rec' => 'facture_rec', 'facturedet_rec' => 'facturedet_rec',
-                'supplier_proposal' => 'supplier_proposal', 'commande_fournisseur' => 'commande_fournisseur',
-                'facture_fourn' => 'facture_fourn', 'facture_fourn_rec' => 'facture_fourn_rec', 'facture_fourn_det' => 'facture_fourn_det', 'facture_fourn_det_rec' => 'facture_fourn_det_rec',
-                'fichinter' => 'fichinter', 'fichinterdet' => 'fichinterdet',
-                'inventory' => 'inventory',
-                'actioncomm' => 'actioncomm', 'bom_bom' => 'bom_bom', 'mrp_mo' => 'mrp_mo',
-                'adherent_type' => 'adherent_type', 'user' => 'user', 'partnership' => 'partnership', 'projet' => 'projet', 'projet_task' => 'projet_task', 'ticket' => 'ticket');
+        'socpeople' => 'socpeople', 'propal' => 'propal', 'commande' => 'commande',
+        'facture' => 'facture', 'facturedet' => 'facturedet', 'facture_rec' => 'facture_rec', 'facturedet_rec' => 'facturedet_rec',
+        'supplier_proposal' => 'supplier_proposal', 'commande_fournisseur' => 'commande_fournisseur',
+        'facture_fourn' => 'facture_fourn', 'facture_fourn_rec' => 'facture_fourn_rec', 'facture_fourn_det' => 'facture_fourn_det', 'facture_fourn_det_rec' => 'facture_fourn_det_rec',
+        'fichinter' => 'fichinter', 'fichinterdet' => 'fichinterdet',
+        'inventory' => 'inventory',
+        'actioncomm' => 'actioncomm', 'bom_bom' => 'bom_bom', 'mrp_mo' => 'mrp_mo',
+        'adherent_type' => 'adherent_type', 'user' => 'user', 'partnership' => 'partnership', 'projet' => 'projet', 'projet_task' => 'projet_task', 'ticket' => 'ticket');
     //$listofmodulesextra = array('fichinter'=>'fichinter');
 
     print '<tr><td colspan="2"><br>*** Check fields into extra table structure match table of definition. If not add column into table</td></tr>';
@@ -407,20 +406,20 @@ if ($ok && GETPOST('standard', 'alpha')) {
                     $sql2 = "SELECT COUNT(*) as nb";
                     $sql2 .= " FROM " . MAIN_DB_PREFIX . "const as c";
                     $sql2 .= " WHERE name = 'MAIN_MODULE_" . $name . "'";
-                    $sql2 .= " AND entity = " . ((int) $obj->entity);
+                    $sql2 .= " AND entity = " . ((int)$obj->entity);
                     $resql2 = $db->query($sql2);
                     if ($resql2) {
                         $obj2 = $db->fetch_object($resql2);
                         if ($obj2 && $obj2->nb == 0) {
                             // Module not found, so we can remove entry
-                            $sqldelete = "DELETE FROM " . MAIN_DB_PREFIX . "const WHERE name = '" . $db->escape($obj->name) . "' AND entity = " . ((int) $obj->entity);
+                            $sqldelete = "DELETE FROM " . MAIN_DB_PREFIX . "const WHERE name = '" . $db->escape($obj->name) . "' AND entity = " . ((int)$obj->entity);
 
                             if (GETPOST('standard', 'alpha') == 'confirmed') {
                                 $db->query($sqldelete);
 
-                                print '<tr><td>Widget ' . $obj->name . ' set in entity ' . $obj->entity . ' with value ' . $obj->value . ' -> Module ' . $name . ' not enabled in entity ' . ((int) $obj->entity) . ', we delete record</td></tr>';
+                                print '<tr><td>Widget ' . $obj->name . ' set in entity ' . $obj->entity . ' with value ' . $obj->value . ' -> Module ' . $name . ' not enabled in entity ' . ((int)$obj->entity) . ', we delete record</td></tr>';
                             } else {
-                                print '<tr><td>Widget ' . $obj->name . ' set in entity ' . $obj->entity . ' with value ' . $obj->value . ' -> Module ' . $name . ' not enabled in entity ' . ((int) $obj->entity) . ', we should delete record (not done, mode test)</td></tr>';
+                                print '<tr><td>Widget ' . $obj->name . ' set in entity ' . $obj->entity . ' with value ' . $obj->value . ' -> Module ' . $name . ' not enabled in entity ' . ((int)$obj->entity) . ', we should delete record (not done, mode test)</td></tr>';
                             }
                         } else {
                             //print '<tr><td>Constant '.$obj->name.' set in entity '.$obj->entity.' with value '.$obj->value.' -> Module found in entity '.$obj->entity.', we keep record</td></tr>';
@@ -465,23 +464,23 @@ if ($ok && GETPOST('standard', 'alpha')) {
                     $sql2 = "SELECT COUNT(*) as nb";
                     $sql2 .= " FROM " . MAIN_DB_PREFIX . "const as c";
                     $sql2 .= " WHERE name = 'MAIN_MODULE_" . strtoupper($module) . "'";
-                    $sql2 .= " AND entity = " . ((int) $obj->entity);
+                    $sql2 .= " AND entity = " . ((int)$obj->entity);
                     $sql2 .= " AND value <> 0";
                     $resql2 = $db->query($sql2);
                     if ($resql2) {
                         $obj2 = $db->fetch_object($resql2);
                         if ($obj2 && $obj2->nb == 0) {
                             // Module not found, so we canremove entry
-                            $sqldeletea = "DELETE FROM " . MAIN_DB_PREFIX . "boxes WHERE entity = " . ((int) $obj->entity) . " AND box_id IN (SELECT rowid FROM " . MAIN_DB_PREFIX . "boxes_def WHERE file = '" . $db->escape($obj->file) . "' AND entity = " . ((int) $obj->entity) . ")";
-                            $sqldeleteb = "DELETE FROM " . MAIN_DB_PREFIX . "boxes_def WHERE file = '" . $db->escape($obj->file) . "' AND entity = " . ((int) $obj->entity);
+                            $sqldeletea = "DELETE FROM " . MAIN_DB_PREFIX . "boxes WHERE entity = " . ((int)$obj->entity) . " AND box_id IN (SELECT rowid FROM " . MAIN_DB_PREFIX . "boxes_def WHERE file = '" . $db->escape($obj->file) . "' AND entity = " . ((int)$obj->entity) . ")";
+                            $sqldeleteb = "DELETE FROM " . MAIN_DB_PREFIX . "boxes_def WHERE file = '" . $db->escape($obj->file) . "' AND entity = " . ((int)$obj->entity);
 
                             if (GETPOST('standard', 'alpha') == 'confirmed') {
                                 $db->query($sqldeletea);
                                 $db->query($sqldeleteb);
 
-                                print '<tr><td>Constant ' . $obj->file . ' set in boxes_def for entity ' . $obj->entity . ' but MAIN_MODULE_' . strtoupper($module) . ' not defined in entity ' . ((int) $obj->entity) . ', we delete record</td></tr>';
+                                print '<tr><td>Constant ' . $obj->file . ' set in boxes_def for entity ' . $obj->entity . ' but MAIN_MODULE_' . strtoupper($module) . ' not defined in entity ' . ((int)$obj->entity) . ', we delete record</td></tr>';
                             } else {
-                                print '<tr><td>Constant ' . $obj->file . ' set in boxes_def for entity ' . $obj->entity . ' but MAIN_MODULE_' . strtoupper($module) . ' not defined in entity ' . ((int) $obj->entity) . ', we should delete record (not done, mode test)</td></tr>';
+                                print '<tr><td>Constant ' . $obj->file . ' set in boxes_def for entity ' . $obj->entity . ' but MAIN_MODULE_' . strtoupper($module) . ' not defined in entity ' . ((int)$obj->entity) . ', we should delete record (not done, mode test)</td></tr>';
                             }
                         } else {
                             //print '<tr><td>Constant '.$obj->name.' set in entity '.$obj->entity.' with value '.$obj->value.' -> Module found in entity '.$obj->entity.', we keep record</td></tr>';
@@ -530,7 +529,7 @@ if ($ok && GETPOST('restore_thirdparties_logos')) {
             if (!empty($name)) {
                 $filetotest = $dolibarr_main_data_root . '/societe/logos/' . $name . $ext;
                 $filetotestsmall = $dolibarr_main_data_root . '/societe/logos/thumbs/' . $name . '_small' . $ext;
-                $exists = (int) dol_is_file($filetotest);
+                $exists = (int)dol_is_file($filetotest);
                 print 'Check thirdparty ' . $obj->rowid . ' name=' . $obj->name . ' logo=' . $obj->logo . ' file ' . $filetotest . " exists=" . $exists . "<br>\n";
                 if ($exists) {
                     $filetarget = $dolibarr_main_data_root . '/societe/' . $obj->rowid . '/logos/' . $name . $ext;
@@ -571,7 +570,6 @@ if ($ok && GETPOST('restore_thirdparties_logos')) {
 }
 
 
-
 // restore_user_pictures: Move pictures to correct new directory.
 if ($ok && GETPOST('restore_user_pictures', 'alpha')) {
     //$exts=array('gif','png','jpg');
@@ -605,7 +603,7 @@ if ($ok && GETPOST('restore_user_pictures', 'alpha')) {
                 $filetotest = $dolibarr_main_data_root . '/users/' . substr(sprintf('%08d', $obj->rowid), -1, 1) . '/' . substr(sprintf('%08d', $obj->rowid), -2, 1) . '/' . $name . $ext;
                 $filetotestsmall = $dolibarr_main_data_root . '/users/' . substr(sprintf('%08d', $obj->rowid), -1, 1) . '/' . substr(sprintf('%08d', $obj->rowid), -2, 1) . '/thumbs/' . $name . '_small' . $ext;
                 $filetotestmini = $dolibarr_main_data_root . '/users/' . substr(sprintf('%08d', $obj->rowid), -1, 1) . '/' . substr(sprintf('%08d', $obj->rowid), -2, 1) . '/thumbs/' . $name . '_mini' . $ext;
-                $exists = (int) dol_is_file($filetotest);
+                $exists = (int)dol_is_file($filetotest);
                 print 'Check user ' . $obj->rowid . ' lastname=' . $obj->lastname . ' firstname=' . $obj->firstname . ' photo=' . $obj->photo . ' file ' . $filetotest . " exists=" . $exists . "<br>\n";
                 if ($exists) {
                     $filetarget = $dolibarr_main_data_root . '/users/' . $obj->rowid . '/' . $name . $ext;
@@ -815,7 +813,6 @@ if ($ok && GETPOST('clean_menus', 'alpha')) {
 }
 
 
-
 // clean_orphelin_dir: Run purge of directory
 if ($ok && GETPOST('clean_orphelin_dir', 'alpha')) {
     $listmodulepart = array('company', 'invoice', 'invoice_supplier', 'propal', 'order', 'order_supplier', 'contract', 'tax');
@@ -851,29 +848,21 @@ if ($ok && GETPOST('clean_orphelin_dir', 'alpha')) {
 
         // To show ref or specific information according to view to show (defined by $module)
         if ($modulepart == 'company') {
-            include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
             $object_instance = new Societe($db);
         }
         if ($modulepart == 'invoice') {
-            include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
             $object_instance = new Facture($db);
         } elseif ($modulepart == 'invoice_supplier') {
-            include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.facture.class.php';
             $object_instance = new FactureFournisseur($db);
         } elseif ($modulepart == 'propal') {
-            include_once DOL_DOCUMENT_ROOT . '/comm/propal/class/propal.class.php';
             $object_instance = new Propal($db);
         } elseif ($modulepart == 'order') {
-            include_once DOL_DOCUMENT_ROOT . '/commande/class/commande.class.php';
             $object_instance = new Commande($db);
         } elseif ($modulepart == 'order_supplier') {
-            include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.commande.class.php';
             $object_instance = new CommandeFournisseur($db);
         } elseif ($modulepart == 'contract') {
-            include_once DOL_DOCUMENT_ROOT . '/contrat/class/contrat.class.php';
             $object_instance = new Contrat($db);
         } elseif ($modulepart == 'tax') {
-            include_once DOL_DOCUMENT_ROOT . '/compta/sociales/class/chargesociales.class.php';
             $object_instance = new ChargeSociales($db);
         }
 
@@ -974,7 +963,7 @@ if ($ok && GETPOST('clean_product_stock_batch', 'alpha')) {
                         // If product is not a product that support batches, we can clean stock by deleting the product batch lines
                         print ' -> Delete qty ' . $obj->reelbatch . ' for any lot linked to fk_product_stock=' . $obj->psrowid;
                         $sql2 = "DELETE FROM " . MAIN_DB_PREFIX . "product_batch";
-                        $sql2 .= " WHERE fk_product_stock = " . ((int) $obj->psrowid);
+                        $sql2 .= " WHERE fk_product_stock = " . ((int)$obj->psrowid);
                         print '<br>' . $sql2;
 
                         if (GETPOST('clean_product_stock_batch') == 'confirmed') {
@@ -989,7 +978,7 @@ if ($ok && GETPOST('clean_product_stock_batch', 'alpha')) {
                             // Method 1
                             print ' -> Insert qty ' . ($obj->reel - $obj->reelbatch) . ' with lot 000000 linked to fk_product_stock=' . $obj->psrowid;
                             $sql2 = "INSERT INTO " . MAIN_DB_PREFIX . "product_batch(fk_product_stock, batch, qty)";
-                            $sql2 .= "VALUES(" . ((int) $obj->psrowid) . ", '000000', " . ((float) ($obj->reel - $obj->reelbatch)) . ")";
+                            $sql2 .= "VALUES(" . ((int)$obj->psrowid) . ", '000000', " . ((float)($obj->reel - $obj->reelbatch)) . ")";
                             print '<br>' . $sql2;
 
                             if (GETPOST('clean_product_stock_batch') == 'confirmed') {
@@ -1004,9 +993,9 @@ if ($ok && GETPOST('clean_product_stock_batch', 'alpha')) {
                         }
                         if ($methodtofix == 'updatestock') {
                             // Method 2
-                            print ' -> Update qty of product_stock with qty = ' . ($obj->reelbatch ? ((float) $obj->reelbatch) : '0') . ' for ps.rowid = ' . ((int) $obj->psrowid);
+                            print ' -> Update qty of product_stock with qty = ' . ($obj->reelbatch ? ((float)$obj->reelbatch) : '0') . ' for ps.rowid = ' . ((int)$obj->psrowid);
                             $sql2 = "UPDATE " . MAIN_DB_PREFIX . "product_stock";
-                            $sql2 .= " SET reel = " . ($obj->reelbatch ? ((float) $obj->reelbatch) : '0') . " WHERE rowid = " . ((int) $obj->psrowid);
+                            $sql2 .= " SET reel = " . ($obj->reelbatch ? ((float)$obj->reelbatch) : '0') . " WHERE rowid = " . ((int)$obj->psrowid);
                             print '<br>' . $sql2;
 
                             if (GETPOST('clean_product_stock_batch') == 'confirmed') {
@@ -1101,7 +1090,7 @@ if ($ok && GETPOST('set_empty_time_spent_amount', 'alpha')) {
 
                 if (GETPOST('set_empty_time_spent_amount') == 'confirmed') {
                     $sql2 = "UPDATE " . MAIN_DB_PREFIX . "element_time";
-                    $sql2 .= " SET thm = " . $obj->user_thm . " WHERE thm IS NULL AND fk_user = " . ((int) $obj->user_id);
+                    $sql2 .= " SET thm = " . $obj->user_thm . " WHERE thm IS NULL AND fk_user = " . ((int)$obj->user_id);
                     $resql2 = $db->query($sql2);
                     if (!$resql2) {
                         $error++;
@@ -1171,13 +1160,13 @@ if ($ok && GETPOST('force_disable_of_modules_not_found', 'alpha')) {
                             }
                             if ($key == 'js') {
                                 $value = $obj->value;
-                                $valuearray = (array) json_decode($value);  // Force cast into array because sometimes it is a stdClass
+                                $valuearray = (array)json_decode($value);  // Force cast into array because sometimes it is a stdClass
                                 $reloffile = $valuearray[0];
                                 $reloffile = preg_replace('/^\//', '', $valuearray[0]);
                             }
                             if ($key == 'css') {
                                 $value = $obj->value;
-                                $valuearray = (array) json_decode($value);  // Force cast into array because sometimes it is a stdClass
+                                $valuearray = (array)json_decode($value);  // Force cast into array because sometimes it is a stdClass
                                 if ($value && (!is_array($valuearray) || count($valuearray) == 0)) {
                                     $valuearray = array();
                                     $valuearray[0] = $value; // If value was not a json array but a string
@@ -1267,7 +1256,7 @@ if ($ok && GETPOST('clean_perm_table', 'alpha')) {
                 if ($obj->id > 0) {
                     print '<tr><td>Found line with id ' . $obj->id . ', label "' . $obj->label . '" of module "' . $obj->module . '" to delete';
                     if (GETPOST('clean_perm_table', 'alpha') == 'confirmed') {
-                        $sqldelete = "DELETE FROM " . MAIN_DB_PREFIX . "rights_def WHERE id = " . ((int) $obj->id);
+                        $sqldelete = "DELETE FROM " . MAIN_DB_PREFIX . "rights_def WHERE id = " . ((int)$obj->id);
                         $resqldelete = $db->query($sqldelete);
                         if (!$resqldelete) {
                             dol_print_error($db);
@@ -1285,7 +1274,6 @@ if ($ok && GETPOST('clean_perm_table', 'alpha')) {
         dol_print_error($db);
     }
 }
-
 
 
 // force utf8 on tables
@@ -1520,8 +1508,8 @@ if ($ok && GETPOST('repair_link_dispatch_lines_supplier_order_lines')) {
         }
         while ($obj_dispatch = $db->fetch_object($resql_dispatch)) {
             $sql_line = 'SELECT line.rowid, line.qty FROM ' . MAIN_DB_PREFIX . 'commande_fournisseurdet AS line';
-            $sql_line .= ' WHERE line.fk_commande = ' . ((int) $obj_dispatch->fk_commande);
-            $sql_line .= ' AND   line.fk_product  = ' . ((int) $obj_dispatch->fk_product);
+            $sql_line .= ' WHERE line.fk_commande = ' . ((int)$obj_dispatch->fk_commande);
+            $sql_line .= ' AND   line.fk_product  = ' . ((int)$obj_dispatch->fk_product);
             $resql_line = $db->query($sql_line);
 
             // s’il y a plusieurs lignes avec le même produit sur cette commande fournisseur,
@@ -1549,20 +1537,20 @@ if ($ok && GETPOST('repair_link_dispatch_lines_supplier_order_lines')) {
                 $qty_for_line = min($remaining_qty, $obj_line->qty);
                 if ($first_iteration) {
                     $sql_attach = 'UPDATE ' . MAIN_DB_PREFIX . 'receptiondet_batch';
-                    $sql_attach .= ' SET fk_elementdet = ' . ((int) $obj_line->rowid) . ', qty = ' . ((float) $qty_for_line);
-                    $sql_attach .= ' WHERE rowid = ' . ((int) $obj_dispatch->rowid);
+                    $sql_attach .= ' SET fk_elementdet = ' . ((int)$obj_line->rowid) . ', qty = ' . ((float)$qty_for_line);
+                    $sql_attach .= ' WHERE rowid = ' . ((int)$obj_dispatch->rowid);
                     $first_iteration = false;
                 } else {
                     $sql_attach_values = array(
-                        (string) ((int) $obj_dispatch->fk_element),
-                        (string) ((int) $obj_dispatch->fk_product),
-                        (string) ((int) $obj_line->rowid),
-                        (string) ((float) $qty_for_line),
-                        (string) ((int) $obj_dispatch->fk_entrepot),
-                        (string) ((int) $obj_dispatch->fk_user),
+                        (string)((int)$obj_dispatch->fk_element),
+                        (string)((int)$obj_dispatch->fk_product),
+                        (string)((int)$obj_line->rowid),
+                        (string)((float)$qty_for_line),
+                        (string)((int)$obj_dispatch->fk_entrepot),
+                        (string)((int)$obj_dispatch->fk_user),
                         $obj_dispatch->datec ? "'" . $db->idate($db->jdate($obj_dispatch->datec)) . "'" : 'NULL',
                         $obj_dispatch->comment ? "'" . $db->escape($obj_dispatch->comment) . "'" : 'NULL',
-                        $obj_dispatch->status ? (string) ((int) $obj_dispatch->status) : 'NULL',
+                        $obj_dispatch->status ? (string)((int)$obj_dispatch->status) : 'NULL',
                         $obj_dispatch->tms ? "'" . $db->idate($db->jdate($obj_dispatch->tms)) . "'" : 'NULL',
                         $obj_dispatch->batch ? "'" . $db->escape($obj_dispatch->batch) . "'" : 'NULL',
                         $obj_dispatch->eatby ? "'" . $db->escape($obj_dispatch->eatby) . "'" : 'NULL',
@@ -1619,8 +1607,6 @@ if ($ok && GETPOST('repair_link_dispatch_lines_supplier_order_lines')) {
 
 // Repair llx_commande_fournisseur to eliminate duplicate reference
 if ($ok && GETPOST('repair_supplier_order_duplicate_ref')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
-    include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
 
     $db->begin();
 
@@ -1654,7 +1640,7 @@ if ($ok && GETPOST('repair_supplier_order_duplicate_ref')) {
 
             $newRef = $supplierOrder->getNextNumRef($soc);
 
-            $sql = "UPDATE " . MAIN_DB_PREFIX . "commande_fournisseur cf SET cf.ref = '" . $db->escape($newRef) . "' WHERE cf.rowid = " . (int) $supplierOrder->id;
+            $sql = "UPDATE " . MAIN_DB_PREFIX . "commande_fournisseur cf SET cf.ref = '" . $db->escape($newRef) . "' WHERE cf.rowid = " . (int)$supplierOrder->id;
             if (!$db->query($sql)) {
                 $err++;
             }

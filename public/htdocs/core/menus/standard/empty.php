@@ -51,8 +51,8 @@ class MenuManager
     /**
      *  Constructor
      *
-     *  @param  DoliDB      $db             Database handler
-     *  @param  int         $type_user      Type of user
+     * @param DoliDB $db Database handler
+     * @param int $type_user Type of user
      */
     public function __construct($db, $type_user)
     {
@@ -64,8 +64,8 @@ class MenuManager
     /**
      * Load this->tabMenu
      *
-     * @param   string  $forcemainmenu      To force mainmenu to load
-     * @param   string  $forceleftmenu      To force leftmenu to load
+     * @param string $forcemainmenu To force mainmenu to load
+     * @param string $forceleftmenu To force leftmenu to load
      * @return  void
      */
     public function loadMenu($forcemainmenu = '', $forceleftmenu = '')
@@ -78,9 +78,9 @@ class MenuManager
     /**
      *  Show menu
      *
-     *  @param  string  $mode           'top', 'left', 'jmobile'
-     *  @param  array   $moredata       An array with more data to output
-     *  @return int|string              0 or nb of top menu entries if $mode = 'topnb', string inc ase of bad parameter
+     * @param string $mode 'top', 'left', 'jmobile'
+     * @param array $moredata An array with more data to output
+     * @return int|string              0 or nb of top menu entries if $mode = 'topnb', string inc ase of bad parameter
      */
     public function showmenu($mode, $moredata = null)
     {
@@ -488,9 +488,9 @@ function print_start_menu_array_empty()
 /**
  * Output start menu entry
  *
- * @param   string  $idsel      Text
- * @param   string  $classname  String to add a css class
- * @param   int     $showmode   0 = hide, 1 = allowed or 2 = not allowed
+ * @param string $idsel Text
+ * @param string $classname String to add a css class
+ * @param int $showmode 0 = hide, 1 = allowed or 2 = not allowed
  * @return  void
  */
 function print_start_menu_entry_empty($idsel, $classname, $showmode)
@@ -505,14 +505,14 @@ function print_start_menu_entry_empty($idsel, $classname, $showmode)
 /**
  * Output menu entry
  *
- * @param   string  $text           Text
- * @param   int     $showmode       1 or 2
- * @param   string  $url            Url
- * @param   string  $id             Id
- * @param   string  $idsel          Id sel
- * @param   string  $classname      Class name
- * @param   string  $atarget        Target
- * @param   array   $menuval        All the $menuval array
+ * @param string $text Text
+ * @param int $showmode 1 or 2
+ * @param string $url Url
+ * @param string $id Id
+ * @param string $idsel Id sel
+ * @param string $classname Class name
+ * @param string $atarget Target
+ * @param array $menuval All the $menuval array
  * @return  void
  */
 function print_text_menu_entry_empty($text, $showmode, $url, $id, $idsel, $classname, $atarget, $menuval = array())
@@ -561,7 +561,7 @@ function print_text_menu_entry_empty($text, $showmode, $url, $id, $idsel, $class
 /**
  * Output end menu entry
  *
- * @param   int     $showmode   0 = hide, 1 = allowed or 2 = not allowed
+ * @param int $showmode 0 = hide, 1 = allowed or 2 = not allowed
  * @return  void
  */
 function print_end_menu_entry_empty($showmode)

@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2021-2023  Waël Almoman            <info@almoman.com>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2021-2023  Waël Almoman                <info@almoman.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,14 +21,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+
 /**
  *  \file       htdocs/core/boxes/box_members_by_type.php
  *  \ingroup    adherent
  *  \brief      Module to show box of members
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 
 /**
  * Class to manage the box to show last modofied members
@@ -45,8 +44,8 @@ class box_members_by_type extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param = '')
     {
@@ -66,8 +65,8 @@ class box_members_by_type extends ModeleBoxes
     /**
      *  Load data into info_box_contents array to show array later.
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -76,8 +75,6 @@ class box_members_by_type extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
         $staticmember = new Adherent($this->db);
 
         $now = dol_now();
@@ -87,7 +84,6 @@ class box_members_by_type extends ModeleBoxes
         $this->info_box_head = array('text' => $langs->trans("BoxTitleMembersByType") . ($numberyears ? ' (' . ($year - $numberyears) . ' - ' . $year . ')' : ''));
 
         if ($user->hasRight('adherent', 'lire')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherentstats.class.php';
             $stats = new AdherentStats($this->db, $user->socid, $user->id);
             // Show array
             $sumMembers = $stats->countMembersByTypeAndStatus($numberyears);
@@ -146,7 +142,7 @@ class box_members_by_type extends ModeleBoxes
                         break;
                     }
                     $adhtype = new AdherentType($this->db);
-                    $adhtype->id = (int) $key;
+                    $adhtype->id = (int)$key;
                     $adhtype->label = $data['label'];
                     $AdherentType[$key] = $adhtype;
 
@@ -258,10 +254,10 @@ class box_members_by_type extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

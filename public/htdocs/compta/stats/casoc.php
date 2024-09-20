@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2007       Franky Van Liedekerke   <franky.van.liedekerke@telenet.be>
- * Copyright (C) 2013       Antoine Iauch           <aiauch@gpcsolutions.fr>
- * Copyright (C) 2015       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2022       Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007       Franky Van Liedekerke       <franky.van.liedekerke@telenet.be>
+ * Copyright (C) 2013       Antoine Iauch               <aiauch@gpcsolutions.fr>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *       \file        htdocs/compta/stats/casoc.php
  *       \brief       Page reporting Turnover (CA) by thirdparty
@@ -35,9 +37,11 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/report.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/tax.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'categories', 'bills', 'compta'));
@@ -294,9 +298,9 @@ if ($modecompta == 'CREANCES-DETTES') {
     if ($selected_cat === -2) { // Without any category
         $sql .= " AND cs.fk_soc is null";
     } elseif ($selected_cat) {  // Into a specific category
-        $sql .= " AND (c.rowid = " . ((int) $selected_cat);
+        $sql .= " AND (c.rowid = " . ((int)$selected_cat);
         if ($subcat) {
-            $sql .= " OR c.fk_parent = " . ((int) $selected_cat);
+            $sql .= " OR c.fk_parent = " . ((int)$selected_cat);
         }
         $sql .= ")";
         $sql .= " AND cs.fk_categorie = c.rowid AND cs.fk_soc = s.rowid";
@@ -325,9 +329,9 @@ if ($modecompta == 'CREANCES-DETTES') {
     if ($selected_cat === -2) { // Without any category
         $sql .= " AND cs.fk_soc is null";
     } elseif ($selected_cat) {  // Into a specific category
-        $sql .= " AND (c.rowid = " . ((int) $selected_cat);
+        $sql .= " AND (c.rowid = " . ((int)$selected_cat);
         if ($subcat) {
-            $sql .= " OR c.fk_parent = " . ((int) $selected_cat);
+            $sql .= " OR c.fk_parent = " . ((int)$selected_cat);
         }
         $sql .= ")";
         $sql .= " AND cs.fk_categorie = c.rowid AND cs.fk_soc = s.rowid";
@@ -345,11 +349,11 @@ if (!empty($search_town)) {
     $sql .= natural_search('s.town', $search_town);
 }
 if ($search_country > 0) {
-    $sql .= ' AND s.fk_pays = ' . ((int) $search_country);
+    $sql .= ' AND s.fk_pays = ' . ((int)$search_country);
 }
 $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
 if ($socid) {
-    $sql .= " AND f.fk_soc = " . ((int) $socid);
+    $sql .= " AND f.fk_soc = " . ((int)$socid);
 }
 $sql .= " GROUP BY s.rowid, s.nom, s.name_alias, s.zip, s.town, s.fk_pays";
 $sql .= " ORDER BY s.rowid";

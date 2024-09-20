@@ -1,9 +1,10 @@
 <?php
 
 /* Module descriptor for ticket system
- * Copyright (C) 2013-2016  Jean-François FERRY     <hello@librethic.io>
- *               2016       Christophe Battarel     <christophe@altairis.fr>
- * Copyright (C) 2019-2021  Frédéric France         <frederic.france@netlogic.fr>
+ * Copyright (C) 2013-2016  Jean-François FERRY         <hello@librethic.io>
+ *               2016       Christophe Battarel         <christophe@altairis.fr>
+ * Copyright (C) 2019-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+
 /**
  *     \file        htdocs/core/boxes/box_graph_ticket_by_severity.php
  *     \ingroup     ticket
  *     \brief       This box shows open tickets by severity
  */
-
-require_once DOL_DOCUMENT_ROOT . "/core/boxes/modules_boxes.php";
 
 /**
  * Class to manage the box
@@ -41,8 +42,8 @@ class box_graph_ticket_by_severity extends ModeleBoxes
 
     /**
      * Constructor
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param = '')
     {
@@ -56,8 +57,8 @@ class box_graph_ticket_by_severity extends ModeleBoxes
     /**
      * Load data into info_box_contents array to show array later.
      *
-     *     @param  int $max Maximum number of records to load
-     *     @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -80,7 +81,6 @@ class box_graph_ticket_by_severity extends ModeleBoxes
         }
         $this->max = $max;
 
-        require_once DOL_DOCUMENT_ROOT . "/ticket/class/ticket.class.php";
 
         $text = $langs->trans("BoxTicketSeverity", $max);
         $this->info_box_head = array(
@@ -154,7 +154,6 @@ class box_graph_ticket_by_severity extends ModeleBoxes
             $stringtoprint = '';
             $stringtoprint .= '<div class="div-table-responsive-no-min ">';
             if (!empty($dataseries) && count($dataseries) > 0) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
                 $px1 = new DolGraph();
                 $mesg = $px1->isGraphKo();
                 $totalnb = 0;
@@ -203,10 +202,10 @@ class box_graph_ticket_by_severity extends ModeleBoxes
     /**
      *     Method to show box
      *
-     *     @param  array $head     Array with properties of box title
-     *     @param  array $contents Array with properties of box lines
-     *     @param  int   $nooutput No print, only return string
-     *     @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

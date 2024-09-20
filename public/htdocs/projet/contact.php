@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2010      Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2012-2015 Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -20,22 +20,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\User\Classes\UserGroup;
+
 /**
  *       \file       htdocs/projet/contact.php
  *       \ingroup    project
  *       \brief      List of all contacts of a project
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-}
 
 // Load translation files required by the page
 $langsLoad = array('projects', 'companies');
@@ -45,13 +47,13 @@ if (isModEnabled('eventorganization')) {
 
 $langs->loadLangs($langsLoad);
 
-$id     = GETPOSTINT('id');
-$ref    = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
 $lineid = GETPOSTINT('lineid');
-$socid  = GETPOSTINT('socid');
+$socid = GETPOSTINT('socid');
 $action = GETPOST('action', 'aZ09');
 
-$mine   = GETPOST('mode') == 'mine' ? 1 : 0;
+$mine = GETPOST('mode') == 'mine' ? 1 : 0;
 //if (! $user->rights->projet->all->lire) $mine=1;  // Special for projects
 
 $object = new Project($db);
@@ -175,7 +177,6 @@ if (empty($reshook)) {
         $errorgrouparray = array();
 
         if ($groupid > 0) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
             $usergroup = new UserGroup($db);
             $result = $usergroup->fetch($groupid);
             if ($result > 0) {
@@ -190,7 +191,7 @@ if (empty($reshook)) {
             } else {
                 $error++;
             }
-        } elseif (! ($contactid > 0)) {
+        } elseif (!($contactid > 0)) {
             $error++;
             $langs->load("errors");
             setEventMessages($langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("Contact")), null, 'errors');
@@ -228,7 +229,6 @@ if (empty($reshook)) {
 
                 $affecttotask = GETPOST('tasksavailable', 'intcomma');
                 if (!empty($affecttotask)) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
                     $task_to_affect = explode(',', $affecttotask);
                     if (!empty($task_to_affect)) {
                         foreach ($task_to_affect as $task_id) {
@@ -315,7 +315,6 @@ $help_url = 'EN:Module_Projects|FR:Module_Projets|ES:M&oacute;dulo_Proyectos|DE:
 llxHeader('', $title, $help_url);
 
 
-
 if ($id > 0 || !empty($ref)) {
     /*
      * View
@@ -350,7 +349,7 @@ if ($id > 0 || !empty($ref)) {
 
     if (!empty($_SESSION['pageforbacktolist']) && !empty($_SESSION['pageforbacktolist']['project'])) {
         $tmpurl = $_SESSION['pageforbacktolist']['project'];
-        $tmpurl = preg_replace('/__SOCID__/', (string) $object->socid, $tmpurl);
+        $tmpurl = preg_replace('/__SOCID__/', (string)$object->socid, $tmpurl);
         $linkback = '<a href="' . $tmpurl . (preg_match('/\?/', $tmpurl) ? '&' : '?') . 'restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
     } else {
         $linkback = '<a href="' . constant('BASE_URL') . '/projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';

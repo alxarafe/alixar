@@ -50,9 +50,9 @@ class InboundTransfer extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Treasury\InboundTransfer the canceled inbound transfer
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Treasury\InboundTransfer the canceled inbound transfer
      */
     public function cancel($params = null, $opts = null)
     {

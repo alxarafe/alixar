@@ -1,9 +1,10 @@
 <?php
 
-/* Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2020 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2020       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\Misc;
 
 /**
  * \file    htdocs/admin/workstation.php
@@ -46,7 +50,7 @@ $value = GETPOST('value', 'alpha');
 $error = 0;
 $setupnotempty = 0;
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 // Access control
 if (!$user->admin) {
@@ -96,7 +100,7 @@ if ($action == 'updateMask') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/workstation/doc/pdf_" . $modele . "_" . strtolower($tmpobjectkey) . ".modules.php", 0);
         if (file_exists($file)) {
@@ -153,7 +157,6 @@ if ($action == 'updateMask') {
     $constforval = 'WORKSTATION_' . strtoupper($tmpobjectkey) . "_ADDON";
     dolibarr_set_const($db, $constforval, $value, 'chaine', 0, '', $conf->entity);
 }
-
 
 
 /*
@@ -305,7 +308,7 @@ foreach ($myTmpObjects as $myTmpObjectKey => $myTmpObjectArray) {
                                 print '</td>';
 
                                 $nameofclass = ucfirst($myTmpObjectKey);
-                                $mytmpinstance = new $nameofclass($db);
+                                $mytmpinstance = Misc::getCodeLibClass($nameofclass, $db);
                                 $mytmpinstance->initAsSpecimen();
 
                                 // Info

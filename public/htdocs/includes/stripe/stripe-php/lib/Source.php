@@ -86,10 +86,10 @@ class Source extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
-     * @throws \Stripe\Exception\UnexpectedValueException if the source is not attached to a customer
+     * @return \Stripe\Source the detached source
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Source the detached source
+     * @throws \Stripe\Exception\UnexpectedValueException if the source is not attached to a customer
      */
     public function detach($params = null, $opts = null)
     {
@@ -99,7 +99,7 @@ class Source extends ApiResource
         if (!$id) {
             $class = static::class;
             $msg = "Could not determine which URL to request: {$class} instance "
-             . "has invalid ID: {$id}";
+                . "has invalid ID: {$id}";
 
             throw new Exception\UnexpectedValueException($msg, null);
         }
@@ -116,7 +116,7 @@ class Source extends ApiResource
             return $this;
         }
         $message = 'This source object does not appear to be currently attached '
-               . 'to a customer object.';
+            . 'to a customer object.';
 
         throw new Exception\UnexpectedValueException($message);
     }
@@ -126,9 +126,9 @@ class Source extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\SourceTransaction> list of SourceTransactions
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\SourceTransaction> list of SourceTransactions
      */
     public static function allSourceTransactions($id, $params = null, $opts = null)
     {
@@ -144,9 +144,9 @@ class Source extends ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Source the verified source
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Source the verified source
      */
     public function verify($params = null, $opts = null)
     {

@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Notify;
+use Dolibarr\Code\Hrm\Classes\Evaluation;
+use Dolibarr\Code\Hrm\Classes\Job;
+use Dolibarr\Code\Hrm\Classes\Skill;
+use Dolibarr\Code\Hrm\Classes\SkillRank;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *    \file       htdocs/hrm/evaluation_card.php
  *    \ingroup    hrm
@@ -29,17 +41,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/evaluation.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skill.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skillrank.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_evaluation.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_skillrank.lib.php';
-
 
 // Load translation files required by the page
 $langs->loadLangs(array('hrm', 'other', 'products'));  // why products?
@@ -53,7 +56,7 @@ $cancel = GETPOST('cancel', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'evaluationcard'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');
-$lineid   = GETPOSTINT('lineid');
+$lineid = GETPOSTINT('lineid');
 
 // Initialize technical objects
 $object = new Evaluation($db);
@@ -87,7 +90,8 @@ $permissiontoread = $user->hasRight('hrm', 'evaluation', 'read');
 $permissiontoadd = $user->hasRight('hrm', 'evaluation', 'write'); // Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
 $permissiontovalidate = (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('hrm', 'evaluation_advance', 'validate')) || (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $permissiontoadd);
 $permissiontoClose = $user->hasRight('hrm', 'evaluation', 'write');
-$permissiontodelete = $user->hasRight('hrm', 'evaluation', 'delete')/* || ($permissiontoadd && isset($object->status) && $object->status == $object::STATUS_DRAFT)*/;
+$permissiontodelete = $user->hasRight('hrm', 'evaluation', 'delete')/* || ($permissiontoadd && isset($object->status) && $object->status == $object::STATUS_DRAFT)*/
+;
 $permissiondellink = $user->hasRight('hrm', 'evaluation', 'write'); // Used by the include of actions_dellink.inc.php
 $upload_dir = $conf->hrm->multidir_output[isset($object->entity) ? $object->entity : 1] . '/evaluation';
 
@@ -171,7 +175,7 @@ if (empty($reshook)) {
     if ($action == 'close') {
         // save evaldet lines to user;
         $sk = new SkillRank($db);
-        $SkillrecordsForActiveUser = $sk->fetchAll('ASC', 'fk_skill', 0, 0, "(fk_object:=:" . ((int) $object->fk_user) . ") AND (objecttype:=:'" . $db->escape(SkillRank::SKILLRANK_TYPE_USER) . "')", 'AND');
+        $SkillrecordsForActiveUser = $sk->fetchAll('ASC', 'fk_skill', 0, 0, "(fk_object:=:" . ((int)$object->fk_user) . ") AND (objecttype:=:'" . $db->escape(SkillRank::SKILLRANK_TYPE_USER) . "')", 'AND');
 
         $errors = 0;
         // we go through the evaldets of the eval
@@ -237,9 +241,6 @@ if (empty($reshook)) {
         }
     }
 }
-
-
-
 
 /*
  * View
@@ -371,7 +372,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
         $text = $langs->trans('ConfirmValidateEvaluation', $numref);
         if (isModEnabled('notification')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
             $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('HRM_EVALUATION_VALIDATE', 0, $object);
@@ -432,7 +432,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     $job->fetch($object->fk_job);
     $morehtmlref .= '<br>' . $langs->trans('JobProfile') . ' : ' . $job->getNomUrl(1);
     $morehtmlref .= '</div>';
-
 
 
     dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref);
@@ -551,7 +550,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $sql .= '  INNER JOIN ' . MAIN_DB_PREFIX . 'hrm_skilldet as skdet_user ON (skdet_user.fk_skill = sk.rowid AND skdet_user.rankorder = ed.rankorder)';
         //$sql .= "  LEFT JOIN " . MAIN_DB_PREFIX . "hrm_skillrank as skr ON (j.rowid = skr.fk_object AND skr.fk_skill = ed.fk_skill AND skr.objecttype = 'job')";
         $sql .= '  LEFT JOIN ' . MAIN_DB_PREFIX . 'hrm_skilldet as skdet_required ON (skdet_required.fk_skill = sk.rowid AND skdet_required.rankorder = ed.required_rank)';
-        $sql .= " WHERE e.rowid =" . ((int) $object->id);
+        $sql .= " WHERE e.rowid =" . ((int)$object->id);
 
         //      echo $sql;
 
@@ -619,7 +618,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
             <script>
 
-                $(document).ready(function() {
+                $(document).ready(function () {
                     $(".radio_js_bloc_number").tooltip();
                 });
 
@@ -710,7 +709,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/hrm/evaluation_agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
         $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element . '@' . $object->module, (is_object($object->thirdparty) ? $object->thirdparty->id : 0), 1, '', $MAXEVENT, '', $morehtmlcenter);
 

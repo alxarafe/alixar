@@ -25,13 +25,13 @@
 /**
  * Fill arrayofmesures for an object
  *
- * @param   mixed       $object         Any object
- * @param   string      $tablealias     Alias of table
- * @param   string      $labelofobject  Label of object
- * @param   array       $arrayofmesures Array of measures already filled
- * @param   int         $level          Level
- * @param   int         $count          Count
- * @param   string      $tablepath      Path of all tables ('t' or 't,contract' or 't,contract,societe'...)
+ * @param mixed $object Any object
+ * @param string $tablealias Alias of table
+ * @param string $labelofobject Label of object
+ * @param array $arrayofmesures Array of measures already filled
+ * @param int $level Level
+ * @param int $count Count
+ * @param string $tablepath Path of all tables ('t' or 't,contract' or 't,contract,societe'...)
  * @return  array                       Array of measures
  */
 function fillArrayOfMeasures($object, $tablealias, $labelofobject, &$arrayofmesures, $level = 0, &$count = 0, &$tablepath = '')
@@ -66,7 +66,7 @@ function fillArrayOfMeasures($object, $tablealias, $labelofobject, &$arrayofmesu
 
     // Add main fields of object
     foreach ($object->fields as $key => $val) {
-        if (!empty($val['isameasure']) && (!isset($val['enabled']) || (int) dol_eval($val['enabled'], 1, 1, '1'))) {
+        if (!empty($val['isameasure']) && (!isset($val['enabled']) || (int)dol_eval($val['enabled'], 1, 1, '1'))) {
             $position = (empty($val['position']) ? 0 : intval($val['position']));
             $arrayofmesures[$tablealias . '.' . $key . '-sum'] = array(
                 'label' => img_picto('', (empty($object->picto) ? 'generic' : $object->picto), 'class="pictofixedwidth"') . $labelofobject . ': ' . $langs->trans($val['label']) . ' <span class="opacitymedium">(' . $langs->trans("Sum") . ')</span>',
@@ -110,7 +110,7 @@ function fillArrayOfMeasures($object, $tablealias, $labelofobject, &$arrayofmesu
     // Add extrafields to Measures
     if (!empty($object->isextrafieldmanaged) && isset($extrafields->attributes[$object->table_element]['label'])) {
         foreach ($extrafields->attributes[$object->table_element]['label'] as $key => $val) {
-            if (!empty($extrafields->attributes[$object->table_element]['totalizable'][$key]) && (!isset($extrafields->attributes[$object->table_element]['enabled'][$key]) || (int) dol_eval($extrafields->attributes[$object->table_element]['enabled'][$key], 1, 1, '1'))) {
+            if (!empty($extrafields->attributes[$object->table_element]['totalizable'][$key]) && (!isset($extrafields->attributes[$object->table_element]['enabled'][$key]) || (int)dol_eval($extrafields->attributes[$object->table_element]['enabled'][$key], 1, 1, '1'))) {
                 // @phan-suppress-next-line PhanTypeMismatchDimAssignment
                 $position = (!empty($val['position']) ? $val['position'] : 0);
                 $arrayofmesures[preg_replace('/^t/', 'te', $tablealias) . '.' . $key . '-sum'] = array(
@@ -179,13 +179,13 @@ function fillArrayOfMeasures($object, $tablealias, $labelofobject, &$arrayofmesu
 /**
  * Fill arrayofmesures for an object
  *
- * @param   mixed       $object         Any object
- * @param   string      $tablealias     Alias of table ('t' for example)
- * @param   string      $labelofobject  Label of object
- * @param   array       $arrayofxaxis   Array of xaxis already filled
- * @param   int         $level          Level
- * @param   int         $count          Count
- * @param   string      $tablepath      Path of all tables ('t' or 't,contract' or 't,contract,societe'...)
+ * @param mixed $object Any object
+ * @param string $tablealias Alias of table ('t' for example)
+ * @param string $labelofobject Label of object
+ * @param array $arrayofxaxis Array of xaxis already filled
+ * @param int $level Level
+ * @param int $count Count
+ * @param string $tablepath Path of all tables ('t' or 't,contract' or 't,contract,societe'...)
  * @return  array                       Array of xaxis
  */
 function fillArrayOfXAxis($object, $tablealias, $labelofobject, &$arrayofxaxis, $level = 0, &$count = 0, &$tablepath = '')
@@ -223,15 +223,15 @@ function fillArrayOfXAxis($object, $tablealias, $labelofobject, &$arrayofxaxis, 
         if (empty($val['measure'])) {
             if (
                 in_array($key, array(
-                'id', 'ref_ext', 'rowid', 'entity', 'last_main_doc', 'logo', 'logo_squarred', 'extraparams',
-                'parent', 'photo', 'socialnetworks', 'webservices_url', 'webservices_key'))
+                    'id', 'ref_ext', 'rowid', 'entity', 'last_main_doc', 'logo', 'logo_squarred', 'extraparams',
+                    'parent', 'photo', 'socialnetworks', 'webservices_url', 'webservices_key'))
             ) {
                 continue;
             }
-            if (isset($val['enabled']) && ! (int) dol_eval($val['enabled'], 1, 1, '1')) {
+            if (isset($val['enabled']) && !(int)dol_eval($val['enabled'], 1, 1, '1')) {
                 continue;
             }
-            if (isset($val['visible']) && ! (int) dol_eval($val['visible'], 1, 1, '1')) {
+            if (isset($val['visible']) && !(int)dol_eval($val['visible'], 1, 1, '1')) {
                 continue;
             }
             if (preg_match('/^fk_/', $key) && !preg_match('/^fk_statu/', $key)) {
@@ -316,7 +316,7 @@ function fillArrayOfXAxis($object, $tablealias, $labelofobject, &$arrayofxaxis, 
                 $arrayofxaxis[preg_replace('/^t/', 'te', $tablealias) . '.' . $key] = array(
                     'label' => img_picto('', (empty($object->picto) ? 'generic' : $object->picto), 'class="pictofixedwidth"') . ' ' . $labelofobject . ': ' . $langs->trans($val),
                     'labelnohtml' => $labelofobject . ': ' . $langs->trans($val),
-                    'position' => 1000 + (int) $extrafields->attributes[$object->table_element]['pos'][$key] + ($count * 100000),
+                    'position' => 1000 + (int)$extrafields->attributes[$object->table_element]['pos'][$key] + ($count * 100000),
                     'table' => $object->table_element,
                     'tablefromt' => $tablepath
                 );
@@ -350,13 +350,13 @@ function fillArrayOfXAxis($object, $tablealias, $labelofobject, &$arrayofxaxis, 
 /**
  * Fill arrayofgrupby for an object
  *
- * @param   mixed       $object         Any object
- * @param   string      $tablealias     Alias of table
- * @param   string      $labelofobject  Label of object
- * @param   array       $arrayofgroupby Array of groupby already filled
- * @param   int         $level          Level
- * @param   int         $count          Count
- * @param   string      $tablepath      Path of all tables ('t' or 't,contract' or 't,contract,societe'...)
+ * @param mixed $object Any object
+ * @param string $tablealias Alias of table
+ * @param string $labelofobject Label of object
+ * @param array $arrayofgroupby Array of groupby already filled
+ * @param int $level Level
+ * @param int $count Count
+ * @param string $tablepath Path of all tables ('t' or 't,contract' or 't,contract,societe'...)
  * @return  array                       Array of groupby
  */
 function fillArrayOfGroupBy($object, $tablealias, $labelofobject, &$arrayofgroupby, $level = 0, &$count = 0, &$tablepath = '')
@@ -390,15 +390,15 @@ function fillArrayOfGroupBy($object, $tablealias, $labelofobject, &$arrayofgroup
         if (empty($val['isameasure'])) {
             if (
                 in_array($key, array(
-                'id', 'ref_ext', 'rowid', 'entity', 'last_main_doc', 'logo', 'logo_squarred', 'extraparams',
-                'parent', 'photo', 'socialnetworks', 'webservices_url', 'webservices_key'))
+                    'id', 'ref_ext', 'rowid', 'entity', 'last_main_doc', 'logo', 'logo_squarred', 'extraparams',
+                    'parent', 'photo', 'socialnetworks', 'webservices_url', 'webservices_key'))
             ) {
                 continue;
             }
-            if (isset($val['enabled']) && ! (int) dol_eval($val['enabled'], 1, 1, '1')) {
+            if (isset($val['enabled']) && !(int)dol_eval($val['enabled'], 1, 1, '1')) {
                 continue;
             }
-            if (isset($val['visible']) && ! (int) dol_eval($val['visible'], 1, 1, '1')) {
+            if (isset($val['visible']) && !(int)dol_eval($val['visible'], 1, 1, '1')) {
                 continue;
             }
             if (preg_match('/^fk_/', $key) && !preg_match('/^fk_statu/', $key)) {
@@ -483,7 +483,7 @@ function fillArrayOfGroupBy($object, $tablealias, $labelofobject, &$arrayofgroup
                 $arrayofgroupby[preg_replace('/^t/', 'te', $tablealias) . '.' . $key] = array(
                     'label' => img_picto('', (empty($object->picto) ? 'generic' : $object->picto), 'class="pictofixedwidth"') . ' ' . $labelofobject . ': ' . $langs->trans($val),
                     'labelnohtml' => $labelofobject . ': ' . $langs->trans($val),
-                    'position' => 1000 + (int) $extrafields->attributes[$object->table_element]['pos'][$key] + ($count * 100000),
+                    'position' => 1000 + (int)$extrafields->attributes[$object->table_element]['pos'][$key] + ($count * 100000),
                     'table' => $object->table_element,
                     'tablefromt' => $tablepath
                 );

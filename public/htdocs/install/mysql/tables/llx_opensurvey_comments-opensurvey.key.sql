@@ -15,8 +15,10 @@
 -- along with this program. If not, see <https://www.gnu.org/licenses/>.
 -- ============================================================================
 
-ALTER TABLE llx_opensurvey_comments ADD INDEX idx_id_comment (id_comment);
-ALTER TABLE llx_opensurvey_comments ADD INDEX idx_id_sondage (id_sondage);
+ALTER TABLE llx_opensurvey_comments
+    ADD INDEX idx_id_comment (id_comment);
+ALTER TABLE llx_opensurvey_comments
+    ADD INDEX idx_id_sondage (id_sondage);
 
 
 

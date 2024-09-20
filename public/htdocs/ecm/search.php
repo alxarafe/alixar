@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2008-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2008-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2008-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2008-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Ecm\Classes\EcmDirectory;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/ecm/search.php
  *  \ingroup    ecm
@@ -26,11 +31,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ecm.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/treeview.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmdirectory.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("ecm", "companies", "other", "users", "orders", "propal", "bills", "contracts"));
@@ -52,9 +55,9 @@ if (!$section) {
     $section = 0;
 }
 
-$module  = GETPOST('module', 'alpha');
+$module = GETPOST('module', 'alpha');
 $website = GETPOST('website', 'alpha');
-$pageid  = GETPOSTINT('pageid');
+$pageid = GETPOSTINT('pageid');
 if (empty($module)) {
     $module = 'ecm';
 }
@@ -99,7 +102,6 @@ if (!$permissiontoread) {
  */
 
 // None
-
 
 
 /*
@@ -254,7 +256,6 @@ foreach ($sectionauto as $sectioncur) {
 print '<tr ' . $bc[false] . '><td colspan="4" class="center"><input type="submit" class="button" value="' . $langs->trans("Search") . '"></td></tr>';
 print "</table></form>";
 //print $langs->trans("ECMSectionAutoDesc");
-
 
 
 print '</td><td class="tdtop">';

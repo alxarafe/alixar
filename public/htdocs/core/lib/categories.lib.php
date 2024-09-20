@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2011 Regis Houssin  <regis.houssin@inodbox.com>
+/* Copyright (C) 2011       Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+
 /**
  *  \file       htdocs/core/lib/categories.lib.php
  *  \brief      Ensemble de functions de base pour le module categorie
@@ -27,8 +30,8 @@
 /**
  * Prepare array with list of tabs
  *
- * @param   Categorie   $object     Object related to tabs
- * @param   string      $type       Type of category
+ * @param Categorie $object Object related to tabs
+ * @param string $type Type of category
  * @return  array                   Array of tabs to show
  */
 function categories_prepare_head(Categorie $object, $type)

@@ -1,15 +1,31 @@
 <?php
 
 /* Copyright (C) 2024       MDW                         <mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * or see https://www.gnu.org/
  */
 
 // Add line to select existing file
+use Dolibarr\Code\Core\Classes\Link;
+
 if (!getDolGlobalString('EXPENSEREPORT_DISABLE_ATTACHMENT_ON_LINES')) {
     print '<!-- expensereport_linktofile.tpl.php -->' . "\n";
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->expensereport->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $arrayoffiles = dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png|' . preg_quote(dol_sanitizeFileName($object->ref . '.pdf'), '/') . ')$');
     $nbFiles = count($arrayoffiles);

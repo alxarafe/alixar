@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2007-2020 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013	   Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2016      Jonathan TISSEAU     <jonathan.tisseau@86dev.fr>
+/* Copyright (C) 2007-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013	    Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2016       Jonathan TISSEAU            <jonathan.tisseau@86dev.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -42,15 +44,9 @@ if (!$user->admin) {
     accessforbidden();
 }
 
-
 /*
  * Actions
  */
-
-if ($action == 'update' && !$cancel) {
-}
-
-
 
 /*
  * View
@@ -65,7 +61,6 @@ if (preg_match('/^win/i', PHP_OS)) {
 if (preg_match('/^mac/i', PHP_OS)) {
     $linuxlike = 0;
 }
-
 
 //$wikihelp = 'EN:Setup_EMails|FR:Paramétrage_EMails|ES:Configuración_EMails';
 $wikihelp = '';

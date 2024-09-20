@@ -1,7 +1,8 @@
 <?php
 
 /*
- * Copyright (C) 2013   Cédric Salvador    <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,18 +18,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+
 /**
  *  \file       htdocs/product/stock/lib/replenishment.lib.php
  *  \ingroup    produit
  *  \brief      Contains functions used in replenish.php and replenishorders.php
  */
 
-require_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.commande.class.php';
-
 /**
  * Check if there is still some dispatching of stock to do.
  *
- * @param   int     $order_id       Id of order to check
+ * @param int $order_id Id of order to check
  * @return  boolean                 True = There is some dispatching to do, False = All dispatching is done (may be we receive more) or is not required
  */
 function dolDispatchToDo($order_id)
@@ -40,7 +41,7 @@ function dolDispatchToDo($order_id)
 
     // Count nb of quantity dispatched per product
     $sql = 'SELECT fk_product, SUM(qty) as qtydispatched FROM ' . MAIN_DB_PREFIX . 'receptiondet_batch';
-    $sql .= ' WHERE fk_commande = ' . ((int) $order_id);
+    $sql .= ' WHERE fk_commande = ' . ((int)$order_id);
     $sql .= ' GROUP BY fk_product';
     $sql .= ' ORDER by fk_product';
     $resql = $db->query($sql);
@@ -52,7 +53,7 @@ function dolDispatchToDo($order_id)
 
     // Count nb of quantity to dispatch per product
     $sql = 'SELECT fk_product, SUM(qty) as qtyordered FROM ' . MAIN_DB_PREFIX . 'commande_fournisseurdet';
-    $sql .= ' WHERE fk_commande = ' . ((int) $order_id);
+    $sql .= ' WHERE fk_commande = ' . ((int)$order_id);
     $sql .= ' AND fk_product > 0';
     if (!getDolGlobalString('STOCK_SUPPORTS_SERVICES')) {
         $sql .= ' AND product_type = 0';
@@ -109,7 +110,7 @@ function dispatchedOrders()
 /**
  * ordered
  *
- * @param   int     $product_id     Product id
+ * @param int $product_id Product id
  * @return  string|null
  */
 function ordered($product_id)
@@ -127,7 +128,7 @@ function ordered($product_id)
     } else {
         $sql .= ' cf.fk_statut < 5';
     }
-    $sql .= ' AND cfd.fk_product = ' . ((int) $product_id);
+    $sql .= ' AND cfd.fk_product = ' . ((int)$product_id);
     $sql .= ' GROUP BY cfd.fk_product';
 
     $resql = $db->query($sql);
@@ -148,7 +149,7 @@ function ordered($product_id)
 /**
  * getProducts
  *
- * @param   int     $order_id       Order id
+ * @param int $order_id Order id
  * @return  array|integer[]
  */
 function getProducts($order_id)

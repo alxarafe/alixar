@@ -14,9 +14,9 @@ namespace PhpOffice\PhpSpreadsheet\Shared\JAMA;
  *    never fail.  The matrix condition number and the effective numerical
  *    rank can be computed from this decomposition.
  *
- *    @author  Paul Meagher
+ * @author  Paul Meagher
  *
- *    @version 1.1
+ * @version 1.1
  */
 class SingularValueDecomposition
 {

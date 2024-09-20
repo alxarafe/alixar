@@ -39,7 +39,6 @@ if (!defined('NOREQUIRESOC')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/fileupload.class.php';  // Class to upload common files
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/genericobject.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/geturl.lib.php';
 
 $id = GETPOSTINT('fk_element');

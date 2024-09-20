@@ -317,7 +317,7 @@ jQuery(document).ready(function() {
   getimgurl = $.ajax({
     type: "GET",
 	data: { token: \'notrequired\' },
-    url: \'' . constant('BASE_URL') . '/theme/eldy/img/help.png\',
+    url: \'' . constant('DOL_URL_ROOT') . '/theme/eldy/img/help.png\',
     cache: false,
     /* async: false, */
     /* crossDomain: true,*/

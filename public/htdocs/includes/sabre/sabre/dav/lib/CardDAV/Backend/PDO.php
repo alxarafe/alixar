@@ -140,7 +140,7 @@ class PDO extends AbstractBackend implements SyncSupport
      * Creates a new address book.
      *
      * @param string $principalUri
-     * @param string $url          just the 'basename' of the url
+     * @param string $url just the 'basename' of the url
      *
      * @return int Last insert id
      */
@@ -220,7 +220,7 @@ class PDO extends AbstractBackend implements SyncSupport
         $result = [];
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             $row['etag'] = '"' . $row['etag'] . '"';
-            $row['lastmodified'] = (int) $row['lastmodified'];
+            $row['lastmodified'] = (int)$row['lastmodified'];
             $result[] = $row;
         }
 
@@ -235,7 +235,7 @@ class PDO extends AbstractBackend implements SyncSupport
      *
      * If the card does not exist, you must return false.
      *
-     * @param mixed  $addressBookId
+     * @param mixed $addressBookId
      * @param string $cardUri
      *
      * @return array
@@ -252,7 +252,7 @@ class PDO extends AbstractBackend implements SyncSupport
         }
 
         $result['etag'] = '"' . $result['etag'] . '"';
-        $result['lastmodified'] = (int) $result['lastmodified'];
+        $result['lastmodified'] = (int)$result['lastmodified'];
 
         return $result;
     }
@@ -281,7 +281,7 @@ class PDO extends AbstractBackend implements SyncSupport
         $result = [];
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             $row['etag'] = '"' . $row['etag'] . '"';
-            $row['lastmodified'] = (int) $row['lastmodified'];
+            $row['lastmodified'] = (int)$row['lastmodified'];
             $result[] = $row;
         }
 
@@ -308,7 +308,7 @@ class PDO extends AbstractBackend implements SyncSupport
      *
      * If you don't return an ETag, you can just return null.
      *
-     * @param mixed  $addressBookId
+     * @param mixed $addressBookId
      * @param string $cardUri
      * @param string $cardData
      *
@@ -354,7 +354,7 @@ class PDO extends AbstractBackend implements SyncSupport
      *
      * If you don't return an ETag, you can just return null.
      *
-     * @param mixed  $addressBookId
+     * @param mixed $addressBookId
      * @param string $cardUri
      * @param string $cardData
      *
@@ -382,7 +382,7 @@ class PDO extends AbstractBackend implements SyncSupport
     /**
      * Deletes a card.
      *
-     * @param mixed  $addressBookId
+     * @param mixed $addressBookId
      * @param string $cardUri
      *
      * @return bool
@@ -449,8 +449,8 @@ class PDO extends AbstractBackend implements SyncSupport
      *
      * @param string $addressBookId
      * @param string $syncToken
-     * @param int    $syncLevel
-     * @param int    $limit
+     * @param int $syncLevel
+     * @param int $limit
      *
      * @return array|null
      */
@@ -475,7 +475,7 @@ class PDO extends AbstractBackend implements SyncSupport
         if ($syncToken) {
             $query = 'SELECT uri, operation FROM ' . $this->addressBookChangesTableName . ' WHERE synctoken >= ? AND synctoken < ? AND addressbookid = ? ORDER BY synctoken';
             if ($limit > 0) {
-                $query .= ' LIMIT ' . (int) $limit;
+                $query .= ' LIMIT ' . (int)$limit;
             }
 
             // Fetching all changes
@@ -518,9 +518,9 @@ class PDO extends AbstractBackend implements SyncSupport
     /**
      * Adds a change record to the addressbookchanges table.
      *
-     * @param mixed  $addressBookId
+     * @param mixed $addressBookId
      * @param string $objectUri
-     * @param int    $operation     1 = add, 2 = modify, 3 = delete
+     * @param int $operation 1 = add, 2 = modify, 3 = delete
      */
     protected function addChange($addressBookId, $objectUri, $operation)
     {

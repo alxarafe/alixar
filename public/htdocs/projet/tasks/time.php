@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2005       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2023	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2010-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2011		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2018		Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2019-2021  Christophe Battarel		<christophe@altairis.fr>
- * Copyright (C) 2023      	Gauthier VERDOL       	<gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2023	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2011		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2018		Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2019-2021  Christophe Battarel		    <christophe@altairis.fr>
+ * Copyright (C) 2023      	Gauthier VERDOL       	    <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,6 +25,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\FactureLigne;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormIntervention;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *    \file        htdocs/projet/tasks/time.php
  *    \ingroup    project
@@ -33,14 +47,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formintervention.class.php';
 
 // Load translation files required by the page
 $langsLoad = array('projects', 'bills', 'orders', 'companies');
@@ -129,7 +137,6 @@ $extrafields->fetch_name_optionals_label($object->table_element);
 if ($id > 0 || $ref) {
     $object->fetch($id, $ref);
 }
-
 
 // Security check
 $socid = 0;
@@ -412,9 +419,6 @@ if ($action == 'confirm_generateinvoice') {
     if (!($projectstatic->thirdparty->id > 0)) {
         setEventMessages($langs->trans("ThirdPartyRequiredToGenerateInvoice"), null, 'errors');
     } else {
-        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 
         $tmpinvoice = new Facture($db);
         $tmptimespent = new Task($db);
@@ -481,8 +485,8 @@ if ($action == 'confirm_generateinvoice') {
                 foreach ($toselect as $key => $value) {
                     // Get userid, timepent
                     $object->fetchTimeSpent($value);    // $value is ID of 1 line in timespent table
-                    $arrayoftasks[$object->timespent_fk_user][(int) $object->timespent_fk_product]['timespent'] += $object->timespent_duration;
-                    $arrayoftasks[$object->timespent_fk_user][(int) $object->timespent_fk_product]['totalvaluetodivideby3600'] += ($object->timespent_duration * $object->timespent_thm);
+                    $arrayoftasks[$object->timespent_fk_user][(int)$object->timespent_fk_product]['timespent'] += $object->timespent_duration;
+                    $arrayoftasks[$object->timespent_fk_user][(int)$object->timespent_fk_product]['totalvaluetodivideby3600'] += ($object->timespent_duration * $object->timespent_thm);
                 }
 
                 foreach ($arrayoftasks as $userid => $data) {
@@ -559,8 +563,8 @@ if ($action == 'confirm_generateinvoice') {
                         }
 
                         // Update lineid into line of timespent
-                        $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'element_time SET invoice_line_id = ' . ((int) $lineid) . ', invoice_id = ' . ((int) $tmpinvoice->id);
-                        $sql .= ' WHERE rowid IN (' . $db->sanitize(implode(',', $toselect)) . ') AND fk_user = ' . ((int) $userid);
+                        $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'element_time SET invoice_line_id = ' . ((int)$lineid) . ', invoice_id = ' . ((int)$tmpinvoice->id);
+                        $sql .= ' WHERE rowid IN (' . $db->sanitize(implode(',', $toselect)) . ') AND fk_user = ' . ((int)$userid);
                         $result = $db->query($sql);
                         if (!$result) {
                             $error++;
@@ -659,8 +663,8 @@ if ($action == 'confirm_generateinvoice') {
                     //var_dump($lineid);exit;
 
                     // Update lineid into line of timespent
-                    $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'element_time SET invoice_line_id = ' . ((int) $lineid) . ', invoice_id = ' . ((int) $tmpinvoice->id);
-                    $sql .= ' WHERE rowid IN (' . $db->sanitize(implode(',', $toselect)) . ') AND fk_user = ' . ((int) $userid);
+                    $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'element_time SET invoice_line_id = ' . ((int)$lineid) . ', invoice_id = ' . ((int)$tmpinvoice->id);
+                    $sql .= ' WHERE rowid IN (' . $db->sanitize(implode(',', $toselect)) . ') AND fk_user = ' . ((int)$userid);
                     $result = $db->query($sql);
                     if (!$result) {
                         $error++;
@@ -674,8 +678,8 @@ if ($action == 'confirm_generateinvoice') {
                     // Get userid, timepent
                     $object->fetchTimeSpent($value);        // Call method to get list of timespent for a timespent line id (We use the utiliy method found into Task object)
                     // $object->id is now the task id
-                    $arrayoftasks[$object->id][(int) $object->timespent_fk_product]['timespent'] += $object->timespent_duration;
-                    $arrayoftasks[$object->id][(int) $object->timespent_fk_product]['totalvaluetodivideby3600'] += ($object->timespent_duration * $object->timespent_thm);
+                    $arrayoftasks[$object->id][(int)$object->timespent_fk_product]['timespent'] += $object->timespent_duration;
+                    $arrayoftasks[$object->id][(int)$object->timespent_fk_product]['totalvaluetodivideby3600'] += ($object->timespent_duration * $object->timespent_thm);
                 }
 
                 foreach ($arrayoftasks as $task_id => $data) {
@@ -758,7 +762,7 @@ if ($action == 'confirm_generateinvoice') {
 
                         if (!$error) {
                             // Update lineid into line of timespent
-                            $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'element_time SET invoice_line_id = ' . ((int) $lineid) . ', invoice_id = ' . ((int) $tmpinvoice->id);
+                            $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'element_time SET invoice_line_id = ' . ((int)$lineid) . ', invoice_id = ' . ((int)$tmpinvoice->id);
                             $sql .= ' WHERE rowid IN (' . $db->sanitize(implode(',', $toselect)) . ')';
                             $result = $db->query($sql);
                             if (!$result) {
@@ -797,12 +801,8 @@ if ($action == 'confirm_generateinter') {
     if (!($projectstatic->thirdparty->id > 0)) {
         setEventMessages($langs->trans("ThirdPartyRequiredToGenerateIntervention"), null, 'errors');
     } else {
-        include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
         $tmpinter = new Fichinter($db);
         $tmptimespent = new Task($db);
         $fuser = new User($db);
@@ -866,7 +866,6 @@ if ($action == 'confirm_generateinter') {
     }
 }
 
-
 /*
  * View
  */
@@ -929,13 +928,13 @@ if (($id > 0 || !empty($ref)) || $projectidforalltimes > 0 || $allprojectforuser
 
             $param = ((!empty($mode) && $mode == 'mine') ? '&mode=mine' : '');
             if ($search_user) {
-                $param .= '&search_user=' . ((int) $search_user);
+                $param .= '&search_user=' . ((int)$search_user);
             }
             if ($search_month) {
-                $param .= '&search_month=' . ((int) $search_month);
+                $param .= '&search_month=' . ((int)$search_month);
             }
             if ($search_year) {
-                $param .= '&search_year=' . ((int) $search_year);
+                $param .= '&search_year=' . ((int)$search_year);
             }
 
             // Project card
@@ -1140,7 +1139,7 @@ if (($id > 0 || !empty($ref)) || $projectidforalltimes > 0 || $allprojectforuser
             $projectsListId = $projectstatic->getProjectsAuthorizedForUser($user, 0, 1);
             $object->next_prev_filter = "fk_projet IN (" . $db->sanitize($projectsListId) . ")";
         } else {
-            $object->next_prev_filter = "fk_projet = " . ((int) $projectstatic->id);
+            $object->next_prev_filter = "fk_projet = " . ((int)$projectstatic->id);
         }
 
         $morehtmlref = '';
@@ -1268,10 +1267,10 @@ if (($id > 0 || !empty($ref)) || $projectidforalltimes > 0 || $allprojectforuser
         // Definition of fields for list
         $arrayfields = array();
         $arrayfields['t.element_date'] = array('label' => $langs->trans("Date"), 'checked' => 1);
-        $arrayfields['p.fk_soc'] = array('label' => $langs->trans("ThirdParty"), 'type' => 'integer:Societe:/societe/class/societe.class.php:1','checked' => 1);
+        $arrayfields['p.fk_soc'] = array('label' => $langs->trans("ThirdParty"), 'type' => 'integer:Societe:/societe/class/societe.class.php:1', 'checked' => 1);
         $arrayfields['s.name_alias'] = array('label' => $langs->trans("AliasNameShort"), 'type' => 'integer:Societe:/societe/class/societe.class.php:1');
         if ((empty($id) && empty($ref)) || !empty($projectidforalltimes)) { // Not a dedicated task
-            if (! empty($allprojectforuser)) {
+            if (!empty($allprojectforuser)) {
                 $arrayfields['p.project_ref'] = ['label' => $langs->trans('RefProject'), 'checked' => 1];
                 $arrayfields['p.project_label'] = ['label' => $langs->trans('ProjectLabel'), 'checked' => 1];
             }
@@ -1297,13 +1296,13 @@ if (($id > 0 || !empty($ref)) || $projectidforalltimes > 0 || $allprojectforuser
             $param .= '&contextpage=' . urlencode($contextpage);
         }
         if ($limit > 0 && $limit != $conf->liste_limit) {
-            $param .= '&limit=' . ((int) $limit);
+            $param .= '&limit=' . ((int)$limit);
         }
         if ($search_month > 0) {
-            $param .= '&search_month=' . urlencode((string) ($search_month));
+            $param .= '&search_month=' . urlencode((string)($search_month));
         }
         if ($search_year > 0) {
-            $param .= '&search_year=' . urlencode((string) ($search_year));
+            $param .= '&search_year=' . urlencode((string)($search_year));
         }
         if (!empty($search_user)) {     // We keep param if -1 because default value is forced to user id if not set
             $param .= '&search_user=' . urlencode($search_user);
@@ -1330,40 +1329,40 @@ if (($id > 0 || !empty($ref)) || $projectidforalltimes > 0 || $allprojectforuser
             $param .= '&search_note=' . urlencode($search_note);
         }
         if ($search_duration != '') {
-            $param .= '&amp;search_field2=' . urlencode((string) ($search_duration));
+            $param .= '&amp;search_field2=' . urlencode((string)($search_duration));
         }
         if ($optioncss != '') {
             $param .= '&optioncss=' . urlencode($optioncss);
         }
         if ($search_date_startday) {
-            $param .= '&search_date_startday=' . urlencode((string) ($search_date_startday));
+            $param .= '&search_date_startday=' . urlencode((string)($search_date_startday));
         }
         if ($search_date_startmonth) {
-            $param .= '&search_date_startmonth=' . urlencode((string) ($search_date_startmonth));
+            $param .= '&search_date_startmonth=' . urlencode((string)($search_date_startmonth));
         }
         if ($search_date_startyear) {
-            $param .= '&search_date_startyear=' . urlencode((string) ($search_date_startyear));
+            $param .= '&search_date_startyear=' . urlencode((string)($search_date_startyear));
         }
         if ($search_date_endday) {
-            $param .= '&search_date_endday=' . urlencode((string) ($search_date_endday));
+            $param .= '&search_date_endday=' . urlencode((string)($search_date_endday));
         }
         if ($search_date_endmonth) {
-            $param .= '&search_date_endmonth=' . urlencode((string) ($search_date_endmonth));
+            $param .= '&search_date_endmonth=' . urlencode((string)($search_date_endmonth));
         }
         if ($search_date_endyear) {
-            $param .= '&search_date_endyear=' . urlencode((string) ($search_date_endyear));
+            $param .= '&search_date_endyear=' . urlencode((string)($search_date_endyear));
         }
         if ($search_timespent_starthour) {
-            $param .= '&search_timespent_duration_starthour=' . urlencode((string) ($search_timespent_starthour));
+            $param .= '&search_timespent_duration_starthour=' . urlencode((string)($search_timespent_starthour));
         }
         if ($search_timespent_startmin) {
-            $param .= '&search_timespent_duration_startmin=' . urlencode((string) ($search_timespent_startmin));
+            $param .= '&search_timespent_duration_startmin=' . urlencode((string)($search_timespent_startmin));
         }
         if ($search_timespent_endhour) {
-            $param .= '&search_timespent_duration_endhour=' . urlencode((string) ($search_timespent_endhour));
+            $param .= '&search_timespent_duration_endhour=' . urlencode((string)($search_timespent_endhour));
         }
         if ($search_timespent_endmin) {
-            $param .= '&search_timespent_duration_endmin=' . urlencode((string) ($search_timespent_endmin));
+            $param .= '&search_timespent_duration_endmin=' . urlencode((string)($search_timespent_endmin));
         }
 
         /*
@@ -1371,13 +1370,13 @@ if (($id > 0 || !empty($ref)) || $projectidforalltimes > 0 || $allprojectforuser
          include DOL_DOCUMENT_ROOT.'/core/tpl/extrafields_list_search_param.tpl.php';
          */
         if ($id) {
-            $param .= '&id=' . urlencode((string) ($id));
+            $param .= '&id=' . urlencode((string)($id));
         }
         if ($projectid) {
-            $param .= '&projectid=' . urlencode((string) ($projectid));
+            $param .= '&projectid=' . urlencode((string)($projectid));
         }
         if ($withproject) {
-            $param .= '&withproject=' . urlencode((string) ($withproject));
+            $param .= '&withproject=' . urlencode((string)($withproject));
         }
         // Add $param from hooks
         $parameters = array('param' => &$param);
@@ -1600,7 +1599,7 @@ if (($id > 0 || !empty($ref)) || $projectidforalltimes > 0 || $allprojectforuser
         $sql .= " AND p.entity IN (" . getEntity('project') . ")";
         if (empty($projectidforalltimes) && empty($allprojectforuser)) {
             // Limit on one task
-            $sql .= " AND t.fk_element =" . ((int) $object->id);
+            $sql .= " AND t.fk_element =" . ((int)$object->id);
         } elseif (!empty($projectidforalltimes)) {
             // Limit on one project
             $sql .= " AND pt.fk_projet IN (" . $db->sanitize($projectidforalltimes) . ")";
@@ -1610,7 +1609,7 @@ if (($id > 0 || !empty($ref)) || $projectidforalltimes > 0 || $allprojectforuser
                 $search_user = $user->id;
             }
             if ($search_user > 0) {
-                $sql .= " AND t.fk_user = " . ((int) $search_user);
+                $sql .= " AND t.fk_user = " . ((int)$search_user);
             }
         }
 
@@ -1832,7 +1831,7 @@ if (($id > 0 || !empty($ref)) || $projectidforalltimes > 0 || $allprojectforuser
             print '<td class="nowraponall">';
             $durationtouse = (GETPOST('timespent_duration') ? GETPOST('timespent_duration') : '');
             if (GETPOSTISSET('timespent_durationhour') || GETPOSTISSET('timespent_durationmin')) {
-                $durationtouse = ((int) GETPOST('timespent_durationhour') * 3600 + (int) GETPOST('timespent_durationmin') * 60);
+                $durationtouse = ((int)GETPOST('timespent_durationhour') * 3600 + (int)GETPOST('timespent_durationmin') * 60);
             }
             print $form->select_duration('timespent_duration', $durationtouse, 0, 'text');
             print '</td>';
@@ -2090,7 +2089,7 @@ if (($id > 0 || !empty($ref)) || $projectidforalltimes > 0 || $allprojectforuser
         $tmpinvoice = new Facture($db);
 
         if ($page) {
-            $param .= '&page=' . ((int) $page);
+            $param .= '&page=' . ((int)$page);
         }
         $param .= '&sortfield=' . urlencode($sortfield) . '&sortorder=' . urlencode($sortorder);
 

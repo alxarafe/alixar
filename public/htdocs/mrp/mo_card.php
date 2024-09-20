@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017-2020 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2017-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Bom\Classes\BOMLine;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Mrp\Classes\MoLine;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *    \file       htdocs/mrp/mo_card.php
  *    \ingroup    mrp
@@ -26,17 +40,10 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp_mo.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bom/lib/bom.lib.php';
 
 if (isModEnabled('workstation')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/class/workstation.class.php';
 }
 
 
@@ -54,7 +61,7 @@ $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'mo
 $backtopage = GETPOST('backtopage', 'alpha');
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');
 $TBomLineId = GETPOST('bomlineid', 'array');
-$lineid   = GETPOSTINT('lineid');
+$lineid = GETPOSTINT('lineid');
 $socid = GETPOSTINT("socid");
 
 // Initialize technical objects
@@ -173,7 +180,7 @@ if (empty($reshook)) {
             $res = $object->add_object_linked('mo', $mo_parent->id);
         }
 
-        header("Location: " . dol_buildpath('/mrp/mo_card.php?id=' . ((int) $mo_parent->id), 1));
+        header("Location: " . dol_buildpath('/mrp/mo_card.php?id=' . ((int)$mo_parent->id), 1));
         exit;
     } elseif ($action == 'confirm_cancel' && $confirm == 'yes' && !empty($permissiontoadd)) {
         $also_cancel_consumed_and_produced_lines = (GETPOST('alsoCancelConsumedAndProducedLines', 'alpha') ? 1 : 0);
@@ -315,8 +322,6 @@ if (empty($reshook)) {
 }
 
 
-
-
 /*
  * View
  */
@@ -328,7 +333,6 @@ $formproject = new FormProjets($db);
 $title = $langs->trans('ManufacturingOrder') . " - " . $langs->trans("Card");
 
 llxHeader('', $title, '');
-
 
 
 // Part to create
@@ -368,13 +372,12 @@ if ($action == 'create') {
 
     mrpCollapseBomManagement(); ?>
     <script>
-         $(document).ready(function () {
-             jQuery('#fk_bom').change(function() {
-                console.log('We change value of BOM with BOM of id '+jQuery('#fk_bom').val());
-                if (jQuery('#fk_bom').val() > 0)
-                {
+        $(document).ready(function () {
+            jQuery('#fk_bom').change(function () {
+                console.log('We change value of BOM with BOM of id ' + jQuery('#fk_bom').val());
+                if (jQuery('#fk_bom').val() > 0) {
                     // Redirect to page with fk_bom set
-                    window.location.href = '<?php echo $_SERVER["PHP_SELF"] ?>?action=create&token=<?php echo newToken(); ?>&fk_bom='+jQuery('#fk_bom').val();
+                    window.location.href = '<?php echo $_SERVER["PHP_SELF"] ?>?action=create&token=<?php echo newToken(); ?>&fk_bom=' + jQuery('#fk_bom').val();
                     /*
                     $.getJSON('<?php echo DOL_URL_ROOT ?>/mrp/ajax/ajax_bom.php?action=getBoms&idbom='+jQuery('#fk_bom').val(), function(data) {
                         console.log(data);
@@ -402,11 +405,10 @@ if ($action == 'create') {
                             console.log("Failed to get BOM");
                         }
                     });*/
-                }
-                else if (jQuery('#fk_bom').val() < 0) {
+                } else if (jQuery('#fk_bom').val() < 0) {
                     // Redirect to page with all fields defined except fk_bom set
                     console.log(jQuery('#fk_product').val());
-                    window.location.href = '<?php echo $_SERVER["PHP_SELF"] ?>?action=create&token=<?php echo newToken(); ?>&qty='+jQuery('#qty').val()+'&mrptype='+jQuery('#mrptype').val()+'&fk_product='+jQuery('#fk_product').val()+'&label='+jQuery('#label').val()+'&fk_project='+jQuery('#fk_project').val()+'&fk_warehouse='+jQuery('#fk_warehouse').val();
+                    window.location.href = '<?php echo $_SERVER["PHP_SELF"] ?>?action=create&token=<?php echo newToken(); ?>&qty=' + jQuery('#qty').val() + '&mrptype=' + jQuery('#mrptype').val() + '&fk_product=' + jQuery('#fk_product').val() + '&label=' + jQuery('#label').val() + '&fk_project=' + jQuery('#fk_project').val() + '&fk_warehouse=' + jQuery('#fk_warehouse').val();
                     /*
                     $('#qty').val('');
                     $("#fk_product").val('');
@@ -417,7 +419,7 @@ if ($action == 'create') {
                     $('#fk_warehouse').trigger('change'); // Notify any JS components that the value changed
                     */
                 }
-             });
+            });
 
             //jQuery('#fk_bom').trigger('change');
         })
@@ -545,8 +547,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmValidateMo', $numref);
         /*if (isModEnabled('notification'))
          {
-         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-         $notify = new Notify($db);
+          $notify = new Notify($db);
          $text .= '<br>';
          $text .= $notify->confirmMessage('BOM_VALIDATE', $object->socid, $object);
          }*/
@@ -554,16 +555,15 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $formquestion = array();
         if (isModEnabled('mrp')) {
             $langs->load("mrp");
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
             $formproduct = new FormProduct($db);
             $forcecombo = 0;
             if ($conf->browser->name == 'ie') {
                 $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
             }
             $formquestion = array(
-            // 'text' => $langs->trans("ConfirmClone"),
-            // array('type' => 'checkbox', 'name' => 'clone_content', 'label' => $langs->trans("CloneMainAttributes"), 'value' => 1),
-            // array('type' => 'checkbox', 'name' => 'update_prices', 'label' => $langs->trans("PuttingPricesUpToDate"), 'value' => 1),
+                // 'text' => $langs->trans("ConfirmClone"),
+                // array('type' => 'checkbox', 'name' => 'clone_content', 'label' => $langs->trans("CloneMainAttributes"), 'value' => 1),
+                // array('type' => 'checkbox', 'name' => 'update_prices', 'label' => $langs->trans("PuttingPricesUpToDate"), 'value' => 1),
             );
         }
 
@@ -867,7 +867,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/mrp/mo_agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
         $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element, $socid, 1, '', $MAXEVENT, '', $morehtmlcenter);
 

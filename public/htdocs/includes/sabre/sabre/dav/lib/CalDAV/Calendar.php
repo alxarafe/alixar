@@ -185,7 +185,7 @@ class Calendar implements ICalendar, DAV\IProperties, DAV\Sync\ISyncCollection, 
      *
      * The contents of the new file must be a valid ICalendar string.
      *
-     * @param string   $name
+     * @param string $name
      * @param resource $data
      *
      * @return string|null
@@ -439,8 +439,8 @@ class Calendar implements ICalendar, DAV\IProperties, DAV\Sync\ISyncCollection, 
      * cannot truncate according to the limit, so it may not be just suggestive.
      *
      * @param string $syncToken
-     * @param int    $syncLevel
-     * @param int    $limit
+     * @param int $syncLevel
+     * @param int $limit
      *
      * @return array|null
      */

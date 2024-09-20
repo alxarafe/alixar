@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2007-2018 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2018      All-3kcis       		 <contact@all-3kcis.fr>
- * Copyright (C) 2021      Noé Cendrier         <noe.cendrier@altairis.fr>
+/* Copyright (C) 2007-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018       All-3kcis       		    <contact@all-3kcis.fr>
+ * Copyright (C) 2021       Noé Cendrier                <noe.cendrier@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
+
 /**
  *      \file       product/stock/productlot_card.php
  *      \ingroup    stock
@@ -28,13 +35,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
 
 global $conf, $db, $langs, $user;
 
@@ -155,7 +157,7 @@ if (empty($reshook)) {
 
     $backurlforlist = dol_buildpath('/product/stock/productlot_list.php', 1);
 
-    if ($action == 'seteatby' && $user->hasRight('stock', 'creer') && ! GETPOST('cancel', 'alpha')) {
+    if ($action == 'seteatby' && $user->hasRight('stock', 'creer') && !GETPOST('cancel', 'alpha')) {
         $newvalue = dol_mktime(12, 0, 0, GETPOSTINT('eatbymonth'), GETPOSTINT('eatbyday'), GETPOSTINT('eatbyyear'));
 
         // check parameters
@@ -180,7 +182,7 @@ if (empty($reshook)) {
         }
     }
 
-    if ($action == 'setsellby' && $user->hasRight('stock', 'creer') && ! GETPOST('cancel', 'alpha')) {
+    if ($action == 'setsellby' && $user->hasRight('stock', 'creer') && !GETPOST('cancel', 'alpha')) {
         $newvalue = dol_mktime(12, 0, 0, GETPOSTINT('sellbymonth'), GETPOSTINT('sellbyday'), GETPOSTINT('sellbyyear'));
 
         // check parameters
@@ -205,7 +207,7 @@ if (empty($reshook)) {
         }
     }
 
-    if ($action == 'seteol_date' && $user->hasRight('stock', 'creer') && ! GETPOST('cancel', 'alpha')) {
+    if ($action == 'seteol_date' && $user->hasRight('stock', 'creer') && !GETPOST('cancel', 'alpha')) {
         $newvalue = dol_mktime(12, 0, 0, GETPOSTINT('eol_datemonth'), GETPOSTINT('eol_dateday'), GETPOSTINT('eol_dateyear'));
         $result = $object->setValueFrom('eol_date', $newvalue, '', null, 'date', '', $user, 'PRODUCTLOT_MODIFY');
         if ($result < 0) {
@@ -216,7 +218,7 @@ if (empty($reshook)) {
         }
     }
 
-    if ($action == 'setmanufacturing_date' && $user->hasRight('stock', 'creer') && ! GETPOST('cancel', 'alpha')) {
+    if ($action == 'setmanufacturing_date' && $user->hasRight('stock', 'creer') && !GETPOST('cancel', 'alpha')) {
         $newvalue = dol_mktime(12, 0, 0, GETPOSTINT('manufacturing_datemonth'), GETPOSTINT('manufacturing_dateday'), GETPOSTINT('manufacturing_dateyear'));
         $result = $object->setValueFrom('manufacturing_date', $newvalue, '', null, 'date', '', $user, 'PRODUCTLOT_MODIFY');
         if ($result < 0) {
@@ -227,7 +229,7 @@ if (empty($reshook)) {
         }
     }
 
-    if ($action == 'setscrapping_date' && $user->hasRight('stock', 'creer') && ! GETPOST('cancel', 'alpha')) {
+    if ($action == 'setscrapping_date' && $user->hasRight('stock', 'creer') && !GETPOST('cancel', 'alpha')) {
         $newvalue = dol_mktime(12, 0, 0, GETPOSTINT('scrapping_datemonth'), GETPOSTINT('scrapping_dateday'), GETPOSTINT('scrapping_dateyear'));
         $result = $object->setValueFrom('scrapping_date', $newvalue, '', null, 'date', '', $user, 'PRODUCTLOT_MODIFY');
         if ($result < 0) {
@@ -249,7 +251,7 @@ if (empty($reshook)) {
         }
     } */
 
-    if ($action == 'setqc_frequency' && $user->hasRight('stock', 'creer') && ! GETPOST('cancel', 'alpha')) {
+    if ($action == 'setqc_frequency' && $user->hasRight('stock', 'creer') && !GETPOST('cancel', 'alpha')) {
         $result = $object->setValueFrom('qc_frequency', GETPOST('qc_frequency'), '', null, 'int', '', $user, 'PRODUCT_MODIFY');
         if ($result < 0) { // Prévoir un test de format de durée
             setEventMessages($object->error, null, 'errors');
@@ -383,9 +385,6 @@ if (empty($reshook)) {
     $trackid = 'productlot' . $object->id;
     include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
 }
-
-
-
 
 /*
  * View
@@ -584,7 +583,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 
-
 /*
  * Generated documents
  */
@@ -610,7 +608,6 @@ if ($action != 'presend') {
 
     $MAXEVENT = 10;
 
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
     $formactions = new FormActions($db);
     $somethingshown = $formactions->showactions($object, 'productlot', 0, 1, '', $MAXEVENT);
 

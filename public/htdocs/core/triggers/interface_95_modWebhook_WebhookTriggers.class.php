@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2022   SuperAdmin      <test@dolibarr.com>
- * Copyright (C) 2023	William Mead	<william.mead@manchenumerique.fr>
+/* Copyright (C) 2022       SuperAdmin                  <test@dolibarr.com>
+ * Copyright (C) 2023	    William Mead	            <william.mead@manchenumerique.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\WebHook\Classes\Target;
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  * \file    core/triggers/interface_99_modWebhook_WebhookTriggers.class.php
@@ -33,7 +40,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/dolibarrtriggers.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/webhook/class/target.class.php';
 
 /**
  *  Class of triggers for Webhook module
@@ -58,11 +64,11 @@ class InterfaceWebhookTriggers extends DolibarrTriggers
      * Function called when a Dolibarr business event is done.
      * All functions "runTrigger" are triggered if file of function is inside directory core/triggers.
      *
-     * @param string        $action     Event action code
-     * @param CommonObject  $object     Object
-     * @param User          $user       Object user
-     * @param Translate     $langs      Object langs
-     * @param Conf          $conf       Object conf
+     * @param string $action Event action code
+     * @param CommonObject $object Object
+     * @param User $user Object user
+     * @param Translate $langs Object langs
+     * @param Conf $conf Object conf
      * @return int                      Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)

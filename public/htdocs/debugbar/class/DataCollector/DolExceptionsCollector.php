@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2023   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2023       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,24 +17,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use DebugBar\DataCollector\ExceptionsCollector;
+
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolexceptionsCollector.php
  *  \brief      Class for debugbar collection
  *  \ingroup    debugbar
  */
 
-use DebugBar\DataCollector\ExceptionsCollector;
-
 /**
  * DolExceptionsCollector class
  */
-
 class DolExceptionsCollector extends ExceptionsCollector
 {
     /**
      *  Return widget settings
      *
-     *  @return    array       Array
+     * @return    array       Array
      */
     public function getWidgets()
     {

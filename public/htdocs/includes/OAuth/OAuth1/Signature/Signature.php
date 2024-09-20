@@ -49,8 +49,8 @@ class Signature implements SignatureInterface
 
     /**
      * @param UriInterface $uri
-     * @param array        $params
-     * @param string       $method
+     * @param array $params
+     * @param string $method
      *
      * @return string
      */

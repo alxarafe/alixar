@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2013-2024  Alexandre Spangaro  <aspangaro@easya.solutions>
+/* Copyright (C) 2013-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,10 +23,12 @@
  *  \brief      Setup page to configure fiscal year
  */
 
+use Dolibarr\Code\Core\Classes\Fiscalyear;
+use Dolibarr\Code\Core\Classes\Form;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/fiscalyear.class.php';
 
 $action = GETPOST('action', 'aZ09');
 

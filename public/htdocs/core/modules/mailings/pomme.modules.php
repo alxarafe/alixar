@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2011 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin       <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,14 +19,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Mailing\Classes\MailingTargets;
+
 /**
  *  \file       htdocs/core/modules/mailings/pomme.modules.php
  *  \ingroup    mailing
  *  \brief      File of class to offer a selector of emailing targets of users.
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/modules/mailings/modules_mailings.php';
-
 
 /**
  *  Class to offer a selector of emailing targets with Rule 'Pomme'.
@@ -48,7 +47,7 @@ class mailing_pomme extends MailingTargets
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -62,7 +61,7 @@ class mailing_pomme extends MailingTargets
      *  array of SQL request that returns two field:
      *  One called "label", One called "nb".
      *
-     *  @return     string[]        Array with SQL requests
+     * @return     string[]        Array with SQL requests
      */
     public function getSqlArrayForStats()
     {
@@ -88,8 +87,8 @@ class mailing_pomme extends MailingTargets
      *  For example if this selector is used to extract 500 different
      *  emails from a text file, this function must return 500.
      *
-     *  @param      string          $sql        SQL request to use to count
-     *  @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
+     * @param string $sql SQL request to use to count
+     * @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
      */
     public function getNbOfRecipients($sql = '')
     {
@@ -100,7 +99,7 @@ class mailing_pomme extends MailingTargets
         $sql .= " WHERE u.email != ''"; // u.email IS NOT NULL est implicit dans ce test
         $sql .= " AND u.entity IN (0," . $conf->entity . ")";
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = u.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = u.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
 
         // La requete doit retourner un champ "nb" pour etre comprise par parent::getNbOfRecipients
@@ -111,7 +110,7 @@ class mailing_pomme extends MailingTargets
     /**
      *  Affiche formulaire de filtre qui apparait dans page de selection des destinataires de mailings
      *
-     *  @return     string      Retourne zone select
+     * @return     string      Retourne zone select
      */
     public function formFilter()
     {
@@ -142,8 +141,8 @@ class mailing_pomme extends MailingTargets
     /**
      *  Renvoie url lien vers fiche de la source du destinataire du mailing
      *
-     *  @param  int     $id     ID
-     *  @return     string      Url lien
+     * @param int $id ID
+     * @return     string      Url lien
      */
     public function url($id)
     {
@@ -151,16 +150,17 @@ class mailing_pomme extends MailingTargets
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Ajoute destinataires dans table des cibles
      *
-     *  @param  int     $mailing_id     Id of emailing
-     *  @return int                     Return integer < 0 si erreur, nb ajout si ok
+     * @param int $mailing_id Id of emailing
+     * @return int                     Return integer < 0 si erreur, nb ajout si ok
      */
     public function add_to_target($mailing_id)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs;
         $langs->load("companies");
 
@@ -172,7 +172,7 @@ class mailing_pomme extends MailingTargets
         $sql .= " FROM " . MAIN_DB_PREFIX . "user as u";
         $sql .= " WHERE u.email <> ''"; // u.email IS NOT NULL est implicit dans ce test
         $sql .= " AND u.entity IN (0," . $conf->entity . ")";
-        $sql .= " AND u.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int) $mailing_id) . ")";
+        $sql .= " AND u.email NOT IN (SELECT email FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE fk_mailing=" . ((int)$mailing_id) . ")";
         if (GETPOSTISSET("filter") && GETPOST("filter") == '1') {
             $sql .= " AND u.statut=1";
         }
@@ -186,7 +186,7 @@ class mailing_pomme extends MailingTargets
             $sql .= " AND u.employee=0";
         }
         if (empty($this->evenunsubscribe)) {
-            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = u.email and mu.entity = " . ((int) $conf->entity) . ")";
+            $sql .= " AND NOT EXISTS (SELECT rowid FROM " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu WHERE mu.email = u.email and mu.entity = " . ((int)$conf->entity) . ")";
         }
         $sql .= " ORDER BY u.email";
 

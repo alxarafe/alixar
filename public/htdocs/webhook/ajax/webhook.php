@@ -51,7 +51,6 @@ if (!defined('NOBROWSERNOTIF')) {
     define('NOBROWSERNOTIF', '1');
 }
 include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/webhook/class/target.class.php';
 
 $action = GETPOST('action', 'aZ09');
 $triggercode = GETPOST('triggercode');
@@ -61,13 +60,11 @@ if (empty($user->admin)) {
     accessforbidden();
 }
 
-
 /*
  * Actions
  */
 
 // None
-
 
 /*
  * View
@@ -130,7 +127,7 @@ if ($action == "getjsonformtrigger") {
 /**
  * Find and init a specimen for the given object type
  *
- * @param   string      $objecttype     Object type to init as a specimen
+ * @param string $objecttype Object type to init as a specimen
  * @return object|false
  */
 function findobjecttosend($objecttype)

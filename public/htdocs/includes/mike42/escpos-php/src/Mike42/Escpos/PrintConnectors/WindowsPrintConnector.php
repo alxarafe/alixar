@@ -109,39 +109,39 @@ class WindowsPrintConnector implements PrintConnector
      */
     public function __construct($dest)
     {
-        $this -> platform = $this -> getCurrentPlatform();
-        $this -> isLocal = false;
-        $this -> buffer = null;
-        $this -> userName = null;
-        $this -> userPassword = null;
-        $this -> workgroup = null;
+        $this->platform = $this->getCurrentPlatform();
+        $this->isLocal = false;
+        $this->buffer = null;
+        $this->userName = null;
+        $this->userPassword = null;
+        $this->workgroup = null;
         if (preg_match(self::REGEX_LOCAL, $dest) == 1) {
             // Straight to LPT1, COM1 or other local port. Allowed only if we are actually on windows.
-            if ($this -> platform !== self::PLATFORM_WIN) {
+            if ($this->platform !== self::PLATFORM_WIN) {
                 throw new BadMethodCallException("WindowsPrintConnector can only be " .
                     "used to print to a local printer ('" . $dest . "') on a Windows computer.");
             }
-            $this -> isLocal = true;
-            $this -> hostname = null;
-            $this -> printerName = $dest;
+            $this->isLocal = true;
+            $this->hostname = null;
+            $this->printerName = $dest;
         } elseif (preg_match(self::REGEX_SMB, $dest) == 1) {
             // Connect to samba share, eg smb://host/printer
             $part = parse_url($dest);
-            $this -> hostname = $part['host'];
+            $this->hostname = $part['host'];
             /* Printer name and optional workgroup */
             $path = ltrim($part['path'], '/');
             if (strpos($path, "/") !== false) {
                 $pathPart = explode("/", $path);
-                $this -> workgroup = $pathPart[0];
-                $this -> printerName = $pathPart[1];
+                $this->workgroup = $pathPart[0];
+                $this->printerName = $pathPart[1];
             } else {
-                $this -> printerName = $path;
+                $this->printerName = $path;
             }
             /* Username and password if set */
             if (isset($part['user'])) {
-                $this -> userName = $part['user'];
+                $this->userName = $part['user'];
                 if (isset($part['pass'])) {
-                    $this -> userPassword = $part['pass'];
+                    $this->userPassword = $part['pass'];
                 }
             }
         } elseif (preg_match(self::REGEX_PRINTERNAME, $dest) == 1) {
@@ -150,32 +150,32 @@ class WindowsPrintConnector implements PrintConnector
             if (!$hostname) {
                 $hostname = "localhost";
             }
-            $this -> hostname = $hostname;
-            $this -> printerName = $dest;
+            $this->hostname = $hostname;
+            $this->printerName = $dest;
         } else {
             throw new BadMethodCallException("Printer '" . $dest . "' is not a valid " .
                 "printer name. Use local port (LPT1, COM1, etc) or smb://computer/printer notation.");
         }
-        $this -> buffer = [];
+        $this->buffer = [];
     }
 
     public function __destruct()
     {
-        if ($this -> buffer !== null) {
+        if ($this->buffer !== null) {
             trigger_error("Print connector was not finalized. Did you forget to close the printer?", E_USER_NOTICE);
         }
     }
 
     public function finalize()
     {
-        $data = implode($this -> buffer);
-        $this -> buffer = null;
-        if ($this -> platform == self::PLATFORM_WIN) {
-            $this -> finalizeWin($data);
-        } elseif ($this -> platform == self::PLATFORM_LINUX) {
-            $this -> finalizeLinux($data);
+        $data = implode($this->buffer);
+        $this->buffer = null;
+        if ($this->platform == self::PLATFORM_WIN) {
+            $this->finalizeWin($data);
+        } elseif ($this->platform == self::PLATFORM_LINUX) {
+            $this->finalizeLinux($data);
         } else {
-            $this -> finalizeMac($data);
+            $this->finalizeMac($data);
         }
     }
 
@@ -188,10 +188,10 @@ class WindowsPrintConnector implements PrintConnector
     protected function finalizeLinux($data)
     {
         /* Non-Windows samba printing */
-        $device = "//" . $this -> hostname . "/" . $this -> printerName;
-        if ($this -> userName !== null) {
-            $user = ($this -> workgroup != null ? ($this -> workgroup . "\\") : "") . $this -> userName;
-            if ($this -> userPassword == null) {
+        $device = "//" . $this->hostname . "/" . $this->printerName;
+        if ($this->userName !== null) {
+            $user = ($this->workgroup != null ? ($this->workgroup . "\\") : "") . $this->userName;
+            if ($this->userPassword == null) {
                 // No password
                 $command = sprintf(
                     "smbclient %s -U %s -c %s -N -m SMB2",
@@ -205,7 +205,7 @@ class WindowsPrintConnector implements PrintConnector
                 $command = sprintf(
                     "smbclient %s %s -U %s -c %s -m SMB2",
                     escapeshellarg($device),
-                    escapeshellarg($this -> userPassword),
+                    escapeshellarg($this->userPassword),
                     escapeshellarg($user),
                     escapeshellarg("print -")
                 );
@@ -226,7 +226,7 @@ class WindowsPrintConnector implements PrintConnector
             );
             $redactedCommand = $command;
         }
-        $retval = $this -> runCommand($command, $outputStr, $errorStr, $data);
+        $retval = $this->runCommand($command, $outputStr, $errorStr, $data);
         if ($retval != 0) {
             throw new Exception("Failed to print. Command \"$redactedCommand\" " .
                 "failed with exit code $retval: " . trim($errorStr) . trim($outputStr));
@@ -252,13 +252,13 @@ class WindowsPrintConnector implements PrintConnector
     protected function finalizeWin($data)
     {
         /* Windows-friendly printing of all sorts */
-        if (!$this -> isLocal) {
+        if (!$this->isLocal) {
             /* Networked printing */
-            $device = "\\\\" . $this -> hostname . "\\" . $this -> printerName;
-            if ($this -> userName !== null) {
+            $device = "\\\\" . $this->hostname . "\\" . $this->printerName;
+            if ($this->userName !== null) {
                 /* Log in */
-                $user = "/user:" . ($this -> workgroup != null ? ($this -> workgroup . "\\") : "") . $this -> userName;
-                if ($this -> userPassword == null) {
+                $user = "/user:" . ($this->workgroup != null ? ($this->workgroup . "\\") : "") . $this->userName;
+                if ($this->userPassword == null) {
                     $command = sprintf(
                         "net use %s %s",
                         escapeshellarg($device),
@@ -270,7 +270,7 @@ class WindowsPrintConnector implements PrintConnector
                         "net use %s %s %s",
                         escapeshellarg($device),
                         escapeshellarg($user),
-                        escapeshellarg($this -> userPassword)
+                        escapeshellarg($this->userPassword)
                     );
                     $redactedCommand = sprintf(
                         "net use %s %s %s",
@@ -279,7 +279,7 @@ class WindowsPrintConnector implements PrintConnector
                         escapeshellarg("*****")
                     );
                 }
-                $retval = $this -> runCommand($command, $outputStr, $errorStr);
+                $retval = $this->runCommand($command, $outputStr, $errorStr);
                 if ($retval != 0) {
                     throw new Exception("Failed to print. Command \"$redactedCommand\" " .
                         "failed with exit code $retval: " . trim($errorStr));
@@ -291,14 +291,14 @@ class WindowsPrintConnector implements PrintConnector
                 throw new Exception("Failed to create temp file for printing.");
             }
             file_put_contents($filename, $data);
-            if (!$this -> runCopy($filename, $device)) {
+            if (!$this->runCopy($filename, $device)) {
                 throw new Exception("Failed to copy file to printer");
             }
             unlink($filename);
         } else {
             /* Drop data straight on the printer */
-            if (!$this -> runWrite($data, $this -> printerName)) {
-                throw new Exception("Failed to write file to printer at " . $this -> printerName);
+            if (!$this->runWrite($data, $this->printerName)) {
+                throw new Exception("Failed to write file to printer at " . $this->printerName);
             }
         }
     }
@@ -338,9 +338,9 @@ class WindowsPrintConnector implements PrintConnector
     protected function runCommand($command, &$outputStr, &$errorStr, $inputStr = null)
     {
         $descriptors = [
-                0 => ["pipe", "r"],
-                1 => ["pipe", "w"],
-                2 => ["pipe", "w"],
+            0 => ["pipe", "r"],
+            1 => ["pipe", "w"],
+            2 => ["pipe", "w"],
         ];
         $process = proc_open($command, $descriptors, $fd);
         if (is_resource($process)) {
@@ -381,7 +381,7 @@ class WindowsPrintConnector implements PrintConnector
      *
      * @param string $data Data to print
      * @param string $filename Destination file
-         * @return boolean True if write was successful, false otherwise
+     * @return boolean True if write was successful, false otherwise
      */
     protected function runWrite($data, $filename)
     {
@@ -390,6 +390,6 @@ class WindowsPrintConnector implements PrintConnector
 
     public function write($data)
     {
-        $this -> buffer[] = $data;
+        $this->buffer[] = $data;
     }
 }

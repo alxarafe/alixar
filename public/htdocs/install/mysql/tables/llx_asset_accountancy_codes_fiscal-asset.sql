@@ -21,15 +21,16 @@
 -- INSERT INTO llx_asset_accountancy_codes_fiscal (fk_asset, fk_asset_model, accelerated_depreciation, endowment_accelerated_depreciation, provision_accelerated_depreciation, tms, fk_user_modif) VALUES
 -- (1, NULL, NULL, NULL, NULL, '2022-01-18 14:20:20', 1);
 
-CREATE TABLE llx_asset_accountancy_codes_fiscal(
-    rowid									integer			AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    fk_asset								integer,
-    fk_asset_model							integer,
+CREATE TABLE llx_asset_accountancy_codes_fiscal
+(
+    rowid                              integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    fk_asset                           integer,
+    fk_asset_model                     integer,
 
-    accelerated_depreciation				varchar(32),
-    endowment_accelerated_depreciation		varchar(32),
-    provision_accelerated_depreciation		varchar(32),
+    accelerated_depreciation           varchar(32),
+    endowment_accelerated_depreciation varchar(32),
+    provision_accelerated_depreciation varchar(32),
 
-    tms                                     timestamp       DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_modif							integer
+    tms                                timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_user_modif                      integer
 ) ENGINE=innodb;

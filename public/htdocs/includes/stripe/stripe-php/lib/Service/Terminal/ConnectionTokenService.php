@@ -14,9 +14,9 @@ class ConnectionTokenService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\ConnectionToken
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\ConnectionToken
      */
     public function create($params = null, $opts = null)
     {

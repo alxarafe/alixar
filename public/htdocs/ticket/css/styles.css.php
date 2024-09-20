@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2018       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -62,7 +62,8 @@ if (empty($dolibarr_nocache)) {
 ?>
 
 html {
-    min-height: 100%; height: 100%;
+    min-height: 100%;
+    height: 100%;
 }
 
 html {
@@ -77,15 +78,15 @@ if (getDolGlobalString('TICKET_SHOW_MODULE_LOGO')) {
 div.ticketform {
     font-family: arial;
     position: static;
-/*  padding: 2em 1em;
-    overflow-x: auto;
-    border: 2px solid rgb(153, 153, 153);
-    background-color: rgb(255, 255, 255);
-    box-shadow: 2px 2px 2px rgb(245, 245, 245);
-    border-radius: 10px 10px 10px 10px;
-    margin: 1.5em;
-    background : #ffffff;
-*/
+    /*  padding: 2em 1em;
+        overflow-x: auto;
+        border: 2px solid rgb(153, 153, 153);
+        background-color: rgb(255, 255, 255);
+        box-shadow: 2px 2px 2px rgb(245, 245, 245);
+        border-radius: 10px 10px 10px 10px;
+        margin: 1.5em;
+        background : #ffffff;
+    */
     text-align: center;
 }
 
@@ -99,14 +100,13 @@ div.ticketform .index_create, div.ticketform .index_display {
     text-transform: uppercase;
 }
 
-#form_create_ticket, #form_view_ticket
-{
+#form_create_ticket, #form_view_ticket {
     margin-left: 10px;
     margin-right: 10px;
-    padding-left:1em;
-    padding-right:1em;
-    padding-top:1.5em;
-    padding-bottom:12px;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 1.5em;
+    padding-bottom: 12px;
 
     border: 1px solid #C0C0C0;
     background-color: #E0E0E0;
@@ -116,19 +116,21 @@ div.ticketform .index_create, div.ticketform .index_display {
     box-shadow: 4px 4px 4px #DDD;
 
     border-radius: 8px;
-    border:solid 1px rgba(168,168,168,.4);
-    border-top:solid 1px f8f8f8;
+    border: solid 1px rgba(168, 168, 168, .4);
+    border-top: solid 1px f8f8f8;
     background-color: #f8f8f8;
 }
 
-#form_create_ticket input.text, #form_create_ticket textarea { width:450px;}
+#form_create_ticket input.text, #form_create_ticket textarea {
+    width: 450px;
+}
 
-@media only screen and (max-width: 767px)
-{
-    #form_create_ticket input.text, #form_create_ticket textarea { width: unset;}
+@media only screen and (max-width: 767px) {
+    #form_create_ticket input.text, #form_create_ticket textarea {
+        width: unset;
+    }
 
-    #form_create_ticket, #form_view_ticket
-    {
+    #form_create_ticket, #form_view_ticket {
         margin-left: 0;
         margin-right: 0;
     }

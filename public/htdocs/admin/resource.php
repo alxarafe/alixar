@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2016  Florian HENRY    <florian.henry@atm-consulting.fr>
+/* Copyright (C) 2016       Florian HENRY               <florian.henry@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  *
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  * \file        htdocs/admin/resource.php
  * \ingroup     resource
@@ -31,7 +33,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ajax.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/resource.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/resource/class/html.formresource.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "resource"));

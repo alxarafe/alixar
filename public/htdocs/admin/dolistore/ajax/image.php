@@ -42,9 +42,9 @@ top_httphead('image');
 $dolistore = new Dolistore();
 
 $id_product = GETPOSTINT('id_product');
-$id_image   = GETPOSTINT('id_image');
+$id_image = GETPOSTINT('id_image');
 // quality : image resize with this in the URL : "cart_default", "home_default", "large_default", "medium_default", "small_default", "thickbox_default"
-$quality    = GETPOST('quality', 'alpha');
+$quality = GETPOST('quality', 'alpha');
 
 try {
     $url = getDolGlobalString('MAIN_MODULE_DOLISTORE_API_SRV') . '/api/images/products/' . $id_product . '/' . $id_image . '/' . $quality;

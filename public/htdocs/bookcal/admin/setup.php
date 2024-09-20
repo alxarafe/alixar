@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2022 Alice Adminson <aadminson@example.com>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022       Alice Adminson              <aadminson@example.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  *
@@ -18,6 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormSetup;
 
 /**
  * \file    htdocs/bookcal/admin/setup.php
@@ -56,29 +59,21 @@ $label = GETPOST('label', 'alpha');
 $scandir = GETPOST('scan_dir', 'alpha');
 $type = 'myobject';
 
-
 $error = 0;
 $setupnotempty = 0;
 
 // Set this to 1 to use the factory to manage constants. Warning, the generated module will be compatible with version v15+ only
 $useFormSetup = 1;
 
-if (!class_exists('FormSetup')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formsetup.class.php';
-}
-
 $formSetup = new FormSetup($db);
-
 
 // Setup conf BOOKCAL_PUBLIC_INTERFACE_TOPIC
 $item = $formSetup->newItem('BOOKCAL_PUBLIC_INTERFACE_TOPIC');
 $item->defaultFieldValue = 'MyBigCompany public interface for Bookcal';
 
-$setupnotempty = + count($formSetup->items);
+$setupnotempty = +count($formSetup->items);
 
-
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
-
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 /*
  * Actions
@@ -152,7 +147,6 @@ if ($action == 'updateMask') {
         dolibarr_del_const($db, $constforval, $conf->entity);
     }
 }
-
 
 
 /*

@@ -1,9 +1,10 @@
 <?php
 
-/* Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2018      Alexandre Spangaro   <aspangaro@open-dsi.fr>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountancySystem;
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\Misc;
+
 /**
  * \file    htdocs/asset/admin/setup.php
  * \ingroup asset
@@ -26,6 +39,7 @@
  */
 
 // Load Dolibarr environment
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/asset.lib.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
@@ -64,7 +78,7 @@ $arrayofparameters = array(
 $error = 0;
 $setupnotempty = 0;
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $moduledir = 'asset';
 $myTmpObjects = array();
@@ -108,7 +122,7 @@ if ($action == 'updateMask') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/asset/doc/pdf_" . $modele . "_" . strtolower($tmpobjectkey) . ".modules.php", 0);
         if (file_exists($file)) {
@@ -176,8 +190,6 @@ if ($action == 'updateMask') {
     }
 }
 
-
-
 /*
  * View
  */
@@ -200,7 +212,6 @@ print dol_get_fiche_head($head, 'settings', $langs->trans($page_name), -1, "asse
 
 // Setup page goes here
 echo '<span class="opacitymedium">' . $langs->trans("AssetSetupPage") . '</span>';
-
 
 foreach ($myTmpObjects as $myTmpObjectKey => $myTmpObjectArray) {
     if ($myTmpObjectArray['includerefgeneration']) {
@@ -277,7 +288,7 @@ foreach ($myTmpObjects as $myTmpObjectKey => $myTmpObjectArray) {
                                 print '</td>';
 
                                 $className = $myTmpObjectArray['class'];
-                                $mytmpinstance = new $className($db);
+                                $mytmpinstance = Misc::getCodeLibClass($className, $db);
                                 $mytmpinstance->initAsSpecimen();
 
                                 // Info
@@ -483,13 +494,11 @@ if ($action == 'edit') {
                 print getDolGlobalString($constname);
                 print "</textarea>\n";
             } elseif ($val['type'] == 'html') {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
                 $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
                 $doleditor->Create();
             } elseif ($val['type'] == 'yesno') {
                 print $form->selectyesno($constname, getDolGlobalString($constname), 1);
             } elseif (preg_match('/emailtemplate:/', $val['type'])) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $formmail = new FormMail($db);
 
                 $tmp = explode(':', $val['type']);
@@ -509,15 +518,12 @@ if ($action == 'edit') {
                 }
                 print $form->selectarray($constname, $arrayofmessagename, getDolGlobalString($constname), 'None', 0, 0, '', 0, 0, 0, '', '', 1);
             } elseif (preg_match('/category:/', $val['type'])) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
                 $formother = new FormOther($db);
 
                 $tmp = explode(':', $val['type']);
                 print img_picto('', 'category', 'class="pictofixedwidth"');
                 print $formother->select_categories($tmp[1], getDolGlobalString($constname), $constname, 0, $langs->trans('CustomersProspectsCategoriesShort'));
             } elseif (preg_match('/thirdparty_type/', $val['type'])) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
                 $formcompany = new FormCompany($db);
                 print $formcompany->selectProspectCustomerType(getDolGlobalString($constname), $constname);
             } elseif ($val['type'] == 'securekey') {
@@ -537,7 +543,6 @@ if ($action == 'edit') {
             } elseif ($val['type'] == 'accountancy_code') {
                 $selected = getDolGlobalString($constname);
                 if (isModEnabled('accounting')) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
                     $formaccounting = new FormAccounting($db);
                     print $formaccounting->select_account($selected, $constname, 1, null, 1, 1, 'minwidth150 maxwidth300', 1);
                 } else {
@@ -549,7 +554,6 @@ if ($action == 'edit') {
                     print '<input type="text" name="' . $constname . '" list="pcg_type_datalist" value="' . $selected . '">';
                     // autosuggest from existing account types if found
                     print '<datalist id="pcg_type_datalist">';
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountancysystem.class.php';
                     $accountsystem = new AccountancySystem($db);
                     $accountsystem->fetch(getDolGlobalInt('CHARTOFACCOUNTS'));
                     $sql = 'SELECT DISTINCT pcg_type FROM ' . MAIN_DB_PREFIX . 'accounting_account';
@@ -600,7 +604,6 @@ if ($action == 'edit') {
                 } elseif ($val['type'] == 'yesno') {
                     print ajax_constantonoff($constname);
                 } elseif (preg_match('/emailtemplate:/', $val['type'])) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                     $formmail = new FormMail($db);
 
                     $tmp = explode(':', $val['type']);
@@ -643,7 +646,6 @@ if ($action == 'edit') {
                     }
                 } elseif ($val['type'] == 'accountancy_code') {
                     if (isModEnabled('accounting')) {
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
                         $accountingaccount = new AccountingAccount($db);
                         $accountingaccount->fetch('', getDolGlobalString($constname), 1);
 

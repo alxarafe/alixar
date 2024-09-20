@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2017 	   Nicolas Zabouri      <info@inovea-conseil.com>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2017 	    Nicolas Zabouri             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,14 +20,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ContratLigne;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/core/boxes/box_services_contracts.php
  *      \ingroup    produits,services
  *      \brief      Widget of sells products
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 
 /**
  * Class to manage the box to show last contracted products/services lines
@@ -42,8 +46,8 @@ class box_services_contracts extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -57,8 +61,8 @@ class box_services_contracts extends ModeleBoxes
     /**
      *  Load data into info_box_contents array to show array later.
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -66,7 +70,6 @@ class box_services_contracts extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/contrat/class/contrat.class.php';
 
         $form = new Form($this->db);
 
@@ -89,12 +92,12 @@ class box_services_contracts extends ModeleBoxes
             $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "contratdet as cd ON c.rowid = cd.fk_contrat";
             $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "product as p ON cd.fk_product = p.rowid";
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "societe_commerciaux as sc ON s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "societe_commerciaux as sc ON s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             $sql .= ")";
             $sql .= " WHERE c.entity = " . $conf->entity;
             if ($user->socid) {
-                $sql .= " AND s.rowid = " . ((int) $user->socid);
+                $sql .= " AND s.rowid = " . ((int)$user->socid);
             }
             $sql .= $this->db->order("c.tms", "DESC");
             $sql .= $this->db->plimit($max, 0);
@@ -203,7 +206,7 @@ class box_services_contracts extends ModeleBoxes
                 }
                 if ($num == 0) {
                     $this->info_box_contents[$i][0] = array(
-                    'td' => 'class="center"',
+                        'td' => 'class="center"',
                         'text' => '<span class="opacitymedium">' . $langs->trans("NoContractedProducts") . '</span>'
                     );
                 }
@@ -227,10 +230,10 @@ class box_services_contracts extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

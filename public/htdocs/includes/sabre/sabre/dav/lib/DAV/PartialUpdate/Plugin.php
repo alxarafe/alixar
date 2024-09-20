@@ -122,7 +122,7 @@ class Plugin extends DAV\ServerPlugin
         }
 
         $contentType = strtolower(
-            (string) $request->getHeader('Content-Type')
+            (string)$request->getHeader('Content-Type')
         );
 
         if ('application/x-sabredav-partialupdate' != $contentType) {
@@ -204,9 +204,9 @@ class Plugin extends DAV\ServerPlugin
         if ('append' === $matches[1]) {
             return [self::RANGE_APPEND];
         } elseif (strlen($matches[2]) > 0) {
-            return [self::RANGE_START, (int) $matches[2], (int) $matches[3] ?: null];
+            return [self::RANGE_START, (int)$matches[2], (int)$matches[3] ?: null];
         } else {
-            return [self::RANGE_END, (int) $matches[4]];
+            return [self::RANGE_END, (int)$matches[4]];
         }
     }
 }

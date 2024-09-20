@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2024	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2010-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2024       Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2024	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/projet/tasks/contact.php
  *  \ingroup    project
@@ -27,11 +35,8 @@
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('projects', 'companies'));
@@ -144,19 +149,18 @@ if (!empty($project_ref) && !empty($withproject)) {
  * View
  */
 $form = new Form($db);
-$formcompany   = new FormCompany($db);
+$formcompany = new FormCompany($db);
 $contactstatic = new Contact($db);
 $userstatic = new User($db);
 $result = $projectstatic->fetch($object->fk_project);
 
 $title = $object->ref . ' - ' . $langs->trans("Contacts");
 if (!empty($withproject)) {
-    $title .= ' | ' . $langs->trans("Project") . (!empty($projectstatic->ref) ? ': ' . $projectstatic->ref : '')  ;
+    $title .= ' | ' . $langs->trans("Project") . (!empty($projectstatic->ref) ? ': ' . $projectstatic->ref : '');
 }
 $help_url = '';
 
 llxHeader('', $title, $help_url);
-
 
 /* *************************************************************************** */
 /*                                                                             */
@@ -331,7 +335,7 @@ if ($id > 0 || !empty($ref)) {
             $projectsListId = $projectstatic->getProjectsAuthorizedForUser($user, 0, 1);
             $object->next_prev_filter = "fk_projet IN (" . $db->sanitize($projectsListId) . ")";
         } else {
-            $object->next_prev_filter = "fk_projet = " . ((int) $projectstatic->id);
+            $object->next_prev_filter = "fk_projet = " . ((int)$projectstatic->id);
         }
 
         $morehtmlref = '';

@@ -16,5 +16,6 @@
 --
 -- ===================================================================
 
-ALTER TABLE llx_c_shipment_mode ADD UNIQUE INDEX uk_c_shipment_mode (code, entity);
+ALTER TABLE llx_c_shipment_mode
+    ADD UNIQUE INDEX uk_c_shipment_mode (code, entity);
 

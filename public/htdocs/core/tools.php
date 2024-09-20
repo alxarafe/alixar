@@ -37,7 +37,6 @@ if ($user->socid > 0) {
 }
 
 
-
 /*
  * View
  */

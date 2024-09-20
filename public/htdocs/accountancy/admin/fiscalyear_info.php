@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2014-2024  Alexandre Spangaro  <aspangaro@easya.solutions>
+/* Copyright (C) 2014-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,11 +23,12 @@
  * \brief       Page to show info of a fiscal year
  */
 
+use Dolibarr\Code\Core\Classes\Fiscalyear;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fiscalyear.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/fiscalyear.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "compta"));

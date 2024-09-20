@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2012-2014 Charles-François BENKE <charles.fr@benke.fr>
- * Copyright (C) 2014      Marcos García          <marcosgdf@gmail.com>
- * Copyright (C) 2015      Frederic France        <frederic.france@free.fr>
- * Copyright (C) 2016      Juan José Menent       <jmenent@2byte.es>
- * Copyright (C) 2020      Pierre Ardoin          <mapiolca@me.com>
+/* Copyright (C) 2012-2014  Charles-François BENKE      <charles.fr@benke.fr>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
+ * Copyright (C) 2016       Juan José Menent            <jmenent@2byte.es>
+ * Copyright (C) 2020       Pierre Ardoin               <mapiolca@me.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,32 +21,31 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+
 /**
  *  \file       htdocs/core/boxes/box_funnel_of_prospection.php
  *  \ingroup    projet
  *  \brief      Module to show the funnel of prospection
  */
 
-include_once DOL_DOCUMENT_ROOT . "/core/boxes/modules_boxes.php";
-
-
 /**
  * Class to manage the box to show funnel of prospections
  */
 class box_funnel_of_prospection extends ModeleBoxes
 {
-    public $boxcode  = "FunnelOfProspection";
-    public $boximg   = "object_projectpub";
+    public $boxcode = "FunnelOfProspection";
+    public $boximg = "object_projectpub";
     public $boxlabel = "BoxTitleFunnelOfProspection";
-    public $depends  = array("projet");
+    public $depends = array("projet");
 
     public $version = 'development';
 
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param = '')
     {
@@ -66,8 +65,8 @@ class box_funnel_of_prospection extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param   int        $max        Maximum number of records to load
-     *  @return  void
+     * @param int $max Maximum number of records to load
+     * @return  void
      */
     public function loadBox($max = 5)
     {
@@ -201,7 +200,7 @@ class box_funnel_of_prospection extends ModeleBoxes
                         if (empty($labelStatus)) {
                             $labelStatus = $listofopplabel[$status];
                         }
-                        $amount = (isset($valsamount[$status]) ? (float) $valsamount[$status] : 0);
+                        $amount = (isset($valsamount[$status]) ? (float)$valsamount[$status] : 0);
                         $customlabel = $amount . "€";
 
                         $data[] = $amount;
@@ -209,7 +208,7 @@ class box_funnel_of_prospection extends ModeleBoxes
                         if (!$conf->use_javascript_ajax) {
                             $stringtoprint .= '<tr class="oddeven">';
                             $stringtoprint .= '<td>' . $labelStatus . '</td>';
-                            $stringtoprint .= '<td class="nowraponall right amount"><a href="list.php?statut=' . $status . '">' . price((isset($valsamount[$status]) ? (float) $valsamount[$status] : 0), 0, '', 1, -1, -1, $conf->currency) . '</a></td>';
+                            $stringtoprint .= '<td class="nowraponall right amount"><a href="list.php?statut=' . $status . '">' . price((isset($valsamount[$status]) ? (float)$valsamount[$status] : 0), 0, '', 1, -1, -1, $conf->currency) . '</a></td>';
                             $stringtoprint .= "</tr>\n";
                         }
                         $customlabels[] = $customlabel;
@@ -229,7 +228,6 @@ class box_funnel_of_prospection extends ModeleBoxes
 
                 $dataseries[] = $data;
                 if ($conf->use_javascript_ajax) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
                     $dolgraph = new DolGraph();
                     $dolgraph->SetMinValue(0);
                     $dolgraph->SetData($dataseries);
@@ -314,10 +312,10 @@ class box_funnel_of_prospection extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No $stringtoprint .=, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No $stringtoprint .=, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

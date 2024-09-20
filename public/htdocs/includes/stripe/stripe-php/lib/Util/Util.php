@@ -230,7 +230,7 @@ abstract class Util
      */
     public static function urlEncode($key)
     {
-        $s = \urlencode((string) $key);
+        $s = \urlencode((string)$key);
 
         // Don't use strict form encoding by changing the square bracket control
         // characters back to their literals. This is fine by the server, and
@@ -260,6 +260,6 @@ abstract class Util
      */
     public static function currentTimeMillis()
     {
-        return (int) \round(\microtime(true) * 1000);
+        return (int)\round(\microtime(true) * 1000);
     }
 }

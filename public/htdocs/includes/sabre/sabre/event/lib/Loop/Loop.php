@@ -112,8 +112,8 @@ class Loop
      */
     public function addReadStream($stream, callable $cb)
     {
-        $this->readStreams[(int) $stream] = $stream;
-        $this->readCallbacks[(int) $stream] = $cb;
+        $this->readStreams[(int)$stream] = $stream;
+        $this->readCallbacks[(int)$stream] = $cb;
     }
 
     /**
@@ -129,8 +129,8 @@ class Loop
      */
     public function addWriteStream($stream, callable $cb)
     {
-        $this->writeStreams[(int) $stream] = $stream;
-        $this->writeCallbacks[(int) $stream] = $cb;
+        $this->writeStreams[(int)$stream] = $stream;
+        $this->writeCallbacks[(int)$stream] = $cb;
     }
 
     /**
@@ -141,8 +141,8 @@ class Loop
     public function removeReadStream($stream)
     {
         unset(
-            $this->readStreams[(int) $stream],
-            $this->readCallbacks[(int) $stream]
+            $this->readStreams[(int)$stream],
+            $this->readCallbacks[(int)$stream]
         );
     }
 
@@ -154,8 +154,8 @@ class Loop
     public function removeWriteStream($stream)
     {
         unset(
-            $this->writeStreams[(int) $stream],
-            $this->writeCallbacks[(int) $stream]
+            $this->writeStreams[(int)$stream],
+            $this->writeCallbacks[(int)$stream]
         );
     }
 
@@ -275,15 +275,15 @@ class Loop
             $except = null;
             // stream_select changes behavior in 8.1 to forbid passing non-null microseconds when the seconds are null.
             // Older versions of php don't allow passing null to microseconds.
-            if (null !== $timeout ? stream_select($read, $write, $except, 0, (int) ($timeout * 1000000)) : stream_select($read, $write, $except, null)) {
+            if (null !== $timeout ? stream_select($read, $write, $except, 0, (int)($timeout * 1000000)) : stream_select($read, $write, $except, null)) {
                 // See PHP Bug https://bugs.php.net/bug.php?id=62452
                 // Fixed in PHP7
                 foreach ($read as $readStream) {
-                    $readCb = $this->readCallbacks[(int) $readStream];
+                    $readCb = $this->readCallbacks[(int)$readStream];
                     $readCb();
                 }
                 foreach ($write as $writeStream) {
-                    $writeCb = $this->writeCallbacks[(int) $writeStream];
+                    $writeCb = $this->writeCallbacks[(int)$writeStream];
                     $writeCb();
                 }
             }

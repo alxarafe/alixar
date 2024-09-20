@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2010-2018  Laurent Destailleur <eldy@users.sourceforge.net>
  * Copyright (C) 2012-2021	Regis Houssin		<regis.houssin@inodbox.com>
  * Copyright (C) 2018-2023  Frédéric France     <frederic.france@netlogic.fr>

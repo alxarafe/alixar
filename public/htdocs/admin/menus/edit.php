@@ -28,8 +28,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/menubase.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("other", "admin"));
@@ -43,7 +41,7 @@ if (!$user->admin) {
 
 $dirstandard = array();
 $dirsmartphone = array();
-$dirmenus = array_merge(array("/core/menus/"), (array) $conf->modules_parts['menus']);
+$dirmenus = array_merge(array("/core/menus/"), (array)$conf->modules_parts['menus']);
 foreach ($dirmenus as $dirmenu) {
     $dirstandard[] = $dirmenu . 'standard';
     $dirsmartphone[] = $dirmenu . 'smartphone';
@@ -66,7 +64,6 @@ if (GETPOST("handler_origine")) {
 if (GETPOST("menu_handler")) {
     $menu_handler = GETPOST("menu_handler");
 }
-
 
 
 /*
@@ -130,19 +127,19 @@ if ($action == 'add') {
     if (!$error) {
         $menu = new Menubase($db);
         $menu->menu_handler = preg_replace('/_menu$/', '', GETPOST('menu_handler', 'aZ09'));
-        $menu->type = (string) GETPOST('type', 'alphanohtml');
-        $menu->title = (string) GETPOST('titre', 'alphanohtml');
-        $menu->prefix = (string) GETPOST('picto', 'restricthtmlallowclass');
-        $menu->url = (string) GETPOST('url', 'alphanohtml');
-        $menu->langs = (string) GETPOST('langs', 'alphanohtml');
+        $menu->type = (string)GETPOST('type', 'alphanohtml');
+        $menu->title = (string)GETPOST('titre', 'alphanohtml');
+        $menu->prefix = (string)GETPOST('picto', 'restricthtmlallowclass');
+        $menu->url = (string)GETPOST('url', 'alphanohtml');
+        $menu->langs = (string)GETPOST('langs', 'alphanohtml');
         $menu->position = GETPOSTINT('position');
-        $menu->enabled = (string) GETPOST('enabled', 'alphanohtml');
-        $menu->perms = (string) GETPOST('perms', 'alphanohtml');
-        $menu->target = (string) GETPOST('target', 'alphanohtml');
-        $menu->user = (string) GETPOST('user', 'alphanohtml');
-        $menu->mainmenu = (string) GETPOST('propertymainmenu', 'alphanohtml');
+        $menu->enabled = (string)GETPOST('enabled', 'alphanohtml');
+        $menu->perms = (string)GETPOST('perms', 'alphanohtml');
+        $menu->target = (string)GETPOST('target', 'alphanohtml');
+        $menu->user = (string)GETPOST('user', 'alphanohtml');
+        $menu->mainmenu = (string)GETPOST('propertymainmenu', 'alphanohtml');
         if (is_numeric(GETPOST('menuIdParent', 'alphanohtml'))) {
-            $menu->fk_menu = (int) GETPOST('menuIdParent', 'alphanohtml');
+            $menu->fk_menu = (int)GETPOST('menuIdParent', 'alphanohtml');
         } else {
             if (GETPOST('type', 'alphanohtml') == 'top') {
                 $menu->fk_menu = 0;
@@ -191,19 +188,19 @@ if ($action == 'update') {
             $menu = new Menubase($db);
             $result = $menu->fetch(GETPOSTINT('menuId'));
             if ($result > 0) {
-                $menu->title = (string) GETPOST('titre', 'alphanohtml');
-                $menu->prefix = (string) GETPOST('picto', 'restricthtmlallowclass');
-                $menu->leftmenu = (string) GETPOST('leftmenu', 'aZ09');
-                $menu->url = (string) GETPOST('url', 'alphanohtml');
-                $menu->langs = (string) GETPOST('langs', 'alphanohtml');
+                $menu->title = (string)GETPOST('titre', 'alphanohtml');
+                $menu->prefix = (string)GETPOST('picto', 'restricthtmlallowclass');
+                $menu->leftmenu = (string)GETPOST('leftmenu', 'aZ09');
+                $menu->url = (string)GETPOST('url', 'alphanohtml');
+                $menu->langs = (string)GETPOST('langs', 'alphanohtml');
                 $menu->position = GETPOSTINT('position');
-                $menu->enabled = (string) GETPOST('enabled', 'alphanohtml');
-                $menu->perms = (string) GETPOST('perms', 'alphanohtml');
-                $menu->target = (string) GETPOST('target', 'alphanohtml');
-                $menu->user = (string) GETPOST('user', 'alphanohtml');
-                $menu->mainmenu = (string) GETPOST('propertymainmenu', 'alphanohtml');
+                $menu->enabled = (string)GETPOST('enabled', 'alphanohtml');
+                $menu->perms = (string)GETPOST('perms', 'alphanohtml');
+                $menu->target = (string)GETPOST('target', 'alphanohtml');
+                $menu->user = (string)GETPOST('user', 'alphanohtml');
+                $menu->mainmenu = (string)GETPOST('propertymainmenu', 'alphanohtml');
                 if (is_numeric(GETPOST('menuIdParent', 'alphanohtml'))) {
-                    $menu->fk_menu = (int) GETPOST('menuIdParent', 'alphanohtml');
+                    $menu->fk_menu = (int)GETPOST('menuIdParent', 'alphanohtml');
                 } else {
                     if (GETPOST('type', 'alphanohtml') == 'top') {
                         $menu->fk_menu = 0;
@@ -236,7 +233,6 @@ if ($action == 'update') {
         exit;
     }
 }
-
 
 
 /*
@@ -377,7 +373,7 @@ if ($action == 'create') {
 
     // Position
     print '<tr><td>' . $langs->trans('Position') . '</td>';
-    print '<td><input type="text" class="width100" name="position" value="' . ((int) (GETPOSTISSET("position") ? GETPOSTINT("position") : 100)) . '"></td><td>' . $langs->trans('DetailPosition') . '</td></tr>';
+    print '<td><input type="text" class="width100" name="position" value="' . ((int)(GETPOSTISSET("position") ? GETPOSTINT("position") : 100)) . '"></td><td>' . $langs->trans('DetailPosition') . '</td></tr>';
 
     // Enabled
     print '<tr><td>' . $langs->trans('Enabled') . '</td>';
@@ -502,13 +498,13 @@ if ($action == 'create') {
 
     // Position
     print '<tr><td>' . $langs->trans('Position') . '</td>';
-    print '<td><input type="text" class="minwidth100" name="position" value="' . ((int) $menu->position) . '"></td><td>' . $langs->trans('DetailPosition') . '</td></tr>';
+    print '<td><input type="text" class="minwidth100" name="position" value="' . ((int)$menu->position) . '"></td><td>' . $langs->trans('DetailPosition') . '</td></tr>';
 
     // Enabled
     print '<tr><td>' . $langs->trans('Enabled') . '</td>';
     print '<td><input type="text" class="minwidth500" name="enabled" value="' . dol_escape_htmltag($menu->enabled) . '"></td><td>' . $langs->trans('DetailEnabled');
     if (!empty($menu->enabled)) {
-        print ' <span class="opacitymedium">(' . $langs->trans("ConditionIsCurrently") . ':</span> ' . yn((int) dol_eval($menu->enabled, 1, 1, '1') <= 0 ? 0 : 1) . ')';
+        print ' <span class="opacitymedium">(' . $langs->trans("ConditionIsCurrently") . ':</span> ' . yn((int)dol_eval($menu->enabled, 1, 1, '1') <= 0 ? 0 : 1) . ')';
     }
     print '</td></tr>';
 
@@ -516,7 +512,7 @@ if ($action == 'create') {
     print '<tr><td>' . $langs->trans('Rights') . '</td>';
     print '<td><input type="text" class="minwidth500" name="perms" value="' . dol_escape_htmltag($menu->perms) . '"></td><td>' . $langs->trans('DetailRight');
     if (!empty($menu->perms)) {
-        print ' <span class="opacitymedium">(' . $langs->trans("ConditionIsCurrently") . ':</span> ' . yn((int) dol_eval($menu->perms, 1, 1, '1') <= 0 ? 0 : 1) . ')';
+        print ' <span class="opacitymedium">(' . $langs->trans("ConditionIsCurrently") . ':</span> ' . yn((int)dol_eval($menu->perms, 1, 1, '1') <= 0 ? 0 : 1) . ')';
     }
     print '</td></tr>';
 

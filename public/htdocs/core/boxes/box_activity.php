@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2012      Charles-François BENKE <charles.fr@benke.fr>
- * Copyright (C) 2005-2015 Laurent Destailleur    <eldy@users.sourceforge.net>
- * Copyright (C) 2014-2021 Frederic France        <frederic.france@netlogic.fr>
+/* Copyright (C) 2012       Charles-François BENKE      <charles.fr@benke.fr>
+ * Copyright (C) 2005-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014-2021  Frederic France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,13 +19,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+
 /**
  *  \file       htdocs/core/boxes/box_activity.php
  *  \ingroup    societes
  *  \brief      Module to show box of bills, orders & propal of the current year
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
 
 /**
  * Class to manage the box of customer activity (invoice, order, proposal)
@@ -42,8 +42,8 @@ class box_activity extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -64,8 +64,8 @@ class box_activity extends ModeleBoxes
     /**
      *  Charge les donnees en memoire pour affichage ulterieur
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -99,7 +99,6 @@ class box_activity extends ModeleBoxes
 
         // list the summary of the propals
         if (isModEnabled("propal") && $user->hasRight("propal", "lire")) {
-            include_once DOL_DOCUMENT_ROOT . '/comm/propal/class/propal.class.php';
             $propalstatic = new Propal($this->db);
 
             $data = array();
@@ -113,10 +112,10 @@ class box_activity extends ModeleBoxes
             $sql .= " WHERE p.entity IN (" . getEntity('propal') . ")";
             $sql .= " AND p.fk_soc = s.rowid";
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             if ($user->socid) {
-                $sql .= " AND s.rowid = " . ((int) $user->socid);
+                $sql .= " AND s.rowid = " . ((int)$user->socid);
             }
             $sql .= " AND p.datep >= '" . $this->db->idate($tmpdate) . "'";
             $sql .= " AND p.date_cloture IS NULL"; // just unclosed
@@ -144,7 +143,7 @@ class box_activity extends ModeleBoxes
                 while ($j < count($data)) {
                     $this->info_box_contents[$line][0] = array(
                         'td' => 'class="left" width="16"',
-                        'url' => DOL_URL_ROOT . "/comm/propal/list.php?mainmenu=commercial&leftmenu=propals&search_status=" . ((int) $data[$j]->fk_statut),
+                        'url' => DOL_URL_ROOT . "/comm/propal/list.php?mainmenu=commercial&leftmenu=propals&search_status=" . ((int)$data[$j]->fk_statut),
                         'tooltip' => $langs->trans("Proposals") . "&nbsp;" . $propalstatic->LibStatut($data[$j]->fk_statut, 0),
                         'logo' => 'object_propal'
                     );
@@ -158,7 +157,7 @@ class box_activity extends ModeleBoxes
                         'td' => 'class="right"',
                         'text' => $data[$j]->nb,
                         'tooltip' => $langs->trans("Proposals") . "&nbsp;" . $propalstatic->LibStatut($data[$j]->fk_statut, 0),
-                        'url' => DOL_URL_ROOT . "/comm/propal/list.php?mainmenu=commercial&leftmenu=propals&search_status=" . ((int) $data[$j]->fk_statut),
+                        'url' => DOL_URL_ROOT . "/comm/propal/list.php?mainmenu=commercial&leftmenu=propals&search_status=" . ((int)$data[$j]->fk_statut),
                     );
                     $totalnb += $data[$j]->nb;
 
@@ -186,7 +185,6 @@ class box_activity extends ModeleBoxes
 
         // list the summary of the orders
         if (isModEnabled('order') && $user->hasRight("commande", "lire")) {
-            include_once DOL_DOCUMENT_ROOT . '/commande/class/commande.class.php';
             $commandestatic = new Commande($this->db);
 
             $langs->load("orders");
@@ -202,10 +200,10 @@ class box_activity extends ModeleBoxes
             $sql .= " WHERE c.entity IN (" . getEntity('commande') . ")";
             $sql .= " AND c.fk_soc = s.rowid";
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             if ($user->socid) {
-                $sql .= " AND s.rowid = " . ((int) $user->socid);
+                $sql .= " AND s.rowid = " . ((int)$user->socid);
             }
             $sql .= " AND c.date_commande >= '" . $this->db->idate($tmpdate) . "'";
             $sql .= " GROUP BY c.fk_statut";
@@ -273,7 +271,6 @@ class box_activity extends ModeleBoxes
 
         // list the summary of the bills
         if (isModEnabled('invoice') && $user->hasRight("facture", "lire")) {
-            include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
             $facturestatic = new Facture($this->db);
 
             // part 1
@@ -286,10 +283,10 @@ class box_activity extends ModeleBoxes
             $sql .= ")";
             $sql .= " WHERE f.entity IN (" . getEntity('invoice') . ')';
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             if ($user->socid) {
-                $sql .= " AND s.rowid = " . ((int) $user->socid);
+                $sql .= " AND s.rowid = " . ((int)$user->socid);
             }
             $sql .= " AND f.fk_soc = s.rowid";
             $sql .= " AND f.datef >= '" . $this->db->idate($tmpdate) . "' AND f.paye=1";
@@ -441,10 +438,10 @@ class box_activity extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

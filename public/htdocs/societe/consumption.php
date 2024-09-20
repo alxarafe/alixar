@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2012-2013 Philippe Berthet     <berthet@systune.be>
- * Copyright (C) 2004-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2013-2015 Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2015-2017 Ferran Marcet		<fmarcet@2byte.es>
- * Copyright (C) 2021-2022 Frédéric France		<frederic.france@netlogic.fr>
+/* Copyright (C) 2012-2013  Philippe Berthet            <berthet@systune.be>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2013-2015  Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015-2017  Ferran Marcet		        <fmarcet@2byte.es>
+ * Copyright (C) 2021-2022  Frédéric France		        <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ContratLigne;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Reception\Classes\Reception;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+
 /**
  *  \file       htdocs/societe/consumption.php
  *  \ingroup    societe
@@ -32,14 +50,10 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.class.php';
-
 
 // Load translation files required by the page
 $langs->loadLangs(array("companies", "bills", "orders", "suppliers", "propal", "interventions", "contracts", "products"));
-
 
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'thirdpartylist';
 
@@ -55,11 +69,11 @@ if ($socid > 0) {
 }
 
 // Sort & Order fields
-$limit      = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
-$sortfield  = GETPOST('sortfield', 'aZ09comma');
-$sortorder  = GETPOST('sortorder', 'aZ09comma');
-$page       = GETPOSTISSET('pageplusone') ? (GETPOST('pageplusone') - 1) : GETPOSTINT("page");
-$optioncss  = GETPOST('optioncss', 'alpha');
+$limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
+$sortfield = GETPOST('sortfield', 'aZ09comma');
+$sortorder = GETPOST('sortorder', 'aZ09comma');
+$page = GETPOSTISSET('pageplusone') ? (GETPOST('pageplusone') - 1) : GETPOSTINT("page");
+$optioncss = GETPOST('optioncss', 'alpha');
 
 if (empty($page) || $page == -1) {
     $page = 0;
@@ -106,8 +120,6 @@ $reshook = $hookmanager->executeHooks('doActions', $parameters, $object, $action
 if ($reshook < 0) {
     setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 }
-
-
 
 /*
  * View
@@ -162,7 +174,7 @@ if ($object->client) {
         print ' <span class="error">(' . $langs->trans("WrongCustomerCode") . ')</span>';
     }
     print '</td></tr>';
-    $sql = "SELECT count(*) as nb from " . MAIN_DB_PREFIX . "facture where fk_soc = " . ((int) $socid);
+    $sql = "SELECT count(*) as nb from " . MAIN_DB_PREFIX . "facture where fk_soc = " . ((int)$socid);
     $resql = $db->query($sql);
     if (!$resql) {
         dol_print_error($db);
@@ -203,7 +215,7 @@ if ($object->fournisseur) {
         print ' <span class="error">(' . $langs->trans("WrongSupplierCode") . ')</span>';
     }
     print '</td></tr>';
-    $sql = "SELECT count(*) as nb from " . MAIN_DB_PREFIX . "commande_fournisseur where fk_soc = " . ((int) $socid);
+    $sql = "SELECT count(*) as nb from " . MAIN_DB_PREFIX . "commande_fournisseur where fk_soc = " . ((int)$socid);
     $resql = $db->query($sql);
     if (!$resql) {
         dol_print_error($db);
@@ -250,22 +262,20 @@ $documentstaticline = '';
     $doc_number='f.id';
 }*/
 if ($type_element == 'fichinter') {     // Customer : show products from invoices
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
     $documentstatic = new Fichinter($db);
     $sql_select = 'SELECT f.rowid as doc_id, f.ref as doc_number, \'1\' as doc_type, f.datec as dateprint, f.fk_statut as status, NULL as paid, ';
     $sql_select .= 'NULL as fk_product, NULL as info_bits, NULL as date_start, NULL as date_end, NULL as prod_qty, NULL as total_ht, ';
     $tables_from = MAIN_DB_PREFIX . "fichinter as f LEFT JOIN " . MAIN_DB_PREFIX . "fichinterdet as d ON d.fk_fichinter = f.rowid"; // Must use left join to work also with option that disable usage of lines.
-    $where = " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int) $socid);
+    $where = " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int)$socid);
     $where .= " AND f.entity = " . $conf->entity;
     $dateprint = 'f.datec';
     $doc_number = 'f.ref';
 }
 if ($type_element == 'invoice') {   // Customer : show products from invoices
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
     $documentstatic = new Facture($db);
     $sql_select = 'SELECT f.rowid as doc_id, f.ref as doc_number, f.type as doc_type, f.datef as dateprint, f.fk_statut as status, f.paye as paid, d.fk_remise_except, ';
     $tables_from = MAIN_DB_PREFIX . "facture as f," . MAIN_DB_PREFIX . "facturedet as d";
-    $where = " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int) $socid);
+    $where = " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int)$socid);
     $where .= " AND d.fk_facture = f.rowid";
     $where .= " AND f.entity IN (" . getEntity('invoice') . ")";
     $dateprint = 'f.datef';
@@ -273,11 +283,10 @@ if ($type_element == 'invoice') {   // Customer : show products from invoices
     $thirdTypeSelect = 'customer';
 }
 if ($type_element == 'propal') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
     $documentstatic = new Propal($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.datep as dateprint, c.fk_statut as status, NULL as paid,';
     $tables_from = MAIN_DB_PREFIX . "propal as c," . MAIN_DB_PREFIX . "propaldet as d";
-    $where = " WHERE c.fk_soc = s.rowid AND s.rowid = " . ((int) $socid);
+    $where = " WHERE c.fk_soc = s.rowid AND s.rowid = " . ((int)$socid);
     $where .= " AND d.fk_propal = c.rowid";
     $where .= " AND c.entity = " . $conf->entity;
     $dateprint = 'c.datep';
@@ -285,12 +294,11 @@ if ($type_element == 'propal') {
     $thirdTypeSelect = 'customer';
 }
 if ($type_element == 'order') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
     $langs->load('sendings'); // delivery planned date
     $documentstatic = new Commande($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_commande as dateprint, c.fk_statut as status, NULL as paid, c.date_livraison as delivery_planned_date,';
     $tables_from = MAIN_DB_PREFIX . "commande as c," . MAIN_DB_PREFIX . "commandedet as d";
-    $where = " WHERE c.fk_soc = s.rowid AND s.rowid = " . ((int) $socid);
+    $where = " WHERE c.fk_soc = s.rowid AND s.rowid = " . ((int)$socid);
     $where .= " AND d.fk_commande = c.rowid";
     $where .= " AND c.entity = " . $conf->entity;
     $dateprint = 'c.date_commande';
@@ -298,12 +306,11 @@ if ($type_element == 'order') {
     $thirdTypeSelect = 'customer';
 }
 if ($type_element == 'shipment') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
     $langs->load('sendings');
     $documentstatic = new Expedition($db);
     $sql_select = 'SELECT e.rowid as doc_id, e.ref as doc_number, \'1\' as doc_type, e.date_creation as dateprint, e.fk_statut as status, NULL as paid, e.date_delivery as delivery_planned_date,';
     $tables_from = MAIN_DB_PREFIX . "expedition as e," . MAIN_DB_PREFIX . "expeditiondet as ed," . MAIN_DB_PREFIX . "commandedet as d";
-    $where = " WHERE e.fk_soc = s.rowid AND s.rowid = " . ((int) $socid);
+    $where = " WHERE e.fk_soc = s.rowid AND s.rowid = " . ((int)$socid);
     $where .= " AND ed.fk_expedition = e.rowid";
     $where .= " AND ed.element_type = 'commande' AND ed.fk_elementdet = d.rowid";
     $where .= " AND e.entity = " . $conf->entity;
@@ -312,11 +319,10 @@ if ($type_element == 'shipment') {
     $thirdTypeSelect = 'customer';
 }
 if ($type_element == 'supplier_invoice') {  // Supplier : Show products from invoices.
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
     $documentstatic = new FactureFournisseur($db);
     $sql_select = 'SELECT f.rowid as doc_id, f.ref as doc_number, \'1\' as doc_type, f.datef as dateprint, f.fk_statut as status, f.paye as paid, ';
     $tables_from = MAIN_DB_PREFIX . "facture_fourn as f," . MAIN_DB_PREFIX . "facture_fourn_det as d";
-    $where = " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int) $socid);
+    $where = " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int)$socid);
     $where .= " AND d.fk_facture_fourn = f.rowid";
     $where .= " AND f.entity = " . $conf->entity;
     $dateprint = 'f.datef';
@@ -324,11 +330,10 @@ if ($type_element == 'supplier_invoice') {  // Supplier : Show products from inv
     $thirdTypeSelect = 'supplier';
 }
 if ($type_element == 'supplier_proposal') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
     $documentstatic = new SupplierProposal($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_valid as dateprint, c.fk_statut as status, NULL as paid, ';
     $tables_from = MAIN_DB_PREFIX . "supplier_proposal as c," . MAIN_DB_PREFIX . "supplier_proposaldet as d";
-    $where = " WHERE c.fk_soc = s.rowid AND s.rowid = " . ((int) $socid);
+    $where = " WHERE c.fk_soc = s.rowid AND s.rowid = " . ((int)$socid);
     $where .= " AND d.fk_supplier_proposal = c.rowid";
     $where .= " AND c.entity = " . $conf->entity;
     $dateprint = 'c.date_valid';
@@ -336,12 +341,11 @@ if ($type_element == 'supplier_proposal') {
     $thirdTypeSelect = 'supplier';
 }
 if ($type_element == 'supplier_order') {    // Supplier : Show products from orders.
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
     $langs->load('sendings'); // delivery planned date
     $documentstatic = new CommandeFournisseur($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_valid as dateprint, c.fk_statut as status, NULL as paid, c.date_livraison as delivery_planned_date, ';
     $tables_from = MAIN_DB_PREFIX . "commande_fournisseur as c," . MAIN_DB_PREFIX . "commande_fournisseurdet as d";
-    $where = " WHERE c.fk_soc = s.rowid AND s.rowid = " . ((int) $socid);
+    $where = " WHERE c.fk_soc = s.rowid AND s.rowid = " . ((int)$socid);
     $where .= " AND d.fk_commande = c.rowid";
     $where .= " AND c.entity = " . $conf->entity;
     $dateprint = 'c.date_valid';
@@ -349,12 +353,11 @@ if ($type_element == 'supplier_order') {    // Supplier : Show products from ord
     $thirdTypeSelect = 'supplier';
 }
 if ($type_element == 'reception') {     // Supplier : Show products from orders.
-    require_once constant('DOL_DOCUMENT_ROOT') . '/reception/class/reception.class.php';
     $langs->loadLangs(['sendings', 'receptions']); // delivery planned date
     $documentstatic = new Reception($db);
     $sql_select = 'SELECT r.rowid as doc_id, r.ref as doc_number, \'1\' as doc_type, r.date_creation as dateprint, r.fk_statut as status, NULL as paid, r.date_delivery as delivery_planned_date, ';
     $tables_from = MAIN_DB_PREFIX . "reception as r," . MAIN_DB_PREFIX . "receptiondet_batch as rd," . MAIN_DB_PREFIX . "commande_fournisseurdet as d";
-    $where = " WHERE r.fk_soc = s.rowid AND s.rowid = " . ((int) $socid);
+    $where = " WHERE r.fk_soc = s.rowid AND s.rowid = " . ((int)$socid);
     $where .= " AND rd.fk_reception = r.rowid";
     $where .= " AND rd.fk_elementdet = d.rowid AND rd.element_type = 'supplier_order'";
     $where .= " AND r.entity = " . $conf->entity;
@@ -363,12 +366,11 @@ if ($type_element == 'reception') {     // Supplier : Show products from orders.
     $thirdTypeSelect = 'supplier';
 }
 if ($type_element == 'contract') {  // Order
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
     $documentstatic = new Contrat($db);
     $documentstaticline = new ContratLigne($db);
     $sql_select = 'SELECT c.rowid as doc_id, c.ref as doc_number, \'1\' as doc_type, c.date_contrat as dateprint, d.statut as status, NULL as paid,';
     $tables_from = MAIN_DB_PREFIX . "contrat as c," . MAIN_DB_PREFIX . "contratdet as d";
-    $where = " WHERE c.fk_soc = s.rowid AND s.rowid = " . ((int) $socid);
+    $where = " WHERE c.fk_soc = s.rowid AND s.rowid = " . ((int)$socid);
     $where .= " AND d.fk_contrat = c.rowid";
     $where .= " AND c.entity = " . $conf->entity;
     $dateprint = 'c.date_valid';
@@ -457,12 +459,12 @@ if ($sql_select) {
 
     $num = $db->num_rows($resql);
 
-    $param = "&socid=" . urlencode((string) ($socid)) . "&type_element=" . urlencode((string) ($type_element));
+    $param = "&socid=" . urlencode((string)($socid)) . "&type_element=" . urlencode((string)($type_element));
     if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($sprod_fulldescr) {
         $param .= "&sprod_fulldescr=" . urlencode($sprod_fulldescr);
@@ -471,10 +473,10 @@ if ($sql_select) {
         $param .= "&sref=" . urlencode($sref);
     }
     if ($month) {
-        $param .= "&month=" . urlencode((string) ($month));
+        $param .= "&month=" . urlencode((string)($month));
     }
     if ($year) {
-        $param .= "&year=" . urlencode((string) ($year));
+        $param .= "&year=" . urlencode((string)($year));
     }
     if ($optioncss) {
         $param .= '&optioncss=' . urlencode($optioncss);
@@ -620,46 +622,45 @@ if ($sql_select) {
 
         if (($objp->info_bits & 2) == 2) { ?>
             <a href="<?php echo constant('BASE_URL') . '/comm/remx.php?id=' . $object->id; ?>">
-            <?php
-            $txt = '';
-            print img_object($langs->trans("ShowReduc"), 'reduc') . ' ';
-            if ($objp->description == '(DEPOSIT)') {
-                $txt = $langs->trans("Deposit");
-            } elseif ($objp->description == '(EXCESS RECEIVED)') {
-                $txt = $langs->trans("ExcessReceived");
-            } elseif ($objp->description == '(EXCESS PAID)') {
-                $txt = $langs->trans("ExcessPaid");
-            }
-            //else $txt=$langs->trans("Discount");
-            print $txt;
-            ?>
+                <?php
+                $txt = '';
+                print img_object($langs->trans("ShowReduc"), 'reduc') . ' ';
+                if ($objp->description == '(DEPOSIT)') {
+                    $txt = $langs->trans("Deposit");
+                } elseif ($objp->description == '(EXCESS RECEIVED)') {
+                    $txt = $langs->trans("ExcessReceived");
+                } elseif ($objp->description == '(EXCESS PAID)') {
+                    $txt = $langs->trans("ExcessPaid");
+                }
+                //else $txt=$langs->trans("Discount");
+                print $txt;
+                ?>
             </a>
             <?php
             if ($objp->description) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
                 if ($objp->description == '(CREDIT_NOTE)' && $objp->fk_remise_except > 0) {
                     $discount = new DiscountAbsolute($db);
                     $discount->fetch($objp->fk_remise_except);
-                    echo($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromCreditNote", $discount->getNomUrl(0));
+                    echo ($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromCreditNote", $discount->getNomUrl(0));
                 }
                 if ($objp->description == '(EXCESS RECEIVED)' && $objp->fk_remise_except > 0) {
                     $discount = new DiscountAbsolute($db);
                     $discount->fetch($objp->fk_remise_except);
-                    echo($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromExcessReceived", $discount->getNomUrl(0));
+                    echo ($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromExcessReceived", $discount->getNomUrl(0));
                 } elseif ($objp->description == '(EXCESS PAID)' && $objp->fk_remise_except > 0) {
                     $discount = new DiscountAbsolute($db);
                     $discount->fetch($objp->fk_remise_except);
-                    echo($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromExcessPaid", $discount->getNomUrl(0));
+                    echo ($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromExcessPaid", $discount->getNomUrl(0));
                 } elseif ($objp->description == '(DEPOSIT)' && $objp->fk_remise_except > 0) {
                     $discount = new DiscountAbsolute($db);
                     $discount->fetch($objp->fk_remise_except);
-                    echo($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromDeposit", $discount->getNomUrl(0));
+                    echo ($txt ? ' - ' : '') . $langs->transnoentities("DiscountFromDeposit", $discount->getNomUrl(0));
                     // Add date of deposit
                     if (getDolGlobalString('INVOICE_ADD_DEPOSIT_DATE')) {
                         echo ' (' . dol_print_date($discount->datec) . ')';
                     }
                 } else {
-                    echo($txt ? ' - ' : '') . dol_htmlentitiesbr($objp->description);
+                    echo ($txt ? ' - ' : '') . dol_htmlentitiesbr($objp->description);
                 }
             }
         } else {
@@ -723,7 +724,7 @@ if ($sql_select) {
 
         print '<td class="right"><span class="amount">' . price($objp->total_ht) . '</span></td>';
 
-        $total_ht += (float) $objp->total_ht;
+        $total_ht += (float)$objp->total_ht;
 
         print '<td class="right">' . price($objp->total_ht / (empty($objp->prod_qty) ? 1 : $objp->prod_qty)) . '</td>';
 

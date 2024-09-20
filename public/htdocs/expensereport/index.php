@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2021	Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004		Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2011	Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015       Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2019       Nicolas ZABOURI      <info@inovea-conseil.com>
- * Copyright (C) 2019-2024  Frédéric France      <frederic.france@free.fr>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2021	Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2011	Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,11 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/expensereport/index.php
  *  \ingroup    expensereport
@@ -32,8 +37,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
 
 $hookmanager = new HookManager($db);
 
@@ -69,7 +72,6 @@ if ($user->socid) {
     $socid = $user->socid;
 }
 $result = restrictedArea($user, 'expensereport', '', '');
-
 
 /*
  * View
@@ -167,7 +169,6 @@ if (count($dataseries) > ($KEEPNFIRST + 1)) {
 if ($conf->use_javascript_ajax) {
     print '<tr><td class="center" colspan="4">';
 
-    include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
     $dolgraph = new DolGraph();
     $dolgraph->SetData($dataseries);
     $dolgraph->setHeight(350);

@@ -54,7 +54,7 @@ abstract class CellIterator implements \Iterator
      */
     public function setIterateOnlyExistingCells($value)
     {
-        $this->onlyExistingCells = (bool) $value;
+        $this->onlyExistingCells = (bool)$value;
 
         $this->adjustForExistingOnlyRange();
     }

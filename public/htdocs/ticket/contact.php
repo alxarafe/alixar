@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2011-2016 Jean-François Ferry    <hello@librethic.io>
- * Copyright (C) 2011      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2016      Christophe Battarel <christophe@altairis.fr>
+/* Copyright (C) 2011-2016  Jean-François Ferry         <hello@librethic.io>
+ * Copyright (C) 2011       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2016       Christophe Battarel         <christophe@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *       \file       htdocs/ticket/contact.php
  *       \ingroup    ticket
@@ -28,16 +35,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/company.lib.php";
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 if (isModEnabled('project')) {
-    include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
     include_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
     include_once DOL_DOCUMENT_ROOT . '/core/lib/project.lib.php';
 }
@@ -184,7 +184,6 @@ if ($action == 'set_thirdparty' && $user->hasRight('ticket', 'write')) {
     }
 }
 
-
 /*
  * View
  */
@@ -208,9 +207,9 @@ if ($id > 0 || !empty($track_id) || !empty($ref)) {
         }
 
         if (!$user->socid && getDolGlobalString('TICKET_LIMIT_VIEW_ASSIGNED_ONLY')) {
-            $object->next_prev_filter = "te.fk_user_assign ='" . ((int) $user->id);
+            $object->next_prev_filter = "te.fk_user_assign ='" . ((int)$user->id);
         } elseif ($user->socid > 0) {
-            $object->next_prev_filter = "te.fk_soc = " . ((int) $user->socid);
+            $object->next_prev_filter = "te.fk_soc = " . ((int)$user->socid);
         }
 
         $head = ticket_prepare_head($object);

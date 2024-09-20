@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2010-2013  Regis Houssin       <regis.houssin@inodbox.com>
  * Copyright (C) 2010-2011	Laurent Destailleur	<eldy@users.sourceforge.net>
  * Copyright (C) 2012-2013	Christophe Battarel	<christophe.battarel@altairis.fr>
@@ -251,8 +252,7 @@ if (($line->info_bits & 2) == 2) {
 }
 
 if ($user->hasRight('fournisseur', 'lire') && isset($line->fk_fournprice) && $line->fk_fournprice > 0 && !getDolGlobalString('SUPPLIER_HIDE_SUPPLIER_OBJECTLINES')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
-    $productfourn = new ProductFournisseur($this->db);
+        $productfourn = new ProductFournisseur($this->db);
     $productfourn->fetch_product_fournisseur_price($line->fk_fournprice);
     print '<div class="clearboth"></div>';
     print '<span class="opacitymedium">' . $langs->trans('Supplier') . ' : </span>' . $productfourn->getSocNomUrl(1, 'supplier') . ' - <span class="opacitymedium">' . $langs->trans('Ref') . ' : </span>';

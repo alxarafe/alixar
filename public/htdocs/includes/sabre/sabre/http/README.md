@@ -735,13 +735,21 @@ function getHttpVersion();
 Made at fruux
 -------------
 
-This library is being developed by [fruux](https://fruux.com/). Drop us a line for commercial services or enterprise support.
+This library is being developed by [fruux](https://fruux.com/). Drop us a line for commercial services or enterprise
+support.
 
 [1]: http://getcomposer.org/
+
 [2]: http://sabre.io/
+
 [3]: https://github.com/symfony/HttpFoundation
+
 [4]: http://php.net/curl
+
 [5]: https://github.com/fruux/sabre-event
+
 [6]: http://en.wikipedia.org/wiki/Decorator_pattern
+
 [7]: http://guzzlephp.org/
+
 [8]: http://php.net/curl_multi_init

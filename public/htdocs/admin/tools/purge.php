@@ -23,7 +23,7 @@
  *      \brief      Page to purge files (temporary or not)
  */
 
-if (! defined('CSRFCHECK_WITH_TOKEN')) {
+if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');        // Force use of CSRF protection with tokens even for GET
 }
 
@@ -130,8 +130,8 @@ print '</div>';
 
 //if ($choice != 'confirm_allfiles')
 //{
-    print '<br>';
-    print '<div class="center"><input type="submit" class="button" value="' . $langs->trans("PurgeRunNow") . '"></div>';
+print '<br>';
+print '<div class="center"><input type="submit" class="button" value="' . $langs->trans("PurgeRunNow") . '"></div>';
 //}
 
 print '</form>';

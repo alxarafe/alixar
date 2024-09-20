@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017   Laurent Destailleur     <eldy@products.sourceforge.net>
- * Copyright (C) 2023 	Anthony Berton			<anthony.berton@bb2a.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@products.sourceforge.net>
+ * Copyright (C) 2023 	    Anthony Berton			    <anthony.berton@bb2a.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,15 +20,18 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\Product\Classes\ModelePDFProduct;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/core/modules/product/doc/pdf_standard.modules.php
  *  \ingroup    societe
  *  \brief      File of class to build PDF documents for products/services
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product/modules_product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -70,7 +73,7 @@ class pdf_standard extends ModelePDFProduct
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -106,21 +109,22 @@ class pdf_standard extends ModelePDFProduct
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build a document on disk using the generic odt module.
      *
-     *  @param      Product     $object             Object source to build document
-     *  @param      Translate   $outputlangs        Lang output object
-     *  @param      string      $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int         $hidedetails        Do not show line details
-     *  @param      int         $hidedesc           Do not show desc
-     *  @param      int         $hideref            Do not show ref
-     *  @return     int                             1 if OK, <=0 if KO
+     * @param Product $object Object source to build document
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                             1 if OK, <=0 if KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath, $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $db, $hookmanager;
 
         if (!is_object($outputlangs)) {
@@ -165,7 +169,6 @@ class pdf_standard extends ModelePDFProduct
             if (file_exists($dir)) {
                 // Add pdfgeneration hook
                 if (!is_object($hookmanager)) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                     $hookmanager = new HookManager($this->db);
                 }
                 $hookmanager->initHooks(array('pdfgeneration'));
@@ -599,19 +602,20 @@ class pdf_standard extends ModelePDFProduct
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     float|int   $tab_top        Top position of table
-     *   @param     float|int   $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y (not used)
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @param     string      $currency       Currency code
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param float|int $tab_top Top position of table
+     * @param float|int $tab_height Height of table (rectangle)
+     * @param int $nexY Y (not used)
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop 1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
+     * @param int $hidebottom Hide bottom bar of array
+     * @param string $currency Currency code
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0, $currency = '')
     {
@@ -699,16 +703,17 @@ class pdf_standard extends ModelePDFProduct
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Product     $object         Object to show
-     *  @param  int         $showaddress    0=no, 1=yes
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @param  string      $titlekey       Translation key to show as title of document
-     *  @return float|int                   Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param Product $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @param string $titlekey Translation key to show as title of document
+     * @return float|int                   Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs, $titlekey = "")
     {
@@ -865,15 +870,16 @@ class pdf_standard extends ModelePDFProduct
         return 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show footer of page. Need this->emetteur object
      *
-     *  @param  TCPDF       $pdf                PDF
-     *  @param  Product     $object             Object to show
-     *  @param  Translate   $outputlangs        Object lang for output
-     *  @param  int         $hidefreetext       1=Hide free text
-     *  @return int                             Return height of bottom margin including footer text
+     * @param TCPDF $pdf PDF
+     * @param Product $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return int                             Return height of bottom margin including footer text
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {

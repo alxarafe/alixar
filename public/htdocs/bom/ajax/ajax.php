@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (C) 2020 Laurent Destailleur <eldy@users.sourceforge.net>
+ * Copyright (C) 2020       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\CUnits;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *  \file       htdocs/bom/ajax/ajax.php
@@ -43,7 +46,6 @@ if (!defined('NOBROWSERNOTIF')) {
 }
 
 include_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cunits.class.php';
 
 

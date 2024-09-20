@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005-2018 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2007      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2010-2012 Destailleur Laurent 	<eldy@users.sourceforge.net>
- * Copyright (C) 2014 	   Henry Florian 		<florian.henry@open-concept.pro>
- * Copyright (C) 2023 	   Benjamin Falière		<benjamin.faliere@altairis.fr>
+/* Copyright (C) 2005-2018  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2010-2012  Destailleur Laurent 	    <eldy@users.sourceforge.net>
+ * Copyright (C) 2014 	    Henry Florian 		        <florian.henry@open-concept.pro>
+ * Copyright (C) 2023 	    Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,11 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/product/traduction.php
  *  \ingroup    product
@@ -32,8 +37,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'languages'));
@@ -226,7 +229,6 @@ dol_banner_tab($object, 'ref', $linkback, $shownav, 'ref', '', '', '', 0, '', ''
 print dol_get_fiche_end();
 
 
-
 /*
  * Action bar
  */
@@ -248,10 +250,8 @@ if (empty($reshook)) {
 print "\n" . '</div>' . "\n";
 
 
-
 if ($action == 'edit') {
     //WYSIWYG Editor
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
     print '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';
     print '<input type="hidden" name="token" value="' . newToken() . '">';
@@ -318,14 +318,12 @@ if ($action == 'edit') {
 }
 
 
-
 /*
  * Form to add a new translation
  */
 
 if ($action == 'add' && ($user->hasRight('produit', 'creer') || $user->hasRight('service', 'creer'))) {
     //WYSIWYG Editor
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
     print '<br>';
     print '<form action="' . $_SERVER["PHP_SELF"] . '" method="post">';

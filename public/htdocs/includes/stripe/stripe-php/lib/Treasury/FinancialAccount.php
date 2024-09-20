@@ -42,9 +42,9 @@ class FinancialAccount extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Treasury\FinancialAccount the retrieved financial account
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Treasury\FinancialAccount the retrieved financial account
      */
     public function retrieveFeatures($params = null, $opts = null)
     {
@@ -60,9 +60,9 @@ class FinancialAccount extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Treasury\FinancialAccount the updated financial account
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Treasury\FinancialAccount the updated financial account
      */
     public function updateFeatures($params = null, $opts = null)
     {

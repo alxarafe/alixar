@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2011      Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2003-2010 Frederico Caldeira Knabben
  *
@@ -52,92 +53,83 @@ top_httphead();
  * This page shows the actual folder path.
 -->
 <html>
-    <head>
-        <title>Folder path</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<?php
-print '<!-- Includes CSS for Dolibarr theme -->' . "\n";
-// Output style sheets (optioncss='print' or ''). Note: $conf->css looks like '/theme/eldy/style.css.php'
-$themepath = dol_buildpath($conf->css, 1);
-$themesubdir = '';
-if (!empty($conf->modules_parts['theme'])) {    // This slow down
-    foreach ($conf->modules_parts['theme'] as $reldir) {
-        if (file_exists(dol_buildpath($reldir . $conf->css, 0))) {
-            $themepath = dol_buildpath($reldir . $conf->css, 1);
-            $themesubdir = $reldir;
-            break;
+<head>
+    <title>Folder path</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <?php
+    print '<!-- Includes CSS for Dolibarr theme -->' . "\n";
+    // Output style sheets (optioncss='print' or ''). Note: $conf->css looks like '/theme/eldy/style.css.php'
+    $themepath = dol_buildpath($conf->css, 1);
+    $themesubdir = '';
+    if (!empty($conf->modules_parts['theme'])) {    // This slow down
+        foreach ($conf->modules_parts['theme'] as $reldir) {
+            if (file_exists(dol_buildpath($reldir . $conf->css, 0))) {
+                $themepath = dol_buildpath($reldir . $conf->css, 1);
+                $themesubdir = $reldir;
+                break;
+            }
         }
     }
-}
 
-//print 'themepath='.$themepath.' themeparam='.$themeparam;exit;
-print '<link rel="stylesheet" type="text/css" href="' . $themepath . '">' . "\n";
-?>
-        <link href="browser.css" type="text/css" rel="stylesheet">
-        <script type="text/javascript">
-// Automatically detect the correct document.domain (#1919).
-(function()
-{
-    var d = document.domain ;
+    //print 'themepath='.$themepath.' themeparam='.$themeparam;exit;
+    print '<link rel="stylesheet" type="text/css" href="' . $themepath . '">' . "\n";
+    ?>
+    <link href="browser.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript">
+        // Automatically detect the correct document.domain (#1919).
+        (function () {
+            var d = document.domain;
 
-    while ( true )
-    {
-        // Test if we can access a parent property.
-        try
-        {
-            var test = window.top.opener.document.domain ;
-            break ;
+            while (true) {
+                // Test if we can access a parent property.
+                try {
+                    var test = window.top.opener.document.domain;
+                    break;
+                } catch (e) {
+                }
+
+                // Remove a domain part: www.mytest.example.com => mytest.example.com => example.com ...
+                d = d.replace(/.*?(?:\.|$)/, '');
+
+                if (d.length == 0)
+                    break;     // It was not able to detect the domain.
+
+                try {
+                    document.domain = d;
+                } catch (e) {
+                    break;
+                }
+            }
+        })();
+
+        function SetCurrentFolder(resourceType, folderPath) {
+            document.getElementById('tdName').innerHTML = folderPath;
         }
-        catch( e )
-        {}
 
-        // Remove a domain part: www.mytest.example.com => mytest.example.com => example.com ...
-        d = d.replace( /.*?(?:\.|$)/, '' );
-
-        if ( d.length == 0 )
-            break ;     // It was not able to detect the domain.
-
-        try
-        {
-            document.domain = d ;
+        window.onload = function () {
+            window.top.IsLoadedActualFolder = true;
         }
-        catch (e)
-        {
-            break ;
-        }
-    }
-})();
 
-function SetCurrentFolder( resourceType, folderPath )
-{
-    document.getElementById('tdName').innerHTML = folderPath ;
-}
-
-window.onload = function()
-{
-    window.top.IsLoadedActualFolder = true ;
-}
-
-        </script>
-    </head>
-    <body>
-        <table class="fullHeight" cellSpacing="0" cellPadding="0" width="100%" border="0">
-            <tr>
-                <td>
-                    <button style="WIDTH: 100%" type="button">
-                        <table cellSpacing="0" cellPadding="0" width="100%" border="0">
-                            <tr>
-                                <td><?php echo img_picto_common('', 'treemenu/folder.gif', 'width="16" height="16"'); ?></td>
-                                <td>&nbsp;</td>
-                                <td id="tdName" width="100%" class="ActualFolder nowrap">/</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                            </tr>
-                        </table>
-                    </button>
-                </td>
-            </tr>
-        </table>
-    </body>
+    </script>
+</head>
+<body>
+<table class="fullHeight" cellSpacing="0" cellPadding="0" width="100%" border="0">
+    <tr>
+        <td>
+            <button style="WIDTH: 100%" type="button">
+                <table cellSpacing="0" cellPadding="0" width="100%" border="0">
+                    <tr>
+                        <td><?php echo img_picto_common('', 'treemenu/folder.gif', 'width="16" height="16"'); ?></td>
+                        <td>&nbsp;</td>
+                        <td id="tdName" width="100%" class="ActualFolder nowrap">/</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
+            </button>
+        </td>
+    </tr>
+</table>
+</body>
 </html>

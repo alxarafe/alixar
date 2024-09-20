@@ -240,8 +240,8 @@ class Plugin extends DAV\ServerPlugin
      * This functions handles REPORT requests specific to CalDAV.
      *
      * @param string $reportName
-     * @param mixed  $report
-     * @param mixed  $path
+     * @param mixed $report
+     * @param mixed $path
      *
      * @return bool|null
      */
@@ -578,7 +578,7 @@ class Plugin extends DAV\ServerPlugin
         }
 
         if ($node instanceof ICalendarObjectContainer && 0 === $depth) {
-            if (0 === strpos((string) $this->server->httpRequest->getHeader('User-Agent'), 'MSFT-')) {
+            if (0 === strpos((string)$this->server->httpRequest->getHeader('User-Agent'), 'MSFT-')) {
                 // Microsoft clients incorrectly supplied depth as 0, when it actually
                 // should have set depth to 1. We're implementing a workaround here
                 // to deal with this.
@@ -709,9 +709,9 @@ class Plugin extends DAV\ServerPlugin
      * This plugin uses this method to ensure that CalDAV objects receive
      * valid calendar data.
      *
-     * @param string   $path
+     * @param string $path
      * @param resource $data
-     * @param bool     $modified should be set to true, if this event handler
+     * @param bool $modified should be set to true, if this event handler
      *                           changed &$data
      */
     public function beforeWriteContent($path, DAV\IFile $node, &$data, &$modified)
@@ -746,9 +746,9 @@ class Plugin extends DAV\ServerPlugin
      * This plugin uses this method to ensure that newly created calendar
      * objects contain valid calendar data.
      *
-     * @param string   $path
+     * @param string $path
      * @param resource $data
-     * @param bool     $modified should be set to true, if this event handler
+     * @param bool $modified should be set to true, if this event handler
      *                           changed &$data
      */
     public function beforeCreateFile($path, &$data, DAV\ICollection $parentNode, &$modified)
@@ -772,13 +772,13 @@ class Plugin extends DAV\ServerPlugin
      *
      * An exception is thrown if it's not.
      *
-     * @param resource|string   $data
-     * @param string            $path
-     * @param bool              $modified should be set to true, if this event handler
+     * @param resource|string $data
+     * @param string $path
+     * @param bool $modified should be set to true, if this event handler
      *                                    changed &$data
-     * @param RequestInterface  $request  the http request
+     * @param RequestInterface $request the http request
      * @param ResponseInterface $response the http response
-     * @param bool              $isNew    is the item a new one, or an update
+     * @param bool $isNew is the item a new one, or an update
      */
     protected function validateICalendar(&$data, $path, &$modified, RequestInterface $request, ResponseInterface $response, $isNew)
     {

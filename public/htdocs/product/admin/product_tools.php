@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2012      Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2013-2015 Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2012       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\Fournisseur;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/product/admin/product_tools.php
  *  \ingroup    product
@@ -32,8 +37,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('admin', 'products'));
@@ -47,7 +50,6 @@ $action = GETPOST('action', 'aZ09');
 $oldvatrate = GETPOST('oldvatrate', 'alpha');
 $newvatrate = GETPOST('newvatrate', 'alpha');
 //$price_base_type=GETPOST('price_base_type');
-
 
 
 /*
@@ -203,7 +205,7 @@ if ($action == 'convert') {
         } else {
             $sql .= " AND default_vat_code = IS NULL";
         }
-        $sql .= " AND s.fk_pays = " . ((int) $country_id);
+        $sql .= " AND s.fk_pays = " . ((int)$country_id);
 
         $resql = $db->query($sql);
         if ($resql) {
@@ -229,8 +231,8 @@ if ($action == 'convert') {
                     //}
                     //else
                     //{
-                        $newprice = price2num($obj->price, 'MU'); // Second param must be MU (we want a unit price so 'MU'. If unit price was on 4 decimal, we must keep 4 decimals)
-                        //$newminprice=$objectstatic2->fourn_price_min;
+                    $newprice = price2num($obj->price, 'MU'); // Second param must be MU (we want a unit price so 'MU'. If unit price was on 4 decimal, we must keep 4 decimals)
+                    //$newminprice=$objectstatic2->fourn_price_min;
                     //}
                     //if ($newminprice > $newprice) $newminprice=$newprice;
                     $newvat = str_replace('*', '', $newvatrate);

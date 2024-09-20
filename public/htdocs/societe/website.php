@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005      Brice Davoleau       <brice.davoleau@gmail.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2006-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007      Patrick Raguin  		<patrick.raguin@gmail.com>
- * Copyright (C) 2010      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2018      Ferran Marcet        <fmarcet@2byte.es>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005       Brice Davoleau              <brice.davoleau@gmail.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007       Patrick Raguin  		    <patrick.raguin@gmail.com>
+ * Copyright (C) 2010       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Societe\Classes\SocieteAccount;
+
 /**
  *  \file       htdocs/societe/website.php
  *  \ingroup    website
@@ -32,9 +40,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
@@ -46,14 +51,14 @@ $langs->loadLangs(array("companies", "website"));
 // Get parameters
 $id = GETPOSTINT('id') ? GETPOSTINT('id') : GETPOSTINT('socid');
 
-$action      = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view';               // The action 'add', 'create', 'edit', 'update', 'view', ...
-$show_files  = GETPOSTINT('show_files');
+$action = GETPOST('action', 'aZ09') ? GETPOST('action', 'aZ09') : 'view';               // The action 'add', 'create', 'edit', 'update', 'view', ...
+$show_files = GETPOSTINT('show_files');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'websitelist';  // To manage different context of search
-$backtopage  = GETPOST('backtopage', 'alpha');                                              // Go back to a dedicated page
-$optioncss   = GETPOST('optioncss', 'aZ');                                                  // Option for the css output (always '' except when 'print')
-$toselect   = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
-$optioncss  = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
-$mode       = GETPOST('mode', 'aZ'); // The output mode ('list', 'kanban', 'hierarchy', 'calendar', ...)
+$backtopage = GETPOST('backtopage', 'alpha');                                              // Go back to a dedicated page
+$optioncss = GETPOST('optioncss', 'aZ');                                                  // Option for the css output (always '' except when 'print')
+$toselect = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
+$optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
+$mode = GETPOST('mode', 'aZ'); // The output mode ('list', 'kanban', 'hierarchy', 'calendar', ...)
 
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
 $sortfield = GETPOST('sortfield', 'aZ09comma');
@@ -182,8 +187,6 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_massactions.inc.php';
 }
 
-
-
 /*
  *	View
  */
@@ -236,7 +239,7 @@ if ($objectwebsiteaccount->ismultientitymanaged == 1) {
 } else {
     $sql .= " WHERE 1 = 1";
 }
-$sql .= " AND fk_soc = " . ((int) $object->id);
+$sql .= " AND fk_soc = " . ((int)$object->id);
 if (!empty($site_filter_list)) {
     $sql .= " AND t.site IN (" . $db->sanitize("'" . implode("','", $site_filter_list) . "'", 1) . ")";
 }
@@ -338,7 +341,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -351,9 +354,9 @@ foreach ($search as $key => $val) {
             }
         }
     } elseif (preg_match('/(_dtstart|_dtend)$/', $key) && !empty($val)) {
-        $param .= '&search_' . $key . 'month=' . ((int) GETPOST('search_' . $key . 'month', 'int'));
-        $param .= '&search_' . $key . 'day=' . ((int) GETPOST('search_' . $key . 'day', 'int'));
-        $param .= '&search_' . $key . 'year=' . ((int) GETPOST('search_' . $key . 'year', 'int'));
+        $param .= '&search_' . $key . 'month=' . ((int)GETPOST('search_' . $key . 'month', 'int'));
+        $param .= '&search_' . $key . 'day=' . ((int)GETPOST('search_' . $key . 'day', 'int'));
+        $param .= '&search_' . $key . 'year=' . ((int)GETPOST('search_' . $key . 'year', 'int'));
     } elseif ($search[$key] != '') {
         $param .= '&search_' . $key . '=' . urlencode($search[$key]);
     }
@@ -363,7 +366,7 @@ include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_list_search_param.tpl.php';
 
 $head = societe_prepare_head($object);
 
-print dol_get_fiche_head($head, 'website', $langs->trans("ThirdParty"), - 1, 'company');
+print dol_get_fiche_head($head, 'website', $langs->trans("ThirdParty"), -1, 'company');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/societe/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 
@@ -422,7 +425,6 @@ if (isModEnabled('website') || isModEnabled('webportal')) {
 }
 
 print '<br>';
-
 
 
 // List of mass actions available
@@ -536,7 +538,6 @@ foreach ($objectwebsiteaccount->fields as $key => $val) {
             print '</div>';
             */
         } elseif ($key == 'lang') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
             $formadmin = new FormAdmin($db);
             print $formadmin->select_language((isset($search[$key]) ? $search[$key] : ''), 'search_lang', 0, null, 1, 0, 0, 'minwidth100imp maxwidth125', 2);
         } else {
@@ -765,7 +766,6 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
         $hidegeneratedfilelistifempty = 0;
     }
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
     $formfile = new FormFile($db);
 
     // Show list of available documents

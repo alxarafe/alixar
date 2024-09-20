@@ -180,15 +180,15 @@ class Plugin extends DAV\ServerPlugin
      * This method will throw an exception if the privilege is not available
      * and return true otherwise.
      *
-     * @param string       $uri
+     * @param string $uri
      * @param array|string $privileges
-     * @param int          $recursion
-     * @param bool         $throwExceptions if set to false, this method won't throw exceptions
-     *
-     * @throws NeedPrivileges
-     * @throws NotAuthenticated
+     * @param int $recursion
+     * @param bool $throwExceptions if set to false, this method won't throw exceptions
      *
      * @return bool
+     * @throws NotAuthenticated
+     *
+     * @throws NeedPrivileges
      */
     public function checkPrivileges($uri, $privileges, $recursion = self::R_PARENT, $throwExceptions = true)
     {
@@ -709,16 +709,16 @@ class Plugin extends DAV\ServerPlugin
      *
      * This method will return a list of properties for the matched properties.
      *
-     * @param array  $searchProperties    The properties to search on. This is a
+     * @param array $searchProperties The properties to search on. This is a
      *                                    key-value list. The keys are property
      *                                    names, and the values the strings to
      *                                    match them on.
-     * @param array  $requestedProperties this is the list of properties to
+     * @param array $requestedProperties this is the list of properties to
      *                                    return for every match
-     * @param string $collectionUri       the principal collection to search on.
+     * @param string $collectionUri the principal collection to search on.
      *                                    If this is ommitted, the standard
      *                                    principal collection-set will be used
-     * @param string $test                "allof" to use AND to search the
+     * @param string $test "allof" to use AND to search the
      *                                    properties. 'anyof' for OR.
      *
      * @return array This method returns an array structure similar to
@@ -1067,8 +1067,8 @@ class Plugin extends DAV\ServerPlugin
      * This method handles HTTP REPORT requests.
      *
      * @param string $reportName
-     * @param mixed  $report
-     * @param mixed  $path
+     * @param mixed $report
+     * @param mixed $path
      */
     public function report($reportName, $report, $path)
     {
@@ -1286,7 +1286,7 @@ class Plugin extends DAV\ServerPlugin
      * Other rfc's, such as ACL rely on this report, so it made sense to put
      * it in this plugin.
      *
-     * @param string                           $path
+     * @param string $path
      * @param Xml\Request\ExpandPropertyReport $report
      */
     protected function expandPropertyReport($path, $report)
@@ -1311,7 +1311,7 @@ class Plugin extends DAV\ServerPlugin
      *
      * @param array $path
      * @param array $requestedProperties the list of required properties
-     * @param int   $depth
+     * @param int $depth
      *
      * @return array
      */
@@ -1366,7 +1366,7 @@ class Plugin extends DAV\ServerPlugin
      * of properties the client may search on, using the
      * {DAV:}principal-property-search report.
      *
-     * @param string                                       $path
+     * @param string $path
      * @param Xml\Request\PrincipalSearchPropertySetReport $report
      */
     protected function principalSearchPropertySetReport($path, $report)

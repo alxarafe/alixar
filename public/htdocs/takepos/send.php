@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2019   Thibault FOUCART      <support@ptibogxiv.net>
- * Copyright (C) 2020	Andreu Bisquerra Gaya <jove@bisquerra.com>
+/* Copyright (C) 2019       Thibault FOUCART            <support@ptibogxiv.net>
+ * Copyright (C) 2020	    Andreu Bisquerra Gaya       <jove@bisquerra.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/takepos/send.php
@@ -44,7 +50,6 @@ if (!defined('NOREQUIREAJAX')) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
 $facid = GETPOSTINT('facid');
 $action = GETPOST('action', 'aZ09');
@@ -61,14 +66,11 @@ $invoice->fetch($facid);
 $customer = new Societe($db);
 $customer->fetch($invoice->socid);
 
-
 /*
  * Actions
  */
 
 if ($action == "send") {
-    include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
     $formmail = new FormMail($db);
     $outputlangs = new Translate('', $conf);
     $model_id = getDolGlobalString('TAKEPOS_EMAIL_TEMPLATE_INVOICE');
@@ -98,34 +100,35 @@ if ($action == "send") {
  */
 
 $arrayofcss = array('/takepos/css/pos.css.php');
-$arrayofjs  = array();
+$arrayofjs = array();
 top_htmlhead($head, '', 0, 0, $arrayofjs, $arrayofcss);
 
 ?>
 <body class="center">
 
 <script>
-function SendMail() {
-    $.ajax({
-        type: "GET",
-        data: { token: '<?php echo currentToken(); ?>' },
-        url: "<?php print constant('BASE_URL') . '/takepos/send.php?action=send&token=' . newToken() . '&facid=' . $facid . '&email='; ?>" + $("#email"). val(),
-    });
-    parent.$.colorbox.close();
-}
+    function SendMail() {
+        $.ajax({
+            type: "GET",
+            data: {token: '<?php echo currentToken(); ?>'},
+            url: "<?php print constant('BASE_URL') . '/takepos/send.php?action=send&token=' . newToken() . '&facid=' . $facid . '&email='; ?>" + $("#email").val(),
+        });
+        parent.$.colorbox.close();
+    }
 
 </script>
 
 <div class="center">
-<center>
-<center>
-<input type="email" id="email" name="email" style="width:60%;font-size: 200%;" value="<?php echo $customer->email; ?>"></center>
-</center>
+    <center>
+        <center>
+            <input type="email" id="email" name="email" style="width:60%;font-size: 200%;"
+                   value="<?php echo $customer->email; ?>"></center>
+    </center>
 </div>
 <br>
 <div class="center">
 
-<button type="button" class="calcbutton"  onclick="SendMail()"><?php print $langs->trans("SendTicket"); ?></button>
+    <button type="button" class="calcbutton" onclick="SendMail()"><?php print $langs->trans("SendTicket"); ?></button>
 
 </div>
 

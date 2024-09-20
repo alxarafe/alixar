@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2009-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2009-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Imports\Classes\Import;
+
 /**
  *      \file       htdocs/imports/emptyexample.php
  *      \ingroup    import
@@ -27,12 +29,11 @@ if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1'); // Do not roll the Anti CSRF token (used if MAIN_SECURITY_CSRF_WITH_TOKEN is on)
 }
 
-
 /**
  * This file is a wrapper, so empty header
  *
- * @ignore
  * @return  void
+ * @ignore
  */
 function llxHeader()
 {
@@ -42,8 +43,8 @@ function llxHeader()
 /**
  * This file is a wrapper, so empty footer
  *
- * @ignore
  * @return  void
+ * @ignore
  */
 function llxFooter()
 {
@@ -53,8 +54,6 @@ function llxFooter()
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/imports/class/import.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/import/modules_import.php';
 
 $datatoimport = GETPOST('datatoimport');
 $format = GETPOST('format');
@@ -71,7 +70,6 @@ if (empty($datatoimport)) {
     llxFooter();
     exit;
 }
-
 
 $filename = $langs->transnoentitiesnoconv("ExampleOfImportFile") . '_' . $datatoimport . '.' . $format;
 
@@ -99,7 +97,6 @@ if ($contenttype) {
 if ($attachment) {
     header('Content-Disposition: attachment; filename="' . $filename . '"');
 }
-
 
 // List of targets fields
 $headerlinefields = array();    // Array of fields (label to show)

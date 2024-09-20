@@ -41,28 +41,28 @@ class Styles extends BaseParserClass
 
     private static function readFontStyle(Font $fontStyle, \SimpleXMLElement $fontStyleXml)
     {
-        $fontStyle->setName((string) $fontStyleXml->name['val']);
-        $fontStyle->setSize((float) $fontStyleXml->sz['val']);
+        $fontStyle->setName((string)$fontStyleXml->name['val']);
+        $fontStyle->setSize((float)$fontStyleXml->sz['val']);
 
         if (isset($fontStyleXml->b)) {
-            $fontStyle->setBold(!isset($fontStyleXml->b['val']) || self::boolean((string) $fontStyleXml->b['val']));
+            $fontStyle->setBold(!isset($fontStyleXml->b['val']) || self::boolean((string)$fontStyleXml->b['val']));
         }
         if (isset($fontStyleXml->i)) {
-            $fontStyle->setItalic(!isset($fontStyleXml->i['val']) || self::boolean((string) $fontStyleXml->i['val']));
+            $fontStyle->setItalic(!isset($fontStyleXml->i['val']) || self::boolean((string)$fontStyleXml->i['val']));
         }
         if (isset($fontStyleXml->strike)) {
-            $fontStyle->setStrikethrough(!isset($fontStyleXml->strike['val']) || self::boolean((string) $fontStyleXml->strike['val']));
+            $fontStyle->setStrikethrough(!isset($fontStyleXml->strike['val']) || self::boolean((string)$fontStyleXml->strike['val']));
         }
         $fontStyle->getColor()->setARGB(self::readColor($fontStyleXml->color));
 
         if (isset($fontStyleXml->u) && !isset($fontStyleXml->u['val'])) {
             $fontStyle->setUnderline(Font::UNDERLINE_SINGLE);
         } elseif (isset($fontStyleXml->u, $fontStyleXml->u['val'])) {
-            $fontStyle->setUnderline((string) $fontStyleXml->u['val']);
+            $fontStyle->setUnderline((string)$fontStyleXml->u['val']);
         }
 
         if (isset($fontStyleXml->vertAlign, $fontStyleXml->vertAlign['val'])) {
-            $verticalAlign = strtolower((string) $fontStyleXml->vertAlign['val']);
+            $verticalAlign = strtolower((string)$fontStyleXml->vertAlign['val']);
             if ($verticalAlign === 'superscript') {
                 $fontStyle->setSuperscript(true);
             }
@@ -79,7 +79,7 @@ class Styles extends BaseParserClass
         }
         $numfmt = $numfmtStyleXml->attributes();
         if ($numfmt->count() > 0 && isset($numfmt['formatCode'])) {
-            $numfmtStyle->setFormatCode((string) $numfmt['formatCode']);
+            $numfmtStyle->setFormatCode((string)$numfmt['formatCode']);
         }
     }
 
@@ -89,14 +89,14 @@ class Styles extends BaseParserClass
             /** @var \SimpleXMLElement $gradientFill */
             $gradientFill = $fillStyleXml->gradientFill[0];
             if (!empty($gradientFill['type'])) {
-                $fillStyle->setFillType((string) $gradientFill['type']);
+                $fillStyle->setFillType((string)$gradientFill['type']);
             }
-            $fillStyle->setRotation((float) ($gradientFill['degree']));
+            $fillStyle->setRotation((float)($gradientFill['degree']));
             $gradientFill->registerXPathNamespace('sml', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
             $fillStyle->getStartColor()->setARGB(self::readColor(self::getArrayItem($gradientFill->xpath('sml:stop[@position=0]'))->color));
             $fillStyle->getEndColor()->setARGB(self::readColor(self::getArrayItem($gradientFill->xpath('sml:stop[@position=1]'))->color));
         } elseif ($fillStyleXml->patternFill) {
-            $patternType = (string) $fillStyleXml->patternFill['patternType'] != '' ? (string) $fillStyleXml->patternFill['patternType'] : 'solid';
+            $patternType = (string)$fillStyleXml->patternFill['patternType'] != '' ? (string)$fillStyleXml->patternFill['patternType'] : 'solid';
             $fillStyle->setFillType($patternType);
             if ($fillStyleXml->patternFill->fgColor) {
                 $fillStyle->getStartColor()->setARGB(self::readColor($fillStyleXml->patternFill->fgColor, true));
@@ -111,8 +111,8 @@ class Styles extends BaseParserClass
 
     private static function readBorderStyle(Borders $borderStyle, \SimpleXMLElement $borderStyleXml)
     {
-        $diagonalUp = self::boolean((string) $borderStyleXml['diagonalUp']);
-        $diagonalDown = self::boolean((string) $borderStyleXml['diagonalDown']);
+        $diagonalUp = self::boolean((string)$borderStyleXml['diagonalUp']);
+        $diagonalDown = self::boolean((string)$borderStyleXml['diagonalDown']);
         if (!$diagonalUp && !$diagonalDown) {
             $borderStyle->setDiagonalDirection(Borders::DIAGONAL_NONE);
         } elseif ($diagonalUp && !$diagonalDown) {
@@ -133,7 +133,7 @@ class Styles extends BaseParserClass
     private static function readBorder(Border $border, \SimpleXMLElement $borderXml)
     {
         if (isset($borderXml['style'])) {
-            $border->setBorderStyle((string) $borderXml['style']);
+            $border->setBorderStyle((string)$borderXml['style']);
         }
         if (isset($borderXml->color)) {
             $border->getColor()->setARGB(self::readColor($borderXml->color));
@@ -142,21 +142,21 @@ class Styles extends BaseParserClass
 
     private static function readAlignmentStyle(Alignment $alignment, \SimpleXMLElement $alignmentXml)
     {
-        $alignment->setHorizontal((string) $alignmentXml->alignment['horizontal']);
-        $alignment->setVertical((string) $alignmentXml->alignment['vertical']);
+        $alignment->setHorizontal((string)$alignmentXml->alignment['horizontal']);
+        $alignment->setVertical((string)$alignmentXml->alignment['vertical']);
 
         $textRotation = 0;
-        if ((int) $alignmentXml->alignment['textRotation'] <= 90) {
-            $textRotation = (int) $alignmentXml->alignment['textRotation'];
-        } elseif ((int) $alignmentXml->alignment['textRotation'] > 90) {
-            $textRotation = 90 - (int) $alignmentXml->alignment['textRotation'];
+        if ((int)$alignmentXml->alignment['textRotation'] <= 90) {
+            $textRotation = (int)$alignmentXml->alignment['textRotation'];
+        } elseif ((int)$alignmentXml->alignment['textRotation'] > 90) {
+            $textRotation = 90 - (int)$alignmentXml->alignment['textRotation'];
         }
 
-        $alignment->setTextRotation((int) $textRotation);
-        $alignment->setWrapText(self::boolean((string) $alignmentXml->alignment['wrapText']));
-        $alignment->setShrinkToFit(self::boolean((string) $alignmentXml->alignment['shrinkToFit']));
-        $alignment->setIndent((int) ((string) $alignmentXml->alignment['indent']) > 0 ? (int) ((string) $alignmentXml->alignment['indent']) : 0);
-        $alignment->setReadOrder((int) ((string) $alignmentXml->alignment['readingOrder']) > 0 ? (int) ((string) $alignmentXml->alignment['readingOrder']) : 0);
+        $alignment->setTextRotation((int)$textRotation);
+        $alignment->setWrapText(self::boolean((string)$alignmentXml->alignment['wrapText']));
+        $alignment->setShrinkToFit(self::boolean((string)$alignmentXml->alignment['shrinkToFit']));
+        $alignment->setIndent((int)((string)$alignmentXml->alignment['indent']) > 0 ? (int)((string)$alignmentXml->alignment['indent']) : 0);
+        $alignment->setReadOrder((int)((string)$alignmentXml->alignment['readingOrder']) > 0 ? (int)((string)$alignmentXml->alignment['readingOrder']) : 0);
     }
 
     private function readStyle(Style $docStyle, $style)
@@ -198,7 +198,7 @@ class Styles extends BaseParserClass
     private function readProtectionLocked(Style $docStyle, $style)
     {
         if (isset($style->protection['locked'])) {
-            if (self::boolean((string) $style->protection['locked'])) {
+            if (self::boolean((string)$style->protection['locked'])) {
                 $docStyle->getProtection()->setLocked(Protection::PROTECTION_PROTECTED);
             } else {
                 $docStyle->getProtection()->setLocked(Protection::PROTECTION_UNPROTECTED);
@@ -209,7 +209,7 @@ class Styles extends BaseParserClass
     private function readProtectionHidden(Style $docStyle, $style)
     {
         if (isset($style->protection['hidden'])) {
-            if (self::boolean((string) $style->protection['hidden'])) {
+            if (self::boolean((string)$style->protection['hidden'])) {
                 $docStyle->getProtection()->setHidden(Protection::PROTECTION_PROTECTED);
             } else {
                 $docStyle->getProtection()->setHidden(Protection::PROTECTION_UNPROTECTED);
@@ -220,14 +220,14 @@ class Styles extends BaseParserClass
     private static function readColor($color, $background = false)
     {
         if (isset($color['rgb'])) {
-            return (string) $color['rgb'];
+            return (string)$color['rgb'];
         } elseif (isset($color['indexed'])) {
             return Color::indexedColor($color['indexed'] - 7, $background)->getARGB();
         } elseif (isset($color['theme'])) {
             if (self::$theme !== null) {
-                $returnColour = self::$theme->getColourByIndex((int) $color['theme']);
+                $returnColour = self::$theme->getColourByIndex((int)$color['theme']);
                 if (isset($color['tint'])) {
-                    $tintAdjust = (float) $color['tint'];
+                    $tintAdjust = (float)$color['tint'];
                     $returnColour = Color::changeBrightness($returnColour, $tintAdjust);
                 }
 
@@ -253,11 +253,11 @@ class Styles extends BaseParserClass
             //    Cell Styles
             if ($this->styleXml->cellStyles) {
                 foreach ($this->styleXml->cellStyles->cellStyle as $cellStyle) {
-                    if ((int) ($cellStyle['builtinId']) == 0) {
-                        if (isset($this->cellStyles[(int) ($cellStyle['xfId'])])) {
+                    if ((int)($cellStyle['builtinId']) == 0) {
+                        if (isset($this->cellStyles[(int)($cellStyle['xfId'])])) {
                             // Set default style
                             $style = new Style();
-                            $this->readStyle($style, $this->cellStyles[(int) ($cellStyle['xfId'])]);
+                            $this->readStyle($style, $this->cellStyles[(int)($cellStyle['xfId'])]);
 
                             // normal style, currently not using it for anything
                         }

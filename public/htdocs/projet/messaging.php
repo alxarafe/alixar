@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *      \file       htdocs/projet/messaging.php
  *      \ingroup    project
@@ -28,16 +31,15 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
 // Load translation files required by the page
 $langs->load("projects");
 
-$id     = GETPOSTINT('id');
-$ref    = GETPOST('ref', 'alpha');
-$socid  = GETPOSTINT('socid');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
+$socid = GETPOSTINT('socid');
 $action = GETPOST('action', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ09');
 
@@ -81,7 +83,6 @@ if (!$user->hasRight('projet', 'lire')) {
 }
 
 
-
 /*
  * Actions
  */
@@ -97,8 +98,6 @@ if (GETPOST('button_removefilter_x', 'alpha') || GETPOST('button_removefilter.x'
     $actioncode = '';
     $search_agenda_label = '';
 }
-
-
 
 /*
  * View
@@ -132,7 +131,7 @@ print dol_get_fiche_head($head, 'agenda', $langs->trans("Project"), -1, ($object
 
 if (!empty($_SESSION['pageforbacktolist']) && !empty($_SESSION['pageforbacktolist']['project'])) {
     $tmpurl = $_SESSION['pageforbacktolist']['project'];
-    $tmpurl = preg_replace('/__SOCID__/', (string) $object->socid, $tmpurl);
+    $tmpurl = preg_replace('/__SOCID__/', (string)$object->socid, $tmpurl);
     $linkback = '<a href="' . $tmpurl . (preg_match('/\?/', $tmpurl) ? '&' : '?') . 'restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 } else {
     $linkback = '<a href="' . constant('BASE_URL') . '/projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
@@ -177,7 +176,6 @@ if ($permok) {
 }
 
 
-
 //print '</div>';
 
 if (!empty($object->id)) {
@@ -216,7 +214,7 @@ if (!empty($object->id)) {
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/memory.lib.php';

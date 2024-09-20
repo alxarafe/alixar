@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+
 /**
  *  \file       htdocs/public/members/public_card.php
  *  \ingroup    member
@@ -43,16 +45,13 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
 // Security check
 if (!isModEnabled('member')) {
@@ -67,13 +66,11 @@ $object = new Adherent($db);
 $extrafields = new ExtraFields($db);
 
 
-
 /*
  * Actions
  */
 
 // None
-
 
 
 /*
@@ -141,12 +138,11 @@ llxFooterVierge();
 $db->close();
 
 
-
 /**
  * Show header for card member
  *
- * @param   string      $title      Title
- * @param   string      $head       More info into header
+ * @param string $title Title
+ * @param string $head More info into header
  * @return  void
  */
 function llxHeaderVierge($title, $head = "")
@@ -157,10 +153,10 @@ function llxHeaderVierge($title, $head = "")
 }
 
 /**
-* Show footer for card member
-*
-* @return   void
-*/
+ * Show footer for card member
+ *
+ * @return   void
+ */
 function llxFooterVierge()
 {
     printCommonFooter('public');

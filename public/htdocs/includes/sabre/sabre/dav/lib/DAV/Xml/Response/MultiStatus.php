@@ -41,7 +41,7 @@ class MultiStatus implements Element
      * Constructor.
      *
      * @param \Sabre\DAV\Xml\Element\Response[] $responses
-     * @param string                            $syncToken
+     * @param string $syncToken
      */
     public function __construct(array $responses, $syncToken = null)
     {

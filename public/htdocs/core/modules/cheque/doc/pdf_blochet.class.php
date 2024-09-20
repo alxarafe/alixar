@@ -29,7 +29,6 @@
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/cheque/modules_chequereceipts.php';
 
 
 /**
@@ -77,7 +76,7 @@ class BordereauChequeBlochet extends ModeleChequeReceipts
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db     Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -114,19 +113,20 @@ class BordereauChequeBlochet extends ModeleChequeReceipts
         $this->tab_height = 200; //$this->line_height * $this->line_per_page;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Fonction to generate document on disk
      *
-     *  @param  RemiseCheque    $object         Object RemiseCheque
-     *  @param  string          $_dir           Directory
-     *  @param  string          $number         Number
-     *  @param  Translate       $outputlangs    Lang output object
-     *  @return int                             1=ok, 0=ko
+     * @param RemiseCheque $object Object RemiseCheque
+     * @param string $_dir Directory
+     * @param string $number Number
+     * @param Translate $outputlangs Lang output object
+     * @return int                             1=ok, 0=ko
      */
     public function write_file($object, $_dir, $number, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $conf, $langs, $hookmanager;
 
         if (!is_object($outputlangs)) {
@@ -156,7 +156,6 @@ class BordereauChequeBlochet extends ModeleChequeReceipts
 
         // Add pdfgeneration hook
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('pdfgeneration'));
@@ -226,7 +225,6 @@ class BordereauChequeBlochet extends ModeleChequeReceipts
 
         // Add pdfgeneration hook
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('pdfgeneration'));
@@ -247,19 +245,20 @@ class BordereauChequeBlochet extends ModeleChequeReceipts
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Generate Header
      *
-     *  @param  TCPDF       $pdf            Pdf object
-     *  @param  int         $page           Current page number
-     *  @param  int         $pages          Total number of pages
-     *  @param  Translate   $outputlangs    Object language for output
-     *  @return void
+     * @param TCPDF $pdf Pdf object
+     * @param int $page Current page number
+     * @param int $pages Total number of pages
+     * @param Translate $outputlangs Object language for output
+     * @return void
      */
     public function Header(&$pdf, $page, $pages, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $langs;
         $default_font_size = pdf_getPDFFontSize($outputlangs);
 
@@ -355,19 +354,20 @@ class BordereauChequeBlochet extends ModeleChequeReceipts
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Output array
      *
-     *  @param  TCPDF       $pdf            PDF object
-     *  @param  int         $pagenb         Page nb
-     *  @param  int         $pages          Pages
-     *  @param  Translate   $outputlangs    Object lang
-     *  @return void
+     * @param TCPDF $pdf PDF object
+     * @param int $pagenb Page nb
+     * @param int $pages Pages
+     * @param Translate $outputlangs Object lang
+     * @return void
      */
     public function Body(&$pdf, $pagenb, $pages, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         // x=10 - Num
         // x=30 - Banque
         // x=100 - Emetteur
@@ -426,15 +426,16 @@ class BordereauChequeBlochet extends ModeleChequeReceipts
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show footer of page. Need this->emetteur object
      *
-     *  @param  TCPDF       $pdf                PDF
-     *  @param  Object      $object             Object to show
-     *  @param  Translate   $outputlangs        Object lang for output
-     *  @param  int         $hidefreetext       1=Hide free text
-     *  @return mixed
+     * @param TCPDF $pdf PDF
+     * @param Object $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return mixed
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {

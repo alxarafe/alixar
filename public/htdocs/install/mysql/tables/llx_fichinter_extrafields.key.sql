@@ -17,4 +17,5 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_fichinter_extrafields ADD UNIQUE INDEX uk_ficheinter_extrafields (fk_object);
+ALTER TABLE llx_fichinter_extrafields
+    ADD UNIQUE INDEX uk_ficheinter_extrafields (fk_object);

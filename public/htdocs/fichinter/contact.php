@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2007-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2012      Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,20 +19,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *       \file       htdocs/fichinter/contact.php
  *       \ingroup    fichinter
  *       \brief      Onglet de gestion des contacts de fiche d'intervention
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fichinter.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('interventions', 'sendings', 'companies'));
@@ -55,7 +59,6 @@ if (!$result) {
 }
 
 $usercancreate = $user->hasRight('ficheinter', 'creer');
-
 
 /*
  * Adding a new contact
@@ -95,7 +98,6 @@ if ($action == 'addcontact' && $user->hasRight('ficheinter', 'creer')) {
         dol_print_error($db);
     }
 }
-
 
 /*
  * View

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2008-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2008-2009  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2008-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2008-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Ecm\Classes\EcmDirectory;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/ftp/index.php
  *  \ingroup    ftp
@@ -27,7 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/treeview.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ftp.lib.php';
@@ -95,7 +99,6 @@ $conn_id = null; // FTP connection ID
 $mesg = '';
 
 
-
 /*
  * ACTIONS
  */
@@ -157,9 +160,9 @@ if ($action == 'addfolder') {
 // Action ajout d'un rep
 if ($action == 'add' && $user->hasRight('ftp', 'setup')) {
     $ecmdir = new EcmDirectory($db);
-    $ecmdir->ref                = GETPOST("ref");
-    $ecmdir->label              = GETPOST("label");
-    $ecmdir->description        = GETPOST("desc");
+    $ecmdir->ref = GETPOST("ref");
+    $ecmdir->label = GETPOST("label");
+    $ecmdir->description = GETPOST("desc");
 
     $id = $ecmdir->create($user);
     if ($id > 0) {
@@ -330,8 +333,6 @@ if ($action == 'download') {
 }
 
 
-
-
 /*
  * View
  */
@@ -341,26 +342,26 @@ llxHeader();
 // Add logic to shoow/hide buttons
 if ($conf->use_javascript_ajax) {
     ?>
-<script type="text/javascript">
-jQuery(document).ready(function() {
-    jQuery("#delconst").hide();
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery("#delconst").hide();
 
-    jQuery(".checkboxfordelete").click(function() {
-        jQuery("#delconst").show();
-    });
+            jQuery(".checkboxfordelete").click(function () {
+                jQuery("#delconst").show();
+            });
 
-    $("#checkall").click(function() {
-        $(".checkboxfordelete").prop('checked', true);
-        jQuery("#delconst").show();
-    });
-    $("#checknone").click(function() {
-        $(".checkboxfordelete").prop('checked', false);
-        jQuery("#delconst").hide();
-    });
+            $("#checkall").click(function () {
+                $(".checkboxfordelete").prop('checked', true);
+                jQuery("#delconst").show();
+            });
+            $("#checknone").click(function () {
+                $(".checkboxfordelete").prop('checked', false);
+                jQuery("#delconst").hide();
+            });
 
-});
+        });
 
-</script>
+    </script>
 
     <?php
 }

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2023-2024 Lionel Vessiller	   <lvessiller@easya.solutions>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023-2024  Lionel Vessiller	        <lvessiller@easya.solutions>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Societe\Classes\SocieteAccount;
+
 /**
  *      \file       htdocs/website/websiteaccount_card.php
  *      \ingroup    website
@@ -26,20 +31,17 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/website/lib/websiteaccount.lib.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("website", "other"));
 
 // Get parameters
-$id         = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
-$action     = GETPOST('action', 'aZ09');
-$confirm    = GETPOST('confirm', 'alpha');
-$cancel     = GETPOST('cancel', 'aZ09');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
+$action = GETPOST('action', 'aZ09');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 // Initialize technical objects
@@ -91,9 +93,9 @@ if ($object->id > 0) {
 } else {
     $permissiontocreate = isModEnabled('website') && $user->hasRight('website', 'write') || isModEnabled('webportal') && $user->hasRight('webportal', 'write');
 }
-$permissionnote    = $permissiontocreate;   //  Used by the include of actions_setnotes.inc.php
+$permissionnote = $permissiontocreate;   //  Used by the include of actions_setnotes.inc.php
 $permissiondellink = $permissiontocreate;   //  Used by the include of actions_dellink.inc.php
-$permissiontoadd   = $permissiontocreate;   //  Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
+$permissiontoadd = $permissiontocreate;   //  Used by the include of actions_addupdatedelete.inc.php and actions_lineupdown.inc.php
 
 // check access from type of site on create, edit, delete (other than view)
 $site_type_js = '';
@@ -162,7 +164,6 @@ if (empty($reshook)) {
     $trackid = 'websiteaccount' . $object->id;
     include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
 }
-
 
 /*
  * View
@@ -364,7 +365,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     $morehtmlref .= '</div>';
 
     if ($socid > 0) {
-        $object->next_prev_filter = 'te.fk_soc = ' . ((int) $socid);
+        $object->next_prev_filter = 'te.fk_soc = ' . ((int)$socid);
     }
 
     dol_banner_tab($object, 'id', $linkback, 1, 'rowid', 'rowid', $morehtmlref);
@@ -435,8 +436,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', dol_buildpath('/mymodule/myobject_agenda.php', 1).'?id='.$object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-        $formactions = new FormActions($db);
+                $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element, $socid, 1, '', $MAXEVENT);
         */
 

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2006-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2006-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
  *      \brief      Popup screen to validate VAT
  */
 
-if (! defined('NOTOKENRENEWAL')) {
+if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1');
 }       // Do not roll the Anti CSRF token (used if MAIN_SECURITY_CSRF_WITH_TOKEN is on)
 

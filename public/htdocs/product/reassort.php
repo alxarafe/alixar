@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2018  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2013       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2015       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2019       Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2023 		Vincent de Grandpré  	<vincent@de-grandpre.quebec>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2018  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2019       Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2023 		Vincent de Grandpré  	    <vincent@de-grandpre.quebec>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Canvas;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/product/reassort.php
  *  \ingroup    produit
@@ -31,10 +38,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'stocks'));
@@ -82,7 +85,6 @@ if (GETPOSTISSET('catid')) {
 $canvas = GETPOST("canvas");
 $objcanvas = null;
 if (!empty($canvas)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
     $objcanvas = new Canvas($db, $action);
     $objcanvas->getCanvas('product', 'list', $canvas);
 }
@@ -129,8 +131,6 @@ if (GETPOST('button_removefilter_x', 'alpha') || GETPOST('button_removefilter.x'
     $sbarcode = '';
     $search_stock_physique = '';
 }
-
-
 
 /*
  * View
@@ -183,7 +183,7 @@ if (!empty($search_categ) && $search_categ != '-1') {
     $sql .= " FROM " . MAIN_DB_PREFIX . "categorie_product as cp";
     $sql .= " WHERE cp.fk_product = p.rowid"; // Join for the needed table to filter by categ
     if ($search_categ > 0) {
-        $sql .= " AND cp.fk_categorie = " . ((int) $search_categ);
+        $sql .= " AND cp.fk_categorie = " . ((int)$search_categ);
     }
     $sql .= ")";
 }
@@ -248,16 +248,16 @@ if ($snom) {
     $sql .= natural_search('p.label', $snom);
 }
 if (!empty($tosell)) {
-    $sql .= " AND p.tosell = " . ((int) $tosell);
+    $sql .= " AND p.tosell = " . ((int)$tosell);
 }
 if (!empty($tobuy)) {
-    $sql .= " AND p.tobuy = " . ((int) $tobuy);
+    $sql .= " AND p.tobuy = " . ((int)$tobuy);
 }
 if (!empty($canvas)) {
     $sql .= " AND p.canvas = '" . $db->escape($canvas) . "'";
 }
 if ($fourn_id > 0) {
-    $sql .= " AND p.rowid = pf.fk_product AND pf.fk_soc = " . ((int) $fourn_id);
+    $sql .= " AND p.rowid = pf.fk_product AND pf.fk_soc = " . ((int)$fourn_id);
 }
 if (getDolGlobalString('PRODUCT_STOCK_LIST_SHOW_WITH_PRECALCULATED_DENORMALIZED_PHYSICAL_STOCK')) {
     if ($search_toolowstock) {
@@ -354,7 +354,7 @@ if ($resql) {
 
     $param = '';
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($sall) {
         $param .= "&sall=" . urlencode($sall);
@@ -366,10 +366,10 @@ if ($resql) {
         $param .= "&tobuy=" . urlencode($tobuy);
     }
     if ($type != '') {
-        $param .= "&type=" . urlencode((string) ($type));
+        $param .= "&type=" . urlencode((string)($type));
     }
     if ($fourn_id) {
-        $param .= "&fourn_id=" . urlencode((string) ($fourn_id));
+        $param .= "&fourn_id=" . urlencode((string)($fourn_id));
     }
     if ($snom) {
         $param .= "&snom=" . urlencode($snom);
@@ -381,13 +381,13 @@ if ($resql) {
         $param .= "&search_sale=" . urlencode($search_sale);
     }
     if ($search_categ > 0) {
-        $param .= "&search_categ=" . urlencode((string) ($search_categ));
+        $param .= "&search_categ=" . urlencode((string)($search_categ));
     }
     if ($search_toolowstock) {
         $param .= "&search_toolowstock=" . urlencode($search_toolowstock);
     }
     if ($sbarcode) {
-        $param .= "&sbarcode=" . urlencode((string) ($sbarcode));
+        $param .= "&sbarcode=" . urlencode((string)($sbarcode));
     }
     if ($search_stock_physique) {
         $param .= '&search_stock_physique=' . urlencode($search_stock_physique);
@@ -600,7 +600,7 @@ if ($resql) {
         // Virtual stock
         if ($virtualdiffersfromphysical) {
             print '<td class="right">';
-            if ($objp->seuil_stock_alerte != '' && ($product->stock_theorique < (float) $objp->seuil_stock_alerte)) {
+            if ($objp->seuil_stock_alerte != '' && ($product->stock_theorique < (float)$objp->seuil_stock_alerte)) {
                 print img_warning($langs->trans("StockLowerThanLimit", $objp->seuil_stock_alerte)) . ' ';
             }
             if ($objp->stock_physique < 0) {

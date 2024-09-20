@@ -31,9 +31,9 @@
 /**
  * Show indent and picto of a tree line. Return array with information of line.
  *
- * @param   array   $fulltree       Array of entries in correct order
- * @param   string  $key            Key of entry into fulltree to show picto
- * @param   int     $silent         Do not output indent and picto, returns only value
+ * @param array $fulltree Array of entries in correct order
+ * @param string $key Key of entry into fulltree to show picto
+ * @param int $silent Do not output indent and picto, returns only value
  * @return  array{0:int,1:int,2:int}    array(0 or 1 if at least one of this level after, 0 or 1 if at least one of higher level after, nbofdirinsub, nbofdocinsub)
  */
 function tree_showpad(&$fulltree, $key, $silent = 0)
@@ -98,7 +98,6 @@ function tree_showpad(&$fulltree, $key, $silent = 0)
 }
 
 
-
 // ------------------------------- Used by menu editor, category view, ... -----------------
 
 /**
@@ -110,14 +109,14 @@ function tree_showpad(&$fulltree, $key, $silent = 0)
  *  $arrayofcss=array('/includes/jquery/plugins/jquerytreeview/jquery.treeview.css');
  *  TODO Replace with jstree plugin instead of treeview plugin.
  *
- *  @param  array   $tab                        Array of all elements
- *  @param  array   $pere                       Array with parent ids ('rowid'=>,'mainmenu'=>,'leftmenu'=>,'fk_mainmenu'=>,'fk_leftmenu'=>)
- *  @param  int     $rang                       Level of element
- *  @param  string  $iddivjstree                Id to use for parent ul element
- *  @param  int     $donoresetalreadyloaded     Do not reset global array $donoresetalreadyloaded used to avoid to go down on an already processed record
- *  @param  int     $showfk                     1=show fk_links to parent into label  (used by menu editor only)
- *  @param  string  $moreparam                  Add more param on url of elements
- *  @return void
+ * @param array $tab Array of all elements
+ * @param array $pere Array with parent ids ('rowid'=>,'mainmenu'=>,'leftmenu'=>,'fk_mainmenu'=>,'fk_leftmenu'=>)
+ * @param int $rang Level of element
+ * @param string $iddivjstree Id to use for parent ul element
+ * @param int $donoresetalreadyloaded Do not reset global array $donoresetalreadyloaded used to avoid to go down on an already processed record
+ * @param int $showfk 1=show fk_links to parent into label  (used by menu editor only)
+ * @param string $moreparam Add more param on url of elements
+ * @return void
  */
 function tree_recur($tab, $pere, $rang, $iddivjstree = 'iddivjstree', $donoresetalreadyloaded = 0, $showfk = 0, $moreparam = '')
 {
@@ -157,7 +156,7 @@ function tree_recur($tab, $pere, $rang, $iddivjstree = 'iddivjstree', $donoreset
 
         //var_dump($tab[$x]);exit;
         // If an element has $pere for parent
-        if ($tab[$x]['fk_menu'] != -1 && ((int) $tab[$x]['fk_menu']) == $pere['rowid']) {
+        if ($tab[$x]['fk_menu'] != -1 && ((int)$tab[$x]['fk_menu']) == $pere['rowid']) {
             //print 'rang='.$rang.'-x='.$x." rowid=".$tab[$x]['rowid']." tab[x]['fk_leftmenu'] = ".$tab[$x]['fk_leftmenu']." leftmenu pere = ".$pere['leftmenu']."<br>\n";
             if (empty($ulprinted) && !empty($pere['rowid'])) {
                 if (!empty($tree_recur_alreadyadded[$tab[$x]['rowid']])) {
@@ -187,7 +186,7 @@ function tree_recur($tab, $pere, $rang, $iddivjstree = 'iddivjstree', $donoreset
             // And now we search all its sons of lower level
             tree_recur($tab, $tab[$x], $rang + 1, 'iddivjstree', 0, $showfk);
             print '</li>';
-        } elseif (!empty($tab[$x]['rowid']) && ((int) $tab[$x]['fk_menu']) == -1 && $tab[$x]['fk_mainmenu'] == $pere['mainmenu'] && $tab[$x]['fk_leftmenu'] == $pere['leftmenu']) {
+        } elseif (!empty($tab[$x]['rowid']) && ((int)$tab[$x]['fk_menu']) == -1 && $tab[$x]['fk_mainmenu'] == $pere['mainmenu'] && $tab[$x]['fk_leftmenu'] == $pere['leftmenu']) {
             //print 'rang='.$rang.'-x='.$x." rowid=".$tab[$x]['rowid']." tab[x]['fk_leftmenu'] = ".$tab[$x]['fk_leftmenu']." leftmenu pere = ".$pere['leftmenu']."<br>\n";
             if (empty($ulprinted) && !empty($pere['rowid'])) {
                 if (!empty($tree_recur_alreadyadded[$tab[$x]['rowid']])) {

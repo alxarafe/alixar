@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2012      Christophe Battarel  <christophe.battarel@altairis.fr>
- * Copyright (C) 2015      Francis Appels       <francis.appels@z-application.com>
- * Copyright (C) 2016      Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2015       Francis Appels              <francis.appels@z-application.com>
+ * Copyright (C) 2016       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *  \file       /htdocs/fourn/ajax/getSupplierPrices.php
@@ -39,7 +42,6 @@ if (!defined('NOREQUIRESOC')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
 
 $idprod = GETPOSTINT('idprod');
 

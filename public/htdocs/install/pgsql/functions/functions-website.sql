@@ -16,6 +16,12 @@
 --
 -- ============================================================================
 
-CREATE TRIGGER update_customer_modtime BEFORE UPDATE ON llx_website FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
-CREATE TRIGGER update_customer_modtime BEFORE UPDATE ON llx_website_page FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
+CREATE TRIGGER update_customer_modtime
+    BEFORE UPDATE
+    ON llx_website
+    FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
+CREATE TRIGGER update_customer_modtime
+    BEFORE UPDATE
+    ON llx_website_page
+    FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
 

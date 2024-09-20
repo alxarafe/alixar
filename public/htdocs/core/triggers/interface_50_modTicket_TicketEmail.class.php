@@ -1,9 +1,9 @@
 <?php
 
 /*
- * Copyright (C) 2014-2016  Jean-François Ferry	<hello@librethic.io>
- * 				 2016       Christophe Battarel <christophe@altairis.fr>
- * Copyright (C) 2023		Benjamin Falière	<benjamin.faliere@altairis.fr>
+ * Copyright (C) 2014-2016  Jean-François Ferry	        <hello@librethic.io>
+ * Copyright (C) 2016       Christophe Battarel         <christophe@altairis.fr>
+ * Copyright (C) 2023		Benjamin Falière	        <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/core/triggers/interface_50_modTicket_TicketEmail.class.php
  *  \ingroup    core
@@ -28,7 +36,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/dolibarrtriggers.class.php';
-
 
 /**
  *  Class of triggers for ticket module
@@ -38,7 +45,7 @@ class InterfaceTicketEmail extends DolibarrTriggers
     /**
      *   Constructor
      *
-     *   @param DoliDB $db Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -55,12 +62,12 @@ class InterfaceTicketEmail extends DolibarrTriggers
      *      Function called when a Dolibarr business event is done.
      *      All functions "runTrigger" are triggered if file is inside directory htdocs/core/triggers
      *
-     *      @param  string    $action Event action code
-     *      @param  Ticket    $object Object
-     *      @param  User      $user   Object user
-     *      @param  Translate $langs  Object langs
-     *      @param  conf      $conf   Object conf
-     *      @return int                     Return integer <0 if KO, 0 if no triggered ran, >0 if OK
+     * @param string $action Event action code
+     * @param Ticket $object Object
+     * @param User $user Object user
+     * @param Translate $langs Object langs
+     * @param Conf $conf Object conf
+     * @return int                     Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
     {
@@ -117,7 +124,6 @@ class InterfaceTicketEmail extends DolibarrTriggers
                                     $old_MAIN_MAIL_AUTOCOPY_TO = getDolGlobalString('MAIN_MAIL_AUTOCOPY_TO');
                                     $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
                                 }
-                                include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
                                 $mailfile = new CMailFile($subject, $sendto, $from, $message, $filepath, $mimetype, $filename, '', '', 0, -1);
                                 if ($mailfile->error) {
                                     setEventMessages($mailfile->error, $mailfile->errors, 'errors');
@@ -265,7 +271,7 @@ class InterfaceTicketEmail extends DolibarrTriggers
                         // Refuse email if not
                         $contact = new Contact($this->db);
                         $res = $contact->fetch($contactid);
-                        if (! in_array($contact, $linked_contacts)) {
+                        if (!in_array($contact, $linked_contacts)) {
                             $error_msg = $langs->trans('Error') . ': ';
                             $error_msg .= $langs->transnoentities('TicketWrongContact');
                             setEventMessages($error_msg, [], 'errors');
@@ -301,11 +307,11 @@ class InterfaceTicketEmail extends DolibarrTriggers
     /**
      * Composes and sends a message concerning a ticket, to be sent to admin address.
      *
-     * @param string    $sendto         Addresses to send the mail, format "first@address.net, second@address.net," etc.
-     * @param string    $base_subject   email subject. Non-translated string.
-     * @param string    $body           email body (first line). Non-translated string.
-     * @param Ticket    $object         the ticket thet the email refers to
-     * @param Translate $langs          the translation object
+     * @param string $sendto Addresses to send the mail, format "first@address.net, second@address.net," etc.
+     * @param string $base_subject email subject. Non-translated string.
+     * @param string $body email body (first line). Non-translated string.
+     * @param Ticket $object the ticket thet the email refers to
+     * @param Translate $langs the translation object
      * @return void
      */
     private function composeAndSendAdminMessage($sendto, $base_subject, $body, Ticket $object, Translate $langs)
@@ -357,7 +363,6 @@ class InterfaceTicketEmail extends DolibarrTriggers
             $old_MAIN_MAIL_AUTOCOPY_TO = getDolGlobalString('MAIN_MAIL_AUTOCOPY_TO');
             $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
         }
-        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($subject, $sendto, $from, $message_admin, $filepath, $mimetype, $filename, '', '', 0, -1, '', '', $trackid, '', 'ticket');
         if ($mailfile->error) {
             dol_syslog($mailfile->error, LOG_DEBUG);
@@ -372,12 +377,12 @@ class InterfaceTicketEmail extends DolibarrTriggers
     /**
      * Composes and sends a message concerning a ticket, to be sent to customer addresses.
      *
-     * @param string    $sendto         Addresses to send the mail, format "first@address.net, second@address.net, " etc.
-     * @param string    $base_subject   email subject. Non-translated string.
-     * @param string    $body           email body (first line). Non-translated string.
-     * @param string    $see_ticket     string indicating the ticket public address
-     * @param Ticket    $object         the ticket thet the email refers to
-     * @param Translate $langs          the translation object
+     * @param string $sendto Addresses to send the mail, format "first@address.net, second@address.net, " etc.
+     * @param string $base_subject email subject. Non-translated string.
+     * @param string $body email body (first line). Non-translated string.
+     * @param string $see_ticket string indicating the ticket public address
+     * @param Ticket $object the ticket thet the email refers to
+     * @param Translate $langs the translation object
      * @return void
      */
     private function composeAndSendCustomerMessage($sendto, $base_subject, $body, $see_ticket, Ticket $object, Translate $langs)
@@ -403,11 +408,11 @@ class InterfaceTicketEmail extends DolibarrTriggers
             foreach ($extrafields->attributes[$object->table_element]['label'] as $key => $value) {
                 $enabled = 1;
                 if ($enabled && isset($extrafields->attributes[$object->table_element]['list'][$key])) {
-                    $enabled = (int) dol_eval($extrafields->attributes[$object->table_element]['list'][$key], 1);
+                    $enabled = (int)dol_eval($extrafields->attributes[$object->table_element]['list'][$key], 1);
                 }
                 $perms = 1;
                 if ($perms && isset($extrafields->attributes[$object->table_element]['perms'][$key])) {
-                    $perms = (int) dol_eval($extrafields->attributes[$object->table_element]['perms'][$key], 1);
+                    $perms = (int)dol_eval($extrafields->attributes[$object->table_element]['perms'][$key], 1);
                 }
 
                 $qualified = true;
@@ -447,7 +452,6 @@ class InterfaceTicketEmail extends DolibarrTriggers
             $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
         }
 
-        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
         $mailfile = new CMailFile($subject, $sendto, $from, $message_customer, $filepath, $mimetype, $filename, '', '', 0, -1, '', '', $trackid, '', 'ticket');
         if ($mailfile->error) {
             dol_syslog($mailfile->error, LOG_DEBUG);

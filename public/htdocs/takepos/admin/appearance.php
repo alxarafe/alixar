@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2008-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2017 Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2019-2020 Andreu Bisquerra Gaya		<jove@bisquerra.com>
+/* Copyright (C) 2008-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2017  Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2019-2020  Andreu Bisquerra Gaya		<jove@bisquerra.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\FormProduct;
+
 /**
  *  \file       htdocs/takepos/admin/appearance.php
  *  \ingroup    takepos
@@ -28,7 +31,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/takepos.lib.php";
 
@@ -66,7 +68,6 @@ if (GETPOST('action', 'alpha') == 'set') {
         setEventMessages($langs->trans("Error"), null, 'errors');
     }
 }
-
 
 /*
  * View

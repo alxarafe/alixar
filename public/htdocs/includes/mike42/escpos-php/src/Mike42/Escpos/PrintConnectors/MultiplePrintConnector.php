@@ -11,13 +11,13 @@ class MultiplePrintConnector implements PrintConnector
 
     public function __construct(PrintConnector ...$connectors)
     {
-        $this -> connectors = $connectors;
+        $this->connectors = $connectors;
     }
 
     public function finalize()
     {
-        foreach ($this -> connectors as $connector) {
-            $connector -> finalize();
+        foreach ($this->connectors as $connector) {
+            $connector->finalize();
         }
     }
 
@@ -29,8 +29,8 @@ class MultiplePrintConnector implements PrintConnector
 
     public function write($data)
     {
-        foreach ($this -> connectors as $connector) {
-            $connector -> write($data);
+        foreach ($this->connectors as $connector) {
+            $connector->write($data);
         }
     }
 

@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2004-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2019-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +54,6 @@ if (!isModEnabled('zapier')) {
 if (empty($user->admin)) {
     accessforbidden();
 }
-
 
 /*
  * Actions
@@ -121,7 +121,6 @@ if (!empty($arrayofparameters)) {
     echo '<br><br><span class="opacitymediumdisabled">' . $langs->trans("ZapierSetupPage") . '</span><br><br>';
     //print '<br>'.$langs->trans("NothingToSetup");
 }
-
 
 // Page end
 print dol_get_fiche_end();

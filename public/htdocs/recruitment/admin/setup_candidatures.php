@@ -1,8 +1,9 @@
 <?php
 
-/* Copyright (C) 2004-2020 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+/* Copyright (C) 2004-2020  Laurent Destailleur             <eldy@users.sourceforge.net>
+ * Copyright (C) 2024		MDW							    <mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Frédéric France                 <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +19,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\Misc;
+
 /**
  * \file    htdocs/recruitment/admin/setup_candidatures.php
  * \ingroup recruitment
@@ -32,7 +36,6 @@ global $conf, $langs, $user;
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/lib/recruitment.lib.php';
-require_once DOL_DOCUMENT_ROOT . "/recruitment/class/recruitmentjobposition.class.php";
 
 // Translations
 $langs->loadLangs(array("admin", "recruitment"));
@@ -162,8 +165,6 @@ if ($action == 'updateMask') {
         dolibarr_del_const($db, $constforval, $conf->entity);
     }
 }
-
-
 
 /*
  * View
@@ -308,7 +309,7 @@ foreach ($myTmpObjects as $myTmpObjectKey => $myTmpObjectArray) {
                                 print '</td>';
 
                                 $className = $myTmpObjectArray['class'];
-                                $mytmpinstance = new $className($db);
+                                $mytmpinstance = Misc::getCodeLibClass($className, $db);
                                 $mytmpinstance->initAsSpecimen();
 
                                 // Info

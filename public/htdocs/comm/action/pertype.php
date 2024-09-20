@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2003      Eric Seigne          <erics@rycks.com>
- * Copyright (C) 2004-2014 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2014      Cedric GROSS         <c.gross@kreiz-it.fr>
- * Copyright (C) 2018-2019  Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003       Eric Seigne                 <erics@rycks.com>
+ * Copyright (C) 2004-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2014       Cedric GROSS                <c.gross@kreiz-it.fr>
+ * Copyright (C) 2018-2019  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,6 +24,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *    \file       htdocs/comm/action/pertype.php
@@ -33,14 +39,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
 
 
 if (!isset($conf->global->AGENDA_MAX_EVENTS_DAY_VIEW)) {
@@ -126,9 +126,9 @@ if (GETPOST('search_actioncode', 'array:aZ09')) {
 
 $dateselect = dol_mktime(0, 0, 0, GETPOSTINT('dateselectmonth'), GETPOSTINT('dateselectday'), GETPOSTINT('dateselectyear'));
 if ($dateselect > 0) {
-    $day   = GETPOSTINT('dateselectday');
+    $day = GETPOSTINT('dateselectday');
     $month = GETPOSTINT('dateselectmonth');
-    $year  = GETPOSTINT('dateselectyear');
+    $year = GETPOSTINT('dateselectyear');
 }
 
 // working hours
@@ -136,7 +136,7 @@ $tmp = !getDolGlobalString('MAIN_DEFAULT_WORKING_HOURS') ? '9-18' : $conf->globa
 $tmp = str_replace(' ', '', $tmp); // FIX 7533
 $tmparray = explode('-', $tmp);
 $begin_h = GETPOSTINT('begin_h') != '' ? GETPOSTINT('begin_h') : ($tmparray[0] != '' ? $tmparray[0] : 9);
-$end_h   = GETPOSTINT('end_h') ? GETPOSTINT('end_h') : ($tmparray[1] != '' ? $tmparray[1] : 18);
+$end_h = GETPOSTINT('end_h') ? GETPOSTINT('end_h') : ($tmparray[1] != '' ? $tmparray[1] : 18);
 if ($begin_h < 0 || $begin_h > 23) {
     $begin_h = 9;
 }
@@ -242,26 +242,26 @@ llxHeader('', $langs->trans("Agenda"), $help_url);
 
 $now = dol_now();
 $nowarray = dol_getdate($now);
-$nowyear  = $nowarray['year'];
+$nowyear = $nowarray['year'];
 $nowmonth = $nowarray['mon'];
-$nowday   = $nowarray['mday'];
+$nowday = $nowarray['mday'];
 
 
 // Define list of all external calendars (global setup)
 $listofextcals = array();
 
 $prev = dol_get_first_day($year, $month);
-$first_day   = 1;
+$first_day = 1;
 $first_month = 1;
-$first_year  = $year;
+$first_year = $year;
 
 $week = $prev['week'];
 
-$day  = (int) $day;
+$day = (int)$day;
 $next = dol_get_next_day($day, $month, $year);
-$next_year  = $year + 1;
+$next_year = $year + 1;
 $next_month = $month;
-$next_day   = $day;
+$next_day = $day;
 
 $max_day_in_month = date("t", dol_mktime(0, 0, 0, $month, 1, $year));
 
@@ -288,7 +288,7 @@ if ($actioncode || GETPOSTISSET('search_actioncode')) {
     }
 }
 if ($resourceid > 0) {
-    $param .= "&search_resourceid=" . urlencode((string) ($resourceid));
+    $param .= "&search_resourceid=" . urlencode((string)($resourceid));
 }
 if ($status || GETPOSTISSET('status') || GETPOSTISSET('search_status')) {
     $param .= "&search_status=" . urlencode($status);
@@ -300,16 +300,16 @@ if ($filtert) {
     $param .= "&search_filtert=" . urlencode($filtert);
 }
 if ($usergroup > 0) {
-    $param .= "&search_usergroup=" . urlencode((string) ($usergroup));
+    $param .= "&search_usergroup=" . urlencode((string)($usergroup));
 }
 if ($socid > 0) {
-    $param .= "&search_socid=" . urlencode((string) ($socid));
+    $param .= "&search_socid=" . urlencode((string)($socid));
 }
 if ($showbirthday) {
     $param .= "&search_showbirthday=1";
 }
 if ($pid) {
-    $param .= "&search_projectid=" . urlencode((string) ($pid));
+    $param .= "&search_projectid=" . urlencode((string)($pid));
 }
 if ($type) {
     $param .= "&search_type=" . urlencode($type);
@@ -324,30 +324,30 @@ if ($end_h != '') {
     $param .= '&end_h=' . urlencode($end_h);
 }
 if ($begin_d != '') {
-    $param .= '&begin_d=' . urlencode((string) ($begin_d));
+    $param .= '&begin_d=' . urlencode((string)($begin_d));
 }
 if ($end_d != '') {
-    $param .= '&end_d=' . urlencode((string) ($end_d));
+    $param .= '&end_d=' . urlencode((string)($end_d));
 }
-$param .= "&maxprint=" . urlencode((string) ($maxprint));
+$param .= "&maxprint=" . urlencode((string)($maxprint));
 
 $paramnoactionodate = $param;
 
 $prev = dol_get_first_day($year, 1);
-$prev_year  = $year - 1;
+$prev_year = $year - 1;
 $prev_month = $month;
-$prev_day   = $day;
-$first_day  = 1;
+$prev_day = $day;
+$first_day = 1;
 $first_month = 1;
 $first_year = $year;
 
 $week = $prev['week'];
 
-$day = (int) $day;
+$day = (int)$day;
 $next = dol_get_next_day(31, 12, $year);
-$next_year  = $year + 1;
+$next_year = $year + 1;
 $next_month = $month;
-$next_day   = $day;
+$next_day = $day;
 
 // Define firstdaytoshow and lastdaytoshow. Warning: lastdaytoshow is last second to show + 1
 // $firstdaytoshow and lastdaytoshow become a gmt dates to use to search/compare because first_xxx are in tz idea and we used tzuserrel
@@ -376,7 +376,7 @@ $nav .= $form->selectDate($dateselect, 'dateselect', 0, 0, 1, '', 1, 0);
 $nav .= ' <button type="submit" class="liste_titre button_search" name="button_search_x" value="x"><span class="fa fa-search"></span></button>';
 
 // Must be after the nav definition
-$param .= '&year=' . urlencode((string) ($year)) . '&month=' . urlencode((string) ($month)) . ($day ? '&day=' . urlencode((string) ($day)) : '');
+$param .= '&year=' . urlencode((string)($year)) . '&month=' . urlencode((string)($month)) . ($day ? '&day=' . urlencode((string)($day)) : '');
 //print 'x'.$param;
 
 
@@ -575,10 +575,10 @@ if (!empty($actioncode)) {
     }
 }
 if ($resourceid > 0) {
-    $sql .= " AND r.element_type = 'action' AND r.element_id = a.id AND r.resource_id = " . ((int) $resourceid);
+    $sql .= " AND r.element_type = 'action' AND r.element_id = a.id AND r.resource_id = " . ((int)$resourceid);
 }
 if ($pid) {
-    $sql .= " AND a.fk_project = " . ((int) $pid);
+    $sql .= " AND a.fk_project = " . ((int)$pid);
 }
 // If the internal user must only see his customers, force searching by him
 $search_sale = 0;
@@ -590,12 +590,12 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = a.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = a.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = a.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search on socid
 if ($socid) {
-    $sql .= " AND a.fk_soc = " . ((int) $socid);
+    $sql .= " AND a.fk_soc = " . ((int)$socid);
 }
 // We must filter on assignment table
 if ($filtert > 0 || $usergroup > 0) {
@@ -626,7 +626,7 @@ if ($mode == 'show_day') {
     $sql .= ')';
 }
 if ($type) {
-    $sql .= " AND ca.id = " . ((int) $type);
+    $sql .= " AND ca.id = " . ((int)$type);
 }
 if ($status == '0') {
     $sql .= " AND a.percent = 0";
@@ -652,7 +652,7 @@ if ($filtert > 0 || $usergroup > 0) {
         $sql .= "ar.fk_element = " . $filtert;
     }
     if ($usergroup > 0) {
-        $sql .= ($filtert > 0 ? " OR " : "") . " ugu.fk_usergroup = " . ((int) $usergroup);
+        $sql .= ($filtert > 0 ? " OR " : "") . " ugu.fk_usergroup = " . ((int)$usergroup);
     }
     $sql .= ")";
 }
@@ -952,26 +952,24 @@ llxFooter();
 $db->close();
 
 
-
-
 /**
  * Show event line of a particular day for a user
  *
- * @param   User    $username       Login
- * @param   int     $day            Day
- * @param   int     $month          Month
- * @param   int     $year           Year
- * @param   int     $monthshown     Current month shown in calendar view
- * @param   string  $style          Style to use for this day
- * @param   array   $eventarray     Array of events
- * @param   int     $maxprint       Nb of actions to show each day on month view (0 means no limit)
- * @param   int     $maxnbofchar    Nb of characters to show for event line
- * @param   string  $newparam       Parameters on current URL
- * @param   int     $showinfo       Add extended information (used by day view)
- * @param   int     $minheight      Minimum height for each event. 60px by default.
- * @param   boolean $showheader     Show header
- * @param   array   $colorsbytype   Array with colors by type
- * @param   bool    $var            true or false for alternat style on tr/td
+ * @param User $username Login
+ * @param int $day Day
+ * @param int $month Month
+ * @param int $year Year
+ * @param int $monthshown Current month shown in calendar view
+ * @param string $style Style to use for this day
+ * @param array $eventarray Array of events
+ * @param int $maxprint Nb of actions to show each day on month view (0 means no limit)
+ * @param int $maxnbofchar Nb of characters to show for event line
+ * @param string $newparam Parameters on current URL
+ * @param int $showinfo Add extended information (used by day view)
+ * @param int $minheight Minimum height for each event. 60px by default.
+ * @param boolean $showheader Show header
+ * @param array $colorsbytype Array with colors by type
+ * @param bool $var true or false for alternat style on tr/td
  * @return  void
  */
 function show_day_events_pertype($username, $day, $month, $year, $monthshown, $style, &$eventarray, $maxprint = 0, $maxnbofchar = 16, $newparam = '', $showinfo = 0, $minheight = 60, $showheader = false, $colorsbytype = array(), $var = false)
@@ -994,7 +992,7 @@ function show_day_events_pertype($username, $day, $month, $year, $monthshown, $s
     $numicals = array();
     $ymd = sprintf("%04d", $year) . sprintf("%02d", $month) . sprintf("%02d", $day);
 
-    $nextindextouse = count($colorindexused); // At first run, this is 0, so fist user has 0, next 1, ...
+    $nextindextouse = count($colorindexused ?? []); // At first run, this is 0, so fist user has 0, next 1, ...
     //if ($username->id && $day==1) {
     //var_dump($eventarray);
     //}
@@ -1002,10 +1000,10 @@ function show_day_events_pertype($username, $day, $month, $year, $monthshown, $s
     // We are in a particular day for $username, now we scan all events
     foreach ($eventarray as $daykey => $notused) {
         $annee = dol_print_date($daykey, '%Y', 'tzuserrel');
-        $mois =  dol_print_date($daykey, '%m', 'tzuserrel');
-        $jour =  dol_print_date($daykey, '%d', 'tzuserrel');
+        $mois = dol_print_date($daykey, '%m', 'tzuserrel');
+        $jour = dol_print_date($daykey, '%d', 'tzuserrel');
 
-        if ($day == $jour && (int) $month == (int) $mois && $year == $annee) {  // Is it the day we are looking for when calling function ?
+        if ($day == $jour && (int)$month == (int)$mois && $year == $annee) {  // Is it the day we are looking for when calling function ?
             // Scan all event for this date
             foreach ($eventarray[$daykey] as $index => $event) {
                 //print 'daykey='.$daykey.' '.$year.'-'.$month.'-'.$day.' -> '.$event->id.' '.$index.' '.$annee.'-'.$mois.'-'.$jour."<br>\n";
@@ -1081,9 +1079,9 @@ function show_day_events_pertype($username, $day, $month, $year, $monthshown, $s
                     //if ($username->id == 1 && $day==1) print 'h='.$h;
                     $newcolor = ''; //init
                     if (empty($event->fulldayevent)) {
-                        $a = dol_mktime((int) $h, 0, 0, $month, $day, $year, 'tzuserrel', 0);
-                        $b = dol_mktime((int) $h, 30, 0, $month, $day, $year, 'tzuserrel', 0);
-                        $c = dol_mktime((int) $h + 1, 0, 0, $month, $day, $year, 'tzuserrel', 0);
+                        $a = dol_mktime((int)$h, 0, 0, $month, $day, $year, 'tzuserrel', 0);
+                        $b = dol_mktime((int)$h, 30, 0, $month, $day, $year, 'tzuserrel', 0);
+                        $c = dol_mktime((int)$h + 1, 0, 0, $month, $day, $year, 'tzuserrel', 0);
 
                         $dateendtouse = $event->date_end_in_calendar;
                         if ($dateendtouse == $event->date_start_in_calendar) {

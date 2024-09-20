@@ -270,8 +270,8 @@ class VCardConverter
             foreach ($parameters['TYPE']->getParts() as $typePart) {
                 if (
                     in_array(
-                    strtoupper($typePart),
-                    ['JPEG', 'PNG', 'GIF']
+                        strtoupper($typePart),
+                        ['JPEG', 'PNG', 'GIF']
                     )
                 ) {
                     $mimeType = 'image/' . strtolower($typePart);

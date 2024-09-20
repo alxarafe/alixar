@@ -60,6 +60,7 @@
  * - httpException extends Exception
  * - http_class
  */
+
 /***********************
  *
  * httpException class
@@ -135,7 +136,7 @@ class http_class
     public $force_multipart_form_post;
     public $username;
     public $password;
-    public $request_headers = array ();
+    public $request_headers = array();
     public $request_body = "Not a useful information";
     public $status;
     public $window_size = 1024; // chunk size of data
@@ -144,11 +145,11 @@ class http_class
     public $host;
     private $default_port = 631;
     private $headers;
-    private $reply_headers = array ();
-    private $reply_body = array ();
+    private $reply_headers = array();
+    private $reply_body = array();
     private $connection;
     private $arguments;
-    private $bodystream = array ();
+    private $bodystream = array();
     private $last_limit;
     private $connected;
     private $nc = 1;
@@ -168,7 +169,7 @@ class http_class
 
     public function GetRequestArguments($url, &$arguments)
     {
-        $this->arguments = array ();
+        $this->arguments = array();
         $this->arguments["URL"] = $arguments["URL"] = $url;
         $this->arguments["RequestMethod"] = $arguments["RequestMethod"] = "POST";
         $this->headers["Content-Length"] = 0;
@@ -233,7 +234,7 @@ class http_class
             return $this->_HttpError($error, E_USER_WARNING);
         }
         $this->connected = true;
-        return array (true, "success");
+        return array(true, "success");
     }
 
     public function SendRequest($arguments)
@@ -246,7 +247,7 @@ class http_class
         }
         self::_ReadReply();
         if (!preg_match('#http/1.1 401 unauthorized#', $this->status)) {
-            return array (true, "success");
+            return array(true, "success");
         }
         $headers = array_keys($this->reply_headers);
         $error = _("need authentication but no mechanism provided");
@@ -283,7 +284,7 @@ class http_class
             return $this->_HttpError($error . ": " . $result[1], E_USER_WARNING);
         }
         self::_ReadReply();
-        return array (true, "success");
+        return array(true, "success");
     }
 
     public function ReadReplyHeaders(&$headers)
@@ -319,13 +320,13 @@ class http_class
             $trace .= sprintf("in [file: '%s'][function: '%s'][line: %s];\n", $trace['file'], $trace['function'], $trace['line']);
         }
         $msg = sprintf(
-             '%s\n%s: [errno: %s]: %s',
+            '%s\n%s: [errno: %s]: %s',
             $trace, error2string($level), $errno, $msg);
         if ($this->with_exceptions) {
             throw new httpException($msg, $errno);
         } else {
             trigger_error($msg, $level);
-            return array (false, $msg);
+            return array(false, $msg);
         }
     }
 
@@ -341,7 +342,7 @@ class http_class
     private function _StreamRequest($arguments)
     {
         $this->status = false;
-        $this->reply_headers = array ();
+        $this->reply_headers = array();
         $this->reply_body = "";
         if (!$this->connected) {
             return $this->_HttpError(_("not connected"), E_USER_WARNING);
@@ -418,17 +419,17 @@ class http_class
                 }
             }
         }
-        return array (true, "success");
+        return array(true, "success");
     }
 
     private function _ReadReply()
     {
         if (!$this->connected) {
-            return array (false, _("not connected"));
+            return array(false, _("not connected"));
         }
-        $this->reply_headers = array ();
+        $this->reply_headers = array();
         $this->reply_body = "";
-        $headers = array ();
+        $headers = array();
         $body = "";
         while (!feof($this->connection)) {
             $line = fgets($this->connection, 1024);
@@ -458,7 +459,7 @@ class http_class
 
     private function _ReadStream()
     {
-        if (! array_key_exists("content-length", $this->reply_headers)) {
+        if (!array_key_exists("content-length", $this->reply_headers)) {
             stream_set_blocking($this->connection, 0);
             $this->reply_body = stream_get_contents($this->connection);
             return true;
@@ -498,8 +499,8 @@ class http_class
 
                 case "md5-sess":
                     $A1 =
-                    $username . ":" . $fields["realm"] . ":" . $password . ":" .
-                    $fields['nonce'] . ":" . $cnonce;
+                        $username . ":" . $fields["realm"] . ":" . $password . ":" .
+                        $fields['nonce'] . ":" . $cnonce;
                     break;
 
                 default:
@@ -508,8 +509,8 @@ class http_class
                             _("digest Authorization: algorithm '%s' not implemented"),
                             $algorithm),
                         E_USER_WARNING);
-                return false;
-                break;
+                    return false;
+                    break;
             }
         }
         $A2 = "POST:" . $this->arguments["RequestURI"];

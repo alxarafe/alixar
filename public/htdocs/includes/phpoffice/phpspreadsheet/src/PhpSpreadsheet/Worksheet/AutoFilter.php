@@ -83,9 +83,9 @@ class AutoFilter
      *
      * @param string $pRange Cell range (i.e. A1:E10)
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setRange($pRange)
     {
@@ -132,9 +132,9 @@ class AutoFilter
      *
      * @param string $column Column name (e.g. A)
      *
+     * @return int The column offset within the autofilter range
      * @throws PhpSpreadsheetException
      *
-     * @return int The column offset within the autofilter range
      */
     public function testColumnInRange($column)
     {
@@ -156,9 +156,9 @@ class AutoFilter
      *
      * @param string $pColumn Column name (e.g. A)
      *
+     * @return int The offset of the specified column within the autofilter range
      * @throws PhpSpreadsheetException
      *
-     * @return int The offset of the specified column within the autofilter range
      */
     public function getColumnOffset($pColumn)
     {
@@ -170,9 +170,9 @@ class AutoFilter
      *
      * @param string $pColumn Column name (e.g. A)
      *
+     * @return AutoFilter\Column
      * @throws PhpSpreadsheetException
      *
-     * @return AutoFilter\Column
      */
     public function getColumn($pColumn)
     {
@@ -190,9 +190,9 @@ class AutoFilter
      *
      * @param int $pColumnOffset Column offset within range (starting from 0)
      *
+     * @return AutoFilter\Column
      * @throws PhpSpreadsheetException
      *
-     * @return AutoFilter\Column
      */
     public function getColumnByOffset($pColumnOffset)
     {
@@ -208,9 +208,9 @@ class AutoFilter
      * @param AutoFilter\Column|string $pColumn
      *            A simple string containing a Column ID like 'A' is permitted
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function setColumn($pColumn)
     {
@@ -239,9 +239,9 @@ class AutoFilter
      *
      * @param string $pColumn Column name (e.g. A)
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function clearColumn($pColumn)
     {
@@ -527,21 +527,21 @@ class AutoFilter
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_TODAY:
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_YESTERDAY:
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_TOMORROW:
-                $maxVal = (int) Date::PHPtoExcel(strtotime('+1 day', $baseDate));
-                $val = (int) Date::PHPToExcel($baseDate);
+            $maxVal = (int)Date::PHPtoExcel(strtotime('+1 day', $baseDate));
+            $val = (int)Date::PHPToExcel($baseDate);
 
                 break;
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_YEARTODATE:
-                $maxVal = (int) Date::PHPtoExcel(strtotime('+1 day', $baseDate));
-                $val = (int) Date::PHPToExcel(gmmktime(0, 0, 0, 1, 1, date('Y', $baseDate)));
+                $maxVal = (int)Date::PHPtoExcel(strtotime('+1 day', $baseDate));
+                $val = (int)Date::PHPToExcel(gmmktime(0, 0, 0, 1, 1, date('Y', $baseDate)));
 
                 break;
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_THISYEAR:
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_LASTYEAR:
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_NEXTYEAR:
-                $maxVal = (int) Date::PHPToExcel(gmmktime(0, 0, 0, 31, 12, date('Y', $baseDate)));
+            $maxVal = (int)Date::PHPToExcel(gmmktime(0, 0, 0, 31, 12, date('Y', $baseDate)));
                 ++$maxVal;
-                $val = (int) Date::PHPToExcel(gmmktime(0, 0, 0, 1, 1, date('Y', $baseDate)));
+            $val = (int)Date::PHPToExcel(gmmktime(0, 0, 0, 1, 1, date('Y', $baseDate)));
 
                 break;
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_THISQUARTER:
@@ -549,24 +549,24 @@ class AutoFilter
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_NEXTQUARTER:
                 $thisMonth = date('m', $baseDate);
                 $thisQuarter = floor(--$thisMonth / 3);
-                $maxVal = (int) Date::PHPtoExcel(gmmktime(0, 0, 0, date('t', $baseDate), (1 + $thisQuarter) * 3, date('Y', $baseDate)));
+            $maxVal = (int)Date::PHPtoExcel(gmmktime(0, 0, 0, date('t', $baseDate), (1 + $thisQuarter) * 3, date('Y', $baseDate)));
                 ++$maxVal;
-                $val = (int) Date::PHPToExcel(gmmktime(0, 0, 0, 1, 1 + $thisQuarter * 3, date('Y', $baseDate)));
+            $val = (int)Date::PHPToExcel(gmmktime(0, 0, 0, 1, 1 + $thisQuarter * 3, date('Y', $baseDate)));
 
                 break;
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_THISMONTH:
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_LASTMONTH:
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_NEXTMONTH:
-                $maxVal = (int) Date::PHPtoExcel(gmmktime(0, 0, 0, date('t', $baseDate), date('m', $baseDate), date('Y', $baseDate)));
+            $maxVal = (int)Date::PHPtoExcel(gmmktime(0, 0, 0, date('t', $baseDate), date('m', $baseDate), date('Y', $baseDate)));
                 ++$maxVal;
-                $val = (int) Date::PHPToExcel(gmmktime(0, 0, 0, 1, date('m', $baseDate), date('Y', $baseDate)));
+            $val = (int)Date::PHPToExcel(gmmktime(0, 0, 0, 1, date('m', $baseDate), date('Y', $baseDate)));
 
                 break;
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_THISWEEK:
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_LASTWEEK:
             case AutoFilter\Column\Rule::AUTOFILTER_RULETYPE_DYNAMIC_NEXTWEEK:
                 $dayOfWeek = date('w', $baseDate);
-                $val = (int) Date::PHPToExcel($baseDate) - $dayOfWeek;
+            $val = (int)Date::PHPToExcel($baseDate) - $dayOfWeek;
                 $maxVal = $val + 7;
 
                 break;
@@ -615,9 +615,9 @@ class AutoFilter
     /**
      * Apply the AutoFilter rules to the AutoFilter Range.
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function showHideRows()
     {
@@ -882,6 +882,6 @@ class AutoFilter
      */
     public function __toString()
     {
-        return (string) $this->range;
+        return (string)$this->range;
     }
 }

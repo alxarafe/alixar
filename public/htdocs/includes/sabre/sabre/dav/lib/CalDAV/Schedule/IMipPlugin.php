@@ -33,7 +33,7 @@ class IMipPlugin extends DAV\ServerPlugin
     /**
      * Creates the email handler.
      *
-     * @param string $senderEmail. The 'senderEmail' is the email that shows up
+     * @param string $senderEmail . The 'senderEmail' is the email that shows up
      *                             in the 'From:' address. This should
      *                             generally be some kind of no-reply email
      *                             address you own.
@@ -144,10 +144,10 @@ class IMipPlugin extends DAV\ServerPlugin
     /**
      * This function is responsible for sending the actual email.
      *
-     * @param string $to      Recipient email address
+     * @param string $to Recipient email address
      * @param string $subject Subject of the email
-     * @param string $body    iCalendar body
-     * @param array  $headers List of headers
+     * @param string $body iCalendar body
+     * @param array $headers List of headers
      */
     protected function mail($to, $subject, $body, array $headers)
     {

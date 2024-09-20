@@ -17,5 +17,6 @@
 -- ============================================================================
 
 
-ALTER TABLE llx_product_attribute_combination_price_level ADD UNIQUE INDEX uk_prod_att_comb_price_level(fk_product_attribute_combination, fk_price_level);
+ALTER TABLE llx_product_attribute_combination_price_level
+    ADD UNIQUE INDEX uk_prod_att_comb_price_level(fk_product_attribute_combination, fk_price_level);
 

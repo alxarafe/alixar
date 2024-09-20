@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2010-2012 Regis Houssin  <regis.houssin@inodbox.com>
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/projet/tasks/note.php
  *  \ingroup    project
@@ -24,8 +29,6 @@
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 
 // Load translation files required by the page
@@ -120,7 +123,7 @@ $now = dol_now();
 
 $title = $object->ref . ' - ' . $langs->trans("Notes");
 if (!empty($withproject)) {
-    $title .= ' | ' . $langs->trans("Project") . (!empty($projectstatic->ref) ? ': ' . $projectstatic->ref : '')  ;
+    $title .= ' | ' . $langs->trans("Project") . (!empty($projectstatic->ref) ? ': ' . $projectstatic->ref : '');
 }
 $help_url = '';
 
@@ -272,7 +275,7 @@ if ($object->id > 0) {
         $projectsListId = $projectstatic->getProjectsAuthorizedForUser($user, 0, 1);
         $object->next_prev_filter = " fk_projet IN (" . $db->sanitize($projectsListId) . ")";
     } else {
-        $object->next_prev_filter = " fk_projet = " . ((int) $projectstatic->id);
+        $object->next_prev_filter = " fk_projet = " . ((int)$projectstatic->id);
     }
 
     $morehtmlref = '';

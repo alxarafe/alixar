@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2006      Andre Cianfarani     <acianfa@free.fr>
- * Copyright (C) 2005-2013 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2007-2020 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2014-2015 Marcos García        <marcosgdf@gmail.com>
+/* Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2005-2013  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014-2015  Marcos García               <marcosgdf@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\FormProjets;
 
 /**
  *       \file       htdocs/projet/ajax/projects.php
@@ -61,7 +63,6 @@ restrictedArea($user, 'projet', 0, 'projet&project');
 
 dol_syslog("Call ajax projet/ajax/projects.php");
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 
 // Mode to get list of projects
 if (empty($mode) || $mode != 'gettasks') {

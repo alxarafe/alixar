@@ -45,9 +45,9 @@ class Secret extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Apps\Secret the deleted secret
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Apps\Secret the deleted secret
      */
     public static function deleteWhere($params = null, $opts = null)
     {
@@ -63,9 +63,9 @@ class Secret extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Apps\Secret the finded secret
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Apps\Secret the finded secret
      */
     public static function find($params = null, $opts = null)
     {

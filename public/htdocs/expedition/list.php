@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2016-2021 Ferran Marcet        <fmarcet@2byte.es>
- * Copyright (C) 2019      Nicolas ZABOURI      <info@inovea-conseil.com>
- * Copyright (C) 2020      Thibault FOUCART     <support@ptibogxiv.net>
- * Copyright (C) 2023      Christophe Battarel	<christophe@altairis.fr>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2016-2021  Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2020       Thibault FOUCART            <support@ptibogxiv.net>
+ * Copyright (C) 2023       Christophe Battarel	        <christophe@altairis.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Benjamin Falière	<benjamin.faliere@altairis.fr>
- * Copyright (C) 2024		Vincent Maury		<vmaury@timgroup.fr>
+ * Copyright (C) 2024		Benjamin Falière	        <benjamin.faliere@altairis.fr>
+ * Copyright (C) 2024		Vincent Maury		        <vmaury@timgroup.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/expedition/list.php
  *      \ingroup    expedition
@@ -34,14 +46,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("sendings", "deliveries", 'companies', 'bills', 'products'));
@@ -251,7 +258,6 @@ if (empty($reshook)) {
 
             $objecttmp = new Facture($db);
 
-            dol_include_once('/commande/class/commande.class.php');
             $expdCmdSrc = new Commande($db);
             $expdCmdSrc->fetch($expd->origin_id);
 
@@ -1114,7 +1120,6 @@ if ($user->hasRight('user', 'user', 'lire')) {
 }
 // If the user can view prospects other than his'
 if (isModEnabled('category') && $user->hasRight('categorie', 'lire') && ($user->hasRight('produit', 'lire') || $user->hasRight('service', 'lire'))) {
-    include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('IncludingProductWithTag');
     $moreforfilter .= img_picto($tmptitle, 'category', 'class="pictofixedwidth"');
@@ -1125,7 +1130,6 @@ if (isModEnabled('category') && $user->hasRight('categorie', 'lire') && ($user->
     $moreforfilter .= '</div>';
 }
 if (isModEnabled('category') && $user->hasRight('categorie', 'lire')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('CustomersProspectsCategoriesShort');
     $moreforfilter .= img_picto($tmptitle, 'category', 'class="pictofixedwidth"');

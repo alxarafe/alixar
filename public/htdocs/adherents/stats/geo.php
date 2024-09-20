@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (c) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (c) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  *      \file       htdocs/adherents/stats/geo.php
  *      \ingroup    member
@@ -28,8 +32,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
 
 $graphwidth = DolGraph::getDefaultGraphSizeForStats('width', 700);
 $mapratio = 0.5;
@@ -165,7 +167,7 @@ if ($mode) {
         while ($i < $num) {
             $obj = $db->fetch_object($resql);
             if ($mode == 'memberbycountry') {
-                $data[] = array('label' => (($obj->code && $langs->trans("Country" . $obj->code) != "Country" . $obj->code) ? img_picto('', constant('BASE_URL') . '/theme/common/flags/' . strtolower($obj->code) . '.png', '', 1) . ' ' . $langs->trans("Country" . $obj->code) : ($obj->label ? $obj->label : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>')),
+                $data[] = array('label' => (($obj->code && $langs->trans("Country" . $obj->code) != "Country" . $obj->code) ? img_picto('', constant('DOL_URL_ROOT') . '/theme/common/flags/' . strtolower($obj->code) . '.png', '', 1) . ' ' . $langs->trans("Country" . $obj->code) : ($obj->label ? $obj->label : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>')),
                     'label_en' => (($obj->code && $langsen->transnoentitiesnoconv("Country" . $obj->code) != "Country" . $obj->code) ? $langsen->transnoentitiesnoconv("Country" . $obj->code) : ($obj->label ? $obj->label : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>')),
                     'code' => $obj->code,
                     'nb' => $obj->nb,
@@ -175,7 +177,7 @@ if ($mode) {
             }
             if ($mode == 'memberbyregion') { //+
                 $data[] = array(
-                    'label' => (($obj->code && $langs->trans("Country" . $obj->code) != "Country" . $obj->code) ? img_picto('', constant('BASE_URL') . '/theme/common/flags/' . strtolower($obj->code) . '.png', '', 1) . ' ' . $langs->trans("Country" . $obj->code) : ($obj->label ? $obj->label : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>')),
+                    'label' => (($obj->code && $langs->trans("Country" . $obj->code) != "Country" . $obj->code) ? img_picto('', constant('DOL_URL_ROOT') . '/theme/common/flags/' . strtolower($obj->code) . '.png', '', 1) . ' ' . $langs->trans("Country" . $obj->code) : ($obj->label ? $obj->label : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>')),
                     'label_en' => (($obj->code && $langsen->transnoentitiesnoconv("Country" . $obj->code) != "Country" . $obj->code) ? $langsen->transnoentitiesnoconv("Country" . $obj->code) : ($obj->label ? $obj->label : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>')),
                     'label2' => ($obj->label2 ? $obj->label2 : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>'),
                     'nb' => $obj->nb,
@@ -184,7 +186,7 @@ if ($mode) {
                 );
             }
             if ($mode == 'memberbystate') {
-                $data[] = array('label' => (($obj->code && $langs->trans("Country" . $obj->code) != "Country" . $obj->code) ? img_picto('', constant('BASE_URL') . '/theme/common/flags/' . strtolower($obj->code) . '.png', '', 1) . ' ' . $langs->trans("Country" . $obj->code) : ($obj->label ? $obj->label : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>')),
+                $data[] = array('label' => (($obj->code && $langs->trans("Country" . $obj->code) != "Country" . $obj->code) ? img_picto('', constant('DOL_URL_ROOT') . '/theme/common/flags/' . strtolower($obj->code) . '.png', '', 1) . ' ' . $langs->trans("Country" . $obj->code) : ($obj->label ? $obj->label : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>')),
                     'label_en' => (($obj->code && $langsen->transnoentitiesnoconv("Country" . $obj->code) != "Country" . $obj->code) ? $langsen->transnoentitiesnoconv("Country" . $obj->code) : ($obj->label ? $obj->label : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>')),
                     'label2' => ($obj->label2 ? $obj->label2 : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>'),
                     'nb' => $obj->nb,
@@ -193,7 +195,7 @@ if ($mode) {
                 );
             }
             if ($mode == 'memberbytown') {
-                $data[] = array('label' => (($obj->code && $langs->trans("Country" . $obj->code) != "Country" . $obj->code) ? img_picto('', constant('BASE_URL') . '/theme/common/flags/' . strtolower($obj->code) . '.png', '', 1) . ' ' . $langs->trans("Country" . $obj->code) : ($obj->label ? $obj->label : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>')),
+                $data[] = array('label' => (($obj->code && $langs->trans("Country" . $obj->code) != "Country" . $obj->code) ? img_picto('', constant('DOL_URL_ROOT') . '/theme/common/flags/' . strtolower($obj->code) . '.png', '', 1) . ' ' . $langs->trans("Country" . $obj->code) : ($obj->label ? $obj->label : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>')),
                     'label_en' => (($obj->code && $langsen->transnoentitiesnoconv("Country" . $obj->code) != "Country" . $obj->code) ? $langsen->transnoentitiesnoconv("Country" . $obj->code) : ($obj->label ? $obj->label : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>')),
                     'label2' => ($obj->label2 ? $obj->label2 : '<span class="opacitymedium">' . $langs->trans("Unknown") . '</span>'),
                     'nb' => $obj->nb,

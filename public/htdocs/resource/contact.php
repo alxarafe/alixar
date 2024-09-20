@@ -1,13 +1,11 @@
 <?php
 
-/* Copyright (C) 2005-2012  Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2007-2009  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2012       Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2016		Gilles Poirier		 <glgpoirier@gmail.com>
+/* Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2016		Gilles Poirier		        <glgpoirier@gmail.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
- */
-
-/**
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -22,6 +20,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Resource\Classes\Dolresource;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *       \file       htdocs/resource/contact.php
  *       \ingroup    resource
@@ -30,10 +34,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/resource/class/dolresource.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/resource.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'resource', 'sendings'));
@@ -57,7 +58,6 @@ $result = restrictedArea($user, 'resource', $object->id, 'resource');
 if (!$user->hasRight('resource', 'read')) {
     accessforbidden();
 }
-
 
 
 /*
@@ -100,7 +100,6 @@ if ($action == 'addcontact' && $user->hasRight('resource', 'write')) {
     }
 }
 
-
 /*
  * View
  */
@@ -119,9 +118,7 @@ if ($id > 0 || !empty($ref)) {
     $head = resource_prepare_head($object);
     print dol_get_fiche_head($head, 'contact', $langs->trans("ResourceSingular"), -1, 'resource');
 
-
     $linkback = '<a href="' . constant('BASE_URL') . '/resource/list.php' . (!empty($socid) ? '?id=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
-
 
     $morehtmlref = '<div class="refidno">';
     $morehtmlref .= '</div>';

@@ -34,7 +34,8 @@ abstract class ApiErrorException extends \Exception implements ExceptionInterfac
         $jsonBody = null,
         $httpHeaders = null,
         $stripeCode = null
-    ) {
+    )
+    {
         $instance = new static($message);
         $instance->setHttpStatus($httpStatus);
         $instance->setHttpBody($httpBody);

@@ -36,7 +36,7 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota, DAV\IMoveTa
      * return the same contents of what was submitted here, you are strongly
      * recommended to omit the ETag.
      *
-     * @param string          $name Name of the file
+     * @param string $name Name of the file
      * @param resource|string $data Initial payload
      *
      * @return string|null
@@ -52,10 +52,10 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota, DAV\IMoveTa
         clearstatcache(true, $newPath);
 
         return '"' . sha1(
-            fileinode($newPath) .
-            filesize($newPath) .
-            filemtime($newPath)
-        ) . '"';
+                fileinode($newPath) .
+                filesize($newPath) .
+                filemtime($newPath)
+            ) . '"';
     }
 
     /**
@@ -82,9 +82,9 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota, DAV\IMoveTa
      *
      * @param string $name
      *
+     * @return DAV\INode
      * @throws DAV\Exception\NotFound
      *
-     * @return DAV\INode
      */
     public function getChild($name)
     {
@@ -131,7 +131,7 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota, DAV\IMoveTa
         $iterator = new \FilesystemIterator(
             $this->path,
             \FilesystemIterator::CURRENT_AS_SELF
-          | \FilesystemIterator::SKIP_DOTS
+            | \FilesystemIterator::SKIP_DOTS
         );
 
         foreach ($iterator as $entry) {
@@ -190,8 +190,8 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota, DAV\IMoveTa
      * the move itself. If you return true from this function, the assumption
      * is that the move was successful.
      *
-     * @param string    $targetName new local file/collection name
-     * @param string    $sourcePath Full path to source node
+     * @param string $targetName new local file/collection name
+     * @param string $sourcePath Full path to source node
      * @param DAV\INode $sourceNode Source node itself
      *
      * @return bool

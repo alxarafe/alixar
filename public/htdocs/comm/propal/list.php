@@ -1,23 +1,23 @@
 <?php
 
-/* Copyright (C) 2001-2007 Rodolphe Quiedeville     <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016 Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2005      Marc Barilley / Ocebo	<marc@ocebo.com>
- * Copyright (C) 2005-2013 Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2006      Andre Cianfarani			<acianfa@free.fr>
- * Copyright (C) 2010-2011 Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2010-2022 Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2012      Christophe Battarel		<christophe.battarel@altairis.fr>
- * Copyright (C) 2013      Cédric Salvador			<csalvador@gpcsolutions.fr>
- * Copyright (C) 2015      Jean-François Ferry		<jfefe@aternatik.fr>
- * Copyright (C) 2016-2021 Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2017-2023 Charlene Benke			<charlene@patas-monkey.com>
- * Copyright (C) 2018	   Nicolas ZABOURI			<info@inovea-conseil.com>
- * Copyright (C) 2019-2021 Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2021	   Anthony Berton			<anthony.berton@bb2a.fr>
- * Copyright (C) 2021-2024  Frédéric France			<frederic.france@free.fr>
- * Copyright (C) 2022      Josep Lluís Amador		<joseplluis@lliuretic.cat>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005       Marc Barilley / Ocebo	    <marc@ocebo.com>
+ * Copyright (C) 2005-2013  Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2006       Andre Cianfarani			<acianfa@free.fr>
+ * Copyright (C) 2010-2011  Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2010-2022  Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2012       Christophe Battarel		    <christophe.battarel@altairis.fr>
+ * Copyright (C) 2013       Cédric Salvador			    <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015       Jean-François Ferry		    <jfefe@aternatik.fr>
+ * Copyright (C) 2016-2021  Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2017-2023  Charlene Benke			    <charlene@patas-monkey.com>
+ * Copyright (C) 2018	    Nicolas ZABOURI			    <info@inovea-conseil.com>
+ * Copyright (C) 2019-2021  Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2021	    Anthony Berton			    <anthony.berton@bb2a.fr>
+ * Copyright (C) 2021-2024  Frédéric France			    <frederic.france@free.fr>
+ * Copyright (C) 2022       Josep Lluís Amador		    <joseplluis@lliuretic.cat>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -35,6 +35,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCategory;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormMargin;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormPropal;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file           htdocs/comm/propal/list.php
  *  \ingroup        propal
@@ -43,21 +59,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formpropal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-if (isModEnabled('margin')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
-}
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcategory.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'propal', 'compta', 'bills', 'orders', 'products', 'deliveries', 'categories'));
@@ -68,24 +71,24 @@ if (isModEnabled("shipping")) {
 // Get Parameters
 $socid = GETPOSTINT('socid');
 
-$action     = GETPOST('action', 'aZ09');
+$action = GETPOST('action', 'aZ09');
 $massaction = GETPOST('massaction', 'alpha');
 $show_files = GETPOSTINT('show_files');
-$confirm    = GETPOST('confirm', 'alpha');
-$cancel     = GETPOST('cancel', 'alpha');
-$toselect   = GETPOST('toselect', 'array');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'alpha');
+$toselect = GETPOST('toselect', 'array');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'proposallist';
-$optioncss  = GETPOST('optioncss', 'alpha');
-$mode       = GETPOST('mode', 'alpha');
+$optioncss = GETPOST('optioncss', 'alpha');
+$mode = GETPOST('mode', 'alpha');
 
 // Search Fields
 $search_all = trim((GETPOST('search_all', 'alphanohtml') != '') ? GETPOST('search_all', 'alphanohtml') : GETPOST('sall', 'alphanohtml'));
-$search_user    = GETPOSTINT('search_user');
+$search_user = GETPOSTINT('search_user');
 if ($search_user == -1) {
     $search_user = 0;
 }
-$search_sale    = GETPOSTINT('search_sale');
-$search_ref     = GETPOST('sf_ref') ? GETPOST('sf_ref', 'alpha') : GETPOST('search_ref', 'alpha');
+$search_sale = GETPOSTINT('search_sale');
+$search_ref = GETPOST('sf_ref') ? GETPOST('sf_ref', 'alpha') : GETPOST('search_ref', 'alpha');
 $search_refcustomer = GETPOST('search_refcustomer', 'alpha');
 $search_refproject = GETPOST('search_refproject', 'alpha');
 $search_project = GETPOST('search_project', 'alpha');
@@ -531,8 +534,6 @@ if (!$error && $massaction === 'setbilled' && $permissiontoclose) {
     }
 }
 
-
-
 /*
  * View
  */
@@ -681,19 +682,19 @@ if ($search_all) {
     $sql .= natural_search(array_keys($fieldstosearchall), $search_all);
 }
 if ($search_fk_cond_reglement > 0) {
-    $sql .= " AND p.fk_cond_reglement = " . ((int) $search_fk_cond_reglement);
+    $sql .= " AND p.fk_cond_reglement = " . ((int)$search_fk_cond_reglement);
 }
 if ($search_fk_shipping_method > 0) {
-    $sql .= " AND p.fk_shipping_method = " . ((int) $search_fk_shipping_method);
+    $sql .= " AND p.fk_shipping_method = " . ((int)$search_fk_shipping_method);
 }
 if ($search_fk_input_reason > 0) {
-    $sql .= " AND p.fk_input_reason = " . ((int) $search_fk_input_reason);
+    $sql .= " AND p.fk_input_reason = " . ((int)$search_fk_input_reason);
 }
 if ($search_fk_mode_reglement > 0) {
-    $sql .= " AND p.fk_mode_reglement = " . ((int) $search_fk_mode_reglement);
+    $sql .= " AND p.fk_mode_reglement = " . ((int)$search_fk_mode_reglement);
 }
 if ($socid > 0) {
-    $sql .= ' AND s.rowid = ' . ((int) $socid);
+    $sql .= ' AND s.rowid = ' . ((int)$socid);
 }
 if ($search_status != '' && $search_status != '-1') {
     $sql .= ' AND p.fk_statut IN (' . $db->sanitize($search_status) . ')';
@@ -732,14 +733,14 @@ if ($search_user > 0) {
     $sql .= " FROM llx_element_contact as ec";
     $sql .= " INNER JOIN  llx_c_type_contact as tc";
     $sql .= " ON ec.fk_c_type_contact = tc.rowid AND tc.element='propal' AND tc.source='internal'";
-    $sql .= " WHERE ec.element_id = p.rowid AND ec.fk_socpeople = " . ((int) $search_user) . ")";
+    $sql .= " WHERE ec.element_id = p.rowid AND ec.fk_socpeople = " . ((int)$search_user) . ")";
 }
 // Search on sale representative
 if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = p.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search for tag/category ($searchCategoryCustomerList is an array of ID)
@@ -753,9 +754,9 @@ if (!empty($searchCategoryCustomerList)) {
             $searchCategoryCustomerSqlList[] = "NOT EXISTS (SELECT cs.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as cs WHERE s.rowid = cs.fk_soc)";
         } elseif (intval($searchCategoryCustomer) > 0) {
             if ($searchCategoryCustomerOperator == 0) {
-                $searchCategoryCustomerSqlList[] = " EXISTS (SELECT cs.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as cs WHERE s.rowid = cs.fk_soc AND cs.fk_categorie = " . ((int) $searchCategoryCustomer) . ")";
+                $searchCategoryCustomerSqlList[] = " EXISTS (SELECT cs.fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe as cs WHERE s.rowid = cs.fk_soc AND cs.fk_categorie = " . ((int)$searchCategoryCustomer) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryCustomer);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryCustomer);
             }
         }
     }
@@ -783,9 +784,9 @@ if (!empty($searchCategoryProductList)) {
             $searchCategoryProductSqlList[] = "NOT EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "propaldet as pd WHERE pd.fk_propal = p.rowid AND pd.fk_product = ck.fk_product)";
         } elseif (intval($searchCategoryProduct) > 0) {
             if ($searchCategoryProductOperator == 0) {
-                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "propaldet as pd WHERE pd.fk_propal = p.rowid AND pd.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int) $searchCategoryProduct) . ")";
+                $searchCategoryProductSqlList[] = " EXISTS (SELECT ck.fk_product FROM " . MAIN_DB_PREFIX . "categorie_product as ck, " . MAIN_DB_PREFIX . "propaldet as pd WHERE pd.fk_propal = p.rowid AND pd.fk_product = ck.fk_product AND ck.fk_categorie = " . ((int)$searchCategoryProduct) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryProduct);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryProduct);
             }
         }
     }
@@ -888,64 +889,64 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($search_all) {
     $param .= '&search_all=' . urlencode($search_all);
 }
 if ($search_date_startday) {
-    $param .= '&search_date_startday=' . urlencode((string) ($search_date_startday));
+    $param .= '&search_date_startday=' . urlencode((string)($search_date_startday));
 }
 if ($search_date_startmonth) {
-    $param .= '&search_date_startmonth=' . urlencode((string) ($search_date_startmonth));
+    $param .= '&search_date_startmonth=' . urlencode((string)($search_date_startmonth));
 }
 if ($search_date_startyear) {
-    $param .= '&search_date_startyear=' . urlencode((string) ($search_date_startyear));
+    $param .= '&search_date_startyear=' . urlencode((string)($search_date_startyear));
 }
 if ($search_date_endday) {
-    $param .= '&search_date_endday=' . urlencode((string) ($search_date_endday));
+    $param .= '&search_date_endday=' . urlencode((string)($search_date_endday));
 }
 if ($search_date_endmonth) {
-    $param .= '&search_date_endmonth=' . urlencode((string) ($search_date_endmonth));
+    $param .= '&search_date_endmonth=' . urlencode((string)($search_date_endmonth));
 }
 if ($search_date_endyear) {
-    $param .= '&search_date_endyear=' . urlencode((string) ($search_date_endyear));
+    $param .= '&search_date_endyear=' . urlencode((string)($search_date_endyear));
 }
 if ($search_date_end_startday) {
-    $param .= '&search_date_end_startday=' . urlencode((string) ($search_date_end_startday));
+    $param .= '&search_date_end_startday=' . urlencode((string)($search_date_end_startday));
 }
 if ($search_date_end_startmonth) {
-    $param .= '&search_date_end_startmonth=' . urlencode((string) ($search_date_end_startmonth));
+    $param .= '&search_date_end_startmonth=' . urlencode((string)($search_date_end_startmonth));
 }
 if ($search_date_end_startyear) {
-    $param .= '&search_date_end_startyear=' . urlencode((string) ($search_date_end_startyear));
+    $param .= '&search_date_end_startyear=' . urlencode((string)($search_date_end_startyear));
 }
 if ($search_date_end_endday) {
-    $param .= '&search_date_end_endday=' . urlencode((string) ($search_date_end_endday));
+    $param .= '&search_date_end_endday=' . urlencode((string)($search_date_end_endday));
 }
 if ($search_date_end_endmonth) {
-    $param .= '&search_date_end_endmonth=' . urlencode((string) ($search_date_end_endmonth));
+    $param .= '&search_date_end_endmonth=' . urlencode((string)($search_date_end_endmonth));
 }
 if ($search_date_end_endyear) {
-    $param .= '&search_date_end_endyear=' . urlencode((string) ($search_date_end_endyear));
+    $param .= '&search_date_end_endyear=' . urlencode((string)($search_date_end_endyear));
 }
 if ($search_date_delivery_startday) {
-    $param .= '&search_date_delivery_startday=' . urlencode((string) ($search_date_delivery_startday));
+    $param .= '&search_date_delivery_startday=' . urlencode((string)($search_date_delivery_startday));
 }
 if ($search_date_delivery_startmonth) {
-    $param .= '&search_date_delivery_startmonth=' . urlencode((string) ($search_date_delivery_startmonth));
+    $param .= '&search_date_delivery_startmonth=' . urlencode((string)($search_date_delivery_startmonth));
 }
 if ($search_date_delivery_startyear) {
-    $param .= '&search_date_delivery_startyear=' . urlencode((string) ($search_date_delivery_startyear));
+    $param .= '&search_date_delivery_startyear=' . urlencode((string)($search_date_delivery_startyear));
 }
 if ($search_date_delivery_endday) {
-    $param .= '&search_date_delivery_endday=' . urlencode((string) ($search_date_delivery_endday));
+    $param .= '&search_date_delivery_endday=' . urlencode((string)($search_date_delivery_endday));
 }
 if ($search_date_delivery_endmonth) {
-    $param .= '&search_date_delivery_endmonth=' . urlencode((string) ($search_date_delivery_endmonth));
+    $param .= '&search_date_delivery_endmonth=' . urlencode((string)($search_date_delivery_endmonth));
 }
 if ($search_date_delivery_endyear) {
-    $param .= '&search_date_delivery_endyear=' . urlencode((string) ($search_date_delivery_endyear));
+    $param .= '&search_date_delivery_endyear=' . urlencode((string)($search_date_delivery_endyear));
 }
 if ($search_ref) {
     $param .= '&search_ref=' . urlencode($search_ref);
@@ -963,7 +964,7 @@ if ($search_societe_alias) {
     $param .= '&search_societe_alias=' . urlencode($search_societe_alias);
 }
 if ($search_user > 0) {
-    $param .= '&search_user=' . urlencode((string) ($search_user));
+    $param .= '&search_user=' . urlencode((string)($search_user));
 }
 if ($search_sale > 0) {
     $param .= '&search_sale=' . urlencode($search_sale);
@@ -996,31 +997,31 @@ if ($search_zip) {
     $param .= '&search_zip=' . urlencode($search_zip);
 }
 if ($socid > 0) {
-    $param .= '&socid=' . urlencode((string) ($socid));
+    $param .= '&socid=' . urlencode((string)($socid));
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
 }
 if ($search_categ_cus > 0) {
-    $param .= '&search_categ_cus=' . urlencode((string) ($search_categ_cus));
+    $param .= '&search_categ_cus=' . urlencode((string)($search_categ_cus));
 }
 if ($search_product_category != '') {
-    $param .= '&search_product_category=' . urlencode((string) ($search_product_category));
+    $param .= '&search_product_category=' . urlencode((string)($search_product_category));
 }
 if ($search_fk_cond_reglement > 0) {
-    $param .= '&search_fk_cond_reglement=' . urlencode((string) ($search_fk_cond_reglement));
+    $param .= '&search_fk_cond_reglement=' . urlencode((string)($search_fk_cond_reglement));
 }
 if ($search_fk_shipping_method > 0) {
-    $param .= '&search_fk_shipping_method=' . urlencode((string) ($search_fk_shipping_method));
+    $param .= '&search_fk_shipping_method=' . urlencode((string)($search_fk_shipping_method));
 }
 if ($search_fk_input_reason > 0) {
-    $param .= '&search_fk_input_reason=' . urlencode((string) ($search_fk_input_reason));
+    $param .= '&search_fk_input_reason=' . urlencode((string)($search_fk_input_reason));
 }
 if ($search_fk_mode_reglement > 0) {
-    $param .= '&search_fk_mode_reglement=' . urlencode((string) ($search_fk_mode_reglement));
+    $param .= '&search_fk_mode_reglement=' . urlencode((string)($search_fk_mode_reglement));
 }
 if ($search_type_thirdparty > 0) {
-    $param .= '&search_type_thirdparty=' . urlencode((string) ($search_type_thirdparty));
+    $param .= '&search_type_thirdparty=' . urlencode((string)($search_type_thirdparty));
 }
 if ($search_town) {
     $param .= '&search_town=' . urlencode($search_town);
@@ -1035,25 +1036,25 @@ if ($search_town) {
     $param .= '&search_town=' . urlencode($search_town);
 }
 if ($search_country) {
-    $param .= '&search_country=' . urlencode((string) ($search_country));
+    $param .= '&search_country=' . urlencode((string)($search_country));
 }
 if ($search_date_signature_startday) {
-    $param .= '&search_date_signature_startday=' . urlencode((string) ($search_date_signature_startday));
+    $param .= '&search_date_signature_startday=' . urlencode((string)($search_date_signature_startday));
 }
 if ($search_date_signature_startmonth) {
-    $param .= '&search_date_signature_startmonth=' . urlencode((string) ($search_date_signature_startmonth));
+    $param .= '&search_date_signature_startmonth=' . urlencode((string)($search_date_signature_startmonth));
 }
 if ($search_date_signature_startyear) {
-    $param .= '&search_date_signature_startyear=' . urlencode((string) ($search_date_signature_startyear));
+    $param .= '&search_date_signature_startyear=' . urlencode((string)($search_date_signature_startyear));
 }
 if ($search_date_signature_endday) {
-    $param .= '&search_date_signature_endday=' . urlencode((string) ($search_date_signature_endday));
+    $param .= '&search_date_signature_endday=' . urlencode((string)($search_date_signature_endday));
 }
 if ($search_date_signature_endmonth) {
-    $param .= '&search_date_signature_endmonth=' . urlencode((string) ($search_date_signature_endmonth));
+    $param .= '&search_date_signature_endmonth=' . urlencode((string)($search_date_signature_endmonth));
 }
 if ($search_date_signature_endyear) {
-    $param .= '&search_date_signature_endyear=' . urlencode((string) ($search_date_signature_endyear));
+    $param .= '&search_date_signature_endyear=' . urlencode((string)($search_date_signature_endyear));
 }
 
 // Add $param from extra fields
@@ -1161,20 +1162,17 @@ if ($user->hasRight('user', 'user', 'lire')) {
 // If the user can view products
 if (isModEnabled('category') && $user->hasRight('categorie', 'read') && ($user->hasRight('product', 'read') || $user->hasRight('service', 'read'))) {
     $searchCategoryProductOperator = -1;
-    include_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
     $tmptitle = $langs->trans('IncludingProductWithTag');
     $formcategory = new FormCategory($db);
     $moreforfilter .= $formcategory->getFilterBox(Categorie::TYPE_PRODUCT, array($search_product_category), 'maxwidth300', $searchCategoryProductOperator, 0, 0, $tmptitle);
 }
 if (isModEnabled('category') && $user->hasRight('categorie', 'lire')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('CustomersProspectsCategoriesShort');
     $moreforfilter .= img_picto($tmptitle, 'category', 'class="pictofixedwidth"') . $formother->select_categories('customer', $search_categ_cus, 'search_categ_cus', 1, $tmptitle, (empty($conf->dol_optimize_smallscreen) ? 'maxwidth300 widthcentpercentminusx' : 'maxwidth250 widthcentpercentminusx'));
     $moreforfilter .= '</div>';
 }
 if (isModEnabled('stock') && getDolGlobalString('WAREHOUSE_ASK_WAREHOUSE_DURING_PROPAL')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
     $formproduct = new FormProduct($db);
     $moreforfilter .= '<div class="divsearchfield">';
     $tmptitle = $langs->trans('Warehouse');
@@ -1702,10 +1700,10 @@ $now = dol_now();
 $with_margin_info = false;
 if (
     isModEnabled('margin') && (
-    !empty($arrayfields['total_pa']['checked'])
-    || !empty($arrayfields['total_margin']['checked'])
-    || !empty($arrayfields['total_margin_rate']['checked'])
-    || !empty($arrayfields['total_mark_rate']['checked'])
+        !empty($arrayfields['total_pa']['checked'])
+        || !empty($arrayfields['total_margin']['checked'])
+        || !empty($arrayfields['total_margin_rate']['checked'])
+        || !empty($arrayfields['total_mark_rate']['checked'])
     )
 ) {
     $with_margin_info = true;
@@ -2402,7 +2400,6 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
         $hidegeneratedfilelistifempty = 0;
     }
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
     $formfile = new FormFile($db);
 
     // Show list of available documents

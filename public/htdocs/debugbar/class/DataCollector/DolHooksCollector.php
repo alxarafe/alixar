@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2024   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2024       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,13 +18,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use DebugBar\DataCollector\RequestDataCollector;
+use Dolibarr\Code\Core\Classes\HookManager;
+
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolHooksCollector.php
  *  \brief      Class for debugbar collection
  *  \ingroup    debugbar
  */
-
-use DebugBar\DataCollector\RequestDataCollector;
 
 /**
  * DolRequestDataCollector class
@@ -64,7 +65,7 @@ class DolHooksCollector extends RequestDataCollector
     /**
      *  Return widget settings
      *
-     *  @return     array<string,array{icon?:string,widget?:string,map:string,default:int|string}>  Array
+     * @return     array<string,array{icon?:string,widget?:string,map:string,default:int|string}>  Array
      */
     public function getWidgets()
     {

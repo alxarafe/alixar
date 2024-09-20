@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2020  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2023  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2017       Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2023  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2017       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormExpenseReport;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Ecm\Classes\EcmFiles;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *  \file           htdocs/expensereport/card.php
  *  \ingroup        expensereport
@@ -31,26 +44,10 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formexpensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmfiles.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/expensereport.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/price.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expensereport/modules_expensereport.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/paymentexpensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("trips", "bills", "mails"));
@@ -1127,8 +1124,7 @@ if (empty($reshook)) {
         if (GETPOSTISSET('attachfile')) {
             $arrayoffiles = GETPOST('attachfile', 'array');
             if (is_array($arrayoffiles) && !empty($arrayoffiles[0])) {
-                include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-                $entityprefix = ($conf->entity != '1') ? $conf->entity . '/' : '';
+                        $entityprefix = ($conf->entity != '1') ? $conf->entity . '/' : '';
                 $relativepath = 'expensereport/' . $object->ref . '/' . $arrayoffiles[0];
                 $ecmfiles = new EcmFiles($db);
                 $ecmfiles->fetch(0, '', $relativepath);
@@ -1297,8 +1293,7 @@ if (empty($reshook)) {
         if (GETPOSTISSET('attachfile')) {
             $arrayoffiles = GETPOST('attachfile', 'array');
             if (is_array($arrayoffiles) && !empty($arrayoffiles[0])) {
-                include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
-                $relativepath = 'expensereport/' . $object->ref . '/' . $arrayoffiles[0];
+                        $relativepath = 'expensereport/' . $object->ref . '/' . $arrayoffiles[0];
                 $ecmfiles = new EcmFiles($db);
                 $ecmfiles->fetch(0, '', $relativepath);
                 $fk_ecm_files = $ecmfiles->id;
@@ -2130,7 +2125,6 @@ if ($action == 'create') {
 
                         $titlealt = '';
                         if (isModEnabled('accounting')) {
-                            require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
                             $accountingaccount = new AccountingAccount($db);
                             $resaccountingaccount = $accountingaccount->fetch(0, $line->type_fees_accountancy_code, 1);
                             //$titlealt .= '<span class="opacitymedium">';
@@ -2474,7 +2468,6 @@ if ($action == 'create') {
                 if (!getDolGlobalString('EXPENSEREPORT_DISABLE_ATTACHMENT_ON_LINES')) {
                     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
                     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
                     $upload_dir = $conf->expensereport->dir_output . "/" . dol_sanitizeFileName($object->ref);
                     $arrayoffiles = dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png|' . preg_quote(dol_sanitizeFileName($object->ref . '.pdf'), '/') . ')$');
                     $nbFiles = count($arrayoffiles);
@@ -2923,8 +2916,7 @@ if ($action != 'presend') {
 
     print '</div><div class="fichehalfright">';
     // List of actions on element
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-    $formactions = new FormActions($db);
+        $formactions = new FormActions($db);
     $somethingshown = $formactions->showactions($object, 'expensereport', null);
 
     print '</div></div>';

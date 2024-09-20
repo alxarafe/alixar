@@ -249,8 +249,8 @@ class PrestaShopWebservice
     /**
      * Output debug info
      *
-     * @param       string  $title          Title
-     * @param       string  $content        Content
+     * @param string $title Title
+     * @param string $content Content
      * @return      void
      */
     public function printDebug($title, $content)
@@ -315,7 +315,7 @@ class PrestaShopWebservice
      * 'postXml' => Full XML string to add resource<br><br>
      * Examples are given in the tutorial</p>
      *
-     * @param array $options        Options
+     * @param array $options Options
      *
      * @return SimpleXMLElement status_code, response
      * @throws PrestaShopWebserviceException

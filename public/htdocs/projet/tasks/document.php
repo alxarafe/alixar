@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2010-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2006-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2012      Florian Henry        <florian.henry@open-concept.pro>
- * Copyright (C) 2013      Cédric Salvador      <csalvador@gpcsolutions.fr>
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+
 /**
  *  \file       htdocs/projet/tasks/document.php
  *  \ingroup    project
@@ -28,12 +32,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('projects', 'other'));
@@ -126,7 +127,7 @@ $form = new Form($db);
 
 $title = $object->ref . ' - ' . $langs->trans("Documents");
 if (!empty($withproject)) {
-    $title .= ' | ' . $langs->trans("Project") . (!empty($projectstatic->ref) ? ': ' . $projectstatic->ref : '')  ;
+    $title .= ' | ' . $langs->trans("Project") . (!empty($projectstatic->ref) ? ': ' . $projectstatic->ref : '');
 }
 $help_url = '';
 
@@ -288,7 +289,7 @@ if ($object->id > 0) {
         $projectsListId = $projectstatic->getProjectsAuthorizedForUser($user, 0, 1);
         $object->next_prev_filter = "fk_projet IN (" . $db->sanitize($projectsListId) . ")";
     } else {
-        $object->next_prev_filter = "fk_projet = " . ((int) $projectstatic->id);
+        $object->next_prev_filter = "fk_projet = " . ((int)$projectstatic->id);
     }
 
     $morehtmlref = '';

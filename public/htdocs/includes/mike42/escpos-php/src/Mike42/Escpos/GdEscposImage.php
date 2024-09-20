@@ -33,7 +33,7 @@ class GdEscposImage extends EscposImage
             /* Set to blank image */
             return parent::loadImageData($filename);
         }
-        
+
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
         switch ($ext) {
             case "png":
@@ -48,7 +48,7 @@ class GdEscposImage extends EscposImage
             default:
                 throw new Exception("Image format not supported in GD");
         }
-        $this -> readImageFromGdResource($im);
+        $this->readImageFromGdResource($im);
     }
 
     /**
@@ -79,8 +79,8 @@ class GdEscposImage extends EscposImage
                 $imgData[$y * $imgWidth + $x] = $black;
             }
         }
-        $this -> setImgWidth($imgWidth);
-        $this -> setImgHeight($imgHeight);
-        $this -> setImgData($imgData);
+        $this->setImgWidth($imgWidth);
+        $this->setImgHeight($imgHeight);
+        $this->setImgData($imgData);
     }
 }

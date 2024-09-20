@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) ---Put here your own copyright and developer email---
- * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+/* Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Mrp\Classes\Mo;
+
 /**
  * \file    lib/mrp_mo.lib.php
  * \ingroup mrp
@@ -26,7 +28,7 @@
 /**
  * Prepare array of tabs for Mo
  *
- * @param   Mo  $object     Mo
+ * @param Mo $object Mo
  * @return  array                   Array of tabs
  */
 function moPrepareHead($object)
@@ -79,7 +81,6 @@ function moPrepareHead($object)
     }
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->mrp->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);

@@ -12,9 +12,9 @@ class LocationService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Terminal\Location>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Terminal\Location>
      */
     public function all($params = null, $opts = null)
     {
@@ -29,9 +29,9 @@ class LocationService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Location
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Location
      */
     public function create($params = null, $opts = null)
     {
@@ -45,9 +45,9 @@ class LocationService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Location
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Location
      */
     public function delete($id, $params = null, $opts = null)
     {
@@ -61,9 +61,9 @@ class LocationService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Location
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Location
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -78,9 +78,9 @@ class LocationService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Location
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Location
      */
     public function update($id, $params = null, $opts = null)
     {

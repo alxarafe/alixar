@@ -34,9 +34,9 @@ class Strava extends AbstractService
      * Scopes
      */
     // default
-    const SCOPE_PUBLIC       = 'public';
+    const SCOPE_PUBLIC = 'public';
     // Modify activities, upload on the user’s behalf
-    const SCOPE_WRITE        = 'write';
+    const SCOPE_WRITE = 'write';
     // View private activities and data within privacy zones
     const SCOPE_VIEW_PRIVATE = 'view_private';
 
@@ -44,11 +44,12 @@ class Strava extends AbstractService
 
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         if (empty($scopes)) {
             $scopes = array(self::SCOPE_PUBLIC);
         }

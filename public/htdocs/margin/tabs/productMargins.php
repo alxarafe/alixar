@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2012-2013  Christophe Battarel <christophe.battarel@altairis.fr>
+/* Copyright (C) 2012-2013  Christophe Battarel         <christophe.battarel@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/margin/tabs/productMargins.php
  *  \ingroup    product margins
@@ -26,8 +30,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
 $langs->loadLangs(array("companies", "bills", "products", "margins"));
 
@@ -114,7 +116,6 @@ if (empty($search_invoice_date_start) && empty($search_invoice_date_end) && !GET
     }
 }
 
-
 /*
  * View
  */
@@ -144,7 +145,7 @@ if ($id > 0 || !empty($ref)) {
 
     $param = "&id=" . $object->id;
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($search_invoice_date_start) {
         $param .= '&search_invoice_date_start_day=' . dol_print_date($search_invoice_date_start, '%d') . '&search_invoice_date_start_month=' . dol_print_date($search_invoice_date_start, '%m') . '&search_invoice_date_start_year=' . dol_print_date($search_invoice_date_start, '%Y');
@@ -218,12 +219,12 @@ if ($id > 0 || !empty($ref)) {
             $sql .= " AND f.fk_statut > 0";
             $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
             $sql .= " AND d.fk_facture = f.rowid";
-            $sql .= " AND d.fk_product = " . ((int) $object->id);
+            $sql .= " AND d.fk_product = " . ((int)$object->id);
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             if (!empty($socid)) {
-                $sql .= " AND f.fk_soc = " . ((int) $socid);
+                $sql .= " AND f.fk_soc = " . ((int)$socid);
             }
             $sql .= " AND d.buy_price_ht IS NOT NULL";
             // We should not use this here. Option ForceBuyingPriceIfNull should have effect only when inserting data. Once data is recorded, it must be used as it is for report.

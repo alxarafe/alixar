@@ -32,6 +32,8 @@
  * - If no option set, we use old APIS (charge)
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+
 /**
  *      \file       htdocs/public/payment/newpayment.php
  *      \ingroup    core
@@ -54,7 +56,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and get of entity must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : (!empty($_GET['e']) ? (int) $_GET['e'] : (!empty($_POST['e']) ? (int) $_POST['e'] : 1))));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : (!empty($_GET['e']) ? (int)$_GET['e'] : (!empty($_POST['e']) ? (int)$_POST['e'] : 1))));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -65,10 +67,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societeaccount.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
 // Hook to be used by external payment modules (ie Payzen, ...)
 $hookmanager = new HookManager($db);
@@ -138,7 +136,7 @@ if ($source == 'organizedeventregistration') {
             $attendeeid = $linkedAttendees[0];
         }*/
         $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "eventorganization_conferenceorboothattendee";
-        $sql .= " WHERE fk_invoice = " . ((int) $invoiceid);
+        $sql .= " WHERE fk_invoice = " . ((int)$invoiceid);
         $resql = $db->query($sql);
         if ($resql) {
             $obj = $db->fetch_object($resql);
@@ -246,8 +244,8 @@ if (!empty($SECUREKEY)) {
     $urlko .= 'securekey=' . urlencode($SECUREKEY) . '&';
 }
 if (!empty($entity)) {
-    $urlok .= 'e=' . urlencode((string) ($entity)) . '&';
-    $urlko .= 'e=' . urlencode((string) ($entity)) . '&';
+    $urlok .= 'e=' . urlencode((string)($entity)) . '&';
+    $urlko .= 'e=' . urlencode((string)($entity)) . '&';
 }
 if (!empty($getpostlang)) {
     $urlok .= 'lang=' . urlencode($getpostlang) . '&';
@@ -319,7 +317,7 @@ if (getDolGlobalString('PAYMENT_SECURITY_TOKEN')) {
         $tokenisok = ($conf->global->PAYMENT_SECURITY_TOKEN == $SECUREKEY);
     }
 
-    if (! $tokenisok) {
+    if (!$tokenisok) {
         if (!getDolGlobalString('PAYMENT_SECURITY_ACCEPT_ANY_TOKEN')) {
             $valid = false; // PAYMENT_SECURITY_ACCEPT_ANY_TOKEN is for backward compatibility
         } else {
@@ -523,7 +521,7 @@ if ($action == 'charge' && isModEnabled('stripe')) {
         try {
             $metadata = array(
                 'dol_version' => DOL_VERSION,
-                'dol_entity'  => $conf->entity,
+                'dol_entity' => $conf->entity,
                 'dol_company' => $mysoc->name, // Useful when using multicompany
                 'dol_tax_num' => $vatnumber,
                 'ipaddress' => getUserRemoteIP()
@@ -584,14 +582,14 @@ if ($action == 'charge' && isModEnabled('stripe')) {
 
                         dol_syslog("Create charge on card " . $card->id, LOG_DEBUG, 0, '_payment');
                         $charge = \Stripe\Charge::create(array(
-                            'amount'   => price2num($amountstripe, 'MU'),
+                            'amount' => price2num($amountstripe, 'MU'),
                             'currency' => $currency,
-                            'capture'  => true, // Charge immediately
+                            'capture' => true, // Charge immediately
                             'description' => 'Stripe payment: ' . $FULLTAG . ' ref=' . $ref,
                             'metadata' => $metadata,
                             'customer' => $customer->id,
                             'source' => $card,
-                          'statement_descriptor_suffix' => dol_trunc($FULLTAG, 10, 'right', 'UTF-8', 1), // 22 chars that appears on bank receipt (company + description)
+                            'statement_descriptor_suffix' => dol_trunc($FULLTAG, 10, 'right', 'UTF-8', 1), // 22 chars that appears on bank receipt (company + description)
                         ), array("idempotency_key" => "$FULLTAG", "stripe_account" => "$stripeacc"));
                         // Return $charge = array('id'=>'ch_XXXX', 'status'=>'succeeded|pending|failed', 'failure_code'=>, 'failure_message'=>...)
                         if (empty($charge)) {
@@ -620,7 +618,7 @@ if ($action == 'charge' && isModEnabled('stripe')) {
                     'email' => $email,
                     'description' => ($email ? 'Anonymous customer for ' . $email : 'Anonymous customer'),
                     'metadata' => $metadata,
-                    'source'  => $stripeToken           // source can be a token OR array('object'=>'card', 'exp_month'=>xx, 'exp_year'=>xxxx, 'number'=>xxxxxxx, 'cvc'=>xxx, 'name'=>'Cardholder's full name', zip ?)
+                    'source' => $stripeToken           // source can be a token OR array('object'=>'card', 'exp_month'=>xx, 'exp_year'=>xxxx, 'number'=>xxxxxxx, 'cvc'=>xxx, 'name'=>'Cardholder's full name', zip ?)
                 ));
                 // Return $customer = array('id'=>'cus_XXXX', ...)
 
@@ -654,9 +652,9 @@ if ($action == 'charge' && isModEnabled('stripe')) {
                 dol_syslog("Create charge", LOG_DEBUG, 0, '_payment');
                 $charge = \Stripe\Charge::create(array(
                     'customer' => $customer->id,
-                    'amount'   => price2num($amountstripe, 'MU'),
+                    'amount' => price2num($amountstripe, 'MU'),
                     'currency' => $currency,
-                    'capture'  => true, // Charge immediately
+                    'capture' => true, // Charge immediately
                     'description' => 'Stripe payment: ' . $FULLTAG . ' ref=' . $ref,
                     'metadata' => $metadata,
                     'statement_descriptor' => dol_trunc($FULLTAG, 10, 'right', 'UTF-8', 1), // 22 chars that appears on bank receipt (company + description)
@@ -672,7 +670,7 @@ if ($action == 'charge' && isModEnabled('stripe')) {
         } catch (\Stripe\Exception\CardException $e) {
             // Since it's a decline, \Stripe\Exception\Card will be caught
             $body = $e->getJsonBody();
-            $err  = $body['error'];
+            $err = $body['error'];
 
             print('Status is:' . $e->getHttpStatus() . "\n");
             print('Type is:' . $err['type'] . "\n");
@@ -836,7 +834,6 @@ if ($reshook < 0) {
 }
 
 
-
 /*
  * View
  */
@@ -945,8 +942,6 @@ if (getDolGlobalString('MAIN_IMAGE_PUBLIC_PAYMENT')) {
 }
 
 
-
-
 print '<!-- Form to send a payment -->' . "\n";
 print '<!-- creditor = ' . dol_escape_htmltag($creditor) . ' -->' . "\n";
 // Additional information for each payment system
@@ -1048,8 +1043,6 @@ if (!$source) {
 if ($source == 'order') {
     $found = true;
     $langs->load("orders");
-
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
 
     $order = new Commande($db);
     $result = $order->fetch('', $ref);
@@ -1180,7 +1173,6 @@ if ($source == 'invoice') {
     $langs->load("bills");
     $form->load_cache_types_paiements();
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
     $invoice = new Facture($db);
     $result = $invoice->fetch('', $ref);
@@ -1322,7 +1314,6 @@ if ($source == 'contractline') {
     $found = true;
     $langs->load("contracts");
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
 
     $contract = new Contrat($db);
     $contractline = new ContratLigne($db);
@@ -1522,10 +1513,6 @@ if ($source == 'member' || $source == 'membersubscription') {
     $found = true;
     $langs->load("members");
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/subscription.class.php';
-
     $member = new Adherent($db);
     $adht = new AdherentType($db);
 
@@ -1626,10 +1613,9 @@ if ($source == 'member' || $source == 'membersubscription') {
 
     if ($member->type) {
         $oldtypeid = $member->typeid;
-        $newtypeid = (int) (GETPOSTISSET("typeid") ? GETPOSTINT("typeid") : $member->typeid);
+        $newtypeid = (int)(GETPOSTISSET("typeid") ? GETPOSTINT("typeid") : $member->typeid);
 
         if (getDolGlobalString('MEMBER_ALLOW_CHANGE_OF_TYPE')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
             $adht = new AdherentType($db);
             // Amount by member type
             $amountbytype = $adht->amountByType(1);
@@ -1641,7 +1627,7 @@ if ($source == 'member' || $source == 'membersubscription') {
 
             // Set the new member type
             $member->typeid = $newtypeid;
-            $member->type = (string) dol_getIdFromCode($db, $newtypeid, 'adherent_type', 'rowid', 'libelle');
+            $member->type = (string)dol_getIdFromCode($db, $newtypeid, 'adherent_type', 'rowid', 'libelle');
 
             // list member type
             if (!$action) {
@@ -1740,7 +1726,6 @@ if ($source == 'donation') {
     $found = true;
     $langs->load("don");
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
 
     $don = new Don($db);
     // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
@@ -1922,7 +1907,7 @@ if ($source == 'organizedeventregistration') {
     print '</b>';
     print '</td></tr>' . "\n";
 
-    if (! is_object($attendee->project)) {
+    if (!is_object($attendee->project)) {
         $text = 'ErrorProjectNotFound';
     } else {
         $text = $langs->trans("PaymentEvent") . ' - ' . $attendee->project->title;
@@ -2231,7 +2216,6 @@ print '</div>' . "\n";
 print '<br>';
 
 
-
 // Add more content on page for some services
 if (preg_match('/^dopayment/', $action)) {          // If we chose/clicked on the payment mode
     // Save some data for the paymentok
@@ -2295,7 +2279,6 @@ if (preg_match('/^dopayment/', $action)) {          // If we chose/clicked on th
         print '<input type="hidden" name="lang" value="' . $getpostlang . '">';
 
         if (getDolGlobalString('STRIPE_USE_INTENT_WITH_AUTOMATIC_CONFIRMATION') || getDolGlobalString('STRIPE_USE_NEW_CHECKOUT')) { // Use a SCA ready method
-            require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 
             $service = 'StripeLive';
             $servicestatus = 1;
@@ -2357,7 +2340,7 @@ if (preg_match('/^dopayment/', $action)) {          // If we chose/clicked on th
 
         print '<br>';
         print '<button class="button buttonpayment" style="text-align: center; padding-left: 0; padding-right: 0;" id="buttontopay" data-secret="' . (is_object($paymentintent) ? $paymentintent->client_secret : '') . '">' . $langs->trans("ValidatePayment") . '</button>';
-        print '<img id="hourglasstopay" class="hidden" src="' . constant('BASE_URL') . '/theme/' . $conf->theme . '/img/working.gif">';
+        print '<img id="hourglasstopay" class="hidden" src="' . constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/img/working.gif">';
 
         print '</td></tr></tbody>';
         print '</table>';
@@ -2454,275 +2437,275 @@ if (preg_match('/^dopayment/', $action)) {          // If we chose/clicked on th
                 } catch (Exception $e) {
                     print $e->getMessage();
                 } ?>
-               // Code for payment with option STRIPE_USE_NEW_CHECKOUT set
+                // Code for payment with option STRIPE_USE_NEW_CHECKOUT set
 
-            // Create a Stripe client.
+                // Create a Stripe client.
                 <?php
                 if (empty($stripeacc)) {
                     ?>
-            var stripe = Stripe('<?php echo $stripearrayofkeys['publishable_key']; // Defined into config.php?>');
+                    var stripe = Stripe('<?php echo $stripearrayofkeys['publishable_key']; // Defined into config.php?>');
                     <?php
                 } else {
                     ?>
-            var stripe = Stripe('<?php echo $stripearrayofkeys['publishable_key']; // Defined into config.php?>', { stripeAccount: '<?php echo $stripeacc; ?>' });
+                    var stripe = Stripe('<?php echo $stripearrayofkeys['publishable_key']; // Defined into config.php?>', { stripeAccount: '<?php echo $stripeacc; ?>' });
                     <?php
                 } ?>
 
-            // Create an instance of Elements
-            var elements = stripe.elements();
+                // Create an instance of Elements
+                var elements = stripe.elements();
 
-            // Custom styling can be passed to options when creating an Element.
-            // (Note that this demo uses a wider set of styles than the guide below.)
-            var style = {
-              base: {
+                // Custom styling can be passed to options when creating an Element.
+                // (Note that this demo uses a wider set of styles than the guide below.)
+                var style = {
+                base: {
                 color: '#32325d',
                 lineHeight: '24px',
                 fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
                 fontSmoothing: 'antialiased',
                 fontSize: '16px',
                 '::placeholder': {
-                  color: '#aab7c4'
+                color: '#aab7c4'
                 }
-              },
-              invalid: {
+                },
+                invalid: {
                 color: '#fa755a',
                 iconColor: '#fa755a'
-              }
-            }
+                }
+                }
 
-            var cardElement = elements.create('card', {style: style});
+                var cardElement = elements.create('card', {style: style});
 
-            // Comment this to avoid the redirect
-            stripe.redirectToCheckout({
-              // Make the id field from the Checkout Session creation API response
-              // available to this file, so you can provide it as parameter here
-              // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
-              sessionId: '<?php print $sessionstripe->id; ?>'
-            }).then(function (result) {
-              // If `redirectToCheckout` fails due to a browser or network
-              // error, display the localized error message to your customer
-              // using `result.error.message`.
-            });
+                // Comment this to avoid the redirect
+                stripe.redirectToCheckout({
+                // Make the id field from the Checkout Session creation API response
+                // available to this file, so you can provide it as parameter here
+                // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+                sessionId: '<?php print $sessionstripe->id; ?>'
+                }).then(function (result) {
+                // If `redirectToCheckout` fails due to a browser or network
+                // error, display the localized error message to your customer
+                // using `result.error.message`.
+                });
 
 
                 <?php
             } elseif (getDolGlobalString('STRIPE_USE_INTENT_WITH_AUTOMATIC_CONFIRMATION')) {
                 ?>
-            // Code for payment with option STRIPE_USE_INTENT_WITH_AUTOMATIC_CONFIRMATION set to 1 or 2
+                // Code for payment with option STRIPE_USE_INTENT_WITH_AUTOMATIC_CONFIRMATION set to 1 or 2
 
-            // Create a Stripe client.
+                // Create a Stripe client.
                 <?php
                 if (empty($stripeacc)) {
                     ?>
-            var stripe = Stripe('<?php echo $stripearrayofkeys['publishable_key']; // Defined into config.php?>');
+                    var stripe = Stripe('<?php echo $stripearrayofkeys['publishable_key']; // Defined into config.php?>');
                     <?php
                 } else {
                     ?>
-            var stripe = Stripe('<?php echo $stripearrayofkeys['publishable_key']; // Defined into config.php?>', { stripeAccount: '<?php echo $stripeacc; ?>' });
+                    var stripe = Stripe('<?php echo $stripearrayofkeys['publishable_key']; // Defined into config.php?>', { stripeAccount: '<?php echo $stripeacc; ?>' });
                     <?php
                 } ?>
 
                 <?php
                 if (getDolGlobalInt('STRIPE_USE_INTENT_WITH_AUTOMATIC_CONFIRMATION') == 2) {
                     ?>
-            var cardButton = document.getElementById('buttontopay');
-            var clientSecret = cardButton.dataset.secret;
-            var options = { clientSecret: clientSecret };
+                    var cardButton = document.getElementById('buttontopay');
+                    var clientSecret = cardButton.dataset.secret;
+                    var options = { clientSecret: clientSecret };
 
-            // Create an instance of Elements
-            var elements = stripe.elements(options);
+                    // Create an instance of Elements
+                    var elements = stripe.elements(options);
                     <?php
                 } else {
                     ?>
-            // Create an instance of Elements
-            var elements = stripe.elements();
+                    // Create an instance of Elements
+                    var elements = stripe.elements();
                     <?php
                 } ?>
 
-            // Custom styling can be passed to options when creating an Element.
-            // (Note that this demo uses a wider set of styles than the guide below.)
-            var style = {
-              base: {
+                // Custom styling can be passed to options when creating an Element.
+                // (Note that this demo uses a wider set of styles than the guide below.)
+                var style = {
+                base: {
                 color: '#32325d',
                 lineHeight: '24px',
                 fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
                 fontSmoothing: 'antialiased',
                 fontSize: '16px',
                 '::placeholder': {
-                  color: '#aab7c4'
+                color: '#aab7c4'
                 }
-              },
-              invalid: {
+                },
+                invalid: {
                 color: '#fa755a',
                 iconColor: '#fa755a'
-              }
-            }
+                }
+                }
 
                 <?php
                 if (getDolGlobalInt('STRIPE_USE_INTENT_WITH_AUTOMATIC_CONFIRMATION') == 2) {
                     ?>
-            var paymentElement = elements.create("payment");
+                    var paymentElement = elements.create("payment");
 
-            // Add an instance of the card Element into the `card-element` <div>
-            paymentElement.mount("#payment-element");
+                    // Add an instance of the card Element into the `card-element` <div>
+                    paymentElement.mount("#payment-element");
 
-            // Handle form submission
-            var cardButton = document.getElementById('buttontopay');
+                    // Handle form submission
+                    var cardButton = document.getElementById('buttontopay');
 
-            cardButton.addEventListener('click', function(event) {
-                console.log("We click on buttontopay");
-                event.preventDefault();
+                    cardButton.addEventListener('click', function(event) {
+                    console.log("We click on buttontopay");
+                    event.preventDefault();
 
                     /* Disable button to pay and show hourglass cursor */
                     jQuery('#hourglasstopay').show();
                     jQuery('#buttontopay').hide();
 
                     stripe.confirmPayment({
-                        elements,confirmParams: {
-                        return_url: '<?php echo $urlok; ?>',
-                        payment_method_data: {
-                            billing_details: {
-                                name: 'test'
-                                <?php if (GETPOST('email', 'alpha') || (is_object($object) && is_object($object->thirdparty) && !empty($object->thirdparty->email))) {
-                                    ?>, email: '<?php echo dol_escape_js(GETPOST('email', 'alpha') ? GETPOST('email', 'alpha') : $object->thirdparty->email); ?>'<?php
-                                } ?>
-                                <?php if (is_object($object) && is_object($object->thirdparty) && !empty($object->thirdparty->phone)) {
-                                    ?>, phone: '<?php echo dol_escape_js($object->thirdparty->phone); ?>'<?php
-                                } ?>
-                                <?php if (is_object($object) && is_object($object->thirdparty)) {
-                                    ?>, address: {
-                                    city: '<?php echo dol_escape_js($object->thirdparty->town); ?>',
-                                    <?php if ($object->thirdparty->country_code) {
-                                        ?>country: '<?php echo dol_escape_js($object->thirdparty->country_code); ?>',<?php
-                                    } ?>
-                                    line1: '<?php echo dol_escape_js(preg_replace('/\s\s+/', ' ', $object->thirdparty->address)); ?>',
-                                    postal_code: '<?php echo dol_escape_js($object->thirdparty->zip); ?>'
-                                    }
-                                    <?php
-                                } ?>
-                            }
-                            },
-                            save_payment_method:<?php if ($stripecu) {
-                                print 'true';
-                                                } else {
-                                                    print 'false';
-                                                } ?>    /* true when a customer was provided when creating payment intent. true ask to save the card */
-                        },
+                    elements,confirmParams: {
+                    return_url: '<?php echo $urlok; ?>',
+                    payment_method_data: {
+                    billing_details: {
+                    name: 'test'
+                    <?php if (GETPOST('email', 'alpha') || (is_object($object) && is_object($object->thirdparty) && !empty($object->thirdparty->email))) {
+                        ?>, email: '<?php echo dol_escape_js(GETPOST('email', 'alpha') ? GETPOST('email', 'alpha') : $object->thirdparty->email); ?>'<?php
+                    } ?>
+                    <?php if (is_object($object) && is_object($object->thirdparty) && !empty($object->thirdparty->phone)) {
+                        ?>, phone: '<?php echo dol_escape_js($object->thirdparty->phone); ?>'<?php
+                    } ?>
+                    <?php if (is_object($object) && is_object($object->thirdparty)) {
+                        ?>, address: {
+                        city: '<?php echo dol_escape_js($object->thirdparty->town); ?>',
+                        <?php if ($object->thirdparty->country_code) {
+                            ?>country: '<?php echo dol_escape_js($object->thirdparty->country_code); ?>',<?php
+                        } ?>
+                        line1: '<?php echo dol_escape_js(preg_replace('/\s\s+/', ' ', $object->thirdparty->address)); ?>',
+                        postal_code: '<?php echo dol_escape_js($object->thirdparty->zip); ?>'
+                        }
+                        <?php
+                    } ?>
+                    }
+                    },
+                    save_payment_method:<?php if ($stripecu) {
+                        print 'true';
+                    } else {
+                        print 'false';
+                    } ?>    /* true when a customer was provided when creating payment intent. true ask to save the card */
+                    },
                     }
                     ).then(function(result) {
-                        console.log(result);
-                        if (result.error) {
-                            console.log("Error on result of handleCardPayment");
-                            jQuery('#buttontopay').show();
-                            jQuery('#hourglasstopay').hide();
-                            // Inform the user if there was an error
-                            var errorElement = document.getElementById('card-errors');
-                            console.log(result);
-                            errorElement.textContent = result.error.message;
-                        } else {
-                            // The payment has succeeded. Display a success message.
-                            console.log("No error on result of handleCardPayment, so we submit the form");
-                            // Submit the form
-                            jQuery('#buttontopay').hide();
-                            jQuery('#hourglasstopay').show();
-                            // Send form (action=charge that will do nothing)
-                            jQuery('#payment-form').submit();
-                        }
+                    console.log(result);
+                    if (result.error) {
+                    console.log("Error on result of handleCardPayment");
+                    jQuery('#buttontopay').show();
+                    jQuery('#hourglasstopay').hide();
+                    // Inform the user if there was an error
+                    var errorElement = document.getElementById('card-errors');
+                    console.log(result);
+                    errorElement.textContent = result.error.message;
+                    } else {
+                    // The payment has succeeded. Display a success message.
+                    console.log("No error on result of handleCardPayment, so we submit the form");
+                    // Submit the form
+                    jQuery('#buttontopay').hide();
+                    jQuery('#hourglasstopay').show();
+                    // Send form (action=charge that will do nothing)
+                    jQuery('#payment-form').submit();
+                    }
                     });
 
-            });
+                    });
                     <?php
                 } else {
                     ?>
-            var cardElement = elements.create('card', {style: style});
+                    var cardElement = elements.create('card', {style: style});
 
-            // Add an instance of the card Element into the `card-element` <div>
-            cardElement.mount('#card-element');
+                    // Add an instance of the card Element into the `card-element` <div>
+                    cardElement.mount('#card-element');
 
-            // Handle real-time validation errors from the card Element.
-            cardElement.addEventListener('change', function(event) {
-                var displayError = document.getElementById('card-errors');
-                  if (event.error) {
-                      console.log("Show event error (like 'Incorrect card number', ...)");
+                    // Handle real-time validation errors from the card Element.
+                    cardElement.addEventListener('change', function(event) {
+                    var displayError = document.getElementById('card-errors');
+                    if (event.error) {
+                    console.log("Show event error (like 'Incorrect card number', ...)");
                     displayError.textContent = event.error.message;
-                  } else {
-                      console.log("Reset error message");
+                    } else {
+                    console.log("Reset error message");
                     displayError.textContent = '';
-                  }
-            });
+                    }
+                    });
 
-            // Handle form submission
-            var cardholderName = document.getElementById('cardholder-name');
-            var cardButton = document.getElementById('buttontopay');
-            var clientSecret = cardButton.dataset.secret;
+                    // Handle form submission
+                    var cardholderName = document.getElementById('cardholder-name');
+                    var cardButton = document.getElementById('buttontopay');
+                    var clientSecret = cardButton.dataset.secret;
 
-            cardButton.addEventListener('click', function(event) {
-                console.log("We click on buttontopay");
-                event.preventDefault();
+                    cardButton.addEventListener('click', function(event) {
+                    console.log("We click on buttontopay");
+                    event.preventDefault();
 
-                if (cardholderName.value == '')
-                {
+                    if (cardholderName.value == '')
+                    {
                     console.log("Field Card holder is empty");
                     var displayError = document.getElementById('card-errors');
                     displayError.textContent = '<?php print dol_escape_js($langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("CardOwner"))); ?>';
-                }
-                else
-                {
+                    }
+                    else
+                    {
                     /* Disable button to pay and show hourglass cursor */
                     jQuery('#hourglasstopay').show();
                     jQuery('#buttontopay').hide();
 
                     stripe.handleCardPayment(
                     clientSecret, cardElement, {
-                        payment_method_data: {
-                            billing_details: {
-                                name: cardholderName.value
-                                <?php if (GETPOST('email', 'alpha') || (is_object($object) && is_object($object->thirdparty) && !empty($object->thirdparty->email))) {
-                                    ?>, email: '<?php echo dol_escape_js(GETPOST('email', 'alpha') ? GETPOST('email', 'alpha') : $object->thirdparty->email); ?>'<?php
-                                } ?>
-                                <?php if (is_object($object) && is_object($object->thirdparty) && !empty($object->thirdparty->phone)) {
-                                    ?>, phone: '<?php echo dol_escape_js($object->thirdparty->phone); ?>'<?php
-                                } ?>
-                                <?php if (is_object($object) && is_object($object->thirdparty)) {
-                                    ?>, address: {
-                                    city: '<?php echo dol_escape_js($object->thirdparty->town); ?>',
-                                    <?php if ($object->thirdparty->country_code) {
-                                        ?>country: '<?php echo dol_escape_js($object->thirdparty->country_code); ?>',<?php
-                                    } ?>
-                                    line1: '<?php echo dol_escape_js(preg_replace('/\s\s+/', ' ', $object->thirdparty->address)); ?>',
-                                    postal_code: '<?php echo dol_escape_js($object->thirdparty->zip); ?>'
-                                    }
-                                    <?php
-                                } ?>
-                            }
-                            },
-                            save_payment_method:<?php if ($stripecu) {
-                                print 'true';
-                                                } else {
-                                                    print 'false';
-                                                } ?>    /* true when a customer was provided when creating payment intent. true ask to save the card */
+                    payment_method_data: {
+                    billing_details: {
+                    name: cardholderName.value
+                    <?php if (GETPOST('email', 'alpha') || (is_object($object) && is_object($object->thirdparty) && !empty($object->thirdparty->email))) {
+                        ?>, email: '<?php echo dol_escape_js(GETPOST('email', 'alpha') ? GETPOST('email', 'alpha') : $object->thirdparty->email); ?>'<?php
+                    } ?>
+                    <?php if (is_object($object) && is_object($object->thirdparty) && !empty($object->thirdparty->phone)) {
+                        ?>, phone: '<?php echo dol_escape_js($object->thirdparty->phone); ?>'<?php
+                    } ?>
+                    <?php if (is_object($object) && is_object($object->thirdparty)) {
+                        ?>, address: {
+                        city: '<?php echo dol_escape_js($object->thirdparty->town); ?>',
+                        <?php if ($object->thirdparty->country_code) {
+                            ?>country: '<?php echo dol_escape_js($object->thirdparty->country_code); ?>',<?php
+                        } ?>
+                        line1: '<?php echo dol_escape_js(preg_replace('/\s\s+/', ' ', $object->thirdparty->address)); ?>',
+                        postal_code: '<?php echo dol_escape_js($object->thirdparty->zip); ?>'
+                        }
+                        <?php
+                    } ?>
+                    }
+                    },
+                    save_payment_method:<?php if ($stripecu) {
+                        print 'true';
+                    } else {
+                        print 'false';
+                    } ?>    /* true when a customer was provided when creating payment intent. true ask to save the card */
                     }
                     ).then(function(result) {
-                        console.log(result);
-                        if (result.error) {
-                            console.log("Error on result of handleCardPayment");
-                            jQuery('#buttontopay').show();
-                            jQuery('#hourglasstopay').hide();
-                            // Inform the user if there was an error
-                            var errorElement = document.getElementById('card-errors');
-                            errorElement.textContent = result.error.message;
-                        } else {
-                            // The payment has succeeded. Display a success message.
-                            console.log("No error on result of handleCardPayment, so we submit the form");
-                            // Submit the form
-                            jQuery('#buttontopay').hide();
-                            jQuery('#hourglasstopay').show();
-                            // Send form (action=charge that will do nothing)
-                            jQuery('#payment-form').submit();
-                        }
+                    console.log(result);
+                    if (result.error) {
+                    console.log("Error on result of handleCardPayment");
+                    jQuery('#buttontopay').show();
+                    jQuery('#hourglasstopay').hide();
+                    // Inform the user if there was an error
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                    } else {
+                    // The payment has succeeded. Display a success message.
+                    console.log("No error on result of handleCardPayment, so we submit the form");
+                    // Submit the form
+                    jQuery('#buttontopay').hide();
+                    jQuery('#hourglasstopay').show();
+                    // Send form (action=charge that will do nothing)
+                    jQuery('#payment-form').submit();
+                    }
                     });
-                }
-            });
+                    }
+                    });
                     <?php
                 } ?>
 

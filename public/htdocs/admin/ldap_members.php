@@ -1,11 +1,11 @@
 <?php
 
 /* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
- * Copyright (C) 2004		Sebastien Di Cintio		<sdicintio@ressource-toi.org>
- * Copyright (C) 2004		Benoit Mortier			<benoit.mortier@opensides.be>
- * Copyright (C) 2005-2017	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2006-2008	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2011-2013	Juanjo Menent			<jmenent@2byte.es>
+ * Copyright (C) 2004		Sebastien Di Cintio		    <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004		Benoit Mortier			    <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2017	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2006-2008	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2013	Juanjo Menent			    <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Ldap;
+
 /**
  *      \file       htdocs/admin/ldap_members.php
  *      \ingroup    ldap member
@@ -31,9 +35,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ldap.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ldap.lib.php';
 
 // Load translation files required by the page
@@ -163,8 +164,6 @@ if ($action == 'setvalue' && $user->admin) {
         dol_print_error($db);
     }
 }
-
-
 
 /*
  * View
@@ -429,7 +428,6 @@ print dol_get_fiche_end();
 print $form->buttonsSaveCancel("Modify", '');
 
 print '</form>';
-
 
 
 /*

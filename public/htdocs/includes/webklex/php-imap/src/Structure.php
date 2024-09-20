@@ -91,20 +91,20 @@ class Structure
     {
         $content_type = $this->header->get("content_type");
         $content_type = (is_array($content_type)) ? implode(' ', $content_type) : $content_type;
-        if(stripos($content_type, 'multipart') === 0) {
+        if (stripos($content_type, 'multipart') === 0) {
             $this->type = IMAP::MESSAGE_TYPE_MULTIPART;
-        }else{
+        } else {
             $this->type = IMAP::MESSAGE_TYPE_TEXT;
         }
     }
 
     /**
      * Find all available headers and return the left over body segment
+     * @return Part[]
+     * @throws InvalidMessageDateException
      * @var string $context
      * @var integer $part_number
      *
-     * @return Part[]
-     * @throws InvalidMessageDateException
      */
     private function parsePart($context, $part_number = 0)
     {
@@ -134,7 +134,7 @@ class Structure
     {
         $base_parts = explode($boundary, $context);
         $final_parts = [];
-        foreach($base_parts as $ctx) {
+        foreach ($base_parts as $ctx) {
             $ctx = substr($ctx, 2);
             if ($ctx !== "--" && $ctx != "") {
                 $parts = $this->parsePart($ctx, $part_number);
@@ -157,8 +157,8 @@ class Structure
      */
     public function find_parts()
     {
-        if($this->type === IMAP::MESSAGE_TYPE_MULTIPART) {
-            if (($boundary = $this->header->getBoundary()) === null)  {
+        if ($this->type === IMAP::MESSAGE_TYPE_MULTIPART) {
+            if (($boundary = $this->header->getBoundary()) === null) {
                 throw new MessageContentFetchingException("no content found", 0);
             }
 

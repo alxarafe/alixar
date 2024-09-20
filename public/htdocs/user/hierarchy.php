@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2005      Matthieu Valleton    <mv@seeschloss.org>
- * Copyright (C) 2005      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2006-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007      Patrick Raguin       <patrick.raguin@gmail.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2019-2024  Frédéric France      <frederic.france@free.fr>
+/* Copyright (C) 2005       Matthieu Valleton           <mv@seeschloss.org>
+ * Copyright (C) 2005       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2006-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007       Patrick Raguin              <patrick.raguin@gmail.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *      \file       htdocs/user/hierarchy.php
@@ -85,8 +88,6 @@ if (isModEnabled('salaries') && $contextpage == 'employeelist' && $search_employ
 
 $childids = $user->getAllChildIds(1);
 
-
-
 /*
  * View
  */
@@ -109,10 +110,10 @@ llxHeader('', $title, $help_url, '', 0, 0, $arrayofjs, $arrayofcss, '', 'bodyfor
 
 $filters = [];
 if (($search_status != '' && $search_status >= 0)) {
-    $filters[] = "statut = " . ((int) $search_status);
+    $filters[] = "statut = " . ((int)$search_status);
 }
 if (($search_employee != '' && $search_employee >= 0)) {
-    $filters[] = "employee = " . ((int) $search_employee);
+    $filters[] = "employee = " . ((int)$search_employee);
 }
 $sqlfilter = '';
 if (!empty($filters)) {
@@ -142,7 +143,7 @@ if (!is_array($user_arbo) && $user_arbo < 0) {
 
     foreach ($fulltree as $key => $val) {
         $userstatic->id = $val['id'];
-        $userstatic->ref = (string) $val['id'];
+        $userstatic->ref = (string)$val['id'];
         $userstatic->login = $val['login'];
         $userstatic->firstname = $val['firstname'];
         $userstatic->lastname = $val['lastname'];
@@ -198,7 +199,7 @@ if (!is_array($user_arbo) && $user_arbo < 0) {
                 if (!empty($user_arbo_all[$idparent])) {
                     $val = $user_arbo_all[$idparent];
                     $userstatic->id = $val['id'];
-                    $userstatic->ref = (string) $val['id'];
+                    $userstatic->ref = (string)$val['id'];
                     $userstatic->login = $val['login'];
                     $userstatic->firstname = $val['firstname'];
                     $userstatic->lastname = $val['lastname'];

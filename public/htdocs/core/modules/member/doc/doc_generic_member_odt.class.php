@@ -1,24 +1,33 @@
 <?php
 
-/* Copyright (C) 2010-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2012		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2010-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <https://www.gnu.org/licenses/>.
-* or see https://www.gnu.org/
-*/
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * or see https://www.gnu.org/
+ */
+
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Members\Classes\ModelePDFMember;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  \file       htdocs/core/modules/member/doc/doc_generic_member_odt.class.php
@@ -26,7 +35,6 @@
  *  \brief      File of class to build ODT documents for members
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/member/modules_member.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -48,7 +56,7 @@ class doc_generic_member_odt extends ModelePDFMember
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -93,8 +101,8 @@ class doc_generic_member_odt extends ModelePDFMember
     /**
      *  Return description of a module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Description
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Description
      */
     public function info($langs)
     {
@@ -183,21 +191,22 @@ class doc_generic_member_odt extends ModelePDFMember
         return $texte;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build a document on disk using the generic odt module.
      *
-     *  @param  Adherent    $object             Object source to build document
-     *  @param  Translate   $outputlangs        Lang output object
-     *  @param  string      $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param  string      $mode               Tell if doc module is called for 'member', ...
-     *  @param  int         $nooutput           1=Generate only file on disk and do not return it on response
-     *  @param  string      $filename           Name of output file (without extension)
-     *  @return int                             1 if OK, <=0 if KO
+     * @param Adherent $object Object source to build document
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param string $mode Tell if doc module is called for 'member', ...
+     * @param int $nooutput 1=Generate only file on disk and do not return it on response
+     * @param string $filename Name of output file (without extension)
+     * @return int                             1 if OK, <=0 if KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath, $mode = 'member', $nooutput = 0, $filename = 'tmp_cards')
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $hookmanager;
 
         if (empty($srctemplatepath)) {
@@ -207,7 +216,6 @@ class doc_generic_member_odt extends ModelePDFMember
 
         // Add odtgeneration hook
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('odtgeneration'));
@@ -313,9 +321,9 @@ class doc_generic_member_odt extends ModelePDFMember
                     $odfHandler = new Odf(
                         $srctemplatepath,
                         array(
-                            'PATH_TO_TMP'     => $conf->adherent->dir_temp,
-                            'ZIP_PROXY'       => 'PclZipProxy', // PhpZipProxy or PclZipProxy. Got "bad compression method" error when using PhpZipProxy.
-                            'DELIMITER_LEFT'  => '{',
+                            'PATH_TO_TMP' => $conf->adherent->dir_temp,
+                            'ZIP_PROXY' => 'PclZipProxy', // PhpZipProxy or PclZipProxy. Got "bad compression method" error when using PhpZipProxy.
+                            'DELIMITER_LEFT' => '{',
                             'DELIMITER_RIGHT' => '}'
                         )
                     );
@@ -415,18 +423,19 @@ class doc_generic_member_odt extends ModelePDFMember
         return -1;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * get substitution array for object
      *
-     * @param CommonObject  $object         member
-     * @param Translate     $outputlangs    translation object
-     * @param string        $array_key      key for array
+     * @param CommonObject $object member
+     * @param Translate $outputlangs translation object
+     * @param string $array_key key for array
      * @return array                        array of substitutions
      */
     public function get_substitutionarray_object($object, $outputlangs, $array_key = 'object')
     {
-		// phpcs:enable
+        // phpcs:enable
         if (!$object instanceof Adherent) {
             dol_syslog("Expected Adherent object, got " . gettype($object), LOG_ERR);
             return array();

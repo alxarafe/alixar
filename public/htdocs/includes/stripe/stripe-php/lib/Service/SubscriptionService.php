@@ -13,9 +13,9 @@ class SubscriptionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Subscription>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Subscription>
      */
     public function all($params = null, $opts = null)
     {
@@ -45,9 +45,9 @@ class SubscriptionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Subscription
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Subscription
      */
     public function cancel($id, $params = null, $opts = null)
     {
@@ -72,9 +72,9 @@ class SubscriptionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Subscription
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Subscription
      */
     public function create($params = null, $opts = null)
     {
@@ -88,9 +88,9 @@ class SubscriptionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Subscription
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Subscription
      */
     public function deleteDiscount($id, $params = null, $opts = null)
     {
@@ -109,9 +109,9 @@ class SubscriptionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Subscription
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Subscription
      */
     public function resume($id, $params = null, $opts = null)
     {
@@ -125,9 +125,9 @@ class SubscriptionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Subscription
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Subscription
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -145,9 +145,9 @@ class SubscriptionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SearchResult<\Stripe\Subscription>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SearchResult<\Stripe\Subscription>
      */
     public function search($params = null, $opts = null)
     {
@@ -165,9 +165,9 @@ class SubscriptionService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Subscription
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Subscription
      */
     public function update($id, $params = null, $opts = null)
     {

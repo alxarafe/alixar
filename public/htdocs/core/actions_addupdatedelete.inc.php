@@ -203,7 +203,7 @@ if ($action == 'add' && !empty($permissiontoadd)) {
             }
 
             $urltogo = $backtopage ? str_replace('__ID__', $result, $backtopage) : $backurlforlist;
-            $urltogo = preg_replace('/--IDFORBACKTOPAGE--/', (string) $object->id, $urltogo); // New method to autoselect field created after a New on another form object creation
+            $urltogo = preg_replace('/--IDFORBACKTOPAGE--/', (string)$object->id, $urltogo); // New method to autoselect field created after a New on another form object creation
 
             $db->commit();
 
@@ -348,8 +348,8 @@ if ($action == 'update' && !empty($permissiontoadd)) {
         $result = $object->update($user);
         if ($result > 0) {
             $action = 'view';
-            $urltogo = $backtopage ? str_replace('__ID__', (string) $result, $backtopage) : $backurlforlist;
-            $urltogo = preg_replace('/--IDFORBACKTOPAGE--/', (string) $object->id, $urltogo); // New method to autoselect project after a New on another form object creation
+            $urltogo = $backtopage ? str_replace('__ID__', (string)$result, $backtopage) : $backurlforlist;
+            $urltogo = preg_replace('/--IDFORBACKTOPAGE--/', (string)$object->id, $urltogo); // New method to autoselect project after a New on another form object creation
             if ($urltogo && empty($noback)) {
                 header("Location: " . $urltogo);
                 exit;

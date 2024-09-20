@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2017	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2010-2014	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2011-2017	Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2015		Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2017       Rui Strecht			    <rui.strecht@aliartalentos.com>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2017	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2014	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2011-2017	Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2015		Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2017       Rui Strecht			        <rui.strecht@aliartalentos.com>
  * Copyright (C) 2023       Nick Fragoulis
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,6 +24,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
+
 /**
  *  \file       htdocs/admin/company.php
  *  \ingroup    company
@@ -38,8 +42,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 
 $action = GETPOST('action', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'admincompany'; // To manage different context of search
@@ -64,7 +66,6 @@ $quality = $tmparraysize['quality'];
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $hookmanager->initHooks(array('admincompany', 'globaladmin'));
 
-
 /*
  * Actions
  */
@@ -86,7 +87,7 @@ if (
             $res = dolibarr_set_const($db, "MAIN_PROFID1_IN_ADDRESS", 1, 'chaine', 0, '', $conf->entity);
         }
 
-        $mysoc->country_id   = $tmparray['id'];
+        $mysoc->country_id = $tmparray['id'];
         $mysoc->country_code = $tmparray['code'];
         $mysoc->country_label = $tmparray['label'];
 
@@ -98,7 +99,7 @@ if (
 
     $tmparray = getState(GETPOSTINT('state_id'), 'all', $db, $langs, 0);
     if (!empty($tmparray['id'])) {
-        $mysoc->state_id   = $tmparray['id'];
+        $mysoc->state_id = $tmparray['id'];
         $mysoc->state_code = $tmparray['code'];
         $mysoc->state_label = $tmparray['label'];
 

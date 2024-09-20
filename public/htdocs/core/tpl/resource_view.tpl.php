@@ -1,5 +1,8 @@
 <!-- BEGIN TEMPLATE resource_view.tpl.php -->
 <?php
+
+use Dolibarr\Code\Core\Classes\Form;
+
 // Protection to avoid direct call of template
 if (empty($conf) || !is_object($conf)) {
     print "Error, template page can't be called as URL";
@@ -27,7 +30,7 @@ print '<input type="hidden" name="id" value="' . $element_id . '" />';
 print '<input type="hidden" name="action" value="update_linked_resource" />';
 print '<input type="hidden" name="resource_type" value="' . $resource_type . '" />';
 
-if ((array) $linked_resources && count($linked_resources) > 0) {
+if ((array)$linked_resources && count($linked_resources) > 0) {
     foreach ($linked_resources as $linked_resource) {
         $object_resource = fetchObjectByElement($linked_resource['resource_id'], $linked_resource['resource_type']);
 

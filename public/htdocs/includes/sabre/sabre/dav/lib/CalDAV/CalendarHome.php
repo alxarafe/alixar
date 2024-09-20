@@ -96,7 +96,7 @@ class CalendarHome implements DAV\IExtendedCollection, DAVACL\IACL
      *
      * This is currently not allowed
      *
-     * @param string   $name
+     * @param string $name
      * @param resource $data
      */
     public function createFile($name, $data = null)
@@ -168,7 +168,7 @@ class CalendarHome implements DAV\IExtendedCollection, DAVACL\IACL
     public function childExists($name)
     {
         try {
-            return (bool) $this->getChild($name);
+            return (bool)$this->getChild($name);
         } catch (NotFound $e) {
             return false;
         }
@@ -313,11 +313,11 @@ class CalendarHome implements DAV\IExtendedCollection, DAVACL\IACL
      * This method should return the url of the newly created calendar if the
      * share was accepted.
      *
-     * @param string $href        The sharee who is replying (often a mailto: address)
-     * @param int    $status      One of the SharingPlugin::STATUS_* constants
+     * @param string $href The sharee who is replying (often a mailto: address)
+     * @param int $status One of the SharingPlugin::STATUS_* constants
      * @param string $calendarUri The url to the calendar thats being shared
-     * @param string $inReplyTo   The unique id this message is a response to
-     * @param string $summary     A description of the reply
+     * @param string $inReplyTo The unique id this message is a response to
+     * @param string $summary A description of the reply
      *
      * @return string|null
      */

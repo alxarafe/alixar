@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017 ATM Consulting      <contact@atm-consulting.fr>
- * Copyright (C) 2017 Pierre-Henry Favre  <phf@atm-consulting.fr>
+/* Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
+ * Copyright (C) 2017       Pierre-Henry Favre          <phf@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *       \file       htdocs/expensereport/ajax/ajaxik.php
@@ -42,8 +45,6 @@ if (!defined('NOREQUIRESOC')) {
 
 $res = 0;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport_ik.class.php';
 
 // Load translation files required by the page
 $langs->loadlangs(array('errors', 'trips'));

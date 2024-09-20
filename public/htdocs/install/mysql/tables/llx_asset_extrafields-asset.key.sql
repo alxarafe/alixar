@@ -16,4 +16,5 @@
 --
 -- ===================================================================
 
-ALTER TABLE llx_asset_extrafields ADD INDEX idx_asset_extrafields (fk_object);
+ALTER TABLE llx_asset_extrafields
+    ADD INDEX idx_asset_extrafields (fk_object);

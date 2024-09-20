@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2020 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2020       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Workstation\Classes\Workstation;
+
 /**
  *  \file       htdocs/workstation/workstation_agenda.php
  *  \ingroup    workstation
@@ -27,10 +31,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/class/workstation.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/workstation/lib/workstation_workstation.lib.php';
 
 global $conf, $db, $hookmanager, $langs, $user;
@@ -122,8 +124,6 @@ if (empty($reshook)) {
     }
 }
 
-
-
 /*
  *	View
  */
@@ -139,7 +139,6 @@ if ($object->id > 0) {
         $langs->load("mails");
     }
     $head = workstationPrepareHead($object);
-
 
     print dol_get_fiche_head($head, 'agenda', $langs->trans("Workstation"), -1, 'workstation');
 

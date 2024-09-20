@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2019 Frédéric FRANCE <frederic.france@free.fr>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2019       Frédéric FRANCE             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  *
  * LICENSE =================================================================
@@ -20,6 +21,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Modules\Zapier;
 
 /**
  *    \file       htdocs/zapier/admin/about.php
@@ -56,7 +60,6 @@ $action = GETPOST('action', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 
-
 /*
  * Actions
  */
@@ -83,8 +86,7 @@ print load_fiche_titre($langs->trans($page_name), $linkback, 'object_zapier');
 $head = zapierAdminPrepareHead();
 print dol_get_fiche_head($head, 'about', '', 0, 'zapier');
 
-dol_include_once('/core/modules/modZapier.class.php');
-$tmpmodule = new modZapier($db);
+$tmpmodule = new Zapier($db);
 print $tmpmodule->getDescLong();
 
 // Page end

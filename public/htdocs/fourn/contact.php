@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2001-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2006 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2006  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -79,7 +79,7 @@ $sql .= " AND s.fournisseur = 1";
 $sql .= " AND s.rowid = p.fk_soc";
 $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 
 if (dol_strlen($stcomm)) {
@@ -97,7 +97,7 @@ if ($contactname) {
 }
 
 if ($socid) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 
 $sql .= " ORDER BY $sortfield $sortorder ";

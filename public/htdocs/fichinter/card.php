@@ -1,17 +1,17 @@
 <?php
 
-/* Copyright (C) 2002-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2018	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2011-2020  Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2013       Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2014-2018  Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2014-2022  Charlene Benke          <charlene@patas-monkey.com>
- * Copyright (C) 2015-2016  Abbes Bahfir            <bafbes@gmail.com>
- * Copyright (C) 2018-2022 	Philippe Grand       	<philippe.grand@atoo-net.com>
- * Copyright (C) 2020-2024	Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2023       Benjamin Grembi         <benjamin@oarces.fr>
- * Copyright (C) 2023-2024	William Mead			<william.mead@manchenumerique.fr>
+/* Copyright (C) 2002-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2018	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2020  Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2014-2018  Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2014-2022  Charlene Benke              <charlene@patas-monkey.com>
+ * Copyright (C) 2015-2016  Abbes Bahfir                <bafbes@gmail.com>
+ * Copyright (C) 2018-2022 	Philippe Grand       	    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2020-2024	Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2023       Benjamin Grembi             <benjamin@oarces.fr>
+ * Copyright (C) 2023-2024	William Mead			    <william.mead@manchenumerique.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -29,6 +29,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormContract;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Notify;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\FichInter\Classes\FichinterLigne;
+use Dolibarr\Code\FichInter\Classes\ModelePDFFicheinter;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/fichinter/card.php
  *  \brief      Page of intervention
@@ -37,36 +54,23 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/fichinter/modules_fichinter.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fichinter.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
-if (isModEnabled('contract')) {
-    require_once DOL_DOCUMENT_ROOT . "/core/class/html.formcontract.class.php";
-    require_once DOL_DOCUMENT_ROOT . "/contrat/class/contrat.class.php";
-}
 if (getDolGlobalString('FICHEINTER_ADDON') && is_readable(DOL_DOCUMENT_ROOT . "/core/modules/fichinter/mod_" . getDolGlobalString('FICHEINTER_ADDON') . ".php")) {
     require_once DOL_DOCUMENT_ROOT . "/core/modules/fichinter/mod_" . getDolGlobalString('FICHEINTER_ADDON') . '.php';
 }
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('bills', 'companies', 'interventions', 'stocks'));
 
-$id         = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
 $ref_client = GETPOST('ref_client', 'alpha');
 $socid = GETPOSTINT('socid');
 $contratid = GETPOSTINT('contratid');
-$action     = GETPOST('action', 'alpha');
-$cancel     = GETPOST('cancel', 'alpha');
-$confirm    = GETPOST('confirm', 'alpha');
+$action = GETPOST('action', 'alpha');
+$cancel = GETPOST('cancel', 'alpha');
+$confirm = GETPOST('confirm', 'alpha');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 $mesg = GETPOST('msg', 'alpha');
@@ -290,7 +294,7 @@ if (empty($reshook)) {
                     $element = $subelement = 'contrat';
                 }
 
-                $object->origin    = $origin;
+                $object->origin = $origin;
                 $object->origin_id = $originid;
 
                 // Possibility to add external linked objects with hooks
@@ -383,7 +387,7 @@ if (empty($reshook)) {
                                                     $mult = 3600 * 24 * 7;
                                                     break;
                                                 case 'm':
-                                                    $mult = (int) 3600 * 24 * (365 / 12); // Average month duration
+                                                    $mult = (int)3600 * 24 * (365 / 12); // Average month duration
                                                     break;
                                                 case 'y':
                                                     $mult = 3600 * 24 * 365;
@@ -810,7 +814,6 @@ if (empty($reshook)) {
     }
 }
 
-
 /*
  * View
  */
@@ -1138,7 +1141,6 @@ if ($action == 'create') {
         }
         $text = $langs->trans('ConfirmValidateIntervention', $numref);
         if (isModEnabled('notification')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
             $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('FICHINTER_VALIDATE', $object->socid, $object);
@@ -1151,7 +1153,6 @@ if ($action == 'create') {
     if ($action == 'classifydone') {
         $text = $langs->trans('ConfirmCloseIntervention');
         if (isModEnabled('notification')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
             $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('FICHINTER_CLOSE', $object->socid, $object);
@@ -1178,12 +1179,12 @@ if ($action == 'create') {
     if ($action == 'clone') {
         // Create an array for form
         $formquestion = array(
-                            // 'text' => $langs->trans("ConfirmClone"),
-                            // array('type' => 'checkbox', 'name' => 'clone_content', 'label' => $langs->trans("CloneMainAttributes"), 'value' =>
-                            // 1),
-                            // array('type' => 'checkbox', 'name' => 'update_prices', 'label' => $langs->trans("PuttingPricesUpToDate"), 'value'
-                            // => 1),
-                            array('type' => 'other', 'name' => 'socid', 'label' => $langs->trans("SelectThirdParty"), 'value' => $form->select_company(GETPOSTINT('socid'), 'socid', '', '', 0, 0, null, 0, 'minwidth200')));
+            // 'text' => $langs->trans("ConfirmClone"),
+            // array('type' => 'checkbox', 'name' => 'clone_content', 'label' => $langs->trans("CloneMainAttributes"), 'value' =>
+            // 1),
+            // array('type' => 'checkbox', 'name' => 'update_prices', 'label' => $langs->trans("PuttingPricesUpToDate"), 'value'
+            // => 1),
+            array('type' => 'other', 'name' => 'socid', 'label' => $langs->trans("SelectThirdParty"), 'value' => $form->select_company(GETPOSTINT('socid'), 'socid', '', '', 0, 0, null, 0, 'minwidth200')));
         // Paiement incomplet. On demande si motif = escompte ou autre
         $formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('ToClone'), $langs->trans('ConfirmCloneIntervention', $object->ref), 'confirm_clone', $formquestion, 'yes', 1);
     }
@@ -1364,7 +1365,7 @@ if ($action == 'create') {
         $sql = 'SELECT ft.rowid, ft.description, ft.fk_fichinter, ft.duree, ft.rang,';
         $sql .= ' ft.date as date_intervention';
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'fichinterdet as ft';
-        $sql .= ' WHERE ft.fk_fichinter = ' . ((int) $object->id);
+        $sql .= ' WHERE ft.fk_fichinter = ' . ((int)$object->id);
         if (getDolGlobalString('FICHINTER_HIDE_EMPTY_DURATION')) {
             $sql .= ' AND ft.duree <> 0';
         }
@@ -1476,7 +1477,6 @@ if ($action == 'create') {
                     print '<a name="' . $objp->rowid . '"></a>'; // ancre pour retourner sur la ligne
 
                     // Editeur wysiwyg
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
                     $doleditor = new DolEditor('np_desc', $objp->description, '', 164, 'dolibarr_details', '', false, true, getDolGlobalInt('FCKEDITOR_ENABLE_DETAILS'), ROWS_2, '90%');
                     $doleditor->Create();
 
@@ -1559,7 +1559,6 @@ if ($action == 'create') {
                 print '<td>';
                 // editeur wysiwyg
                 if (!getDolGlobalString('FICHINTER_EMPTY_LINE_DESC')) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
                     $doleditor = new DolEditor('np_desc', GETPOST('np_desc', 'restricthtml'), '', 100, 'dolibarr_details', '', false, true, getDolGlobalString('FCKEDITOR_ENABLE_DETAILS'), ROWS_2, '90%');
                     $doleditor->Create();
                 }
@@ -1780,7 +1779,6 @@ if ($action == 'create') {
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/fichinter/agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
         $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, 'fichinter', $socid, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for thirdparty
 

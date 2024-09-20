@@ -170,7 +170,7 @@ abstract class AbstractCloner implements ClonerInterface
      */
     public function setMaxItems($maxItems)
     {
-        $this->maxItems = (int) $maxItems;
+        $this->maxItems = (int)$maxItems;
     }
 
     /**
@@ -180,14 +180,14 @@ abstract class AbstractCloner implements ClonerInterface
      */
     public function setMaxString($maxString)
     {
-        $this->maxString = (int) $maxString;
+        $this->maxString = (int)$maxString;
     }
 
     /**
      * Clones a PHP variable.
      *
-     * @param mixed $var    Any PHP variable
-     * @param int   $filter A bit field of Caster::EXCLUDE_* constants
+     * @param mixed $var Any PHP variable
+     * @param int $filter A bit field of Caster::EXCLUDE_* constants
      *
      * @return Data The cloned variable represented by a Data object
      */
@@ -233,7 +233,7 @@ abstract class AbstractCloner implements ClonerInterface
     /**
      * Casts an object to an array representation.
      *
-     * @param Stub $stub     The Stub for the casted object
+     * @param Stub $stub The Stub for the casted object
      * @param bool $isNested True if the object is nested in the dumped structure
      *
      * @return array The object casted as array
@@ -274,7 +274,7 @@ abstract class AbstractCloner implements ClonerInterface
     /**
      * Casts a resource to an array representation.
      *
-     * @param Stub $stub     The Stub for the casted resource
+     * @param Stub $stub The Stub for the casted resource
      * @param bool $isNested True if the object is nested in the dumped structure
      *
      * @return array The resource casted as array
@@ -297,11 +297,11 @@ abstract class AbstractCloner implements ClonerInterface
     /**
      * Calls a custom caster.
      *
-     * @param callable        $callback The caster
-     * @param object|resource $obj      The object/resource being casted
-     * @param array           $a        The result of the previous cast for chained casters
-     * @param Stub            $stub     The Stub for the casted object/resource
-     * @param bool            $isNested True if $obj is nested in the dumped structure
+     * @param callable $callback The caster
+     * @param object|resource $obj The object/resource being casted
+     * @param array $a The result of the previous cast for chained casters
+     * @param Stub $stub The Stub for the casted object/resource
+     * @param bool $isNested True if $obj is nested in the dumped structure
      *
      * @return array The casted object/resource
      */

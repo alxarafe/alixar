@@ -1,18 +1,18 @@
 <?php
 
-/* Copyright (C) 2003-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2004-2020	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2004		Christophe Combelles	<ccomb@free.fr>
- * Copyright (C) 2005		Marc Barilley / Ocebo	<marc@ocebo.com>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2014		Teddy Andreotti			<125155@supinfo.com>
- * Copyright (C) 2015		Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2015		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2017-2023  Alexandre Spangaro		<aspangaro@easya.solutions>
- * Copyright (C) 2018-2021	Frédéric France			<frederic.france@netlogic.fr>
- * Copyright (C) 2020		Tobias Sekan			<tobias.sekan@startmail.com>
- * Copyright (C) 2021		Ferran Marcet			<fmarcet@2byte.es>
+/* Copyright (C) 2003-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004		Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2004-2020	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Christophe Combelles	    <ccomb@free.fr>
+ * Copyright (C) 2005		Marc Barilley / Ocebo	    <marc@ocebo.com>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2014		Teddy Andreotti			    <125155@supinfo.com>
+ * Copyright (C) 2015		Marcos García			    <marcosgdf@gmail.com>
+ * Copyright (C) 2015		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2017-2023  Alexandre Spangaro		    <aspangaro@easya.solutions>
+ * Copyright (C) 2018-2021	Frédéric France			    <frederic.france@netlogic.fr>
+ * Copyright (C) 2020		Tobias Sekan			    <tobias.sekan@startmail.com>
+ * Copyright (C) 2021		Ferran Marcet			    <fmarcet@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -30,19 +30,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/fourn/paiement/list.php
-*   \ingroup    fournisseur,facture
+ *  \ingroup    fournisseur,facture
  *  \brief      Payment list for supplier invoices
  */
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/paiementfourn.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'bills', 'banks', 'compta'));
@@ -55,25 +58,25 @@ $mode = GETPOST('mode', 'aZ');
 
 $socid = GETPOSTINT('socid');
 
-$search_ref             = GETPOST('search_ref', 'alpha');
-$search_date_startday   = GETPOSTINT('search_date_startday');
+$search_ref = GETPOST('search_ref', 'alpha');
+$search_date_startday = GETPOSTINT('search_date_startday');
 $search_date_startmonth = GETPOSTINT('search_date_startmonth');
-$search_date_startyear  = GETPOSTINT('search_date_startyear');
-$search_date_endday     = GETPOSTINT('search_date_endday');
-$search_date_endmonth   = GETPOSTINT('search_date_endmonth');
-$search_date_endyear    = GETPOSTINT('search_date_endyear');
-$search_date_start      = dol_mktime(0, 0, 0, $search_date_startmonth, $search_date_startday, $search_date_startyear);  // Use tzserver
-$search_date_end        = dol_mktime(23, 59, 59, $search_date_endmonth, $search_date_endday, $search_date_endyear);
-$search_company         = GETPOST('search_company', 'alpha');
-$search_payment_type    = GETPOST('search_payment_type', 'alpha');
-$search_cheque_num      = GETPOST('search_cheque_num', 'alpha');
-$search_bank_account    = GETPOST('search_bank_account', 'int');
-$search_amount          = GETPOST('search_amount', 'alpha'); // alpha because we must be able to search on '< x'
-$search_sale            = GETPOSTINT('search_sale');
+$search_date_startyear = GETPOSTINT('search_date_startyear');
+$search_date_endday = GETPOSTINT('search_date_endday');
+$search_date_endmonth = GETPOSTINT('search_date_endmonth');
+$search_date_endyear = GETPOSTINT('search_date_endyear');
+$search_date_start = dol_mktime(0, 0, 0, $search_date_startmonth, $search_date_startday, $search_date_startyear);  // Use tzserver
+$search_date_end = dol_mktime(23, 59, 59, $search_date_endmonth, $search_date_endday, $search_date_endyear);
+$search_company = GETPOST('search_company', 'alpha');
+$search_payment_type = GETPOST('search_payment_type', 'alpha');
+$search_cheque_num = GETPOST('search_cheque_num', 'alpha');
+$search_bank_account = GETPOST('search_bank_account', 'int');
+$search_amount = GETPOST('search_amount', 'alpha'); // alpha because we must be able to search on '< x'
+$search_sale = GETPOSTINT('search_sale');
 
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
-$sortfield              = GETPOST('sortfield', 'aZ09comma');
-$sortorder              = GETPOST('sortorder', 'aZ09comma');
+$sortfield = GETPOST('sortfield', 'aZ09comma');
+$sortorder = GETPOST('sortorder', 'aZ09comma');
 $page = GETPOSTISSET('pageplusone') ? (GETPOST('pageplusone') - 1) : GETPOSTINT('page');
 
 if (empty($page) || $page == -1) {
@@ -101,13 +104,13 @@ $fieldstosearchall = array(
 );
 
 $arrayfields = array(
-    'p.ref'             => array('label' => "RefPayment", 'checked' => 1, 'position' => 10),
-    'p.datep'           => array('label' => "Date", 'checked' => 1, 'position' => 20),
-    's.nom'             => array('label' => "ThirdParty", 'checked' => 1, 'position' => 30),
-    'c.libelle'         => array('label' => "Type", 'checked' => 1, 'position' => 40),
-    'p.num_paiement'    => array('label' => "Numero", 'checked' => 1, 'position' => 50, 'tooltip' => "ChequeOrTransferNumber"),
-    'ba.label'          => array('label' => "BankAccount", 'checked' => 1, 'position' => 60, 'enable' => (isModEnabled("bank"))),
-    'p.amount'          => array('label' => "Amount", 'checked' => 1, 'position' => 70),
+    'p.ref' => array('label' => "RefPayment", 'checked' => 1, 'position' => 10),
+    'p.datep' => array('label' => "Date", 'checked' => 1, 'position' => 20),
+    's.nom' => array('label' => "ThirdParty", 'checked' => 1, 'position' => 30),
+    'c.libelle' => array('label' => "Type", 'checked' => 1, 'position' => 40),
+    'p.num_paiement' => array('label' => "Numero", 'checked' => 1, 'position' => 50, 'tooltip' => "ChequeOrTransferNumber"),
+    'ba.label' => array('label' => "BankAccount", 'checked' => 1, 'position' => 60, 'enable' => (isModEnabled("bank"))),
+    'p.amount' => array('label' => "Amount", 'checked' => 1, 'position' => 70),
 );
 $arrayfields = dol_sort_array($arrayfields, 'position');
 '@phan-var-force array<string,array{label:string,checked?:int<0,1>,position?:int,help?:string}> $arrayfields';  // dol_sort_array looses type for Phan
@@ -210,7 +213,7 @@ $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'societe AS s ON s.rowid = f.fk_soc';
 $sql .= ' WHERE f.entity IN (' . getEntity('supplier_invoice') . ')';       // TODO We should use p.entity that does not exists yet in this table
 if ($socid > 0) {
     $sql .= " AND EXISTS (SELECT f.fk_soc FROM " . MAIN_DB_PREFIX . "facture_fourn as f, " . MAIN_DB_PREFIX . "paiementfourn_facturefourn as pf";
-    $sql .= " WHERE p.rowid = pf.fk_paiementfourn AND pf.fk_facturefourn = f.rowid AND f.fk_soc = " . ((int) $socid) . ")";
+    $sql .= " WHERE p.rowid = pf.fk_paiementfourn AND pf.fk_facturefourn = f.rowid AND f.fk_soc = " . ((int)$socid) . ")";
 }
 
 // Search criteria
@@ -240,7 +243,7 @@ if ($search_amount) {
     $sql .= ")";
 }
 if ($search_bank_account > 0) {
-    $sql .= ' AND b.fk_account = ' . ((int) $search_bank_account);
+    $sql .= ' AND b.fk_account = ' . ((int)$search_bank_account);
 }
 if ($search_all) {
     $sql .= natural_search(array_keys($fieldstosearchall), $search_all);
@@ -250,7 +253,7 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 
@@ -304,7 +307,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -314,22 +317,22 @@ if ($search_ref) {
     $param .= '&search_ref=' . urlencode($search_ref);
 }
 if ($search_date_startday) {
-    $param .= '&search_date_startday=' . urlencode((string) ($search_date_startday));
+    $param .= '&search_date_startday=' . urlencode((string)($search_date_startday));
 }
 if ($search_date_startmonth) {
-    $param .= '&search_date_startmonth=' . urlencode((string) ($search_date_startmonth));
+    $param .= '&search_date_startmonth=' . urlencode((string)($search_date_startmonth));
 }
 if ($search_date_startyear) {
-    $param .= '&search_date_startyear=' . urlencode((string) ($search_date_startyear));
+    $param .= '&search_date_startyear=' . urlencode((string)($search_date_startyear));
 }
 if ($search_date_endday) {
-    $param .= '&search_date_endday=' . urlencode((string) ($search_date_endday));
+    $param .= '&search_date_endday=' . urlencode((string)($search_date_endday));
 }
 if ($search_date_endmonth) {
-    $param .= '&search_date_endmonth=' . urlencode((string) ($search_date_endmonth));
+    $param .= '&search_date_endmonth=' . urlencode((string)($search_date_endmonth));
 }
 if ($search_date_endyear) {
-    $param .= '&search_date_endyear=' . urlencode((string) ($search_date_endyear));
+    $param .= '&search_date_endyear=' . urlencode((string)($search_date_endyear));
 }
 if ($search_company) {
     $param .= '&search_company=' . urlencode($search_company);

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2016-2017  Jamal Elbaz             <jamelbaz@gmail.com>
- * Copyright (C) 2016-2022  Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2018-2020  Laurent Destailleur     <eldy@destailleur.fr>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2016-2017  Jamal Elbaz                 <jamelbaz@gmail.com>
+ * Copyright (C) 2016-2022  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018-2020  Laurent Destailleur         <eldy@destailleur.fr>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  * \file        htdocs/compta/resultat/result.php
  * \ingroup     compta, accountancy
@@ -32,8 +35,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/report.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountancycategory.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('compta', 'bills', 'donation', 'salaries', 'accountancy'));
@@ -194,7 +195,6 @@ $form = new Form($db);
 
 $textprevyear = '<a href="' . $_SERVER["PHP_SELF"] . '?year=' . ($start_year - 1) . '&showaccountdetail=' . urlencode($showaccountdetail) . '">' . img_previous() . '</a>';
 $textnextyear = ' &nbsp; <a href="' . $_SERVER["PHP_SELF"] . '?year=' . ($start_year + 1) . '&showaccountdetail=' . urlencode($showaccountdetail) . '">' . img_next() . '</a>';
-
 
 
 // Affiche en-tete de rapport
@@ -358,7 +358,7 @@ if ($modecompta == 'CREANCES-DETTES') {
                 } else {
                     //var_dump($result);
                     //$r = $AccCat->calculate($result);
-                    $r = (float) dol_eval($result, 1, 1, '1');
+                    $r = (float)dol_eval($result, 1, 1, '1');
 
                     if (getDolGlobalInt('ACCOUNTANCY_TRUNC_DECIMAL_ON_BALANCE_REPORT')) {
                         print '<td class="liste_total right"><span class="amount">' . price($r, 0, '', 1, 0, 0) . '</span></td>';
@@ -389,7 +389,7 @@ if ($modecompta == 'CREANCES-DETTES') {
                 $result = str_replace('--', '+', $result);
 
                 //$r = $AccCat->calculate($result);
-                $r = (float) dol_eval($result, 1, 1, '1');
+                $r = (float)dol_eval($result, 1, 1, '1');
 
                 if (getDolGlobalInt('ACCOUNTANCY_TRUNC_DECIMAL_ON_BALANCE_REPORT')) {
                     print '<td class="liste_total right borderright"><span class="amount">' . price($r, 0, '', 1, 0, 0) . '</span></td>';
@@ -412,7 +412,7 @@ if ($modecompta == 'CREANCES-DETTES') {
                         $result = str_replace('--', '+', $result);
 
                         //$r = $AccCat->calculate($result);
-                        $r = (float) dol_eval($result, 1, 1, '1');
+                        $r = (float)dol_eval($result, 1, 1, '1');
 
 
                         if (getDolGlobalInt('ACCOUNTANCY_TRUNC_DECIMAL_ON_BALANCE_REPORT')) {
@@ -438,7 +438,7 @@ if ($modecompta == 'CREANCES-DETTES') {
                             $result = str_replace('--', '+', $result);
 
                             //$r = $AccCat->calculate($result);
-                            $r = (float) dol_eval($result, 1, 1, '1');
+                            $r = (float)dol_eval($result, 1, 1, '1');
 
                             if (getDolGlobalInt('ACCOUNTANCY_TRUNC_DECIMAL_ON_BALANCE_REPORT')) {
                                 print '<td class="liste_total right"><span class="amount">' . price($r, 0, '', 1, 0, 0) . '</span></td>';

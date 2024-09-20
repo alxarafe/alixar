@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2012	Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2012		Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2013       Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2012	Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012		Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Deplacement;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/compta/deplacement/card.php
  *  \brief      Page to show a trip card
@@ -30,10 +36,7 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/trip.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 }
 
 // Load translation files required by the page
@@ -99,7 +102,7 @@ if ($action == 'validate' && $user->hasRight('deplacement', 'creer')) {
         $error = 0;
 
         $object->date = dol_mktime(12, 0, 0, GETPOSTINT('remonth'), GETPOSTINT('reday'), GETPOSTINT('reyear'));
-        $object->km = (float) price2num(GETPOST('km', 'alpha'), 'MU'); // Not 'int', it may be a formatted amount
+        $object->km = (float)price2num(GETPOST('km', 'alpha'), 'MU'); // Not 'int', it may be a formatted amount
         $object->type = GETPOST('type', 'alpha');
         $object->socid = GETPOSTINT('socid');
         $object->fk_user = GETPOSTINT('fk_user');
@@ -143,7 +146,7 @@ if ($action == 'validate' && $user->hasRight('deplacement', 'creer')) {
         $result = $object->fetch($id);
 
         $object->date = dol_mktime(12, 0, 0, GETPOSTINT('remonth'), GETPOSTINT('reday'), GETPOSTINT('reyear'));
-        $object->km = (float) price2num(GETPOST('km', 'alpha'), 'MU'); // Not 'int', it may be a formatted amount
+        $object->km = (float)price2num(GETPOST('km', 'alpha'), 'MU'); // Not 'int', it may be a formatted amount
         $object->type = GETPOST('type', 'alpha');
         $object->socid = GETPOSTINT('socid');
         $object->fk_user = GETPOSTINT('fk_user');
@@ -185,7 +188,6 @@ if ($action == 'validate' && $user->hasRight('deplacement', 'creer')) {
     }
 }
 
-
 /*
  * View
  */
@@ -199,7 +201,6 @@ $form = new Form($db);
 */
 if ($action == 'create') {
     //WYSIWYG Editor
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
     print load_fiche_titre($langs->trans("NewTrip"));
 
@@ -280,7 +281,6 @@ if ($action == 'create') {
 
         if ($action == 'edit' && $user->hasRight('deplacement', 'creer')) {
             //WYSIWYG Editor
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
             $soc = new Societe($db);
             if ($object->socid) {
@@ -369,7 +369,7 @@ if ($action == 'create') {
              * Confirm delete trip
              */
             if ($action == 'delete') {
-                print $form->formconfirm($_SERVER["PHP_SELF"] . "?id=" . urlencode((string) ($id)), $langs->trans("DeleteTrip"), $langs->trans("ConfirmDeleteTrip"), "confirm_delete");
+                print $form->formconfirm($_SERVER["PHP_SELF"] . "?id=" . urlencode((string)($id)), $langs->trans("DeleteTrip"), $langs->trans("ConfirmDeleteTrip"), "confirm_delete");
             }
 
             $soc = new Societe($db);

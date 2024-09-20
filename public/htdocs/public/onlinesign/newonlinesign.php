@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *      \file       htdocs/public/onlinesign/newonlinesign.php
  *      \ingroup    core
@@ -44,7 +46,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -55,8 +57,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
 
 // Load translation files
 $langs->loadLangs(array("main", "other", "dict", "bills", "companies", "errors", "members", "paybox", "stripe", "propal", "commercial"));
@@ -116,8 +116,8 @@ if (!empty($SECUREKEY)) {
     $urlko .= 'securekey=' . urlencode($SECUREKEY) . '&';
 }
 if (!empty($entity)) {
-    $urlok .= 'entity=' . urlencode((string) ($entity)) . '&';
-    $urlko .= 'entity=' . urlencode((string) ($entity)) . '&';
+    $urlok .= 'entity=' . urlencode((string)($entity)) . '&';
+    $urlko .= 'entity=' . urlencode((string)($entity)) . '&';
 }
 $urlok = preg_replace('/&$/', '', $urlok); // Remove last &
 $urlko = preg_replace('/&$/', '', $urlko); // Remove last &
@@ -147,23 +147,18 @@ if (!dol_verifyHash($securekeyseed . $type . $ref . (isModEnabled('multicompany'
 }
 
 if ($source == 'proposal') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
     $object = new Propal($db);
     $result = $object->fetch(0, $ref, '', $entity);
 } elseif ($source == 'contract') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
     $object = new Contrat($db);
     $result = $object->fetch(0, $ref);
 } elseif ($source == 'fichinter') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
     $object = new Fichinter($db);
     $result = $object->fetch(0, $ref);
 } elseif ($source == 'societe_rib') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/companybankaccount.class.php';
     $object = new CompanyBankAccount($db);
     $result = $object->fetch(0, $ref);
 } elseif ($source == 'expedition') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
     $object = new Expedition($db);
     $result = $object->fetch(0, $ref);
 } else {
@@ -183,9 +178,9 @@ $error = 0;
 if ($action == 'confirm_refusepropal' && $confirm == 'yes') {
     $db->begin();
 
-    $sql  = "UPDATE " . MAIN_DB_PREFIX . "propal";
-    $sql .= " SET fk_statut = " . ((int) $object::STATUS_NOTSIGNED) . ", note_private = '" . $db->escape($object->note_private) . "', date_signature='" . $db->idate(dol_now()) . "'";
-    $sql .= " WHERE rowid = " . ((int) $object->id);
+    $sql = "UPDATE " . MAIN_DB_PREFIX . "propal";
+    $sql .= " SET fk_statut = " . ((int)$object::STATUS_NOTSIGNED) . ", note_private = '" . $db->escape($object->note_private) . "', date_signature='" . $db->idate(dol_now()) . "'";
+    $sql .= " WHERE rowid = " . ((int)$object->id);
 
     dol_syslog(__FILE__, LOG_DEBUG);
     $resql = $db->query($sql);
@@ -577,11 +572,11 @@ if ($source == 'proposal') {
 
     $last_main_doc_file = $object->last_main_doc;
     $diroutput = $conf->societe->multidir_output[$object->thirdparty->entity] . '/'
-            . dol_sanitizeFileName($object->thirdparty->id) . '/';
+        . dol_sanitizeFileName($object->thirdparty->id) . '/';
     if (
         (empty($last_main_doc_file) ||
-        !dol_is_file($diroutput
-            . $langs->transnoentitiesnoconv("SepaMandateShort") . ' ' . $object->id . "-" . dol_sanitizeFileName($object->rum) . ".pdf")) &&
+            !dol_is_file($diroutput
+                . $langs->transnoentitiesnoconv("SepaMandateShort") . ' ' . $object->id . "-" . dol_sanitizeFileName($object->rum) . ".pdf")) &&
         $message != "signed"
     ) {
         // It seems document has never been generated, or was generated and then deleted.
@@ -779,7 +774,7 @@ if ($action == "dosign" && empty($cancel)) {
 					success: function(response) {
 						if (response == "success"){
 							console.log("Success on saving signature");
-							window.location.replace("' . $_SERVER["PHP_SELF"] . '?ref=' . urlencode($ref) . '&source=' . urlencode($source) . '&message=signed&securekey=' . urlencode($SECUREKEY) . (isModEnabled('multicompany') ? '&entity=' . (int) $entity : '') . '");
+							window.location.replace("' . $_SERVER["PHP_SELF"] . '?ref=' . urlencode($ref) . '&source=' . urlencode($source) . '&message=signed&securekey=' . urlencode($SECUREKEY) . (isModEnabled('multicompany') ? '&entity=' . (int)$entity : '') . '");
 						} else {
 							document.body.style.cursor = \'auto\';
 							console.error(response);

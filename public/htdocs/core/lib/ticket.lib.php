@@ -1,9 +1,10 @@
 <?php
 
-/* Copyright (C) 2013-2018  Jean-François FERRY    <hello@librethic.io>
- * Copyright (C) 2016		Christophe Battarel	<christophe@altairis.fr>
- * Copyright (C) 2019-2024  Frédéric France     <frederic.france@netlogic.fr>
+/* Copyright (C) 2013-2018  Jean-François FERRY         <hello@librethic.io>
+ * Copyright (C) 2016		Christophe Battarel	        <christophe@altairis.fr>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +26,9 @@
  * \brief      This file is a library for Ticket module
  */
 
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Lib\Images;
 
 /**
@@ -81,8 +85,8 @@ function ticketAdminPrepareHead()
 /**
  *  Build tabs for a Ticket object
  *
- *  @param  Ticket    $object       Object Ticket
- *  @return array                         Array of tabs
+ * @param Ticket $object Object Ticket
+ * @return array                         Array of tabs
  */
 function ticket_prepare_head($object)
 {
@@ -113,7 +117,7 @@ function ticket_prepare_head($object)
     $upload_dir = $conf->ticket->dir_output . "/" . $object->ref;
     $nbFiles = count(dol_dir_list($upload_dir, 'files'));
     $sql = 'SELECT id FROM ' . MAIN_DB_PREFIX . 'actioncomm';
-    $sql .= " WHERE fk_element = " . (int) $object->id . " AND elementtype = 'ticket'";
+    $sql .= " WHERE fk_element = " . (int)$object->id . " AND elementtype = 'ticket'";
     $resql = $db->query($sql);
     if ($resql) {
         $numrows = $db->num_rows($resql);
@@ -165,14 +169,13 @@ function ticket_prepare_head($object)
 /**
  * Return string with full Url. The file qualified is the one defined by relative path in $object->last_main_doc
  *
- * @param   Object  $object             Object
+ * @param Object $object Object
  * @return  string                      Url string
  */
 function showDirectPublicLink($object)
 {
     global $conf, $langs;
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
     $email = CMailFile::getValidAddress($object->origin_email, 2);
     $url = '';
     if ($email) {
@@ -202,14 +205,14 @@ function showDirectPublicLink($object)
 /**
  *  Generate a random id
  *
- *  @param  int     $car    Length of string to generate key
- *  @return string
+ * @param int $car Length of string to generate key
+ * @return string
  */
 function generate_random_id($car = 16)
 {
     $string = "";
     $chaine = "abcdefghijklmnopqrstuvwxyz123456789";
-    mt_srand((int) ((float) microtime() * 1000000));
+    mt_srand((int)((float)microtime() * 1000000));
     for ($i = 0; $i < $car; $i++) {
         $string .= $chaine[mt_rand() % strlen($chaine)];
     }
@@ -219,12 +222,12 @@ function generate_random_id($car = 16)
 /**
  * Show http header, open body tag and show HTML header banner for public pages for tickets
  *
- * @param  string $title       Title
- * @param  string $head        Head array
- * @param  int    $disablejs   More content into html header
- * @param  int    $disablehead More content into html header
- * @param  array  $arrayofjs   Array of complementary js files
- * @param  array  $arrayofcss  Array of complementary css files
+ * @param string $title Title
+ * @param string $head Head array
+ * @param int $disablejs More content into html header
+ * @param int $disablehead More content into html header
+ * @param array $arrayofjs Array of complementary js files
+ * @param array $arrayofcss Array of complementary css files
  * @return void
  */
 function llxHeaderTicket($title, $head = "", $disablejs = 0, $disablehead = 0, $arrayofjs = [], $arrayofcss = [])

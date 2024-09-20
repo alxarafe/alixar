@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C)    2013      Cédric Salvador     <csalvador@gpcsolutions.fr>
- * Copyright (C)    2013-2014 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C)	2015	  Marcos García		  <marcosgdf@gmail.com>
+/* Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C)2015	    Marcos García		        <marcosgdf@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -33,6 +33,8 @@
 // $object = Object fetched;
 // $sendto
 // $withmaindocfilemail
+use Dolibarr\Code\Categories\Classes\Categorie;
+
 '@phan-var-force CommonObject $objecttmp';
 
 if (!empty($sall) || !empty($search_all)) {
@@ -62,7 +64,6 @@ if ($massaction == 'preclonetasks') {
 }
 
 if ($massaction == 'preaffecttag' && isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
     $categ = new Categorie($db);
     $categ_types = array();
     $categ_type_array = $categ->getMapList();
@@ -111,11 +112,11 @@ if ($massaction == 'preupdateprice') {
     $valuefield .= '</div>';
 
     $formquestion[] = array(
-                'type' => 'other',
-                'name' => 'pricerate',
-                'label' => $langs->trans("Rate"),
-                'value' => $valuefield
-            );
+        'type' => 'other',
+        'name' => 'pricerate',
+        'label' => $langs->trans("Rate"),
+        'value' => $valuefield
+    );
 
     print $form->formconfirm($_SERVER["PHP_SELF"], $langs->trans("ConfirmUpdatePrice"), $langs->trans("ConfirmUpdatePriceQuestion", count($toselect)), "updateprice", $formquestion, 1, 0, 200, 500, 1);
 }
@@ -129,11 +130,11 @@ if ($massaction == 'presetsupervisor') {
     $valuefield .= '</div>';
 
     $formquestion[] = array(
-                'type' => 'other',
-                'name' => 'supervisortoset',
-                'label' => $langs->trans("Supervisor"),
-                'value' => $valuefield
-            );
+        'type' => 'other',
+        'name' => 'supervisortoset',
+        'label' => $langs->trans("Supervisor"),
+        'value' => $valuefield
+    );
 
     print $form->formconfirm($_SERVER["PHP_SELF"], $langs->trans("ConfirmSetSupervisor"), $langs->trans("ConfirmSetSupervisorQuestion", count($toselect)), "setsupervisor", $formquestion, 1, 0, 200, 500, 1);
 }
@@ -155,11 +156,11 @@ if ($massaction == 'preaffectuser') {
     $valuefieldtasksrole .= '</div>';
 
     $formquestion[] = array(
-                'type' => 'other',
-                'name' => 'usertoaffect',
-                'label' => $langs->trans("User"),
-                'value' => $valuefielduser
-            );
+        'type' => 'other',
+        'name' => 'usertoaffect',
+        'label' => $langs->trans("User"),
+        'value' => $valuefielduser
+    );
     $formquestion[] = array(
         'type' => 'other',
         'name' => 'projectrole',
@@ -213,7 +214,6 @@ if ($massaction == 'presend') {
     print dol_get_fiche_head(null, '', '');
 
     // Create mail form
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
     $formmail = new FormMail($db);
     $formmail->withform = -1;
     $formmail->fromtype = (GETPOST('fromtype') ? GETPOST('fromtype') : (getDolGlobalString('MAIN_MAIL_DEFAULT_FROMTYPE') ? $conf->global->MAIN_MAIL_DEFAULT_FROMTYPE : 'user'));
@@ -325,7 +325,6 @@ if ($massaction == 'presend') {
 }
 
 if ($massaction == 'edit_extrafields') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
     $elementtype = $objecttmp->element;
     /** @var CommonObject $objecttmp */
     $extrafields = new ExtraFields($db);
@@ -369,11 +368,10 @@ if ($massaction == 'edit_extrafields') {
         $outputShowOutputFields .= '</div>';
 
 
-
         $formquestion[] = array(
             'type' => 'other',
             'value' => $outputShowOutputFields
-            );
+        );
 
         print $form->formconfirm($_SERVER["PHP_SELF"], $langs->trans("ConfirmEditExtrafield"), $langs->trans("ConfirmEditExtrafieldQuestion", count($toselect)), "confirm_edit_value_extrafields", $formquestion, 1, 0, 200, 500, 1);
     } else {
@@ -391,9 +389,9 @@ if ($massaction == 'presetcommercial') {
     $formquestion = array();
     $userlist = $form->select_dolusers('', '', 0, null, 0, '', '', 0, 0, 0, 'AND u.statut = 1', 0, '', '', 0, 1);
     $formquestion[] = array('type' => 'other',
-            'name' => 'affectedcommercial',
-            'label' => $form->editfieldkey('AllocateCommercial', 'commercial_id', '', $object, 0),
-            'value' => $form->multiselectarray('commercial', $userlist, null, 0, 0, 'quatrevingtpercent widthcentpercentminusx', 0, 0, '', '', '', 1));
+        'name' => 'affectedcommercial',
+        'label' => $form->editfieldkey('AllocateCommercial', 'commercial_id', '', $object, 0),
+        'value' => $form->multiselectarray('commercial', $userlist, null, 0, 0, 'quatrevingtpercent widthcentpercentminusx', 0, 0, '', '', '', 1));
     print $form->formconfirm($_SERVER["PHP_SELF"], $langs->trans("ConfirmAllocateCommercial"), $langs->trans("ConfirmAllocateCommercialQuestion", count($toselect)), "affectcommercial", $formquestion, 1, 0, 200, 500, 1);
 }
 if ($massaction == 'unsetcommercial') {

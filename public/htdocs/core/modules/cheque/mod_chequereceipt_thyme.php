@@ -19,14 +19,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Cheque\Classes\ModeleNumRefChequeReceipts;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  * \file       htdocs/core/modules/cheque/mod_chequereceipt_thyme.php
  * \ingroup    cheque
  * \brief      File containing class for numbering module Thyme
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/cheque/modules_chequereceipts.php';
-
 
 /**
  *  Class to manage cheque receipts numbering rules Thyme
@@ -50,8 +51,8 @@ class mod_chequereceipt_thyme extends ModeleNumRefChequeReceipts
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -91,7 +92,7 @@ class mod_chequereceipt_thyme extends ModeleNumRefChequeReceipts
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -111,9 +112,9 @@ class mod_chequereceipt_thyme extends ModeleNumRefChequeReceipts
     /**
      *  Return next free value
      *
-     *  @param  Societe         $objsoc     Object thirdparty
-     *  @param  RemiseCheque    $object     Object we need next value for
-     *  @return string|0                    Next value if OK, 0 if KO
+     * @param Societe $objsoc Object thirdparty
+     * @param RemiseCheque $object Object we need next value for
+     * @return string|0                    Next value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $object)
     {
@@ -131,6 +132,6 @@ class mod_chequereceipt_thyme extends ModeleNumRefChequeReceipts
 
         $numFinal = get_next_value($db, $mask, 'bordereau_cheque', 'ref', '', $objsoc, empty($object) ? dol_now() : $object->date_bordereau);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

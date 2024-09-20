@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2017	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2010-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2017	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2010-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+
 /**
  *  \file       htdocs/projet/tasks/task.php
  *  \ingroup    project
@@ -28,15 +39,8 @@
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/task/modules_task.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 
 // Load translation files required by the page
 $langs->loadlangs(array('projects', 'companies'));
@@ -81,8 +85,6 @@ if ($id > 0 || $ref) {
 $socid = 0;
 
 restrictedArea($user, 'projet', $object->fk_project, 'projet&project');
-
-
 
 /*
  * Actions
@@ -248,7 +250,6 @@ if ($action == 'remove_file' && $user->hasRight('projet', 'creer')) {
     }
 }
 
-
 /*
  * View
  */
@@ -260,19 +261,17 @@ $result = $projectstatic->fetch($object->fk_project);
 
 $title = $object->ref;
 if (!empty($withproject)) {
-    $title .= ' | ' . $langs->trans("Project") . (!empty($projectstatic->ref) ? ': ' . $projectstatic->ref : '')  ;
+    $title .= ' | ' . $langs->trans("Project") . (!empty($projectstatic->ref) ? ': ' . $projectstatic->ref : '');
 }
 $help_url = '';
 
 llxHeader('', $title, $help_url);
-
 
 if ($id > 0 || !empty($ref)) {
     $res = $object->fetch_optionals();
     if (getDolGlobalString('PROJECT_ALLOW_COMMENT_ON_TASK') && method_exists($object, 'fetchComments') && empty($object->comments)) {
         $object->fetchComments();
     }
-
 
     if (getDolGlobalString('PROJECT_ALLOW_COMMENT_ON_PROJECT') && method_exists($projectstatic, 'fetchComments') && empty($projectstatic->comments)) {
         $projectstatic->fetchComments();
@@ -517,7 +516,6 @@ if ($id > 0 || !empty($ref)) {
         print '<td>';
 
         // WYSIWYG editor
-        include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
         $nbrows = getDolGlobalInt('MAIN_INPUT_DESC_HEIGHT', 0);
         $doleditor = new DolEditor('description', $object->description, '', 80, 'dolibarr_details', '', false, true, getDolGlobalInt('FCKEDITOR_ENABLE_SOCIETE'), $nbrows, '90%');
         print $doleditor->Create();
@@ -587,7 +585,7 @@ if ($id > 0 || !empty($ref)) {
             $projectsListId = $projectstatic->getProjectsAuthorizedForUser($user, 0, 1);
             $object->next_prev_filter = "fk_projet IN (" . $db->sanitize($projectsListId) . ")";
         } else {
-            $object->next_prev_filter = "fk_projet = " . ((int) $projectstatic->id);
+            $object->next_prev_filter = "fk_projet = " . ((int)$projectstatic->id);
         }
 
         $morehtmlref = '';
@@ -679,7 +677,7 @@ if ($id > 0 || !empty($ref)) {
 
         // Budget
         print '<tr><td>' . $langs->trans("Budget") . '</td><td>';
-        if (!is_null($object->budget_amount) && strcmp((string) $object->budget_amount, '')) {
+        if (!is_null($object->budget_amount) && strcmp((string)$object->budget_amount, '')) {
             print '<span class="amount">' . price($object->budget_amount, 0, $langs, 1, 0, 0, $conf->currency) . '</span>';
         }
         print '</td></tr>';
@@ -713,9 +711,9 @@ if ($id > 0 || !empty($ref)) {
         if (empty($reshook)) {
             // Modify
             if ($user->hasRight('projet', 'creer')) {
-                print '<a class="butAction" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&action=edit&token=' . newToken() . '&withproject=' . ((int) $withproject) . '">' . $langs->trans('Modify') . '</a>';
-                print '<a class="butAction" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&action=clone&token=' . newToken() . '&withproject=' . ((int) $withproject) . '">' . $langs->trans('Clone') . '</a>';
-                print '<a class="butActionDelete classfortooltip" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&action=merge&token=' . newToken() . '&withproject=' . ((int) $withproject) . '" title="' . $langs->trans("MergeTasks") . '">' . $langs->trans('Merge') . '</a>';
+                print '<a class="butAction" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&action=edit&token=' . newToken() . '&withproject=' . ((int)$withproject) . '">' . $langs->trans('Modify') . '</a>';
+                print '<a class="butAction" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&action=clone&token=' . newToken() . '&withproject=' . ((int)$withproject) . '">' . $langs->trans('Clone') . '</a>';
+                print '<a class="butActionDelete classfortooltip" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&action=merge&token=' . newToken() . '&withproject=' . ((int)$withproject) . '" title="' . $langs->trans("MergeTasks") . '">' . $langs->trans('Merge') . '</a>';
             } else {
                 print '<a class="butActionRefused classfortooltip" href="#" title="' . $langs->trans("NotAllowed") . '">' . $langs->trans('Modify') . '</a>';
             }
@@ -724,12 +722,12 @@ if ($id > 0 || !empty($ref)) {
             $permissiontodelete = $user->hasRight('projet', 'supprimer');
             if ($permissiontodelete) {
                 if (!$object->hasChildren() && !$object->hasTimeSpent()) {
-                    print dolGetButtonAction($langs->trans("Delete"), '', 'delete', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=delete&token=' . newToken() . '&withproject=' . ((int) $withproject), 'delete', $permissiontodelete);
+                    print dolGetButtonAction($langs->trans("Delete"), '', 'delete', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=delete&token=' . newToken() . '&withproject=' . ((int)$withproject), 'delete', $permissiontodelete);
                 } else {
-                    print dolGetButtonAction($langs->trans("TaskHasChild"), $langs->trans("Delete"), 'delete', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=delete&token=' . newToken() . '&withproject=' . ((int) $withproject), 'delete', 0);
+                    print dolGetButtonAction($langs->trans("TaskHasChild"), $langs->trans("Delete"), 'delete', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=delete&token=' . newToken() . '&withproject=' . ((int)$withproject), 'delete', 0);
                 }
             } else {
-                print dolGetButtonAction($langs->trans("Delete"), '', 'delete', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=delete&token=' . newToken() . '&withproject=' . ((int) $withproject), 'delete', $permissiontodelete);
+                print dolGetButtonAction($langs->trans("Delete"), '', 'delete', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=delete&token=' . newToken() . '&withproject=' . ((int)$withproject), 'delete', $permissiontodelete);
             }
 
             print '</div>';
@@ -752,7 +750,6 @@ if ($id > 0 || !empty($ref)) {
         print '</div><div class="fichehalfright">';
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
         $formactions = new FormActions($db);
         $formactions->showactions($object, 'project_task', 0, 1, '', 10, 'withproject=' . $withproject);
 

@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (c) 2004-2019	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2005		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2013		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2019		Thibault FOUCART		<support@ptibogxiv.net>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (c) 2004-2019	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2005		Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2013		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2019		Thibault FOUCART		    <support@ptibogxiv.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *       \file       htdocs/product/stats/card.php
  *       \ingroup    product
@@ -33,10 +39,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width', 380);
 $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height', 160);
@@ -44,11 +46,11 @@ $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height', 160);
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'products', 'stocks', 'bills', 'other'));
 
-$id     = GETPOSTINT('id'); // For this page, id can also be 'all'
-$ref    = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id'); // For this page, id can also be 'all'
+$ref = GETPOST('ref', 'alpha');
 $mode = (GETPOST('mode', 'alpha') ? GETPOST('mode', 'alpha') : 'byunit');
-$search_year   = GETPOSTINT('search_year');
-$search_categ  = GETPOSTINT('search_categ');
+$search_year = GETPOSTINT('search_year');
+$search_categ = GETPOSTINT('search_categ');
 $notab = GETPOSTINT('notab');
 $type = GETPOST('type', 'alpha');
 
@@ -85,13 +87,11 @@ if ($id > 0 || !empty($ref)) {
 
 $result = restrictedArea($user, 'produit|service', $fieldvalue, 'product&product', '', '', $fieldtype);
 
-
 /*
  * Actions
  */
 
 // None
-
 
 /*
  *	View
@@ -161,26 +161,26 @@ if ((!($id > 0) && empty($ref)) || $notab) {
     $h = 0;
     $head = array();
 
-    $head[$h][0] = constant('BASE_URL') . '/product/stats/card.php' . ($type != '' ? '?type=' . ((int) $type) : '');
+    $head[$h][0] = constant('BASE_URL') . '/product/stats/card.php' . ($type != '' ? '?type=' . ((int)$type) : '');
     $head[$h][1] = $langs->trans("Chart");
     $head[$h][2] = 'chart';
     $h++;
 
     $title = $langs->trans("ListProductServiceByPopularity");
-    if ((string) $type == '0') {
+    if ((string)$type == '0') {
         $title = $langs->trans("ListProductByPopularity");
     }
-    if ((string) $type == '1') {
+    if ((string)$type == '1') {
         $title = $langs->trans("ListServiceByPopularity");
     }
 
 
-    $head[$h][0] = constant('BASE_URL') . '/product/popuprop.php' . ($type != '' ? '?type=' . ((int) $type) : '');
+    $head[$h][0] = constant('BASE_URL') . '/product/popuprop.php' . ($type != '' ? '?type=' . ((int)$type) : '');
     $head[$h][1] = $langs->trans("ProductsServicesPerPopularity");
-    if ((string) $type == '0') {
+    if ((string)$type == '0') {
         $head[$h][1] = $langs->trans("ProductsPerPopularity");
     }
-    if ((string) $type == '1') {
+    if ((string)$type == '1') {
         $head[$h][1] = $langs->trans("ServicesPerPopularity");
     }
     $head[$h][2] = 'popularity';
@@ -255,9 +255,9 @@ if ($result || !($id > 0)) {
 
 
     $param = '';
-    $param .= (GETPOSTISSET('id') ? '&id=' . GETPOSTINT('id') : '&id=' . $object->id) . (($type != '' && $type != '-1') ? '&type=' . ((int) $type) : '') . '&search_year=' . ((int) $search_year) . ($notab ? '&notab=' . $notab : '');
+    $param .= (GETPOSTISSET('id') ? '&id=' . GETPOSTINT('id') : '&id=' . $object->id) . (($type != '' && $type != '-1') ? '&type=' . ((int)$type) : '') . '&search_year=' . ((int)$search_year) . ($notab ? '&notab=' . $notab : '');
     if ($socid > 0) {
-        $param .= '&socid=' . ((int) $socid);
+        $param .= '&socid=' . ((int)$socid);
     }
 
     // Choice of stats mode (byunit or bynumber)
@@ -345,50 +345,50 @@ if ($result || !($id > 0)) {
 
     if (isModEnabled('propal')) {
         $graphfiles['propal'] = array('modulepart' => 'productstats_proposals',
-            'file' => $object->id . '/propal12m' . ((string) $type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
+            'file' => $object->id . '/propal12m' . ((string)$type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
             'label' => $langs->transnoentitiesnoconv($arrayforlabel[$mode], $langs->transnoentitiesnoconv("Proposals")));
     }
 
     if (isModEnabled('supplier_proposal')) {
         $langs->load("supplier_proposal");
         $graphfiles['proposalssuppliers'] = array('modulepart' => 'productstats_proposalssuppliers',
-            'file' => $object->id . '/proposalssuppliers12m' . ((string) $type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
+            'file' => $object->id . '/proposalssuppliers12m' . ((string)$type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
             'label' => $langs->transnoentitiesnoconv($arrayforlabel[$mode], $langs->transnoentitiesnoconv("SupplierProposals")));
     }
 
     if (isModEnabled('order')) {
         $graphfiles['orders'] = array('modulepart' => 'productstats_orders',
-            'file' => $object->id . '/orders12m' . ((string) $type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
+            'file' => $object->id . '/orders12m' . ((string)$type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
             'label' => $langs->transnoentitiesnoconv($arrayforlabel[$mode], $langs->transnoentitiesnoconv("Orders")));
     }
 
     if (isModEnabled('supplier_order')) {
         $graphfiles['orderssuppliers'] = array('modulepart' => 'productstats_orderssuppliers',
-            'file' => $object->id . '/orderssuppliers12m' . ((string) $type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
+            'file' => $object->id . '/orderssuppliers12m' . ((string)$type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
             'label' => $langs->transnoentitiesnoconv($arrayforlabel[$mode], $langs->transnoentitiesnoconv("SuppliersOrders")));
     }
 
     if (isModEnabled('invoice')) {
         $graphfiles['invoices'] = array('modulepart' => 'productstats_invoices',
-            'file' => $object->id . '/invoices12m' . ((string) $type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
+            'file' => $object->id . '/invoices12m' . ((string)$type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
             'label' => $langs->transnoentitiesnoconv($arrayforlabel[$mode], $langs->transnoentitiesnoconv("Invoices")));
     }
 
     if (isModEnabled('supplier_invoice')) {
         $graphfiles['invoicessuppliers'] = array('modulepart' => 'productstats_invoicessuppliers',
-            'file' => $object->id . '/invoicessuppliers12m' . ((string) $type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
+            'file' => $object->id . '/invoicessuppliers12m' . ((string)$type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
             'label' => $langs->transnoentitiesnoconv($arrayforlabel[$mode], $langs->transnoentitiesnoconv("SupplierInvoices")));
     }
 
     if (isModEnabled('contract')) {
         $graphfiles['contracts'] = array('modulepart' => 'productstats_contracts',
-            'file' => $object->id . '/contracts12m' . ((string) $type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
+            'file' => $object->id . '/contracts12m' . ((string)$type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
             'label' => $langs->transnoentitiesnoconv($arrayforlabel[$mode], $langs->transnoentitiesnoconv("Contracts")));
     }
 
     if (isModEnabled('mrp') && $mode != 'byamount') {
         $graphfiles['mrp'] = array('modulepart' => 'productstats_mrp',
-            'file' => $object->id . '/mos12m' . ((string) $type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
+            'file' => $object->id . '/mos12m' . ((string)$type != '' ? '_type' . $type : '') . '_' . $mode . ($search_year > 0 ? '_year' . $search_year : '') . '.png',
             'label' => $langs->transnoentitiesnoconv($arrayforlabel[$mode] . "Mos"));
     }
 
@@ -419,28 +419,28 @@ if ($result || !($id > 0)) {
                     }
 
                     if ($key == 'propal') {
-                        $graph_data = $object->get_nb_propal($socid, $mode, ((string) $type != '' ? $type : -1), $search_year, $morefilters);
+                        $graph_data = $object->get_nb_propal($socid, $mode, ((string)$type != '' ? $type : -1), $search_year, $morefilters);
                     }
                     if ($key == 'orders') {
-                        $graph_data = $object->get_nb_order($socid, $mode, ((string) $type != '' ? $type : -1), $search_year, $morefilters);
+                        $graph_data = $object->get_nb_order($socid, $mode, ((string)$type != '' ? $type : -1), $search_year, $morefilters);
                     }
                     if ($key == 'invoices') {
-                        $graph_data = $object->get_nb_vente($socid, $mode, ((string) $type != '' ? $type : -1), $search_year, $morefilters);
+                        $graph_data = $object->get_nb_vente($socid, $mode, ((string)$type != '' ? $type : -1), $search_year, $morefilters);
                     }
                     if ($key == 'proposalssuppliers') {
-                        $graph_data = $object->get_nb_propalsupplier($socid, $mode, ((string) $type != '' ? $type : -1), $search_year, $morefilters);
+                        $graph_data = $object->get_nb_propalsupplier($socid, $mode, ((string)$type != '' ? $type : -1), $search_year, $morefilters);
                     }
                     if ($key == 'invoicessuppliers') {
-                        $graph_data = $object->get_nb_achat($socid, $mode, ((string) $type != '' ? $type : -1), $search_year, $morefilters);
+                        $graph_data = $object->get_nb_achat($socid, $mode, ((string)$type != '' ? $type : -1), $search_year, $morefilters);
                     }
                     if ($key == 'orderssuppliers') {
-                        $graph_data = $object->get_nb_ordersupplier($socid, $mode, ((string) $type != '' ? $type : -1), $search_year, $morefilters);
+                        $graph_data = $object->get_nb_ordersupplier($socid, $mode, ((string)$type != '' ? $type : -1), $search_year, $morefilters);
                     }
                     if ($key == 'contracts') {
-                        $graph_data = $object->get_nb_contract($socid, $mode, ((string) $type != '' ? $type : -1), $search_year, $morefilters);
+                        $graph_data = $object->get_nb_contract($socid, $mode, ((string)$type != '' ? $type : -1), $search_year, $morefilters);
                     }
                     if ($key == 'mrp') {
-                        $graph_data = $object->get_nb_mos($socid, $mode, ((string) $type != '' ? $type : -1), $search_year, $morefilters);
+                        $graph_data = $object->get_nb_mos($socid, $mode, ((string)$type != '' ? $type : -1), $search_year, $morefilters);
                     }
 
                     // TODO Save cachefile $graphfiles[$key]['file']
@@ -458,7 +458,7 @@ if ($result || !($id > 0)) {
                     $px->SetShading(3);
                     //print 'x '.$key.' '.$graphfiles[$key]['file'];
 
-                    $url = constant('BASE_URL') . '/viewimage.php?modulepart=' . $graphfiles[$key]['modulepart'] . '&entity=' . ((int) $object->entity) . '&file=' . urlencode($graphfiles[$key]['file']) . ($notab ? '&notab=' . $notab : '');
+                    $url = constant('BASE_URL') . '/viewimage.php?modulepart=' . $graphfiles[$key]['modulepart'] . '&entity=' . ((int)$object->entity) . '&file=' . urlencode($graphfiles[$key]['file']) . ($notab ? '&notab=' . $notab : '');
                     $px->draw($dir . "/" . $graphfiles[$key]['file'], $url);
 
                     $graphfiles[$key]['total'] = $px->total();
@@ -519,7 +519,7 @@ if ($result || !($id > 0)) {
             } else {
                 $dategenerated = ($mesg ? '<span class="error">' . $mesg . '</span>' : $langs->trans("ChartNotGenerated"));
             }
-            $linktoregenerate = '<a class="reposition" href="' . $_SERVER["PHP_SELF"] . '?' . (GETPOSTISSET('id') ? 'id=' . GETPOSTINT('id') : 'id=' . $object->id) . (((string) $type != '' && $type != '-1') ? '&type=' . ((int) $type) : '') . '&action=recalcul&mode=' . urlencode($mode) . '&search_year=' . ((int) $search_year) . ($search_categ > 0 ? '&search_categ=' . ((int) $search_categ) : '') . '">';
+            $linktoregenerate = '<a class="reposition" href="' . $_SERVER["PHP_SELF"] . '?' . (GETPOSTISSET('id') ? 'id=' . GETPOSTINT('id') : 'id=' . $object->id) . (((string)$type != '' && $type != '-1') ? '&type=' . ((int)$type) : '') . '&action=recalcul&mode=' . urlencode($mode) . '&search_year=' . ((int)$search_year) . ($search_categ > 0 ? '&search_categ=' . ((int)$search_categ) : '') . '">';
             $linktoregenerate .= img_picto($langs->trans("ReCalculate") . ' (' . $dategenerated . ')', 'refresh');
             $linktoregenerate .= '</a>';
 

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017-2021 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2017-2021  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
+
 /**
  *      \file       knowledgerecord_card.php
  *      \ingroup    knowledgemanagement
@@ -25,14 +35,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/knowledgemanagement/class/knowledgerecord.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/knowledgemanagement/lib/knowledgemanagement_knowledgerecord.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("knowledgemanagement", "ticket", "other"));
@@ -46,7 +49,7 @@ $cancel = GETPOST('cancel', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'knowledgerecordcard'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');
-$lineid   = GETPOSTINT('lineid');
+$lineid = GETPOSTINT('lineid');
 
 // Initialize technical objects
 $object = new KnowledgeRecord($db);
@@ -212,7 +215,6 @@ if ($action == 'create') {
     // Add field answer
     print '<br>';
     print $langs->trans($object->fields['answer']['label']) . '<br>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('answer', $object->answer, '', 200, 'dolibarr_notes', 'In', true, true, true, ROWS_9, '100%');
     $out = $doleditor->Create(1);
     print $out;
@@ -277,7 +279,6 @@ if (($id || $ref) && $action == 'edit') {
     // Add field answer
     print '<br>';
     print $langs->trans($object->fields['answer']['label']) . '<br>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('answer', $object->answer, '', 200, 'dolibarr_notes', 'In', true, true, true, ROWS_9, '100%');
     $out = $doleditor->Create(1);
     print $out;
@@ -318,8 +319,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmCloseKM', $object->ref);
         /*if (isModEnabled('notification'))
          {
-         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-         $notify = new Notify($db);
+          $notify = new Notify($db);
          $text .= '<br>';
          $text .= $notify->confirmMessage('MYOBJECT_CLOSE', $object->socid, $object);
          }*/
@@ -343,8 +343,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmReopenKM', $object->ref);
         /*if (isModEnabled('notification'))
          {
-         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-         $notify = new Notify($db);
+          $notify = new Notify($db);
          $text .= '<br>';
          $text .= $notify->confirmMessage('MYOBJECT_CLOSE', $object->socid, $object);
          }*/
@@ -454,7 +453,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     // Add field answer
     print '<br>';
     print $langs->trans($object->fields['answer']['label']) . '<br>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('answer', $object->answer, '', 200, 'dolibarr_notes', 'In', true, true, true, ROWS_9, '100%', 1);
     $out = $doleditor->Create(1);
     print $out;
@@ -557,7 +555,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/knowledgemanagement/knowledgerecord_agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
         $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element . '@' . $object->module, (is_object($object->thirdparty) ? $object->thirdparty->id : 0), 1, '', $MAXEVENT, '', $morehtmlcenter);
 

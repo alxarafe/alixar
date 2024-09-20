@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2014-2016  Alexandre Spangaro  <aspangaro@open-dsi.fr>
- * Copyright (C) 2015-2020	Frederic France     <frederic.france@netlogic.fr>
- * Copyright (C) 2020       Maxime DEMAREST     <maxime@indelog.fr>
+/* Copyright (C) 2014-2016  Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015-2020	Frederic France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2020       Maxime DEMAREST             <maxime@indelog.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Loan\Classes\LoanSchedule;
+
 /**
  *      \file       htdocs/core/lib/loan.lib.php
  *      \ingroup    loan
@@ -29,7 +32,7 @@
 /**
  * Prepare array with list of tabs
  *
- * @param   Object  $object     Object related to tabs
+ * @param Object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function loan_prepare_head($object)
@@ -56,7 +59,6 @@ function loan_prepare_head($object)
     complete_head_from_modules($conf, $langs, $object, $head, $tab, 'loan', 'add', 'core');
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->loan->dir_output . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
@@ -94,17 +96,17 @@ function loan_prepare_head($object)
 /**
  * Calculate remaining loan mensuality and interests
  *
- * @param   float   $mens               Value of this mensuality (interests include, set 0 if we don't paid interests for this mensuality)
- * @param   float   $capital            Remaining capital for this mensuality
- * @param   float   $rate               Loan rate
- * @param   int     $numactualloadterm  Actual loan term
- * @param   int     $nbterm             Total number of term for this loan
+ * @param float $mens Value of this mensuality (interests include, set 0 if we don't paid interests for this mensuality)
+ * @param float $capital Remaining capital for this mensuality
+ * @param float $rate Loan rate
+ * @param int $numactualloadterm Actual loan term
+ * @param int $nbterm Total number of term for this loan
  * @return  array                       Array with remaining capital, interest, and mensuality for each remaining terms
  */
 function loanCalcMonthlyPayment($mens, $capital, $rate, $numactualloadterm, $nbterm)
 {
     global $conf, $db;
-    require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loanschedule.class.php';
+
     $object = new LoanSchedule($db);
     $output = array();
 
@@ -112,8 +114,8 @@ function loanCalcMonthlyPayment($mens, $capital, $rate, $numactualloadterm, $nbt
     $mens = price2num($mens);
     $capital = price2num($capital);
     $rate = price2num($rate);
-    $numactualloadterm = ((int) $numactualloadterm);
-    $nbterm = ((int) $nbterm);
+    $numactualloadterm = ((int)$numactualloadterm);
+    $nbterm = ((int)$nbterm);
 
     // If mensuality is 0 we don't pay interests and remaining capital not modified
     if ($mens == 0) {

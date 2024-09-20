@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/projet/ganttview.php
  *  \ingroup    projet
@@ -27,14 +36,8 @@
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 
 $id = GETPOST('id', 'intcomma');
 $ref = GETPOST('ref', 'alpha');
@@ -65,7 +68,6 @@ $langs->loadlangs(array('users', 'projects'));
 
 // None
 
-
 /*
  * View
  */
@@ -81,8 +83,8 @@ $arrayofcss = array('/includes/jsgantt/jsgantt.css');
 
 if (!empty($conf->use_javascript_ajax)) {
     $arrayofjs = array(
-    '/includes/jsgantt/jsgantt.js',
-    '/projet/jsgantt_language.js.php?lang=' . $langs->defaultlang
+        '/includes/jsgantt/jsgantt.js',
+        '/projet/jsgantt_language.js.php?lang=' . $langs->defaultlang
     );
 }
 
@@ -110,12 +112,11 @@ if (($id > 0 && is_numeric($id)) || !empty($ref)) {
     $param = ($mode == 'mine' ? '&mode=mine' : '');
 
 
-
     // Project card
 
     if (!empty($_SESSION['pageforbacktolist']) && !empty($_SESSION['pageforbacktolist']['project'])) {
         $tmpurl = $_SESSION['pageforbacktolist']['project'];
-        $tmpurl = preg_replace('/__SOCID__/', (string) $object->socid, $tmpurl);
+        $tmpurl = preg_replace('/__SOCID__/', (string)$object->socid, $tmpurl);
         $linkback = '<a href="' . $tmpurl . (preg_match('/\?/', $tmpurl) ? '&' : '?') . 'restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
     } else {
         $linkback = '<a href="' . constant('BASE_URL') . '/projet/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';

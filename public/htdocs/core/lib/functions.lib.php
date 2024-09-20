@@ -41,6 +41,23 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Comm\Classes\CActionComm;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\DolGeoIP;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\Website\Classes\Website;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file           htdocs/core/lib/functions.lib.php
  *  \brief          A set of functions for Dolibarr
@@ -3851,11 +3868,11 @@ function dol_print_socialnetworks($value, $cid, $socid, $type, $dictsocialnetwor
             $htmllink .= '&nbsp; <a href="skype:';
             $htmllink .= dol_string_nospecial($value, '_', '', array('@'));
             $htmllink .= '?call" alt="' . $langs->trans("Call") . '&nbsp;' . $value . '" title="' . dol_escape_htmltag($langs->trans("Call") . ' ' . $value) . '">';
-            $htmllink .= '<img src="' . constant('BASE_URL') . '/theme/common/skype_callbutton.png" border="0">';
+            $htmllink .= '<img src="' . constant('DOL_URL_ROOT') . '/theme/common/skype_callbutton.png" border="0">';
             $htmllink .= '</a><a href="skype:';
             $htmllink .= dol_string_nospecial($value, '_', '', array('@'));
             $htmllink .= '?chat" alt="' . $langs->trans("Chat") . '&nbsp;' . $value . '" title="' . dol_escape_htmltag($langs->trans("Chat") . ' ' . $value) . '">';
-            $htmllink .= '<img class="paddingleft" src="' . constant('BASE_URL') . '/theme/common/skype_chatbutton.png" border="0">';
+            $htmllink .= '<img class="paddingleft" src="' . constant('DOL_URL_ROOT') . '/theme/common/skype_chatbutton.png" border="0">';
             $htmllink .= '</a>';
             if (($cid || $socid) && isModEnabled('agenda') && $user->hasRight('agenda', 'myactions', 'create')) {
                 $addlink = 'AC_SKYPE';
@@ -4322,7 +4339,7 @@ function dol_print_ip($ip, $mode = 0)
         $countrycode = dolGetCountryCodeFromIp($ip);
         if ($countrycode) { // If success, countrycode is us, fr, ...
             if (file_exists(DOL_DOCUMENT_ROOT . '/theme/common/flags/' . $countrycode . '.png')) {
-                $ret .= ' ' . img_picto($countrycode . ' ' . $langs->trans("AccordingToGeoIPDatabase"), constant('BASE_URL') . '/theme/common/flags/' . $countrycode . '.png', '', 1);
+                $ret .= ' ' . img_picto($countrycode . ' ' . $langs->trans("AccordingToGeoIPDatabase"), constant('DOL_URL_ROOT') . '/theme/common/flags/' . $countrycode . '.png', '', 1);
             } else {
                 $ret .= ' (' . $countrycode . ')';
             }
@@ -4395,7 +4412,6 @@ function dolGetCountryCodeFromIp($ip)
         $datafile = getDolGlobalString('GEOIPMAXMIND_COUNTRY_DATAFILE');
         //$ip='24.24.24.24';
         //$datafile='/usr/share/GeoIP/GeoIP.dat';    Note that this must be downloaded datafile (not same than datafile provided with ubuntu packages)
-        include_once DOL_DOCUMENT_ROOT . '/core/class/dolgeoip.class.php';
         $geoip = new DolGeoIP('country', $datafile);
         //print 'ip='.$ip.' databaseType='.$geoip->gi->databaseType." GEOIP_CITY_EDITION_REV1=".GEOIP_CITY_EDITION_REV1."\n";
         $countrycode = $geoip->getCountryCodeFromIP($ip);
@@ -4422,7 +4438,6 @@ function dol_user_country()
         $datafile = getDolGlobalString('GEOIPMAXMIND_COUNTRY_DATAFILE');
         //$ip='24.24.24.24';
         //$datafile='E:\Mes Sites\Web\Admin1\awstats\maxmind\GeoIP.dat';
-        include_once DOL_DOCUMENT_ROOT . '/core/class/dolgeoip.class.php';
         $geoip = new DolGeoIP('country', $datafile);
         $countrycode = $geoip->getCountryCodeFromIP($ip);
         $ret = $countrycode;
@@ -4489,11 +4504,11 @@ function dol_print_address($address, $htmlid, $element, $id, $noprint = 0, $char
             }
             if ($showgmap) {
                 $url = dol_buildpath('/google/gmaps.php?mode=' . $element . '&id=' . $id, 1);
-                $out .= ' <a href="' . $url . '" target="_gmaps"><img id="' . $htmlid . '" class="valigntextbottom" src="' . constant('BASE_URL') . '/theme/common/gmap.png"></a>';
+                $out .= ' <a href="' . $url . '" target="_gmaps"><img id="' . $htmlid . '" class="valigntextbottom" src="' . constant('DOL_URL_ROOT') . '/theme/common/gmap.png"></a>';
             }
             if ($showomap) {
                 $url = dol_buildpath('/openstreetmap/maps.php?mode=' . $element . '&id=' . $id, 1);
-                $out .= ' <a href="' . $url . '" target="_gmaps"><img id="' . $htmlid . '_openstreetmap" class="valigntextbottom" src="' . constant('BASE_URL') . '/theme/common/gmap.png"></a>';
+                $out .= ' <a href="' . $url . '" target="_gmaps"><img id="' . $htmlid . '_openstreetmap" class="valigntextbottom" src="' . constant('DOL_URL_ROOT') . '/theme/common/gmap.png"></a>';
             }
         }
     }
@@ -5188,7 +5203,7 @@ function img_weather($titlealt, $picto, $moreatt = '', $pictoisfullpath = 0, $mo
         $picto .= '.png';
     }
 
-    $path = constant('BASE_URL') . '/theme/' . $conf->theme . '/img/weather/' . $picto;
+    $path = constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/img/weather/' . $picto;
 
     return img_picto($titlealt, $path, $moreatt, 1, 0, 0, '', $morecss);
 }
@@ -5215,7 +5230,7 @@ function img_picto_common($titlealt, $picto, $moreatt = '', $pictoisfullpath = 0
     if ($pictoisfullpath) {
         $path = $picto;
     } else {
-        $path = constant('BASE_URL') . '/theme/common/' . $picto;
+        $path = constant('DOL_URL_ROOT') . '/theme/common/' . $picto;
 
         if (getDolGlobalInt('MAIN_MODULE_CAN_OVERWRITE_COMMONICONS')) {
             $themepath = DOL_DOCUMENT_ROOT . '/theme/' . $conf->theme . '/img/' . $picto;
@@ -5803,7 +5818,6 @@ function dol_print_error($db = null, $error = '', $errors = null)
 
     // If error occurs before the $lang object was loaded
     if (!$langs) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/translate.class.php';
         $langs = new Translate('', $conf);
         $langs->load("main");
     }
@@ -7173,7 +7187,6 @@ function get_product_vat_for_country($idprod, $thirdpartytouse, $idprodfournpric
 {
     global $db, $mysoc;
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
     $ret = 0;
     $found = 0;
@@ -7270,7 +7283,6 @@ function get_product_localtax_for_country($idprod, $local, $thirdpartytouse)
     global $db, $mysoc;
 
     if (!class_exists('Product')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
     }
 
     $ret = 0;
@@ -7460,14 +7472,12 @@ function get_default_npr(Societe $thirdparty_seller, Societe $thirdparty_buyer, 
 
     if ($idprodfournprice > 0) {
         if (!class_exists('ProductFournisseur')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
         }
         $prodprice = new ProductFournisseur($db);
         $prodprice->fetch_product_fournisseur_price($idprodfournprice);
         return $prodprice->fourn_tva_npr;
     } elseif ($idprod > 0) {
         if (!class_exists('Product')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
         }
         $prod = new Product($db);
         $prod->fetch($idprod);
@@ -13618,7 +13628,6 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
 
     global $param, $massactionbutton;
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
 
     // Check parameters
     if (!is_object($filterobj) && !is_object($objcon)) {
@@ -13921,13 +13930,9 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
     if (isModEnabled('agenda') || (isModEnabled('mailing') && !empty($objcon->email))) {
         $delay_warning = $conf->global->MAIN_DELAY_ACTIONS_TODO * 24 * 60 * 60;
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
         include_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formactions.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 
         $formactions = new FormActions($db);
-
         $actionstatic = new ActionComm($db);
         $userstatic = new User($db);
         $contactstatic = new Contact($db);
@@ -14023,7 +14028,6 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
             $out .= getTitleFieldOfList($tmp);
         }
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/cactioncomm.class.php';
         $caction = new CActionComm($db);
         $arraylist = $caction->liste_array(1, 'code', '', (!getDolGlobalString('AGENDA_USE_EVENT_TYPE') ? 1 : 0), '', 1);
 
@@ -14466,7 +14470,6 @@ function recordNotFound($message = '', $printheader = 1, $printfooter = 1, $show
 
     if (empty($showonlymessage)) {
         if (empty($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($db);
             // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
             $hookmanager->initHooks(array('main'));

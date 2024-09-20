@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2019	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2016	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2021		Waël Almoman            <info@almoman.com>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2019	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2016	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2021		Waël Almoman                <info@almoman.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Mailing;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\FormMail;
+
 /**
  *       \file       htdocs/comm/mailing/card.php
  *       \ingroup    mailing
@@ -35,12 +39,7 @@ if (!defined('NOSTYLECHECK')) {
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/emailing.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/mailing/class/mailing.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmail.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("mails", "admin"));
@@ -102,7 +101,6 @@ $upload_dir = $conf->mailing->dir_output . "/" . get_exdir($object->id, 2, 0, 1,
 $permissiontocreate = $user->hasRight('mailing', 'creer');
 $permissiontovalidatesend = $user->hasRight('mailing', 'valider');
 $permissiontodelete = $user->hasRight('mailing', 'supprimer');
-
 
 /*
  * Actions
@@ -174,10 +172,10 @@ if (empty($reshook)) {
                 exit;
             }
 
-            $id       = $object->id;
-            $subject  = $object->sujet;
-            $message  = $object->body;
-            $from     = $object->email_from;
+            $id = $object->id;
+            $subject = $object->sujet;
+            $message = $object->body;
+            $from = $object->email_from;
             $replyto = $object->email_replyto;
             $errorsto = $object->email_errorsto;
             // Is the message in html
@@ -196,7 +194,7 @@ if (empty($reshook)) {
             // or sent in error (statut=-1)
             $sql = "SELECT mc.rowid, mc.fk_mailing, mc.lastname, mc.firstname, mc.email, mc.other, mc.source_url, mc.source_id, mc.source_type, mc.tag";
             $sql .= " FROM " . MAIN_DB_PREFIX . "mailing_cibles as mc";
-            $sql .= " WHERE mc.statut < 1 AND mc.fk_mailing = " . ((int) $object->id);
+            $sql .= " WHERE mc.statut < 1 AND mc.fk_mailing = " . ((int)$object->id);
             $sql .= " ORDER BY mc.statut DESC"; // first status 0, then status -1
 
             dol_syslog("card.php: select targets", LOG_DEBUG);
@@ -210,7 +208,7 @@ if (empty($reshook)) {
                     $now = dol_now();
 
                     // Positioning date of start sending
-                    $sql = "UPDATE " . MAIN_DB_PREFIX . "mailing SET date_envoi='" . $db->idate($now) . "' WHERE rowid=" . ((int) $object->id);
+                    $sql = "UPDATE " . MAIN_DB_PREFIX . "mailing SET date_envoi='" . $db->idate($now) . "' WHERE rowid=" . ((int)$object->id);
                     $resql2 = $db->query($sql);
                     if (!$resql2) {
                         dol_print_error($db);
@@ -270,9 +268,9 @@ if (empty($reshook)) {
                         $substitutionarray['__OTHER5__'] = $other5;
                         $substitutionarray['__USER_SIGNATURE__'] = $signature; // Signature is empty when ran from command line or taken from user in parameter)
                         $substitutionarray['__SENDEREMAIL_SIGNATURE__'] = $signature; // Signature is empty when ran from command line or taken from user in parameter)
-                        $substitutionarray['__CHECK_READ__'] = '<img src="' . DOL_MAIN_URL_ROOT . '/public/emailing/mailing-read.php?tag=' . urlencode($obj->tag) . '&securitykey=' . dol_hash(getDolGlobalString('MAILING_EMAIL_UNSUBSCRIBE_KEY') . '-' . $obj->tag . '-' . $obj->email . '-' . $obj->rowid, "md5") . '&email=' . urlencode($obj->email) . '&mtid=' . ((int) $obj->rowid) . '" width="1" height="1" style="width:1px;height:1px" border="0"/>';
-                        $substitutionarray['__UNSUBSCRIBE__'] = '<a href="' . DOL_MAIN_URL_ROOT . '/public/emailing/mailing-unsubscribe.php?tag=' . urlencode($obj->tag) . '&unsuscrib=1&securitykey=' . dol_hash(getDolGlobalString('MAILING_EMAIL_UNSUBSCRIBE_KEY') . '-' . $obj->tag . '-' . $obj->email . '-' . $obj->rowid, "md5") . '&email=' . urlencode($obj->email) . '&mtid=' . ((int) $obj->rowid) . '" target="_blank" rel="noopener noreferrer">' . $langs->trans("MailUnsubcribe") . '</a>';
-                        $substitutionarray['__UNSUBSCRIBE_URL__'] = DOL_MAIN_URL_ROOT . '/public/emailing/mailing-unsubscribe.php?tag=' . urlencode($obj->tag) . '&unsuscrib=1&securitykey=' . dol_hash(getDolGlobalString('MAILING_EMAIL_UNSUBSCRIBE_KEY') . '-' . $obj->tag . '-' . $obj->email . '-' . $obj->rowid, "md5") . '&email=' . urlencode($obj->email) . '&mtid=' . ((int) $obj->rowid);
+                        $substitutionarray['__CHECK_READ__'] = '<img src="' . DOL_MAIN_URL_ROOT . '/public/emailing/mailing-read.php?tag=' . urlencode($obj->tag) . '&securitykey=' . dol_hash(getDolGlobalString('MAILING_EMAIL_UNSUBSCRIBE_KEY') . '-' . $obj->tag . '-' . $obj->email . '-' . $obj->rowid, "md5") . '&email=' . urlencode($obj->email) . '&mtid=' . ((int)$obj->rowid) . '" width="1" height="1" style="width:1px;height:1px" border="0"/>';
+                        $substitutionarray['__UNSUBSCRIBE__'] = '<a href="' . DOL_MAIN_URL_ROOT . '/public/emailing/mailing-unsubscribe.php?tag=' . urlencode($obj->tag) . '&unsuscrib=1&securitykey=' . dol_hash(getDolGlobalString('MAILING_EMAIL_UNSUBSCRIBE_KEY') . '-' . $obj->tag . '-' . $obj->email . '-' . $obj->rowid, "md5") . '&email=' . urlencode($obj->email) . '&mtid=' . ((int)$obj->rowid) . '" target="_blank" rel="noopener noreferrer">' . $langs->trans("MailUnsubcribe") . '</a>';
+                        $substitutionarray['__UNSUBSCRIBE_URL__'] = DOL_MAIN_URL_ROOT . '/public/emailing/mailing-unsubscribe.php?tag=' . urlencode($obj->tag) . '&unsuscrib=1&securitykey=' . dol_hash(getDolGlobalString('MAILING_EMAIL_UNSUBSCRIBE_KEY') . '-' . $obj->tag . '-' . $obj->email . '-' . $obj->rowid, "md5") . '&email=' . urlencode($obj->email) . '&mtid=' . ((int)$obj->rowid);
 
                         $onlinepaymentenabled = 0;
                         if (isModEnabled('paypal')) {
@@ -353,7 +351,7 @@ if (empty($reshook)) {
                         $arr_file = array();
                         $arr_mime = array();
                         $arr_name = array();
-                        $arr_css  = array();
+                        $arr_css = array();
 
                         $listofpaths = dol_dir_list($upload_dir, 'all', 0, '', '', 'name', SORT_ASC, 0);
                         if (count($listofpaths)) {
@@ -390,7 +388,7 @@ if (empty($reshook)) {
                             dol_syslog("comm/mailing/card.php: ok for #" . $iforemailloop . ($mail->error ? ' - ' . $mail->error : ''), LOG_DEBUG);
 
                             $sql = "UPDATE " . MAIN_DB_PREFIX . "mailing_cibles";
-                            $sql .= " SET statut=1, date_envoi = '" . $db->idate($now) . "' WHERE rowid=" . ((int) $obj->rowid);
+                            $sql .= " SET statut=1, date_envoi = '" . $db->idate($now) . "' WHERE rowid=" . ((int)$obj->rowid);
                             $resql2 = $db->query($sql);
                             if (!$resql2) {
                                 dol_print_error($db);
@@ -398,7 +396,7 @@ if (empty($reshook)) {
                                 //if check read is use then update prospect contact status
                                 if (strpos($message, '__CHECK_READ__') !== false) {
                                     //Update status communication of thirdparty prospect
-                                    $sql = "UPDATE " . MAIN_DB_PREFIX . "societe SET fk_stcomm=2 WHERE rowid IN (SELECT source_id FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE rowid=" . ((int) $obj->rowid) . ")";
+                                    $sql = "UPDATE " . MAIN_DB_PREFIX . "societe SET fk_stcomm=2 WHERE rowid IN (SELECT source_id FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE rowid=" . ((int)$obj->rowid) . ")";
                                     dol_syslog("card.php: set prospect thirdparty status", LOG_DEBUG);
                                     $resql2 = $db->query($sql);
                                     if (!$resql2) {
@@ -406,7 +404,7 @@ if (empty($reshook)) {
                                     }
 
                                     //Update status communication of contact prospect
-                                    $sql = "UPDATE " . MAIN_DB_PREFIX . "societe SET fk_stcomm=2 WHERE rowid IN (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "socpeople AS sc INNER JOIN " . MAIN_DB_PREFIX . "mailing_cibles AS mc ON mc.rowid=" . ((int) $obj->rowid) . " AND mc.source_type = 'contact' AND mc.source_id = sc.rowid)";
+                                    $sql = "UPDATE " . MAIN_DB_PREFIX . "societe SET fk_stcomm=2 WHERE rowid IN (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "socpeople AS sc INNER JOIN " . MAIN_DB_PREFIX . "mailing_cibles AS mc ON mc.rowid=" . ((int)$obj->rowid) . " AND mc.source_type = 'contact' AND mc.source_id = sc.rowid)";
                                     dol_syslog("card.php: set prospect contact status", LOG_DEBUG);
 
                                     $resql2 = $db->query($sql);
@@ -417,8 +415,8 @@ if (empty($reshook)) {
                             }
 
                             if (getDolGlobalString('MAILING_DELAY')) {
-                                dol_syslog("Wait a delay of MAILING_DELAY=" . ((float) $conf->global->MAILING_DELAY));
-                                usleep((int) ((float) $conf->global->MAILING_DELAY * 1000000));
+                                dol_syslog("Wait a delay of MAILING_DELAY=" . ((float)$conf->global->MAILING_DELAY));
+                                usleep((int)((float)$conf->global->MAILING_DELAY * 1000000));
                             }
 
                             //test if CHECK READ change statut prospect contact
@@ -429,7 +427,7 @@ if (empty($reshook)) {
                             dol_syslog("comm/mailing/card.php: error for #" . $iforemailloop . ($mail->error ? ' - ' . $mail->error : ''), LOG_WARNING);
 
                             $sql = "UPDATE " . MAIN_DB_PREFIX . "mailing_cibles";
-                            $sql .= " SET statut=-1, error_text='" . $db->escape($mail->error) . "', date_envoi='" . $db->idate($now) . "' WHERE rowid=" . ((int) $obj->rowid);
+                            $sql .= " SET statut=-1, error_text='" . $db->escape($mail->error) . "', date_envoi='" . $db->idate($now) . "' WHERE rowid=" . ((int)$obj->rowid);
                             $resql2 = $db->query($sql);
                             if (!$resql2) {
                                 dol_print_error($db);
@@ -455,7 +453,7 @@ if (empty($reshook)) {
                     setEventMessages($langs->transnoentitiesnoconv("EMailSentToNRecipients", $nbok), null, 'mesgs');
                 }
 
-                $sql = "UPDATE " . MAIN_DB_PREFIX . "mailing SET statut=" . ((int) $statut) . " WHERE rowid = " . ((int) $object->id);
+                $sql = "UPDATE " . MAIN_DB_PREFIX . "mailing SET statut=" . ((int)$statut) . " WHERE rowid = " . ((int)$object->id);
                 dol_syslog("comm/mailing/card.php: update global status", LOG_DEBUG);
                 $resql2 = $db->query($sql);
                 if (!$resql2) {
@@ -471,7 +469,7 @@ if (empty($reshook)) {
     }
 
     // Action send test emailing
-    if ($action == 'send' && ! $cancel && $permissiontovalidatesend) {
+    if ($action == 'send' && !$cancel && $permissiontovalidatesend) {
         $error = 0;
 
         $upload_dir = $conf->mailing->dir_output . "/" . get_exdir($object->id, 2, 0, 1, $object, 'mailing');
@@ -510,7 +508,7 @@ if (empty($reshook)) {
             $arr_file = array();
             $arr_mime = array();
             $arr_name = array();
-            $arr_css  = array();
+            $arr_css = array();
 
             // Add CSS
             if (!empty($object->bgcolor)) {
@@ -549,19 +547,19 @@ if (empty($reshook)) {
     if ($action == 'add' && $permissiontocreate) {
         $mesgs = array();
 
-        $object->messtype       = (string) GETPOST("messtype");
+        $object->messtype = (string)GETPOST("messtype");
         if ($object->messtype == 'sms') {
-            $object->email_from     = (string) GETPOST("from_phone", 'alphawithlgt'); // Must allow 'name <email>'
+            $object->email_from = (string)GETPOST("from_phone", 'alphawithlgt'); // Must allow 'name <email>'
         } else {
-            $object->email_from     = (string) GETPOST("from", 'alphawithlgt'); // Must allow 'name <email>'
+            $object->email_from = (string)GETPOST("from", 'alphawithlgt'); // Must allow 'name <email>'
         }
-        $object->email_replyto  = (string) GETPOST("replyto", 'alphawithlgt'); // Must allow 'name <email>'
-        $object->email_errorsto = (string) GETPOST("errorsto", 'alphawithlgt'); // Must allow 'name <email>'
-        $object->title          = (string) GETPOST("title");
-        $object->sujet          = (string) GETPOST("sujet");
-        $object->body           = (string) GETPOST("bodyemail", 'restricthtml');
-        $object->bgcolor        = preg_replace('/^#/', '', (string) GETPOST("bgcolor"));
-        $object->bgimage        = (string) GETPOST("bgimage");
+        $object->email_replyto = (string)GETPOST("replyto", 'alphawithlgt'); // Must allow 'name <email>'
+        $object->email_errorsto = (string)GETPOST("errorsto", 'alphawithlgt'); // Must allow 'name <email>'
+        $object->title = (string)GETPOST("title");
+        $object->sujet = (string)GETPOST("sujet");
+        $object->body = (string)GETPOST("bodyemail", 'restricthtml');
+        $object->bgcolor = preg_replace('/^#/', '', (string)GETPOST("bgcolor"));
+        $object->bgimage = (string)GETPOST("bgimage");
 
         if (!$object->title) {
             $mesgs[] = $langs->trans("ErrorFieldRequired", $langs->transnoentities("MailTitle"));
@@ -654,10 +652,10 @@ if (empty($reshook)) {
             $mesgs = array();
 
             //$object->messtype       = (string) GETPOST("messtype");   // We must not be able to change the messtype
-            $object->sujet          = (string) GETPOST("sujet");
-            $object->body           = (string) GETPOST("bodyemail", 'restricthtml');
-            $object->bgcolor        = preg_replace('/^#/', '', (string) GETPOST("bgcolor"));
-            $object->bgimage        = (string) GETPOST("bgimage");
+            $object->sujet = (string)GETPOST("sujet");
+            $object->body = (string)GETPOST("bodyemail", 'restricthtml');
+            $object->bgcolor = preg_replace('/^#/', '', (string)GETPOST("bgcolor"));
+            $object->bgimage = (string)GETPOST("bgimage");
 
             if ($object->messtype != 'sms' && !$object->sujet) {
                 $mesgs[] = $langs->trans("ErrorFieldRequired", $langs->transnoentities("MailTopic"));
@@ -877,7 +875,6 @@ if ($action == 'create') {
 
     print '<div style="padding-top: 10px">';
     // wysiwyg editor
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('bodyemail', GETPOST('bodyemail', 'restricthtmlallowunvalid'), '', 600, 'dolibarr_mailings', '', true, true, getDolGlobalInt('FCKEDITOR_ENABLE_MAILING'), 20, '90%');
     $doleditor->Create();
     print '</div>';
@@ -998,7 +995,7 @@ if ($action == 'create') {
             $nbtry = $nbok = 0;
             if ($object->status == 2 || $object->status == 3) {
                 $nbtry = $object->countNbOfTargets('alreadysent');
-                $nbko  = $object->countNbOfTargets('alreadysentko');
+                $nbko = $object->countNbOfTargets('alreadysentko');
 
                 $morehtmlstatus .= ' (' . $nbtry . '/' . $object->nbemail;
                 if ($nbko) {
@@ -1149,8 +1146,8 @@ if ($action == 'create') {
                 // Create an array for form
                 $formquestion = array(
                     'text' => $langs->trans("ConfirmClone"),
-                0 => array('type' => 'checkbox', 'name' => 'clone_content', 'label' => $langs->trans("CloneContent"), 'value' => 1),
-                1 => array('type' => 'checkbox', 'name' => 'clone_receivers', 'label' => $langs->trans("CloneReceivers"), 'value' => 0)
+                    0 => array('type' => 'checkbox', 'name' => 'clone_content', 'label' => $langs->trans("CloneContent"), 'value' => 1),
+                    1 => array('type' => 'checkbox', 'name' => 'clone_receivers', 'label' => $langs->trans("CloneReceivers"), 'value' => 0)
                 );
                 // Incomplete payment. On demande si motif = escompte ou autre
                 print $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('ToClone'), $langs->trans('ConfirmCloneEMailing', $object->ref), 'confirm_clone', $formquestion, 'yes', 2, 240);
@@ -1237,7 +1234,6 @@ if ($action == 'create') {
                 print dol_get_fiche_head(null, '', '', -1);
 
                 // Create mail form object
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $formmail = new FormMail($db);
                 $formmail->fromname = $object->email_from;
                 $formmail->frommail = $object->email_from;
@@ -1319,7 +1315,6 @@ if ($action == 'create') {
             if (empty($object->bgcolor) || strtolower($object->bgcolor) == 'ffffff') {  // CKEditor does not apply the color of the div into its content area
                 $readonly = 1;
                 // wysiwyg editor
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
                 $doleditor = new DolEditor('bodyemail', $object->body, '', 600, 'dolibarr_mailings', '', false, true, !getDolGlobalString('FCKEDITOR_ENABLE_MAILING') ? 0 : 1, 20, '90%', $readonly);
                 $doleditor->Create();
             } else {
@@ -1347,7 +1342,7 @@ if ($action == 'create') {
             $nbtry = $nbok = 0;
             if ($object->status == 2 || $object->status == 3) {
                 $nbtry = $object->countNbOfTargets('alreadysent');
-                $nbko  = $object->countNbOfTargets('alreadysentko');
+                $nbko = $object->countNbOfTargets('alreadysentko');
 
                 $morehtmlstatus .= ' (' . $nbtry . '/' . $object->nbemail;
                 if ($nbko) {
@@ -1537,19 +1532,16 @@ if ($action == 'create') {
 
             if ($action == 'edit') {
                 // wysiwyg editor
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
                 $doleditor = new DolEditor('bodyemail', $object->body, '', 600, 'dolibarr_mailings', '', true, true, getDolGlobalInt('FCKEDITOR_ENABLE_MAILING'), 20, '90%');
                 $doleditor->Create();
             }
             if ($action == 'edittxt') {
                 // wysiwyg editor
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
                 $doleditor = new DolEditor('bodyemail', $object->body, '', 600, 'dolibarr_mailings', '', true, true, 0, 20, '90%');
                 $doleditor->Create();
             }
             if ($action == 'edithtml') {
                 // HTML source editor
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
                 $doleditor = new DolEditor('bodyemail', $object->body, '', 600, 'dolibarr_mailings', '', true, true, 'ace', 20, '90%');
                 $doleditor->Create(0, '', false, 'HTML Source', 'php');
             }

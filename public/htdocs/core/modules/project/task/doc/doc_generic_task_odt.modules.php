@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2010-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2012		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2013		Florian Henry		<florian.henry@ope-concept.pro>
- * Copyright (C) 2016		Charlie Benke		<charlie@patas-monkey.com>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
- * Copyright (C) 2023      	Gauthier VERDOL     <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2010-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2013		Florian Henry		        <florian.henry@ope-concept.pro>
+ * Copyright (C) 2016		Charlie Benke		        <charlie@patas-monkey.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2023      	Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,55 +24,28 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\ModelePDFTask;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/project/task/doc/doc_generic_task_odt.modules.php
  *  \ingroup    project
  *  \brief      File of class to build ODT documents for third parties
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/modules_project.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/project/task/modules_task.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/doc.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
-}
-if (isModEnabled('invoice')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-}
-if (isModEnabled('invoice')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
-}
-if (isModEnabled('order')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
-}
-if (isModEnabled("supplier_invoice")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-}
-if (isModEnabled("supplier_order")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
-}
-if (isModEnabled('contract')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-}
-if (isModEnabled('intervention')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
-}
-if (isModEnabled('deplacement')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
-}
-if (isModEnabled('agenda')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-}
-
 
 /**
  *  Class to build documents using ODF templates generator
@@ -89,7 +62,7 @@ class doc_generic_task_odt extends ModelePDFTask
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -131,18 +104,19 @@ class doc_generic_task_odt extends ModelePDFTask
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      * Define array with couple substitution key => substitution value
      *
-     * @param   CommonObject    $object             Main object to use as data source
-     * @param   Translate       $outputlangs        Lang object to use for output
-     * @param   string          $array_key          Name of the key for return array
+     * @param CommonObject $object Main object to use as data source
+     * @param Translate $outputlangs Lang object to use for output
+     * @param string $array_key Name of the key for return array
      * @return  array                               Array of substitution
      */
     public function get_substitutionarray_object($object, $outputlangs, $array_key = 'object')
     {
-		// phpcs:enable
+        // phpcs:enable
         global $extrafields;
 
         if (!$object instanceof Project) {
@@ -175,18 +149,19 @@ class doc_generic_task_odt extends ModelePDFTask
         return $resarray;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Define array with couple substitution key => substitution value
      *
-     *  @param  Task            $task               Task Object
-     *  @param  Translate       $outputlangs        Lang object to use for output
-     *  @param  string          $array_key          Name of the key for return array
-     *  @return array                               Return a substitution array
+     * @param Task $task Task Object
+     * @param Translate $outputlangs Lang object to use for output
+     * @param string $array_key Name of the key for return array
+     * @return array                               Return a substitution array
      */
     public function get_substitutionarray_tasks($task, $outputlangs, $array_key = 'task')
     {
-		// phpcs:enable
+        // phpcs:enable
         global $extrafields;
 
         $resarray = array(
@@ -219,17 +194,18 @@ class doc_generic_task_odt extends ModelePDFTask
         return $resarray;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Define array with couple substitution key => substitution value
      *
-     *  @param  array           $contact            Contact array
-     *  @param  Translate       $outputlangs        Lang object to use for output
-     *  @return array                               Return a substitution array
+     * @param array $contact Contact array
+     * @param Translate $outputlangs Lang object to use for output
+     * @return array                               Return a substitution array
      */
     public function get_substitutionarray_project_contacts($contact, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         return array(
             'projcontacts_id' => $contact['id'],
             'projcontacts_rowid' => $contact['rowid'],
@@ -242,17 +218,18 @@ class doc_generic_task_odt extends ModelePDFTask
         );
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Define array with couple substitution key => substitution value
      *
-     *  @param  array           $file               file array
-     *  @param  Translate       $outputlangs        Lang object to use for output
-     *  @return array                               Return a substitution array
+     * @param array $file file array
+     * @param Translate $outputlangs Lang object to use for output
+     * @return array                               Return a substitution array
      */
     public function get_substitutionarray_project_file($file, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         return array(
             'projfile_name' => $file['name'],
             'projfile_date' => dol_print_date($file['date'], 'day'),
@@ -260,17 +237,18 @@ class doc_generic_task_odt extends ModelePDFTask
         );
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Define array with couple substitution key => substitution value
      *
-     *  @param  array           $refdetail          Reference array
-     *  @param  Translate       $outputlangs        Lang object to use for output
-     *  @return array                               Return a substitution array
+     * @param array $refdetail Reference array
+     * @param Translate $outputlangs Lang object to use for output
+     * @return array                               Return a substitution array
      */
     public function get_substitutionarray_project_reference($refdetail, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         return array(
             'projref_type' => $refdetail['type'],
             'projref_ref' => $refdetail['ref'],
@@ -282,17 +260,18 @@ class doc_generic_task_odt extends ModelePDFTask
         );
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Define array with couple substitution key => substitution value
      *
-     *  @param  array           $taskresource       Resource array
-     *  @param  Translate       $outputlangs        Lang object to use for output
-     *  @return array                               Return a substitution array
+     * @param array $taskresource Resource array
+     * @param Translate $outputlangs Lang object to use for output
+     * @return array                               Return a substitution array
      */
     public function get_substitutionarray_tasksressource($taskresource, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
 
         //dol_syslog(get_class($this).'::get_substitutionarray_tasksressource taskressource='.var_export($taskressource,true),LOG_DEBUG);
         return array(
@@ -306,17 +285,18 @@ class doc_generic_task_odt extends ModelePDFTask
         );
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Define array with couple substitution key => substitution value
      *
-     *  @param  array           $tasktime           times object
-     *  @param  Translate       $outputlangs        Lang object to use for output
-     *  @return array                               Return a substitution array
+     * @param array $tasktime times object
+     * @param Translate $outputlangs Lang object to use for output
+     * @return array                               Return a substitution array
      */
     public function get_substitutionarray_taskstime($tasktime, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf;
 
         return array(
@@ -331,17 +311,18 @@ class doc_generic_task_odt extends ModelePDFTask
         );
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Define array with couple substitution key => substitution value
      *
-     *  @param  array           $file               file array
-     *  @param  Translate       $outputlangs        Lang object to use for output
-     *  @return array                               Return a substitution array
+     * @param array $file file array
+     * @param Translate $outputlangs Lang object to use for output
+     * @return array                               Return a substitution array
      */
     public function get_substitutionarray_task_file($file, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         return array(
             'tasksfile_name' => $file['name'],
             'tasksfile_date' => dol_print_date($file['date'], 'day'),
@@ -353,8 +334,8 @@ class doc_generic_task_odt extends ModelePDFTask
     /**
      *  Return description of a module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Description
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Description
      */
     public function info($langs)
     {
@@ -450,18 +431,19 @@ class doc_generic_task_odt extends ModelePDFTask
         return $texte;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build a document on disk using the generic odt module.
      *
-     *  @param  Commande    $object                 Object source to build document
-     *  @param  Translate   $outputlangs            Lang output object
-     *  @param  string      $srctemplatepath        Full path of source filename for generator using a template file
-     *  @return int                                 1 if OK, <=0 if KO
+     * @param Commande $object Object source to build document
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @return int                                 1 if OK, <=0 if KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $hookmanager;
 
         if (empty($srctemplatepath)) {
@@ -533,8 +515,8 @@ class doc_generic_task_odt extends ModelePDFTask
 
                 // Make substitution
                 $substitutionarray = array(
-                '__FROM_NAME__' => $this->emetteur->name,
-                '__FROM_EMAIL__' => $this->emetteur->email,
+                    '__FROM_NAME__' => $this->emetteur->name,
+                    '__FROM_EMAIL__' => $this->emetteur->email,
                 );
                 complete_substitutions_array($substitutionarray, $langs, $object);
                 // Call the ODTSubstitution hook
@@ -549,10 +531,10 @@ class doc_generic_task_odt extends ModelePDFTask
                     $odfHandler = new Odf(
                         $srctemplatepath,
                         array(
-                        'PATH_TO_TMP'     => $conf->project->dir_temp,
-                        'ZIP_PROXY'       => 'PclZipProxy', // PhpZipProxy or PclZipProxy. Got "bad compression method" error when using PhpZipProxy.
-                        'DELIMITER_LEFT'  => '{',
-                        'DELIMITER_RIGHT' => '}'
+                            'PATH_TO_TMP' => $conf->project->dir_temp,
+                            'ZIP_PROXY' => 'PclZipProxy', // PhpZipProxy or PclZipProxy. Got "bad compression method" error when using PhpZipProxy.
+                            'DELIMITER_LEFT' => '{',
+                            'DELIMITER_RIGHT' => '}'
                         )
                     );
                 } catch (Exception $e) {
@@ -662,7 +644,7 @@ class doc_generic_task_odt extends ModelePDFTask
                     $sql .= ", u.lastname, u.firstname";
                     $sql .= " FROM " . MAIN_DB_PREFIX . "element_time as t";
                     $sql .= " , " . MAIN_DB_PREFIX . "user as u";
-                    $sql .= " WHERE t.fk_element =" . ((int) $object->id);
+                    $sql .= " WHERE t.fk_element =" . ((int)$object->id);
                     $sql .= " AND t.elementtype = 'task'";
                     $sql .= " AND t.fk_user = u.rowid";
                     $sql .= " ORDER BY t.element_date DESC";
@@ -733,7 +715,6 @@ class doc_generic_task_odt extends ModelePDFTask
                     dol_syslog($this->error, LOG_WARNING);
                     return -1;
                 }
-
 
 
                 // Replace tags of project files

@@ -1,17 +1,17 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville        <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2020 Laurent Destailleur         <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Eric Seigne                 <eric.seigne@ryxeo.com>
- * Copyright (C) 2006      Andre Cianfarani            <acianfa@free.fr>
- * Copyright (C) 2005-2017 Regis Houssin               <regis.houssin@inodbox.com>
- * Copyright (C) 2008      Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
- * Copyright (C) 2010-2020 Juanjo Menent               <jmenent@2byte.es>
- * Copyright (C) 2013      Alexandre Spangaro          <aspangaro@open-dsi.fr>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2005-2017  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008       Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
+ * Copyright (C) 2010-2020  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2021-2024  Frédéric France             <frederic.france@free.fr>
- * Copyright (C) 2015      Marcos García               <marcosgdf@gmail.com>
- * Copyright (C) 2020      Open-Dsi         		   <support@open-dsi.fr>
- * Copyright (C) 2022      Anthony Berton     			<anthony.berton@bb2a.fr>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2020       Open-Dsi         		    <support@open-dsi.fr>
+ * Copyright (C) 2022       Anthony Berton     			<anthony.berton@bb2a.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -28,6 +28,25 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\FactureRec;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ContratLigne;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Societe\Classes\Client;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *       \file       htdocs/comm/card.php
  *       \ingroup    commercial compta
@@ -39,33 +58,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-if (isModEnabled('invoice')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture-rec.class.php';
-}
-if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
-}
-if (isModEnabled('order')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
-}
-if (isModEnabled("shipping")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
-}
-if (isModEnabled('contract')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-}
-if (isModEnabled('member')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-}
-if (isModEnabled('intervention')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'banks'));
@@ -144,7 +136,6 @@ if ($user->socid > 0) {
     $id = $user->socid;
 }
 $result = restrictedArea($user, 'societe', $object->id, '&societe', '', 'fk_soc', 'rowid', 0);
-
 
 /*
  * Actions
@@ -303,7 +294,6 @@ if (empty($reshook)) {
         $result = $object->setWarehouse(GETPOSTINT('fk_warehouse'));
     }
 }
-
 
 /*
  * View
@@ -550,7 +540,6 @@ if ($object->id > 0) {
     // Warehouse
     if (isModEnabled('stock') && getDolGlobalString('SOCIETE_ASK_FOR_WAREHOUSE')) {
         $langs->load('stocks');
-        require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
         $formproduct = new FormProduct($db);
         print '<tr class="nowrap">';
         print '<td>';
@@ -833,7 +822,7 @@ if ($object->id > 0) {
         $sql .= ", p.datep as dp, p.fin_validite as date_limit, p.entity";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "propal as p, " . MAIN_DB_PREFIX . "c_propalst as c";
         $sql .= " WHERE p.fk_soc = s.rowid AND p.fk_statut = c.id";
-        $sql .= " AND s.rowid = " . ((int) $object->id);
+        $sql .= " AND s.rowid = " . ((int)$object->id);
         $sql .= " AND p.entity IN (" . getEntity('propal') . ")";
         $sql .= " ORDER BY p.datep DESC";
 
@@ -931,7 +920,7 @@ if ($object->id > 0) {
         $sql .= ", c.facture as billed";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "commande as c";
         $sql .= " WHERE c.fk_soc = s.rowid ";
-        $sql .= " AND s.rowid = " . ((int) $object->id);
+        $sql .= " AND s.rowid = " . ((int)$object->id);
         $sql .= " AND c.entity IN (" . getEntity('commande') . ')';
         $sql .= " ORDER BY c.date_commande DESC";
 
@@ -947,7 +936,7 @@ if ($object->id > 0) {
                 $sql2 .= ' FROM ' . MAIN_DB_PREFIX . 'societe as s';
                 $sql2 .= ', ' . MAIN_DB_PREFIX . 'commande as c';
                 $sql2 .= ' WHERE c.fk_soc = s.rowid';
-                $sql2 .= ' AND s.rowid = ' . ((int) $object->id);
+                $sql2 .= ' AND s.rowid = ' . ((int)$object->id);
                 // Show orders with status validated, shipping started and delivered (well any order we can bill)
                 $sql2 .= " AND ((c.fk_statut IN (1,2)) OR (c.fk_statut = 3 AND c.facture = 0))";
 
@@ -1038,7 +1027,7 @@ if ($object->id > 0) {
         $sql .= ', s.nom';
         $sql .= ', s.rowid as socid';
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "expedition as e";
-        $sql .= " WHERE e.fk_soc = s.rowid AND s.rowid = " . ((int) $object->id);
+        $sql .= " WHERE e.fk_soc = s.rowid AND s.rowid = " . ((int)$object->id);
         $sql .= " AND e.entity IN (" . getEntity('expedition') . ")";
         $sql .= ' GROUP BY e.rowid';
         $sql .= ', e.ref, e.entity';
@@ -1133,7 +1122,7 @@ if ($object->id > 0) {
         $sql .= " c.last_main_doc, c.model_pdf";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "contrat as c";
         $sql .= " WHERE c.fk_soc = s.rowid ";
-        $sql .= " AND s.rowid = " . ((int) $object->id);
+        $sql .= " AND s.rowid = " . ((int)$object->id);
         $sql .= " AND c.entity IN (" . getEntity('contract') . ")";
         $sql .= " ORDER BY c.datec DESC";
 
@@ -1240,7 +1229,7 @@ if ($object->id > 0) {
         $sql = "SELECT s.nom, s.rowid, f.rowid as id, f.ref, f.fk_statut, f.duree as duration, f.datei as startdate, f.entity";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s, " . MAIN_DB_PREFIX . "fichinter as f";
         $sql .= " WHERE f.fk_soc = s.rowid";
-        $sql .= " AND s.rowid = " . ((int) $object->id);
+        $sql .= " AND s.rowid = " . ((int)$object->id);
         $sql .= " AND f.entity IN (" . getEntity('intervention') . ")";
         $sql .= " ORDER BY f.tms DESC";
 
@@ -1334,7 +1323,7 @@ if ($object->id > 0) {
         $sql .= ', f.suspended as suspended';
         $sql .= ', s.nom, s.rowid as socid';
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s," . MAIN_DB_PREFIX . "facture_rec as f";
-        $sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int) $object->id);
+        $sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int)$object->id);
         $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
         $sql .= ' GROUP BY f.rowid, f.titre, f.total_ht, f.total_tva, f.total_ttc,';
         $sql .= ' f.date_last_gen, f.datec, f.frequency, f.unit_frequency,';
@@ -1434,7 +1423,7 @@ if ($object->id > 0) {
         $sql .= ', SUM(pf.amount) as am';
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s," . MAIN_DB_PREFIX . "facture as f";
         $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'paiement_facture as pf ON f.rowid=pf.fk_facture';
-        $sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int) $object->id);
+        $sql .= " WHERE f.fk_soc = s.rowid AND s.rowid = " . ((int)$object->id);
         $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
         $sql .= ' GROUP BY f.rowid, f.ref, f.type, f.total_ht, f.total_tva, f.total_ttc,';
         $sql .= ' f.entity, f.datef, f.date_lim_reglement, f.datec, f.paye, f.fk_statut,';

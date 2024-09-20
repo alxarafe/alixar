@@ -36,8 +36,8 @@
 /**
  * The session open handler called by PHP whenever a session is initialized.
  *
- * @param   string  $save_path      Value of session.save_path into php.ini
- * @param   string  $session_name   Session name (Example: 'DOLSESSID_xxxxxx')
+ * @param string $save_path Value of session.save_path into php.ini
+ * @param string $session_name Session name (Example: 'DOLSESSID_xxxxxx')
  * @return  boolean                 Always true
  */
 function dolSessionOpen($save_path, $session_name)
@@ -70,7 +70,7 @@ function dolSessionOpen($save_path, $session_name)
     }
     //var_dump('open '.$database_name.' '.$table_name);
 
-    $dbsession = getDoliDBInstance($dolibarr_session_db_type, $dolibarr_session_db_host, $dolibarr_session_db_user, $dolibarr_session_db_pass, $dolibarr_session_db_name, (int) $dolibarr_session_db_port);
+    $dbsession = getDoliDBInstance($dolibarr_session_db_type, $dolibarr_session_db_host, $dolibarr_session_db_user, $dolibarr_session_db_pass, $dolibarr_session_db_name, (int)$dolibarr_session_db_port);
 
     return true;
 }
@@ -78,7 +78,7 @@ function dolSessionOpen($save_path, $session_name)
 /**
  * This function is called whenever a session_start() call is made and reads the session variables.
  *
- * @param   string      $sess_id    Session ID
+ * @param string $sess_id Session ID
  * @return  string                  Returns "" when a session is not found  or (serialized)string if session exists
  */
 function dolSessionRead($sess_id)
@@ -113,8 +113,8 @@ function dolSessionRead($sess_id)
  * This function is called when a session is initialized with a session_start(  ) call, when variables are registered or unregistered,
  * and when session variables are modified. Returns true on success.
  *
- * @param   string      $sess_id        Session iDecodeStream
- * @param   string      $val            Content of session
+ * @param string $sess_id Session iDecodeStream
+ * @param string $val Content of session
  * @return  boolean                     Always true
  */
 function dolSessionWrite($sess_id, $val)
@@ -205,7 +205,7 @@ function dolSessionClose()
 /**
  * This is called whenever the session_destroy() function call is made. Returns true if the session has successfully been deleted.
  *
- * @param   string  $sess_id        Session iDecodeStream
+ * @param string $sess_id Session iDecodeStream
  * @return  boolean                 Always true
  */
 function dolSessionDestroy($sess_id)
@@ -225,7 +225,7 @@ function dolSessionDestroy($sess_id)
  * This function is called on a session's start up with the probability specified in session.gc_probability.
  * Performs garbage collection by removing all sessions that haven't been updated in the last $max_lifetime seconds as set in session.gc_maxlifetime.
  *
- * @param   int     $max_lifetime       Max lifetime
+ * @param int $max_lifetime Max lifetime
  * @return  boolean                     true if the DELETE query succeeded.
  */
 function dolSessionGC($max_lifetime)

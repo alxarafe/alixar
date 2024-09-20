@@ -205,11 +205,11 @@ class Csv extends BaseReader
             }
 
             $meanSquareDeviations[$delimiter] = array_reduce(
-                $series,
-                function ($sum, $value) use ($median) {
-                    return $sum + pow($value - $median, 2);
-                }
-            ) / count($series);
+                    $series,
+                    function ($sum, $value) use ($median) {
+                        return $sum + pow($value - $median, 2);
+                    }
+                ) / count($series);
         }
 
         // ... and pick the delimiter with the smallest mean square deviation (in case of ties, the order in potentialDelimiters is respected)
@@ -272,9 +272,9 @@ class Csv extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return array
      * @throws Exception
      *
-     * @return array
      */
     public function listWorksheetInfo($pFilename)
     {
@@ -317,9 +317,9 @@ class Csv extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function load($pFilename)
     {
@@ -336,9 +336,9 @@ class Csv extends BaseReader
      * @param string $pFilename
      * @param Spreadsheet $spreadsheet
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function loadIntoExisting($pFilename, Spreadsheet $spreadsheet)
     {
@@ -484,7 +484,7 @@ class Csv extends BaseReader
      */
     public function setContiguous($contiguous)
     {
-        $this->contiguous = (bool) $contiguous;
+        $this->contiguous = (bool)$contiguous;
         if (!$contiguous) {
             $this->contiguousRow = -1;
         }

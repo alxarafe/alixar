@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2024       Frédéric France     <frederic.france@free.fr>
+/* Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,12 +18,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\EmailCollector\Classes\EmailCollector;
+
 /**
  * \file        emailcollector/lib/emailcollector.lib.php
  * \ingroup     emailcollector
  * \brief       Library files with common functions for EmailCollector
  */
-
 
 /**
  * Prepare array of tabs for EmailCollector

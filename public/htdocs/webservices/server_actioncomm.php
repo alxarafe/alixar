@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006-2016  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2012	 	Florian Henry			<florian.henry@open-concept.pro>
+/* Copyright (C) 2006-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012	 	Florian Henry			    <florian.henry@open-concept.pro>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,6 +21,10 @@
  *
  * Path to WSDL is: http://localhost/dolibarr/webservices/server_actioncomm.php?wsdl
  */
+
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Comm\Classes\CActionComm;
+use Dolibarr\Code\Core\Classes\ExtraFields;
 
 /**
  *       \file       htdocs/webservices/server_actioncomm.php
@@ -55,7 +59,6 @@ require_once DOL_DOCUMENT_ROOT . "/core/lib/ws.lib.php";
 
 require_once DOL_DOCUMENT_ROOT . "/comm/action/class/actioncomm.class.php";
 require_once DOL_DOCUMENT_ROOT . "/comm/action/class/cactioncomm.class.php";
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
 
 dol_syslog("Call ActionComm webservices interfaces");

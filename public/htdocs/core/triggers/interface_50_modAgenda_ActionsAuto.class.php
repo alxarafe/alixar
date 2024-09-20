@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2005-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2017	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2011-2014	Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2013		Cedric GROSS			<c.gross@kreiz-it.fr>
- * Copyright (C) 2014		Marcos García		<marcosgdf@gmail.com>
- * Copyright (C) 2015		Bahfir Abbes			<bafbes@gmail.com>
- * Copyright (C) 2022		Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2023		William Mead			<william.mead@manchenumerique.fr>
- * Copyright (C) 2023       Christian Foellmann     <christian@foellmann.de>
- * Copyright (C) 2024		William Mead			<william.mead@manchenumerique.fr>
+/* Copyright (C) 2005-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2017	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2014	Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2013		Cedric GROSS			    <c.gross@kreiz-it.fr>
+ * Copyright (C) 2014		Marcos García		        <marcosgdf@gmail.com>
+ * Copyright (C) 2015		Bahfir Abbes			    <bafbes@gmail.com>
+ * Copyright (C) 2022		Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2023		William Mead			    <william.mead@manchenumerique.fr>
+ * Copyright (C) 2023       Christian Foellmann         <christian@foellmann.de>
+ * Copyright (C) 2024		William Mead			    <william.mead@manchenumerique.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -26,6 +26,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/core/triggers/interface_50_modAgenda_ActionsAuto.class.php
@@ -72,11 +78,11 @@ class InterfaceActionsAuto extends DolibarrTriggers
      *      $object->elementtype (->element of object to link action to)
      *      $object->module (if defined, elementtype in llx_actioncomm will be elementtype@module)
      *
-     * @param string        $action     Event action code ('CONTRACT_MODIFY', 'RECRUITMENTCANDIDATURE_MODIFIY', or example by external module: 'SENTBYSMS'...)
-     * @param Object        $object     Object
-     * @param User          $user       Object user
-     * @param Translate     $langs      Object langs
-     * @param conf          $conf       Object conf
+     * @param string $action Event action code ('CONTRACT_MODIFY', 'RECRUITMENTCANDIDATURE_MODIFIY', or example by external module: 'SENTBYSMS'...)
+     * @param Object $object Object
+     * @param User $user Object user
+     * @param Translate $langs Object langs
+     * @param Conf $conf Object conf
      * @return int                      Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
@@ -1045,7 +1051,6 @@ class InterfaceActionsAuto extends DolibarrTriggers
             $member = (isset($object->context['member']) ? $object->context['member'] : null);
             if (!is_object($member)) {  // This should not happen
                 dol_syslog("Execute a trigger MEMBER_SUBSCRIPTION_CREATE with context key 'member' not an object");
-                include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent.class.php';
                 $member = new Adherent($this->db);
                 $member->fetch($object->fk_adherent);
             }
@@ -1075,7 +1080,6 @@ class InterfaceActionsAuto extends DolibarrTriggers
 
             $member = $object->context['member'];
             if (!is_object($member)) {  // This should not happen
-                include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent.class.php';
                 $member = new Adherent($this->db);
                 $member->fetch($object->fk_adherent);
             }
@@ -1106,7 +1110,6 @@ class InterfaceActionsAuto extends DolibarrTriggers
             $member = $object->context['member'];
             if (!is_object($member)) {  // This should not happen but it happen when deleting a subscription from adherents/subscription/card.php
                 dol_syslog("Execute a trigger MEMBER_SUBSCRIPTION_CREATE with context key 'member' not an object");
-                include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent.class.php';
                 $member = new Adherent($this->db);
                 $member->fetch($object->fk_adherent);
             }
@@ -1504,37 +1507,36 @@ class InterfaceActionsAuto extends DolibarrTriggers
         //var_dump($societeforaction);var_dump($contactforaction);var_dump($elementid);var_dump($elementtype);exit;
 
         // Insertion action
-        require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
         $actioncomm = new ActionComm($this->db);
-        $actioncomm->type_code   = $object->actiontypecode; // Type of event ('AC_OTH', 'AC_OTH_AUTO', 'AC_XXX'...)
-        $actioncomm->code        = 'AC_' . $action;
-        $actioncomm->label       = $object->actionmsg2;     // Label of event
+        $actioncomm->type_code = $object->actiontypecode; // Type of event ('AC_OTH', 'AC_OTH_AUTO', 'AC_XXX'...)
+        $actioncomm->code = 'AC_' . $action;
+        $actioncomm->label = $object->actionmsg2;     // Label of event
         $actioncomm->note_private = $object->actionmsg;     // Description
-        $actioncomm->fk_project  = $projectid;
-        $actioncomm->datep       = $now;
-        $actioncomm->datef       = $now;
-        $actioncomm->durationp   = 0;
-        $actioncomm->percentage  = -1; // Not applicable
-        $actioncomm->socid       = $societeforactionid;
-        $actioncomm->contact_id  = $contactforactionid; // deprecated, now managed by setting $actioncomm->socpeopleassigned later
-        $actioncomm->authorid    = $user->id; // User saving action
+        $actioncomm->fk_project = $projectid;
+        $actioncomm->datep = $now;
+        $actioncomm->datef = $now;
+        $actioncomm->durationp = 0;
+        $actioncomm->percentage = -1; // Not applicable
+        $actioncomm->socid = $societeforactionid;
+        $actioncomm->contact_id = $contactforactionid; // deprecated, now managed by setting $actioncomm->socpeopleassigned later
+        $actioncomm->authorid = $user->id; // User saving action
         $actioncomm->userownerid = $user->id; // Owner of action
         // Fields defined when action is an email (content should be into object->actionmsg to be added into event note, subject should be into object->actionms2 to be added into event label)
         if (!property_exists($object, 'email_fields_no_propagate_in_actioncomm') || empty($object->email_fields_no_propagate_in_actioncomm)) {
-            $actioncomm->email_msgid   = empty($object->email_msgid) ? null : $object->email_msgid;
-            $actioncomm->email_from    = empty($object->email_from) ? null : $object->email_from;
-            $actioncomm->email_sender  = empty($object->email_sender) ? null : $object->email_sender;
-            $actioncomm->email_to      = empty($object->email_to) ? null : $object->email_to;
-            $actioncomm->email_tocc    = empty($object->email_tocc) ? null : $object->email_tocc;
-            $actioncomm->email_tobcc   = empty($object->email_tobcc) ? null : $object->email_tobcc;
+            $actioncomm->email_msgid = empty($object->email_msgid) ? null : $object->email_msgid;
+            $actioncomm->email_from = empty($object->email_from) ? null : $object->email_from;
+            $actioncomm->email_sender = empty($object->email_sender) ? null : $object->email_sender;
+            $actioncomm->email_to = empty($object->email_to) ? null : $object->email_to;
+            $actioncomm->email_tocc = empty($object->email_tocc) ? null : $object->email_tocc;
+            $actioncomm->email_tobcc = empty($object->email_tobcc) ? null : $object->email_tobcc;
             $actioncomm->email_subject = empty($object->email_subject) ? null : $object->email_subject;
-            $actioncomm->errors_to     = empty($object->errors_to) ? null : $object->errors_to;
+            $actioncomm->errors_to = empty($object->errors_to) ? null : $object->errors_to;
         }
 
         // Object linked (if link is for thirdparty, contact or project, it is a recording error. We should not have links in link table
         // for such objects because there is already a dedicated field into table llx_actioncomm or llx_actioncomm_resources.
         if (!in_array($elementtype, array('societe', 'contact', 'project'))) {
-            $actioncomm->fk_element  = $elementid;
+            $actioncomm->fk_element = $elementid;
             $actioncomm->elementtype = $elementtype . ($elementmodule ? '@' . $elementmodule : '');
         }
 

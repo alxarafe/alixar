@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2010      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2019      Nicolas ZABOURI      <info@inovea-conseil.com>
- * Copyright (C) 2023      Gauthier VERDOL      <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2023       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+
 /**
  *  \file       htdocs/projet/activity/index.php
  *  \ingroup    projet
@@ -28,8 +32,6 @@
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
@@ -125,10 +127,10 @@ $sql .= " FROM " . MAIN_DB_PREFIX . "projet as p";
 $sql .= ", " . MAIN_DB_PREFIX . "projet_task as t";
 $sql .= ", " . MAIN_DB_PREFIX . "element_time as tt";
 $sql .= " WHERE t.fk_projet = p.rowid";
-$sql .= " AND p.entity = " . ((int) $conf->entity);
+$sql .= " AND p.entity = " . ((int)$conf->entity);
 $sql .= " AND tt.fk_element = t.rowid";
 $sql .= " AND tt.elementtype = 'task'";
-$sql .= " AND tt.fk_user = " . ((int) $user->id);
+$sql .= " AND tt.fk_user = " . ((int)$user->id);
 $sql .= " AND element_date BETWEEN '" . $db->idate(dol_mktime(0, 0, 0, $month, $day, $year)) . "' AND '" . $db->idate(dol_mktime(23, 59, 59, $month, $day, $year)) . "'";
 $sql .= " AND p.rowid in (" . $db->sanitize($projectsListId) . ")";
 $sql .= " GROUP BY p.rowid, p.ref, p.title, p.public";
@@ -179,10 +181,10 @@ $sql .= " FROM " . MAIN_DB_PREFIX . "projet as p";
 $sql .= ", " . MAIN_DB_PREFIX . "projet_task as t";
 $sql .= ", " . MAIN_DB_PREFIX . "element_time as tt";
 $sql .= " WHERE t.fk_projet = p.rowid";
-$sql .= " AND p.entity = " . ((int) $conf->entity);
+$sql .= " AND p.entity = " . ((int)$conf->entity);
 $sql .= " AND tt.fk_element = t.rowid";
 $sql .= " AND tt.elementtype = 'task'";
-$sql .= " AND tt.fk_user = " . ((int) $user->id);
+$sql .= " AND tt.fk_user = " . ((int)$user->id);
 $sql .= " AND element_date BETWEEN '" . $db->idate(dol_time_plus_duree(dol_mktime(0, 0, 0, $month, $day, $year), -1, 'd')) . "' AND '" . $db->idate(dol_time_plus_duree(dol_mktime(23, 59, 59, $month, $day, $year), -1, 'd')) . "'";
 $sql .= " AND p.rowid in (" . $db->sanitize($projectsListId) . ")";
 $sql .= " GROUP BY p.rowid, p.ref, p.title, p.public";
@@ -215,7 +217,6 @@ print '<td class="right">' . convertSecondToTime($total, 'allhourmin') . '</td>'
 print "</tr>\n";
 print "</table>";
 print '</div>';
-
 
 
 /*
@@ -292,10 +293,10 @@ if (getDolGlobalString('PROJECT_TASK_TIME_MONTH')) {
     $sql .= ", " . MAIN_DB_PREFIX . "projet_task as t";
     $sql .= ", " . MAIN_DB_PREFIX . "element_time as tt";
     $sql .= " WHERE t.fk_projet = p.rowid";
-    $sql .= " AND p.entity = " . ((int) $conf->entity);
+    $sql .= " AND p.entity = " . ((int)$conf->entity);
     $sql .= " AND tt.fk_element = t.rowid";
     $sql .= " AND tt.elementtype = 'task'";
-    $sql .= " AND tt.fk_user = " . ((int) $user->id);
+    $sql .= " AND tt.fk_user = " . ((int)$user->id);
     $sql .= " AND element_date BETWEEN '" . $db->idate(dol_get_first_day($year, $month)) . "' AND '" . $db->idate(dol_get_last_day($year, $month)) . "'";
     $sql .= " AND p.rowid in (" . $db->sanitize($projectsListId) . ")";
     $sql .= " GROUP BY p.rowid, p.ref, p.title, p.public";
@@ -339,10 +340,10 @@ if (getDolGlobalString('PROJECT_TASK_TIME_YEAR')) {
     $sql .= ", " . MAIN_DB_PREFIX . "projet_task as t";
     $sql .= ", " . MAIN_DB_PREFIX . "element_time as tt";
     $sql .= " WHERE t.fk_projet = p.rowid";
-    $sql .= " AND p.entity = " . ((int) $conf->entity);
+    $sql .= " AND p.entity = " . ((int)$conf->entity);
     $sql .= " AND tt.fk_element = t.rowid";
     $sql .= " AND tt.elementtype = 'task'";
-    $sql .= " AND tt.fk_user = " . ((int) $user->id);
+    $sql .= " AND tt.fk_user = " . ((int)$user->id);
     $sql .= " AND YEAR(element_date) = '" . dol_print_date($now, "%Y") . "'";
     $sql .= " AND p.rowid in (" . $db->sanitize($projectsListId) . ")";
     $sql .= " GROUP BY p.rowid, p.ref, p.title, p.public";
@@ -429,10 +430,10 @@ if (!getDolGlobalString('PROJECT_HIDE_TASKS') && getDolGlobalString('PROJECT_SHO
         $sql .= " AND p.rowid IN (" . $db->sanitize($projectsListId) . ")"; // project i have permission on
     }
     if ($mine) {     // this may duplicate record if we are contact twice
-        $sql .= " AND ect.fk_c_type_contact IN (" . $db->sanitize(implode(',', array_keys($listoftaskcontacttype))) . ") AND ect.element_id = t.rowid AND ect.fk_socpeople = " . ((int) $user->id);
+        $sql .= " AND ect.fk_c_type_contact IN (" . $db->sanitize(implode(',', array_keys($listoftaskcontacttype))) . ") AND ect.element_id = t.rowid AND ect.fk_socpeople = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND (p.fk_soc IS NULL OR p.fk_soc = 0 OR p.fk_soc = " . ((int) $socid) . ")";
+        $sql .= " AND (p.fk_soc IS NULL OR p.fk_soc = 0 OR p.fk_soc = " . ((int)$socid) . ")";
     }
     $sql .= " AND p.fk_statut=1";
     $sql .= " GROUP BY p.ref, p.title, p.rowid, p.fk_statut, p.fk_opp_status, p.public, p.dateo, p.datee, t.label, t.rowid, t.planned_workload, t.duration_effective, t.progress, t.dateo, t.datee";

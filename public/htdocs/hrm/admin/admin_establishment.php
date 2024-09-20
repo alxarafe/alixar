@@ -1,6 +1,7 @@
 <?php
 
-/* Copyright (C) 2015       Alexandre Spangaro <aspangaro@open-dsi.fr>
+/* Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +17,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Hrm\Classes\Establishment;
+
 /**
  *    \file       htdocs/hrm/admin/admin_establishment.php
  *    \ingroup    HRM
@@ -25,7 +29,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/establishment.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('admin', 'hrm'));
@@ -34,7 +37,7 @@ $error = 0;
 
 // Permissions
 $permissiontoread = $user->admin;
-$permissiontoadd  = $user->admin;
+$permissiontoadd = $user->admin;
 
 // Security check - Protection if external user
 //if ($user->socid > 0) accessforbidden();
@@ -48,8 +51,8 @@ if (empty($permissiontoread)) {
     accessforbidden();
 }
 
-$sortorder     = GETPOST('sortorder', 'aZ09comma');
-$sortfield     = GETPOST('sortfield', 'aZ09comma');
+$sortorder = GETPOST('sortorder', 'aZ09comma');
+$sortfield = GETPOST('sortfield', 'aZ09comma');
 if (!$sortorder) {
     $sortorder = "DESC";
 }
@@ -66,13 +69,11 @@ $offset = $limit * $page;
 $pageprev = $page - 1;
 $pagenext = $page + 1;
 
-
 /*
  * Actions
  */
 
 // None
-
 
 /*
  * View

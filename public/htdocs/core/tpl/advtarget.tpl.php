@@ -2,8 +2,6 @@
 
 /* Copyright (C) 2024       MDW                         <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
- */
-/*
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,9 +18,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-if (isModEnabled('category') && $user->hasRight('categorie', 'lire')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-}
+use Dolibarr\Code\Categories\Classes\Categorie;
 
 print '<script>
 	$(document).ready(function() {
@@ -110,7 +106,7 @@ print '</td></tr>' . "\n";
 print '<tr><td>' . $langs->trans('CustomerCode');
 if (!empty($array_query['cust_code'])) {
     print img_picto($langs->trans('AdvTgtUse'), 'ok.png@advtargetemailing');
-    $cust_code_str = (string) $array_query['cust_code'];
+    $cust_code_str = (string)$array_query['cust_code'];
 } else {
     $cust_code_str = null;
 }
@@ -290,7 +286,6 @@ if (!getDolGlobalString('MAIN_EXTRAFIELDS_DISABLED')) {
     $socstatic = new Societe($db);
     $elementtype = $socstatic->table_element;
     // fetch optionals attributes and labels
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
     $extrafields = new ExtraFields($db);
     $extrafields->fetch_name_optionals_label($elementtype);
     foreach ($extrafields->attributes[$elementtype]['label'] as $key => $val) {
@@ -520,7 +515,7 @@ if (!getDolGlobalString('MAIN_EXTRAFIELDS_DISABLED')) {
                 print $form->selectarray(
                     'options_' . $key . '_cnct',
                     array(
-                        ''  => '',
+                        '' => '',
                         '1' => $langs->trans('Yes'),
                         '0' => $langs->trans('No')
                     ),

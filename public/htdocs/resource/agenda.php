@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005      Brice Davoleau       <brice.davoleau@gmail.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2006-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007      Patrick Raguin  		<patrick.raguin@gmail.com>
- * Copyright (C) 2010      Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2018      Florain Henry        <florian.henry@open-concept.pro
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005       Brice Davoleau              <brice.davoleau@gmail.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007       Patrick Raguin  		    <patrick.raguin@gmail.com>
+ * Copyright (C) 2010       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018       Florain Henry               <florian.henry@open-concept.pro
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Resource\Classes\Dolresource;
+
 /**
  *  \file       htdocs/resource/agenda.php
  *  \ingroup    resource
@@ -32,11 +37,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/resource.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/resource/class/dolresource.class.php';
 
 // Load translation files required by the page
 $langs->load('companies');
@@ -94,7 +97,6 @@ if (!$user->hasRight('resource', 'read')) {
     accessforbidden();
 }
 
-
 /*
  *	Actions
  */
@@ -119,8 +121,6 @@ if (empty($reshook)) {
     }
 }
 
-
-
 /*
  *	View
  */
@@ -130,7 +130,6 @@ $form = new Form($db);
 
 if ($object->id > 0) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
     $picto = 'resource';
 

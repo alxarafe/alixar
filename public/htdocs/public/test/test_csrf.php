@@ -45,28 +45,28 @@ This is a form to test if a CSRF exists into a Dolibarr page.<br>
 
 <br>
 <?php
-    $urltosendrequest = "http://127.0.0.1/dolibarr/htdocs/user/group/card.php";
-    print 'urltosendrequest = ' . $urltosendrequest . '<br><br>';
+$urltosendrequest = "http://127.0.0.1/dolibarr/htdocs/user/group/card.php";
+print 'urltosendrequest = ' . $urltosendrequest . '<br><br>';
 ?>
 
 Test post
 <form method="POST" action="<?php echo $urltosendrequest; ?>" target="_blank">
-<!-- <input type="hidden" name="token" value="123456789"> -->
-<input type="text" name="action" value="add">
-<input type="text" name="nom" value="New group test">
-<input type="submit" name="submit" value="Submit">
+    <!-- <input type="hidden" name="token" value="123456789"> -->
+    <input type="text" name="action" value="add">
+    <input type="text" name="nom" value="New group test">
+    <input type="submit" name="submit" value="Submit">
 </form>
 
 
 Test logout
 <html>
-  <body>
-  <script>history.pushState('', '', '/')</script>
-    <form action="http://localhostgit/dolibarr_dev/htdocs/user/logout.php">
-      <input type="submit" value="Submit request" />
-    </form>
-    <script>
-      document.forms[0].submit();
-    </script>
-  </body>
+<body>
+<script>history.pushState('', '', '/')</script>
+<form action="http://localhostgit/dolibarr_dev/htdocs/user/logout.php">
+    <input type="submit" value="Submit request"/>
+</form>
+<script>
+    document.forms[0].submit();
+</script>
+</body>
 </html>

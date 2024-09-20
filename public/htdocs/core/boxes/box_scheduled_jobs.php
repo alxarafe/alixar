@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2017 	   Nicolas Zabouri      <info@inovea-conseil.com>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2017 	    Nicolas Zabouri             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,14 +20,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+use Dolibarr\Code\Cron\Classes\Cronjob;
+
 /**
  *      \file       htdocs/core/boxes/box_scheduled_jobs.php
  *      \ingroup    task
  *      \brief      Widget of scheduled jobs
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
 
 /**
  * Class to manage the box to show last contracted products/services lines
@@ -42,8 +42,8 @@ class box_scheduled_jobs extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -57,8 +57,8 @@ class box_scheduled_jobs extends ModeleBoxes
     /**
      *  Load data into info_box_contents array to show array later.
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -68,7 +68,6 @@ class box_scheduled_jobs extends ModeleBoxes
         $this->info_box_head = array('text' => $langs->trans("BoxScheduledJobs", $max));
 
         if ($user->hasRight('cron', 'read')) {
-            include_once DOL_DOCUMENT_ROOT . '/cron/class/cronjob.class.php';
             $cronstatic = new Cronjob($this->db);
             $resultarray = array();
 
@@ -91,7 +90,7 @@ class box_scheduled_jobs extends ModeleBoxes
                 while ($i < $num) {
                     $objp = $this->db->fetch_object($result);
 
-                    if ((int) dol_eval($objp->test, 1, 1, '2')) {
+                    if ((int)dol_eval($objp->test, 1, 1, '2')) {
                         $nextrun = $this->db->jdate($objp->datenextrun);
                         if (empty($nextrun)) {
                             $nextrun = $this->db->jdate($objp->datestart);
@@ -196,10 +195,10 @@ class box_scheduled_jobs extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

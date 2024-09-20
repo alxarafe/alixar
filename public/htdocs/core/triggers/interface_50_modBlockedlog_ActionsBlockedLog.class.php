@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017       ATM Consulting      <contact@atm-consulting.fr>
- * Copyright (C) 2017-2018  Laurent Destailleur	<eldy@users.sourceforge.net>
+/* Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
+ * Copyright (C) 2017-2018  Laurent Destailleur	        <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,8 +24,12 @@
  *  \brief      Trigger file for blockedlog module
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/dolibarrtriggers.class.php';
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
 
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/dolibarrtriggers.class.php';
 
 /**
  *  Class of triggered functions for agenda module
@@ -51,11 +55,11 @@ class InterfaceActionsBlockedLog extends DolibarrTriggers
     /**
      * Function called on Dolibarr payment or invoice event.
      *
-     * @param string        $action     Event action code
-     * @param Object        $object     Object
-     * @param User          $user       Object user
-     * @param Translate     $langs      Object langs
-     * @param conf          $conf       Object conf
+     * @param string $action Event action code
+     * @param Object $object Object
+     * @param User $user Object user
+     * @param Translate $langs Object langs
+     * @param Conf $conf Object conf
      * @return int                      Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
@@ -75,7 +79,6 @@ class InterfaceActionsBlockedLog extends DolibarrTriggers
 
         dol_syslog("Trigger '" . $this->name . "' for action '" . $action . "' launched by " . __FILE__ . ". id=" . $object->id);
 
-        require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/blockedlog.class.php';
         $b = new BlockedLog($this->db);
         $b->loadTrackedEvents();
 
@@ -101,14 +104,14 @@ class InterfaceActionsBlockedLog extends DolibarrTriggers
 
             if (
                 in_array($action, array(
-                'MEMBER_SUBSCRIPTION_CREATE', 'MEMBER_SUBSCRIPTION_MODIFY', 'MEMBER_SUBSCRIPTION_DELETE',
-                'DON_VALIDATE', 'DON_MODIFY', 'DON_DELETE'))
+                    'MEMBER_SUBSCRIPTION_CREATE', 'MEMBER_SUBSCRIPTION_MODIFY', 'MEMBER_SUBSCRIPTION_DELETE',
+                    'DON_VALIDATE', 'DON_MODIFY', 'DON_DELETE'))
             ) {
-                $amounts = (float) $object->amount;
+                $amounts = (float)$object->amount;
             } elseif ($action == 'CASHCONTROL_VALIDATE') {
-                $amounts = (float) $object->cash + (float) $object->cheque + (float) $object->card;
+                $amounts = (float)$object->cash + (float)$object->cheque + (float)$object->card;
             } elseif (property_exists($object, 'total_ttc')) {
-                $amounts = (float) $object->total_ttc;
+                $amounts = (float)$object->total_ttc;
             }
         }
         /*if ($action === 'BILL_PAYED' || $action==='BILL_UNPAYED'
@@ -125,14 +128,14 @@ class InterfaceActionsBlockedLog extends DolibarrTriggers
             $amounts = 0;
             if (!empty($object->amounts)) {
                 foreach ($object->amounts as $amount) {
-                    $amounts += (float) $amount;
+                    $amounts += (float)$amount;
                 }
             } elseif (!empty($object->amount)) {
                 $amounts = $object->amount;
             }
         } elseif (strpos($action, 'PAYMENT') !== false && !in_array($action, array('PAYMENT_ADD_TO_BANK'))) {
             $qualified++;
-            $amounts = (float) $object->amount;
+            $amounts = (float)$object->amount;
         }
 
         // Another protection.

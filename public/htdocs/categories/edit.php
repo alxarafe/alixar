@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005      Matthieu Valleton    <mv@seeschloss.org>
- * Copyright (C) 2006-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2007      Patrick Raguin	  	<patrick.raguin@gmail.com>
- * Copyright (C) 2020      Frédéric France		<frederic.france@netlogic.fr>
+/* Copyright (C) 2005       Matthieu Valleton           <mv@seeschloss.org>
+ * Copyright (C) 2006-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007       Patrick Raguin	  	        <patrick.raguin@gmail.com>
+ * Copyright (C) 2020       Frédéric France		        <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+
 /**
  *      \file       htdocs/categories/edit.php
  *      \ingroup    category
@@ -29,9 +35,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 
 // Load translation files required by the page
 $langs->load("categories");
@@ -179,7 +182,6 @@ print '</tr>';
 print '<tr>';
 print '<td>' . $langs->trans("Description") . '</td>';
 print '<td>';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 $doleditor = new DolEditor('description', $object->description, '', 200, 'dolibarr_notes', '', false, true, isModEnabled('fckeditor'), ROWS_6, '90%');
 $doleditor->Create();
 print '</td></tr>';

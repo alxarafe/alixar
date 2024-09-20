@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2001-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2002-2003  Jean-Louis Bergamo      <jlb@j1b.org>
- * Copyright (C) 2004-2022  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2013-2015  Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2014-2016  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2018       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2021-2024	Frédéric France			<frederic.france@free.fr>
- * Copyright (C) 2024		MDW						<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Benjamin Falière		<benjamin.faliere@altairis.fr>
+/* Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2002-2003  Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2004-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2013-2015  Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2014-2016  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2018       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2021-2024	Frédéric France			    <frederic.france@free.fr>
+ * Copyright (C) 2024		MDW						    <mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024		Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/adherents/list.php
  *  \ingroup    member
@@ -33,9 +42,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent_type.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
 
@@ -44,48 +50,48 @@ $langs->loadLangs(array("members", "companies", "categories"));
 
 
 // Get parameters
-$action     = GETPOST('action', 'aZ09');
+$action = GETPOST('action', 'aZ09');
 $massaction = GETPOST('massaction', 'alpha');
 $show_files = GETPOSTINT('show_files');
-$confirm    = GETPOST('confirm', 'alpha');
-$cancel     = GETPOST('cancel', 'alpha');
-$toselect   = GETPOST('toselect', 'array');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'alpha');
+$toselect = GETPOST('toselect', 'array');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'memberslist'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
-$optioncss  = GETPOST('optioncss', 'aZ');
-$mode       = GETPOST('mode', 'alpha');
+$optioncss = GETPOST('optioncss', 'aZ');
+$mode = GETPOST('mode', 'alpha');
 
 // Search fields
-$search             = GETPOST("search", 'alpha');
+$search = GETPOST("search", 'alpha');
 $search_id = GETPOST('search_id', 'int');
-$search_ref         = GETPOST("search_ref", 'alpha');
-$search_lastname    = GETPOST("search_lastname", 'alpha');
-$search_firstname   = GETPOST("search_firstname", 'alpha');
-$search_gender      = GETPOST("search_gender", 'alpha');
-$search_civility    = GETPOST("search_civility", 'alpha');
-$search_company     = GETPOST('search_company', 'alphanohtml');
-$search_login       = GETPOST("search_login", 'alpha');
-$search_address     = GETPOST("search_address", 'alpha');
-$search_zip         = GETPOST("search_zip", 'alpha');
-$search_town        = GETPOST("search_town", 'alpha');
-$search_state       = GETPOST("search_state", 'alpha');  // county / departement / federal state
-$search_country     = GETPOST("search_country", 'alpha');
-$search_phone       = GETPOST("search_phone", 'alpha');
+$search_ref = GETPOST("search_ref", 'alpha');
+$search_lastname = GETPOST("search_lastname", 'alpha');
+$search_firstname = GETPOST("search_firstname", 'alpha');
+$search_gender = GETPOST("search_gender", 'alpha');
+$search_civility = GETPOST("search_civility", 'alpha');
+$search_company = GETPOST('search_company', 'alphanohtml');
+$search_login = GETPOST("search_login", 'alpha');
+$search_address = GETPOST("search_address", 'alpha');
+$search_zip = GETPOST("search_zip", 'alpha');
+$search_town = GETPOST("search_town", 'alpha');
+$search_state = GETPOST("search_state", 'alpha');  // county / departement / federal state
+$search_country = GETPOST("search_country", 'alpha');
+$search_phone = GETPOST("search_phone", 'alpha');
 $search_phone_perso = GETPOST("search_phone_perso", 'alpha');
 $search_phone_mobile = GETPOST("search_phone_mobile", 'alpha');
-$search_type        = GETPOST("search_type", 'alpha');
-$search_email       = GETPOST("search_email", 'alpha');
-$search_categ       = GETPOST("search_categ", 'intcomma');
-$search_morphy      = GETPOST("search_morphy", 'alpha');
-$search_import_key  = trim(GETPOST("search_import_key", 'alpha'));
+$search_type = GETPOST("search_type", 'alpha');
+$search_email = GETPOST("search_email", 'alpha');
+$search_categ = GETPOST("search_categ", 'intcomma');
+$search_morphy = GETPOST("search_morphy", 'alpha');
+$search_import_key = trim(GETPOST("search_import_key", 'alpha'));
 
-$socid      = GETPOSTINT('socid');
+$socid = GETPOSTINT('socid');
 if (GETPOSTINT('catid') && empty($search_categ)) {
     $search_categ = GETPOSTINT('catid');
 }
 
-$search_filter      = GETPOST("search_filter", 'alpha');
-$search_status      = GETPOST("search_status", 'intcomma');  // status
+$search_filter = GETPOST("search_filter", 'alpha');
+$search_status = GETPOST("search_status", 'intcomma');  // status
 $search_datec_start = dol_mktime(0, 0, 0, GETPOSTINT('search_datec_start_month'), GETPOSTINT('search_datec_start_day'), GETPOSTINT('search_datec_start_year'));
 $search_datec_end = dol_mktime(23, 59, 59, GETPOSTINT('search_datec_end_month'), GETPOSTINT('search_datec_end_day'), GETPOSTINT('search_datec_end_year'));
 $search_datem_start = dol_mktime(0, 0, 0, GETPOSTINT('search_datem_start_month'), GETPOSTINT('search_datem_start_day'), GETPOSTINT('search_datem_start_year'));
@@ -199,11 +205,11 @@ foreach ($object->fields as $key => $val) {
     // If $val['visible']==0, then we never show the field
 
     if (!empty($val['visible'])) {
-        $visible = (int) dol_eval($val['visible'], 1);
+        $visible = (int)dol_eval($val['visible'], 1);
         $arrayfields[$tableprefix . '.' . $key] = array(
             'label' => $val['label'],
             'checked' => (($visible < 0) ? 0 : 1),
-            'enabled' => (abs($visible) != 3 && (int) dol_eval($val['enabled'], 1)),
+            'enabled' => (abs($visible) != 3 && (int)dol_eval($val['enabled'], 1)),
             'position' => $val['position'],
             'help' => isset($val['help']) ? $val['help'] : ''
         );
@@ -461,9 +467,9 @@ if (!empty($searchCategoryContactList)) {
             $searchCategoryContactSqlList[] = "NOT EXISTS (SELECT ck.fk_categorie FROM " . MAIN_DB_PREFIX . "categorie_member as ck WHERE d.rowid = ck.fk_member)";
         } elseif (intval($searchCategoryContact) > 0) {
             if ($searchCategoryContactOperator == 0) {
-                $searchCategoryContactSqlList[] = " EXISTS (SELECT ck.fk_categorie FROM " . MAIN_DB_PREFIX . "categorie_member as ck WHERE d.rowid = ck.fk_member AND ck.fk_categorie = " . ((int) $searchCategoryContact) . ")";
+                $searchCategoryContactSqlList[] = " EXISTS (SELECT ck.fk_categorie FROM " . MAIN_DB_PREFIX . "categorie_member as ck WHERE d.rowid = ck.fk_member AND ck.fk_categorie = " . ((int)$searchCategoryContact) . ")";
             } else {
-                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int) $searchCategoryContact);
+                $listofcategoryid .= ($listofcategoryid ? ', ' : '') . ((int)$searchCategoryContact);
             }
         }
     }
@@ -486,7 +492,7 @@ if ($search_all) {
     $sql .= natural_search(array_keys($fieldstosearchall), $search_all);
 }
 if ($search_type > 0) {
-    $sql .= " AND t.rowid=" . ((int) $search_type);
+    $sql .= " AND t.rowid=" . ((int)$search_type);
 }
 if ($search_filter == 'withoutsubscription') {
     $sql .= " AND (datefin IS NULL)";
@@ -650,7 +656,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -680,7 +686,7 @@ if ($search_email) {
     $param .= "&search_email=" . urlencode($search_email);
 }
 if ($search_categ > 0 || $search_categ == -2) {
-    $param .= "&search_categ=" . urlencode((string) ($search_categ));
+    $param .= "&search_categ=" . urlencode((string)($search_categ));
 }
 if ($search_company) {
     $param .= "&search_company=" . urlencode($search_company);
@@ -833,7 +839,6 @@ $selectedfields .= (count($arrayofmassactions) ? $form->showCheckAddButtons('che
 $moreforfilter = '';
 // Filter on categories
 if (isModEnabled('category') && $user->hasRight('categorie', 'lire')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
     $moreforfilter .= '<div class="divsearchfield">';
     $moreforfilter .= img_picto($langs->trans('Categories'), 'category', 'class="pictofixedwidth"') . $formother->select_categories(Categorie::TYPE_MEMBER, $search_categ, 'search_categ', 1, $langs->trans("MembersCategoriesShort"));
     $moreforfilter .= '</div>';
@@ -1586,7 +1591,6 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
         $hidegeneratedfilelistifempty = 0;
     }
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
     $formfile = new FormFile($db);
 
     // Show list of available documents

@@ -42,7 +42,7 @@ abstract class BaseWriter implements IWriter
 
     public function setIncludeCharts($pValue)
     {
-        $this->includeCharts = (bool) $pValue;
+        $this->includeCharts = (bool)$pValue;
 
         return $this;
     }
@@ -54,7 +54,7 @@ abstract class BaseWriter implements IWriter
 
     public function setPreCalculateFormulas($pValue)
     {
-        $this->preCalculateFormulas = (bool) $pValue;
+        $this->preCalculateFormulas = (bool)$pValue;
 
         return $this;
     }

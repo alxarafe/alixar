@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2010      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015      Frederic France      <frederic.france@free.fr>
- * Copyright (C) 2016-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
+ * Copyright (C) 2016-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,13 +19,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/core/boxes/box_contracts.php
  *      \ingroup    contracts
  *      \brief      Module de generation de l'affichage de la box contracts
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
 
 
 /**
@@ -41,8 +43,8 @@ class box_contracts extends ModeleBoxes
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -56,8 +58,8 @@ class box_contracts extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -65,7 +67,6 @@ class box_contracts extends ModeleBoxes
 
         $this->max = $max;
 
-        include_once DOL_DOCUMENT_ROOT . '/contrat/class/contrat.class.php';
 
         $this->info_box_head = array(
             'text' => '<span class="valignmiddle">' . $langs->trans("BoxTitleLastContracts", $max) . '</span><a class="paddingleft valignmiddle" href="' . constant('BASE_URL') . '/contrat/list.php?sortfield=c.tms&sortorder=DESC"><span class="badge">...</span></a>'
@@ -85,10 +86,10 @@ class box_contracts extends ModeleBoxes
             $sql .= " WHERE c.fk_soc = s.rowid";
             $sql .= " AND c.entity = " . $conf->entity;
             if (!$user->hasRight('societe', 'client', 'voir')) {
-                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+                $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
             }
             if ($user->socid) {
-                $sql .= " AND s.rowid = " . ((int) $user->socid);
+                $sql .= " AND s.rowid = " . ((int)$user->socid);
             }
             if (getDolGlobalString('MAIN_LASTBOX_ON_OBJECT_DATE')) {
                 $sql .= " ORDER BY c.date_contrat DESC, c.ref DESC ";
@@ -188,10 +189,10 @@ class box_contracts extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

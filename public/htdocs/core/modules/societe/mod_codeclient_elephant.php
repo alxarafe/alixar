@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2007-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011      Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2013-2018 Philippe Grand      	<philippe.grand@atoo-net.com>
- * Copyright (C) 2020-2024	Frédéric France		<frederic.france@free.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011       Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2013-2018  Philippe Grand      	    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2020-2024	Frédéric France		        <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,14 +24,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\ModeleThirdPartyCode;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *       \file       htdocs/core/modules/societe/mod_codeclient_elephant.php
  *       \ingroup    societe
  *       \brief      File of class to manage third party code with elephant rule
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/societe/modules_societe.class.php';
-
 
 /**
  *  Class to manage third party code with elephant rule
@@ -58,7 +59,7 @@ class mod_codeclient_elephant extends ModeleThirdPartyCode
     /**
      *  Constructor
      *
-     *  @param DoliDB       $db     Database object
+     * @param DoliDB $db Database object
      */
     public function __construct($db)
     {
@@ -76,8 +77,8 @@ class mod_codeclient_elephant extends ModeleThirdPartyCode
     /**
      *  Return description of module
      *
-     *  @param  Translate   $langs      Object langs
-     *  @return string                  Description of module
+     * @param Translate $langs Object langs
+     * @return string                  Description of module
      */
     public function info($langs)
     {
@@ -126,9 +127,9 @@ class mod_codeclient_elephant extends ModeleThirdPartyCode
     /**
      * Return an example of result returned by getNextValue
      *
-     * @param   Translate       $langs      Object langs
-     * @param   Societe|string  $objsoc     Object thirdparty
-     * @param   int             $type       Type of third party (1:customer, 2:supplier, -1:autodetect)
+     * @param Translate $langs Object langs
+     * @param Societe|string $objsoc Object thirdparty
+     * @param int $type Type of third party (1:customer, 2:supplier, -1:autodetect)
      * @return  string                      Return string example
      */
     public function getExample($langs, $objsoc = '', $type = -1)
@@ -181,8 +182,8 @@ class mod_codeclient_elephant extends ModeleThirdPartyCode
     /**
      * Return next value
      *
-     * @param   Societe|string  $objsoc     Object third party
-     * @param   int             $type       Client ou fournisseur (0:customer, 1:supplier)
+     * @param Societe|string $objsoc Object third party
+     * @param int $type Client ou fournisseur (0:customer, 1:supplier)
      * @return  string|-1                   Value if OK, '' if module not configured, -1 if KO
      */
     public function getNextValue($objsoc = '', $type = -1)
@@ -220,19 +221,20 @@ class mod_codeclient_elephant extends ModeleThirdPartyCode
 
         $numFinal = get_next_value($db, $mask, 'societe', $field, $where, '', $now);
 
-        return  $numFinal;
+        return $numFinal;
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *   Check if mask/numbering use prefix
      *
-     *   @return    int         0 or 1
+     * @return    int         0 or 1
      */
     public function verif_prefixIsUsed()
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf;
 
         $mask = getDolGlobalString('COMPANY_ELEPHANT_MASK_CUSTOMER');
@@ -252,11 +254,11 @@ class mod_codeclient_elephant extends ModeleThirdPartyCode
     /**
      *  Check validity of code according to its rules
      *
-     *  @param  DoliDB      $db     Database handler
-     *  @param  string      $code   Code to check/correct
-     *  @param  Societe     $soc    Object third party
-     *  @param  int         $type   0 = customer/prospect , 1 = supplier
-     *  @return int                 0 if OK
+     * @param DoliDB $db Database handler
+     * @param string $code Code to check/correct
+     * @param Societe $soc Object third party
+     * @param int $type 0 = customer/prospect , 1 = supplier
+     * @return int                 0 if OK
      *                              -1 ErrorBadCustomerCodeSyntax
      *                              -2 ErrorCustomerCodeRequired
      *                              -3 ErrorCustomerCodeAlreadyUsed
@@ -307,19 +309,20 @@ class mod_codeclient_elephant extends ModeleThirdPartyCode
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *      Indicate if the code is available or not (by another third party)
      *
-     *      @param  DoliDB      $db         Handler access base
-     *      @param  string      $code       Code a verifier
-     *      @param  Societe     $soc        Object societe
-     *      @param  int         $type       0 = customer/prospect , 1 = supplier
-     *      @return int                     0 if available, <0 if KO
+     * @param DoliDB $db Handler access base
+     * @param string $code Code a verifier
+     * @param Societe $soc Object societe
+     * @param int $type 0 = customer/prospect , 1 = supplier
+     * @return int                     0 if available, <0 if KO
      */
     public function verif_dispo($db, $code, $soc, $type = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "societe";
         if ($type == 1) {
             $sql .= " WHERE code_fournisseur = '" . $db->escape($code) . "'";

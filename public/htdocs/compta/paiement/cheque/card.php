@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2006       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2007-2011	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2011-2016	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2013 		Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2015-2016	Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2006       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2007-2011	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2016	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2013 		Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2015-2016	Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Compta\Classes\RemiseCheque;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  *  \file       htdocs/compta/paiement/cheque/card.php
  *  \ingroup    bank, invoice
@@ -31,10 +39,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/cheque/class/remisecheque.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories', 'bills', 'companies', 'compta'));
@@ -462,7 +466,7 @@ if ($action == 'new') {
         $sql .= " AND b.dateo <= '" . $db->idate($search_date_end) . "'";
     }
     if ($filteraccountid > 0) {
-        $sql .= " AND ba.rowid = " . ((int) $filteraccountid);
+        $sql .= " AND ba.rowid = " . ((int)$filteraccountid);
     }
     $sql .= $db->order("b.dateo,b.rowid", "ASC");
 
@@ -648,7 +652,7 @@ if ($action == 'new') {
         print $langs->trans('RefExt');
         print '</td>';
         if ($action != 'editrefext') {
-            print '<td class="right"><a class="editfielda" href="' . $_SERVER["PHP_SELF"] . '?action=editrefext&token=' . newToken() . '&id=' . ((int) $object->id) . '">' . img_edit($langs->trans('SetRefExt'), 1) . '</a></td>';
+            print '<td class="right"><a class="editfielda" href="' . $_SERVER["PHP_SELF"] . '?action=editrefext&token=' . newToken() . '&id=' . ((int)$object->id) . '">' . img_edit($langs->trans('SetRefExt'), 1) . '</a></td>';
         }
         print '</tr></table>';
         print '</td><td>';
@@ -692,7 +696,7 @@ if ($action == 'new') {
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "paiement as p ON p.fk_bank = b.rowid";
     $sql .= " WHERE ba.entity IN (" . getEntity('bank_account') . ")";
     $sql .= " AND b.fk_type= '" . $db->escape($object->type) . "'";
-    $sql .= " AND b.fk_bordereau = " . ((int) $object->id);
+    $sql .= " AND b.fk_bordereau = " . ((int)$object->id);
     $sql .= $db->order($sortfield, $sortorder);
 
     $resql = $db->query($sql);
@@ -789,8 +793,6 @@ if ($action == 'new') {
 }
 
 
-
-
 /*
  * Actions Buttons
  */
@@ -805,7 +807,6 @@ if ($user->socid == 0 && !empty($object->id) && $user->hasRight('banque', 'chequ
     print dolGetButtonAction($langs->trans("Delete"), '', 'delete', $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=delete&token=' . newToken(), 'delete', $permissiontodelete);
 }
 print '</div>';
-
 
 
 if ($action != 'new') {

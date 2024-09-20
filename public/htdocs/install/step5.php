@@ -38,6 +38,8 @@
  *         It (re)creates the install.lock and shows the final message.
  */
 
+use Dolibarr\Core\Base\DolibarrModules;
+
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
 if (file_exists($conffile)) {
@@ -75,7 +77,7 @@ $langs->loadLangs(array("admin", "install"));
 $login = GETPOST('login', 'alpha') ? GETPOST('login', 'alpha') : (empty($argv[5]) ? '' : $argv[5]);
 $pass = GETPOST('pass', 'alpha') ? GETPOST('pass', 'alpha') : (empty($argv[6]) ? '' : $argv[6]);
 $pass_verif = GETPOST('pass_verif', 'alpha') ? GETPOST('pass_verif', 'alpha') : (empty($argv[7]) ? '' : $argv[7]);
-$force_install_lockinstall = (int) (!empty($force_install_lockinstall) ? $force_install_lockinstall : (GETPOST('installlock', 'aZ09') ? GETPOST('installlock', 'aZ09') : (empty($argv[8]) ? '' : $argv[8])));
+$force_install_lockinstall = (int)(!empty($force_install_lockinstall) ? $force_install_lockinstall : (GETPOST('installlock', 'aZ09') ? GETPOST('installlock', 'aZ09') : (empty($argv[8]) ? '' : $argv[8])));
 
 $success = 0;
 
@@ -167,7 +169,7 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
     $conf->db->dolibarr_main_db_encryption = isset($dolibarr_main_db_encryption) ? $dolibarr_main_db_encryption : 0;
     $conf->db->dolibarr_main_db_cryptkey = isset($dolibarr_main_db_cryptkey) ? $dolibarr_main_db_cryptkey : '';
 
-    $db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int) $conf->db->port);
+    $db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int)$conf->db->port);
 
     // Create the global $hookmanager object
     include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
@@ -181,8 +183,9 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
         $modName = 'modUser';
         $file = $modName . ".class.php";
         dolibarr_install_syslog('step5: load module user ' . DOL_DOCUMENT_ROOT . "/core/modules/" . $file, LOG_INFO);
-        include_once DOL_DOCUMENT_ROOT . "/core/modules/" . $file;
-        $objMod = new $modName($db);
+        // include_once DOL_DOCUMENT_ROOT . "/core/modules/" . $file;
+        // $objMod = new $modName($db);
+        $objMod = DolibarrModules::getModule($modName);
         $result = $objMod->init();
         if (!$result) {
             print "ERROR: failed to init module file = " . $file;
@@ -197,7 +200,6 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
             $conf->global->MAIN_ENABLE_LOG_TO_HTML = 1;
 
             // Create admin user
-            include_once DOL_DOCUMENT_ROOT . '/user/class/user.class.php';
 
             // Set default encryption to yes, generate a salt and set default encryption algorithm (but only if there is no user yet into database)
             $sql = "SELECT u.rowid, u.pass, u.pass_crypted";
@@ -308,43 +310,20 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
                     $tmparray = explode(',', $force_install_module);
                 }
 
-                $modNameLoaded = array();
-
                 // Search modules dirs
                 $modulesdir[] = $dolibarr_main_document_root . '/core/modules/';
+                $modulesdir = dolGetModulesDirs();
+                $allModules = DolibarrModules::getModules($modulesdir);
+                foreach ($allModules as $modName => $filename) {
+                    $objMod = DolibarrModules::getObj($db, $modName, $filename);
 
-                foreach ($modulesdir as $dir) {
-                    // Load modules attributes in arrays (name, numero, orders) from dir directory
-                    //print $dir."\n<br>";
-                    dol_syslog("Scan directory " . $dir . " for module descriptor files (modXXX.class.php)");
-                    $handle = @opendir($dir);
-                    if (is_resource($handle)) {
-                        while (($file = readdir($handle)) !== false) {
-                            if (is_readable($dir . $file) && substr($file, 0, 3) == 'mod' && substr($file, dol_strlen($file) - 10) == '.class.php') {
-                                $modName = substr($file, 0, dol_strlen($file) - 10);
-                                if ($modName) {
-                                    if (!empty($modNameLoaded[$modName])) {   // In cache of already loaded modules ?
-                                        $mesg = "Error: Module " . $modName . " was found twice: Into " . $modNameLoaded[$modName] . " and " . $dir . ". You probably have an old file on your disk.<br>";
-                                        setEventMessages($mesg, null, 'warnings');
-                                        dol_syslog($mesg, LOG_ERR);
-                                        continue;
-                                    }
+                    if (!isset($objMod)) {
+                        print info_admin("admin/modules.php Warning bad descriptor file : " . $filename . " (Class " . $modName . " not found into file)", 0, 0, '1', 'warning');
+                        continue;
+                    }
 
-                                    try {
-                                        $res = include_once $dir . $file; // A class already exists in a different file will send a non catchable fatal error.
-                                        if (class_exists($modName)) {
-                                            $objMod = new $modName($db);
-                                            $modNameLoaded[$modName] = $dir;
-                                            if (!empty($objMod->enabled_bydefault) && !in_array($file, $tmparray)) {
-                                                $tmparray[] = $file;
-                                            }
-                                        }
-                                    } catch (Exception $e) {
-                                        dol_syslog("Failed to load " . $dir . $file . " " . $e->getMessage(), LOG_ERR);
-                                    }
-                                }
-                            }
-                        }
+                    if (!empty($objMod->enabled_bydefault) && !in_array($file, $tmparray)) {
+                        $tmparray[] = $file;
                     }
                 }
 
@@ -435,7 +414,6 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
 
     $db->close();
 }
-
 
 
 // Create lock file

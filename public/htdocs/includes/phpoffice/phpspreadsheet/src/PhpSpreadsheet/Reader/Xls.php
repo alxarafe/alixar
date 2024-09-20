@@ -444,9 +444,9 @@ class Xls extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return array
      * @throws Exception
      *
-     * @return array
      */
     public function listWorksheetNames($pFilename)
     {
@@ -504,9 +504,9 @@ class Xls extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return array
      * @throws Exception
      *
-     * @return array
      */
     public function listWorksheetInfo($pFilename)
     {
@@ -618,9 +618,9 @@ class Xls extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function load($pFilename)
     {
@@ -1283,11 +1283,11 @@ class Xls extends BaseReader
 
                         $scope = ($definedName['scope'] == 0) ? null : $this->spreadsheet->getSheetByName($this->sheets[$definedName['scope'] - 1]['name']);
 
-                        $this->spreadsheet->addNamedRange(new NamedRange((string) $definedName['name'], $docSheet, $extractedRange, $localOnly, $scope));
+                        $this->spreadsheet->addNamedRange(new NamedRange((string)$definedName['name'], $docSheet, $extractedRange, $localOnly, $scope));
                     }
                 }
                 //    Named Value
-                    //    TODO Provide support for named values
+                //    TODO Provide support for named values
             }
         }
         $this->data = null;
@@ -2649,7 +2649,7 @@ class Xls extends BaseReader
             $xfIndex = (0x0FFF & $ixfe) >> 0;
 
             // bit: 15; mask 0x8000; 0 = user-defined style, 1 = built-in style
-            $isBuiltIn = (bool) ((0x8000 & $ixfe) >> 15);
+            $isBuiltIn = (bool)((0x8000 & $ixfe) >> 15);
 
             if ($isBuiltIn) {
                 // offset: 2; size: 1; identifier for built-in style
@@ -3082,7 +3082,7 @@ class Xls extends BaseReader
                         $len = min($charsLeft, $limitpos - $pos);
                         for ($j = 0; $j < $len; ++$j) {
                             $retstr .= $recordData[$pos + $j]
-                            . chr(0);
+                                . chr(0);
                         }
                         $charsLeft -= $len;
                         $isCompressed = false;
@@ -3156,7 +3156,7 @@ class Xls extends BaseReader
 
         if ($this->version == self::XLS_BIFF8 && !$this->readDataOnly) {
             // offset: 0; size: 2; 0 = do not print sheet grid lines; 1 = print sheet gridlines
-            $printGridlines = (bool) self::getUInt2d($recordData, 0);
+            $printGridlines = (bool)self::getUInt2d($recordData, 0);
             $this->phpSheet->setPrintGridlines($printGridlines);
         }
     }
@@ -3201,7 +3201,7 @@ class Xls extends BaseReader
 
         // bit: 8; mask: 0x100; 0 = scale printout in percent, 1 = fit printout to number of pages
         // this corresponds to radio button setting in page setup dialog in Excel
-        $this->isFitToPages = (bool) ((0x0100 & self::getUInt2d($recordData, 0)) >> 8);
+        $this->isFitToPages = (bool)((0x0100 & self::getUInt2d($recordData, 0)) >> 8);
     }
 
     /**
@@ -3324,7 +3324,7 @@ class Xls extends BaseReader
 
         if (!$this->readDataOnly) {
             // offset: 0; size: 2; 0 = print sheet left aligned, 1 = print sheet centered horizontally
-            $isHorizontalCentered = (bool) self::getUInt2d($recordData, 0);
+            $isHorizontalCentered = (bool)self::getUInt2d($recordData, 0);
 
             $this->phpSheet->getPageSetup()->setHorizontalCentered($isHorizontalCentered);
         }
@@ -3343,7 +3343,7 @@ class Xls extends BaseReader
 
         if (!$this->readDataOnly) {
             // offset: 0; size: 2; 0 = print sheet aligned at top page border, 1 = print sheet vertically centered
-            $isVerticalCentered = (bool) self::getUInt2d($recordData, 0);
+            $isVerticalCentered = (bool)self::getUInt2d($recordData, 0);
 
             $this->phpSheet->getPageSetup()->setVerticalCentered($isVerticalCentered);
         }
@@ -3464,7 +3464,7 @@ class Xls extends BaseReader
                 }
 
                 $this->phpSheet->getPageSetup()->setScale($scale, false);
-                $this->phpSheet->getPageSetup()->setFitToPage((bool) $this->isFitToPages);
+                $this->phpSheet->getPageSetup()->setFitToPage((bool)$this->isFitToPages);
                 $this->phpSheet->getPageSetup()->setFitToWidth($fitToWidth, false);
                 $this->phpSheet->getPageSetup()->setFitToHeight($fitToHeight, false);
             }
@@ -3499,7 +3499,7 @@ class Xls extends BaseReader
 
         // bit 0, mask 0x01; 1 = sheet is protected
         $bool = (0x01 & self::getUInt2d($recordData, 0)) >> 0;
-        $this->phpSheet->getProtection()->setSheet((bool) $bool);
+        $this->phpSheet->getProtection()->setSheet((bool)$bool);
     }
 
     /**
@@ -3522,7 +3522,7 @@ class Xls extends BaseReader
         // bit: 0, mask 0x01; 1 = scenarios are protected
         $bool = (0x01 & self::getUInt2d($recordData, 0)) >> 0;
 
-        $this->phpSheet->getProtection()->setScenarios((bool) $bool);
+        $this->phpSheet->getProtection()->setScenarios((bool)$bool);
     }
 
     /**
@@ -3545,7 +3545,7 @@ class Xls extends BaseReader
         // bit: 0, mask 0x01; 1 = objects are protected
         $bool = (0x01 & self::getUInt2d($recordData, 0)) >> 0;
 
-        $this->phpSheet->getProtection()->setObjects((bool) $bool);
+        $this->phpSheet->getProtection()->setObjects((bool)$bool);
     }
 
     /**
@@ -3960,7 +3960,7 @@ class Xls extends BaseReader
         // bit: 0; mask: 0x0001; 1 = recalculate always
         // bit: 1; mask: 0x0002; 1 = calculate on open
         // bit: 2; mask: 0x0008; 1 = part of a shared formula
-        $isPartOfSharedFormula = (bool) (0x0008 & $options);
+        $isPartOfSharedFormula = (bool)(0x0008 & $options);
 
         // WARNING:
         // We can apparently not rely on $isPartOfSharedFormula. Even when $isPartOfSharedFormula = true
@@ -4008,7 +4008,7 @@ class Xls extends BaseReader
             ) {
                 // Boolean formula. Result is in +2; 0=false, 1=true
                 $dataType = DataType::TYPE_BOOL;
-                $value = (bool) ord($recordData[8]);
+                $value = (bool)ord($recordData[8]);
             } elseif (
                 (ord($recordData[6]) == 2)
                 && (ord($recordData[12]) == 255)
@@ -4155,7 +4155,7 @@ class Xls extends BaseReader
             $cell = $this->phpSheet->getCell($columnString . ($row + 1));
             switch ($isError) {
                 case 0: // boolean
-                    $value = (bool) $boolErr;
+                    $value = (bool)$boolErr;
 
                     // add cell value
                     $cell->setValueExplicit($value, DataType::TYPE_BOOL);
@@ -4386,27 +4386,27 @@ class Xls extends BaseReader
         }
 
         // bit: 1; mask: 0x0002; 0 = do not show gridlines, 1 = show gridlines
-        $showGridlines = (bool) ((0x0002 & $options) >> 1);
+        $showGridlines = (bool)((0x0002 & $options) >> 1);
         $this->phpSheet->setShowGridlines($showGridlines);
 
         // bit: 2; mask: 0x0004; 0 = do not show headers, 1 = show headers
-        $showRowColHeaders = (bool) ((0x0004 & $options) >> 2);
+        $showRowColHeaders = (bool)((0x0004 & $options) >> 2);
         $this->phpSheet->setShowRowColHeaders($showRowColHeaders);
 
         // bit: 3; mask: 0x0008; 0 = panes are not frozen, 1 = panes are frozen
-        $this->frozen = (bool) ((0x0008 & $options) >> 3);
+        $this->frozen = (bool)((0x0008 & $options) >> 3);
 
         // bit: 6; mask: 0x0040; 0 = columns from left to right, 1 = columns from right to left
-        $this->phpSheet->setRightToLeft((bool) ((0x0040 & $options) >> 6));
+        $this->phpSheet->setRightToLeft((bool)((0x0040 & $options) >> 6));
 
         // bit: 10; mask: 0x0400; 0 = sheet not active, 1 = sheet active
-        $isActive = (bool) ((0x0400 & $options) >> 10);
+        $isActive = (bool)((0x0400 & $options) >> 10);
         if ($isActive) {
             $this->spreadsheet->setActiveSheetIndex($this->spreadsheet->getIndex($this->phpSheet));
         }
 
         // bit: 11; mask: 0x0800; 0 = normal view, 1 = page break view
-        $isPageBreakPreview = (bool) ((0x0800 & $options) >> 11);
+        $isPageBreakPreview = (bool)((0x0800 & $options) >> 11);
 
         //FIXME: set $firstVisibleRow and $firstVisibleColumn
 
@@ -4995,9 +4995,9 @@ class Xls extends BaseReader
                 $objValidation = $this->phpSheet->getCell($coordinate)->getDataValidation();
                 $objValidation->setType($type);
                 $objValidation->setErrorStyle($errorStyle);
-                $objValidation->setAllowBlank((bool) $allowBlank);
-                $objValidation->setShowInputMessage((bool) $showInputMessage);
-                $objValidation->setShowErrorMessage((bool) $showErrorMessage);
+                $objValidation->setAllowBlank((bool)$allowBlank);
+                $objValidation->setShowInputMessage((bool)$showInputMessage);
+                $objValidation->setShowErrorMessage((bool)$showErrorMessage);
                 $objValidation->setShowDropDown(!$suppressDropDown);
                 $objValidation->setOperator($operator);
                 $objValidation->setErrorTitle($errorTitle);
@@ -5526,9 +5526,9 @@ class Xls extends BaseReader
      * @param string $formulaData Formula data
      * @param string $baseCell Base cell, only needed when formula contains tRefN tokens, e.g. with shared formulas
      *
+     * @return array
      * @throws Exception
      *
-     * @return array
      */
     private function getNextToken($formulaData, $baseCell = 'A1')
     {
@@ -5776,7 +5776,7 @@ class Xls extends BaseReader
                 $name = 'tNum';
                 $size = 9;
                 $data = self::extractNumber(substr($formulaData, 1));
-                $data = str_replace(',', '.', (string) $data); // in case non-English locale
+                $data = str_replace(',', '.', (string)$data); // in case non-English locale
                 break;
             case 0x20:    //    array constant
             case 0x40:
@@ -7196,9 +7196,9 @@ class Xls extends BaseReader
      *
      * @param string $subData
      *
+     * @return string
      * @throws Exception
      *
-     * @return string
      */
     private function readBIFF5CellRangeAddressFixed($subData)
     {
@@ -7237,9 +7237,9 @@ class Xls extends BaseReader
      *
      * @param string $subData
      *
+     * @return string
      * @throws Exception
      *
-     * @return string
      */
     private function readBIFF8CellRangeAddressFixed($subData)
     {
@@ -7475,9 +7475,9 @@ class Xls extends BaseReader
      *
      * @param int $index
      *
+     * @return false|string
      * @throws Exception
      *
-     * @return false|string
      */
     private function readSheetRangeByRefIndex($index)
     {

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2010 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2010       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,14 +20,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\ModeleAccountancyCode;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *      \file       htdocs/core/modules/societe/mod_codecompta_panicum.php
  *      \ingroup    societe
  *      \brief      File of class to manage accountancy code of thirdparties with Panicum rules
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/societe/modules_societe.class.php';
-
 
 /**
  *      Class to manage accountancy code of thirdparties with Panicum rules
@@ -64,7 +65,7 @@ class mod_codecompta_panicum extends ModeleAccountancyCode
     /**
      * Return description of module
      *
-     * @param   Translate   $langs  Object langs
+     * @param Translate $langs Object langs
      * @return  string              Description of module
      */
     public function info($langs)
@@ -75,28 +76,29 @@ class mod_codecompta_panicum extends ModeleAccountancyCode
     /**
      *  Return an example of result returned by getNextValue
      *
-     *  @param  Translate       $langs      Object langs
-     *  @param  Societe|string  $objsoc     Object thirdparty
-     *  @param  int             $type       Type of third party (1:customer, 2:supplier, -1:autodetect)
-     *  @return string                      Example
+     * @param Translate $langs Object langs
+     * @param Societe|string $objsoc Object thirdparty
+     * @param int $type Type of third party (1:customer, 2:supplier, -1:autodetect)
+     * @return string                      Example
      */
     public function getExample($langs, $objsoc = '', $type = -1)
     {
         return '';
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Set accountancy account code for a third party into this->code
      *
-     *  @param  DoliDB  $db              Database handler
-     *  @param  Societe $societe         Third party object
-     *  @param  string  $type           'customer' or 'supplier'
-     *  @return int                     >=0 if OK, <0 if KO
+     * @param DoliDB $db Database handler
+     * @param Societe $societe Third party object
+     * @param string $type 'customer' or 'supplier'
+     * @return int                     >=0 if OK, <0 if KO
      */
     public function get_code($db, $societe, $type = '')
     {
-		// phpcs:enable
+        // phpcs:enable
         $this->code = '';
 
         if (is_object($societe)) {

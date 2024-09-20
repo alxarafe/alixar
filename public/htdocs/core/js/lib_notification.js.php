@@ -82,8 +82,8 @@ if ("Notification" in window) {
     /* Check if permission ok */
     if (Notification.permission !== "granted") {
         console.log("Ask Notification.permission");
-        Notification.requestPermission(function(result) {
-            console.log("result for Notification.requestPermission is "+result);
+        Notification.requestPermission(function (result) {
+            console.log("result for Notification.requestPermission is " + result);
         });
     }
 
@@ -95,7 +95,7 @@ if ("Notification" in window) {
 
     setTimeout(first_execution, time_first_execution * 1000);   // Launch a first execution after a time_first_execution delay
     time_js_next_test = nowtime + time_first_execution;
-    console.log("Launch browser notif check: setTimeout is set to launch 'first_execution' function after a wait of time_first_execution="+time_first_execution+". nowtime (time php page generation) = "+nowtime+" time_js_next_check = "+time_js_next_test);
+    console.log("Launch browser notif check: setTimeout is set to launch 'first_execution' function after a wait of time_first_execution=" + time_first_execution + ". nowtime (time php page generation) = " + nowtime + " time_js_next_check = " + time_js_next_test);
 } else {
     console.log("This browser in this context does not support Notification.");
 }
@@ -105,7 +105,7 @@ function first_execution() {
     console.log("Call first_execution of check_events()");
     result = check_events();    //one check before setting the new time for other checks
     if (result > 0) {
-        console.log("check_events() is scheduled as a repeated task with a time_auto_update = MAIN_BROWSER_NOTIFICATION_FREQUENCY = "+time_auto_update+"s");
+        console.log("check_events() is scheduled as a repeated task with a time_auto_update = MAIN_BROWSER_NOTIFICATION_FREQUENCY = " + time_auto_update + "s");
         dolnotif_idinterval = setInterval(check_events, time_auto_update * 1000); // Set new time to run next check events. time_auto_update=nb of seconds
     }
 }
@@ -121,27 +121,32 @@ function check_events() {
         for (let i = 0; i < allMeta.length; i++) {
             if (allMeta[i].getAttribute("name") == 'anti-csrf-currenttoken') {
                 currentToken = allMeta[i].getAttribute('content');
-                console.log("currentToken in page = "+currentToken);
+                console.log("currentToken in page = " + currentToken);
             }
         }
         time_js_next_test += time_auto_update;
 
-        console.log("Call ajax to check events with time_js_next_test = "+time_js_next_test+" dolnotif_nb_test_for_page="+dolnotif_nb_test_for_page);
+        console.log("Call ajax to check events with time_js_next_test = " + time_js_next_test + " dolnotif_nb_test_for_page=" + dolnotif_nb_test_for_page);
 
         $.ajax("<?php print constant('BASE_URL') . '/core/ajax/check_notifications.php'; ?>", {
             type: "POST",   // Usually post or get
             async: true,
-            data: { time_js_next_test: time_js_next_test, forcechecknow: 1, token: currentToken, dolnotif_nb_test_for_page: dolnotif_nb_test_for_page },
+            data: {
+                time_js_next_test: time_js_next_test,
+                forcechecknow: 1,
+                token: currentToken,
+                dolnotif_nb_test_for_page: dolnotif_nb_test_for_page
+            },
             dataType: "json",
             success: function (result) {
                 //console.log(result);
                 var arrayofpastreminders = Object.values(result.pastreminders);
                 if (arrayofpastreminders && arrayofpastreminders.length > 0) {
-                    console.log("Retrieved "+arrayofpastreminders.length+" reminders to do.");
+                    console.log("Retrieved " + arrayofpastreminders.length + " reminders to do.");
                     var audio = null;
                     <?php
                     if (getDolGlobalString('AGENDA_REMINDER_BROWSER_SOUND')) {
-                        print 'audio = new Audio(\'' . constant('BASE_URL') . '/theme/common/sound/notification_agenda.wav\');';
+                        print 'audio = new Audio(\'' . constant('DOL_URL_ROOT') . '/theme/common/sound/notification_agenda.wav\');';
                     }
                     ?>
                     var listofreminderids = '';
@@ -152,8 +157,8 @@ function check_events() {
                         var url = "notdefined";
                         var title = "Not defined";
                         var body = value.label;
-                        var icon = '<?php print constant('BASE_URL') . '/theme/common/octicons/build/svg/bell.svg'; ?>';
-                        var image = '<?php print constant('BASE_URL') . '/theme/common/octicons/build/svg/bell.svg'; ?>';
+                        var icon = '<?php print constant('DOL_URL_ROOT') . '/theme/common/octicons/build/svg/bell.svg'; ?>';
+                        var image = '<?php print constant('DOL_URL_ROOT') . '/theme/common/octicons/build/svg/bell.svg'; ?>';
                         if (value.type == 'agenda' && value.location != null && value.location != '') {
                             body += '\n' + value.location;
                         }
@@ -162,8 +167,7 @@ function check_events() {
                             body += '\n' + value.event_date_start_formated;
                         }
 
-                        if (value.type == 'agenda')
-                        {
+                        if (value.type == 'agenda') {
                             url = '<?php print constant('BASE_URL') . '/comm/action/card.php?id='; ?>' + value.id_agenda;
                             title = '<?php print dol_escape_js($langs->transnoentities('EventReminder')) ?>';
                         }
@@ -178,17 +182,16 @@ function check_events() {
                         };
 
                         // We release the notify
-                        console.log("Send notification on browser url="+url);
+                        console.log("Send notification on browser url=" + url);
                         noti[index] = new Notification(title, extra);
-                        if (index==0 && audio)
-                        {
+                        if (index == 0 && audio) {
                             audio.play();
                         }
 
                         if (noti[index]) {
                             noti[index].onclick = function (event) {
                                 /* If the user has clicked on button Activate */
-                                console.log("A click on notification on browser has been done for url="+url);
+                                console.log("A click on notification on browser has been done for url=" + url);
                                 event.preventDefault(); // prevent the browser from focusing the Notification's tab
                                 window.focus();
                                 window.open(url, '_blank');
@@ -200,27 +203,27 @@ function check_events() {
                     });
 
                     // Update status of all notifications we sent on browser (listofreminderids)
-                    console.log("Flag notification as done for listofreminderids="+listofreminderids);
-                    $.ajax("<?php print constant('BASE_URL') . '/core/ajax/check_notifications.php?action=stopreminder&listofreminderids='; ?>"+listofreminderids, {
+                    console.log("Flag notification as done for listofreminderids=" + listofreminderids);
+                    $.ajax("<?php print constant('BASE_URL') . '/core/ajax/check_notifications.php?action=stopreminder&listofreminderids='; ?>" + listofreminderids, {
                         type: "POST",   // Usually post or get
                         async: true,
-                        data: { time_js_next_test: time_js_next_test, token: currentToken }
+                        data: {time_js_next_test: time_js_next_test, token: currentToken}
                     });
                 } else {
-                    console.log("No remind to do found, next search at "+time_js_next_test);
+                    console.log("No remind to do found, next search at " + time_js_next_test);
                 }
             }
         });
 
         result = 1;
     } else {
-        console.log("Cancel check_events() with dolnotif_nb_test_for_page="+dolnotif_nb_test_for_page+". Check is useless because javascript Notification.permission is "+Notification.permission+" (blocked manually or web site is not https or browser is in Private mode).");
+        console.log("Cancel check_events() with dolnotif_nb_test_for_page=" + dolnotif_nb_test_for_page + ". Check is useless because javascript Notification.permission is " + Notification.permission + " (blocked manually or web site is not https or browser is in Private mode).");
 
         result = 2; // We return a positive so the repeated check will done even if authorization is not yet allowed may be after this check)
     }
 
     if (dolnotif_nb_test_for_page >= 5) {
-        console.log("We did "+dolnotif_nb_test_for_page+" consecutive test on this page. We stop checking now from here by clearing dolnotif_idinterval="+dolnotif_idinterval);
+        console.log("We did " + dolnotif_nb_test_for_page + " consecutive test on this page. We stop checking now from here by clearing dolnotif_idinterval=" + dolnotif_idinterval);
         clearInterval(dolnotif_idinterval);
     }
 

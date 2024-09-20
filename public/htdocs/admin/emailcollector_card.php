@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2018 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2022 Charlene Benke	   <charlene@patas-monkey.com>
+/* Copyright (C) 2018       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022       Charlene Benke	            <charlene@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\EmailCollector\Classes\EmailCollector;
+use Dolibarr\Code\EmailCollector\Classes\EmailCollectorAction;
+use Dolibarr\Code\EmailCollector\Classes\EmailCollectorFilter;
+use OAuth\Common\Storage\DoliStorage;
+use OAuth\Common\Consumer\Credentials;
+use Webklex\PHPIMAP\ClientManager;
+use Webklex\PHPIMAP\Exceptions\ConnectionFailedException;
+
 /**
  *      \file       htdocs/admin/emailcollector_card.php
  *      \ingroup    emailcollector
@@ -29,7 +40,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/events.class.php';
 
 include_once DOL_DOCUMENT_ROOT . '/core/class/html.formcompany.class.php';
 include_once DOL_DOCUMENT_ROOT . '/core/class/html.formfile.class.php';
@@ -37,13 +47,6 @@ include_once DOL_DOCUMENT_ROOT . '/emailcollector/class/emailcollector.class.php
 include_once DOL_DOCUMENT_ROOT . '/emailcollector/class/emailcollectorfilter.class.php';
 include_once DOL_DOCUMENT_ROOT . '/emailcollector/class/emailcollectoraction.class.php';
 include_once DOL_DOCUMENT_ROOT . '/emailcollector/lib/emailcollector.lib.php';
-
-use Webklex\PHPIMAP\ClientManager;
-use Webklex\PHPIMAP\Exceptions\ConnectionFailedException;
-
-
-use OAuth\Common\Storage\DoliStorage;
-use OAuth\Common\Consumer\Credentials;
 
 if (!$user->admin) {
     accessforbidden();
@@ -57,10 +60,10 @@ $langs->loadLangs(array("admin", "mails", "other"));
 
 // Get parameters
 $id = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
-$confirm    = GETPOST('confirm', 'alpha');
-$cancel     = GETPOST('cancel', 'aZ09');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'emailcollectorcard'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 
@@ -268,8 +271,6 @@ if ($action == 'confirm_collect') {
 
     $action = '';
 }
-
-
 
 /*
  * View
@@ -486,13 +487,13 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
                 $cm = new ClientManager();
                 $client = $cm->make([
-                    'host'           => $object->host,
-                    'port'           => $object->port,
-                    'encryption'     => 'ssl',
-                    'validate_cert'  => true,
-                    'protocol'       => 'imap',
-                    'username'       => $object->login,
-                    'password'       => $token,
+                    'host' => $object->host,
+                    'port' => $object->port,
+                    'encryption' => 'ssl',
+                    'validate_cert' => true,
+                    'protocol' => 'imap',
+                    'username' => $object->login,
+                    'password' => $token,
                     'authentication' => "oauth",
                 ]);
             } else {
@@ -501,13 +502,13 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
                 // Mode login/pass with PHP-IMAP
                 $cm = new ClientManager();
                 $client = $cm->make([
-                    'host'           => $object->host,
-                    'port'           => $object->port,
-                    'encryption'     => 'ssl',
-                    'validate_cert'  => true,
-                    'protocol'       => 'imap',
-                    'username'       => $object->login,
-                    'password'       => $object->password,
+                    'host' => $object->host,
+                    'port' => $object->port,
+                    'encryption' => 'ssl',
+                    'validate_cert' => true,
+                    'protocol' => 'imap',
+                    'username' => $object->login,
+                    'password' => $object->password,
                     'authentication' => "login",
                 ]);
             }

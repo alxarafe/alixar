@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2011-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2011-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,12 +20,14 @@
  * $elementype must be defined.
  */
 
+use Dolibarr\Code\Core\Classes\Comment;
+
+global $db;
+
 /**
  *  \file           htdocs/core/actions_comments.inc.php
  *  \brief          Code for actions on comments pages
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/comment.class.php';
 
 $varpage = empty($contextpage) ? $_SERVER["PHP_SELF"] : $contextpage;
 $comment = new Comment($db);

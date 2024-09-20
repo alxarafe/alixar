@@ -57,12 +57,12 @@ class EscposPrintBuffer implements PrintBuffer
      */
     public function __construct()
     {
-        $this -> printer = null;
+        $this->printer = null;
     }
 
     public function flush()
     {
-        if ($this -> printer == null) {
+        if ($this->printer == null) {
             throw new LogicException("Not attached to a printer.");
         }
         // TODO Not yet implemented for this buffer: This indicates that the printer needs the current line to be ended.
@@ -70,14 +70,14 @@ class EscposPrintBuffer implements PrintBuffer
 
     public function getPrinter()
     {
-        return $this -> printer;
+        return $this->printer;
     }
 
     public function setPrinter(Printer $printer = null)
     {
-        $this -> printer = $printer;
+        $this->printer = $printer;
         if ($printer != null) {
-            $this -> loadAvailableCharacters();
+            $this->loadAvailableCharacters();
         }
     }
 
@@ -119,7 +119,7 @@ class EscposPrintBuffer implements PrintBuffer
 
     public function writeTextRaw(string $text)
     {
-        if ($this -> printer == null) {
+        if ($this->printer == null) {
             throw new LogicException("Not attached to a printer.");
         }
         if (strlen($text) == 0) {
@@ -139,7 +139,7 @@ class EscposPrintBuffer implements PrintBuffer
             }
             $j++;
         }
-        $this -> write(substr($outp, 0, $j));
+        $this->write(substr($outp, 0, $j));
     }
 
     /**
@@ -152,11 +152,11 @@ class EscposPrintBuffer implements PrintBuffer
      */
     private function identifyText(int $codePoint)
     {
-        if (!isset($this -> available[$codePoint])) {
+        if (!isset($this->available[$codePoint])) {
             /* Character not available anywhere */
             return false;
         }
-        return $this -> available[$codePoint];
+        return $this->available[$codePoint];
     }
 
     /**
@@ -165,12 +165,12 @@ class EscposPrintBuffer implements PrintBuffer
      */
     private function loadAvailableCharacters()
     {
-        $profile = $this -> printer -> getPrinterCapabilityProfile();
-        $supportedCodePages = $profile -> getCodePages();
-        $profileName = $profile -> getId();
+        $profile = $this->printer->getPrinterCapabilityProfile();
+        $supportedCodePages = $profile->getCodePages();
+        $profileName = $profile->getId();
         $cacheFile = dirname(__FILE__) . "/cache/Characters-" . $profileName . ".ser" .
             (self::COMPRESS_CACHE ? ".z" : "");
-        $cacheKey = $profile -> getCodePageCacheKey();
+        $cacheKey = $profile->getCodePageCacheKey();
         /* Check for pre-generated file */
         if (file_exists($cacheFile)) {
             $cacheData = file_get_contents($cacheFile);
@@ -181,10 +181,10 @@ class EscposPrintBuffer implements PrintBuffer
                 $dataArray = unserialize($cacheData);
                 if (
                     isset($dataArray["key"]) && isset($dataArray["available"]) &&
-                        isset($dataArray["encode"]) && $dataArray["key"] == $cacheKey
+                    isset($dataArray["encode"]) && $dataArray["key"] == $cacheKey
                 ) {
-                    $this -> available = $dataArray["available"];
-                    $this -> encode = $dataArray["encode"];
+                    $this->available = $dataArray["available"];
+                    $this->encode = $dataArray["encode"];
                     return;
                 }
             }
@@ -197,10 +197,10 @@ class EscposPrintBuffer implements PrintBuffer
 
         foreach ($supportedCodePages as $num => $codePage) {
             $encodeLegacy[$num] = [];
-            if (!$codePage -> isEncodable()) {
+            if (!$codePage->isEncodable()) {
                 continue;
             }
-            $map = $codePage -> getDataArray();
+            $map = $codePage->getDataArray();
             $encodeMap = [];
             for ($char = 128; $char <= 255; $char++) {
                 $codePoint = $map[$char - 128];
@@ -214,15 +214,15 @@ class EscposPrintBuffer implements PrintBuffer
             }
             $encode[$num] = $encodeMap;
         }
-        
+
         /* Use generated data */
         $dataArray = [
             "available" => $available,
             "encode" => $encode,
             "key" => $cacheKey
         ];
-        $this -> available = $available;
-        $this -> encode = $encode;
+        $this->available = $available;
+        $this->encode = $encode;
 
         $cacheData = serialize($dataArray);
         if (self::COMPRESS_CACHE) {
@@ -240,7 +240,7 @@ class EscposPrintBuffer implements PrintBuffer
      */
     private function writeTextUsingEncoding(array $codePoints, int $encodingNo)
     {
-        $encodeMap = $this -> encode[$encodingNo];
+        $encodeMap = $this->encode[$encodingNo];
         $len = count($codePoints);
 
         $rawText = str_repeat(self::REPLACEMENT_CHAR, $len);
@@ -260,10 +260,10 @@ class EscposPrintBuffer implements PrintBuffer
             }
             $bytesWritten++;
         }
-        if ($this -> printer -> getCharacterTable() != $encodingNo) {
-            $this -> printer -> selectCharacterTable($encodingNo);
+        if ($this->printer->getCharacterTable() != $encodingNo) {
+            $this->printer->selectCharacterTable($encodingNo);
         }
-        $this -> writeTextRaw(substr($rawText, 0, $bytesWritten));
+        $this->writeTextRaw(substr($rawText, 0, $bytesWritten));
     }
 
     /**
@@ -273,7 +273,7 @@ class EscposPrintBuffer implements PrintBuffer
      */
     private function write(string $data)
     {
-        $this -> printer -> getPrintConnector() -> write($data);
+        $this->printer->getPrintConnector()->write($data);
     }
 
     /**

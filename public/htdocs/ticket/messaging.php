@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) - 2013-2016 Jean-François FERRY    <hello@librethic.io>
+/* Copyright (C) 2013-2016  Jean-François FERRY         <hello@librethic.io>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormTicket;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       htdocs/ticket/messaging.php
  *      \ingroup    ticket
@@ -25,15 +32,10 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/company.lib.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 if (isModEnabled('project')) {
-    include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
     include_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
     include_once DOL_DOCUMENT_ROOT . '/core/lib/project.lib.php';
 }
@@ -42,11 +44,11 @@ if (isModEnabled('project')) {
 $langs->loadLangs(array('companies', 'other', 'ticket'));
 
 // Get parameters
-$id       = GETPOSTINT('id');
-$ref      = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
 $track_id = GETPOST('track_id', 'alpha', 3);
-$socid    = GETPOSTINT('socid');
-$action   = GETPOST('action', 'aZ09');
+$socid = GETPOSTINT('socid');
+$action = GETPOST('action', 'aZ09');
 
 // Store current page url
 $url_page_current = constant('BASE_URL') . '/ticket/messaging.php';
@@ -138,7 +140,6 @@ if ($action == 'set_thirdparty' && $user->hasRight('ticket', 'write')) {
     }
 }
 
-
 /*
  * View
  */
@@ -166,9 +167,9 @@ if ($socid > 0) {
 }
 
 if (!$user->socid && getDolGlobalString('TICKET_LIMIT_VIEW_ASSIGNED_ONLY')) {
-    $object->next_prev_filter = "te.fk_user_assign = " . ((int) $user->id);
+    $object->next_prev_filter = "te.fk_user_assign = " . ((int)$user->id);
 } elseif ($user->socid > 0) {
-    $object->next_prev_filter = "te.fk_soc = " . ((int) $user->socid);
+    $object->next_prev_filter = "te.fk_soc = " . ((int)$user->socid);
 }
 $head = ticket_prepare_head($object);
 

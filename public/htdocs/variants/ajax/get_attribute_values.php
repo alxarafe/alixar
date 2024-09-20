@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2016   Marcos García  <marcosgdf@gmail.com>
- * Copyright (C) 2022   Open-Dsi		<support@open-dsi.fr>
+/* Copyright (C) 2016       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2022       Open-Dsi		            <support@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Variants\Classes\ProductAttribute;
+use Dolibarr\Code\Variants\Classes\ProductAttributeValue;
 
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1');
@@ -36,9 +39,6 @@ if (!defined('NOREQUIRESOC')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttribute.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttributeValue.class.php';
 
 // Security check
 if (!isModEnabled('variants')) {

@@ -13,9 +13,9 @@ class ChargeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Charge>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Charge>
      */
     public function all($params = null, $opts = null)
     {
@@ -36,9 +36,9 @@ class ChargeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Charge
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Charge
      */
     public function capture($id, $params = null, $opts = null)
     {
@@ -55,9 +55,9 @@ class ChargeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Charge
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Charge
      */
     public function create($params = null, $opts = null)
     {
@@ -74,9 +74,9 @@ class ChargeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Charge
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Charge
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -94,9 +94,9 @@ class ChargeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SearchResult<\Stripe\Charge>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SearchResult<\Stripe\Charge>
      */
     public function search($params = null, $opts = null)
     {
@@ -111,9 +111,9 @@ class ChargeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Charge
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Charge
      */
     public function update($id, $params = null, $opts = null)
     {

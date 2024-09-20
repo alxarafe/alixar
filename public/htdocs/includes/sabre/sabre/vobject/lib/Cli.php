@@ -286,7 +286,7 @@ class Cli
         $this->log($this->colorize('green', '  convert') . ' source_file [output_file] Converts a file.');
         $this->log($this->colorize('green', '  color') . ' source_file                 Colorize a file, useful for debugging.');
         $this->log(
-        <<<HELP
+            <<<HELP
 
 If source_file is set as '-', STDIN will be used.
 If output_file is omitted, STDOUT will be used.
@@ -315,10 +315,10 @@ HELP
 
         switch ($vObj->name) {
             case 'VCALENDAR':
-                $this->log('iCalendar: ' . (string) $vObj->VERSION);
+                $this->log('iCalendar: ' . (string)$vObj->VERSION);
                 break;
             case 'VCARD':
-                $this->log('vCard: ' . (string) $vObj->VERSION);
+                $this->log('vCard: ' . (string)$vObj->VERSION);
                 break;
         }
 
@@ -355,10 +355,10 @@ HELP
 
         switch ($vObj->name) {
             case 'VCALENDAR':
-                $this->log('iCalendar: ' . (string) $vObj->VERSION);
+                $this->log('iCalendar: ' . (string)$vObj->VERSION);
                 break;
             case 'VCARD':
-                $this->log('vCard: ' . (string) $vObj->VERSION);
+                $this->log('vCard: ' . (string)$vObj->VERSION);
                 break;
         }
 
@@ -508,7 +508,7 @@ HELP
          * space to accommodate elements. The $key is added to the $score to
          * preserve the original relative order of elements.
          *
-         * @param int   $key
+         * @param int $key
          * @param array $array
          *
          * @return int
@@ -601,7 +601,7 @@ HELP
                 }
                 $first2 = true;
                 // Looping through property sub-values
-                foreach ((array) $part as $subPart) {
+                foreach ((array)$part as $subPart) {
                     if ($first2) {
                         $first2 = false;
                     } else {

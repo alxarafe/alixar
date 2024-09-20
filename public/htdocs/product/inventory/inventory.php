@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2019 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2019       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Inventory;
+use Dolibarr\Code\Product\Classes\InventoryLine;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
+
 /**
  *      \file       htdocs/product/inventory/inventory.php
  *      \ingroup    inventory
@@ -27,7 +38,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 include_once DOL_DOCUMENT_ROOT . '/core/class/html.formcompany.class.php';
 include_once DOL_DOCUMENT_ROOT . '/product/class/html.formproduct.class.php';
-include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 include_once DOL_DOCUMENT_ROOT . '/product/inventory/class/inventory.class.php';
 include_once DOL_DOCUMENT_ROOT . '/product/inventory/lib/inventory.lib.php';
 include_once DOL_DOCUMENT_ROOT . '/product/stock/class/mouvementstock.class.php';
@@ -101,7 +111,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_fetchobject.inc.php'; // Must be incl
 //Parameters Page
 $paramwithsearch = '';
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $paramwithsearch .= '&limit=' . ((int) $limit);
+    $paramwithsearch .= '&limit=' . ((int)$limit);
 }
 
 
@@ -114,7 +124,6 @@ if (!getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) {
 }
 
 $now = dol_now();
-
 
 
 /*
@@ -151,7 +160,7 @@ if (empty($reshook)) {
         $sql = 'SELECT id.rowid, id.datec as date_creation, id.tms as date_modification, id.fk_inventory, id.fk_warehouse,';
         $sql .= ' id.fk_product, id.batch, id.qty_stock, id.qty_view, id.qty_regulated, id.pmp_real';
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'inventorydet as id';
-        $sql .= ' WHERE id.fk_inventory = ' . ((int) $object->id);
+        $sql .= ' WHERE id.fk_inventory = ' . ((int)$object->id);
         $sql .= ' ORDER BY id.rowid';
 
         $resql = $db->query($sql);
@@ -216,13 +225,13 @@ if (empty($reshook)) {
 
                         // Update line with id of stock movement (and the start quantity if it has changed this last recording)
                         $sqlupdate = "UPDATE " . MAIN_DB_PREFIX . "inventorydet";
-                        $sqlupdate .= " SET fk_movement = " . ((int) $idstockmove);
+                        $sqlupdate .= " SET fk_movement = " . ((int)$idstockmove);
                         if ($qty_stock != $realqtynow) {
-                            $sqlupdate .= ", qty_stock = " . ((float) $realqtynow);
+                            $sqlupdate .= ", qty_stock = " . ((float)$realqtynow);
                         }
-                        $sqlupdate .= " WHERE rowid = " . ((int) $line->rowid);
+                        $sqlupdate .= " WHERE rowid = " . ((int)$line->rowid);
                         $resqlupdate = $db->query($sqlupdate);
-                        if (! $resqlupdate) {
+                        if (!$resqlupdate) {
                             $error++;
                             setEventMessages($db->lasterror(), null, 'errors');
                             break;
@@ -230,17 +239,17 @@ if (empty($reshook)) {
                     }
 
                     if (!empty($line->pmp_real) && getDolGlobalString('INVENTORY_MANAGE_REAL_PMP')) {
-                        $sqlpmp = 'UPDATE ' . MAIN_DB_PREFIX . 'product SET pmp = ' . ((float) $line->pmp_real) . ' WHERE rowid = ' . ((int) $line->fk_product);
+                        $sqlpmp = 'UPDATE ' . MAIN_DB_PREFIX . 'product SET pmp = ' . ((float)$line->pmp_real) . ' WHERE rowid = ' . ((int)$line->fk_product);
                         $resqlpmp = $db->query($sqlpmp);
-                        if (! $resqlpmp) {
+                        if (!$resqlpmp) {
                             $error++;
                             setEventMessages($db->lasterror(), null, 'errors');
                             break;
                         }
                         if (getDolGlobalString('MAIN_PRODUCT_PERENTITY_SHARED')) {
-                            $sqlpmp = 'UPDATE ' . MAIN_DB_PREFIX . 'product_perentity SET pmp = ' . ((float) $line->pmp_real) . ' WHERE fk_product = ' . ((int) $line->fk_product) . ' AND entity=' . $conf->entity;
+                            $sqlpmp = 'UPDATE ' . MAIN_DB_PREFIX . 'product_perentity SET pmp = ' . ((float)$line->pmp_real) . ' WHERE fk_product = ' . ((int)$line->fk_product) . ' AND entity=' . $conf->entity;
                             $resqlpmp = $db->query($sqlpmp);
-                            if (! $resqlpmp) {
+                            if (!$resqlpmp) {
                                 $error++;
                                 setEventMessages($db->lasterror(), null, 'errors');
                                 break;
@@ -259,7 +268,7 @@ if (empty($reshook)) {
             $error++;
         }
 
-        if (! $error) {
+        if (!$error) {
             $db->commit();
         } else {
             $db->rollback();
@@ -271,7 +280,7 @@ if (empty($reshook)) {
         $sql = 'SELECT id.rowid, id.datec as date_creation, id.tms as date_modification, id.fk_inventory, id.fk_warehouse,';
         $sql .= ' id.fk_product, id.batch, id.qty_stock, id.qty_view, id.qty_regulated';
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'inventorydet as id';
-        $sql .= ' WHERE id.fk_inventory = ' . ((int) $object->id);
+        $sql .= ' WHERE id.fk_inventory = ' . ((int)$object->id);
         $sql .= $db->order('id.rowid', 'ASC');
         $sql .= $db->plimit($limit, $offset);
 
@@ -292,14 +301,14 @@ if (empty($reshook)) {
                 $resultupdate = 0;
 
                 if (GETPOST("id_" . $lineid, 'alpha') != '') {        // If a value was set ('0' or something else)
-                    $qtytoupdate = (float) price2num(GETPOST("id_" . $lineid, 'alpha'), 'MS');
+                    $qtytoupdate = (float)price2num(GETPOST("id_" . $lineid, 'alpha'), 'MS');
                     $result = $inventoryline->fetch($lineid);
                     if ($qtytoupdate < 0) {
                         $result = -1;
                         setEventMessages($langs->trans("FieldCannotBeNegative", $langs->transnoentitiesnoconv("RealQty")), null, 'errors');
                     }
                     if ($result > 0) {
-                        $inventoryline->qty_stock = (float) price2num(GETPOST('stock_qty_' . $lineid, 'alpha'), 'MS');    // The new value that was set in as hidden field
+                        $inventoryline->qty_stock = (float)price2num(GETPOST('stock_qty_' . $lineid, 'alpha'), 'MS');    // The new value that was set in as hidden field
                         $inventoryline->qty_view = $qtytoupdate;    // The new value we want
                         $inventoryline->pmp_real = price2num(GETPOST('realpmp_' . $lineid, 'alpha'), 'MS');
                         $inventoryline->pmp_expected = price2num(GETPOST('expectedpmp_' . $lineid, 'alpha'), 'MS');
@@ -325,12 +334,12 @@ if (empty($reshook)) {
         }
 
         // Update line with id of stock movement (and the start quantity if it has changed this last recording)
-        if (! $error) {
+        if (!$error) {
             $sqlupdate = "UPDATE " . MAIN_DB_PREFIX . "inventory";
-            $sqlupdate .= " SET fk_user_modif = " . ((int) $user->id);
-            $sqlupdate .= " WHERE rowid = " . ((int) $object->id);
+            $sqlupdate .= " SET fk_user_modif = " . ((int)$user->id);
+            $sqlupdate .= " WHERE rowid = " . ((int)$object->id);
             $resqlupdate = $db->query($sqlupdate);
-            if (! $resqlupdate) {
+            if (!$resqlupdate) {
                 $error++;
                 setEventMessages($db->lasterror(), null, 'errors');
             }
@@ -362,7 +371,7 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT.'/core/actions_sendmails.inc.php';*/
 
     if (GETPOST('addline', 'alpha')) {
-        $qty = (GETPOST('qtytoadd') != '' ? ((float) price2num(GETPOST('qtytoadd'), 'MS')) : null);
+        $qty = (GETPOST('qtytoadd') != '' ? ((float)price2num(GETPOST('qtytoadd'), 'MS')) : null);
         if ($fk_warehouse <= 0) {
             $error++;
             setEventMessages($langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("Warehouse")), null, 'errors');
@@ -420,7 +429,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 
 /*
@@ -621,7 +629,6 @@ if ($action != 'record') {
         print '<br><br>';
     }
 }
-
 
 
 if ($object->status == Inventory::STATUS_VALIDATED) {
@@ -888,7 +895,6 @@ if ($action == 'updatebyscaning') {
 		';
         print '</script>';
     }
-    include DOL_DOCUMENT_ROOT . '/core/class/html.formother.class.php';
     $formother = new FormOther($db);
     print $formother->getHTMLScannerForm("barcodescannerjs", 'all');
 }
@@ -1005,7 +1011,7 @@ if ($object->status == $object::STATUS_DRAFT || $object->status == $object::STAT
 $sql = 'SELECT id.rowid, id.datec as date_creation, id.tms as date_modification, id.fk_inventory, id.fk_warehouse,';
 $sql .= ' id.fk_product, id.batch, id.qty_stock, id.qty_view, id.qty_regulated, id.fk_movement, id.pmp_real, id.pmp_expected';
 $sql .= ' FROM ' . MAIN_DB_PREFIX . 'inventorydet as id';
-$sql .= ' WHERE id.fk_inventory = ' . ((int) $object->id);
+$sql .= ' WHERE id.fk_inventory = ' . ((int)$object->id);
 $sql .= $db->order('id.rowid', 'ASC');
 $sql .= $db->plimit($limit, $offset);
 
@@ -1288,68 +1294,68 @@ print '<script type="text/javascript">
 
 if (getDolGlobalString('INVENTORY_MANAGE_REAL_PMP')) {
     ?>
-<script type="text/javascript">
-$('.realqty').on('change', function () {
-    let realqty = $(this).closest('tr').find('.realqty').val();
-    let inputPmp = $(this).closest('tr').find('input[class*=realpmp]');
-    let realpmp = $(inputPmp).val();
-    if (!isNaN(realqty) && !isNaN(realpmp)) {
-        let realval = realqty * realpmp;
-        $(this).closest('tr').find('input[name^=realvaluation]').val(realval.toFixed(2));
-    }
-    updateTotalValuation();
-});
+    <script type="text/javascript">
+        $('.realqty').on('change', function () {
+            let realqty = $(this).closest('tr').find('.realqty').val();
+            let inputPmp = $(this).closest('tr').find('input[class*=realpmp]');
+            let realpmp = $(inputPmp).val();
+            if (!isNaN(realqty) && !isNaN(realpmp)) {
+                let realval = realqty * realpmp;
+                $(this).closest('tr').find('input[name^=realvaluation]').val(realval.toFixed(2));
+            }
+            updateTotalValuation();
+        });
 
-$('input[class*=realpmp]').on('change', function () {
-    let inputQtyReal = $(this).closest('tr').find('.realqty');
-    let realqty = $(inputQtyReal).val();
-    let inputPmp = $(this).closest('tr').find('input[class*=realpmp]');
-    console.log(inputPmp);
-    let realPmpClassname = $(inputPmp).attr('class').match(/[\w-]*realpmp[\w-]*/g)[0];
-    let realpmp = $(inputPmp).val();
-    if (!isNaN(realpmp)) {
-        $('.'+realPmpClassname).val(realpmp); //For batch case if pmp is changed we change it everywhere it's same product and calc back everything
+        $('input[class*=realpmp]').on('change', function () {
+            let inputQtyReal = $(this).closest('tr').find('.realqty');
+            let realqty = $(inputQtyReal).val();
+            let inputPmp = $(this).closest('tr').find('input[class*=realpmp]');
+            console.log(inputPmp);
+            let realPmpClassname = $(inputPmp).attr('class').match(/[\w-]*realpmp[\w-]*/g)[0];
+            let realpmp = $(inputPmp).val();
+            if (!isNaN(realpmp)) {
+                $('.' + realPmpClassname).val(realpmp); //For batch case if pmp is changed we change it everywhere it's same product and calc back everything
 
-        if (!isNaN(realqty)) {
-            let realval = realqty * realpmp;
-            $(this).closest('tr').find('input[name^=realvaluation]').val(realval.toFixed(2));
+                if (!isNaN(realqty)) {
+                    let realval = realqty * realpmp;
+                    $(this).closest('tr').find('input[name^=realvaluation]').val(realval.toFixed(2));
+                }
+                $('.realqty').trigger('change');
+                updateTotalValuation();
+            }
+        });
+
+        $('input[name^=realvaluation]').on('change', function () {
+            let inputQtyReal = $(this).closest('tr').find('.realqty');
+            let realqty = $(inputQtyReal).val();
+            let inputPmp = $(this).closest('tr').find('input[class*=realpmp]');
+            let inputRealValuation = $(this).closest('tr').find('input[name^=realvaluation]');
+            let realPmpClassname = $(inputPmp).attr('class').match(/[\w-]*realpmp[\w-]*/g)[0];
+            let realvaluation = $(inputRealValuation).val();
+            if (!isNaN(realvaluation) && !isNaN(realqty) && realvaluation !== '' && realqty !== '' && realqty !== 0) {
+                let realpmp = realvaluation / realqty
+                $('.' + realPmpClassname).val(realpmp); //For batch case if pmp is changed we change it everywhere it's same product and calc back everything
+                $('.realqty').trigger('change');
+                updateTotalValuation();
+            }
+        });
+
+        function updateTotalValuation() {
+            let total = 0;
+            $('input[name^=realvaluation]').each(function (index) {
+                let val = $(this).val();
+                if (!isNaN(val)) total += parseFloat($(this).val());
+            });
+            let currencyFractionDigits = new Intl.NumberFormat('fr-FR', {
+                style: 'currency',
+                currency: 'EUR',
+            }).resolvedOptions().maximumFractionDigits;
+            $('#totalRealValuation').html(total.toLocaleString('fr-FR', {
+                maximumFractionDigits: currencyFractionDigits
+            }));
         }
-        $('.realqty').trigger('change');
-        updateTotalValuation();
-    }
-});
 
-$('input[name^=realvaluation]').on('change', function () {
-    let inputQtyReal = $(this).closest('tr').find('.realqty');
-    let realqty = $(inputQtyReal).val();
-    let inputPmp = $(this).closest('tr').find('input[class*=realpmp]');
-    let inputRealValuation = $(this).closest('tr').find('input[name^=realvaluation]');
-    let realPmpClassname = $(inputPmp).attr('class').match(/[\w-]*realpmp[\w-]*/g)[0];
-    let realvaluation = $(inputRealValuation).val();
-    if (!isNaN(realvaluation) && !isNaN(realqty) && realvaluation !== '' && realqty !== '' && realqty !== 0) {
-        let realpmp = realvaluation / realqty
-        $('.'+realPmpClassname).val(realpmp); //For batch case if pmp is changed we change it everywhere it's same product and calc back everything
-        $('.realqty').trigger('change');
-        updateTotalValuation();
-    }
-});
-
-function updateTotalValuation() {
-    let total = 0;
-    $('input[name^=realvaluation]').each(function( index ) {
-        let val = $(this).val();
-        if(!isNaN(val)) total += parseFloat($(this).val());
-    });
-    let currencyFractionDigits = new Intl.NumberFormat('fr-FR', {
-        style: 'currency',
-        currency: 'EUR',
-    }).resolvedOptions().maximumFractionDigits;
-    $('#totalRealValuation').html(total.toLocaleString('fr-FR', {
-        maximumFractionDigits: currencyFractionDigits
-    }));
-}
-
-</script>
+    </script>
     <?php
 }
 

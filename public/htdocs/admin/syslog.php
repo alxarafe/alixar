@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2007      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2013	   Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2005-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2007       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2013	    Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,6 +21,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *  \file       htdocs/admin/syslog.php
@@ -218,7 +220,7 @@ foreach ($syslogModules as $moduleName) {
     $module = new $moduleName();
     '@phan-var-force LogHandler $module';
 
-    $moduleactive = (int) $module->isActive();
+    $moduleactive = (int)$module->isActive();
     //print $moduleName." = ".$moduleactive." - ".$module->getName()." ".($moduleactive == -1)."<br>\n";
     if (($moduleactive == -1) && getDolGlobalInt('MAIN_FEATURES_LEVEL') == 0) {
         continue; // Some modules are hidden if not activable and not into debug mode (end user must not see them)

@@ -26,7 +26,7 @@
 /**
  * Prepare array with list of tabs
  *
- * @param   Deplacement $object     Object related to tabs
+ * @param Deplacement $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function trip_prepare_head(Deplacement $object)

@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2001-2003 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015      Alexandre Spangaro   <aspangaro@open-dsi.fr>
+/* Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Don\Classes\DonationStats;
+
 /**
  *  \file       htdocs/don/stats/index.php
  *  \ingroup    donations
@@ -28,13 +34,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/donstats.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-}
+
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');
 $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height');
 
@@ -121,7 +121,8 @@ $px2 = new DolGraph();
 $mesg = $px2->isGraphKo();
 if (!$mesg) {
     $px2->SetData($data);
-    $i = $startyear;$legend = array();
+    $i = $startyear;
+    $legend = array();
     while ($i <= $endyear) {
         $legend[] = $i;
         $i++;
@@ -297,7 +298,7 @@ foreach ($data as $val) {
     print '<td class="right">' . $val['nb'] . '</td>';
     print '<td class="right opacitylow" style="' . ($greennb ? 'color: green;' : 'color: red;') . '">' . (!empty($val['nb_diff']) && $val['nb_diff'] < 0 ? '' : '+') . round(!empty($val['nb_diff']) ? $val['nb_diff'] : 0) . '%</td>';
     print '<td class="right"><span class="amount">' . price(price2num($val['total'], 'MT'), 1) . '</span></td>';
-    print '<td class="right opacitylow" style="' . ($greentotal ? 'color: green;' : 'color: red;') . '">' . ( !empty($val['total_diff']) && $val['total_diff'] < 0 ? '' : '+') . round(!empty($val['total_diff']) ? $val['total_diff'] : 0) . '%</td>';
+    print '<td class="right opacitylow" style="' . ($greentotal ? 'color: green;' : 'color: red;') . '">' . (!empty($val['total_diff']) && $val['total_diff'] < 0 ? '' : '+') . round(!empty($val['total_diff']) ? $val['total_diff'] : 0) . '%</td>';
     print '<td class="right"><span class="amount">' . price(price2num($val['avg'], 'MT'), 1) . '</span></td>';
     print '<td class="right opacitylow" style="' . ($greenavg ? 'color: green;' : 'color: red;') . '">' . (!empty($val['avg_diff']) && $val['avg_diff'] < 0 ? '' : '+') . round(!empty($val['avg_diff']) ? $val['avg_diff'] : 0) . '%</td>';
     print '</tr>';

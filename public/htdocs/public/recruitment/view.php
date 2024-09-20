@@ -38,8 +38,6 @@ if (!defined('NOBROWSERNOTIF')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentjobposition.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
@@ -48,9 +46,9 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 $langs->loadLangs(array("companies", "other", "recruitment"));
 
 // Get parameters
-$action   = GETPOST('action', 'aZ09');
-$cancel   = GETPOST('cancel', 'alpha');
-$email    = GETPOST('email', 'alpha');
+$action = GETPOST('action', 'aZ09');
+$cancel = GETPOST('cancel', 'alpha');
+$email = GETPOST('email', 'alpha');
 $backtopage = '';
 
 $ref = GETPOST('ref', 'alpha');
@@ -152,7 +150,6 @@ $paramname = 'id';
 $autocopy = 'MAIN_MAIL_AUTOCOPY_CANDIDATURE_TO'; // used to know the automatic BCC to add
 $trackid = 'recruitmentcandidature' . $object->id;
 include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
-
 
 
 /*

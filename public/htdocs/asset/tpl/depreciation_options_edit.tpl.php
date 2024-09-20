@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2021  Open-Dsi  <support@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -36,7 +37,6 @@ if (!is_object($form)) {
 }
 
 if (!isset($formadmin) || !is_object($formadmin)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
     $formadmin = new FormAdmin($db);
 }
 

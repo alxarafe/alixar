@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2015       ATM Consulting          <support@atm-consulting.fr>
- * Copyright (C) 2019-2020  Open-DSI                <support@open-dsi.fr>
+/* Copyright (C) 2015       ATM Consulting              <support@atm-consulting.fr>
+ * Copyright (C) 2019-2020  Open-DSI                    <support@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Canvas;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\IntracommReport\Classes\IntracommReport;
+
 /**
  *  \file       htdocs/intracommreport/list.php
  *  \ingroup    Intracomm Report
@@ -27,9 +33,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/intracommreport/class/intracommreport.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('intracommreport'));
@@ -104,7 +108,6 @@ if (empty($action)) {
 $canvas = GETPOST("canvas");
 $objcanvas = null;
 if (!empty($canvas)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/canvas.class.php';
     $objcanvas = new Canvas($db, $action);
     $objcanvas->getCanvas('product', 'list', $canvas);
 }
@@ -201,7 +204,6 @@ if (empty($reshook)) {
     $uploaddir = $conf->product->dir_output;
     include DOL_DOCUMENT_ROOT . '/core/actions_massactions.inc.php';
 }
-
 
 /*
  * View

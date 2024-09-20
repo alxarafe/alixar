@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2020   Tobias Sekan    <tobias.sekan@startmail.com>
+/* Copyright (C) 2020       Tobias Sekan                <tobias.sekan@startmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,15 +19,12 @@
 
 /**
  *  \file       htdocs/fourn/facture/index.php
-*   \ingroup    facture
+ *   \ingroup    facture
  *  \brief      Home page of customer invoices area
  */
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
 
 // Load translation files required by the page
@@ -55,7 +52,6 @@ restrictedArea($user, 'fournisseur', 0, '', 'facture');
  */
 
 // None
-
 
 
 /*

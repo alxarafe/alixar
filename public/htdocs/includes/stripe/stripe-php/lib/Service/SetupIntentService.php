@@ -12,9 +12,9 @@ class SetupIntentService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\SetupIntent>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\SetupIntent>
      */
     public function all($params = null, $opts = null)
     {
@@ -33,9 +33,9 @@ class SetupIntentService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SetupIntent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SetupIntent
      */
     public function cancel($id, $params = null, $opts = null)
     {
@@ -58,9 +58,9 @@ class SetupIntentService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SetupIntent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SetupIntent
      */
     public function confirm($id, $params = null, $opts = null)
     {
@@ -77,9 +77,9 @@ class SetupIntentService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SetupIntent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SetupIntent
      */
     public function create($params = null, $opts = null)
     {
@@ -100,9 +100,9 @@ class SetupIntentService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SetupIntent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SetupIntent
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -116,9 +116,9 @@ class SetupIntentService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SetupIntent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SetupIntent
      */
     public function update($id, $params = null, $opts = null)
     {
@@ -132,9 +132,9 @@ class SetupIntentService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SetupIntent
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SetupIntent
      */
     public function verifyMicrodeposits($id, $params = null, $opts = null)
     {

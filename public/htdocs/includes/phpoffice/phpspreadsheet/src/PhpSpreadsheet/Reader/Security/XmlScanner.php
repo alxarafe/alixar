@@ -114,9 +114,9 @@ class XmlScanner
      *
      * @param mixed $xml
      *
+     * @return string
      * @throws Reader\Exception
      *
-     * @return string
      */
     public function scan($xml)
     {
@@ -143,9 +143,9 @@ class XmlScanner
      *
      * @param string $filestream
      *
+     * @return string
      * @throws Reader\Exception
      *
-     * @return string
      */
     public function scanFile($filestream)
     {

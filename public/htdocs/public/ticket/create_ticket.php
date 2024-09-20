@@ -19,6 +19,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *       \file       htdocs/public/ticket/create_ticket.php
  *       \ingroup    ticket
@@ -48,23 +51,18 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'other', 'mails', 'ticket'));
@@ -167,7 +165,7 @@ if (empty($reshook)) {
             // Ensure that contact is active and select first active contact
             $cid = -1;
             foreach ($contacts as $key => $contact) {
-                if ((int) $contact->statut == 1) {
+                if ((int)$contact->statut == 1) {
                     $cid = $key;
                     break;
                 }
@@ -377,7 +375,6 @@ if (empty($reshook)) {
                     $res = $object->fetch($id);
                     if ($res) {
                         // Create form object
-                        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                         include_once DOL_DOCUMENT_ROOT . '/core/lib/files.lib.php';
                         $formmail = new FormMail($db);
 
@@ -395,7 +392,7 @@ if (empty($reshook)) {
                         $appli = $mysoc->name;
 
                         $subject = '[' . $appli . '] ' . $langs->transnoentities('TicketNewEmailSubject', $object->ref, $object->track_id);
-                        $message  = (getDolGlobalString('TICKET_MESSAGE_MAIL_NEW') !== '' ? getDolGlobalString('TICKET_MESSAGE_MAIL_NEW') : $langs->transnoentities('TicketNewEmailBody')) . '<br><br>';
+                        $message = (getDolGlobalString('TICKET_MESSAGE_MAIL_NEW') !== '' ? getDolGlobalString('TICKET_MESSAGE_MAIL_NEW') : $langs->transnoentities('TicketNewEmailBody')) . '<br><br>';
                         $message .= $langs->transnoentities('TicketNewEmailBodyInfosTicket') . '<br>';
 
                         $url_public_ticket = getDolGlobalString('TICKET_URL_PUBLIC_INTERFACE', dol_buildpath('/public/ticket/', 2)) . 'view.php?track_id=' . $object->track_id;
@@ -416,7 +413,6 @@ if (empty($reshook)) {
                             $old_MAIN_MAIL_AUTOCOPY_TO = getDolGlobalString('TICKET_DISABLE_MAIL_AUTOCOPY_TO');
                             $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
                         }
-                        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
                         $mailfile = new CMailFile($subject, $sendto, $from, $message, $filepath, $mimetype, $filename, $sendtocc, '', $deliveryreceipt, -1, '', '', 'tic' . $object->id, '', 'ticket');
                         if ($mailfile->error || !empty($mailfile->errors)) {
                             setEventMessages($mailfile->error, $mailfile->errors, 'errors');
@@ -459,7 +455,6 @@ if (empty($reshook)) {
                                 $old_MAIN_MAIL_AUTOCOPY_TO = getDolGlobalString('TICKET_DISABLE_MAIL_AUTOCOPY_TO');
                                 $conf->global->MAIN_MAIL_AUTOCOPY_TO = '';
                             }
-                            include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
                             $mailfile = new CMailFile($subject, $sendto, $from, $message_admin, $filepath, $mimetype, $filename, $sendtocc, '', $deliveryreceipt, -1, '', '', 'tic' . $object->id, '', 'ticket');
                             if ($mailfile->error || !empty($mailfile->errors)) {
                                 setEventMessages($mailfile->error, $mailfile->errors, 'errors');

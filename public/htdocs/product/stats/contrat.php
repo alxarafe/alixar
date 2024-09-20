@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ContratLigne;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *       \file       htdocs/product/stats/contrat.php
  *       \ingroup    product service contrat
@@ -28,8 +33,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('contracts', 'products', 'companies'));
@@ -68,7 +71,6 @@ if (!$sortfield) {
 $socid = 0;
 
 $result = restrictedArea($user, 'produit|service', $fieldvalue, 'product&product', '', '', $fieldtype);
-
 
 /*
  * View
@@ -147,12 +149,12 @@ if ($id > 0 || !empty($ref)) {
         $sql .= " WHERE c.rowid = cd.fk_contrat";
         $sql .= " AND c.fk_soc = s.rowid";
         $sql .= " AND c.entity IN (" . getEntity('contract') . ")";
-        $sql .= " AND cd.fk_product = " . ((int) $product->id);
+        $sql .= " AND cd.fk_product = " . ((int)$product->id);
         if (!$user->hasRight('societe', 'client', 'voir')) {
-            $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+            $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
         }
         if ($socid) {
-            $sql .= " AND s.rowid = " . ((int) $socid);
+            $sql .= " AND s.rowid = " . ((int)$socid);
         }
         $sql .= " GROUP BY c.rowid, c.ref, c.ref_customer, c.ref_supplier, c.date_contrat, c.statut, s.nom, s.rowid, s.code_client";
         $sql .= $db->order($sortfield, $sortorder);
@@ -177,7 +179,7 @@ if ($id > 0 || !empty($ref)) {
             $option = '&id=' . $product->id;
 
             if ($limit > 0 && $limit != $conf->liste_limit) {
-                $option .= '&limit=' . ((int) $limit);
+                $option .= '&limit=' . ((int)$limit);
             }
             /*
             if (!empty($search_month)) {
@@ -201,7 +203,7 @@ if ($id > 0 || !empty($ref)) {
             print_barre_liste($langs->trans("Contrats"), $page, $_SERVER["PHP_SELF"], $option, $sortfield, $sortorder, '', $num, $totalofrecords, '', 0, '', '', $limit, 0, 0, 1);
 
             if (!empty($page)) {
-                $option .= '&page=' . urlencode((string) ($page));
+                $option .= '&page=' . urlencode((string)($page));
             }
 
             $i = 0;

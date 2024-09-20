@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2012-2014 Charles-François BENKE <charles.fr@benke.fr>
- * Copyright (C) 2014      Marcos García          <marcosgdf@gmail.com>
- * Copyright (C) 2015      Frederic France        <frederic.france@free.fr>
- * Copyright (C) 2016      Juan José Menent       <jmenent@2byte.es>
- * Copyright (C) 2020      Pierre Ardoin          <mapiolca@me.com>
+/* Copyright (C) 2012-2014  Charles-François BENKE      <charles.fr@benke.fr>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
+ * Copyright (C) 2016       Juan José Menent            <jmenent@2byte.es>
+ * Copyright (C) 2020       Pierre Ardoin               <mapiolca@me.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,13 +21,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/core/boxes/box_project.php
  *  \ingroup    project
  *  \brief      Module to show Project activity of the current Year
  */
-
-include_once DOL_DOCUMENT_ROOT . "/core/boxes/modules_boxes.php";
 
 /**
  * Class to manage the box to show last project
@@ -35,15 +37,15 @@ include_once DOL_DOCUMENT_ROOT . "/core/boxes/modules_boxes.php";
 class box_project extends ModeleBoxes
 {
     public $boxcode = "project";
-    public $boximg  = "object_projectpub";
+    public $boximg = "object_projectpub";
     public $boxlabel;
     // var $depends = array("projet");
 
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param = '')
     {
@@ -61,8 +63,8 @@ class box_project extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param   int        $max        Maximum number of records to load
-     *  @return  void
+     * @param int $max Maximum number of records to load
+     * @return  void
      */
     public function loadBox($max = 5)
     {
@@ -80,8 +82,6 @@ class box_project extends ModeleBoxes
         $i = 0;
         // list the summary of the orders
         if ($user->hasRight('projet', 'lire')) {
-            include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
-            include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
             $projectstatic = new Project($this->db);
             $companystatic = new Societe($this->db);
 
@@ -99,7 +99,7 @@ class box_project extends ModeleBoxes
             $sql .= " FROM " . MAIN_DB_PREFIX . "projet as p";
             $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "societe as s on p.fk_soc = s.rowid";
             $sql .= " WHERE p.entity IN (" . getEntity('project') . ")"; // Only current entity or severals if permission ok
-            $sql .= " AND p.fk_statut = " . ((int) $projectstatic::STATUS_VALIDATED); // Only open projects
+            $sql .= " AND p.fk_statut = " . ((int)$projectstatic::STATUS_VALIDATED); // Only open projects
             if (!$user->hasRight('projet', 'all', 'lire')) {
                 $sql .= " AND p.rowid IN (" . $this->db->sanitize($projectsListId) . ")"; // public and assigned to, or restricted to company for external users
             }
@@ -144,7 +144,7 @@ class box_project extends ModeleBoxes
                     $sql = "SELECT count(*) as nb, sum(progress) as totprogress";
                     $sql .= " FROM " . MAIN_DB_PREFIX . "projet as p LEFT JOIN " . MAIN_DB_PREFIX . "projet_task as pt on pt.fk_projet = p.rowid";
                     $sql .= " WHERE p.entity IN (" . getEntity('project') . ')';
-                    $sql .= " AND p.rowid = " . ((int) $objp->rowid);
+                    $sql .= " AND p.rowid = " . ((int)$objp->rowid);
 
                     $resultTask = $this->db->query($sql);
                     if ($resultTask) {
@@ -209,10 +209,10 @@ class box_project extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

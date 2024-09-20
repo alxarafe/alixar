@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2015       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2015       Juanjo Menent           <jmenent@2byte.es>
+/* Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *  \file       htdocs/don/admin/donation_extrafields.php
  *  \ingroup    donations
@@ -27,7 +30,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/donation.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'admin', 'donations'));
@@ -54,7 +56,6 @@ if (!$user->admin) {
 require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 
 
-
 /*
  * View
  */
@@ -75,7 +76,6 @@ print dol_get_fiche_head($head, 'attributes', $langs->trans("Donations"), -1, 'p
 require DOL_DOCUMENT_ROOT . '/core/tpl/admin_extrafields_view.tpl.php';
 
 print dol_get_fiche_end();
-
 
 
 /* ************************************************************************** */

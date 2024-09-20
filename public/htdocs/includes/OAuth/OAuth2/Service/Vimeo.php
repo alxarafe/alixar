@@ -39,30 +39,31 @@ class Vimeo extends AbstractService
      * @see  https://developer.vimeo.com/api/authentication#scope
      */
     // View public videos
-    const SCOPE_PUBLIC    = 'public';
+    const SCOPE_PUBLIC = 'public';
     // View private videos
-    const SCOPE_PRIVATE   = 'private';
+    const SCOPE_PRIVATE = 'private';
     // View Vimeo On Demand purchase history
     const SCOPE_PURCHASED = 'purchased';
     // Create new videos, groups, albums, etc.
-    const SCOPE_CREATE    = 'create';
+    const SCOPE_CREATE = 'create';
     // Edit videos, groups, albums, etc.
-    const SCOPE_EDIT      = 'edit';
+    const SCOPE_EDIT = 'edit';
     // Delete videos, groups, albums, etc.
-    const SCOPE_DELETE    = 'delete';
+    const SCOPE_DELETE = 'delete';
     // Interact with a video on behalf of a user, such as liking
     // a video or adding it to your watch later queue
-    const SCOPE_INTERACT  = 'interact';
+    const SCOPE_INTERACT = 'interact';
     // Upload a video
-    const SCOPE_UPLOAD    = 'upload';
+    const SCOPE_UPLOAD = 'upload';
 
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct(
             $credentials,
             $httpClient,

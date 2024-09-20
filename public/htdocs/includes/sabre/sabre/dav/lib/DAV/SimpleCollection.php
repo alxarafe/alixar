@@ -38,7 +38,7 @@ class SimpleCollection extends Collection
      * The name of the node must be passed, child nodes can also be passed.
      * This nodes must be instances of INode
      *
-     * @param string  $name
+     * @param string $name
      * @param INode[] $children
      */
     public function __construct($name, array $children = [])
@@ -85,9 +85,9 @@ class SimpleCollection extends Collection
      *
      * @param string $name
      *
+     * @return INode
      * @throws Exception\NotFound
      *
-     * @return INode
      */
     public function getChild($name)
     {

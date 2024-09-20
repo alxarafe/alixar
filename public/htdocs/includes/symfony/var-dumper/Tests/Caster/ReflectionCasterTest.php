@@ -65,7 +65,7 @@ EOTXT
     {
         $a = $b = 123;
         $var = function ($x) use ($a, &$b) {
-};
+        };
 
         $this->assertDumpMatchesFormat(
             <<<EOTXT

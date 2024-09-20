@@ -25,7 +25,7 @@ class StringUtil
             return false;
         }
 
-        return (bool) preg_match('%%u', $str);
+        return (bool)preg_match('%%u', $str);
     }
 
     /**

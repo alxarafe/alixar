@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2015  Juanjo Menent                <jmenent@2byte.es>
- * Copyright (C) 2020  Maxime DEMAREST              <maxime@indelog.fr>
+/* Copyright (C) 2015       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2020       Maxime DEMAREST             <maxime@indelog.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Code\Payment\Classes;
+
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/admin/payment.php
  *      \ingroup    invoice
@@ -29,7 +34,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/invoice.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "other", "errors", "bills"));
@@ -100,7 +104,7 @@ if ($action == 'setparams') {
  * View
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 llxHeader('', $langs->trans("BillsSetup"), 'EN:Invoice_Configuration|FR:Configuration_module_facture|ES:ConfiguracionFactura', '', 0, 0, '', '', '', 'mod-admin page-payment');
 

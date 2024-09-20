@@ -12,9 +12,9 @@ class OutboundPaymentService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Treasury\OutboundPayment>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Treasury\OutboundPayment>
      */
     public function all($params = null, $opts = null)
     {
@@ -28,9 +28,9 @@ class OutboundPaymentService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Treasury\OutboundPayment
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Treasury\OutboundPayment
      */
     public function cancel($id, $params = null, $opts = null)
     {
@@ -43,9 +43,9 @@ class OutboundPaymentService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Treasury\OutboundPayment
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Treasury\OutboundPayment
      */
     public function create($params = null, $opts = null)
     {
@@ -61,9 +61,9 @@ class OutboundPaymentService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Treasury\OutboundPayment
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Treasury\OutboundPayment
      */
     public function retrieve($id, $params = null, $opts = null)
     {

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2014-2015 Florian HENRY       <florian.henry@open-concept.pro>
- * Copyright (C) 2015      Laurent Destailleur <ldestailleur@users.sourceforge.net>
+/* Copyright (C) 2014-2015  Florian HENRY               <florian.henry@open-concept.pro>
+ * Copyright (C) 2015       Laurent Destailleur         <ldestailleur@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\TaskStats;
+
 /**
  *       \file       htdocs/projet/tasks/stats/index.php
  *       \ingroup    project
@@ -26,9 +30,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/taskstats.class.php';
 
 // Security check
 if (!$user->hasRight('projet', 'lire')) {
@@ -84,7 +86,6 @@ if (!empty($socid) && $socid != -1) {
 if (!empty($year)) {
     $stats_tasks->year = $year;
 }
-
 
 
 // Build graphic number of object

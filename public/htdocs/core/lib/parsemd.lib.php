@@ -26,9 +26,9 @@
 /**
  * Function to parse MD content into HTML
  *
- * @param   string    $content              MD content
- * @param   string    $parser               'parsedown' or 'nl2br'
- * @param   string    $replaceimagepath     Replace path to image with another path. Example: ('doc/'=>'xxx/aaa/')
+ * @param string $content MD content
+ * @param string $parser 'parsedown' or 'nl2br'
+ * @param string $replaceimagepath Replace path to image with another path. Example: ('doc/'=>'xxx/aaa/')
  * @return  string                          Parsed content
  */
 function dolMd2Html($content, $parser = 'parsedown', $replaceimagepath = null)
@@ -72,9 +72,9 @@ function dolMd2Html($content, $parser = 'parsedown', $replaceimagepath = null)
 /**
  * Function to parse MD content into ASCIIDOC
  *
- * @param   string    $content              MD content
- * @param   string    $parser               'dolibarr'
- * @param   string    $replaceimagepath     Replace path to image with another path. Example: ('doc/'=>'xxx/aaa/')
+ * @param string $content MD content
+ * @param string $parser 'dolibarr'
+ * @param string $replaceimagepath Replace path to image with another path. Example: ('doc/'=>'xxx/aaa/')
  * @return  string                          Parsed content
  */
 function dolMd2Asciidoc($content, $parser = 'dolibarr', $replaceimagepath = null)

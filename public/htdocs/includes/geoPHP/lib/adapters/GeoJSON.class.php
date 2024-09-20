@@ -146,17 +146,17 @@ class GeoJSON extends GeoAdapter
             $component_array = array();
             foreach ($geometry->components as $component) {
                 $component_array[] = array(
-                'type' => $component->geometryType(),
-                'coordinates' => $component->asArray(),
+                    'type' => $component->geometryType(),
+                    'coordinates' => $component->asArray(),
                 );
             }
             return array(
-            'type' => 'GeometryCollection',
-            'geometries' => $component_array,
+                'type' => 'GeometryCollection',
+                'geometries' => $component_array,
             );
         } else return array(
-        'type' => $geometry->getGeomType(),
-        'coordinates' => $geometry->asArray(),
+            'type' => $geometry->getGeomType(),
+            'coordinates' => $geometry->asArray(),
         );
     }
 }

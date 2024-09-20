@@ -18,6 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/contact/project.php
  *  \ingroup    contact
@@ -26,7 +30,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
 $langs->loadLangs(array("contacts", "companies", "projects"));
 
@@ -54,7 +57,6 @@ if ($reshook < 0) {
 $form = new Form($db);
 
 if ($id) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/contact.lib.php';
 
     $object = new Contact($db);

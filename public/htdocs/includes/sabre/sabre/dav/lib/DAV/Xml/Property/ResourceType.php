@@ -34,7 +34,7 @@ class ResourceType extends Element\Elements implements HtmlOutput
      */
     public function __construct($resourceTypes = null)
     {
-        parent::__construct((array) $resourceTypes);
+        parent::__construct((array)$resourceTypes);
     }
 
     /**

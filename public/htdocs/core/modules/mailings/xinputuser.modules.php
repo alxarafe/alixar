@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2005-2012 Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2005-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,13 +18,14 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Mailing\Classes\MailingTargets;
+
 /**
  *  \file       htdocs/core/modules/mailings/xinputuser.modules.php
  *  \ingroup    mailing
  *  \brief      File of class to offer a selector of emailing targets with Rule 'xinputuser'.
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/modules/mailings/modules_mailings.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 
@@ -49,7 +50,7 @@ class mailing_xinputuser extends MailingTargets
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -63,7 +64,7 @@ class mailing_xinputuser extends MailingTargets
      *  array of SQL request that returns two field:
      *  One called "label", One called "nb".
      *
-     *  @return     array       Array with SQL requests
+     * @return     array       Array with SQL requests
      */
     public function getSqlArrayForStats()
     {
@@ -80,8 +81,8 @@ class mailing_xinputuser extends MailingTargets
      *  For example if this selector is used to extract 500 different
      *  emails from a text file, this function must return 500.
      *
-     *  @param      string          $sql        Sql request to count
-     *  @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
+     * @param string $sql Sql request to count
+     * @return     int|string                  Nb of recipient, or <0 if error, or '' if NA
      */
     public function getNbOfRecipients($sql = '')
     {
@@ -92,8 +93,8 @@ class mailing_xinputuser extends MailingTargets
     /**
      *  Renvoie url lien vers fiche de la source du destinataire du mailing
      *
-     *  @param  int     $id     ID
-     *  @return string          Url lien
+     * @param int $id ID
+     * @return string          Url lien
      */
     public function url($id)
     {
@@ -104,7 +105,7 @@ class mailing_xinputuser extends MailingTargets
     /**
      *   Affiche formulaire de filtre qui apparait dans page de selection des destinataires de mailings
      *
-     *   @return     string      Retourne zone select
+     * @return     string      Retourne zone select
      */
     public function formFilter()
     {
@@ -115,16 +116,17 @@ class mailing_xinputuser extends MailingTargets
         return $s;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Ajoute destinataires dans table des cibles
      *
-     *  @param  int     $mailing_id     Id of emailing
-     *  @return int                     Return integer < 0 si erreur, nb ajout si ok
+     * @param int $mailing_id Id of emailing
+     * @return int                     Return integer < 0 si erreur, nb ajout si ok
      */
     public function add_to_target($mailing_id)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs, $_FILES;
 
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';

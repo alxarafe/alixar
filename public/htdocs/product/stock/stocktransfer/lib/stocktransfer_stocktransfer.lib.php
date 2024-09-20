@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) ---Put here your own copyright and developer email---
- * Copyright (C) 2021  Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Product\Classes\StockTransfer;
+
 /**
  * \file    lib/stocktransfer_stocktransfer.lib.php
  * \ingroup stocktransfer
@@ -26,7 +29,7 @@
 /**
  * Prepare array of tabs for StockTransfer
  *
- * @param   StockTransfer   $object     StockTransfer
+ * @param StockTransfer $object StockTransfer
  * @return  array                   Array of tabs
  */
 function stocktransferPrepareHead($object)
@@ -72,7 +75,6 @@ function stocktransferPrepareHead($object)
     }
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->stocktransfer->dir_output . "/stocktransfer/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);

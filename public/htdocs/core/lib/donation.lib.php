@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2015      Alexandre Spangaro   <aspangaro@open-dsi.fr>
+/* Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Don\Classes\Don;
+
 /**
  *      \file           htdocs/core/lib/donation.lib.php
  *      \ingroup        Donation
@@ -26,7 +30,7 @@
 /**
  *  Prepare array with list of admin tabs
  *
- *  @return array                   Array of tabs to show
+ * @return array                   Array of tabs to show
  */
 function donation_admin_prepare_head()
 {
@@ -66,8 +70,8 @@ function donation_admin_prepare_head()
 /**
  *  Prepare array with list of tabs
  *
- *  @param  Don         $object     Donation
- *  @return array                   Array of tabs to show
+ * @param Don $object Donation
+ * @return array                   Array of tabs to show
  */
 function donation_prepare_head($object)
 {
@@ -88,7 +92,6 @@ function donation_prepare_head($object)
     complete_head_from_modules($conf, $langs, $object, $head, $h, 'donation', 'add', 'core');
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->don->dir_output . '/' . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);

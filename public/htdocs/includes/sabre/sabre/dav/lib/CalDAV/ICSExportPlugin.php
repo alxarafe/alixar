@@ -74,11 +74,11 @@ class ICSExportPlugin extends DAV\ServerPlugin
     /**
      * Intercepts GET requests on calendar urls ending with ?export.
      *
-     * @throws BadRequest
+     * @return bool
      * @throws DAV\Exception\NotFound
      * @throws VObject\InvalidDataException
      *
-     * @return bool
+     * @throws BadRequest
      */
     public function httpGet(RequestInterface $request, ResponseInterface $response)
     {
@@ -121,7 +121,7 @@ class ICSExportPlugin extends DAV\ServerPlugin
             }
             $end = DateTime::createFromFormat('U', $queryParams['end']);
         }
-        if (isset($queryParams['expand']) && (bool) $queryParams['expand']) {
+        if (isset($queryParams['expand']) && (bool)$queryParams['expand']) {
             if (!$start || !$end) {
                 throw new BadRequest('If you\'d like to expand recurrences, you must specify both a start= and end= parameter.');
             }
@@ -161,13 +161,13 @@ class ICSExportPlugin extends DAV\ServerPlugin
     /**
      * This method is responsible for generating the actual, full response.
      *
-     * @param string        $path
+     * @param string $path
      * @param DateTime|null $start
      * @param DateTime|null $end
-     * @param bool          $expand
-     * @param string        $componentType
-     * @param string        $format
-     * @param array         $properties
+     * @param bool $expand
+     * @param string $componentType
+     * @param string $format
+     * @param array $properties
      *
      * @throws DAV\Exception\NotFound
      * @throws VObject\InvalidDataException
@@ -318,7 +318,7 @@ class ICSExportPlugin extends DAV\ServerPlugin
                     // VTIMEZONE is special, because we need to filter out the duplicates
                     case 'VTIMEZONE':
                         // Naively just checking tzid.
-                        if (in_array((string) $child->TZID, $collectedTimezones)) {
+                        if (in_array((string)$child->TZID, $collectedTimezones)) {
                             break;
                         }
 

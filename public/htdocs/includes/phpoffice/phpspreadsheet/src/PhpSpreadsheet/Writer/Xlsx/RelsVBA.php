@@ -12,9 +12,9 @@ class RelsVBA extends WriterPart
      *
      * @param Spreadsheet $spreadsheet
      *
+     * @return string XML Output
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      *
-     * @return string XML Output
      */
     public function writeVBARelationships(Spreadsheet $spreadsheet)
     {

@@ -1,8 +1,9 @@
 <?php
 
-/* Copyright (C) 2017       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2017		Saasprov				<saasprov@gmail.com>
- * Copyright (C) 2017		Ferran Marcet			<fmarcet@2byte.es.com>
+/* Copyright (C) 2017       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2017		Saasprov				    <saasprov@gmail.com>
+ * Copyright (C) 2017		Ferran Marcet			    <fmarcet@2byte.es.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +22,10 @@
  */
 
 /**
-*  \file       htdocs/stripe/config.php
-*  \ingroup    Stripe
-*  \brief      Page to move config in api
-*/
+ *  \file       htdocs/stripe/config.php
+ *  \ingroup    Stripe
+ *  \brief      Page to move config in api
+ */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/stripe/stripe-php/init.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/stripe/stripe-php/lib/Stripe.php';
@@ -35,11 +36,11 @@ global $stripearrayofkeysbyenv;
 
 $stripearrayofkeysbyenv = array(
     array(
-        "secret_key"      => getDolGlobalString('STRIPE_TEST_SECRET_KEY'),
+        "secret_key" => getDolGlobalString('STRIPE_TEST_SECRET_KEY'),
         "publishable_key" => getDolGlobalString('STRIPE_TEST_PUBLISHABLE_KEY')
     ),
     array(
-        "secret_key"      => getDolGlobalString('STRIPE_LIVE_SECRET_KEY'),
+        "secret_key" => getDolGlobalString('STRIPE_LIVE_SECRET_KEY'),
         "publishable_key" => getDolGlobalString('STRIPE_LIVE_PUBLISHABLE_KEY')
     )
 );

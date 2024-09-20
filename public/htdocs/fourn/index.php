@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2001-2006 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/fourn/index.php
  *  \ingroup    fournisseur
@@ -27,9 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 
 $langs->loadLangs(array("suppliers", "orders", "companies"));
 
@@ -39,7 +41,6 @@ if ($user->socid) {
     $socid = $user->socid;
 }
 $result = restrictedArea($user, 'societe', $socid, '');
-
 
 /*
  * View
@@ -53,11 +54,9 @@ llxHeader("", $langs->trans("SuppliersArea"));
 
 print load_fiche_titre($langs->trans("SuppliersArea"));
 
-
 //print '<table border="0" width="100%" class="notopnoleftnoright">';
 //print '<tr><td valign="top" width="30%" class="notopnoleft">';
 print '<div class="fichecenter"><div class="fichethirdleft">';
-
 
 // Orders
 $sql = "SELECT count(cf.rowid), cf.fk_statut";
@@ -68,7 +67,7 @@ if (!$user->hasRight("societe", "client", "voir") && !$socid) {
 }
 $sql .= " WHERE cf.fk_soc = s.rowid ";
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-    $sql .= " AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND sc.fk_user = " . ((int)$user->id);
 }
 $sql .= " AND cf.entity = " . $conf->entity;
 $sql .= " GROUP BY cf.fk_statut";
@@ -114,12 +113,12 @@ if (isModEnabled("supplier_order")) {
     }
     $sql .= " WHERE cf.fk_soc = s.rowid";
     if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-        $sql .= " AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND sc.fk_user = " . ((int)$user->id);
     }
     $sql .= " AND cf.entity = " . $conf->entity;
     $sql .= " AND cf.fk_statut = 0";
     if ($socid) {
-        $sql .= " AND cf.fk_soc = " . ((int) $socid);
+        $sql .= " AND cf.fk_soc = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -170,12 +169,12 @@ if (isModEnabled("supplier_invoice") && ($user->hasRight('fournisseur', 'facture
     }
     $sql .= " WHERE s.rowid = ff.fk_soc";
     if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-        $sql .= " AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND sc.fk_user = " . ((int)$user->id);
     }
     $sql .= " AND ff.entity = " . $conf->entity;
     $sql .= " AND ff.fk_statut = 0";
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -240,7 +239,7 @@ if (getDolGlobalString('MAIN_COMPANY_PERENTITY_SHARED')) {
 $sql .= ", st.libelle as stcomm";
 $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s";
 if (getDolGlobalString('MAIN_COMPANY_PERENTITY_SHARED')) {
-    $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "societe_perentity as spe ON spe.fk_soc = s.rowid AND spe.entity = " . ((int) $conf->entity);
+    $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "societe_perentity as spe ON spe.fk_soc = s.rowid AND spe.entity = " . ((int)$conf->entity);
 }
 $sql .= ", " . MAIN_DB_PREFIX . "c_stcomm as st";
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
@@ -250,10 +249,10 @@ $sql .= " WHERE s.fk_stcomm = st.id";
 $sql .= " AND s.fournisseur = 1";
 $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if ($socid) {
-    $sql .= " AND s.rowid = " . ((int) $socid);
+    $sql .= " AND s.rowid = " . ((int)$socid);
 }
 $sql .= " ORDER BY s.tms DESC";
 $sql .= $db->plimit($max, 0);

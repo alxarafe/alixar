@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Hrm\Classes\Evaluation;
+use Dolibarr\Code\Hrm\Classes\Job;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *    \file       htdocs/hrm/evaluation_agenda.php
  *    \ingroup    hrm
@@ -29,14 +35,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/evaluation.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_evaluation.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';
-
 
 // Load translation files required by the page
 $langs->loadLangs(array('hrm', 'other'));
@@ -132,7 +133,6 @@ if (empty($reshook)) {
 }
 
 
-
 /*
  *	View
  */
@@ -166,7 +166,6 @@ if ($object->id > 0) {
     $morehtmlref .= '<br>' . $langs->trans('JobProfile') . ' : ' . $job->getNomUrl(1);
     $morehtmlref .= '</div>';
 
-
     dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref);
 
     print '<div class="fichecenter">';
@@ -180,20 +179,19 @@ if ($object->id > 0) {
     print dol_get_fiche_end();
 
 
-
     // Actions buttons
 
     $objthirdparty = $object;
     $objcon = new stdClass();
 
-    $out = '&origin=' . urlencode((string) ($object->element . '@' . $object->module)) . '&originid=' . urlencode((string) ($object->id));
+    $out = '&origin=' . urlencode((string)($object->element . '@' . $object->module)) . '&originid=' . urlencode((string)($object->id));
     $urlbacktopage = $_SERVER['PHP_SELF'] . '?id=' . $object->id;
     $out .= '&backtopage=' . urlencode($urlbacktopage);
     $permok = $user->hasRight('agenda', 'myactions', 'create');
     if ((!empty($objthirdparty->id) || !empty($objcon->id)) && $permok) {
         //$out.='<a href="'.DOL_URL_ROOT.'/comm/action/card.php?action=create';
         if (get_class($objthirdparty) == 'Societe') {
-            $out .= '&socid=' . urlencode((string) ($objthirdparty->id));
+            $out .= '&socid=' . urlencode((string)($objthirdparty->id));
         }
         $out .= (!empty($objcon->id) ? '&contactid=' . urlencode($objcon->id) : '');
         //$out.=$langs->trans("AddAnAction").' ';
@@ -224,7 +222,7 @@ if ($object->id > 0) {
             $param .= '&contextpage=' . urlencode($contextpage);
         }
         if ($limit > 0 && $limit != $conf->liste_limit) {
-            $param .= '&limit=' . ((int) $limit);
+            $param .= '&limit=' . ((int)$limit);
         }
 
         //print load_fiche_titre($langs->trans("ActionsOnMyObject"), '', '');

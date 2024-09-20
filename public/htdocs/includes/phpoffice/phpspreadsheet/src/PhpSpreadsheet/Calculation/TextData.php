@@ -34,7 +34,7 @@ class TextData
             return iconv('UCS-4LE', 'UTF-8', pack('V', $character));
         }
 
-        return mb_convert_encoding('&#' . (int) $character . ';', 'UTF-8', 'HTML-ENTITIES');
+        return mb_convert_encoding('&#' . (int)$character . ';', 'UTF-8', 'HTML-ENTITIES');
     }
 
     /**
@@ -87,7 +87,7 @@ class TextData
     private static function convertBooleanValue($value)
     {
         if (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_OPENOFFICE) {
-            return (int) $value;
+            return (int)$value;
         }
 
         return ($value) ? Calculation::getTRUE() : Calculation::getFALSE();
@@ -266,7 +266,7 @@ class TextData
         if (!is_numeric($value) || !is_numeric($decimals)) {
             return Functions::NAN();
         }
-        $decimals = (int) floor($decimals);
+        $decimals = (int)floor($decimals);
 
         $valueResult = round($value, $decimals);
         if ($decimals < 0) {
@@ -281,7 +281,7 @@ class TextData
             );
         }
 
-        return (string) $valueResult;
+        return (string)$valueResult;
     }
 
     /**
@@ -535,7 +535,7 @@ class TextData
             $value = DateTime::DATEVALUE($value);
         }
 
-        return (string) NumberFormat::toFormattedString($value, $format);
+        return (string)NumberFormat::toFormattedString($value, $format);
     }
 
     /**
@@ -556,7 +556,7 @@ class TextData
                 trim($value, " \t\n\r\0\x0B" . StringHelper::getCurrencyCode())
             );
             if (is_numeric($numberValue)) {
-                return (float) $numberValue;
+                return (float)$numberValue;
             }
 
             $dateSetting = Functions::getReturnDateType();
@@ -581,7 +581,7 @@ class TextData
             return Functions::VALUE();
         }
 
-        return (float) $value;
+        return (float)$value;
     }
 
     /**
@@ -622,12 +622,12 @@ class TextData
 
             $percentageAdjustment = strlen($value) - strlen($percentageString);
             if ($percentageAdjustment) {
-                $value = (float) $percentageString;
+                $value = (float)$percentageString;
                 $value /= pow(10, $percentageAdjustment * 2);
             }
         }
 
-        return (float) $value;
+        return (float)$value;
     }
 
     /**
@@ -645,7 +645,7 @@ class TextData
         $value1 = Functions::flattenSingleValue($value1);
         $value2 = Functions::flattenSingleValue($value2);
 
-        return (string) $value2 === (string) $value1;
+        return (string)$value2 === (string)$value1;
     }
 
     /**

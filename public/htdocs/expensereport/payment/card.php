@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2015-2017  Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2015-2017  Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
+
 /**
  *      \file       htdocs/expensereport/payment/card.php
  *      \ingroup    Expense Report
@@ -25,12 +31,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/paymentexpensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expensereport/modules_expensereport.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/expensereport.lib.php';
 if (isModEnabled("bank")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 }
 
 // Load translation files required by the page
@@ -75,7 +77,6 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('expense
         $db->rollback();
     }
 }
-
 
 /*
  * View

@@ -16,6 +16,15 @@
 --
 -- ============================================================================
 
-CREATE TRIGGER update_customer_modtime BEFORE UPDATE ON llx_opensurvey_comments FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
-CREATE TRIGGER update_customer_modtime BEFORE UPDATE ON llx_opensurvey_sondage FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
-CREATE TRIGGER update_customer_modtime BEFORE UPDATE ON llx_opensurvey_user_studs FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
+CREATE TRIGGER update_customer_modtime
+    BEFORE UPDATE
+    ON llx_opensurvey_comments
+    FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
+CREATE TRIGGER update_customer_modtime
+    BEFORE UPDATE
+    ON llx_opensurvey_sondage
+    FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
+CREATE TRIGGER update_customer_modtime
+    BEFORE UPDATE
+    ON llx_opensurvey_user_studs
+    FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();

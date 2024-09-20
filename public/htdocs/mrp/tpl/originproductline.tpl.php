@@ -1,6 +1,7 @@
 <?php
-/* Copyright (C) 2010-2012  Regis Houssin   <regis.houssin@inodbox.com>
- * Copyright (C) 2017		Charlie Benke	<charlie@patas-monkey.com>
+
+/* Copyright (C) 2010-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2017		Charlie Benke	            <charlie@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -17,6 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Bom\Classes\BOMLine;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
 
 // Protection to avoid direct call of template
 if (empty($conf) || !is_object($conf)) {
@@ -113,7 +119,7 @@ print '</tr>' . "\n";
 
 // Select of all the sub-BOM lines
 $sql = 'SELECT rowid, fk_bom_child, fk_product, qty FROM ' . MAIN_DB_PREFIX . 'bom_bomline AS bl';
-$sql .= ' WHERE fk_bom =' . (int) $tmpbom->id;
+$sql .= ' WHERE fk_bom =' . (int)$tmpbom->id;
 $resql = $db->query($sql);
 
 if ($resql) {
@@ -151,7 +157,7 @@ if ($resql) {
         if ($sub_bom_line->qty_frozen > 0) {
             print '<td class="linecolqty nowrap right" id="sub_bom_qty_' . $sub_bom_line->id . '">' . price($sub_bom_line->qty, 0, '', 0, 0) . '</td>';
         } else {
-            print '<td class="linecolqty nowrap right" id="sub_bom_qty_' . $sub_bom_line->id . '">' . price($sub_bom_line->qty * (float) $line->qty, 0, '', 0, 0) . '</td>';
+            print '<td class="linecolqty nowrap right" id="sub_bom_qty_' . $sub_bom_line->id . '">' . price($sub_bom_line->qty * (float)$line->qty, 0, '', 0, 0) . '</td>';
         }
 
         // Unit

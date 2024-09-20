@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021  Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\StockTransfer;
+
 /**
  *  \file       stocktransfer_agenda.php
  *  \ingroup    stocktransfer
@@ -26,10 +30,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransfer.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/lib/stocktransfer_stocktransfer.lib.php';
 
 
@@ -38,9 +40,9 @@ $langs->loadLangs(array("stocks", "other"));
 
 // Get parameters
 $id = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'alpha');
-$cancel     = GETPOST('cancel', 'aZ09');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 if (GETPOST('actioncode', 'array')) {
@@ -116,8 +118,6 @@ if (empty($reshook)) {
         $search_agenda_label = '';
     }
 }
-
-
 
 /*
  *	View
@@ -196,7 +196,6 @@ if ($object->id > 0) {
     print dol_get_fiche_end();
 
 
-
     // Actions buttons
 
     $objthirdparty = $object;
@@ -234,7 +233,7 @@ if ($object->id > 0) {
             $param .= '&contextpage=' . urlencode($contextpage);
         }
         if ($limit > 0 && $limit != $conf->liste_limit) {
-            $param .= '&limit=' . ((int) $limit);
+            $param .= '&limit=' . ((int)$limit);
         }
 
 

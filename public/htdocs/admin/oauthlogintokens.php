@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2013-2016  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2014-2018  Frederic France      <frederic.france@netlogic.fr>
- * Copyright (C) 2020		Nicolas ZABOURI      <info@inovea-conseil.com>
+/* Copyright (C) 2013-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014-2018  Frederic France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2020		Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use OAuth\Common\Storage\DoliStorage;
+
 /**
  * \file        htdocs/admin/oauthlogintokens.php
  * \ingroup     oauth
@@ -29,9 +32,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/oauth.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-
-use OAuth\Common\Storage\DoliStorage;
 
 $supportedoauth2array = getSupportedOauth2Array();
 

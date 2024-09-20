@@ -40,10 +40,10 @@ if (GETPOSTINT('uploadform') && empty($_POST) && empty($_FILES)) {
 
 if (
     (GETPOST('sendit', 'alpha')
-    || GETPOST('linkit', 'restricthtml')
-    || ($action == 'confirm_deletefile' && $confirm == 'yes')
-    || ($action == 'confirm_updateline' && GETPOST('save', 'alpha') && GETPOST('link', 'alpha'))
-    || ($action == 'renamefile' && GETPOST('renamefilesave', 'alpha'))) && empty($permissiontoadd)
+        || GETPOST('linkit', 'restricthtml')
+        || ($action == 'confirm_deletefile' && $confirm == 'yes')
+        || ($action == 'confirm_updateline' && GETPOST('save', 'alpha') && GETPOST('link', 'alpha'))
+        || ($action == 'renamefile' && GETPOST('renamefilesave', 'alpha'))) && empty($permissiontoadd)
 ) {
     dol_syslog('The file actions_linkedfiles.inc.php was included but parameter $permissiontoadd was not set before.');
     print 'The file actions_linkedfiles.inc.php was included but parameter $permissiontoadd was not set before.';
@@ -165,7 +165,6 @@ if ($action == 'confirm_deletefile' && $confirm == 'yes' && !empty($permissionto
             setEventMessages($langs->trans("ErrorFailToDeleteFile", $urlfile), null, 'errors');
         }
     } elseif ($linkid) {    // delete of external link
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
         $link = new Link($db);
         $link->fetch($linkid);
         $res = $link->delete($user);
@@ -193,7 +192,6 @@ if ($action == 'confirm_deletefile' && $confirm == 'yes' && !empty($permissionto
         }
     }
 } elseif ($action == 'confirm_updateline' && GETPOST('save', 'alpha') && GETPOST('link', 'alpha') && !empty($permissiontoadd)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
 
     $link = new Link($db);
     $f = $link->fetch(GETPOSTINT('linkid'));
@@ -313,7 +311,6 @@ if ($action == 'confirm_deletefile' && $confirm == 'yes' && !empty($permissionto
     if (GETPOSTINT('ecmfileid') > 0) {
         $shareenabled = GETPOST('shareenabled', 'alpha');
 
-        include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
         $ecmfile = new EcmFiles($db);
         $result = $ecmfile->fetch(GETPOSTINT('ecmfileid'));
         if ($result > 0) {

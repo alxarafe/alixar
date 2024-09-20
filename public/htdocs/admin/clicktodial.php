@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2021 Laurent Destailleur  <eldy@users.sourceforge.org>
- * Copyright (C) 2011-2013 Juanjo Menent		<jmenent@2byte.es>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2021  Laurent Destailleur         <eldy@users.sourceforge.org>
+ * Copyright (C) 2011-2013  Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 
@@ -112,8 +114,8 @@ print '</span>';
 
 //if (!empty($user->clicktodial_url))
 //{
-    print '<br>';
-    print info_admin($langs->trans("ValueOverwrittenByUserSetup"));
+print '<br>';
+print info_admin($langs->trans("ValueOverwrittenByUserSetup"));
 //}
 
 print '</td></tr>';

@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2016       Neil Orley          <neil.orley@oeris.fr>
- * Copyright (C) 2013-2016  Olivier Geffroy     <jeff@jeffinfo.com>
- * Copyright (C) 2013-2020  Florian Henry       <florian.henry@open-concept.pro>
- * Copyright (C) 2013-2024  Alexandre Spangaro  <alexandre@inovea-conseil.com>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
- * Copyright (C) 2024       MDW                 <mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2016       Neil Orley                  <neil.orley@oeris.fr>
+ * Copyright (C) 2013-2016  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2020  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2024  Alexandre Spangaro          <alexandre@inovea-conseil.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       MDW                         <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Accountancy\Classes\BookKeeping;
+use Dolibarr\Code\Accountancy\Classes\Lettering;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+
 /**
  * \file        htdocs/accountancy/bookkeeping/listbyaccount.php
  * \ingroup     Accountancy (Double entries)
@@ -30,14 +43,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/lettering.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/bookkeeping.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 // Load translation files required by the page
@@ -95,11 +101,11 @@ $search_import_key = GETPOST("search_import_key", 'alpha');
 $search_account_category = GETPOSTINT('search_account_category');
 
 $search_accountancy_code_start = GETPOST('search_accountancy_code_start', 'alpha');
-if ($search_accountancy_code_start == - 1) {
+if ($search_accountancy_code_start == -1) {
     $search_accountancy_code_start = '';
 }
 $search_accountancy_code_end = GETPOST('search_accountancy_code_end', 'alpha');
-if ($search_accountancy_code_end == - 1) {
+if ($search_accountancy_code_end == -1) {
     $search_accountancy_code_end = '';
 }
 $search_doc_ref = GETPOST('search_doc_ref', 'alpha');
@@ -284,7 +290,7 @@ if (empty($reshook)) {
         $search_date_due_start = '';
         // Due date end
         $search_date_due_end_day = '';
-        $search_date_due_end_month =  '';
+        $search_date_due_end_month = '';
         $search_date_due_end_year = '';
         $search_date_due_end = '';
         $search_lettering_code = '';
@@ -308,10 +314,9 @@ if (empty($reshook)) {
         $param .= '&doc_datemonth=' . GETPOSTINT('doc_datemonth') . '&doc_dateday=' . GETPOSTINT('doc_dateday') . '&doc_dateyear=' . GETPOSTINT('doc_dateyear');
     }
     if ($search_account_category != '-1' && !empty($search_account_category)) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountancycategory.class.php';
         $accountingcategory = new AccountancyCategory($db);
 
-        $listofaccountsforgroup = $accountingcategory->getCptsCat(0, 'fk_accounting_category = ' . ((int) $search_account_category));
+        $listofaccountsforgroup = $accountingcategory->getCptsCat(0, 'fk_accounting_category = ' . ((int)$search_account_category));
         $listofaccountsforgroup2 = array();
         if (is_array($listofaccountsforgroup)) {
             foreach ($listofaccountsforgroup as $tmpval) {
@@ -319,7 +324,7 @@ if (empty($reshook)) {
             }
         }
         $filter['t.search_accounting_code_in'] = implode(',', $listofaccountsforgroup2);
-        $param .= '&search_account_category=' . urlencode((string) ($search_account_category));
+        $param .= '&search_account_category=' . urlencode((string)($search_account_category));
     }
     if (!empty($search_accountancy_code_start)) {
         if ($type == 'sub') {
@@ -343,7 +348,7 @@ if (empty($reshook)) {
     }
     if (!empty($search_mvt_num)) {
         $filter['t.piece_num'] = $search_mvt_num;
-        $param .= '&search_mvt_num=' . urlencode((string) ($search_mvt_num));
+        $param .= '&search_mvt_num=' . urlencode((string)($search_mvt_num));
     }
     if (!empty($search_doc_ref)) {
         $filter['t.doc_ref'] = $search_doc_ref;
@@ -739,7 +744,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 
 print_barre_liste($title_page, $page, $_SERVER["PHP_SELF"], $param, $sortfield, $sortorder, $massactionbutton, $num, $nbtotalofrecords, 'title_accountancy', 0, $newcardbutton, '', $limit, 0, 0, 1);
@@ -1222,7 +1227,6 @@ while ($i < min($num, $limit)) {
         if ($line->doc_type == 'customer_invoice') {
             $langs->loadLangs(array('bills'));
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
             $objectstatic = new Facture($db);
             $objectstatic->fetch($line->fk_doc);
             //$modulepart = 'facture';
@@ -1234,7 +1238,6 @@ while ($i < min($num, $limit)) {
         } elseif ($line->doc_type == 'supplier_invoice') {
             $langs->loadLangs(array('bills'));
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
             $objectstatic = new FactureFournisseur($db);
             $objectstatic->fetch($line->fk_doc);
 
@@ -1246,7 +1249,6 @@ while ($i < min($num, $limit)) {
         } elseif ($line->doc_type == 'expense_report') {
             $langs->loadLangs(array('trips'));
 
-            require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
             $objectstatic = new ExpenseReport($db);
             $objectstatic->fetch($line->fk_doc);
             //$modulepart = 'expensereport';
@@ -1256,7 +1258,6 @@ while ($i < min($num, $limit)) {
             $urlsource = $_SERVER['PHP_SELF'] . '?id=' . $objectstatic->id;
             $documentlink = $formfile->getDocumentsLink($objectstatic->element, $filename, $filedir);
         } elseif ($line->doc_type == 'bank') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
             $objectstatic = new AccountLine($db);
             $objectstatic->fetch($line->fk_doc);
         } else {
@@ -1314,7 +1315,7 @@ while ($i < min($num, $limit)) {
         if (!$i) {
             $totalarray['pos'][$totalarray['nbfield']] = 'totaldebit';
         }
-        $totalarray['val']['totaldebit'] += (float) $line->debit;
+        $totalarray['val']['totaldebit'] += (float)$line->debit;
     }
 
     // Amount credit
@@ -1326,7 +1327,7 @@ while ($i < min($num, $limit)) {
         if (!$i) {
             $totalarray['pos'][$totalarray['nbfield']] = 'totalcredit';
         }
-        $totalarray['val']['totalcredit'] += (float) $line->credit;
+        $totalarray['val']['totalcredit'] += (float)$line->credit;
     }
 
     // Amount balance
@@ -1435,13 +1436,13 @@ if ($num > 0 && $colspan > 0) {
 
 // Clean total values to round them
 if (!empty($totalarray['val']['totaldebit'])) {
-    $totalarray['val']['totaldebit'] = (float) price2num($totalarray['val']['totaldebit'], 'MT');
+    $totalarray['val']['totaldebit'] = (float)price2num($totalarray['val']['totaldebit'], 'MT');
 }
 if (!empty($totalarray['val']['totalcredit'])) {
-    $totalarray['val']['totalcredit'] = (float) price2num($totalarray['val']['totalcredit'], 'MT');
+    $totalarray['val']['totalcredit'] = (float)price2num($totalarray['val']['totalcredit'], 'MT');
 }
 if (!empty($totalarray['val']['totalbalance'])) {
-    $totalarray['val']['totalbalance'] = (float) price2num($totalarray['val']['totaldebit'] - $totalarray['val']['totalcredit'], 'MT');
+    $totalarray['val']['totalbalance'] = (float)price2num($totalarray['val']['totaldebit'] - $totalarray['val']['totalcredit'], 'MT');
 }
 
 // Show total line

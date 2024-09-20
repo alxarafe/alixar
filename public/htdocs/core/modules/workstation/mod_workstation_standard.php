@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2020 	   Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2020 	    Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -22,13 +22,16 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Workstation\Classes\ModeleNumRefWorkstation;
+use Dolibarr\Code\Workstation\Classes\Workstation;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/workstation/mod_workstation_standard.php
  *  \ingroup    workstation
  *  \brief      File of class to manage Workstation numbering rules standard
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/workstation/modules_workstation.php';
 
 /**
  * Class to manage the Standard numbering rule for Workstation
@@ -57,8 +60,8 @@ class mod_workstation_standard extends ModeleNumRefWorkstation
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -70,7 +73,7 @@ class mod_workstation_standard extends ModeleNumRefWorkstation
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -82,8 +85,8 @@ class mod_workstation_standard extends ModeleNumRefWorkstation
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -120,8 +123,8 @@ class mod_workstation_standard extends ModeleNumRefWorkstation
     /**
      *  Return next free value
      *
-     *  @param  Workstation $object     Object we need next value for
-     *  @return string|-1               Next value if OK, -1 if KO
+     * @param Workstation $object Object we need next value for
+     * @return string|-1               Next value if OK, -1 if KO
      */
     public function getNextValue($object)
     {

@@ -1,7 +1,6 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) ---Put here your own copyright and developer email---
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +18,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\Product\Classes\StockTransfer;
+use Dolibarr\Code\Product\Classes\StockTransferLine;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\StockTransfer\Classes\ModelePDFStockTransfer;
+
 /**
  *      \file       stocktransfer_card.php
  *      \ingroup    stocktransfer
@@ -27,16 +41,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransfer.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/class/stocktransferline.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/stocktransfer/lib/stocktransfer_stocktransfer.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/stocktransfer/modules_stocktransfer.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("stocks", "other", "productbatch", "companies"));
@@ -47,10 +52,10 @@ if (isModEnabled('incoterm')) {
 
 // Get parameters
 $id = GETPOSTINT('id');
-$ref        = GETPOST('ref', 'alpha');
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
-$confirm    = GETPOST('confirm', 'alpha');
-$cancel     = GETPOST('cancel', 'aZ09');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : str_replace('_', '', basename(dirname(__FILE__)) . basename(__FILE__, '.php')); // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');                   // if not set, a default page will be used
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha'); // if not set, $backtopage will be used
@@ -58,7 +63,7 @@ $qty = GETPOSTINT('qty');
 $fk_product = GETPOSTINT('fk_product');
 $fk_warehouse_source = GETPOSTINT('fk_warehouse_source');
 $fk_warehouse_destination = GETPOSTINT('fk_warehouse_destination');
-$lineid   = GETPOSTINT('lineid');
+$lineid = GETPOSTINT('lineid');
 $label = GETPOST('label', 'alpha');
 $batch = GETPOST('batch', 'alpha');
 $code_inv = GETPOST('inventorycode', 'alphanohtml');
@@ -202,7 +207,7 @@ if (empty($reshook)) {
 
         if (empty($error)) {
             $line = new StockTransferLine($db);
-            $records = $line->fetchAll('', '', 0, 0, '(fk_stocktransfer:=:' . ((int) $id) . ') AND (fk_product:=:' . ((int) $fk_product) . ') AND (fk_warehouse_source:=:' . ((int) $fk_warehouse_source) . ') AND (fk_warehouse_destination:=:' . ((int) $fk_warehouse_destination) . ') AND (' . (empty($batch) ? "(batch:=:'') OR (batch:IS:NULL)" : "batch:=:'" . $db->escape($batch) . "'") . ')');
+            $records = $line->fetchAll('', '', 0, 0, '(fk_stocktransfer:=:' . ((int)$id) . ') AND (fk_product:=:' . ((int)$fk_product) . ') AND (fk_warehouse_source:=:' . ((int)$fk_warehouse_source) . ') AND (fk_warehouse_destination:=:' . ((int)$fk_warehouse_destination) . ') AND (' . (empty($batch) ? "(batch:=:'') OR (batch:IS:NULL)" : "batch:=:'" . $db->escape($batch) . "'") . ')');
             if (!empty($records[key($records)])) {
                 $line = $records[key($records)];
             }
@@ -398,9 +403,6 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
 }
 
-
-
-
 /*
  * View
  */
@@ -413,7 +415,6 @@ $title = $langs->trans("StockTransfer");
 $help_url = '';
 
 llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock-stocktransfer_stocktransfer_card');
-
 
 
 // Example : Adding jquery code
@@ -477,7 +478,6 @@ if ($action == 'create') {
     print '<tr><td>' . $langs->trans('DefaultModel') . '</td>';
     print '<td>';
     print img_picto('', 'pdf', 'class="pictofixedwidth"');
-    include_once DOL_DOCUMENT_ROOT . '/core/modules/commande/modules_commande.php';
     $liste = ModelePDFStockTransfer::liste_modeles($db);
     $preselected = getDolGlobalString('STOCKTRANSFER_ADDON_PDF');
     print $form->selectarray('model', $liste, $preselected, 0, 0, 0, '', 0, 0, 0, '', 'maxwidth200 widthcentpercentminusx', 1);
@@ -556,28 +556,28 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('ToClone'), $langs->trans('ConfirmCloneAsk', $object->ref), 'confirm_clone', $formquestion, 'yes', 1);
     } elseif ($action == 'destock') { // Destock confirmation
         // Create an array for form
-        $formquestion = array(  'text' => '',
+        $formquestion = array('text' => '',
             0 => array('type' => 'text', 'name' => 'label', 'label' => $langs->trans("Label"), 'value' => $langs->trans('ConfirmDestock', $object->ref), 'size' => 40),
             1 => array('type' => 'text', 'name' => 'inventorycode', 'label' => $langs->trans("InventoryCode"), 'value' => dol_print_date(dol_now(), '%y%m%d%H%M%S'), 'size' => 25)
         );
         $formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('DestockAllProduct'), '', 'confirm_destock', $formquestion, 'yes', 1);
     } elseif ($action == 'destockcancel') { // Destock confirmation cancel
         // Create an array for form
-        $formquestion = array(  'text' => '',
+        $formquestion = array('text' => '',
             0 => array('type' => 'text', 'name' => 'label', 'label' => $langs->trans("Label"), 'value' => $langs->trans('ConfirmDestockCancel', $object->ref), 'size' => 40),
             1 => array('type' => 'text', 'name' => 'inventorycode', 'label' => $langs->trans("InventoryCode"), 'value' => dol_print_date(dol_now(), '%y%m%d%H%M%S'), 'size' => 25)
         );
         $formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('DestockAllProductCancel'), '', 'confirm_destockcancel', $formquestion, 'yes', 1);
     } elseif ($action == 'addstock') { // Addstock confirmation
         // Create an array for form
-        $formquestion = array(  'text' => '',
+        $formquestion = array('text' => '',
             0 => array('type' => 'text', 'name' => 'label', 'label' => $langs->trans("Label") . '&nbsp;:', 'value' => $langs->trans('ConfirmAddStock', $object->ref), 'size' => 40),
             1 => array('type' => 'text', 'name' => 'inventorycode', 'label' => $langs->trans("InventoryCode"), 'value' => dol_print_date(dol_now(), '%y%m%d%H%M%S'), 'size' => 25)
         );
         $formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('AddStockAllProduct'), '', 'confirm_addstock', $formquestion, 'yes', 1);
     } elseif ($action == 'addstockcancel') { // Addstock confirmation cancel
         // Create an array for form
-        $formquestion = array(  'text' => '',
+        $formquestion = array('text' => '',
             0 => array('type' => 'text', 'name' => 'label', 'label' => $langs->trans("Label") . '&nbsp;:', 'value' => $langs->trans('ConfirmAddStockCancel', $object->ref), 'size' => 40),
             1 => array('type' => 'text', 'name' => 'inventorycode', 'label' => $langs->trans("InventoryCode"), 'value' => dol_print_date(dol_now(), '%y%m%d%H%M%S'), 'size' => 25)
         );
@@ -767,7 +767,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         */
     }
 
-
     $formproduct = new FormProduct($db);
     print '<div class="div-table-responsive-no-min">';
     print '	<form name="addproduct" id="addproduct" action="' . $_SERVER["PHP_SELF"] . '?id=' . $object->id . (($action != 'editline') ? '#addline' : '#line_' . GETPOSTINT('lineid')) . '" method="POST">
@@ -818,7 +817,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $warehousestatict->fetch($line->fk_warehouse_destination);
 
         // add html5 elements
-        $domData  = ' data-element="' . $line->element . '"';
+        $domData = ' data-element="' . $line->element . '"';
         $domData .= ' data-id="' . $line->id . '"';
         $domData .= ' data-qty="' . $line->qty . '"';
         //$domData .= ' data-product_type="'.$line->product_type.'"';
@@ -902,12 +901,14 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
             if ($num > 1 && $conf->browser->layout != 'phone' && empty($disablemove)) {
                 print '<td class="linecolmove tdlineupdown center">';
                 if ($i > 0) { ?>
-                    <a class="lineupdown" href="<?php print $_SERVER["PHP_SELF"] . '?id=' . $id . '&amp;action=up&amp;rowid=' . $line->id; ?>">
+                    <a class="lineupdown"
+                       href="<?php print $_SERVER["PHP_SELF"] . '?id=' . $id . '&amp;action=up&amp;rowid=' . $line->id; ?>">
                         <?php print img_up('default', 0, 'imgupforline'); ?>
                     </a>
                 <?php }
                 if ($i < $num - 1) { ?>
-                    <a class="lineupdown" href="<?php print $_SERVER["PHP_SELF"] . '?id=' . $id . '&amp;action=down&amp;rowid=' . $line->id; ?>">
+                    <a class="lineupdown"
+                       href="<?php print $_SERVER["PHP_SELF"] . '?id=' . $id . '&amp;action=down&amp;rowid=' . $line->id; ?>">
                         <?php print img_down('default', 0, 'imgdownforline'); ?>
                     </a>
                 <?php }
@@ -1116,7 +1117,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', dol_buildpath('/mymodule/myobject_agenda.php', 1) . '?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
         $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, 'stocktransfer', 0, 1, '', $MAXEVENT, '');
 

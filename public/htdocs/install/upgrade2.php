@@ -37,10 +37,15 @@
  * php upgrade2.php 0.0.0 0.0.0 [MAIN_MODULE_NAME1_TO_ENABLE,MAIN_MODULE_NAME2_TO_ENABLE]
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
+use Dolibarr\Code\Comm\Classes\Propal;
+
 /**
  *  \file       htdocs/install/upgrade2.php
  *  \brief      Upgrade some data
  */
+
 
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
@@ -48,13 +53,7 @@ if (!file_exists($conffile)) {
     print 'Error: Dolibarr config file was not found. This may means that Dolibarr is not installed yet. Please call the page "/install/index.php" instead of "/install/upgrade.php").';
 }
 require_once $conffile;
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/price.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/menubase.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
 global $langs;
@@ -69,7 +68,7 @@ $error = 0;
 $err = error_reporting();
 error_reporting(0);
 if (getDolGlobalString('MAIN_OVERRIDE_TIME_LIMIT')) {
-    @set_time_limit((int) $conf->global->MAIN_OVERRIDE_TIME_LIMIT);
+    @set_time_limit((int)$conf->global->MAIN_OVERRIDE_TIME_LIMIT);
 } else {
     @set_time_limit(600);
 }
@@ -98,7 +97,6 @@ dolibarr_install_syslog("--- upgrade2: entering upgrade2.php page " . $versionfr
 if (!is_object($conf)) {
     dolibarr_install_syslog("upgrade2: conf file not initialized", LOG_ERR);
 }
-
 
 
 /*
@@ -147,7 +145,7 @@ if (!GETPOST('action', 'aZ09') || preg_match('/upgrade/i', GETPOST('action', 'aZ
     $conf->db->user = $dolibarr_main_db_user;
     $conf->db->pass = $dolibarr_main_db_pass;
 
-    $db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int) $conf->db->port);
+    $db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int)$conf->db->port);
 
     if (!$db->connected) {
         print '<tr><td colspan="4">' . $langs->trans("ErrorFailedToConnectToDatabase", $conf->db->name) . '</td><td class="right">' . $langs->trans('Error') . '</td></tr>';
@@ -744,13 +742,12 @@ if ($ret) {
 }
 
 
-
 /**
  * Reporte liens vers une facture de paiements sur table de jointure (lien n-n paiements factures)
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_paiements($db, $langs, $conf)
@@ -793,11 +790,11 @@ function migrate_paiements($db, $langs, $conf)
                 $num = count($row);
                 for ($i = 0; $i < $num; $i++) {
                     $sql = "INSERT INTO " . MAIN_DB_PREFIX . "paiement_facture (fk_facture, fk_paiement, amount)";
-                    $sql .= " VALUES (" . ((int) $row[$i][1]) . "," . ((int) $row[$i][0]) . "," . ((float) $row[$i][2]) . ")";
+                    $sql .= " VALUES (" . ((int)$row[$i][1]) . "," . ((int)$row[$i][0]) . "," . ((float)$row[$i][2]) . ")";
 
                     $res += $db->query($sql);
 
-                    $sql = "UPDATE " . MAIN_DB_PREFIX . "paiement SET fk_facture = 0 WHERE rowid = " . ((int) $row[$i][0]);
+                    $sql = "UPDATE " . MAIN_DB_PREFIX . "paiement SET fk_facture = 0 WHERE rowid = " . ((int)$row[$i][0]);
 
                     $res += $db->query($sql);
 
@@ -827,9 +824,9 @@ function migrate_paiements($db, $langs, $conf)
  * Pour verifier s'il reste des orphelins:
  * select * from llx_paiement as p left join llx_paiement_facture as pf on pf.fk_paiement=p.rowid WHERE pf.rowid IS NULL AND (p.fk_facture = 0 OR p.fk_facture IS NULL)
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_paiements_orphelins_1($db, $langs, $conf)
@@ -891,7 +888,7 @@ function migrate_paiements_orphelins_1($db, $langs, $conf)
                 // On cherche facture sans lien paiement et du meme montant et pour meme societe.
                 $sql = " SELECT distinct f.rowid from " . MAIN_DB_PREFIX . "facture as f";
                 $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "paiement_facture as pf ON f.rowid = pf.fk_facture";
-                $sql .= " WHERE f.fk_statut in (2,3) AND fk_soc = " . ((int) $row[$i]['socid']) . " AND total_ttc = " . ((float) $row[$i]['pamount']);
+                $sql .= " WHERE f.fk_statut in (2,3) AND fk_soc = " . ((int)$row[$i]['socid']) . " AND total_ttc = " . ((float)$row[$i]['pamount']);
                 $sql .= " AND pf.fk_facture IS NULL";
                 $sql .= " ORDER BY f.fk_statut";
                 //print $sql.'<br>';
@@ -904,7 +901,7 @@ function migrate_paiements_orphelins_1($db, $langs, $conf)
                         $facid = $obj->rowid;
 
                         $sql = "INSERT INTO " . MAIN_DB_PREFIX . "paiement_facture (fk_facture, fk_paiement, amount)";
-                        $sql .= " VALUES (" . ((int) $facid) . "," . ((int) $row[$i]['paymentid']) . ", " . ((float) $row[$i]['pamount']) . ")";
+                        $sql .= " VALUES (" . ((int)$facid) . "," . ((int)$row[$i]['paymentid']) . ", " . ((float)$row[$i]['pamount']) . ")";
 
                         $res += $db->query($sql);
 
@@ -937,9 +934,9 @@ function migrate_paiements_orphelins_1($db, $langs, $conf)
  * Pour verifier s'il reste des orphelins:
  * select * from llx_paiement as p left join llx_paiement_facture as pf on pf.fk_paiement=p.rowid WHERE pf.rowid IS NULL AND (p.fk_facture = 0 OR p.fk_facture IS NULL)
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_paiements_orphelins_2($db, $langs, $conf)
@@ -1002,7 +999,7 @@ function migrate_paiements_orphelins_2($db, $langs, $conf)
                 // On cherche facture sans lien paiement et du meme montant et pour meme societe.
                 $sql = " SELECT distinct f.rowid from " . MAIN_DB_PREFIX . "facture as f";
                 $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "paiement_facture as pf ON f.rowid = pf.fk_facture";
-                $sql .= " WHERE f.fk_statut in (2,3) AND fk_soc = " . ((int) $row[$i]['socid']) . " AND total_ttc = " . ((float) $row[$i]['pamount']);
+                $sql .= " WHERE f.fk_statut in (2,3) AND fk_soc = " . ((int)$row[$i]['socid']) . " AND total_ttc = " . ((float)$row[$i]['pamount']);
                 $sql .= " AND pf.fk_facture IS NULL";
                 $sql .= " ORDER BY f.fk_statut";
                 //print $sql.'<br>';
@@ -1015,7 +1012,7 @@ function migrate_paiements_orphelins_2($db, $langs, $conf)
                         $facid = $obj->rowid;
 
                         $sql = "INSERT INTO " . MAIN_DB_PREFIX . "paiement_facture (fk_facture, fk_paiement, amount)";
-                        $sql .= " VALUES (" . ((int) $facid) . "," . ((int) $row[$i]['paymentid']) . ", " . ((float) $row[$i]['pamount']) . ")";
+                        $sql .= " VALUES (" . ((int)$facid) . "," . ((int)$row[$i]['paymentid']) . ", " . ((float)$row[$i]['pamount']) . ")";
 
                         $res += $db->query($sql);
 
@@ -1061,9 +1058,9 @@ function migrate_paiements_orphelins_2($db, $langs, $conf)
 /**
  * Mise a jour des contrats (gestion du contrat + detail de contrat)
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_contracts_det($db, $langs, $conf)
@@ -1103,14 +1100,14 @@ function migrate_contracts_det($db, $langs, $conf)
                 $sql .= "date_ouverture_prevue, date_ouverture, date_fin_validite, tva_tx, qty,";
                 $sql .= "subprice, price_ht, fk_user_author, fk_user_ouverture)";
                 $sql .= " VALUES (";
-                $sql .= ((int) $obj->cref) . ", " . ($obj->fk_product ? ((int) $obj->fk_product) : 0) . ", ";
+                $sql .= ((int)$obj->cref) . ", " . ($obj->fk_product ? ((int)$obj->fk_product) : 0) . ", ";
                 $sql .= "0, ";
                 $sql .= "'" . $db->escape($obj->label) . "', null, ";
                 $sql .= ($obj->date_contrat ? "'" . $db->idate($db->jdate($obj->date_contrat)) . "'" : "null") . ", ";
                 $sql .= "null, ";
                 $sql .= "null, ";
-                $sql .= ((float) $obj->tva_tx) . ", 1, ";
-                $sql .= ((float) $obj->price) . ", " . ((float) $obj->price) . ", " . ((int) $obj->fk_user_author) . ",";
+                $sql .= ((float)$obj->tva_tx) . ", 1, ";
+                $sql .= ((float)$obj->price) . ", " . ((float)$obj->price) . ", " . ((int)$obj->fk_user_author) . ",";
                 $sql .= "null";
                 $sql .= ")";
 
@@ -1146,9 +1143,9 @@ function migrate_contracts_det($db, $langs, $conf)
 /**
  * Function to migrate links into llx_bank_url
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_links_transfert($db, $langs, $conf)
@@ -1220,9 +1217,9 @@ function migrate_links_transfert($db, $langs, $conf)
 /**
  * Mise a jour des date de contrats non renseignees
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_contracts_date1($db, $langs, $conf)
@@ -1262,9 +1259,9 @@ function migrate_contracts_date1($db, $langs, $conf)
 /**
  * Update contracts with date min real if service date is lower
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Language
- * @param   Conf        $conf   Conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Language
+ * @param Conf $conf Conf
  * @return  void
  */
 function migrate_contracts_date2($db, $langs, $conf)
@@ -1301,7 +1298,7 @@ function migrate_contracts_date2($db, $langs, $conf)
                     print $langs->trans('MigrationContractsInvalidDateFix', $obj->cref, $obj->date_contrat, $obj->datemin) . "<br>\n";
                     $sql = "UPDATE " . MAIN_DB_PREFIX . "contrat";
                     $sql .= " SET date_contrat='" . $db->idate($datemin) . "'";
-                    $sql .= " WHERE rowid = " . ((int) $obj->cref);
+                    $sql .= " WHERE rowid = " . ((int)$obj->cref);
                     $resql2 = $db->query($sql);
                     if (!$resql2) {
                         dol_print_error($db);
@@ -1330,9 +1327,9 @@ function migrate_contracts_date2($db, $langs, $conf)
 /**
  * Mise a jour des dates de creation de contrat
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_contracts_date3($db, $langs, $conf)
@@ -1360,9 +1357,9 @@ function migrate_contracts_date3($db, $langs, $conf)
 /**
  * Reouverture des contrats qui ont au moins une ligne non fermee
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_contracts_open($db, $langs, $conf)
@@ -1394,7 +1391,7 @@ function migrate_contracts_open($db, $langs, $conf)
                 print $langs->trans('MigrationReopenThisContract', $obj->cref) . "<br>\n";
                 $sql = "UPDATE " . MAIN_DB_PREFIX . "contrat";
                 $sql .= " SET statut = 1";
-                $sql .= " WHERE rowid = " . ((int) $obj->cref);
+                $sql .= " WHERE rowid = " . ((int)$obj->cref);
                 $resql2 = $db->query($sql);
                 if (!$resql2) {
                     dol_print_error($db);
@@ -1423,9 +1420,9 @@ function migrate_contracts_open($db, $langs, $conf)
 /**
  * Factures fournisseurs
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_paiementfourn_facturefourn($db, $langs, $conf)
@@ -1460,7 +1457,7 @@ function migrate_paiementfourn_facturefourn($db, $langs, $conf)
                 // Verifier si la ligne est deja dans la nouvelle table. On ne veut pas inserer de doublons.
                 $check_sql = 'SELECT fk_paiementfourn, fk_facturefourn';
                 $check_sql .= ' FROM ' . MAIN_DB_PREFIX . 'paiementfourn_facturefourn';
-                $check_sql .= ' WHERE fk_paiementfourn = ' . ((int) $select_obj->rowid) . ' AND fk_facturefourn = ' . ((int) $select_obj->fk_facture_fourn);
+                $check_sql .= ' WHERE fk_paiementfourn = ' . ((int)$select_obj->rowid) . ' AND fk_facturefourn = ' . ((int)$select_obj->fk_facture_fourn);
                 $check_resql = $db->query($check_sql);
                 if ($check_resql) {
                     $check_num = $db->num_rows($check_resql);
@@ -1519,9 +1516,9 @@ function migrate_paiementfourn_facturefourn($db, $langs, $conf)
 /**
  * Update total of invoice lines
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_price_facture($db, $langs, $conf)
@@ -1569,11 +1566,11 @@ function migrate_price_facture($db, $langs, $conf)
                 $facligne->fetch($rowid);
 
                 $result = calcul_price_total($qty, $pu, $remise_percent, $vatrate, 0, 0, $remise_percent_global, 'HT', $info_bits, $facligne->product_type, $tmpmysoc);
-                $total_ht  = $result[0];
+                $total_ht = $result[0];
                 $total_tva = $result[1];
                 $total_ttc = $result[2];
 
-                $facligne->total_ht  = $total_ht;
+                $facligne->total_ht = $total_ht;
                 $facligne->total_tva = $total_tva;
                 $facligne->total_ttc = $total_ttc;
 
@@ -1624,9 +1621,9 @@ function migrate_price_facture($db, $langs, $conf)
 /**
  * Update total of proposal lines
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_price_propal($db, $langs, $conf)
@@ -1670,11 +1667,11 @@ function migrate_price_propal($db, $langs, $conf)
                 $propalligne->fetch($rowid);
 
                 $result = calcul_price_total($qty, $pu, $remise_percent, $vatrate, 0, 0, $remise_percent_global, 'HT', $info_bits, $propalligne->product_type, $tmpmysoc);
-                $total_ht  = $result[0];
+                $total_ht = $result[0];
                 $total_tva = $result[1];
                 $total_ttc = $result[2];
 
-                $propalligne->total_ht  = $total_ht;
+                $propalligne->total_ht = $total_ht;
                 $propalligne->total_tva = $total_tva;
                 $propalligne->total_ttc = $total_ttc;
 
@@ -1705,9 +1702,9 @@ function migrate_price_propal($db, $langs, $conf)
 /**
  * Update total of contract lines
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_price_contrat($db, $langs, $conf)
@@ -1754,11 +1751,11 @@ function migrate_price_contrat($db, $langs, $conf)
                 $contratligne->fetch($rowid);
 
                 $result = calcul_price_total($qty, $pu, $remise_percent, $vatrate, 0, 0, 0, 'HT', $info_bits, $contratligne->product_type, $tmpmysoc);
-                $total_ht  = $result[0];
+                $total_ht = $result[0];
                 $total_tva = $result[1];
                 $total_ttc = $result[2];
 
-                $contratligne->total_ht  = $total_ht;
+                $contratligne->total_ht = $total_ht;
                 $contratligne->total_tva = $total_tva;
                 $contratligne->total_ttc = $total_ttc;
 
@@ -1789,9 +1786,9 @@ function migrate_price_contrat($db, $langs, $conf)
 /**
  * Update total of sales order lines
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_price_commande($db, $langs, $conf)
@@ -1835,11 +1832,11 @@ function migrate_price_commande($db, $langs, $conf)
                 $commandeligne->fetch($rowid);
 
                 $result = calcul_price_total($qty, $pu, $remise_percent, $vatrate, 0, 0, $remise_percent_global, 'HT', $info_bits, $commandeligne->product_type, $tmpmysoc);
-                $total_ht  = $result[0];
+                $total_ht = $result[0];
                 $total_tva = $result[1];
                 $total_ttc = $result[2];
 
-                $commandeligne->total_ht  = $total_ht;
+                $commandeligne->total_ht = $total_ht;
                 $commandeligne->total_tva = $total_tva;
                 $commandeligne->total_ttc = $total_ttc;
 
@@ -1880,9 +1877,9 @@ function migrate_price_commande($db, $langs, $conf)
 /**
  * Update total of purchase order lines
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_price_commande_fournisseur($db, $langs, $conf)
@@ -1928,11 +1925,11 @@ function migrate_price_commande_fournisseur($db, $langs, $conf)
                 $commandeligne->fetch($rowid);
 
                 $result = calcul_price_total($qty, $pu, $remise_percent, $vatrate, 0, 0, $remise_percent_global, 'HT', $info_bits, $commandeligne->product_type, $mysoc);
-                $total_ht  = $result[0];
+                $total_ht = $result[0];
                 $total_tva = $result[1];
                 $total_ttc = $result[2];
 
-                $commandeligne->total_ht  = $total_ht;
+                $commandeligne->total_ht = $total_ht;
                 $commandeligne->total_tva = $total_tva;
                 $commandeligne->total_ttc = $total_ttc;
 
@@ -1973,9 +1970,9 @@ function migrate_price_commande_fournisseur($db, $langs, $conf)
 /**
  * Mise a jour des modeles selectionnes
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_modeles($db, $langs, $conf)
@@ -1986,7 +1983,6 @@ function migrate_modeles($db, $langs, $conf)
     dolibarr_install_syslog("upgrade2::migrate_modeles");
 
     if (isModEnabled('invoice')) {
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/facture/modules_facture.php';
         $modellist = ModelePDFFactures::liste_modeles($db);
         if (count($modellist) == 0) {
             // Aucun model par default.
@@ -1999,7 +1995,6 @@ function migrate_modeles($db, $langs, $conf)
     }
 
     if (isModEnabled('order')) {
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/commande/modules_commande.php';
         $modellist = ModelePDFCommandes::liste_modeles($db);
         if (count($modellist) == 0) {
             // Aucun model par default.
@@ -2012,7 +2007,6 @@ function migrate_modeles($db, $langs, $conf)
     }
 
     if (isModEnabled("shipping")) {
-        include_once DOL_DOCUMENT_ROOT . '/core/modules/expedition/modules_expedition.php';
         $modellist = ModelePdfExpedition::liste_modeles($db);
         if (count($modellist) == 0) {
             // Aucun model par default.
@@ -2031,9 +2025,9 @@ function migrate_modeles($db, $langs, $conf)
 /**
  * Correspondence des expeditions et des commandes clients dans la table llx_co_exp
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_commande_expedition($db, $langs, $conf)
@@ -2063,7 +2057,7 @@ function migrate_commande_expedition($db, $langs, $conf)
                     $obj = $db->fetch_object($resql);
 
                     $sql = "INSERT INTO " . MAIN_DB_PREFIX . "co_exp (fk_expedition,fk_commande)";
-                    $sql .= " VALUES (" . ((int) $obj->rowid) . ", " . ((int) $obj->fk_commande) . ")";
+                    $sql .= " VALUES (" . ((int)$obj->rowid) . ", " . ((int)$obj->fk_commande) . ")";
                     $resql2 = $db->query($sql);
 
                     if (!$resql2) {
@@ -2096,9 +2090,9 @@ function migrate_commande_expedition($db, $langs, $conf)
 /**
  * Correspondence des livraisons et des commandes clients dans la table llx_co_liv
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_commande_livraison($db, $langs, $conf)
@@ -2131,7 +2125,7 @@ function migrate_commande_livraison($db, $langs, $conf)
                     $obj = $db->fetch_object($resql);
 
                     $sql = "INSERT INTO " . MAIN_DB_PREFIX . "co_liv (fk_livraison,fk_commande)";
-                    $sql .= " VALUES (" . ((int) $obj->rowid) . ", " . ((int) $obj->fk_commande) . ")";
+                    $sql .= " VALUES (" . ((int)$obj->rowid) . ", " . ((int)$obj->fk_commande) . ")";
                     $resql2 = $db->query($sql);
 
                     if ($resql2) {
@@ -2140,7 +2134,7 @@ function migrate_commande_livraison($db, $langs, $conf)
                         $sqlu = "UPDATE " . MAIN_DB_PREFIX . "livraison SET";
                         $sqlu .= " ref_client = '" . $db->escape($obj->ref_client) . "'";
                         $sqlu .= ", date_livraison = '" . $db->idate($delivery_date) . "'";
-                        $sqlu .= " WHERE rowid = " . ((int) $obj->rowid);
+                        $sqlu .= " WHERE rowid = " . ((int)$obj->rowid);
                         $resql3 = $db->query($sqlu);
                         if (!$resql3) {
                             $error++;
@@ -2176,9 +2170,9 @@ function migrate_commande_livraison($db, $langs, $conf)
 /**
  * Migration des details commandes dans les details livraisons
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_detail_livraison($db, $langs, $conf)
@@ -2213,17 +2207,17 @@ function migrate_detail_livraison($db, $langs, $conf)
                     $obj = $db->fetch_object($resql);
 
                     $sql = "UPDATE " . MAIN_DB_PREFIX . "livraisondet SET";
-                    $sql .= " fk_product = " . ((int) $obj->fk_product);
+                    $sql .= " fk_product = " . ((int)$obj->fk_product);
                     $sql .= ",description = '" . $db->escape($obj->description) . "'";
                     $sql .= ",subprice = " . price2num($obj->subprice);
                     $sql .= ",total_ht = " . price2num($obj->total_ht);
-                    $sql .= " WHERE fk_commande_ligne = " . ((int) $obj->rowid);
+                    $sql .= " WHERE fk_commande_ligne = " . ((int)$obj->rowid);
                     $resql2 = $db->query($sql);
 
                     if ($resql2) {
                         $sql = "SELECT total_ht";
                         $sql .= " FROM " . MAIN_DB_PREFIX . "livraison";
-                        $sql .= " WHERE rowid = " . ((int) $obj->fk_livraison);
+                        $sql .= " WHERE rowid = " . ((int)$obj->fk_livraison);
                         $resql3 = $db->query($sql);
 
                         if ($resql3) {
@@ -2232,7 +2226,7 @@ function migrate_detail_livraison($db, $langs, $conf)
 
                             $sqlu = "UPDATE " . MAIN_DB_PREFIX . "livraison SET";
                             $sqlu .= " total_ht = " . price2num($total_ht, 'MT');
-                            $sqlu .= " WHERE rowid = " . ((int) $obj->fk_livraison);
+                            $sqlu .= " WHERE rowid = " . ((int)$obj->fk_livraison);
                             $resql4 = $db->query($sqlu);
                             if (!$resql4) {
                                 $error++;
@@ -2278,9 +2272,9 @@ function migrate_detail_livraison($db, $langs, $conf)
 /**
  * Migration du champ stock dans produits
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_stocks($db, $langs, $conf)
@@ -2310,7 +2304,7 @@ function migrate_stocks($db, $langs, $conf)
 
                 $sql = "UPDATE " . MAIN_DB_PREFIX . "product SET";
                 $sql .= " stock = " . price2num($obj->total, 'MS');
-                $sql .= " WHERE rowid = " . ((int) $obj->fk_product);
+                $sql .= " WHERE rowid = " . ((int)$obj->fk_product);
 
                 $resql2 = $db->query($sql);
                 if ($resql2) {
@@ -2340,9 +2334,9 @@ function migrate_stocks($db, $langs, $conf)
  * Migration of menus (use only 1 table instead of 3)
  * 2.6 -> 2.7
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_menus($db, $langs, $conf)
@@ -2373,7 +2367,7 @@ function migrate_menus($db, $langs, $conf)
 
                     $sql = "UPDATE " . MAIN_DB_PREFIX . "menu SET";
                     $sql .= " enabled = '" . $db->escape($obj->action) . "'";
-                    $sql .= " WHERE rowid = " . ((int) $obj->rowid);
+                    $sql .= " WHERE rowid = " . ((int)$obj->rowid);
                     $sql .= " AND enabled = '1'";
 
                     $resql2 = $db->query($sql);
@@ -2407,9 +2401,9 @@ function migrate_menus($db, $langs, $conf)
  * Migration du champ fk_adresse_livraison dans expedition
  * 2.6 -> 2.7
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_commande_deliveryaddress($db, $langs, $conf)
@@ -2443,7 +2437,7 @@ function migrate_commande_deliveryaddress($db, $langs, $conf)
 
                     $sql = "UPDATE " . MAIN_DB_PREFIX . "expedition SET";
                     $sql .= " fk_adresse_livraison = '" . $db->escape($obj->fk_adresse_livraison) . "'";
-                    $sql .= " WHERE rowid = " . ((int) $obj->fk_expedition);
+                    $sql .= " WHERE rowid = " . ((int)$obj->fk_expedition);
 
                     $resql2 = $db->query($sql);
                     if (!$resql2) {
@@ -2477,9 +2471,9 @@ function migrate_commande_deliveryaddress($db, $langs, $conf)
  * Migration du champ fk_remise_except dans llx_facturedet doit correspondre a
  * lien dans llx_societe_remise_except vers llx_facturedet
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  integer             Return integer <0 if KO, 0=Bad version, >0 if OK
  */
 function migrate_restore_missing_links($db, $langs, $conf)
@@ -2527,7 +2521,7 @@ function migrate_restore_missing_links($db, $langs, $conf)
                 print 'Line ' . $obj->rowid . ' in ' . $table1 . ' is linked to record ' . $obj->field . ' in ' . $table2 . ' that has no link to ' . $table1 . '. We fix this.<br>';
                 $sql = "UPDATE " . MAIN_DB_PREFIX . $table2 . " SET";
                 $sql .= " " . $field2 . " = '" . $db->escape($obj->rowid) . "'";
-                $sql .= " WHERE rowid = " . ((int) $obj->field);
+                $sql .= " WHERE rowid = " . ((int)$obj->field);
 
                 $resql2 = $db->query($sql);
                 if (!$resql2) {
@@ -2586,7 +2580,7 @@ function migrate_restore_missing_links($db, $langs, $conf)
                 print 'Line ' . $obj->rowid . ' in ' . $table1 . ' is linked to record ' . $obj->field . ' in ' . $table2 . ' that has no link to ' . $table1 . '. We fix this.<br>';
                 $sql = "UPDATE " . MAIN_DB_PREFIX . $table2 . " SET";
                 $sql .= " " . $field2 . " = '" . $db->escape($obj->rowid) . "'";
-                $sql .= " WHERE rowid = " . ((int) $obj->field);
+                $sql .= " WHERE rowid = " . ((int)$obj->field);
 
                 $resql2 = $db->query($sql);
                 if (!$resql2) {
@@ -2618,9 +2612,9 @@ function migrate_restore_missing_links($db, $langs, $conf)
 /**
  * Migration du champ fk_user_resp de llx_projet vers llx_element_contact
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_project_user_resp($db, $langs, $conf)
@@ -2699,9 +2693,9 @@ function migrate_project_user_resp($db, $langs, $conf)
 /**
  * Migration de la table llx_projet_task_actors vers llx_element_contact
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_project_task_actors($db, $langs, $conf)
@@ -2776,14 +2770,14 @@ function migrate_project_task_actors($db, $langs, $conf)
 /**
  * Migration des tables de relation
  *
- * @param   DoliDB      $db             Database handler
- * @param   Translate   $langs          Object langs
- * @param   Conf        $conf           Object conf
- * @param   string      $table          Table name
- * @param   string      $fk_source      Id of element source (name of field)
- * @param   string      $sourcetype     Type of element source
- * @param   string      $fk_target      Id of element target
- * @param   string      $targettype     Type of element target
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
+ * @param string $table Table name
+ * @param string $fk_source Id of element source (name of field)
+ * @param string $sourcetype Type of element source
+ * @param string $fk_target Id of element target
+ * @param string $targettype Type of element target
  * @return  void
  */
 function migrate_relationship_tables($db, $langs, $conf, $table, $fk_source, $sourcetype, $fk_target, $targettype)
@@ -2860,9 +2854,9 @@ function migrate_relationship_tables($db, $langs, $conf, $table, $fk_source, $so
 /**
  * Migrate duration in seconds
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_element_time($db, $langs, $conf)
@@ -2901,8 +2895,8 @@ function migrate_element_time($db, $langs, $conf)
                     $newtime = $hour + $min;
 
                     $sql2 = "UPDATE " . MAIN_DB_PREFIX . "element_time SET";
-                    $sql2 .= " element_duration = " . ((int) $newtime);
-                    $sql2 .= " WHERE rowid = " . ((int) $obj->rowid);
+                    $sql2 .= " element_duration = " . ((int)$newtime);
+                    $sql2 .= " WHERE rowid = " . ((int)$obj->rowid);
 
                     $resql2 = $db->query($sql2);
                     if (!$resql2) {
@@ -2931,8 +2925,8 @@ function migrate_element_time($db, $langs, $conf)
                 if ($oldtime > 0) {
                     foreach ($totaltime as $taskid => $total_duration) {
                         $sql = "UPDATE " . MAIN_DB_PREFIX . "projet_task SET";
-                        $sql .= " duration_effective = " . ((int) $total_duration);
-                        $sql .= " WHERE rowid = " . ((int) $taskid);
+                        $sql .= " duration_effective = " . ((int)$total_duration);
+                        $sql .= " WHERE rowid = " . ((int)$taskid);
 
                         $resql = $db->query($sql);
                         if (!$resql) {
@@ -2965,9 +2959,9 @@ function migrate_element_time($db, $langs, $conf)
 /**
  * Migrate order ref_customer and date_delivery fields to llx_expedition
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_customerorder_shipping($db, $langs, $conf)
@@ -3011,7 +3005,7 @@ function migrate_customerorder_shipping($db, $langs, $conf)
                         $sqlUpdate = "UPDATE " . MAIN_DB_PREFIX . "expedition SET";
                         $sqlUpdate .= " ref_customer = '" . $db->escape($obj->ref_client) . "'";
                         $sqlUpdate .= ", date_delivery = '" . $db->escape($obj->delivery_date ? $obj->delivery_date : 'null') . "'";
-                        $sqlUpdate .= " WHERE rowid = " . ((int) $obj->shipping_id);
+                        $sqlUpdate .= " WHERE rowid = " . ((int)$obj->shipping_id);
 
                         $result = $db->query($sqlUpdate);
                         if (!$result) {
@@ -3049,9 +3043,9 @@ function migrate_customerorder_shipping($db, $langs, $conf)
 /**
  * Migrate link stored into fk_expedition into llx_element_element
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_shipping_delivery($db, $langs, $conf)
@@ -3098,7 +3092,7 @@ function migrate_shipping_delivery($db, $langs, $conf)
                     $result = $db->query($sqlInsert);
                     if ($result) {
                         $sqlUpdate = "UPDATE " . MAIN_DB_PREFIX . "livraison SET fk_expedition = NULL";
-                        $sqlUpdate .= " WHERE rowid = " . ((int) $obj->rowid);
+                        $sqlUpdate .= " WHERE rowid = " . ((int)$obj->rowid);
 
                         $result = $db->query($sqlUpdate);
                         if (!$result) {
@@ -3144,9 +3138,9 @@ function migrate_shipping_delivery($db, $langs, $conf)
  * We try to complete field ref_customer and date_delivery that are empty into llx_livraison.
  * We set them with value from llx_expedition.
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_shipping_delivery2($db, $langs, $conf)
@@ -3186,7 +3180,7 @@ function migrate_shipping_delivery2($db, $langs, $conf)
                 $sqlUpdate = "UPDATE " . MAIN_DB_PREFIX . "livraison SET";
                 $sqlUpdate .= " ref_customer = '" . $db->escape($obj->ref_customer) . "',";
                 $sqlUpdate .= " date_delivery = " . ($obj->date_delivery ? "'" . $db->escape($obj->date_delivery) . "'" : 'null');
-                $sqlUpdate .= " WHERE rowid = " . ((int) $obj->delivery_id);
+                $sqlUpdate .= " WHERE rowid = " . ((int)$obj->delivery_id);
 
                 $result = $db->query($sqlUpdate);
                 if (!$result) {
@@ -3217,9 +3211,9 @@ function migrate_shipping_delivery2($db, $langs, $conf)
 /**
  * Migrate link stored into fk_xxxx into fk_element and elementtype
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_actioncomm_element($db, $langs, $conf)
@@ -3276,9 +3270,9 @@ function migrate_actioncomm_element($db, $langs, $conf)
 /**
  * Migrate link stored into fk_mode_reglement
  *
- * @param   DoliDB      $db     Database handler
- * @param   Translate   $langs  Object langs
- * @param   Conf        $conf   Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_mode_reglement($db, $langs, $conf)
@@ -3303,7 +3297,7 @@ function migrate_mode_reglement($db, $langs, $conf)
 
         $sqlSelect = "SELECT id";
         $sqlSelect .= " FROM " . MAIN_DB_PREFIX . "c_paiement";
-        $sqlSelect .= " WHERE id = " . ((int) $old_id);
+        $sqlSelect .= " WHERE id = " . ((int)$old_id);
         $sqlSelect .= " AND code = '" . $db->escape($elements['code'][$key]) . "'";
 
         $resql = $db->query($sqlSelect);
@@ -3315,22 +3309,22 @@ function migrate_mode_reglement($db, $langs, $conf)
                 $db->begin();
 
                 $sqla = "UPDATE " . MAIN_DB_PREFIX . "paiement SET";
-                $sqla .= " fk_paiement = " . ((int) $elements['new_id'][$key]);
-                $sqla .= " WHERE fk_paiement = " . ((int) $old_id);
-                $sqla .= " AND fk_paiement IN (SELECT id FROM " . MAIN_DB_PREFIX . "c_paiement WHERE id = " . ((int) $old_id) . " AND code = '" . $db->escape($elements['code'][$key]) . "')";
+                $sqla .= " fk_paiement = " . ((int)$elements['new_id'][$key]);
+                $sqla .= " WHERE fk_paiement = " . ((int)$old_id);
+                $sqla .= " AND fk_paiement IN (SELECT id FROM " . MAIN_DB_PREFIX . "c_paiement WHERE id = " . ((int)$old_id) . " AND code = '" . $db->escape($elements['code'][$key]) . "')";
                 $resqla = $db->query($sqla);
 
                 $sql = "UPDATE " . MAIN_DB_PREFIX . "c_paiement SET";
-                $sql .= " id = " . ((int) $elements['new_id'][$key]);
-                $sql .= " WHERE id = " . ((int) $old_id);
+                $sql .= " id = " . ((int)$elements['new_id'][$key]);
+                $sql .= " WHERE id = " . ((int)$old_id);
                 $sql .= " AND code = '" . $db->escape($elements['code'][$key]) . "'";
                 $resql = $db->query($sql);
 
                 if ($resqla && $resql) {
                     foreach ($elements['tables'] as $table) {
                         $sql = "UPDATE " . MAIN_DB_PREFIX . $table . " SET ";
-                        $sql .= "fk_mode_reglement = " . ((int) $elements['new_id'][$key]);
-                        $sql .= " WHERE fk_mode_reglement = " . ((int) $old_id);
+                        $sql .= "fk_mode_reglement = " . ((int)$elements['new_id'][$key]);
+                        $sql .= " WHERE fk_mode_reglement = " . ((int)$old_id);
 
                         $resql = $db->query($sql);
                         if (!$resql) {
@@ -3366,9 +3360,9 @@ function migrate_mode_reglement($db, $langs, $conf)
 /**
  * Delete duplicates in table categorie_association
  *
- * @param   DoliDB      $db         Database handler
- * @param   Translate   $langs      Object langs
- * @param   Conf        $conf       Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_clean_association($db, $langs, $conf)
@@ -3410,7 +3404,7 @@ function migrate_clean_association($db, $langs, $conf)
                         // And we insert only each record once
                         foreach ($couples as $key => $val) {
                             $sql = "INSERT INTO " . MAIN_DB_PREFIX . "categorie_association(fk_categorie_mere,fk_categorie_fille)";
-                            $sql .= " VALUES(" . ((int) $val['mere']) . ", " . ((int) $val['fille']) . ")";
+                            $sql .= " VALUES(" . ((int)$val['mere']) . ", " . ((int)$val['fille']) . ")";
                             dolibarr_install_syslog("upgrade: insert association");
                             $resqli = $db->query($sql);
                             if (!$resqli) {
@@ -3441,9 +3435,9 @@ function migrate_clean_association($db, $langs, $conf)
 /**
  * Migrate categorie association
  *
- * @param   DoliDB      $db             Database handler
- * @param   Translate   $langs          Object langs
- * @param   Conf        $conf           Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_categorie_association($db, $langs, $conf)
@@ -3473,8 +3467,8 @@ function migrate_categorie_association($db, $langs, $conf)
                     $obj = $db->fetch_object($resql);
 
                     $sqlUpdate = "UPDATE " . MAIN_DB_PREFIX . "categorie SET ";
-                    $sqlUpdate .= "fk_parent = " . ((int) $obj->fk_categorie_mere);
-                    $sqlUpdate .= " WHERE rowid = " . ((int) $obj->fk_categorie_fille);
+                    $sqlUpdate .= "fk_parent = " . ((int)$obj->fk_categorie_mere);
+                    $sqlUpdate .= " WHERE rowid = " . ((int)$obj->fk_categorie_fille);
 
                     $result = $db->query($sqlUpdate);
                     if (!$result) {
@@ -3507,9 +3501,9 @@ function migrate_categorie_association($db, $langs, $conf)
 /**
  * Migrate event assignment to owner
  *
- * @param   DoliDB      $db             Database handler
- * @param   Translate   $langs          Object langs
- * @param   Conf        $conf           Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_event_assignement($db, $langs, $conf)
@@ -3542,7 +3536,7 @@ function migrate_event_assignement($db, $langs, $conf)
                 $obj = $db->fetch_object($resql);
 
                 $sqlUpdate = "INSERT INTO " . MAIN_DB_PREFIX . "actioncomm_resources(fk_actioncomm, element_type, fk_element) ";
-                $sqlUpdate .= "VALUES(" . ((int) $obj->id) . ", 'user', " . ((int) $obj->fk_user_action) . ")";
+                $sqlUpdate .= "VALUES(" . ((int)$obj->id) . ", 'user', " . ((int)$obj->fk_user_action) . ")";
 
                 $result = $db->query($sqlUpdate);
                 if (!$result) {
@@ -3573,9 +3567,9 @@ function migrate_event_assignement($db, $langs, $conf)
 /**
  * Migrate event assignment to owner
  *
- * @param   DoliDB      $db             Database handler
- * @param   Translate   $langs          Object langs
- * @param   Conf        $conf           Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_event_assignement_contact($db, $langs, $conf)
@@ -3608,7 +3602,7 @@ function migrate_event_assignement_contact($db, $langs, $conf)
                 $obj = $db->fetch_object($resql);
 
                 $sqlUpdate = "INSERT INTO " . MAIN_DB_PREFIX . "actioncomm_resources(fk_actioncomm, element_type, fk_element) ";
-                $sqlUpdate .= "VALUES(" . ((int) $obj->id) . ", 'socpeople', " . ((int) $obj->fk_contact) . ")";
+                $sqlUpdate .= "VALUES(" . ((int)$obj->id) . ", 'socpeople', " . ((int)$obj->fk_contact) . ")";
 
                 $result = $db->query($sqlUpdate);
                 if (!$result) {
@@ -3640,16 +3634,14 @@ function migrate_event_assignement_contact($db, $langs, $conf)
 /**
  * Migrate to reset the blocked log for V7+ algorithm
  *
- * @param   DoliDB      $db             Database handler
- * @param   Translate   $langs          Object langs
- * @param   Conf        $conf           Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_reset_blocked_log($db, $langs, $conf)
 {
     global $user;
-
-    require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/blockedlog.class.php';
 
     print '<tr><td colspan="4">';
 
@@ -3678,7 +3670,7 @@ function migrate_reset_blocked_log($db, $langs, $conf)
 
                 print 'Process entity ' . $obj->entity;
 
-                $sqlSearch = "SELECT count(rowid) as nb FROM " . MAIN_DB_PREFIX . "blockedlog WHERE action = 'MODULE_SET' and entity = " . ((int) $obj->entity);
+                $sqlSearch = "SELECT count(rowid) as nb FROM " . MAIN_DB_PREFIX . "blockedlog WHERE action = 'MODULE_SET' and entity = " . ((int)$obj->entity);
                 $resqlSearch = $db->query($sqlSearch);
                 if ($resqlSearch) {
                     $objSearch = $db->fetch_object($resqlSearch);
@@ -3687,7 +3679,7 @@ function migrate_reset_blocked_log($db, $langs, $conf)
                         print ' - Record for entity must be reset...';
 
                         $sqlUpdate = "DELETE FROM " . MAIN_DB_PREFIX . "blockedlog";
-                        $sqlUpdate .= " WHERE entity = " . ((int) $obj->entity);
+                        $sqlUpdate .= " WHERE entity = " . ((int)$obj->entity);
                         $resqlUpdate = $db->query($sqlUpdate);
                         if (!$resqlUpdate) {
                             $error++;
@@ -3739,9 +3731,9 @@ function migrate_reset_blocked_log($db, $langs, $conf)
 /**
  * Migrate to add entity value into llx_societe_remise
  *
- * @param   DoliDB      $db             Database handler
- * @param   Translate   $langs          Object langs
- * @param   Conf        $conf           Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_remise_entity($db, $langs, $conf)
@@ -3774,7 +3766,7 @@ function migrate_remise_entity($db, $langs, $conf)
 
                 $sqlUpdate = "UPDATE " . MAIN_DB_PREFIX . "societe_remise SET";
                 $sqlUpdate .= " entity = " . $obj->entity;
-                $sqlUpdate .= " WHERE rowid = " . ((int) $obj->rowid);
+                $sqlUpdate .= " WHERE rowid = " . ((int)$obj->rowid);
 
                 $result = $db->query($sqlUpdate);
                 if (!$result) {
@@ -3805,9 +3797,9 @@ function migrate_remise_entity($db, $langs, $conf)
 /**
  * Migrate to add entity value into llx_societe_remise_except
  *
- * @param   DoliDB      $db             Database handler
- * @param   Translate   $langs          Object langs
- * @param   Conf        $conf           Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_remise_except_entity($db, $langs, $conf)
@@ -3841,16 +3833,16 @@ function migrate_remise_except_entity($db, $langs, $conf)
 
                     $sqlSelect2 = "SELECT f.entity";
                     $sqlSelect2 .= " FROM " . MAIN_DB_PREFIX . "facture as f";
-                    $sqlSelect2 .= " WHERE f.rowid = " . ((int) $fk_facture);
+                    $sqlSelect2 .= " WHERE f.rowid = " . ((int)$fk_facture);
                 } elseif (!empty($obj->fk_facture_line)) {
                     $sqlSelect2 = "SELECT f.entity";
                     $sqlSelect2 .= " FROM " . MAIN_DB_PREFIX . "facture as f, " . MAIN_DB_PREFIX . "facturedet as fd";
-                    $sqlSelect2 .= " WHERE fd.rowid = " . ((int) $obj->fk_facture_line);
+                    $sqlSelect2 .= " WHERE fd.rowid = " . ((int)$obj->fk_facture_line);
                     $sqlSelect2 .= " AND fd.fk_facture = f.rowid";
                 } else {
                     $sqlSelect2 = "SELECT s.entity";
                     $sqlSelect2 .= " FROM " . MAIN_DB_PREFIX . "societe as s";
-                    $sqlSelect2 .= " WHERE s.rowid = " . ((int) $obj->fk_soc);
+                    $sqlSelect2 .= " WHERE s.rowid = " . ((int)$obj->fk_soc);
                 }
 
                 $resql2 = $db->query($sqlSelect2);
@@ -3859,8 +3851,8 @@ function migrate_remise_except_entity($db, $langs, $conf)
                         $obj2 = $db->fetch_object($resql2);
 
                         $sqlUpdate = "UPDATE " . MAIN_DB_PREFIX . "societe_remise_except SET";
-                        $sqlUpdate .= " entity = " . ((int) $obj2->entity);
-                        $sqlUpdate .= " WHERE rowid = " . ((int) $obj->rowid);
+                        $sqlUpdate .= " entity = " . ((int)$obj2->entity);
+                        $sqlUpdate .= " WHERE rowid = " . ((int)$obj->rowid);
 
                         $result = $db->query($sqlUpdate);
                         if (!$result) {
@@ -3897,9 +3889,9 @@ function migrate_remise_except_entity($db, $langs, $conf)
 /**
  * Migrate to add entity value into llx_user_rights
  *
- * @param   DoliDB      $db             Database handler
- * @param   Translate   $langs          Object langs
- * @param   Conf        $conf           Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_user_rights_entity($db, $langs, $conf)
@@ -3929,8 +3921,8 @@ function migrate_user_rights_entity($db, $langs, $conf)
                 $obj = $db->fetch_object($resql);
 
                 $sqlUpdate = "UPDATE " . MAIN_DB_PREFIX . "user_rights SET";
-                $sqlUpdate .= " entity = " . ((int) $obj->entity);
-                $sqlUpdate .= " WHERE fk_user = " . ((int) $obj->rowid);
+                $sqlUpdate .= " entity = " . ((int)$obj->entity);
+                $sqlUpdate .= " WHERE fk_user = " . ((int)$obj->rowid);
 
                 $result = $db->query($sqlUpdate);
                 if (!$result) {
@@ -3962,9 +3954,9 @@ function migrate_user_rights_entity($db, $langs, $conf)
 /**
  * Migrate to add entity value into llx_usergroup_rights
  *
- * @param   DoliDB      $db             Database handler
- * @param   Translate   $langs          Object langs
- * @param   Conf        $conf           Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  void
  */
 function migrate_usergroup_rights_entity($db, $langs, $conf)
@@ -3994,8 +3986,8 @@ function migrate_usergroup_rights_entity($db, $langs, $conf)
                 $obj = $db->fetch_object($resql);
 
                 $sqlUpdate = "UPDATE " . MAIN_DB_PREFIX . "usergroup_rights SET";
-                $sqlUpdate .= " entity = " . ((int) $obj->entity);
-                $sqlUpdate .= " WHERE fk_usergroup = " . ((int) $obj->rowid);
+                $sqlUpdate .= " entity = " . ((int)$obj->entity);
+                $sqlUpdate .= " WHERE fk_usergroup = " . ((int)$obj->rowid);
 
                 $result = $db->query($sqlUpdate);
                 if (!$result) {
@@ -4027,11 +4019,11 @@ function migrate_usergroup_rights_entity($db, $langs, $conf)
 /**
  * Migration directory
  *
- * @param   DoliDB      $db         Database handler
- * @param   Translate   $langs      Object langs
- * @param   Conf        $conf       Object conf
- * @param   string      $oldname    Old name (relative to DOL_DATA_ROOT)
- * @param   string      $newname    New name (relative to DOL_DATA_ROOT)
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
+ * @param string $oldname Old name (relative to DOL_DATA_ROOT)
+ * @param string $newname New name (relative to DOL_DATA_ROOT)
  * @return  void
  */
 function migrate_rename_directories($db, $langs, $conf, $oldname, $newname)
@@ -4048,9 +4040,9 @@ function migrate_rename_directories($db, $langs, $conf, $oldname, $newname)
 /**
  * Delete deprecated files
  *
- * @param   DoliDB      $db         Database handler
- * @param   Translate   $langs      Object langs
- * @param   Conf        $conf       Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  boolean
  */
 function migrate_delete_old_files($db, $langs, $conf)
@@ -4153,9 +4145,9 @@ function migrate_delete_old_files($db, $langs, $conf)
 /**
  * Remove deprecated directories
  *
- * @param   DoliDB      $db         Database handler
- * @param   Translate   $langs      Object langs
- * @param   Conf        $conf       Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  boolean
  */
 function migrate_delete_old_dir($db, $langs, $conf)
@@ -4196,11 +4188,11 @@ function migrate_delete_old_dir($db, $langs, $conf)
  * We must do this when internal menu of module or permissions has changed
  * or when triggers have moved.
  *
- * @param   DoliDB      $db             Database handler
- * @param   Translate   $langs          Object langs
- * @param   Conf        $conf           Object conf
- * @param   array       $listofmodule   List of modules, like array('MODULE_KEY_NAME'=>', $reloadmode)
- * @param   int         $force          1=Reload module even if not already loaded
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
+ * @param array $listofmodule List of modules, like array('MODULE_KEY_NAME'=>', $reloadmode)
+ * @param int $force 1=Reload module even if not already loaded
  * @return  int                 Return integer <0 if KO, >0 if OK
  */
 function migrate_reload_modules($db, $langs, $conf, $listofmodule = array(), $force = 0)
@@ -4212,7 +4204,6 @@ function migrate_reload_modules($db, $langs, $conf, $listofmodule = array(), $fo
     }
 
     if (!is_object($user)) {
-        include_once DOL_DOCUMENT_ROOT . '/user/class/user.class.php';
         $user = new User($db);  // To avoid error during migration
     }
 
@@ -4329,13 +4320,12 @@ function migrate_reload_modules($db, $langs, $conf, $listofmodule = array(), $fo
 }
 
 
-
 /**
  * Reload SQL menu file (if dynamic menus, if modified by version)
  *
- * @param   DoliDB      $db         Database handler
- * @param   Translate   $langs      Object langs
- * @param   Conf        $conf       Object conf
+ * @param DoliDB $db Database handler
+ * @param Translate $langs Object langs
+ * @param Conf $conf Object conf
  * @return  int                     Return integer <0 if KO, >0 if OK
  */
 function migrate_reload_menu($db, $langs, $conf)
@@ -4634,7 +4624,7 @@ function migrate_users_socialnetworks()
             $sqlupd .= ', googleplus=null';
             $sqlupd .= ', youtube=null';
             $sqlupd .= ', whatsapp=null';
-            $sqlupd .= ' WHERE rowid = ' . ((int) $obj->rowid);
+            $sqlupd .= ' WHERE rowid = ' . ((int)$obj->rowid);
             //print $sqlupd."<br>";
             $resqlupd = $db->query($sqlupd);
             if (!$resqlupd) {
@@ -4726,7 +4716,7 @@ function migrate_members_socialnetworks()
             $sqlupd .= ', googleplus=null';
             $sqlupd .= ', youtube=null';
             $sqlupd .= ', whatsapp=null';
-            $sqlupd .= ' WHERE rowid = ' . ((int) $obj->rowid);
+            $sqlupd .= ' WHERE rowid = ' . ((int)$obj->rowid);
             //print $sqlupd."<br>";
             $resqlupd = $db->query($sqlupd);
             if (!$resqlupd) {
@@ -4822,7 +4812,7 @@ function migrate_contacts_socialnetworks()
             $sqlupd .= ', googleplus=null';
             $sqlupd .= ', youtube=null';
             $sqlupd .= ', whatsapp=null';
-            $sqlupd .= ' WHERE rowid = ' . ((int) $obj->rowid);
+            $sqlupd .= ' WHERE rowid = ' . ((int)$obj->rowid);
             //print $sqlupd."<br>";
             $resqlupd = $db->query($sqlupd);
             if (!$resqlupd) {
@@ -4913,7 +4903,7 @@ function migrate_thirdparties_socialnetworks()
             $sqlupd .= ', googleplus=null';
             $sqlupd .= ', youtube=null';
             $sqlupd .= ', whatsapp=null';
-            $sqlupd .= ' WHERE rowid = ' . ((int) $obj->rowid);
+            $sqlupd .= ' WHERE rowid = ' . ((int)$obj->rowid);
             //print $sqlupd."<br>";
             $resqlupd = $db->query($sqlupd);
             if (!$resqlupd) {
@@ -4938,7 +4928,7 @@ function migrate_thirdparties_socialnetworks()
 /**
  * Migrate export and import profiles to fix field name that was renamed
  *
- * @param   string      $mode       'export' or 'import'
+ * @param string $mode 'export' or 'import'
  * @return  void
  */
 function migrate_export_import_profiles($mode = 'export')
@@ -4977,7 +4967,7 @@ function migrate_export_import_profiles($mode = 'export')
                 if ($mode == 'export') {
                     $sqlupd .= ", filter = '" . $db->escape($newfilter) . "'";
                 }
-                $sqlupd .= ' WHERE rowid = ' . ((int) $obj->rowid);
+                $sqlupd .= ' WHERE rowid = ' . ((int)$obj->rowid);
                 $resultstring .= '<tr class="trforrunsql" style=""><td class="wordbreak" colspan="4">' . $sqlupd . "</td></tr>\n";
                 $resqlupd = $db->query($sqlupd);
                 if (!$resqlupd) {
@@ -5035,7 +5025,7 @@ function migrate_contractdet_rank()
                 $currentRank = 1;
             }
 
-            $sqlUpd = "UPDATE " . $db->prefix() . "contratdet SET rang=" . (int) $currentRank . " WHERE rowid=" . (int) $obj->cdid;
+            $sqlUpd = "UPDATE " . $db->prefix() . "contratdet SET rang=" . (int)$currentRank . " WHERE rowid=" . (int)$obj->cdid;
             $resultstring = '.';
             print $resultstring;
             $resqlUpd = $db->query($sqlUpd);
@@ -5044,7 +5034,7 @@ function migrate_contractdet_rank()
                 $error++;
             }
 
-            $current_contract =  $obj->cid;
+            $current_contract = $obj->cid;
         }
     } else {
         $error++;

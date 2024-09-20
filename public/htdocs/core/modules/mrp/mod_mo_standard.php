@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2005-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,13 +21,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Mrp\Classes\ModeleNumRefMos;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/mrp/mod_mo_standard.php
  *  \ingroup    mrp
  *  \brief      File of class to manage MO numbering rules standard
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/mrp/modules_mo.php';
 
 /**
  *  Class to manage MO numbering rules standard
@@ -56,8 +60,8 @@ class mod_mo_standard extends ModeleNumRefMos
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -69,7 +73,7 @@ class mod_mo_standard extends ModeleNumRefMos
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -81,8 +85,8 @@ class mod_mo_standard extends ModeleNumRefMos
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object Object we need next value for
-     *  @return boolean                 false if conflict, true if ok
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                 false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -117,9 +121,9 @@ class mod_mo_standard extends ModeleNumRefMos
     /**
      *  Return next free value
      *
-     *  @param  Product     $objprod    Object product
-     *  @param  Mo          $object     Object we need next value for
-     *  @return string|-1               Value if OK, -1 if KO
+     * @param Product $objprod Object product
+     * @param Mo $object Object we need next value for
+     * @return string|-1               Value if OK, -1 if KO
      */
     public function getNextValue($objprod, $object)
     {

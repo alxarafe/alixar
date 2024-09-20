@@ -317,7 +317,7 @@ class VCalendar extends VObject\Document
                 // converting everything to UTC.
                 if ('VEVENT' === $child->name && (isset($child->{'RECURRENCE-ID'}) || isset($child->RRULE) || isset($child->RDATE))) {
                     // Handle these a bit later.
-                    $uid = (string) $child->UID;
+                    $uid = (string)$child->UID;
                     if (!$uid) {
                         throw new InvalidDataException('Every VEVENT object must have a UID property');
                     }
@@ -423,7 +423,7 @@ class VCalendar extends VObject\Document
         $warnings = parent::validate($options);
 
         if ($ver = $this->VERSION) {
-            if ('2.0' !== (string) $ver) {
+            if ('2.0' !== (string)$ver) {
                 $warnings[] = [
                     'level' => 3,
                     'message' => 'Only iCalendar version 2.0 as defined in rfc5545 is supported.',
@@ -445,7 +445,7 @@ class VCalendar extends VObject\Document
                 }
                 $componentTypes[] = $child->name;
 
-                $uid = (string) $child->UID;
+                $uid = (string)$child->UID;
                 $isMaster = isset($child->{'RECURRENCE-ID'}) ? 0 : 1;
                 if (isset($uidList[$uid])) {
                     ++$uidList[$uid]['count'];

@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2003      Eric Seigne          <erics@rycks.com>
- * Copyright (C) 2003,2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Sebastien Di Cintio  <sdicintio@ressource-toi.org>
- * Copyright (C) 2004      Benoit Mortier       <benoit.mortier@opensides.be>
- * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011 	   Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2020		Tobias Sekan		<tobias.sekan@startmail.com>
+/* Copyright (C) 2003       Eric Seigne                 <erics@rycks.com>
+ * Copyright (C) 2003,2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Sebastien Di Cintio         <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011 	    Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2020		Tobias Sekan		        <tobias.sekan@startmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,6 +25,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\InfoBox;
+use Dolibarr\Code\Core\Classes\RssParser;
+
 /**
  *      \file       htdocs/admin/external_rss.php
  *      \ingroup    external_rss
@@ -34,8 +38,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/rssparser.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/infobox.class.php';
 
 // Load translation files required by the page
 $langs->load("admin");
@@ -47,7 +49,6 @@ $action = GETPOST('action', 'aZ09');
 if (!$user->admin) {
     accessforbidden();
 }
-
 
 /*
  * Actions
@@ -140,11 +141,11 @@ if (GETPOST("delete")) {
 
                 $sql = "DELETE FROM " . MAIN_DB_PREFIX . "boxes";
                 $sql .= " WHERE entity = " . $conf->entity;
-                $sql .= " AND box_id = " . ((int) $obj->rowid);
+                $sql .= " AND box_id = " . ((int)$obj->rowid);
                 $resql = $db->query($sql);
 
                 $sql = "DELETE FROM " . MAIN_DB_PREFIX . "boxes_def";
-                $sql .= " WHERE rowid = " . ((int) $obj->rowid);
+                $sql .= " WHERE rowid = " . ((int)$obj->rowid);
                 $resql = $db->query($sql);
 
                 if (!$resql) {
@@ -349,14 +350,14 @@ $db->close();
 /**
  * Check if the given RSS feed if inside the list of boxes/widgets
  *
- * @param   int     $idrss      The id of the RSS feed
- * @param   array   $boxlist    A list with boxes/widgets
+ * @param int $idrss The id of the RSS feed
+ * @param array $boxlist A list with boxes/widgets
  * @return  bool                true if the rss feed is inside the box/widget list, otherwise false
  */
 function _isInBoxList($idrss, array $boxlist)
 {
     foreach ($boxlist as $box) {
-        if ($box->boxcode === "lastrssinfos" && strpos($box->note, (string) $idrss) !== false) {
+        if ($box->boxcode === "lastrssinfos" && strpos($box->note, (string)$idrss) !== false) {
             return true;
         }
     }

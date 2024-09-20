@@ -1,9 +1,10 @@
 <?php
-/* Copyright (C) 2017  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2021  Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021  Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021  Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021  Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -20,7 +21,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
 
+use Dolibarr\Code\Hrm\Classes\Job;
+
+/*
  * \file        htdocs/hrm/compare.php
  * \ingroup     hrm
  * \brief       This file compares skills of user groups
@@ -33,17 +38,11 @@
  * 3-  the right part displays the members of group 2 or the job to be compared
  */
 
-
 // Load Dolibarr environment
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skill.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/evaluation.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/position.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm.lib.php';
-
 
 // Load translation files required by the page
 $langs->load('hrm');
@@ -119,7 +118,7 @@ print dol_get_fiche_head($head, 'compare', '', 1);
 <?php
 
 $fk_usergroup2 = 0;
-$fk_job = (int) GETPOST('fk_job');
+$fk_job = (int)GETPOST('fk_job');
 if ($fk_job <= 0) {
     $fk_usergroup2 = GETPOST('fk_usergroup2');
 }
@@ -137,63 +136,66 @@ $fk_usergroup1 = GETPOST('fk_usergroup1');
                     <table class="border tableforfield" width="100%">
                         <tr>
                             <td><?php
-                            print $langs->trans('group1ToCompare') . '</td><td>';
-                            print img_picto('', 'group', 'class="pictofixedwidth"');
-                            print $form->select_dolgroups($fk_usergroup1, 'fk_usergroup1', 1);
-                            ?></td>
+                                print $langs->trans('group1ToCompare') . '</td><td>';
+                                print img_picto('', 'group', 'class="pictofixedwidth"');
+                                print $form->select_dolgroups($fk_usergroup1, 'fk_usergroup1', 1);
+                                ?></td>
                         </tr>
-                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
                         <tr>
                             <td><?php
-                            print $langs->trans('group2ToCompare') . '</td><td>';
-                            print img_picto('', 'group', 'class="pictofixedwidth"');
-                            print $form->select_dolgroups($fk_usergroup2, 'fk_usergroup2', 1);
-                            ?></td>
+                                print $langs->trans('group2ToCompare') . '</td><td>';
+                                print img_picto('', 'group', 'class="pictofixedwidth"');
+                                print $form->select_dolgroups($fk_usergroup2, 'fk_usergroup2', 1);
+                                ?></td>
                         </tr>
                         <tr>
                             <td><STRONG><?php print $langs->trans('or'); ?></STRONG></td>
                         </tr>
                         <tr>
                             <td><?php
-                            echo $langs->trans('OrJobToCompare') . '</td><td>';
-                            $j = new Job($db);
-                            $jobs = $j->fetchAll();
-                            $TJobs = array();
+                                echo $langs->trans('OrJobToCompare') . '</td><td>';
+                                $j = new Job($db);
+                                $jobs = $j->fetchAll();
+                                $TJobs = array();
 
-                            foreach ($jobs as &$j) {
-                                $TJobs[$j->id] = $j->label;
-                            }
+                                foreach ($jobs as &$j) {
+                                    $TJobs[$j->id] = $j->label;
+                                }
 
-                            print img_picto('', 'jobprofile', 'class="pictofixedwidth"') . $form->selectarray('fk_job', $TJobs, $fk_job, 1);
-                            ?></td>
+                                print img_picto('', 'jobprofile', 'class="pictofixedwidth"') . $form->selectarray('fk_job', $TJobs, $fk_job, 1);
+                                ?></td>
                         </tr>
                     </table>
                 </div>
 
-                <div style="background:#eee;border-radius:5px 0;margin:0px 0 10px;font-style:italic;padding:5px;" class="fichehalfright">
+                <div style="background:#eee;border-radius:5px 0;margin:0px 0 10px;font-style:italic;padding:5px;"
+                     class="fichehalfright">
                     <!--<h4><?php echo $langs->trans('legend'); ?></h4>-->
-                        <table class="border" width="100%">
-                            <tr>
-                                <td><span style="vertical-align:middle" class="toohappy diffnote little"></span>
+                    <table class="border" width="100%">
+                        <tr>
+                            <td><span style="vertical-align:middle" class="toohappy diffnote little"></span>
                                 <?php echo $langs->trans('CompetenceAcquiredByOneOrMore'); ?></td>
-                            </tr>
-                            <tr>
-                                <td><span style="vertical-align:middle" class="veryhappy diffnote little"></span>
+                        </tr>
+                        <tr>
+                            <td><span style="vertical-align:middle" class="veryhappy diffnote little"></span>
                                 <?php echo $langs->trans('MaxlevelGreaterThan'); ?></td>
-                            </tr>
-                            <tr>
-                                <td><span style="vertical-align:middle" class="happy diffnote little"></span>
+                        </tr>
+                        <tr>
+                            <td><span style="vertical-align:middle" class="happy diffnote little"></span>
                                 <?php echo $langs->trans('MaxLevelEqualTo'); ?></td>
-                            </tr>
-                            <tr>
-                                <td><span style="vertical-align:middle" class="sad diffnote little"></span>
+                        </tr>
+                        <tr>
+                            <td><span style="vertical-align:middle" class="sad diffnote little"></span>
                                 <?php echo $langs->trans('MaxLevelLowerThan'); ?></td>
-                            </tr>
-                            <tr>
-                                <td><span style="vertical-align:middle" class="toosad diffnote little"></span>
+                        </tr>
+                        <tr>
+                            <td><span style="vertical-align:middle" class="toosad diffnote little"></span>
                                 <?php echo $langs->trans('SkillNotAcquired'); ?></td>
-                            </tr>
-                        </table>
+                        </tr>
+                    </table>
 
                 </div>
 
@@ -284,13 +286,12 @@ llxFooter();
 $db->close();
 
 
-
 /**
  *
  *  Return a html list element with diff  between required rank  and user rank
  *
- *      @param array $TMergedSkills skill list with all rate to add good picto
- *      @return string
+ * @param array $TMergedSkills skill list with all rate to add good picto
+ * @return string
  */
 function diff(&$TMergedSkills)
 {
@@ -323,9 +324,9 @@ function diff(&$TMergedSkills)
 
 /**
  *  Return a html list with rank information
- *      @param array $TMergedSkills skill list for display
- *      @param string $field which column of comparison we are working with
- *      @return string
+ * @param array $TMergedSkills skill list for display
+ * @param string $field which column of comparison we are working with
+ * @return string
  */
 function rate(&$TMergedSkills, $field)
 {
@@ -420,10 +421,10 @@ function mergeSkills($TSkill1, $TSkill2)
 /**
  *  Display a list of User with picto
  *
- *  @param  array   $TUser          list of users (employees) in selected usergroup of a column
- *  @param  int     $fk_usergroup   selected usergroup id
- *  @param  string  $namelist       html name
- *  @return string
+ * @param array $TUser list of users (employees) in selected usergroup of a column
+ * @param int $fk_usergroup selected usergroup id
+ * @param string $namelist html name
+ * @return string
  */
 function displayUsersListWithPicto(&$TUser, $fk_usergroup = 0, $namelist = 'list-user')
 {
@@ -437,8 +438,8 @@ function displayUsersListWithPicto(&$TUser, $fk_usergroup = 0, $namelist = 'list
 
         $sql = "SELECT u.rowid FROM " . MAIN_DB_PREFIX . "user u
 		LEFT JOIN " . MAIN_DB_PREFIX . "usergroup_user as ugu ON (u.rowid = ugu.fk_user)
-		WHERE u.statut > 0 AND ugu.entity = " . ((int) $conf->entity);
-        $sql .= " AND ugu.fk_usergroup=" . ((int) $fk_usergroup);
+		WHERE u.statut > 0 AND ugu.entity = " . ((int)$conf->entity);
+        $sql .= " AND ugu.fk_usergroup=" . ((int)$fk_usergroup);
 
         $res = $db->query($sql);
         $out .= '<ul name="' . $namelist . '">';
@@ -504,8 +505,8 @@ function displayUsersListWithPicto(&$TUser, $fk_usergroup = 0, $namelist = 'list
  *
  *      Allow to get skill(s) of a user
  *
- *      @param int[] $TUser array of employees we need to get skills
- *      @return array<int,stdClass>
+ * @param int[] $TUser array of employees we need to get skills
+ * @return array<int,stdClass>
  */
 function getSkillForUsers($TUser)
 {
@@ -532,9 +533,9 @@ function getSkillForUsers($TUser)
         $num = 0;
         while ($obj = $db->fetch_object($resql)) {
             $sql1 = "SELECT COUNT(rowid) as how_many_max FROM " . MAIN_DB_PREFIX . "hrm_skillrank as sr";
-            $sql1 .= " WHERE sr.rankorder = " . ((int) $obj->rankorder);
+            $sql1 .= " WHERE sr.rankorder = " . ((int)$obj->rankorder);
             $sql1 .= " AND sr.objecttype = '" . $db->escape(SkillRank::SKILLRANK_TYPE_USER) . "'";
-            $sql1 .= " AND sr.fk_skill = " . ((int) $obj->fk_skill);
+            $sql1 .= " AND sr.fk_skill = " . ((int)$obj->fk_skill);
             $sql1 .= " AND sr.fk_object IN (" . $db->sanitize(implode(',', $TUser)) . ")";
             $resql1 = $db->query($sql1);
 
@@ -562,8 +563,8 @@ function getSkillForUsers($TUser)
 /**
  *      Allow to get skill(s) of a job
  *
- *      @param int $fk_job job we need to get required skills
- *      @return stdClass[]
+ * @param int $fk_job job we need to get required skills
+ * @return stdClass[]
  */
 function getSkillForJob($fk_job)
 {
@@ -578,7 +579,7 @@ function getSkillForJob($fk_job)
     $sql .= ' FROM ' . MAIN_DB_PREFIX . 'hrm_skill as sk';
     $sql .= '	LEFT JOIN ' . MAIN_DB_PREFIX . 'hrm_skillrank as sr ON (sk.rowid = sr.fk_skill)';
     $sql .= "	WHERE sr.objecttype = '" . SkillRank::SKILLRANK_TYPE_JOB . "'";
-    $sql .= ' AND sr.fk_object = ' . ((int) $fk_job);
+    $sql .= ' AND sr.fk_object = ' . ((int)$fk_job);
     $sql .= ' GROUP BY sk.rowid, sk.label, sk.description, sk.skill_type, sr.fk_object, sr.objecttype, sr.fk_skill'; // group par competence*/
 
     $resql = $db->query($sql);

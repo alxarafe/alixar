@@ -38,8 +38,8 @@ class PropFind
      * Creates the PROPFIND object.
      *
      * @param string $path
-     * @param int    $depth
-     * @param int    $requestType
+     * @param int $depth
+     * @param int $requestType
      */
     public function __construct($path, array $properties, $depth = 0, $requestType = self::NORMAL)
     {
@@ -86,7 +86,7 @@ class PropFind
      * It's also possible to not pass a callback, but immediately pass a value
      *
      * @param string $propertyName
-     * @param mixed  $valueOrCallBack
+     * @param mixed $valueOrCallBack
      */
     public function handle($propertyName, $valueOrCallBack)
     {
@@ -110,8 +110,8 @@ class PropFind
      * properties, and 404 for null properties.
      *
      * @param string $propertyName
-     * @param mixed  $value
-     * @param int    $status
+     * @param mixed $value
+     * @param int $status
      */
     public function set($propertyName, $value, $status = null)
     {

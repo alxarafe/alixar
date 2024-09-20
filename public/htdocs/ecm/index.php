@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2008-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2008-2010 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2008-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2008-2010  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,10 @@
  * You can call this page with param module=medias to get a filemanager for medias.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Ecm\Classes\EcmDirectory;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/ecm/index.php
  *  \ingroup    ecm
@@ -28,11 +32,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ecm.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/treeview.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ecm/class/ecmdirectory.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('ecm', 'companies', 'other', 'users', 'orders', 'propal', 'bills', 'contracts'));
@@ -166,9 +168,9 @@ if ($action == 'confirm_deletefile' && $permissiontodelete) {
 
 // Add directory
 if ($action == 'add' && $permissiontocreatedir) {
-    $ecmdir->ref                = 'NOTUSEDYET';
-    $ecmdir->label              = GETPOST("label");
-    $ecmdir->description        = GETPOST("desc");
+    $ecmdir->ref = 'NOTUSEDYET';
+    $ecmdir->label = GETPOST("label");
+    $ecmdir->description = GETPOST("desc");
 
     $id = $ecmdir->create($user);
     if ($id > 0) {
@@ -260,10 +262,10 @@ if ($action == 'refreshmanual' && $permissiontoread) {
             }
 
             if ($fk_parent >= 0) {
-                $ecmdirtmp->ref                = 'NOTUSEDYET';
-                $ecmdirtmp->label              = dol_basename($dirdesc['fullname']);
-                $ecmdirtmp->description        = '';
-                $ecmdirtmp->fk_parent          = $fk_parent;
+                $ecmdirtmp->ref = 'NOTUSEDYET';
+                $ecmdirtmp->label = dol_basename($dirdesc['fullname']);
+                $ecmdirtmp->description = '';
+                $ecmdirtmp->fk_parent = $fk_parent;
 
                 $txt = "We create directory " . $ecmdirtmp->label . " with parent " . $fk_parent;
                 dol_syslog($txt);
@@ -271,10 +273,10 @@ if ($action == 'refreshmanual' && $permissiontoread) {
                 $id = $ecmdirtmp->create($user);
                 if ($id > 0) {
                     $newdirsql = array('id' => $id,
-                                     'id_mere' => $ecmdirtmp->fk_parent,
-                                     'label' => $ecmdirtmp->label,
-                                     'description' => $ecmdirtmp->description,
-                                     'fullrelativename' => $relativepathmissing);
+                        'id_mere' => $ecmdirtmp->fk_parent,
+                        'label' => $ecmdirtmp->label,
+                        'description' => $ecmdirtmp->description,
+                        'fullrelativename' => $relativepathmissing);
                     $sqltree[] = $newdirsql; // We complete fulltree for following loops
                     //var_dump($sqltree);
                     $adirwascreated = 1;
@@ -309,7 +311,6 @@ if ($action == 'refreshmanual' && $permissiontoread) {
         $sqltree = null;
     }
 }
-
 
 
 /*

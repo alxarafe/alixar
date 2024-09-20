@@ -44,7 +44,7 @@ class Json extends Parser
      * If either input or options are not supplied, the defaults will be used.
      *
      * @param resource|string|array|null $input
-     * @param int                        $options
+     * @param int $options
      *
      * @return \Sabre\VObject\Document
      */
@@ -132,7 +132,7 @@ class Json extends Parser
             $propertyName,
             $parameters,
             $valueType
-        ) = $jProp;
+            ) = $jProp;
 
         $propertyName = strtoupper($propertyName);
 
@@ -140,7 +140,7 @@ class Json extends Parser
         // value type. We're using this value later in this function.
         $defaultPropertyClass = $this->root->getClassNameForPropertyName($propertyName);
 
-        $parameters = (array) $parameters;
+        $parameters = (array)$parameters;
 
         $value = array_slice($jProp, 3);
 

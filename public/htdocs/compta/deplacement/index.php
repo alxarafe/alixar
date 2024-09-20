@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015	Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004		Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2011	Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015	Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005-2011	Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Deplacement;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/compta/deplacement/index.php
  *  \brief      Page list of expenses
@@ -27,8 +31,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'users', 'trips'));
@@ -71,7 +73,6 @@ $childids[] = $user->id;
 //$help_url='EN:Module_Donations|FR:Module_Dons|ES:M&oacute;dulo_Donaciones';
 $help_url = '';
 llxHeader('', $langs->trans("TripsAndExpenses"), $help_url);
-
 
 
 $totalnb = 0;
@@ -119,13 +120,12 @@ print "</tr>\n";
 $listoftype = $tripandexpense_static->listOfTypes();
 $dataseries = array();
 foreach ($listoftype as $code => $label) {
-    $dataseries[] = array($label, (isset($nb[$code]) ? (int) $nb[$code] : 0));
+    $dataseries[] = array($label, (isset($nb[$code]) ? (int)$nb[$code] : 0));
 }
 
 if ($conf->use_javascript_ajax) {
     print '<tr><td align="center" colspan="4">';
 
-    include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
     $dolgraph = new DolGraph();
     $dolgraph->SetData($dataseries);
     $dolgraph->setShowLegend(2);
@@ -144,7 +144,6 @@ print '<td class="right">' . $totalnb . '</td>';
 print '</tr>';
 
 print '</table>';
-
 
 
 print '</div><div class="fichetwothirdright">';
@@ -171,12 +170,12 @@ if ($search_sale && $search_sale != '-1') {
     if ($search_sale == -2) {
         $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = d.fk_soc)";
     } elseif ($search_sale > 0) {
-        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = d.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+        $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = d.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
     }
 }
 // Search on socid
 if ($socid) {
-    $sql .= " AND d.fk_soc = " . ((int) $socid);
+    $sql .= " AND d.fk_soc = " . ((int)$socid);
 }
 $sql .= $db->order("d.tms", "DESC");
 $sql .= $db->plimit($max, 0);

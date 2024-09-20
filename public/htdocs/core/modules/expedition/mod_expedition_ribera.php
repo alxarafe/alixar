@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2011       Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2019-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2011       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,13 +19,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Expedition\Classes\ModelNumRefExpedition;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/core/modules/expedition/mod_expedition_ribera.php
  *  \ingroup    expedition
  *  \brief      File of class to manage expedition numbering rules Ribera
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expedition/modules_expedition.php';
 
 /**
  *  Class to manage expedition numbering rules Ribera
@@ -58,8 +62,8 @@ class mod_expedition_ribera extends ModelNumRefExpedition
     /**
      *  Return default description of numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -95,7 +99,7 @@ class mod_expedition_ribera extends ModelNumRefExpedition
     /**
      *  Return numbering example
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -118,9 +122,9 @@ class mod_expedition_ribera extends ModelNumRefExpedition
     /**
      *  Return next value
      *
-     *  @param  Societe     $objsoc     Third party object
-     *  @param  Expedition  $shipment   Shipment object
-     *  @return string|0                Value if OK, 0 if KO
+     * @param Societe $objsoc Third party object
+     * @param Expedition $shipment Shipment object
+     * @return string|0                Value if OK, 0 if KO
      */
     public function getNextValue($objsoc, $shipment)
     {
@@ -139,6 +143,6 @@ class mod_expedition_ribera extends ModelNumRefExpedition
 
         $numFinal = get_next_value($db, $mask, 'expedition', 'ref', '', $objsoc, $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

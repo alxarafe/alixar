@@ -63,7 +63,6 @@ print load_fiche_titre($langs->trans("ExternalResources"), '', 'title_setup');
 print '<div style="padding-left: 30px;">' . img_picto_common('', 'dolibarr_box.png', 'height="120"') . '</div>';
 
 
-
 print '<div class="fichecenter"><div class="fichehalfleft">';
 
 print $langs->trans("DolibarrLicense") . ' : ';
@@ -177,7 +176,8 @@ print '</ul>';
 print $langs->trans("OtherResources") . ':';
 print '<ul>';
 
-$url = 'https://saas.dolibarr.org'; $title = $langs->trans("OfficialWebHostingService");
+$url = 'https://saas.dolibarr.org';
+$title = $langs->trans("OfficialWebHostingService");
 if (preg_match('/^fr_/i', $langs->getDefaultLang())) {
     $url = 'https://wiki.dolibarr.org/index.php/Solutions_Cloud_pour_Dolibarr_ERP_CRM';
 }
@@ -187,7 +187,8 @@ if (preg_match('/^es_/i', $langs->getDefaultLang())) {
 print '<li>';
 print '<a target="_blank" rel="noopener noreferrer external" href="' . $url . '">' . $title . '</a>';
 print '</li>';
-$url = 'https://partners.dolibarr.org'; $title = $langs->trans("ReferencedPreferredPartners");
+$url = 'https://partners.dolibarr.org';
+$title = $langs->trans("ReferencedPreferredPartners");
 print '<li>';
 print '<a target="_blank" rel="noopener noreferrer external" href="' . $url . '">' . $title . '</a>';
 print '</li>';

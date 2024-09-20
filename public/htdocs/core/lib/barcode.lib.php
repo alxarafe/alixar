@@ -70,16 +70,14 @@ if (defined('PHP-BARCODE_PATH_COMMAND')) {
 }
 
 
-
-
 /**
  * Print barcode
  *
- * @param   string          $code           Code
- * @param   string          $encoding       Encoding ('EAN13', 'ISBN', 'C128', 'UPC', 'CBR', 'QRCODE', 'DATAMATRIX', 'ANY'...)
- * @param   int<1,max>      $scale          Scale
- * @param   string          $mode           'png', 'gif', 'jpg', 'jpeg' ...
- * @param   string          $filebarcode    Filename to store barcode image file if defined
+ * @param string $code Code
+ * @param string $encoding Encoding ('EAN13', 'ISBN', 'C128', 'UPC', 'CBR', 'QRCODE', 'DATAMATRIX', 'ANY'...)
+ * @param int<1,max> $scale Scale
+ * @param string $mode 'png', 'gif', 'jpg', 'jpeg' ...
+ * @param string $filebarcode Filename to store barcode image file if defined
  * @return  array{encoding:string,bars:string,text:string}|string   $bars       array('encoding': the encoding which has been used, 'bars': the bars, 'text': text-positioning info) or string with error message
  */
 function barcode_print($code, $encoding = "ANY", $scale = 2, $mode = "png", $filebarcode = '')
@@ -127,8 +125,8 @@ function barcode_print($code, $encoding = "ANY", $scale = 2, $mode = "png", $fil
  *   MSI    MSI (by Leonid A. Broukhis)
  *   PLS    Plessey (by Leonid A. Broukhis)
  *
- * @param   string  $code       Code
- * @param   string  $encoding   Encoding
+ * @param string $code Code
+ * @param string $encoding Encoding
  * @return  array{encoding:string,bars:string,text:string}|false            array('encoding': the encoding which has been used, 'bars': the bars, 'text': text-positioning info)
  */
 function barcode_encode($code, $encoding)
@@ -146,17 +144,17 @@ function barcode_encode($code, $encoding)
         (preg_match("/^ean$/i", $encoding))
 
         || (($encoding)
-        && (preg_match("/^isbn$/i", $encoding))
-        && ((strlen($code) == 9
-        || strlen($code) == 10)
-        || (((preg_match("/^978/", $code)
-        && strlen($code) == 12)
-        || (strlen($code) == 13)))))
+            && (preg_match("/^isbn$/i", $encoding))
+            && ((strlen($code) == 9
+                    || strlen($code) == 10)
+                || (((preg_match("/^978/", $code)
+                        && strlen($code) == 12)
+                    || (strlen($code) == 13)))))
 
         || ((!isset($encoding)
-        || !$encoding
-        || (preg_match("/^ANY$/i", $encoding)))
-        && (preg_match("/^[0-9]{12,13}$/", $code)))
+                || !$encoding
+                || (preg_match("/^ANY$/i", $encoding)))
+            && (preg_match("/^[0-9]{12,13}$/", $code)))
     ) {
         /* use built-in EAN-Encoder */
         dol_syslog("barcode.lib.php::barcode_encode Use barcode_encode_ean");
@@ -183,7 +181,7 @@ function barcode_encode($code, $encoding)
 /**
  * Calculate EAN sum
  *
- * @param   string  $ean    EAN to encode
+ * @param string $ean EAN to encode
  * @return  int<0,9>        EAN Sum
  */
 function barcode_gen_ean_sum($ean)
@@ -207,7 +205,7 @@ function barcode_gen_ean_sum($ean)
 /**
  * Generate EAN bars
  *
- * @param   string  $ean    EAN to encode
+ * @param string $ean EAN to encode
  * @return  string          Encoded EAN
  */
 function barcode_gen_ean_bars($ean)
@@ -218,8 +216,8 @@ function barcode_gen_ean_bars($ean)
 
     $line = $guards[0];
     for ($i = 1; $i < 13; $i++) {
-        $str = $digits[(int) $ean[$i]];
-        if ($i < 7 && $mirror[(int) $ean[0]][$i - 1] == 1) {
+        $str = $digits[(int)$ean[$i]];
+        if ($i < 7 && $mirror[(int)$ean[0]][$i - 1] == 1) {
             $line .= strrev($str);
         } else {
             $line .= $str;
@@ -236,8 +234,8 @@ function barcode_gen_ean_bars($ean)
 /**
  * Encode EAN
  *
- * @param   string  $ean        Code
- * @param   string  $encoding   Encoding
+ * @param string $ean Code
+ * @param string $encoding Encoding
  * @return  array{encoding:string,bars:string,text:string,error:string}|array{text:string,error:string} array('encoding': the encoding which has been used, 'bars': the bars, 'text': text-positioning info, 'error': error message if error)
  */
 function barcode_encode_ean($ean, $encoding = "EAN-13")
@@ -292,8 +290,8 @@ function barcode_encode_ean($ean, $encoding = "EAN-13")
 /**
  * Encode UPC
  *
- * @param   string  $upc        Code
- * @param   string  $encoding   Encoding
+ * @param string $upc Code
+ * @param string $encoding Encoding
  * @return  array{encoding:string,bars:string,text:string,error:string}|array{text:string,error:string} array('encoding': the encoding which has been used, 'bars': the bars, 'text': text-positioning info, 'error': error message if error)
  */
 function barcode_encode_upc($upc, $encoding = "UPC")
@@ -342,8 +340,8 @@ function barcode_encode_upc($upc, $encoding = "UPC")
 /**
  * Encode result of genbarcode command
  *
- * @param   string  $code       Code
- * @param   string  $encoding   Encoding
+ * @param string $code Code
+ * @param string $encoding Encoding
  * @return  array{encoding:string,bars:string,text:string}|false            array('encoding': the encoding which has been used, 'bars': the bars, 'text': text-positioning info)
  */
 function barcode_encode_genbarcode($code, $encoding)
@@ -413,13 +411,13 @@ function barcode_encode_genbarcode($code, $encoding)
 /**
  * Output image onto standard output, or onto disk if $filebarcode is defined
  *
- * @param   string      $text           the text-line (<position>:<font-size>:<character> ...)
- * @param   string      $bars           where to place the bars  (<space-width><bar-width><space-width><bar-width>...)
- * @param   int<1,max>  $scale          scale factor ( 1 < scale < unlimited (scale 50 will produce 5400x300 pixels when using EAN-13!!!))
- * @param   string      $mode           Mime 'png', 'gif', 'jpg', 'jpeg' (default='png') or file disk if empty.
- * @param   int         $total_y        the total height of the image ( default: scale * 60 )
- * @param   array{}|array{top:int,bottom:int,left:int,right:int}    $space      default:  $space[top]   = 2 * $scale; $space[bottom]= 2 * $scale;  $space[left]  = 2 * $scale;  $space[right] = 2 * $scale;
- * @param   string      $filebarcode    Filename to store barcode image file
+ * @param string $text the text-line (<position>:<font-size>:<character> ...)
+ * @param string $bars where to place the bars  (<space-width><bar-width><space-width><bar-width>...)
+ * @param int<1,max> $scale scale factor ( 1 < scale < unlimited (scale 50 will produce 5400x300 pixels when using EAN-13!!!))
+ * @param string $mode Mime 'png', 'gif', 'jpg', 'jpeg' (default='png') or file disk if empty.
+ * @param int $total_y the total height of the image ( default: scale * 60 )
+ * @param array{}|array{top:int,bottom:int,left:int,right:int} $space default:  $space[top]   = 2 * $scale; $space[bottom]= 2 * $scale;  $space[left]  = 2 * $scale;  $space[right] = 2 * $scale;
+ * @param string $filebarcode Filename to store barcode image file
  * @return  void
  */
 function barcode_outimage($text, $bars, $scale = 1, $mode = "png", $total_y = 0, $space = [], $filebarcode = '')
@@ -432,9 +430,9 @@ function barcode_outimage($text, $bars, $scale = 1, $mode = "png", $total_y = 0,
     if ($scale < 1) {
         $scale = 2;
     }
-    $total_y = (int) $total_y;
+    $total_y = (int)$total_y;
     if ($total_y < 1) {
-        $total_y = (int) $scale * 60;
+        $total_y = (int)$scale * 60;
     }
     if (!is_array($space) || empty($space)) {
         $space = array('top' => 2 * $scale, 'bottom' => 2 * $scale, 'left' => 2 * $scale, 'right' => 2 * $scale);
@@ -447,7 +445,7 @@ function barcode_outimage($text, $bars, $scale = 1, $mode = "png", $total_y = 0,
     for ($i = 0; $i < $ln; $i++) {
         $val = strtolower($bars[$i]);
         if ($width) {
-            $xpos += (int) $val * $scale;
+            $xpos += (int)$val * $scale;
             $width = false;
             continue;
         }
@@ -471,8 +469,8 @@ function barcode_outimage($text, $bars, $scale = 1, $mode = "png", $total_y = 0,
     $col_bg = imagecolorallocate($im, $bg_color[0], $bg_color[1], $bg_color[2]);
     $col_bar = imagecolorallocate($im, $bar_color[0], $bar_color[1], $bar_color[2]);
     $col_text = imagecolorallocate($im, $text_color[0], $text_color[1], $text_color[2]);
-    $height = (int) round($total_y - ($scale * 10));
-    $height2 = (int) round($total_y - $space['bottom']);
+    $height = (int)round($total_y - ($scale * 10));
+    $height2 = (int)round($total_y - $space['bottom']);
 
     /* paint the bars */
     $width = true;
@@ -480,7 +478,7 @@ function barcode_outimage($text, $bars, $scale = 1, $mode = "png", $total_y = 0,
     for ($i = 0; $i < $ln; $i++) {
         $val = strtolower($bars[$i]);
         if ($width) {
-            $xpos += (float) $val * $scale;
+            $xpos += (float)$val * $scale;
             $width = false;
             continue;
         }
@@ -491,7 +489,7 @@ function barcode_outimage($text, $bars, $scale = 1, $mode = "png", $total_y = 0,
         } else {
             $h = $height;
         }
-        imagefilledrectangle($im, $xpos, $space['top'], $xpos + (int) ((float) $val * $scale) - 1, $h, $col_bar);
+        imagefilledrectangle($im, $xpos, $space['top'], $xpos + (int)((float)$val * $scale) - 1, $h, $col_bar);
         $xpos += $val * $scale;
         $width = true;
     }
@@ -500,9 +498,9 @@ function barcode_outimage($text, $bars, $scale = 1, $mode = "png", $total_y = 0,
     foreach ($chars as $v) {
         if (trim($v)) {
             $inf = explode(":", $v);
-            $fontsize = $scale * ((float) $inf[1] / 1.8);
-            $fontheight = (int) round($total_y - ($fontsize / 2.7) + 2);
-            imagettftext($im, $fontsize, 0, $space['left'] + (int) ($scale * (float) $inf[0]) + 2, $fontheight, $col_text, $font_loc, $inf[2]);
+            $fontsize = $scale * ((float)$inf[1] / 1.8);
+            $fontheight = (int)round($total_y - ($fontsize / 2.7) + 2);
+            imagettftext($im, $fontsize, 0, $space['left'] + (int)($scale * (float)$inf[0]) + 2, $fontheight, $col_text, $font_loc, $inf[2]);
         }
     }
 
@@ -528,13 +526,13 @@ function barcode_outimage($text, $bars, $scale = 1, $mode = "png", $total_y = 0,
 /**
  * Check if EAN13 code is valid
  *
- * @param string $ean   Code
+ * @param string $ean Code
  * @return bool
  */
 function isAValidEAN13($ean)
 {
     $sumEvenIndexes = 0;
-    $sumOddIndexes  = 0;
+    $sumOddIndexes = 0;
 
     $eanAsArray = array_map('intval', str_split($ean));
 
@@ -545,7 +543,7 @@ function isAValidEAN13($ean)
     $num = (count($eanAsArray) - 1);
     for ($i = 0; $i < $num; $i++) {
         if ($i % 2 === 0) {
-            $sumOddIndexes  += $eanAsArray[$i];
+            $sumOddIndexes += $eanAsArray[$i];
         } else {
             $sumEvenIndexes += $eanAsArray[$i];
         }

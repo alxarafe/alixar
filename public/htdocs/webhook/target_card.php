@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +18,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\WebHook\Classes\Target;
+
 /**
  *    \file       htdocs/webhook/target_card.php
  *    \ingroup    webhook
@@ -26,17 +32,13 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/webhook/class/target.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/webhook/lib/webhook_target.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/geturl.lib.php';
 
 global $conf, $db, $hookmanager, $langs, $user;
 
 // Load translation files required by the page
-$langs->loadLangs(array('other','admin'));
+$langs->loadLangs(array('other', 'admin'));
 
 // Get parameters
 $id = GETPOSTINT('id');
@@ -47,7 +49,7 @@ $cancel = GETPOST('cancel', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'targetcard'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 $backtopageforcancel = GETPOST('backtopageforcancel', 'alpha');
-$lineid   = GETPOSTINT('lineid');
+$lineid = GETPOSTINT('lineid');
 
 // Initialize technical objects
 $object = new Target($db);
@@ -187,8 +189,6 @@ if (empty($reshook)) {
 }
 
 
-
-
 /*
  * View
  */
@@ -318,8 +318,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmActionTarget', $object->ref);
         /*if (isModEnabled('notification'))
         {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-            $notify = new Notify($db);
+                $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('TARGET_CLOSE', $object->socid, $object);
         }*/

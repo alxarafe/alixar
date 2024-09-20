@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) ---Put here your own copyright and developer email---
- * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+/* Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
+use Dolibarr\Code\Projet\Classes\Project;
 
 /**
  * \file    htdocs/eventorganization/lib/eventorganization_conferenceorbooth.lib.php
@@ -86,7 +91,6 @@ function conferenceorboothPrepareHead($object, $with_project = 0)
     */
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->eventorganization->dir_output . "/conferenceorbooth/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
@@ -166,7 +170,6 @@ function conferenceorboothProjectPrepareHead($object)
     if (!is_null($dataretrieved)) {
         $nbAttendees = $dataretrieved;
     } else {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
         $attendees = new ConferenceOrBoothAttendee($db);
         $result = $attendees->fetchAll('', '', 0, 0, '(t.fk_project:=:' . ((int) $object->id) . ')');
         if (!is_array($result) && $result < 0) {

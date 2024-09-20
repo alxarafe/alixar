@@ -78,7 +78,6 @@ if (!$res) {
     die("Include of main fails");
 }
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 // load module libraries
@@ -626,8 +625,7 @@ foreach ($object->fields as $key => $val) {
             print $form->selectDate($search[$key . '_dtend'] ? $search[$key . '_dtend'] : '', "search_" . $key . "_dtend", 0, 0, 1, '', 1, 0, 0, '', '', '', '', 1, '', $langs->trans('to'));
             print '</div>';
         } elseif ($key == 'lang') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
-            $formadmin = new FormAdmin($db);
+			$formadmin = new FormAdmin($db);
             print $formadmin->select_language((isset($search[$key]) ? $search[$key] : ''), 'search_lang', 0, null, 1, 0, 0, 'minwidth100imp maxwidth125', 2);
         } else {
             print '<input type="text" class="flat maxwidth75" name="search_' . $key . '" value="' . dol_escape_htmltag(isset($search[$key]) ? $search[$key] : '') . '">';
@@ -895,8 +893,7 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
         $hidegeneratedfilelistifempty = 0;
     }
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-    $formfile = new FormFile($db);
+	$formfile = new FormFile($db);
 
     // Show list of available documents
     $urlsource = $_SERVER['PHP_SELF'] . '?sortfield=' . $sortfield . '&sortorder=' . $sortorder;

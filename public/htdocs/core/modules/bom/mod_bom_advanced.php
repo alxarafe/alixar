@@ -22,14 +22,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Bom\Classes\ModeleNumRefBoms;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  * \file       htdocs/core/modules/bom/mod_bom_advanced.php
  * \ingroup    bom
  * \brief      File containing class for numbering model of BOMs advanced
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/bom/modules_bom.php';
-
 
 /**
  *  Class to manage customer Bom numbering rules advanced
@@ -56,8 +59,8 @@ class mod_bom_advanced extends ModeleNumRefBoms
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -97,7 +100,7 @@ class mod_bom_advanced extends ModeleNumRefBoms
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -120,9 +123,9 @@ class mod_bom_advanced extends ModeleNumRefBoms
     /**
      *  Return next free value
      *
-     *  @param  Product     $objprod    Object product
-     *  @param  Bom         $object     Object we need next value for
-     *  @return string|0                Next value if OK, 0 if KO
+     * @param Product $objprod Object product
+     * @param Bom $object Object we need next value for
+     * @return string|0                Next value if OK, 0 if KO
      */
     public function getNextValue($objprod, $object)
     {
@@ -142,6 +145,6 @@ class mod_bom_advanced extends ModeleNumRefBoms
 
         $numFinal = get_next_value($db, $mask, 'bom_bom', 'ref', '', null, $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

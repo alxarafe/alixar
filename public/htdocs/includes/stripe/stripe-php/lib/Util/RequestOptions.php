@@ -86,9 +86,9 @@ class RequestOptions
      * @param null|array|RequestOptions|string $options a key => value array
      * @param bool $strict when true, forbid string form and arbitrary keys in array form
      *
+     * @return RequestOptions
      * @throws \Stripe\Exception\InvalidArgumentException
      *
-     * @return RequestOptions
      */
     public static function parse($options, $strict = false)
     {
@@ -147,9 +147,9 @@ class RequestOptions
         }
 
         $message = 'The second argument to Stripe API method calls is an '
-           . 'optional per-request apiKey, which must be a string, or '
-           . 'per-request options, which must be an array. (HINT: you can set '
-           . 'a global apiKey by "Stripe::setApiKey(<apiKey>)")';
+            . 'optional per-request apiKey, which must be a string, or '
+            . 'per-request options, which must be an array. (HINT: you can set '
+            . 'a global apiKey by "Stripe::setApiKey(<apiKey>)")';
 
         throw new \Stripe\Exception\InvalidArgumentException($message);
     }

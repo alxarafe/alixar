@@ -1,16 +1,16 @@
 <?php
 
-/* Copyright (C) 2002-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2003		Xavier Dutoit			<doli@sydesy.com>
- * Copyright (C) 2004-2012	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2004		Sebastien Di Cintio		<sdicintio@ressource-toi.org>
- * Copyright (C) 2004		Benoit Mortier			<benoit.mortier@opensides.be>
- * Copyright (C) 2005-2017	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2005		Simon Tosser			<simon@kornog-computing.com>
- * Copyright (C) 2006		Andre Cianfarani		<andre.cianfarani@acdeveloppement.net>
- * Copyright (C) 2010		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2011		Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2014		Teddy Andreotti			<125155@supinfo.com>
+/* Copyright (C) 2002-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003		Xavier Dutoit			    <doli@sydesy.com>
+ * Copyright (C) 2004-2012	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Sebastien Di Cintio		    <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004		Benoit Mortier			    <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2017	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2005		Simon Tosser			    <simon@kornog-computing.com>
+ * Copyright (C) 2006		Andre Cianfarani		    <andre.cianfarani@acdeveloppement.net>
+ * Copyright (C) 2010		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2011		Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2014		Teddy Andreotti			    <125155@supinfo.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -28,6 +28,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/master.inc.php
  *  \ingroup    core
@@ -37,10 +43,8 @@
 
 // Include the conf.php and functions.lib.php and security.lib.php. This defined the constants like DOL_DOCUMENT_ROOT, DOL_DATA_ROOT, DOL_URL_ROOT...
 // This file may have been already required by main.inc.php. But may not by scripts. So, here the require_once must be kept.
-require_once 'filefunc.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/conf.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/hookmanager.class.php';
 
+require_once 'filefunc.inc.php';
 
 if (!function_exists('is_countable')) {
     /**
@@ -117,18 +121,6 @@ if (!empty($dolibarr_main_document_root_alt)) {
         $conf->file->dol_url_root['alt' . ($i++)] = (string) $value;
     }
 }
-
-// Load the main includes of common libraries
-if (!defined('NOREQUIREUSER')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php'; // Need 500ko memory
-}
-if (!defined('NOREQUIRETRAN')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/translate.class.php';
-}
-if (!defined('NOREQUIRESOC')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-}
-
 
 /*
  * Create object $langs (must be before all other code)
@@ -213,8 +205,6 @@ $conf->setValues($db);
 
 // Create object $mysoc (A thirdparty object that contains properties of companies managed by Dolibarr.
 if (!defined('NOREQUIREDB') && !defined('NOREQUIRESOC')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-
     $mysoc = new Societe($db);
     $mysoc->setMysoc($conf);
 

@@ -1,19 +1,19 @@
 <?php
 
-/* Copyright (C) 2001-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2004       Eric Seigne             <eric.seigne@ryxeo.com>
- * Copyright (C) 2005       Marc Barilley / Ocebo   <marc@ocebo.com>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2006       Andre Cianfarani        <acianfa@free.fr>
- * Copyright (C) 2010-2014  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2010-2019  Philippe Grand          <philippe.grand@atoo-net.com>
- * Copyright (C) 2012-2013  Christophe Battarel     <christophe.battarel@altairis.fr>
- * Copyright (C) 2013-2014  Florian Henry           <florian.henry@open-concept.pro>
- * Copyright (C) 2014       Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2020		Tobias Sekan			<tobias.sekan@startmail.com>
- * Copyright (C) 2022       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006       Andre Cianfarani            <acianfa@free.fr>
+ * Copyright (C) 2010-2014  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2010-2019  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2012-2013  Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2013-2014  Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2014       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2020		Tobias Sekan			    <tobias.sekan@startmail.com>
+ * Copyright (C) 2022       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -30,6 +30,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormMargin;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Notify;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\SupplierProposal\Classes\ModelePDFSupplierProposal;
+use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+
 /**
  *  \file       htdocs/supplier_proposal/card.php
  *  \ingroup    supplier_proposal
@@ -38,19 +55,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_proposal/modules_supplier_proposal.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/supplier_proposal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'supplier_proposal', 'compta', 'bills', 'propal', 'orders', 'products', 'deliveries', 'sendings'));
@@ -107,8 +113,8 @@ if ($id > 0 || !empty($ref)) {
 
 // Common permissions
 $usercanread = $user->hasRight('supplier_proposal', 'lire');
-$usercancreate      = $user->hasRight('supplier_proposal', 'creer');
-$usercandelete      = $user->hasRight('supplier_proposal', 'supprimer');
+$usercancreate = $user->hasRight('supplier_proposal', 'creer');
+$usercandelete = $user->hasRight('supplier_proposal', 'supprimer');
 
 // Advanced permissions
 $usercanvalidate = ((!getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && !empty($usercancreate)) || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('supplier_proposal', 'validate_advance')));
@@ -972,7 +978,7 @@ if (empty($reshook)) {
             }
 
             $ttc = price2num(GETPOST('price_ttc'), '', 2);
-            $ht = (float) $ttc / (1 + ((float) $vatratecleaned / 100));
+            $ht = (float)$ttc / (1 + ((float)$vatratecleaned / 100));
             $price_base_type = 'HT';
         }
 
@@ -1221,8 +1227,8 @@ if ($action == 'create') {
         $projectid = (!empty($objectsrc->fk_project) ? $objectsrc->fk_project : '');
         $soc = $objectsrc->thirdparty;
 
-        $cond_reglement_id  = (!empty($objectsrc->cond_reglement_id) ? $objectsrc->cond_reglement_id : (!empty($soc->cond_reglement_id) ? $soc->cond_reglement_id : 0)); // TODO maybe add default value option
-        $mode_reglement_id  = (!empty($objectsrc->mode_reglement_id) ? $objectsrc->mode_reglement_id : (!empty($soc->mode_reglement_id) ? $soc->mode_reglement_id : 0));
+        $cond_reglement_id = (!empty($objectsrc->cond_reglement_id) ? $objectsrc->cond_reglement_id : (!empty($soc->cond_reglement_id) ? $soc->cond_reglement_id : 0)); // TODO maybe add default value option
+        $mode_reglement_id = (!empty($objectsrc->mode_reglement_id) ? $objectsrc->mode_reglement_id : (!empty($soc->mode_reglement_id) ? $soc->mode_reglement_id : 0));
 
         // Replicate extrafields
         $objectsrc->fetch_optionals();
@@ -1237,8 +1243,8 @@ if ($action == 'create') {
             }
         }
     } else {
-        $cond_reglement_id  = $soc->cond_reglement_supplier_id;
-        $mode_reglement_id  = $soc->mode_reglement_supplier_id;
+        $cond_reglement_id = $soc->cond_reglement_supplier_id;
+        $mode_reglement_id = $soc->mode_reglement_supplier_id;
         if (isModEnabled("multicurrency") && !empty($soc->multicurrency_code)) {
             $currency_code = $soc->multicurrency_code;
         }
@@ -1545,7 +1551,7 @@ if ($action == 'create') {
                 'name' => 'socid',
                 'label' => $langs->trans("SelectThirdParty"),
                 'value' => $form->select_company(GETPOSTINT('socid'), 'socid', $filter))
-            );
+        );
         // Paiement incomplet. On demande si motif = escompte ou autre
         $formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('ToClone'), $langs->trans('ConfirmCloneAsk', $object->ref), 'confirm_clone', $formquestion, 'yes', 1);
     } elseif ($action == 'delete') {
@@ -1575,7 +1581,6 @@ if ($action == 'create') {
 
         $text = $langs->trans('ConfirmValidateAsk', $numref);
         if (isModEnabled('notification')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
             $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('PROPOSAL_SUPPLIER_VALIDATE', $object->socid, $object);
@@ -2084,7 +2089,6 @@ if ($action == 'create') {
         print '</div><div class="fichehalfright">';
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
         $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, 'supplier_proposal', $socid, 1);
 

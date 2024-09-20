@@ -57,8 +57,6 @@ class Functions
     /**
      * Set the Compatibility Mode.
      *
-     * @category Function Configuration
-     *
      * @param string $compatibilityMode Compatibility Mode
      *                                                Permitted values are:
      *                                                    Functions::COMPATIBILITY_EXCEL            'Excel'
@@ -66,6 +64,8 @@ class Functions
      *                                                    Functions::COMPATIBILITY_OPENOFFICE    'OpenOfficeCalc'
      *
      * @return bool (Success or Failure)
+     * @category Function Configuration
+     *
      */
     public static function setCompatibilityMode($compatibilityMode)
     {
@@ -85,13 +85,13 @@ class Functions
     /**
      * Return the current Compatibility Mode.
      *
-     * @category Function Configuration
-     *
      * @return string Compatibility Mode
      *                            Possible Return values are:
      *                                Functions::COMPATIBILITY_EXCEL            'Excel'
      *                                Functions::COMPATIBILITY_GNUMERIC        'Gnumeric'
      *                                Functions::COMPATIBILITY_OPENOFFICE    'OpenOfficeCalc'
+     * @category Function Configuration
+     *
      */
     public static function getCompatibilityMode()
     {
@@ -101,8 +101,6 @@ class Functions
     /**
      * Set the Return Date Format used by functions that return a date/time (Excel, PHP Serialized Numeric or PHP Object).
      *
-     * @category Function Configuration
-     *
      * @param string $returnDateType Return Date Format
      *                                                Permitted values are:
      *                                                    Functions::RETURNDATE_UNIX_TIMESTAMP        'P'
@@ -110,6 +108,8 @@ class Functions
      *                                                    Functions::RETURNDATE_EXCEL            'E'
      *
      * @return bool Success or failure
+     * @category Function Configuration
+     *
      */
     public static function setReturnDateType($returnDateType)
     {
@@ -129,13 +129,13 @@ class Functions
     /**
      * Return the current Return Date Format for functions that return a date/time (Excel, PHP Serialized Numeric or PHP Object).
      *
-     * @category Function Configuration
-     *
      * @return string Return Date Format
      *                            Possible Return values are:
      *                                Functions::RETURNDATE_UNIX_TIMESTAMP        'P'
      *                                Functions::RETURNDATE_PHP_DATETIME_OBJECT        'O'
      *                                Functions::RETURNDATE_EXCEL            'E'
+     * @category Function Configuration
+     *
      */
     public static function getReturnDateType()
     {
@@ -145,9 +145,9 @@ class Functions
     /**
      * DUMMY.
      *
+     * @return string #Not Yet Implemented
      * @category Error Returns
      *
-     * @return string #Not Yet Implemented
      */
     public static function DUMMY()
     {
@@ -157,9 +157,9 @@ class Functions
     /**
      * DIV0.
      *
+     * @return string #Not Yet Implemented
      * @category Error Returns
      *
-     * @return string #Not Yet Implemented
      */
     public static function DIV0()
     {
@@ -175,9 +175,9 @@ class Functions
      * Returns the error value #N/A
      *        #N/A is the error value that means "no value is available."
      *
+     * @return string #N/A!
      * @category Logical Functions
      *
-     * @return string #N/A!
      */
     public static function NA()
     {
@@ -189,9 +189,9 @@ class Functions
      *
      * Returns the error value #NUM!
      *
+     * @return string #NUM!
      * @category Error Returns
      *
-     * @return string #NUM!
      */
     public static function NAN()
     {
@@ -203,9 +203,9 @@ class Functions
      *
      * Returns the error value #NAME?
      *
+     * @return string #NAME?
      * @category Error Returns
      *
-     * @return string #NAME?
      */
     public static function NAME()
     {
@@ -217,9 +217,9 @@ class Functions
      *
      * Returns the error value #REF!
      *
+     * @return string #REF!
      * @category Error Returns
      *
-     * @return string #REF!
      */
     public static function REF()
     {
@@ -231,9 +231,9 @@ class Functions
      *
      * Returns the error value #NULL!
      *
+     * @return string #NULL!
      * @category Error Returns
      *
-     * @return string #NULL!
      */
     public static function null()
     {
@@ -245,9 +245,9 @@ class Functions
      *
      * Returns the error value #VALUE!
      *
+     * @return string #VALUE!
      * @category Error Returns
      *
-     * @return string #VALUE!
      */
     public static function VALUE()
     {
@@ -507,7 +507,7 @@ class Functions
             case 'integer':
                 return $value;
             case 'boolean':
-                return (int) $value;
+                return (int)$value;
             case 'string':
                 //    Errors
                 if ((strlen($value) > 0) && ($value[0] == '#')) {
@@ -544,7 +544,7 @@ class Functions
             //    Range of cells is an error
             if (self::isCellValue($a)) {
                 return 16;
-            //    Test for Matrix
+                //    Test for Matrix
             } elseif (self::isMatrixValue($a)) {
                 return 64;
             }
@@ -582,7 +582,7 @@ class Functions
     public static function flattenArray($array)
     {
         if (!is_array($array)) {
-            return (array) $array;
+            return (array)$array;
         }
 
         $arrayValues = [];
@@ -615,7 +615,7 @@ class Functions
     public static function flattenArrayIndexed($array)
     {
         if (!is_array($array)) {
-            return (array) $array;
+            return (array)$array;
         }
 
         $arrayValues = [];

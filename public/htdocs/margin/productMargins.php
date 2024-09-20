@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2012-2013  Christophe Battarel <christophe.battarel@altairis.fr>
- * Copyright (C) 2014		Ferran Marcet		<fmarcet@2byte.es>
- * Copyright (C) 2020		Alexandre Spangaro	<aspangaro@open-dsi.fr>
+/* Copyright (C) 2012-2013  Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2014		Ferran Marcet		        <fmarcet@2byte.es>
+ * Copyright (C) 2020		Alexandre Spangaro	        <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/margin/productMargins.php
  *  \ingroup    margin
@@ -28,8 +32,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 
 // Load translation files required by the page
@@ -87,7 +89,6 @@ $result = restrictedArea($user, 'produit|service', $fieldvalue, 'product&product
 if (!$user->hasRight('margins', 'liretous')) {
     accessforbidden();
 }
-
 
 /*
  * View
@@ -205,7 +206,7 @@ $sql .= ' AND f.entity IN (' . getEntity('invoice') . ')';
 $sql .= " AND f.fk_statut NOT IN (" . $db->sanitize(implode(', ', $invoice_status_except_list)) . ")";
 $sql .= " AND d.fk_facture = f.rowid";
 if ($id > 0) {
-    $sql .= " AND d.fk_product =" . ((int) $id);
+    $sql .= " AND d.fk_product =" . ((int)$id);
 }
 if (!empty($TSelectedCats)) {
     $sql .= ' AND cp.fk_categorie IN (' . $db->sanitize(implode(',', $TSelectedCats)) . ')';
@@ -231,7 +232,7 @@ $sql .= $db->order($sortfield, $sortorder);
 // TODO: calculate total to display then restore pagination
 //$sql.= $db->plimit($conf->liste_limit +1, $offset);
 
-$param = '&id=' . ((int) $id);
+$param = '&id=' . ((int)$id);
 if (GETPOSTINT('startdatemonth')) {
     $param .= '&startdateyear=' . GETPOSTINT('startdateyear');
     $param .= '&startdatemonth=' . GETPOSTINT('startdatemonth');

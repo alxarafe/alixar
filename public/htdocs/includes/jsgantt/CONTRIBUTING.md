@@ -3,12 +3,12 @@
 We'd love for you to contribute to our source code and to make jsGanttImproved even better than it is
 today! Here are the guidelines we'd like you to follow:
 
- - [Issues and Bugs](#issue)
- - [Feature Requests](#feature)
- - [Submission Guidelines](#submit)
- - [Coding Rules](#rules)
- - [Commit Message Guidelines](#commit)
- - [Further Info](#info)
+- [Issues and Bugs](#issue)
+- [Feature Requests](#feature)
+- [Submission Guidelines](#submit)
+- [Coding Rules](#rules)
+- [Commit Message Guidelines](#commit)
+- [Further Info](#info)
 
 ## <a name="issue"></a> Found an Issue?
 
@@ -20,12 +20,13 @@ with a fix.
 
 ## <a name="feature"></a> Want a Feature?
 
-You can request a new feature by submitting an issue to our [GitHub Repository][github].  If you
+You can request a new feature by submitting an issue to our [GitHub Repository][github]. If you
 would like to implement a new feature then it can be crafted and submitted as a Pull Request.
 
 ## <a name="submit"></a> Submission Guidelines
 
 ### Submitting an Issue
+
 Before you submit your issue search the archive, maybe your question was already answered.
 
 If your issue appears to be a bug, and hasn't been reported, open a new issue. Help us to maximize
@@ -44,6 +45,7 @@ quickly:
   causing the problem (line of code or commit)
 
 ### Submitting a Pull Request
+
 Before you submit your pull request consider the following guidelines:
 
 * Search [GitHub](https://github.com/jsGanttImproved/jsgantt-improved/pulls) for an open or closed Pull Request
@@ -129,10 +131,11 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 ## <a name="commit"></a> Git Commit Guidelines
 
-We have very precise rules over how our git commit messages can be formatted.  This leads to **more
+We have very precise rules over how our git commit messages can be formatted. This leads to **more
 readable messages** that are easy to follow when looking through the **project history**.
 
 ### Commit Message Format
+
 Each commit message consists of a **subject**, a **body** and a **footer**:
 
 ```
@@ -149,10 +152,12 @@ Any line of the commit message cannot be longer 100 characters! This allows the 
 to read on GitHub as well as in various git tools.
 
 ### Revert
+
 If the commit reverts a previous commit, it should begin with `revert: `, followed by the header of the reverted commit.
 In the body it should say: `This reverts commit <hash>.`, where the hash is the SHA of the commit being reverted.
 
 ### Subject
+
 The subject contains succinct description of the change:
 
 * use the imperative, present tense: "change" not "changed" nor "changes"
@@ -160,10 +165,12 @@ The subject contains succinct description of the change:
 * no dot (.) at the end
 
 ### Body
+
 Just as in the **subject**, use the imperative, present tense: "change" not "changed" nor "changes".
 The body should include the motivation for the change and contrast this with previous behavior.
 
 ### Footer
+
 The footer should contain any information about **Breaking Changes** and is also the place to
 [reference GitHub issues that this commit closes][closing-issues].
 
@@ -171,10 +178,14 @@ The footer should contain any information about **Breaking Changes** and is also
 The rest of the commit message is then used for this.
 
 ## <a name="info"></a> Further Information
+
 You can find out more detailed information about contributing in the [Documentation][docs].
 
 
 [github]: https://github.com/jsGanttImproved/jsgantt-improved
+
 [js-style-guide]: https://google.github.io/styleguide/jsguide.html
+
 [closing-issues]: https://help.github.com/articles/closing-issues-via-commit-messages/
+
 [docs]: https://github.com/jsGanttImproved/jsgantt-improved/wiki/Documentation

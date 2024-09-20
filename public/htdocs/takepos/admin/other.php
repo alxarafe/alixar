@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2008-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2017 Juanjo Menent		<jmenent@2byte.es>
+/* Copyright (C) 2008-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2017  Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,9 +26,8 @@
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+
 require_once DOL_DOCUMENT_ROOT . "/core/lib/takepos.lib.php";
 
 // If socid provided by ajax company selector
@@ -97,7 +96,7 @@ print '</tr>';
 $url = 'https://www.dolistore.com/45-pos';
 
 print '<tr class="oddeven">' . "\n";
-print '<td class="titlefield"><a href="' . $url . '" target="_blank" rel="noopener noreferrer external"><img border="0" class="imgautosize imgmaxwidth180" src="' . constant('BASE_URL') . '/theme/alxarafe_shop.png"></a></td>';
+print '<td class="titlefield"><a href="' . $url . '" target="_blank" rel="noopener noreferrer external"><img border="0" class="imgautosize imgmaxwidth180" src="' . constant('DOL_URL_ROOT') . '/theme/alxarafe_shop.png"></a></td>';
 print '<td>' . $langs->trans("DolistorePosCategory") . '</td>';
 print '<td><a href="' . $url . '" target="_blank" rel="noopener noreferrer external">' . $url . '</a></td>';
 print '</tr>';

@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2024 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2014      Florian Henry        <florian.henry@open-concept.pro>
- * Copyright (C) 2024      MDW	                <mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2024  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2014       Florian Henry               <florian.henry@open-concept.pro>
+ * Copyright (C) 2024       MDW	                        <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Comm\Classes\Mailing;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
+use Dolibarr\Code\Mailing\Classes\MailingTargets;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *       \file       htdocs/comm/mailing/cibles.php
  *       \ingroup    mailing
@@ -29,11 +37,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/mailings/modules_mailings.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/mailing/class/mailing.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmailing.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/emailing.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ajax.lib.php';
 
@@ -100,7 +104,6 @@ $permissiontoread = $user->hasRight('maling', 'lire');
 $permissiontocreate = $user->hasRight('mailing', 'creer');
 $permissiontovalidatesend = $user->hasRight('mailing', 'valider');
 $permissiontodelete = $user->hasRight('mailing', 'supprimer');
-
 
 /*
  * Actions
@@ -171,10 +174,10 @@ if (GETPOSTINT('exportcsv') && $permissiontoread) {
     header('Content-Disposition: attachment;filename=' . $completefilename);
 
     // List of selected targets
-    $sql  = "SELECT mc.rowid, mc.lastname, mc.firstname, mc.email, mc.other, mc.statut as status, mc.date_envoi, mc.tms,";
+    $sql = "SELECT mc.rowid, mc.lastname, mc.firstname, mc.email, mc.other, mc.statut as status, mc.date_envoi, mc.tms,";
     $sql .= " mc.source_id, mc.source_type, mc.error_text";
     $sql .= " FROM " . MAIN_DB_PREFIX . "mailing_cibles as mc";
-    $sql .= " WHERE mc.fk_mailing = " . ((int) $object->id);
+    $sql .= " WHERE mc.fk_mailing = " . ((int)$object->id);
     $sql .= $db->order($sortfield, $sortorder);
 
     $resql = $db->query($sql);
@@ -206,7 +209,7 @@ if (GETPOSTINT('exportcsv') && $permissiontoread) {
 
 if ($action == 'delete' && $permissiontocreate) {
     // Ici, rowid indique le destinataire et id le mailing
-    $sql = "DELETE FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE rowid = " . ((int) $rowid);
+    $sql = "DELETE FROM " . MAIN_DB_PREFIX . "mailing_cibles WHERE rowid = " . ((int)$rowid);
     $resql = $db->query($sql);
     if ($resql) {
         if (!empty($id)) {
@@ -292,7 +295,7 @@ if ($object->fetch($id) >= 0) {
     $nbtry = $nbok = 0;
     if ($object->status == $object::STATUS_SENTPARTIALY || $object->status == $object::STATUS_SENTCOMPLETELY) {
         $nbtry = $object->countNbOfTargets('alreadysent');
-        $nbko  = $object->countNbOfTargets('alreadysentko');
+        $nbko = $object->countNbOfTargets('alreadysentko');
         $nbok = ($nbtry - $nbko);
 
         $morehtmlstatus .= ' (' . $nbtry . '/' . $object->nbemail;
@@ -519,7 +522,7 @@ if ($object->fetch($id) >= 0) {
                 $obj = new $classname($db);
 
                 // Check if qualified
-                $qualified = (is_null($obj->enabled) ? 1 : (int) dol_eval($obj->enabled, 1));
+                $qualified = (is_null($obj->enabled) ? 1 : (int)dol_eval($obj->enabled, 1));
 
                 // Check dependencies
                 foreach ($obj->require_module as $key) {
@@ -621,12 +624,12 @@ if ($object->fetch($id) >= 0) {
     }
 
     // List of selected targets
-    $sql  = "SELECT mc.rowid, mc.lastname, mc.firstname, mc.email, mc.other, mc.statut as status, mc.date_envoi, mc.tms,";
+    $sql = "SELECT mc.rowid, mc.lastname, mc.firstname, mc.email, mc.other, mc.statut as status, mc.date_envoi, mc.tms,";
     $sql .= " mc.source_url, mc.source_id, mc.source_type, mc.error_text,";
     $sql .= " COUNT(mu.rowid) as nb";
     $sql .= " FROM " . MAIN_DB_PREFIX . "mailing_cibles as mc";
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "mailing_unsubscribe as mu ON mu.email = mc.email";
-    $sql .= " WHERE mc.fk_mailing=" . ((int) $object->id);
+    $sql .= " WHERE mc.fk_mailing=" . ((int)$object->id);
     $asearchcriteriahasbeenset = 0;
     if ($search_lastname) {
         $sql .= natural_search("mc.lastname", $search_lastname);
@@ -644,8 +647,8 @@ if ($object->fetch($id) >= 0) {
         $sql .= natural_search("mc.other", $search_other);
         $asearchcriteriahasbeenset++;
     }
-    if ($search_dest_status != '' && (int) $search_dest_status >= -1) {
-        $sql .= " AND mc.statut = " . ((int) $search_dest_status);
+    if ($search_dest_status != '' && (int)$search_dest_status >= -1) {
+        $sql .= " AND mc.statut = " . ((int)$search_dest_status);
         $asearchcriteriahasbeenset++;
     }
     $sql .= ' GROUP BY mc.rowid, mc.lastname, mc.firstname, mc.email, mc.other, mc.statut, mc.date_envoi, mc.tms, mc.source_url, mc.source_id, mc.source_type, mc.error_text';
@@ -685,7 +688,7 @@ if ($object->fetch($id) >= 0) {
         $param = "&id=" . $object->id;
         //if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) $param.='&contextpage='.urlencode($contextpage);
         if ($limit > 0 && $limit != $conf->liste_limit) {
-            $param .= '&limit=' . ((int) $limit);
+            $param .= '&limit=' . ((int)$limit);
         }
         if ($search_lastname) {
             $param .= "&search_lastname=" . urlencode($search_lastname);
@@ -791,7 +794,7 @@ if ($object->fetch($id) >= 0) {
         print '</tr>';
 
         if ($page) {
-            $param .= "&page=" . urlencode((string) ($page));
+            $param .= "&page=" . urlencode((string)($page));
         }
 
         print '<tr class="liste_titre">';
@@ -818,12 +821,6 @@ if ($object->fetch($id) >= 0) {
         $i = 0;
 
         if ($num) {
-            include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent.class.php';
-            include_once DOL_DOCUMENT_ROOT . '/user/class/user.class.php';
-            include_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
-            include_once DOL_DOCUMENT_ROOT . '/contact/class/contact.class.php';
-            include_once DOL_DOCUMENT_ROOT . '/eventorganization/class/conferenceorboothattendee.class.php';
-
             $objectstaticmember = new Adherent($db);
             $objectstaticuser = new User($db);
             $objectstaticcompany = new Societe($db);
@@ -841,7 +838,7 @@ if ($object->fetch($id) >= 0) {
                     print '<!-- ID mailing_cibles = ' . $obj->rowid . ' -->';
                     if ($obj->status == $object::STATUS_DRAFT) {    // Not sent yet
                         if ($user->hasRight('mailing', 'creer')) {
-                            print '<a class="reposition" href="' . $_SERVER['PHP_SELF'] . '?action=delete&token=' . newToken() . '&rowid=' . ((int) $obj->rowid) . $param . '">' . img_delete($langs->trans("RemoveRecipient")) . '</a>';
+                            print '<a class="reposition" href="' . $_SERVER['PHP_SELF'] . '?action=delete&token=' . newToken() . '&rowid=' . ((int)$obj->rowid) . $param . '">' . img_delete($langs->trans("RemoveRecipient")) . '</a>';
                         }
                     }
                     /*if ($obj->status == -1)   // Sent with error
@@ -906,9 +903,9 @@ if ($object->fetch($id) >= 0) {
                 // Status of recipient sending email (Warning != status of emailing)
                 print '<td class="nowrap center">';
                 if ($obj->status == $object::STATUS_DRAFT) {        // If status of target line is not draft
-                    print $object::libStatutDest((int) $obj->status, 2, '');
+                    print $object::libStatutDest((int)$obj->status, 2, '');
                 } else {
-                    print $object::libStatutDest((int) $obj->status, 2, $obj->error_text);
+                    print $object::libStatutDest((int)$obj->status, 2, $obj->error_text);
                 }
                 print '</td>';
 
@@ -918,7 +915,7 @@ if ($object->fetch($id) >= 0) {
                     print '<!-- ID mailing_cibles = ' . $obj->rowid . ' -->';
                     if ($obj->status == $object::STATUS_DRAFT) {    // If status of target line is not sent yet
                         if ($user->hasRight('mailing', 'creer')) {
-                            print '<a class="reposition" href="' . $_SERVER['PHP_SELF'] . '?action=delete&token=' . newToken() . '&rowid=' . ((int) $obj->rowid) . $param . '">' . img_delete($langs->trans("RemoveRecipient")) . '</a>';
+                            print '<a class="reposition" href="' . $_SERVER['PHP_SELF'] . '?action=delete&token=' . newToken() . '&rowid=' . ((int)$obj->rowid) . $param . '">' . img_delete($langs->trans("RemoveRecipient")) . '</a>';
                         }
                     }
                     /*if ($obj->status == -1)   // Sent with error

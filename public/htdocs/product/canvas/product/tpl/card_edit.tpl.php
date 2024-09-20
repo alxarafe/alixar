@@ -1,5 +1,6 @@
 <?php
-/* Copyright (C) 2010-2018 Regis Houssin <regis.houssin@inodbox.com>
+
+/* Copyright (C) 2010-2018  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -39,76 +40,100 @@ dol_htmloutput_errors($object->error, $object->errors);
 ?>
 
 <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
-<input type="hidden" name="token" value="<?php echo newToken(); ?>">
-<input type="hidden" name="action" value="update">
-<input type="hidden" name="id" value="<?php echo $object->id; ?>">
-<input type="hidden" name="canvas" value="<?php echo $object->canvas; ?>">
-<?php if (!isModEnabled('stock')) { ?>
-<input name="seuil_stock_alerte" type="hidden" value="0">
-<?php } ?>
+    <input type="hidden" name="token" value="<?php echo newToken(); ?>">
+    <input type="hidden" name="action" value="update">
+    <input type="hidden" name="id" value="<?php echo $object->id; ?>">
+    <input type="hidden" name="canvas" value="<?php echo $object->canvas; ?>">
+    <?php if (!isModEnabled('stock')) { ?>
+        <input name="seuil_stock_alerte" type="hidden" value="0">
+    <?php } ?>
 
 
-<table class="border allwidth">
+    <table class="border allwidth">
 
-<tr>
-<td class="fieldrequired" width="20%"><?php echo $langs->trans("Ref"); ?></td>
-<td><input name="ref" size="40" maxlength="32" value="<?php echo $object->ref; ?>">
-</td></tr>
+        <tr>
+            <td class="fieldrequired" width="20%"><?php echo $langs->trans("Ref"); ?></td>
+            <td><input name="ref" size="40" maxlength="32" value="<?php echo $object->ref; ?>">
+            </td>
+        </tr>
 
-<tr>
-<td class="fieldrequired"><?php echo $langs->trans("Label"); ?></td>
-<td><input name="label" size="40" value="<?php echo $object->label; ?>"></td>
-</tr>
+        <tr>
+            <td class="fieldrequired"><?php echo $langs->trans("Label"); ?></td>
+            <td><input name="label" size="40" value="<?php echo $object->label; ?>"></td>
+        </tr>
 
-<tr>
-<td class="fieldrequired"><?php echo $langs->trans("Status") . ' (' . $langs->trans("Sell") . ')'; ?></td>
-<td><?php echo $form->selectarray('statut', $statutarray, $object->status); ?></td>
-</tr>
+        <tr>
+            <td class="fieldrequired"><?php echo $langs->trans("Status") . ' (' . $langs->trans("Sell") . ')'; ?></td>
+            <td><?php echo $form->selectarray('statut', $statutarray, $object->status); ?></td>
+        </tr>
 
-<tr>
-<td class="fieldrequired"><?php echo $langs->trans("Status") . ' (' . $langs->trans("Buy") . ')'; ?></td>
-<td><?php echo $form->selectarray('statut_buy', $statutarray, $object->status_buy); ?></td>
-</tr>
+        <tr>
+            <td class="fieldrequired"><?php echo $langs->trans("Status") . ' (' . $langs->trans("Buy") . ')'; ?></td>
+            <td><?php echo $form->selectarray('statut_buy', $statutarray, $object->status_buy); ?></td>
+        </tr>
 
-<?php if (isModEnabled('stock')) { ?>
-<tr><td><?php echo $langs->trans("StockLimit"); ?></td><td>
-<input name="seuil_stock_alerte" size="4" value="<?php echo $object->seuil_stock_alerte; ?>">
-</td></tr>
-<?php } ?>
+        <?php if (isModEnabled('stock')) { ?>
+            <tr>
+                <td><?php echo $langs->trans("StockLimit"); ?></td>
+                <td>
+                    <input name="seuil_stock_alerte" size="4" value="<?php echo $object->seuil_stock_alerte; ?>">
+                </td>
+            </tr>
+        <?php } ?>
 
-<tr><td><?php echo $langs->trans("Nature"); ?></td><td>
-<?php echo $object->finished; ?>
-</td></tr>
+        <tr>
+            <td><?php echo $langs->trans("Nature"); ?></td>
+            <td>
+                <?php echo $object->finished; ?>
+            </td>
+        </tr>
 
-<tr><td><?php echo $langs->trans("Weight"); ?></td><td>
-<input name="weight" size="4" value="<?php echo $object->weight; ?>">
-<?php echo $object->weight_units; ?>
-</td></tr>
+        <tr>
+            <td><?php echo $langs->trans("Weight"); ?></td>
+            <td>
+                <input name="weight" size="4" value="<?php echo $object->weight; ?>">
+                <?php echo $object->weight_units; ?>
+            </td>
+        </tr>
 
-<tr><td><?php echo $langs->trans("Length"); ?></td><td>
-<input name="size" size="4" value="<?php echo $object->length; ?>">
-<?php echo $object->length_units; ?>
-</td></tr>
+        <tr>
+            <td><?php echo $langs->trans("Length"); ?></td>
+            <td>
+                <input name="size" size="4" value="<?php echo $object->length; ?>">
+                <?php echo $object->length_units; ?>
+            </td>
+        </tr>
 
-<tr><td><?php echo $langs->trans("Surface"); ?></td><td>
-<input name="surface" size="4" value="<?php echo $object->surface; ?>">
-<?php echo $object->surface_units; ?>
-</td></tr>
+        <tr>
+            <td><?php echo $langs->trans("Surface"); ?></td>
+            <td>
+                <input name="surface" size="4" value="<?php echo $object->surface; ?>">
+                <?php echo $object->surface_units; ?>
+            </td>
+        </tr>
 
-<tr><td><?php echo $langs->trans("Volume"); ?></td><td>
-<input name="volume" size="4" value="<?php echo $object->volume; ?>">
-<?php echo $object->volume_units; ?>
-</td></tr>
+        <tr>
+            <td><?php echo $langs->trans("Volume"); ?></td>
+            <td>
+                <input name="volume" size="4" value="<?php echo $object->volume; ?>">
+                <?php echo $object->volume_units; ?>
+            </td>
+        </tr>
 
-<tr><td class="tdtop"><?php echo $langs->trans("NoteNotVisibleOnBill"); ?></td><td>
-<?php echo $object->textarea_note; ?>
-</td></tr>
-</table>
+        <tr>
+            <td class="tdtop"><?php echo $langs->trans("NoteNotVisibleOnBill"); ?></td>
+            <td>
+                <?php echo $object->textarea_note; ?>
+            </td>
+        </tr>
+    </table>
 
-<br>
+    <br>
 
-<div align="center"><input type="submit" class="button button-save" value="<?php echo $langs->trans("Save"); ?>"> &nbsp; &nbsp;
-<input type="submit" class="button button-cancel" name="cancel" value="<?php echo $langs->trans("Cancel"); ?>"></div>
+    <div align="center"><input type="submit" class="button button-save" value="<?php echo $langs->trans("Save"); ?>">
+        &nbsp; &nbsp;
+        <input type="submit" class="button button-cancel" name="cancel" value="<?php echo $langs->trans("Cancel"); ?>">
+    </div>
 
 </form>
 

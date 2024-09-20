@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2012	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2012		Vinicius Nogueira	<viniciusvgn@gmail.com>
- * Copyright (C) 2019		Nicolas ZABOURI         <info@inovea-conseil.com>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2012	Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2012		Vinicius Nogueira	        <viniciusvgn@gmail.com>
+ * Copyright (C) 2019		Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *    \file       htdocs/fourn/commande/index.php
  *    \ingroup    order fournisseur
@@ -30,10 +36,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
-
 
 // Load translation files required by the page
 $langs->loadLangs(array("suppliers", "orders"));
@@ -51,7 +53,6 @@ if ($user->socid) {
     $socid = $user->socid;
 }
 $result = restrictedArea($user, 'fournisseur', $orderid, '', 'commande');
-
 
 /*
  * 	View
@@ -80,10 +81,10 @@ if (!$user->hasRight("societe", "client", "voir") && !$socid) {
 $sql .= " WHERE cf.fk_soc = s.rowid";
 $sql .= " AND cf.entity IN (" . getEntity('supplier_order') . ")";
 if ($user->socid) {
-    $sql .= ' AND cf.fk_soc = ' . ((int) $user->socid);
+    $sql .= ' AND cf.fk_soc = ' . ((int)$user->socid);
 }
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 $sql .= " GROUP BY cf.fk_statut";
 
@@ -118,7 +119,7 @@ if ($resql) {
     print "</tr>\n";
     $listofstatus = array(0, 1, 2, 3, 4, 5, 6, 9);
     foreach ($listofstatus as $status) {
-        $dataseries[] = array($commandestatic->LibStatut($status, 1), (isset($vals[$status]) ? (int) $vals[$status] : 0));
+        $dataseries[] = array($commandestatic->LibStatut($status, 1), (isset($vals[$status]) ? (int)$vals[$status] : 0));
         if ($status == CommandeFournisseur::STATUS_DRAFT) {
             $colorseries[$status] = '-' . $badgeStatus0;
         }
@@ -154,7 +155,6 @@ if ($resql) {
     if ($conf->use_javascript_ajax) {
         print '<tr class="impair"><td class="center" colspan="2">';
 
-        include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
         $dolgraph = new DolGraph();
         $dolgraph->SetData($dataseries);
         $dolgraph->SetDataColor(array_values($colorseries));
@@ -191,10 +191,10 @@ if (isModEnabled("supplier_order")) {
     $sql .= " AND c.entity IN (" . getEntity("supplier_order") . ")"; // Thirdparty sharing is mandatory with supplier order sharing
     $sql .= " AND c.fk_statut = 0";
     if (!empty($socid)) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
     if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
 
     $resql = $db->query($sql);
@@ -297,10 +297,10 @@ $sql .= " WHERE c.fk_soc = s.rowid";
 $sql .= " AND c.entity IN (" . getEntity('supplier_order') . ")";
 //$sql.= " AND c.fk_statut > 2";
 if (!empty($socid)) {
-    $sql .= " AND c.fk_soc = " . ((int) $socid);
+    $sql .= " AND c.fk_soc = " . ((int)$socid);
 }
 if (!$user->hasRight("societe", "client", "voir") && !$socid) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 $sql .= " ORDER BY c.tms DESC";
 $sql .= $db->plimit($max, 0);

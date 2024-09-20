@@ -22,6 +22,11 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Partnerships\Classes\ModeleNumRefPartnership;
+use Dolibarr\Code\Partnerships\Classes\Partnership;
+
 /**
  * \file       htdocs/core/modules/partnership/mod_partnership_advanced.php
  * \ingroup    partnership
@@ -29,7 +34,6 @@
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/core/modules/partnership/modules_partnership.php';
-
 
 /**
  *  Class to manage the Advanced numbering rule for Partnership

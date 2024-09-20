@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017       ATM-Consulting       <support@atm-consulting.fr>
- * Copyright (C) 2020		Maxime DEMAREST  	 <maxime@indelog.fr>
+/* Copyright (C) 2017       ATM-Consulting              <support@atm-consulting.fr>
+ * Copyright (C) 2020		Maxime DEMAREST  	        <maxime@indelog.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  *  \file       htdocs/fourn/facture/rapport.php
  *  \ingroup    fourn
@@ -28,8 +32,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/rapport/pdf_paiement_fourn.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 
 $langs->loadLangs(array('bills'));
 
@@ -58,7 +60,6 @@ if (!$year) {
     $year = date("Y");
 }
 
-
 /*
  * Actions
  */
@@ -84,7 +85,6 @@ if ($action == 'builddoc') {
 
     $year = GETPOSTINT("reyear");
 }
-
 
 /*
  * View

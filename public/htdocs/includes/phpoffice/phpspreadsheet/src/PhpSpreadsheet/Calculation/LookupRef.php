@@ -95,7 +95,7 @@ class LookupRef
             foreach ($cellAddress as $columnKey => $value) {
                 $columnKey = preg_replace('/[^a-z]/i', '', $columnKey);
 
-                return (int) Coordinate::columnIndexFromString($columnKey);
+                return (int)Coordinate::columnIndexFromString($columnKey);
             }
         } else {
             [$sheet, $cellAddress] = Worksheet::extractSheetTitle($cellAddress, true);
@@ -105,14 +105,14 @@ class LookupRef
                 $endAddress = preg_replace('/[^a-z]/i', '', $endAddress);
                 $returnValue = [];
                 do {
-                    $returnValue[] = (int) Coordinate::columnIndexFromString($startAddress);
+                    $returnValue[] = (int)Coordinate::columnIndexFromString($startAddress);
                 } while ($startAddress++ != $endAddress);
 
                 return $returnValue;
             }
             $cellAddress = preg_replace('/[^a-z]/i', '', $cellAddress);
 
-            return (int) Coordinate::columnIndexFromString($cellAddress);
+            return (int)Coordinate::columnIndexFromString($cellAddress);
         }
     }
 
@@ -171,7 +171,7 @@ class LookupRef
         if (is_array($cellAddress)) {
             foreach ($cellAddress as $columnKey => $rowValue) {
                 foreach ($rowValue as $rowKey => $cellValue) {
-                    return (int) preg_replace('/\D/', '', $rowKey);
+                    return (int)preg_replace('/\D/', '', $rowKey);
                 }
             }
         } else {
@@ -182,14 +182,14 @@ class LookupRef
                 $endAddress = preg_replace('/\D/', '', $endAddress);
                 $returnValue = [];
                 do {
-                    $returnValue[][] = (int) $startAddress;
+                    $returnValue[][] = (int)$startAddress;
                 } while ($startAddress++ != $endAddress);
 
                 return $returnValue;
             }
             [$cellAddress] = explode(':', $cellAddress);
 
-            return (int) preg_replace('/\D/', '', $cellAddress);
+            return (int)preg_replace('/\D/', '', $cellAddress);
         }
     }
 
@@ -230,13 +230,13 @@ class LookupRef
      * Excel Function:
      *        =HYPERLINK(linkURL,displayName)
      *
-     * @category Logical Functions
-     *
      * @param string $linkURL Value to check, is also the value returned when no error
      * @param string $displayName Value to return when testValue is an error condition
      * @param Cell $pCell The cell to set the hyperlink in
      *
      * @return mixed The value of $displayName (or $linkURL if $displayName was blank)
+     * @category Logical Functions
+     *
      */
     public static function HYPERLINK($linkURL = '', $displayName = null, Cell $pCell = null)
     {
@@ -475,7 +475,7 @@ class LookupRef
     {
         $lookupArray = Functions::flattenArray($lookupArray);
         $lookupValue = Functions::flattenSingleValue($lookupValue);
-        $matchType = ($matchType === null) ? 1 : (int) Functions::flattenSingleValue($matchType);
+        $matchType = ($matchType === null) ? 1 : (int)Functions::flattenSingleValue($matchType);
 
         // MATCH is not case sensitive, so we convert lookup value to be lower cased in case it's string type.
         if (is_string($lookupValue)) {
@@ -535,7 +535,7 @@ class LookupRef
                 $exactMatch = $exactTypeMatch || $nonOnlyNumericExactMatch;
 
                 if ($matchType === 0) {
-                    if ($typeMatch && is_string($lookupValue) && (bool) preg_match('/([\?\*])/', $lookupValue)) {
+                    if ($typeMatch && is_string($lookupValue) && (bool)preg_match('/([\?\*])/', $lookupValue)) {
                         $splitString = $lookupValue;
                         $chars = array_map(function ($i) use ($splitString) {
                             return mb_substr($splitString, $i, 1);
@@ -566,7 +566,7 @@ class LookupRef
                         }
 
                         $pattern .= '$/';
-                        if ((bool) preg_match($pattern, $lookupArrayValue)) {
+                        if ((bool)preg_match($pattern, $lookupArrayValue)) {
                             // exact match
                             return $i + 1;
                         }
@@ -844,8 +844,8 @@ class LookupRef
 
             if (
                 $not_exact_match && (
-                ($bothNumeric && $rowData > $lookup_value) ||
-                ($bothNotNumeric && $rowDataLower > $lookupLower)
+                    ($bothNumeric && $rowData > $lookup_value) ||
+                    ($bothNotNumeric && $rowDataLower > $lookupLower)
                 )
             ) {
                 break;

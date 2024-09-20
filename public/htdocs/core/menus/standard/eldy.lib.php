@@ -31,19 +31,19 @@
  *  \brief      Library for file eldy menus
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/menubase.class.php';
-
+use Dolibarr\Code\Core\Classes\Menu;
+use Dolibarr\Code\Core\Classes\Menubase;
 
 /**
  * Core function to output top menu eldy
  *
- * @param   DoliDB  $db             Database handler
- * @param   string  $atarget        Target (Example: '' or '_top')
- * @param   int     $type_user      0=Menu for backoffice, 1=Menu for front office
- * @param   array<array{rowid:string,fk_menu:string,langs:string,enabled:int<0,2>,type:string,fk_mainmenu:string,fk_leftmenu:string,url:string,titre:string,perms:string,target:string,mainmenu:string,leftmenu:string,position:int,level?:int,prefix:string}>  $tabMenu        If array with menu entries already loaded, we put this array here (in most cases, it's empty). For eldy menu, it contains menu entries loaded from database.
- * @param   Menu    $menu           Object Menu to return back list of menu entries
- * @param   int     $noout          1=Disable output (Initialise &$menu only).
- * @param   string  $mode           'top', 'topnb', 'left', 'jmobile'
+ * @param DoliDB $db Database handler
+ * @param string $atarget Target (Example: '' or '_top')
+ * @param int $type_user 0=Menu for backoffice, 1=Menu for front office
+ * @param array<array{rowid:string,fk_menu:string,langs:string,enabled:int<0,2>,type:string,fk_mainmenu:string,fk_leftmenu:string,url:string,titre:string,perms:string,target:string,mainmenu:string,leftmenu:string,position:int,level?:int,prefix:string}> $tabMenu If array with menu entries already loaded, we put this array here (in most cases, it's empty). For eldy menu, it contains menu entries loaded from database.
+ * @param Menu $menu Object Menu to return back list of menu entries
+ * @param int $noout 1=Disable output (Initialise &$menu only).
+ * @param string $mode 'top', 'topnb', 'left', 'jmobile'
  * @return  int                     0
  */
 function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 0, $mode = '')
@@ -90,7 +90,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 10,
         'id' => $id,
         'idsel' => 'home',
-        'classname' =>  $classname = (empty($_SESSION["mainmenu"]) || $_SESSION["mainmenu"] == "home") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (empty($_SESSION["mainmenu"]) || $_SESSION["mainmenu"] == "home") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => '<span class="fas fa-home fa-fw"></span>',
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "home") ? 0 : 1),
         'loadLangs' => array(),
@@ -115,7 +115,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 18,
         'id' => $id,
         'idsel' => 'members',
-        'classname' =>  $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "members") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "members") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => img_picto('', 'member', 'class="fa-fw pictofixedwidth"'),
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "members") ? 0 : 1),
         'loadLangs' => array("members"),
@@ -127,7 +127,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'enabled' => (
             (
                 isModEnabled('societe') &&
-            (!getDolGlobalString('SOCIETE_DISABLE_PROSPECTS') || !getDolGlobalString('SOCIETE_DISABLE_CUSTOMERS'))
+                (!getDolGlobalString('SOCIETE_DISABLE_PROSPECTS') || !getDolGlobalString('SOCIETE_DISABLE_CUSTOMERS'))
             )
             || (isModEnabled('supplier_proposal') || isModEnabled('supplier_order') || isModEnabled('supplier_invoice'))
         ),
@@ -147,7 +147,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 20,
         'id' => $id,
         'idsel' => 'companies',
-        'classname' =>  $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "companies") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "companies") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => img_picto('', 'company', 'class="fa-fw pictofixedwidth"'),
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "companies") ? 0 : 1),
         'loadLangs' => array("companies", "suppliers"),
@@ -164,8 +164,8 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'name' => 'Products',
         'link' => '/product/index.php?mainmenu=products&amp;leftmenu=',
         'title' => (isModEnabled('product') && isModEnabled('service'))
-        ? (array("TMenuProducts", " | ", "TMenuServices"))
-        : (isModEnabled('product') ? "TMenuProducts" : "TMenuServices"),
+            ? (array("TMenuProducts", " | ", "TMenuServices"))
+            : (isModEnabled('product') ? "TMenuProducts" : "TMenuServices"),
         'level' => 0,
         'enabled' => $showmode = isVisibleToUserType($type_user, $tmpentry, $listofmodulesforexternal),
         'target' => $atarget,
@@ -174,7 +174,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 30,
         'id' => $id,
         'idsel' => 'products',
-        'classname' =>  $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "products") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "products") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => img_picto('', 'product', 'class="fa-fw pictofixedwidth"'),
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "products") ? 0 : 1),
         'loadLangs' => array("products", "stocks"),
@@ -199,7 +199,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 31,
         'id' => $id,
         'idsel' => 'mrp',
-        'classname' =>  $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "mrp") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "mrp") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => img_picto('', 'mrp', 'class="fa-fw pictofixedwidth"'),
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "mrp") ? 0 : 1),
         'loadLangs' => array("mrp"),
@@ -237,7 +237,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 35,
         'id' => $id,
         'idsel' => 'project',
-        'classname' =>  $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "project") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "project") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => img_picto('', 'project', 'class="fa-fw pictofixedwidth"'),
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "project") ? 0 : 1),
         'loadLangs' => array("projects"),
@@ -269,12 +269,12 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
     );
 
     $onlysupplierorder = $user->hasRight('fournisseur', 'commande', 'lire') &&
-    !$user->hasRight('propal', 'lire') &&
-    !$user->hasRight('commande', 'lire') &&
-    !$user->hasRight('supplier_order', 'lire') &&
-    !$user->hasRight('supplier_proposal', 'lire') &&
-    !$user->hasRight('contrat', 'lire') &&
-    !$user->hasRight('ficheinter', 'lire');
+        !$user->hasRight('propal', 'lire') &&
+        !$user->hasRight('commande', 'lire') &&
+        !$user->hasRight('supplier_order', 'lire') &&
+        !$user->hasRight('supplier_proposal', 'lire') &&
+        !$user->hasRight('contrat', 'lire') &&
+        !$user->hasRight('ficheinter', 'lire');
 
     $menu_arr[] = array(
         'name' => 'Commercial',
@@ -288,7 +288,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 40,
         'id' => $id,
         'idsel' => 'commercial',
-        'classname' =>  $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "commercial") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "commercial") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => img_picto('', 'contract', 'class="fa-fw pictofixedwidth"'),
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "commercial") ? 0 : 1),
         'loadLangs' => array("commercial"),
@@ -314,7 +314,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
     $menu_arr[] = array(
         'name' => 'Compta',
         'link' => '/compta/index.php?mainmenu=billing&amp;leftmenu=',
-        'title' =>  "MenuFinancial",
+        'title' => "MenuFinancial",
         'level' => 0,
         'enabled' => $showmode = isVisibleToUserType($type_user, $tmpentry, $listofmodulesforexternal),
         'target' => $atarget,
@@ -323,7 +323,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 50,
         'id' => $id,
         'idsel' => 'billing',
-        'classname' =>  $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "billing") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "billing") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => img_picto('', 'bill', 'class="fa-fw pictofixedwidth"'),
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "billing") ? 0 : 1),
         'loadLangs' => array("compta"),
@@ -339,7 +339,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
     $menu_arr[] = array(
         'name' => 'Bank',
         'link' => '/compta/bank/list.php?mainmenu=bank&amp;leftmenu=&amp;search_status=opened',
-        'title' =>  "MenuBankCash",
+        'title' => "MenuBankCash",
         'level' => 0,
         'enabled' => $showmode = isVisibleToUserType($type_user, $tmpentry, $listofmodulesforexternal),
         'target' => $atarget,
@@ -348,7 +348,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 52,
         'id' => $id,
         'idsel' => 'bank',
-        'classname' =>  $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "bank") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "bank") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => img_picto('', 'bank_account', 'class="fa-fw pictofixedwidth"'),
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "bank") ? 0 : 1),
         'loadLangs' => array("compta", "banks"),
@@ -364,7 +364,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
     $menu_arr[] = array(
         'name' => 'Accounting',
         'link' => '/accountancy/index.php?mainmenu=accountancy&amp;leftmenu=',
-        'title' =>  "MenuAccountancy",
+        'title' => "MenuAccountancy",
         'level' => 0,
         'enabled' => $showmode = isVisibleToUserType($type_user, $tmpentry, $listofmodulesforexternal),
         'target' => $atarget,
@@ -373,7 +373,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 54,
         'id' => $id,
         'idsel' => 'accountancy',
-        'classname' =>  $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "accountancy") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "accountancy") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => img_picto('', 'accountancy', 'class="fa-fw pictofixedwidth"'),
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "accountancy") ? 0 : 1),
         'loadLangs' => array("compta", "accountancy", "assets", "intracommreport"),
@@ -390,7 +390,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
     $menu_arr[] = array(
         'name' => 'HRM',
         'link' => '/hrm/index.php?mainmenu=hrm&amp;leftmenu=',
-        'title' =>  "HRM",
+        'title' => "HRM",
         'level' => 0,
         'enabled' => $showmode = isVisibleToUserType($type_user, $tmpentry, $listofmodulesforexternal),
         'target' => $atarget,
@@ -399,7 +399,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 80,
         'id' => $id,
         'idsel' => 'hrm',
-        'classname' =>  $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "hrm") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "hrm") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => img_picto('', 'hrm', 'class="fa-fw pictofixedwidth"'),
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "hrm") ? 0 : 1),
         'loadLangs' => array("hrm", "holiday"),
@@ -421,7 +421,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
     $menu_arr[] = array(
         'name' => 'Ticket',
         'link' => $link,
-        'title' =>  isModEnabled('ticket') ? "Tickets" : "MenuKnowledgeRecordShort",
+        'title' => isModEnabled('ticket') ? "Tickets" : "MenuKnowledgeRecordShort",
         'level' => 0,
         'enabled' => $showmode = isVisibleToUserType($type_user, $tmpentry, $listofmodulesforexternal),
         'target' => $atarget,
@@ -430,7 +430,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 88,
         'id' => $id,
         'idsel' => 'ticket',
-        'classname' =>  $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "ticket") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "ticket") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => img_picto('', 'ticket', 'class="fa-fw pictofixedwidth"'),
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "ticket") ? 0 : 1),
         'loadLangs' => array("ticket", "knowledgemanagement"),
@@ -446,7 +446,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
     $menu_arr[] = array(
         'name' => 'Tools',
         'link' => '/core/tools.php?mainmenu=tools&amp;leftmenu=',
-        'title' =>  "Tools",
+        'title' => "Tools",
         'level' => 0,
         'enabled' => $showmode = isVisibleToUserType($type_user, $tmpentry, $listofmodulesforexternal),
         'target' => $atarget,
@@ -455,7 +455,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
         'position' => 90,
         'id' => $id,
         'idsel' => 'tools',
-        'classname' =>  $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "tools") ? 'class="tmenusel"' : 'class="tmenu"',
+        'classname' => $classname = (!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "tools") ? 'class="tmenusel"' : 'class="tmenu"',
         'prefix' => img_picto('', 'tools', 'class="fa-fw pictofixedwidth"'),
         'session' => ((!empty($_SESSION["mainmenu"]) && $_SESSION["mainmenu"] == "tools") ? 0 : 1),
         'loadLangs' => array("other"),
@@ -464,7 +464,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
 
     // Add menus
     foreach ($menu_arr as $key => $smenu) {
-        $smenu = (object) $smenu;
+        $smenu = (object)$smenu;
 
         if ($smenu->enabled) {
             if ($smenu->session) {
@@ -573,7 +573,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
             $urllogo=DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/thumbs/'.$mysoc->logo_mini);
             }*/
         } else {
-            $urllogo = constant('BASE_URL') . '/theme/dolibarr_512x512_white.png';
+            $urllogo = constant('DOL_URL_ROOT') . '/theme/dolibarr_512x512_white.png';
             $logoContainerAdditionalClass = '';
         }
         $title = $langs->trans("GoIntoSetupToChangeLogo");
@@ -620,9 +620,9 @@ function print_start_menu_array()
 /**
  * Output start menu entry
  *
- * @param   string  $idsel      Text
- * @param   string  $classname  String to add a css class
- * @param   int     $showmode   0 = hide, 1 = allowed or 2 = not allowed
+ * @param string $idsel Text
+ * @param string $classname String to add a css class
+ * @param int $showmode 0 = hide, 1 = allowed or 2 = not allowed
  * @return  void
  */
 function print_start_menu_entry($idsel, $classname, $showmode)
@@ -637,14 +637,14 @@ function print_start_menu_entry($idsel, $classname, $showmode)
 /**
  * Output menu entry
  *
- * @param   string  $text           Text
- * @param   int     $showmode       0 = hide, 1 = allowed or 2 = not allowed
- * @param   string  $url            Url
- * @param   string  $id             Id
- * @param   string  $idsel          Id sel
- * @param   string  $classname      Class name
- * @param   string  $atarget        Target
- * @param   array{}|array{rowid:string,fk_menu:string,langs:string,enabled:int<0,2>,type:string,fk_mainmenu:string,fk_leftmenu:string,url:string,titre:string,perms:string,target:string,mainmenu:string,leftmenu:string,position:int,level?:int,prefix:string}     $menuval        All the $menuval array
+ * @param string $text Text
+ * @param int $showmode 0 = hide, 1 = allowed or 2 = not allowed
+ * @param string $url Url
+ * @param string $id Id
+ * @param string $idsel Id sel
+ * @param string $classname Class name
+ * @param string $atarget Target
+ * @param array{}|array{rowid:string,fk_menu:string,langs:string,enabled:int<0,2>,type:string,fk_mainmenu:string,fk_leftmenu:string,url:string,titre:string,perms:string,target:string,mainmenu:string,leftmenu:string,position:int,level?:int,prefix:string} $menuval All the $menuval array
  * @return  void
  */
 function print_text_menu_entry($text, $showmode, $url, $id, $idsel, $classname, $atarget, $menuval = array())
@@ -697,7 +697,7 @@ function print_text_menu_entry($text, $showmode, $url, $id, $idsel, $classname, 
 /**
  * Output end menu entry
  *
- * @param   int     $showmode   0 = hide, 1 = allowed or 2 = not allowed
+ * @param int $showmode 0 = hide, 1 = allowed or 2 = not allowed
  * @return  void
  */
 function print_end_menu_entry($showmode)
@@ -724,16 +724,16 @@ function print_end_menu_array()
  * Core function to output left menu eldy
  * Fill &$menu (example with $forcemainmenu='home' $forceleftmenu='all', return left menu tree of Home)
  *
- * @param   DoliDB      $db                 Database handler
- * @param   array<array{rowid:string,fk_menu:string,langs:string,enabled:int<0,2>,type:string,fk_mainmenu:string,fk_leftmenu:string,url:string,titre:string,perms:string,target:string,mainmenu:string,leftmenu:string,position:int,level?:int,prefix:string}>  $menu_array_before  Table of menu entries to show before entries of menu handler (menu->liste filled with menu->add)
- * @param   array<array{rowid:string,fk_menu:string,langs:string,enabled:int<0,2>,type:string,fk_mainmenu:string,fk_leftmenu:string,url:string,titre:string,perms:string,target:string,mainmenu:string,leftmenu:string,position:int,level?:int,prefix:string}>      $menu_array_after   Table of menu entries to show after entries of menu handler (menu->liste filled with menu->add)
- * @param   array<array{rowid:string,fk_menu:string,langs:string,enabled:int<0,2>,type:string,fk_mainmenu:string,fk_leftmenu:string,url:string,titre:string,perms:string,target:string,mainmenu:string,leftmenu:string,position:int,level?:int,prefix:string}>  $tabMenu            If array with menu entries already loaded, we put this array here (in most cases, it's empty)
- * @param   Menu        $menu               Object Menu to return back list of menu entries
- * @param   int         $noout              Disable output (Initialise &$menu only).
- * @param   string      $forcemainmenu      'x'=Force mainmenu to mainmenu='x'
- * @param   string      $forceleftmenu      'all'=Force leftmenu to '' (= all). If value come being '', we change it to value in session and 'none' if not defined in session.
- * @param   array       $moredata           An array with more data to output
- * @param   int         $type_user          0=Menu for backoffice, 1=Menu for front office
+ * @param DoliDB $db Database handler
+ * @param array<array{rowid:string,fk_menu:string,langs:string,enabled:int<0,2>,type:string,fk_mainmenu:string,fk_leftmenu:string,url:string,titre:string,perms:string,target:string,mainmenu:string,leftmenu:string,position:int,level?:int,prefix:string}> $menu_array_before Table of menu entries to show before entries of menu handler (menu->liste filled with menu->add)
+ * @param array<array{rowid:string,fk_menu:string,langs:string,enabled:int<0,2>,type:string,fk_mainmenu:string,fk_leftmenu:string,url:string,titre:string,perms:string,target:string,mainmenu:string,leftmenu:string,position:int,level?:int,prefix:string}> $menu_array_after Table of menu entries to show after entries of menu handler (menu->liste filled with menu->add)
+ * @param array<array{rowid:string,fk_menu:string,langs:string,enabled:int<0,2>,type:string,fk_mainmenu:string,fk_leftmenu:string,url:string,titre:string,perms:string,target:string,mainmenu:string,leftmenu:string,position:int,level?:int,prefix:string}> $tabMenu If array with menu entries already loaded, we put this array here (in most cases, it's empty)
+ * @param Menu $menu Object Menu to return back list of menu entries
+ * @param int $noout Disable output (Initialise &$menu only).
+ * @param string $forcemainmenu 'x'=Force mainmenu to mainmenu='x'
+ * @param string $forceleftmenu 'all'=Force leftmenu to '' (= all). If value come being '', we change it to value in session and 'none' if not defined in session.
+ * @param array $moredata An array with more data to output
+ * @param int $type_user 0=Menu for backoffice, 1=Menu for front office
  * @return  int                             Nb of menu entries
  */
 function print_left_eldy_menu($db, $menu_array_before, $menu_array_after, &$tabMenu, &$menu, $noout = 0, $forcemainmenu = '', $forceleftmenu = '', $moredata = null, $type_user = 0)
@@ -1107,11 +1107,11 @@ function print_left_eldy_menu($db, $menu_array_before, $menu_array_after, &$tabM
 /**
  * Get left Menu HOME
  *
- * @param   string      $mainmenu       Main menu
- * @param   Menu        $newmenu        Object Menu to return back list of menu entries
- * @param   int         $usemenuhider   Use menu hider
- * @param   string      $leftmenu       Left menu
- * @param   int         $type_user      Type of user
+ * @param string $mainmenu Main menu
+ * @param Menu $newmenu Object Menu to return back list of menu entries
+ * @param int $usemenuhider Use menu hider
+ * @param string $leftmenu Left menu
+ * @param int $type_user Type of user
  * @return  void
  */
 function get_left_menu_home($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 'none', $type_user = 0)
@@ -1233,11 +1233,11 @@ function get_left_menu_home($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu =
 /**
  * Get left Menu THIRDPARTIES
  *
- * @param   string      $mainmenu       Main menu
- * @param   Menu        $newmenu        Object Menu to return back list of menu entries
- * @param   int         $usemenuhider   Use menu hider
- * @param   string      $leftmenu       Left menu
- * @param   int         $type_user      Type of targeted user for menu
+ * @param string $mainmenu Main menu
+ * @param Menu $newmenu Object Menu to return back list of menu entries
+ * @param int $usemenuhider Use menu hider
+ * @param string $leftmenu Left menu
+ * @param int $type_user Type of targeted user for menu
  * @return  void
  */
 function get_left_menu_thridparties($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 'none', $type_user = 0)
@@ -1338,11 +1338,11 @@ function get_left_menu_thridparties($mainmenu, &$newmenu, $usemenuhider = 1, $le
 /**
  * Get left Menu COMMERCIAL (propal, commande, supplier_proposal, supplier_order, contrat, ficheinter)
  *
- * @param   string      $mainmenu       Main menu
- * @param   Menu        $newmenu        Object Menu to return back list of menu entries
- * @param   int         $usemenuhider   Use menu hider
- * @param   string      $leftmenu       Left menu
- * @param   int         $type_user      Type of targeted user for menu
+ * @param string $mainmenu Main menu
+ * @param Menu $newmenu Object Menu to return back list of menu entries
+ * @param int $usemenuhider Use menu hider
+ * @param string $leftmenu Left menu
+ * @param int $type_user Type of targeted user for menu
  * @return  void
  */
 function get_left_menu_commercial($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 'none', $type_user = 0)
@@ -1464,11 +1464,11 @@ function get_left_menu_commercial($mainmenu, &$newmenu, $usemenuhider = 1, $left
 /**
  * Get left COMPTA-FINANCIAL
  *
- * @param   string      $mainmenu       Main menu
- * @param   Menu        $newmenu        Object Menu to return back list of menu entries
- * @param   int         $usemenuhider   Use menu hider
- * @param   string      $leftmenu       Left menu
- * @param   int         $type_user      Type of targeted user for menu
+ * @param string $mainmenu Main menu
+ * @param Menu $newmenu Object Menu to return back list of menu entries
+ * @param int $usemenuhider Use menu hider
+ * @param string $leftmenu Left menu
+ * @param int $type_user Type of targeted user for menu
  * @return  void
  */
 function get_left_menu_billing($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 'none', $type_user = 0)
@@ -1647,11 +1647,11 @@ function get_left_menu_billing($mainmenu, &$newmenu, $usemenuhider = 1, $leftmen
 /**
  * Get left COMPTA-FINANCIAL (accountancy)
  *
- * @param   string      $mainmenu       Main menu
- * @param   Menu        $newmenu        Object Menu to return back list of menu entries
- * @param   int         $usemenuhider   Use menu hider
- * @param   string      $leftmenu       Left menu
- * @param   int         $type_user      Type of targeted user for menu
+ * @param string $mainmenu Main menu
+ * @param Menu $newmenu Object Menu to return back list of menu entries
+ * @param int $usemenuhider Use menu hider
+ * @param string $leftmenu Left menu
+ * @param int $type_user Type of targeted user for menu
  * @return  void
  */
 function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 'none', $type_user = 0)
@@ -1734,7 +1734,7 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
                 // Multi journal
                 $sql = "SELECT rowid, code, label, nature";
                 $sql .= " FROM " . MAIN_DB_PREFIX . "accounting_journal";
-                $sql .= " WHERE entity = " . ((int) $conf->entity);
+                $sql .= " WHERE entity = " . ((int)$conf->entity);
                 $sql .= " AND active = 1";
                 $sql .= " ORDER BY nature ASC, label DESC";
 
@@ -1976,11 +1976,11 @@ function get_left_menu_accountancy($mainmenu, &$newmenu, $usemenuhider = 1, $lef
 /**
  * Get left Menu BANK
  *
- * @param   string      $mainmenu       Main menu
- * @param   Menu        $newmenu        Object Menu to return back list of menu entries
- * @param   int         $usemenuhider   Use menu hider
- * @param   string      $leftmenu       Left menu
- * @param   int         $type_user      Type of targeted user for menu
+ * @param string $mainmenu Main menu
+ * @param Menu $newmenu Object Menu to return back list of menu entries
+ * @param int $usemenuhider Use menu hider
+ * @param string $leftmenu Left menu
+ * @param int $type_user Type of targeted user for menu
  * @return  void
  */
 function get_left_menu_bank($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 'none', $type_user = 0)
@@ -2059,11 +2059,11 @@ function get_left_menu_bank($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu =
 /**
  * Get left Menu PRODUCTS-SERVICES
  *
- * @param   string      $mainmenu       Main menu
- * @param   Menu        $newmenu        Object Menu to return back list of menu entries
- * @param   int         $usemenuhider   Use menu hider
- * @param   string      $leftmenu       Left menu
- * @param   int         $type_user      Type of targeted user for menu
+ * @param string $mainmenu Main menu
+ * @param Menu $newmenu Object Menu to return back list of menu entries
+ * @param int $usemenuhider Use menu hider
+ * @param string $leftmenu Left menu
+ * @param int $type_user Type of targeted user for menu
  * @return  void
  */
 function get_left_menu_products($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 'none', $type_user = 0)
@@ -2203,11 +2203,11 @@ function get_left_menu_products($mainmenu, &$newmenu, $usemenuhider = 1, $leftme
 /**
  * Get left Menu PRODUCTS-SERVICES MRP - GPAO
  *
- * @param   string      $mainmenu       Main menu
- * @param   Menu        $newmenu        Object Menu to return back list of menu entries
- * @param   int         $usemenuhider   Use menu hider
- * @param   string      $leftmenu       Left menu
- * @param   int         $type_user      Type of targeted user for menu
+ * @param string $mainmenu Main menu
+ * @param Menu $newmenu Object Menu to return back list of menu entries
+ * @param int $usemenuhider Use menu hider
+ * @param string $leftmenu Left menu
+ * @param int $type_user Type of targeted user for menu
  * @return  void
  */
 function get_left_menu_mrp($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 'none', $type_user = 0)
@@ -2237,11 +2237,11 @@ function get_left_menu_mrp($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 
 /**
  * Get left Menu PROJECTS
  *
- * @param   string      $mainmenu       Main menu
- * @param   Menu        $newmenu        Object Menu to return back list of menu entries
- * @param   int         $usemenuhider   Use menu hider
- * @param   string      $leftmenu       Left menu
- * @param   int         $type_user      Type of targeted user for menu
+ * @param string $mainmenu Main menu
+ * @param Menu $newmenu Object Menu to return back list of menu entries
+ * @param int $usemenuhider Use menu hider
+ * @param string $leftmenu Left menu
+ * @param int $type_user Type of targeted user for menu
  * @return  void
  */
 function get_left_menu_projects($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 'none', $type_user = 0)
@@ -2312,11 +2312,11 @@ function get_left_menu_projects($mainmenu, &$newmenu, $usemenuhider = 1, $leftme
 /**
  * Get left Menu HRM
  *
- * @param   string      $mainmenu       Main menu
- * @param   Menu        $newmenu        Object Menu to return back list of menu entries
- * @param   int         $usemenuhider   Use menu hider
- * @param   string      $leftmenu       Left menu
- * @param   int         $type_user      Type of targeted user for menu
+ * @param string $mainmenu Main menu
+ * @param Menu $newmenu Object Menu to return back list of menu entries
+ * @param int $usemenuhider Use menu hider
+ * @param string $leftmenu Left menu
+ * @param int $type_user Type of targeted user for menu
  * @return  void
  */
 function get_left_menu_hrm($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 'none', $type_user = 0)
@@ -2420,11 +2420,11 @@ function get_left_menu_hrm($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 
 /**
  * Get left Menu TOOLS
  *
- * @param   string      $mainmenu       Main menu
- * @param   Menu        $newmenu        Object Menu to return back list of menu entries
- * @param   int         $usemenuhider   Use menu hider
- * @param   string      $leftmenu       Left menu
- * @param   int         $type_user      Type of targeted user for menu
+ * @param string $mainmenu Main menu
+ * @param Menu $newmenu Object Menu to return back list of menu entries
+ * @param int $usemenuhider Use menu hider
+ * @param string $leftmenu Left menu
+ * @param int $type_user Type of targeted user for menu
  * @return  void
  */
 function get_left_menu_tools($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 'none', $type_user = 0)
@@ -2468,11 +2468,11 @@ function get_left_menu_tools($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu 
 /**
  * Get left Menu MEMBERS
  *
- * @param   string      $mainmenu       Main menu
- * @param   Menu        $newmenu        Object Menu to return back list of menu entries
- * @param   int         $usemenuhider   Use menu hider
- * @param   string      $leftmenu       Left menu
- * @param   int         $type_user      Type of targeted user for menu
+ * @param string $mainmenu Main menu
+ * @param Menu $newmenu Object Menu to return back list of menu entries
+ * @param int $usemenuhider Use menu hider
+ * @param string $leftmenu Left menu
+ * @param int $type_user Type of targeted user for menu
  * @return  void
  */
 function get_left_menu_members($mainmenu, &$newmenu, $usemenuhider = 1, $leftmenu = 'none', $type_user = 0)

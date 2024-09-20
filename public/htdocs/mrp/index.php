@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2003		Jean-Louis Bergamo	    <jlb@j1b.org>
- * Copyright (C) 2004-2019	Laurent Destailleur	    <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin		    <regis.houssin@inodbox.com>
- * Copyright (C) 2019       Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003		Jean-Louis Bergamo	        <jlb@j1b.org>
+ * Copyright (C) 2004-2019	Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Mrp\Classes\Mo;
+
 /**
  *       \file       htdocs/mrp/index.php
  *       \ingroup    bom, mrp
@@ -30,8 +35,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
 
 $hookmanager = new HookManager($db);
 
@@ -105,7 +108,7 @@ if ($conf->use_javascript_ajax) {
         print '</tr>' . "\n";
         $listofstatus = array(0, 1, 2, 3, 9);
         foreach ($listofstatus as $status) {
-            $dataseries[] = array($staticmo->LibStatut($status, 1), (isset($vals[$status]) ? (int) $vals[$status] : 0));
+            $dataseries[] = array($staticmo->LibStatut($status, 1), (isset($vals[$status]) ? (int)$vals[$status] : 0));
             if ($status == Mo::STATUS_DRAFT) {
                 $colorseries[$status] = '-' . $badgeStatus0;
             }
@@ -132,7 +135,6 @@ if ($conf->use_javascript_ajax) {
         if ($conf->use_javascript_ajax) {
             print '<tr><td class="center" colspan="2">';
 
-            include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
             $dolgraph = new DolGraph();
             $dolgraph->SetData($dataseries);
             $dolgraph->SetDataColor(array_values($colorseries));

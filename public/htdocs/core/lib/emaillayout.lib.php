@@ -27,7 +27,7 @@
 /**
  * Get empty html
  *
- * @param   string  $name   Name of template
+ * @param string $name Name of template
  * @return  string  $out    Html content
  */
 function getHtmlOfLayout($name)

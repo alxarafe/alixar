@@ -86,7 +86,7 @@ class PropPatch
     public function handle($properties, callable $callback)
     {
         $usedProperties = [];
-        foreach ((array) $properties as $propertyName) {
+        foreach ((array)$properties as $propertyName) {
             if (array_key_exists($propertyName, $this->mutations) && !isset($this->result[$propertyName])) {
                 $usedProperties[] = $propertyName;
                 // HTTP Accepted
@@ -135,11 +135,11 @@ class PropPatch
      * Sets the result code for one or more properties.
      *
      * @param string|string[] $properties
-     * @param int             $resultCode
+     * @param int $resultCode
      */
     public function setResultCode($properties, $resultCode)
     {
-        foreach ((array) $properties as $propertyName) {
+        foreach ((array)$properties as $propertyName) {
             $this->result[$propertyName] = $resultCode;
         }
 

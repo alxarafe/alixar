@@ -29,11 +29,12 @@ class Delicious extends AbstractService
 {
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct(
             $credentials,
             $httpClient,
@@ -108,6 +109,7 @@ class Delicious extends AbstractService
 
 
     // Special, delicious didn't respect the oauth2 RFC and need a grant_type='code'
+
     /**
      * {@inheritdoc}
      */
@@ -118,11 +120,11 @@ class Delicious extends AbstractService
         }
 
         $bodyParams = array(
-            'code'          => $code,
-            'client_id'     => $this->credentials->getConsumerId(),
+            'code' => $code,
+            'client_id' => $this->credentials->getConsumerId(),
             'client_secret' => $this->credentials->getConsumerSecret(),
-            'redirect_uri'  => $this->credentials->getCallbackUrl(),
-            'grant_type'    => 'code',
+            'redirect_uri' => $this->credentials->getCallbackUrl(),
+            'grant_type' => 'code',
         );
 
         $responseBody = $this->httpClient->retrieveResponse(

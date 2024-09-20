@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010      François Legastelois <flegastelois@teclib.com>
- * Copyright (C) 2018-2024  Frédéric France      <frederic.france@free.fr>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010       François Legastelois        <flegastelois@teclib.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/projet/activity/perweek.php
  *  \ingroup    projet
@@ -29,14 +40,8 @@
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('projects', 'users', 'companies'));
@@ -70,7 +75,7 @@ $month = GETPOSTINT('remonth') ? GETPOSTINT('remonth') : (GETPOSTINT("month") ? 
 $day = GETPOSTINT('reday') ? GETPOSTINT('reday') : (GETPOSTINT("day") ? GETPOSTINT("day") : date("d"));
 $week = GETPOSTINT("week") ? GETPOSTINT("week") : date("W");
 
-$day = (int) $day;
+$day = (int)$day;
 
 //$search_categ = GETPOST("search_categ", 'alpha');
 $search_usertoprocessid = GETPOSTINT('search_usertoprocessid');
@@ -86,18 +91,18 @@ $sortorder = GETPOST('sortorder', 'aZ09comma');
 $startdayarray = dol_get_first_day_week($day, $month, $year);
 
 $prev = $startdayarray;
-$prev_year  = $prev['prev_year'];
+$prev_year = $prev['prev_year'];
 $prev_month = $prev['prev_month'];
-$prev_day   = $prev['prev_day'];
-$first_day  = $prev['first_day'];
+$prev_day = $prev['prev_day'];
+$first_day = $prev['first_day'];
 $first_month = $prev['first_month'];
 $first_year = $prev['first_year'];
 $week = $prev['week'];
 
 $next = dol_get_next_week($first_day, $week, $first_month, $first_year);
-$next_year  = $next['year'];
+$next_year = $next['year'];
 $next_month = $next['month'];
-$next_day   = $next['day'];
+$next_day = $next['day'];
 
 // Define firstdaytoshow and lastdaytoshow (warning: lastdaytoshow is last second to show + 1)
 $firstdaytoshow = dol_mktime(0, 0, 0, $first_month, $first_day, $first_year);
@@ -145,7 +150,7 @@ $arrayfields['timeconsumed'] = array('label' => 'TimeConsumed', 'checked' => 1, 
 if (!empty($extrafields->attributes['projet_task']['label']) && is_array($extrafields->attributes['projet_task']['label']) && count($extrafields->attributes['projet_task']['label']) > 0) {
     foreach ($extrafields->attributes['projet_task']['label'] as $key => $val) {
         if (!empty($extrafields->attributes['projet_task']['list'][$key])) {
-            $arrayfields["efpt." . $key] = array('label' => $extrafields->attributes['projet_task']['label'][$key], 'checked' => (($extrafields->attributes['projet_task']['list'][$key] < 0) ? 0 : 1), 'position' => $extrafields->attributes['projet_task']['pos'][$key], 'enabled' => (abs((int) $extrafields->attributes['projet_task']['list'][$key]) != 3 && $extrafields->attributes['projet_task']['perms'][$key]));
+            $arrayfields["efpt." . $key] = array('label' => $extrafields->attributes['projet_task']['label'][$key], 'checked' => (($extrafields->attributes['projet_task']['list'][$key] < 0) ? 0 : 1), 'position' => $extrafields->attributes['projet_task']['pos'][$key], 'enabled' => (abs((int)$extrafields->attributes['projet_task']['list'][$key]) != 3 && $extrafields->attributes['projet_task']['perms'][$key]));
         }
     }
 }
@@ -222,7 +227,7 @@ if ($action == 'addtime' && $user->hasRight('projet', 'lire') && GETPOST('assign
         if ($result >= 0 || $result == -2) {    // Contact add ok or already contact of task
             // Test if we are already contact of the project (should be rare but sometimes we can add as task contact without being contact of project, like when admin user has been removed from contact of project)
             $sql = 'SELECT ec.rowid FROM ' . MAIN_DB_PREFIX . 'element_contact as ec, ' . MAIN_DB_PREFIX . 'c_type_contact as tc WHERE tc.rowid = ec.fk_c_type_contact';
-            $sql .= ' AND ec.fk_socpeople = ' . ((int) $idfortaskuser) . " AND ec.element_id = " . ((int) $object->fk_project) . " AND tc.element = 'project' AND source = 'internal'";
+            $sql .= ' AND ec.fk_socpeople = ' . ((int)$idfortaskuser) . " AND ec.element_id = " . ((int)$object->fk_project) . " AND tc.element = 'project' AND source = 'internal'";
             $resql = $db->query($sql);
             if ($resql) {
                 $obj = $db->fetch_object($resql);
@@ -332,9 +337,9 @@ if ($action == 'addtime' && $user->hasRight('projet', 'lire') && GETPOST('formfi
 
             $param = '';
             $param .= ($mode ? '&mode=' . urlencode($mode) : '');
-            $param .= ($projectid ? 'id=' . urlencode((string) ($projectid)) : '');
+            $param .= ($projectid ? 'id=' . urlencode((string)($projectid)) : '');
             $param .= ($search_usertoprocessid ? '&search_usertoprocessid=' . urlencode($search_usertoprocessid) : '');
-            $param .= ($day ? '&day=' . urlencode((string) ($day)) : '') . ($month ? '&month=' . urlencode((string) ($month)) : '') . ($year ? '&year=' . urlencode((string) ($year)) : '');
+            $param .= ($day ? '&day=' . urlencode((string)($day)) : '') . ($month ? '&month=' . urlencode((string)($month)) : '') . ($year ? '&year=' . urlencode((string)($year)) : '');
             $param .= ($search_project_ref ? '&search_project_ref=' . urlencode($search_project_ref) : '');
             $param .= ($search_usertoprocessid > 0 ? '&search_usertoprocessid=' . urlencode($search_usertoprocessid) : '');
             $param .= ($search_thirdparty ? '&search_thirdparty=' . urlencode($search_thirdparty) : '');
@@ -357,7 +362,6 @@ if ($action == 'addtime' && $user->hasRight('projet', 'lire') && GETPOST('formfi
         }
     }
 }
-
 
 /*
  * View
@@ -544,13 +548,13 @@ for ($idw = 0; $idw < 7; $idw++) {
 }
 
 
-
 $moreforfilter = '';
 
 // Filter on categories
 /*
  if (isModEnabled("categorie")) {
- require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
+ use Dolibarr\Code\Categories\Classes\Categorie;
+
  $moreforfilter.='<div class="divsearchfield">';
  $moreforfilter.=$langs->trans('ProjectCategories'). ': ';
  $moreforfilter.=$formother->select_categories('project', $search_categ, 'search_categ', 1, 1, 'maxwidth300');
@@ -671,7 +675,7 @@ if (!empty($arrayfields['t.progress']['checked'])) {
 if (!empty($arrayfields['timeconsumed']['checked'])) {
     print '<th class="right maxwidth100">' . $langs->trans("TimeSpentSmall") . '<br>';
     print '<span class="nowraponall">';
-    print '<span class="opacitymedium nopadding userimg"><img alt="Photo" class="photouserphoto userphoto" src="' . constant('BASE_URL') . '/theme/common/everybody.png"></span>';
+    print '<span class="opacitymedium nopadding userimg"><img alt="Photo" class="photouserphoto userphoto" src="' . constant('DOL_URL_ROOT') . '/theme/common/everybody.png"></span>';
     print '<span class="opacitymedium paddingleft">' . $langs->trans("EverybodySmall") . '</span>';
     print '</span>';
     print '</th>';
@@ -743,7 +747,6 @@ if ($conf->use_javascript_ajax && count($tasksarray) >= getDolGlobalInt('NBLINES
 }
 
 
-
 // By default, we can edit only tasks we are assigned to
 $restrictviewformytask = getDolGlobalInt('PROJECT_TIME_SHOW_TASK_NOT_ASSIGNED', 2);
 
@@ -776,7 +779,7 @@ if (count($tasksarray) > 0) {
             if (empty($totalforeachday[$tmpday])) {
                 $totalforeachday[$tmpday] = empty($projectstatic->weekWorkLoad[$tmpday]) ? 0 : $projectstatic->weekWorkLoad[$tmpday];
             } else {
-                $totalforeachday[$tmpday] +=  empty($projectstatic->weekWorkLoad[$tmpday]) ? 0 : $projectstatic->weekWorkLoad[$tmpday];
+                $totalforeachday[$tmpday] += empty($projectstatic->weekWorkLoad[$tmpday]) ? 0 : $projectstatic->weekWorkLoad[$tmpday];
             }
         }
     }
@@ -894,7 +897,7 @@ if ($conf->use_javascript_ajax) {
 
     $idw = 0;
     while ($idw < 7) {
-        print "    updateTotal(" . ((int) $idw) . ", '" . dol_escape_js($modeinput) . "');";
+        print "    updateTotal(" . ((int)$idw) . ", '" . dol_escape_js($modeinput) . "');";
         $idw++;
     }
     print "\n});\n";

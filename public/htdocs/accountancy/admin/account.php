@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2013-2016  Olivier Geffroy     <jeff@jeffinfo.com>
- * Copyright (C) 2013-2024  Alexandre Spangaro  <aspangaro@easya.solutions>
- * Copyright (C) 2016-2018  Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2013-2016  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2016-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+
 /**
  * \file        htdocs/accountancy/admin/account.php
  * \ingroup     Accountancy (Double entries)
@@ -30,8 +34,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('accountancy', 'admin', 'bills', 'compta', 'salaries'));
@@ -273,7 +275,7 @@ if (strlen(trim($search_account))) {
     $weremovedsomezero = 0;
     if (strlen($search_account_tmp) <= $lengthpaddingaccount) {
         for ($i = 0; $i < $lengthpaddingaccount; $i++) {
-            if (preg_match('/0$/', $search_account_tmp)) {
+            if (str_ends_with($search_account_tmp, '0')) {
                 $weremovedsomezero++;
                 $search_account_tmp = preg_replace('/0$/', '', $search_account_tmp);
             }

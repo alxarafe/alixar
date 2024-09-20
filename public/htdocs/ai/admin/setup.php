@@ -1,9 +1,10 @@
 <?php
 
-/* Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2022 Alice Adminson <aadminson@example.com>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022       Alice Adminson              <aadminson@example.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormSetup;
 
 /**
  * \file    htdocs/ai/admin/setup.php
@@ -59,7 +63,6 @@ if (!$user->admin) {
 $useFormSetup = 1;
 
 if (!class_exists('FormSetup')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formsetup.class.php';
 }
 
 $formSetup = new FormSetup($db);
@@ -88,10 +91,10 @@ foreach ($arrayofia as $ia => $ialabel) {
     $item->cssClass = 'minwidth500 text-security';
 }
 
-$setupnotempty = + count($formSetup->items);
+$setupnotempty = +count($formSetup->items);
 
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 
 /*

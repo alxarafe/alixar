@@ -25,7 +25,6 @@
  * Put detailed description here.
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonhookactions.class.php';
 
 /**
  * Class ActionsMyModule

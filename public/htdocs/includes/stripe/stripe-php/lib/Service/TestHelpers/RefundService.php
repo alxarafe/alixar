@@ -13,9 +13,9 @@ class RefundService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Refund
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Refund
      */
     public function expire($id, $params = null, $opts = null)
     {

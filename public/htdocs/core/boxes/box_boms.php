@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015      Frederic France      <frederic.france@free.fr>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,30 +20,32 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       htdocs/core/boxes/box_boms.php
  *      \ingroup    bom
  *      \brief      Widget for latest modified BOM
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
-
 /**
  * Class to manage the box to show last modified BOMs
  */
 class box_boms extends ModeleBoxes
 {
-    public $boxcode  = "lastboms";
-    public $boximg   = "object_bom";
+    public $boxcode = "lastboms";
+    public $boximg = "object_bom";
     public $boxlabel = "BoxTitleLatestModifiedBoms";
-    public $depends  = array("bom");
+    public $depends = array("bom");
 
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -57,17 +59,14 @@ class box_boms extends ModeleBoxes
     /**
      *  Load data for box to show them later
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
         global $user, $langs, $conf;
 
         $this->max = $max;
-
-        include_once DOL_DOCUMENT_ROOT . '/bom/class/bom.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 
         $bomstatic = new BOM($this->db);
         $productstatic = new Product($this->db);
@@ -152,8 +151,8 @@ class box_boms extends ModeleBoxes
 
                 if ($num == 0) {
                     $this->info_box_contents[$line][0] = array(
-                    'td' => 'class="center"',
-                    'text' => '<span class="opacitymedium">' . $langs->trans("NoRecordedOrders") . '</span>'
+                        'td' => 'class="center"',
+                        'text' => '<span class="opacitymedium">' . $langs->trans("NoRecordedOrders") . '</span>'
                     );
                 }
 
@@ -176,10 +175,10 @@ class box_boms extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

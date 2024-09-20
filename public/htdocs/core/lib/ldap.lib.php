@@ -94,12 +94,12 @@ function ldap_prepare_head()
 /**
  *  Show button test LDAP synchro
  *
- *  @param  string  $butlabel       Label
- *  @param  string  $testlabel      Label
- *  @param  string  $key            Key
- *  @param  string  $dn             Dn
- *  @param  string  $objectclass    Class
- *  @return void
+ * @param string $butlabel Label
+ * @param string $testlabel Label
+ * @param string $key Key
+ * @param string $dn Dn
+ * @param string $objectclass Class
+ * @return void
  */
 function show_ldap_test_button($butlabel, $testlabel, $key, $dn, $objectclass)
 {
@@ -123,12 +123,12 @@ function show_ldap_test_button($butlabel, $testlabel, $key, $dn, $objectclass)
 /**
  * Show a LDAP array into an HTML output array.
  *
- * @param   array   $result     Array to show. This array is already encoded into charset_output
- * @param   int     $level      Level
- * @param   int     $count      Count
- * @param   string  $var        Var
- * @param   int     $hide       Hide
- * @param   int     $subcount   Subcount
+ * @param array $result Array to show. This array is already encoded into charset_output
+ * @param int $level Level
+ * @param int $count Count
+ * @param string $var Var
+ * @param int $hide Hide
+ * @param int $subcount Subcount
  * @return  int
  */
 function show_ldap_content($result, $level, $count, $var, $hide = 0, $subcount = 0)

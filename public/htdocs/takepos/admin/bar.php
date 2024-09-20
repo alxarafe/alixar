@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2008-2011  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2017  Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2022       Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2008-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2017  Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\FormProduct;
+
 /**
  *  \file       htdocs/takepos/admin/bar.php
  *  \ingroup    takepos
@@ -28,9 +33,7 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/takepos.lib.php";
 
 // Security check
@@ -100,13 +103,21 @@ print '<input type="hidden" name="token" value="' . newToken() . '">';
 print '<input type="hidden" name="action" value="set">';
 
 ?>
-<script type="text/javascript" src="<?php echo DOL_URL_ROOT ?>/takepos/js/jquery.colorbox-min.js"></script> <!-- TODO It seems we don't need this -->
-<script type="text/javascript">
-function Floors() {
-    console.log("Open box to select floor");
-    $.colorbox({href:"<?php echo DOL_URL_ROOT ?>/takepos/floors.php?mode=edit&place=0", width:"90%", height:"90%", transition:"none", iframe:"true", title:"<?php echo $langs->trans("Floors"); ?>"});
-}
-</script>
+    <script type="text/javascript"
+            src="<?php echo DOL_URL_ROOT ?>/takepos/js/jquery.colorbox-min.js"></script> <!-- TODO It seems we don't need this -->
+    <script type="text/javascript">
+        function Floors() {
+            console.log("Open box to select floor");
+            $.colorbox({
+                href: "<?php echo DOL_URL_ROOT ?>/takepos/floors.php?mode=edit&place=0",
+                width: "90%",
+                height: "90%",
+                transition: "none",
+                iframe: "true",
+                title: "<?php echo $langs->trans("Floors"); ?>"
+            });
+        }
+    </script>
 
 <?php
 

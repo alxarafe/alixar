@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017      ATM Consulting      <contact@atm-consulting.fr>
- * Copyright (C) 2017-2018 Laurent Destailleur <eldy@destailleur.fr>
+/* Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
+ * Copyright (C) 2017-2018  Laurent Destailleur         <eldy@destailleur.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *  \file       htdocs/blockedlog/admin/blockedlog.php
  *  \ingroup    blockedlog
@@ -27,7 +30,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/lib/blockedlog.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/blockedlog.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 
 // Load translation files required by the page

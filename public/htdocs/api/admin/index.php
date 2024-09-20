@@ -1,10 +1,10 @@
 <?php
 
 /* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2016	Laurent Destailleur		<eldy@users.sourceforge.org>
- * Copyright (C) 2011		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2012-2018	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2015		Jean-François Ferry		<jfefe@aternatik.fr>
+ * Copyright (C) 2005-2016	Laurent Destailleur		    <eldy@users.sourceforge.org>
+ * Copyright (C) 2011		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2012-2018	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2015		Jean-François Ferry		    <jfefe@aternatik.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -118,31 +118,29 @@ print "</tr>";
 
 print '<tr class="oddeven">';
 print '<td>' . $langs->trans("ApiProductionMode") . '</td>';
-$production_mode = (!getDolGlobalString('API_PRODUCTION_MODE') ? false : true);
+$production_mode = (bool)getDolGlobalString('API_PRODUCTION_MODE');
 if ($production_mode) {
     print '<td><a class="reposition" href="' . $_SERVER['PHP_SELF'] . '?action=setproductionmode&token=' . newToken() . '&status=0">';
     print img_picto($langs->trans("Activated"), 'switch_on');
-    print '</a></td>';
 } else {
     print '<td><a class="reposition" href="' . $_SERVER['PHP_SELF'] . '?action=setproductionmode&token=' . newToken() . '&status=1">';
     print img_picto($langs->trans("Disabled"), 'switch_off');
-    print '</a></td>';
 }
+print '</a></td>';
 print '<td>&nbsp;</td>';
 print '</tr>';
 
 print '<tr class="oddeven">';
 print '<td>' . $langs->trans("API_DISABLE_COMPRESSION") . '</td>';
-$disable_compression = (!getDolGlobalString('API_DISABLE_COMPRESSION') ? false : true);
+$disable_compression = (bool)getDolGlobalString('API_DISABLE_COMPRESSION');
 if ($disable_compression) {
     print '<td><a class="reposition" href="' . $_SERVER['PHP_SELF'] . '?action=setdisablecompression&token=' . newToken() . '&status=0">';
     print img_picto($langs->trans("Activated"), 'switch_on');
-    print '</a></td>';
 } else {
     print '<td><a class="reposition" href="' . $_SERVER['PHP_SELF'] . '?action=setdisablecompression&token=' . newToken() . '&status=1">';
     print img_picto($langs->trans("Disabled"), 'switch_off');
-    print '</a></td>';
 }
+print '</a></td>';
 print '<td>&nbsp;</td>';
 print '</tr>';
 

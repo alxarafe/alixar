@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2021       Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2022-2024	Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2021       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022-2024	Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,14 +19,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Members\Classes\ModeleNumRefMembers;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/member/mod_member_simple.php
  *  \ingroup    member
  *  \brief      File with class to manage the numbering module Simple for member references
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/member/modules_member.class.php';
-
 
 /**
  *  Class to manage the numbering module Simple for member references
@@ -55,8 +58,8 @@ class mod_member_simple extends ModeleNumRefMembers
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -68,7 +71,7 @@ class mod_member_simple extends ModeleNumRefMembers
     /**
      *  Return an example of numbering module values
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -80,8 +83,8 @@ class mod_member_simple extends ModeleNumRefMembers
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object Object we need next value for
-     *  @return boolean                 false if KO (there is a conflict), true if OK
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                 false if KO (there is a conflict), true if OK
      */
     public function canBeActivated($object)
     {
@@ -114,9 +117,9 @@ class mod_member_simple extends ModeleNumRefMembers
     /**
      *  Return next value
      *
-     *  @param  Societe     $objsoc     Object third party
-     *  @param  Adherent    $object     Object we need next value for
-     *  @return string|-1               Value if OK, -1 if KO
+     * @param Societe $objsoc Object third party
+     * @param Adherent $object Object we need next value for
+     * @return string|-1               Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $object)
     {
@@ -125,7 +128,7 @@ class mod_member_simple extends ModeleNumRefMembers
         // the ref of a member is the rowid
         $sql = "SELECT MAX(CAST(ref AS SIGNED)) as max";
         $sql .= " FROM " . MAIN_DB_PREFIX . "adherent";
-        $sql .= " WHERE entity = " . (int) $conf->entity;
+        $sql .= " WHERE entity = " . (int)$conf->entity;
 
         $resql = $db->query($sql);
         if ($resql) {
@@ -139,7 +142,7 @@ class mod_member_simple extends ModeleNumRefMembers
             dol_syslog("mod_member_simple::getNextValue", LOG_DEBUG);
             return -1;
         }
-        $max = str_pad((string) $max, getDolGlobalInt('MEMBER_MOD_SIMPLE_LPAD'), "0", STR_PAD_LEFT);
+        $max = str_pad((string)$max, getDolGlobalInt('MEMBER_MOD_SIMPLE_LPAD'), "0", STR_PAD_LEFT);
         return $max;
     }
 }

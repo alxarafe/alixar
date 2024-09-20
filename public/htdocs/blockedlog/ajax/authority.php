@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2017 ATM Consulting       <contact@atm-consulting.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\BloquedLog\Classes\BlockedLogAuthority;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *      \file       htdocs/blockedlog/ajax/authority.php
@@ -39,12 +42,9 @@ if (!defined('NOREQUIREHTML')) {
 
 $res = require '../../master.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/blockedlog.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/authority.class.php';
 
 $user = new User($db);
 $user->fetch(1); //TODO conf user authority
-
 
 /*
  * View
@@ -62,7 +62,6 @@ if ($auth->fetch(0, $signature) <= 0) {
     $auth->signature = $signature;
     $auth->create($user);
 }
-
 
 if (!empty($hash)) {
     echo $auth->checkBlockchain($hash) ? 'hashisok' : 'hashisjunk';

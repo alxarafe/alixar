@@ -37,8 +37,8 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 $id = GETPOSTINT('id');
 $action = GETPOST('action', 'aZ09');    // 'getSellerVATRates' or 'getBuyerVATRates'
-$htmlname   = GETPOST('htmlname', 'alpha');
-$selected   = (GETPOST('selected') ? GETPOST('selected') : '-1');
+$htmlname = GETPOST('htmlname', 'alpha');
+$selected = (GETPOST('selected') ? GETPOST('selected') : '-1');
 $productid = (GETPOSTINT('productid') ? GETPOSTINT('productid') : 0);
 
 // Security check
@@ -69,9 +69,9 @@ if (!empty($id) && !empty($action) && !empty($htmlname)) {
     }
 
     $return = array();
-    $return['value']    = $form->load_tva('tva_tx', $selected, $seller, $buyer, $productid, 0, '', true);
+    $return['value'] = $form->load_tva('tva_tx', $selected, $seller, $buyer, $productid, 0, '', true);
     $return['num'] = $form->num;
-    $return['error']    = $form->error;
+    $return['error'] = $form->error;
 
     echo json_encode($return);
 }

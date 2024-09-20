@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2012 Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2014-2015 Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
- * Copyright (C) 2021 		Gauthier VERDOL 	<gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2012  Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2014-2015  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2021 		Gauthier VERDOL 	        <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,18 +24,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\StockTransfer\Classes\ModelePDFStockTransfer;
+
 /**
  *  \file       htdocs/core/modules/stocktransfer/doc/pdf_eagle.modules.php
  *  \ingroup    expedition
  *  \brief      Class file used to generate the dispatch slips for the Eagle model
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/stocktransfer/modules_stocktransfer.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-
 
 /**
  *  Class to build sending documents with model Eagle
@@ -98,7 +97,7 @@ class pdf_eagle extends ModelePDFStockTransfer
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db     Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct(DoliDB $db)
     {
@@ -165,21 +164,22 @@ class pdf_eagle extends ModelePDFStockTransfer
         }*/
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build pdf onto disk
      *
-     *  @param      StockTransfer   $object             Object StockTransfer to generate (or id if old method)
-     *  @param      Translate       $outputlangs        Lang output object
-     *  @param      string          $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int             $hidedetails        Do not show line details
-     *  @param      int             $hidedesc           Do not show desc
-     *  @param      int             $hideref            Do not show ref
-     *  @return     int                                 1=OK, 0=KO
+     * @param StockTransfer $object Object StockTransfer to generate (or id if old method)
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                                 1=OK, 0=KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath = '', $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $conf, $langs, $hookmanager;
 
         $object->fetch_thirdparty();
@@ -286,7 +286,6 @@ class pdf_eagle extends ModelePDFStockTransfer
             if (file_exists($dir)) {
                 // Add pdfgeneration hook
                 if (!is_object($hookmanager)) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                     $hookmanager = new HookManager($this->db);
                 }
                 $hookmanager->initHooks(array('pdfgeneration'));
@@ -762,21 +761,21 @@ class pdf_eagle extends ModelePDFStockTransfer
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *  Show total to pay
      *
-     *  @param  TCPDF           $pdf            Object PDF
-     *  @param  StockTransfer   $object         Object StockTransfer
-     *  @param  int             $deja_regle     Amount already paid
-     *  @param  int             $posy           Start Position
-     *  @param  Translate       $outputlangs    Object langs
-     *  @return int                             Position for suite
+     * @param TCPDF $pdf Object PDF
+     * @param StockTransfer $object Object StockTransfer
+     * @param int $deja_regle Amount already paid
+     * @param int $posy Start Position
+     * @param Translate $outputlangs Object langs
+     * @return int                             Position for suite
      */
     protected function _tableau_tot(&$pdf, $object, $deja_regle, $posy, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         $default_font_size = pdf_getPDFFontSize($outputlangs);
 
         $tab2_top = $posy;
@@ -876,22 +875,23 @@ class pdf_eagle extends ModelePDFStockTransfer
         return ($tab2_top + ($tab2_hl * $index));
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     float|int   $tab_top        Top position of table
-     *   @param     float|int   $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        Hide top bar of array
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param float|int $tab_top Top position of table
+     * @param float|int $tab_height Height of table (rectangle)
+     * @param int $nexY Y
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop Hide top bar of array
+     * @param int $hidebottom Hide bottom bar of array
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf;
 
         // Force to disable hidetop and hidebottom
@@ -975,7 +975,7 @@ class pdf_eagle extends ModelePDFStockTransfer
     /**
      * Used to know if at least one line of Stock Transfer object has a batch set
      *
-     * @param   StockTransfer   $object Stock Transfer object
+     * @param StockTransfer $object Stock Transfer object
      * @return  boolean         true if at least one line has batch set, false if not
      */
     public function atLeastOneBatch($object)
@@ -997,19 +997,20 @@ class pdf_eagle extends ModelePDFStockTransfer
         return false;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF           $pdf            Object PDF
-     *  @param  StockTransfer   $object         Object to show
-     *  @param  int             $showaddress    0=no, 1=yes
-     *  @param  Translate       $outputlangs    Object lang for output
-     *  @return float|int                       Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param StockTransfer $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @return float|int                       Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $langs;
 
         $langs->load("orders");
@@ -1260,19 +1261,20 @@ class pdf_eagle extends ModelePDFStockTransfer
         return $top_shift;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show footer of page. Need this->emetteur object
      *
-     *  @param  TCPDF           $pdf                PDF
-     *  @param  StockTransfer   $object             Object to show
-     *  @param  Translate       $outputlangs        Object lang for output
-     *  @param  int             $hidefreetext       1=Hide free text
-     *  @return int                                 Return height of bottom margin including footer text
+     * @param TCPDF $pdf PDF
+     * @param StockTransfer $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return int                                 Return height of bottom margin including footer text
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         $showdetails = getDolGlobalInt('MAIN_GENERATE_DOCUMENTS_SHOW_FOOT_DETAILS', 0);
         return pdf_pagefoot($pdf, $outputlangs, 'SHIPPING_FREE_TEXT', $this->emetteur, $this->marge_basse, $this->marge_gauche, $this->page_hauteur, $object, $showdetails, $hidefreetext);
     }

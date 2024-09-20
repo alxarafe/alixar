@@ -27,14 +27,15 @@
  *  \brief      Library of accountancy functions
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 
 /**
  *  Check if a value is empty with some options
  *
  * @author  Michael - https://www.php.net/manual/fr/function.empty.php#90767
- * @param   mixed       $var            Value to test
- * @param   boolean     $allow_false    Setting this to true will make the function consider a boolean value of false as NOT empty. This parameter is false by default.
- * @param   boolean     $allow_ws       Setting this to true will make the function consider a string with nothing but white space as NOT empty. This parameter is false by default.
+ * @param mixed $var Value to test
+ * @param boolean $allow_false Setting this to true will make the function consider a boolean value of false as NOT empty. This parameter is false by default.
+ * @param boolean $allow_ws Setting this to true will make the function consider a string with nothing but white space as NOT empty. This parameter is false by default.
  * @return  boolean                     True of False
  */
 function is_empty($var, $allow_false = false, $allow_ws = false)
@@ -48,8 +49,8 @@ function is_empty($var, $allow_false = false, $allow_ws = false)
 /**
  *  Prepare array with list of tabs
  *
- *  @param  AccountingAccount   $object     Accounting account
- *  @return array               Array of tabs to show
+ * @param AccountingAccount $object Accounting account
+ * @return array               Array of tabs to show
  */
 function accounting_prepare_head(AccountingAccount $object)
 {
@@ -77,7 +78,7 @@ function accounting_prepare_head(AccountingAccount $object)
 /**
  * Return accounting account without zero on the right
  *
- * @param   string  $account        Accounting account
+ * @param string $account Accounting account
  * @return  string                  String without zero on the right
  */
 function clean_account($account)
@@ -90,7 +91,7 @@ function clean_account($account)
 /**
  * Return General accounting account with defined length (used for product and miscellaneous)
  *
- * @param   string  $account        General accounting account
+ * @param string $account General accounting account
  * @return  string                  String with defined length
  */
 function length_accountg($account)
@@ -129,7 +130,7 @@ function length_accountg($account)
 /**
  * Return Auxiliary accounting account of thirdparties with defined length
  *
- * @param   string  $accounta       Auxiliary accounting account
+ * @param string $accounta Auxiliary accounting account
  * @return  string                  String with defined length
  */
 function length_accounta($accounta)
@@ -166,22 +167,21 @@ function length_accounta($accounta)
 }
 
 
-
 /**
  *  Show header of a page used to transfer/dispatch data in accounting
  *
- *  @param  string              $nom            Name of report
- *  @param  string              $variant        Link for alternate report
- *  @param  string              $period         Period of report
- *  @param  string              $periodlink     Link to switch period
- *  @param  string              $description    Description
- *  @param  integer             $builddate      Date of generation
- *  @param  string              $exportlink     Link for export or ''
- *  @param  array               $moreparam      Array with list of params to add into hidden fields of form
- *  @param  string              $calcmode       Calculation mode
- *  @param  string              $varlink        Add a variable into the address of the page
- *  @param  array               $moreoptions    Array with list of params to add to table
- *  @return void
+ * @param string $nom Name of report
+ * @param string $variant Link for alternate report
+ * @param string $period Period of report
+ * @param string $periodlink Link to switch period
+ * @param string $description Description
+ * @param integer $builddate Date of generation
+ * @param string $exportlink Link for export or ''
+ * @param array $moreparam Array with list of params to add into hidden fields of form
+ * @param string $calcmode Calculation mode
+ * @param string $varlink Add a variable into the address of the page
+ * @param array $moreoptions Array with list of params to add to table
+ * @return void
  */
 function journalHead($nom, $variant, $period, $periodlink, $description, $builddate, $exportlink = '', $moreparam = array(), $calcmode = '', $varlink = '', $moreoptions = array())
 {
@@ -319,16 +319,16 @@ function getDefaultDatesForTransfer()
             $date_end = dol_get_last_day($year_end, $month_end);
         }
     } elseif ($periodbydefaultontransfer == 1) {    // current month
-        $year_current = (int) dol_print_date(dol_now('gmt'), "%Y", 'gmt');
-        $pastmonth = (int) dol_print_date(dol_now('gmt'), '%m', 'gmt');
+        $year_current = (int)dol_print_date(dol_now('gmt'), "%Y", 'gmt');
+        $pastmonth = (int)dol_print_date(dol_now('gmt'), '%m', 'gmt');
         $pastmonthyear = $year_current;
         if ($pastmonth == 0) {
             $pastmonth = 12;
             $pastmonthyear--;
         }
     } else {    // previous month
-        $year_current = (int) dol_print_date(dol_now('gmt'), "%Y", 'gmt');
-        $pastmonth = (int) dol_print_date(dol_now('gmt'), '%m', 'gmt') - 1;
+        $year_current = (int)dol_print_date(dol_now('gmt'), "%Y", 'gmt');
+        $pastmonth = (int)dol_print_date(dol_now('gmt'), '%m', 'gmt') - 1;
         $pastmonthyear = $year_current;
         if ($pastmonth == 0) {
             $pastmonth = 12;
@@ -347,9 +347,9 @@ function getDefaultDatesForTransfer()
 /**
  * Get current period of fiscal year
  *
- * @param   DoliDB      $db             Database handler
- * @param   stdClass    $conf           Config
- * @param   int         $from_time      [=null] Get current time or set time to find fiscal period
+ * @param DoliDB $db Database handler
+ * @param stdClass $conf Config
+ * @param int $from_time [=null] Get current time or set time to find fiscal period
  * @return  array       Period of fiscal year : [date_start, date_end]
  */
 function getCurrentPeriodOfFiscalYear($db, $conf, $from_time = null)
@@ -361,7 +361,7 @@ function getCurrentPeriodOfFiscalYear($db, $conf, $from_time = null)
     }
     $from_db_time = $db->idate($from_time);
 
-    $sql  = "SELECT date_start, date_end FROM " . $db->prefix() . "accounting_fiscalyear";
+    $sql = "SELECT date_start, date_end FROM " . $db->prefix() . "accounting_fiscalyear";
     $sql .= " WHERE date_start <= '" . $db->escape($from_db_time) . "' AND date_end >= '" . $db->escape($from_db_time) . "'";
     $sql .= $db->order('date_start', 'DESC');
     $sql .= $db->plimit(1);
@@ -373,7 +373,7 @@ function getCurrentPeriodOfFiscalYear($db, $conf, $from_time = null)
         $date_end = $db->jdate($obj->date_end);
     } else {
         $month_start = 1;
-        $conf_fiscal_month_start = (int) $conf->global->SOCIETE_FISCAL_MONTH_START;
+        $conf_fiscal_month_start = (int)$conf->global->SOCIETE_FISCAL_MONTH_START;
         if ($conf_fiscal_month_start >= 1 && $conf_fiscal_month_start <= 12) {
             $month_start = $conf_fiscal_month_start;
         }

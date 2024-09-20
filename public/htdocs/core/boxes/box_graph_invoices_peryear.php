@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2013 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2013       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,30 +18,29 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+
 /**
  *  \file       htdocs/core/boxes/box_graph_invoices_peryear.php
  *  \ingroup    invoices
  *  \brief      Box to show graph of invoices per year
  */
 
-include_once DOL_DOCUMENT_ROOT . '/core/boxes/modules_boxes.php';
-
-
 /**
  * Class to manage the box to show invoices per year graph
  */
 class box_graph_invoices_peryear extends ModeleBoxes
 {
-    public $boxcode  = "invoicesperyear";
-    public $boximg   = "object_bill";
+    public $boxcode = "invoicesperyear";
+    public $boximg = "object_bill";
     public $boxlabel = "BoxCustomersInvoicesPerYear";
-    public $depends  = array("facture");
+    public $depends = array("facture");
 
     /**
      *  Constructor
      *
-     *  @param  DoliDB  $db         Database handler
-     *  @param  string  $param      More parameters
+     * @param DoliDB $db Database handler
+     * @param string $param More parameters
      */
     public function __construct($db, $param)
     {
@@ -55,8 +54,8 @@ class box_graph_invoices_peryear extends ModeleBoxes
     /**
      *  Load data into info_box_contents array to show array later.
      *
-     *  @param  int     $max        Maximum number of records to load
-     *  @return void
+     * @param int $max Maximum number of records to load
+     * @return void
      */
     public function loadBox($max = 5)
     {
@@ -102,8 +101,6 @@ class box_graph_invoices_peryear extends ModeleBoxes
             $param_year = 'DOLUSERCOOKIE_box_' . $this->boxcode . '_year';
             $param_showtot = 'DOLUSERCOOKIE_box_' . $this->boxcode . '_showtot';
 
-            include_once DOL_DOCUMENT_ROOT . '/core/class/dolgraph.class.php';
-            include_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facturestats.class.php';
             $autosetarray = preg_split("/[,;:]+/", GETPOST('DOL_AUTOSET_COOKIE'));
             if (in_array('DOLUSERCOOKIE_box_' . $this->boxcode, $autosetarray)) {
                 $endyear = GETPOSTINT($param_year);
@@ -210,10 +207,10 @@ class box_graph_invoices_peryear extends ModeleBoxes
     /**
      *  Method to show box
      *
-     *  @param  array   $head       Array with properties of box title
-     *  @param  array   $contents   Array with properties of box lines
-     *  @param  int     $nooutput   No print, only return string
-     *  @return string
+     * @param array $head Array with properties of box title
+     * @param array $contents Array with properties of box lines
+     * @param int $nooutput No print, only return string
+     * @return string
      */
     public function showBox($head = null, $contents = null, $nooutput = 0)
     {

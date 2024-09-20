@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2001-2004 Rodolphe Quiedeville        <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019 Laurent Destailleur         <eldy@users.sourceforge.net>
- * Copyright (C) 2008      Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2008       Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
  * Copyright (C) 2019-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -21,22 +21,26 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       htdocs/comm/remx.php
  *      \ingroup    societe
  *      \brief      Page to edit absolute discounts for a customer
  */
 
-if (! defined('CSRFCHECK_WITH_TOKEN')) {
+if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');
 }       // Force use of CSRF protection with tokens even for GET
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/discount.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('orders', 'bills', 'companies'));
@@ -62,7 +66,6 @@ $result = restrictedArea($user, 'societe', $id, '&societe', '', 'fk_soc', 'rowid
 $permissiontocreate = ($user->hasRight('societe', 'creer') || $user->hasRight('facture', 'creer'));
 
 
-
 /*
  * Actions
  */
@@ -86,7 +89,7 @@ if ($action == 'confirm_split' && GETPOST("confirm", "alpha") == 'yes' && $permi
         $error++;
         setEventMessages($langs->trans("ErrorFailedToLoadDiscount"), null, 'errors');
     }
-    if (!$error && price2num((float) $amount_ttc_1 + (float) $amount_ttc_2) != $discount->amount_ttc) {
+    if (!$error && price2num((float)$amount_ttc_1 + (float)$amount_ttc_2) != $discount->amount_ttc) {
         $error++;
         setEventMessages($langs->trans("TotalOfTwoDiscountMustEqualsOriginal"), null, 'errors');
     }
@@ -138,7 +141,7 @@ if ($action == 'confirm_split' && GETPOST("confirm", "alpha") == 'yes' && $permi
         $newdiscount1->amount_tva = price2num($newdiscount1->amount_ttc - $newdiscount1->amount_ht);
         $newdiscount2->amount_tva = price2num($newdiscount2->amount_ttc - $newdiscount2->amount_ht);
 
-        $newdiscount1->multicurrency_amount_ttc = (float) $amount_ttc_1 * ($discount->multicurrency_amount_ttc / $discount->amount_ttc);
+        $newdiscount1->multicurrency_amount_ttc = (float)$amount_ttc_1 * ($discount->multicurrency_amount_ttc / $discount->amount_ttc);
         $newdiscount2->multicurrency_amount_ttc = price2num($discount->multicurrency_amount_ttc - $newdiscount1->multicurrency_amount_ttc);
         $newdiscount1->multicurrency_amount_ht = price2num($newdiscount1->multicurrency_amount_ttc / (1 + $newdiscount1->tva_tx / 100), 'MT');
         $newdiscount2->multicurrency_amount_ht = price2num($newdiscount2->multicurrency_amount_ttc / (1 + $newdiscount2->tva_tx / 100), 'MT');
@@ -184,10 +187,10 @@ if ($action == 'setremise' && $permissiontocreate) {
 
             if ($discountid > 0) {
                 if (!empty($backtopage)) {
-                    header("Location: " . $backtopage . '&discountid=' . ((int) $discountid));
+                    header("Location: " . $backtopage . '&discountid=' . ((int)$discountid));
                     exit;
                 } else {
-                    header("Location: remx.php?id=" . ((int) $id));
+                    header("Location: remx.php?id=" . ((int)$id));
                     exit;
                 }
             } else {
@@ -215,7 +218,6 @@ if (GETPOST('action', 'aZ09') == 'confirm_remove' && GETPOST("confirm") == 'yes'
         $db->rollback();
     }
 }
-
 
 /*
  * View
@@ -275,8 +277,8 @@ if ($socid > 0) {
         $remise_all = $remise_user = 0;
         $sql = "SELECT SUM(rc.amount_ht) as amount, rc.fk_user";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe_remise_except as rc";
-        $sql .= " WHERE rc.fk_soc = " . ((int) $object->id);
-        $sql .= " AND rc.entity = " . ((int) $conf->entity);
+        $sql .= " WHERE rc.fk_soc = " . ((int)$object->id);
+        $sql .= " AND rc.entity = " . ((int)$conf->entity);
         $sql .= " AND discount_type = 0"; // Exclude supplier discounts
         $sql .= " AND (fk_facture_line IS NULL AND fk_facture IS NULL)";
         $sql .= " GROUP BY rc.fk_user";
@@ -304,8 +306,8 @@ if ($socid > 0) {
         $remise_all = $remise_user = 0;
         $sql = "SELECT SUM(rc.amount_ht) as amount, rc.fk_user";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe_remise_except as rc";
-        $sql .= " WHERE rc.fk_soc = " . ((int) $object->id);
-        $sql .= " AND rc.entity = " . ((int) $conf->entity);
+        $sql .= " WHERE rc.fk_soc = " . ((int)$object->id);
+        $sql .= " AND rc.entity = " . ((int)$conf->entity);
         $sql .= " AND discount_type = 1"; // Exclude customer discounts
         $sql .= " AND (fk_invoice_supplier_line IS NULL AND fk_invoice_supplier IS NULL)";
         $sql .= " GROUP BY rc.fk_user";
@@ -443,8 +445,8 @@ if ($socid > 0) {
         $sql .= " fa.ref as ref, fa.type as type";
         $sql .= " FROM  " . MAIN_DB_PREFIX . "user as u, " . MAIN_DB_PREFIX . "societe_remise_except as rc";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "facture as fa ON rc.fk_facture_source = fa.rowid";
-        $sql .= " WHERE rc.fk_soc = " . ((int) $object->id);
-        $sql .= " AND rc.entity = " . ((int) $conf->entity);
+        $sql .= " WHERE rc.fk_soc = " . ((int)$object->id);
+        $sql .= " AND rc.entity = " . ((int)$conf->entity);
         $sql .= " AND u.rowid = rc.fk_user";
         $sql .= " AND rc.discount_type = 0"; // Eliminate supplier discounts
         $sql .= " AND (rc.fk_facture_line IS NULL AND rc.fk_facture IS NULL)";
@@ -563,7 +565,7 @@ if ($socid > 0) {
 
             if (count($showconfirminfo)) {
                 $amount1 = price2num($showconfirminfo['amount_ttc'] / 2, 'MT');
-                $amount2 = ($showconfirminfo['amount_ttc'] - (float) $amount1);
+                $amount2 = ($showconfirminfo['amount_ttc'] - (float)$amount1);
                 $formquestion = array(
                     'text' => $langs->trans('TypeAmountOfEachNewDiscount'),
                     0 => array('type' => 'text', 'name' => 'amount_ttc_1', 'label' => $langs->trans("AmountTTC") . ' 1', 'value' => $amount1, 'size' => '5'),
@@ -596,8 +598,8 @@ if ($socid > 0) {
         $sql .= " fa.ref, fa.type as type";
         $sql .= " FROM  " . MAIN_DB_PREFIX . "user as u, " . MAIN_DB_PREFIX . "societe_remise_except as rc";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "facture_fourn as fa ON rc.fk_invoice_supplier_source = fa.rowid";
-        $sql .= " WHERE rc.fk_soc = " . ((int) $object->id);
-        $sql .= " AND rc.entity = " . ((int) $conf->entity);
+        $sql .= " WHERE rc.fk_soc = " . ((int)$object->id);
+        $sql .= " AND rc.entity = " . ((int)$conf->entity);
         $sql .= " AND u.rowid = rc.fk_user";
         $sql .= " AND rc.discount_type = 1"; // Eliminate customer discounts
         $sql .= " AND (rc.fk_invoice_supplier IS NULL AND rc.fk_invoice_supplier_line IS NULL)";
@@ -710,7 +712,7 @@ if ($socid > 0) {
 
             if (count($showconfirminfo)) {
                 $amount1 = price2num($showconfirminfo['amount_ttc'] / 2, 'MT');
-                $amount2 = ($showconfirminfo['amount_ttc'] - (float) $amount1);
+                $amount2 = ($showconfirminfo['amount_ttc'] - (float)$amount1);
                 $formquestion = array(
                     'text' => $langs->trans('TypeAmountOfEachNewDiscount'),
                     0 => array('type' => 'text', 'name' => 'amount_ttc_1', 'label' => $langs->trans("AmountTTC") . ' 1', 'value' => $amount1, 'size' => '5'),
@@ -756,7 +758,7 @@ if ($socid > 0) {
         $sql .= " , " . MAIN_DB_PREFIX . "facturedet as fc";
         $sql .= " , " . MAIN_DB_PREFIX . "societe_remise_except as rc";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "facture as fa ON rc.fk_facture_source = fa.rowid";
-        $sql .= " WHERE rc.fk_soc = " . ((int) $object->id);
+        $sql .= " WHERE rc.fk_soc = " . ((int)$object->id);
         $sql .= " AND rc.fk_facture_line = fc.rowid";
         $sql .= " AND fc.fk_facture = f.rowid";
         $sql .= " AND rc.fk_user = u.rowid";
@@ -774,7 +776,7 @@ if ($socid > 0) {
         $sql2 .= " , " . MAIN_DB_PREFIX . "user as u";
         $sql2 .= " , " . MAIN_DB_PREFIX . "societe_remise_except as rc";
         $sql2 .= " LEFT JOIN " . MAIN_DB_PREFIX . "facture as fa ON rc.fk_facture_source = fa.rowid";
-        $sql2 .= " WHERE rc.fk_soc = " . ((int) $object->id);
+        $sql2 .= " WHERE rc.fk_soc = " . ((int)$object->id);
         $sql2 .= " AND rc.fk_facture = f.rowid";
         $sql2 .= " AND rc.fk_user = u.rowid";
         $sql2 .= " AND rc.discount_type = 0"; // Eliminate supplier discounts
@@ -925,7 +927,7 @@ if ($socid > 0) {
         $sql .= " , " . MAIN_DB_PREFIX . "facture_fourn_det as fc";
         $sql .= " , " . MAIN_DB_PREFIX . "societe_remise_except as rc";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "facture_fourn as fa ON rc.fk_invoice_supplier_source = fa.rowid";
-        $sql .= " WHERE rc.fk_soc = " . ((int) $object->id);
+        $sql .= " WHERE rc.fk_soc = " . ((int)$object->id);
         $sql .= " AND rc.fk_invoice_supplier_line = fc.rowid";
         $sql .= " AND fc.fk_facture_fourn = f.rowid";
         $sql .= " AND rc.fk_user = u.rowid";
@@ -944,7 +946,7 @@ if ($socid > 0) {
         $sql2 .= " , " . MAIN_DB_PREFIX . "user as u";
         $sql2 .= " , " . MAIN_DB_PREFIX . "societe_remise_except as rc";
         $sql2 .= " LEFT JOIN " . MAIN_DB_PREFIX . "facture_fourn as fa ON rc.fk_invoice_supplier_source = fa.rowid";
-        $sql2 .= " WHERE rc.fk_soc = " . ((int) $object->id);
+        $sql2 .= " WHERE rc.fk_soc = " . ((int)$object->id);
         $sql2 .= " AND rc.fk_invoice_supplier = f.rowid";
         $sql2 .= " AND rc.fk_user = u.rowid";
         $sql2 .= " AND rc.discount_type = 1"; // Eliminate customer discounts

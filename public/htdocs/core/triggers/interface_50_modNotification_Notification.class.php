@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2006-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2011      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013-2014 Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2022      Anthony Berton     	<anthony.berton@bb2a.fr>
+/* Copyright (C) 2006-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2014  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2022       Anthony Berton     	        <anthony.berton@bb2a.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -27,9 +27,13 @@
  *  \brief      File of class of triggers for notification module
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/dolibarrtriggers.class.php';
-include_once DOL_DOCUMENT_ROOT . '/core/class/notify.class.php';
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Notify;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
 
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/dolibarrtriggers.class.php';
 
 /**
  *  Class of triggers for notification module
@@ -60,11 +64,11 @@ class InterfaceNotification extends DolibarrTriggers
      * Function called when a Dolibarr business event is done.
      * All functions "runTrigger" are triggered if file is inside directory htdocs/core/triggers or htdocs/module/code/triggers (and declared)
      *
-     * @param string        $action     Event action code
-     * @param Object        $object     Object
-     * @param User          $user       Object user
-     * @param Translate     $langs      Object langs
-     * @param conf          $conf       Object conf
+     * @param string $action Event action code
+     * @param Object $object Object
+     * @param User $user Object user
+     * @param Translate $langs Object langs
+     * @param Conf $conf Object conf
      * @return int                      Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
@@ -76,7 +80,6 @@ class InterfaceNotification extends DolibarrTriggers
         }
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('notification'));
@@ -113,7 +116,6 @@ class InterfaceNotification extends DolibarrTriggers
         global $hookmanager;
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('notification'));

@@ -48,9 +48,9 @@ class FreeBusyData
     /**
      * Adds free or busytime to the data.
      *
-     * @param int    $start
-     * @param int    $end
-     * @param string $type  FREE, BUSY, BUSY-UNAVAILABLE or BUSY-TENTATIVE
+     * @param int $start
+     * @param int $end
+     * @param string $type FREE, BUSY, BUSY-UNAVAILABLE or BUSY-TENTATIVE
      */
     public function add($start, $end, $type)
     {

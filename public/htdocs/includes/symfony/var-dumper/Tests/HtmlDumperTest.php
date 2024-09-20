@@ -45,7 +45,7 @@ class HtmlDumperTest extends TestCase
         $intMax = PHP_INT_MAX;
         preg_match('/sf-dump-\d+/', $out, $dumpId);
         $dumpId = $dumpId[0];
-        $res = (int) $var['res'];
+        $res = (int)$var['res'];
 
         $r = defined('HHVM_VERSION') ? '' : '<a class=sf-dump-ref>#%d</a>';
         $this->assertStringMatchesFormat(

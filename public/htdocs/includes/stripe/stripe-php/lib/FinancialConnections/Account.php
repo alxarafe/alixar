@@ -53,9 +53,9 @@ class Account extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\FinancialConnections\Account the disconnected account
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\FinancialConnections\Account the disconnected account
      */
     public function disconnect($params = null, $opts = null)
     {
@@ -71,9 +71,9 @@ class Account extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\FinancialConnections\AccountOwner> list of BankConnectionsResourceOwners
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\FinancialConnections\AccountOwner> list of BankConnectionsResourceOwners
      */
     public static function allOwners($id, $params = null, $opts = null)
     {
@@ -89,9 +89,9 @@ class Account extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\FinancialConnections\Account the refreshed account
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\FinancialConnections\Account the refreshed account
      */
     public function refreshAccount($params = null, $opts = null)
     {

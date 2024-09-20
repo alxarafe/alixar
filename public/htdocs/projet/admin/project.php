@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2010-2014  Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2016	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2011-2015	Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2011-2018	Philippe Grand		<philippe.grand@atoo-net.com>
- * Copyright (C) 2013		Florian Henry		<florian.henry@open-concept.pro>
- * Copyright (C) 2015       Marcos García       <marcosgdf@gmail.com>
- * Copyright (C) 2018		Ferran Marcet		<fmarcet@2byte.es>
+/* Copyright (C) 2010-2014  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2016	Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2015	Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2011-2018	Philippe Grand		        <philippe.grand@atoo-net.com>
+ * Copyright (C) 2013		Florian Henry		        <florian.henry@open-concept.pro>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018		Ferran Marcet		        <fmarcet@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -25,6 +25,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *  \file       htdocs/projet/admin/project.php
  *  \ingroup    project
@@ -35,8 +38,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/task.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('admin', 'errors', 'other', 'projects'));
@@ -105,7 +106,7 @@ if ($action == 'updateMaskTask') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/project/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -139,7 +140,7 @@ if ($action == 'updateMaskTask') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/project/task/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -241,7 +242,7 @@ if ($action == 'updateMaskTask') {
  * View
  */
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 llxHeader("", $langs->trans("ProjectsSetup"));
 
@@ -253,7 +254,6 @@ print load_fiche_titre($langs->trans("ProjectsSetup"), $linkback, 'title_setup')
 $head = project_admin_prepare_head();
 
 print dol_get_fiche_head($head, 'project', $langs->trans("Projects"), -1, 'project');
-
 
 
 // Main options
@@ -291,7 +291,6 @@ print '</table></form>';
 print '<br>';
 
 
-
 /*
  * Projects Numbering model
  */
@@ -323,7 +322,7 @@ foreach ($dirmodels as $reldir) {
 
                     require_once $dir . $file . '.php';
 
-                    $module = new $file();
+                    $module = new $file($db);
 
                     // Show modules according to features level
                     if ($module->version == 'development' && getDolGlobalInt('MAIN_FEATURES_LEVEL') < 2) {
@@ -421,7 +420,7 @@ if (!getDolGlobalString('PROJECT_HIDE_TASKS')) {
 
                         require_once $dir . $file . '.php';
 
-                        $module = new $file();
+                        $module = new $file($db);
 
                         // Show modules according to features level
                         if ($module->version == 'development' && getDolGlobalInt('MAIN_FEATURES_LEVEL') < 2) {
@@ -634,8 +633,6 @@ foreach ($dirmodels as $reldir) {
 print '</table>';
 print '</div>';
 print '<br>';
-
-
 
 if (!getDolGlobalString('PROJECT_HIDE_TASKS')) {
     /*

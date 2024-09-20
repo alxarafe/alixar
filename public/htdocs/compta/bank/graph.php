@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *  \file       htdocs/compta/bank/graph.php
  *  \ingroup    banque
@@ -29,8 +33,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories'));
@@ -58,7 +60,6 @@ if (GETPOST("mode") == 'showalltime') {
 }
 $error = 0;
 
-
 /*
  * View
  */
@@ -74,7 +75,6 @@ if (GETPOSTINT("year")) {
 if (GETPOSTINT("month")) {
     $month = sprintf("%02d", GETPOSTINT("month"));
 }
-
 
 $object = new Account($db);
 if (GETPOST('account') && !preg_match('/,/', GETPOST('account'))) { // if for a particular account and not a list
@@ -128,8 +128,8 @@ if ($result < 0) {
         // Loading table $amounts
         $amounts = array();
 
-        $monthnext = (int) $month + 1;
-        $yearnext = (int) $year;
+        $monthnext = (int)$month + 1;
+        $yearnext = (int)$year;
         if ($monthnext > 12) {
             $monthnext = 1;
             $yearnext++;
@@ -539,8 +539,8 @@ if ($result < 0) {
         $credits = array();
         $debits = array();
 
-        $monthnext = (int) $month + 1;
-        $yearnext = (int) $year;
+        $monthnext = (int)$month + 1;
+        $yearnext = (int)$year;
         if ($monthnext > 12) {
             $monthnext = 1;
             $yearnext++;
@@ -576,8 +576,8 @@ if ($result < 0) {
             dol_print_error($db);
         }
 
-        $monthnext = (int) $month + 1;
-        $yearnext = (int) $year;
+        $monthnext = (int)$month + 1;
+        $yearnext = (int)$year;
         if ($monthnext > 12) {
             $monthnext = 1;
             $yearnext++;
@@ -814,10 +814,10 @@ print '</table>';
 
 // Graphs
 if ($mode == 'standard') {
-    $prevyear = (int) $year;
-    $nextyear = (int) $year;
-    $prevmonth = (int) $month - 1;
-    $nextmonth = (int) $month + 1;
+    $prevyear = (int)$year;
+    $nextyear = (int)$year;
+    $prevmonth = (int)$month - 1;
+    $nextmonth = (int)$month + 1;
     if ($prevmonth < 1) {
         $prevmonth = 12;
         $prevyear--;
@@ -845,8 +845,8 @@ if ($mode == 'standard') {
     print '</div>';
 
     // For year
-    $prevyear = (int) $year - 1;
-    $nextyear = (int) $year + 1;
+    $prevyear = (int)$year - 1;
+    $nextyear = (int)$year + 1;
     $nextyear = sprintf('%04d', $nextyear);
     $prevyear = sprintf('%04d', $prevyear);
     $link = "<a href='" . $_SERVER["PHP_SELF"] . "?account=" . $account . (GETPOST("option") != 'all' ? '' : '&option=all') . "&year=" . ($prevyear) . "'>" . img_previous('', 'class="valignbottom"') . "</a> " . $langs->trans("Year") . " <a href='" . $_SERVER["PHP_SELF"] . "?account=" . $account . (GETPOST("option") != 'all' ? '' : '&option=all') . "&year=" . ($nextyear) . "'>" . img_next('', 'class="valignbottom"') . "</a>";

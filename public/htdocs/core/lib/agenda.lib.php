@@ -26,29 +26,41 @@
  * \brief       Set of function for the agenda module
  */
 
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Resource\Classes\Dolresource;
+use Dolibarr\Code\Resource\Classes\FormResource;
+use Dolibarr\Code\Societe\Classes\Client;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 
 /**
  * Show filter form in agenda view
  *
- * @param   Form            $form               Form object
- * @param   int             $canedit            Can edit filter fields
- * @param   int             $status             Status
- * @param   int             $year               Year
- * @param   int             $month              Month
- * @param   int             $day                Day
- * @param   int             $showbirthday       Show birthday
- * @param   string          $filtera            Filter on create by user
- * @param   string          $filtert            Filter on assigned to user
- * @param   string          $filtered           Filter of done by user
- * @param   int             $pid                Product id
- * @param   int             $socid              Third party id
- * @param   string          $action             Action string
- * @param   array           $showextcals        Array with list of external calendars (used to show links to select calendar), or -1 to show no legend
- * @param   string|array    $actioncode         Preselected value(s) of actioncode for filter on event type
- * @param   int             $usergroupid        Id of group to filter on users
- * @param   string          $excludetype        A type to exclude ('systemauto', 'system', '')
- * @param   int             $resourceid         Preselected value of resource for filter on resource
- * @param   int             $search_categ_cus   Tag id
+ * @param Form $form Form object
+ * @param int $canedit Can edit filter fields
+ * @param int $status Status
+ * @param int $year Year
+ * @param int $month Month
+ * @param int $day Day
+ * @param int $showbirthday Show birthday
+ * @param string $filtera Filter on create by user
+ * @param string $filtert Filter on assigned to user
+ * @param string $filtered Filter of done by user
+ * @param int $pid Product id
+ * @param int $socid Third party id
+ * @param string $action Action string
+ * @param array $showextcals Array with list of external calendars (used to show links to select calendar), or -1 to show no legend
+ * @param string|array $actioncode Preselected value(s) of actioncode for filter on event type
+ * @param int $usergroupid Id of group to filter on users
+ * @param string $excludetype A type to exclude ('systemauto', 'system', '')
+ * @param int $resourceid Preselected value of resource for filter on resource
+ * @param int $search_categ_cus Tag id
  * @return  void
  */
 function print_actions_filter(
@@ -71,25 +83,25 @@ function print_actions_filter(
     $excludetype = '',
     $resourceid = 0,
     $search_categ_cus = 0
-) {
+)
+{
     global $user, $langs, $db, $hookmanager;
     global $massaction;
 
     $langs->load("companies");
 
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
     $formactions = new FormActions($db);
 
     // Filters
     //print '<form name="listactionsfilter" class="listactionsfilter" action="' . $_SERVER["PHP_SELF"] . '" method="get">';
     print '<input type="hidden" name="token" value="' . newToken() . '">';
-    print '<input type="hidden" name="year" value="' . ((int) $year) . '">';
-    print '<input type="hidden" name="month" value="' . ((int) $month) . '">';
-    print '<input type="hidden" name="day" value="' . ((int) $day) . '">';
+    print '<input type="hidden" name="year" value="' . ((int)$year) . '">';
+    print '<input type="hidden" name="month" value="' . ((int)$month) . '">';
+    print '<input type="hidden" name="day" value="' . ((int)$day) . '">';
     if ($massaction != 'predelete' && $massaction != 'preaffecttag') {      // When $massaction == 'predelete', action may be already output to 'delete' by the mass action system.
         print '<input type="hidden" name="action" value="' . $action . '">';
     }
-    print '<input type="hidden" name="search_showbirthday" value="' . ((int) $showbirthday) . '">';
+    print '<input type="hidden" name="search_showbirthday" value="' . ((int)$showbirthday) . '">';
 
     print '<div class="divsearchfield">';
     // Type
@@ -115,7 +127,6 @@ function print_actions_filter(
         print '</div>';
 
         if (isModEnabled('resource')) {
-            include_once DOL_DOCUMENT_ROOT . '/resource/class/html.formresource.class.php';
             $formresource = new FormResource($db);
 
             // Resource
@@ -134,7 +145,6 @@ function print_actions_filter(
     }
 
     if (isModEnabled('project') && $user->hasRight('projet', 'lire')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
         $formproject = new FormProjets($db);
 
         print '<div class="divsearchfield">';
@@ -144,8 +154,6 @@ function print_actions_filter(
     }
 
     if (isModEnabled('category') && $user->hasRight('categorie', 'lire')) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
         $formother = new FormOther($db);
         $langs->load('categories');
 
@@ -175,8 +183,8 @@ function print_actions_filter(
 /**
  *  Show actions to do array
  *
- *  @param  int     $max        Max nb of records
- *  @return void
+ * @param int $max Max nb of records
+ * @return void
  */
 function show_array_actions_to_do($max = 5)
 {
@@ -185,7 +193,6 @@ function show_array_actions_to_do($max = 5)
     $now = dol_now();
 
     include_once DOL_DOCUMENT_ROOT . '/comm/action/class/actioncomm.class.php';
-    include_once DOL_DOCUMENT_ROOT . '/societe/class/client.class.php';
 
     $sql = "SELECT a.id, a.label, a.datep as dp, a.datep2 as dp2, a.fk_user_author, a.percent";
     $sql .= ", c.code, c.libelle as type_label";
@@ -201,10 +208,10 @@ function show_array_actions_to_do($max = 5)
     $sql .= " WHERE a.entity IN (" . getEntity('agenda') . ")";
     $sql .= " AND ((a.percent >= 0 AND a.percent < 100) OR (a.percent = -1 AND a.datep2 > '" . $db->idate($now) . "'))";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
     $sql .= " ORDER BY a.datep DESC, a.id DESC";
     $sql .= $db->plimit($max, 0);
@@ -294,8 +301,8 @@ function show_array_actions_to_do($max = 5)
 /**
  *  Show last actions array
  *
- *  @param  int     $max        Max nb of records
- *  @return void
+ * @param int $max Max nb of records
+ * @return void
  */
 function show_array_last_actions_done($max = 5)
 {
@@ -317,10 +324,10 @@ function show_array_last_actions_done($max = 5)
     $sql .= " WHERE a.entity IN (" . getEntity('agenda') . ")";
     $sql .= " AND (a.percent >= 100 OR (a.percent = -1 AND a.datep2 <= '" . $db->idate($now) . "'))";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
     $sql .= " ORDER BY a.datep2 DESC";
     $sql .= $db->plimit($max, 0);
@@ -449,7 +456,7 @@ function agenda_prepare_head()
 /**
  * Prepare array with list of tabs
  *
- * @param   object  $object     Object related to tabs
+ * @param object $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function actions_prepare_head($object)
@@ -466,7 +473,6 @@ function actions_prepare_head($object)
 
     // Tab to link resources
     if (isModEnabled('resource')) {
-        include_once DOL_DOCUMENT_ROOT . '/resource/class/dolresource.class.php';
         $resource = new Dolresource($db);
 
         $head[$h][0] = constant('BASE_URL') . '/resource/element_resource.php?element=action&element_id=' . $object->id;
@@ -482,7 +488,6 @@ function actions_prepare_head($object)
 
     // Attached files
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->agenda->dir_output . "/" . $object->id;
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
@@ -510,8 +515,8 @@ function actions_prepare_head($object)
 /**
  *  Define head array for tabs of agenda setup pages
  *
- *  @param  string  $param      Parameters to add to url
- *  @return array               Array of head
+ * @param string $param Parameters to add to url
+ * @return array               Array of head
  */
 function calendars_prepare_head($param)
 {

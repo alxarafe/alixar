@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2004-2023 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2015 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2004-2023  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2015  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/user/virtualcard.php
  *      \ingroup    core
@@ -28,7 +31,9 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+
+use Dolibarr\Code\User\Classes\User;
+
 
 // Load translation files required by page
 $langs->loadLangs(array("users", "companies", "admin", "website"));
@@ -121,7 +126,7 @@ $morehtmlref = '<a href="' . constant('BASE_URL') . '/user/vcard.php?id=' . $obj
 $morehtmlref .= img_picto($langs->trans("Download") . ' ' . $langs->trans("VCard"), 'vcard.png', 'class="valignmiddle marginleftonly paddingrightonly"');
 $morehtmlref .= '</a>';
 
-$urltovirtualcard = '/user/virtualcard.php?id=' . ((int) $object->id);
+$urltovirtualcard = '/user/virtualcard.php?id=' . ((int)$object->id);
 $morehtmlref .= dolButtonToOpenUrlInDialogPopup('publicvirtualcard', $langs->transnoentitiesnoconv("PublicVirtualCardUrl") . ' - ' . $object->getFullName($langs), img_picto($langs->trans("PublicVirtualCardUrl"), 'card', 'class="valignmiddle marginleftonly paddingrightonly"'), $urltovirtualcard, '', 'nohover');
 
 
@@ -129,7 +134,7 @@ print '<div class="fichecenter">';
 
 print '<br>';
 
-$param = '&id=' . ((int) $object->id);
+$param = '&id=' . ((int)$object->id);
 $param .= '&dol_openinpopup=1';
 
 $enabledisablehtml = $langs->trans("EnablePublicVirtualCard") . ' ';
@@ -285,7 +290,6 @@ if (getDolUserInt('USER_ENABLE_PUBLIC', 0, $object)) {
     print '<tr class="oddeven" id="tredit"><td>';
     print $langs->trans("Text");
     print '</td><td>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $extendededitor = 0;    // We force no WYSIWYG editor
     $doleditor = new DolEditor('USER_PUBLIC_MORE', getDolUserString('USER_PUBLIC_MORE', '', $object), '', 160, 'dolibarr_notes', '', false, false, $extendededitor, ROWS_5, '90%');
     $doleditor->Create();

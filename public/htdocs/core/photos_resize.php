@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2010-2015  Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2010-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2009		Meos
- * Copyright (C) 2012		Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2016		Juanjo Menent		<jmenent@2byte.es>
+ * Copyright (C) 2012		Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2016		Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Ecm\Classes\EcmFiles;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *       \file      htdocs/core/photos_resize.php
@@ -124,7 +140,6 @@ if (!$accessallowed) {
 // Define dir according to modulepart
 $dir = '';
 if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'service' || $modulepart == 'produit|service') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
     $object = new Product($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -140,7 +155,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         }
     }
 } elseif ($modulepart == 'project') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
     $object = new Project($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -150,7 +164,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->project->multidir_output[$object->entity]; // By default
     }
 } elseif ($modulepart == 'propal') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
     $object = new Propal($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -160,7 +173,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->propal->multidir_output[$object->entity]; // By default
     }
 } elseif ($modulepart == 'holiday') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
     $object = new Holiday($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -170,7 +182,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'member') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
     $object = new Adherent($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -180,7 +191,7 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->adherent->dir_output; // By default
     }
 } elseif ($modulepart == 'societe') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
+
     $object = new Societe($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -190,7 +201,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output;
     }
 } elseif ($modulepart == 'user') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
     $object = new User($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -200,7 +210,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'expensereport') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
     $object = new ExpenseReport($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -210,7 +219,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->expensereport->dir_output; // By default
     }
 } elseif ($modulepart == 'tax') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
     $object = new ChargeSociales($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -220,7 +228,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'ticket') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
     $object = new Ticket($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -230,7 +237,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'bom') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
     $object = new BOM($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -240,7 +246,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'mrp') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
     $object = new Mo($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -250,7 +255,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'bank') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
     $object = new Account($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -260,7 +264,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->bank->dir_output; // By default
     }
 } elseif ($modulepart == 'facture') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
     $object = new Facture($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -270,7 +273,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->$modulepart->dir_output; // By default
     }
 } elseif ($modulepart == 'facture_fourn' || $modulepart == 'facture_fournisseur') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
     $object = new FactureFournisseur($db);
     if ($id > 0) {
         $result = $object->fetch($id);
@@ -289,36 +291,36 @@ if (empty($backtourl)) {
     $regs = array();
 
     if (in_array($modulepart, array('product', 'produit', 'service', 'produit|service'))) {
-        $backtourl = constant('BASE_URL') . "/product/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/product/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('expensereport'))) {
-        $backtourl = constant('BASE_URL') . "/expensereport/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/expensereport/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('holiday'))) {
-        $backtourl = constant('BASE_URL') . "/holiday/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/holiday/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('member'))) {
-        $backtourl = constant('BASE_URL') . "/adherents/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/adherents/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('project'))) {
-        $backtourl = constant('BASE_URL') . "/projet/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/projet/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('propal'))) {
-        $backtourl = constant('BASE_URL') . "/comm/propal/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/comm/propal/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('societe'))) {
-        $backtourl = constant('BASE_URL') . "/societe/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/societe/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('tax'))) {
-        $backtourl = constant('BASE_URL') . "/compta/sociales/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/compta/sociales/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('ticket'))) {
-        $backtourl = constant('BASE_URL') . "/ticket/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/ticket/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('user'))) {
-        $backtourl = constant('BASE_URL') . "/user/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/user/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('facture'))) {
-        $backtourl = constant('BASE_URL') . "/compta/facture/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/compta/facture/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('facture_fourn', 'facture_fournisseur'))) {
-        $backtourl = constant('BASE_URL') . "/fourn/facture/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/fourn/facture/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('bank')) && preg_match('/\/statement\/([^\/]+)\//', $file, $regs)) {
         $num = $regs[1];
-        $backtourl = constant('BASE_URL') . "/compta/bank/account_statement_document.php?id=" . ((int) $id) . '&num=' . urlencode($num) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/compta/bank/account_statement_document.php?id=" . ((int)$id) . '&num=' . urlencode($num) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('bank'))) {
-        $backtourl = constant('BASE_URL') . "/compta/bank/document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/compta/bank/document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('mrp'))) {
-        $backtourl = constant('BASE_URL') . "/mrp/mo_document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/mrp/mo_document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     } elseif (in_array($modulepart, array('medias'))) {
         $section_dir = dirname($file);
         if (!preg_match('/\/$/', $section_dir)) {
@@ -327,7 +329,7 @@ if (empty($backtourl)) {
         $backtourl = constant('BASE_URL') . '/website/index.php?action=file_manager' . ($website ? '&website=' . urlencode($website) : '') . '&section_dir=' . urlencode($section_dir);
     } else {
         // Generic case that should work for everybody else
-        $backtourl = constant('BASE_URL') . "/" . $modulepart . "/" . $modulepart . "_document.php?id=" . ((int) $id) . '&file=' . urlencode($file);
+        $backtourl = constant('BASE_URL') . "/" . $modulepart . "/" . $modulepart . "_document.php?id=" . ((int)$id) . '&file=' . urlencode($file);
     }
 }
 
@@ -366,7 +368,6 @@ if ($action == 'confirm_resize' && GETPOSTISSET("file") && GETPOSTISSET("sizex")
         $rel_filename = preg_replace('/^' . preg_quote(DOL_DATA_ROOT, '/') . '/', '', $fullpath);
         $rel_filename = preg_replace('/^[\\/]/', '', $rel_filename);
 
-        include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
         $ecmfile = new EcmFiles($db);
         $result = $ecmfile->fetch(0, '', $rel_filename);
         if ($result > 0) {   // If found
@@ -429,7 +430,6 @@ if ($action == 'confirm_crop') {
         $rel_filename = preg_replace('/^' . preg_quote(DOL_DATA_ROOT, '/') . '/', '', $fullpath);
         $rel_filename = preg_replace('/^[\\/]/', '', $rel_filename);
 
-        include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
         $ecmfile = new EcmFiles($db);
         $result = $ecmfile->fetch(0, '', $rel_filename);
         if ($result > 0) {   // If found
@@ -503,7 +503,7 @@ print '<br>' . "\n";
  */
 
 print '<!-- Form to resize -->' . "\n";
-print '<form name="redim_file" action="' . $_SERVER["PHP_SELF"] . '?id=' . ((int) $id) . ($num ? '&num=' . urlencode($num) : '') . '" method="POST">';
+print '<form name="redim_file" action="' . $_SERVER["PHP_SELF"] . '?id=' . ((int)$id) . ($num ? '&num=' . urlencode($num) : '') . '" method="POST">';
 print '<input type="hidden" name="token" value="' . newToken() . '">';
 print '<input type="hidden" name="backtourl" value="' . $backtourl . '">';
 
@@ -561,11 +561,11 @@ if (!empty($conf->use_javascript_ajax)) {
 
     if (empty($conf->dol_no_mouse_hover)) {
         print '<div style="border: 1px solid #888888; width: ' . $widthforcrop . 'px;">';
-        print '<img src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . urlencode($modulepart) . '&entity=' . ((int) $object->entity) . '&file=' . urlencode($original_file) . '" alt="" id="cropbox" width="' . $widthforcrop . 'px"/>';
+        print '<img src="' . constant('BASE_URL') . '/viewimage.php?modulepart=' . urlencode($modulepart) . '&entity=' . ((int)$object->entity) . '&file=' . urlencode($original_file) . '" alt="" id="cropbox" width="' . $widthforcrop . 'px"/>';
         print '</div>';
         print '</div><br>';
 
-        print '<form action="' . $_SERVER["PHP_SELF"] . '?id=' . ((int) $id) . ($num ? '&num=' . urlencode($num) : '') . '" method="POST">';
+        print '<form action="' . $_SERVER["PHP_SELF"] . '?id=' . ((int)$id) . ($num ? '&num=' . urlencode($num) : '') . '" method="POST">';
         print '<input type="hidden" name="token" value="' . newToken() . '">';
         print '<input type="hidden" name="backtourl" value="' . $backtourl . '">';
         print '

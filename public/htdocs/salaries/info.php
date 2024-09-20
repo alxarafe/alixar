@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005-2015  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Charlie BENKE        <charlie@patas-monkey.com>
- * Copyright (C) 2017-2023  Alexandre Spangaro   <aspangaro@easya.solutions>
- * Copyright (C) 2021       Gauthier VERDOL      <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2005-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Charlie BENKE               <charlie@patas-monkey.com>
+ * Copyright (C) 2017-2023  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Salaries\Classes\Salary;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/salaries/info.php
  *  \ingroup    salaries
@@ -28,13 +35,10 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/salary.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/salaries.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
+    }
 
 // Load translation files required by the page
 $langs->loadLangs(array("compta", "bills", "users", "salaries", "hrm"));
@@ -103,8 +107,6 @@ if ($action == 'setlabel' && $permissiontoadd) {
     $object->label = $label;
     $object->update($user);
 }
-
-
 
 /*
  * View

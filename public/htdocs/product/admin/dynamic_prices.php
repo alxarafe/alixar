@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2015       Ion Agorria             <ion@agorria.com>
- * Copyright (C) 2023       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2015       Ion Agorria                 <ion@agorria.com>
+ * Copyright (C) 2023       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\PriceGlobalVariable;
+use Dolibarr\Code\Product\Classes\PriceGlobalVariableUpdater;
+
 /**
  *  \file       htdocs/product/admin/dynamic_prices.php
  *  \ingroup    product
@@ -27,9 +32,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_global_variable.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/dynamic_price/class/price_global_variable_updater.class.php';
 
 // Load translation files required by the page
 $langs->load("products");
@@ -60,7 +62,6 @@ if ($action == 'edit_updater') {
         setEventMessages($price_updaters->error, $price_updaters->errors, 'errors');
     }
 }
-
 
 /*
  * Actions
@@ -338,7 +339,6 @@ if ($action == 'create_updater' || $action == 'edit_updater') {
     print '<tr>';
     $help = $langs->trans("GlobalVariableUpdaterHelp" . $type) . '<br><b>' . $langs->trans("GlobalVariableUpdaterHelpFormat" . $type) . '</b>';
     print '<td class="fieldrequired">' . $form->textwithpicto($langs->trans("Parameters"), $help, 1) . '</td><td>';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
     $doleditor = new DolEditor('parameters', empty($price_updaters->parameters) ? '' : $price_updaters->parameters, '', 300, '', '', false, false, false, ROWS_8, '90%');
     $doleditor->Create();
     print '</td></tr>';

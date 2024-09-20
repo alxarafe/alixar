@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2015-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2021 Nicolas ZABOURI	<info@inovea-conseil.com>
- * Copyright (C) 2018 	   Juanjo Menent  <jmenent@2byte.es>
- * Copyright (C) 2019 	   Ferran Marcet  <fmarcet@2byte.es>
- * Copyright (C) 2019-2024 Frédéric France <frederic.france@netlogic.fr>
+/* Copyright (C) 2015-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2021  Nicolas ZABOURI	            <info@inovea-conseil.com>
+ * Copyright (C) 2018 	    Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2019 	    Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,19 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file           htdocs/core/actions_massactions.inc.php
  *  \brief          Code for actions done with massaction button (send by email, merge pdf, delete, ...)
@@ -39,6 +52,7 @@
 
 
 // Protection
+
 if (empty($objectclass) || empty($uploaddir)) {
     dol_print_error(null, 'include of actions_massactions.inc.php is done but var $objectclass or $uploaddir was not defined');
     exit;
@@ -206,7 +220,7 @@ if (!$error && $massaction == 'confirm_presend') {
                     if ($val == 'thirdparty') { // Id of third party or user
                         $tmparray[] = $thirdparty->name . ' <' . $thirdparty->email . '>';
                     } elseif ($val && method_exists($thirdparty, 'contact_get_property')) {     // Id of contact
-                        $tmparray[] = $thirdparty->contact_get_property((int) $val, 'email');
+                        $tmparray[] = $thirdparty->contact_get_property((int)$val, 'email');
                         //$sendtoid[] = $val;
                     }
                 }
@@ -232,7 +246,7 @@ if (!$error && $massaction == 'confirm_presend') {
                     if ($val == 'thirdparty') { // Id of third party
                         $tmparray[] = $thirdparty->name . ' <' . $thirdparty->email . '>';
                     } elseif ($val) {   // Id du contact
-                        $tmparray[] = $thirdparty->contact_get_property((int) $val, 'email');
+                        $tmparray[] = $thirdparty->contact_get_property((int)$val, 'email');
                         //$sendtoid[] = $val;  TODO Add also id of contact in CC ?
                     }
                 }
@@ -415,7 +429,7 @@ if (!$error && $massaction == 'confirm_presend') {
                     $tmp = explode(',', getDolGlobalString('MAIN_INFO_SOCIETE_MAIL_ALIASES'));
                     $from = trim($tmp[($reg[1] - 1)]);
                 } elseif (preg_match('/senderprofile_(\d+)_(\d+)/', $fromtype, $reg)) {
-                    $sql = "SELECT rowid, label, email FROM " . MAIN_DB_PREFIX . "c_email_senderprofile WHERE rowid = " . (int) $reg[1];
+                    $sql = "SELECT rowid, label, email FROM " . MAIN_DB_PREFIX . "c_email_senderprofile WHERE rowid = " . (int)$reg[1];
                     $resql = $db->query($sql);
                     $obj = $db->fetch_object($resql);
                     if ($obj) {
@@ -474,8 +488,8 @@ if (!$error && $massaction == 'confirm_presend') {
                         $objecttmp->fetch_projet();
                     }
                     $substitutionarray = getCommonSubstitutionArray($langs, 0, null, $objecttmp);
-                    $substitutionarray['__ID__']    = ($oneemailperrecipient ? implode(', ', array_keys($listofqualifiedobj)) : $objecttmp->id);
-                    $substitutionarray['__REF__']   = ($oneemailperrecipient ? implode(', ', $listofqualifiedref) : $objecttmp->ref);
+                    $substitutionarray['__ID__'] = ($oneemailperrecipient ? implode(', ', array_keys($listofqualifiedobj)) : $objecttmp->id);
+                    $substitutionarray['__REF__'] = ($oneemailperrecipient ? implode(', ', $listofqualifiedref) : $objecttmp->ref);
                     $substitutionarray['__EMAIL__'] = $thirdparty->email;
                     $substitutionarray['__CHECK_READ__'] = '<img src="' . DOL_MAIN_URL_ROOT . '/public/emailing/mailing-read.php?tag=undefined&securitykey=' . dol_hash(getDolGlobalString('MAILING_EMAIL_UNSUBSCRIBE_KEY') . "-undefined", 'md5') . '" width="1" height="1" style="width:1px;height:1px" border="0"/>';
 
@@ -561,7 +575,6 @@ if (!$error && $massaction == 'confirm_presend') {
                     $upload_dir_tmp = $vardir . '/temp'; // TODO Add $keytoavoidconflict in upload_dir path
 
                     // Send mail (substitutionarray must be done just before this)
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
                     $mailfile = new CMailFile($subjectreplaced, $sendto, $from, $messagereplaced, $filepath, $mimetype, $filename, $sendtocc, $sendtobcc, $deliveryreceipt, -1, '', '', $trackid, '', $sendcontext, '', $upload_dir_tmp);
                     if ($mailfile->error) {
                         $resaction .= '<div class="error">' . $mailfile->error . '</div>';
@@ -601,11 +614,11 @@ if (!$error && $massaction == 'confirm_presend') {
                                 // Initialisation donnees
                                 $objectobj2->sendtoid = (empty($contactidtosend) ? 0 : $contactidtosend);
                                 $objectobj2->actionmsg = $actionmsg; // Long text
-                                $objectobj2->actionmsg2     = $actionmsg2; // Short text
-                                $objectobj2->fk_element     = $objid2;
-                                $objectobj2->elementtype    = $objectobj2->element;
+                                $objectobj2->actionmsg2 = $actionmsg2; // Short text
+                                $objectobj2->fk_element = $objid2;
+                                $objectobj2->elementtype = $objectobj2->element;
                                 if (getDolGlobalString('MAIN_MAIL_REPLACE_EVENT_TITLE_BY_EMAIL_SUBJECT')) {
-                                    $objectobj2->actionmsg2     = $subjectreplaced; // Short text
+                                    $objectobj2->actionmsg2 = $subjectreplaced; // Short text
                                 }
 
                                 $triggername = strtoupper(get_class($objectobj2)) . '_SENTBYMAIL';
@@ -937,7 +950,7 @@ if (!$error && $massaction == 'validate' && $permissiontoadd) {
     if ($objecttmp->element == 'facture') {
         if (!empty($toselect) && getDolGlobalString('INVOICE_CHECK_POSTERIOR_DATE')) {
             // order $toselect by date
-            $sql  = "SELECT rowid FROM " . MAIN_DB_PREFIX . "facture";
+            $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "facture";
             $sql .= " WHERE rowid IN (" . $db->sanitize(implode(",", $toselect)) . ")";
             $sql .= " ORDER BY datef";
 
@@ -1064,7 +1077,7 @@ if (!$error && ($massaction == 'delete' || ($action == 'delete' && $confirm == '
                 continue;
             }
 
-            if ($objectclass == 'Holiday' && ! in_array($objecttmp->statut, array(Holiday::STATUS_DRAFT, Holiday::STATUS_CANCELED, Holiday::STATUS_REFUSED))) {
+            if ($objectclass == 'Holiday' && !in_array($objecttmp->statut, array(Holiday::STATUS_DRAFT, Holiday::STATUS_CANCELED, Holiday::STATUS_REFUSED))) {
                 $langs->load("errors");
                 $nbignored++;
                 $TMsg[] = '<div class="error">' . $langs->trans('ErrorLeaveRequestMustBeDraftCanceledOrRefusedToBeDeleted', $objecttmp->ref) . '</div><br>';
@@ -1072,7 +1085,7 @@ if (!$error && ($massaction == 'delete' || ($action == 'delete' && $confirm == '
             }
 
             if ($objectclass == "Task" && $objecttmp->hasChildren() > 0) {
-                $sql = "UPDATE " . MAIN_DB_PREFIX . "projet_task SET fk_task_parent = 0 WHERE fk_task_parent = " . ((int) $objecttmp->id);
+                $sql = "UPDATE " . MAIN_DB_PREFIX . "projet_task SET fk_task_parent = 0 WHERE fk_task_parent = " . ((int)$objecttmp->id);
                 $res = $db->query($sql);
 
                 if (!$res) {
@@ -1214,7 +1227,6 @@ if (!$error && ($action == 'affecttag' && $confirm == 'yes') && $permissiontoadd
     }
     if (!empty($affecttag_type_array)) {
         //check if tag type submitted exists into Tag Map categorie class
-        require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
         $categ = new Categorie($db);
         $to_affecttag_type_array = array();
         $categ_type_array = $categ->getMapList();
@@ -1673,7 +1685,6 @@ if (!$error && ($massaction == 'approveleave' || ($action == 'approveleave' && $
 
                         $trackid = 'leav' . $objecttmp->id;
 
-                        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/CMailFile.class.php';
                         $mail = new CMailFile($subject, $emailTo, $emailFrom, $message, array(), array(), array(), '', '', 0, 0, '', '', $trackid);
 
                         // Sending email

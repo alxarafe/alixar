@@ -18,11 +18,12 @@ class QuickBooks extends AbstractService
      */
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        SignatureInterface $signature,
-        UriInterface $baseApiUri = null
-    ) {
+        SignatureInterface   $signature,
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct(
             $credentials,
             $httpClient,
@@ -115,7 +116,8 @@ class QuickBooks extends AbstractService
         $method = 'GET',
         $body = null,
         array $extraHeaders = array()
-    ) {
+    )
+    {
         $extraHeaders['Accept'] = 'application/json';
         return parent::request($path, $method, $body, $extraHeaders);
     }

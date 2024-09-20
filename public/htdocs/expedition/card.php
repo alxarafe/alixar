@@ -1,20 +1,20 @@
 <?php
 
-/* Copyright (C) 2003-2008  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2016	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005		Simon TOSSER			<simon@kornog-computing.com>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2011-2017	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2013       Florian Henry		  	<florian.henry@open-concept.pro>
- * Copyright (C) 2013       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2014		Cedric GROSS			<c.gross@kreiz-it.fr>
- * Copyright (C) 2014-2017	Francis Appels			<francis.appels@yahoo.com>
- * Copyright (C) 2015		Claudio Aschieri		<c.aschieri@19.coop>
- * Copyright (C) 2016-2018	Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2016		Yasser Carreón			<yacasia@gmail.com>
- * Copyright (C) 2018-2022  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2020       Lenin Rivas         	<lenin@leninrivas.com>
- * Copyright (C) 2022       Josep Lluís Amador      <joseplluis@lliuretic.cat>
+/* Copyright (C) 2003-2008  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2016	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005		Simon TOSSER			    <simon@kornog-computing.com>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2017	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2013       Florian Henry		  	    <florian.henry@open-concept.pro>
+ * Copyright (C) 2013       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2014		Cedric GROSS			    <c.gross@kreiz-it.fr>
+ * Copyright (C) 2014-2017	Francis Appels			    <francis.appels@yahoo.com>
+ * Copyright (C) 2015		Claudio Aschieri		    <c.aschieri@19.coop>
+ * Copyright (C) 2016-2018	Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2016		Yasser Carreón			    <yacasia@gmail.com>
+ * Copyright (C) 2018-2022  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2020       Lenin Rivas         	    <lenin@leninrivas.com>
+ * Copyright (C) 2022       Josep Lluís Amador          <joseplluis@lliuretic.cat>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -32,6 +32,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Commande\Classes\OrderLine;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Notify;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Expedition\Classes\ExpeditionLigne;
+use Dolibarr\Code\Expedition\Classes\ExpeditionLineBatch;
+use Dolibarr\Code\Expedition\Classes\ModelePdfExpedition;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productbatch;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/expedition/card.php
  *  \ingroup    expedition
@@ -40,30 +64,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/sendings.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/expedition/modules_expedition.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
-if (isModEnabled("product") || isModEnabled("service")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-}
-if (isModEnabled("propal")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
-}
-if (isModEnabled('productbatch')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/productbatch.class.php';
-}
-if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("sendings", "companies", "bills", 'deliveries', 'orders', 'stocks', 'other', 'propal', 'productbatch'));
@@ -1108,7 +1110,6 @@ if ($action == 'create') {
             }
 
             // Document model
-            include_once DOL_DOCUMENT_ROOT . '/core/modules/expedition/modules_expedition.php';
             $list = ModelePdfExpedition::liste_modeles($db);
             if (count($list) > 1) {
                 print "<tr><td>" . $langs->trans("DefaultModel") . "</td>";
@@ -1882,7 +1883,6 @@ if ($action == 'create') {
         }
 
         if (isModEnabled('notification')) {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
             $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('SHIPPING_VALIDATE', $object->socid, $object);
@@ -2798,8 +2798,7 @@ if ($action == 'create') {
         print '</div><div class="fichehalfright">';
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-        $formactions = new FormActions($db);
+                $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, 'shipping', $socid, 1);
 
         print '</div></div>';

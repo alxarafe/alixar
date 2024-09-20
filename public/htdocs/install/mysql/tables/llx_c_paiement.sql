@@ -22,13 +22,13 @@
 
 create table llx_c_paiement
 (
-  id					integer AUTO_INCREMENT PRIMARY KEY,
-  entity				integer	DEFAULT 1 NOT NULL,	-- multi company id
-  code       		varchar(6)  NOT NULL,
-  libelle    		varchar(128),
-  type       		smallint,	-- 0: input money, 1: output money, 2: input and output, 3: other
-  active     		tinyint DEFAULT 1  NOT NULL,
-  accountancy_code	varchar(32) NULL,
-  module     		varchar(32) NULL,
-  position			integer NOT NULL DEFAULT 0
+    id               integer AUTO_INCREMENT PRIMARY KEY,
+    entity           integer DEFAULT 1 NOT NULL, -- multi company id
+    code             varchar(6)        NOT NULL,
+    libelle          varchar(128),
+    type             smallint,                   -- 0: input money, 1: output money, 2: input and output, 3: other
+    active           tinyint DEFAULT 1 NOT NULL,
+    accountancy_code varchar(32) NULL,
+    module           varchar(32) NULL,
+    position         integer           NOT NULL DEFAULT 0
 )ENGINE=innodb;

@@ -119,7 +119,7 @@ class AddressBookQueryReport implements XmlDeserializable
      */
     public static function xmlDeserialize(Reader $reader)
     {
-        $elems = (array) $reader->parseInnerTree([
+        $elems = (array)$reader->parseInnerTree([
             '{urn:ietf:params:xml:ns:carddav}prop-filter' => 'Sabre\\CardDAV\\Xml\\Filter\\PropFilter',
             '{urn:ietf:params:xml:ns:carddav}param-filter' => 'Sabre\\CardDAV\\Xml\\Filter\\ParamFilter',
             '{urn:ietf:params:xml:ns:carddav}address-data' => 'Sabre\\CardDAV\\Xml\\Filter\\AddressData',
@@ -157,7 +157,7 @@ class AddressBookQueryReport implements XmlDeserializable
                     }
 
                     $newProps['filters'] = [];
-                    foreach ((array) $elem['value'] as $subElem) {
+                    foreach ((array)$elem['value'] as $subElem) {
                         if ($subElem['name'] === '{' . Plugin::NS_CARDDAV . '}prop-filter') {
                             $newProps['filters'][] = $subElem['value'];
                         }
@@ -166,7 +166,7 @@ class AddressBookQueryReport implements XmlDeserializable
                 case '{' . Plugin::NS_CARDDAV . '}limit':
                     foreach ($elem['value'] as $child) {
                         if ($child['name'] === '{' . Plugin::NS_CARDDAV . '}nresults') {
-                            $newProps['limit'] = (int) $child['value'];
+                            $newProps['limit'] = (int)$child['value'];
                         }
                     }
                     break;

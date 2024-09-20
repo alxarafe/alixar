@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2006       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2007-2016	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2014		Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2016		Juanjo Menent   		<jmenent@2byte.es>
+/* Copyright (C) 2006       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2007-2016	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2014		Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2016		Juanjo Menent   		    <jmenent@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\RemiseCheque;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+
 /**
  *   \file       htdocs/compta/paiement/cheque/list.php
  *   \ingroup    compta
@@ -30,9 +35,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/cheque/class/remisecheque.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 // Load translation files required by the page
@@ -87,13 +89,13 @@ foreach ($arrayofpaymentmodetomanage as $key => $val) {
 }
 
 $arrayfields = array(
-    'bc.ref'            => array('label' => "Ref", 'checked' => 1, 'position' => 10),
-    'bc.type'           => array('label' => "Type", 'checked' => 1, 'position' => 20),
+    'bc.ref' => array('label' => "Ref", 'checked' => 1, 'position' => 10),
+    'bc.type' => array('label' => "Type", 'checked' => 1, 'position' => 20),
     'bc.date_bordereau' => array('label' => "DateCreation", 'checked' => 1, 'position' => 30),
-    'ba.label'          => array('label' => "BankAccount", 'checked' => 1, 'position' => 40),
-    'bc.nbcheque'       => array('label' => "NbOfCheques", 'checked' => 1, 'position' => 50),
-    'bc.amount'         => array('label' => "Amount", 'checked' => 1, 'position' => 60),
-    'bc.statut'         => array('label' => "Status", 'checked' => 1, 'position' => 70)
+    'ba.label' => array('label' => "BankAccount", 'checked' => 1, 'position' => 40),
+    'bc.nbcheque' => array('label' => "NbOfCheques", 'checked' => 1, 'position' => 50),
+    'bc.amount' => array('label' => "Amount", 'checked' => 1, 'position' => 60),
+    'bc.statut' => array('label' => "Status", 'checked' => 1, 'position' => 70)
 );
 $arrayfields = dol_sort_array($arrayfields, 'position');
 '@phan-var-force array<string,array{label:string,checked?:int<0,1>,position?:int,help?:string}> $arrayfields';  // dol_sort_array looses type for Phan
@@ -136,7 +138,6 @@ if (empty($reshook)) {
 }
 
 
-
 /*
  * View
  */
@@ -159,14 +160,14 @@ $sqlfields = $sql; // $sql fields to remove for count total
 $sql .= " FROM " . MAIN_DB_PREFIX . "bordereau_cheque as bc,";
 $sql .= " " . MAIN_DB_PREFIX . "bank_account as ba";
 $sql .= " WHERE bc.fk_bank_account = ba.rowid";
-$sql .= " AND bc.entity = " . ((int) $conf->entity);
+$sql .= " AND bc.entity = " . ((int)$conf->entity);
 
 // Search criteria
 if ($search_ref) {
     $sql .= natural_search("bc.ref", $search_ref);
 }
 if ($search_account > 0) {
-    $sql .= " AND bc.fk_bank_account = " . ((int) $search_account);
+    $sql .= " AND bc.fk_bank_account = " . ((int)$search_account);
 }
 if ($search_amount) {
     $sql .= natural_search("bc.amount", price2num($search_amount));
@@ -223,22 +224,22 @@ if ($resql) {
         $param .= '&contextpage=' . $contextpage;
     }
     if ($search_date_startday) {
-        $param .= '&search_date_startday=' . urlencode((string) ($search_date_startday));
+        $param .= '&search_date_startday=' . urlencode((string)($search_date_startday));
     }
     if ($search_date_startmonth) {
-        $param .= '&search_date_startmonth=' . urlencode((string) ($search_date_startmonth));
+        $param .= '&search_date_startmonth=' . urlencode((string)($search_date_startmonth));
     }
     if ($search_date_startyear) {
-        $param .= '&search_date_startyear=' . urlencode((string) ($search_date_startyear));
+        $param .= '&search_date_startyear=' . urlencode((string)($search_date_startyear));
     }
     if ($search_date_endday) {
-        $param .= '&search_date_endday=' . urlencode((string) ($search_date_endday));
+        $param .= '&search_date_endday=' . urlencode((string)($search_date_endday));
     }
     if ($search_date_endmonth) {
-        $param .= '&search_date_endmonth=' . urlencode((string) ($search_date_endmonth));
+        $param .= '&search_date_endmonth=' . urlencode((string)($search_date_endmonth));
     }
     if ($search_date_endyear) {
-        $param .= '&search_date_endyear=' . urlencode((string) ($search_date_endyear));
+        $param .= '&search_date_endyear=' . urlencode((string)($search_date_endyear));
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
         $param .= '&limit=' . $limit;
@@ -247,12 +248,12 @@ if ($resql) {
         $param .= '&search_amount=' . urlencode($search_amount);
     }
     if ($search_account > 0) {
-        $param .= '&search_account=' . urlencode((string) ($search_account));
+        $param .= '&search_account=' . urlencode((string)($search_account));
     }
 
     $url = constant('BASE_URL') . '/compta/paiement/cheque/card.php?action=new';
 
-    $newcardbutton  = '';
+    $newcardbutton = '';
     $newcardbutton .= dolGetButtonTitle($langs->trans('ViewList'), '', 'fa fa-bars imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=common' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ((empty($mode) || $mode == 'common') ? 2 : 1), array('morecss' => 'reposition'));
     $newcardbutton .= dolGetButtonTitle($langs->trans('ViewKanban'), '', 'fa fa-th-list imgforviewmode', $_SERVER["PHP_SELF"] . '?mode=kanban' . preg_replace('/(&|\?)*mode=[^&]+/', '', $param), '', ($mode == 'kanban' ? 2 : 1), array('morecss' => 'reposition'));
     $newcardbutton .= dolGetButtonTitleSeparator();

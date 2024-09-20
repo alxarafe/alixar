@@ -33,8 +33,8 @@ use Dolibarr\Lib\Images;
 /**
  *  Return user/group account of web server
  *
- *  @param  string  $mode       'user' or 'group'
- *  @return string              Return user or group of web server
+ * @param string $mode 'user' or 'group'
+ * @return string              Return user or group of web server
  */
 function dol_getwebuser($mode)
 {
@@ -51,12 +51,12 @@ function dol_getwebuser($mode)
 /**
  *  Return a login if login/pass was successful
  *
- *  @param      string  $usertotest         Login value to test
- *  @param      string  $passwordtotest     Password value to test
- *  @param      string  $entitytotest       Instance of data we must check
- *  @param      array   $authmode           Array list of selected authentication mode array('http', 'dolibarr', 'xxx'...)
- *  @param      string  $context            Context checkLoginPassEntity was created for ('api', 'dav', 'ws', '')
- *  @return     string                      Login or '' or '--bad-login-validity--'
+ * @param string $usertotest Login value to test
+ * @param string $passwordtotest Password value to test
+ * @param string $entitytotest Instance of data we must check
+ * @param array $authmode Array list of selected authentication mode array('http', 'dolibarr', 'xxx'...)
+ * @param string $context Context checkLoginPassEntity was created for ('api', 'dav', 'ws', '')
+ * @return     string                      Login or '' or '--bad-login-validity--'
  */
 function checkLoginPassEntity($usertotest, $passwordtotest, $entitytotest, $authmode, $context = '')
 {
@@ -80,7 +80,7 @@ function checkLoginPassEntity($usertotest, $passwordtotest, $entitytotest, $auth
                 $authfile = 'functions_' . $mode . '.php';
                 $fullauthfile = '';
 
-                $dirlogin = array_merge(array("/core/login"), (array) $conf->modules_parts['login']);
+                $dirlogin = array_merge(array("/core/login"), (array)$conf->modules_parts['login']);
                 foreach ($dirlogin as $reldir) {
                     $dir = dol_buildpath($reldir, 0);
                     $newdir = dol_osencode($dir);
@@ -130,9 +130,9 @@ if (!function_exists('dol_loginfunction')) {
      * Show Dolibarr default login page.
      * Part of this code is also duplicated into main.inc.php::top_htmlhead
      *
-     * @param       Translate   $langs      Lang object (must be initialized by a new).
-     * @param       Conf        $conf       Conf object
-     * @param       Societe     $mysoc      Company object
+     * @param Translate $langs Lang object (must be initialized by a new).
+     * @param Conf $conf Conf object
+     * @param Societe $mysoc Company object
      * @return      void
      */
     function dol_loginfunction($langs, $conf, $mysoc)
@@ -297,7 +297,7 @@ if (!function_exists('dol_loginfunction')) {
         // Set jquery theme
         $dol_loginmesg = (!empty($_SESSION["dol_loginmesg"]) ? $_SESSION["dol_loginmesg"] : '');
 
-        $favicon = constant('BASE_URL') . '/theme/alixar_square_logo_256x256_color.png';
+        $favicon = constant('DOL_URL_ROOT') . '/theme/alixar_square_logo_256x256_color.png';
         if (!empty($mysoc->logo_squarred_mini)) {
             $favicon = constant('BASE_URL') . '/viewimage.php?cache=1&modulepart=mycompany&file=' . urlencode('logos/thumbs/' . $mysoc->logo_squarred_mini);
         }
@@ -330,10 +330,10 @@ if (!function_exists('dol_loginfunction')) {
 /**
  *  Initialise the salt for the crypt function.
  *
- *  @param      int     $type       2 =>Return a salt for DES encryption
+ * @param int $type 2 =>Return a salt for DES encryption
  *                                  12=>Return a salt for MD5 encryption
  *                                  Undefined=>Return a salt for default encryption
- *  @return     string              Salt string
+ * @return     string              Salt string
  */
 function makesalt($type = CRYPT_SALT_LENGTH)
 {
@@ -369,8 +369,8 @@ function makesalt($type = CRYPT_SALT_LENGTH)
 /**
  *  Encode or decode database password in config file
  *
- *  @param      int     $level      Encode level: 0 no encoding, 1 encoding
- *  @return     int                 Return integer <0 if KO, >0 if OK
+ * @param int $level Encode level: 0 no encoding, 1 encoding
+ * @return     int                 Return integer <0 if KO, >0 if OK
  */
 function encodedecode_dbpassconf($level = 0)
 {
@@ -471,9 +471,9 @@ function encodedecode_dbpassconf($level = 0)
 /**
  * Return a generated password using default module
  *
- * @param       boolean     $generic                true=Create generic password (32 chars/numbers), false=Use the configured password generation module
- * @param       array       $replaceambiguouschars  Discard ambiguous characters. For example array('I').
- * @param       int         $length                 Length of random string (Used only if $generic is true)
+ * @param boolean $generic true=Create generic password (32 chars/numbers), false=Use the configured password generation module
+ * @param array $replaceambiguouschars Discard ambiguous characters. For example array('I').
+ * @param int $length Length of random string (Used only if $generic is true)
  * @return      string                              New value for password
  * @see dol_hash(), dolJSToSetRandomPassword()
  */
@@ -557,9 +557,9 @@ function getRandomPassword($generic = false, $replaceambiguouschars = null, $len
 /**
  * Output javascript to autoset a generated password using default module into a HTML element.
  *
- * @param       string      $htmlname           HTML name of element to insert key into
- * @param       string      $htmlnameofbutton   HTML name of button
- * @param       int         $generic            1=Return a generic pass, 0=Return a pass following setup rules
+ * @param string $htmlname HTML name of element to insert key into
+ * @param string $htmlnameofbutton HTML name of button
+ * @param int $generic 1=Return a generic pass, 0=Return a pass following setup rules
  * @return      string                          HTML javascript code to set a password
  * @see getRandomPassword()
  */

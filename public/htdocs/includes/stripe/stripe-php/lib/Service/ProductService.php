@@ -13,9 +13,9 @@ class ProductService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Product>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Product>
      */
     public function all($params = null, $opts = null)
     {
@@ -28,9 +28,9 @@ class ProductService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Product
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Product
      */
     public function create($params = null, $opts = null)
     {
@@ -46,9 +46,9 @@ class ProductService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Product
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Product
      */
     public function delete($id, $params = null, $opts = null)
     {
@@ -64,9 +64,9 @@ class ProductService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Product
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Product
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -84,9 +84,9 @@ class ProductService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SearchResult<\Stripe\Product>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SearchResult<\Stripe\Product>
      */
     public function search($params = null, $opts = null)
     {
@@ -101,9 +101,9 @@ class ProductService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Product
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Product
      */
     public function update($id, $params = null, $opts = null)
     {

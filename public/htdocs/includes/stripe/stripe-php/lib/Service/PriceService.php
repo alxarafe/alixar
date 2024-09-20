@@ -12,9 +12,9 @@ class PriceService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Price>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Price>
      */
     public function all($params = null, $opts = null)
     {
@@ -28,9 +28,9 @@ class PriceService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Price
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Price
      */
     public function create($params = null, $opts = null)
     {
@@ -44,9 +44,9 @@ class PriceService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Price
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Price
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -64,9 +64,9 @@ class PriceService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\SearchResult<\Stripe\Price>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SearchResult<\Stripe\Price>
      */
     public function search($params = null, $opts = null)
     {
@@ -81,9 +81,9 @@ class PriceService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Price
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Price
      */
     public function update($id, $params = null, $opts = null)
     {

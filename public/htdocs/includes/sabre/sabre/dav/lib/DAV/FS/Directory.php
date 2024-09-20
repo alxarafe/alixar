@@ -35,7 +35,7 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota
      * return the same contents of what was submitted here, you are strongly
      * recommended to omit the ETag.
      *
-     * @param string          $name Name of the file
+     * @param string $name Name of the file
      * @param resource|string $data Initial payload
      *
      * @return string|null
@@ -67,9 +67,9 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota
      *
      * @param string $name
      *
+     * @return DAV\INode
      * @throws DAV\Exception\NotFound
      *
-     * @return DAV\INode
      */
     public function getChild($name)
     {
@@ -96,7 +96,7 @@ class Directory extends Node implements DAV\ICollection, DAV\IQuota
         $iterator = new \FilesystemIterator(
             $this->path,
             \FilesystemIterator::CURRENT_AS_SELF
-          | \FilesystemIterator::SKIP_DOTS
+            | \FilesystemIterator::SKIP_DOTS
         );
         foreach ($iterator as $entry) {
             $nodes[] = $this->getChild($entry->getFilename());

@@ -1,6 +1,7 @@
 <?php
 
-/* Copyright (C) 2015       Alexandre Spangaro <aspangaro@open-dsi.fr>
+/* Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *    \file       htdocs/hrm/admin/admin_hrm.php
@@ -34,13 +37,12 @@ $langs->loadLangs(array('admin', 'hrm'));
 $action = GETPOST('action', 'aZ09');
 
 // Other parameters HRM_*
-$list = array(
-//      'HRM_EMAIL_EXTERNAL_SERVICE'   // To prevent your public accountant for example
+$list = array(//      'HRM_EMAIL_EXTERNAL_SERVICE'   // To prevent your public accountant for example
 );
 
 // Permissions
 $permissiontoread = $user->admin;
-$permissiontoadd  = $user->admin;
+$permissiontoadd = $user->admin;
 
 // Security check - Protection if external user
 //if ($user->socid > 0) accessforbidden();
@@ -53,7 +55,6 @@ if (!isModEnabled('hrm')) {
 if (empty($permissiontoread)) {
     accessforbidden();
 }
-
 
 /*
  * Actions

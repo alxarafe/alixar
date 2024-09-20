@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2021       Florian Henry           <florian.henry@scopen.fr>
- * Copyright (C) 2024		MDW						<mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2021       Florian Henry               <florian.henry@scopen.fr>
+ * Copyright (C) 2024		MDW						    <mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +18,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  * \file    htdocs/admin/eventorganization.php
  * \ingroup eventorganization
@@ -31,7 +40,6 @@ global $langs, $user;
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/eventorganization.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 
 // Translations
 $langs->loadLangs(array("admin", "eventorganization", "categories"));
@@ -49,7 +57,7 @@ $scandir = GETPOST('scan_dir', 'alpha');
 $type = 'myobject';
 
 $arrayofparameters = array(
-    'EVENTORGANIZATION_TASK_LABEL' => array('type' => 'textarea','enabled' => 1, 'css' => ''),
+    'EVENTORGANIZATION_TASK_LABEL' => array('type' => 'textarea', 'enabled' => 1, 'css' => ''),
     'EVENTORGANIZATION_CATEG_THIRDPARTY_CONF' => array('type' => 'category:' . Categorie::TYPE_CUSTOMER, 'enabled' => 1, 'css' => ''),
     'EVENTORGANIZATION_CATEG_THIRDPARTY_BOOTH' => array('type' => 'category:' . Categorie::TYPE_CUSTOMER, 'enabled' => 1, 'css' => ''),
     'EVENTORGANIZATION_FILTERATTENDEES_CAT' => array('type' => 'category:' . Categorie::TYPE_CUSTOMER, 'enabled' => 1, 'css' => ''),
@@ -68,7 +76,7 @@ $arrayofparameters = array(
 $error = 0;
 $setupnotempty = 0;
 
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 // Access control
 if (empty($user->admin)) {
@@ -76,13 +84,12 @@ if (empty($user->admin)) {
 }
 
 
-
 /*
  * Actions
  */
 
 if ($cancel) {
-    $action  = '';
+    $action = '';
 }
 
 include DOL_DOCUMENT_ROOT . '/core/actions_setmoduleoptions.inc.php';
@@ -149,8 +156,6 @@ if ($action == 'updateMask') {
     }
 }*/
 
-
-
 /*
  * View
  */
@@ -196,13 +201,11 @@ if ($action == 'edit') {
                 print getDolGlobalString($constname);
                 print "</textarea>\n";
             } elseif ($val['type'] == 'html') {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
                 $doleditor = new DolEditor($constname, getDolGlobalString($constname), '', 160, 'dolibarr_notes', '', false, false, isModEnabled('fckeditor'), ROWS_5, '90%');
                 $doleditor->Create();
             } elseif ($val['type'] == 'yesno') {
                 print $form->selectyesno($constname, getDolGlobalString($constname), 1);
             } elseif (preg_match('/emailtemplate:/', $val['type'])) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                 $formmail = new FormMail($db);
 
                 $tmp = explode(':', $val['type']);
@@ -222,15 +225,12 @@ if ($action == 'edit') {
                 }
                 print $form->selectarray($constname, $arrayofmessagename, getDolGlobalString($constname), 'None', 0, 0, '', 0, 0, 0, '', '', 1);
             } elseif (preg_match('/category:/', $val['type'])) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
                 $formother = new FormOther($db);
 
                 $tmp = explode(':', $val['type']);
                 print img_picto('', 'category', 'class="pictofixedwidth"');
                 print $formother->select_categories($tmp[1], getDolGlobalString($constname), $constname, 0, $langs->trans('CustomersProspectsCategoriesShort'));
             } elseif (preg_match('/thirdparty_type/', $val['type'])) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
                 $formcompany = new FormCompany($db);
                 print $formcompany->selectProspectCustomerType(getDolGlobalString($constname), $constname, 'customerorprospect', 'form', '', 1);
             } elseif ($val['type'] == 'securekey') {
@@ -283,7 +283,6 @@ if ($action == 'edit') {
                     print ajax_constantonoff($constname);
                 } elseif (preg_match('/emailtemplate:/', $val['type'])) {
                     if (getDolGlobalString($constname)) {
-                        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
                         $formmail = new FormMail($db);
 
                         $tmp = explode(':', $val['type']);

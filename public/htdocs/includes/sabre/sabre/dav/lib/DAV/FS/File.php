@@ -67,10 +67,10 @@ class File extends Node implements DAV\IFile
     public function getETag()
     {
         return '"' . sha1(
-            fileinode($this->path) .
-            filesize($this->path) .
-            filemtime($this->path)
-        ) . '"';
+                fileinode($this->path) .
+                filesize($this->path) .
+                filemtime($this->path)
+            ) . '"';
     }
 
     /**

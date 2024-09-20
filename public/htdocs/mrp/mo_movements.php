@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2019 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2022 Ferran Marcet <fmarcet@2byte.es>
+/* Copyright (C) 2019       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *    \file       mo_movements.php
  *    \ingroup    mrp
@@ -27,36 +39,27 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp_mo.lib.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("mrp", "stocks", "other"));
 
 // Get parameters
-$id          = GETPOSTINT('id');
-$ref         = GETPOST('ref', 'alpha');
-$action      = GETPOST('action', 'aZ09');
-$confirm     = GETPOST('confirm', 'alpha');
-$cancel      = GETPOST('cancel', 'aZ09');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
+$action = GETPOST('action', 'aZ09');
+$confirm = GETPOST('confirm', 'alpha');
+$cancel = GETPOST('cancel', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'mostockmovement'; // To manage different context of search
-$backtopage  = GETPOST('backtopage', 'alpha');
-$optioncss   = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
-$massaction  = GETPOST('massaction', 'aZ09');
-$lineid      = GETPOSTINT('lineid');
+$backtopage = GETPOST('backtopage', 'alpha');
+$optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
+$massaction = GETPOST('massaction', 'aZ09');
+$lineid = GETPOSTINT('lineid');
 
-$msid  = GETPOSTINT('msid');
+$msid = GETPOSTINT('msid');
 
-$year  = GETPOST("year");       // TODO Rename into search_year
+$year = GETPOST("year");       // TODO Rename into search_year
 $month = GETPOST("month");      // TODO Rename into search_month
 
 $search_ref = GETPOST('search_ref', 'alpha');
@@ -71,7 +74,7 @@ $search_qty = trim(GETPOST("search_qty", 'alpha'));
 $search_type_mouvement = GETPOST('search_type_mouvement', "intcomma");
 
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
-$page  = GETPOSTISSET('pageplusone') ? (GETPOST('pageplusone') - 1) : GETPOSTINT("page");
+$page = GETPOSTISSET('pageplusone') ? (GETPOST('pageplusone') - 1) : GETPOSTINT("page");
 $sortfield = GETPOST('sortfield', 'aZ09comma');
 $sortorder = GETPOST('sortorder', 'aZ09comma');
 if (empty($page) || $page == -1) {
@@ -250,8 +253,6 @@ if (empty($reshook)) {
         $result = $object->setStatut($object::STATUS_INPROGRESS, 0, '', 'MRP_REOPEN');
     }
 }
-
-
 
 /*
  * View
@@ -451,9 +452,9 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "user as u ON m.fk_user_author = u.rowid";
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "product_lot as pl ON m.batch = pl.batch AND m.fk_product = pl.fk_product";
     $sql .= " WHERE m.fk_product = p.rowid";
-    $sql .= " AND m.origintype = 'mo' AND m.fk_origin = " . (int) $object->id;
+    $sql .= " AND m.origintype = 'mo' AND m.fk_origin = " . (int)$object->id;
     if ($msid > 0) {
-        $sql .= " AND m.rowid = " . ((int) $msid);
+        $sql .= " AND m.rowid = " . ((int)$msid);
     }
     $sql .= " AND m.fk_entrepot = e.rowid";
     $sql .= " AND e.entity IN (" . getEntity('stock') . ")";
@@ -521,10 +522,10 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($id > 0) {
-        $param .= '&id=' . urlencode((string) ($id));
+        $param .= '&id=' . urlencode((string)($id));
     }
     if ($search_movement) {
         $param .= '&search_movement=' . urlencode($search_movement);
@@ -863,7 +864,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
             // TODO Use a cache here
             $sql = "SELECT label";
             $sql .= " FROM " . MAIN_DB_PREFIX . "product_lang";
-            $sql .= " WHERE fk_product = " . ((int) $objp->rowid);
+            $sql .= " WHERE fk_product = " . ((int)$objp->rowid);
             $sql .= " AND lang = '" . $db->escape($langs->getDefaultLang()) . "'";
             $sql .= " LIMIT 1";
 

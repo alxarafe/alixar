@@ -27,6 +27,8 @@
  *  \brief          Library of ai script
  */
 
+use Dolibarr\Code\Ai\Classes\Ai;
+
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1'); // Disables token renewal
 }

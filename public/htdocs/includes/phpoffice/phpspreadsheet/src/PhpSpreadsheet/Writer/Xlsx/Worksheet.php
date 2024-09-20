@@ -28,9 +28,9 @@ class Worksheet extends WriterPart
      * @param string[] $pStringTable
      * @param bool $includeCharts Flag indicating if we should write charts
      *
+     * @return string XML Output
      * @throws WriterException
      *
-     * @return string XML Output
      */
     public function writeWorksheet(PhpspreadsheetWorksheet $pSheet, $pStringTable = null, $includeCharts = false)
     {
@@ -326,8 +326,8 @@ class Worksheet extends WriterPart
 
         // Set Zero Height row
         if (
-            (string) $pSheet->getDefaultRowDimension()->getZeroHeight() === '1' ||
-            strtolower((string) $pSheet->getDefaultRowDimension()->getZeroHeight()) == 'true'
+            (string)$pSheet->getDefaultRowDimension()->getZeroHeight() === '1' ||
+            strtolower((string)$pSheet->getDefaultRowDimension()->getZeroHeight()) == 'true'
         ) {
             $objWriter->writeAttribute('zeroHeight', '1');
         }
@@ -344,7 +344,7 @@ class Worksheet extends WriterPart
                 $outlineLevelRow = $dimension->getOutlineLevel();
             }
         }
-        $objWriter->writeAttribute('outlineLevelRow', (int) $outlineLevelRow);
+        $objWriter->writeAttribute('outlineLevelRow', (int)$outlineLevelRow);
 
         // Outline level - column
         $outlineLevelCol = 0;
@@ -353,7 +353,7 @@ class Worksheet extends WriterPart
                 $outlineLevelCol = $dimension->getOutlineLevel();
             }
         }
-        $objWriter->writeAttribute('outlineLevelCol', (int) $outlineLevelCol);
+        $objWriter->writeAttribute('outlineLevelCol', (int)$outlineLevelCol);
 
         $objWriter->endElement();
     }
@@ -1157,7 +1157,7 @@ class Worksheet extends WriterPart
                     //force a decimal to be written if the type is float
                     if (is_float($cellValue)) {
                         // force point as decimal separator in case current locale uses comma
-                        $cellValue = str_replace(',', '.', (string) $cellValue);
+                        $cellValue = str_replace(',', '.', (string)$cellValue);
                         if (strpos($cellValue, '.') === false) {
                             $cellValue = $cellValue . '.0';
                         }

@@ -1,9 +1,10 @@
 <?php
 
-/* Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Hrm\Classes\Job;
+
 /**
  * \file    lib/hrm_job.lib.php
  * \ingroup hrm
@@ -28,7 +32,7 @@
 /**
  * Prepare array of tabs for Job
  *
- * @param   Job     $object     Job
+ * @param Job $object Job
  * @return  array               Array of tabs
  */
 function jobPrepareHead($object)
@@ -48,7 +52,7 @@ function jobPrepareHead($object)
     $head[$h][0] = constant('BASE_URL') . "/hrm/skill_tab.php?id=" . $object->id . '&objecttype=job';
     $head[$h][1] = $langs->trans("RequiredSkills");
     $nbResources = 0;
-    $sql = "SELECT COUNT(rowid) as nb FROM " . MAIN_DB_PREFIX . "hrm_skillrank WHERE objecttype = 'job' AND fk_object = " . ((int) $object->id);
+    $sql = "SELECT COUNT(rowid) as nb FROM " . MAIN_DB_PREFIX . "hrm_skillrank WHERE objecttype = 'job' AND fk_object = " . ((int)$object->id);
     $resql = $db->query($sql);
     if ($resql) {
         $obj = $db->fetch_object($resql);
@@ -65,7 +69,7 @@ function jobPrepareHead($object)
     $head[$h][0] = constant('BASE_URL') . "/hrm/position.php?id=" . $object->id;
     $head[$h][1] = $langs->trans("PositionsWithThisProfile");
     $nbResources = 0;
-    $sql = "SELECT COUNT(rowid) as nb FROM " . MAIN_DB_PREFIX . "hrm_job_user WHERE fk_job = " . ((int) $object->id);
+    $sql = "SELECT COUNT(rowid) as nb FROM " . MAIN_DB_PREFIX . "hrm_job_user WHERE fk_job = " . ((int)$object->id);
     $resql = $db->query($sql);
     if ($resql) {
         $obj = $db->fetch_object($resql);
@@ -98,7 +102,6 @@ function jobPrepareHead($object)
     }
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->hrm->dir_output . "/job/" . dol_sanitizeFileName($object->label);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);

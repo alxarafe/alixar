@@ -263,11 +263,11 @@ class Style extends Supervisor
                     // start column index for region
                     $colStart = ($x == 3) ?
                         Coordinate::stringFromColumnIndex($rangeEnd[0])
-                            : Coordinate::stringFromColumnIndex($rangeStart[0] + $x - 1);
+                        : Coordinate::stringFromColumnIndex($rangeStart[0] + $x - 1);
                     // end column index for region
                     $colEnd = ($x == 1) ?
                         Coordinate::stringFromColumnIndex($rangeStart[0])
-                            : Coordinate::stringFromColumnIndex($rangeEnd[0] - $xMax + $x);
+                        : Coordinate::stringFromColumnIndex($rangeEnd[0] - $xMax + $x);
 
                     for ($y = 1; $y <= $yMax; ++$y) {
                         // which edges are touching the region
@@ -588,7 +588,7 @@ class Style extends Supervisor
             $styleArray = ['quotePrefix' => $pValue];
             $this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
         } else {
-            $this->quotePrefix = (bool) $pValue;
+            $this->quotePrefix = (bool)$pValue;
         }
 
         return $this;

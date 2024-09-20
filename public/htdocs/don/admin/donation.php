@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2005-2010  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2012-2015  Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2013-2017  Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2015-2020  Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2015       Benoit Bruchard			<benoitb21@gmail.com>
- * Copyright (C) 2019       Thibault FOUCART		<support@ptibogxiv.net>
+/* Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012-2015  Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2013-2017  Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2015-2020  Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015       Benoit Bruchard			    <benoitb21@gmail.com>
+ * Copyright (C) 2019       Thibault FOUCART		    <support@ptibogxiv.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Don\Classes\Don;
+
 /**
  *  \file       htdocs/don/admin/donation.php
  *  \ingroup    donations
@@ -32,10 +36,7 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/donation.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 }
 
 // Load translation files required by the page
@@ -69,7 +70,7 @@ if ($action == 'specimen') {
     if ($modele !== '' && file_exists($dir . $file)) {
         require_once $dir . $file;
 
-        $classname = (string) $modele;
+        $classname = (string)$modele;
         $obj = new $classname($db);
 
         if ($obj->write_file($don, $langs) > 0) {

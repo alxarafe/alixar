@@ -15,9 +15,9 @@ interface ClientInterface
      * They should return, in string form, the response body and throw an exception on error.
      *
      * @param UriInterface $endpoint
-     * @param mixed        $requestBody
-     * @param array        $extraHeaders
-     * @param string       $method
+     * @param mixed $requestBody
+     * @param array $extraHeaders
+     * @param string $method
      *
      * @return string
      *
@@ -25,8 +25,8 @@ interface ClientInterface
      */
     public function retrieveResponse(
         UriInterface $endpoint,
-        $requestBody,
+              $requestBody,
         array $extraHeaders = array(),
-        $method = 'POST'
+              $method = 'POST'
     );
 }

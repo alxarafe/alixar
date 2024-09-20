@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2006-2012  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2023		Charlene BENKE		<charlene@patas-monkey.com>
+/* Copyright (C) 2006-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2023		Charlene BENKE		        <charlene@patas-monkey.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,10 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
+
 /**
  * \file       htdocs/core/lib/contract.lib.php
  * \brief      Ensemble de functions de base pour le module contrat
@@ -28,7 +32,7 @@
 /**
  * Prepare array with list of tabs
  *
- * @param   Contrat $object     Object related to tabs
+ * @param Contrat $object Object related to tabs
  * @return  array               Array of tabs to show
  */
 function contract_prepare_head(Contrat $object)
@@ -86,7 +90,6 @@ function contract_prepare_head(Contrat $object)
     }
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->contrat->multidir_output[$object->entity] . "/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
@@ -112,7 +115,7 @@ function contract_prepare_head(Contrat $object)
         } else {
             $sql = "SELECT COUNT(id) as nb";
             $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm";
-            $sql .= " WHERE fk_element = " . ((int) $object->id);
+            $sql .= " WHERE fk_element = " . ((int)$object->id);
             $sql .= " AND elementtype = 'contract'";
             $resql = $db->query($sql);
             if ($resql) {
@@ -143,7 +146,7 @@ function contract_prepare_head(Contrat $object)
 /**
  *  Return array head with list of tabs to view object information.
  *
- *  @return array               head array with tabs
+ * @return array               head array with tabs
  */
 function contract_admin_prepare_head()
 {

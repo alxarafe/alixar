@@ -31,19 +31,20 @@ class Netatmo extends AbstractService
     // @link https://dev.netatmo.com/doc/authentication/scopes
 
     // Used to read weather station's data (devicelist, getmeasure)
-    const SCOPE_STATION_READ        = 'read_station';
+    const SCOPE_STATION_READ = 'read_station';
     // Used to read thermostat's data (devicelist, getmeasure, getthermstate)
-    const SCOPE_THERMOSTAT_READ     = 'read_thermostat';
+    const SCOPE_THERMOSTAT_READ = 'read_thermostat';
     // Used to configure the thermostat (syncschedule, setthermpoint)
-    const SCOPE_THERMOSTAT_WRITE    = 'write_thermostat';
+    const SCOPE_THERMOSTAT_WRITE = 'write_thermostat';
 
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct(
             $credentials,
             $httpClient,

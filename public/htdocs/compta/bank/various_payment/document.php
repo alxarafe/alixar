@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017       Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2017       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -26,12 +26,13 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Compta\Classes\PaymentVarious;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("compta", "banks", "bills", "users", "accountancy"));
@@ -66,7 +67,6 @@ if (!$sortfield) {
     $sortfield = "name";
 }
 
-
 $object = new PaymentVarious($db);
 $object->fetch($id, $ref);
 
@@ -75,14 +75,11 @@ $modulepart = 'banque';
 
 $permissiontoadd = $user->hasRight('banque', 'modifier');   // Used by the include of actions_dellink.inc.php
 
-
-
 /*
  * Actions
  */
 
 include DOL_DOCUMENT_ROOT . '/core/actions_linkedfiles.inc.php';
-
 
 /*
  * View

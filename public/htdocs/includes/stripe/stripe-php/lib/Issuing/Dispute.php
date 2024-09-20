@@ -39,9 +39,9 @@ class Dispute extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Issuing\Dispute the submited dispute
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Issuing\Dispute the submited dispute
      */
     public function submit($params = null, $opts = null)
     {

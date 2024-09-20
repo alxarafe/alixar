@@ -107,9 +107,9 @@ class Slk extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return array
      * @throws Exception
      *
-     * @return array
      */
     public function listWorksheetInfo($pFilename)
     {
@@ -177,9 +177,9 @@ class Slk extends BaseReader
      *
      * @param string $pFilename
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function load($pFilename)
     {
@@ -196,9 +196,9 @@ class Slk extends BaseReader
      * @param string $pFilename
      * @param Spreadsheet $spreadsheet
      *
+     * @return Spreadsheet
      * @throws Exception
      *
-     * @return Spreadsheet
      */
     public function loadIntoExisting($pFilename, Spreadsheet $spreadsheet)
     {
@@ -286,7 +286,7 @@ class Slk extends BaseReader
                     }
                 }
                 $this->formats['P' . $this->format++] = $formatArray;
-            //    Read cell value data
+                //    Read cell value data
             } elseif ($dataType == 'C') {
                 $hasCalculatedValue = false;
                 $cellData = $cellDataFormula = '';

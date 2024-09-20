@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2016   Marcos García  <marcosgdf@gmail.com>
- * Copyright (C) 2022   Open-Dsi		<support@open-dsi.fr>
+/* Copyright (C) 2016       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2022       Open-Dsi		            <support@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024	Benjamin Falière	<benjamin.faliere@altairis.fr>
+ * Copyright (C) 2024	    Benjamin Falière	        <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Variants\Classes\ProductAttribute;
+
 /**
  *      \file       htdocs/variants/list.php
  *      \ingroup    variants
@@ -28,8 +33,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/variants/class/ProductAttribute.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("products", "other"));
@@ -225,8 +228,6 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_massactions.inc.php';
 }
 
-
-
 /*
  * View
  */
@@ -239,7 +240,6 @@ $help_url = '';
 $title = $langs->trans("ProductAttributes");
 $morejs = array();
 $morecss = array();
-
 
 // Build and execute select
 // --------------------------------------------------------------------
@@ -557,7 +557,6 @@ foreach ($object->fields as $key => $val) {
             print $form->selectDate($search[$key . '_dtend'] ? $search[$key . '_dtend'] : '', "search_" . $key . "_dtend", 0, 0, 1, '', 1, 0, 0, '', '', '', '', 1, '', $langs->trans('to'));
             print '</div>';
         } elseif ($key == 'lang') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
             $formadmin = new FormAdmin($db);
             print $formadmin->select_language($search[$key], 'search_lang', 0, null, 1, 0, 0, 'minwidth100imp maxwidth125', 2);
         } else {
@@ -851,7 +850,7 @@ $tagidfortablednd = (empty($tagidfortablednd) ? 'tableattributes' : $tagidfortab
             $(".imgupforline, .imgdownforline").hide();
             $(".lineupdown").removeAttr('href');
             $(".tdlineupdown")
-                .css("background-image", 'url(<?php echo constant('BASE_URL') . '/theme/' . $conf->theme . '/img/grip.png'; ?>)')
+                .css("background-image", 'url(<?php echo constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/img/grip.png'; ?>)')
                 .css("background-repeat", "no-repeat")
                 .css("background-position", "center center")
                 .hover(
@@ -893,7 +892,6 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
         $hidegeneratedfilelistifempty = 0;
     }
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
     $formfile = new FormFile($db);
 
     // Show list of available documents

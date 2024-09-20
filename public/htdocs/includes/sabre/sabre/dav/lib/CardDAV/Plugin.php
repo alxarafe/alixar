@@ -119,8 +119,8 @@ class Plugin extends DAV\ServerPlugin
         $node = $this->server->tree->getNodeForPath($uri);
         if ($node instanceof IAddressBook || $node instanceof ICard) {
             return [
-                 '{' . self::NS_CARDDAV . '}addressbook-multiget',
-                 '{' . self::NS_CARDDAV . '}addressbook-query',
+                '{' . self::NS_CARDDAV . '}addressbook-multiget',
+                '{' . self::NS_CARDDAV . '}addressbook-query',
             ];
         }
 
@@ -175,9 +175,9 @@ class Plugin extends DAV\ServerPlugin
     /**
      * This functions handles REPORT requests specific to CardDAV.
      *
-     * @param string   $reportName
+     * @param string $reportName
      * @param \DOMNode $dom
-     * @param mixed    $path
+     * @param mixed $path
      *
      * @return bool
      */
@@ -262,9 +262,9 @@ class Plugin extends DAV\ServerPlugin
      * This plugin uses this method to ensure that Card nodes receive valid
      * vcard data.
      *
-     * @param string   $path
+     * @param string $path
      * @param resource $data
-     * @param bool     $modified should be set to true, if this event handler
+     * @param bool $modified should be set to true, if this event handler
      *                           changed &$data
      */
     public function beforeWriteContent($path, DAV\IFile $node, &$data, &$modified)
@@ -282,9 +282,9 @@ class Plugin extends DAV\ServerPlugin
      * This plugin uses this method to ensure that Card nodes receive valid
      * vcard data.
      *
-     * @param string   $path
+     * @param string $path
      * @param resource $data
-     * @param bool     $modified should be set to true, if this event handler
+     * @param bool $modified should be set to true, if this event handler
      *                           changed &$data
      */
     public function beforeCreateFile($path, &$data, DAV\ICollection $parentNode, &$modified)
@@ -302,7 +302,7 @@ class Plugin extends DAV\ServerPlugin
      * An exception is thrown if it's not.
      *
      * @param resource|string $data
-     * @param bool            $modified should be set to true, if this event handler
+     * @param bool $modified should be set to true, if this event handler
      *                                  changed &$data
      */
     protected function validateVCard(&$data, &$modified)
@@ -474,7 +474,7 @@ class Plugin extends DAV\ServerPlugin
      * Validates if a vcard makes it throught a list of filters.
      *
      * @param string $vcardData
-     * @param string $test      anyof or allof (which means OR or AND)
+     * @param string $test anyof or allof (which means OR or AND)
      *
      * @return bool
      */
@@ -674,7 +674,7 @@ class Plugin extends DAV\ServerPlugin
         // the content-type property. By default SabreDAV will send back
         // text/x-vcard; charset=utf-8, but for SOGO we must strip that last
         // part.
-        if (false === strpos((string) $this->server->httpRequest->getHeader('User-Agent'), 'Thunderbird')) {
+        if (false === strpos((string)$this->server->httpRequest->getHeader('User-Agent'), 'Thunderbird')) {
             return;
         }
         $contentType = $propFind->get('{DAV:}getcontenttype');
@@ -786,7 +786,7 @@ class Plugin extends DAV\ServerPlugin
             case 'application/vcard+json':
                 return 'jcard';
 
-        // @codeCoverageIgnoreStart
+            // @codeCoverageIgnoreStart
         }
         // @codeCoverageIgnoreEnd
     }
@@ -795,8 +795,8 @@ class Plugin extends DAV\ServerPlugin
      * Converts a vcard blob to a different version, or jcard.
      *
      * @param string|resource $data
-     * @param string          $target
-     * @param array           $propertiesFilter
+     * @param string $target
+     * @param array $propertiesFilter
      *
      * @return string
      */

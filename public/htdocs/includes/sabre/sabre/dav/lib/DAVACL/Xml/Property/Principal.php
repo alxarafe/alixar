@@ -58,7 +58,7 @@ class Principal extends DAV\Xml\Property\Href
      *
      * 'href' is only required for the HREF type.
      *
-     * @param int         $type
+     * @param int $type
      * @param string|null $href
      */
     public function __construct($type, $href = null)

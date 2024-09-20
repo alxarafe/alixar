@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2022 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2022       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\WebHook\Classes\Target;
+
 /**
  * \file    htdocs/webhook/lib/webhook_target.lib.php
  * \ingroup webhook
@@ -25,7 +28,7 @@
 /**
  * Prepare array of tabs for Target
  *
- * @param   Target  $object     Target
+ * @param Target $object Target
  * @return  array               Returns an array of tabs
  */
 function targetPrepareHead($object)

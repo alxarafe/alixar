@@ -1,6 +1,8 @@
 <?php
 
-/*
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -14,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *  \file       /htdocs/expedition/ajax/searchfrombarcode.php
@@ -36,7 +40,6 @@ if (!defined('NOREQUIRESOC')) {
     define('NOREQUIRESOC', '1');
 }
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-include_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 
 $action = GETPOST("action", "alpha");
 $barcode = GETPOST("barcode", "aZ09");

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2007-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2007-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Recruitement\Classes\RecruitmentCandidature;
+use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
+
 /**
  *      \file       recruitmentcandidature_list.php
  *      \ingroup    recruitment
@@ -27,11 +33,8 @@
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/lib/recruitment.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/lib/recruitment_recruitmentjobposition.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentcandidature.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentjobposition.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("recruitment", "other"));
@@ -205,8 +208,6 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_massactions.inc.php';
 }
 
-
-
 /*
  * View
  */
@@ -220,7 +221,6 @@ $help_url = '';
 $title = $langs->trans('RecruitmentCandidatures');
 $morejs = array();
 $morecss = array();
-
 
 // Build and execute select
 // --------------------------------------------------------------------
@@ -467,9 +467,7 @@ if ($jobposition->id > 0 && (empty($action) || ($action != 'edit' && $action != 
     }
     $morehtmlref .= '</div>';
 
-
     dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref);
-
 
     print '<div class="fichecenter">';
     print '<div class="fichehalfleft">';
@@ -653,7 +651,6 @@ foreach ($object->fields as $key => $val) {
             print $form->selectDate($search[$key . '_dtend'] ? $search[$key . '_dtend'] : '', "search_" . $key . "_dtend", 0, 0, 1, '', 1, 0, 0, '', '', '', '', 1, '', $langs->trans('to'));
             print '</div>';
         } elseif ($key == 'lang') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
             $formadmin = new FormAdmin($db);
             print $formadmin->select_language($search[$key], 'search_lang', 0, null, 1, 0, 0, 'minwidth100imp maxwidth125', 2);
         } else {
@@ -899,7 +896,6 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
         $hidegeneratedfilelistifempty = 0;
     }
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
     $formfile = new FormFile($db);
 
     // Show list of available documents

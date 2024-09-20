@@ -26,13 +26,14 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\FichInter\Classes\ModelePDFFicheinter;
+
 /**
  *  \file       htdocs/core/modules/fichinter/doc/pdf_soleil.modules.php
  *  \ingroup    ficheinter
  *  \brief      File of Class to build interventions documents with model Soleil
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/fichinter/modules_fichinter.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -79,7 +80,7 @@ class pdf_soleil extends ModelePDFFicheinter
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -119,21 +120,22 @@ class pdf_soleil extends ModelePDFFicheinter
         $this->posxdesc = $this->marge_gauche + 1;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build pdf onto disk
      *
-     *  @param      Fichinter       $object             Object to generate
-     *  @param      Translate       $outputlangs        Lang output object
-     *  @param      string          $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int             $hidedetails        Do not show line details
-     *  @param      int             $hidedesc           Do not show desc
-     *  @param      int             $hideref            Do not show ref
-     *  @return     int                                 1=OK, 0=KO
+     * @param Fichinter $object Object to generate
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                                 1=OK, 0=KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath = '', $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $db, $hookmanager;
 
         if (!is_object($outputlangs)) {
@@ -175,7 +177,6 @@ class pdf_soleil extends ModelePDFFicheinter
             if (file_exists($dir)) {
                 // Add pdfgeneration hook
                 if (!is_object($hookmanager)) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                     $hookmanager = new HookManager($this->db);
                 }
 
@@ -443,19 +444,20 @@ class pdf_soleil extends ModelePDFFicheinter
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     float|int   $tab_top        Top position of table
-     *   @param     float|int   $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        Hide top bar of array
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @param     ?Fichinter  $object         FichInter Object
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param float|int $tab_top Top position of table
+     * @param float|int $tab_height Height of table (rectangle)
+     * @param int $nexY Y
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop Hide top bar of array
+     * @param int $hidebottom Hide bottom bar of array
+     * @param     ?Fichinter $object FichInter Object
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0, Fichinter $object = null)
     {
@@ -516,15 +518,16 @@ class pdf_soleil extends ModelePDFFicheinter
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Fichinter   $object         Object to show
-     *  @param  int         $showaddress    0=no, 1=yes
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @return float|int                   Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param Fichinter $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @return float|int                   Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs)
     {
@@ -706,15 +709,16 @@ class pdf_soleil extends ModelePDFFicheinter
         return 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *      Show footer of page. Need this->emetteur object
      *
-     *      @param  TCPDF       $pdf                PDF
-     *      @param  Fichinter   $object             Object to show
-     *      @param  Translate   $outputlangs        Object lang for output
-     *      @param  int         $hidefreetext       1=Hide free text
-     *      @return integer
+     * @param TCPDF $pdf PDF
+     * @param Fichinter $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return integer
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {

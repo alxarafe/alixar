@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2018  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2024	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2019		Nicolas ZABOURI		<info@inovea-conseil.com>
+/* Copyright (C) 2005-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2024	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2019		Nicolas ZABOURI		        <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\InfoBox;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\User\Classes\UserGroup;
+
 /**
  *  \file       htdocs/user/home.php
  *  \brief      Home page of users and groups management
@@ -26,8 +33,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'userhome'; // To manage different context of search
 
@@ -64,7 +69,6 @@ $resultboxes = FormOther::getBoxesArea($user, "1");
 
 if (GETPOST('addbox')) {
     // Add box (when submit is done from a form when ajax disabled)
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/infobox.class.php';
     $zone = GETPOSTINT('areacode');
     $userid = GETPOSTINT('userid');
     $boxorder = GETPOST('boxorder', 'aZ09');
@@ -136,7 +140,7 @@ if ($reshook > 0) {
     $sql .= " WHERE u.entity IN (" . getEntity('user') . ")";
 }
 if (!empty($socid)) {
-    $sql .= " AND u.fk_soc = " . ((int) $socid);
+    $sql .= " AND u.fk_soc = " . ((int)$socid);
 }
 $sql .= $db->order("u.datec", "DESC");
 $sql .= $db->plimit($max);

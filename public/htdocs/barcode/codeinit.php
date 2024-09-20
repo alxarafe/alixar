@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2014-2022 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2018  	   Ferran Marcet 		<fmarcet@2byte.es>
+/* Copyright (C) 2014-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018  	    Ferran Marcet 		        <fmarcet@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *  \file       htdocs/barcode/codeinit.php
  *  \ingroup    member
@@ -27,8 +30,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
+
+use Dolibarr\Code\Societe\Classes\Societe;
 
 // Load translation files required by the page
 $langs->loadLangs(array('admin', 'members', 'errors', 'other'));
@@ -282,7 +285,6 @@ if ($action == 'initbarcodeproducts') {
     $action = '';
 }
 
-
 /*
  * View
  */
@@ -301,7 +303,6 @@ print '<br>';
 //print '<br>';
 
 print '<br>';
-
 
 
 // Example 1 : Adding jquery code
@@ -451,7 +452,6 @@ if (isModEnabled('product') || isModEnabled('service')) {
 print load_fiche_titre($langs->trans("BarCodePrintsheet"), '', 'generic');
 print '<br>' . "\n";
 print $langs->trans("ClickHereToGoTo") . ' : <a href="' . constant('BASE_URL') . 'barcode/printsheet.php">' . $langs->trans("BarCodePrintsheet") . '</a>';
-
 
 
 print '<br>';

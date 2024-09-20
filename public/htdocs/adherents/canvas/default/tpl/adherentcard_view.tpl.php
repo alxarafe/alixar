@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2010-2012 Regis Houssin  <regis.houssin@inodbox.com>
  * Copyright (C) 2012-2022 Philippe Grand <philippe.grand@atoo-net.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>

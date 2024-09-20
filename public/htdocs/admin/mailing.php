@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville     <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2013 Laurent Destailleur  	<eldy@users.sourceforge.org>
- * Copyright (C) 2011-2013 Juanjo Menent			<jmenent@2byte.es>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2013  Laurent Destailleur  	    <eldy@users.sourceforge.org>
+ * Copyright (C) 2011-2013  Juanjo Menent			    <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security2.lib.php';
@@ -40,7 +42,6 @@ if (!$user->admin) {
 $action = GETPOST('action', 'aZ09');
 
 $form = new Form($db);
-
 
 /*
  * Actions
@@ -60,10 +61,10 @@ if ($action == 'setvalue') {
         $mailingdelay = '';
     }
     // Clean data
-    if ((float) $mailingdelay > 10) {
+    if ((float)$mailingdelay > 10) {
         $mailingdelay = 10;
     }
-    if (GETPOST('MAILING_DELAY', 'alpha') != '' && GETPOST('MAILING_DELAY', 'alpha') != '0' && (float) $mailingdelay < 0.001) {
+    if (GETPOST('MAILING_DELAY', 'alpha') != '' && GETPOST('MAILING_DELAY', 'alpha') != '0' && (float)$mailingdelay < 0.001) {
         $mailingdelay = 0.001;
     }
 

@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2011       Dimitri Mouillard   <dmouillard@teclib.com>
- * Copyright (C) 2013-2015	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2012-2014	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2015-2016	Alexandre Spangaro	<aspangaro@open-dsi.fr>
- * Copyright (C) 2019       Nicolas ZABOURI     <info@inovea-conseil.com>
- * Copyright (C) 2021-2024  Frédéric France		<frederic.france@free.fr>
+/* Copyright (C) 2011       Dimitri Mouillard           <dmouillard@teclib.com>
+ * Copyright (C) 2013-2015	Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2012-2014	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2016	Alexandre Spangaro	        <aspangaro@open-dsi.fr>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2021-2024  Frédéric France		        <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\Recruitement\Classes\RecruitmentCandidature;
+use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *    \file       htdocs/hrm/index.php
  *    \ingroup    hrm
@@ -30,28 +36,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/usergroup.class.php';
-
-if (isModEnabled('deplacement')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/deplacement/class/deplacement.class.php';
-}
-if (isModEnabled('expensereport')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
-}
-if (isModEnabled('recruitment')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentcandidature.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/recruitment/class/recruitmentjobposition.class.php';
-}
-if (isModEnabled('holiday')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
-}
-
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $hookmanager = new HookManager($db);
@@ -75,7 +62,6 @@ if (!getDolGlobalString('MAIN_INFO_SOCIETE_NOM') || !getDolGlobalString('MAIN_IN
 
 $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
 
-
 /*
  * Actions
  */
@@ -85,7 +71,6 @@ if (isModEnabled('holiday') && !empty($setupcompanynotcomplete)) {
     $holidaystatic = new Holiday($db);
     $result = $holidaystatic->updateBalance();
 }
-
 
 /*
  * View
@@ -364,7 +349,6 @@ if (isModEnabled('expensereport') && $user->hasRight('expensereport', 'read')) {
     }
 }
 
-
 // Last modified job position
 if (isModEnabled('recruitment') && $user->hasRight('recruitment', 'recruitmentjobposition', 'read')) {
     $staticrecruitmentcandidature = new RecruitmentCandidature($db);
@@ -378,7 +362,7 @@ if (isModEnabled('recruitment') && $user->hasRight('recruitment', 'recruitmentjo
     }
     $sql .= " WHERE rc.entity IN (" . getEntity($staticrecruitmentcandidature->element) . ")";
     if (isModEnabled('societe') && !$user->hasRight('societe', 'client', 'voir') && !$socid) {
-        $sql .= " AND rp.fk_soc = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND rp.fk_soc = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
         $sql .= " AND rp.fk_soc = $socid";

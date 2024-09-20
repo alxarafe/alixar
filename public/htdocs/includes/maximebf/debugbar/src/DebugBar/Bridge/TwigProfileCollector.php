@@ -57,7 +57,7 @@ class TwigProfileCollector extends DataCollector implements Renderable, AssetPro
     /**
      * @var array[] {
      * @var string $name
-     * @var int    $render_time
+     * @var int $render_time
      * @var string $render_time_str
      * @var string $memory_str
      * @var string $xdebug_link
@@ -73,7 +73,7 @@ class TwigProfileCollector extends DataCollector implements Renderable, AssetPro
      */
     public function __construct(\Twig_Profiler_Profile $profile, $loaderOrEnv = null)
     {
-        $this->profile     = $profile;
+        $this->profile = $profile;
         if ($loaderOrEnv instanceof \Twig_Environment) {
             $loaderOrEnv = $loaderOrEnv->getLoader();
         }
@@ -89,14 +89,14 @@ class TwigProfileCollector extends DataCollector implements Renderable, AssetPro
     public function getWidgets()
     {
         return array(
-            'twig'       => array(
-                'icon'    => 'leaf',
-                'widget'  => 'PhpDebugBar.Widgets.TemplatesWidget',
-                'map'     => 'twig',
+            'twig' => array(
+                'icon' => 'leaf',
+                'widget' => 'PhpDebugBar.Widgets.TemplatesWidget',
+                'map' => 'twig',
                 'default' => json_encode(array('templates' => array())),
             ),
             'twig:badge' => array(
-                'map'     => 'twig.badge',
+                'map' => 'twig.badge',
                 'default' => 0,
             ),
         );
@@ -109,7 +109,7 @@ class TwigProfileCollector extends DataCollector implements Renderable, AssetPro
     {
         return array(
             'css' => 'widgets/templates/widget.css',
-            'js'  => 'widgets/templates/widget.js',
+            'js' => 'widgets/templates/widget.js',
         );
     }
 
@@ -121,19 +121,19 @@ class TwigProfileCollector extends DataCollector implements Renderable, AssetPro
     public function collect()
     {
         $this->templateCount = $this->blockCount = $this->macroCount = 0;
-        $this->templates     = array();
+        $this->templates = array();
         $this->computeData($this->profile);
 
         return array(
-            'nb_templates'                => $this->templateCount,
-            'nb_blocks'                   => $this->blockCount,
-            'nb_macros'                   => $this->macroCount,
-            'templates'                   => $this->templates,
-            'accumulated_render_time'     => $this->profile->getDuration(),
+            'nb_templates' => $this->templateCount,
+            'nb_blocks' => $this->blockCount,
+            'nb_macros' => $this->macroCount,
+            'templates' => $this->templates,
+            'accumulated_render_time' => $this->profile->getDuration(),
             'accumulated_render_time_str' => $this->getDataFormatter()->formatDuration($this->profile->getDuration()),
-            'memory_usage_str'            => $this->getDataFormatter()->formatBytes($this->profile->getMemoryUsage()),
-            'callgraph'                   => $this->getHtmlCallGraph(),
-            'badge'                       => implode(
+            'memory_usage_str' => $this->getDataFormatter()->formatBytes($this->profile->getMemoryUsage()),
+            'callgraph' => $this->getHtmlCallGraph(),
+            'badge' => implode(
                 '/',
                 array(
                     $this->templateCount,
@@ -165,8 +165,8 @@ class TwigProfileCollector extends DataCollector implements Renderable, AssetPro
      * Get an Xdebug Link to a file
      *
      * @return array {
-     *  @var string url
-     *  @var bool ajax
+     * @var string url
+     * @var bool ajax
      * }
      */
     public function getXdebugLink($template, $line = 1)
@@ -182,15 +182,15 @@ class TwigProfileCollector extends DataCollector implements Renderable, AssetPro
     private function computeData(\Twig_Profiler_Profile $profile)
     {
         $this->templateCount += ($profile->isTemplate() ? 1 : 0);
-        $this->blockCount    += ($profile->isBlock() ? 1 : 0);
-        $this->macroCount    += ($profile->isMacro() ? 1 : 0);
+        $this->blockCount += ($profile->isBlock() ? 1 : 0);
+        $this->macroCount += ($profile->isMacro() ? 1 : 0);
         if ($profile->isTemplate()) {
             $this->templates[] = array(
-                'name'            => $profile->getName(),
-                'render_time'     => $profile->getDuration(),
+                'name' => $profile->getName(),
+                'render_time' => $profile->getDuration(),
                 'render_time_str' => $this->getDataFormatter()->formatDuration($profile->getDuration()),
-                'memory_str'      => $this->getDataFormatter()->formatBytes($profile->getMemoryUsage()),
-                'xdebug_link'     => $this->getXdebugLink($profile->getTemplate()),
+                'memory_str' => $this->getDataFormatter()->formatBytes($profile->getMemoryUsage()),
+                'xdebug_link' => $this->getXdebugLink($profile->getTemplate()),
             );
         }
         foreach ($profile as $p) {

@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2017       Pierre-Henry Favre   <support@atm-consulting.fr>
- * Copyright (C) 2020       Maxime DEMAREST      <maxime@indelog.fr>
- * Copyright (C) 2021       Gauthier VERDOL      <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2022-2024  Alexandre Spangaro   <aspangaro@easya.solutions>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2017       Pierre-Henry Favre          <support@atm-consulting.fr>
+ * Copyright (C) 2020       Maxime DEMAREST             <maxime@indelog.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2022-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,6 +22,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\ChargeSociales;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\PaymentVarious;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Loan\Classes\PaymentLoan;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Salaries\Classes\PaymentSalary;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/compta/accounting-files.php
@@ -40,21 +54,8 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/paymentsalary.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/sociales/class/chargesociales.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/don/class/don.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/paymentvarious.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/paymentloan.class.php';
 
 if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 }
 
 // Constant to define payment sens
@@ -145,9 +146,8 @@ $listofchoices = array(
     'selectsocialcontributions' => array('label' => 'SocialContributions', 'picto' => 'bill', 'enabled' => isModEnabled('tax'), 'perms' => $user->hasRight('tax', 'charges', 'lire')),
     'selectpaymentsofsalaries' => array('label' => 'SalariesPayments', 'picto' => 'salary', 'lang' => 'salaries', 'enabled' => isModEnabled('salaries'), 'perms' => $user->hasRight('salaries', 'read')),
     'selectvariouspayment' => array('label' => 'VariousPayment', 'picto' => 'payment', 'enabled' => isModEnabled('bank'), 'perms' => $user->hasRight('banque', 'lire')),
-    'selectloanspayment' => array('label' => 'PaymentLoan','picto' => 'loan', 'enabled' => isModEnabled('don'), 'perms' => $user->hasRight('loan', 'read')),
+    'selectloanspayment' => array('label' => 'PaymentLoan', 'picto' => 'loan', 'enabled' => isModEnabled('don'), 'perms' => $user->hasRight('loan', 'read')),
 );
-
 
 
 /*
@@ -192,7 +192,7 @@ if (($action == 'searchfiles' || $action == 'dl')) {
             $sql .= " AND t.entity IN (" . $db->sanitize($entity == 1 ? '0,1' : $entity) . ')';
             $sql .= " AND t.fk_statut <> " . Facture::STATUS_DRAFT;
             if (!empty($projectid)) {
-                $sql .= " AND fk_projet = " . ((int) $projectid);
+                $sql .= " AND fk_projet = " . ((int)$projectid);
             }
         }
         // Vendor invoices
@@ -208,7 +208,7 @@ if (($action == 'searchfiles' || $action == 'dl')) {
             $sql .= " AND t.entity IN (" . $db->sanitize($entity == 1 ? '0,1' : $entity) . ')';
             $sql .= " AND t.fk_statut <> " . FactureFournisseur::STATUS_DRAFT;
             if (!empty($projectid)) {
-                $sql .= " AND fk_projet = " . ((int) $projectid);
+                $sql .= " AND fk_projet = " . ((int)$projectid);
             }
         }
         // Expense reports
@@ -237,7 +237,7 @@ if (($action == 'searchfiles' || $action == 'dl')) {
             $sql .= " AND t.entity IN (" . $db->sanitize($entity == 1 ? '0,1' : $entity) . ')';
             $sql .= " AND t.fk_statut <> " . Don::STATUS_DRAFT;
             if (!empty($projectid)) {
-                $sql .= " AND fk_projet = " . ((int) $projectid);
+                $sql .= " AND fk_projet = " . ((int)$projectid);
             }
         }
         // Payments of salaries
@@ -253,7 +253,7 @@ if (($action == 'searchfiles' || $action == 'dl')) {
             $sql .= " AND t.entity IN (" . $db->sanitize($entity == 1 ? '0,1' : $entity) . ')';
             //$sql.=" AND fk_statut <> ".PaymentSalary::STATUS_DRAFT;
             if (!empty($projectid)) {
-                $sql .= " AND fk_projet = " . ((int) $projectid);
+                $sql .= " AND fk_projet = " . ((int)$projectid);
             }
         }
         // Social contributions
@@ -269,7 +269,7 @@ if (($action == 'searchfiles' || $action == 'dl')) {
             $sql .= " AND t.entity IN (" . $db->sanitize($entity == 1 ? '0,1' : $entity) . ')';
             //$sql.=" AND fk_statut <> ".ChargeSociales::STATUS_UNPAID;
             if (!empty($projectid)) {
-                $sql .= " AND fk_projet = " . ((int) $projectid);
+                $sql .= " AND fk_projet = " . ((int)$projectid);
             }
         }
         // Various payments
@@ -284,7 +284,7 @@ if (($action == 'searchfiles' || $action == 'dl')) {
             $sql .= " WHERE datep between " . $wheretail;
             $sql .= " AND t.entity IN (" . $db->sanitize($entity == 1 ? '0,1' : $entity) . ')';
             if (!empty($projectid)) {
-                $sql .= " AND fk_projet = " . ((int) $projectid);
+                $sql .= " AND fk_projet = " . ((int)$projectid);
             }
         }
         // Loan payments
@@ -586,7 +586,6 @@ if ($result && $action == "dl" && !$error) {
     }
 }
 
-
 /*
  * View
  */
@@ -703,7 +702,7 @@ if (!empty($date_start) && !empty($date_stop)) {
 
     echo dol_print_date($date_start, 'day', 'tzuserrel') . " - " . dol_print_date($date_stop, 'day', 'tzuserrel');
 
-    print '<a class="marginleftonly small' . (empty($TData) ? ' butActionRefused' : ' butAction') . '" href="' . $_SERVER["PHP_SELF"] . '?action=dl&token=' . currentToken() . '&projectid=' . ((int) $projectid) . '&output=file&file=' . urlencode($filename) . $param . '"';
+    print '<a class="marginleftonly small' . (empty($TData) ? ' butActionRefused' : ' butAction') . '" href="' . $_SERVER["PHP_SELF"] . '?action=dl&token=' . currentToken() . '&projectid=' . ((int)$projectid) . '&output=file&file=' . urlencode($filename) . $param . '"';
     if (empty($TData)) {
         print " disabled";
     }

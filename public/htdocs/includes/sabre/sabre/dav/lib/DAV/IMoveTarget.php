@@ -38,7 +38,7 @@ interface IMoveTarget extends ICollection
      *
      * @param string $targetName new local file/collection name
      * @param string $sourcePath Full path to source node
-     * @param INode  $sourceNode Source node itself
+     * @param INode $sourceNode Source node itself
      *
      * @return bool
      */

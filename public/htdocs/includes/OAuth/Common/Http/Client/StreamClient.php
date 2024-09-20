@@ -15,9 +15,9 @@ class StreamClient extends AbstractClient
      * They should return, in string form, the response body and throw an exception on error.
      *
      * @param UriInterface $endpoint
-     * @param mixed        $requestBody
-     * @param array        $extraHeaders
-     * @param string       $method
+     * @param mixed $requestBody
+     * @param array $extraHeaders
+     * @param string $method
      *
      * @return string
      *
@@ -26,10 +26,11 @@ class StreamClient extends AbstractClient
      */
     public function retrieveResponse(
         UriInterface $endpoint,
-        $requestBody,
+              $requestBody,
         array $extraHeaders = array(),
-        $method = 'POST'
-    ) {
+              $method = 'POST'
+    )
+    {
         // Normalize method name
         $method = strtoupper($method);
 
@@ -49,7 +50,7 @@ class StreamClient extends AbstractClient
             $host .= ':' . $endpoint->getPort();
         }
 
-        $extraHeaders['Host']       = $host;
+        $extraHeaders['Host'] = $host;
         $extraHeaders['Connection'] = 'Connection: close';
 
         if (is_array($requestBody)) {
@@ -82,13 +83,13 @@ class StreamClient extends AbstractClient
         return stream_context_create(
             array(
                 'http' => array(
-                    'method'           => $method,
-                    'header'           => implode("\r\n", array_values($headers)),
-                    'content'          => $body,
+                    'method' => $method,
+                    'header' => implode("\r\n", array_values($headers)),
+                    'content' => $body,
                     'protocol_version' => '1.1',
-                    'user_agent'       => $this->userAgent,
-                    'max_redirects'    => $this->maxRedirects,
-                    'timeout'          => $this->timeout
+                    'user_agent' => $this->userAgent,
+                    'max_redirects' => $this->maxRedirects,
+                    'timeout' => $this->timeout
                 ),
             )
         );

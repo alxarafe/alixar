@@ -14,9 +14,9 @@ class PayoutService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Payout>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Payout>
      */
     public function all($params = null, $opts = null)
     {
@@ -32,9 +32,9 @@ class PayoutService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Payout
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Payout
      */
     public function cancel($id, $params = null, $opts = null)
     {
@@ -57,9 +57,9 @@ class PayoutService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Payout
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Payout
      */
     public function create($params = null, $opts = null)
     {
@@ -75,9 +75,9 @@ class PayoutService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Payout
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Payout
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -98,9 +98,9 @@ class PayoutService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Payout
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Payout
      */
     public function reverse($id, $params = null, $opts = null)
     {
@@ -116,9 +116,9 @@ class PayoutService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Payout
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Payout
      */
     public function update($id, $params = null, $opts = null)
     {

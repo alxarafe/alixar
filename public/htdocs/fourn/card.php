@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2003      Eric Seigne          <erics@rycks.com>
- * Copyright (C) 2004-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010-2015 Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2014      Jean Heimburger      <jean@tiaris.info>
- * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2015      Raphaël Doursenaud   <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2021       Frédéric France     <frederic.france@netlogic.fr>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003       Eric Seigne                 <erics@rycks.com>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2015  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2014       Jean Heimburger             <jean@tiaris.info>
+ * Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2021       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Fourn\Classes\Fournisseur;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+
 /**
  *  \file       htdocs/fourn/card.php
  *  \ingroup    fournisseur, facture
@@ -33,18 +44,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-if (isModEnabled('member')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-}
-if (isModEnabled('category')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
-}
 if (!empty($conf->accounting->enabled)) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 }
@@ -86,7 +86,6 @@ if ($object->id > 0) {
         accessforbidden();
     }
 }
-
 
 /*
  * Action
@@ -574,7 +573,7 @@ if ($object->id > 0) {
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'product_fournisseur_price as pfp';
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "product as p ON p.rowid = pfp.fk_product";
         $sql .= ' WHERE p.entity IN (' . getEntity('product') . ')';
-        $sql .= ' AND pfp.fk_soc = ' . ((int) $object->id);
+        $sql .= ' AND pfp.fk_soc = ' . ((int)$object->id);
         $sql .= $db->order('pfp.tms', 'desc');
         $sql .= $db->plimit($MAXLIST);
 
@@ -635,7 +634,6 @@ if ($object->id > 0) {
         print '</div>';
     }
 
-
     /*
      * Latest supplier proposal
      */
@@ -646,7 +644,7 @@ if ($object->id > 0) {
 
         $sql = "SELECT p.rowid, p.ref, p.date_valid as dc, p.fk_statut, p.total_ht, p.total_tva, p.total_ttc";
         $sql .= " FROM " . MAIN_DB_PREFIX . "supplier_proposal as p ";
-        $sql .= " WHERE p.fk_soc = " . ((int) $object->id);
+        $sql .= " WHERE p.fk_soc = " . ((int)$object->id);
         $sql .= " AND p.entity IN (" . getEntity('supplier_proposal') . ")";
         $sql .= " ORDER BY p.date_valid DESC";
         $sql .= $db->plimit($MAXLIST);
@@ -716,7 +714,7 @@ if ($object->id > 0) {
         $sql2 .= ', ' . MAIN_DB_PREFIX . 'commande_fournisseur as c';
         $sql2 .= ' WHERE c.fk_soc = s.rowid';
         $sql2 .= " AND c.entity IN (" . getEntity('commande_fournisseur') . ")";
-        $sql2 .= ' AND s.rowid = ' . ((int) $object->id);
+        $sql2 .= ' AND s.rowid = ' . ((int)$object->id);
         // Show orders we can bill
         if (!getDolGlobalString('SUPPLIER_ORDER_TO_INVOICE_STATUS')) {
             $sql2 .= " AND c.fk_statut IN (" . $db->sanitize(CommandeFournisseur::STATUS_RECEIVED_COMPLETELY) . ")"; //  Must match filter in htdocs/fourn/commande/list.php
@@ -739,7 +737,7 @@ if ($object->id > 0) {
         // TODO move to DAO class
         $sql = "SELECT count(p.rowid) as total";
         $sql .= " FROM " . MAIN_DB_PREFIX . "commande_fournisseur as p";
-        $sql .= " WHERE p.fk_soc = " . ((int) $object->id);
+        $sql .= " WHERE p.fk_soc = " . ((int)$object->id);
         $sql .= " AND p.entity IN (" . getEntity('commande_fournisseur') . ")";
         $resql = $db->query($sql);
         if ($resql) {
@@ -747,9 +745,9 @@ if ($object->id > 0) {
             $num = $object_count->total;
         }
 
-        $sql  = "SELECT p.rowid,p.ref, p.date_commande as date, p.fk_statut, p.total_ht, p.total_tva, p.total_ttc";
+        $sql = "SELECT p.rowid,p.ref, p.date_commande as date, p.fk_statut, p.total_ht, p.total_tva, p.total_ttc";
         $sql .= " FROM " . MAIN_DB_PREFIX . "commande_fournisseur as p";
-        $sql .= " WHERE p.fk_soc = " . ((int) $object->id);
+        $sql .= " WHERE p.fk_soc = " . ((int)$object->id);
         $sql .= " AND p.entity IN (" . getEntity('commande_fournisseur') . ")";
         $sql .= " ORDER BY p.date_commande DESC";
         $sql .= $db->plimit($MAXLIST);
@@ -818,7 +816,7 @@ if ($object->id > 0) {
         $sql .= ' SUM(pf.amount) as am';
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'facture_fourn as f';
         $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'paiementfourn_facturefourn as pf ON f.rowid=pf.fk_facturefourn';
-        $sql .= ' WHERE f.fk_soc = ' . ((int) $object->id);
+        $sql .= ' WHERE f.fk_soc = ' . ((int)$object->id);
         $sql .= " AND f.entity IN (" . getEntity('facture_fourn') . ")";
         $sql .= ' GROUP BY f.rowid,f.libelle,f.ref,f.ref_supplier,f.fk_statut,f.datef,f.total_ht,f.total_tva,f.total_ttc,f.paye';
         $sql .= ' ORDER BY f.datef DESC';

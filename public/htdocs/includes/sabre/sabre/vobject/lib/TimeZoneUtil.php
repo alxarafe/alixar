@@ -89,7 +89,7 @@ class TimeZoneUtil
         if ($vcalendar) {
             // If that didn't work, we will scan VTIMEZONE objects
             foreach ($vcalendar->select('VTIMEZONE') as $vtimezone) {
-                if ((string) $vtimezone->TZID === $tzid) {
+                if ((string)$vtimezone->TZID === $tzid) {
                     foreach ($this->timezoneGuessers as $timezoneGuesser) {
                         $timezone = $timezoneGuesser->guess($vtimezone, $failIfUncertain);
                         if (!$timezone instanceof DateTimeZone) {
@@ -122,7 +122,7 @@ class TimeZoneUtil
 
     /**
      * @param string $tzid
-     * @param false  $failIfUncertain
+     * @param false $failIfUncertain
      *
      * @return DateTimeZone
      */
@@ -137,6 +137,7 @@ class TimeZoneUtil
     }
 
     // Keeping things for backwards compatibility
+
     /**
      * @var array|null
      *
@@ -209,11 +210,11 @@ class TimeZoneUtil
         29 => 'Atlantic/Azores',
         53 => 'Atlantic/Cape_Verde',
         30 => 'America/Noronha',
-         8 => 'America/Sao_Paulo', // Best guess
+        8 => 'America/Sao_Paulo', // Best guess
         32 => 'America/Argentina/Buenos_Aires',
         60 => 'America/Godthab',
         28 => 'America/St_Johns',
-         9 => 'America/Halifax',
+        9 => 'America/Halifax',
         33 => 'America/Caracas',
         65 => 'America/Santiago',
         35 => 'America/Bogota',

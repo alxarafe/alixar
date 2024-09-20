@@ -43,7 +43,6 @@ if (!defined('NOREQUIRESOC')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
 
 $idstatus = GETPOSTINT('id');
 $idprospect = GETPOSTINT('prospectid');
@@ -78,9 +77,9 @@ if ($action === "updatestatusprospect" && $permisstiontoupdate) {
 
     $response = '';
 
-    $sql  = "UPDATE " . MAIN_DB_PREFIX . "societe SET ";
-    $sql .= "fk_stcomm=" . (int) $db->escape($idstatus);
-    $sql .= " WHERE rowid = " . (int) $db->escape($idprospect);
+    $sql = "UPDATE " . MAIN_DB_PREFIX . "societe SET ";
+    $sql .= "fk_stcomm=" . (int)$db->escape($idstatus);
+    $sql .= " WHERE rowid = " . (int)$db->escape($idprospect);
 
     $resql = $db->query($sql);
 

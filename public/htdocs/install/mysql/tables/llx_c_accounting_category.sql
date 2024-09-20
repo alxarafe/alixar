@@ -20,16 +20,17 @@
 -- a different dispatching of account in a category for each chart system.
 -- ===================================================================
 
-CREATE TABLE llx_c_accounting_category (
-  rowid 				integer NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  entity 				integer NOT NULL DEFAULT 1,
-  code 					varchar(16) NOT NULL,
-  label 				varchar(255) NOT NULL,
-  range_account			varchar(255) NOT NULL,			 -- Comment
-  sens 					tinyint NOT NULL DEFAULT '0',    -- For international accounting  0 : credit - debit / 1 : debit - credit
-  category_type			tinyint NOT NULL DEFAULT '0',    -- Field calculated or not
-  formula				varchar(255) NOT NULL,			 -- Example : 1 + 2 (rowid of the category)
-  position    			integer DEFAULT 0,
-  fk_country 			integer DEFAULT NULL,			 -- This category is dedicated to a country
-  active 				integer DEFAULT 1
+CREATE TABLE llx_c_accounting_category
+(
+    rowid         integer      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    entity        integer      NOT NULL DEFAULT 1,
+    code          varchar(16)  NOT NULL,
+    label         varchar(255) NOT NULL,
+    range_account varchar(255) NOT NULL,              -- Comment
+    sens          tinyint      NOT NULL DEFAULT '0',  -- For international accounting  0 : credit - debit / 1 : debit - credit
+    category_type tinyint      NOT NULL DEFAULT '0',  -- Field calculated or not
+    formula       varchar(255) NOT NULL,              -- Example : 1 + 2 (rowid of the category)
+    position      integer               DEFAULT 0,
+    fk_country    integer               DEFAULT NULL, -- This category is dedicated to a country
+    active        integer               DEFAULT 1
 ) ENGINE=innodb;

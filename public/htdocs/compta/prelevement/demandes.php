@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2004-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2012 Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2004-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2012  Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Code\Salaries\Classes\Salary;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/compta/prelevement/demandes.php
  *  \ingroup    prelevement
@@ -28,12 +35,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/modPrelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/salaries/class/salary.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories', 'withdrawals', 'companies'));
@@ -44,7 +45,7 @@ $status = GETPOSTINT('status');
 
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'directdebitcredittransferlist'; // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha'); // Go back to a dedicated page
-$optioncss  = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
+$optioncss = GETPOST('optioncss', 'aZ'); // Option for the css output (always '' except when 'print')
 
 $type = GETPOST('type', 'aZ09');
 $sourcetype = GETPOST('sourcetype', 'aZ');
@@ -101,8 +102,6 @@ if (GETPOST('button_removefilter_x', 'alpha') || GETPOST('button_removefilter.x'
     $search_array_options = array();
 }
 
-
-
 /*
  * View
  */
@@ -150,17 +149,17 @@ if ($sourcetype != 'salary') {
     $sql .= " WHERE s.rowid = f.fk_soc";
     $sql .= " AND f.entity IN (" . getEntity('invoice') . ")";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     if (!$status) {
         $sql .= " AND pd.traite = 0";
     }
     $sql .= " AND pd.ext_payment_id IS NULL";
     if ($status) {
-        $sql .= " AND pd.traite = " . ((int) $status);
+        $sql .= " AND pd.traite = " . ((int)$status);
     }
     $sql .= " AND f.total_ttc > 0";
     if (!getDolGlobalString('WITHDRAWAL_ALLOW_ANY_INVOICE_STATUS')) {
@@ -194,7 +193,7 @@ if ($sourcetype != 'salary') {
     }
     $sql .= " AND pd.ext_payment_id IS NULL";
     if ($status) {
-        $sql .= " AND pd.traite = " . ((int) $status);
+        $sql .= " AND pd.traite = " . ((int)$status);
     }
     $sql .= " AND s.amount > 0";
     $sql .= " AND s.paye = " . Salary::STATUS_UNPAID;
@@ -230,7 +229,6 @@ if (is_numeric($nbtotalofrecords) && $limit > $nbtotalofrecords) {
 
     $num = $db->num_rows($resql);
 }
-
 
 
 $newcardbutton = '<a class="marginrightonly" href="' . constant('BASE_URL') . '/compta/prelevement/index.php">' . $langs->trans("Back") . '</a>';

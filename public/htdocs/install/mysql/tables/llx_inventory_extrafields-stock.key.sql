@@ -18,4 +18,5 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_inventory_extrafields ADD INDEX idx_inventory_extrafields (fk_object);
+ALTER TABLE llx_inventory_extrafields
+    ADD INDEX idx_inventory_extrafields (fk_object);

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2001-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2009  Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Expedition\Classes\ExpeditionStats;
+
 /**
  *    \file       htdocs/expedition/stats/month.php
  *    \ingroup    order
@@ -26,9 +29,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expedition.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expedition/class/expeditionstats.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
 
 $year = GETPOSTINT('year');
 
@@ -37,7 +37,6 @@ if ($user->socid) {
     $socid = $user->socid;
 }
 restrictedArea($user, 'expedition');
-
 
 /*
  * View

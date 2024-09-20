@@ -29,7 +29,10 @@
  * \brief      File containing class for advanced numbering model of StockTransfer
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/stocktransfer/modules_stocktransfer.php';
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\StockTransfer;
+use Dolibarr\Code\StockTransfer\Classes\ModeleNumRefStockTransfer;
 
 
 /**
@@ -57,8 +60,8 @@ class mod_stocktransfer_advanced extends ModeleNumRefStockTransfer
     /**
      *  Returns the description of the numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -98,7 +101,7 @@ class mod_stocktransfer_advanced extends ModeleNumRefStockTransfer
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -126,8 +129,8 @@ class mod_stocktransfer_advanced extends ModeleNumRefStockTransfer
     /**
      *  Return next free value
      *
-     *  @param  StockTransfer   $object     Object we need next value for
-     *  @return string|0                    Value if OK, 0 if KO
+     * @param StockTransfer $object Object we need next value for
+     * @return string|0                    Value if OK, 0 if KO
      */
     public function getNextValue($object)
     {
@@ -147,6 +150,6 @@ class mod_stocktransfer_advanced extends ModeleNumRefStockTransfer
 
         $numFinal = get_next_value($db, $mask, 'stocktransfer_stocktransfer', 'ref', '', null, $date);
 
-        return  $numFinal;
+        return $numFinal;
     }
 }

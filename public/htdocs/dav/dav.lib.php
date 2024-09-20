@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018   Destailleur Laurent <eldy@users.sourceforge.net>
+/* Copyright (C) 2018       Destailleur Laurent         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -40,9 +40,6 @@ if (!defined('CDAV_URI_KEY')) {
         define('CDAV_URI_KEY', substr(md5($_SERVER['HTTP_HOST']), 0, 8));
     }
 }
-
-
-
 
 /**
  * Prepare array with list of tabs

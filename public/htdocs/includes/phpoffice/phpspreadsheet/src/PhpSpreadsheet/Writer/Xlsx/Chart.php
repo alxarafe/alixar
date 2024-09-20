@@ -29,9 +29,9 @@ class Chart extends WriterPart
      * @param \PhpOffice\PhpSpreadsheet\Chart\Chart $pChart
      * @param mixed $calculateCellValues
      *
+     * @return string XML Output
      * @throws WriterException
      *
-     * @return string XML Output
      */
     public function writeChart(\PhpOffice\PhpSpreadsheet\Chart\Chart $pChart, $calculateCellValues = true)
     {
@@ -83,7 +83,7 @@ class Chart extends WriterPart
         $this->writeLegend($objWriter, $pChart->getLegend());
 
         $objWriter->startElement('c:plotVisOnly');
-        $objWriter->writeAttribute('val', (int) $pChart->getPlotVisibleOnly());
+        $objWriter->writeAttribute('val', (int)$pChart->getPlotVisibleOnly());
         $objWriter->endElement();
 
         $objWriter->startElement('c:dispBlanksAs');
@@ -260,7 +260,7 @@ class Chart extends WriterPart
             if ($chartType === DataSeries::TYPE_LINECHART) {
                 //    Line only, Line3D can't be smoothed
                 $objWriter->startElement('c:smooth');
-                $objWriter->writeAttribute('val', (int) $plotGroup->getSmoothLine());
+                $objWriter->writeAttribute('val', (int)$plotGroup->getSmoothLine());
                 $objWriter->endElement();
             } elseif (($chartType === DataSeries::TYPE_BARCHART) || ($chartType === DataSeries::TYPE_BARCHART_3D)) {
                 $objWriter->startElement('c:gapWidth');
@@ -999,9 +999,9 @@ class Chart extends WriterPart
      *
      * @param PlotArea $plotArea
      *
+     * @return array|string
      * @throws WriterException
      *
-     * @return array|string
      */
     private static function getChartType($plotArea)
     {
@@ -1027,8 +1027,8 @@ class Chart extends WriterPart
      * Method writing plot series values.
      *
      * @param XMLWriter $objWriter XML Writer
-     * @param int       $val       value for idx (default: 3)
-     * @param string    $fillColor hex color (default: FF9900)
+     * @param int $val value for idx (default: 3)
+     * @param string $fillColor hex color (default: FF9900)
      *
      * @return XMLWriter XML Writer
      */

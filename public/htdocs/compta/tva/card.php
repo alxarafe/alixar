@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2013  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2023  Alexandre Spangaro      <aspangaro@easya.solutions>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2021       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2013  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2023  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\PaymentVAT;
+use Dolibarr\Code\Compta\Classes\Tva;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+
 /**
  *      \file       htdocs/compta/tva/card.php
  *      \ingroup    tax
@@ -30,12 +40,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/tva.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/tva/class/paymentvat.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/vat.lib.php';
 
 if (isModEnabled('accounting')) {
@@ -181,7 +185,7 @@ if (empty($reshook)) {
         $object->datev = $datev;
         $object->datep = $datep;
 
-        $amount = (float) price2num(GETPOST("amount", 'alpha'));
+        $amount = (float)price2num(GETPOST("amount", 'alpha'));
         if ($refund == 1) {
             $amount = price2num(-1 * $amount);
         }
@@ -223,16 +227,16 @@ if (empty($reshook)) {
 
                 // Create a line of payments
                 $paiement = new PaymentVAT($db);
-                $paiement->chid         = $object->id;
-                $paiement->datepaye     = $datep;
-                $paiement->amounts      = array($object->id => $amount); // Tableau de montant
+                $paiement->chid = $object->id;
+                $paiement->datepaye = $datep;
+                $paiement->amounts = array($object->id => $amount); // Tableau de montant
                 $paiement->paiementtype = GETPOST("type_payment", 'alphanohtml');
-                $paiement->num_payment  = GETPOST("num_payment", 'alphanohtml');
+                $paiement->num_payment = GETPOST("num_payment", 'alphanohtml');
                 $paiement->note = GETPOST("note", 'restricthtml');
                 $paiement->note_private = GETPOST("note", 'restricthtml');
 
                 if (!$error) {
-                    $paymentid = $paiement->create($user, (int) GETPOST('closepaidtva'));
+                    $paymentid = $paiement->create($user, (int)GETPOST('closepaidtva'));
                     if ($paymentid < 0) {
                         $error++;
                         setEventMessages($paiement->error, null, 'errors');
@@ -376,7 +380,6 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_builddoc.inc.php';
 }
 
-
 /*
  *	View
  */
@@ -395,7 +398,8 @@ if ($action == 'create') {
 
     if (!empty($conf->use_javascript_ajax)) {
         print "\n" . '<script type="text/javascript">';
-        print /** @lang JavaScript */'
+        print /** @lang JavaScript */
+            '
 			$(document).ready(function () {
 				let onAutoCreatePaiementChange = function () {
 					if($("#auto_create_paiement").is(":checked")) {
@@ -682,7 +686,7 @@ if ($id > 0) {
     $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'bank_account as ba ON b.fk_account = ba.rowid';
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_paiement as c ON p.fk_typepaiement = c.id";
     $sql .= ", " . MAIN_DB_PREFIX . "tva as tva";
-    $sql .= " WHERE p.fk_tva = " . ((int) $id);
+    $sql .= " WHERE p.fk_tva = " . ((int)$id);
     $sql .= " AND p.fk_tva = tva.rowid";
     $sql .= " AND tva.entity IN (" . getEntity('tax') . ")";
     $sql .= " ORDER BY dp DESC";
@@ -806,8 +810,8 @@ if ($id > 0) {
         if (
             $object->paye == 0
             && (
-            (round($resteapayer) <= 0 && $object->amount > 0)
-            || (round($resteapayer) >= 0 && $object->amount < 0)
+                (round($resteapayer) <= 0 && $object->amount > 0)
+                || (round($resteapayer) >= 0 && $object->amount < 0)
             )
             && $user->hasRight('tax', 'charges', 'creer')
         ) {
@@ -826,7 +830,6 @@ if ($id > 0) {
         }
     }
     print '</div>' . "\n";
-
 
 
     // Select mail models is same action as presend

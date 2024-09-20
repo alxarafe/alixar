@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2014-2023  Alexandre Spangaro   <aspangaro@easya.solutions>
- * Copyright (C) 2015       Frederic France      <frederic.france@free.fr>
- * Copyright (C) 2017       Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2020       Maxime DEMAREST      <maxime@indelog.fr>
+/* Copyright (C) 2014-2023  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
+ * Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2020       Maxime DEMAREST             <maxime@indelog.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *   \file       htdocs/loan/card.php
  *   \ingroup    loan
@@ -28,22 +37,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/loan.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
-
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingaccount.class.php';
-}
-
-if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-}
-
 
 // Load translation files required by the page
 $langs->loadLangs(array("bills", "compta", "loan"));
@@ -253,7 +249,6 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_builddoc.inc.php';
 }
 
-
 /*
  * View
  */
@@ -270,11 +265,9 @@ $title = $langs->trans("Loan") . ' - ' . $langs->trans("Card");
 $help_url = 'EN:Module_Loan|FR:Module_Emprunt';
 llxHeader("", $title, $help_url);
 
-
 // Create mode
 if ($action == 'create') {
     //WYSIWYG Editor
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
     print load_fiche_titre($langs->trans("NewLoan"), '', 'money-bill-alt');
 
@@ -656,7 +649,7 @@ if ($id > 0) {
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "bank as b ON p.fk_bank = b.rowid";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_paiement as c ON p.fk_typepayment = c.id,";
         $sql .= " " . MAIN_DB_PREFIX . "loan as l";
-        $sql .= " WHERE p.fk_loan = " . ((int) $id);
+        $sql .= " WHERE p.fk_loan = " . ((int)$id);
         $sql .= " AND p.fk_loan = l.rowid";
         $sql .= " AND l.entity IN ( " . getEntity('loan') . ")";
         $sql .= " ORDER BY dp DESC";

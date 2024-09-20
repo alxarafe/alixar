@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018      Quentin Vial-Gouteyron    <quentin.vial-gouteyron@atm-consulting.fr>
+/* Copyright (C) 2018       Quentin Vial-Gouteyron      <quentin.vial-gouteyron@atm-consulting.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -20,13 +20,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Reception\Classes\ModelNumRefReception;
+use Dolibarr\Code\Reception\Classes\Reception;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/reception/mod_reception_beryl.php
  *  \ingroup    reception
  *  \brief      File of class to manage shipments numbering rules Beryl
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/reception/modules_reception.php';
 
 /**
  *  Class to manage reception numbering rules Beryl
@@ -42,8 +46,8 @@ class mod_reception_beryl extends ModelNumRefReception
     /**
      *  Return default description of numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -55,7 +59,7 @@ class mod_reception_beryl extends ModelNumRefReception
     /**
      *  Return numbering example
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -66,8 +70,8 @@ class mod_reception_beryl extends ModelNumRefReception
     /**
      *  Test if existing numbers make problems with numbering
      *
-     *  @param  CommonObject    $object Object we need next value for
-     *  @return boolean                 false if KO (there is a conflict), true if OK
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                 false if KO (there is a conflict), true if OK
      */
     public function canBeActivated($object)
     {
@@ -102,9 +106,9 @@ class mod_reception_beryl extends ModelNumRefReception
     /**
      *  Return next value
      *
-     *  @param  Societe     $objsoc     Third party object
-     *  @param  Reception   $reception  Reception object
-     *  @return string|-1               Value if OK, -1 if KO
+     * @param Societe $objsoc Third party object
+     * @param Reception $reception Reception object
+     * @return string|-1               Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $reception)
     {

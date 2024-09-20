@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2013-2016  Jean-François FERRY <hello@librethic.io>
+/* Copyright (C) 2013-2016  Jean-François FERRY         <hello@librethic.io>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,9 +24,11 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/ticket.lib.php";
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 
 // Load translation files required by the page
@@ -46,14 +48,11 @@ if (!$user->admin) {
     accessforbidden();
 }
 
-
 /*
  * Actions
  */
 
 include DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
-
-
 
 /*
  * View

@@ -137,9 +137,9 @@ class NumberFormat extends Supervisor
      *
      * @param array $pStyles Array containing style information
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function applyFromArray(array $pStyles)
     {
@@ -341,7 +341,7 @@ class NumberFormat extends Supervisor
     public static function builtInFormatCode($pIndex)
     {
         // Clean parameter
-        $pIndex = (int) $pIndex;
+        $pIndex = (int)$pIndex;
 
         // Ensure built-in format codes are available
         self::fillBuiltInFormatCodes();
@@ -398,43 +398,43 @@ class NumberFormat extends Supervisor
      * @var array
      */
     private static $dateFormatReplacements = [
-            // first remove escapes related to non-format characters
-            '\\' => '',
-            //    12-hour suffix
-            'am/pm' => 'A',
-            //    4-digit year
-            'e' => 'Y',
-            'yyyy' => 'Y',
-            //    2-digit year
-            'yy' => 'y',
-            //    first letter of month - no php equivalent
-            'mmmmm' => 'M',
-            //    full month name
-            'mmmm' => 'F',
-            //    short month name
-            'mmm' => 'M',
-            //    mm is minutes if time, but can also be month w/leading zero
-            //    so we try to identify times be the inclusion of a : separator in the mask
-            //    It isn't perfect, but the best way I know how
-            ':mm' => ':i',
-            'mm:' => 'i:',
-            //    month leading zero
-            'mm' => 'm',
-            //    month no leading zero
-            'm' => 'n',
-            //    full day of week name
-            'dddd' => 'l',
-            //    short day of week name
-            'ddd' => 'D',
-            //    days leading zero
-            'dd' => 'd',
-            //    days no leading zero
-            'd' => 'j',
-            //    seconds
-            'ss' => 's',
-            //    fractional seconds - no php equivalent
-            '.s' => '',
-        ];
+        // first remove escapes related to non-format characters
+        '\\' => '',
+        //    12-hour suffix
+        'am/pm' => 'A',
+        //    4-digit year
+        'e' => 'Y',
+        'yyyy' => 'Y',
+        //    2-digit year
+        'yy' => 'y',
+        //    first letter of month - no php equivalent
+        'mmmmm' => 'M',
+        //    full month name
+        'mmmm' => 'F',
+        //    short month name
+        'mmm' => 'M',
+        //    mm is minutes if time, but can also be month w/leading zero
+        //    so we try to identify times be the inclusion of a : separator in the mask
+        //    It isn't perfect, but the best way I know how
+        ':mm' => ':i',
+        'mm:' => 'i:',
+        //    month leading zero
+        'mm' => 'm',
+        //    month no leading zero
+        'm' => 'n',
+        //    full day of week name
+        'dddd' => 'l',
+        //    short day of week name
+        'ddd' => 'D',
+        //    days leading zero
+        'dd' => 'd',
+        //    days no leading zero
+        'd' => 'j',
+        //    seconds
+        'ss' => 's',
+        //    fractional seconds - no php equivalent
+        '.s' => '',
+    ];
 
     /**
      * Search/replace values to convert Excel date/time format masks hours to PHP format masks (24 hr clock).
@@ -487,7 +487,7 @@ class NumberFormat extends Supervisor
                     // 24-hour time format
                     // when [h]:mm format, the [h] should replace to the hours of the value * 24
                     if (false !== strpos($block, '[h]')) {
-                        $hours = (int) ($value * 24);
+                        $hours = (int)($value * 24);
                         $block = str_replace('[h]', $hours, $block);
 
                         continue;
@@ -640,7 +640,7 @@ class NumberFormat extends Supervisor
                 //    Scientific format
                 $value = sprintf('%5.2E', $value);
             } elseif (preg_match('/0([^\d\.]+)0/', $format) || substr_count($format, '.') > 1) {
-                if ($value == (int) $value && substr_count($format, '.') === 1) {
+                if ($value == (int)$value && substr_count($format, '.') === 1) {
                     $value *= 10 ** strlen(explode('.', $format)[1]);
                 }
                 $value = self::complexNumberFormatMask($value, $format);
@@ -686,7 +686,7 @@ class NumberFormat extends Supervisor
         }
 
         if (preg_match('/#?.*\?\/\?/', $format, $m)) {
-            if ($value != (int) $value) {
+            if ($value != (int)$value) {
                 self::formatAsFraction($value, $format);
             }
         } else {

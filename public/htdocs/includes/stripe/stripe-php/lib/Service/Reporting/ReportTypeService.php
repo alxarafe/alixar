@@ -12,9 +12,9 @@ class ReportTypeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Reporting\ReportType>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Reporting\ReportType>
      */
     public function all($params = null, $opts = null)
     {
@@ -29,9 +29,9 @@ class ReportTypeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Reporting\ReportType
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Reporting\ReportType
      */
     public function retrieve($id, $params = null, $opts = null)
     {

@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2004-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2011      Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2013      Florian Henry		<florian.henry@open-concept.pro>
+/* Copyright (C) 2004-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011       Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2013       Florian Henry		        <florian.henry@open-concept.pro>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+
 /**
  *  \file       htdocs/compta/prelevement/index.php
  *  \ingroup    prelevement
@@ -29,11 +31,11 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/prelevement/class/bonprelevement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/prelevement.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories', 'withdrawals'));
@@ -98,7 +100,6 @@ print price($bprev->SommeAPrelever('direct-debit'), 0, '', 1, -1, -1, 'auto');
 print '</span></td></tr></table></div><br>';
 
 
-
 /*
  * Invoices waiting for withdraw
  */
@@ -121,10 +122,10 @@ $sql .= " AND pfd.traite = 0";
 $sql .= " AND pfd.ext_payment_id IS NULL";
 $sql .= " AND pfd.fk_facture = f.rowid";
 if (!$user->hasRight('societe', 'client', 'voir')) {
-    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+    $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
 }
 if ($socid) {
-    $sql .= " AND f.fk_soc = " . ((int) $socid);
+    $sql .= " AND f.fk_soc = " . ((int)$socid);
 }
 
 $resql = $db->query($sql);

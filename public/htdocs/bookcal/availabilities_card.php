@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2022 Alice Adminson <aadminson@example.com>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2022       Alice Adminson              <aadminson@example.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\BookCal\Classes\Availabilities;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+
 /**
  *   \file       htdocs/bookcal/availabilities_card.php
  *   \ingroup    bookcal
@@ -26,10 +33,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/bookcal/class/availabilities.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bookcal/lib/bookcal_availabilities.lib.php';
 
 // Load translation files required by the page
@@ -76,7 +79,7 @@ if (empty($action) && empty($id) && empty($ref)) {
 include DOL_DOCUMENT_ROOT . '/core/actions_fetchobject.inc.php'; // Must be include, not include_once.
 
 //avoid warning on missing/undef entity
-$object->entity                 = (GETPOSTISSET('entity') ? GETPOSTINT('entity') : $conf->entity);
+$object->entity = (GETPOSTISSET('entity') ? GETPOSTINT('entity') : $conf->entity);
 
 // There is several ways to check permission.
 // Set $enablepermissioncheck to 1 to enable a minimum low level of checks
@@ -108,10 +111,6 @@ if (!isModEnabled('bookcal')) {
 if (!$permissiontoread) {
     accessforbidden();
 }
-
-
-
-
 
 
 /*
@@ -181,8 +180,8 @@ if (empty($reshook)) {
     }
 
 
-        // Actions cancel, add, update, update_extras, confirm_validate, confirm_delete, confirm_deleteline, confirm_clone, confirm_close, confirm_setdraft, confirm_reopen
-        include DOL_DOCUMENT_ROOT . '/core/actions_addupdatedelete.inc.php';
+    // Actions cancel, add, update, update_extras, confirm_validate, confirm_delete, confirm_deleteline, confirm_clone, confirm_close, confirm_setdraft, confirm_reopen
+    include DOL_DOCUMENT_ROOT . '/core/actions_addupdatedelete.inc.php';
 
     // Actions when linking object each other
     include DOL_DOCUMENT_ROOT . '/core/actions_dellink.inc.php';
@@ -209,8 +208,6 @@ if (empty($reshook)) {
     $trackid = 'availabilities' . $object->id;
     include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
 }
-
-
 
 
 /*
@@ -351,8 +348,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmActionAvailabilities', $object->ref);
         /*if (! empty($conf->notification->enabled))
         {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-            $notify = new Notify($db);
+                $notify = new Notify($db);
             $text .= '<br>';
             $text .= $notify->confirmMessage('AVAILABILITIES_CLOSE', $object->socid, $object);
         }*/
@@ -600,7 +596,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', dol_buildpath('/bookcal/availabilities_agenda.php', 1) . '?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
         $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element . '@' . $object->module, (is_object($object->thirdparty) ? $object->thirdparty->id : 0), 1, '', $MAXEVENT, '', $morehtmlcenter);
 

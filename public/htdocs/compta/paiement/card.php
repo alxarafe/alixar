@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville  <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2023 Laurent Destailleur   <eldy@users.sourceforge.net>
- * Copyright (C) 2005      Marc Barilley / Ocebo <marc@ocebo.com>
- * Copyright (C) 2005-2012 Regis Houssin         <regis.houssin@inodbox.com>
- * Copyright (C) 2013	   Marcos García		 <marcosgdf@gmail.com>
- * Copyright (C) 2015	   Juanjo Menent		 <jmenent@2byte.es>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2023  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Marc Barilley / Ocebo       <marc@ocebo.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013	    Marcos García		        <marcosgdf@gmail.com>
+ * Copyright (C) 2015	    Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Compta\Classes\RemiseCheque;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormMargin;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Stripe\Classes\Stripe;
+
 /**
  *      \file       htdocs/compta/paiement/card.php
  *      \ingroup    invoice
@@ -31,15 +42,10 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/facture/modules_facture.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 if (isModEnabled("bank")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 }
 if (isModEnabled('margin')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formmargin.class.php';
 }
 
 // Load translation files required by the page
@@ -77,8 +83,6 @@ if ($socid && $socid != $object->thirdparty->id) {
 
 // Init Stripe objects
 if (isModEnabled('stripe')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
-
     $service = 'StripeTest';
     $servicestatus = 0;
     if (getDolGlobalString('STRIPE_LIVE') && !GETPOST('forcesandbox', 'alpha')) {
@@ -163,7 +167,7 @@ if (empty($reshook)) {
                 $sql .= ' WHERE pf.fk_facture = f.rowid';
                 $sql .= ' AND f.fk_soc = s.rowid';
                 $sql .= ' AND f.entity IN (' . getEntity('invoice') . ')';
-                $sql .= ' AND pf.fk_paiement = ' . ((int) $object->id);
+                $sql .= ' AND pf.fk_paiement = ' . ((int)$object->id);
                 $resql = $db->query($sql);
                 if ($resql) {
                     $i = 0;
@@ -198,7 +202,7 @@ if (empty($reshook)) {
                 }
             }
 
-            if (! $error) {
+            if (!$error) {
                 header('Location: ' . $_SERVER['PHP_SELF'] . '?id=' . $object->id);
                 exit;
             }
@@ -291,7 +295,7 @@ if ($action == 'delete') {
 // Confirmation of payment validation
 if ($action == 'valide') {
     $facid = GETPOSTINT('facid');
-    print $form->formconfirm($_SERVER['PHP_SELF'] . '?id=' . $object->id . '&facid=' . ((int) $facid), $langs->trans("ValidatePayment"), $langs->trans("ConfirmValidatePayment"), 'confirm_validate', '', 0, 2);
+    print $form->formconfirm($_SERVER['PHP_SELF'] . '?id=' . $object->id . '&facid=' . ((int)$facid), $langs->trans("ValidatePayment"), $langs->trans("ConfirmValidatePayment"), 'confirm_validate', '', 0, 2);
 }
 
 $linkback = '<a href="' . constant('BASE_URL') . '/compta/paiement/list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
@@ -365,7 +369,6 @@ print '</td></tr>';
 if (isModEnabled("bank")) {
     if ($object->fk_account > 0) {
         if ($object->type_code == 'CHQ' && $bankline->fk_bordereau > 0) {
-            include_once DOL_DOCUMENT_ROOT . '/compta/paiement/cheque/class/remisecheque.class.php';
             $bordereau = new RemiseCheque($db);
             $bordereau->fetch($bankline->fk_bordereau);
 
@@ -472,7 +475,7 @@ $sql .= ' FROM ' . MAIN_DB_PREFIX . 'paiement_facture as pf,' . MAIN_DB_PREFIX .
 $sql .= ' WHERE pf.fk_facture = f.rowid';
 $sql .= ' AND f.fk_soc = s.rowid';
 $sql .= ' AND f.entity IN (' . getEntity('invoice') . ')';
-$sql .= ' AND pf.fk_paiement = ' . ((int) $object->id);
+$sql .= ' AND pf.fk_paiement = ' . ((int)$object->id);
 $resql = $db->query($sql);
 if ($resql) {
     $num = $db->num_rows($resql);
@@ -565,7 +568,7 @@ if ($resql) {
             // Status
             print '<td class="right">' . $invoice->getLibStatut(5, $alreadypayed) . '</td>';
 
-            $parameters = array('fk_paiement' => (int) $object->id);
+            $parameters = array('fk_paiement' => (int)$object->id);
             $reshook = $hookmanager->executeHooks('printFieldListValue', $parameters, $objp, $action); // Note that $action and $object may have been modified by hook
 
             print "</tr>\n";
@@ -591,7 +594,6 @@ if ($resql) {
 }
 
 
-
 /*
  * Actions Buttons
  */
@@ -607,7 +609,7 @@ if (getDolGlobalString('BILL_ADD_PAYMENT_VALIDATION')) {
 }
 
 $params = array();
-if (! empty($title_button)) {
+if (!empty($title_button)) {
     $params['attr'] = array('title' => $title_button);
 }
 

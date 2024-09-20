@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2014-2023  Alexandre Spangaro  <aspangaro@easya.solutions>
- * Copyright (C) 2017       Ferran Marcet       <fmarcet@2byte.es>
+/* Copyright (C) 2014-2023  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2017       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,6 +19,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *  \file       htdocs/loan/info.php
  *  \ingroup    loan
@@ -27,12 +31,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/loan.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("compta", "bills", "loan"));
@@ -46,7 +46,6 @@ if ($user->socid) {
     $socid = $user->socid;
 }
 $result = restrictedArea($user, 'loan', $id, '', '');
-
 
 /*
  * View

@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2013		Cédric Salvador			<csalvador@gpcsolutions.fr>
- * Copyright (C) 2015		Jean-François Ferry		<jfefe@aternatik.fr>
- * Copyright (C) 2015		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2017-2023	Alexandre Spangaro		<aspangaro@easya.solutions>
- * Copyright (C) 2018-2021	Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2018		Charlene Benke			<charlie@patas-monkey.com>
- * Copyright (C) 2020		Tobias Sekan			<tobias.sekan@startmail.com>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2013		Cédric Salvador			    <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2015		Jean-François Ferry		    <jfefe@aternatik.fr>
+ * Copyright (C) 2015		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2017-2023	Alexandre Spangaro		    <aspangaro@easya.solutions>
+ * Copyright (C) 2018-2021	Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2018		Charlene Benke			    <charlie@patas-monkey.com>
+ * Copyright (C) 2020		Tobias Sekan			    <tobias.sekan@startmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -27,6 +27,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/compta/paiement/list.php
  *  \ingroup    compta
@@ -35,11 +43,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('bills', 'banks', 'compta', 'companies'));
@@ -104,16 +108,16 @@ $fieldstosearchall = array(
 );
 
 $arrayfields = array(
-    'p.ref'             => array('label' => "RefPayment", 'checked' => 1, 'position' => 10),
-    'p.datep'           => array('label' => "Date", 'checked' => 1, 'position' => 20),
-    's.nom'             => array('label' => "ThirdParty", 'checked' => 1, 'position' => 30),
-    'c.libelle'         => array('label' => "Type", 'checked' => 1, 'position' => 40),
-    'transaction'       => array('label' => "BankTransactionLine", 'checked' => 1, 'position' => 50, 'enabled' => (isModEnabled("bank"))),
-    'ba.label'          => array('label' => "BankAccount", 'checked' => 1, 'position' => 60, 'enabled' => (isModEnabled("bank"))),
-    'p.num_paiement'    => array('label' => "Numero", 'checked' => 1, 'position' => 70, 'tooltip' => "ChequeOrTransferNumber"),
-    'p.amount'          => array('label' => "Amount", 'checked' => 1, 'position' => 80),
-    'p.note'            => array('label' => "Comment", 'checked' => -1, 'position' => 85),
-    'p.statut'          => array('label' => "Status", 'checked' => 1, 'position' => 90, 'enabled' => (getDolGlobalString('BILL_ADD_PAYMENT_VALIDATION'))),
+    'p.ref' => array('label' => "RefPayment", 'checked' => 1, 'position' => 10),
+    'p.datep' => array('label' => "Date", 'checked' => 1, 'position' => 20),
+    's.nom' => array('label' => "ThirdParty", 'checked' => 1, 'position' => 30),
+    'c.libelle' => array('label' => "Type", 'checked' => 1, 'position' => 40),
+    'transaction' => array('label' => "BankTransactionLine", 'checked' => 1, 'position' => 50, 'enabled' => (isModEnabled("bank"))),
+    'ba.label' => array('label' => "BankAccount", 'checked' => 1, 'position' => 60, 'enabled' => (isModEnabled("bank"))),
+    'p.num_paiement' => array('label' => "Numero", 'checked' => 1, 'position' => 70, 'tooltip' => "ChequeOrTransferNumber"),
+    'p.amount' => array('label' => "Amount", 'checked' => 1, 'position' => 80),
+    'p.note' => array('label' => "Comment", 'checked' => -1, 'position' => 85),
+    'p.statut' => array('label' => "Status", 'checked' => 1, 'position' => 90, 'enabled' => (getDolGlobalString('BILL_ADD_PAYMENT_VALIDATION'))),
 );
 $arrayfields = dol_sort_array($arrayfields, 'position');
 '@phan-var-force array<string,array{label:string,checked?:int<0,1>,position?:int,help?:string}> $arrayfields';  // dol_sort_array looses type for Phan
@@ -232,13 +236,13 @@ if (GETPOST("orphelins", "alpha")) {
     $sql .= " WHERE p.entity IN (" . getEntity('invoice') . ")";
     if ($socid > 0) {
         $sql .= " AND EXISTS (SELECT f.fk_soc FROM " . MAIN_DB_PREFIX . "facture as f, " . MAIN_DB_PREFIX . "paiement_facture as pf";
-        $sql .= " WHERE p.rowid = pf.fk_paiement AND pf.fk_facture = f.rowid AND f.fk_soc = " . ((int) $socid) . ")";
+        $sql .= " WHERE p.rowid = pf.fk_paiement AND pf.fk_facture = f.rowid AND f.fk_soc = " . ((int)$socid) . ")";
     }
     if ($userid) {
         if ($userid == -1) {
             $sql .= " AND p.fk_user_creat IS NULL";
         } else {
-            $sql .= " AND p.fk_user_creat = " . ((int) $userid);
+            $sql .= " AND p.fk_user_creat = " . ((int)$userid);
         }
     }
 
@@ -253,7 +257,7 @@ if (GETPOST("orphelins", "alpha")) {
         $sql .= " AND p.datep <= '" . $db->idate($search_date_end) . "'";
     }
     if ($search_account > 0) {
-        $sql .= " AND b.fk_account=" . ((int) $search_account);
+        $sql .= " AND b.fk_account=" . ((int)$search_account);
     }
     if ($search_paymenttype != '') {
         $sql .= " AND c.code='" . $db->escape($search_paymenttype) . "'";
@@ -278,7 +282,7 @@ if (GETPOST("orphelins", "alpha")) {
         if ($search_sale == -2) {
             $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc)";
         } elseif ($search_sale > 0) {
-            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = f.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
         }
     }
 
@@ -340,7 +344,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($optioncss != '') {
     $param .= '&optioncss=' . urlencode($optioncss);
@@ -353,22 +357,22 @@ if ($search_ref) {
     $param .= '&search_ref=' . urlencode($search_ref);
 }
 if ($search_date_startday) {
-    $param .= '&search_date_startday=' . urlencode((string) ($search_date_startday));
+    $param .= '&search_date_startday=' . urlencode((string)($search_date_startday));
 }
 if ($search_date_startmonth) {
-    $param .= '&search_date_startmonth=' . urlencode((string) ($search_date_startmonth));
+    $param .= '&search_date_startmonth=' . urlencode((string)($search_date_startmonth));
 }
 if ($search_date_startyear) {
-    $param .= '&search_date_startyear=' . urlencode((string) ($search_date_startyear));
+    $param .= '&search_date_startyear=' . urlencode((string)($search_date_startyear));
 }
 if ($search_date_endday) {
-    $param .= '&search_date_endday=' . urlencode((string) ($search_date_endday));
+    $param .= '&search_date_endday=' . urlencode((string)($search_date_endday));
 }
 if ($search_date_endmonth) {
-    $param .= '&search_date_endmonth=' . urlencode((string) ($search_date_endmonth));
+    $param .= '&search_date_endmonth=' . urlencode((string)($search_date_endmonth));
 }
 if ($search_date_endyear) {
-    $param .= '&search_date_endyear=' . urlencode((string) ($search_date_endyear));
+    $param .= '&search_date_endyear=' . urlencode((string)($search_date_endyear));
 }
 if ($search_company) {
     $param .= '&search_company=' . urlencode($search_company);
@@ -380,7 +384,7 @@ if ($search_paymenttype) {
     $param .= '&search_paymenttype=' . urlencode($search_paymenttype);
 }
 if ($search_account) {
-    $param .= '&search_account=' . urlencode((string) ($search_account));
+    $param .= '&search_account=' . urlencode((string)($search_account));
 }
 if ($search_payment_num) {
     $param .= '&search_payment_num=' . urlencode($search_payment_num);

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,10 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *  \file       htdocs/core/modules/action/doc/pdf_standard_actions.class.php
  *  \ingroup    commercial
@@ -30,8 +34,6 @@
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
 /**
  *  Class to generate event report
@@ -86,9 +88,9 @@ class pdf_standard_actions
     /**
      * Constructor
      *
-     * @param   DoliDB  $db     Database handler
-     * @param   int     $month  Month
-     * @param   int     $year   Year
+     * @param DoliDB $db Database handler
+     * @param int $month Month
+     * @param int $year Year
      */
     public function __construct($db, $month, $year)
     {
@@ -118,17 +120,18 @@ class pdf_standard_actions
         $this->subject = $langs->transnoentitiesnoconv("ActionsReport") . ' ' . $this->year . "-" . $this->month;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *      Write the object to document file to disk
      *
-     *      @param  int         $socid          Thirdparty id
-     *      @param  Translate   $outputlangs    Lang object for output language
-     *      @return int                         1=OK, 0=KO
+     * @param int $socid Thirdparty id
+     * @param Translate $outputlangs Lang object for output language
+     * @return int                         1=OK, 0=KO
      */
     public function write_file($socid, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $conf, $langs, $hookmanager;
 
         if (!is_object($outputlangs)) {
@@ -155,7 +158,6 @@ class pdf_standard_actions
         if (file_exists($dir)) {
             // Add pdfgeneration hook
             if (!is_object($hookmanager)) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                 $hookmanager = new HookManager($this->db);
             }
             $hookmanager->initHooks(array('pdfgeneration'));
@@ -203,7 +205,6 @@ class pdf_standard_actions
 
             // Add pdfgeneration hook
             if (!is_object($hookmanager)) {
-                include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                 $hookmanager = new HookManager($this->db);
             }
             $hookmanager->initHooks(array('pdfgeneration'));
@@ -227,8 +228,8 @@ class pdf_standard_actions
     /**
      * Write content of pages
      *
-     * @param   TCPDF       $pdf            Object pdf
-     * @param   Translate   $outputlangs    Object langs
+     * @param TCPDF $pdf Object pdf
+     * @param Translate $outputlangs Object langs
      * @return  int                         1
      */
     private function _pages(&$pdf, $outputlangs)
@@ -355,10 +356,10 @@ class pdf_standard_actions
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @param  int         $pagenb         Page nb
-     *  @return float                       Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param Translate $outputlangs Object lang for output
+     * @param int $pagenb Page nb
+     * @return float                       Return topshift value
      */
     private function _pagehead(&$pdf, $outputlangs, $pagenb)
     {

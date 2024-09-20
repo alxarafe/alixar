@@ -1,17 +1,17 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2019  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2004       Benoit Mortier          <benoit.mortier@opensides.be>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2010-2016  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2011-2019  Philippe Grand          <philippe.grand@atoo-net.com>
- * Copyright (C) 2011       Remy Younes             <ryounes@gmail.com>
- * Copyright (C) 2012-2015  Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2012       Christophe Battarel     <christophe.battarel@ltairis.fr>
- * Copyright (C) 2011-2024  Alexandre Spangaro      <aspangaro@easya.solutions>
- * Copyright (C) 2015       Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2016       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010-2016  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2011-2019  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2011       Remy Younes                 <ryounes@gmail.com>
+ * Copyright (C) 2012-2015  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2012       Christophe Battarel         <christophe.battarel@ltairis.fr>
+ * Copyright (C) 2011-2024  Alexandre Spangaro          <aspangaro@easya.solutions>
+ * Copyright (C) 2015       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2016       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -36,17 +36,16 @@
  *      \brief      Page to administer model of chart of accounts
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormCompany;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('accountancy', 'admin', 'companies', 'compta', 'errors', 'holiday', 'hrm', 'resource'));
@@ -155,7 +154,7 @@ if (GETPOST('actionadd', 'alpha') || GETPOST('actionmodify', 'alpha')) {
     // Check that all fields are filled
     $ok = 1;
     foreach ($listfield as $f => $value) {
-        if ($value == 'country_id' && in_array($tablib[$id], array('Pcg_version'))) {
+        if ($value == 'country_id' && $tablib[$id] == 'Pcg_version') {
             continue; // For some pages, country is not mandatory
         }
         if ((!GETPOSTISSET($value)) || GETPOST($value) == '') {

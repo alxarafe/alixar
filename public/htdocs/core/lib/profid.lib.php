@@ -28,18 +28,18 @@
 
 /**
  *  Check if a string passes the Luhn algorithm test.
- *  @param      string|int      $str        string to check
- *  @return     bool                        True if the string passes the Luhn algorithm check, False otherwise
- *  @since      Dolibarr V20
+ * @param string|int $str string to check
+ * @return     bool                        True if the string passes the Luhn algorithm check, False otherwise
+ * @since      Dolibarr V20
  */
 function isValidLuhn($str)
 {
-    $str = (string) $str;
+    $str = (string)$str;
     $len = dol_strlen($str);
     $parity = $len % 2;
     $sum = 0;
     for ($i = $len - 1; $i >= 0; $i--) {
-        $d = (int) $str[$i];
+        $d = (int)$str[$i];
         if ($i % 2 == $parity) {
             if (($d *= 2) > 9) {
                 $d -= 9;
@@ -54,9 +54,9 @@ function isValidLuhn($str)
 /**
  *  Check the syntax validity of a SIREN.
  *
- *  @param      string      $siren      SIREN to check
- *  @return     boolean                 True if valid, False otherwise
- *  @since      Dolibarr V20
+ * @param string $siren SIREN to check
+ * @return     boolean                 True if valid, False otherwise
+ * @since      Dolibarr V20
  */
 function isValidSiren($siren)
 {
@@ -74,9 +74,9 @@ function isValidSiren($siren)
 /**
  *  Check the syntax validity of a SIRET.
  *
- *  @param      string      $siret      SIRET to check
- *  @return     boolean                 True if valid, False otherwise
- *  @since      Dolibarr V20
+ * @param string $siret SIRET to check
+ * @return     boolean                 True if valid, False otherwise
+ * @since      Dolibarr V20
  */
 function isValidSiret($siret)
 {
@@ -106,9 +106,9 @@ function isValidSiret($siret)
  *  Check the syntax validity of a Portuguese (PT) Tax Identification Number (TIN).
  *  (NIF = Número de Identificação Fiscal)
  *
- *  @param      string      $str        NIF to check
- *  @return     boolean                 True if valid, False otherwise
- *  @since      Dolibarr V20
+ * @param string $str NIF to check
+ * @return     boolean                 True if valid, False otherwise
+ * @since      Dolibarr V20
  */
 function isValidTinForPT($str)
 {
@@ -127,9 +127,9 @@ function isValidTinForPT($str)
  *  Check the syntax validity of an Algerian (DZ) Tax Identification Number (TIN).
  *  (NIF = Numéro d'Identification Fiscale)
  *
- *  @param      string      $str        TIN to check
- *  @return     boolean                 True if valid, False otherwise
- *  @since      Dolibarr V20
+ * @param string $str TIN to check
+ * @return     boolean                 True if valid, False otherwise
+ * @since      Dolibarr V20
  */
 function isValidTinForDZ($str)
 {
@@ -148,9 +148,9 @@ function isValidTinForDZ($str)
  *  Check the syntax validity of a Belgium (BE) Tax Identification Number (TIN).
  *  (NN = Numéro National)
  *
- *  @param      string      $str        NN to check
- *  @return     boolean                 True if valid, False otherwise
- *  @since      Dolibarr V20
+ * @param string $str NN to check
+ * @return     boolean                 True if valid, False otherwise
+ * @since      Dolibarr V20
  */
 function isValidTinForBE($str)
 {
@@ -172,9 +172,9 @@ function isValidTinForBE($str)
  *  - CIF = Código de Identificación Fiscal (used for companies only before 2008. Replaced by NIF since 2008.)
  *  - NIE = Número de Identidad de Extranjero
  *
- *  @param      string      $str        TIN to check
- *  @return     int<-4,3>               1 if NIF ok, 2 if CIF ok, 3 if NIE ok, -1 if NIF bad, -2 if CIF bad, -3 if NIE bad, -4 if unexpected bad
- *  @since      Dolibarr V20
+ * @param string $str TIN to check
+ * @return     int<-4,3>               1 if NIF ok, 2 if CIF ok, 3 if NIE ok, -1 if NIF bad, -2 if CIF bad, -3 if NIE bad, -4 if unexpected bad
+ * @since      Dolibarr V20
  */
 function isValidTinForES($str)
 {
@@ -194,7 +194,7 @@ function isValidTinForES($str)
 
     //Check NIF
     if (preg_match('/(^[0-9]{8}[A-Z]{1}$)/', $str)) {
-        if ($num[8] == substr('TRWAGMYFPDXBNJZSQVHLCKE', (int) substr($str, 0, 8) % 23, 1)) {
+        if ($num[8] == substr('TRWAGMYFPDXBNJZSQVHLCKE', (int)substr($str, 0, 8) % 23, 1)) {
             return 1;
         } else {
             return -1;
@@ -202,15 +202,15 @@ function isValidTinForES($str)
     }
 
     //algorithm checking type code CIF
-    $sum = (int) $num[2] + (int) $num[4] + (int) $num[6];
+    $sum = (int)$num[2] + (int)$num[4] + (int)$num[6];
     for ($i = 1; $i < 8; $i += 2) {
-        $sum += intval(substr((string) (2 * (int) $num[$i]), 0, 1)) + intval(substr((string) (2 * (int) $num[$i]), 1, 1));
+        $sum += intval(substr((string)(2 * (int)$num[$i]), 0, 1)) + intval(substr((string)(2 * (int)$num[$i]), 1, 1));
     }
-    $n = 10 - (int) substr((string) $sum, strlen((string) $sum) - 1, 1);
+    $n = 10 - (int)substr((string)$sum, strlen((string)$sum) - 1, 1);
 
     //Check special NIF
     if (preg_match('/^[KLM]{1}/', $str)) {
-        if ($num[8] == chr(64 + $n) || $num[8] == substr('TRWAGMYFPDXBNJZSQVHLCKE', (int) substr($str, 1, 8) % 23, 1)) {
+        if ($num[8] == chr(64 + $n) || $num[8] == substr('TRWAGMYFPDXBNJZSQVHLCKE', (int)substr($str, 1, 8) % 23, 1)) {
             return 1;
         } else {
             return -1;
@@ -219,7 +219,7 @@ function isValidTinForES($str)
 
     //Check CIF
     if (preg_match('/^[ABCDEFGHJNPQRSUVW]{1}/', $str)) {
-        if ($num[8] == chr(64 + $n) || $num[8] == substr((string) $n, strlen((string) $n) - 1, 1)) {
+        if ($num[8] == chr(64 + $n) || $num[8] == substr((string)$n, strlen((string)$n) - 1, 1)) {
             return 2;
         } else {
             return -2;
@@ -237,7 +237,7 @@ function isValidTinForES($str)
 
     //Check NIE XYZ
     if (preg_match('/^[XYZ]{1}/', $str)) {
-        if ($num[8] == substr('TRWAGMYFPDXBNJZSQVHLCKE', (int) substr(str_replace(array('X', 'Y', 'Z'), array('0', '1', '2'), $str), 0, 8) % 23, 1)) {
+        if ($num[8] == substr('TRWAGMYFPDXBNJZSQVHLCKE', (int)substr(str_replace(array('X', 'Y', 'Z'), array('0', '1', '2'), $str), 0, 8) % 23, 1)) {
             return 3;
         } else {
             return -3;

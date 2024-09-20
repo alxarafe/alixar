@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2004-2014 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2008      Raphael Bertrand     <raphael.bertrand@resultic.fr>
- * Copyright (C) 2010-2014 Juanjo Menent	    <jmenent@2byte.es>
- * Copyright (C) 2012      Christophe Battarel  <christophe.battarel@altairis.fr>
- * Copyright (C) 2017      Ferran Marcet        <fmarcet@2byte.es>
+/* Copyright (C) 2004-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2008       Raphael Bertrand            <raphael.bertrand@resultic.fr>
+ * Copyright (C) 2010-2014  Juanjo Menent	            <jmenent@2byte.es>
+ * Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2017       Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -25,18 +25,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\SupplierProposal\Classes\ModelePDFSupplierProposal;
+
 /**
  *  \file       htdocs/core/modules/supplier_proposal/doc/pdf_aurore.modules.php
  *  \ingroup    propale
  *  \brief      File of the class allowing to generate the supplier proposals to the Aurore model
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_proposal/modules_supplier_proposal.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
-
 
 /**
  *  Class to generate PDF supplier proposal Aurore
@@ -78,7 +77,7 @@ class pdf_aurore extends ModelePDFSupplierProposal
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -155,21 +154,22 @@ class pdf_aurore extends ModelePDFSupplierProposal
         $this->atleastonediscount = 0;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build pdf onto disk
      *
-     *  @param      SupplierProposal        $object             Object to generate
-     *  @param      Translate   $outputlangs        Lang output object
-     *  @param      string      $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int         $hidedetails        Do not show line details
-     *  @param      int         $hidedesc           Do not show desc
-     *  @param      int         $hideref            Do not show ref
-     *  @return     int                             1=OK, 0=KO
+     * @param SupplierProposal $object Object to generate
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                             1=OK, 0=KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath = '', $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $db, $hookmanager, $nblines;
 
         if (!is_object($outputlangs)) {
@@ -258,7 +258,6 @@ class pdf_aurore extends ModelePDFSupplierProposal
             if (file_exists($dir)) {
                 // Add pdfgeneration hook
                 if (!is_object($hookmanager)) {
-                    include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
                     $hookmanager = new HookManager($this->db);
                 }
                 $hookmanager->initHooks(array('pdfgeneration'));
@@ -541,7 +540,7 @@ class pdf_aurore extends ModelePDFSupplierProposal
                         $localtax2ligne -= ($localtax2ligne * $object->remise_percent) / 100;
                     }*/
 
-                    $vatrate = (string) $object->lines[$i]->tva_tx;
+                    $vatrate = (string)$object->lines[$i]->tva_tx;
 
                     // Retrieve type from database for backward compatibility with old records
                     if (
@@ -695,37 +694,37 @@ class pdf_aurore extends ModelePDFSupplierProposal
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *  Show payments table
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Object      $object         Object proposal
-     *  @param  int         $posy           Position y in PDF
-     *  @param  Translate   $outputlangs    Object langs for output
-     *  @return int                         Return integer <0 if KO, >0 if OK
+     * @param TCPDF $pdf Object PDF
+     * @param Object $object Object proposal
+     * @param int $posy Position y in PDF
+     * @param Translate $outputlangs Object langs for output
+     * @return int                         Return integer <0 if KO, >0 if OK
      */
     protected function _tableau_versements(&$pdf, $object, $posy, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         return 1;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *   Show miscellaneous information (payment mode, payment term, ...)
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     Object      $object         Object to show
-     *   @param     int|float   $posy           Y
-     *   @param     Translate   $outputlangs    Langs object
-     *   @return    int|float
+     * @param TCPDF $pdf Object PDF
+     * @param Object $object Object to show
+     * @param int|float $posy Y
+     * @param Translate $outputlangs Langs object
+     * @return    int|float
      */
     protected function _tableau_info(&$pdf, $object, $posy, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf;
         $default_font_size = pdf_getPDFFontSize($outputlangs);
 
@@ -869,21 +868,21 @@ class pdf_aurore extends ModelePDFSupplierProposal
         return $posy;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
     /**
      *  Show total to pay
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Facture     $object         Object invoice
-     *  @param  int         $deja_regle     Montant deja regle
-     *  @param  int         $posy           Position depart
-     *  @param  Translate   $outputlangs    Object langs
-     *  @return int                         Position pour suite
+     * @param TCPDF $pdf Object PDF
+     * @param Facture $object Object invoice
+     * @param int $deja_regle Montant deja regle
+     * @param int $posy Position depart
+     * @param Translate $outputlangs Object langs
+     * @return int                         Position pour suite
      */
     protected function _tableau_tot(&$pdf, $object, $deja_regle, $posy, $outputlangs)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $conf, $mysoc;
         $default_font_size = pdf_getPDFFontSize($outputlangs);
 
@@ -924,7 +923,7 @@ class pdf_aurore extends ModelePDFSupplierProposal
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX1_OPTION) && $conf->global->FACTURE_LOCAL_TAX1_OPTION=='localtax1on')
                 //{
                 foreach ($this->localtax1 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('1', '3', '5'))) {
+                    if (in_array((string)$localtax_type, array('1', '3', '5'))) {
                         continue;
                     }
 
@@ -954,14 +953,13 @@ class pdf_aurore extends ModelePDFSupplierProposal
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX2_OPTION) && $conf->global->FACTURE_LOCAL_TAX2_OPTION=='localtax2on')
                 //{
                 foreach ($this->localtax2 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('1', '3', '5'))) {
+                    if (in_array((string)$localtax_type, array('1', '3', '5'))) {
                         continue;
                     }
 
                     foreach ($localtax_rate as $tvakey => $tvaval) {
                         if ($tvakey != 0) {    // On affiche pas taux 0
                             //$this->atleastoneratenotnull++;
-
 
 
                             $index++;
@@ -1008,7 +1006,7 @@ class pdf_aurore extends ModelePDFSupplierProposal
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX1_OPTION) && $conf->global->FACTURE_LOCAL_TAX1_OPTION=='localtax1on')
                 //{
                 foreach ($this->localtax1 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('2', '4', '6'))) {
+                    if (in_array((string)$localtax_type, array('2', '4', '6'))) {
                         continue;
                     }
 
@@ -1038,7 +1036,7 @@ class pdf_aurore extends ModelePDFSupplierProposal
                 //if (!empty($conf->global->FACTURE_LOCAL_TAX2_OPTION) && $conf->global->FACTURE_LOCAL_TAX2_OPTION=='localtax2on')
                 //{
                 foreach ($this->localtax2 as $localtax_type => $localtax_rate) {
-                    if (in_array((string) $localtax_type, array('2', '4', '6'))) {
+                    if (in_array((string)$localtax_type, array('2', '4', '6'))) {
                         continue;
                     }
 
@@ -1112,19 +1110,20 @@ class pdf_aurore extends ModelePDFSupplierProposal
         return ($tab2_top + ($tab2_hl * $index));
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *   Show table for lines
      *
-     *   @param     TCPDF       $pdf            Object PDF
-     *   @param     float|int   $tab_top        Top position of table
-     *   @param     float|int   $tab_height     Height of table (rectangle)
-     *   @param     int         $nexY           Y (not used)
-     *   @param     Translate   $outputlangs    Langs object
-     *   @param     int         $hidetop        1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
-     *   @param     int         $hidebottom     Hide bottom bar of array
-     *   @param     string      $currency       Currency code
-     *   @return    void
+     * @param TCPDF $pdf Object PDF
+     * @param float|int $tab_top Top position of table
+     * @param float|int $tab_height Height of table (rectangle)
+     * @param int $nexY Y (not used)
+     * @param Translate $outputlangs Langs object
+     * @param int $hidetop 1=Hide top bar of array and title, 0=Hide nothing, -1=Hide only title
+     * @param int $hidebottom Hide bottom bar of array
+     * @param string $currency Currency code
+     * @return    void
      */
     protected function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0, $currency = '')
     {
@@ -1203,15 +1202,16 @@ class pdf_aurore extends ModelePDFSupplierProposal
         }
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show top header of page.
      *
-     *  @param  TCPDF       $pdf            Object PDF
-     *  @param  Object      $object         Object to show
-     *  @param  int         $showaddress    0=no, 1=yes
-     *  @param  Translate   $outputlangs    Object lang for output
-     *  @return float|int                   Return topshift value
+     * @param TCPDF $pdf Object PDF
+     * @param Object $object Object to show
+     * @param int $showaddress 0=no, 1=yes
+     * @param Translate $outputlangs Object lang for output
+     * @return float|int                   Return topshift value
      */
     protected function _pagehead(&$pdf, $object, $showaddress, $outputlangs)
     {
@@ -1417,15 +1417,16 @@ class pdf_aurore extends ModelePDFSupplierProposal
         return $top_shift;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.PublicUnderscore
+
     /**
      *  Show footer of page. Need this->emetteur object
      *
-     *  @param  TCPDF       $pdf                PDF
-     *  @param  Object      $object             Object to show
-     *  @param  Translate   $outputlangs        Object lang for output
-     *  @param  int         $hidefreetext       1=Hide free text
-     *  @return int                             Return height of bottom margin including footer text
+     * @param TCPDF $pdf PDF
+     * @param Object $object Object to show
+     * @param Translate $outputlangs Object lang for output
+     * @param int $hidefreetext 1=Hide free text
+     * @return int                             Return height of bottom margin including footer text
      */
     protected function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
     {

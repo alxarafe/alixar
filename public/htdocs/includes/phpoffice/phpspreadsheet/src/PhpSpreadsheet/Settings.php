@@ -128,7 +128,7 @@ class Settings
      */
     public static function setLibXmlDisableEntityLoader($state)
     {
-        self::$libXmlDisableEntityLoader = (bool) $state;
+        self::$libXmlDisableEntityLoader = (bool)$state;
     }
 
     /**

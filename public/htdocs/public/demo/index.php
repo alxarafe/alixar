@@ -76,7 +76,8 @@ $tmpaction = 'view';
 $parameters = array();
 $object = new stdClass();
 $reshook = $hookmanager->executeHooks('addDemoProfile', $parameters, $object, $tmpaction); // Note that $action and $object may have been modified by some hooks
-$error = $hookmanager->error; $errors = $hookmanager->errors;
+$error = $hookmanager->error;
+$errors = $hookmanager->errors;
 if (empty($reshook)) {
     $demoprofiles = array(
         array(
@@ -126,13 +127,13 @@ if (empty($reshook)) {
     $alwaysuncheckedmodules = array('ai', 'dav', 'dynamicprices', 'incoterm', 'loan', 'multicurrency', 'paybox', 'paypal', 'stripe', 'google', 'printing', 'scanner', 'socialnetworks', 'webhook', 'webportal', 'website', 'zapier'); // Module we don't want by default
     // Not visible
     $alwayshiddencheckedmodules = array('accounting', 'api', 'barcode', 'blockedlog', 'bookmark', 'clicktodial', 'comptabilite', 'cron', 'document', 'domain', 'externalrss', 'externalsite', 'fckeditor', 'geoipmaxmind', 'gravatar', 'label', 'ldap',
-                                    'mailmanspip', 'notification', 'oauth', 'syslog', 'user', 'webservices', 'workflow',
-                                    // Extended modules
-                                    'memcached', 'numberwords', 'zipautofillfr');
+        'mailmanspip', 'notification', 'oauth', 'syslog', 'user', 'webservices', 'workflow',
+        // Extended modules
+        'memcached', 'numberwords', 'zipautofillfr');
     $alwayshiddenuncheckedmodules = array('cashdesk', 'collab', 'dav', 'debugbar', 'emailcollector', 'ftp', 'hrm', 'modulebuilder', 'printing', 'webservicesclient', 'zappier',
-                                    // Extended modules
-                                    'awstats', 'bittorrent', 'bootstrap', 'cabinetmed', 'cmcic', 'concatpdf', 'customfield', 'datapolicy', 'deplacement', 'dolicloud', 'filemanager', 'lightbox', 'mantis', 'monitoring', 'moretemplates', 'multicompany', 'nltechno', 'numberingpack', 'openstreetmap',
-                                    'ovh', 'phenix', 'phpsysinfo', 'pibarcode', 'postnuke', 'dynamicprices', 'receiptprinter', 'selectbank', 'skincoloreditor', 'submiteverywhere', 'survey', 'thomsonphonebook', 'topten', 'tvacerfa', 'voyage', 'webcalendar', 'webmail');
+        // Extended modules
+        'awstats', 'bittorrent', 'bootstrap', 'cabinetmed', 'cmcic', 'concatpdf', 'customfield', 'datapolicy', 'deplacement', 'dolicloud', 'filemanager', 'lightbox', 'mantis', 'monitoring', 'moretemplates', 'multicompany', 'nltechno', 'numberingpack', 'openstreetmap',
+        'ovh', 'phenix', 'phpsysinfo', 'pibarcode', 'postnuke', 'dynamicprices', 'receiptprinter', 'selectbank', 'skincoloreditor', 'submiteverywhere', 'survey', 'thomsonphonebook', 'topten', 'tvacerfa', 'voyage', 'webcalendar', 'webmail');
 }
 
 // Search modules
@@ -150,51 +151,39 @@ $categ = array();
 $i = 0; // is a sequencer of modules found
 $j = 0; // j is module number. Automatically affected if module number not defined.
 
-foreach ($modulesdir as $dir) {
-    // Charge tableaux modules, nom, numero, orders depuis repertoire dir
-    $handle = @opendir($dir);
-    if (is_resource($handle)) {
-        while (($file = readdir($handle)) !== false) {
-            //print "$i ".$file."\n<br>";
-            if (is_readable($dir . $file) && substr($file, 0, 3) == 'mod' && substr($file, dol_strlen($file) - 10) == '.class.php') {
-                $modName = substr($file, 0, dol_strlen($file) - 10);
+$allModules = DolibarrModules::getModules($modulesdir);
+foreach ($allModules as $modName => $filename) {
+    $objMod = DolibarrModules::getObj($db, $modName, $filename);
 
-                if ($modName) {
-                    try {
-                        include_once $dir . $file;
-                        $objMod = new $modName($db);
+    if (!isset($objMod)) {
+        print info_admin("demo/index.php Warning bad descriptor file : " . $filename . " (Class " . $modName . " not found into file)", 0, 0, '1', 'warning');
+        continue;
+    }
 
-                        if ($objMod->numero > 0) {
-                            $j = $objMod->numero;
-                        } else {
-                            $j = 1000 + $i;
-                        }
+    if ($objMod->numero > 0) {
+        $j = $objMod->numero;
+    } else {
+        $j = 1000 + $i;
+    }
 
-                        $modulequalified = 1;
+    $modulequalified = 1;
 
-                        // We discard modules according to features level (PS: if module is activated we always show it)
-                        $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_class($objMod)));
-                        if ($objMod->version == 'development' && getDolGlobalInt('MAIN_FEATURES_LEVEL') < 2 && !getDolGlobalString($const_name)) {
-                            $modulequalified = 0;
-                        }
-                        if ($objMod->version == 'experimental' && getDolGlobalInt('MAIN_FEATURES_LEVEL') < 1 && !getDolGlobalString($const_name)) {
-                            $modulequalified = 0;
-                        }
+    // We discard modules according to features level (PS: if module is activated we always show it)
+    $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_class($objMod)));
+    if ($objMod->version == 'development' && getDolGlobalInt('MAIN_FEATURES_LEVEL') < 2 && !getDolGlobalString($const_name)) {
+        $modulequalified = 0;
+    }
+    if ($objMod->version == 'experimental' && getDolGlobalInt('MAIN_FEATURES_LEVEL') < 1 && !getDolGlobalString($const_name)) {
+        $modulequalified = 0;
+    }
 
-                        if ($modulequalified) {
-                            $modules[$i] = $objMod;
-                            $filename[$i] = $modName;
-                            $orders[$i]  = $objMod->family . "_" . $j; // Tri par famille puis numero module
-                            //print "x".$modName." ".$orders[$i]."\n<br>";
-                            $j++;
-                            $i++;
-                        }
-                    } catch (Exception $e) {
-                        dol_syslog("Failed to load " . $dir . $file . " " . $e->getMessage(), LOG_ERR);
-                    }
-                }
-            }
-        }
+    if ($modulequalified) {
+        $modules[$i] = $objMod;
+        $filename[$i] = $modName;
+        $orders[$i] = $objMod->family . "_" . $j; // Tri par famille puis numero module
+        //print "x".$modName." ".$orders[$i]."\n<br>";
+        $j++;
+        $i++;
     }
 }
 
@@ -469,8 +458,8 @@ $db->close();
 /**
  * Show header for demo
  *
- * @param   string      $title      Title
- * @param   string      $head       Head string
+ * @param string $title Title
+ * @param string $head Head string
  * @return  void
  */
 function llxHeaderVierge($title, $head = "")

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006-2011  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2011		Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2006-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011		Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -28,10 +28,8 @@ set_include_path($_SERVER['DOCUMENT_ROOT'] . '/htdocs');
 
 require_once '../master.inc.php';
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
 
 $langs->load("admin");
-
 
 /*
  * View
@@ -48,10 +46,7 @@ if (!getDolGlobalString('MAIN_MODULE_WEBSERVICES')) {
     exit;
 }
 
-
-
 // WSDL
 print 'List of available SOAP Web services is visible on the setup area, setup page of module WebService SOAP.';
-
 
 $db->close();

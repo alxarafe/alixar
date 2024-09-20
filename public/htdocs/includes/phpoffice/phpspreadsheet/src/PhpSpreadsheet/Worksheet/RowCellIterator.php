@@ -57,9 +57,9 @@ class RowCellIterator extends CellIterator
      *
      * @param string $startColumn The column address at which to start iterating
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function resetStart($startColumn = 'A')
     {
@@ -75,9 +75,9 @@ class RowCellIterator extends CellIterator
      *
      * @param string $endColumn The column address at which to stop iterating
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function resetEnd($endColumn = null)
     {
@@ -93,9 +93,9 @@ class RowCellIterator extends CellIterator
      *
      * @param string $column The column address to set the current pointer at
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function seek($column = 'A')
     {

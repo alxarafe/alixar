@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2015      Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2015       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,13 +19,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Payment\Classes\ModeleNumRefPayments;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  * \file       htdocs/core/modules/payment/mod_payment_cicada.php
  * \ingroup    payment
  * \brief      File containing class for numbering module Cicada
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/payment/modules_payment.php';
 
 /**
  *  Class to manage customer payment numbering rules Cicada
@@ -61,8 +63,8 @@ class mod_payment_cicada extends ModeleNumRefPayments
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -74,7 +76,7 @@ class mod_payment_cicada extends ModeleNumRefPayments
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -86,8 +88,8 @@ class mod_payment_cicada extends ModeleNumRefPayments
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  Object      $object     Object we need next value for
-     *  @return boolean                 false if conflict, true if ok
+     * @param Object $object Object we need next value for
+     * @return boolean                 false if conflict, true if ok
      */
     public function canBeActivated($object)
     {
@@ -122,9 +124,9 @@ class mod_payment_cicada extends ModeleNumRefPayments
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc     Object thirdparty
-     *  @param  Object      $object     Object we need next value for
-     *  @return string|-1               Value if OK, -1 if KO
+     * @param Societe $objsoc Object thirdparty
+     * @param Object $object Object we need next value for
+     * @return string|-1               Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $object)
     {
@@ -165,17 +167,18 @@ class mod_payment_cicada extends ModeleNumRefPayments
     }
 
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Return next free value
      *
-     *  @param  Societe     $objsoc     Object third party
-     *  @param  string      $objforref  Object for number to search
-     *  @return string|-1               Next free value, -1 if KO
+     * @param Societe $objsoc Object third party
+     * @param string $objforref Object for number to search
+     * @return string|-1               Next free value, -1 if KO
      */
     public function payment_get_num($objsoc, $objforref)
     {
-		// phpcs:enable
+        // phpcs:enable
         return $this->getNextValue($objsoc, $objforref);
     }
 }

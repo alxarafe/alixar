@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013-2018 Philippe Grand       <philippe.grand@atoo-net.com>
- * Copyright (C) 2016      Alexandre Spangaro   <aspangaro@open-dsi.fr>
+/* Copyright (C) 2005-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2018  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2016       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -23,14 +23,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\FactureFournisseur\Classes\ModeleNumRefSuppliersInvoices;
+
 /**
  *      \file       htdocs/core/modules/supplier_invoice/mod_facture_fournisseur_cactus.php
  *      \ingroup    supplier invoice
  *      \brief      File containing class for the numbering module Cactus
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_invoice/modules_facturefournisseur.php';
-
 
 /**
  *  Cactus Class of numbering models of suppliers invoices references
@@ -70,8 +69,8 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
     /**
      *  Return description of numbering model
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -84,7 +83,7 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
     /**
      *  Returns a numbering example
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -95,8 +94,8 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
     /**
      *  Tests if the numbers already in the database do not cause conflicts that would prevent this numbering.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if KO (there is a conflict), true if OK
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if KO (there is a conflict), true if OK
      */
     public function canBeActivated($object)
     {
@@ -177,9 +176,9 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
     /**
      * Return next value
      *
-     * @param   Societe             $objsoc     Object third party
-     * @param   FactureFournisseur  $object     Object invoice
-     * @param   string              $mode       'next' for next value or 'last' for last value
+     * @param Societe $objsoc Object third party
+     * @param FactureFournisseur $object Object invoice
+     * @param string $mode 'next' for next value or 'last' for last value
      * @return  string|-1                       Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $object, $mode = 'next')
@@ -260,9 +259,9 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
     /**
      * Return next free value
      *
-     * @param   Societe             $objsoc         Object third party
-     * @param   FactureFournisseur  $objforref      Object for number to search
-     * @param   string              $mode           'next' for next value or 'last' for last value
+     * @param Societe $objsoc Object third party
+     * @param FactureFournisseur $objforref Object for number to search
+     * @param string $mode 'next' for next value or 'last' for last value
      * @return  string                              Next free value
      * @deprecated see getNextValue
      */

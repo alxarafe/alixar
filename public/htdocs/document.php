@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2004-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005      Simon Tosser         <simon@kornog-computing.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010	   Pierre Morin         <pierre.morin@auguria.net>
- * Copyright (C) 2010	   Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2022	   Ferran Marcet        <fmarcet@2byte.es>
+/* Copyright (C) 2004-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Simon Tosser                <simon@kornog-computing.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010	    Pierre Morin                <pierre.morin@auguria.net>
+ * Copyright (C) 2010	    Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2022	    Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+use Dolibarr\Code\Ecm\Classes\EcmFiles;
 
 /**
  *  \file       htdocs/document.php
@@ -79,17 +81,18 @@ if ((isset($_GET["modulepart"]) && $_GET["modulepart"] == 'medias')) {
 /**
  * Header empty
  *
- * @ignore
  * @return  void
+ * @ignore
  */
 function llxHeader()
 {
 }
+
 /**
  * Footer empty
  *
- * @ignore
  * @return  void
+ * @ignore
  */
 function llxFooter()
 {
@@ -137,8 +140,6 @@ if (in_array($modulepart, array('facture_paiement', 'unpaid'))) {
 
 // None
 
-
-
 /*
  * View
  */
@@ -146,7 +147,6 @@ if (in_array($modulepart, array('facture_paiement', 'unpaid'))) {
 // If we have a hash public (hashp), we guess the original_file.
 $ecmfile = '';
 if (!empty($hashp)) {
-    include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
     $ecmfile = new EcmFiles($db);
     $result = $ecmfile->fetch(0, '', '', '', $hashp);
     if ($result > 0) {
@@ -219,9 +219,9 @@ if (empty($modulepart)) {
 
 // Check security and set return info with full path of file
 $check_access = dol_check_secure_access_document($modulepart, $original_file, $entity, $user, '');
-$accessallowed              = $check_access['accessallowed'];
+$accessallowed = $check_access['accessallowed'];
 $sqlprotectagainstexternals = $check_access['sqlprotectagainstexternals'];
-$fullpath_original_file     = $check_access['original_file']; // $fullpath_original_file is now a full path name
+$fullpath_original_file = $check_access['original_file']; // $fullpath_original_file is now a full path name
 //var_dump($fullpath_original_file.' '.$original_file.' '.$accessallowed);exit;
 
 if (!empty($hashp)) {

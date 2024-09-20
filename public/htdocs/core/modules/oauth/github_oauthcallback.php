@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2022       Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2015       Frederic France      <frederic.france@free.fr>
+/* Copyright (C) 2022       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use OAuth\Common\Http\Uri\UriFactory;
+
 /**
  *      \file       htdocs/core/modules/oauth/github_oauthcallback.php
  *      \ingroup    oauth
@@ -27,6 +29,7 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/includes/OAuth/bootstrap.php';
+
 use OAuth\Common\Storage\DoliStorage;
 use OAuth\Common\Consumer\Credentials;
 
@@ -47,17 +50,16 @@ if (empty($keyforprovider) && !empty($_SESSION["oauthkeyforproviderbeforeoauthju
 /**
  * Create a new instance of the URI class with the current URI, stripping the query string
  */
-$uriFactory = new \OAuth\Common\Http\Uri\UriFactory();
+$uriFactory = new UriFactory();
 //$currentUri = $uriFactory->createFromSuperGlobalArray($_SERVER);
 //$currentUri->setQuery('');
 $currentUri = $uriFactory->createFromAbsolute($urlwithroot . '/core/modules/oauth/github_oauthcallback.php');
-
 
 /**
  * Load the credential for the service
  */
 
-/** @var \OAuth\ServiceFactory $serviceFactory  An OAuth service factory. */
+/** @var \OAuth\ServiceFactory $serviceFactory An OAuth service factory. */
 $serviceFactory = new \OAuth\ServiceFactory();
 $httpClient = new \OAuth\Common\Http\Client\CurlClient();
 // TODO Set options for proxy and timeout

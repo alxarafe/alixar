@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021 Dorian Laurent <i.merraha@sofimedmaroc.com>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Dorian Laurent              <i.merraha@sofimedmaroc.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Modules\Partnership;
 
 /**
  * \file    partnership/admin/setup.php
@@ -42,7 +46,6 @@ if (!$user->admin) {
     accessforbidden();
 }
 
-
 /*
  * Actions
  */
@@ -50,14 +53,11 @@ if (!$user->admin) {
 $nomessageinsetmoduleoptions = 1;
 include DOL_DOCUMENT_ROOT . '/core/actions_setmoduleoptions.inc.php';
 
-
 if ($action == 'setting') {
-    require_once DOL_DOCUMENT_ROOT . "/core/modules/modPartnership.class.php";
-
     $modulemenu = (GETPOST('PARTNERSHIP_IS_MANAGED_FOR', 'alpha') == 'member') ? 'member' : 'thirdparty';
     $res = dolibarr_set_const($db, "PARTNERSHIP_IS_MANAGED_FOR", $modulemenu, 'chaine', 0, '', $conf->entity);
 
-    $partnership = new modPartnership($db);
+    $partnership = new Partnership($db);
 
     $error += $partnership->delete_tabs();
     $error += $partnership->insert_tabs();
@@ -102,7 +102,6 @@ $form = new Form($db);
 // Module to manage partnership / services code
 $dirpartnership = array('/core/modules/partnership/');
 $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
-
 
 /*
  * Other conf

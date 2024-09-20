@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2014-2017  Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2014-2017  Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,12 +25,14 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Class
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
 }
 
 // Load translation files required by the page
@@ -45,9 +47,9 @@ $action = GETPOST('action', 'aZ09');
 
 // Other parameters LOAN_*
 $list = array(
-        'LOAN_ACCOUNTING_ACCOUNT_CAPITAL',
-        'LOAN_ACCOUNTING_ACCOUNT_INTEREST',
-        'LOAN_ACCOUNTING_ACCOUNT_INSURANCE'
+    'LOAN_ACCOUNTING_ACCOUNT_CAPITAL',
+    'LOAN_ACCOUNTING_ACCOUNT_INTEREST',
+    'LOAN_ACCOUNTING_ACCOUNT_INSURANCE'
 );
 
 /*

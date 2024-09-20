@@ -28,7 +28,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 
 $langs->load("admin");
 
@@ -99,29 +98,29 @@ jQuery(document).ready(function() {';
 ?>
 
     function hideoptions () {
-        jQuery("#mysql_options").hide();
-        jQuery("#mysql_nobin_options").hide();
-        jQuery("#postgresql_options").hide();
+    jQuery("#mysql_options").hide();
+    jQuery("#mysql_nobin_options").hide();
+    jQuery("#postgresql_options").hide();
     }
 
     hideoptions();
     jQuery("#radio_dump_mysql").click(function() {
-        hideoptions();
-        jQuery("#mysql_options").show();
+    hideoptions();
+    jQuery("#mysql_options").show();
     });
     jQuery("#radio_dump_mysql_nobin").click(function() {
-        hideoptions();
-        jQuery("#mysql_nobin_options").show();
+    hideoptions();
+    jQuery("#mysql_nobin_options").show();
     });
     jQuery("#radio_dump_postgresql").click(function() {
-        hideoptions();
-        jQuery("#postgresql_options").show();
+    hideoptions();
+    jQuery("#postgresql_options").show();
     });
     jQuery("#select_sql_compat").click(function() {
-        if (jQuery("#select_sql_compat").val() == 'POSTGRESQL')
-        {
-            jQuery("#checkbox_dump_disable-add-locks").prop('checked',true);
-        }
+    if (jQuery("#select_sql_compat").val() == 'POSTGRESQL')
+    {
+    jQuery("#checkbox_dump_disable-add-locks").prop('checked',true);
+    }
     });
 
 <?php
@@ -462,8 +461,6 @@ print '</tr>';
 print '</table>';
 
 
-
-
 print '<!--<fieldset>';
 print '<legend>' . $langs->trans("Destination") . '</legend> -->';
 print '<br>';
@@ -503,9 +500,9 @@ if (in_array($type, array('mysql', 'mysqli'))) {
     //     'label' => $langs->trans("FormatZip")
     // );
     $compression['bz'] = array(
-    'function' => 'bzopen',
-    'id' => 'radio_compression_bzip',
-    'label' => $langs->trans("Bzip2")
+        'function' => 'bzopen',
+        'id' => 'radio_compression_bzip',
+        'label' => $langs->trans("Bzip2")
     );
     $compression['zstd'] = array(
         'function' => 'zstd_compress',

@@ -216,7 +216,7 @@ if (empty($error) && !empty($xml)) {
         $i = 0;
         foreach ($xml->dolibarr_constants[0]->constant as $constant) {    // $constant is a simpleXMLElement
             $constname = $constant['name'];
-            $constvalue = (string) $constant;
+            $constvalue = (string)$constant;
             $constvalue = (empty($constvalue) ? '0' : $constvalue);
             // Value found
             $value = '';
@@ -422,7 +422,7 @@ if (empty($error) && !empty($xml)) {
     asort($checksumconcat); // Sort list of checksum
     //var_dump($checksumconcat);
     $checksumget = md5(implode(',', $checksumconcat));
-    $checksumtoget = trim((string) $xml->dolibarr_htdocs_dir_checksum);
+    $checksumtoget = trim((string)$xml->dolibarr_htdocs_dir_checksum);
 
     //var_dump(count($file_list['added']));
     //var_dump($checksumget);

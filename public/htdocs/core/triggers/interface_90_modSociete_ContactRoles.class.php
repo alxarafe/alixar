@@ -1,12 +1,12 @@
 <?php
 
 /*
- * Copyright (C) 2005-2017 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2017 Regis Houssin <regis.houssin@inodbox.com>
- * Copyright (C) 2011-2014 Juanjo Menent <jmenent@2byte.es>
- * Copyright (C) 2013 Cedric GROSS <c.gross@kreiz-it.fr>
- * Copyright (C) 2014 Marcos García <marcosgdf@gmail.com>
- * Copyright (C) 2015 Bahfir Abbes <bafbes@gmail.com>
+ * Copyright (C) 2005-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2017  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2014  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013       Cedric GROSS                <c.gross@kreiz-it.fr>
+ * Copyright (C) 2014       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Bahfir Abbes                <bafbes@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  * \file htdocs/core/triggers/interface_90_modSociete_ContactRoles.class.php
@@ -61,11 +66,11 @@ class InterfaceContactRoles extends DolibarrTriggers
      * $object->socid or $object->fk_soc(id of thirdparty)
      * $object->element (element type of object)
      *
-     * @param string $action    Event action code
-     * @param Object $object    Object
-     * @param User $user        Object user
-     * @param Translate $langs  Object langs
-     * @param conf $conf        Object conf
+     * @param string $action Event action code
+     * @param Object $object Object
+     * @param User $user Object user
+     * @param Translate $langs Object langs
+     * @param Conf $conf Object conf
      * @return int Return integer <0 if KO, 0 if no triggered ran, >0 if OK
      */
     public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
@@ -80,7 +85,6 @@ class InterfaceContactRoles extends DolibarrTriggers
             $socid = (property_exists($object, 'socid') ? $object->socid : $object->fk_soc);
 
             if (!empty($socid) && $socid > 0) {
-                require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
                 $contactdefault = new Contact($this->db);
                 $contactdefault->socid = $socid;
 

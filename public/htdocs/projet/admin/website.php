@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2015	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2006-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2011		Juanjo Menent			<jmenent@2byte.es>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2015	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2006-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2011		Juanjo Menent			    <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormProjets;
+
 /**
  *      \file       htdocs/projet/admin/website.php
  *      \ingroup    member
@@ -31,8 +34,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "members"));
@@ -81,7 +82,6 @@ if ($action == 'update') {
     }
 }
 
-
 /*
  * View
  */
@@ -92,7 +92,6 @@ $formproject = new FormProjets($db);
 $title = $langs->trans("ProjectsSetup");
 $help_url = '';
 llxHeader('', $title, $help_url);
-
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($title, $linkback, 'title_setup');
@@ -106,7 +105,6 @@ print '<input type="hidden" name="action" value="update">';
 print '<input type="hidden" name="token" value="' . newToken() . '">';
 
 print dol_get_fiche_head($head, 'website', $langs->trans("Projects"), -1, 'project');
-
 
 print '<span class="opacitymedium">' . $langs->trans("LeadPublicFormDesc") . '</span><br><br>';
 

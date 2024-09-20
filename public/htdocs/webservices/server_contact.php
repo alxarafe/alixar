@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2012      JF FERRY             <jfefe@aternatik.fr>
+/* Copyright (C) 2006-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       JF FERRY                    <jfefe@aternatik.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -19,6 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
 
 /**
  *       \file       htdocs/webservices/server_contact.php
@@ -50,7 +53,6 @@ if (!defined("NOSESSION")) {
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
 require_once DOL_DOCUMENT_ROOT . "/core/lib/ws.lib.php";
-require_once DOL_DOCUMENT_ROOT . "/contact/class/contact.class.php";
 require_once DOL_DOCUMENT_ROOT . "/core/class/extrafields.class.php";
 
 
@@ -141,7 +143,6 @@ $contact_fields = array(
 
 $elementtype = 'socpeople';
 
-
 //Retrieve all extrafield for contact
 // fetch optionals attributes and labels
 $extrafields = new ExtraFields($db);
@@ -192,16 +193,12 @@ $server->wsdl->addComplexType(
     )
 );
 
-
-
-
 // 5 styles: RPC/encoded, RPC/literal, Document/encoded (not WS-I compliant), Document/literal, Document/literal wrapped
 // Style merely dictates how to translate a WSDL binding to a SOAP message. Nothing more. You can use either style with any programming model.
 // http://www.ibm.com/developerworks/webservices/library/ws-whichwsdl/
 $styledoc = 'rpc'; // rpc/document (document is an extend into SOAP 1.0 to support unstructured messages)
 $styleuse = 'encoded'; // encoded/literal/literal wrapped
 // Better choice is document/literal wrapped but literal wrapped not supported by nusoap.
-
 
 // Register WSDL
 $server->register(
@@ -457,7 +454,6 @@ function createContact($authentication, $contact)
                 $newobject->array_options[$key] = $contact[$key];
             }
         }
-
 
         //...
 

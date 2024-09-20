@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2020 Floiran Henry <florian.henry@scopen.fr>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2020       Floiran Henry               <florian.henry@scopen.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *       \file       htdocs/product/stats/mo.php
  *       \ingroup    product mo
@@ -30,8 +32,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('mrp', 'products', 'companies'));
@@ -143,7 +143,7 @@ if ($id > 0 || !empty($ref)) {
         $sql .= " FROM " . MAIN_DB_PREFIX . "bom_bom as b";
         $sql .= " WHERE ";
         $sql .= " b.entity IN (" . getEntity('bom') . ")";
-        $sql .= " AND b.fk_product = " . ((int) $product->id);
+        $sql .= " AND b.fk_product = " . ((int)$product->id);
         $sql .= $db->order($sortfield, $sortorder);
 
         // Count total nb of records
@@ -206,7 +206,7 @@ if ($id > 0 || !empty($ref)) {
         $sql .= " FROM " . MAIN_DB_PREFIX . "bom_bom as b";
         $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "bom_bomline as bl ON bl.fk_bom=b.rowid";
         $sql .= " WHERE b.entity IN (" . getEntity('bom') . ")";
-        $sql .= " AND bl.fk_product = " . ((int) $product->id);
+        $sql .= " AND bl.fk_product = " . ((int)$product->id);
         $sql .= " GROUP BY b.rowid, b.ref, b.status, b.date_valid, b.fk_product";
         $sql .= $db->order($sortfield, $sortorder);
 
@@ -272,13 +272,13 @@ if ($id > 0 || !empty($ref)) {
         $option .= '&id=' . $product->id;
 
         if ($limit > 0 && $limit != $conf->liste_limit) {
-            $option .= '&limit=' . ((int) $limit);
+            $option .= '&limit=' . ((int)$limit);
         }
         if (!empty($search_month)) {
-            $option .= '&search_month=' . urlencode((string) $search_month);
+            $option .= '&search_month=' . urlencode((string)$search_month);
         }
         if (!empty($search_year)) {
-            $option .= '&search_year=' . urlencode((string) $search_year);
+            $option .= '&search_year=' . urlencode((string)$search_year);
         }
 
         print '<form method="post" action="' . $_SERVER['PHP_SELF'] . '?id=' . $product->id . '" name="search_form">' . "\n";
@@ -293,7 +293,7 @@ if ($id > 0 || !empty($ref)) {
         print_barre_liste($langs->trans("BOMs"), $page, $_SERVER["PHP_SELF"], $option, $sortfield, $sortorder, '', count($bom_data_result), count($bom_data_result), '', 0, '', '', $limit, 0, 0, 1);
 
         if (!empty($page)) {
-            $option .= '&page=' . urlencode((string) ($page));
+            $option .= '&page=' . urlencode((string)($page));
         }
 
         print '<div class="div-table-responsive">';

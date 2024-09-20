@@ -1,10 +1,11 @@
 <?php
 
-/* Copyright (C) 2013-2014  Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2018       Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2024		William Mead			<william.mead@manchenumerique.fr>
+/* Copyright (C) 2013-2014  Jean-François Ferry         <jfefe@aternatik.fr>
+ * Copyright (C) 2018       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2024		William Mead			    <william.mead@manchenumerique.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +21,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Resource\Classes\Dolresource;
+
 /**
  *      \file       htdocs/resource/list.php
  *      \ingroup    resource
@@ -28,7 +33,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/resource/class/dolresource.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("resource", "companies", "other"));

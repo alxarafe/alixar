@@ -150,14 +150,14 @@ print '
 	}
 
     a.alilevel0, span.spanlilevel0 {
-        background-image: url(\'' . constant('BASE_URL') . '/theme/' . urlencode($conf->theme) . '/img/next.png\') !important;
+        background-image: url(\'' . constant('DOL_URL_ROOT') . '/theme/' . urlencode($conf->theme) . '/img/next.png\') !important;
         background-repeat: no-repeat !important;';
 if ($langs->trans("DIRECTION") == 'rtl') {
     print 'background-position: right;';
 } else {
     print 'background-position-x: 10px;';
 }
-    print '
+print '
         background-position-y: 18px;
         padding: 1em 15px 1em 40px;
 		display: block;
@@ -186,16 +186,16 @@ if ($langs->trans("DIRECTION") == 'rtl') {
         padding-bottom: 5px;
     }
 	li.lilevel1 > a, li.lilevel1 > i {
-        /* background-image: url(\'' . constant('BASE_URL') . '/theme/' . urlencode($conf->theme) . '/img/puce.png\') !important; */
+        /* background-image: url(\'' . constant('DOL_URL_ROOT') . '/theme/' . urlencode($conf->theme) . '/img/puce.png\') !important; */
         background-repeat: no-repeat !important;';
 if ($langs->trans("DIRECTION") == 'rtl') {
     print 'background-position: right;';
 } else {
     print 'background-position-x: 10px;';
 }
-    print 'background-position-y: 1px;';
-    print 'padding-left: 20px;';
-    print '
+print 'background-position-y: 1px;';
+print 'padding-left: 20px;';
+print '
 	}
     li.lilevel1 a, li.lilevel1 {
         color: #000;
@@ -273,7 +273,7 @@ if (GETPOST('menu', 'aZ09')) {
 }
 if (!class_exists('MenuManager')) {
     $menufound = 0;
-    $dirmenus = array_merge(array("/core/menus/"), (array) $conf->modules_parts['menus']);
+    $dirmenus = array_merge(array("/core/menus/"), (array)$conf->modules_parts['menus']);
     foreach ($dirmenus as $dirmenu) {
         $menufound = dol_include_once($dirmenu . "standard/" . $file_menu);
         if ($menufound) {

@@ -13,9 +13,9 @@ class TaxCodeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\TaxCode>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\TaxCode>
      */
     public function all($params = null, $opts = null)
     {
@@ -30,9 +30,9 @@ class TaxCodeService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\TaxCode
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\TaxCode
      */
     public function retrieve($id, $params = null, $opts = null)
     {

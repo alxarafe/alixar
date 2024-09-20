@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2021  Frederic France      <frederic.france@netlogic.fr>
+ * Copyright (C) 2014-2021  Frederic France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,13 +20,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Printing\Classes\PrintingDriver;
+
 /**
  *      \file       htdocs/core/modules/printing/printipp.modules.php
  *      \ingroup    printing
  *      \brief      File to provide printing with PrintIPP
  */
-
-include_once DOL_DOCUMENT_ROOT . '/core/modules/printing/modules_printing.php';
 
 /**
  *   Class to provide printing with PrintIPP
@@ -107,7 +107,7 @@ class printing_printipp extends PrintingDriver
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -130,9 +130,9 @@ class printing_printipp extends PrintingDriver
     /**
      *  Print selected file
      *
-     * @param   string      $file       file
-     * @param   string      $module     module
-     * @param   string      $subdir     subdirectory of document like for expedition subdir is sendings
+     * @param string $file file
+     * @param string $module module
+     * @param string $subdir subdirectory of document like for expedition subdir is sendings
      *
      * @return  int                     0 if OK, >0 if KO
      */
@@ -157,7 +157,7 @@ class printing_printipp extends PrintingDriver
         }
 
         // select printer uri for module order, propal,...
-        $sql = "SELECT rowid,printer_id,copy FROM " . MAIN_DB_PREFIX . "printing WHERE module = '" . $this->db->escape($module) . "' AND driver = 'printipp' AND userid = " . ((int) $user->id);
+        $sql = "SELECT rowid,printer_id,copy FROM " . MAIN_DB_PREFIX . "printing WHERE module = '" . $this->db->escape($module) . "' AND driver = 'printipp' AND userid = " . ((int)$user->id);
         $result = $this->db->query($sql);
         if ($result) {
             $obj = $this->db->fetch_object($result);
@@ -202,9 +202,9 @@ class printing_printipp extends PrintingDriver
     /**
      *  Return list of available printers
      *
-     *  @return  int                     0 if OK, >0 if KO
+     * @return  int                     0 if OK, >0 if KO
      *
-     *  @phan-suppress PhanTypeExpectedObjectPropAccess
+     * @phan-suppress PhanTypeExpectedObjectPropAccess
      */
     public function listAvailablePrinters()
     {
@@ -257,7 +257,7 @@ class printing_printipp extends PrintingDriver
     /**
      *  Return list of available printers
      *
-     *  @return string[]                List of printers (URIs)
+     * @return string[]                List of printers (URIs)
      */
     public function getlistAvailablePrinters()
     {
@@ -278,8 +278,8 @@ class printing_printipp extends PrintingDriver
     /**
      *  Get printer detail
      *
-     *  @param  string  $uri    URI
-     *  @return stdClass        List of attributes
+     * @param string $uri URI
+     * @return stdClass        List of attributes
      */
     private function getPrinterDetail($uri)
     {
@@ -302,9 +302,9 @@ class printing_printipp extends PrintingDriver
     /**
      *  List jobs print
      *
-     *  @param   string      $module     module
+     * @param string $module module
      *
-     *  @return  int                     0 if OK, >0 if KO
+     * @return  int                     0 if OK, >0 if KO
      */
     public function listJobs($module)
     {

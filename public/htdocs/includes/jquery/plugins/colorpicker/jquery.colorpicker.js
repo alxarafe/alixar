@@ -24,9 +24,9 @@
  * * Bug: Selects Change event should be called on color pick
  * * Name: Bob Farrell <unknown>
  */
-(function($) {
+(function ($) {
     $.fn.extend({
-        colorpicker: function(options) {
+        colorpicker: function (options) {
 
             //Settings list and the default values
             var defaults = {
@@ -47,13 +47,13 @@
             var info = $('<div class="colorpicker-picker-info"></div>');
             var clear = $('<div style="clear:both;"></div>');
 
-            var clickcount=0;
-            
-            return this.each(function() {
+            var clickcount = 0;
+
+            return this.each(function () {
                 obj = this;
 
                 //build an array of colors
-                $(obj).children('option').each(function(i, elm) {
+                $(obj).children('option').each(function (i, elm) {
                     colors[i] = {};
                     colors[i].color = $(elm).text();
                     colors[i].value = $(elm).val();
@@ -77,31 +77,32 @@
 
 
             function create_wrap() {
-            	wrap.click(function() {
-            		clickcount++;
-            		if (clickcount % 2 == 0) { picker.fadeOut('fast'); }
-            	});
-                wrap.mouseleave(function() {
+                wrap.click(function () {
+                    clickcount++;
+                    if (clickcount % 2 == 0) {
+                        picker.fadeOut('fast');
+                    }
+                });
+                wrap.mouseleave(function () {
                     /* picker.fadeOut('fast'); */
                 });
             }
 
             function create_label() {
                 label.text(options.label);
-                label.click(function() {
+                label.click(function () {
                     trigger.click()
                 });
             }
 
             function create_trigger() {
-                trigger.click(function() {
+                trigger.click(function () {
                     var offset = $(this).position();
                     var top = offset.top;
                     var left = offset.left + $(this).width() + 5;
-                	if ((left + (options.size + 4) * options.count) > $(window).width()) 
-                	{
-                		left = offset.left - (options.size + 4) * options.count - 15;
-                	}
+                    if ((left + (options.size + 4) * options.count) > $(window).width()) {
+                        left = offset.left - (options.size + 4) * options.count - 15;
+                    }
                     $(picker).css({
                         'top': top,
                         'left': left
@@ -114,15 +115,15 @@
                 for (var i in colors) {
                     picker.append('<span class="colorpicker-picker-span ' + (colors[i].color == $(obj).children(":selected").text() ? ' active' : '') + '" rel="' + colors[i].color + '" style="background-color: #' + colors[i].color + '; width: ' + options.size + 'px; height: ' + options.size + 'px;"></span>');
                 }
-                trigger.css('background-color', '#'+$(obj).children(":selected").text());
+                trigger.css('background-color', '#' + $(obj).children(":selected").text());
                 info.text($(obj).children(":selected").text());
-                picker.children(".colorpicker-picker-span").hover(function() {
-                    info.text($(this).attr('rel')!=''?$(this).attr('rel'):'-');
-                }, function() {
+                picker.children(".colorpicker-picker-span").hover(function () {
+                    info.text($(this).attr('rel') != '' ? $(this).attr('rel') : '-');
+                }, function () {
                     info.text(picker.children('.colorpicker-picker-span.active').attr('rel'));
                 });
-                picker.delegate(".colorpicker-picker-span", "click", function() {
-                    info.text($(this).attr('rel')!=''?$(this).attr('rel'):'-');
+                picker.delegate(".colorpicker-picker-span", "click", function () {
+                    info.text($(this).attr('rel') != '' ? $(this).attr('rel') : '-');
                     $(obj).val($(this).attr('rel'));
                     $(obj).change();
                     picker.children('.colorpicker-picker-span.active').removeClass('active');

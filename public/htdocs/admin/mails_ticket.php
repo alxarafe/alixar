@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2007-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013	   Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2016      Jonathan TISSEAU     <jonathan.tisseau@86dev.fr>
+/* Copyright (C) 2007-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013	    Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2016       Jonathan TISSEAU            <jonathan.tisseau@86dev.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,10 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormMail;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -118,9 +122,6 @@ if ($action == 'presend' && GETPOST('trackid', 'alphanohtml') == 'test') {
 if ($action == 'presend' && GETPOST('trackid', 'alphanohtml') == 'testhtml') {
     $action = 'testhtml';
 }
-
-
-
 
 /*
  * View
@@ -453,7 +454,7 @@ if ($action == 'edit') {
     if (!empty($conf->use_javascript_ajax) || (isset($conf->global->MAIN_MAIL_SENDMODE_TICKET) && in_array($conf->global->MAIN_MAIL_SENDMODE_TICKET, array('smtps', 'swiftmailer')))) {
         print '<tr class="oddeven smtp_oauth_service hideifdefault"><td>' . $langs->trans("MAIN_MAIL_SMTPS_OAUTH_SERVICE") . '</td><td>';
         // SuperAdministrator access only
-        if (!isModEnabled('multicompany')  || ($user->admin && !$user->entity)) {
+        if (!isModEnabled('multicompany') || ($user->admin && !$user->entity)) {
             print $form->selectarray('MAIN_MAIL_SMTPS_OAUTH_SERVICE_TICKET', $oauthservices, $conf->global->MAIN_MAIL_SMTPS_OAUTH_SERVICE_TICKET);
         } else {
             $text = $oauthservices[getDolGlobalString('MAIN_MAIL_SMTPS_OAUTH_SERVICE_TICKET')];
@@ -696,7 +697,6 @@ if ($action == 'edit') {
         print '<div id="formmailaftertstconnect" name="formmailaftertstconnect"></div>';
         print load_fiche_titre($langs->trans("DoTestServerAvailability"));
 
-        include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
         $mail = new CMailFile('', '', '', '', array(), array(), array(), '', '', 0, '', '', '', '', $trackid, $sendcontext);
 
         $result = $mail->check_server_port($server, $port);
@@ -722,7 +722,6 @@ if ($action == 'edit') {
         print dol_get_fiche_head(array(), '', '', -1);
 
         // Cree l'objet formulaire mail
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
         $formmail = new FormMail($db);
         $formmail->fromname = (GETPOSTISSET('fromname') ? GETPOST('fromname', 'restricthtml') : getDolGlobalString('MAIN_MAIL_EMAIL_FROM'));
         $formmail->frommail = (GETPOSTISSET('frommail') ? GETPOST('frommail', 'restricthtml') : getDolGlobalString('MAIN_MAIL_EMAIL_FROM'));

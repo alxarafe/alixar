@@ -12,9 +12,9 @@ class WebhookEndpointService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\WebhookEndpoint>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\WebhookEndpoint>
      */
     public function all($params = null, $opts = null)
     {
@@ -35,9 +35,9 @@ class WebhookEndpointService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\WebhookEndpoint
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\WebhookEndpoint
      */
     public function create($params = null, $opts = null)
     {
@@ -53,9 +53,9 @@ class WebhookEndpointService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\WebhookEndpoint
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\WebhookEndpoint
      */
     public function delete($id, $params = null, $opts = null)
     {
@@ -69,9 +69,9 @@ class WebhookEndpointService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\WebhookEndpoint
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\WebhookEndpoint
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -86,9 +86,9 @@ class WebhookEndpointService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\WebhookEndpoint
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\WebhookEndpoint
      */
     public function update($id, $params = null, $opts = null)
     {

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2008-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2007 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2008-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2007  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -26,17 +26,15 @@
  */
 
 
-
-
 /**
  * Create a redirect form to paybox form
  *
- * @param   int     $PRICE      Price
- * @param   string  $CURRENCY   Currency
- * @param   string  $EMAIL      EMail
- * @param   string  $urlok      Url to go back if payment is OK
- * @param   string  $urlko      Url to go back if payment is KO
- * @param   string  $TAG        Full tag
+ * @param int $PRICE Price
+ * @param string $CURRENCY Currency
+ * @param string $EMAIL EMail
+ * @param string $urlok Url to go back if payment is OK
+ * @param string $urlko Url to go back if payment is KO
+ * @param string $TAG Full tag
  * @return  int                 1 if OK, -1 if ERROR
  */
 function print_paybox_redirect($PRICE, $CURRENCY, $EMAIL, $urlok, $urlko, $TAG)
@@ -131,24 +129,24 @@ function print_paybox_redirect($PRICE, $CURRENCY, $EMAIL, $urlok, $urlko, $TAG)
     $PBX_TIME = dol_print_date(dol_now(), 'dayhourrfc', 'gmt');
 
     $msg = "PBX_IDENTIFIANT=" . $PBX_IDENTIFIANT .
-           "&PBX_MODE=" . $IBS_MODE .
-           "&PBX_SITE=" . $IBS_SITE .
-           "&PBX_RANG=" . $IBS_RANG .
-           "&PBX_TOTAL=" . $IBS_TOTAL .
-           "&PBX_DEVISE=" . $IBS_DEVISE .
-           "&PBX_CMD=" . $IBS_CMD .
-           "&PBX_PORTEUR=" . $IBS_PORTEUR .
-           "&PBX_RETOUR=" . $IBS_RETOUR .
-           "&PBX_EFFECTUE=" . $IBS_EFFECTUE .
-           "&PBX_ANNULE=" . $IBS_ANNULE .
-           "&PBX_REFUSE=" . $IBS_REFUSE .
-           "&PBX_TXT=" . $IBS_TXT .
-           "&PBX_BKGD=" . $IBS_BKGD .
-           "&PBX_WAIT=" . $IBS_WAIT .
-           "&PBX_LANGUE=" . $IBS_LANG .
-           "&PBX_OUTPUT=" . $IBS_OUTPUT .
-           "&PBX_SOURCE=" . $PBX_SOURCE .
-           "&PBX_TYPEPAIEMENT=" . $PBX_TYPEPAIEMENT;
+        "&PBX_MODE=" . $IBS_MODE .
+        "&PBX_SITE=" . $IBS_SITE .
+        "&PBX_RANG=" . $IBS_RANG .
+        "&PBX_TOTAL=" . $IBS_TOTAL .
+        "&PBX_DEVISE=" . $IBS_DEVISE .
+        "&PBX_CMD=" . $IBS_CMD .
+        "&PBX_PORTEUR=" . $IBS_PORTEUR .
+        "&PBX_RETOUR=" . $IBS_RETOUR .
+        "&PBX_EFFECTUE=" . $IBS_EFFECTUE .
+        "&PBX_ANNULE=" . $IBS_ANNULE .
+        "&PBX_REFUSE=" . $IBS_REFUSE .
+        "&PBX_TXT=" . $IBS_TXT .
+        "&PBX_BKGD=" . $IBS_BKGD .
+        "&PBX_WAIT=" . $IBS_WAIT .
+        "&PBX_LANGUE=" . $IBS_LANG .
+        "&PBX_OUTPUT=" . $IBS_OUTPUT .
+        "&PBX_SOURCE=" . $PBX_SOURCE .
+        "&PBX_TYPEPAIEMENT=" . $PBX_TYPEPAIEMENT;
     // "&PBX_HASH=".$PBX_HASH;
     // "&PBX_TIME=".$PBX_TIME;
 

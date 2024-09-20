@@ -23,7 +23,7 @@ class RedisStorage implements StorageInterface
     protected $hash;
 
     /**
-     * @param  \Predis\Client|\Redis $redis Redis Client
+     * @param \Predis\Client|\Redis $redis Redis Client
      * @param string $hash
      */
     public function __construct($redis, $hash = 'phpdebugbar')
@@ -75,7 +75,7 @@ class RedisStorage implements StorageInterface
                     }
                 }
             }
-        } while($cursor);
+        } while ($cursor);
 
         usort($results, static function ($a, $b) {
             return $b['utime'] <=> $a['utime'];

@@ -33,7 +33,7 @@ class AutoFilter
         $autoFilter->setRange($autoFilterRange);
 
         foreach ($xmlSheet->autoFilter->filterColumn as $filterColumn) {
-            $column = $autoFilter->getColumnByOffset((int) $filterColumn['colId']);
+            $column = $autoFilter->getColumnByOffset((int)$filterColumn['colId']);
             //    Check for standard filters
             if ($filterColumn->filters) {
                 $column->setFilterType(Column::AUTOFILTER_FILTERTYPE_FILTER);
@@ -46,7 +46,7 @@ class AutoFilter
                 //    Entries can be either filter elements
                 foreach ($filters->filter as $filterRule) {
                     //    Operator is undefined, but always treated as EQUAL
-                    $column->createRule()->setRule(null, (string) $filterRule['val'])->setRuleType(Rule::AUTOFILTER_RULETYPE_FILTER);
+                    $column->createRule()->setRule(null, (string)$filterRule['val'])->setRuleType(Rule::AUTOFILTER_RULETYPE_FILTER);
                 }
 
                 //    Or Date Group elements
@@ -69,14 +69,14 @@ class AutoFilter
             $column->createRule()->setRule(
                 null,
                 [
-                    'year' => (string) $dateGroupItem['year'],
-                    'month' => (string) $dateGroupItem['month'],
-                    'day' => (string) $dateGroupItem['day'],
-                    'hour' => (string) $dateGroupItem['hour'],
-                    'minute' => (string) $dateGroupItem['minute'],
-                    'second' => (string) $dateGroupItem['second'],
+                    'year' => (string)$dateGroupItem['year'],
+                    'month' => (string)$dateGroupItem['month'],
+                    'day' => (string)$dateGroupItem['day'],
+                    'hour' => (string)$dateGroupItem['hour'],
+                    'minute' => (string)$dateGroupItem['minute'],
+                    'second' => (string)$dateGroupItem['second'],
                 ],
-                (string) $dateGroupItem['dateTimeGrouping']
+                (string)$dateGroupItem['dateTimeGrouping']
             )->setRuleType(Rule::AUTOFILTER_RULETYPE_DATEGROUP);
         }
     }
@@ -93,8 +93,8 @@ class AutoFilter
             }
             foreach ($customFilters->customFilter as $filterRule) {
                 $column->createRule()->setRule(
-                    (string) $filterRule['operator'],
-                    (string) $filterRule['val']
+                    (string)$filterRule['operator'],
+                    (string)$filterRule['val']
                 )->setRuleType(Rule::AUTOFILTER_RULETYPE_CUSTOMFILTER);
             }
         }
@@ -109,14 +109,14 @@ class AutoFilter
                 //    Operator is undefined, but always treated as EQUAL
                 $column->createRule()->setRule(
                     null,
-                    (string) $filterRule['val'],
-                    (string) $filterRule['type']
+                    (string)$filterRule['val'],
+                    (string)$filterRule['type']
                 )->setRuleType(Rule::AUTOFILTER_RULETYPE_DYNAMICFILTER);
                 if (isset($filterRule['val'])) {
-                    $column->setAttribute('val', (string) $filterRule['val']);
+                    $column->setAttribute('val', (string)$filterRule['val']);
                 }
                 if (isset($filterRule['maxVal'])) {
-                    $column->setAttribute('maxVal', (string) $filterRule['maxVal']);
+                    $column->setAttribute('maxVal', (string)$filterRule['maxVal']);
                 }
             }
         }
@@ -133,7 +133,7 @@ class AutoFilter
                         ? Rule::AUTOFILTER_COLUMN_RULE_TOPTEN_PERCENT
                         : Rule::AUTOFILTER_COLUMN_RULE_TOPTEN_BY_VALUE
                     ),
-                    (string) $filterRule['val'],
+                    (string)$filterRule['val'],
                     (((isset($filterRule['top'])) && ($filterRule['top'] == 1))
                         ? Rule::AUTOFILTER_COLUMN_RULE_TOPTEN_TOP
                         : Rule::AUTOFILTER_COLUMN_RULE_TOPTEN_BOTTOM

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2010-2011  Laurent Destailleur     <ely@users.sourceforge.net>
- * Copyright (C) 2016	    Charlie Benke           <charlie@patas-monkey.com>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2010-2011  Laurent Destailleur         <ely@users.sourceforge.net>
+ * Copyright (C) 2016	    Charlie Benke               <charlie@patas-monkey.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,18 +20,23 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+
 /**
  *  \file       htdocs/core/modules/societe/doc/doc_generic_odt.modules.php
  *  \ingroup    societe
  *  \brief      File of class to build ODT documents for third parties
  */
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/societe/modules_societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\ModeleThirdPartyDoc;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/doc.lib.php';
-
 
 /**
  *  Class to build documents using ODF templates generator
@@ -47,7 +52,7 @@ class doc_generic_odt extends ModeleThirdPartyDoc
     /**
      *  Constructor
      *
-     *  @param      DoliDB      $db      Database handler
+     * @param DoliDB $db Database handler
      */
     public function __construct($db)
     {
@@ -82,11 +87,10 @@ class doc_generic_odt extends ModeleThirdPartyDoc
         }
     }
 
-
     /**
      * Return description of a module
      *
-     * @param   Translate   $langs      Object language
+     * @param Translate $langs Object language
      * @return  string                  Description
      */
     public function info($langs)
@@ -195,21 +199,22 @@ class doc_generic_odt extends ModeleThirdPartyDoc
         return $texte;
     }
 
-	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
     /**
      *  Function to build a document on disk using the generic odt module.
      *
-     *  @param      Societe     $object             Object source to build document
-     *  @param      Translate   $outputlangs        Lang output object
-     *  @param      string      $srctemplatepath    Full path of source filename for generator using a template file
-     *  @param      int         $hidedetails        Do not show line details
-     *  @param      int         $hidedesc           Do not show desc
-     *  @param      int         $hideref            Do not show ref
-     *  @return     int                             1 if OK, <=0 if KO
+     * @param Societe $object Object source to build document
+     * @param Translate $outputlangs Lang output object
+     * @param string $srctemplatepath Full path of source filename for generator using a template file
+     * @param int $hidedetails Do not show line details
+     * @param int $hidedesc Do not show desc
+     * @param int $hideref Do not show ref
+     * @return     int                             1 if OK, <=0 if KO
      */
     public function write_file($object, $outputlangs, $srctemplatepath, $hidedetails = 0, $hidedesc = 0, $hideref = 0)
     {
-		// phpcs:enable
+        // phpcs:enable
         global $user, $langs, $conf, $mysoc, $hookmanager;
         global $action;
 
@@ -220,7 +225,6 @@ class doc_generic_odt extends ModeleThirdPartyDoc
 
         // Add odtgeneration hook
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($this->db);
         }
         $hookmanager->initHooks(array('odtgeneration'));
@@ -292,9 +296,9 @@ class doc_generic_odt extends ModeleThirdPartyDoc
                     $odfHandler = new Odf(
                         $srctemplatepath,
                         array(
-                            'PATH_TO_TMP'     => $conf->societe->multidir_temp[$object->entity],
-                            'ZIP_PROXY'       => 'PclZipProxy', // PhpZipProxy or PclZipProxy. Got "bad compression method" error when using PhpZipProxy.
-                            'DELIMITER_LEFT'  => '{',
+                            'PATH_TO_TMP' => $conf->societe->multidir_temp[$object->entity],
+                            'ZIP_PROXY' => 'PclZipProxy', // PhpZipProxy or PclZipProxy. Got "bad compression method" error when using PhpZipProxy.
+                            'DELIMITER_LEFT' => '{',
                             'DELIMITER_RIGHT' => '}'
                         )
                     );
@@ -310,14 +314,12 @@ class doc_generic_odt extends ModeleThirdPartyDoc
 
                 $sql = "SELECT p.rowid";
                 $sql .= " FROM " . MAIN_DB_PREFIX . "socpeople as p";
-                $sql .= " WHERE p.fk_soc = " . ((int) $object->id);
+                $sql .= " WHERE p.fk_soc = " . ((int)$object->id);
 
                 $result = $this->db->query($sql);
                 $num = $this->db->num_rows($result);
 
                 if ($num) {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
-
                     $i = 0;
                     $contactstatic = new Contact($this->db);
 
@@ -340,7 +342,7 @@ class doc_generic_odt extends ModeleThirdPartyDoc
                     if ($foundtagforlines) {
                         foreach ($contact_arrray as $array_key => $contact_id) {
                             $res_contact = $contactstatic->fetch($contact_id);
-                            if ((int) $res_contact > 0) {
+                            if ((int)$res_contact > 0) {
                                 $tmparray = $this->get_substitutionarray_contact($contactstatic, $outputlangs, 'contact');
                                 foreach ($tmparray as $key => $val) {
                                     try {

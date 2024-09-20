@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2019 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2019       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\Ticket\Classes\TicketStats;
+
 /**
  *      \file       htdocs/ticket/stats/index.php
  *      \ingroup    ticket
@@ -25,10 +30,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticketstats.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/dolgraph.class.php';
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');
 $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height');
@@ -55,7 +56,6 @@ $endyear = $year;
 // Load translation files required by the page
 $langs->loadLangs(array('orders', 'companies', 'other', 'tickets'));
 
-
 /*
  * View
  */
@@ -76,7 +76,6 @@ $stats = new TicketStats($db, $socid, ($userid > 0 ? $userid : 0));
 if ($object_status != '' && $object_status >= -1) {
     $stats->where .= ' AND fk_statut IN (' . $db->sanitize($db->escape($object_status)) . ')';
 }
-
 
 // Build graphic number of object
 $data = $stats->getNbByMonthWithPrevYear($endyear, $startyear);

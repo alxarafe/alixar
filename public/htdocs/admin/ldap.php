@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004       Sebastien Di Cintio     <sdicintio@ressource-toi.org>
- * Copyright (C) 2004       Benoit Mortier          <benoit.mortier@opensides.be>
- * Copyright (C) 2005-2021  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2006-2020  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2013  Juanjo Menent           <jmenent@2byte.es>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004       Sebastien Di Cintio         <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2021  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2006-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2013  Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,10 +29,12 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormLdap;
+use Dolibarr\Code\Core\Classes\Ldap;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/ldap.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formldap.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ldap.lib.php';
 
 // Load translation files required by the page

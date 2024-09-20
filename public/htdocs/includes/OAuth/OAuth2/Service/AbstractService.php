@@ -33,25 +33,26 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
     protected $apiVersion;
 
     /**
-     * @param CredentialsInterface  $credentials
-     * @param ClientInterface       $httpClient
+     * @param CredentialsInterface $credentials
+     * @param ClientInterface $httpClient
      * @param TokenStorageInterface $storage
-     * @param array                 $scopes
-     * @param UriInterface|null     $baseApiUri
+     * @param array $scopes
+     * @param UriInterface|null $baseApiUri
      * @param bool $stateParameterInAutUrl
-     * @param string                $apiVersion
+     * @param string $apiVersion
      *
      * @throws InvalidScopeException
      */
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        $scopes = array(),
-        UriInterface $baseApiUri = null,
-        $stateParameterInAutUrl = false,
-        $apiVersion = ""
-    ) {
+                             $scopes = array(),
+        UriInterface         $baseApiUri = null,
+                             $stateParameterInAutUrl = false,
+                             $apiVersion = ""
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage);
         $this->stateParameterInAuthUrl = $stateParameterInAutUrl;
 
@@ -76,9 +77,9 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
         $parameters = array_merge(
             $additionalParameters,
             array(
-                'type'          => 'web_server',
-                'client_id'     => $this->credentials->getConsumerId(),
-                'redirect_uri'  => $this->credentials->getCallbackUrl(),
+                'type' => 'web_server',
+                'client_id' => $this->credentials->getConsumerId(),
+                'redirect_uri' => $this->credentials->getCallbackUrl(),
                 'response_type' => 'code',
             )
         );
@@ -111,11 +112,11 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
         }
 
         $bodyParams = array(
-            'code'          => $code,
-            'client_id'     => $this->credentials->getConsumerId(),
+            'code' => $code,
+            'client_id' => $this->credentials->getConsumerId(),
             'client_secret' => $this->credentials->getConsumerSecret(),
-            'redirect_uri'  => $this->credentials->getCallbackUrl(),
-            'grant_type'    => 'authorization_code',
+            'redirect_uri' => $this->credentials->getCallbackUrl(),
+            'grant_type' => 'authorization_code',
         );
 
         $responseBody = $this->httpClient->retrieveResponse(
@@ -135,9 +136,9 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
      * If the path provided is not an absolute URI, the base API Uri (must be passed into constructor) will be used.
      *
      * @param string|UriInterface $path
-     * @param string              $method       HTTP method
-     * @param array               $body         Request body if applicable.
-     * @param array               $extraHeaders Extra headers if applicable. These will override service-specific
+     * @param string $method HTTP method
+     * @param array $body Request body if applicable.
+     * @param array $extraHeaders Extra headers if applicable. These will override service-specific
      *                                          any defaults.
      *
      * @return string
@@ -212,9 +213,9 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
         }
 
         $parameters = array(
-            'grant_type'    => 'refresh_token',
-            'type'          => 'web_server',
-            'client_id'     => $this->credentials->getConsumerId(),
+            'grant_type' => 'refresh_token',
+            'type' => 'web_server',
+            'client_id' => $this->credentials->getConsumerId(),
             'client_secret' => $this->credentials->getConsumerSecret(),
             'refresh_token' => $refreshToken,
         );
@@ -350,7 +351,7 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
      */
     protected function getApiVersionString()
     {
-        return !(empty($this->apiVersion)) ? "/" . $this->apiVersion : "" ;
+        return !(empty($this->apiVersion)) ? "/" . $this->apiVersion : "";
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2014-2019  Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2014-2019  Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,9 @@
  *
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+
 /**
  * \file        htdocs/salaries/admin/salaries.php
  * \ingroup     Salaries
@@ -30,9 +33,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 // Class
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/salaries.lib.php';
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formaccounting.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('admin', 'salaries'));

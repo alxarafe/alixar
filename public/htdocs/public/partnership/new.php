@@ -48,7 +48,7 @@ if (!defined('NOBROWSERNOTIF')) {
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
-$entity = (!empty($_GET['entity']) ? (int) $_GET['entity'] : (!empty($_POST['entity']) ? (int) $_POST['entity'] : 1));
+$entity = (!empty($_GET['entity']) ? (int)$_GET['entity'] : (!empty($_POST['entity']) ? (int)$_POST['entity'] : 1));
 if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
@@ -56,10 +56,10 @@ if (is_numeric($entity)) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/class/partnership.class.php';
+
+use Dolibarr\Code\Partnerships\Classes\Partnership;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/class/partnership_type.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 // Init vars
@@ -94,12 +94,12 @@ $user->loadDefaultValues();
 /**
  * Show header for new partnership
  *
- * @param   string      $title              Title
- * @param   string      $head               Head array
- * @param   int         $disablejs          More content into html header
- * @param   int         $disablehead        More content into html header
- * @param   array       $arrayofjs          Array of complementary js files
- * @param   array       $arrayofcss         Array of complementary css files
+ * @param string $title Title
+ * @param string $head Head array
+ * @param int $disablejs More content into html header
+ * @param int $disablehead More content into html header
+ * @param array $arrayofjs Array of complementary js files
+ * @param array $arrayofcss Array of complementary css files
  * @return  void
  */
 function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $arrayofjs = [], $arrayofcss = [])
@@ -162,7 +162,6 @@ function llxFooterVierge()
 }
 
 
-
 /*
  * Actions
  */
@@ -219,13 +218,13 @@ if (empty($reshook) && $action == 'add') {
             $partnership->fk_soc = 0;
         }
 
-        $partnership->status                 = 0;
-        $partnership->note_private           = GETPOST('note_private');
-        $partnership->date_creation          = dol_now();
+        $partnership->status = 0;
+        $partnership->note_private = GETPOST('note_private');
+        $partnership->date_creation = dol_now();
         $partnership->date_partnership_start = dol_now();
-        $partnership->fk_user_creat          = 0;
-        $partnership->fk_type                = GETPOSTINT('partnershiptype');
-        $partnership->url                    = GETPOST('url');
+        $partnership->fk_user_creat = 0;
+        $partnership->fk_type = GETPOSTINT('partnershiptype');
+        $partnership->url = GETPOST('url');
         //$partnership->typeid               = $conf->global->PARTNERSHIP_NEWFORM_FORCETYPE ? $conf->global->PARTNERSHIP_NEWFORM_FORCETYPE : GETPOST('typeid', 'int');
         $partnership->ip = getUserRemoteIP();
 
@@ -262,15 +261,15 @@ if (empty($reshook) && $action == 'add') {
                 // create thirdparty
                 $company = new Societe($db);
 
-                $company->name        = GETPOST('societe');
-                $company->address     = GETPOST('address');
-                $company->zip         = GETPOST('zipcode');
-                $company->town        = GETPOST('town');
-                $company->email       = GETPOST('email');
-                $company->url         = GETPOST('url');
-                $company->country_id  = GETPOSTINT('country_id');
-                $company->state_id    = GETPOSTINT('state_id');
-                $company->name_alias  = dolGetFirstLastname(GETPOST('firstname'), GETPOST('lastname'));
+                $company->name = GETPOST('societe');
+                $company->address = GETPOST('address');
+                $company->zip = GETPOST('zipcode');
+                $company->town = GETPOST('town');
+                $company->email = GETPOST('email');
+                $company->url = GETPOST('url');
+                $company->country_id = GETPOSTINT('country_id');
+                $company->state_id = GETPOSTINT('state_id');
+                $company->name_alias = dolGetFirstLastname(GETPOST('firstname'), GETPOST('lastname'));
 
                 $resultat = $company->create($user);
                 if ($resultat < 0) {
@@ -533,7 +532,6 @@ if (empty($reshook) && $action == 'added') {
     llxFooterVierge();
     exit;
 }
-
 
 
 /*

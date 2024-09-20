@@ -12,9 +12,9 @@ class CountrySpecService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\CountrySpec>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\CountrySpec>
      */
     public function all($params = null, $opts = null)
     {
@@ -28,9 +28,9 @@ class CountrySpecService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\CountrySpec
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\CountrySpec
      */
     public function retrieve($id, $params = null, $opts = null)
     {

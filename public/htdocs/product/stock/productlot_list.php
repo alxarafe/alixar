@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2007-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2021  Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2007-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2021  Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Product\Classes\Productlot;
+
 /**
  * \file        product/stock/productlot_list.php
  * \ingroup     stock
@@ -28,11 +34,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('stocks', 'productbatch', 'other', 'users'));
@@ -113,11 +116,11 @@ $arrayfields = array();
 foreach ($object->fields as $key => $val) {
     // If $val['visible']==0, then we never show the field
     if (!empty($val['visible'])) {
-        $visible = (int) dol_eval($val['visible'], 1);
+        $visible = (int)dol_eval($val['visible'], 1);
         $arrayfields['t.' . $key] = array(
             'label' => $val['label'],
             'checked' => (($visible < 0) ? 0 : 1),
-            'enabled' => (abs($visible) != 3 && (int) dol_eval($val['enabled'], 1)),
+            'enabled' => (abs($visible) != 3 && (int)dol_eval($val['enabled'], 1)),
             'position' => $val['position'],
             'help' => isset($val['help']) ? $val['help'] : ''
         );
@@ -382,7 +385,7 @@ if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
     $param .= '&contextpage=' . urlencode($contextpage);
 }
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 foreach ($search as $key => $val) {
     if (is_array($search[$key]) && count($search[$key])) {
@@ -522,7 +525,6 @@ foreach ($object->fields as $key => $val) {
             print $form->selectDate($search[$key . '_dtend'] ? $search[$key . '_dtend'] : '', "search_" . $key . "_dtend", 0, 0, 1, '', 1, 0, 0, '', '', '', '', 1, '', $langs->trans('to'));
             print '</div>';
         } elseif ($key == 'lang') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
             $formadmin = new FormAdmin($db);
             print $formadmin->select_language($search[$key], 'search_lang', 0, null, 1, 0, 0, 'minwidth100imp maxwidth125', 2);
         } else {
@@ -744,7 +746,6 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
         $hidegeneratedfilelistifempty = 0;
     }
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
     $formfile = new FormFile($db);
 
     // Show list of available documents

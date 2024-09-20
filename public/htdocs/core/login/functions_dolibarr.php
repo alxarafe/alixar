@@ -33,9 +33,9 @@
  * If test is ko, reason must be filled into $_SESSION["dol_loginmesg"]
  * Note: On critical error (hack attempt), we put a log "functions_dolibarr::check_user_password_dolibarr authentication KO"
  *
- * @param   string  $usertotest     Login
- * @param   string  $passwordtotest Password
- * @param   int     $entitytotest   Number of instance (always 1 if module multicompany not enabled)
+ * @param string $usertotest Login
+ * @param string $passwordtotest Password
+ * @param int $entitytotest Number of instance (always 1 if module multicompany not enabled)
  * @return  string                  Login if OK, '' if KO
  */
 function check_user_password_dolibarr($usertotest, $passwordtotest, $entitytotest = 1)
@@ -85,7 +85,7 @@ function check_user_password_dolibarr($usertotest, $passwordtotest, $entitytotes
             if (preg_match('/@/', $usertotest)) {
                 $sql .= " OR " . $usernamecol2 . " = '" . $db->escape($usertotest) . "'";
             }
-            $sql .= ") AND " . $entitycol . " IN (0," . ($entity ? ((int) $entity) : 1) . ")";
+            $sql .= ") AND " . $entitycol . " IN (0," . ($entity ? ((int)$entity) : 1) . ")";
             $sql .= " AND statut = 1";
             // Order is required to firstly found the user into entity, then the superadmin.
             // For the case (TODO: we must avoid that) a user has renamed its login with same value than a user in entity 0.

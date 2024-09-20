@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2007-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2007-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Hrm\Classes\Job;
+use Dolibarr\Code\Hrm\Classes\Position;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *    \file       htdocs/hrm/position_note.php
  *    \ingroup    hrm
@@ -29,18 +35,16 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/job.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/position.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/lib/hrm_position.lib.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('hrm', 'companies'));
 
 // Get parameters
-$id     = GETPOSTINT('id');
-$ref    = GETPOST('ref', 'alpha');
+$id = GETPOSTINT('id');
+$ref = GETPOST('ref', 'alpha');
 $action = GETPOST('action', 'aZ09');
-$cancel     = GETPOST('cancel', 'aZ09');
+$cancel = GETPOST('cancel', 'aZ09');
 $backtopage = GETPOST('backtopage', 'alpha');
 
 // Initialize technical objects
@@ -58,7 +62,7 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // Permissions
-$permissionnote   = $user->hasRight('hrm', 'all', 'write');
+$permissionnote = $user->hasRight('hrm', 'all', 'write');
 $permissiontoread = $user->hasRight('hrm', 'all', 'read'); // Used by the include of actions_addupdatedelete.inc.php
 
 // Security check (enable the most restrictive one)
@@ -85,7 +89,6 @@ if ($reshook < 0) {
 if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_setnotes.inc.php'; // Must be include, not include_once
 }
-
 
 /*
  * View
@@ -117,13 +120,10 @@ if ($id > 0 || !empty($ref)) {
     $morehtmlref .= '<br>' . $langs->trans('JobProfile') . ' : ' . $job->getNomUrl(1);
     $morehtmlref .= '</div>';
 
-
     dol_banner_tab($object, 'id', $linkback, 1, 'rowid', 'rowid', $morehtmlref);
-
 
     print '<div class="fichecenter">';
     print '<div class="underbanner clearboth"></div>';
-
 
     $cssclass = "titlefield";
 

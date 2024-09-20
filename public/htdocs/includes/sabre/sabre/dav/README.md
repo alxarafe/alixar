@@ -32,8 +32,8 @@ Documentation
 * [Introduction](http://sabre.io/dav/).
 * [Installation](http://sabre.io/dav/install/).
 
-
 Made at fruux
 -------------
 
-SabreDAV is being developed by [fruux](https://fruux.com/). Drop us a line for commercial services or enterprise support.
+SabreDAV is being developed by [fruux](https://fruux.com/). Drop us a line for commercial services or enterprise
+support.

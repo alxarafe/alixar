@@ -1,9 +1,10 @@
 <?php
 
-/* Copyright (C) 2021 Gauthier VERDOL <gauthier.verdol@atm-consulting.fr>
- * Copyright (C) 2021 Greg Rastklan <greg.rastklan@atm-consulting.fr>
- * Copyright (C) 2021 Jean-Pascal BOUDET <jean-pascal.boudet@atm-consulting.fr>
- * Copyright (C) 2021 Grégory BLEMAND <gregory.blemand@atm-consulting.fr>
+/* Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
+ * Copyright (C) 2021       Greg Rastklan               <greg.rastklan@atm-consulting.fr>
+ * Copyright (C) 2021       Jean-Pascal BOUDET          <jean-pascal.boudet@atm-consulting.fr>
+ * Copyright (C) 2021       Grégory BLEMAND             <gregory.blemand@atm-consulting.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Hrm\Classes\Skill;
+use Dolibarr\Code\Hrm\Classes\Skilldet;
+use Dolibarr\Code\Hrm\Classes\SkillRank;
+
 /**
  * \file    lib/hrm_skillrank.lib.php
  * \ingroup hrm
@@ -28,7 +34,7 @@
 /**
  * Prepare array of tabs for SkillRank
  *
- * @param   SkillRank   $object     SkillRank
+ * @param SkillRank $object SkillRank
  * @return  array                   Array of tabs
  */
 function skillrankPrepareHead($object)
@@ -63,7 +69,6 @@ function skillrankPrepareHead($object)
     }
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->hrm->dir_output . "/skillrank/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
@@ -109,12 +114,11 @@ function displayRankInfos($selected_rank, $fk_skill, $inputname = 'TNote', $mode
 {
     global $db, $conf, $langs;
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skill.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/hrm/class/skilldet.class.php';
 
     // On charge les différentes notes possibles pour la compétence $fk_skill
     $skilldet = new Skilldet($db);
-    $Lines = $skilldet->fetchAll('ASC', 'rankorder', 0, 0, '(fk_skill:=:' . ((int) $fk_skill) . ')');
+    $Lines = $skilldet->fetchAll('ASC', 'rankorder', 0, 0, '(fk_skill:=:' . ((int)$fk_skill) . ')');
 
     if (!is_array($Lines) && $Lines < 0) {
         setEventMessages($skilldet->error, $skilldet->errors, 'errors');

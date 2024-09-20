@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2015 Laurent Destailleur  <eldy@users.sourceforge.org>
- * Copyright (C) 2013      Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2015      Bahfir Abbes         <contact@dolibarrpar.org>
- * Copyright (C) 2020      Thibault FOUCART     <suport@ptibogxiv.net>
- * Copyright (C) 2022      Anthony Berton     	<anthony.berton@bb2a.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2015  Laurent Destailleur         <eldy@users.sourceforge.org>
+ * Copyright (C) 2013       Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2015       Bahfir Abbes                <contact@dolibarrpar.org>
+ * Copyright (C) 2020       Thibault FOUCART            <suport@ptibogxiv.net>
+ * Copyright (C) 2022       Anthony Berton     	        <anthony.berton@bb2a.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Notify;
+
 /**
  *      \file       htdocs/admin/notification.php
  *      \ingroup    notification
@@ -30,7 +33,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/interface_50_modNotification_Notification.class.php';
 
@@ -137,12 +139,12 @@ if ($action == 'setfixednotif' && $user->admin) {
             if (preg_match('/^NOTIF_(.*)_old_(.*)_key/', $key, $reg)) {
                 dolibarr_del_const($db, 'NOTIFICATION_FIXEDEMAIL_' . $reg[1] . '_THRESHOLD_HIGHER_' . $reg[2], $conf->entity);
 
-                $newkey = 'NOTIFICATION_FIXEDEMAIL_' . $reg[1] . '_THRESHOLD_HIGHER_' . ((int) GETPOST($shortkey . '_amount'));
+                $newkey = 'NOTIFICATION_FIXEDEMAIL_' . $reg[1] . '_THRESHOLD_HIGHER_' . ((int)GETPOST($shortkey . '_amount'));
                 $newval = GETPOST($shortkey . '_key');
                 //print $newkey.' - '.$newval.'<br>';
             } elseif (preg_match('/^NOTIF_(.*)_new_key/', $key, $reg)) {
                 // Add a new entry
-                $newkey = 'NOTIFICATION_FIXEDEMAIL_' . $reg[1] . '_THRESHOLD_HIGHER_' . ((int) GETPOST($shortkey . '_amount'));
+                $newkey = 'NOTIFICATION_FIXEDEMAIL_' . $reg[1] . '_THRESHOLD_HIGHER_' . ((int)GETPOST($shortkey . '_amount'));
                 $newval = GETPOST($shortkey . '_key');
             }
 
@@ -162,7 +164,6 @@ if ($action == 'setfixednotif' && $user->admin) {
         setEventMessages($langs->trans("Error"), null, 'errors');
     }
 }
-
 
 
 /*

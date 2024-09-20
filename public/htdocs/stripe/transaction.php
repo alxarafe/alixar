@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2018-2019  Thibault FOUCART        <support@ptibogxiv.net>
- * Copyright (C) 2018-2021  Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2018-2019  Thibault FOUCART            <support@ptibogxiv.net>
+ * Copyright (C) 2018-2021  Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,20 +18,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Stripe\Classes\Stripe;
+
 // Put here all includes required by your class file
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/stripe/class/stripe.class.php';
 //require_once DOL_DOCUMENT_ROOT.'/core/lib/stripe.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-if (isModEnabled('accounting')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/accountancy/class/accountingjournal.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('compta', 'salaries', 'bills', 'hrm', 'stripe'));
@@ -59,7 +56,6 @@ $param = "";
 $num = 0;
 $totalnboflines = 0;
 $result = restrictedArea($user, 'banque');
-
 
 /*
  * View
@@ -214,8 +210,8 @@ if (!$rowid) {
             // Type
             print '<td>' . $txn->type . '</td>';
             // Amount
-            print '<td class="right"><span class="amount">' . price(($txn->amount) / 100, 0, '', 1, - 1, - 1, strtoupper($txn->currency)) . "</span></td>";
-            print '<td class="right"><span class="amount">' . price(($txn->fee) / 100, 0, '', 1, - 1, - 1, strtoupper($txn->currency)) . "</span></td>";
+            print '<td class="right"><span class="amount">' . price(($txn->amount) / 100, 0, '', 1, -1, -1, strtoupper($txn->currency)) . "</span></td>";
+            print '<td class="right"><span class="amount">' . price(($txn->fee) / 100, 0, '', 1, -1, -1, strtoupper($txn->currency)) . "</span></td>";
             // Status
             print "<td class='right'>";
             if ($txn->status == 'available') {

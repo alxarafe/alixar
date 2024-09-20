@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2007-2022  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2011		Dimitri Mouillard	<dmouillard@teclib.com>
- * Copyright (C) 2013		Marcos García		<marcosgdf@gmail.com>
- * Copyright (C) 2016		Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2007-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011		Dimitri Mouillard	        <dmouillard@teclib.com>
+ * Copyright (C) 2013		Marcos García		        <marcosgdf@gmail.com>
+ * Copyright (C) 2016		Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      File that defines the balance of paid holiday of users.
  *
@@ -31,8 +36,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
 
 // Load translation files required by the page
 $langs->loadlangs(array('users', 'other', 'holiday', 'hrm'));
@@ -50,7 +53,7 @@ $search_supervisor = GETPOST('search_supervisor', "intcomma");
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
 $sortfield = GETPOST('sortfield', 'aZ09comma');
 $sortorder = GETPOST('sortorder', 'aZ09comma');
-$toselect   = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
+$toselect = GETPOST('toselect', 'array'); // Array of ids of elements selected into a list
 $confirm = GETPOST('confirm', 'alpha');
 
 $page = GETPOSTISSET('pageplusone') ? (GETPOSTINT('pageplusone') - 1) : GETPOSTINT("page");
@@ -67,13 +70,11 @@ if (!$sortorder) {
     $sortorder = "ASC";
 }
 
-
 // Initialize technical object to manage hooks. Note that conf->hooks_modules contains array
 $hookmanager->initHooks(array('defineholidaylist'));
 $extrafields = new ExtraFields($db);
 
 $holiday = new Holiday($db);
-
 
 if (empty($conf->holiday->enabled)) {
     accessforbidden('Module not enabled');
@@ -95,7 +96,6 @@ $arrayfields = array(
     'cp.nbHoliday' => array('label' => $langs->trans("MenuConfCP"), 'checked' => 1, 'position' => 40),
     'cp.note_public' => array('label' => $langs->trans("Note"), 'checked' => 1, 'position' => 50),
 );
-
 
 /*
  * Actions
@@ -152,7 +152,7 @@ if (empty($reshook)) {
             $userValue = GETPOST('nb_holiday_' . $val['rowid']);
             $userValue = $userValue[$userID];
 
-            if (!empty($userValue) || (string) $userValue == '0') {
+            if (!empty($userValue) || (string)$userValue == '0') {
                 $userValue = price2num($userValue, 5);
             } else {
                 $userValue = '';
@@ -260,7 +260,6 @@ include DOL_DOCUMENT_ROOT . '/core/tpl/massactions_pre.tpl.php';
 
 if ($massaction == 'preincreaseholiday') {
     $langs->load("holiday", "hrm");
-    require_once constant('DOL_DOCUMENT_ROOT') . '/holiday/class/holiday.class.php';
     $staticholiday = new Holiday($db);
     $arraytypeholidays = $staticholiday->getTypes(1, 1);
     $formquestion = array();
@@ -268,12 +267,12 @@ if ($massaction == 'preincreaseholiday') {
     foreach ($typeleaves as $key => $val) {
         $labeltypes[$val['id']] = ($langs->trans($val['code']) != $val['code']) ? $langs->trans($val['code']) : $langs->trans($val['label']);
     }
-    $formquestion [] = array( 'type' => 'other',
+    $formquestion [] = array('type' => 'other',
         'name' => 'typeofholiday',
         'label' => $langs->trans("Type"),
         'value' => $form->selectarray('typeholiday', $labeltypes, GETPOST('typeholiday', 'alpha'), 1)
     );
-    $formquestion [] = array( 'type' => 'other',
+    $formquestion [] = array('type' => 'other',
         'name' => 'nbdaysholydays',
         'label' => $langs->trans("NumberDayAddMass"),
         'value' => '<input name="nbdaysholidays" class="maxwidth75" id="nbdaysholidays" value="' . GETPOSTINT('nbdaysholidays') . '">'
@@ -314,7 +313,6 @@ if (is_numeric($listUsers) && $listUsers < 0) {
 }
 
 $i = 0;
-
 
 
 if (count($typeleaves) == 0) {

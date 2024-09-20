@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2006      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2007-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2009      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2016      Juanjo Menent	    <jmenent@2byte.es>
+/* Copyright (C) 2006       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2007-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2016       Juanjo Menent	            <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\RemiseCheque;
+
 /**
  *      \file       htdocs/compta/paiement/cheque/index.php
  *      \ingroup    compta
@@ -28,8 +31,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/cheque/class/remisecheque.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories', 'compta', 'bills'));
@@ -131,7 +132,7 @@ foreach ($arrayofpaymentmodetomanage as $val) {
     $sql .= " FROM " . MAIN_DB_PREFIX . "bordereau_cheque as bc, " . MAIN_DB_PREFIX . "bank_account as ba";
     $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "accounting_journal as aj ON aj.rowid = ba.fk_accountancy_journal";
     $sql .= " WHERE ba.rowid = bc.fk_bank_account";
-    $sql .= " AND bc.entity = " . ((int) $conf->entity);
+    $sql .= " AND bc.entity = " . ((int)$conf->entity);
     $sql .= " AND bc.type = '" . $db->escape($val) . "'";
     $sql .= " ORDER BY bc.date_bordereau DESC, rowid DESC";
     $sql .= $db->plimit($max);

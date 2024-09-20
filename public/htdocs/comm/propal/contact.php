@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005      Patrick Rouillon     <patrick@rouillon.net>
- * Copyright (C) 2005-2016 Destailleur Laurent  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2011-2022 Philippe Grand       <philippe.grand@atoo-net.com>
- * Copyright (C) 2023      Christian Foellmann  <christian@foellmann.de>
+/* Copyright (C) 2005       Patrick Rouillon            <patrick@rouillon.net>
+ * Copyright (C) 2005-2016  Destailleur Laurent         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2011-2022  Philippe Grand              <philippe.grand@atoo-net.com>
+ * Copyright (C) 2023       Christian Foellmann         <christian@foellmann.de>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Projet\Classes\Project;
+
 /**
  *       \file       htdocs/comm/propal/contact.php
  *       \ingroup    propal
@@ -29,12 +35,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/propal.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('facture', 'propal', 'orders', 'sendings', 'companies'));
@@ -90,8 +91,8 @@ if (empty($reshook)) {
     if ($action == 'addcontact' && $user->hasRight('propal', 'creer')) {
         if ($object->id > 0) {
             $contactid = (GETPOSTINT('userid') ? GETPOSTINT('userid') : GETPOSTINT('contactid'));
-            $typeid    = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
-            $result    = $object->add_contact($contactid, $typeid, GETPOST("source", 'aZ09'));
+            $typeid = (GETPOST('typecontact') ? GETPOST('typecontact') : GETPOST('type'));
+            $result = $object->add_contact($contactid, $typeid, GETPOST("source", 'aZ09'));
         }
 
         if ($result >= 0) {
@@ -139,11 +140,8 @@ if ($object->id > 0) {
     $head = propal_prepare_head($object);
     print dol_get_fiche_head($head, 'contact', $langs->trans("Proposal"), -1, 'propal');
 
-
     // Proposal card
-
     $linkback = '<a href="' . constant('BASE_URL') . '/comm/propal/list.php?restore_lastsearch_values=1' . (!empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
-
 
     $morehtmlref = '<div class="refidno">';
     // Ref customer

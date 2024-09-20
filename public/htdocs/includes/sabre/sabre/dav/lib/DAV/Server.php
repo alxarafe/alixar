@@ -264,7 +264,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
             $DOM->appendChild($error);
 
             $h = function ($v) {
-                return htmlspecialchars((string) $v, ENT_NOQUOTES, 'UTF-8');
+                return htmlspecialchars((string)$v, ENT_NOQUOTES, 'UTF-8');
             };
 
             if (self::$exposeVersion) {
@@ -552,9 +552,9 @@ class Server implements LoggerAwareInterface, EmitterInterface
      *
      * @param string $uri
      *
+     * @return string
      * @throws Exception\Forbidden A permission denied exception is thrown whenever there was an attempt to supply a uri outside of the base uri
      *
-     * @return string
      */
     public function calculateUri($uri)
     {
@@ -568,8 +568,8 @@ class Server implements LoggerAwareInterface, EmitterInterface
         if (0 === strpos($uri, $baseUri)) {
             return trim(HTTP\decodePath(substr($uri, strlen($baseUri))), '/');
 
-        // A special case, if the baseUri was accessed without a trailing
-        // slash, we'll accept it as well.
+            // A special case, if the baseUri was accessed without a trailing
+            // slash, we'll accept it as well.
         } elseif ($uri . '/' === $baseUri) {
             return '';
         } else {
@@ -605,7 +605,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
             return $default;
         }
 
-        return (int) $depth;
+        return (int)$depth;
     }
 
     /**
@@ -640,8 +640,8 @@ class Server implements LoggerAwareInterface, EmitterInterface
         }
 
         return [
-            '' !== $matches[1] ? (int) $matches[1] : null,
-            '' !== $matches[2] ? (int) $matches[2] : null,
+            '' !== $matches[1] ? (int)$matches[1] : null,
+            '' !== $matches[2] ? (int)$matches[2] : null,
         ];
     }
 
@@ -706,7 +706,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
      *   * destination - Destination path
      *   * destinationExists - Whether or not the destination is an existing url (and should therefore be overwritten)
      *
-     * @throws Exception\BadRequest           upon missing or broken request headers
+     * @return array
      * @throws Exception\UnsupportedMediaType when trying to copy into a
      *                                        non-collection
      * @throws Exception\PreconditionFailed   if overwrite is set to false, but
@@ -716,7 +716,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
      * @throws Exception\Conflict             when trying to copy a node into its own
      *                                        subtree
      *
-     * @return array
+     * @throws Exception\BadRequest           upon missing or broken request headers
      */
     public function getCopyAndMoveInfo(RequestInterface $request)
     {
@@ -733,8 +733,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
             $overwrite = true;
         } elseif ('F' == strtoupper($overwrite)) {
             $overwrite = false;
-        }
-        // We need to throw a bad request exception, if the header was invalid
+        } // We need to throw a bad request exception, if the header was invalid
         else {
             throw new Exception\BadRequest('The HTTP Overwrite header should be either T or F');
         }
@@ -774,7 +773,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
         // These are the three relevant properties we need to return
         return [
             'destination' => $destination,
-            'destinationExists' => (bool) $destinationNode,
+            'destinationExists' => (bool)$destinationNode,
             'destinationNode' => $destinationNode,
         ];
     }
@@ -791,7 +790,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
      * returned.
      *
      * @param string $path
-     * @param array  $propertyNames
+     * @param array $propertyNames
      *
      * @return array
      */
@@ -814,7 +813,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
      * The parent node will not be returned.
      *
      * @param string $path
-     * @param array  $propertyNames
+     * @param array $propertyNames
      *
      * @return array
      */
@@ -866,7 +865,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
             if (is_scalar($properties[$property])) {
                 $headers[$header] = $properties[$property];
 
-            // GetLastModified gets special cased
+                // GetLastModified gets special cased
             } elseif ($properties[$property] instanceof Xml\Property\GetLastModified) {
                 $headers[$header] = HTTP\toDate($properties[$property]->getTime());
             }
@@ -928,8 +927,8 @@ class Server implements LoggerAwareInterface, EmitterInterface
      * If a depth of 1 is requested child elements will also be returned.
      *
      * @param string $path
-     * @param array  $propertyNames
-     * @param int    $depth
+     * @param array $propertyNames
+     * @param int $depth
      *
      * @return array
      *
@@ -951,8 +950,8 @@ class Server implements LoggerAwareInterface, EmitterInterface
      * If a depth of 1 is requested child elements will also be returned.
      *
      * @param string $path
-     * @param array  $propertyNames
-     * @param int    $depth
+     * @param array $propertyNames
+     * @param int $depth
      *
      * @return \Iterator
      */
@@ -966,7 +965,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
         $path = trim($path, '/');
 
         $propFindType = $propertyNames ? PropFind::NORMAL : PropFind::ALLPROPS;
-        $propFind = new PropFind($path, (array) $propertyNames, $depth, $propFindType);
+        $propFind = new PropFind($path, (array)$propertyNames, $depth, $propFindType);
 
         $parentNode = $this->tree->getNodeForPath($path);
 
@@ -1061,9 +1060,9 @@ class Server implements LoggerAwareInterface, EmitterInterface
      *
      * This method will return true if the file was actually created
      *
-     * @param string   $uri
+     * @param string $uri
      * @param resource $data
-     * @param string   $etag
+     * @param string $etag
      *
      * @return bool
      */
@@ -1114,9 +1113,9 @@ class Server implements LoggerAwareInterface, EmitterInterface
      *
      * This method will return true if the file was actually updated
      *
-     * @param string   $uri
+     * @param string $uri
      * @param resource $data
-     * @param string   $etag
+     * @param string $etag
      *
      * @return bool
      */
@@ -1629,7 +1628,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
      * If 'strip404s' is set to true, all 404 responses will be removed.
      *
      * @param array|\Traversable $fileProperties The list with nodes
-     * @param bool               $strip404s
+     * @param bool $strip404s
      *
      * @return callable|string
      */

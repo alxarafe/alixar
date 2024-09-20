@@ -1,15 +1,15 @@
 <?php
 
-/* Copyright (C) 2001-2006 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2003      Xavier DUTOIT        <doli@sydesy.com>
- * Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2004      Christophe Combelles <ccomb@free.fr>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2017 Alexandre Spangaro	<aspangaro@open-dsi.fr>
- * Copyright (C) 2015      Jean-François Ferry	<jfefe@aternatik.fr>
- * Copyright (C) 2016      Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2021       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003       Xavier DUTOIT               <doli@sydesy.com>
+ * Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2004       Christophe Combelles        <ccomb@free.fr>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2017  Alexandre Spangaro	        <aspangaro@open-dsi.fr>
+ * Copyright (C) 2015       Jean-François Ferry	        <jfefe@aternatik.fr>
+ * Copyright (C) 2016       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -27,6 +27,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Compta\Classes\RemiseCheque;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/compta/bank/line.php
  *  \ingroup    bank
@@ -35,10 +45,7 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/extrafields.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
 // Load translation files required by the page
@@ -55,7 +62,6 @@ if (isModEnabled('loan')) {
 if (isModEnabled('salaries')) {
     $langs->load("salaries");
 }
-
 
 $id = GETPOSTINT('rowid');
 $rowid = GETPOSTINT('rowid');
@@ -120,7 +126,7 @@ if ($user->hasRight('banque', 'consolidate') && $action == 'donext') {
 if ($action == 'confirm_delete_categ' && $confirm == "yes" && $user->hasRight('banque', 'modifier')) {
     $cat1 = GETPOSTINT("cat1");
     if (!empty($rowid) && !empty($cat1)) {
-        $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank_class WHERE lineid = " . ((int) $rowid) . " AND fk_categ = " . ((int) $cat1);
+        $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank_class WHERE lineid = " . ((int)$rowid) . " AND fk_categ = " . ((int)$cat1);
         if (!$db->query($sql)) {
             dol_print_error($db);
         }
@@ -193,8 +199,8 @@ if ($user->hasRight('banque', 'modifier') && $action == "update") {
                 $sql .= " datev = '" . $db->idate($dateval) . "',";
             }
         }
-        $sql .= " fk_account = " . ((int) $actarget->id);
-        $sql .= " WHERE rowid = " . ((int) $object->id);
+        $sql .= " fk_account = " . ((int)$actarget->id);
+        $sql .= " WHERE rowid = " . ((int)$object->id);
 
         $result = $db->query($sql);
         if (!$result) {
@@ -203,14 +209,14 @@ if ($user->hasRight('banque', 'modifier') && $action == "update") {
 
         if (!$error) {
             $arrayofcategs = GETPOST('custcats', 'array');
-            $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank_class WHERE lineid = " . ((int) $rowid);
+            $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank_class WHERE lineid = " . ((int)$rowid);
             if (!$db->query($sql)) {
                 $error++;
                 dol_print_error($db);
             }
             if (count($arrayofcategs)) {
                 foreach ($arrayofcategs as $val) {
-                    $sql = "INSERT INTO " . MAIN_DB_PREFIX . "bank_class (lineid, fk_categ) VALUES (" . ((int) $rowid) . ", " . ((int) $val) . ")";
+                    $sql = "INSERT INTO " . MAIN_DB_PREFIX . "bank_class (lineid, fk_categ) VALUES (" . ((int)$rowid) . ", " . ((int)$val) . ")";
                     if (!$db->query($sql)) {
                         $error++;
                         dol_print_error($db);
@@ -257,9 +263,9 @@ if ($user->hasRight('banque', 'consolidate') && ($action == 'num_releve' || $act
         if (empty($num_rel)) {
             $sql .= ", rappro = 0";
         } else {
-            $sql .= ", rappro = " . ((int) $rappro);
+            $sql .= ", rappro = " . ((int)$rappro);
         }
-        $sql .= " WHERE rowid = " . ((int) $rowid);
+        $sql .= " WHERE rowid = " . ((int)$rowid);
 
         $updatePathFile = true;
         $update_dir = true;
@@ -304,8 +310,6 @@ if ($user->hasRight('banque', 'consolidate') && ($action == 'num_releve' || $act
     }
 }
 
-
-
 /*
  * View
  */
@@ -331,7 +335,7 @@ $sql = "SELECT b.rowid, b.dateo as do, b.datev as dv, b.amount, b.label, b.rappr
 $sql .= " b.num_releve, b.fk_user_author, b.num_chq, b.fk_type, b.fk_account, b.fk_bordereau as receiptid,";
 $sql .= " b.emetteur,b.banque";
 $sql .= " FROM " . MAIN_DB_PREFIX . "bank as b";
-$sql .= " WHERE rowid=" . ((int) $rowid);
+$sql .= " WHERE rowid=" . ((int)$rowid);
 $sql .= " ORDER BY dateo ASC";
 $result = $db->query($sql);
 if ($result) {
@@ -354,7 +358,7 @@ if ($result) {
 
         // Confirmations
         if ($action == 'delete_categ') {
-            print $form->formconfirm($_SERVER['PHP_SELF'] . "?rowid=" . urlencode((string) ($rowid)) . "&cat1=" . urlencode((string) (GETPOSTINT("fk_categ"))) . "&orig_account=" . urlencode((string) ($orig_account)), $langs->trans("RemoveFromRubrique"), $langs->trans("RemoveFromRubriqueConfirm"), "confirm_delete_categ", '', 'yes', 1);
+            print $form->formconfirm($_SERVER['PHP_SELF'] . "?rowid=" . urlencode((string)($rowid)) . "&cat1=" . urlencode((string)(GETPOSTINT("fk_categ"))) . "&orig_account=" . urlencode((string)($orig_account)), $langs->trans("RemoveFromRubrique"), $langs->trans("RemoveFromRubriqueConfirm"), "confirm_delete_categ", '', 'yes', 1);
         }
 
         print '<form name="update" method="POST" action="' . $_SERVER['PHP_SELF'] . '?rowid=' . $rowid . '">';
@@ -399,7 +403,6 @@ if ($result) {
                     print '<br>';
                 }
                 if ($links[$key]['type'] == 'payment') {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/paiement/class/paiement.class.php';
                     $paymenttmp = new Paiement($db);
                     $paymenttmp->fetch($links[$key]['url_id']);
                     $paymenttmp->ref = $langs->trans("Payment") . ' ' . $paymenttmp->ref;
@@ -409,7 +412,6 @@ if ($result) {
                     print '</a>';*/
                     print $paymenttmp->getNomUrl(1);
                 } elseif ($links[$key]['type'] == 'payment_supplier') {
-                    require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/paiementfourn.class.php';
                     $paymenttmp = new PaiementFourn($db);
                     $paymenttmp->fetch($links[$key]['url_id']);
                     $paymenttmp->ref = $langs->trans("Payment") . ' ' . $paymenttmp->ref;
@@ -507,7 +509,6 @@ if ($result) {
             $form->select_types_paiements($objp->fk_type, "value", '', 2);
             print '<input type="text" class="flat" name="num_chq" value="' . (empty($objp->num_chq) ? '' : $objp->num_chq) . '">';
             if ($objp->receiptid) {
-                include_once DOL_DOCUMENT_ROOT . '/compta/paiement/cheque/class/remisecheque.class.php';
                 $receipt = new RemiseCheque($db);
                 $receipt->fetch($objp->receiptid);
                 print ' &nbsp; &nbsp; ' . $langs->trans("CheckReceipt") . ': ' . $receipt->getNomUrl(2);
@@ -685,7 +686,6 @@ if ($result) {
         print '<div class="center"><input type="submit" class="button" value="' . $langs->trans("Update") . '"></div><br>';
 
         print "</form>";
-
 
 
         // Releve rappro

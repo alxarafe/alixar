@@ -1,14 +1,14 @@
 <!-- BEGIN TEMPLATE resource_add.tpl.php -->
 <?php
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Resource\Classes\FormResource;
+
 // Protection to avoid direct call of template
 if (empty($conf) || !is_object($conf)) {
     print "Error, template page can't be called as URL";
     exit(1);
 }
-
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/resource/class/html.formresource.class.php';
 
 $form = new Form($db);
 $formresources = new FormResource($db);

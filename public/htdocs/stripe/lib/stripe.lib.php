@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017      Alexandre Spangaro   <aspangaro@open-dsi.fr>
+/* Copyright (C) 2017       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file           htdocs/stripe/lib/stripe.lib.php
  *  \ingroup        stripe
@@ -28,7 +31,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 /**
  *  Define head array for tabs of stripe tools setup pages
  *
- *  @return         Array of head
+ * @return         Array of head
  */
 function stripeadmin_prepare_head()
 {
@@ -55,12 +58,11 @@ function stripeadmin_prepare_head()
     return $head;
 }
 
-
 /**
  * Show footer of company in HTML pages
  *
- * @param   Societe     $fromcompany    Third party
- * @param   Translate   $langs          Output language
+ * @param Societe $fromcompany Third party
+ * @param Translate $langs Output language
  * @return  void
  */
 function html_print_stripe_footer($fromcompany, $langs)

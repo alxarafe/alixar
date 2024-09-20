@@ -110,9 +110,9 @@ class Session extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Checkout\Session the expired session
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Checkout\Session the expired session
      */
     public function expire($params = null, $opts = null)
     {
@@ -128,9 +128,9 @@ class Session extends \Stripe\ApiResource
      * @param null|array $params
      * @param null|array|string $opts
      *
+     * @return \Stripe\Collection<\Stripe\LineItem> list of LineItems
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\LineItem> list of LineItems
      */
     public static function allLineItems($id, $params = null, $opts = null)
     {

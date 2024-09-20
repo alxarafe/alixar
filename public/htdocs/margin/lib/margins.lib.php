@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2012      Christophe Battarel <christophe.battarel@altairis.fr>
- * Copyright (C) 2014-2015 Marcos García       <marcosgdf@gmail.com>
- * Copyright (C) 2016	   Florian Henry       <florian.henry@open-concept.pro>
+/* Copyright (C) 2012       Christophe Battarel         <christophe.battarel@altairis.fr>
+ * Copyright (C) 2014-2015  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2016	    Florian Henry               <florian.henry@open-concept.pro>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+
 /**
  *  \file           /htdocs/margin/lib/margins.lib.php
  *  \ingroup        margin
@@ -29,7 +31,7 @@
 /**
  *  Define head array for tabs of marges tools setup pages
  *
- *  @return         Array of head
+ * @return         Array of head
  */
 function marges_admin_prepare_head()
 {
@@ -109,13 +111,13 @@ function marges_prepare_head()
 /**
  * Return an array with margins information of a line
  *
- * @param   float   $pv_ht              Selling price without tax
- * @param   float   $remise_percent     Discount percent on line
- * @param   float   $tva_tx             Vat rate (not used)
- * @param   float   $localtax1_tx       Vat rate special 1 (not used)
- * @param   float   $localtax2_tx       Vat rate special 2 (not used)
- * @param   int     $fk_pa              Id of buying price (prefer set this to 0 and provide $pa_ht instead. With id, buying price may have change)
- * @param   float   $pa_ht              Buying price without tax
+ * @param float $pv_ht Selling price without tax
+ * @param float $remise_percent Discount percent on line
+ * @param float $tva_tx Vat rate (not used)
+ * @param float $localtax1_tx Vat rate special 1 (not used)
+ * @param float $localtax2_tx Vat rate special 2 (not used)
+ * @param int $fk_pa Id of buying price (prefer set this to 0 and provide $pa_ht instead. With id, buying price may have change)
+ * @param float $pa_ht Buying price without tax
  * @return  array                       Array of margin info (buying price, marge rate, marque rate)
  */
 function getMarginInfos($pv_ht, $remise_percent, $tva_tx, $localtax1_tx, $localtax2_tx, $fk_pa, $pa_ht)
@@ -126,7 +128,6 @@ function getMarginInfos($pv_ht, $remise_percent, $tva_tx, $localtax1_tx, $localt
     $marque_tx_ret = '';
 
     if ($fk_pa > 0 && empty($pa_ht)) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.product.class.php';
         $product = new ProductFournisseur($db);
         if ($product->fetch_product_fournisseur_price($fk_pa)) {
             $pa_ht_ret = $product->fourn_unitprice * (1 - $product->fourn_remise_percent / 100);
@@ -145,9 +146,9 @@ function getMarginInfos($pv_ht, $remise_percent, $tva_tx, $localtax1_tx, $localt
 
     // calcul marge
     if ($pu_ht_remise < 0) {
-        $marge = -1 * (abs((float) $pu_ht_remise) - $pa_ht_ret);
+        $marge = -1 * (abs((float)$pu_ht_remise) - $pa_ht_ret);
     } else {
-        $marge = (float) $pu_ht_remise - $pa_ht_ret;
+        $marge = (float)$pu_ht_remise - $pa_ht_ret;
     }
 
     // calcul taux marge
@@ -156,7 +157,7 @@ function getMarginInfos($pv_ht, $remise_percent, $tva_tx, $localtax1_tx, $localt
     }
     // calcul taux marque
     if ($pu_ht_remise != 0) {
-        $marque_tx_ret = (100 * $marge) / (float) $pu_ht_remise;
+        $marque_tx_ret = (100 * $marge) / (float)$pu_ht_remise;
     }
 
     return array($pa_ht_ret, $marge_tx_ret, $marque_tx_ret);

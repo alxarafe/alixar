@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2017-2023  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2023       Charlene Benke          <charlene@patas-monkey.com>
+/* Copyright (C) 2017-2023  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2023       Charlene Benke              <charlene@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,6 +20,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Bom\Classes\BOMLine;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *    \file       htdocs/bom/bom_card.php
  *    \ingroup    bom
@@ -28,25 +36,21 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formcompany.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/bom/class/bom.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bom/lib/bom.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/lib/mrp.lib.php';
-
 
 // Load translation files required by the page
 $langs->loadLangs(array('mrp', 'other'));
 
 // Get parameters
-$id      = GETPOSTINT('id');
-$lineid  = GETPOSTINT('lineid');
-$ref     = GETPOST('ref', 'alpha');
-$action  = GETPOST('action', 'aZ09');
+$id = GETPOSTINT('id');
+$lineid = GETPOSTINT('lineid');
+$ref = GETPOST('ref', 'alpha');
+$action = GETPOST('action', 'aZ09');
 $confirm = GETPOST('confirm', 'alpha');
-$cancel  = GETPOST('cancel', 'aZ09');
+$cancel = GETPOST('cancel', 'aZ09');
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'bomcard'; // To manage different context of search
-$backtopage  = GETPOST('backtopage', 'alpha');
+$backtopage = GETPOST('backtopage', 'alpha');
 
 
 // PDF
@@ -280,11 +284,11 @@ if (empty($reshook)) {
             $bomline->fetch($lineid);
 
             $fk_default_workstation = $bomline->fk_default_workstation;
-            if (isModEnabled('workstation') &&  GETPOSTISSET('idworkstations')) {
+            if (isModEnabled('workstation') && GETPOSTISSET('idworkstations')) {
                 $fk_default_workstation = GETPOSTINT('idworkstations');
             }
 
-            $result = $object->updateLine($lineid, $qty, (int) $qty_frozen, (int) $disable_stock_change, $efficiency, $bomline->position, $bomline->import_key, $fk_unit, $array_options, $fk_default_workstation);
+            $result = $object->updateLine($lineid, $qty, (int)$qty_frozen, (int)$disable_stock_change, $efficiency, $bomline->position, $bomline->import_key, $fk_unit, $array_options, $fk_default_workstation);
 
             if ($result <= 0) {
                 setEventMessages($object->error, $object->errors, 'errors');
@@ -303,7 +307,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View
@@ -406,8 +409,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmValidateBom', $numref);
         /*if (isModEnabled('notification'))
          {
-         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-         $notify = new Notify($db);
+          $notify = new Notify($db);
          $text .= '<br>';
          $text .= $notify->confirmMessage('BOM_VALIDATE', $object->socid, $object);
          }*/
@@ -434,8 +436,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmCloseBom', $object->ref);
         /*if (isModEnabled('notification'))
          {
-         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-         $notify = new Notify($db);
+          $notify = new Notify($db);
          $text .= '<br>';
          $text .= $notify->confirmMessage('BOM_CLOSE', $object->socid, $object);
          }*/
@@ -462,8 +463,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $text = $langs->trans('ConfirmReopenBom', $object->ref);
         /*if (isModEnabled('notification'))
          {
-         require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/notify.class.php';
-         $notify = new Notify($db);
+          $notify = new Notify($db);
          $text .= '<br>';
          $text .= $notify->confirmMessage('BOM_CLOSE', $object->socid, $object);
          }*/
@@ -471,7 +471,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $formquestion = array();
         if (isModEnabled('bom')) {
             $langs->load("mrp");
-            require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
             $forcecombo = 0;
             if ($conf->browser->name == 'ie') {
                 $forcecombo = 1; // There is a bug in IE10 that make combo inside popup crazy
@@ -584,7 +583,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     print '<div class="clearboth"></div>';
 
     print dol_get_fiche_end();
-
 
 
     /*
@@ -816,7 +814,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
         $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/bom/bom_agenda.php?id=' . $object->id);
 
         // List of actions on element
-        include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
         $formactions = new FormActions($db);
         $somethingshown = $formactions->showactions($object, $object->element, 0, 1, '', $MAXEVENT, '', $morehtmlcenter);
 

@@ -34,8 +34,7 @@ class VAvailability extends VObject\Component
 
         return
             (is_null($effectiveStart) || $start < $effectiveEnd) &&
-            (is_null($effectiveEnd) || $end > $effectiveStart)
-        ;
+            (is_null($effectiveEnd) || $end > $effectiveStart);
     }
 
     /**

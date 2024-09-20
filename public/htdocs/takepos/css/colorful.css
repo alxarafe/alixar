@@ -7,12 +7,12 @@ button.calcbutton.poscolorblue {
 }
 
 button.calcbutton2 {
-	background-color: #0000FF !important;
+    background-color: #0000FF !important;
 }
 
 button.calcbutton2.poscolordelete {
-	background-color: #FF0000 !important;
-	color: #FFFFFF !important;
+    background-color: #FF0000 !important;
+    color: #FFFFFF !important;
 }
 
 button.actionbutton {
@@ -20,18 +20,18 @@ button.actionbutton {
 }
 
 tr.selected, tr.selected td {
-	background-color: #0000FF !important;
-	color: #FFFFFF !important;
+    background-color: #0000FF !important;
+    color: #FFFFFF !important;
 }
 
-.header{
-	background: rgb(0,0,0) !important;
+.header {
+    background: rgb(0, 0, 0) !important;
 }
 
-.topnav{
-	background: rgb(0,0,0) !important;
+.topnav {
+    background: rgb(0, 0, 0) !important;
 }
 
 .fa-trash {
-	color: #fff !important;
+    color: #fff !important;
 }

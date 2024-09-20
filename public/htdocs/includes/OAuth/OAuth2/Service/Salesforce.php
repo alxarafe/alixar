@@ -18,8 +18,8 @@ class Salesforce extends AbstractService
      *
      * @var string
      */
-    const   SCOPE_API           =   'api',
-            SCOPE_REFRESH_TOKEN =   'refresh_token';
+    const   SCOPE_API = 'api',
+        SCOPE_REFRESH_TOKEN = 'refresh_token';
 
     /**
      * {@inheritdoc}

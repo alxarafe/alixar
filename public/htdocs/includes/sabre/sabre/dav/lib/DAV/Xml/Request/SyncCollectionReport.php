@@ -84,7 +84,7 @@ class SyncCollectionReport implements XmlDeserializable
         $required = [
             '{DAV:}sync-token',
             '{DAV:}prop',
-            ];
+        ];
 
         foreach ($required as $elem) {
             if (!array_key_exists($elem, $elems)) {
@@ -99,7 +99,7 @@ class SyncCollectionReport implements XmlDeserializable
             $nresults = null;
             foreach ($elems['{DAV:}limit'] as $child) {
                 if ('{DAV:}nresults' === $child['name']) {
-                    $nresults = (int) $child['value'];
+                    $nresults = (int)$child['value'];
                 }
             }
             $self->limit = $nresults;

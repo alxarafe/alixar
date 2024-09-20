@@ -149,7 +149,6 @@ if (!defined('USEDOLIBARRSERVER') && !defined('USEDOLIBARREDITOR')) {
         $contentsecuritypolicy = getDolGlobalString('WEBSITE_MAIN_SECURITY_FORCECSPRO');
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($db);
         }
         $hookmanager->initHooks(array("main"));
@@ -182,7 +181,6 @@ if (!defined('USEDOLIBARRSERVER') && !defined('USEDOLIBARREDITOR')) {
         $contentsecuritypolicy = getDolGlobalString('WEBSITE_MAIN_SECURITY_FORCECSP');
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($db);
         }
         $hookmanager->initHooks(array("main"));
@@ -243,10 +241,10 @@ if ($_SERVER['PHP_SELF'] != constant('BASE_URL') . '/website/index.php') {    //
     if (GETPOST('l', 'aZ09')) {
         $sql = "SELECT wp.rowid, wp.lang, wp.pageurl, wp.fk_page";
         $sql .= " FROM " . MAIN_DB_PREFIX . "website_page as wp";
-        $sql .= " WHERE wp.fk_website = " . ((int) $website->id);
-        $sql .= " AND (wp.fk_page = " . ((int) $pageid) . " OR wp.rowid  = " . ((int) $pageid);
+        $sql .= " WHERE wp.fk_website = " . ((int)$website->id);
+        $sql .= " AND (wp.fk_page = " . ((int)$pageid) . " OR wp.rowid  = " . ((int)$pageid);
         if (is_object($websitepage) && $websitepage->fk_page > 0) {
-            $sql .= " OR wp.fk_page = " . ((int) $websitepage->fk_page) . " OR wp.rowid = " . ((int) $websitepage->fk_page);
+            $sql .= " OR wp.fk_page = " . ((int)$websitepage->fk_page) . " OR wp.rowid = " . ((int)$websitepage->fk_page);
         }
         $sql .= ")";
         $sql .= " AND wp.lang = '" . $db->escape(GETPOST('l', 'aZ09')) . "'";

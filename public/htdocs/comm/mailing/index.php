@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2005-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2010      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2019      Nicolas ZABOURI      <info@inovea-conseil.com>
+/* Copyright (C) 2005       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2005-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Mailing;
+use Dolibarr\Code\Core\Classes\HookManager;
+
 /**
  *       \file       htdocs/comm/mailing/index.php
  *       \ingroup    mailing
@@ -29,7 +32,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/mailing/class/mailing.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 $hookmanager = new HookManager($db);
@@ -44,7 +46,6 @@ $object = new Mailing($db);
 
 // Security check
 $result = restrictedArea($user, 'mailing');
-
 
 /*
  *	View
@@ -83,8 +84,6 @@ print '<tr class="oddeven"><td class="nowrap">';
 print $langs->trans("Other") . ':</td><td><input type="text" class="flat inputsearch" name="sall"></td>';
 
 print "</table></div></form><br>\n";
-
-
 
 
 // Affiche stats de tous les modules de destinataires mailings
@@ -161,7 +160,7 @@ print '</div><div class="secondcolumn fichehalfright boxhalfright" id="boxhalfri
  */
 
 $limit = 10;
-$sql  = "SELECT m.rowid, m.titre as title, m.nbemail, m.statut as status, m.date_creat, m.messtype";
+$sql = "SELECT m.rowid, m.titre as title, m.nbemail, m.statut as status, m.date_creat, m.messtype";
 $sql .= " FROM " . MAIN_DB_PREFIX . "mailing as m";
 $sql .= " WHERE m.entity = " . $conf->entity;
 $sql .= " ORDER BY m.date_creat DESC";
@@ -203,7 +202,7 @@ if ($result) {
                 print '<td class="center">' . dol_escape_htmltag($obj->messtype) . '</td>';
             }
             print '<td class="center">' . dol_print_date($db->jdate($obj->date_creat), 'day') . '</td>';
-            print '<td class="center">' . ($obj->nbemail ? (int) $obj->nbemail : "0") . '</td>';
+            print '<td class="center">' . ($obj->nbemail ? (int)$obj->nbemail : "0") . '</td>';
             print '<td class="right">' . $mailstatic->LibStatut($obj->status, 5) . '</td>';
             print '</tr>';
             $i++;

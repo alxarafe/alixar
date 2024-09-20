@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2023-2024	Frédéric France      <frederic.france@free.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023-2024	Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,13 +20,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\ProductBatch\Classes\ModeleNumRefBatch;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *       \file       htdocs/core/modules/product_batch/mod_lot_free.php
  *       \ingroup    productbatch
  *       \brief      File containing class for numbering model of Lot free
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/product_batch/modules_product_batch.class.php';
 
 /**
  *  \class mod_lot_free
@@ -61,8 +63,8 @@ class mod_lot_free extends ModeleNumRefBatch
     /**
      *  Return description of module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -74,7 +76,7 @@ class mod_lot_free extends ModeleNumRefBatch
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -84,8 +86,8 @@ class mod_lot_free extends ModeleNumRefBatch
     /**
      * Return an example of result returned by getNextValue
      *
-     * @param   Societe     $objsoc     Object thirdparty
-     * @param   Productlot  $object     Object we need next value for
+     * @param Societe $objsoc Object thirdparty
+     * @param Productlot $object Object we need next value for
      * @return  string                  Return next value
      */
     public function getNextValue($objsoc, $object)

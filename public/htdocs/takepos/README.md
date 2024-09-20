@@ -1,6 +1,7 @@
 # TAKEPOS
 
 ## Features
+
 Add a Touch Screen POS (Point Of Sale) to your ERP.
 
 <!--

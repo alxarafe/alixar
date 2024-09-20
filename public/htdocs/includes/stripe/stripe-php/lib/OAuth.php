@@ -34,9 +34,9 @@ abstract class OAuth
      * @param null|array $params
      * @param null|array $opts
      *
+     * @return StripeObject object containing the response from the API
      * @throws \Stripe\Exception\OAuth\OAuthErrorException if the request fails
      *
-     * @return StripeObject object containing the response from the API
      */
     public static function token($params = null, $opts = null)
     {
@@ -58,9 +58,9 @@ abstract class OAuth
      * @param null|array $params
      * @param null|array $opts
      *
+     * @return StripeObject object containing the response from the API
      * @throws \Stripe\Exception\OAuth\OAuthErrorException if the request fails
      *
-     * @return StripeObject object containing the response from the API
      */
     public static function deauthorize($params = null, $opts = null)
     {
@@ -86,12 +86,12 @@ abstract class OAuth
         }
         if (null === $clientId) {
             $msg = 'No client_id provided.  (HINT: set your client_id using '
-              . '"Stripe::setClientId(<CLIENT-ID>)".  You can find your client_ids '
-              . 'in your Stripe dashboard at '
-              . 'https://dashboard.stripe.com/account/applications/settings, '
-              . 'after registering your account as a platform. See '
-              . 'https://stripe.com/docs/connect/standard-accounts for details, '
-              . 'or email support@stripe.com if you have any questions.';
+                . '"Stripe::setClientId(<CLIENT-ID>)".  You can find your client_ids '
+                . 'in your Stripe dashboard at '
+                . 'https://dashboard.stripe.com/account/applications/settings, '
+                . 'after registering your account as a platform. See '
+                . 'https://stripe.com/docs/connect/standard-accounts for details, '
+                . 'or email support@stripe.com if you have any questions.';
 
             throw new Exception\AuthenticationException($msg);
         }

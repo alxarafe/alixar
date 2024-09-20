@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2012-2013  Christophe Battarel <christophe.battarel@altairis.fr>
+/* Copyright (C) 2012-2013  Christophe Battarel         <christophe.battarel@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Societe\Classes\Societe;
+
 /**
  *  \file       htdocs/margin/tabs/thirdpartyMargins.php
  *  \ingroup    product margins
@@ -26,8 +30,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
 
 $langs->loadLangs(array("companies", "bills", "products", "margins"));
 
@@ -68,7 +70,6 @@ $result = restrictedArea($user, 'societe', $object->id, '');
 if (!$user->hasRight('margins', 'liretous')) {
     accessforbidden();
 }
-
 
 /*
  * Actions
@@ -139,7 +140,7 @@ llxHeader('', $title, $help_url);
 
 $param = "&socid=" . $socid;
 if ($limit > 0 && $limit != $conf->liste_limit) {
-    $param .= '&limit=' . ((int) $limit);
+    $param .= '&limit=' . ((int)$limit);
 }
 if ($search_invoice_date_start) {
     $param .= '&search_invoice_date_start_day=' . dol_print_date($search_invoice_date_start, '%d') . '&search_invoice_date_start_month=' . dol_print_date($search_invoice_date_start, '%m') . '&search_invoice_date_start_year=' . dol_print_date($search_invoice_date_start, '%Y');

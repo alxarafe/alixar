@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2023 	Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 	Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2020		Tobias Sekan		<tobias.sekan@startmail.com>
- * Copyright (C) 2021-2022 	Anthony Berton		<anthony.berton@bb2a.fr>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2023 	Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012 	Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2020		Tobias Sekan		        <tobias.sekan@startmail.com>
+ * Copyright (C) 2021-2022 	Anthony Berton		        <anthony.berton@bb2a.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\vCard;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *      \file       htdocs/user/vcard.php
  *      \ingroup    user
@@ -29,9 +33,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/societe.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/vcard.class.php';
 
 $id = GETPOSTINT('id');
 

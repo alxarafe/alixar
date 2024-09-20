@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018 Nicolas ZABOURI   <info@inovea-conseil.com>
+/* Copyright (C) 2018       Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *  \file       htdocs/modulebuilder/admin/setup.php
@@ -35,7 +37,6 @@ $backtopage = GETPOST('backtopage', 'alpha');
 if (!$user->admin || !isModEnabled('modulebuilder')) {
     accessforbidden();
 }
-
 
 /*
  * Actions
@@ -84,7 +85,6 @@ if (preg_match('/del_(.*)/', $action, $reg)) {
         dol_print_error($db);
     }
 }
-
 
 /*
  * 	View

@@ -23,7 +23,7 @@ class User extends DAVACL\Principal implements DAV\ICollection
     /**
      * Creates a new file in the directory.
      *
-     * @param string   $name Name of the file
+     * @param string $name Name of the file
      * @param resource $data initial payload, passed as a readable stream resource
      *
      * @throws DAV\Exception\Forbidden

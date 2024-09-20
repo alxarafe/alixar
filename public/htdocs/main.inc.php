@@ -35,6 +35,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+
 /**
  *  \file       htdocs/main.inc.php
  *  \ingroup    core
@@ -44,6 +48,7 @@
 //@ini_set('memory_limit', '128M'); // This may be useless if memory is hard limited by your PHP
 
 // For optional tuning. Enabled if environment variable MAIN_SHOW_TUNING_INFO is defined.
+
 $micro_start_time = 0;
 if (!empty($_SERVER['MAIN_SHOW_TUNING_INFO'])) {
     list($usec, $sec) = explode(" ", microtime());
@@ -564,9 +569,6 @@ if (!defined('NOLOGIN') && !defined('NOIPCHECK') && !empty($dolibarr_main_restri
 }
 
 // Loading of additional presentation includes
-if (!defined('NOREQUIREHTML')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php'; // Need 660ko memory (800ko in 2.2)
-}
 if (!defined('NOREQUIREAJAX')) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ajax.lib.php'; // Need 22ko memory
 }
@@ -1705,7 +1707,6 @@ function top_httphead($contenttype = 'text/html', $forcenocache = 0)
         $contentsecuritypolicy = getDolGlobalString('MAIN_SECURITY_FORCECSPRO');
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($db);
         }
         $hookmanager->initHooks(array("main"));
@@ -1742,7 +1743,6 @@ function top_httphead($contenttype = 'text/html', $forcenocache = 0)
         $contentsecuritypolicy = getDolGlobalString('MAIN_SECURITY_FORCECSP');
 
         if (!is_object($hookmanager)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
             $hookmanager = new HookManager($db);
         }
         $hookmanager->initHooks(array("main"));
@@ -1848,7 +1848,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
         }
 
         // Mobile appli like icon
-        $manifest = constant('BASE_URL') . '/theme/' . $conf->theme . '/manifest.json.php';
+        $manifest = constant('DOL_URL_ROOT') . '/theme/' . $conf->theme . '/manifest.json.php';
         $parameters = array('manifest' => $manifest);
         $resHook = $hookmanager->executeHooks('hookSetManifest', $parameters); // Note that $action and $object may have been modified by some hooks
         if ($resHook > 0) {
@@ -2035,7 +2035,7 @@ function top_htmlhead($head, $title = '', $disablejs = 0, $disablehead = 0, $arr
         // Custom CSS
         if (getDolGlobalString('MAIN_IHM_CUSTOM_CSS')) {
             // If a custom CSS was set, we add link to the custom css php file
-            print '<link rel="stylesheet" type="text/css" href="' . constant('BASE_URL') . '/theme/custom.css.php' . ($ext ? '?' . $ext : '') . '&amp;revision=' . getDolGlobalInt("MAIN_IHM_PARAMS_REV") . '">' . "\n";
+            print '<link rel="stylesheet" type="text/css" href="' . constant('DOL_URL_ROOT') . '/theme/custom.css.php' . ($ext ? '?' . $ext : '') . '&amp;revision=' . getDolGlobalInt("MAIN_IHM_PARAMS_REV") . '">' . "\n";
         }
 
         // Output standard javascript links
@@ -2249,7 +2249,6 @@ function top_menu($head, $title = '', $target = '', $disablejs = 0, $disablehead
      */
     if ((empty($conf->dol_hide_topmenu) || GETPOSTINT('dol_invisible_topmenu')) && (!defined('NOREQUIREMENU') || !constant('NOREQUIREMENU'))) {
         if (!isset($form) || !is_object($form)) {
-            include_once DOL_DOCUMENT_ROOT . '/core/class/html.form.class.php';
             $form = new Form($db);
         }
 
@@ -3038,7 +3037,7 @@ function top_menu_bookmark()
     }
 
     if (!defined('JS_JQUERY_DISABLE_DROPDOWN') && !empty($conf->use_javascript_ajax)) {     // This may be set by some pages that use different jquery version to avoid errors
-        include_once DOL_DOCUMENT_ROOT . '/bookmarks/bookmarks.lib.php';
+        include_once DOL_DOCUMENT_ROOT . '/bookmarks/lib/bookmarks.lib.php';
         $langs->load("bookmarks");
 
         if (getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER')) {

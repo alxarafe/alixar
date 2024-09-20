@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2018-2022  OpenDSI     <support@open-dsi.fr>
- * Copyright (C) 2022       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2018-2022  OpenDSI                     <support@open-dsi.fr>
+ * Copyright (C) 2022       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Asset\Classes\Asset;
+use Dolibarr\Code\Asset\Classes\AssetModel;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Link;
 
 /**
  * \file    htdocs/core/lib/asset.lib.php
@@ -82,7 +88,7 @@ function assetAdminPrepareHead()
 /**
  * Prepare array of tabs for Asset
  *
- * @param   Asset   $object     Asset
+ * @param Asset $object Asset
  * @return  array               Array of tabs
  */
 function assetPrepareHead(Asset $object)
@@ -143,7 +149,6 @@ function assetPrepareHead(Asset $object)
     }
 
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/link.class.php';
     $upload_dir = $conf->asset->dir_output . "/asset/" . dol_sanitizeFileName($object->ref);
     $nbFiles = count(dol_dir_list($upload_dir, 'files', 0, '', '(\.meta|_preview.*\.png)$'));
     $nbLinks = Link::count($db, $object->element, $object->id);
@@ -178,7 +183,7 @@ function assetPrepareHead(Asset $object)
 /**
  * Prepare array of tabs for AssetModel
  *
- * @param   AssetModel  $object     AssetModel
+ * @param AssetModel $object AssetModel
  * @return  array                   Array of tabs
  */
 function assetModelPrepareHead($object)

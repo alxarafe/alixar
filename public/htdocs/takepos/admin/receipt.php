@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2008-2011  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2017  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2019       Andreu Bisquerra Gaya   <jove@bisquerra.com>
- * Copyright (C) 2021       Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2022       Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2008-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2017  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2019       Andreu Bisquerra Gaya       <jove@bisquerra.com>
+ * Copyright (C) 2021       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\FormProduct;
+
 /**
  *  \file       htdocs/takepos/admin/receipt.php
  *  \ingroup    takepos
@@ -30,7 +34,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/takepos.lib.php";
 
@@ -75,7 +78,6 @@ if (GETPOST('action', 'alpha') == 'set') {
         activateModule("modReceiptPrinter");
     }
 }
-
 
 /*
  * View
@@ -127,7 +129,6 @@ if (getDolGlobalString('TAKEPOS_PRINT_METHOD') == "browser" || getDolGlobalStrin
     if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
         print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
     } else {
-        include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
         $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
         print $doleditor->Create();
     }
@@ -140,7 +141,6 @@ if (getDolGlobalString('TAKEPOS_PRINT_METHOD') == "browser" || getDolGlobalStrin
     if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
         print '<textarea name="' . $variablename . '" class="flat" cols="120">' . getDolGlobalString($variablename) . '</textarea>';
     } else {
-        include_once DOL_DOCUMENT_ROOT . '/core/class/doleditor.class.php';
         $doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
         print $doleditor->Create();
     }

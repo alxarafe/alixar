@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -25,11 +25,13 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Cron\Classes\Cronjob;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formactions.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/cron/class/cronjob.class.php';
 
 if (!$user->admin) {
     accessforbidden();
@@ -89,7 +91,7 @@ if ($action == 'set') {
     // Search template files
     $file = '';
     $classname = '';
-    $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+    $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
     foreach ($dirmodels as $reldir) {
         $file = dol_buildpath($reldir . "core/modules/action/doc/pdf_" . $modele . ".modules.php", 0);
         if (file_exists($file)) {
@@ -147,7 +149,7 @@ if ($action == 'set') {
  */
 
 $formactions = new FormActions($db);
-$dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
+$dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-agenda_reminder');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2014-2018  Alexandre Spangaro  <aspangaro@open-dsi.fr>
+/* Copyright (C) 2014-2018  Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,12 +24,11 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Code\Loan\Classes\PaymentLoan;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/loan.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/loan/class/paymentloan.class.php';
-if (isModEnabled("bank")) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array("bills", "banks", "companies", "loan"));
@@ -52,7 +51,6 @@ if ($id > 0) {
     }
 }
 
-
 /*
  * Actions
  */
@@ -61,7 +59,7 @@ if ($id > 0) {
 if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('loan', 'delete')) {
     $db->begin();
 
-    $sql = "UPDATE " . MAIN_DB_PREFIX . "loan_schedule SET fk_bank = 0 WHERE fk_bank = " . ((int) $payment->fk_bank);
+    $sql = "UPDATE " . MAIN_DB_PREFIX . "loan_schedule SET fk_bank = 0 WHERE fk_bank = " . ((int)$payment->fk_bank);
     $db->query($sql);
 
     $fk_loan = $payment->fk_loan;
@@ -69,14 +67,13 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('loan', 
     $result = $payment->delete($user);
     if ($result > 0) {
         $db->commit();
-        header("Location: " . constant('BASE_URL') . "/loan/card.php?id=" . urlencode((string) ($fk_loan)));
+        header("Location: " . constant('BASE_URL') . "/loan/card.php?id=" . urlencode((string)($fk_loan)));
         exit;
     } else {
         setEventMessages($payment->error, $payment->errors, 'errors');
         $db->rollback();
     }
 }
-
 
 /*
  * View
@@ -159,8 +156,8 @@ $disable_delete = 0;
 $sql = 'SELECT l.rowid as id, l.label, l.paid, l.capital as capital, pl.amount_capital, pl.amount_insurance, pl.amount_interest';
 $sql .= ' FROM ' . MAIN_DB_PREFIX . 'payment_loan as pl,' . MAIN_DB_PREFIX . 'loan as l';
 $sql .= ' WHERE pl.fk_loan = l.rowid';
-$sql .= ' AND l.entity = ' . ((int) $conf->entity);
-$sql .= ' AND pl.rowid = ' . ((int) $payment->id);
+$sql .= ' AND l.entity = ' . ((int)$conf->entity);
+$sql .= ' AND pl.rowid = ' . ((int)$payment->id);
 
 dol_syslog("loan/payment/card.php", LOG_DEBUG);
 $resql = $db->query($sql);

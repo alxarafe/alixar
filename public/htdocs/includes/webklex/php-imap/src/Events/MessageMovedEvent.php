@@ -29,8 +29,8 @@ class MessageMovedEvent extends Event
 
     /**
      * Create a new event instance.
-     * @var Message[] $messages
      * @return void
+     * @var Message[] $messages
      */
     public function __construct($messages)
     {

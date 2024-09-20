@@ -1,6 +1,7 @@
 <?php
 
-/*
+/* Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -14,6 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\InventoryLine;
 
 /**
  *  \file       /htdocs/product/inventory/ajax/searchfrombarcode.php
@@ -92,26 +96,25 @@ if ($action == "existbarcode" && !empty($barcode)) {
                     $fk_product = $object->fk_product;
                     $reelqty = $object->reel;
 
-                    $objectreturn = array('fk_warehouse' => $warehouseid,'fk_product' => $fk_product,'reelqty' => $reelqty);
+                    $objectreturn = array('fk_warehouse' => $warehouseid, 'fk_product' => $fk_product, 'reelqty' => $reelqty);
                 }
             }
         }
         if ($warehousefound < 1) {
-            $response = array('status' => 'error','errorcode' => 'NotFound','message' => 'No warehouse found for barcode' . $barcode);
+            $response = array('status' => 'error', 'errorcode' => 'NotFound', 'message' => 'No warehouse found for barcode' . $barcode);
         } elseif ($warehousefound > 1) {
-            $response = array('status' => 'error','errorcode' => 'TooManyWarehouse','message' => 'Too many warehouse found');
+            $response = array('status' => 'error', 'errorcode' => 'TooManyWarehouse', 'message' => 'Too many warehouse found');
         } else {
-            $response = array('status' => 'success','message' => 'Warehouse found','object' => $objectreturn);
+            $response = array('status' => 'success', 'message' => 'Warehouse found', 'object' => $objectreturn);
         }
     } else {
-        $response = array('status' => 'error','errorcode' => 'NotFound','message' => "No results found for barcode");
+        $response = array('status' => 'error', 'errorcode' => 'NotFound', 'message' => "No results found for barcode");
     }
 } else {
-    $response = array('status' => 'error','errorcode' => 'ActionError','message' => "Error on action");
+    $response = array('status' => 'error', 'errorcode' => 'ActionError', 'message' => "Error on action");
 }
 
 if ($action == "addnewlineproduct") {
-    require_once DOL_DOCUMENT_ROOT . "/product/inventory/class/inventory.class.php";
     $inventoryline = new InventoryLine($db);
     if (!empty($fk_inventory)) {
         $inventoryline->fk_inventory = $fk_inventory;
@@ -126,12 +129,12 @@ if ($action == "addnewlineproduct") {
 
         $result = $inventoryline->create($user);
         if ($result > 0) {
-            $response = array('status' => 'success','message' => 'Success on creating line','id_line' => $result);
+            $response = array('status' => 'success', 'message' => 'Success on creating line', 'id_line' => $result);
         } else {
-            $response = array('status' => 'error','errorcode' => 'ErrorCreation','message' => "Error on line creation");
+            $response = array('status' => 'error', 'errorcode' => 'ErrorCreation', 'message' => "Error on line creation");
         }
     } else {
-        $response = array('status' => 'error','errorcode' => 'NoIdForInventory','message' => "No id for inventory");
+        $response = array('status' => 'error', 'errorcode' => 'NoIdForInventory', 'message' => "No id for inventory");
     }
 }
 

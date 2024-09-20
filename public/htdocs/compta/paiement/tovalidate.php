@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -65,7 +65,6 @@ if (!$user->hasRight('facture', 'lire')) {
  */
 
 
-
 /*
  * View
  */
@@ -81,7 +80,7 @@ if ($socid) {
 }
 $sql .= " WHERE p.entity IN (" . getEntity('invoice') . ')';
 if ($socid) {
-    $sql .= " AND f.fk_soc = " . ((int) $socid);
+    $sql .= " AND f.fk_soc = " . ((int)$socid);
 }
 $sql .= " AND p.statut = 0";
 

@@ -1,7 +1,6 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) ---Put here your own copyright and developer email---
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Asset\Classes\AssetModel;
+
 /**
  *  \file       htdocs/asset/model/agenda.php
  *  \ingroup    asset
@@ -27,8 +28,11 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/asset.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/asset/class/assetmodel.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/contact/class/contact.class.php';
+
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
@@ -128,7 +132,6 @@ if (empty($reshook)) {
     }
 }
 
-
 /*
  *	View
  */
@@ -174,14 +177,14 @@ if ($object->id > 0) {
     $objthirdparty = $object;
     $objcon = new stdClass();
 
-    $out = '&origin=' . urlencode((string) ($object->element . '@' . $object->module)) . '&originid=' . urlencode((string) ($object->id));
+    $out = '&origin=' . urlencode((string)($object->element . '@' . $object->module)) . '&originid=' . urlencode((string)($object->id));
     $urlbacktopage = $_SERVER['PHP_SELF'] . '?id=' . $object->id;
     $out .= '&backtopage=' . urlencode($urlbacktopage);
     $permok = $user->hasRight('agenda', 'myactions', 'create');
     if ((!empty($objthirdparty->id) || !empty($objcon->id)) && $permok) {
         //$out.='<a href="'.DOL_URL_ROOT.'/comm/action/card.php?action=create';
         if (get_class($objthirdparty) == 'Societe') {
-            $out .= '&socid=' . urlencode((string) ($objthirdparty->id));
+            $out .= '&socid=' . urlencode((string)($objthirdparty->id));
         }
         $out .= (!empty($objcon->id) ? '&contactid=' . urlencode($objcon->id) : '');
         //$out.=$langs->trans("AddAnAction").' ';

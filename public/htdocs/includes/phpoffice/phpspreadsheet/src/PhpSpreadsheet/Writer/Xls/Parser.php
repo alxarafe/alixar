@@ -494,36 +494,36 @@ class Parser
             return $this->convertString($token);
         } elseif (is_numeric($token)) {
             return $this->convertNumber($token);
-        // match references like A1 or $A$1
+            // match references like A1 or $A$1
         } elseif (preg_match('/^\$?([A-Ia-i]?[A-Za-z])\$?(\d+)$/', $token)) {
             return $this->convertRef2d($token);
-        // match external references like Sheet1!A1 or Sheet1:Sheet2!A1 or Sheet1!$A$1 or Sheet1:Sheet2!$A$1
+            // match external references like Sheet1!A1 or Sheet1:Sheet2!A1 or Sheet1!$A$1 or Sheet1:Sheet2!$A$1
         } elseif (preg_match('/^' . self::REGEX_SHEET_TITLE_UNQUOTED . '(\\:' . self::REGEX_SHEET_TITLE_UNQUOTED . ')?\\!\$?[A-Ia-i]?[A-Za-z]\$?(\\d+)$/u', $token)) {
             return $this->convertRef3d($token);
-        // match external references like 'Sheet1'!A1 or 'Sheet1:Sheet2'!A1 or 'Sheet1'!$A$1 or 'Sheet1:Sheet2'!$A$1
+            // match external references like 'Sheet1'!A1 or 'Sheet1:Sheet2'!A1 or 'Sheet1'!$A$1 or 'Sheet1:Sheet2'!$A$1
         } elseif (preg_match("/^'" . self::REGEX_SHEET_TITLE_QUOTED . '(\\:' . self::REGEX_SHEET_TITLE_QUOTED . ")?'\\!\\$?[A-Ia-i]?[A-Za-z]\\$?(\\d+)$/u", $token)) {
             return $this->convertRef3d($token);
-        // match ranges like A1:B2 or $A$1:$B$2
+            // match ranges like A1:B2 or $A$1:$B$2
         } elseif (preg_match('/^(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)\:(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)$/', $token)) {
             return $this->convertRange2d($token);
-        // match external ranges like Sheet1!A1:B2 or Sheet1:Sheet2!A1:B2 or Sheet1!$A$1:$B$2 or Sheet1:Sheet2!$A$1:$B$2
+            // match external ranges like Sheet1!A1:B2 or Sheet1:Sheet2!A1:B2 or Sheet1!$A$1:$B$2 or Sheet1:Sheet2!$A$1:$B$2
         } elseif (preg_match('/^' . self::REGEX_SHEET_TITLE_UNQUOTED . '(\\:' . self::REGEX_SHEET_TITLE_UNQUOTED . ')?\\!\$?([A-Ia-i]?[A-Za-z])?\$?(\\d+)\\:\$?([A-Ia-i]?[A-Za-z])?\$?(\\d+)$/u', $token)) {
             return $this->convertRange3d($token);
-        // match external ranges like 'Sheet1'!A1:B2 or 'Sheet1:Sheet2'!A1:B2 or 'Sheet1'!$A$1:$B$2 or 'Sheet1:Sheet2'!$A$1:$B$2
+            // match external ranges like 'Sheet1'!A1:B2 or 'Sheet1:Sheet2'!A1:B2 or 'Sheet1'!$A$1:$B$2 or 'Sheet1:Sheet2'!$A$1:$B$2
         } elseif (preg_match("/^'" . self::REGEX_SHEET_TITLE_QUOTED . '(\\:' . self::REGEX_SHEET_TITLE_QUOTED . ")?'\\!\\$?([A-Ia-i]?[A-Za-z])?\\$?(\\d+)\\:\\$?([A-Ia-i]?[A-Za-z])?\\$?(\\d+)$/u", $token)) {
             return $this->convertRange3d($token);
-        // operators (including parentheses)
+            // operators (including parentheses)
         } elseif (isset($this->ptg[$token])) {
             return pack('C', $this->ptg[$token]);
-        // match error codes
+            // match error codes
         } elseif (preg_match('/^#[A-Z0\\/]{3,5}[!?]{1}$/', $token) or $token == '#N/A') {
             return $this->convertError($token);
-        // commented so argument number can be processed correctly. See toReversePolish().
-        /*elseif (preg_match("/[A-Z0-9\xc0-\xdc\.]+/", $token))
-        {
-            return($this->convertFunction($token, $this->_func_args));
-        }*/
-        // if it's an argument, ignore the token (the argument remains)
+            // commented so argument number can be processed correctly. See toReversePolish().
+            /*elseif (preg_match("/[A-Z0-9\xc0-\xdc\.]+/", $token))
+            {
+                return($this->convertFunction($token, $this->_func_args));
+            }*/
+            // if it's an argument, ignore the token (the argument remains)
         } elseif ($token == 'arg') {
             return '';
         }
@@ -823,10 +823,10 @@ class Parser
      * called by the addWorksheet() method of the
      * \PhpOffice\PhpSpreadsheet\Writer\Xls\Workbook class.
      *
-     * @see \PhpOffice\PhpSpreadsheet\Writer\Xls\Workbook::addWorksheet()
-     *
      * @param string $name The name of the worksheet being added
      * @param int $index The index of the worksheet being added
+     * @see \PhpOffice\PhpSpreadsheet\Writer\Xls\Workbook::addWorksheet()
+     *
      */
     public function setExtSheet($name, $index)
     {
@@ -1077,7 +1077,7 @@ class Parser
     public function parse($formula)
     {
         $this->currentCharacter = 0;
-        $this->formula = (string) $formula;
+        $this->formula = (string)$formula;
         $this->lookAhead = $formula[1] ?? '';
         $this->advance();
         $this->parseTree = $this->condition();
@@ -1150,20 +1150,20 @@ class Parser
             $this->advance();
 
             return $result;
-        // If it's an error code
+            // If it's an error code
         } elseif (preg_match('/^#[A-Z0\\/]{3,5}[!?]{1}$/', $this->currentToken) or $this->currentToken == '#N/A') {
             $result = $this->createTree($this->currentToken, 'ptgErr', '');
             $this->advance();
 
             return $result;
-        // If it's a negative value
+            // If it's a negative value
         } elseif ($this->currentToken == '-') {
             // catch "-" Term
             $this->advance();
             $result2 = $this->expression();
 
             return $this->createTree('ptgUminus', $result2, '');
-        // If it's a positive value
+            // If it's a positive value
         } elseif ($this->currentToken == '+') {
             // catch "+" Term
             $this->advance();
@@ -1174,8 +1174,8 @@ class Parser
         $result = $this->term();
         while (
             ($this->currentToken == '+') or
-               ($this->currentToken == '-') or
-               ($this->currentToken == '^')
+            ($this->currentToken == '-') or
+            ($this->currentToken == '^')
         ) {
             if ($this->currentToken == '+') {
                 $this->advance();
@@ -1199,9 +1199,9 @@ class Parser
      * This function just introduces a ptgParen element in the tree, so that Excel
      * doesn't get confused when working with a parenthesized formula afterwards.
      *
+     * @return array The parsed ptg'd tree
      * @see fact()
      *
-     * @return array The parsed ptg'd tree
      */
     private function parenthesizedExpression()
     {
@@ -1219,7 +1219,7 @@ class Parser
         $result = $this->fact();
         while (
             ($this->currentToken == '*') or
-               ($this->currentToken == '/')
+            ($this->currentToken == '/')
         ) {
             if ($this->currentToken == '*') {
                 $this->advance();
@@ -1276,7 +1276,7 @@ class Parser
             return $result;
         } elseif (
             preg_match('/^(\$)?[A-Ia-i]?[A-Za-z](\$)?\d+:(\$)?[A-Ia-i]?[A-Za-z](\$)?\d+$/', $this->currentToken) or
-                preg_match('/^(\$)?[A-Ia-i]?[A-Za-z](\$)?\d+\.\.(\$)?[A-Ia-i]?[A-Za-z](\$)?\d+$/', $this->currentToken)
+            preg_match('/^(\$)?[A-Ia-i]?[A-Za-z](\$)?\d+\.\.(\$)?[A-Ia-i]?[A-Za-z](\$)?\d+$/', $this->currentToken)
         ) {
             // if it's a range A1:B2 or $A$1:$B$2
             // must be an error?

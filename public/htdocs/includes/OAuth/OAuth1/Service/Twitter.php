@@ -15,17 +15,18 @@ use OAuth\Common\Exception\Exception;
 class Twitter extends AbstractService
 {
     const ENDPOINT_AUTHENTICATE = "https://api.twitter.com/oauth/authenticate";
-    const ENDPOINT_AUTHORIZE    = "https://api.twitter.com/oauth/authorize";
+    const ENDPOINT_AUTHORIZE = "https://api.twitter.com/oauth/authorize";
 
-    protected $authorizationEndpoint   = self::ENDPOINT_AUTHENTICATE;
+    protected $authorizationEndpoint = self::ENDPOINT_AUTHENTICATE;
 
     public function __construct(
         CredentialsInterface $credentials,
-        ClientInterface $httpClient,
+        ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-        SignatureInterface $signature,
-        UriInterface $baseApiUri = null
-    ) {
+        SignatureInterface   $signature,
+        UriInterface         $baseApiUri = null
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage, $signature, $baseApiUri);
 
         if (null === $baseApiUri) {

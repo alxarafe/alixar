@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2013-2014  Olivier Geffroy     <jeff@jeffinfo.com>
- * Copyright (C) 2013-2014	Florian Henry		<florian.henry@open-concept.pro>
- * Copyright (C) 2013-2024	Alexandre Spangaro	<alexandre@inovea-conseil.com>
- * Copyright (C) 2014		Juanjo Menent		<jmenent@2byte.es>
+/* Copyright (C) 2013-2014  Olivier Geffroy             <jeff@jeffinfo.com>
+ * Copyright (C) 2013-2014	Florian Henry		        <florian.henry@open-concept.pro>
+ * Copyright (C) 2013-2024	Alexandre Spangaro	        <alexandre@inovea-conseil.com>
+ * Copyright (C) 2014		Juanjo Menent		        <jmenent@2byte.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,10 +27,11 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/expensereport/class/expensereport.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("compta", "bills", "other", "accountancy"));

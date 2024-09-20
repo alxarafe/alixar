@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018   Andreu Bisquerra    <jove@bisquerra.com>
+/* Copyright (C) 2018       Andreu Bisquerra            <jove@bisquerra.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Product\Classes\Product;
 
 // This page return an image of public photos of a category or product.
 // Test to check image can be publicly viewed is done inside the viewimage.php wrapper.
@@ -58,7 +61,6 @@ if (!isModEnabled('takepos')) {
  */
 
 if ($query == "cat") {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/categories.lib.php';
 
     $object = new Categorie($db);
@@ -81,7 +83,6 @@ if ($query == "cat") {
     header('Location: ../../public/theme/common/nophoto.png');
     exit;
 } elseif ($query == "pro") {
-    require_once DOL_DOCUMENT_ROOT . "/product/class/product.class.php";
 
     $objProd = new Product($db);
     $objProd->fetch($id);

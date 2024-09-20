@@ -1,4 +1,5 @@
 <?php
+
 /* Copyright (C) 2014   Maxime Kohlhaas     <support@atm-consulting.fr>
  * Copyright (C) 2014	Juanjo Menent		<jmenent@2byte.es>
  * Copyright (C) 2021	Frédéric France		<frederic.france@netlogic.fr>
@@ -75,15 +76,15 @@ if (empty($reshook) && !empty($object->table_element) && isset($extrafields->att
 
         $enabled = 1;
         if ($enabled && isset($extrafields->attributes[$object->table_element]['enabled'][$tmpkeyextra])) {
-            $enabled = (int) dol_eval($extrafields->attributes[$object->table_element]['enabled'][$tmpkeyextra], 1, 1, '2');
+            $enabled = (int)dol_eval($extrafields->attributes[$object->table_element]['enabled'][$tmpkeyextra], 1, 1, '2');
         }
         if ($enabled && isset($extrafields->attributes[$object->table_element]['list'][$tmpkeyextra])) {
-            $enabled = (int) dol_eval($extrafields->attributes[$object->table_element]['list'][$tmpkeyextra], 1, 1, '2');
+            $enabled = (int)dol_eval($extrafields->attributes[$object->table_element]['list'][$tmpkeyextra], 1, 1, '2');
         }
 
         $perms = 1;
         if ($perms && isset($extrafields->attributes[$object->table_element]['perms'][$tmpkeyextra])) {
-            $perms = (int) dol_eval($extrafields->attributes[$object->table_element]['perms'][$tmpkeyextra], 1, 1, '2');
+            $perms = (int)dol_eval($extrafields->attributes[$object->table_element]['perms'][$tmpkeyextra], 1, 1, '2');
         }
         //print $tmpkeyextra.'-'.$enabled.'-'.$perms.'<br>'."\n";
 

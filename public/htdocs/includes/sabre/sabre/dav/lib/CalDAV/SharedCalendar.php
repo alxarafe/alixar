@@ -119,7 +119,7 @@ class SharedCalendar extends Calendar implements ISharedCalendar
                     'principal' => $this->calendarInfo['principaluri'] . '/calendar-proxy-write',
                     'protected' => true,
                 ];
-                // no break intentional!
+            // no break intentional!
             case SPlugin::ACCESS_READWRITE:
                 $acl[] = [
                     'privilege' => '{DAV:}write',
@@ -131,7 +131,7 @@ class SharedCalendar extends Calendar implements ISharedCalendar
                     'principal' => $this->calendarInfo['principaluri'] . '/calendar-proxy-write',
                     'protected' => true,
                 ];
-                // no break intentional!
+            // no break intentional!
             case SPlugin::ACCESS_READ:
                 $acl[] = [
                     'privilege' => '{DAV:}write-properties',
@@ -194,7 +194,7 @@ class SharedCalendar extends Calendar implements ISharedCalendar
                     'principal' => $this->calendarInfo['principaluri'] . '/calendar-proxy-write',
                     'protected' => true,
                 ];
-                // no break intentional
+            // no break intentional
             case SPlugin::ACCESS_READ:
                 $acl[] = [
                     'privilege' => '{DAV:}read',

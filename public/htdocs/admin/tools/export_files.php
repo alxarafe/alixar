@@ -25,7 +25,7 @@
  *      \brief      Page to export documents into a compressed file
  */
 
-if (! defined('CSRFCHECK_WITH_TOKEN')) {
+if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');        // Force use of CSRF protection with tokens even for GET
 }
 
@@ -34,7 +34,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/utils.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 
 $langs->load("admin");
 
@@ -125,7 +124,7 @@ $dump_buffer_len = 0;
 $time_start = time();
 
 
-$outputdir  = $conf->admin->dir_output . '/documents';
+$outputdir = $conf->admin->dir_output . '/documents';
 $result = dol_mkdir($outputdir);
 
 $utils = new Utils($db);

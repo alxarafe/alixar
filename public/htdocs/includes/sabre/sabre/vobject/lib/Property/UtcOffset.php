@@ -62,7 +62,7 @@ class UtcOffset extends Text
         return array_map(
             function ($value) {
                 return substr($value, 0, -2) . ':' .
-                       substr($value, -2);
+                    substr($value, -2);
             },
             parent::getJsonValue()
         );

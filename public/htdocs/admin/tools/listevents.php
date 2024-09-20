@@ -29,7 +29,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/events.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/triggers/interface_20_all_Logevents.class.php';
 
@@ -47,7 +46,7 @@ if ($user->socid > 0) {
 }
 
 // Load translation files required by the page
-$langs->loadLangs(array("companies", "admin", "users", "other","withdrawals"));
+$langs->loadLangs(array("companies", "admin", "users", "other", "withdrawals"));
 
 // Load variable for pagination
 $limit = GETPOSTINT('limit') ? GETPOSTINT('limit') : $conf->liste_limit;
@@ -69,10 +68,10 @@ if (!$sortorder) {
 
 $search_rowid = GETPOST("search_rowid", "intcomma");
 $search_code = GETPOST("search_code", "alpha");
-$search_ip   = GETPOST("search_ip", "alpha");
+$search_ip = GETPOST("search_ip", "alpha");
 $search_user = GETPOST("search_user", "alpha");
 $search_desc = GETPOST("search_desc", "alpha");
-$search_ua   = GETPOST("search_ua", "restricthtml");
+$search_ua = GETPOST("search_ua", "restricthtml");
 $search_prefix_session = GETPOST("search_prefix_session", "restricthtml");
 $optioncss = GETPOST("optioncss", "aZ"); // Option for the css output (always '' except when 'print')
 
@@ -275,13 +274,13 @@ if ($result) {
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($optioncss != '') {
         $param .= '&optioncss=' . urlencode($optioncss);
     }
     if ($search_rowid) {
-        $param .= '&search_rowid=' . urlencode((string) ($search_rowid));
+        $param .= '&search_rowid=' . urlencode((string)($search_rowid));
     }
     if ($search_code) {
         $param .= '&search_code=' . urlencode($search_code);
@@ -302,22 +301,22 @@ if ($result) {
         $param .= '&search_prefix_session=' . urlencode($search_prefix_session);
     }
     if ($date_startmonth) {
-        $param .= "&date_startmonth=" . ((int) $date_startmonth);
+        $param .= "&date_startmonth=" . ((int)$date_startmonth);
     }
     if ($date_startday) {
-        $param .= "&date_startday=" . ((int) $date_startday);
+        $param .= "&date_startday=" . ((int)$date_startday);
     }
     if ($date_startyear) {
-        $param .= "&date_startyear=" . ((int) $date_startyear);
+        $param .= "&date_startyear=" . ((int)$date_startyear);
     }
     if ($date_endmonth) {
-        $param .= "&date_endmonth=" . ((int) $date_endmonth);
+        $param .= "&date_endmonth=" . ((int)$date_endmonth);
     }
     if ($date_endday) {
-        $param .= "&date_endday=" . ((int) $date_endday);
+        $param .= "&date_endday=" . ((int)$date_endday);
     }
     if ($date_endyear) {
-        $param .= "&date_endyear=" . ((int) $date_endyear);
+        $param .= "&date_endyear=" . ((int)$date_endyear);
     }
 
     $center = '';

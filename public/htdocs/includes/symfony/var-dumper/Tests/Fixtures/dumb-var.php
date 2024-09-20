@@ -22,9 +22,9 @@ $var = array(
     'res' => $g,
     'obj' => $foo,
     'closure' => function ($a, \PDO &$b = null) {
-},
+    },
     'line' => __LINE__ - 1,
-    'nobj' => array((object) array()),
+    'nobj' => array((object)array()),
 );
 
 $r = array();

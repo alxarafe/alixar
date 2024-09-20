@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2015      Juanjo Menent        <jmenent@2byte.es>
+/* Copyright (C) 2015       Juanjo Menent               <jmenent@2byte.es>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -20,13 +20,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\SupplierPayment\Classes\ModeleNumRefSupplierPayments;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  * \file       htdocs/core/modules/supplier_payment/mod_supplier_payment_bronan.php
  * \ingroup    supplier_payment
  * \brief      File containing class for numbering module Bronan
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/supplier_payment/modules_supplier_payment.php';
 
 /**
  *  Class to manage customer payment numbering rules Cicada
@@ -58,12 +62,11 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
      */
     public $name = 'Bronan';
 
-
     /**
      *  Return description of numbering module
      *
-     *  @param  Translate   $langs      Lang object to use for output
-     *  @return string                  Descriptive text
+     * @param Translate $langs Lang object to use for output
+     * @return string                  Descriptive text
      */
     public function info($langs)
     {
@@ -71,11 +74,10 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
         return $langs->trans("SimpleNumRefModelDesc", $this->prefix);
     }
 
-
     /**
      *  Return an example of numbering
      *
-     *  @return     string      Example
+     * @return     string      Example
      */
     public function getExample()
     {
@@ -87,8 +89,8 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
      *  Checks if the numbers already in the database do not
      *  cause conflicts that would prevent this numbering working.
      *
-     *  @param  CommonObject    $object     Object we need next value for
-     *  @return boolean                     false if KO (there is a conflict), true if OK
+     * @param CommonObject $object Object we need next value for
+     * @return boolean                     false if KO (there is a conflict), true if OK
      */
     public function canBeActivated($object)
     {
@@ -123,9 +125,9 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
     /**
      *  Return next free value
      *
-     *  @param  Societe         $objsoc     Object thirdparty
-     *  @param  PaiementFourn   $object     Object we need next value for
-     *  @return string|-1                   Value if OK, -1 if KO
+     * @param Societe $objsoc Object thirdparty
+     * @param PaiementFourn $object Object we need next value for
+     * @return string|-1                   Value if OK, -1 if KO
      */
     public function getNextValue($objsoc, $object)
     {

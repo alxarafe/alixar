@@ -68,7 +68,7 @@ class ExceptionCaster
         $xPrefix = "\0Exception\0";
 
         if (isset($a[$xPrefix . 'previous'], $a[$xPrefix . 'trace']) && $a[$xPrefix . 'previous'] instanceof \Exception) {
-            $b = (array) $a[$xPrefix . 'previous'];
+            $b = (array)$a[$xPrefix . 'previous'];
             self::traceUnshift($b[$xPrefix . 'trace'], get_class($a[$xPrefix . 'previous']), $b[$prefix . 'file'], $b[$prefix . 'line']);
             $a[$xPrefix . 'trace'] = new TraceStub($b[$xPrefix . 'trace'], false, 0, -1 - count($a[$xPrefix . 'trace']->value));
         }
@@ -154,7 +154,7 @@ class ExceptionCaster
             } else {
                 if (preg_match('/\((\d+)\)(?:\([\da-f]{32}\))? : (?:eval\(\)\'d code|runtime-created function)$/', $f['file'], $match)) {
                     $f['file'] = substr($f['file'], 0, -strlen($match[0]));
-                    $f['line'] = (int) $match[1];
+                    $f['line'] = (int)$match[1];
                 }
                 $caller = isset($f['function']) ? sprintf('in %s() on line %d', (isset($f['class']) ? $f['class'] . $f['type'] : '') . $f['function'], $f['line']) : null;
                 $src = $f['line'];

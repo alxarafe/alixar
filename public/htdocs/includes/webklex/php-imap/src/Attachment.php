@@ -93,8 +93,8 @@ class Attachment
 
     /**
      * Attachment constructor.
-     * @param Message   $oMessage
-     * @param Part      $part
+     * @param Message $oMessage
+     * @param Part $part
      */
     public function __construct(Message $oMessage, Part $part)
     {
@@ -105,7 +105,7 @@ class Attachment
         $this->part_number = $part->part_number;
 
         $default_mask = $this->oMessage->getClient()->getDefaultAttachmentMask();
-        if($default_mask != null) {
+        if ($default_mask != null) {
             $this->mask = $default_mask;
         }
 
@@ -123,15 +123,15 @@ class Attachment
      */
     public function __call($method, $arguments)
     {
-        if(strtolower(substr($method, 0, 3)) === 'get') {
+        if (strtolower(substr($method, 0, 3)) === 'get') {
             $name = Str::snake(substr($method, 3));
 
-            if(isset($this->attributes[$name])) {
+            if (isset($this->attributes[$name])) {
                 return $this->attributes[$name];
             }
 
             return null;
-        }elseif (strtolower(substr($method, 0, 3)) === 'set') {
+        } elseif (strtolower(substr($method, 0, 3)) === 'set') {
             $name = Str::snake(substr($method, 3));
 
             $this->attributes[$name] = array_pop($arguments);
@@ -164,7 +164,7 @@ class Attachment
      */
     public function __get($name)
     {
-        if(isset($this->attributes[$name])) {
+        if (isset($this->attributes[$name])) {
             return $this->attributes[$name];
         }
 
@@ -229,7 +229,7 @@ class Attachment
             $this->setName($filename);
         } elseif (($name = $this->part->name) !== null) {
             $this->setName($name);
-        }else {
+        } else {
             $this->setName("undefined");
         }
 
@@ -264,9 +264,9 @@ class Attachment
     {
         $decoder = $this->config['decoder']['attachment'];
         if ($name !== null) {
-            if($decoder === 'utf-8' && extension_loaded('imap')) {
+            if ($decoder === 'utf-8' && extension_loaded('imap')) {
                 $this->name = \imap_utf8($name);
-            }else{
+            } else {
                 $this->name = mb_decode_mimeheader($name);
             }
         }
@@ -290,7 +290,7 @@ class Attachment
     public function getExtension()
     {
         $deprecated_guesser = "\Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser";
-        if (class_exists($deprecated_guesser) !== false){
+        if (class_exists($deprecated_guesser) !== false) {
             return $deprecated_guesser::getInstance()->guess($this->getMimeType());
         }
         $guesser = "\Symfony\Component\Mime\MimeTypes";
@@ -324,7 +324,7 @@ class Attachment
      */
     public function setMask($mask)
     {
-        if(class_exists($mask)){
+        if (class_exists($mask)) {
             $this->mask = $mask;
         }
 
@@ -351,7 +351,7 @@ class Attachment
     public function mask($mask = null)
     {
         $mask = $mask !== null ? $mask : $this->mask;
-        if(class_exists($mask)){
+        if (class_exists($mask)) {
             return new $mask($this);
         }
 

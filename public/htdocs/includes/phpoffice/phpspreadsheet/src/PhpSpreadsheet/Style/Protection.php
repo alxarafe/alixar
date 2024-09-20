@@ -84,9 +84,9 @@ class Protection extends Supervisor
      *
      * @param array $pStyles Array containing style information
      *
+     * @return $this
      * @throws PhpSpreadsheetException
      *
-     * @return $this
      */
     public function applyFromArray(array $pStyles)
     {

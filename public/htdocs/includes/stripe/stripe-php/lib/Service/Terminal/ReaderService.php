@@ -12,9 +12,9 @@ class ReaderService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Terminal\Reader>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Terminal\Reader>
      */
     public function all($params = null, $opts = null)
     {
@@ -28,9 +28,9 @@ class ReaderService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Reader
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Reader
      */
     public function cancelAction($id, $params = null, $opts = null)
     {
@@ -43,9 +43,9 @@ class ReaderService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Reader
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Reader
      */
     public function create($params = null, $opts = null)
     {
@@ -59,9 +59,9 @@ class ReaderService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Reader
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Reader
      */
     public function delete($id, $params = null, $opts = null)
     {
@@ -75,9 +75,9 @@ class ReaderService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Reader
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Reader
      */
     public function processPaymentIntent($id, $params = null, $opts = null)
     {
@@ -91,9 +91,9 @@ class ReaderService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Reader
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Reader
      */
     public function processSetupIntent($id, $params = null, $opts = null)
     {
@@ -107,9 +107,9 @@ class ReaderService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Reader
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Reader
      */
     public function refundPayment($id, $params = null, $opts = null)
     {
@@ -123,9 +123,9 @@ class ReaderService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Reader
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Reader
      */
     public function retrieve($id, $params = null, $opts = null)
     {
@@ -139,9 +139,9 @@ class ReaderService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Reader
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Reader
      */
     public function setReaderDisplay($id, $params = null, $opts = null)
     {
@@ -156,9 +156,9 @@ class ReaderService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Terminal\Reader
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Terminal\Reader
      */
     public function update($id, $params = null, $opts = null)
     {

@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2006  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2020	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2014	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2015		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2018		Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2019-2024  Frédéric France         <frederic.france@free.fr>
+/* Copyright (C) 2001-2006  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2020	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2014	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2015		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2018		Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2019-2024  Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productbatch;
+use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file       htdocs/product/stock/movement_card.php
  *  \ingroup    stock
@@ -31,20 +45,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/entrepot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/mouvementstock.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/stock/class/productlot.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/html.formproduct.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/stock.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-if (isModEnabled('project')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formprojet.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'stocks', 'orders'));
@@ -128,7 +131,6 @@ $arrayfields = array(
 $usercanread = (($user->hasRight('stock', 'mouvement', 'lire')));
 $usercancreate = (($user->hasRight('stock', 'mouvement', 'creer')));
 $usercandelete = (($user->hasRight('stock', 'mouvement', 'supprimer')));
-
 
 
 /*
@@ -418,7 +420,6 @@ if (empty($reshook) && $action != 'remove_file') {
 }
 
 
-
 /*
  * View
  */
@@ -462,7 +463,7 @@ $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "user as u ON m.fk_user_author = u.rowi
 $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "product_lot as pl ON m.batch = pl.batch AND m.fk_product = pl.fk_product";
 $sql .= " WHERE m.fk_product = p.rowid";
 if ($msid > 0) {
-    $sql .= " AND m.rowid = " . ((int) $msid);
+    $sql .= " AND m.rowid = " . ((int)$msid);
 }
 $sql .= " AND m.fk_entrepot = e.rowid";
 $sql .= " AND e.entity IN (" . getEntity('stock') . ")";
@@ -470,11 +471,11 @@ if (!getDolGlobalString('STOCK_SUPPORTS_SERVICES')) {
     $sql .= " AND p.fk_product_type = 0";
 }
 if ($id > 0) {
-    $sql .= " AND e.rowid = " . ((int) $id);
+    $sql .= " AND e.rowid = " . ((int)$id);
 }
 $sql .= dolSqlDateFilter('m.datem', 0, $month, $year);
 if ($idproduct > 0) {
-    $sql .= " AND p.rowid = " . ((int) $idproduct);
+    $sql .= " AND p.rowid = " . ((int)$idproduct);
 }
 if (!empty($search_ref)) {
     $sql .= natural_search('m.rowid', $search_ref, 1);
@@ -623,7 +624,7 @@ if ($resql) {
         // Last movement
         $sql = "SELECT MAX(m.datem) as datem";
         $sql .= " FROM " . MAIN_DB_PREFIX . "stock_mouvement as m";
-        $sql .= " WHERE m.fk_entrepot = " . (int) $object->id;
+        $sql .= " WHERE m.fk_entrepot = " . (int)$object->id;
         $resqlbis = $db->query($sql);
         if ($resqlbis) {
             $obj = $db->fetch_object($resqlbis);
@@ -690,10 +691,10 @@ if ($resql) {
         $param .= '&contextpage=' . urlencode($contextpage);
     }
     if ($limit > 0 && $limit != $conf->liste_limit) {
-        $param .= '&limit=' . ((int) $limit);
+        $param .= '&limit=' . ((int)$limit);
     }
     if ($id > 0) {
-        $param .= '&id=' . urlencode((string) ($id));
+        $param .= '&id=' . urlencode((string)($id));
     }
     if ($search_movement) {
         $param .= '&search_movement=' . urlencode($search_movement);
@@ -720,15 +721,15 @@ if ($resql) {
         $param .= '&search_user=' . urlencode($search_user);
     }
     if ($idproduct > 0) {
-        $param .= '&idproduct=' . urlencode((string) ($idproduct));
+        $param .= '&idproduct=' . urlencode((string)($idproduct));
     }
     // Add $param from extra fields
     include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_list_search_param.tpl.php';
 
     // List of mass actions available
     $arrayofmassactions = array(
-    //    'presend'=>$langs->trans("SendByMail"),
-    //    'builddoc'=>$langs->trans("PDFMerge"),
+        //    'presend'=>$langs->trans("SendByMail"),
+        //    'builddoc'=>$langs->trans("PDFMerge"),
     );
     //if ($user->rights->stock->supprimer) $arrayofmassactions['predelete']='<span class="fa fa-trash paddingrightonly"></span>'.$langs->trans("Delete");
     if (in_array($massaction, array('presend', 'predelete'))) {
@@ -1073,12 +1074,12 @@ if ($resql) {
         if (!empty($arrayfields['m.inventorycode']['checked'])) {
             // Inventory code
             print '<td><a href="'
-                        . constant('BASE_URL') . '/product/stock/movement_card.php?id=' . urlencode($objp->entrepot_id)
-                        . '&search_inventorycode=' . urlencode($objp->inventorycode)
-                        . '&search_type_mouvement=' . urlencode($objp->type_mouvement)
-                        . '">'
-                        . $objp->inventorycode
-                        . '</a></td>';
+                . constant('BASE_URL') . '/product/stock/movement_card.php?id=' . urlencode($objp->entrepot_id)
+                . '&search_inventorycode=' . urlencode($objp->inventorycode)
+                . '&search_type_mouvement=' . urlencode($objp->type_mouvement)
+                . '">'
+                . $objp->inventorycode
+                . '</a></td>';
         }
         if (!empty($arrayfields['m.label']['checked'])) {
             // Label of movement
@@ -1179,7 +1180,6 @@ if ($resql) {
 }
 
 
-
 /*
  * Generated documents
  */
@@ -1220,13 +1220,11 @@ if ($action != 'create' && $action != 'edit' && $action != 'delete' && $id > 0) 
     $morehtmlcenter = dolGetButtonTitle($langs->trans('SeeAll'), '', 'fa fa-bars imgforviewmode', constant('BASE_URL') . '/product/agenda.php?id=' . $object->id);
 
     // List of actions on element
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
     $formactions = new FormActions($db);
     $somethingshown = $formactions->showactions($object, 'mouvement', 0, 1, '', $MAXEVENT, '', $morehtmlcenter); // Show all action for product
 
     print '</div></div>';
 }
-
 
 // End of page
 llxFooter();

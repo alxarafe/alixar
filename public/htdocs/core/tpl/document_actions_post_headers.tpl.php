@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C)    2013      Cédric Salvador     <csalvador@gpcsolutions.fr>
- * Copyright (C)    2013-2014 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C)	2015	  Marcos García		  <marcosgdf@gmail.com>
- * Copyright (C) 	2019	  Nicolas ZABOURI     <info@inovea-conseil.com>
+/* Copyright (C) 2013       Cédric Salvador             <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015	    Marcos García		        <marcosgdf@gmail.com>
+ * Copyright (C) 2019	    Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,6 +32,8 @@
 // $savingdocmask = dol_sanitizeFileName($object->ref).'-__file__';
 
 // Protection to avoid direct call of template
+use Dolibarr\Code\Core\Classes\FormFile;
+
 if (empty($langs) || !is_object($langs)) {
     print "Error, template page can't be called as URL";
     exit(1);
@@ -64,7 +66,6 @@ if (in_array($modulepart, array('product', 'produit', 'societe', 'user', 'ticket
 }
 
 
-
 /*
  * Confirm form to delete a file
  */
@@ -91,25 +92,25 @@ if (!isset($savingdocmask) || getDolGlobalString('MAIN_DISABLE_SUGGEST_REF_AS_PR
         //var_dump($modulepart);
         if (
             in_array($modulepart, array(
-            'facture_fournisseur',
-            'commande_fournisseur',
-            'facture',
-            'commande',
-            'propal',
-            'payment',
-            'supplier_proposal',
-            'ficheinter',
-            'contract',
-            'expedition',
-            'project',
-            'project_task',
-            'expensereport',
-            'tax',
-            'tax-vat',
-            'produit',
-            'product_batch',
-            'bom',
-            'mrp'
+                'facture_fournisseur',
+                'commande_fournisseur',
+                'facture',
+                'commande',
+                'propal',
+                'payment',
+                'supplier_proposal',
+                'ficheinter',
+                'contract',
+                'expedition',
+                'project',
+                'project_task',
+                'expensereport',
+                'tax',
+                'tax-vat',
+                'produit',
+                'product_batch',
+                'bom',
+                'mrp'
             ))
         ) {
             $savingdocmask = dol_sanitizeFileName($object->ref) . '-__file__';

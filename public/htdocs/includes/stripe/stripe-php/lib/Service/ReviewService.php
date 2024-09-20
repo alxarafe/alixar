@@ -14,9 +14,9 @@ class ReviewService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Collection<\Stripe\Review>
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\Review>
      */
     public function all($params = null, $opts = null)
     {
@@ -31,9 +31,9 @@ class ReviewService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Review
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Review
      */
     public function approve($id, $params = null, $opts = null)
     {
@@ -47,9 +47,9 @@ class ReviewService extends \Stripe\Service\AbstractService
      * @param null|array $params
      * @param null|array|\Stripe\Util\RequestOptions $opts
      *
+     * @return \Stripe\Review
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Review
      */
     public function retrieve($id, $params = null, $opts = null)
     {

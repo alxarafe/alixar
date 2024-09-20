@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2017 ATM Consulting       <contact@atm-consulting.fr>
+/* Copyright (C) 2017       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2017       ATM Consulting              <contact@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
 
 /**
  *      \file       htdocs/blockedlog/ajax/block-add.php
@@ -49,7 +51,6 @@ if ($element === 'facture') {
     accessforbidden('Bad value for element');
 }
 
-
 /*
  * View
  */
@@ -62,8 +63,6 @@ if (empty($action)) {
 }
 
 if ($element === 'facture') {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/blockedlog/class/blockedlog.class.php';
-    require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/facture.class.php';
 
     $facture = new Facture($db);
     if ($facture->fetch($id) > 0) {

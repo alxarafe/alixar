@@ -1,5 +1,25 @@
 <?php
 
+/* Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+use Dolibarr\Code\Ecm\Classes\EcmFiles;
+use Dolibarr\Code\Website\Classes\Website;
+use Dolibarr\Code\Website\Classes\WebsitePage;
+
 // BEGIN PHP File wrapper.php used to download rss, logo, shared files - DO NOT MODIFY - It is just a copy of file website/samples/wrapper.php
 $websitekey = basename(__DIR__);
 if (strpos($_SERVER["PHP_SELF"], 'website/samples/wrapper.php')) {
@@ -28,7 +48,6 @@ if ($rss) {
 
 // If we have a hash public (hashp), we guess the original_file.
 if (!empty($hashp)) {
-    include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
     $ecmfile = new EcmFiles($db);
     $result = $ecmfile->fetch(0, '', '', '', $hashp);
     if ($result > 0) {
@@ -98,8 +117,6 @@ if ($rss) {
     $filename = $original_file;
     $dir_temp = $conf->website->dir_temp;
 
-    include_once DOL_DOCUMENT_ROOT . '/website/class/website.class.php';
-    include_once DOL_DOCUMENT_ROOT . '/website/class/websitepage.class.php';
     $website = new Website($db);
     $websitepage = new WebsitePage($db);
 
@@ -230,9 +247,9 @@ if ($rss) {
     // Find the subdirectory name as the reference
     include_once DOL_DOCUMENT_ROOT . '/core/lib/files.lib.php';
     $check_access = dol_check_secure_access_document($modulepart, $original_file, $entity, null, $refname);
-    $accessallowed              = empty($check_access['accessallowed']) ? '' : $check_access['accessallowed'];
+    $accessallowed = empty($check_access['accessallowed']) ? '' : $check_access['accessallowed'];
     $sqlprotectagainstexternals = empty($check_access['sqlprotectagainstexternals']) ? '' : $check_access['sqlprotectagainstexternals'];
-    $fullpath_original_file     = empty($check_access['original_file']) ? '' : $check_access['original_file']; // $fullpath_original_file is now a full path name
+    $fullpath_original_file = empty($check_access['original_file']) ? '' : $check_access['original_file']; // $fullpath_original_file is now a full path name
     if ($hashp) {
         $accessallowed = 1; // When using hashp, link is public so we force $accessallowed
         $sqlprotectagainstexternals = '';

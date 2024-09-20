@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2015	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2015		Jean-François Ferry		<jfefe@aternatik.fr>
- * Copyright (C) 2019		Nicolas ZABOURI			<info@inovea-conseil.com>
- * Copyright (C) 2020		Pierre Ardoin			<mapiolca@me.com>
- * Copyright (C) 2020		Tobias Sekan			<tobias.sekan@startmail.com>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2015	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2015		Jean-François Ferry		    <jfefe@aternatik.fr>
+ * Copyright (C) 2019		Nicolas ZABOURI			    <info@inovea-conseil.com>
+ * Copyright (C) 2020		Pierre Ardoin			    <mapiolca@me.com>
+ * Copyright (C) 2020		Tobias Sekan			    <tobias.sekan@startmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+
 /**
  *  \file       htdocs/comm/index.php
  *  \ingroup    commercial
@@ -31,22 +42,9 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formfile.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/action/class/actioncomm.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/comm/propal/class/propal.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/commande/class/commande.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/fourn/class/fournisseur.commande.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/societe/class/client.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/supplier_proposal/class/supplier_proposal.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/propal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/order.lib.php';
-if (isModEnabled('contract')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/contrat/class/contrat.class.php';
-}
-if (isModEnabled('intervention')) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/fichinter/class/fichinter.class.php';
-}
 
 // Initialize technical object to manage hooks. Note that conf->hooks_modules contains array
 $hookmanager = new HookManager($db);
@@ -77,7 +75,6 @@ if (
 ) {
     accessforbidden();
 }
-
 
 
 /*
@@ -151,10 +148,10 @@ if (isModEnabled("propal") && $user->hasRight("propal", "lire")) {
     $sql .= " AND p.fk_soc = s.rowid";
     $sql .= " AND p.fk_statut = " . Propal::STATUS_DRAFT;
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -249,10 +246,10 @@ if (isModEnabled('supplier_proposal') && $user->hasRight("supplier_proposal", "l
     $sql .= " AND p.fk_statut = " . SupplierProposal::STATUS_DRAFT;
     $sql .= " AND p.fk_soc = s.rowid";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -346,10 +343,10 @@ if (isModEnabled('order') && $user->hasRight('commande', 'lire')) {
     $sql .= " AND c.fk_statut = " . Commande::STATUS_DRAFT;
     $sql .= " AND c.fk_soc = s.rowid";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -446,10 +443,10 @@ if ((isModEnabled("fournisseur") && !getDolGlobalString('MAIN_USE_NEW_SUPPLIERMO
     $sql .= " AND cf.fk_statut = " . CommandeFournisseur::STATUS_DRAFT;
     $sql .= " AND cf.fk_soc = s.rowid";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND cf.fk_soc = " . ((int) $socid);
+        $sql .= " AND cf.fk_soc = " . ((int)$socid);
     }
 
     $resql = $db->query($sql);
@@ -544,10 +541,10 @@ if (isModEnabled('intervention')) {
     $sql .= " AND f.fk_soc = s.rowid";
     $sql .= " AND f.fk_statut = 0";
     if ($socid) {
-        $sql .= " AND f.fk_soc = " . ((int) $socid);
+        $sql .= " AND f.fk_soc = " . ((int)$socid);
     }
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
 
 
@@ -626,14 +623,14 @@ if (isModEnabled("societe") && $user->hasRight('societe', 'lire')) {
     $sql .= " WHERE s.entity IN (" . getEntity($companystatic->element) . ")";
     $sql .= " AND s.client IN (" . Societe::CUSTOMER . ", " . Societe::PROSPECT . ", " . Societe::CUSTOMER_AND_PROSPECT . ")";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     // Add where from hooks
     $parameters = array('socid' => $socid);
     $reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters, $companystatic); // Note that $action and $object may have been modified by hook
     if (empty($reshook)) {
         if ($socid > 0) {
-            $sql .= " AND s.rowid = " . ((int) $socid);
+            $sql .= " AND s.rowid = " . ((int)$socid);
         }
     }
     $sql .= $hookmanager->resPrint;
@@ -736,12 +733,12 @@ if (isModEnabled('propal')) {
         if ($search_sale == -2) {
             $sql .= " AND NOT EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc)";
         } elseif ($search_sale > 0) {
-            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int) $search_sale) . ")";
+            $sql .= " AND EXISTS (SELECT sc.fk_soc FROM " . MAIN_DB_PREFIX . "societe_commerciaux as sc WHERE sc.fk_soc = c.fk_soc AND sc.fk_user = " . ((int)$search_sale) . ")";
         }
     }
     // Search on socid
     if ($socid) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
     $sql .= " ORDER BY c.tms DESC";
 
@@ -828,10 +825,10 @@ if (isModEnabled('order')) {
     $sql .= " AND c.entity IN (" . getEntity('commande') . ")";
     //$sql.= " AND c.fk_statut > 2";
     if ($socid) {
-        $sql .= " AND c.fk_soc = " . ((int) $socid);
+        $sql .= " AND c.fk_soc = " . ((int)$socid);
     }
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     $sql .= " ORDER BY c.tms DESC";
     $sql .= $db->plimit($max, 0);
@@ -915,14 +912,14 @@ if ((isModEnabled("supplier_order") || isModEnabled("supplier_invoice")) && $use
     $sql .= " WHERE s.entity IN (" . getEntity($companystatic->element) . ")";
     $sql .= " AND s.fournisseur = " . Societe::SUPPLIER;
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     // Add where from hooks
     $parameters = array('socid' => $socid);
     $reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters, $companystatic); // Note that $action and $object may have been modified by hook
     if (empty($reshook)) {
         if ($socid > 0) {
-            $sql .= " AND s.rowid = " . ((int) $socid);
+            $sql .= " AND s.rowid = " . ((int)$socid);
         }
     }
     $sql .= $hookmanager->resPrint;
@@ -1031,10 +1028,10 @@ if (isModEnabled('contract') && $user->hasRight("contrat", "lire") && 0) { // TO
     $sql .= " AND c.fk_soc = s.rowid";
     $sql .= " AND c.fk_product = p.rowid";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
     $sql .= " ORDER BY c.tms DESC";
     $sql .= $db->plimit($max + 1, 0);
@@ -1106,10 +1103,10 @@ if (isModEnabled("propal") && $user->hasRight("propal", "lire")) {
     $sql .= " AND p.fk_soc = s.rowid";
     $sql .= " AND p.fk_statut = " . Propal::STATUS_VALIDATED;
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
     $sql .= " ORDER BY p.rowid DESC";
 
@@ -1225,10 +1222,10 @@ if (isModEnabled('order') && $user->hasRight('commande', 'lire')) {
     $sql .= " AND c.fk_soc = s.rowid";
     $sql .= " AND c.fk_statut IN (" . Commande::STATUS_VALIDATED . ", " . Commande::STATUS_SHIPMENTONPROCESS . ")";
     if (!$user->hasRight('societe', 'client', 'voir')) {
-        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int) $user->id);
+        $sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = " . ((int)$user->id);
     }
     if ($socid) {
-        $sql .= " AND s.rowid = " . ((int) $socid);
+        $sql .= " AND s.rowid = " . ((int)$socid);
     }
     $sql .= " ORDER BY c.rowid DESC";
 

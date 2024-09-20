@@ -1,7 +1,6 @@
 <?php
 
-/* Copyright (C) 2007-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) ---Put here your own copyright and developer email---
+/* Copyright (C) 2007-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,6 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
 
 /**
  *    \file       htdocs/eventorganization/conferenceorboothattendee_note.php
@@ -63,8 +66,6 @@ if ($id > 0 || !empty($ref)) {
 // Permissions
 $permissionnote = $user->hasRight('eventorganization', 'conferenceorboothattendee', 'write'); // Used by the include of actions_setnotes.inc.php
 $permissiontoadd = $user->hasRight('eventorganization', 'conferenceorboothattendee', 'write'); // Used by the include of actions_addupdatedelete.inc.php
-
-
 
 /*
  * Actions

@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2004  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005       Simon Tosser            <simon@kornog-computing.com>
- * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2016       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2022       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005       Simon Tosser                <simon@kornog-computing.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2016       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2022       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *      \file       htdocs/admin/delais.php
@@ -161,7 +163,6 @@ if (!isset($conf->global->MAIN_DELAY_ORDERS_TO_PROCESS)) {
 if (!isset($conf->global->MAIN_DELAY_ORDERS_TO_PROCESS)) {
     $conf->global->MAIN_DELAY_ORDERS_TO_PROCESS = 2;
 }
-
 
 
 /*
@@ -381,14 +382,14 @@ if (!getDolGlobalString('MAIN_DISABLE_METEO') || getDolGlobalInt('MAIN_DISABLE_M
 
         <script type="text/javascript">
 
-            $(document).ready(function() {
+            $(document).ready(function () {
 
-                $("#change_mode").click(function() {
+                $("#change_mode").click(function () {
                     var use_percent = $("#MAIN_USE_METEO_WITH_PERCENTAGE");
                     var str_mode_std = "<?php print $str_mode_std; ?>";
                     var str_mode_percentage = "<?php print $str_mode_percentage; ?>";
 
-                    if(use_percent.val() == 1) {
+                    if (use_percent.val() == 1) {
                         use_percent.val(0);
                         $("#standard").show();
                         $("#percentage").hide();

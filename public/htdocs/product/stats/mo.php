@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2021 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2023	   Gauthier VERDOL		<gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2021  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2023	    Gauthier VERDOL		        <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Code\Mrp\Classes\MoLine;
+use Dolibarr\Code\Product\Classes\Product;
+
 /**
  *       \file       htdocs/product/stats/mo.php
  *       \ingroup    product mo
@@ -29,9 +35,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/mrp/class/mo.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/product/class/product.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('mrp', 'products', 'companies'));
@@ -78,7 +81,6 @@ if (GETPOST('button_removefilter_x', 'alpha') || GETPOST('button_removefilter', 
 $socid = 0;
 
 $result = restrictedArea($user, 'produit|service', $fieldvalue, 'product&product', '', '', $fieldtype);
-
 
 /*
  * View
@@ -153,7 +155,7 @@ if ($id > 0 || !empty($ref)) {
         $sql .= ", " . MAIN_DB_PREFIX . "mrp_production as cd";
         $sql .= " WHERE c.rowid = cd.fk_mo";
         $sql .= " AND c.entity IN (" . getEntity('mo') . ")";
-        $sql .= " AND cd.fk_product = " . ((int) $product->id);
+        $sql .= " AND cd.fk_product = " . ((int)$product->id);
         if (!empty($search_month)) {
             $sql .= ' AND MONTH(c.date_valid) IN (' . $db->sanitize($search_month) . ')';
         }
@@ -161,7 +163,7 @@ if ($id > 0 || !empty($ref)) {
             $sql .= ' AND YEAR(c.date_valid) IN (' . $db->sanitize($search_year) . ')';
         }
         if ($socid) {
-            $sql .= " AND s.rowid = " . ((int) $socid);
+            $sql .= " AND s.rowid = " . ((int)$socid);
         }
         $sql .= " GROUP BY c.rowid, c.ref, c.date_valid, c.status";
         //$sql .= ", s.nom, s.rowid, s.code_client";
@@ -187,13 +189,13 @@ if ($id > 0 || !empty($ref)) {
             $option = '&id=' . $product->id;
 
             if ($limit > 0 && $limit != $conf->liste_limit) {
-                $option .= '&limit=' . ((int) $limit);
+                $option .= '&limit=' . ((int)$limit);
             }
             if (!empty($search_month)) {
-                $option .= '&search_month=' . urlencode((string) ($search_month));
+                $option .= '&search_month=' . urlencode((string)($search_month));
             }
             if (!empty($search_year)) {
-                $option .= '&search_year=' . urlencode((string) ($search_year));
+                $option .= '&search_year=' . urlencode((string)($search_year));
             }
 
             print '<form method="post" action="' . $_SERVER['PHP_SELF'] . '?id=' . $product->id . '" name="search_form">' . "\n";
@@ -209,14 +211,14 @@ if ($id > 0 || !empty($ref)) {
             print_barre_liste($langs->trans("MOs"), $page, $_SERVER["PHP_SELF"], $option, $sortfield, $sortorder, '', $num, $totalofrecords, '', 0, '', '', $limit, 0, 0, 1);
 
             if (!empty($page)) {
-                $option .= '&page=' . urlencode((string) ($page));
+                $option .= '&page=' . urlencode((string)($page));
             }
 
             print '<div class="liste_titre liste_titre_bydiv centpercent">';
             print '<div class="divsearchfield">';
             print $langs->trans('Period') . ' (' . $langs->trans("DateCreation") . ') - ';
             print $langs->trans('Month') . ':<input class="flat" type="text" size="4" name="search_month" value="' . ($search_month > 0 ? $search_month : '') . '"> ';
-            print $langs->trans('Year') . ':' . $formother->selectyear($search_year ? $search_year : - 1, 'search_year', 1, 20, 5);
+            print $langs->trans('Year') . ':' . $formother->selectyear($search_year ? $search_year : -1, 'search_year', 1, 20, 5);
             print '<div style="vertical-align: middle; display: inline-block">';
             print '<input type="image" class="liste_titre" name="button_search" src="' . img_picto($langs->trans("Search"), 'search.png', '', '', 1) . '" value="' . dol_escape_htmltag($langs->trans("Search")) . '" title="' . dol_escape_htmltag($langs->trans("Search")) . '">';
             print '<input type="image" class="liste_titre" name="button_removefilter" src="' . img_picto($langs->trans("Search"), 'searchclear.png', '', '', 1) . '" value="' . dol_escape_htmltag($langs->trans("RemoveFilter")) . '" title="' . dol_escape_htmltag($langs->trans("RemoveFilter")) . '">';

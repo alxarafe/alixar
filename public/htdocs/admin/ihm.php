@@ -30,14 +30,17 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormOther;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formother.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('admin', 'languages', 'other', 'companies', 'products', 'members', 'projects', 'hrm', 'agenda'));
@@ -339,9 +342,9 @@ llxHeader(
     0,
     0,
     array(
-    '/includes/ace/src/ace.js',
-    '/includes/ace/src/ext-statusbar.js',
-    '/includes/ace/src/ext-language_tools.js',
+        '/includes/ace/src/ace.js',
+        '/includes/ace/src/ext-statusbar.js',
+        '/includes/ace/src/ext-language_tools.js',
     ),
     array(),
     '',
@@ -358,7 +361,6 @@ print '<span class="opacitymedium">' . $langs->trans("DisplayDesc") . "</span><b
 print "<br>\n";
 
 //WYSIWYG Editor
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/doleditor.class.php';
 
 print '<form enctype="multipart/form-data" method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
 print '<input type="hidden" name="token" value="' . newToken() . '">';

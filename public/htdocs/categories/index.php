@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2005       Matthieu Valleton   <mv@seeschloss.org>
- * Copyright (C) 2005       Eric Seigne         <eric.seigne@ryxeo.com>
- * Copyright (C) 2006-2016  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2007       Patrick Raguin      <patrick.raguin@gmail.com>
- * Copyright (C) 2005-2012  Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2015       Raphaël Doursenaud  <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2021		Frédéric France		<frederic.france@netlogic.fr>
+/* Copyright (C) 2005       Matthieu Valleton           <mv@seeschloss.org>
+ * Copyright (C) 2005       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2006-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007       Patrick Raguin              <patrick.raguin@gmail.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2021		Frédéric France		        <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Form;
+
 /**
  *      \file       htdocs/categories/index.php
  *      \ingroup    category
@@ -31,7 +34,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/categories/class/categorie.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/treeview.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
@@ -54,7 +56,6 @@ $hookmanager->initHooks(array('categoryindex'));
 if (!$user->hasRight('categorie', 'lire')) {
     accessforbidden();
 }
-
 
 /*
  * View
@@ -112,7 +113,6 @@ if (empty($nosearch)) {
 
     print '</div><div class="fichehalfright">';
 
-
     /*
      * Categories found
      */
@@ -159,22 +159,6 @@ $cate_arbo = $categstatic->get_full_arbo($typetext);
 
 // Define fulltree array
 $fulltree = $cate_arbo;
-
-// Load possible missing includes
-if (getDolGlobalString('CATEGORY_SHOW_COUNTS')) {
-    if ($type == Categorie::TYPE_MEMBER) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/adherents/class/adherent.class.php';
-    }
-    if ($type == Categorie::TYPE_ACCOUNT) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/compta/bank/class/account.class.php';
-    }
-    if ($type == Categorie::TYPE_PROJECT) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/projet/class/project.class.php';
-    }
-    if ($type == Categorie::TYPE_USER) {
-        require_once constant('DOL_DOCUMENT_ROOT') . '/user/class/user.class.php';
-    }
-}
 
 // Define data (format for treeview)
 $data = array();
@@ -238,7 +222,6 @@ foreach ($data as $record) {
         $morethan1level = 1;
     }
 }
-
 
 print '<table class="liste nohover centpercent">';
 print '<tr class="liste_titre"><td>' . $langs->trans("Categories") . '</td><td></td><td class="right">';

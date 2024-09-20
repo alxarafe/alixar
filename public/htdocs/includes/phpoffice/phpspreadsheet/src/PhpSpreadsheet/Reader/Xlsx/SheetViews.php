@@ -37,7 +37,7 @@ class SheetViews extends BaseParserClass
     private function zoomScale()
     {
         if (isset($this->sheetViewXml['zoomScale'])) {
-            $zoomScale = (int) ($this->sheetViewXml['zoomScale']);
+            $zoomScale = (int)($this->sheetViewXml['zoomScale']);
             if ($zoomScale <= 0) {
                 // setZoomScale will throw an Exception if the scale is less than or equals 0
                 // that is OK when manually creating documents, but we should be able to read all documents
@@ -48,7 +48,7 @@ class SheetViews extends BaseParserClass
         }
 
         if (isset($this->sheetViewXml['zoomScaleNormal'])) {
-            $zoomScaleNormal = (int) ($this->sheetViewXml['zoomScaleNormal']);
+            $zoomScaleNormal = (int)($this->sheetViewXml['zoomScaleNormal']);
             if ($zoomScaleNormal <= 0) {
                 // setZoomScaleNormal will throw an Exception if the scale is less than or equals 0
                 // that is OK when manually creating documents, but we should be able to read all documents
@@ -62,7 +62,7 @@ class SheetViews extends BaseParserClass
     private function view()
     {
         if (isset($this->sheetViewXml['view'])) {
-            $this->worksheet->getSheetView()->setView((string) $this->sheetViewXml['view']);
+            $this->worksheet->getSheetView()->setView((string)$this->sheetViewXml['view']);
         }
     }
 
@@ -70,7 +70,7 @@ class SheetViews extends BaseParserClass
     {
         if (isset($this->sheetViewXml['showGridLines'])) {
             $this->worksheet->setShowGridLines(
-                self::boolean((string) $this->sheetViewXml['showGridLines'])
+                self::boolean((string)$this->sheetViewXml['showGridLines'])
             );
         }
     }
@@ -79,7 +79,7 @@ class SheetViews extends BaseParserClass
     {
         if (isset($this->sheetViewXml['showRowColHeaders'])) {
             $this->worksheet->setShowRowColHeaders(
-                self::boolean((string) $this->sheetViewXml['showRowColHeaders'])
+                self::boolean((string)$this->sheetViewXml['showRowColHeaders'])
             );
         }
     }
@@ -88,7 +88,7 @@ class SheetViews extends BaseParserClass
     {
         if (isset($this->sheetViewXml['rightToLeft'])) {
             $this->worksheet->setRightToLeft(
-                self::boolean((string) $this->sheetViewXml['rightToLeft'])
+                self::boolean((string)$this->sheetViewXml['rightToLeft'])
             );
         }
     }
@@ -97,7 +97,7 @@ class SheetViews extends BaseParserClass
     {
         if (isset($this->sheetViewXml['showZeros'])) {
             $this->worksheet->getSheetView()->setShowZeros(
-                self::boolean((string) $this->sheetViewXml['showZeros'])
+                self::boolean((string)$this->sheetViewXml['showZeros'])
             );
         }
     }
@@ -109,15 +109,15 @@ class SheetViews extends BaseParserClass
         $topLeftCell = null;
 
         if (isset($this->sheetViewXml->pane['xSplit'])) {
-            $xSplit = (int) ($this->sheetViewXml->pane['xSplit']);
+            $xSplit = (int)($this->sheetViewXml->pane['xSplit']);
         }
 
         if (isset($this->sheetViewXml->pane['ySplit'])) {
-            $ySplit = (int) ($this->sheetViewXml->pane['ySplit']);
+            $ySplit = (int)($this->sheetViewXml->pane['ySplit']);
         }
 
         if (isset($this->sheetViewXml->pane['topLeftCell'])) {
-            $topLeftCell = (string) $this->sheetViewXml->pane['topLeftCell'];
+            $topLeftCell = (string)$this->sheetViewXml->pane['topLeftCell'];
         }
 
         $this->worksheet->freezePane(
@@ -128,7 +128,7 @@ class SheetViews extends BaseParserClass
 
     private function selection()
     {
-        $sqref = (string) $this->sheetViewXml->selection['sqref'];
+        $sqref = (string)$this->sheetViewXml->selection['sqref'];
         $sqref = explode(' ', $sqref);
         $sqref = $sqref[0];
 
