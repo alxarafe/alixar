@@ -180,7 +180,6 @@ if (GETPOST("cache", 'alpha')) {
 
 // If we have a hash public (hashp), we guess the original_file.
 if (!empty($hashp)) {
-    include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
     $ecmfile = new EcmFiles($db);
     $result = $ecmfile->fetch(0, '', '', '', $hashp);
     if ($result > 0) {

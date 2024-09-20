@@ -26,7 +26,9 @@
  * \brief      This file is a library for Ticket module
  */
 
+use Dolibarr\Code\Core\Classes\CMailFile;
 use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Lib\Images;
 
 /**

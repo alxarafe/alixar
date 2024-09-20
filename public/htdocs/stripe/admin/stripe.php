@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2017       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2017		Olivier Geffroy			<jeff@jeffinfo.com>
- * Copyright (C) 2017		Saasprov				<saasprov@gmail.com>
- * Copyright (C) 2018-2022  Thibault FOUCART		<support@ptibogxiv.net>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2017       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2017		Olivier Geffroy			    <jeff@jeffinfo.com>
+ * Copyright (C) 2017		Saasprov				    <saasprov@gmail.com>
+ * Copyright (C) 2018-2022  Thibault FOUCART		    <support@ptibogxiv.net>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Stripe\Classes\Stripe;
 
 /**
  * \file       htdocs/stripe/admin/stripe.php
@@ -167,7 +172,6 @@ if ($action == "setlive") {
     }
 }
 //TODO: import script for stripe account saving in alone or connect mode for stripe.class.php
-
 
 /*
  *	View

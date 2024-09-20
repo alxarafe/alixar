@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018   Andreu Bisquerra    <jove@bisquerra.com>
+/* Copyright (C) 2018       Andreu Bisquerra            <jove@bisquerra.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
 
 /**
  *  \file       htdocs/takepos/floors.php
@@ -59,7 +61,6 @@ $mode = GETPOST('mode', 'alpha');
 if (!$user->hasRight('takepos', 'run')) {
     accessforbidden();
 }
-
 
 /*
  * Actions

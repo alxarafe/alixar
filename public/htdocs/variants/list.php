@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2016   Marcos García  <marcosgdf@gmail.com>
- * Copyright (C) 2022   Open-Dsi		<support@open-dsi.fr>
+/* Copyright (C) 2016       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2022       Open-Dsi		            <support@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024	Benjamin Falière	<benjamin.faliere@altairis.fr>
+ * Copyright (C) 2024	    Benjamin Falière	        <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Variants\Classes\ProductAttribute;
 
 /**
  *      \file       htdocs/variants/list.php
@@ -223,8 +228,6 @@ if (empty($reshook)) {
     include DOL_DOCUMENT_ROOT . '/core/actions_massactions.inc.php';
 }
 
-
-
 /*
  * View
  */
@@ -237,7 +240,6 @@ $help_url = '';
 $title = $langs->trans("ProductAttributes");
 $morejs = array();
 $morecss = array();
-
 
 // Build and execute select
 // --------------------------------------------------------------------

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) - 2013-2016 Jean-François FERRY    <hello@librethic.io>
+/* Copyright (C) 2013-2016  Jean-François FERRY         <hello@librethic.io>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,7 +17,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormTicket;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *      \file       htdocs/ticket/messaging.php
@@ -27,8 +32,6 @@ use Dolibarr\Code\Contact\Classes\Contact;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
 require_once DOL_DOCUMENT_ROOT . "/core/lib/company.lib.php";
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
@@ -136,7 +139,6 @@ if ($action == 'set_thirdparty' && $user->hasRight('ticket', 'write')) {
         exit();
     }
 }
-
 
 /*
  * View

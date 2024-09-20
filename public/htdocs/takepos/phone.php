@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2018   Andreu Bisquerra    <jove@bisquerra.com>
+/* Copyright (C) 2018       Andreu Bisquerra            <jove@bisquerra.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,8 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
-use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *  \file       htdocs/takepos/phone.php

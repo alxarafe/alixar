@@ -90,7 +90,6 @@ if (GETPOST('removAll', 'alpha')) {
         $listofmimes = explode(';', $_SESSION["listofmimes" . $keytoavoidconflict]);
     }
 
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
     $formmail = new FormMail($db);
     $formmail->trackid = $trackid;
 

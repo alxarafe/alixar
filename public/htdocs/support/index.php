@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2008-2015  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2008-2012	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2012		Juanjo Menent		<jmenent@2byte.es>
- * add german links 2020    Udo Tamm            <dev@dolibit.de>
+/* Copyright (C) 2008-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2008-2012	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2012		Juanjo Menent		        <jmenent@2byte.es>
+ * add german links 2020    Udo Tamm                    <dev@dolibit.de>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -41,7 +41,6 @@ if (!defined('DOL_URL_ROOT')) {
 }
 
 $langs->loadLangs(array("other", "help"));
-
 
 /*
  * View

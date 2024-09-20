@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
- * Copyright (C) 2011-2012 Philippe Grand	    <philippe.grand@atoo-net.com>
- * Copyright (C) 2020      Open-DSI	            <support@open-dsi.fr>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@capnetworks.com>
+ * Copyright (C) 2011-2012  Philippe Grand	            <philippe.grand@atoo-net.com>
+ * Copyright (C) 2020       Open-DSI	                <support@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+
+namespace Dolibarr\Code\TakePos\Classes;
+
+use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
 /**
  *  \file       htdocs/core/modules/takepos/modules_takepos.php

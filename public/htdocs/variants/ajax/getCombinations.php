@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2016   Marcos García  <marcosgdf@gmail.com>
- * Copyright (C) 2022   Open-Dsi		<support@open-dsi.fr>
+/* Copyright (C) 2016       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2022       Open-Dsi		            <support@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Variants\Classes\ProductCombination;
 
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1');

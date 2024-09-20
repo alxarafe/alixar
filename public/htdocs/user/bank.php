@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2002-2004  Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2003       Jean-Louis Bergamo   <jlb@j1b.org>
- * Copyright (C) 2004-2015  Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009  Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2013       Peter Fontaine       <contact@peterfontaine.fr>
- * Copyright (C) 2015-2016  Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2015       Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2021       Gauthier VERDOL      <gauthier.verdol@atm-consulting.fr>
+/* Copyright (C) 2002-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003       Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2004-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Peter Fontaine              <contact@peterfontaine.fr>
+ * Copyright (C) 2015-2016  Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2021       Gauthier VERDOL             <gauthier.verdol@atm-consulting.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -26,6 +26,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReportIk;
+use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Code\Salaries\Classes\PaymentSalary;
+use Dolibarr\Code\Salaries\Classes\Salary;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\User\Classes\UserBankAccount;
+
 /**
  *      \file       htdocs/user/bank.php
  *      \ingroup    HRM
@@ -38,12 +48,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-if (isModEnabled('holiday')) {
-}
-if (isModEnabled('expensereport')) {
-}
-if (isModEnabled('salaries')) {
-}
 
 // Load translation files required by page
 $langs->loadLangs(array('companies', 'commercial', 'banks', 'bills', 'trips', 'holiday', 'salaries'));
@@ -264,7 +268,6 @@ if (getDolGlobalString('MAIN_USE_EXPENSE_IK')) {
         }
     }
 }
-
 
 /*
  *	View

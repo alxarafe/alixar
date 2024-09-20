@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2022   Open-Dsi        <support@open-dsi.fr>
+/* Copyright (C) 2022       Open-Dsi                    <support@open-dsi.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *

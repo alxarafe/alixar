@@ -135,7 +135,6 @@ if ($action == 'presend') {
     print dol_get_fiche_head('', '', '', -1);
 
     // Create form for email
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
     $formmail = new FormMail($db);
 
     $formmail->param['langsmodels'] = (empty($newlang) ? $langs->defaultlang : $newlang);

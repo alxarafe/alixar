@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2006-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2006-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -18,7 +18,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 
 /**
  *       \file       htdocs/webservices/server_supplier_invoice.php

@@ -95,7 +95,6 @@ $type = '';
 
 
 if (empty($pageid)) {
-    require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/websitepage.class.php';
 
     $object = new Website($db);
     $object->fetch(0, $websitekey);

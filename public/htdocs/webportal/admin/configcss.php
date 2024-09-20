@@ -1,8 +1,9 @@
 <?php
 
-/* Copyright (C) 2023-2024  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2023-2024	Lionel Vessiller		<lvessiller@easya.solutions>
- * Copyright (C) 2023-2024	Patrice Andreani		<pandreani@easya.solutions>
+/* Copyright (C) 2023-2024  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023-2024	Lionel Vessiller		    <lvessiller@easya.solutions>
+ * Copyright (C) 2023-2024	Patrice Andreani		    <pandreani@easya.solutions>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\DolEditor;
 
 /**
  * \file    htdocs/webportal/admin/configcss.php

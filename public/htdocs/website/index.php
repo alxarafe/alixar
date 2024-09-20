@@ -21,6 +21,12 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormWebsite;
+use Dolibarr\Code\Website\Classes\Website;
+use Dolibarr\Code\Website\Classes\WebsitePage;
 
 /**
  *      \file       htdocs/website/index.php
@@ -48,9 +54,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/website.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/website2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formwebsite.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/website/class/websitepage.class.php';
-
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "other", "website", "errors"));
@@ -2829,7 +2832,6 @@ if ($action == 'generatesitemaps' && $usercanedit) {
     }
     $action = 'preview';
 }
-
 
 /*
  * View

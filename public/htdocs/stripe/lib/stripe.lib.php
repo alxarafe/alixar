@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2017      Alexandre Spangaro   <aspangaro@open-dsi.fr>
+/* Copyright (C) 2017       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file           htdocs/stripe/lib/stripe.lib.php
@@ -54,7 +57,6 @@ function stripeadmin_prepare_head()
 
     return $head;
 }
-
 
 /**
  * Show footer of company in HTML pages

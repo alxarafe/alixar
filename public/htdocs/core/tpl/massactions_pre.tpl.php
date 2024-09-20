@@ -214,7 +214,6 @@ if ($massaction == 'presend') {
     print dol_get_fiche_head(null, '', '');
 
     // Create mail form
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
     $formmail = new FormMail($db);
     $formmail->withform = -1;
     $formmail->fromtype = (GETPOST('fromtype') ? GETPOST('fromtype') : (getDolGlobalString('MAIN_MAIL_DEFAULT_FROMTYPE') ? $conf->global->MAIN_MAIL_DEFAULT_FROMTYPE : 'user'));

@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2011-2016 Jean-François Ferry    <hello@librethic.io>
- * Copyright (C) 2011      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2016      Christophe Battarel <christophe@altairis.fr>
+/* Copyright (C) 2011-2016  Jean-François Ferry         <hello@librethic.io>
+ * Copyright (C) 2011       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2016       Christophe Battarel         <christophe@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,14 +20,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *       \file       htdocs/ticket/contact.php
  *       \ingroup    ticket
  *       \brief      Contacts of tickets
  */
-
-use Dolibarr\Code\Contact\Classes\Contact;
-use Dolibarr\Code\Societe\Classes\Societe;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -179,7 +183,6 @@ if ($action == 'set_thirdparty' && $user->hasRight('ticket', 'write')) {
         exit();
     }
 }
-
 
 /*
  * View

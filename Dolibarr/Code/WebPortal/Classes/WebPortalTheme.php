@@ -21,7 +21,7 @@
 
 namespace Dolibarr\Code\WebPortal\Classes;
 
-use DoliDB;
+use Dolibarr\Lib\Images;
 
 /**
  * \file       htdocs/webportal/class/webPortalTheme.class.php
@@ -44,7 +44,6 @@ class WebPortalTheme
         'a' =>  1   // Alfa
     );
 
-
     public $loginLogoUrl;
     public $menuLogoUrl;
     public $loginBackground;
@@ -58,7 +57,6 @@ class WebPortalTheme
      * @var int Use dark theme on banner
      */
     public $bannerUseDarkTheme;
-
 
     /**
      * Constructor

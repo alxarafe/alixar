@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2002-2005  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2021	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2024	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2015		Alexandre Spangaro		<aspangaro@open-dsi.fr>
- * Copyright (C) 2016		Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2024		MDW						<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Benjamin Falière		<benjamin.faliere@altairis.fr>
+/* Copyright (C) 2002-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2021	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2024	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2015		Alexandre Spangaro		    <aspangaro@open-dsi.fr>
+ * Copyright (C) 2016		Marcos García			    <marcosgdf@gmail.com>
+ * Copyright (C) 2024		MDW						    <mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024		Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,12 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *      \file       htdocs/user/list.php
@@ -345,7 +351,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View

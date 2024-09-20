@@ -105,7 +105,6 @@ $term = empty($_SESSION['takeposterminal']) ? 1 : $_SESSION['takeposterminal'];
 // Security check
 $result = restrictedArea($user, 'takepos', 0, '');
 
-
 /*
  * View
  */
@@ -121,7 +120,6 @@ if (getDolGlobalInt('TAKEPOS_COLOR_THEME') == 1) {
     $arrayofcss[] = '/takepos/css/colorful.css';
 }
 
-
 // Title
 $title = 'TakePOS - Dolibarr ' . DOL_VERSION;
 if (getDolGlobalString('MAIN_APPLICATION_TITLE')) {
@@ -133,9 +131,7 @@ $head = '<meta name="apple-mobile-web-app-title" content="TakePOS"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>';
 top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss);
 
-
 $categories = $categorie->get_full_arbo('product', ((getDolGlobalInt('TAKEPOS_ROOT_CATEGORY_ID') > 0) ? getDolGlobalInt('TAKEPOS_ROOT_CATEGORY_ID') : 0), 1);
-
 
 // Search root category to know its level
 //$conf->global->TAKEPOS_ROOT_CATEGORY_ID=0;

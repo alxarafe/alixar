@@ -22,11 +22,8 @@
 namespace Dolibarr\Code\Stripe\Classes;
 
 use Dolibarr\Code\Societe\Classes\SocieteAccount;
-use Dolibarr\Core\Base\CommonObject;
-
-// Put here all includes required by your class file
 use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 use Exception;
 

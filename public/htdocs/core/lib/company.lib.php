@@ -36,6 +36,7 @@
  *  \ingroup    societe
  */
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Comm\Classes\ActionComm;
 use Dolibarr\Code\Comm\Classes\CActionComm;
 use Dolibarr\Code\Contact\Classes\Contact;

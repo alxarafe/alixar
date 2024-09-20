@@ -1,8 +1,9 @@
 <?php
 
-/* Copyright (C) 2023-2024  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2023-2024	Lionel Vessiller		<lvessiller@easya.solutions>
+/* Copyright (C) 2023-2024  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023-2024	Lionel Vessiller		    <lvessiller@easya.solutions>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormSetup;
+use Dolibarr\Code\WebPortal\Classes\WebPortalTheme;
 
 /**
  * \file    htdocs/webportal/admin/setup.php
@@ -55,12 +60,7 @@ $setupnotempty = 0;
 // Set this to 1 to use the factory to manage constants. Warning, the generated module will be compatible with version v15+ only
 $useFormSetup = 1;
 
-if (!class_exists('FormSetup')) {
-}
-
 $formSetup = new FormSetup($db);
-
-require_once __DIR__ . '/../class/webPortalTheme.class.php';
 $webPortalTheme = new WebPortalTheme();
 
 // Setup conf for secondary color
@@ -68,15 +68,12 @@ $item = $formSetup->newItem('WEBPORTAL_PRIMARY_COLOR');
 $item->setAsColor();
 $item->defaultFieldValue = $webPortalTheme->primaryColorHex;
 
-
 // Logo URL
 $item = $formSetup->newItem('WEBPORTAL_LOGIN_LOGO_URL');
 $item->fieldAttr = array('type' => 'url', 'size' => 50, 'placeholder' => 'https://');
 
 $item = $formSetup->newItem('WEBPORTAL_MENU_LOGO_URL');
 $item->fieldAttr = array('type' => 'url', 'size' => 50, 'placeholder' => 'https://');
-
-
 
 // Background URL
 $item = $formSetup->newItem('WEBPORTAL_LOGIN_BACKGROUND');
@@ -90,8 +87,6 @@ $item = $formSetup->newItem('WEBPORTAL_BANNER_BACKGROUND_IS_DARK')->setAsYesNo()
 
 $setupnotempty += count($formSetup->items);
 
-
-
 /*
  * Actions
  */
@@ -102,7 +97,6 @@ include DOL_DOCUMENT_ROOT . '/core/actions_setmoduleoptions.inc.php';
 if (empty($action) || $action == 'update') {
     $action = 'edit';
 }
-
 
 /*
  * View

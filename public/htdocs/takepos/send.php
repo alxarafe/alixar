@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2019   Thibault FOUCART      <support@ptibogxiv.net>
- * Copyright (C) 2020	Andreu Bisquerra Gaya <jove@bisquerra.com>
+/* Copyright (C) 2019       Thibault FOUCART            <support@ptibogxiv.net>
+ * Copyright (C) 2020	    Andreu Bisquerra Gaya       <jove@bisquerra.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/takepos/send.php
@@ -60,14 +66,11 @@ $invoice->fetch($facid);
 $customer = new Societe($db);
 $customer->fetch($invoice->socid);
 
-
 /*
  * Actions
  */
 
 if ($action == "send") {
-    include_once DOL_DOCUMENT_ROOT . '/core/class/CMailFile.class.php';
-    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formmail.class.php';
     $formmail = new FormMail($db);
     $outputlangs = new Translate('', $conf);
     $model_id = getDolGlobalString('TAKEPOS_EMAIL_TEMPLATE_INVOICE');

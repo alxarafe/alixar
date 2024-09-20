@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2006-2012  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2006-2017  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2006-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006-2017  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Ldap;
+use Dolibarr\Code\User\Classes\UserGroup;
 
 /**
  *       \file       htdocs/user/group/ldap.php
@@ -55,7 +59,6 @@ if (getDolGlobalString('MAIN_USE_ADVANCED_PERMS')) {
     $canreadperms = (!empty($user->admin) || $user->hasRight('user', 'group_advance', 'read'));
 }
 
-
 /*
  * Actions
  */
@@ -84,7 +87,6 @@ if ($action == 'dolibarr2ldap') {
         setEventMessages($ldap->error, $ldap->errors, 'errors');
     }
 }
-
 
 /*
  *	View

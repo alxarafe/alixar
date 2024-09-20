@@ -21,6 +21,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *       \file       htdocs/user/param_ihm.php
  *       \brief      Page to show user setup for display
@@ -83,7 +87,6 @@ $formadmin = new FormAdmin($db);
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $hookmanager->initHooks(array('usercard', 'userihm', 'globalcard'));
-
 
 /*
  * Actions

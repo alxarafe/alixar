@@ -32,19 +32,20 @@
 
 namespace Dolibarr\Code\Contact\Classes;
 
-/**
- *  \file       htdocs/contact/class/contact.class.php
- *  \ingroup    societe
- *  \brief      File of contacts class
- */
-
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Traits\CommonPeople;
 use Dolibarr\Code\Core\Traits\CommonSocialNetworks;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
+use Exception;
 
+/**
+ *  \file       htdocs/contact/class/contact.class.php
+ *  \ingroup    societe
+ *  \brief      File of contacts class
+ */
 
 /**
  *  Class to manage contact/addresses

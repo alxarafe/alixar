@@ -60,13 +60,11 @@ if (empty($user->admin)) {
     accessforbidden();
 }
 
-
 /*
  * Actions
  */
 
 // None
-
 
 /*
  * View

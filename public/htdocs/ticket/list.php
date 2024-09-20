@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2013-2018  Jean-François FERRY    <hello@librethic.io>
- * Copyright (C) 2016		Christophe Battarel	<christophe@altairis.fr>
- * Copyright (C) 2018		Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2019-2021	Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2019-2020  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2023		Charlene Benke		<charlene@patas-monkey.com>
+/* Copyright (C) 2013-2018  Jean-François FERRY         <hello@librethic.io>
+ * Copyright (C) 2016		Christophe Battarel	        <christophe@altairis.fr>
+ * Copyright (C) 2018		Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2019-2021	Juanjo Menent		        <jmenent@2byte.es>
+ * Copyright (C) 2019-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023		Charlene Benke		        <charlene@patas-monkey.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Benjamin Falière	<benjamin.faliere@altairis.fr>
+ * Copyright (C) 2024		Benjamin Falière	        <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormTicket;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *    \file     htdocs/ticket/list.php
  *    \ingroup  ticket
@@ -32,13 +40,8 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-
-use Dolibarr\Code\User\Classes\User;
-
 include_once DOL_DOCUMENT_ROOT . '/core/class/html.formprojet.class.php';
 include_once DOL_DOCUMENT_ROOT . '/core/lib/project.lib.php';
 
@@ -325,7 +328,6 @@ if (empty($reshook)) {
         }
     }
 }
-
 
 /*
  * View

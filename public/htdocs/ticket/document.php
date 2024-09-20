@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2002-2007      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010      Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012      Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2010           Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2013-2016      Jean-François Ferry  <hello@librethic.io>
+/* Copyright (C) 2002-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2010       Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2013-2016  Jean-François Ferry         <hello@librethic.io>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/ticket/document.php
@@ -115,7 +120,6 @@ if ($action == 'set_thirdparty' && $user->hasRight('ticket', 'write')) {
         exit();
     }
 }
-
 
 /*
  * View

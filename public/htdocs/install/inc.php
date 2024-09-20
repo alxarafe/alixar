@@ -38,7 +38,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/filefunc.inc.php';
 
 use Dolibarr\Code\Core\Classes\Conf;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/translate.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';

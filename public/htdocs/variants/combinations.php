@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2016       Marcos García       <marcosgdf@gmail.com>
- * Copyright (C) 2017      	Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2024  Frédéric France     <frederic.france@free.fr>
- * Copyright (C) 2022   	Open-Dsi			<support@open-dsi.fr>
+/* Copyright (C) 2016       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2017      	Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2022   	Open-Dsi			        <support@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Variants\Classes\ProductAttribute;
+use Dolibarr\Code\Variants\Classes\ProductAttributeValue;
+use Dolibarr\Code\Variants\Classes\ProductCombination;
+use Dolibarr\Code\Variants\Classes\ProductCombination2ValuePair;
+use Dolibarr\Code\Variants\Classes\ProductCombinationLevel;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
@@ -34,7 +42,7 @@ $combination_id = GETPOSTINT('combination_id');     // ID of the combination
 $reference = GETPOST('reference', 'alpha');         // Reference of the variant Product
 
 $weight_impact = GETPOSTFLOAT('weight_impact', 2);
-$price_impact_percent = (bool) GETPOST('price_impact_percent');
+$price_impact_percent = (bool)GETPOST('price_impact_percent');
 $price_impact = $price_impact_percent ? GETPOSTFLOAT('price_impact', 2) : GETPOSTFLOAT('price_impact', 'MU');
 
 // for PRODUIT_MULTIPRICES
@@ -133,7 +141,6 @@ if ($action == 'create' && $subaction == 'delete') {    // We click on select co
     }
 }
 
-
 $prodcomb = new ProductCombination($db);
 $prodcomb2val = new ProductCombination2ValuePair($db);
 
@@ -170,11 +177,11 @@ if (($action == 'add' || $action == 'create') && empty($massaction) && !GETPOST(
             }
 
             // Valuepair
-            $sanit_features[(int) $explode[0]] = (int) $explode[1];
+            $sanit_features[(int)$explode[0]] = (int)$explode[1];
 
             $tmp = new ProductCombination2ValuePair($db);
-            $tmp->fk_prod_attr = (int) $explode[0];
-            $tmp->fk_prod_attr_val = (int) $explode[1];
+            $tmp->fk_prod_attr = (int)$explode[0];
+            $tmp->fk_prod_attr_val = (int)$explode[1];
 
             $productCombination2ValuePairs1[] = $tmp;
         }
@@ -274,7 +281,7 @@ if (($action == 'add' || $action == 'create') && empty($massaction) && !GETPOST(
         exit();
     }
 
-    $prodcomb->variation_weight = (float) price2num($weight_impact);
+    $prodcomb->variation_weight = (float)price2num($weight_impact);
 
     // for conf PRODUIT_MULTIPRICES
     if (getDolGlobalString('PRODUIT_MULTIPRICES')) {
@@ -294,8 +301,8 @@ if (($action == 'add' || $action == 'create') && empty($massaction) && !GETPOST(
             $productCombinationLevel = new ProductCombinationLevel($db);
             $productCombinationLevel->fk_product_attribute_combination = $prodcomb->id;
             $productCombinationLevel->fk_price_level = $i;
-            $productCombinationLevel->variation_price = (float) $level_price_impact[$i];
-            $productCombinationLevel->variation_price_percentage = (bool) $level_price_impact_percent[$i];
+            $productCombinationLevel->variation_price = (float)$level_price_impact[$i];
+            $productCombinationLevel->variation_price_percentage = (bool)$level_price_impact_percent[$i];
             $prodcomb->combination_price_levels[$i] = $productCombinationLevel;
         }
     }
@@ -387,7 +394,6 @@ if ($action === 'confirm_deletecombination') {
 }
 
 
-
 /*
  *	View
  */
@@ -411,8 +417,8 @@ if (!empty($id) || !empty($ref)) {
 
     print dol_get_fiche_head($head, 'combinations', $titre, -1, $picto);
 
-    $linkback = '<a href="' . constant('BASE_URL') . '/product/list.php?type=' . ((int) $object->type) . '">' . $langs->trans("BackToList") . '</a>';
-    $object->next_prev_filter = "fk_product_type = " . ((int) $object->type);
+    $linkback = '<a href="' . constant('BASE_URL') . '/product/list.php?type=' . ((int)$object->type) . '">' . $langs->trans("BackToList") . '</a>';
+    $object->next_prev_filter = "fk_product_type = " . ((int)$object->type);
 
     dol_banner_tab($object, 'ref', $linkback, ($user->socid ? 0 : 1), 'ref', '', '', '', 0, '', '');
 
@@ -531,16 +537,16 @@ if (!empty($id) || !empty($ref)) {
                 $prodattr_alljson[$each->id] = $each;
             } ?>
 
-        <script type="text/javascript">
+            <script type="text/javascript">
 
-            variants_available = <?php echo json_encode($prodattr_alljson, JSON_PARTIAL_OUTPUT_ON_ERROR); ?>;
-            variants_selected = {
-                index: [],
-                info: []
-            };
+                variants_available = <?php echo json_encode($prodattr_alljson, JSON_PARTIAL_OUTPUT_ON_ERROR); ?>;
+                variants_selected = {
+                    index: [],
+                    info: []
+                };
 
-            <?php
-            foreach ($productCombination2ValuePairs1 as $pc2v) {
+                <?php
+                foreach ($productCombination2ValuePairs1 as $pc2v) {
                 $prodattr_val->fetch($pc2v->fk_prod_attr_val); ?>
                 variants_selected.index.push(<?php echo $pc2v->fk_prod_attr ?>);
                 variants_selected.info[<?php echo $pc2v->fk_prod_attr ?>] = {
@@ -551,53 +557,53 @@ if (!empty($id) || !empty($ref)) {
                     }
                 };
                 <?php
-            } ?>
+                } ?>
 
-            restoreAttributes = function() {
-                jQuery("select[name=attribute]").empty().append('<option value="-1">&nbsp;</option>');
+                restoreAttributes = function () {
+                    jQuery("select[name=attribute]").empty().append('<option value="-1">&nbsp;</option>');
 
-                jQuery.each(variants_available, function (key, val) {
-                    if (jQuery.inArray(val.id, variants_selected.index) == -1) {
-                        jQuery("select[name=attribute]").append('<option value="' + val.id + '">' + val.label + '</option>');
-                    }
-                });
-            };
+                    jQuery.each(variants_available, function (key, val) {
+                        if (jQuery.inArray(val.id, variants_selected.index) == -1) {
+                            jQuery("select[name=attribute]").append('<option value="' + val.id + '">' + val.label + '</option>');
+                        }
+                    });
+                };
 
 
-            jQuery(document).ready(function() {
-                jQuery("select#attribute").change(function () {
-                    console.log("Change of field variant attribute");
-                    var select = jQuery("select#value");
+                jQuery(document).ready(function () {
+                    jQuery("select#attribute").change(function () {
+                        console.log("Change of field variant attribute");
+                        var select = jQuery("select#value");
 
-                    if (!jQuery(this).val().length || jQuery(this).val() == '-1') {
-                        select.empty();
-                        select.append('<option value="-1">&nbsp;</option>');
-                        return;
-                    }
-
-                    select.empty().append('<option value="">Loading...</option>');
-
-                    jQuery.getJSON("ajax/get_attribute_values.php", {
-                        id: jQuery(this).val()
-                    }, function(data) {
-                        if (data.error) {
+                        if (!jQuery(this).val().length || jQuery(this).val() == '-1') {
                             select.empty();
                             select.append('<option value="-1">&nbsp;</option>');
-                            return alert(data.error);
+                            return;
                         }
 
-                        select.empty();
-                        select.append('<option value="-1">&nbsp;</option>');
+                        select.empty().append('<option value="">Loading...</option>');
 
-                        jQuery(data).each(function (key, val) {
-                            keyforoption = val.id
-                            valforoption = val.value
-                            select.append('<option value="' + keyforoption + '">' + valforoption + '</option>');
+                        jQuery.getJSON("ajax/get_attribute_values.php", {
+                            id: jQuery(this).val()
+                        }, function (data) {
+                            if (data.error) {
+                                select.empty();
+                                select.append('<option value="-1">&nbsp;</option>');
+                                return alert(data.error);
+                            }
+
+                            select.empty();
+                            select.append('<option value="-1">&nbsp;</option>');
+
+                            jQuery(data).each(function (key, val) {
+                                keyforoption = val.id
+                                valforoption = val.value
+                                select.append('<option value="' + keyforoption + '">' + valforoption + '</option>');
+                            });
                         });
                     });
                 });
-            });
-        </script>
+            </script>
 
             <?php
         }
@@ -658,8 +664,10 @@ if (!empty($id) || !empty($ref)) {
                 </td>
             </tr>
             <tr>
-                <td></td><td>
-                    <input type="submit" class="button" name="selectvariant" id="selectvariant" value="<?php echo dol_escape_htmltag($langs->trans("SelectCombination")); ?>">
+                <td></td>
+                <td>
+                    <input type="submit" class="button" name="selectvariant" id="selectvariant"
+                           value="<?php echo dol_escape_htmltag($langs->trans("SelectCombination")); ?>">
                 </td>
             </tr>
             <?php
@@ -679,18 +687,19 @@ if (!empty($id) || !empty($ref)) {
             if (is_array($productCombination2ValuePairs1) && count($productCombination2ValuePairs1)) {
                 ?>
                 <tr>
-                    <td class="titlefieldcreate tdtop"><label for="features"><?php echo $langs->trans('Attributes') ?></label></td>
+                    <td class="titlefieldcreate tdtop"><label
+                                for="features"><?php echo $langs->trans('Attributes') ?></label></td>
                     <td class="tdtop">
                         <div class="inline-block valignmiddle quatrevingtpercent">
-                    <?php
-                    foreach ($productCombination2ValuePairs1 as $pc2v) {
-                        $result1 = $prodattr->fetch($pc2v->fk_prod_attr);
-                        $result2 = $prodattr_val->fetch($pc2v->fk_prod_attr_val);
-                        if ($result1 > 0 && $result2 > 0) {
-                            print $prodattr->label . ' : ' . $prodattr_val->value . '<br>';
-                            // TODO Add delete link
-                        }
-                    } ?>
+                            <?php
+                            foreach ($productCombination2ValuePairs1 as $pc2v) {
+                                $result1 = $prodattr->fetch($pc2v->fk_prod_attr);
+                                $result2 = $prodattr_val->fetch($pc2v->fk_prod_attr_val);
+                                if ($result1 > 0 && $result2 > 0) {
+                                    print $prodattr->label . ' : ' . $prodattr_val->value . '<br>';
+                                    // TODO Add delete link
+                                }
+                            } ?>
                         </div>
                         <!-- <div class="inline-block valignmiddle">
                         <a href="#" class="inline-block valignmiddle button" id="delfeature"><?php echo img_edit_remove() ?></a>
@@ -708,12 +717,15 @@ if (!empty($id) || !empty($ref)) {
             <?php
             if (!getDolGlobalString('PRODUIT_MULTIPRICES')) {
                 ?>
-            <tr>
-                <td><label for="price_impact"><?php echo $langs->trans('PriceImpact') ?></label></td>
-                <td><input type="text" id="price_impact" name="price_impact" value="<?php echo price($price_impact) ?>">
-                <input type="checkbox" id="price_impact_percent" name="price_impact_percent" <?php echo $price_impact_percent ? ' checked' : '' ?>> <label for="price_impact_percent"><?php echo $langs->trans('PercentageVariation') ?></label>
-                </td>
-            </tr>
+                <tr>
+                    <td><label for="price_impact"><?php echo $langs->trans('PriceImpact') ?></label></td>
+                    <td><input type="text" id="price_impact" name="price_impact"
+                               value="<?php echo price($price_impact) ?>">
+                        <input type="checkbox" id="price_impact_percent"
+                               name="price_impact_percent" <?php echo $price_impact_percent ? ' checked' : '' ?>> <label
+                                for="price_impact_percent"><?php echo $langs->trans('PercentageVariation') ?></label>
+                    </td>
+                </tr>
                 <?php
             } else {
                 $prodcomb->fetchCombinationPriceLevels();
@@ -748,18 +760,18 @@ if (!empty($id) || !empty($ref)) {
         if (getDolGlobalString('PRODUIT_MULTIPRICES')) {
             ?>
             <script>
-                $(document).ready(function() {
+                $(document).ready(function () {
                     // Apply level 1 impact to all prices impact levels
-                    $('body').on('click', '#apply-price-impact-to-all-level', function(e) {
+                    $('body').on('click', '#apply-price-impact-to-all-level', function (e) {
                         e.preventDefault();
-                        let priceImpact = $( "#level_price_impact_1" ).val();
-                        let priceImpactPrecent = $( "#level_price_impact_percent_1" ).prop("checked");
+                        let priceImpact = $("#level_price_impact_1").val();
+                        let priceImpactPrecent = $("#level_price_impact_percent_1").prop("checked");
 
                         var multipricelimit = <?php print intval($conf->global->PRODUIT_MULTIPRICES_LIMIT); ?>
 
                         for (let i = 2; i <= multipricelimit; i++) {
-                            $( "#level_price_impact_" + i ).val(priceImpact);
-                            $( "#level_price_impact_percent_" + i  ).prop("checked", priceImpactPrecent);
+                            $("#level_price_impact_" + i).val(priceImpact);
+                            $("#level_price_impact_percent_" + i).prop("checked", priceImpactPrecent);
                         }
                     });
                 });
@@ -770,11 +782,13 @@ if (!empty($id) || !empty($ref)) {
         print dol_get_fiche_end(); ?>
 
         <div style="text-align: center">
-        <input type="submit" name="create" <?php if (!is_array($productCombination2ValuePairs1)) {
-            print ' disabled="disabled"';
-                                           } ?> value="<?php echo $action == 'add' ? $langs->trans('Create') : $langs->trans("Save") ?>" class="button button-save">
-        &nbsp;
-        <input type="submit" name="cancel" value="<?php echo $langs->trans("Cancel"); ?>" class="button button-cancel">
+            <input type="submit" name="create" <?php if (!is_array($productCombination2ValuePairs1)) {
+                print ' disabled="disabled"';
+            } ?> value="<?php echo $action == 'add' ? $langs->trans('Create') : $langs->trans("Save") ?>"
+                   class="button button-save">
+            &nbsp;
+            <input type="submit" name="cancel" value="<?php echo $langs->trans("Cancel"); ?>"
+                   class="button button-cancel">
         </div>
 
         <?php
@@ -786,7 +800,7 @@ if (!empty($id) || !empty($ref)) {
                 $prodstatic->fetch($prodcomb->fk_product_child);
 
                 print $form->formconfirm(
-                    "combinations.php?id=" . urlencode((string) ($id)) . "&combination_id=" . urlencode((string) ($combination_id)),
+                    "combinations.php?id=" . urlencode((string)($id)) . "&combination_id=" . urlencode((string)($combination_id)),
                     $langs->trans('Delete'),
                     $langs->trans('ProductCombinationDeleteDialog', $prodstatic->ref),
                     "confirm_deletecombination",
@@ -805,9 +819,9 @@ if (!empty($id) || !empty($ref)) {
             ?>
 
             <script type="text/javascript">
-                jQuery(document).ready(function() {
+                jQuery(document).ready(function () {
 
-                    jQuery('input[name="select_all"]').click(function() {
+                    jQuery('input[name="select_all"]').click(function () {
 
                         if (jQuery(this).prop('checked')) {
                             var checked = true;
@@ -818,7 +832,7 @@ if (!empty($id) || !empty($ref)) {
                         jQuery('table.liste input[type="checkbox"]').prop('checked', checked);
                     });
 
-                    jQuery('input[name^="select["]').click(function() {
+                    jQuery('input[name^="select["]').click(function () {
                         jQuery('input[name="select_all"]').prop('checked', false);
                     });
 
@@ -842,7 +856,6 @@ if (!empty($id) || !empty($ref)) {
         print '	</div>';
 
         print '</div>';
-
 
 
         $arrayofselected = is_array($toselect) ? $toselect : array();

@@ -246,7 +246,6 @@ if ($action == 'confirm_delete' && $user->hasRight('adherent', 'configurer')) {
     }
 }
 
-
 /*
  * View
  */

@@ -18,6 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\WebPortal\Classes\Context;
+use Dolibarr\Code\WebPortal\Classes\Controller;
+
  /**
  * \file        htdocs/webportal/controllers/login.controller.class.php
  * \ingroup     webportal

@@ -22,7 +22,9 @@
 
 namespace Dolibarr\Code\Ticket\Classes;
 
+use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\CommonHookActions;
+use DoliDB;
 
 /**
  *    \file       ticket/class/actions_ticket.class.php
@@ -32,12 +34,7 @@ use Dolibarr\Code\Core\Classes\CommonHookActions;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
-use Dolibarr\Code\Contact\Classes\Contact;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/commonhookactions.class.php';
-
 // TODO Only the last method emailElementlist is a hook method. Other must be moved into standard ticket.class.php
-
 
 /**
  *  Class Actions of the module ticket

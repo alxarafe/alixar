@@ -26,7 +26,9 @@
 namespace Dolibarr\Code\Website\Classes;
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file    htdocs/website/class/websitepage.class.php

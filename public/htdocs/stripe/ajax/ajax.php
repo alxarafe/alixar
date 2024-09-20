@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2021       Thibault FOUCART    <support@ptibogxiv.net>
+/* Copyright (C) 2021       Thibault FOUCART            <support@ptibogxiv.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Stripe\Classes\Stripe;
 
 /**
  *  \file       htdocs/stripe/ajax/ajax.php
@@ -61,7 +64,6 @@ $usestripeterminals = getDolGlobalString('STRIPE_LOCATION');
 if (!$usestripeterminals) {
     accessforbidden('Feature to use Stripe terminals not enabled');
 }
-
 
 /*
  * View

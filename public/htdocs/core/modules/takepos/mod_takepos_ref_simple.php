@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2005-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@capnetworks.com>
- * Copyright (C) 2013	   Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2020      Open-DSI	            <support@open-dsi.fr>
+/* Copyright (C) 2005-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@capnetworks.com>
+ * Copyright (C) 2013	    Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2020       Open-DSI	                <support@open-dsi.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -23,13 +23,15 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\TakePos\Classes\ModeleNumRefTakepos;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  *  \file       htdocs/core/modules/takepos/mod_takepos_ref_simple.php
  *  \ingroup    takepos
  *  \brief      File with Simple ref numbering module for takepos
  */
-
-dol_include_once('/core/modules/takepos/modules_takepos.php');
 
 /**
  *  Class to manage ref numbering of takepos cards with rule Simple.

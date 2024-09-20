@@ -1,7 +1,8 @@
 <?php
 
-/* Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2019 Frédéric FRANCE <frederic.france@free.fr>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2019       Frédéric FRANCE             <frederic.france@free.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  *
  * LICENSE =================================================================
@@ -21,6 +22,9 @@
  *
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Modules\Zapier;
+
 /**
  *    \file       htdocs/zapier/admin/about.php
  *    \ingroup    zapier
@@ -28,8 +32,6 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Modules\modZapier;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Libraries
@@ -84,8 +86,7 @@ print load_fiche_titre($langs->trans($page_name), $linkback, 'object_zapier');
 $head = zapierAdminPrepareHead();
 print dol_get_fiche_head($head, 'about', '', 0, 'zapier');
 
-dol_include_once('/core/modules/modZapier.class.php');
-$tmpmodule = new modZapier($db);
+$tmpmodule = new Zapier($db);
 print $tmpmodule->getDescLong();
 
 // Page end

@@ -30,7 +30,9 @@
 // if (! defined('NOREQUIRESOC'))       define('NOREQUIRESOC', '1');
 // if (! defined('NOREQUIRETRAN'))      define('NOREQUIRETRAN', '1');
 
+use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Stripe\Classes\Stripe;
 
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1');
@@ -44,7 +46,6 @@ if (!defined('NOREQUIREHTML')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
-
 
 // Load translation files required by the page
 $langs->loadLangs(array("main", "bills", "cashdesk", "banks"));

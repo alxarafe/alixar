@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2001-2004  Andreu Bisquerra    <jove@bisquerra.com>
- * Copyright (C) 2020		Thibault FOUCART	<support@ptibogxiv.net>
+/* Copyright (C) 2001-2004  Andreu Bisquerra            <jove@bisquerra.com>
+ * Copyright (C) 2020		Thibault FOUCART	        <support@ptibogxiv.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -45,6 +45,9 @@ if (!defined('NOBROWSERNOTIF')) {
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\dolReceiptPrinter;
+use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
 
 $category = GETPOST('category', 'alphanohtml'); // Can be id of category or 'supplements'

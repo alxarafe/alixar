@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2013-2016  Jean-François FERRY     <hello@librethic.io>
- * Copyright (C) 2019       Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2021-2024	Frédéric France			<frederic.france@netlogic.fr>
- * Copyright (C) 2024		MDW						<mdeweerd@users.noreply.github.com>
+/* Copyright (C) 2013-2016  Jean-François FERRY         <hello@librethic.io>
+ * Copyright (C) 2019       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2021-2024	Frédéric France			    <frederic.france@netlogic.fr>
+ * Copyright (C) 2024		MDW						    <mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\Ticket\Classes\TicketStats;
+
 /**
  *    \file       htdocs/ticket/index.php
  *    \ingroup    ticket
@@ -28,9 +34,6 @@
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/ticketstats.class.php';
-
 
 $hookmanager = new HookManager($db);
 
@@ -72,13 +75,11 @@ if (!$user->hasRight('ticket', 'read') && !$user->hasRight('knowledgemanagement'
 
 $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
 
-
 /*
  * Actions
  */
 
 // None
-
 
 /*
  * View

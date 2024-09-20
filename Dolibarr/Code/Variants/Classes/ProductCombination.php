@@ -23,6 +23,8 @@
 
 namespace Dolibarr\Code\Variants\Classes;
 
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
 /**

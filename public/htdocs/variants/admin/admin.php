@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2016   Marcos García   <marcosgdf@gmail.com>
- * Copyright (C) 2018   Frédéric France <frederic.france@netlogic.fr>
+/* Copyright (C) 2016       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,6 @@ if (!$user->admin || !isModEnabled('variants')) {
 }
 
 $error = 0;
-
 
 /*
  * Actions

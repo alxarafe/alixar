@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2008-2011  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2017  Juanjo Menent           <jmenent@2byte.es>
- * Copyright (C) 2019       Andreu Bisquerra Gaya   <jove@bisquerra.com>
- * Copyright (C) 2021       Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2022       Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2008-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2011-2017  Juanjo Menent               <jmenent@2byte.es>
+ * Copyright (C) 2019       Andreu Bisquerra Gaya       <jove@bisquerra.com>
+ * Copyright (C) 2021       Nicolas ZABOURI             <info@inovea-conseil.com>
+ * Copyright (C) 2022       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\FormProduct;
 
 /**
  *  \file       htdocs/takepos/admin/receipt.php
@@ -74,7 +78,6 @@ if (GETPOST('action', 'alpha') == 'set') {
         activateModule("modReceiptPrinter");
     }
 }
-
 
 /*
  * View

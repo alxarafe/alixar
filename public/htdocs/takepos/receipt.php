@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2007-2008 Jeremie Ollivier    <jeremie.o@laposte.net>
- * Copyright (C) 2011-2023 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2012      Marcos García       <marcosgdf@gmail.com>
- * Copyright (C) 2018      Andreu Bisquerra    <jove@bisquerra.com>
- * Copyright (C) 2019      Josep Lluís Amador  <joseplluis@lliuretic.cat>
- * Copyright (C) 2021      Nicolas ZABOURI     <info@inovea-conseil.com>
+/* Copyright (C) 2007-2008  Jeremie Ollivier            <jeremie.o@laposte.net>
+ * Copyright (C) 2011-2023  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2018       Andreu Bisquerra            <jove@bisquerra.com>
+ * Copyright (C) 2019       Josep Lluís Amador          <joseplluis@lliuretic.cat>
+ * Copyright (C) 2021       Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+
 /**
  *  \file       htdocs/takepos/receipt.php
  *  \ingroup    takepos
@@ -29,6 +31,7 @@
  */
 
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 // Include main (when fie in included into send.php, $action is set and main was already loaded)
 if (!isset($action)) {

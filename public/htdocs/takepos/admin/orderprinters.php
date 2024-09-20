@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2005       Matthieu Valleton   <mv@seeschloss.org>
- * Copyright (C) 2005       Eric Seigne         <eric.seigne@ryxeo.com>
- * Copyright (C) 2006-2016  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2007       Patrick Raguin      <patrick.raguin@gmail.com>
- * Copyright (C) 2005-2012  Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2015       Raphaël Doursenaud  <rdoursenaud@gpcsolutions.fr>
+/* Copyright (C) 2005       Matthieu Valleton           <mv@seeschloss.org>
+ * Copyright (C) 2005       Eric Seigne                 <eric.seigne@ryxeo.com>
+ * Copyright (C) 2006-2016  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007       Patrick Raguin              <patrick.raguin@gmail.com>
+ * Copyright (C) 2005-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,7 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *      \file       htdocs/takepos/admin/orderprinters.php
@@ -88,7 +89,6 @@ if ($action == "SavePrinter3") {
     }
     dolibarr_set_const($db, "TAKEPOS_PRINTED_CATEGORIES_3", $printedcategories, 'chaine', 0, '', $conf->entity);
 }
-
 
 /*
  * View

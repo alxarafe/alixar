@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2018  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2024	Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2019		Nicolas ZABOURI		<info@inovea-conseil.com>
+/* Copyright (C) 2005-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2024	Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2019		Nicolas ZABOURI		        <info@inovea-conseil.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\InfoBox;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\User\Classes\UserGroup;
+
 /**
  *  \file       htdocs/user/home.php
  *  \brief      Home page of users and groups management
@@ -26,8 +33,6 @@
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\User\Classes\UserGroup;
 
 $contextpage = GETPOST('contextpage', 'aZ') ? GETPOST('contextpage', 'aZ') : 'userhome'; // To manage different context of search
 

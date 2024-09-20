@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2013-2016 Jean-François FERRY  <hello@librethic.io>
- * Copyright (C) 2016      Christophe Battarel  <christophe@altairis.fr>
- * Copyright (C) 2018      Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2021-2024 Frédéric France		<frederic.france@netlogic.fr>
- * Copyright (C) 2021      Alexandre Spangaro   <aspangaro@open-dsi.fr>
- * Copyright (C) 2022-2023 Charlene Benke       <charlene@patas-monkey.com>
- * Copyright (C) 2023      Benjamin Falière		<benjamin.faliere@altairis.fr>
+/* Copyright (C) 2013-2016  Jean-François FERRY         <hello@librethic.io>
+ * Copyright (C) 2016       Christophe Battarel         <christophe@altairis.fr>
+ * Copyright (C) 2018       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2021-2024  Frédéric France		        <frederic.france@netlogic.fr>
+ * Copyright (C) 2021       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2022-2023  Charlene Benke              <charlene@patas-monkey.com>
+ * Copyright (C) 2023       Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024	   Irvine FLEITH		<irvine.fleith@atm-consulting.fr>
+ * Copyright (C) 2024	    Irvine FLEITH		        <irvine.fleith@atm-consulting.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,6 +27,20 @@
 
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormContract;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\FormTicket;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\ActionsTicket;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *   \file       htdocs/ticket/card.php
@@ -36,8 +50,6 @@ use Dolibarr\Code\Contact\Classes\Contact;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/ticket/class/actions_ticket.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formticket.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
@@ -81,7 +93,6 @@ if (GETPOST('actioncode', 'array')) {
 } else {
     $actioncode = GETPOST("actioncode", "alpha", 3) ? GETPOST("actioncode", "alpha", 3) : (GETPOST("actioncode") == '0' ? '0' : getDolGlobalString('AGENDA_DEFAULT_FILTER_TYPE_FOR_OBJECT'));
 }
-
 
 // Initialize technical object to manage hooks of ticket. Note that conf->hooks_modules contains array array
 $hookmanager->initHooks(array('ticketcard', 'globalcard'));
@@ -671,7 +682,6 @@ if (empty($reshook)) {
         $action = 'presend_addmessage';
     }
 }
-
 
 /*
  * View

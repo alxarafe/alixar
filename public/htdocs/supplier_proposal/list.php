@@ -1,20 +1,20 @@
 <?php
 
-/* Copyright (C) 2001-2007  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2017	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2004		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2005		Marc Barilley / Ocebo	<marc@ocebo.com>
- * Copyright (C) 2005-2013	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2006		Andre Cianfarani		<acianfa@free.fr>
- * Copyright (C) 2010-2011	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2010-2019	Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2012		Christophe Battarel		<christophe.battarel@altairis.fr>
- * Copyright (C) 2013		Cédric Salvador			<csalvador@gpcsolutions.fr>
- * Copyright (C) 2016		Ferran Marcet			<fmarcet@2byte.es>
- * Copyright (C) 2018-2023	Charlene Benke			<charlene@patas-monkey.com>
- * Copyright (C) 2021		Alexandre Spangaro		<aspangaro@open-dsi.fr>
+/* Copyright (C) 2001-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2017	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Eric Seigne				    <eric.seigne@ryxeo.com>
+ * Copyright (C) 2005		Marc Barilley / Ocebo	    <marc@ocebo.com>
+ * Copyright (C) 2005-2013	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2006		Andre Cianfarani		    <acianfa@free.fr>
+ * Copyright (C) 2010-2011	Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2010-2019	Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2012		Christophe Battarel		    <christophe.battarel@altairis.fr>
+ * Copyright (C) 2013		Cédric Salvador			    <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2016		Ferran Marcet			    <fmarcet@2byte.es>
+ * Copyright (C) 2018-2023	Charlene Benke			    <charlene@patas-monkey.com>
+ * Copyright (C) 2021		Alexandre Spangaro		    <aspangaro@open-dsi.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
- * Copyright (C) 2024		Benjamin Falière		<benjamin.faliere@altairis.fr>
+ * Copyright (C) 2024		Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,6 +31,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormPropal;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+use Dolibarr\Code\User\Classes\User;
+
 /**
  *  \file           htdocs/supplier_proposal/list.php
  *  \ingroup        supplier_proposal
@@ -41,8 +52,6 @@
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-if (isModEnabled('project')) {
-}
 
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'propal', 'supplier_proposal', 'compta', 'bills', 'orders', 'products'));
@@ -275,7 +284,6 @@ if (empty($reshook)) {
     $uploaddir = $conf->supplier_proposal->dir_output;
     include DOL_DOCUMENT_ROOT . '/core/actions_massactions.inc.php';
 }
-
 
 /*
  * View

@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2003-2007 Rodolphe Quiedeville         <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2008 Laurent Destailleur          <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin                <regis.houssin@capnetworks.com>
- * Copyright (C) 2008      Raphael Bertrand (Resultic)  <raphael.bertrand@resultic.fr>
- * Copyright (C) 2013      Juanjo Menent				<jmenent@2byte.es>
- * Copyright (C) 2020      Open-DSI	                    <support@open-dsi.fr>
+/* Copyright (C) 2003-2007  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2008  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@capnetworks.com>
+ * Copyright (C) 2008       Raphael Bertrand (Resultic) <raphael.bertrand@resultic.fr>
+ * Copyright (C) 2013       Juanjo Menent				<jmenent@2byte.es>
+ * Copyright (C) 2020       Open-DSI	                <support@open-dsi.fr>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,13 +24,17 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\TakePos\Classes\ModeleNumRefTakepos;
+
 /**
  *  \file       htdocs/core/modules/takepos/mod_takepos_ref_universal.php
  *  \ingroup    takepos
  *  \brief      File with Universal ref numbering module for takepos
  */
-
-dol_include_once('/core/modules/takepos/modules_takepos.php');
 
 /**
  *  Class to manage ref numbering of takepos cards with rule universal.

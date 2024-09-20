@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2018-2022  Thibault FOUCART        <support@ptibogxiv.net>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
+/* Copyright (C) 2018-2022  Thibault FOUCART            <support@ptibogxiv.net>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,15 +18,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
-
-// Put here all includes required by your class file
+use Dolibarr\Code\Stripe\Classes\Stripe;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-//require_once DOL_DOCUMENT_ROOT.'/core/lib/stripe.lib.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array('compta', 'salaries', 'bills', 'hrm', 'stripe'));
