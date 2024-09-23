@@ -41,21 +41,13 @@
  * or see https://www.gnu.org/
  */
 
-use Dolibarr\Code\Bom\Classes\BOM;
-use Dolibarr\Code\Categories\Classes\Categorie;
-use Dolibarr\Code\Comm\Classes\ActionComm;
-use Dolibarr\Code\Comm\Classes\CActionComm;
-use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\DolGeoIP;
-use Dolibarr\Code\Core\Classes\Form;
-use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
-use Dolibarr\Code\Website\Classes\Website;
 use Dolibarr\Core\Base\CommonObject;
 
 /**
@@ -362,7 +354,6 @@ function getEntity($element, $shared = 1, $currentobject = null)
     global $conf, $mc, $hookmanager, $object, $action, $db;
 
     if (!is_object($hookmanager)) {
-        include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
         $hookmanager = new HookManager($db);
     }
 
@@ -523,13 +514,13 @@ function getBrowserInfo($user_agent)
 
     // Name
     $reg = array();
-    if (preg_match('/firefox(\/|\s)([\d\.]*)/i', $user_agent, $reg)) {
+    if (preg_match('/firefox(\/|\s)([\d.]*)/i', $user_agent, $reg)) {
         $name = 'firefox';
         $version = empty($reg[2]) ? '' : $reg[2];
-    } elseif (preg_match('/edge(\/|\s)([\d\.]*)/i', $user_agent, $reg)) {
+    } elseif (preg_match('/edge(\/|\s)([\d.]*)/i', $user_agent, $reg)) {
         $name = 'edge';
         $version = empty($reg[2]) ? '' : $reg[2];
-    } elseif (preg_match('/chrome(\/|\s)([\d\.]+)/i', $user_agent, $reg)) {
+    } elseif (preg_match('/chrome(\/|\s)([\d.]+)/i', $user_agent, $reg)) {
         $name = 'chrome';
         $version = empty($reg[2]) ? '' : $reg[2];
     } elseif (preg_match('/chrome/i', $user_agent, $reg)) {
@@ -539,10 +530,10 @@ function getBrowserInfo($user_agent)
         $name = 'iceweasel';
     } elseif (preg_match('/epiphany/i', $user_agent)) {
         $name = 'epiphany';
-    } elseif (preg_match('/safari(\/|\s)([\d\.]*)/i', $user_agent, $reg)) {
+    } elseif (preg_match('/safari(\/|\s)([\d.]*)/i', $user_agent, $reg)) {
         $name = 'safari';
         $version = empty($reg[2]) ? '' : $reg[2];
-    } elseif (preg_match('/opera(\/|\s)([\d\.]*)/i', $user_agent, $reg)) {
+    } elseif (preg_match('/opera(\/|\s)([\d.]*)/i', $user_agent, $reg)) {
         // Safari is often present in string for mobile but its not.
         $name = 'opera';
         $version = empty($reg[2]) ? '' : $reg[2];
@@ -553,7 +544,7 @@ function getBrowserInfo($user_agent)
         // MS products at end
         $name = 'ie';
         $version = end($reg);
-    } elseif (preg_match('/l[iy]n(x|ks)(\(|\/|\s)*([\d\.]+)/i', $user_agent, $reg)) {
+    } elseif (preg_match('/l[iy]n(x|ks)(\(|\/|\s)*([\d.]+)/i', $user_agent, $reg)) {
         // MS products at end
         $name = 'lynxlinks';
         $version = empty($reg[3]) ? '' : $reg[3];
@@ -661,13 +652,13 @@ function GETPOSTISARRAY($paramname, $method = 0)
 {
     // for $method test need return the same $val as GETPOST
     if (empty($method)) {
-        $val = isset($_GET[$paramname]) ? $_GET[$paramname] : (isset($_POST[$paramname]) ? $_POST[$paramname] : '');
+        $val = $_GET[$paramname] ?? ($_POST[$paramname] ?? '');
     } elseif ($method == 1) {
-        $val = isset($_GET[$paramname]) ? $_GET[$paramname] : '';
+        $val = $_GET[$paramname] ?? '';
     } elseif ($method == 2) {
-        $val = isset($_POST[$paramname]) ? $_POST[$paramname] : '';
+        $val = $_POST[$paramname] ?? '';
     } elseif ($method == 3) {
-        $val = isset($_POST[$paramname]) ? $_POST[$paramname] : (isset($_GET[$paramname]) ? $_GET[$paramname] : '');
+        $val = $_POST[$paramname] ?? ($_GET[$paramname] ?? '');
     } else {
         $val = 'BadFirstParameterForGETPOST';
     }
@@ -994,7 +985,7 @@ function GETPOST($paramname, $check = 'alphanohtml', $method = 0, $filter = null
         do {
             $oldstringtoclean = $out;
             $out = str_ireplace(array('javascript', 'vbscript', '&colon', '&#'), '', $out);
-            $out = preg_replace(array('/^[^\?]*%/'), '', $out);             // We remove any % chars before the ?. Example in url: '/product/stock/card.php?action=create&backtopage=%2Fdolibarr_dev%2Fhtdocs%2Fpro%25duct%2Fcard.php%3Fid%3Dabc'
+            $out = preg_replace(array('/^[^?]*%/'), '', $out);             // We remove any % chars before the ?. Example in url: '/product/stock/card.php?action=create&backtopage=%2Fdolibarr_dev%2Fhtdocs%2Fpro%25duct%2Fcard.php%3Fid%3Dabc'
             $out = preg_replace(array('/^[a-z]*\/\s*\/+/i'), '', $out);     // We remove schema*// to remove external URL
         } while ($oldstringtoclean != $out);
     }
@@ -1109,7 +1100,7 @@ function sanitizeVal($out = '', $check = 'alphanohtml', $filter = null, $options
         case 'aZ09':
             if (!is_array($out)) {
                 $out = trim($out);
-                if (preg_match('/[^a-z0-9_\-\.]+/i', $out)) {
+                if (preg_match('/[^a-z0-9_\-.]+/i', $out)) {
                     $out = '';
                 }
             }
@@ -1117,7 +1108,7 @@ function sanitizeVal($out = '', $check = 'alphanohtml', $filter = null, $options
         case 'aZ09arobase':     // great to sanitize $objecttype parameter
             if (!is_array($out)) {
                 $out = trim($out);
-                if (preg_match('/[^a-z0-9_\-\.@]+/i', $out)) {
+                if (preg_match('/[^a-z0-9_\-.@]+/i', $out)) {
                     $out = '';
                 }
             }
@@ -1125,7 +1116,7 @@ function sanitizeVal($out = '', $check = 'alphanohtml', $filter = null, $options
         case 'aZ09comma':       // great to sanitize $sortfield or $sortorder params that can be 't.abc,t.def_gh'
             if (!is_array($out)) {
                 $out = trim($out);
-                if (preg_match('/[^a-z0-9_\-\.,]+/i', $out)) {
+                if (preg_match('/[^a-z0-9_\-.,]+/i', $out)) {
                     $out = '';
                 }
             }
@@ -1351,7 +1342,7 @@ function dol_buildpath($path, $type = 0, $returnemptyifnotfound = 0)
                 continue;
             }
             $regs = array();
-            preg_match('/^([^\?]+(\.css\.php|\.css|\.js\.php|\.js|\.png|\.jpg|\.php)?)/i', $path, $regs); // Take part before '?'
+            preg_match('/^([^?]+(\.css\.php|\.css|\.js\.php|\.js|\.png|\.jpg|\.php)?)/i', $path, $regs); // Take part before '?'
             if (!empty($regs[1])) {
                 //print $key.'-'.$dirroot.'/'.$path.'-'.$conf->file->dol_url_root[$type].'<br>'."\n";
                 //if (file_exists($dirroot.'/'.$regs[1])) {
@@ -1506,9 +1497,9 @@ function dol_sanitizeFileName($str, $newstr = '_', $unaccent = 1)
     // Chars '--' can be used into filename to inject special parameters like --use-compress-program to make command with file as parameter making remote execution of command
     $filesystem_forbidden_chars = array('<', '>', '/', '\\', '?', '*', '|', '"', ':', '°', '$', ';', '`');
     $tmp = dol_string_nospecial($unaccent ? dol_string_unaccent($str) : $str, $newstr, $filesystem_forbidden_chars);
-    $tmp = preg_replace('/\-\-+/', '_', $tmp);
-    $tmp = preg_replace('/\s+\-([^\s])/', ' _$1', $tmp);
-    $tmp = preg_replace('/\s+\-$/', '', $tmp);
+    $tmp = preg_replace('/--+/', '_', $tmp);
+    $tmp = preg_replace('/\s+-([^\s])/', ' _$1', $tmp);
+    $tmp = preg_replace('/\s+-$/', '', $tmp);
     $tmp = str_replace('..', '', $tmp);
     return $tmp;
 }
@@ -1532,9 +1523,9 @@ function dol_sanitizePathName($str, $newstr = '_', $unaccent = 1)
     // Chars '--' can be used into filename to inject special parameters like --use-compress-program to make command with file as parameter making remote execution of command
     $filesystem_forbidden_chars = array('<', '>', '?', '*', '|', '"', '°', '$', ';', '`');
     $tmp = dol_string_nospecial($unaccent ? dol_string_unaccent($str) : $str, $newstr, $filesystem_forbidden_chars);
-    $tmp = preg_replace('/\-\-+/', '_', $tmp);
-    $tmp = preg_replace('/\s+\-([^\s])/', ' _$1', $tmp);
-    $tmp = preg_replace('/\s+\-$/', '', $tmp);
+    $tmp = preg_replace('/--+/', '_', $tmp);
+    $tmp = preg_replace('/\s+-([^\s])/', ' _$1', $tmp);
+    $tmp = preg_replace('/\s+-$/', '', $tmp);
     $tmp = str_replace('..', '', $tmp);
     return $tmp;
 }
@@ -1931,13 +1922,13 @@ function dol_escape_htmltag($stringtoescape, $keepb = 0, $keepn = 0, $noescapeta
                     $tmpattributes = str_ireplace('src="http:', '__SRCHTTPIMG', $tmpattributes);
                     $tmpattributes = str_ireplace('src="https:', '__SRCHTTPSIMG', $tmpattributes);
                     $tmpattributes = str_ireplace('"', '__DOUBLEQUOTE', $tmpattributes);
-                    $tmpattributes = preg_replace('/[^a-z0-9_\/\?\;\s=&\.-]/i', '', $tmpattributes);
+                    $tmpattributes = preg_replace('#[^a-z0-9_/?;\s=&.-]#i', '', $tmpattributes);
                     $tmp = preg_replace('/<' . preg_quote($tagtoreplace, '/') . '\s+([^>]+)>/', '__BEGINTAGTOREPLACE' . $tagtoreplace . '[' . $tmpattributes . ']__', $tmp);
                 }
                 if (preg_match('/<' . preg_quote($tagtoreplace, '/') . '\s+([^>]+)> \/>/', $tmp, $reg)) {
                     $tmpattributes = str_ireplace(array('[', ']'), '_', $reg[1]);   // We must not have [ ] inside the attribute string
                     $tmpattributes = str_ireplace('"', '__DOUBLEQUOTE', $tmpattributes);
-                    $tmpattributes = preg_replace('/[^a-z0-9_\/\?\;\s=&]/i', '', $tmpattributes);
+                    $tmpattributes = preg_replace('/[^a-z0-9_\/?;\s=&]/i', '', $tmpattributes);
                     $tmp = preg_replace('/<' . preg_quote($tagtoreplace, '/') . '\s+([^>]+) \/>/', '__BEGINENDTAGTOREPLACE' . $tagtoreplace . '[' . $tmpattributes . ']__', $tmp);
                 }
             }
@@ -1948,10 +1939,10 @@ function dol_escape_htmltag($stringtoescape, $keepb = 0, $keepn = 0, $noescapeta
         if (count($tmparrayoftags)) {
             foreach ($tmparrayoftags as $tagtoreplace) {
                 $result = str_ireplace('__BEGINTAGTOREPLACE' . $tagtoreplace . '__', '<' . $tagtoreplace . '>', $result);
-                $result = preg_replace('/__BEGINTAGTOREPLACE' . $tagtoreplace . '\[(.*)\]__/', '<' . $tagtoreplace . ' \1>', $result);
+                $result = preg_replace('/__BEGINTAGTOREPLACE' . $tagtoreplace . '\[(.*)]__/', '<' . $tagtoreplace . ' \1>', $result);
                 $result = str_ireplace('__ENDTAGTOREPLACE' . $tagtoreplace . '__', '</' . $tagtoreplace . '>', $result);
                 $result = str_ireplace('__BEGINENDTAGTOREPLACE' . $tagtoreplace . '__', '<' . $tagtoreplace . ' />', $result);
-                $result = preg_replace('/__BEGINENDTAGTOREPLACE' . $tagtoreplace . '\[(.*)\]__/', '<' . $tagtoreplace . ' \1 />', $result);
+                $result = preg_replace('/__BEGINENDTAGTOREPLACE' . $tagtoreplace . '\[(.*)]__/', '<' . $tagtoreplace . ' \1 />', $result);
             }
 
             $result = str_ireplace('__HREFHTTPA', 'href="http:', $result);
@@ -2275,12 +2266,12 @@ function dol_format_address($object, $withcountry = 0, $sep = "\n", $outputlangs
         if (!empty($object->state)) {
             $ret .= $sep . $object->state;
         }
-    } elseif (isset($object->country_code) && in_array($object->country_code, array('JP'))) {
+    } elseif (isset($object->country_code) && $object->country_code == 'JP') {
         // JP: In romaji, title firstname name\n address lines \n [state,] town zip \n country
         // See https://www.sljfaq.org/afaq/addresses.html
         $town = ($extralangcode ? $object->array_languages['town'][$extralangcode] : (empty($object->town) ? '' : $object->town));
         $ret .= ($ret ? $sep : '') . ($object->state ? $object->state . ', ' : '') . $town . ($object->zip ? ' ' : '') . $object->zip;
-    } elseif (isset($object->country_code) && in_array($object->country_code, array('IT'))) {
+    } elseif (isset($object->country_code) && $object->country_code == 'IT') {
         // IT: title firstname name\n address lines \n zip town state_code \n country
         $ret .= ($ret ? $sep : '') . $object->zip;
         $town = ($extralangcode ? $object->array_languages['town'][$extralangcode] : (empty($object->town) ? '' : $object->town));
@@ -2353,6 +2344,8 @@ function dol_strftime($fmt, $ts = false, $is_gmt = false)
  * @param boolean $encodetooutput false=no convert into output pagecode
  * @return string                      Formatted date or '' if time is null
  *
+ * @throws DateInvalidTimeZoneException
+ * @throws DateInvalidTimeZoneException
  * @see        dol_mktime(), dol_stringtotime(), dol_getdate(), selectDate()
  */
 function dol_print_date($time, $format = '', $tzoutput = 'auto', $outputlangs = null, $encodetooutput = false)
@@ -2365,7 +2358,7 @@ function dol_print_date($time, $format = '', $tzoutput = 'auto', $outputlangs = 
     }
 
     if ($tzoutput === 'auto') {
-        $tzoutput = (empty($conf) ? 'tzserver' : (isset($conf->tzuserinputkey) ? $conf->tzuserinputkey : 'tzserver'));
+        $tzoutput = (empty($conf) ? 'tzserver' : ($conf->tzuserinputkey ?? 'tzserver'));
     }
 
     // Clean parameters
@@ -2477,7 +2470,7 @@ function dol_print_date($time, $format = '', $tzoutput = 'auto', $outputlangs = 
     if (preg_match('/^([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])$/i', (string)$time, $reg)) {  // Deprecated. Ex: 1970-01-01, 1970-01-01 01:00:00, 19700101010000
         dol_print_error(null, "Functions.lib::dol_print_date function called with a bad value from page " . (empty($_SERVER["PHP_SELF"]) ? 'unknown' : $_SERVER["PHP_SELF"]));
         return '';
-    } elseif (preg_match('/^([0-9]+)\-([0-9]+)\-([0-9]+) ?([0-9]+)?:?([0-9]+)?:?([0-9]+)?/i', (string)$time, $reg)) {    // Still available to solve problems in extrafields of type date
+    } elseif (preg_match('/^([0-9]+)-([0-9]+)-([0-9]+) ?([0-9]+)?:?([0-9]+)?:?([0-9]+)?/i', (string)$time, $reg)) {    // Still available to solve problems in extrafields of type date
         // This part of code should not be used anymore.
         dol_syslog("Functions.lib::dol_print_date function called with a bad value from page " . (empty($_SERVER["PHP_SELF"]) ? 'unknown' : $_SERVER["PHP_SELF"]), LOG_WARNING);
         //if (function_exists('debug_print_backtrace')) debug_print_backtrace();
@@ -2607,6 +2600,7 @@ function dol_print_date($time, $format = '', $tzoutput = 'auto', $outputlangs = 
  *                                      'year' => $year,
  *                                      'yday' => floor($secsInYear/$_day_power)
  *                                      '0' => original timestamp
+ * @throws DateInvalidTimeZoneException
  * @see                                dol_print_date(), dol_stringtotime(), dol_mktime()
  */
 function dol_getdate($timestamp, $fast = false, $forcetimezone = '')
@@ -2924,8 +2918,6 @@ function dol_print_ip($ip, $mode = 0)
             } else {
                 $ret .= ' (' . $countrycode . ')';
             }
-        } else {
-            // Nothing
         }
     }
 
@@ -2942,8 +2934,8 @@ function dol_print_ip($ip, $mode = 0)
  */
 function getUserRemoteIP()
 {
-    if (empty($_SERVER['HTTP_X_FORWARDED_FOR']) || preg_match('/[^0-9\.\:,\[\]]/', $_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        if (empty($_SERVER['HTTP_CLIENT_IP']) || preg_match('/[^0-9\.\:,\[\]]/', $_SERVER['HTTP_CLIENT_IP'])) {
+    if (empty($_SERVER['HTTP_X_FORWARDED_FOR']) || preg_match('/[^0-9.:,\[\]]/', $_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        if (empty($_SERVER['HTTP_CLIENT_IP']) || preg_match('/[^0-9.:,\[\]]/', $_SERVER['HTTP_CLIENT_IP'])) {
             if (empty($_SERVER["HTTP_CF_CONNECTING_IP"])) {
                 $ip = (empty($_SERVER['REMOTE_ADDR']) ? '' : $_SERVER['REMOTE_ADDR']);  // value may have been the IP of the proxy and not the client
             } else {
@@ -5041,14 +5033,12 @@ function get_default_npr(Societe $thirdparty_seller, Societe $thirdparty_buyer, 
     global $db;
 
     if ($idprodfournprice > 0) {
-        if (!class_exists('ProductFournisseur')) {
-        }
         $prodprice = new ProductFournisseur($db);
         $prodprice->fetch_product_fournisseur_price($idprodfournprice);
         return $prodprice->fourn_tva_npr;
-    } elseif ($idprod > 0) {
-        if (!class_exists('Product')) {
-        }
+    }
+
+    if ($idprod > 0) {
         $prod = new Product($db);
         $prod->fetch($idprod);
         return $prod->tva_npr;
@@ -5160,7 +5150,7 @@ function get_exdir($num, $level, $alpha, $withoutslash, $object, $modulepart = '
         if (empty($alpha)) {
             $num = preg_replace('/([^0-9])/i', '', $num);
         } else {
-            $num = preg_replace('/^.*\-/i', '', $num);
+            $num = preg_replace('/^.*-/i', '', $num);
         }
         $num = substr("000" . $num, -$level);
         if ($level == 1) {

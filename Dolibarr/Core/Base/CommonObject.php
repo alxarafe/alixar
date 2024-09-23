@@ -1941,7 +1941,6 @@ abstract class CommonObject
             exit;
         }
         if (!is_object($langs)) {   // If lang was not defined, we set it. It is required by run_triggers().
-            include_once DOL_DOCUMENT_ROOT . '/core/class/translate.class.php';
             $langs = new Translate('', $conf);
         }
 

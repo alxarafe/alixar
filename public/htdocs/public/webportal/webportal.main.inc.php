@@ -111,7 +111,6 @@ if (!defined('NOREQUIREDB') && empty($conf->webportal->enabled)) {
 
 if (!defined('WEBPORTAL_NOREQUIRETRAN') || (!defined('WEBPORTAL_NOLOGIN') && !empty($context->controllerInstance->accessNeedLoggedUser))) {
     if (!is_object($langs)) { // This can occurs when calling page with NOREQUIRETRAN defined, however we need langs for error messages.
-        include_once DOL_DOCUMENT_ROOT . '/core/class/translate.class.php';
         $langs = new Translate("", $conf);
         $langcode = (GETPOST('lang', 'aZ09', 1) ? GETPOST('lang', 'aZ09', 1) : (empty($logged_user->conf->MAIN_LANG_DEFAULT) ? (!getDolGlobalString('MAIN_LANG_DEFAULT') ? 'auto' : $conf->global->MAIN_LANG_DEFAULT) : $logged_user->conf->MAIN_LANG_DEFAULT));
         if (defined('MAIN_LANG_DEFAULT')) {
@@ -260,7 +259,6 @@ if (!defined('WEBPORTAL_NOLOGIN') && !empty($context->controllerInstance->access
                     if (!$error) {
                         if ($logged_thirdparty->default_lang != $langs->defaultlang && !defined('WEBPORTAL_NOREQUIRETRAN')) {
                             if (!is_object($langs)) { // This can occurs when calling page with NOREQUIRETRAN defined, however we need langs for error messages.
-                                include_once DOL_DOCUMENT_ROOT . '/core/class/translate.class.php';
                                 $langs = new Translate("", $conf);
                                 $langs->setDefaultLang($logged_thirdparty->default_lang);
                             }

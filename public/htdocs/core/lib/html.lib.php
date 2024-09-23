@@ -45,6 +45,18 @@
  * TODO: Convert to abstract class with static methods
  */
 
+use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Conf;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\Website\Classes\Website;
+use Dolibarr\Core\Base\CommonObject;
+
 /**
  * Create a dialog with two buttons for export and overwrite of a website
  *
@@ -2432,7 +2444,6 @@ function recordNotFound($message = '', $printheader = 1, $printfooter = 1, $show
     global $action, $object;
 
     if (!is_object($langs)) {
-        include_once DOL_DOCUMENT_ROOT . '/core/class/translate.class.php';
         $langs = new Translate('', $conf);
         $langs->setDefaultLang();
     }
@@ -3917,7 +3928,6 @@ function getElementProperties($elementType)
 
     // Add  hook
     if (!is_object($hookmanager)) {
-        include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
         $hookmanager = new HookManager($db);
     }
     $hookmanager->initHooks(array('elementproperties'));

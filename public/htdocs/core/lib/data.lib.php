@@ -45,6 +45,8 @@
  * TODO: Convert to abstract class with static methods
  */
 
+use Dolibarr\Code\Comm\Classes\ActionComm;
+
 /**
  * getActionCommEcmList
  *
@@ -53,13 +55,13 @@
  */
 function getActionCommEcmList($object)
 {
-    global $conf, $db;
+    global $db;
 
     $documents = array();
 
     $sql = 'SELECT ecm.rowid as id, ecm.src_object_type, ecm.src_object_id, ecm.filepath, ecm.filename';
-    $sql .= ' FROM ' . MAIN_DB_PREFIX . 'ecm_files ecm';
-    $sql .= " WHERE ecm.filepath = 'agenda/" . ((int)$object->id) . "'";
+    $sql .= ' FROM ' . constant('MAIN_DB_PREFIX') . 'ecm_files ecm';
+    $sql .= " WHERE ecm.filepath = 'agenda/" . $object->id . "'";
     //$sql.= " ecm.src_object_type = '".$db->escape($object->element)."' AND ecm.src_object_id = ".((int) $object->id); // Old version didn't add object_type during upload
     $sql .= ' ORDER BY ecm.position ASC';
 
@@ -159,7 +161,7 @@ function dolForgeCriteriaCallback($matches)
         return '';
     }
 
-    $operand = preg_replace('/[^a-z0-9\._]/i', '', trim($tmp[0]));
+    $operand = preg_replace('/[^a-z0-9._]/i', '', trim($tmp[0]));
 
     $operator = strtoupper(preg_replace('/[^a-z<>!=]/i', '', trim($tmp[1])));
 
@@ -248,7 +250,7 @@ function forgeSQLFromUniversalSearchCriteria($filter, &$errorstr = '', $noand = 
         $filter = '(' . $filter . ')';
     }
 
-    $regexstring = '\(([a-zA-Z0-9_\.]+:[<>!=insotlke]+:[^\(\)]+)\)';    // Must be  (aaa:bbb:...) with aaa is a field name (with alias or not) and bbb is one of this operator '=', '<', '>', '<=', '>=', '!=', 'in', 'notin', 'like', 'notlike', 'is', 'isnot'
+    $regexstring = '\(([a-zA-Z0-9_.]+:[<>!=insotlke]+:[^()]+)\)';    // Must be  (aaa:bbb:...) with aaa is a field name (with alias or not) and bbb is one of this operator '=', '<', '>', '<=', '>=', '!=', 'in', 'notin', 'like', 'notlike', 'is', 'isnot'
     $firstandlastparenthesis = 0;
 
     if (!dolCheckFilters($filter, $errorstr, $firstandlastparenthesis)) {
@@ -264,7 +266,7 @@ function forgeSQLFromUniversalSearchCriteria($filter, &$errorstr = '', $noand = 
     $t = str_replace(array('and', 'or', 'AND', 'OR', ' '), '', $t);     // Remove the only strings allowed between each () criteria
     // If the string result contains something else than '()', the syntax was wrong
 
-    if (preg_match('/[^\(\)]/', $t)) {
+    if (preg_match('/[^()]/', $t)) {
         $tmperrorstr = 'Bad syntax of the search string';
         $errorstr = 'Bad syntax of the search string: ' . $filter;
         if ($noerror) {
