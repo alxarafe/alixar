@@ -177,7 +177,6 @@ if (!GETPOST('action', 'aZ09') || preg_match('/upgrade/i', GETPOST('action', 'aZ
     $listofentities = array(1);
 
     // Create the global $hookmanager object
-    include_once DOL_DOCUMENT_ROOT . '/core/class/hookmanager.class.php';
     $hookmanager = new HookManager($db);
     $hookmanager->initHooks(array('upgrade2'));
 
