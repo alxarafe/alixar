@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Dispatcher;
+
 /**
  * Gets the URL segment corresponding to the controller route.
  *
@@ -118,6 +120,30 @@ if (isset($_GET['api_route'])) {
  * Here we put a temporary patch while it is migrating.
  */
 $_SERVER['PHP_SELF'] = constant('BASE_URL') . $route;
+
+/**
+ * If a value has been defined for the GET controller variable, an attempt
+ * is made to launch the controller.const CONTROLLER_VAR = 'controller';
+ */
+const MODULE_NAME_VAR = 'module';
+const CONTROLLER_VAR = 'controller';
+const METHOD_VAR = 'method';
+const METHOD_DEFAULT_VALUE = 'action';
+
+$module = filter_input(INPUT_GET, MODULE_NAME_VAR);
+$controller = filter_input(INPUT_GET, CONTROLLER_VAR);
+$method = filter_input(INPUT_GET, METHOD_VAR) ?? METHOD_DEFAULT_VALUE;
+
+$routes = [
+    'Dolibarr\\Code' => '/Dolibarr/Code/',
+    'Module' => '/Module/',
+];
+
+if (isset($module) && isset($controller)) {
+    if (Dispatcher::run($module, $controller, $method, $routes)) {
+        die(); // The controller has been executed succesfully!
+    }
+}
 
 chdir($fullpath);
 

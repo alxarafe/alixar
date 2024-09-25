@@ -109,7 +109,7 @@ foreach ($allModules as $modName => $filename) {
     '@phan-var-force DolibarrModules $objMod';
 
     $modules[$objMod->numero] = $objMod;
-    dd($objMod);
+    dd(['objMod' => $objMod]);
     $modules_files[$objMod->numero] = $file;
 }
 '@phan-var-force array<string,DolibarrModules> $modules';
