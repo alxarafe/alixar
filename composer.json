@@ -44,6 +44,7 @@
     "nnnick/chartjs": "^3.7.1",
     "pclzip/pclzip": "^2.8",
     "phpoffice/phpspreadsheet": ">=1.12",
+    "rsanjoseo/alxarafe": "v0.0.34",
     "stripe/stripe-php": "^13.12",
     "symfony/mailer": "^6.4",
     "symfony/var-dumper": "^6.4",
@@ -75,7 +76,9 @@
   },
   "autoload": {
     "psr-4": {
+      "Alxarafe\\": "Core",
       "Dolibarr\\": "Dolibarr",
+      "Module\\": "Module",
       "Public\\": "public/htdocs"
     },
     "files": [
