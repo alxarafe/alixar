@@ -262,7 +262,7 @@ class DoliDBSqlite3 extends DoliDB
                 }
                 if (preg_match('/ALTER\s+TABLE\s*(.*)\s*ADD\s+CONSTRAINT\s+(.*)\s*FOREIGN\s+KEY\s*\(([\w,\s]+)\)\s*REFERENCES\s+(\w+)\s*\(([\w,\s]+)\)/i', $line, $reg)) {
                     // Pour l'instant les contraintes ne sont pas créées
-                    dol_syslog(get_only_class() . '::query line emptied');
+                    dol_syslog(get_only_class($this) . '::query line emptied');
                     $line = 'SELECT 0;';
                 }
 

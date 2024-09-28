@@ -132,7 +132,6 @@ if (!$user->hasRight('adherent', 'creer') && $action == 'edit') {
 
 $linkofpubliclist = DOL_MAIN_URL_ROOT . '/public/members/public_list.php' . ((isModEnabled('multicompany')) ? '?entity=' . $conf->entity : '');
 
-
 /*
  * 	Actions
  */
