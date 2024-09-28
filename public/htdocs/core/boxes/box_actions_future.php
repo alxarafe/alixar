@@ -107,7 +107,7 @@ class box_actions_future extends ModeleBoxes
             $sql .= " ORDER BY a.datep ASC";
             $sql .= $this->db->plimit($max, 0);
 
-            dol_syslog(get_class($this) . "::loadBox", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::loadBox", LOG_DEBUG);
             $result = $this->db->query($sql);
             if ($result) {
                 $now = dol_now();

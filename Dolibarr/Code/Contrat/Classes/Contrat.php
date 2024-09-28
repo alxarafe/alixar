@@ -350,7 +350,7 @@ class Contrat extends CommonObject
                 return $numref;
             } else {
                 $this->error = $obj->error;
-                dol_print_error($db, get_class($this) . "::getNextValue " . $obj->error);
+                dol_print_error($db, get_only_class($this) . "::getNextValue " . $obj->error);
                 return "";
             }
         } else {
@@ -529,7 +529,7 @@ class Contrat extends CommonObject
         $now = dol_now();
 
         $error = 0;
-        dol_syslog(get_class($this) . '::validate user=' . $user->id . ', force_number=' . $force_number);
+        dol_syslog(get_only_class($this) . '::validate user=' . $user->id . ', force_number=' . $force_number);
 
 
         $this->db->begin();
@@ -556,7 +556,7 @@ class Contrat extends CommonObject
             //$sql.= ", fk_user_valid = ".$user->id.", date_valid = '".$this->db->idate($now)."'";
             $sql .= " WHERE rowid = " . ((int) $this->id) . " AND statut = 0";
 
-            dol_syslog(get_class($this) . "::validate", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::validate", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 dol_print_error($this->db);
@@ -601,7 +601,7 @@ class Contrat extends CommonObject
                     $dirsource = $conf->contract->dir_output . '/' . $oldref;
                     $dirdest = $conf->contract->dir_output . '/' . $newref;
                     if (!$error && file_exists($dirsource)) {
-                        dol_syslog(get_class($this) . "::validate rename dir " . $dirsource . " into " . $dirdest);
+                        dol_syslog(get_only_class($this) . "::validate rename dir " . $dirsource . " into " . $dirdest);
 
                         if (@rename($dirsource, $dirdest)) {
                             dol_syslog("Rename ok");
@@ -653,7 +653,7 @@ class Contrat extends CommonObject
         $now = dol_now();
 
         $error = 0;
-        dol_syslog(get_class($this) . '::reopen user=' . $user->id);
+        dol_syslog(get_only_class($this) . '::reopen user=' . $user->id);
 
         $this->db->begin();
 
@@ -663,7 +663,7 @@ class Contrat extends CommonObject
         //$sql.= ", fk_user_valid = null, date_valid = null";
         $sql .= " WHERE rowid = " . ((int) $this->id) . " AND statut = 1";
 
-        dol_syslog(get_class($this) . "::validate", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::validate", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             dol_print_error($this->db);
@@ -735,7 +735,7 @@ class Contrat extends CommonObject
             $sql .= " AND ref = '" . $this->db->escape($ref) . "'";
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -801,17 +801,17 @@ class Contrat extends CommonObject
 
                     return $this->id;
                 } else {
-                    dol_syslog(get_class($this) . "::fetch Contract failed");
+                    dol_syslog(get_only_class($this) . "::fetch Contract failed");
                     $this->error = "Fetch contract failed";
                     return -1;
                 }
             } else {
-                dol_syslog(get_class($this) . "::fetch Contract not found");
+                dol_syslog(get_only_class($this) . "::fetch Contract not found");
                 $this->error = "Contract not found";
                 return 0;
             }
         } else {
-            dol_syslog(get_class($this) . "::fetch Error searching contract");
+            dol_syslog(get_only_class($this) . "::fetch Error searching contract");
             $this->error = $this->db->error();
             return -1;
         }
@@ -871,7 +871,7 @@ class Contrat extends CommonObject
         }
         $sql .= " ORDER by d.rang ASC";
 
-        dol_syslog(get_class($this) . "::fetch_lines", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch_lines", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $num = $this->db->num_rows($result);
@@ -985,7 +985,7 @@ class Contrat extends CommonObject
             }
             $this->db->free($result);
         } else {
-            dol_syslog(get_class($this) . "::Fetch Error when reading lines of contracts linked to products");
+            dol_syslog(get_only_class($this) . "::Fetch Error when reading lines of contracts linked to products");
             return -3;
         }
 
@@ -1171,19 +1171,19 @@ class Contrat extends CommonObject
                     $this->db->commit();
                     return $this->id;
                 } else {
-                    dol_syslog(get_class($this) . "::create - 30 - " . $this->error, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::create - 30 - " . $this->error, LOG_ERR);
                     $this->db->rollback();
                     return -3;
                 }
             } else {
                 $this->error = "Failed to add contract";
-                dol_syslog(get_class($this) . "::create - 20 - " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create - 20 - " . $this->error, LOG_ERR);
                 $this->db->rollback();
                 return -2;
             }
         } else {
             $this->error = $langs->trans("UnknownError") . ": " . $this->db->error();
-            dol_syslog(get_class($this) . "::create - 10 - " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create - 10 - " . $this->error, LOG_ERR);
 
             $this->db->rollback();
             return -1;
@@ -1218,7 +1218,7 @@ class Contrat extends CommonObject
             // Delete linked contacts
             $res = $this->delete_linked_contact();
             if ($res < 0) {
-                dol_syslog(get_class($this) . "::delete error", LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error", LOG_ERR);
                 $error++;
             }
         }
@@ -1238,7 +1238,7 @@ class Contrat extends CommonObject
             $ef = $main . "_extrafields";
             $sql = "DELETE FROM " . $ef . " WHERE fk_object IN (SELECT rowid FROM " . $main . " WHERE fk_contrat = " . ((int) $this->id) . ")";
 
-            dol_syslog(get_class($this) . "::delete contratdet_extrafields", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete contratdet_extrafields", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $this->error = $this->db->error();
@@ -1251,7 +1251,7 @@ class Contrat extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "contratdet";
             $sql .= " WHERE fk_contrat=" . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete contratdet", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete contratdet", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $this->error = $this->db->error();
@@ -1275,7 +1275,7 @@ class Contrat extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "contrat";
             $sql .= " WHERE rowid=" . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete contrat", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete contrat", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $this->error = $this->db->error();
@@ -1288,7 +1288,7 @@ class Contrat extends CommonObject
             $result = $this->deleteExtraFields();
             if ($result < 0) {
                 $error++;
-                dol_syslog(get_class($this) . "::delete error -3 " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error -3 " . $this->error, LOG_ERR);
             }
         }
 
@@ -1432,7 +1432,7 @@ class Contrat extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -1472,7 +1472,7 @@ class Contrat extends CommonObject
         global $user, $langs, $conf, $mysoc;
         $error = 0;
 
-        dol_syslog(get_class($this) . "::addline $desc, $pu_ht, $qty, $txtva, $txlocaltax1, $txlocaltax2, $fk_product, $remise_percent, $date_start, $date_end, $price_base_type, $pu_ttc, $info_bits, $rang");
+        dol_syslog(get_only_class($this) . "::addline $desc, $pu_ht, $qty, $txtva, $txlocaltax1, $txlocaltax2, $fk_product, $remise_percent, $date_start, $date_end, $price_base_type, $pu_ttc, $info_bits, $rang");
 
         // Check parameters
         if ($fk_product <= 0 && empty($desc)) {
@@ -1671,7 +1671,7 @@ class Contrat extends CommonObject
                 return -1;
             }
         } else {
-            dol_syslog(get_class($this) . "::addline ErrorTryToAddLineOnValidatedContract", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::addline ErrorTryToAddLineOnValidatedContract", LOG_ERR);
             return -2;
         }
     }
@@ -1737,7 +1737,7 @@ class Contrat extends CommonObject
             return -1;
         }
 
-        dol_syslog(get_class($this) . "::updateline $rowid, $desc, $pu, $qty, $remise_percent, $date_start, $date_end, $date_start_real, $date_end_real, $tvatx, $localtax1tx, $localtax2tx, $price_base_type, $info_bits, $rang");
+        dol_syslog(get_only_class($this) . "::updateline $rowid, $desc, $pu, $qty, $remise_percent, $date_start, $date_end, $date_start_real, $date_end_real, $tvatx, $localtax1tx, $localtax2tx, $price_base_type, $info_bits, $rang");
 
         $this->db->begin();
 
@@ -1824,7 +1824,7 @@ class Contrat extends CommonObject
         $sql .= ", rang = " . (!empty($rang) ? ((int) $rang) : "0");
         $sql .= " WHERE rowid = " . ((int) $rowid);
 
-        dol_syslog(get_class($this) . "::updateline", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::updateline", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             if (is_array($array_options) && count($array_options) > 0) { // For avoid conflicts if trigger used
@@ -1861,7 +1861,7 @@ class Contrat extends CommonObject
         } else {
             $this->db->rollback();
             $this->error = $this->db->error();
-            dol_syslog(get_class($this) . "::updateline Erreur -1");
+            dol_syslog(get_only_class($this) . "::updateline Erreur -1");
             return -1;
         }
     }
@@ -1890,7 +1890,7 @@ class Contrat extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . $this->table_element_line;
             $sql .= " WHERE rowid = " . ((int) $idline);
 
-            dol_syslog(get_class($this) . "::deleteline", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::deleteline", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $this->error = "Error " . $this->db->lasterror();
@@ -1904,7 +1904,7 @@ class Contrat extends CommonObject
                 $result = $contractline->deleteExtraFields();
                 if ($result < 0) {
                     $error++;
-                    $this->error = "Error " . get_class($this) . "::deleteline deleteExtraFields error -4 " . $contractline->error;
+                    $this->error = "Error " . get_only_class($this) . "::deleteline deleteExtraFields error -4 " . $contractline->error;
                 }
             }
 
@@ -1912,7 +1912,7 @@ class Contrat extends CommonObject
                 $this->db->commit();
                 return 1;
             } else {
-                dol_syslog(get_class($this) . "::deleteline ERROR:" . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::deleteline ERROR:" . $this->error, LOG_ERR);
                 $this->db->rollback();
                 return -1;
             }
@@ -2204,7 +2204,7 @@ class Contrat extends CommonObject
             $sql .= " AND statut = " . ((int) $status);
         }
 
-        dol_syslog(get_class($this) . "::array_detail()", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::array_detail()", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -2246,7 +2246,7 @@ class Contrat extends CommonObject
         $sql .= (!empty($line_status)) ? " AND cd.statut IN (" . $this->db->sanitize(implode(', ', $line_status)) . ")" : "";
         $sql .= " GROUP BY c.rowid";
 
-        dol_syslog(get_class($this) . "::getOtherContracts()", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getOtherContracts()", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);

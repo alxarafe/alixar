@@ -186,7 +186,7 @@ class FormResource
 
         $resourcestat = new Dolresource($this->db);
 
-        dol_syslog(get_class($this) . "::select_types_resource " . $selected . ", " . $htmlname . ", " . $filtertype . ", " . $format, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_types_resource " . $selected . ", " . $htmlname . ", " . $filtertype . ", " . $format, LOG_DEBUG);
 
         $filterarray = array();
 
@@ -297,7 +297,7 @@ class FormResource
 		// phpcs:enable
         global $conf, $langs, $user;
 
-        dol_syslog(get_class($this) . "::select_departement selected=" . $selected . ", country_codeid=" . $country_codeid, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_departement selected=" . $selected . ", country_codeid=" . $country_codeid, LOG_DEBUG);
 
         $langs->load("dict");
 
@@ -326,7 +326,7 @@ class FormResource
             }
             $num = $this->db->num_rows($result);
             $i = 0;
-            dol_syslog(get_class($this) . "::select_departement num=" . $num, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::select_departement num=" . $num, LOG_DEBUG);
             if ($num) {
                 $country = '';
                 while ($i < $num) {

@@ -110,12 +110,12 @@ class FormAccounting extends Form
             }
             $sql .= " ORDER BY code";
 
-            dol_syslog(get_class($this) . "::select_journal", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::select_journal", LOG_DEBUG);
             $resql = $this->db->query($sql);
 
             if (!$resql) {
                 $this->error = "Error " . $this->db->lasterror();
-                dol_syslog(get_class($this) . "::select_journal " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::select_journal " . $this->error, LOG_ERR);
                 return -1;
             }
 
@@ -190,12 +190,12 @@ class FormAccounting extends Form
             }
             $sql .= " ORDER BY code";
 
-            dol_syslog(get_class($this) . "::multi_select_journal", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::multi_select_journal", LOG_DEBUG);
             $resql = $this->db->query($sql);
 
             if (!$resql) {
                 $this->error = "Error " . $this->db->lasterror();
-                dol_syslog(get_class($this) . "::multi_select_journal " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::multi_select_journal " . $this->error, LOG_ERR);
                 return -1;
             }
 
@@ -281,7 +281,7 @@ class FormAccounting extends Form
 
         $this->nbaccounts_category = 0;
 
-        dol_syslog(get_class($this) . '::' . __METHOD__, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::' . __METHOD__, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -342,12 +342,12 @@ class FormAccounting extends Form
         $sql .= " WHERE entity IN (" . getEntity('accountancy') . ")";
         $sql .= ' ORDER BY import_key DESC';
 
-        dol_syslog(get_class($this) . "::select_bookkeeping_importkey", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_bookkeeping_importkey", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::select_bookkeeping_importkey " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::select_bookkeeping_importkey " . $this->error, LOG_ERR);
             return -1;
         }
 
@@ -406,12 +406,12 @@ class FormAccounting extends Form
             $sql .= " AND aa.entity=" . ((int) $conf->entity);
             $sql .= " ORDER BY aa.account_number";
 
-            dol_syslog(get_class($this) . "::select_account", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::select_account", LOG_DEBUG);
             $resql = $this->db->query($sql);
 
             if (!$resql) {
                 $this->error = "Error " . $this->db->lasterror();
-                dol_syslog(get_class($this) . "::select_account " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::select_account " . $this->error, LOG_ERR);
                 return -1;
             }
 
@@ -491,7 +491,7 @@ class FormAccounting extends Form
         if ($usecache && !empty($this->options_cache[$usecache])) {
             $aux_account = $aux_account + $this->options_cache[$usecache]; // We use + instead of array_merge because we don't want to reindex key from 0
         } else {
-            dol_syslog(get_class($this) . "::select_auxaccount", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::select_auxaccount", LOG_DEBUG);
 
             // Auxiliary thirdparties account
             $sql = "SELECT code_compta, code_compta_fournisseur, nom as name";
@@ -511,7 +511,7 @@ class FormAccounting extends Form
                 }
             } else {
                 $this->error = "Error " . $this->db->lasterror();
-                dol_syslog(get_class($this) . "::select_auxaccount " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::select_auxaccount " . $this->error, LOG_ERR);
                 return -1;
             }
 
@@ -534,7 +534,7 @@ class FormAccounting extends Form
                 }
             } else {
                 $this->error = "Error " . $this->db->lasterror();
-                dol_syslog(get_class($this) . "::select_auxaccount " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::select_auxaccount " . $this->error, LOG_ERR);
                 return -1;
             }
             $this->db->free($resql);

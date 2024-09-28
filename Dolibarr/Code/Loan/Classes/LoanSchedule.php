@@ -197,7 +197,7 @@ class LoanSchedule extends CommonObject
             $sql .= " " . ((int) $user->id) . ",";
             $sql .= " " . ((int) $this->fk_bank) . ")";
 
-            dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "payment_loan");
@@ -251,7 +251,7 @@ class LoanSchedule extends CommonObject
         $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'bank as b ON t.fk_bank = b.rowid';
         $sql .= " WHERE t.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -356,7 +356,7 @@ class LoanSchedule extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -392,7 +392,7 @@ class LoanSchedule extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . $this->table_element;
             $sql .= " WHERE rowid=" . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -403,7 +403,7 @@ class LoanSchedule extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -462,7 +462,7 @@ class LoanSchedule extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . $this->table_element . " as t";
         $sql .= " WHERE t.fk_loan = " . ((int) $loanid);
 
-        dol_syslog(get_class($this) . "::fetchAll", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchAll", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         if ($resql) {

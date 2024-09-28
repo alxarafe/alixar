@@ -161,7 +161,7 @@ class doc_generic_member_odt extends ModelePDFMember
         if (count($listofdir)) {
             $texte .= $langs->trans("NumberOfModelFilesFound") . ': <b>' . count($listoffiles) . '</b>';
 
-            $texte .= '<div id="div_' . get_class($this) . '" class="hiddenx">';
+            $texte .= '<div id="div_' . get_only_class($this) . '" class="hiddenx">';
             // Show list of found files
             foreach ($listoffiles as $file) {
                 $texte .= '- ' . $file['name'] . ' <a href="' . constant('BASE_URL') . 'document.php?modulepart=doctemplates&file=members/' . urlencode(basename($file['name'])) . '">' . img_picto('', 'listlight') . '</a>';

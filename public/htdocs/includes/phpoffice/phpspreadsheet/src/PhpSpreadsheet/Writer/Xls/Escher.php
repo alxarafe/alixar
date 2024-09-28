@@ -57,7 +57,7 @@ class Escher
         // initialize
         $this->data = '';
 
-        switch (get_class($this->object)) {
+        switch (get_only_class($this->object)) {
             case \PhpOffice\PhpSpreadsheet\Shared\Escher::class:
                 if ($dggContainer = $this->object->getDggContainer()) {
                     $writer = new self($dggContainer);

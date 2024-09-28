@@ -270,7 +270,7 @@ class mod_barcode_thirdparty_standard extends ModeleNumRefBarCode
             }
         }
 
-        dol_syslog(get_class($this) . "::verif type=" . $thirdparty_type . " result=" . $result);
+        dol_syslog(get_only_class($this) . "::verif type=" . $thirdparty_type . " result=" . $result);
 
         return $result;
     }
@@ -330,7 +330,7 @@ class mod_barcode_thirdparty_standard extends ModeleNumRefBarCode
             return -1;
         }
 
-        dol_syslog(get_class($this) . '::verif_syntax codefortest=' . $codefortest . " typefortest=" . $typefortest);
+        dol_syslog(get_only_class($this) . '::verif_syntax codefortest=' . $codefortest . " typefortest=" . $typefortest);
 
         $newcodefortest = $codefortest;
 
@@ -340,7 +340,7 @@ class mod_barcode_thirdparty_standard extends ModeleNumRefBarCode
                 if (strlen($reg[1]) == 12) {
                     $newcodefortest = substr($newcodefortest, 0, 12);
                 }
-                dol_syslog(get_class($this) . '::verif_syntax newcodefortest=' . $newcodefortest);
+                dol_syslog(get_only_class($this) . '::verif_syntax newcodefortest=' . $newcodefortest);
             }
         }
 

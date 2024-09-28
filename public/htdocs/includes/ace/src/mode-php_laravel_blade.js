@@ -4517,7 +4517,7 @@ define("ace/mode/php_completions", ["require", "exports", "module"], function (r
             "Get the value of a PHP configuration option"
         ],
         "get_class": [
-            "string get_class([object object])",
+            "string get_only_class([object object])",
             "Retrieves the class name"
         ],
         "get_class_methods": [

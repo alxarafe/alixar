@@ -192,7 +192,7 @@ class mod_facture_mars extends ModeleNumRefFactures
         $sql .= " AND entity IN (" . getEntity('invoicenumber', 1, $invoice) . ")";
 
         $resql = $db->query($sql);
-        dol_syslog(get_class($this) . "::getNextValue", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getNextValue", LOG_DEBUG);
         if ($resql) {
             $obj = $db->fetch_object($resql);
             if ($obj) {
@@ -218,7 +218,7 @@ class mod_facture_mars extends ModeleNumRefFactures
             $sql .= " AND entity IN (" . getEntity('invoicenumber', 1, $invoice) . ")";
             $sql .= " ORDER BY ref DESC";
 
-            dol_syslog(get_class($this) . "::getNextValue", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::getNextValue", LOG_DEBUG);
             $resql = $db->query($sql);
             if ($resql) {
                 $obj = $db->fetch_object($resql);
@@ -240,7 +240,7 @@ class mod_facture_mars extends ModeleNumRefFactures
                 $num = sprintf("%04d", $max + 1);
             }
 
-            dol_syslog(get_class($this) . "::getNextValue return " . $prefix . $yymm . "-" . $num);
+            dol_syslog(get_only_class($this) . "::getNextValue return " . $prefix . $yymm . "-" . $num);
             return $prefix . $yymm . "-" . $num;
         } else {
             dol_print_error(null, 'Bad parameter for getNextValue');

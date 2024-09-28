@@ -2130,7 +2130,7 @@ function addFileIntoDatabaseIndex($dir, $file, $fullpathorig = '', $mode = 'uplo
             if (isset($object->table_element)) {
                 $ecmfile->src_object_type = $object->table_element;
             } else {
-                dol_syslog('Error: object ' . get_class($object) . ' has no table_element attribute.');
+                dol_syslog('Error: object ' . get_only_class($object) . ' has no table_element attribute.');
                 return -1;
             }
             if (isset($object->src_object_description)) {

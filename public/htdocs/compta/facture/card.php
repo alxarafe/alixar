@@ -1317,10 +1317,10 @@ if (empty($reshook)) {
                         $remain_to_pay = abs($facture_source->total_ttc - $totalpaid - $totalcreditnotes - $totaldeposits);
 
                         if (getDolGlobalString('INVOICE_VAT_TO_USE_ON_CREDIT_NOTE_WHEN_GENERATED_FROM_REMAIN_TO_PAY') == 'default') {
-                            if ((empty($object->thirdparty) || !is_object($object->thirdparty) || get_class($object->thirdparty) != 'Societe')) {
+                            if ((empty($object->thirdparty) || !is_object($object->thirdparty) || get_only_class($object->thirdparty) != 'Societe')) {
                                 $object->fetch_thirdparty();
                             }
-                            if (!empty($object->thirdparty) && is_object($object->thirdparty) && get_class($object->thirdparty) == 'Societe') {
+                            if (!empty($object->thirdparty) && is_object($object->thirdparty) && get_only_class($object->thirdparty) == 'Societe') {
                                 $tva_tx = get_default_tva($mysoc, $object->thirdparty);
                             } else {
                                 $tva_tx = 0;
@@ -4122,7 +4122,7 @@ if ($action == 'create') {
             //print '<input type="hidden" name="origin"   value="'.$objectsrc->element.'">';
             //print '<input type="hidden" name="originid" value="'.$objectsrc->id.'">';
 
-            switch (get_class($objectsrc)) {
+            switch (get_only_class($objectsrc)) {
                 case 'Propal':
                     $newclassname = 'CommercialProposal';
                     break;
@@ -4139,7 +4139,7 @@ if ($action == 'create') {
                     $newclassname = 'Intervention';
                     break;
                 default:
-                    $newclassname = get_class($objectsrc);
+                    $newclassname = get_only_class($objectsrc);
             }
 
             // Ref of origin

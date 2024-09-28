@@ -417,7 +417,7 @@ class StripeObject implements \ArrayAccess, \Countable, \JsonSerializable
 
             throw new Exception\InvalidArgumentException(
                 "Cannot save property `{$key}` containing an API resource of type " .
-                \get_class($value) . ". It doesn't appear to be persisted and is " .
+                \get_only_class($value) . ". It doesn't appear to be persisted and is " .
                 'not marked as `saveWithParent`.'
             );
         }
@@ -570,7 +570,7 @@ class StripeObject implements \ArrayAccess, \Countable, \JsonSerializable
             $values = $obj->_values;
         } else {
             throw new Exception\InvalidArgumentException(
-                'empty_values got unexpected object type: ' . \get_class($obj)
+                'empty_values got unexpected object type: ' . \get_only_class($obj)
             );
         }
 

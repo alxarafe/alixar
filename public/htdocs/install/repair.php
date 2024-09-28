@@ -927,7 +927,7 @@ if ($ok && GETPOST('clean_orphelin_dir', 'alpha')) {
                         }
                         print "</td></tr>";
                     } elseif ($result < 0) {
-                        print 'Error in ' . get_class($object_instance) . '.fetch of id' . $id . ' ref=' . $ref . ', result=' . $result . '<br>';
+                        print 'Error in ' . get_only_class($object_instance) . '.fetch of id' . $id . ' ref=' . $ref . ', result=' . $result . '<br>';
                     }
                 }
             }

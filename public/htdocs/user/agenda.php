@@ -19,20 +19,12 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
-
-/**
- *      \file       htdocs/user/agenda.php
- *      \ingroup    core
- *      \brief      Page for user events
- */
+use Dolibarr\Code\User\Classes\User;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
-
-use Dolibarr\Code\User\Classes\User;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
 // Load translation files required by page
@@ -169,7 +161,7 @@ $objcon = new stdClass();
 $out = '';
 $permok = $user->hasRight('agenda', 'myactions', 'create');
 if ((!empty($objUser->id) || !empty($objcon->id)) && $permok) {
-    if (is_object($objUser) && get_class($objUser) == 'User') {
+    if (is_object($objUser) && get_only_class($objUser) == 'User') {
         $out .= '&amp;originid=' . $objUser->id . ($objUser->id > 0 ? '&amp;userid=' . $objUser->id : '') . '&amp;backtopage=' . urlencode($_SERVER['PHP_SELF'] . ($objUser->id > 0 ? '?userid=' . $objUser->id : ''));
     }
     $out .= (!empty($objcon->id) ? '&amp;contactid=' . $objcon->id : '');

@@ -283,7 +283,7 @@ class OrderLine extends CommonOrderLine
             $result = $this->deleteExtraFields();
             if ($result < 0) {
                 $error++;
-                dol_syslog(get_class($this) . "::delete error -4 " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error -4 " . $this->error, LOG_ERR);
             }
         }
 
@@ -293,7 +293,7 @@ class OrderLine extends CommonOrderLine
         }
 
         foreach ($this->errors as $errmsg) {
-            dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
             $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
         }
         $this->db->rollback();
@@ -313,7 +313,7 @@ class OrderLine extends CommonOrderLine
 
         $pa_ht_isemptystring = (empty($this->pa_ht) && $this->pa_ht == ''); // If true, we can use a default value. If this->pa_ht = '0', we must use '0'.
 
-        dol_syslog(get_class($this) . "::insert rang=" . $this->rang);
+        dol_syslog(get_only_class($this) . "::insert rang=" . $this->rang);
 
         // Clean parameters
         if (empty($this->tva_tx)) {
@@ -425,7 +425,7 @@ class OrderLine extends CommonOrderLine
         $sql .= ", " . price2num($this->multicurrency_total_ttc, 'CT');
         $sql .= ')';
 
-        dol_syslog(get_class($this) . "::insert", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::insert", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . 'commandedet');
@@ -453,7 +453,7 @@ class OrderLine extends CommonOrderLine
             }
 
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::insert " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::insert " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -590,7 +590,7 @@ class OrderLine extends CommonOrderLine
 
         $sql .= " WHERE rowid = " . ((int) $this->rowid);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if (!$error) {
@@ -616,7 +616,7 @@ class OrderLine extends CommonOrderLine
             }
 
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();

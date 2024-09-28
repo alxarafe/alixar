@@ -510,7 +510,7 @@ class Availabilities extends CommonObject
 
         // Protection
         if ($this->status == self::STATUS_VALIDATED) {
-            dol_syslog(get_class($this) . "::validate action abandoned: already validated", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::validate action abandoned: already validated", LOG_WARNING);
             return 0;
         }
 
@@ -539,7 +539,7 @@ class Availabilities extends CommonObject
             }
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::validate()", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::validate()", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 dol_print_error($this->db);
@@ -584,7 +584,7 @@ class Availabilities extends CommonObject
                 $dirsource = $conf->bookcal->dir_output . '/availabilities/' . $oldref;
                 $dirdest = $conf->bookcal->dir_output . '/availabilities/' . $newref;
                 if (!$error && file_exists($dirsource)) {
-                    dol_syslog(get_class($this) . "::validate() rename dir " . $dirsource . " into " . $dirdest);
+                    dol_syslog(get_only_class($this) . "::validate() rename dir " . $dirsource . " into " . $dirdest);
 
                     if (@rename($dirsource, $dirdest)) {
                         dol_syslog("Rename ok");
@@ -991,7 +991,7 @@ class Availabilities extends CommonObject
                     return $numref;
                 } else {
                     $this->error = $obj->error;
-                    //dol_print_error($this->db,get_class($this)."::getNextNumRef ".$obj->error);
+                    //dol_print_error($this->db,get_only_class($this)."::getNextNumRef ".$obj->error);
                     return "";
                 }
             } else {

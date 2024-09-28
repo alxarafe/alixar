@@ -747,17 +747,17 @@ class DolGraph
     {
         if (empty($file)) {
             $this->error = "Call to draw method was made with empty value for parameter file.";
-            dol_syslog(get_class($this) . "::draw " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::draw " . $this->error, LOG_ERR);
             return -2;
         }
         if (!is_array($this->data)) {
             $this->error = "Call to draw method was made but SetData was not called or called with an empty dataset for parameters";
-            dol_syslog(get_class($this) . "::draw " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::draw " . $this->error, LOG_ERR);
             return -1;
         }
         if (count($this->data) < 1) {
             $this->error = "Call to draw method was made but SetData was is an empty dataset";
-            dol_syslog(get_class($this) . "::draw " . $this->error, LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::draw " . $this->error, LOG_WARNING);
         }
         $call = "draw_" . $this->_library;  // Example "draw_jflot"
 
@@ -786,7 +786,7 @@ class DolGraph
 		// phpcs:enable
         global $langs;
 
-        dol_syslog(get_class($this) . "::draw_jflot this->type=" . implode(',', $this->type) . " this->MaxValue=" . $this->MaxValue);
+        dol_syslog(get_only_class($this) . "::draw_jflot this->type=" . implode(',', $this->type) . " this->MaxValue=" . $this->MaxValue);
 
         if (empty($this->width) && empty($this->height)) {
             print 'Error width or height not set';
@@ -1073,7 +1073,7 @@ class DolGraph
 		// phpcs:enable
         global $langs;
 
-        dol_syslog(get_class($this) . "::draw_chart this->type=" . implode(',', $this->type) . " this->MaxValue=" . $this->MaxValue);
+        dol_syslog(get_only_class($this) . "::draw_chart this->type=" . implode(',', $this->type) . " this->MaxValue=" . $this->MaxValue);
 
         if (empty($this->width) && empty($this->height)) {
             print 'Error width or height not set';

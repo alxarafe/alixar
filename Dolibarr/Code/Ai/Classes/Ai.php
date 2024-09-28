@@ -21,15 +21,11 @@
 
 namespace Dolibarr\Code\Ai\Classes;
 
-/**
- * \file    htdocs/ai/class/ai.class.php
- * \ingroup ai
- * \brief   Class files with common methods for Ai
- */
+use DoliDB;
+use Exception;
 
-require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/geturl.lib.php';
-
 
 /**
  * Class for AI
@@ -39,31 +35,30 @@ class Ai
     /**
      * @var DoliDB $db Database object
      */
-    protected $db;
+    protected DoliDB $db;
 
     /**
      * @var string $apiService
      */
-    private $apiService;
+    private string $apiService;
 
     /**
      * @var string $apiKey
      */
-    private $apiKey;
+    private string $apiKey;
 
     /**
      * @var string $apiEndpoint
      */
-    private $apiEndpoint;
-
+    private string $apiEndpoint;
 
     /**
      * Constructor
      *
-     * @param   DoliDB  $db      Database handler
+     * @param DoliDB $db Database handler
      *
      */
-    public function __construct($db)
+    public function __construct(DoliDB $db)
     {
         $this->db = $db;
 
@@ -75,10 +70,10 @@ class Ai
     /**
      * Generate response of instructions
      *
-     * @param   string      $instructions   Instruction to generate content
-     * @param   string      $model          Model name ('gpt-3.5-turbo', 'gpt-4-turbo', 'dall-e-3', ...)
-     * @param   string      $function       Code of the feature we want to use ('textgeneration', 'transcription', 'audiotext', 'imagegeneration', 'translation')
-     * @param   string      $format         Format for output ('', 'html', ...)
+     * @param string $instructions Instruction to generate content
+     * @param string $model Model name ('gpt-3.5-turbo', 'gpt-4-turbo', 'dall-e-3', ...)
+     * @param string $function Code of the feature we want to use ('textgeneration', 'transcription', 'audiotext', 'imagegeneration', 'translation')
+     * @param string $format Format for output ('', 'html', ...)
      * @return  mixed       $response
      */
     public function generateContent($instructions, $model = 'auto', $function = 'textgeneration', $format = '')

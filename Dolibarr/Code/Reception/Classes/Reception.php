@@ -200,7 +200,7 @@ class Reception extends CommonObject
             if ($numref != "") {
                 return $numref;
             } else {
-                dol_print_error($this->db, get_class($this) . "::getNextNumRef " . $obj->error);
+                dol_print_error($this->db, get_only_class($this) . "::getNextNumRef " . $obj->error);
                 return "";
             }
         } else {
@@ -287,7 +287,7 @@ class Reception extends CommonObject
         $sql .= ", '" . $this->db->escape($this->location_incoterms) . "'";
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
 
@@ -298,7 +298,7 @@ class Reception extends CommonObject
             $sql .= " SET ref = '(PROV" . ((int) $this->id) . ")'";
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
             if ($this->db->query($sql)) {
                 // Insert of lines
                 $num = count($this->lines);
@@ -339,7 +339,7 @@ class Reception extends CommonObject
                     return $this->id;
                 } else {
                     foreach ($this->errors as $errmsg) {
-                        dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                        dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                         $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
                     }
                     $this->db->rollback();
@@ -398,7 +398,7 @@ class Reception extends CommonObject
             $sql .= " AND e.ref_ext = '" . $this->db->escape($ref_ext) . "'";
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             if ($this->db->num_rows($result)) {
@@ -478,7 +478,7 @@ class Reception extends CommonObject
 
                 return 1;
             } else {
-                dol_syslog(get_class($this) . '::Fetch no reception found', LOG_ERR);
+                dol_syslog(get_only_class($this) . '::Fetch no reception found', LOG_ERR);
                 $this->error = 'Reception with id ' . $id . ' not found';
                 return 0;
             }
@@ -501,11 +501,11 @@ class Reception extends CommonObject
 
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
-        dol_syslog(get_class($this) . "::valid");
+        dol_syslog(get_only_class($this) . "::valid");
 
         // Protection
         if ($this->statut) {
-            dol_syslog(get_class($this) . "::valid no draft status", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::valid no draft status", LOG_WARNING);
             return 0;
         }
 
@@ -514,7 +514,7 @@ class Reception extends CommonObject
             || (getDolGlobalInt('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('reception', 'reception_advance', 'validate')))
         ) {
             $this->error = 'Permission denied';
-            dol_syslog(get_class($this) . "::valid " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::valid " . $this->error, LOG_ERR);
             return -1;
         }
 
@@ -545,7 +545,7 @@ class Reception extends CommonObject
         $sql .= ", date_valid = '" . $this->db->idate($now) . "'";
         $sql .= ", fk_user_valid = " . $user->id;
         $sql .= " WHERE rowid = " . ((int) $this->id);
-        dol_syslog(get_class($this) . "::valid update reception", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::valid update reception", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = $this->db->lasterror();
@@ -568,7 +568,7 @@ class Reception extends CommonObject
             $sql .= " WHERE ed.fk_reception = " . ((int) $this->id);
             $sql .= " AND cd.rowid = ed.fk_elementdet";
 
-            dol_syslog(get_class($this) . "::valid select details", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::valid select details", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $cpt = $this->db->num_rows($resql);
@@ -580,7 +580,7 @@ class Reception extends CommonObject
                     if ($qty == 0 || ($qty < 0 && !getDolGlobalInt('RECEPTION_ALLOW_NEGATIVE_QTY'))) {
                         continue;
                     }
-                    dol_syslog(get_class($this) . "::valid movement index " . $i . " ed.rowid=" . $obj->rowid . " edb.rowid=" . $obj->edbrowid);
+                    dol_syslog(get_only_class($this) . "::valid movement index " . $i . " ed.rowid=" . $obj->rowid . " edb.rowid=" . $obj->edbrowid);
 
                     //var_dump($this->lines[$i]);
                     $mouvS = new MouvementStock($this->db);
@@ -681,7 +681,7 @@ class Reception extends CommonObject
                 $dirsource = $conf->reception->dir_output . '/' . $oldref;
                 $dirdest = $conf->reception->dir_output . '/' . $newref;
                 if (!$error && file_exists($dirsource)) {
-                    dol_syslog(get_class($this) . "::valid rename dir " . $dirsource . " into " . $dirdest);
+                    dol_syslog(get_only_class($this) . "::valid rename dir " . $dirsource . " into " . $dirdest);
 
                     if (@rename($dirsource, $dirdest)) {
                         dol_syslog("Rename ok");
@@ -711,7 +711,7 @@ class Reception extends CommonObject
             return 1;
         } else {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::valid " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::valid " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -1013,7 +1013,7 @@ class Reception extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -1034,7 +1034,7 @@ class Reception extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -1075,12 +1075,12 @@ class Reception extends CommonObject
             $sql .= " WHERE ed.fk_reception = " . ((int) $this->id);
             $sql .= " AND cd.rowid = ed.fk_elementdet";
 
-            dol_syslog(get_class($this) . "::delete select details", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete select details", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $cpt = $this->db->num_rows($resql);
                 for ($i = 0; $i < $cpt; $i++) {
-                    dol_syslog(get_class($this) . "::delete movement index " . $i);
+                    dol_syslog(get_only_class($this) . "::delete movement index " . $i);
                     $obj = $this->db->fetch_object($resql);
 
                     $mouvS = new MouvementStock($this->db);
@@ -1431,7 +1431,7 @@ class Reception extends CommonObject
         include_once DOL_DOCUMENT_ROOT . '/fourn/class/fournisseur.commande.dispatch.class.php';
         $now = dol_now();
 
-        dol_syslog(get_class($this) . "::initAsSpecimen");
+        dol_syslog(get_only_class($this) . "::initAsSpecimen");
 
         $order = new CommandeFournisseur($this->db);
         $order->initAsSpecimen();
@@ -1495,7 +1495,7 @@ class Reception extends CommonObject
             $sql .= " SET date_delivery = " . ($delivery_date ? "'" . $this->db->idate($delivery_date) . "'" : 'null');
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::setDeliveryDate", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::setDeliveryDate", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $this->date_delivery = $delivery_date;
@@ -1613,7 +1613,7 @@ class Reception extends CommonObject
 
         // Protection. This avoid to move stock later when we should not
         if ($this->statut == Reception::STATUS_CLOSED) {
-            dol_syslog(get_class($this) . "::setClosed already in closed status", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::setClosed already in closed status", LOG_WARNING);
             return 0;
         }
 
@@ -1667,7 +1667,7 @@ class Reception extends CommonObject
                 $sql .= " WHERE ed.fk_reception = " . ((int) $this->id);
                 $sql .= " AND cd.rowid = ed.fk_elementdet";
 
-                dol_syslog(get_class($this) . "::valid select details", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::valid select details", LOG_DEBUG);
                 $resql = $this->db->query($sql);
 
                 if ($resql) {
@@ -1680,7 +1680,7 @@ class Reception extends CommonObject
                         if ($qty <= 0) {
                             continue;
                         }
-                        dol_syslog(get_class($this) . "::valid movement index " . $i . " ed.rowid=" . $obj->rowid . " edb.rowid=" . $obj->edbrowid);
+                        dol_syslog(get_only_class($this) . "::valid movement index " . $i . " ed.rowid=" . $obj->rowid . " edb.rowid=" . $obj->edbrowid);
 
                         $mouvS = new MouvementStock($this->db);
                         $mouvS->origin = &$this;
@@ -1824,7 +1824,7 @@ class Reception extends CommonObject
                 $sql .= " WHERE ed.fk_reception = " . ((int) $this->id);
                 $sql .= " AND cd.rowid = ed.fk_elementdet";
 
-                dol_syslog(get_class($this) . "::valid select details", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::valid select details", LOG_DEBUG);
                 $resql = $this->db->query($sql);
                 if ($resql) {
                     $cpt = $this->db->num_rows($resql);
@@ -1837,7 +1837,7 @@ class Reception extends CommonObject
                             continue;
                         }
 
-                        dol_syslog(get_class($this) . "::reopen reception movement index " . $i . " ed.rowid=" . $obj->rowid);
+                        dol_syslog(get_only_class($this) . "::reopen reception movement index " . $i . " ed.rowid=" . $obj->rowid);
 
                         //var_dump($this->lines[$i]);
                         $mouvS = new MouvementStock($this->db);
@@ -1959,7 +1959,7 @@ class Reception extends CommonObject
                 $sql .= " WHERE ed.fk_reception = " . ((int) $this->id);
                 $sql .= " AND cd.rowid = ed.fk_elementdet";
 
-                dol_syslog(get_class($this) . "::valid select details", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::valid select details", LOG_DEBUG);
                 $resql = $this->db->query($sql);
                 if ($resql) {
                     $cpt = $this->db->num_rows($resql);
@@ -1972,7 +1972,7 @@ class Reception extends CommonObject
                         if ($qty <= 0) {
                             continue;
                         }
-                        dol_syslog(get_class($this) . "::reopen reception movement index " . $i . " ed.rowid=" . $obj->rowid . " edb.rowid=" . $obj->edbrowid);
+                        dol_syslog(get_only_class($this) . "::reopen reception movement index " . $i . " ed.rowid=" . $obj->rowid . " edb.rowid=" . $obj->edbrowid);
 
                         //var_dump($this->lines[$i]);
                         $mouvS = new MouvementStock($this->db);

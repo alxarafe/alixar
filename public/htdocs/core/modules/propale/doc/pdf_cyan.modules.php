@@ -930,7 +930,7 @@ class pdf_cyan extends ModelePDFPropales
                                             }
                                         }
 
-                                        dol_syslog(get_class($this) . ':: upload_dir=' . $filetomerge_dir, LOG_DEBUG);
+                                        dol_syslog(get_only_class($this) . ':: upload_dir=' . $filetomerge_dir, LOG_DEBUG);
 
                                         $infile = $filetomerge_dir . '/' . $linefile->file_name;
                                         if (file_exists($infile) && is_readable($infile)) {

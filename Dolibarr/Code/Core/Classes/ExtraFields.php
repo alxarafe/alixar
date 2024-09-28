@@ -241,13 +241,13 @@ class ExtraFields
 
         // Create field into database except for separator type which is not stored in database
         if ($type != 'separate') {
-            dol_syslog(get_class($this) . '::thisupdate', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::thisupdate', LOG_DEBUG);
             $result = $this->update($attrname, $label, $type, $size, $elementtype, $unique, $required, $pos, $param, $alwayseditable, $perms, $list, $help, $default_value, $computed, $entity, $langfile, $enabled, $totalizable, $printable, $moreparams);
         }
         $err1 = $this->errno;
         if ($result > 0 || $err1 == 'DB_ERROR_COLUMN_ALREADY_EXISTS' || $type == 'separate') {
             // Add declaration of field into table
-            dol_syslog(get_class($this) . '::thislabel', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::thislabel', LOG_DEBUG);
             $result2 = $this->update_label($attrname, $label, $type, $size, $elementtype, $unique, $required, $pos, $param, $alwayseditable, $perms, $list, $help, $default_value, $computed, $entity, $langfile, $enabled, $totalizable, $printable, $moreparams);
             $err2 = $this->errno;
             if ($result2 > 0 || ($err1 == 'DB_ERROR_COLUMN_ALREADY_EXISTS' && $err2 == 'DB_ERROR_RECORD_ALREADY_EXISTS')) {
@@ -511,10 +511,10 @@ class ExtraFields
             $sql .= ')';
 
             if ($this->db->query($sql)) {
-                dol_syslog(get_class($this) . "::create_label_success", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::create_label_success", LOG_DEBUG);
                 return 1;
             } else {
-                dol_syslog(get_class($this) . "::create_label_error", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::create_label_error", LOG_DEBUG);
                 $this->error = $this->db->lasterror();
                 $this->errno = $this->db->lasterrno();
                 return -1;
@@ -606,7 +606,7 @@ class ExtraFields
             $sql .= " AND entity IN  (0," . $conf->entity . ')';
             $sql .= " AND elementtype = '" . $this->db->escape($elementtype) . "'";
 
-            dol_syslog(get_class($this) . "::delete_label", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete_label", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 return 1;
@@ -722,25 +722,25 @@ class ExtraFields
                 }
             }
 
-            dol_syslog(get_class($this) . '::DDLUpdateField', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::DDLUpdateField', LOG_DEBUG);
             if ($type != 'separate') { // No table update when separate type
                 $result = $this->db->DDLUpdateField($this->db->prefix() . $table, $attrname, $field_desc);
             }
             if ($result > 0 || $type == 'separate') {
                 if ($label) {
-                    dol_syslog(get_class($this) . '::update_label', LOG_DEBUG);
+                    dol_syslog(get_only_class($this) . '::update_label', LOG_DEBUG);
                     $result = $this->update_label($attrname, $label, $type, $length, $elementtype, $unique, $required, $pos, $param, $alwayseditable, $perms, $list, $help, $default, $computed, $entity, $langfile, $enabled, $totalizable, $printable, $moreparams);
                 }
                 if ($result > 0) {
                     $sql = '';
                     if ($unique) {
-                        dol_syslog(get_class($this) . '::update_unique', LOG_DEBUG);
+                        dol_syslog(get_only_class($this) . '::update_unique', LOG_DEBUG);
                         $sql = "ALTER TABLE " . $this->db->prefix() . $table . " ADD UNIQUE INDEX uk_" . $table . "_" . $this->db->sanitize($attrname) . " (" . $this->db->sanitize($attrname) . ")";
                     } else {
-                        dol_syslog(get_class($this) . '::update_common', LOG_DEBUG);
+                        dol_syslog(get_only_class($this) . '::update_common', LOG_DEBUG);
                         $sql = "ALTER TABLE " . $this->db->prefix() . $table . " DROP INDEX IF EXISTS uk_" . $table . "_" . $this->db->sanitize($attrname);
                     }
-                    dol_syslog(get_class($this) . '::update', LOG_DEBUG);
+                    dol_syslog(get_only_class($this) . '::update', LOG_DEBUG);
                     $resql = $this->db->query($sql, 1, 'dml');
                     /*if ($resql < 0) {
                         $this->error = $this->db->lasterror();
@@ -793,7 +793,7 @@ class ExtraFields
     {
 		// phpcs:enable
         global $conf, $user;
-        dol_syslog(get_class($this) . "::update_label " . $attrname . ", " . $label . ", " . $type . ", " . $size . ", " . $elementtype . ", " . $unique . ", " . $required . ", " . $pos . ", " . $alwayseditable . ", " . $perms . ", " . $list . ", " . $default . ", " . $computed . ", " . $entity . ", " . $langfile . ", " . $enabled . ", " . $totalizable . ", " . $printable);
+        dol_syslog(get_only_class($this) . "::update_label " . $attrname . ", " . $label . ", " . $type . ", " . $size . ", " . $elementtype . ", " . $unique . ", " . $required . ", " . $pos . ", " . $alwayseditable . ", " . $perms . ", " . $list . ", " . $default . ", " . $computed . ", " . $entity . ", " . $langfile . ", " . $enabled . ", " . $totalizable . ", " . $printable);
 
         // Clean parameters
         if ($elementtype == 'thirdparty') {
@@ -1032,7 +1032,7 @@ class ExtraFields
             }
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . "::fetch_name_optionals_label " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetch_name_optionals_label " . $this->error, LOG_ERR);
         }
 
         return $array_name_label;
@@ -1069,7 +1069,7 @@ class ExtraFields
         }
 
         if (empty($extrafieldsobjectkey)) {
-            dol_syslog(get_class($this) . '::showInputField extrafieldsobjectkey required', LOG_ERR);
+            dol_syslog(get_only_class($this) . '::showInputField extrafieldsobjectkey required', LOG_ERR);
             return 'BadValueForParamExtraFieldsObjectKey';
         }
 
@@ -1405,7 +1405,7 @@ class ExtraFields
 
                     $sql .= ' ORDER BY ' . implode(', ', $fields_label);
 
-                    dol_syslog(get_class($this) . '::showInputField type=sellist', LOG_DEBUG);
+                    dol_syslog(get_only_class($this) . '::showInputField type=sellist', LOG_DEBUG);
                     $resql = $this->db->query($sql);
                     if ($resql) {
                         $out .= '<option value="0">&nbsp;</option>';
@@ -1622,7 +1622,7 @@ class ExtraFields
                     // print $sql;
 
                     $sql .= $sqlwhere;
-                    dol_syslog(get_class($this) . '::showInputField type=chkbxlst', LOG_DEBUG);
+                    dol_syslog(get_only_class($this) . '::showInputField type=chkbxlst', LOG_DEBUG);
                     $resql = $this->db->query($sql);
                     if ($resql) {
                         $num = $this->db->num_rows($resql);
@@ -1775,7 +1775,7 @@ class ExtraFields
         }
 
         if (empty($extrafieldsobjectkey)) {
-            dol_syslog(get_class($this) . '::showOutputField extrafieldsobjectkey required', LOG_ERR);
+            dol_syslog(get_only_class($this) . '::showOutputField extrafieldsobjectkey required', LOG_ERR);
             return 'BadValueForParamExtraFieldsObjectKey';
         }
 
@@ -1910,7 +1910,7 @@ class ExtraFields
 
             //$sql.= ' AND entity = '.$conf->entity;
 
-            dol_syslog(get_class($this) . ':showOutputField:$type=sellist', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . ':showOutputField:$type=sellist', LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 if ($filter_categorie === false) {
@@ -1963,7 +1963,7 @@ class ExtraFields
                     $value = '<div class="select2-container-multi-dolibarr" style="width: 90%;"><ul class="select2-choices-dolibarr">' . implode(' ', $toprint) . '</ul></div>';
                 }
             } else {
-                dol_syslog(get_class($this) . '::showOutputField error ' . $this->db->lasterror(), LOG_WARNING);
+                dol_syslog(get_only_class($this) . '::showOutputField error ' . $this->db->lasterror(), LOG_WARNING);
             }
         } elseif ($type == 'radio') {
             if (!isset($param['options'][$value])) {
@@ -2019,7 +2019,7 @@ class ExtraFields
             // $sql.= " WHERE ".$selectkey."='".$this->db->escape($value)."'";
             // $sql.= ' AND entity = '.$conf->entity;
 
-            dol_syslog(get_class($this) . ':showOutputField:$type=chkbxlst', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . ':showOutputField:$type=chkbxlst', LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 if ($filter_categorie === false) {
@@ -2074,7 +2074,7 @@ class ExtraFields
                     $value = '<div class="select2-container-multi-dolibarr" style="width: 90%;"><ul class="select2-choices-dolibarr">' . implode(' ', $toprint) . '</ul></div>';
                 }
             } else {
-                dol_syslog(get_class($this) . '::showOutputField error ' . $this->db->lasterror(), LOG_WARNING);
+                dol_syslog(get_only_class($this) . '::showOutputField error ' . $this->db->lasterror(), LOG_WARNING);
             }
         } elseif ($type == 'link') {
             $out = '';

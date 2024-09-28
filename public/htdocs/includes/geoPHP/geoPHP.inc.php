@@ -169,7 +169,7 @@ class geoPHP
         // If it does, then pass the member, if not, then just pass back the geometry
         if (gettype($geometry) == 'object') {
             $simple_collections = array('MultiPoint', 'MultiLineString', 'MultiPolygon');
-            if (in_array(get_class($geometry), $passbacks)) {
+            if (in_array(get_only_class($geometry), $passbacks)) {
                 $components = $geometry->getComponents();
                 if (count($components) == 1) {
                     return $components[0];
@@ -191,7 +191,7 @@ class geoPHP
 
         foreach ($geometry as $item) {
             if ($item) {
-                if (in_array(get_class($item), $collections)) {
+                if (in_array(get_only_class($item), $collections)) {
                     foreach ($item->getComponents() as $component) {
                         $geometries[] = $component;
                         $geom_types[] = $component->geometryType();

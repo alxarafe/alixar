@@ -158,14 +158,14 @@ class doc_generic_asset_odt extends ModelePDFAsset
         $nbofiles = count($listoffiles);
         if (getDolGlobalString('ASSET_ASSET_ADDON_PDF_ODT_PATH')) {
             $texte .= $langs->trans("NumberOfModelFilesFound") . ': <b>';
-            //$texte.=$nbofiles?'<a id="a_'.get_class($this).'" href="#">':'';
+            //$texte.=$nbofiles?'<a id="a_'.get_only_class($this).'" href="#">':'';
             $texte .= count($listoffiles);
             //$texte.=$nbofiles?'</a>':'';
             $texte .= '</b>';
         }
 
         if ($nbofiles) {
-            $texte .= '<div id="div_' . get_class($this) . '" class="hidden">';
+            $texte .= '<div id="div_' . get_only_class($this) . '" class="hidden">';
             foreach ($listoffiles as $file) {
                 $texte .= '- ' . $file['name'] . ' <a href="' . constant('BASE_URL') . '/document.php?modulepart=doctemplates&file=asset_asset/' . urlencode(basename($file['name'])) . '">' . img_picto('', 'listlight') . '</a>';
                 $texte .= ' &nbsp; <a class="reposition" href="' . $_SERVER["PHP_SELF"] . '?modulepart=doctemplates&keyforuploaddir=ASSET_ASSET_ADDON_PDF_ODT_PATH&action=deletefile&token=' . newToken() . '&file=' . urlencode(basename($file['name'])) . '">' . img_picto('', 'delete') . '</a>';

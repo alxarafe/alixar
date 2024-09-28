@@ -349,7 +349,7 @@ class FichinterLigne extends CommonObjectLine
     {
         $error = 0;
 
-        dol_syslog(get_class($this) . "::deleteline lineid=" . $this->id);
+        dol_syslog(get_only_class($this) . "::deleteline lineid=" . $this->id);
 
         $this->db->begin();
 

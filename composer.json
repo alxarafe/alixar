@@ -53,6 +53,7 @@
     "luracast/restler": "^5.0",
     "ext-curl": "*",
     "ext-dom": "*",
+    "ext-libxml": "*",
     "ext-simplexml": "*"
   },
   "require-dev": {

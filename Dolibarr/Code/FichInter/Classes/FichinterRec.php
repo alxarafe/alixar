@@ -304,7 +304,7 @@ class FichinterRec extends Fichinter
             $sql .= " WHERE f.title = '" . $this->db->escape($ref) . "'";
         }
 
-        dol_syslog(get_class($this) . "::fetch rowid=" . $rowid, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch rowid=" . $rowid, LOG_DEBUG);
 
         $result = $this->db->query($sql);
         if ($result) {
@@ -345,7 +345,7 @@ class FichinterRec extends Fichinter
                 return 1;
             } else {
                 $this->error = 'Interventional with id ' . $rowid . ' not found sql=' . $sql;
-                dol_syslog(get_class($this) . '::Fetch Error ' . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . '::Fetch Error ' . $this->error, LOG_ERR);
                 return -2;
             }
         } else {
@@ -437,7 +437,7 @@ class FichinterRec extends Fichinter
     {
         $rowid = $this->id;
 
-        dol_syslog(get_class($this) . "::delete rowid=" . $rowid, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete rowid=" . $rowid, LOG_DEBUG);
 
         $error = 0;
         $this->db->begin();
@@ -580,7 +580,7 @@ class FichinterRec extends Fichinter
             $sql .= ", " . (!empty($fk_unit) ? $fk_unit : "null");
             $sql .= ")";
 
-            dol_syslog(get_class($this) . "::addLineRec", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::addLineRec", LOG_DEBUG);
             if ($this->db->query($sql)) {
                 return 1;
             } else {
@@ -739,12 +739,12 @@ class FichinterRec extends Fichinter
     public function setFrequencyAndUnit($frequency, $unit)
     {
         if (!$this->table_element) {
-            dol_syslog(get_class($this) . "::setFrequencyAndUnit called with table_element not defined", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::setFrequencyAndUnit called with table_element not defined", LOG_ERR);
             return -1;
         }
 
         if (!empty($frequency) && empty($unit)) {
-            dol_syslog(get_class($this) . "::setFrequencyAndUnit called with frequency defined but unit not ", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::setFrequencyAndUnit called with frequency defined but unit not ", LOG_ERR);
             return -2;
         }
 
@@ -755,7 +755,7 @@ class FichinterRec extends Fichinter
         }
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::setFrequencyAndUnit", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::setFrequencyAndUnit", LOG_DEBUG);
         if ($this->db->query($sql)) {
             $this->frequency = $frequency;
             if (!empty($unit)) {
@@ -778,7 +778,7 @@ class FichinterRec extends Fichinter
     public function setNextDate($date, $increment_nb_gen_done = 0)
     {
         if (!$this->table_element) {
-            dol_syslog(get_class($this) . "::setNextDate was called on object with property table_element not defined", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::setNextDate was called on object with property table_element not defined", LOG_ERR);
             return -1;
         }
         $sql = 'UPDATE ' . MAIN_DB_PREFIX . $this->table_element;
@@ -788,7 +788,7 @@ class FichinterRec extends Fichinter
         }
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::setNextDate", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::setNextDate", LOG_DEBUG);
         if ($this->db->query($sql)) {
             $this->date_when = $date;
             if ($increment_nb_gen_done > 0) {
@@ -810,7 +810,7 @@ class FichinterRec extends Fichinter
     public function setMaxPeriod($nb)
     {
         if (!$this->table_element) {
-            dol_syslog(get_class($this) . "::setMaxPeriod was called on object with property table_element not defined", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::setMaxPeriod was called on object with property table_element not defined", LOG_ERR);
             return -1;
         }
 
@@ -822,7 +822,7 @@ class FichinterRec extends Fichinter
         $sql .= ' SET nb_gen_max = ' . ((int) $nb);
         $sql .= ' WHERE rowid = ' . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::setMaxPeriod", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::setMaxPeriod", LOG_DEBUG);
         if ($this->db->query($sql)) {
             $this->nb_gen_max = $nb;
             return 1;
@@ -841,7 +841,7 @@ class FichinterRec extends Fichinter
     public function setAutoValidate($validate)
     {
         if (!$this->table_element) {
-            dol_syslog(get_class($this) . "::setAutoValidate called with property table_element not defined", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::setAutoValidate called with property table_element not defined", LOG_ERR);
             return -1;
         }
 
@@ -849,7 +849,7 @@ class FichinterRec extends Fichinter
         $sql .= ' SET auto_validate = ' . ((int) $validate);
         $sql .= ' WHERE rowid = ' . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::setAutoValidate", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::setAutoValidate", LOG_DEBUG);
         if ($this->db->query($sql)) {
             $this->auto_validate = $validate;
             return 1;
@@ -867,7 +867,7 @@ class FichinterRec extends Fichinter
     public function updateNbGenDone()
     {
         if (!$this->table_element) {
-            dol_syslog(get_class($this) . "::updateNbGenDone called with property table_element not defined", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::updateNbGenDone called with property table_element not defined", LOG_ERR);
             return -1;
         }
 
@@ -881,7 +881,7 @@ class FichinterRec extends Fichinter
 
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::setAutoValidate", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::setAutoValidate", LOG_DEBUG);
         if ($this->db->query($sql)) {
             $this->nb_gen_done = $this->nb_gen_done + 1;
             $this->nb_gen_done = dol_now();

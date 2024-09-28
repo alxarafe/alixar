@@ -477,19 +477,19 @@ class Facture extends CommonInvoice
             $this->multicurrency_tx = 1;
         }
 
-        dol_syslog(get_class($this) . "::create user=" . $user->id . " date=" . $this->date);
+        dol_syslog(get_only_class($this) . "::create user=" . $user->id . " date=" . $this->date);
 
         // Check parameters
         if (empty($this->date)) {
             $this->error = "Try to create an invoice with an empty parameter (date)";
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
             return -3;
         }
         $soc = new Societe($this->db);
         $result = $soc->fetch($this->socid);
         if ($result < 0) {
             $this->error = "Failed to fetch company: " . $soc->error;
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
             return -2;
         }
 
@@ -1093,7 +1093,7 @@ class Facture extends CommonInvoice
                     return -3;
                 }
             } else {
-                dol_syslog(get_class($this) . "::create error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create error " . $this->error, LOG_ERR);
                 $this->db->rollback();
                 return -2;
             }
@@ -1177,7 +1177,7 @@ class Facture extends CommonInvoice
             }
         }
 
-        dol_syslog(get_class($this) . "::createFromCurrent invertdetail=" . $invertdetail . " socid=" . $this->socid . " nboflines=" . count($facture->lines));
+        dol_syslog(get_only_class($this) . "::createFromCurrent invertdetail=" . $invertdetail . " socid=" . $this->socid . " nboflines=" . count($facture->lines));
 
         $facid = $facture->create($user);
         if ($facid <= 0) {
@@ -2146,7 +2146,7 @@ class Facture extends CommonInvoice
             }
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -2294,7 +2294,7 @@ class Facture extends CommonInvoice
         $sql .= ' WHERE l.fk_facture = ' . ((int) $this->id);
         $sql .= ' ORDER BY l.rang, l.rowid';
 
-        dol_syslog(get_class($this) . '::fetch_lines', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::fetch_lines', LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $num = $this->db->num_rows($result);
@@ -2407,7 +2407,7 @@ class Facture extends CommonInvoice
         $sql .= ' AND situation_cycle_ref = ' . (int) $this->situation_cycle_ref;
         $sql .= ' ORDER BY situation_counter ASC';
 
-        dol_syslog(get_class($this) . '::fetchPreviousNextSituationInvoice ', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::fetchPreviousNextSituationInvoice ', LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result && $this->db->num_rows($result) > 0) {
             while ($objp = $this->db->fetch_object($result)) {
@@ -2528,7 +2528,7 @@ class Facture extends CommonInvoice
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -2554,7 +2554,7 @@ class Facture extends CommonInvoice
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -2738,7 +2738,7 @@ class Facture extends CommonInvoice
 
         $rowid = $this->id;
 
-        dol_syslog(get_class($this) . "::delete rowid=" . $rowid . ", ref=" . $this->ref . ", thirdparty=" . (empty($this->thirdparty) ? '' : $this->thirdparty->name), LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete rowid=" . $rowid . ", ref=" . $this->ref . ", thirdparty=" . (empty($this->thirdparty) ? '' : $this->thirdparty->name), LOG_DEBUG);
 
         // Test to avoid invoice deletion (allowed if draft)
         $result = $this->is_erasable();
@@ -2765,7 +2765,7 @@ class Facture extends CommonInvoice
             $result = $this->deleteExtraFields();
             if ($result < 0) {
                 $error++;
-                dol_syslog(get_class($this) . "::delete error deleteExtraFields " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error deleteExtraFields " . $this->error, LOG_ERR);
             }
         }
 
@@ -2927,7 +2927,7 @@ class Facture extends CommonInvoice
     public function set_paid($user, $close_code = '', $close_note = '')
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::set_paid is deprecated, use setPaid instead", LOG_NOTICE);
+        dol_syslog(get_only_class($this) . "::set_paid is deprecated, use setPaid instead", LOG_NOTICE);
         return $this->setPaid($user, $close_code, $close_note);
     }
 
@@ -2950,7 +2950,7 @@ class Facture extends CommonInvoice
 
             $now = dol_now();
 
-            dol_syslog(get_class($this) . "::setPaid rowid=" . ((int) $this->id), LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::setPaid rowid=" . ((int)$this->id), LOG_DEBUG);
 
             $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'facture SET';
             $sql .= ' fk_statut=' . self::STATUS_CLOSED;
@@ -3007,7 +3007,7 @@ class Facture extends CommonInvoice
     public function set_unpaid($user)
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::set_unpaid is deprecated, use setUnpaid instead", LOG_NOTICE);
+        dol_syslog(get_only_class($this) . "::set_unpaid is deprecated, use setUnpaid instead", LOG_NOTICE);
         return $this->setUnpaid($user);
     }
 
@@ -3031,7 +3031,7 @@ class Facture extends CommonInvoice
         $sql .= ' fk_user_closing=null';
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::setUnpaid", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::setUnpaid", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             // Call trigger
@@ -3072,7 +3072,7 @@ class Facture extends CommonInvoice
     public function set_canceled($user, $close_code = '', $close_note = '')
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::set_canceled is deprecated, use setCanceled instead", LOG_NOTICE);
+        dol_syslog(get_only_class($this) . "::set_canceled is deprecated, use setCanceled instead", LOG_NOTICE);
         return $this->setCanceled($user, $close_code, $close_note);
     }
 
@@ -3088,7 +3088,7 @@ class Facture extends CommonInvoice
      */
     public function setCanceled($user, $close_code = '', $close_note = '')
     {
-        dol_syslog(get_class($this) . "::setCanceled rowid=" . ((int) $this->id), LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::setCanceled rowid=" . ((int)$this->id), LOG_DEBUG);
 
         $this->db->begin();
         $now = dol_now();
@@ -3164,7 +3164,7 @@ class Facture extends CommonInvoice
         $now = dol_now();
 
         $error = 0;
-        dol_syslog(get_class($this) . '::validate user=' . $user->id . ', force_number=' . $force_number . ', idwarehouse=' . $idwarehouse);
+        dol_syslog(get_only_class($this) . '::validate user=' . $user->id . ', force_number=' . $force_number . ', idwarehouse=' . $idwarehouse);
 
         // Force to have object complete for checks
         $this->fetch_thirdparty();
@@ -3172,7 +3172,7 @@ class Facture extends CommonInvoice
 
         // Check parameters
         if ($this->status != self::STATUS_DRAFT) {
-            dol_syslog(get_class($this) . "::validate Current status is not draft. operation canceled.", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::validate Current status is not draft. operation canceled.", LOG_WARNING);
             return 0;
         }
         if (count($this->lines) <= 0) {
@@ -3185,7 +3185,7 @@ class Facture extends CommonInvoice
             || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && !$user->hasRight('facture', 'invoice_advance', 'validate'))
         ) {
             $this->error = 'Permission denied';
-            dol_syslog(get_class($this) . "::validate " . $this->error . ' MAIN_USE_ADVANCED_PERMS=' . getDolGlobalString('MAIN_USE_ADVANCED_PERMS'), LOG_ERR);
+            dol_syslog(get_only_class($this) . "::validate " . $this->error . ' MAIN_USE_ADVANCED_PERMS=' . getDolGlobalString('MAIN_USE_ADVANCED_PERMS'), LOG_ERR);
             return -1;
         }
         if (
@@ -3330,7 +3330,7 @@ class Facture extends CommonInvoice
             }
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::validate", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::validate", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 dol_print_error($this->db);
@@ -3519,7 +3519,7 @@ class Facture extends CommonInvoice
                     $dirsource = $conf->facture->dir_output . '/' . $oldref;
                     $dirdest = $conf->facture->dir_output . '/' . $newref;
                     if (!$error && file_exists($dirsource)) {
-                        dol_syslog(get_class($this) . "::validate rename dir " . $dirsource . " into " . $dirdest);
+                        dol_syslog(get_only_class($this) . "::validate rename dir " . $dirsource . " into " . $dirdest);
 
                         if (@rename($dirsource, $dirdest)) {
                             dol_syslog("Rename ok");
@@ -3810,7 +3810,7 @@ class Facture extends CommonInvoice
 
         global $mysoc, $conf, $langs;
 
-        dol_syslog(get_class($this) . "::addline id=$this->id, pu_ht=$pu_ht, qty=$qty, txtva=$txtva, txlocaltax1=$txlocaltax1, txlocaltax2=$txlocaltax2, fk_product=$fk_product, remise_percent=$remise_percent, date_start=$date_start, date_end=$date_end, fk_code_ventilation=$fk_code_ventilation, info_bits=$info_bits, fk_remise_except=$fk_remise_except, price_base_type=$price_base_type, pu_ttc=$pu_ttc, type=$type, fk_unit=$fk_unit, desc=" . dol_trunc($desc, 25), LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::addline id=$this->id, pu_ht=$pu_ht, qty=$qty, txtva=$txtva, txlocaltax1=$txlocaltax1, txlocaltax2=$txlocaltax2, fk_product=$fk_product, remise_percent=$remise_percent, date_start=$date_start, date_end=$date_end, fk_code_ventilation=$fk_code_ventilation, info_bits=$info_bits, fk_remise_except=$fk_remise_except, price_base_type=$price_base_type, pu_ttc=$pu_ttc, type=$type, fk_unit=$fk_unit, desc=" . dol_trunc($desc, 25), LOG_DEBUG);
 
         if ($this->status == self::STATUS_DRAFT) {
             include_once DOL_DOCUMENT_ROOT . '/core/lib/price.lib.php';
@@ -4029,7 +4029,7 @@ class Facture extends CommonInvoice
             }
         } else {
             $this->errors[] = 'status of invoice must be Draft to allow use of ->addline()';
-            dol_syslog(get_class($this) . "::addline status of invoice must be Draft to allow use of ->addline()", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::addline status of invoice must be Draft to allow use of ->addline()", LOG_ERR);
             return -3;
         }
     }
@@ -4077,7 +4077,7 @@ class Facture extends CommonInvoice
 
         global $mysoc, $langs;
 
-        dol_syslog(get_class($this) . "::updateline rowid=$rowid, desc=$desc, pu=$pu, qty=$qty, remise_percent=$remise_percent, date_start=$date_start, date_end=$date_end, txtva=$txtva, txlocaltax1=$txlocaltax1, txlocaltax2=$txlocaltax2, price_base_type=$price_base_type, info_bits=$info_bits, type=$type, fk_parent_line=$fk_parent_line pa_ht=$pa_ht, special_code=$special_code, fk_unit=$fk_unit, pu_ht_devise=$pu_ht_devise", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::updateline rowid=$rowid, desc=$desc, pu=$pu, qty=$qty, remise_percent=$remise_percent, date_start=$date_start, date_end=$date_end, txtva=$txtva, txlocaltax1=$txlocaltax1, txlocaltax2=$txlocaltax2, price_base_type=$price_base_type, info_bits=$info_bits, type=$type, fk_parent_line=$fk_parent_line pa_ht=$pa_ht, special_code=$special_code, fk_unit=$fk_unit, pu_ht_devise=$pu_ht_devise", LOG_DEBUG);
 
         if ($this->status == self::STATUS_DRAFT) {
             if (!$this->is_last_in_cycle() && empty($this->error)) {
@@ -4359,7 +4359,7 @@ class Facture extends CommonInvoice
     {
         global $user;
 
-        dol_syslog(get_class($this) . "::deleteline rowid=" . ((int) $rowid), LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::deleteline rowid=" . ((int)$rowid), LOG_DEBUG);
 
         if ($this->status != self::STATUS_DRAFT) {
             $this->error = 'ErrorDeleteLineNotAllowedByObjectStatus';
@@ -4420,7 +4420,7 @@ class Facture extends CommonInvoice
     public function set_remise($user, $remise, $notrigger = 0)
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::set_remise is deprecated, use setDiscount instead", LOG_NOTICE);
+        dol_syslog(get_only_class($this) . "::set_remise is deprecated, use setDiscount instead", LOG_NOTICE);
         // @phan-suppress-next-line PhanDeprecatedFunction
         return $this->setDiscount($user, $remise, $notrigger);
     }
@@ -4813,7 +4813,7 @@ class Facture extends CommonInvoice
         //$sql .= " GROUP BY f.rowid, f.ref, f.fk_statut, f.paye, ff.rowid";
         $sql .= " ORDER BY f.ref";
 
-        dol_syslog(get_class($this) . "::list_replacable_invoices", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::list_replacable_invoices", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             while ($obj = $this->db->fetch_object($resql)) {
@@ -4885,7 +4885,7 @@ class Facture extends CommonInvoice
         }
         $sql .= " ORDER BY f.ref";
 
-        dol_syslog(get_class($this) . "::list_qualified_avoir_invoices", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::list_qualified_avoir_invoices", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             while ($obj = $this->db->fetch_object($resql)) {
@@ -5385,7 +5385,7 @@ class Facture extends CommonInvoice
                 return ($last == $this->situation_counter);
             } else {
                 $this->error = $this->db->lasterror();
-                dol_syslog(get_class($this) . "::select Error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::select Error " . $this->error, LOG_ERR);
                 return false;
             }
         } else {
@@ -5564,7 +5564,7 @@ class Facture extends CommonInvoice
      */
     public function setRetainedWarranty($value)
     {
-        dol_syslog(get_class($this) . '::setRetainedWarranty(' . $value . ')');
+        dol_syslog(get_only_class($this) . '::setRetainedWarranty(' . $value . ')');
 
         if ($this->status >= 0) {
             $fieldname = 'retained_warranty';
@@ -5576,12 +5576,12 @@ class Facture extends CommonInvoice
                 $this->retained_warranty = (float) $value;
                 return 1;
             } else {
-                dol_syslog(get_class($this) . '::setRetainedWarranty Erreur ' . $sql . ' - ' . $this->db->error());
+                dol_syslog(get_only_class($this) . '::setRetainedWarranty Erreur ' . $sql . ' - ' . $this->db->error());
                 $this->error = $this->db->error();
                 return -1;
             }
         } else {
-            dol_syslog(get_class($this) . '::setRetainedWarranty, status of the object is incompatible');
+            dol_syslog(get_only_class($this) . '::setRetainedWarranty, status of the object is incompatible');
             $this->error = 'Status of the object is incompatible ' . $this->status;
             return -2;
         }
@@ -5602,7 +5602,7 @@ class Facture extends CommonInvoice
         }
 
 
-        dol_syslog(get_class($this) . '::setRetainedWarrantyDateLimit(' . $timestamp . ')');
+        dol_syslog(get_only_class($this) . '::setRetainedWarrantyDateLimit(' . $timestamp . ')');
         if ($this->status >= 0) {
             $fieldname = 'retained_warranty_date_limit';
             $sql = 'UPDATE ' . MAIN_DB_PREFIX . $this->table_element;
@@ -5613,12 +5613,12 @@ class Facture extends CommonInvoice
                 $this->retained_warranty_date_limit = $timestamp;
                 return 1;
             } else {
-                dol_syslog(get_class($this) . '::setRetainedWarrantyDateLimit Erreur ' . $sql . ' - ' . $this->db->error());
+                dol_syslog(get_only_class($this) . '::setRetainedWarrantyDateLimit Erreur ' . $sql . ' - ' . $this->db->error());
                 $this->error = $this->db->error();
                 return -1;
             }
         } else {
-            dol_syslog(get_class($this) . '::setRetainedWarrantyDateLimit, status of the object is incompatible');
+            dol_syslog(get_only_class($this) . '::setRetainedWarrantyDateLimit, status of the object is incompatible');
             $this->error = 'Status of the object is incompatible ' . $this->status;
             return -2;
         }

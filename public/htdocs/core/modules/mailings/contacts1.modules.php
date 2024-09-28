@@ -451,7 +451,7 @@ class mailing_contacts1 extends MailingTargets
             $i = 0;
             $j = 0;
 
-            dol_syslog(get_class($this) . "::add_to_target mailing " . $num . " targets found");
+            dol_syslog(get_only_class($this) . "::add_to_target mailing " . $num . " targets found");
 
             $old = '';
             while ($i < $num) {

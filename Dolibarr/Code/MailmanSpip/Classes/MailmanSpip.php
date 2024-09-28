@@ -182,7 +182,7 @@ class MailmanSpip
     public function add_to_spip($object)
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::add_to_spip");
+        dol_syslog(get_only_class($this) . "::add_to_spip");
 
         if ($this->isSpipEnabled()) {
             if ($this->checkSpipConfig()) {
@@ -229,7 +229,7 @@ class MailmanSpip
     public function del_to_spip($object)
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::del_to_spip");
+        dol_syslog(get_only_class($this) . "::del_to_spip");
 
         if ($this->isSpipEnabled()) {
             if ($this->checkSpipConfig()) {
@@ -319,7 +319,7 @@ class MailmanSpip
 		// phpcs:enable
         global $conf, $langs, $user;
 
-        dol_syslog(get_class($this) . "::add_to_mailman");
+        dol_syslog(get_only_class($this) . "::add_to_mailman");
 
         $this->mladded_ok = array();
         $this->mladded_ko = array();
@@ -389,7 +389,7 @@ class MailmanSpip
 		// phpcs:enable
         global $conf, $langs, $user;
 
-        dol_syslog(get_class($this) . "::del_to_mailman");
+        dol_syslog(get_only_class($this) . "::del_to_mailman");
 
         $this->mlremoved_ok = array();
         $this->mlremoved_ko = array();

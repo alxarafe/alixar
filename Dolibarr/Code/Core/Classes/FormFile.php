@@ -1759,7 +1759,7 @@ class FormFile
         global $search_doc_ref;
         global $dolibarr_main_url_root;
 
-        dol_syslog(get_class($this) . '::list_of_autoecmfiles upload_dir=' . $upload_dir . ' modulepart=' . $modulepart);
+        dol_syslog(get_only_class($this) . '::list_of_autoecmfiles upload_dir=' . $upload_dir . ' modulepart=' . $modulepart);
 
         // Show list of documents
         if (empty($useinecm) || $useinecm == 6) {
@@ -1960,7 +1960,7 @@ class FormFile
                 if (!empty($conf->cache['modulepartobject'][$modulepart . '_' . $id . '_' . $ref])) {
                     $found = 1;
                 } else {
-                    //print 'Fetch '.$id." - ".$ref.' class='.get_class($object_instance).'<br>';
+                    //print 'Fetch '.$id." - ".$ref.' class='.get_only_class($object_instance).'<br>';
 
                     $result = 0;
                     if (is_object($object_instance)) {

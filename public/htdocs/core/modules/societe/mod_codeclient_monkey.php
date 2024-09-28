@@ -118,7 +118,7 @@ class mod_codeclient_monkey extends ModeleThirdPartyCode
         $sql .= " WHERE " . $field . " LIKE '" . $db->escape($prefix) . "____-%'";
         $sql .= " AND entity IN (" . getEntity('societe') . ")";
 
-        dol_syslog(get_class($this) . "::getNextValue", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getNextValue", LOG_DEBUG);
 
         $resql = $db->query($sql);
         if ($resql) {
@@ -141,7 +141,7 @@ class mod_codeclient_monkey extends ModeleThirdPartyCode
             $num = sprintf("%05d", $max + 1);
         }
 
-        dol_syslog(get_class($this) . "::getNextValue return " . $prefix . $yymm . "-" . $num);
+        dol_syslog(get_only_class($this) . "::getNextValue return " . $prefix . $yymm . "-" . $num);
         return $prefix . $yymm . "-" . $num;
     }
 
@@ -185,7 +185,7 @@ class mod_codeclient_monkey extends ModeleThirdPartyCode
             }
         }
 
-        dol_syslog(get_class($this) . "::verif code=" . $code . " type=" . $type . " result=" . $result);
+        dol_syslog(get_only_class($this) . "::verif code=" . $code . " type=" . $type . " result=" . $result);
         return $result;
     }
 
@@ -215,7 +215,7 @@ class mod_codeclient_monkey extends ModeleThirdPartyCode
             $sql .= " AND rowid <> " . $soc->id;
         }
 
-        dol_syslog(get_class($this) . "::verif_dispo", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::verif_dispo", LOG_DEBUG);
         $resql = $db->query($sql);
         if ($resql) {
             if ($db->num_rows($resql) == 0) {

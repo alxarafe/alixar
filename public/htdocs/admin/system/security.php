@@ -17,10 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *  \file       htdocs/admin/system/security.php
- *  \brief      Page to show Security information
- */
+use Dolibarr\Code\Core\Classes\Events;
+use Dolibarr\Code\Core\Classes\Form;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -503,7 +501,6 @@ if (!in_array($umask, array('600', '660', '0600', '0660'))) {
 }
 print '<br>';
 print '<br>';
-
 
 $securityevent = new Events($db);
 $eventstolog = $securityevent->eventstolog;

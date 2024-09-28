@@ -105,7 +105,7 @@ abstract class DolibarrTriggers
     public function __construct(DoliDB $db)
     {
         $this->db = $db;
-        $this->name = preg_replace('/^Interface/i', '', get_class($this));
+        $this->name = preg_replace('/^Interface/i', '', get_only_class($this));
         $this->description = '';
         $this->version = self::VERSIONS['dev'];
         $this->picto = 'technic';

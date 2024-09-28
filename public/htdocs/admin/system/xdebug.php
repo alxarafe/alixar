@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2009-2014 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2009-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  *
 * This program is free software; you can redistribute it and/or modify
@@ -17,11 +17,6 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-/**
- *     \file       htdocs/admin/system/xdebug.php
- *     \brief      Page administration XDebug
- */
-
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
@@ -30,7 +25,6 @@ $langs->load("admin");
 if (!$user->admin) {
     accessforbidden();
 }
-
 
 /*
  * View
@@ -131,7 +125,6 @@ xdebug.auto_trace=0
 } else {
     print "Can't test if PHPDebug is OK as PHP socket functions are not enabled.";
 }
-
 
 llxFooter();
 

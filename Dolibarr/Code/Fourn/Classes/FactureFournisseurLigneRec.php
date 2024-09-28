@@ -275,7 +275,7 @@ class FactureFournisseurLigneRec extends CommonInvoiceLine
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . '::updateline', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::updateline', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if (!$error) {

@@ -137,7 +137,7 @@ class ExceptionsCollector extends DataCollector implements Renderable
         }
 
         return array(
-            'type' => get_class($e),
+            'type' => get_only_class($e),
             'message' => $e->getMessage(),
             'code' => $e->getCode(),
             'file' => $filePath,

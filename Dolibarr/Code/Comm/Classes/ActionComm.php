@@ -614,7 +614,7 @@ class ActionComm extends CommonObject
         $sql .= (!empty($this->ip) ? "'" . $this->db->escape($this->ip) . "'" : "null");
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::add", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::add", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "actioncomm", "id");
@@ -796,7 +796,7 @@ class ActionComm extends CommonObject
         global $langs;
 
         if (empty($id) && empty($ref) && empty($ref_ext) && empty($email_msgid)) {
-            dol_syslog(get_class($this) . "::fetch Bad parameters", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::fetch Bad parameters", LOG_WARNING);
             return -1;
         }
 
@@ -837,7 +837,7 @@ class ActionComm extends CommonObject
             $sql .= " a.id = " . ((int) $id);
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -1034,7 +1034,7 @@ class ActionComm extends CommonObject
     {
         $error = 0;
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
 
         $this->db->begin();
 
@@ -1078,7 +1078,7 @@ class ActionComm extends CommonObject
             $result = $this->deleteExtraFields();
             if ($result < 0) {
                 $error++;
-                dol_syslog(get_class($this) . "::delete error -3 " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error -3 " . $this->error, LOG_ERR);
             }
         }
 
@@ -1218,7 +1218,7 @@ class ActionComm extends CommonObject
         }
         $sql .= " WHERE id=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         if ($this->db->query($sql)) {
             $action = 'update';
 
@@ -1300,7 +1300,7 @@ class ActionComm extends CommonObject
                 return 1;
             } else {
                 $this->db->rollback();
-                dol_syslog(get_class($this) . "::update " . implode(',', $this->errors), LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . implode(',', $this->errors), LOG_ERR);
                 return -2;
             }
         } else {
@@ -1329,7 +1329,7 @@ class ActionComm extends CommonObject
 
         $resarray = array();
 
-        dol_syslog(get_class() . "::getActions", LOG_DEBUG);
+        dol_syslog(get_only_class() . "::getActions", LOG_DEBUG);
 
         // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
         if (!is_object($hookmanager)) {
@@ -1501,7 +1501,7 @@ class ActionComm extends CommonObject
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'actioncomm as a';
         $sql .= ' WHERE a.id = ' . ((int) $id);
 
-        dol_syslog(get_class($this) . "::info", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::info", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             if ($this->db->num_rows($result)) {
@@ -1966,7 +1966,7 @@ class ActionComm extends CommonObject
         require_once DOL_DOCUMENT_ROOT . "/core/lib/date.lib.php";
         require_once DOL_DOCUMENT_ROOT . "/core/lib/files.lib.php";
 
-        dol_syslog(get_class($this) . "::build_exportfile Build export file format=" . $format . ", type=" . $type . ", cachedelay=" . $cachedelay . ", filename=" . $filename . ", filters size=" . count($filters), LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::build_exportfile Build export file format=" . $format . ", type=" . $type . ", cachedelay=" . $cachedelay . ", filename=" . $filename . ", filters size=" . count($filters), LOG_DEBUG);
 
         // Check parameters
         if (empty($format)) {
@@ -2000,7 +2000,7 @@ class ActionComm extends CommonObject
             $nowgmt = dol_now();
             include_once DOL_DOCUMENT_ROOT . '/core/lib/files.lib.php';
             if (dol_filemtime($outputfile) > ($nowgmt - $cachedelay)) {
-                dol_syslog(get_class($this) . "::build_exportfile file " . $outputfile . " is not older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . "). Build is canceled");
+                dol_syslog(get_only_class($this) . "::build_exportfile file " . $outputfile . " is not older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . "). Build is canceled");
                 $buildfile = false;
             }
         }
@@ -2212,7 +2212,7 @@ class ActionComm extends CommonObject
 
             //print $sql;exit;
 
-            dol_syslog(get_class($this) . "::build_exportfile select event(s)", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::build_exportfile select event(s)", LOG_DEBUG);
 
             $resql = $this->db->query($sql);
             if ($resql) {
@@ -2424,12 +2424,12 @@ class ActionComm extends CommonObject
                     $result = 1;
                 } else {
                     $this->error = 'Failed to rename ' . $outputfiletmp . ' into ' . $outputfile;
-                    dol_syslog(get_class($this) . "::build_exportfile " . $this->error, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::build_exportfile " . $this->error, LOG_ERR);
                     dol_delete_file($outputfiletmp, 0, 1);
                     $result = -1;
                 }
             } else {
-                dol_syslog(get_class($this) . "::build_exportfile build_xxxfile function fails to for format=" . $format . " outputfiletmp=" . $outputfile, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::build_exportfile build_xxxfile function fails to for format=" . $format . " outputfiletmp=" . $outputfile, LOG_ERR);
                 dol_delete_file($outputfiletmp, 0, 1);
                 $langs->load("errors");
                 $this->error = $langs->trans("ErrorFailToCreateFile", $outputfile);

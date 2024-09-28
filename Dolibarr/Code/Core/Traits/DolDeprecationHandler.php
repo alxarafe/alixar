@@ -52,7 +52,7 @@ trait DolDeprecationHandler
         $deprecatedProperties = $this->deprecatedProperties();
         if (isset($deprecatedProperties[$name])) {
             $newProperty = $deprecatedProperties[$name];
-            $msg = "DolDeprecationHandler: Accessing deprecated property '" . $name . "' on class " . get_class($this) . ". Use '" . $newProperty . "' instead." . self::getCallerInfoString();
+            $msg = "DolDeprecationHandler: Accessing deprecated property '" . $name . "' on class " . get_only_class($this) . ". Use '" . $newProperty . "' instead." . self::getCallerInfoString();
             dol_syslog($msg);
             if ($this->isDeprecatedReportingEnabled()) {
                 trigger_error($msg, E_USER_DEPRECATED);
@@ -141,7 +141,7 @@ trait DolDeprecationHandler
         $deprecatedProperties = $this->deprecatedProperties();
         if (isset($deprecatedProperties[$name])) {
             $newProperty = $deprecatedProperties[$name];
-            $msg = "DolDeprecationHandler: Accessing deprecated property '" . $name . "' on class " . get_class($this) . ". Use '" . $newProperty . "' instead." . self::getCallerInfoString();
+            $msg = "DolDeprecationHandler: Accessing deprecated property '" . $name . "' on class " . get_only_class($this) . ". Use '" . $newProperty . "' instead." . self::getCallerInfoString();
             dol_syslog($msg);
             if ($this->isDeprecatedReportingEnabled()) {
                 trigger_error($msg, E_USER_DEPRECATED);
@@ -169,7 +169,7 @@ trait DolDeprecationHandler
         if (isset($deprecatedMethods[$name])) {
             $newMethod = $deprecatedMethods[$name];
             if ($this->isDeprecatedReportingEnabled()) {
-                trigger_error("Calling deprecated method '" . $name . "' on class " . get_class($this) . ". Use '" . $newMethod . "' instead." . self::getCallerInfoString(), E_USER_DEPRECATED);
+                trigger_error("Calling deprecated method '" . $name . "' on class " . get_only_class($this) . ". Use '" . $newMethod . "' instead." . self::getCallerInfoString(), E_USER_DEPRECATED);
             }
             if (method_exists($this, $newMethod)) {
                 return call_user_func_array([$this, $newMethod], $arguments);

@@ -42,7 +42,7 @@ if (((!empty($id) && $id > 0) || (!empty($ref) && !in_array($action, array('crea
         } else {
             if (empty($object->error) && !count($object->errors)) {
                 if ($ret < 0) { // if $ret == 0, it means not found.
-                    setEventMessages('Fetch on object (type ' . get_class($object) . ') return an error without filling $object->error nor $object->errors', null, 'errors');
+                    setEventMessages('Fetch on object (type ' . get_only_class($object) . ') return an error without filling $object->error nor $object->errors', null, 'errors');
                 }
             } else {
                 setEventMessages($object->error, $object->errors, 'errors');

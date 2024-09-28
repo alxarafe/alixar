@@ -55,7 +55,7 @@ class SupplierProposal extends DolibarrModules
 
         $this->family = "srm";
         $this->module_position = '35';
-        $this->name = preg_replace('/^mod/i', '', get_class($this));
+        $this->name = preg_replace('/^mod/i', '', get_only_class($this));
         $this->description = "supplier_proposalDESC";
 
         $this->version = 'dolibarr';

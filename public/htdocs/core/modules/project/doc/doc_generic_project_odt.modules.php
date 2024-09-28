@@ -226,9 +226,9 @@ class doc_generic_project_odt extends ModelePDFProjects
             $extrafields = new ExtraFields($this->db);
             $extrafields->fetch_name_optionals_label($ct->table_element, true);
             $extrafields_num = $ct->fetch_optionals();
-            //dol_syslog(get_class($this)."::get_substitutionarray_project_contacts: ===== Number of Extrafields found: ".$extrafields_num, LOG_DEBUG);
+            //dol_syslog(get_only_class($this)."::get_substitutionarray_project_contacts: ===== Number of Extrafields found: ".$extrafields_num, LOG_DEBUG);
             foreach ($ct->array_options as $efkey => $efval) {
-                dol_syslog(get_class($this) . "::get_substitutionarray_project_contacts: +++++ Extrafield " . $efkey . " => " . $efval, LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::get_substitutionarray_project_contacts: +++++ Extrafield " . $efkey . " => " . $efval, LOG_DEBUG);
                 $ret[$pc . $efkey] = $efval; // add nothing else because it already comes as 'options_XX'
             }
         } elseif ($contact['source'] == 'internal') {
@@ -301,7 +301,7 @@ class doc_generic_project_odt extends ModelePDFProjects
     {
         // phpcs:enable
 
-        //dol_syslog(get_class($this).'::get_substitutionarray_tasksressource taskressource='.var_export($taskressource,true),LOG_DEBUG);
+        //dol_syslog(get_only_class($this).'::get_substitutionarray_tasksressource taskressource='.var_export($taskressource,true),LOG_DEBUG);
         return array(
             'taskressource_rowid' => $taskresource['rowid'],
             'taskressource_role' => $taskresource['libelle'],
@@ -424,14 +424,14 @@ class doc_generic_project_odt extends ModelePDFProjects
         $nbofiles = count($listoffiles);
         if (getDolGlobalString('PROJECT_ADDON_PDF_ODT_PATH')) {
             $texte .= $langs->trans("NumberOfModelFilesFound") . ': <b>';
-            //$texte.=$nbofiles?'<a id="a_'.get_class($this).'" href="#">':'';
+            //$texte.=$nbofiles?'<a id="a_'.get_only_class($this).'" href="#">':'';
             $texte .= $nbofiles;
             //$texte.=$nbofiles?'</a>':'';
             $texte .= '</b>';
         }
 
         if ($nbofiles) {
-            $texte .= '<div id="div_' . get_class($this) . '" class="hiddenx">';
+            $texte .= '<div id="div_' . get_only_class($this) . '" class="hiddenx">';
             // Show list of found files
             foreach ($listoffiles as $file) {
                 $texte .= '- ' . $file['name'] . ' <a href="' . constant('BASE_URL') . '/document.php?modulepart=doctemplates&file=projects/' . urlencode(basename($file['name'])) . '">' . img_picto('', 'listlight') . '</a>';
@@ -796,7 +796,7 @@ class doc_generic_project_odt extends ModelePDFProjects
 
                         foreach ($filearray as $filedetail) {
                             $tmparray = $this->get_substitutionarray_task_file($filedetail, $outputlangs);
-                            //dol_syslog(get_class($this).'::main $tmparray'.var_export($tmparray,true));
+                            //dol_syslog(get_only_class($this).'::main $tmparray'.var_export($tmparray,true));
                             foreach ($tmparray as $key => $val) {
                                 try {
                                     $listtasksfiles->setVars($key, $val, true, 'UTF-8');
@@ -827,7 +827,7 @@ class doc_generic_project_odt extends ModelePDFProjects
                     $filearray = dol_dir_list($upload_dir, "files", 0, '', '(\.meta|_preview.*\.png)$', 'name', SORT_ASC, 1);
 
                     foreach ($filearray as $filedetail) {
-                        //dol_syslog(get_class($this).'::main $filedetail'.var_export($filedetail,true));
+                        //dol_syslog(get_only_class($this).'::main $filedetail'.var_export($filedetail,true));
                         $tmparray = $this->get_substitutionarray_project_file($filedetail, $outputlangs);
 
                         foreach ($tmparray as $key => $val) {

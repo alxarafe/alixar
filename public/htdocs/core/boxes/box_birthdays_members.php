@@ -90,7 +90,7 @@ class box_birthdays_members extends ModeleBoxes
             $sql .= " ORDER BY daya ASC";   // We want to have date of the month sorted by the day without taking into consideration the year
             $sql .= $this->db->plimit($max, 0);
 
-            dol_syslog(get_class($this) . "::loadBox", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::loadBox", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $num = $this->db->num_rows($resql);

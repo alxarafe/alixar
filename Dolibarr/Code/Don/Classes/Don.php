@@ -528,7 +528,7 @@ class Don extends CommonObject
         $sql .= ", fk_statut=" . ((int) $this->statut);
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::Update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::Update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if (!$notrigger) {
@@ -559,7 +559,7 @@ class Don extends CommonObject
             $this->error = $this->db->lasterror();
             $this->errors[] = $this->error;
             $this->db->rollback();
-            dol_syslog(get_class($this) . "::Update error -2 " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::Update error -2 " . $this->error, LOG_ERR);
             $result = -2;
         }
         return $result;
@@ -629,10 +629,10 @@ class Don extends CommonObject
             return 1;
         } else {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
-            dol_syslog(get_class($this) . "::delete " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::delete " . $this->error, LOG_ERR);
             $this->db->rollback();
             return -1;
         }
@@ -665,7 +665,7 @@ class Don extends CommonObject
             $sql .= " AND d.ref='" . $this->db->escape($ref) . "'";
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -984,7 +984,7 @@ class Don extends CommonObject
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'don as d';
         $sql .= ' WHERE d.rowid = ' . ((int) $id);
 
-        dol_syslog(get_class($this) . '::info', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::info', LOG_DEBUG);
         $result = $this->db->query($sql);
 
         if ($result) {

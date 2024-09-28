@@ -124,7 +124,7 @@ class CActionComm
             $sql .= " WHERE code='" . $this->db->escape($id) . "'";
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -192,7 +192,7 @@ class CActionComm
             $sql .= " ORDER BY type, position, module";
         }
 
-        dol_syslog(get_class($this) . "::liste_array", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::liste_array", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $nump = $this->db->num_rows($resql);

@@ -150,7 +150,7 @@ class mod_propale_marbre extends ModeleNumRefPropales
                 $max = 0;
             }
         } else {
-            dol_syslog(get_class($this) . "::getNextValue", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::getNextValue", LOG_DEBUG);
             return -1;
         }
 
@@ -163,7 +163,7 @@ class mod_propale_marbre extends ModeleNumRefPropales
             $num = sprintf("%04d", $max + 1);
         }
 
-        dol_syslog(get_class($this) . "::getNextValue return " . $this->prefix . $yymm . "-" . $num);
+        dol_syslog(get_only_class($this) . "::getNextValue return " . $this->prefix . $yymm . "-" . $num);
         return $this->prefix . $yymm . "-" . $num;
     }
 

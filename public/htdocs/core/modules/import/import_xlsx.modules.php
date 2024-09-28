@@ -245,7 +245,7 @@ class ImportXlsx extends ModeleImports
         global $langs;
         $ret = 1;
 
-        dol_syslog(get_class($this) . "::open_file file=" . $file);
+        dol_syslog(get_only_class($this) . "::open_file file=" . $file);
 
         $reader = new Xlsx();
         $this->workbook = $reader->load($file);

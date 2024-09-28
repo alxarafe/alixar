@@ -163,7 +163,7 @@ class Fiscalyear extends CommonObject
         $sql .= ", " . ((int) $user->id);
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->id = $this->db->last_insert_id($this->db->prefix() . "accounting_fiscalyear");
@@ -208,7 +208,7 @@ class Fiscalyear extends CommonObject
         $sql .= ", fk_user_modif = " . ((int) $user->id);
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->db->commit();
@@ -233,7 +233,7 @@ class Fiscalyear extends CommonObject
         $sql .= " FROM " . $this->db->prefix() . "accounting_fiscalyear";
         $sql .= " WHERE rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $obj = $this->db->fetch_object($result);
@@ -442,7 +442,7 @@ class Fiscalyear extends CommonObject
         $sql .= " FROM " . $this->db->prefix() . "accounting_fiscalyear as fy";
         $sql .= " WHERE fy.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch info", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch info", LOG_DEBUG);
         $result = $this->db->query($sql);
 
         if ($result) {

@@ -166,7 +166,7 @@ class BlockedLogAuthority
     {
         global $langs;
 
-        dol_syslog(get_class($this) . "::fetch id=" . ((int) $id), LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch id=" . ((int)$id), LOG_DEBUG);
 
         if (empty($id) && empty($signature)) {
             $this->error = 'BadParameter';
@@ -222,7 +222,7 @@ class BlockedLogAuthority
 
         $error = 0;
 
-        dol_syslog(get_class($this) . '::create', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::create', LOG_DEBUG);
 
         $this->db->begin();
 
@@ -269,7 +269,7 @@ class BlockedLogAuthority
 
         $error = 0;
 
-        dol_syslog(get_class($this) . '::create', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::create', LOG_DEBUG);
 
         $this->db->begin();
 

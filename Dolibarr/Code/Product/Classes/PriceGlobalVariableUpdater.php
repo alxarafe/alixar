@@ -244,7 +244,7 @@ class PriceGlobalVariableUpdater
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();

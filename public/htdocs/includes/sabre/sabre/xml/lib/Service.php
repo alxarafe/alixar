@@ -268,12 +268,12 @@ class Service
      */
     public function writeValueObject($object, string $contextUri = null)
     {
-        if (!isset($this->valueObjectMap[get_class($object)])) {
-            throw new \InvalidArgumentException('"' . get_class($object) . '" is not a registered value object class. Register your class with mapValueObject.');
+        if (!isset($this->valueObjectMap[get_only_class($object)])) {
+            throw new \InvalidArgumentException('"' . get_only_class($object) . '" is not a registered value object class. Register your class with mapValueObject.');
         }
 
         return $this->write(
-            $this->valueObjectMap[get_class($object)],
+            $this->valueObjectMap[get_only_class($object)],
             $object,
             $contextUri
         );

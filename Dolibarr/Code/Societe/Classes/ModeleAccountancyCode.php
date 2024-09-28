@@ -95,7 +95,7 @@ abstract class ModeleAccountancyCode extends CommonNumRefGenerator
         // phpcs:enable
         global $langs;
 
-        dol_syslog(get_class($this) . "::get_code" . $langs->trans("NotAvailable"), LOG_ERR);
+        dol_syslog(get_only_class($this) . "::get_code" . $langs->trans("NotAvailable"), LOG_ERR);
         return -1;
     }
 }

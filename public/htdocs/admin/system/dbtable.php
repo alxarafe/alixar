@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2005	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2004		Sebastien Di Cintio		<sdicintio@ressource-toi.org>
- * Copyright (C) 2004		Benoit Mortier			<benoit.mortier@opensides.be>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2005	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Sebastien Di Cintio		    <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004		Benoit Mortier			    <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,11 +21,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *  \file           htdocs/admin/system/dbtable.php
- *  \brief          Page d'info des contraintes d'une table
- */
-
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
@@ -38,7 +33,6 @@ if (!$user->admin) {
 $table = GETPOST('table', 'aZ09');
 $field = GETPOST('field', 'aZ09');
 $action = GETPOST('action', 'aZ09');
-
 
 /*
  * Actions

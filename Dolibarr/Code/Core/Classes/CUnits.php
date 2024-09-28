@@ -120,7 +120,7 @@ class CUnits extends CommonDict
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -134,7 +134,7 @@ class CUnits extends CommonDict
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -356,7 +356,7 @@ class CUnits extends CommonDict
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -366,7 +366,7 @@ class CUnits extends CommonDict
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -394,7 +394,7 @@ class CUnits extends CommonDict
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -404,7 +404,7 @@ class CUnits extends CommonDict
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();

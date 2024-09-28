@@ -176,7 +176,7 @@ class PaymentVAT extends CommonObject
 
         $now = dol_now();
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
 
         // Validate parameters
         if (!$this->datepaye) {
@@ -317,7 +317,7 @@ class PaymentVAT extends CommonObject
         $sql .= " WHERE t.rowid = " . ((int) $id);
         // TODO link on entity of tax;
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -415,7 +415,7 @@ class PaymentVAT extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -425,7 +425,7 @@ class PaymentVAT extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -448,7 +448,7 @@ class PaymentVAT extends CommonObject
     {
         $error = 0;
 
-        dol_syslog(get_class($this) . "::delete");
+        dol_syslog(get_only_class($this) . "::delete");
 
         $this->db->begin();
 
@@ -466,7 +466,7 @@ class PaymentVAT extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "payment_vat";
             $sql .= " WHERE rowid=" . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -477,7 +477,7 @@ class PaymentVAT extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -664,7 +664,7 @@ class PaymentVAT extends CommonObject
 		// phpcs:enable
         $sql = "UPDATE " . MAIN_DB_PREFIX . "payment_vat SET fk_bank = " . ((int) $id_bank) . " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update_fk_bank", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update_fk_bank", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             return 1;

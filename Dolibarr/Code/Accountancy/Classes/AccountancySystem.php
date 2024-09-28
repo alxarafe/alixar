@@ -137,7 +137,7 @@ class AccountancySystem
                 $sql .= " a.pcg_version = '" . $this->db->escape($ref) . "'";
             }
 
-            dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
             $result = $this->db->query($sql);
             if ($result) {
                 $obj = $this->db->fetch_object($result);
@@ -177,7 +177,7 @@ class AccountancySystem
         $sql .= " (date_creation, fk_user_author, numero, label)";
         $sql .= " VALUES ('" . $this->db->idate($now) . "'," . ((int) $user->id) . ",'" . $this->db->escape($this->numero) . "','" . $this->db->escape($this->label) . "')";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $id = $this->db->last_insert_id(MAIN_DB_PREFIX . "accounting_system");

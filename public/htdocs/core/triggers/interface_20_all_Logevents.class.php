@@ -150,7 +150,7 @@ class InterfaceLogevents extends DolibarrTriggers
             $this->errors[] = $error;
             $this->error = $error;
 
-            dol_syslog(get_class($this) . ": " . $error, LOG_ERR);
+            dol_syslog(get_only_class($this) . ": " . $error, LOG_ERR);
             return -1;
         }
     }

@@ -874,7 +874,7 @@ class FormWebPortal extends Form
 
                     $sql .= ' ORDER BY ' . implode(', ', $fields_label);
 
-                    dol_syslog(get_class($this) . '::showInputField type=sellist', LOG_DEBUG);
+                    dol_syslog(get_only_class($this) . '::showInputField type=sellist', LOG_DEBUG);
                     $resql = $this->db->query($sql);
                     if ($resql) {
                         $out .= '<option value="0">&nbsp;</option>';

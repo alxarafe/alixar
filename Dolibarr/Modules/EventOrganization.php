@@ -62,7 +62,7 @@ class EventOrganization extends DolibarrModules
 
         $this->module_position = '15';
 
-        $this->name = preg_replace('/^mod/i', '', get_class($this));
+        $this->name = preg_replace('/^mod/i', '', get_only_class($this));
 
         $this->description = "EventOrganizationDescription";
         $this->descriptionlong = "EventOrganizationDescriptionLong";

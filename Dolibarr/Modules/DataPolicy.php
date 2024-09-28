@@ -72,7 +72,7 @@ class DataPolicy extends DolibarrModules
         // Gives the possibility to the module, to provide his own family info and position of this family (Overwrite $this->family and $this->module_position. Avoid this)
         //$this->familyinfo = array('myownfamily' => array('position' => '01', 'label' => $langs->trans("MyOwnFamily")));
         // Module label (no space allowed), used if translation string 'ModuledatapolicyName' not found (MyModue is name of module).
-        $this->name = preg_replace('/^mod/i', '', get_class($this));
+        $this->name = preg_replace('/^mod/i', '', get_only_class($this));
         // Module description, used if translation string 'ModuledatapolicyDesc' not found (MyModue is name of module).
         $this->description = "Module to manage Data policy (for compliance with GDPR in Europe or other Data policy rules)";
         // Used only if file README.md and README-LL.md not found.

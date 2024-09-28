@@ -291,7 +291,7 @@ class nusoap_base
     function debug($string)
     {
         if ($this->debugLevel > 0) {
-            $this->appendDebug($this->getmicrotime() . ' ' . get_class($this) . ": $string\n");
+            $this->appendDebug($this->getmicrotime() . ' ' . get_only_class($this) . ": $string\n");
         }
     }
 
@@ -435,7 +435,7 @@ class nusoap_base
         $this->appendDebug('value=' . $this->varDump($val));
         $this->appendDebug('attributes=' . $this->varDump($attributes));
 
-        if (is_object($val) && get_class($val) == 'soapval' && (!$soapval)) {
+        if (is_object($val) && get_only_class($val) == 'soapval' && (!$soapval)) {
             $this->debug("serialize_val: serialize soapval");
             $xml = $val->serialize($use);
             $this->appendDebug($val->getDebug());
@@ -553,17 +553,17 @@ class nusoap_base
             case is_object($val):
                 $this->debug("serialize_val: serialize object");
                 $pXml = "";
-                if (get_class($val) == 'soapval') {
+                if (get_only_class($val) == 'soapval') {
                     $this->debug("serialize_val: serialize soapval object");
                     $pXml = $val->serialize($use);
                     $this->appendDebug($val->getDebug());
                     $val->clearDebug();
                 } else {
                     if (!$name) {
-                        $name = get_class($val);
+                        $name = get_only_class($val);
                         $this->debug("In serialize_val, used class name $name as element name");
                     } else {
-                        $this->debug("In serialize_val, do not override name $name for element name for class " . get_class($val));
+                        $this->debug("In serialize_val, do not override name $name for element name for class " . get_only_class($val));
                     }
                     foreach (get_object_vars($val) as $k => $v) {
                         $pXml = isset($pXml) ? $pXml . $this->serialize_val($v, $k, false, false, false, false, $use) : $this->serialize_val($v, $k, false, false, false, false, $use);
@@ -591,7 +591,7 @@ class nusoap_base
                         $tt_ns = "";
                         $tt = "";
                         foreach ($val as $v) {
-                            if (is_object($v) && get_class($v) == 'soapval') {
+                            if (is_object($v) && get_only_class($v) == 'soapval') {
                                 $tt_ns = $v->type_ns;
                                 $tt = $v->type;
                             } elseif (is_array($v)) {
@@ -721,7 +721,7 @@ class nusoap_base
             if (is_array($headers)) {
                 $xml = '';
                 foreach ($headers as $k => $v) {
-                    if (is_object($v) && get_class($v) == 'soapval') {
+                    if (is_object($v) && get_only_class($v) == 'soapval') {
                         $xml .= $this->serialize_val($v, false, false, false, false, false, $use);
                     } else {
                         $xml .= $this->serialize_val($v, $k, false, false, false, false, $use);
@@ -3772,7 +3772,7 @@ class nusoap_server extends nusoap_base
         // wsdl
         if ($wsdl) {
             $this->debug("In nusoap_server, WSDL is specified");
-            if (is_object($wsdl) && (get_class($wsdl) == 'wsdl')) {
+            if (is_object($wsdl) && (get_only_class($wsdl) == 'wsdl')) {
                 $this->wsdl = $wsdl;
                 $this->externalWSDLURL = $this->wsdl->wsdl;
                 $this->debug('Use existing wsdl instance from ' . $this->externalWSDLURL);
@@ -4222,7 +4222,7 @@ class nusoap_server extends nusoap_base
     {
         $this->debug('Entering serialize_return methodname: ' . $this->methodname . ' methodURI: ' . $this->methodURI);
         // if fault
-        if (isset($this->methodreturn) && is_object($this->methodreturn) && ((get_class($this->methodreturn) == 'soap_fault') || (get_class($this->methodreturn) == 'nusoap_fault'))) {
+        if (isset($this->methodreturn) && is_object($this->methodreturn) && ((get_only_class($this->methodreturn) == 'soap_fault') || (get_only_class($this->methodreturn) == 'nusoap_fault'))) {
             $this->debug('got a fault object from method');
             $this->fault = $this->methodreturn;
             return;
@@ -6048,7 +6048,7 @@ class wsdl extends nusoap_base
         }
 
         // if a soapval has been supplied, let its type override the WSDL
-        if (is_object($value) && get_class($value) == 'soapval') {
+        if (is_object($value) && get_only_class($value) == 'soapval') {
             if ($value->type_ns) {
                 $type = $value->type_ns . ':' . $value->type;
                 $forceType = true;
@@ -7549,7 +7549,7 @@ class nusoap_client extends nusoap_base
 
         // make values
         if ($wsdl) {
-            if (is_object($endpoint) && (get_class($endpoint) == 'wsdl')) {
+            if (is_object($endpoint) && (get_only_class($endpoint) == 'wsdl')) {
                 $this->wsdl = $endpoint;
                 $this->endpoint = $this->wsdl->wsdl;
                 $this->wsdlFile = $this->endpoint;
@@ -8568,7 +8568,7 @@ class nusoap_wsdlcache
      */
     function debug($string)
     {
-        $this->debug_str .= get_class($this) . ": $string\n";
+        $this->debug_str .= get_only_class($this) . ": $string\n";
     }
 
     /**

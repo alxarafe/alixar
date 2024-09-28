@@ -27,7 +27,7 @@ class CutStub extends Stub
         switch (gettype($value)) {
             case 'object':
                 $this->type = self::TYPE_OBJECT;
-                $this->class = get_class($value);
+                $this->class = get_only_class($value);
                 $this->cut = -1;
                 break;
 

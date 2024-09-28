@@ -247,7 +247,7 @@ class ModeleImports
      */
     public function listOfAvailableImportFormat($db, $maxfilenamelength = 0)
     {
-        dol_syslog(get_class($this) . "::listOfAvailableImportFormat");
+        dol_syslog(get_only_class($this) . "::listOfAvailableImportFormat");
 
         $dir = DOL_DOCUMENT_ROOT . "/core/modules/import/";
         $handle = opendir($dir);

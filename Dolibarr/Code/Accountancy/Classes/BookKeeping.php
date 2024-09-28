@@ -367,14 +367,14 @@ class BookKeeping extends CommonObject
                 $sqlnum .= " AND doc_ref = '" . $this->db->escape($this->doc_ref) . "'"; // ref of source object
                 $sqlnum .= " AND entity = " . $conf->entity; // Do not use getEntity for accounting features
 
-                dol_syslog(get_class($this) . ":: create sqlnum=" . $sqlnum, LOG_DEBUG);
+                dol_syslog(get_only_class($this) . ":: create sqlnum=" . $sqlnum, LOG_DEBUG);
                 $resqlnum = $this->db->query($sqlnum);
                 if ($resqlnum) {
                     $objnum = $this->db->fetch_object($resqlnum);
                     $this->piece_num = $objnum->piece_num;
                 }
 
-                dol_syslog(get_class($this) . "::create this->piece_num=" . $this->piece_num, LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::create this->piece_num=" . $this->piece_num, LOG_DEBUG);
                 if (empty($this->piece_num)) {
                     $sqlnum = "SELECT MAX(piece_num)+1 as maxpiecenum";
                     $sqlnum .= " FROM " . MAIN_DB_PREFIX . $this->table_element;
@@ -385,7 +385,7 @@ class BookKeeping extends CommonObject
                         $objnum = $this->db->fetch_object($resqlnum);
                         $this->piece_num = $objnum->maxpiecenum;
                     }
-                    dol_syslog(get_class($this) . ":: create now this->piece_num=" . $this->piece_num, LOG_DEBUG);
+                    dol_syslog(get_only_class($this) . ":: create now this->piece_num=" . $this->piece_num, LOG_DEBUG);
                 }
                 if (empty($this->piece_num)) {
                     $this->piece_num = 1;
@@ -1641,7 +1641,7 @@ class BookKeeping extends CommonObject
 
         if (!$resql) {
             $this->errors[] = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::delete Error " . $this->db->lasterror(), LOG_ERR);
+            dol_syslog(get_only_class($this) . "::delete Error " . $this->db->lasterror(), LOG_ERR);
             $this->db->rollback();
             return -1;
         }
@@ -1699,7 +1699,7 @@ class BookKeeping extends CommonObject
         if (!$resql) {
             $this->errors[] = "Error " . $this->db->lasterror();
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -1741,7 +1741,7 @@ class BookKeeping extends CommonObject
         if (!$resql) {
             $this->errors[] = "Error " . $this->db->lasterror();
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -1901,7 +1901,7 @@ class BookKeeping extends CommonObject
         $sql = "SELECT MAX(piece_num)+1 as max FROM " . MAIN_DB_PREFIX . $this->table_element . $mode;
         $sql .= " WHERE entity = " . ((int) $conf->entity); // Do not use getEntity for accounting features
 
-        dol_syslog(get_class($this) . "::getNextNumMvt", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getNextNumMvt", LOG_DEBUG);
 
         $result = $this->db->query($sql);
 
@@ -1916,7 +1916,7 @@ class BookKeeping extends CommonObject
             return $result;
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::getNextNumMvt " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::getNextNumMvt " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -2010,7 +2010,7 @@ class BookKeeping extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . $this->table_element;
         $sql .= " WHERE entity = " . ((int) $conf->entity); // Do not use getEntity for accounting features
 
-        dol_syslog(get_class($this) . "::export_bookkeeping", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::export_bookkeeping", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
 
@@ -2050,7 +2050,7 @@ class BookKeeping extends CommonObject
             return $num;
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::export_bookkeeping " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::export_bookkeeping " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -2214,12 +2214,12 @@ class BookKeeping extends CommonObject
         $sql .= " AND ab.entity = " . ((int) $conf->entity); // Do not use getEntity for accounting features
         $sql .= " ORDER BY account_number ASC";
 
-        dol_syslog(get_class($this) . "::select_account", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_account", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::select_account " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::select_account " . $this->error, LOG_ERR);
             return "-1";
         }
 
@@ -2277,7 +2277,7 @@ class BookKeeping extends CommonObject
         $sql .= " WHERE aa.account_number = '" . $this->db->escape($account) . "'";
         $sql .= " AND aa.entity = " . ((int) $conf->entity); // Do not use getEntity for accounting features
 
-        dol_syslog(get_class($this) . "::select_account", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_account", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $obj = '';
@@ -2317,7 +2317,7 @@ class BookKeeping extends CommonObject
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_accounting_category as cat ON aa.fk_accounting_category = cat.rowid";
         $sql .= " WHERE aa.entity = " . ((int) $conf->entity); // Do not use getEntity for accounting features
 
-        dol_syslog(get_class($this) . "::select_account", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_account", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $obj = '';

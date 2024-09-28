@@ -132,7 +132,7 @@ class Translate
     {
         global $conf;
 
-        //dol_syslog(get_class($this)."::setDefaultLang srclang=".$srclang,LOG_DEBUG);
+        //dol_syslog(get_only_class($this)."::setDefaultLang srclang=".$srclang,LOG_DEBUG);
 
         // If a module ask to force a priority on langs directories (to use its own lang files)
         if (getDolGlobalString('MAIN_FORCELANGDIR')) {
@@ -252,7 +252,7 @@ class Translate
 
         // Check parameters
         if (empty($domain)) {
-            dol_print_error(null, get_class($this) . "::Load ErrorWrongParameters");
+            dol_print_error(null, get_only_class($this) . "::Load ErrorWrongParameters");
             return -1;
         }
 
@@ -299,7 +299,7 @@ class Translate
         }
 
         if (empty($langofdir)) {    // This may occurs when load is called without setting the language and without providing a value for forcelangdir
-            dol_syslog("Error: " . get_class($this) . "::load was called for domain=" . $domain . " but language was not set yet with langs->setDefaultLang(). Nothing will be loaded.", LOG_WARNING);
+            dol_syslog("Error: " . get_only_class($this) . "::load was called for domain=" . $domain . " but language was not set yet with langs->setDefaultLang(). Nothing will be loaded.", LOG_WARNING);
             return -1;
         }
 
@@ -312,7 +312,7 @@ class Translate
             //$filelangexists = is_file($file_lang_osencoded);
             $filelangexists = @is_file($file_lang_osencoded);   // avoid [php:warn]
 
-            //dol_syslog(get_class($this).'::Load Try to read for alt='.$alt.' langofdir='.$langofdir.' domain='.$domain.' newdomain='.$newdomain.' modulename='.$modulename.' file_lang='.$file_lang." => filelangexists=".$filelangexists);
+            //dol_syslog(get_only_class($this).'::Load Try to read for alt='.$alt.' langofdir='.$langofdir.' domain='.$domain.' newdomain='.$newdomain.' modulename='.$modulename.' file_lang='.$file_lang." => filelangexists=".$filelangexists);
             //print 'Try to read for alt='.$alt.' langofdir='.$langofdir.' domain='.$domain.' newdomain='.$newdomain.' modulename='.$modulename.' this->_tab_loaded[newdomain]='.$this->_tab_loaded[$newdomain].' file_lang='.$file_lang." => filelangexists=".$filelangexists."\n";
 
             if ($filelangexists) {
@@ -499,7 +499,7 @@ class Translate
         $langofdir = $this->defaultlang;
 
         if (empty($langofdir)) {    // This may occurs when load is called without setting the language and without providing a value for forcelangdir
-            dol_syslog("Error: " . get_class($this) . "::loadFromDatabase was called but language was not set yet with langs->setDefaultLang(). Nothing will be loaded.", LOG_WARNING);
+            dol_syslog("Error: " . get_only_class($this) . "::loadFromDatabase was called but language was not set yet with langs->setDefaultLang(). Nothing will be loaded.", LOG_WARNING);
             return -1;
         }
 
@@ -787,7 +787,7 @@ class Translate
         if ($filteronentity) {
             $sql .= " AND entity IN (" . getEntity($tablename) . ')';
         }
-        dol_syslog(get_class($this) . '::getLabelFromKey', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::getLabelFromKey', LOG_DEBUG);
         $resql = $db->query($sql);
         if ($resql) {
             $obj = $db->fetch_object($resql);
@@ -1135,7 +1135,7 @@ class Translate
         }
         //$sql.= " ORDER BY code_iso ASC"; // Not required, a sort is done later
 
-        dol_syslog(get_class($this) . '::loadCacheCurrencies', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::loadCacheCurrencies', LOG_DEBUG);
         $resql = $db->query($sql);
         if ($resql) {
             $this->load("dict");

@@ -163,7 +163,7 @@ $objcon = new stdClass();
 $out = '';
 $permok = $user->hasRight('agenda', 'myactions', 'create');
 if ((!empty($objUser->id) || !empty($objcon->id)) && $permok) {
-    if (is_object($objUser) && get_class($objUser) == 'User') {
+    if (is_object($objUser) && get_only_class($objUser) == 'User') {
         $out .= '&amp;originid=' . $objUser->id . ($objUser->id > 0 ? '&amp;userid=' . $objUser->id : '') . '&amp;backtopage=' . urlencode($_SERVER['PHP_SELF'] . ($objUser->id > 0 ? '?userid=' . $objUser->id : ''));
     }
     $out .= (!empty($objcon->id) ? '&amp;contactid=' . $objcon->id : '');

@@ -541,22 +541,22 @@ if (!$error && $massaction == 'confirm_presend') {
                             $trackid = 'use' . $thirdparty->id;
                         }
                     } else {
-                        $trackid = strtolower(get_class($objecttmp));
-                        if (get_class($objecttmp) == 'Contact') {
+                        $trackid = strtolower(get_only_class($objecttmp));
+                        if (get_only_class($objecttmp) == 'Contact') {
                             $trackid = 'ctc';
-                        } elseif (get_class($objecttmp) == 'Contrat') {
+                        } elseif (get_only_class($objecttmp) == 'Contrat') {
                             $trackid = 'con';
-                        } elseif (get_class($objecttmp) == 'Propal') {
+                        } elseif (get_only_class($objecttmp) == 'Propal') {
                             $trackid = 'pro';
-                        } elseif (get_class($objecttmp) == 'Commande') {
+                        } elseif (get_only_class($objecttmp) == 'Commande') {
                             $trackid = 'ord';
-                        } elseif (get_class($objecttmp) == 'Facture') {
+                        } elseif (get_only_class($objecttmp) == 'Facture') {
                             $trackid = 'inv';
-                        } elseif (get_class($objecttmp) == 'SupplierProposal') {
+                        } elseif (get_only_class($objecttmp) == 'SupplierProposal') {
                             $trackid = 'spr';
-                        } elseif (get_class($objecttmp) == 'CommandeFournisseur') {
+                        } elseif (get_only_class($objecttmp) == 'CommandeFournisseur') {
                             $trackid = 'sor';
-                        } elseif (get_class($objecttmp) == 'FactureFournisseur') {
+                        } elseif (get_only_class($objecttmp) == 'FactureFournisseur') {
                             $trackid = 'sin';
                         }
 
@@ -591,7 +591,7 @@ if (!$error && $massaction == 'confirm_presend') {
                                     continue; // We discard this pass to avoid duplicate with other pass in looparray at higher level
                                 }
 
-                                dol_syslog("Try to insert email event into agenda for objid=" . $objid2 . " => objectobj=" . get_class($objectobj2));
+                                dol_syslog("Try to insert email event into agenda for objid=" . $objid2 . " => objectobj=" . get_only_class($objectobj2));
 
                                 /*if ($objectclass == 'Propale') $actiontypecode='AC_PROP';
                                 if ($objectclass == 'Commande') $actiontypecode='AC_COM';
@@ -621,7 +621,7 @@ if (!$error && $massaction == 'confirm_presend') {
                                     $objectobj2->actionmsg2 = $subjectreplaced; // Short text
                                 }
 
-                                $triggername = strtoupper(get_class($objectobj2)) . '_SENTBYMAIL';
+                                $triggername = strtoupper(get_only_class($objectobj2)) . '_SENTBYMAIL';
                                 if ($triggername == 'SOCIETE_SENTBYMAIL') {
                                     $triggername = 'COMPANY_SENTBYMAIL';
                                 }

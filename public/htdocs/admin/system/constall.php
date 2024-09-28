@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2009      Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009       Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,11 +19,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *      \file       htdocs/admin/system/constall.php
- *      \brief      Page to show all Dolibarr setup (config file and database constants)
- */
-
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
@@ -34,7 +29,6 @@ $langs->loadLangs(array("install", "user", "admin"));
 if (!$user->admin) {
     accessforbidden();
 }
-
 
 /*
  * View
@@ -180,7 +174,7 @@ foreach ($configfileparameters as $key) {
             print "<td>";
             if ($newkey == 'dolibarr_main_db_pass') {
                 print preg_replace('/./i', '*', ${$newkey});
-            } elseif ($newkey == 'dolibarr_main_url_root' && preg_match('/__auto__/', ${$newkey})) {
+            } elseif ($newkey == 'dolibarr_main_url_root' && str_contains(${$newkey}, '__auto__')) {
                 print ${$newkey} . ' => ' . constant('DOL_MAIN_URL_ROOT');
             } else {
                 print ${$newkey};
@@ -210,26 +204,7 @@ if (!isModEnabled('multicompany') || !$user->entity) {
 }
 print "</tr>\n";
 
-$sql = "SELECT";
-$sql .= " rowid";
-$sql .= ", " . $db->decrypt('name') . " as name";
-$sql .= ", " . $db->decrypt('value') . " as value";
-$sql .= ", type";
-$sql .= ", note";
-$sql .= ", entity";
-$sql .= " FROM " . MAIN_DB_PREFIX . "const";
-if (!isModEnabled('multicompany')) {
-    // If no multicompany mode, admins can see global and their constantes
-    $sql .= " WHERE entity IN (0," . $conf->entity . ")";
-} else {
-    // If multicompany mode, superadmin (user->entity=0) can see everything, admin are limited to their entities.
-    if ($user->entity) {
-        $sql .= " WHERE entity IN (" . $db->sanitize($user->entity . "," . $conf->entity) . ")";
-    }
-}
-$sql .= " ORDER BY entity, name ASC";
-$resql = $db->query($sql);
-if ($resql) {
+if (getConstants()) {
     $num = $db->num_rows($resql);
     $i = 0;
 

@@ -820,7 +820,7 @@ class Product extends CommonObject
             }
         }
 
-        dol_syslog(get_class($this) . "::create ref=" . $this->ref . " price=" . $this->price . " price_ttc=" . $this->price_ttc . " tva_tx=" . $this->tva_tx . " price_base_type=" . $this->price_base_type, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create ref=" . $this->ref . " price=" . $this->price . " price_ttc=" . $this->price_ttc . " tva_tx=" . $this->tva_tx . " price_base_type=" . $this->price_base_type, LOG_DEBUG);
 
         $now = dol_now();
 
@@ -914,7 +914,7 @@ class Product extends CommonObject
                     $sql .= ", '" . $this->db->escape($this->mandatory_period) . "'";
                     $sql .= ")";
 
-                    dol_syslog(get_class($this) . "::Create", LOG_DEBUG);
+                    dol_syslog(get_only_class($this) . "::Create", LOG_DEBUG);
 
                     $result = $this->db->query($sql);
                     if ($result) {
@@ -979,7 +979,7 @@ class Product extends CommonObject
                     $langs->load("products");
                     $error++;
                     $this->error = "ErrorProductAlreadyExists";
-                    dol_syslog(get_class($this) . "::Create fails, ref " . $this->ref . " already exists");
+                    dol_syslog(get_only_class($this) . "::Create fails, ref " . $this->ref . " already exists");
                 }
             } else {
                 $error++;
@@ -1004,7 +1004,7 @@ class Product extends CommonObject
             }
         } else {
             $this->db->rollback();
-            dol_syslog(get_class($this) . "::Create fails verify " . implode(',', $this->errors), LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::Create fails verify " . implode(',', $this->errors), LOG_WARNING);
             return -3;
         }
     }
@@ -1086,7 +1086,7 @@ class Product extends CommonObject
             $mod = new $module();
             '@phan-var-force ModeleNumRefBarCode $mod';
 
-            dol_syslog(get_class($this) . "::check_barcode value=" . $valuetotest . " type=" . $typefortest . " module=" . $module);
+            dol_syslog(get_only_class($this) . "::check_barcode value=" . $valuetotest . " type=" . $typefortest . " module=" . $module);
             $result = $mod->verif($this->db, $valuetotest, $this, 0, $typefortest);
             return $result;
         } else {
@@ -1355,7 +1355,7 @@ class Product extends CommonObject
             // stock field is not here because it is a denormalized value from product_stock.
             $sql .= " WHERE rowid = " . ((int) $id);
 
-            dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
 
             $resql = $this->db->query($sql);
             if ($resql) {
@@ -1511,7 +1511,7 @@ class Product extends CommonObject
             }
         } else {
             $this->db->rollback();
-            dol_syslog(get_class($this) . "::Update fails verify " . implode(',', $this->errors), LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::Update fails verify " . implode(',', $this->errors), LOG_WARNING);
             return -3;
         }
     }
@@ -1620,7 +1620,7 @@ class Product extends CommonObject
                 $result = $this->deleteExtraFields();
                 if ($result < 0) {
                     $error++;
-                    dol_syslog(get_class($this) . "::delete error -4 " . $this->error, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::delete error -4 " . $this->error, LOG_ERR);
                 }
             }
 
@@ -1665,7 +1665,7 @@ class Product extends CommonObject
                 return 1;
             } else {
                 foreach ($this->errors as $errmsg) {
-                    dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                     $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
                 }
                 $this->db->rollback();
@@ -1757,7 +1757,7 @@ class Product extends CommonObject
                     }
                     $sql2 .= ")";
                 }
-                dol_syslog(get_class($this) . '::setMultiLangs key = current_lang = ' . $key);
+                dol_syslog(get_only_class($this) . '::setMultiLangs key = current_lang = ' . $key);
                 if (!$this->db->query($sql2)) {
                     $this->error = $this->db->lasterror();
                     return -1;
@@ -1834,21 +1834,21 @@ class Product extends CommonObject
         $sql = "DELETE FROM " . $this->db->prefix() . "product_lang";
         $sql .= " WHERE fk_product = " . ((int) $this->id) . " AND lang = '" . $this->db->escape($langtodelete) . "'";
 
-        dol_syslog(get_class($this) . '::delMultiLangs', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::delMultiLangs', LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             // Call trigger
             $result = $this->call_trigger('PRODUCT_DEL_MULTILANGS', $user);
             if ($result < 0) {
                 $this->error = $this->db->lasterror();
-                dol_syslog(get_class($this) . '::delMultiLangs error=' . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . '::delMultiLangs error=' . $this->error, LOG_ERR);
                 return -1;
             }
             // End call triggers
             return 1;
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . '::delMultiLangs error=' . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . '::delMultiLangs error=' . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -2013,7 +2013,7 @@ class Product extends CommonObject
         $sql .= " " . price2num($this->localtax1_tx) . ", " . price2num($this->localtax2_tx) . ", '" . $this->db->escape($this->localtax1_type) . "', '" . $this->db->escape($this->localtax2_type) . "', " . price2num($this->price_min) . ", " . price2num($this->price_min_ttc) . ", " . price2num($this->price_by_qty) . ", " . ((int) $conf->entity) . "," . ($this->fk_price_expression > 0 ? ((int) $this->fk_price_expression) : 'null');
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::_log_price", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::_log_price", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = $this->db->lasterror();
@@ -2219,7 +2219,7 @@ class Product extends CommonObject
         }
         $sql .= " ORDER BY pfp.quantity DESC";
 
-        dol_syslog(get_class($this) . "::get_buyprice first search by prodfournprice/qty", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::get_buyprice first search by prodfournprice/qty", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $obj = $this->db->fetch_object($resql);
@@ -2283,7 +2283,7 @@ class Product extends CommonObject
                 $sql .= " ORDER BY pfp.quantity DESC";
                 $sql .= " LIMIT 1";
 
-                dol_syslog(get_class($this) . "::get_buyprice second search from qty/ref/product_id", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::get_buyprice second search from qty/ref/product_id", LOG_DEBUG);
                 $resql = $this->db->query($sql);
                 if ($resql) {
                     $obj = $this->db->fetch_object($resql);
@@ -2366,7 +2366,7 @@ class Product extends CommonObject
 
         $id = $this->id;
 
-        dol_syslog(get_class($this) . "::update_price id=" . $id . " newprice=" . $newprice . " newpricebase=" . $newpricebase . " newminprice=" . $newminprice . " level=" . $level . " npr=" . $newnpr . " newdefaultvatcode=" . $newdefaultvatcode);
+        dol_syslog(get_only_class($this) . "::update_price id=" . $id . " newprice=" . $newprice . " newpricebase=" . $newpricebase . " newminprice=" . $newminprice . " level=" . $level . " npr=" . $newnpr . " newdefaultvatcode=" . $newdefaultvatcode);
 
         // Clean parameters
         if (empty($this->tva_tx)) {
@@ -2487,7 +2487,7 @@ class Product extends CommonObject
             $sql .= " recuperableonly = '" . $this->db->escape($newnpr) . "'";
             $sql .= " WHERE rowid = " . ((int) $id);
 
-            dol_syslog(get_class($this) . "::update_price", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::update_price", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $this->multiprices[$level] = $price;
@@ -2581,12 +2581,12 @@ class Product extends CommonObject
 
         global $langs, $conf;
 
-        dol_syslog(get_class($this) . "::fetch id=" . $id . " ref=" . $ref . " ref_ext=" . $ref_ext);
+        dol_syslog(get_only_class($this) . "::fetch id=" . $id . " ref=" . $ref . " ref_ext=" . $ref_ext);
 
         // Check parameters
         if (!$id && !$ref && !$ref_ext && !$barcode) {
             $this->error = 'ErrorWrongParameters';
-            dol_syslog(get_class($this) . "::fetch " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetch " . $this->error, LOG_ERR);
             return -1;
         }
 
@@ -4544,7 +4544,7 @@ class Product extends CommonObject
                         $result = $this->call_trigger('PRODUCT_SUBPRODUCT_ADD', $user);
                         if ($result < 0) {
                             $this->error = $this->db->lasterror();
-                            dol_syslog(get_class($this) . '::addSubproduct error=' . $this->error, LOG_ERR);
+                            dol_syslog(get_only_class($this) . '::addSubproduct error=' . $this->error, LOG_ERR);
                             return -1;
                         }
                     }
@@ -4603,7 +4603,7 @@ class Product extends CommonObject
                 $result = $this->call_trigger('PRODUCT_SUBPRODUCT_UPDATE', $user);
                 if ($result < 0) {
                     $this->error = $this->db->lasterror();
-                    dol_syslog(get_class($this) . '::updateSubproduct error=' . $this->error, LOG_ERR);
+                    dol_syslog(get_only_class($this) . '::updateSubproduct error=' . $this->error, LOG_ERR);
                     return -1;
                 }
                 // End call triggers
@@ -4638,7 +4638,7 @@ class Product extends CommonObject
         $sql .= " WHERE fk_product_pere  = " . ((int) $fk_parent);
         $sql .= " AND fk_product_fils = " . ((int) $fk_child);
 
-        dol_syslog(get_class($this) . '::del_sousproduit', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::del_sousproduit', LOG_DEBUG);
         if (!$this->db->query($sql)) {
             dol_print_error($this->db);
             return -1;
@@ -4668,7 +4668,7 @@ class Product extends CommonObject
             $result = $this->call_trigger('PRODUCT_SUBPRODUCT_DELETE', $user);
             if ($result < 0) {
                 $this->error = $this->db->lasterror();
-                dol_syslog(get_class($this) . '::delSubproduct error=' . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . '::delSubproduct error=' . $this->error, LOG_ERR);
                 return -1;
             }
             // End call triggers
@@ -4732,7 +4732,7 @@ class Product extends CommonObject
 
         $now = dol_now();
 
-        dol_syslog(get_class($this) . "::add_fournisseur id_fourn = " . $id_fourn . " ref_fourn=" . $ref_fourn . " quantity=" . $quantity, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::add_fournisseur id_fourn = " . $id_fourn . " ref_fourn=" . $ref_fourn . " quantity=" . $quantity, LOG_DEBUG);
 
         // Clean parameters
         $quantity = price2num($quantity, 'MS');
@@ -4952,7 +4952,7 @@ class Product extends CommonObject
         $sql .= " SELECT " . $toId . ", fk_product_fils, qty, incdec FROM " . $this->db->prefix() . "product_association";
         $sql .= " WHERE fk_product_pere = " . ((int) $fromId);
 
-        dol_syslog(get_class($this) . '::clone_association', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::clone_association', LOG_DEBUG);
         if (!$this->db->query($sql)) {
             $this->db->rollback();
             return -1;
@@ -4997,7 +4997,7 @@ class Product extends CommonObject
         $sql .= " FROM " . $this->db->prefix() . "product_fournisseur_price";
         $sql .= " WHERE fk_product = " . ((int) $fromId);
 
-        dol_syslog(get_class($this) . '::clone_fournisseurs', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::clone_fournisseurs', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->db->rollback();
@@ -5249,7 +5249,7 @@ class Product extends CommonObject
         $sql .= " AND pa.fk_product_fils <> " . ((int) $id); // This should not happens, it is to avoid infinite loop if it happens
         $sql .= " ORDER BY pa.rang";
 
-        dol_syslog(get_class($this) . '::getChildsArbo id=' . $id . ' level=' . $level . ' parents=' . (is_array($parents) ? implode(',', $parents) : $parents), LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::getChildsArbo id=' . $id . ' level=' . $level . ' parents=' . (is_array($parents) ? implode(',', $parents) : $parents), LOG_DEBUG);
 
         if ($level == 1) {
             $alreadyfound = array($id => 1); // We init array of found object to start of tree, so if we found it later (should not happened), we stop immediately
@@ -5264,7 +5264,7 @@ class Product extends CommonObject
             $prods = array();
             while ($rec = $this->db->fetch_array($res)) {
                 if (!empty($alreadyfound[$rec['rowid']])) {
-                    dol_syslog(get_class($this) . '::getChildsArbo the product id=' . $rec['rowid'] . ' was already found at a higher level in tree. We discard to avoid infinite loop', LOG_WARNING);
+                    dol_syslog(get_only_class($this) . '::getChildsArbo the product id=' . $rec['rowid'] . ' was already found at a higher level in tree. We discard to avoid infinite loop', LOG_WARNING);
                     if (in_array($rec['id'], $parents)) {
                         continue; // We discard this child if it is already found at a higher level in tree in the same branch.
                     }
@@ -5884,7 +5884,7 @@ class Product extends CommonObject
 
         $sql .= " ORDER BY ps.reel " . (getDolGlobalString('DO_NOT_TRY_TO_DEFRAGMENT_STOCKS_WAREHOUSE') ? 'DESC' : 'ASC'); // Note : qty ASC is important for expedition card, to avoid stock fragmentation;
 
-        dol_syslog(get_class($this) . "::load_stock", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::load_stock", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $num = $this->db->num_rows($result);
@@ -6068,7 +6068,7 @@ class Product extends CommonObject
         $sql = "SELECT pb.batch, pb.eatby, pb.sellby, SUM(pb.qty) AS qty FROM " . $this->db->prefix() . "product_batch as pb, " . $this->db->prefix() . "product_stock as ps";
         $sql .= " WHERE pb.fk_product_stock = ps.rowid AND ps.fk_product = " . ((int) $this->id) . " AND pb.batch = '" . $this->db->escape($batch) . "'";
         $sql .= " GROUP BY pb.batch, pb.eatby, pb.sellby";
-        dol_syslog(get_class($this) . "::loadBatchInfo load first entry found for lot/serial = " . $batch, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::loadBatchInfo load first entry found for lot/serial = " . $batch, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -6405,7 +6405,7 @@ class Product extends CommonObject
 
             $result = $mod->getNextValue($object, $type);
 
-            dol_syslog(get_class($this) . "::get_barcode barcode=" . $result . " module=" . $var);
+            dol_syslog(get_only_class($this) . "::get_barcode barcode=" . $result . " module=" . $var);
         }
         return $result;
     }
@@ -6484,7 +6484,7 @@ class Product extends CommonObject
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = $this->db->error();
-            dol_syslog(get_class($this) . "::getLabelOfUnit Error " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::getLabelOfUnit Error " . $this->error, LOG_ERR);
             return -1;
         } elseif ($this->db->num_rows($resql) > 0 && $res = $this->db->fetch_array($resql)) {
             $label = ($label_type == 'short_label' ? $res[$label_type] : 'unit' . $res['code']);

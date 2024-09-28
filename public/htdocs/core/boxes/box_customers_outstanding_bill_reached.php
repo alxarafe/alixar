@@ -101,7 +101,7 @@ class box_customers_outstanding_bill_reached extends ModeleBoxes
             $sql .= " ORDER BY s.tms DESC";
             //$sql .= $this->db->plimit($max, 0);
 
-            dol_syslog(get_class($this) . "::loadBox", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::loadBox", LOG_DEBUG);
             $result = $this->db->query($sql);
             if ($result) {
                 $num = $this->db->num_rows($result);

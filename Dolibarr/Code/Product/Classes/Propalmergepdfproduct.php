@@ -160,7 +160,7 @@ class Propalmergepdfproduct extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -222,7 +222,7 @@ class Propalmergepdfproduct extends CommonObject
             return 1;
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::fetch " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetch " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -292,7 +292,7 @@ class Propalmergepdfproduct extends CommonObject
             return 1;
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::fetch_by_product " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetch_by_product " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -353,7 +353,7 @@ class Propalmergepdfproduct extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -394,7 +394,7 @@ class Propalmergepdfproduct extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -442,7 +442,7 @@ class Propalmergepdfproduct extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -483,7 +483,7 @@ class Propalmergepdfproduct extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();

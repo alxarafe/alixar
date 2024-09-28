@@ -224,7 +224,7 @@ class AccountLine extends CommonObjectLine
             $sql .= " AND b.rowid = " . ((int)$rowid);
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $ret = 0;
@@ -315,7 +315,7 @@ class AccountLine extends CommonObjectLine
         $sql .= ")";
 
 
-        dol_syslog(get_class($this) . "::insert", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::insert", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . 'bank');
@@ -393,7 +393,7 @@ class AccountLine extends CommonObjectLine
         }
 
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank_class WHERE lineid=" . (int)$this->rowid;
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $result = $this->db->query($sql);
         if (!$result) {
             $nbko++;
@@ -406,7 +406,7 @@ class AccountLine extends CommonObjectLine
         }
 
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank WHERE rowid=" . (int)$this->rowid;
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $result = $this->db->query($sql);
         if (!$result) {
             $nbko++;
@@ -444,7 +444,7 @@ class AccountLine extends CommonObjectLine
         $this->db->begin();
 
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank_url WHERE fk_bank=" . (int)$this->rowid;
-        dol_syslog(get_class($this) . "::delete_urls", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete_urls", LOG_DEBUG);
         $result = $this->db->query($sql);
         if (!$result) {
             $nbko++;
@@ -477,7 +477,7 @@ class AccountLine extends CommonObjectLine
         $sql .= " dateo='" . $this->db->idate($this->dateo) . "'";
         $sql .= " WHERE rowid = " . ((int)$this->rowid);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->db->commit();
@@ -503,7 +503,7 @@ class AccountLine extends CommonObjectLine
         $sql .= " label = '" . $this->db->escape($this->label) . "'";
         $sql .= " WHERE rowid = " . ((int)$this->rowid);
 
-        dol_syslog(get_class($this) . "::update_label", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update_label", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->db->commit();
@@ -549,7 +549,7 @@ class AccountLine extends CommonObjectLine
         }
         $sql .= " WHERE rowid = " . ((int)$this->id);
 
-        dol_syslog(get_class($this) . "::update_conciliation", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update_conciliation", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if (!empty($cat) && $cat > 0) {
@@ -561,7 +561,7 @@ class AccountLine extends CommonObjectLine
                 $sql .= ", " . ((int)$cat);
                 $sql .= ")";
 
-                dol_syslog(get_class($this) . "::update_conciliation", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::update_conciliation", LOG_DEBUG);
                 $this->db->query($sql);
 
                 // No error check. Can fail if category already affected

@@ -226,7 +226,7 @@ class AdherentType extends CommonObject
                     $sql2 .= " '" . $this->db->escape($this->description) . "'";
                     $sql2 .= ")";
                 }
-                dol_syslog(get_class($this) . '::setMultiLangs key = current_lang = ' . $key);
+                dol_syslog(get_only_class($this) . '::setMultiLangs key = current_lang = ' . $key);
                 if (!$this->db->query($sql2)) {
                     $this->error = $this->db->lasterror();
                     return -1;
@@ -288,21 +288,21 @@ class AdherentType extends CommonObject
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "adherent_type_lang";
         $sql .= " WHERE fk_type = " . ((int) $this->id) . " AND lang = '" . $this->db->escape($langtodelete) . "'";
 
-        dol_syslog(get_class($this) . '::delMultiLangs', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::delMultiLangs', LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             // Call trigger
             $result = $this->call_trigger('MEMBER_TYPE_DEL_MULTILANGS', $user);
             if ($result < 0) {
                 $this->error = $this->db->lasterror();
-                dol_syslog(get_class($this) . '::delMultiLangs error=' . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . '::delMultiLangs error=' . $this->error, LOG_ERR);
                 return -1;
             }
             // End call triggers
             return 1;
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . '::delMultiLangs error=' . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . '::delMultiLangs error=' . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -359,7 +359,7 @@ class AdherentType extends CommonObject
                 $this->db->commit();
                 return $this->id;
             } else {
-                dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
                 $this->db->rollback();
                 return -2;
             }
@@ -439,7 +439,7 @@ class AdherentType extends CommonObject
                 return 1;
             } else {
                 $this->db->rollback();
-                dol_syslog(get_class($this) . "::update " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $this->error, LOG_ERR);
                 return -$error;
             }
         } else {
@@ -632,7 +632,7 @@ class AdherentType extends CommonObject
             $sql .= ' AND (' . $excludefilter . ')';
         }
 
-        dol_syslog(get_class($this) . "::listMembersForMemberType", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::listMembersForMemberType", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             while ($obj = $this->db->fetch_object($resql)) {

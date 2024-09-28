@@ -171,7 +171,7 @@ class DiscountAbsolute extends CommonObject
             $sql .= " AND sr.fk_invoice_supplier_source = " . ((int) $fk_invoice_supplier_source);
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -265,7 +265,7 @@ class DiscountAbsolute extends CommonObject
         // Check parameters
         if (empty($this->description)) {
             $this->error = 'BadValueForPropertyDescriptionOfDiscount';
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
             return -1;
         }
 
@@ -290,7 +290,7 @@ class DiscountAbsolute extends CommonObject
         $sql .= " " . ($this->fk_invoice_supplier_source ? ((int) $this->fk_invoice_supplier_source) : "null");
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id($this->db->prefix() . "societe_remise_except");
@@ -321,7 +321,7 @@ class DiscountAbsolute extends CommonObject
             $sql .= " AND fk_facture_source = " . ((int) $this->fk_facture_source);
             //$sql.=" AND rowid != ".$this->id;
 
-            dol_syslog(get_class($this) . "::delete Check if we can remove discount", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete Check if we can remove discount", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $obj = $this->db->fetch_object($resql);
@@ -344,7 +344,7 @@ class DiscountAbsolute extends CommonObject
             $sql .= " AND fk_invoice_supplier_source = " . ((int) $this->fk_invoice_supplier_source);
             //$sql.=" AND rowid != ".$this->id;
 
-            dol_syslog(get_class($this) . "::delete Check if we can remove discount", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete Check if we can remove discount", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $obj = $this->db->fetch_object($resql);
@@ -374,7 +374,7 @@ class DiscountAbsolute extends CommonObject
         $sql .= " AND (fk_invoice_supplier_line IS NULL"; // Not used as absolute simple discount
         $sql .= " AND fk_invoice_supplier IS NULL)"; // Not used as credit note and not used as deposit
 
-        dol_syslog(get_class($this) . "::delete Delete discount", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete Delete discount", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             // If source of discount was a credit note or deposit, we change source statut.
@@ -383,7 +383,7 @@ class DiscountAbsolute extends CommonObject
                 $sql .= " set paye=0, fk_statut=1";
                 $sql .= " WHERE type IN (" . $this->db->sanitize(CommonInvoice::TYPE_CREDIT_NOTE . ", " . CommonInvoice::TYPE_DEPOSIT) . ") AND rowid = " . ((int) $this->fk_facture_source);
 
-                dol_syslog(get_class($this) . "::delete Update credit note or deposit invoice statut", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::delete Update credit note or deposit invoice statut", LOG_DEBUG);
                 $result = $this->db->query($sql);
                 if ($result) {
                     $this->db->commit();
@@ -398,7 +398,7 @@ class DiscountAbsolute extends CommonObject
                 $sql .= " set paye=0, fk_statut=1";
                 $sql .= " WHERE type IN (" . $this->db->sanitize(CommonInvoice::TYPE_CREDIT_NOTE . ", " . CommonInvoice::TYPE_DEPOSIT) . ") AND rowid = " . ((int) $this->fk_invoice_supplier_source);
 
-                dol_syslog(get_class($this) . "::delete Update credit note or deposit invoice statut", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::delete Update credit note or deposit invoice statut", LOG_DEBUG);
                 $result = $this->db->query($sql);
                 if ($result) {
                     $this->db->commit();
@@ -462,7 +462,7 @@ class DiscountAbsolute extends CommonObject
         }
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::link_to_invoice", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::link_to_invoice", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if (!empty($this->discount_type)) {
@@ -498,7 +498,7 @@ class DiscountAbsolute extends CommonObject
         }
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::unlink_invoice", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::unlink_invoice", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             return 1;
@@ -524,7 +524,7 @@ class DiscountAbsolute extends CommonObject
     {
         global $conf;
 
-        dol_syslog(get_class($this) . "::getAvailableDiscounts discount_type=" . $discount_type, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getAvailableDiscounts discount_type=" . $discount_type, LOG_DEBUG);
 
         $sql = "SELECT SUM(rc.amount_ttc) as amount, SUM(rc.multicurrency_amount_ttc) as multicurrency_amount";
         $sql .= " FROM " . $this->db->prefix() . "societe_remise_except as rc";
@@ -576,7 +576,7 @@ class DiscountAbsolute extends CommonObject
      */
     public function getSumDepositsUsed($invoice, $multicurrency = 0)
     {
-        dol_syslog(get_class($this) . "::getSumDepositsUsed", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getSumDepositsUsed", LOG_DEBUG);
 
         if ($invoice->element == 'facture' || $invoice->element == 'invoice') {
             $sql = "SELECT sum(rc.amount_ttc) as amount, sum(rc.multicurrency_amount_ttc) as multicurrency_amount";
@@ -589,7 +589,7 @@ class DiscountAbsolute extends CommonObject
             $sql .= " WHERE rc.fk_invoice_supplier_source=f.rowid AND rc.fk_invoice_supplier = " . ((int) $invoice->id);
             $sql .= " AND f.type = " . (int) $invoice::TYPE_DEPOSIT;
         } else {
-            $this->error = get_class($this) . "::getSumDepositsUsed was called with a bad object as a first parameter";
+            $this->error = get_only_class($this) . "::getSumDepositsUsed was called with a bad object as a first parameter";
             dol_print_error($this->db, $this->error);
             return -1;
         }
@@ -617,7 +617,7 @@ class DiscountAbsolute extends CommonObject
      */
     public function getSumCreditNotesUsed($invoice, $multicurrency = 0)
     {
-        dol_syslog(get_class($this) . "::getSumCreditNotesUsed", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getSumCreditNotesUsed", LOG_DEBUG);
 
         if ($invoice->element == 'facture' || $invoice->element == 'invoice') {
             $sql = "SELECT sum(rc.amount_ttc) as amount, sum(rc.multicurrency_amount_ttc) as multicurrency_amount";
@@ -630,7 +630,7 @@ class DiscountAbsolute extends CommonObject
             $sql .= " WHERE rc.fk_invoice_supplier_source=f.rowid AND rc.fk_invoice_supplier = " . ((int) $invoice->id);
             $sql .= " AND f.type IN (" . $this->db->sanitize($invoice::TYPE_STANDARD . ", " . $invoice::TYPE_CREDIT_NOTE) . ")"; // Find discount coming from credit note or excess paid
         } else {
-            $this->error = get_class($this) . "::getSumCreditNotesUsed was called with a bad object as a first parameter";
+            $this->error = get_only_class($this) . "::getSumCreditNotesUsed was called with a bad object as a first parameter";
             dol_print_error($this->db, $this->error);
             return -1;
         }
@@ -657,7 +657,7 @@ class DiscountAbsolute extends CommonObject
      */
     public function getSumFromThisCreditNotesNotUsed($invoice, $multicurrency = 0)
     {
-        dol_syslog(get_class($this) . "::getSumCreditNotesUsed", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getSumCreditNotesUsed", LOG_DEBUG);
 
         if ($invoice->element == 'facture' || $invoice->element == 'invoice') {
             $sql = "SELECT sum(rc.amount_ttc) as amount, sum(rc.multicurrency_amount_ttc) as multicurrency_amount";
@@ -668,7 +668,7 @@ class DiscountAbsolute extends CommonObject
             $sql .= " FROM " . $this->db->prefix() . "societe_remise_except as rc";
             $sql .= " WHERE rc.fk_invoice_supplier IS NULL AND rc.fk_invoice_supplier_source = " . ((int) $invoice->id);
         } else {
-            $this->error = get_class($this) . "::getSumCreditNotesUsed was called with a bad object as a first parameter";
+            $this->error = get_only_class($this) . "::getSumCreditNotesUsed was called with a bad object as a first parameter";
             dol_print_error($this->db, $this->error);
             return -1;
         }

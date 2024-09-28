@@ -146,7 +146,7 @@ class Localtax extends CommonObject
         $sql .= " " . ((int) $this->fk_user_modif);
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "localtax");
@@ -206,7 +206,7 @@ class Localtax extends CommonObject
         $sql .= " fk_user_modif=" . (int) $this->fk_user_modif;
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
@@ -259,7 +259,7 @@ class Localtax extends CommonObject
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "bank as b ON t.fk_bank = b.rowid";
         $sql .= " WHERE t.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -310,7 +310,7 @@ class Localtax extends CommonObject
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "localtax";
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
@@ -523,7 +523,7 @@ class Localtax extends CommonObject
         $sql .= ", " . ((int) $user->id) . ", NULL";
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::addPayment", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::addPayment", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "localtax"); // TODO devrait s'appeler paiementlocaltax

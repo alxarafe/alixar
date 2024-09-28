@@ -225,7 +225,7 @@ class PaymentLoan extends CommonObject
             $sql .= " " . ((int) $this->paymenttype) . ", '" . $this->db->escape($this->num_payment) . "', '" . $this->db->escape($this->note_private) . "', '" . $this->db->escape($this->note_public) . "', " . $user->id . ",";
             $sql .= " 0)";
 
-            dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "payment_loan");
@@ -278,7 +278,7 @@ class PaymentLoan extends CommonObject
         $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'bank as b ON t.fk_bank = b.rowid';
         $sql .= " WHERE t.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -387,7 +387,7 @@ class PaymentLoan extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -397,7 +397,7 @@ class PaymentLoan extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -427,7 +427,7 @@ class PaymentLoan extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank_url";
             $sql .= " WHERE type='payment_loan' AND url_id=" . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -439,7 +439,7 @@ class PaymentLoan extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "payment_loan";
             $sql .= " WHERE rowid=" . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -453,7 +453,7 @@ class PaymentLoan extends CommonObject
             $loan->fetch($this->fk_loan);
             $sum_payment = $loan->getSumPayment();
             if ($sum_payment == 0) {
-                dol_syslog(get_class($this) . "::delete : set loan to unpaid", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::delete : set loan to unpaid", LOG_DEBUG);
                 if ($loan->setUnpaid($user) < 1) {
                     $error++;
                     dol_print_error($this->db);
@@ -480,7 +480,7 @@ class PaymentLoan extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -601,7 +601,7 @@ class PaymentLoan extends CommonObject
             $loan = new Loan($this->db);
             $loan->fetch($fk_loan);
             if ($loan->paid == $loan::STATUS_UNPAID) {
-                dol_syslog(get_class($this) . "::addPaymentToBank : set loan payment to started", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::addPaymentToBank : set loan payment to started", LOG_DEBUG);
                 if ($loan->setStarted($user) < 1) {
                     $error++;
                     dol_print_error($this->db);
@@ -631,7 +631,7 @@ class PaymentLoan extends CommonObject
 		// phpcs:enable
         $sql = "UPDATE " . MAIN_DB_PREFIX . "payment_loan SET fk_bank = " . ((int) $id_bank) . " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update_fk_bank", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update_fk_bank", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->fk_bank = ((int) $id_bank);

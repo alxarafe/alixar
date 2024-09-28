@@ -550,7 +550,7 @@ if ($object->fetch($id) >= 0) {
                     if (empty($obj->picto)) {
                         $obj->picto = 'generic';
                     }
-                    print img_object($langs->trans("EmailingTargetSelector") . ': ' . get_class($obj), $obj->picto, 'class="valignmiddle width25 size15x"');
+                    print img_object($langs->trans("EmailingTargetSelector") . ': ' . get_only_class($obj), $obj->picto, 'class="valignmiddle width25 size15x"');
                     print '</div>';
                     print '<div class="tagtd valignmiddle">';   //  style="height: 4em"
                     print $obj->getDesc();

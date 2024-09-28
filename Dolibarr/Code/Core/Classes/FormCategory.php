@@ -115,7 +115,7 @@ class FormCategory extends Form
         $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "categorie as cat ON cat.rowid = cp.fk_categorie";
         $sql .= " GROUP BY cp.fk_categorie, cat.label";
 
-        dol_syslog(get_class($this) . "::selectProductCategory", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectProductCategory", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             print '<select class="flat" id="select_' . $htmlname . '" name="' . $htmlname . '">';

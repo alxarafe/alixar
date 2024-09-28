@@ -258,7 +258,7 @@ class Entrepot extends CommonObject
         $sql = "INSERT INTO " . $this->db->prefix() . "entrepot (ref, entity, datec, fk_user_author, fk_parent, fk_project)";
         $sql .= " VALUES ('" . $this->db->escape($this->label) . "', " . ((int) $conf->entity) . ", '" . $this->db->idate($now) . "', " . ((int) $user->id) . ", " . ($this->fk_parent > 0 ? ((int) $this->fk_parent) : "NULL") . ", " . ($this->fk_project > 0 ? ((int) $this->fk_project) : "NULL") . ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $id = $this->db->last_insert_id($this->db->prefix() . "entrepot");
@@ -293,18 +293,18 @@ class Entrepot extends CommonObject
                     $this->db->commit();
                     return $id;
                 } else {
-                    dol_syslog(get_class($this) . "::create return -3");
+                    dol_syslog(get_only_class($this) . "::create return -3");
                     $this->db->rollback();
                     return -3;
                 }
             } else {
                 $this->error = "Failed to get insert id";
-                dol_syslog(get_class($this) . "::create return -2");
+                dol_syslog(get_only_class($this) . "::create return -2");
                 return -2;
             }
         } else {
             $this->error = $this->db->error();
-            dol_syslog(get_class($this) . "::create Error " . $this->db->error());
+            dol_syslog(get_only_class($this) . "::create Error " . $this->db->error());
             $this->db->rollback();
             return -1;
         }
@@ -364,7 +364,7 @@ class Entrepot extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         if (!$resql) {
@@ -412,7 +412,7 @@ class Entrepot extends CommonObject
 
         $error = 0;
 
-        dol_syslog(get_class($this) . "::delete id=" . $this->id, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete id=" . $this->id, LOG_DEBUG);
 
         $this->db->begin();
 
@@ -456,7 +456,7 @@ class Entrepot extends CommonObject
             $result = $this->deleteExtraFields();
             if ($result < 0) {
                 $error++;
-                dol_syslog(get_class($this) . "::delete Error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete Error " . $this->error, LOG_ERR);
             }
         }
 
@@ -467,7 +467,7 @@ class Entrepot extends CommonObject
             if (!$resql1) {
                 $error++;
                 $this->errors[] = $this->db->lasterror();
-                dol_syslog(get_class($this) . "::delete Error " . $this->db->lasterror(), LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete Error " . $this->db->lasterror(), LOG_ERR);
             }
         }
 
@@ -478,7 +478,7 @@ class Entrepot extends CommonObject
             if (!$resql2) {
                 $error++;
                 $this->errors[] = $this->db->lasterror();
-                dol_syslog(get_class($this) . "::delete Error " . $this->db->lasterror(), LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete Error " . $this->db->lasterror(), LOG_ERR);
             }
         }
 
@@ -503,12 +503,12 @@ class Entrepot extends CommonObject
     {
         global $conf;
 
-        dol_syslog(get_class($this) . "::fetch id=" . $id . " ref=" . $ref);
+        dol_syslog(get_only_class($this) . "::fetch id=" . $id . " ref=" . $ref);
 
         // Check parameters
         if (!$id && !$ref) {
             $this->error = 'ErrorWrongParameters';
-            dol_syslog(get_class($this) . "::fetch " . $this->error);
+            dol_syslog(get_only_class($this) . "::fetch " . $this->error);
             return -1;
         }
 
@@ -581,7 +581,7 @@ class Entrepot extends CommonObject
         $sql .= " FROM " . $this->db->prefix() . "entrepot as e";
         $sql .= " WHERE e.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::info", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::info", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             if ($this->db->num_rows($result)) {

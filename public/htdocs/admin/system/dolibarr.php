@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2020  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2007		Rodolphe Quiedeville	<rodolphe@quiedeville.org>
- * Copyright (C) 2007-2012	Regis Houssin			<regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007		Rodolphe Quiedeville	    <rodolphe@quiedeville.org>
+ * Copyright (C) 2007-2012	Regis Houssin			    <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,10 +19,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *  \file       htdocs/admin/system/dolibarr.php
- *  \brief      Page to show Dolibarr information
- */
+use Dolibarr\Code\Core\Classes\Form;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -44,7 +41,6 @@ if (!$user->admin) {
 $sfurl = '';
 $version = '0.0';
 
-
 /*
  *	Actions
  */
@@ -65,7 +61,6 @@ if ($action == 'getlastversion') {
         setEventMessages($langs->trans("ErrorPHPDoesNotSupport", "xml"), null, 'errors');
     }
 }
-
 
 /*
  * View
@@ -114,7 +109,7 @@ if (function_exists('curl_init')) {
             while (!empty($sfurl->channel[0]->item[$i]->title) && $i < 10000) {
                 $title = $sfurl->channel[0]->item[$i]->title;
                 $reg = array();
-                if (preg_match('/([0-9]+\.([0-9\.]+))/', $title, $reg)) {
+                if (preg_match('/([0-9]+\.([0-9.]+))/', $title, $reg)) {
                     $newversion = $reg[1];
                     $newversionarray = explode('.', $newversion);
                     $versionarray = explode('.', $version);
@@ -499,26 +494,7 @@ if (!isModEnabled('multicompany') || !$user->entity) {
 }
 print "</tr>\n";
 
-$sql = "SELECT";
-$sql .= " rowid";
-$sql .= ", " . $db->decrypt('name') . " as name";
-$sql .= ", " . $db->decrypt('value') . " as value";
-$sql .= ", type";
-$sql .= ", note";
-$sql .= ", entity";
-$sql .= " FROM " . MAIN_DB_PREFIX . "const";
-if (!isModEnabled('multicompany')) {
-    // If no multicompany mode, admins can see global and their constantes
-    $sql .= " WHERE entity IN (0," . $conf->entity . ")";
-} else {
-    // If multicompany mode, superadmin (user->entity=0) can see everything, admin are limited to their entities.
-    if ($user->entity) {
-        $sql .= " WHERE entity IN (" . $db->sanitize($user->entity . "," . $conf->entity) . ")";
-    }
-}
-$sql .= " ORDER BY entity, name ASC";
-$resql = $db->query($sql);
-if ($resql) {
+if (getConstants()) {
     $num = $db->num_rows($resql);
     $i = 0;
 

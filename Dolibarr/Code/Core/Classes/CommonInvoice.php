@@ -263,7 +263,7 @@ abstract class CommonInvoice extends CommonObject
         $sql .= " FROM " . $this->db->prefix() . $table;
         $sql .= " WHERE " . $field . " = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::getSommePaiement", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getSommePaiement", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -477,7 +477,7 @@ abstract class CommonInvoice extends CommonObject
             $sql .= " AND t.code='PRE'";
         }
 
-        dol_syslog(get_class($this) . "::getListOfPayments", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getListOfPayments", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -748,7 +748,7 @@ abstract class CommonInvoice extends CommonObject
         $sql .= " WHERE active = 1 AND fk_country = " . ((int) $mysoc->country_id) . " AND entity IN(" . getEntity('c_invoice_subtype') . ")";
         $sql .= " ORDER by rowid, code";
 
-        dol_syslog(get_class($this) . '::getArrayOfInvoiceSubtypes', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::getArrayOfInvoiceSubtypes', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -901,7 +901,7 @@ abstract class CommonInvoice extends CommonObject
             $sqltemp .= " AND c.code = '" . $this->db->escape($cond_reglement) . "'";
         }
 
-        dol_syslog(get_class($this) . '::calculate_date_lim_reglement', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::calculate_date_lim_reglement', LOG_DEBUG);
         $resqltemp = $this->db->query($sqltemp);
         if ($resqltemp) {
             if ($this->db->num_rows($resqltemp)) {
@@ -982,7 +982,7 @@ abstract class CommonInvoice extends CommonObject
 
         $error = 0;
 
-        dol_syslog(get_class($this) . "::demande_prelevement", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::demande_prelevement", LOG_DEBUG);
 
         if ($this->status > self::STATUS_DRAFT && $this->paye == 0) {
             $bac = new CompanyBankAccount($this->db);
@@ -1000,7 +1000,7 @@ abstract class CommonInvoice extends CommonObject
                 $sql .= " AND traite = 0";
             }
 
-            dol_syslog(get_class($this) . "::demande_prelevement", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::demande_prelevement", LOG_DEBUG);
 
             $resql = $this->db->query($sql);
             if ($resql) {
@@ -1042,16 +1042,16 @@ abstract class CommonInvoice extends CommonObject
                         $sql .= ", " . ((int) $conf->entity);
                         $sql .= ")";
 
-                        dol_syslog(get_class($this) . "::demande_prelevement", LOG_DEBUG);
+                        dol_syslog(get_only_class($this) . "::demande_prelevement", LOG_DEBUG);
                         $resql = $this->db->query($sql);
                         if (!$resql) {
                             $this->error = $this->db->lasterror();
-                            dol_syslog(get_class($this) . '::demandeprelevement Erreur');
+                            dol_syslog(get_only_class($this) . '::demandeprelevement Erreur');
                             $error++;
                         }
                     } else {
                         $this->error = 'WithdrawRequestErrorNilAmount';
-                        dol_syslog(get_class($this) . '::demandeprelevement WithdrawRequestErrorNilAmount');
+                        dol_syslog(get_only_class($this) . '::demandeprelevement WithdrawRequestErrorNilAmount');
                         $error++;
                     }
 
@@ -1069,17 +1069,17 @@ abstract class CommonInvoice extends CommonObject
                     return 1;
                 } else {
                     $this->error = "A request already exists";
-                    dol_syslog(get_class($this) . '::demandeprelevement Can t create a request to generate a direct debit, a request already exists.');
+                    dol_syslog(get_only_class($this) . '::demandeprelevement Can t create a request to generate a direct debit, a request already exists.');
                     return 0;
                 }
             } else {
                 $this->error = $this->db->error();
-                dol_syslog(get_class($this) . '::demandeprelevement Error -2');
+                dol_syslog(get_only_class($this) . '::demandeprelevement Error -2');
                 return -2;
             }
         } else {
             $this->error = "Status of invoice does not allow this";
-            dol_syslog(get_class($this) . "::demandeprelevement " . $this->error . " $this->status, $this->paye, $this->mode_reglement_id");
+            dol_syslog(get_only_class($this) . "::demandeprelevement " . $this->error . " $this->status, $this->paye, $this->mode_reglement_id");
             return -3;
         }
     }
@@ -1134,7 +1134,7 @@ abstract class CommonInvoice extends CommonObject
 
         $error = 0;
 
-        dol_syslog(get_class($this) . "::makeStripeSepaRequest start did=" . $did . " type=" . $type . " service=" . $service . " sourcetype=" . $sourcetype . " forcestripe=" . $forcestripe, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::makeStripeSepaRequest start did=" . $did . " type=" . $type . " service=" . $service . " sourcetype=" . $sourcetype . " forcestripe=" . $forcestripe, LOG_DEBUG);
 
         if ($this->status > self::STATUS_DRAFT && $this->paye == 0) {
             // Get the default payment mode for BAN payment of the third party
@@ -1143,7 +1143,7 @@ abstract class CommonInvoice extends CommonObject
             if ($result <= 0 || empty($bac->id)) {
                 $this->error = $langs->trans("ThirdpartyHasNoDefaultBanAccount");
                 $this->errors[] = $this->error;
-                dol_syslog(get_class($this) . "::makeStripeSepaRequest " . $this->error);
+                dol_syslog(get_only_class($this) . "::makeStripeSepaRequest " . $this->error);
                 return -1;
             }
 
@@ -1163,7 +1163,7 @@ abstract class CommonInvoice extends CommonObject
             }
             $sql .= " AND traite = 0";  // To not process payment request that were already converted into a direct debit or credit transfer order (Note: fk_prelevement_bons is also empty when traite = 0)
 
-            dol_syslog(get_class($this) . "::makeStripeSepaRequest load requests to process", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::makeStripeSepaRequest load requests to process", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $obj = $this->db->fetch_object($resql);
@@ -1580,11 +1580,11 @@ abstract class CommonInvoice extends CommonObject
                         $sql .= " ext_payment_site = '" . $this->db->escape($service) . "'";
                         $sql .= " WHERE rowid = " . ((int) $did);
 
-                        dol_syslog(get_class($this) . "::makeStripeSepaRequest update to save stripe paymentintent ids", LOG_DEBUG);
+                        dol_syslog(get_only_class($this) . "::makeStripeSepaRequest update to save stripe paymentintent ids", LOG_DEBUG);
                         $resql = $this->db->query($sql);
                         if (!$resql) {
                             $this->error = $this->db->lasterror();
-                            dol_syslog(get_class($this) . '::makeStripeSepaRequest Erreur');
+                            dol_syslog(get_only_class($this) . '::makeStripeSepaRequest Erreur');
                             $error++;
                         }
                     }
@@ -1596,7 +1596,7 @@ abstract class CommonInvoice extends CommonObject
                     }
                 } else {
                     $this->error = 'WithdrawRequestErrorNilAmount';
-                    dol_syslog(get_class($this) . '::makeStripeSepaRequest WithdrawRequestErrorNilAmount');
+                    dol_syslog(get_only_class($this) . '::makeStripeSepaRequest WithdrawRequestErrorNilAmount');
                     $error++;
                 }
 
@@ -1615,12 +1615,12 @@ abstract class CommonInvoice extends CommonObject
                 return 1;
             } else {
                 $this->error = $this->db->error();
-                dol_syslog(get_class($this) . '::makeStripeSepaRequest Erreur -2');
+                dol_syslog(get_only_class($this) . '::makeStripeSepaRequest Erreur -2');
                 return -2;
             }
         } else {
             $this->error = "Status of invoice does not allow this";
-            dol_syslog(get_class($this) . "::makeStripeSepaRequest " . $this->error . " " . $this->status . " ," . $this->paye . ", " . $this->mode_reglement_id, LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::makeStripeSepaRequest " . $this->error . " " . $this->status . " ," . $this->paye . ", " . $this->mode_reglement_id, LOG_WARNING);
             return -3;
         }
     }
@@ -1643,7 +1643,7 @@ abstract class CommonInvoice extends CommonObject
             return 0;
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . '::demande_prelevement_delete Error ' . $this->error);
+            dol_syslog(get_only_class($this) . '::demande_prelevement_delete Error ' . $this->error);
             return -1;
         }
     }

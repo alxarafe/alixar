@@ -211,7 +211,7 @@ class CashControl extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -228,7 +228,7 @@ class CashControl extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -255,7 +255,7 @@ class CashControl extends CommonObject
 
         // Protection
         if ($this->status == self::STATUS_VALIDATED) {
-            dol_syslog(get_class($this) . "::valid action abandoned: already validated", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::valid action abandoned: already validated", LOG_WARNING);
             return 0;
         }
 
@@ -270,7 +270,7 @@ class CashControl extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::close", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::close", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -295,7 +295,7 @@ class CashControl extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();

@@ -456,7 +456,7 @@ class AssetModel extends CommonObject
 
         // Protection
         if ($this->status == self::STATUS_VALIDATED) {
-            dol_syslog(get_class($this) . "::validate action abandoned: already validated", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::validate action abandoned: already validated", LOG_WARNING);
             return 0;
         }
 
@@ -475,7 +475,7 @@ class AssetModel extends CommonObject
         }
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::validate()", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::validate()", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             dol_print_error($this->db);

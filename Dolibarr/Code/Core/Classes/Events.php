@@ -189,7 +189,7 @@ class Events // extends CommonObject
         $sql .= " '" . $this->db->escape(dol_getprefix()) . "'";
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id($this->db->prefix() . "events");
@@ -225,7 +225,7 @@ class Events // extends CommonObject
         $sql .= " description='" . $this->db->escape($this->description) . "'";
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
@@ -257,7 +257,7 @@ class Events // extends CommonObject
         $sql .= " FROM " . $this->db->prefix() . "events as t";
         $sql .= " WHERE t.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -294,7 +294,7 @@ class Events // extends CommonObject
         $sql = "DELETE FROM " . $this->db->prefix() . "events";
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();

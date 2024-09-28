@@ -224,7 +224,7 @@ if (!$error && $massaction == 'confirm_presend_attendees') {
                     $resaction .= $langs->trans('MailSuccessfulySent', $mailfile->getValidAddress($from, 2), $mailfile->getValidAddress($sendto, 2)) . '<br>'; // Must not contain "
                     $error = 0;
 
-                    dol_syslog("Try to insert email event into agenda for objid=" . $attendees->id . " => objectobj=" . get_class($attendees));
+                    dol_syslog("Try to insert email event into agenda for objid=" . $attendees->id . " => objectobj=" . get_only_class($attendees));
 
                     $actionmsg = $langs->transnoentities('MailSentByTo', $from, $sendto);
                     if ($message) {

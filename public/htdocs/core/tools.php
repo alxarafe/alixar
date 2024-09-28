@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2001-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
+/* Copyright (C) 2001-2005  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2010  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Societe\Classes\Societe;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Load translation files required by the page
@@ -35,7 +37,6 @@ $socid = 0;
 if ($user->socid > 0) {
     $socid = $user->socid;
 }
-
 
 /*
  * View
@@ -52,10 +53,8 @@ print load_fiche_titre($text, '', 'wrench');
 // Show description of content
 print '<div class="justify opacitymedium">' . $langs->trans("ToolsDesc") . '</div><br><br>';
 
-
 // Show logo
 print '<div class="center"><div class="logo_setup"></div></div>';
-
 
 llxFooter();
 

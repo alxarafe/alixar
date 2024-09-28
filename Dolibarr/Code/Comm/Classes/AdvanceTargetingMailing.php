@@ -196,7 +196,7 @@ class AdvanceTargetingMailing extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -210,7 +210,7 @@ class AdvanceTargetingMailing extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -246,7 +246,7 @@ class AdvanceTargetingMailing extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . "mailing_advtarget as t";
         $sql .= " WHERE t.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -269,7 +269,7 @@ class AdvanceTargetingMailing extends CommonObject
             return 1;
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::fetch " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetch " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -305,7 +305,7 @@ class AdvanceTargetingMailing extends CommonObject
             $sql .= " WHERE t.fk_element = " . ((int) $this->fk_element) . " AND type_element = 'mailing'";
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -328,7 +328,7 @@ class AdvanceTargetingMailing extends CommonObject
             return 1;
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::fetch " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetch " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -368,7 +368,7 @@ class AdvanceTargetingMailing extends CommonObject
             $sql .= " WHERE t.fk_element = " . ((int) $this->fk_element) . " AND type_element = '" . $this->db->escape($type_element) . "'";
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -391,7 +391,7 @@ class AdvanceTargetingMailing extends CommonObject
             return 1;
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::fetch " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetch " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -438,7 +438,7 @@ class AdvanceTargetingMailing extends CommonObject
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
         $this->db->begin();
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -448,7 +448,7 @@ class AdvanceTargetingMailing extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -477,7 +477,7 @@ class AdvanceTargetingMailing extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "mailing_advtarget";
             $sql .= " WHERE rowid=" . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete sql=" . $sql);
+            dol_syslog(get_only_class($this) . "::delete sql=" . $sql);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -488,7 +488,7 @@ class AdvanceTargetingMailing extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -663,7 +663,7 @@ class AdvanceTargetingMailing extends CommonObject
         }
 
 
-        dol_syslog(get_class($this) . "::query_thirdparty", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::query_thirdparty", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->thirdparty_lines = array();
@@ -683,7 +683,7 @@ class AdvanceTargetingMailing extends CommonObject
             return $num;
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::query_thirdparty " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::query_thirdparty " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -922,7 +922,7 @@ class AdvanceTargetingMailing extends CommonObject
             }
         }
 
-        dol_syslog(get_class($this) . "::query_contact", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::query_contact", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->contact_lines = array();
@@ -943,7 +943,7 @@ class AdvanceTargetingMailing extends CommonObject
             return $num;
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::query_contact " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::query_contact " . $this->error, LOG_ERR);
             return -1;
         }
     }

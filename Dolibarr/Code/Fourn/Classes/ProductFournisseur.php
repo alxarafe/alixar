@@ -251,7 +251,7 @@ class ProductFournisseur extends Product
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "product_fournisseur_price";
         $sql .= " WHERE fk_product = " . ((int) $this->id) . " AND fk_soc = " . ((int) $id_fourn);
 
-        dol_syslog(get_class($this) . "::remove_fournisseur", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::remove_fournisseur", LOG_DEBUG);
         $resql2 = $this->db->query($sql);
         if (!$resql2) {
             $this->error = $this->db->lasterror();
@@ -295,7 +295,7 @@ class ProductFournisseur extends Product
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "product_fournisseur_price";
             $sql .= " WHERE rowid = " . ((int) $rowid);
 
-            dol_syslog(get_class($this) . "::remove_product_fournisseur_price", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::remove_product_fournisseur_price", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $this->error = $this->db->lasterror();
@@ -534,7 +534,7 @@ class ProductFournisseur extends Product
 
             // TODO Add price_base_type and price_ttc
 
-            dol_syslog(get_class($this) . '::update_buyprice update knowing id of line = product_fourn_price_id = ' . $this->product_fourn_price_id, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::update_buyprice update knowing id of line = product_fourn_price_id = ' . $this->product_fourn_price_id, LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 // Call trigger
@@ -562,7 +562,7 @@ class ProductFournisseur extends Product
                 return -2;
             }
         } else {
-            dol_syslog(get_class($this) . '::update_buyprice without knowing id of line, so we delete from company, quantity and supplier_ref and insert again', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::update_buyprice without knowing id of line, so we delete from company, quantity and supplier_ref and insert again', LOG_DEBUG);
 
             // Delete price for this quantity
             $sql = "DELETE FROM  " . MAIN_DB_PREFIX . "product_fournisseur_price";
@@ -696,7 +696,7 @@ class ProductFournisseur extends Product
         $sql .= " WHERE pfp.rowid = " . (int) $rowid;
         $sql .= " AND pfp.fk_product = p.rowid";
 
-        dol_syslog(get_class($this) . "::fetch_product_fournisseur_price", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch_product_fournisseur_price", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $obj = $this->db->fetch_object($resql);
@@ -802,7 +802,7 @@ class ProductFournisseur extends Product
             $sql .= $this->db->order($sortfield, $sortorder);
         }
         $sql .= $this->db->plimit($limit, $offset);
-        dol_syslog(get_class($this) . "::list_product_fournisseur_price", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::list_product_fournisseur_price", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -938,7 +938,7 @@ class ProductFournisseur extends Product
             $sql .= ' AND pfp.fk_soc = ' . ((int) $socid);
         }
 
-        dol_syslog(get_class($this) . "::find_min_price_product_fournisseur", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::find_min_price_product_fournisseur", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -1034,7 +1034,7 @@ class ProductFournisseur extends Product
         $sql .= " SET fk_supplier_price_expression = " . ((int) $expression_id);
         $sql .= " WHERE rowid = " . ((int) $this->product_fourn_price_id);
 
-        dol_syslog(get_class($this) . "::setSupplierPriceExpression", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::setSupplierPriceExpression", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -1169,7 +1169,7 @@ class ProductFournisseur extends Product
             $sql .= $this->db->order($sortfield, $sortorder);
         }
         $sql .= $this->db->plimit($limit, $offset);
-        dol_syslog(get_class($this) . "::list_product_fournisseur_price_log", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::list_product_fournisseur_price_log", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {

@@ -1426,7 +1426,7 @@ function dol_clone($object, $native = 0)
     if ($native == 0) {
         // deprecated method, use the method with native = 2 instead
         $tmpsavdb = null;
-        if (isset($object->db) && isset($object->db->db) && is_object($object->db->db) && get_class($object->db->db) == 'PgSql\Connection') {
+        if (isset($object->db) && isset($object->db->db) && is_object($object->db->db) && get_only_class($object->db->db) == 'PgSql\Connection') {
             $tmpsavdb = $object->db;
             unset($object->db);     // Such property can not be serialized with pgsl (when object->db->db = 'PgSql\Connection')
         }

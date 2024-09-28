@@ -75,7 +75,7 @@ class Client extends EventEmitter
     {
         // See https://github.com/sabre-io/http/pull/115#discussion_r241292068
         // Preserve compatibility for sub-classes that implements their own method `parseCurlResult`
-        $separatedHeaders = __CLASS__ === get_class($this);
+        $separatedHeaders = __CLASS__ === get_only_class($this);
 
         $this->curlSettings = [
             CURLOPT_RETURNTRANSFER => true,

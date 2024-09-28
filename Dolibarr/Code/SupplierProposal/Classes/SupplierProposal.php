@@ -260,7 +260,7 @@ class SupplierProposal extends CommonObject
             $qty = 1;
         }
 
-        dol_syslog(get_class($this) . "::add_product $idproduct, $qty, $remise_percent");
+        dol_syslog(get_only_class($this) . "::add_product $idproduct, $qty, $remise_percent");
         if ($idproduct > 0) {
             $prod = new Product($this->db);
             $prod->fetch($idproduct);
@@ -402,7 +402,7 @@ class SupplierProposal extends CommonObject
     {
         global $mysoc, $conf, $langs;
 
-        dol_syslog(get_class($this) . "::addline supplier_proposalid=$this->id, desc=$desc, pu_ht=$pu_ht, qty=$qty, txtva=$txtva, fk_product=$fk_product, remise_except=$remise_percent, price_base_type=$price_base_type, pu_ttc=$pu_ttc, info_bits=$info_bits, type=$type");
+        dol_syslog(get_only_class($this) . "::addline supplier_proposalid=$this->id, desc=$desc, pu_ht=$pu_ht, qty=$qty, txtva=$txtva, fk_product=$fk_product, remise_except=$remise_percent, price_base_type=$price_base_type, pu_ttc=$pu_ttc, info_bits=$info_bits, type=$type");
         include_once DOL_DOCUMENT_ROOT . '/core/lib/price.lib.php';
 
         // Clean parameters
@@ -452,7 +452,7 @@ class SupplierProposal extends CommonObject
             if ($fk_product > 0) {
                 if (getDolGlobalString('SUPPLIER_PROPOSAL_WITH_PREDEFINED_PRICES_ONLY')) {
                     // Check quantity is enough
-                    dol_syslog(get_class($this) . "::addline we check supplier prices fk_product=" . $fk_product . " fk_fournprice=" . $fk_fournprice . " qty=" . $qty . " ref_supplier=" . $ref_supplier);
+                    dol_syslog(get_only_class($this) . "::addline we check supplier prices fk_product=" . $fk_product . " fk_fournprice=" . $fk_fournprice . " qty=" . $qty . " ref_supplier=" . $ref_supplier);
                     $productsupplier = new ProductFournisseur($this->db);
                     if ($productsupplier->fetch($fk_product) > 0) {
                         $product_type = $productsupplier->type;
@@ -475,7 +475,7 @@ class SupplierProposal extends CommonObject
                             $langs->load("errors");
                             $this->error = "Ref " . $productsupplier->ref . " " . $langs->trans("ErrorQtyTooLowForThisSupplier");
                             $this->db->rollback();
-                            dol_syslog(get_class($this) . "::addline we did not found supplier price, so we can't guess unit price");
+                            dol_syslog(get_only_class($this) . "::addline we did not found supplier price, so we can't guess unit price");
                             //$pu    = $productsupplier->fourn_pu;     // We do not overwrite unit price
                             //$ref   = $productsupplier_fourn;    // We do not overwrite ref supplier price
                             return -1;
@@ -484,14 +484,14 @@ class SupplierProposal extends CommonObject
                             $langs->load("errors");
                             $this->error = "Ref " . $productsupplier->ref . " " . $langs->trans("ErrorQtyTooLowForThisSupplier");
                             $this->db->rollback();
-                            dol_syslog(get_class($this) . "::addline result=" . $result . " - " . $this->error, LOG_DEBUG);
+                            dol_syslog(get_only_class($this) . "::addline result=" . $result . " - " . $this->error, LOG_DEBUG);
                             return -1;
                         }
                         if ($result < -1) {
                             $this->error = $productsupplier->error;
                             $this->errors = $productsupplier->errors;
                             $this->db->rollback();
-                            dol_syslog(get_class($this) . "::addline result=" . $result . " - " . $this->error, LOG_ERR);
+                            dol_syslog(get_only_class($this) . "::addline result=" . $result . " - " . $this->error, LOG_ERR);
                             return -1;
                         }
                     } else {
@@ -682,7 +682,7 @@ class SupplierProposal extends CommonObject
     {
         global $conf, $user, $langs, $mysoc;
 
-        dol_syslog(get_class($this) . "::updateLine $rowid, $pu, $qty, $remise_percent, $txtva, $desc, $price_base_type, $info_bits");
+        dol_syslog(get_only_class($this) . "::updateLine $rowid, $pu, $qty, $remise_percent, $txtva, $desc, $price_base_type, $info_bits");
         include_once DOL_DOCUMENT_ROOT . '/core/lib/price.lib.php';
 
         // Clean parameters
@@ -833,7 +833,7 @@ class SupplierProposal extends CommonObject
                 return -1;
             }
         } else {
-            dol_syslog(get_class($this) . "::updateline Erreur -2 SupplierProposal en mode incompatible pour cette action");
+            dol_syslog(get_only_class($this) . "::updateline Erreur -2 SupplierProposal en mode incompatible pour cette action");
             return -2;
         }
     }
@@ -883,20 +883,20 @@ class SupplierProposal extends CommonObject
 
         $now = dol_now();
 
-        dol_syslog(get_class($this) . "::create");
+        dol_syslog(get_only_class($this) . "::create");
 
         // Check parameters
         $result = $this->fetch_thirdparty();
         if ($result < 0) {
             $this->error = "Failed to fetch company";
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
             return -3;
         }
         if (!empty($this->ref)) {   // We check that ref is not already used
             $result = self::isExistingObject($this->element, 0, $this->ref); // Check ref is not yet used
             if ($result > 0) {
                 $this->error = 'ErrorRefAlreadyExists';
-                dol_syslog(get_class($this) . "::create " . $this->error, LOG_WARNING);
+                dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_WARNING);
                 $this->db->rollback();
                 return -1;
             }
@@ -963,7 +963,7 @@ class SupplierProposal extends CommonObject
         $sql .= ", " . ((float) $this->multicurrency_tx);
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "supplier_proposal");
@@ -972,7 +972,7 @@ class SupplierProposal extends CommonObject
                 $this->ref = '(PROV' . $this->id . ')';
                 $sql = 'UPDATE ' . MAIN_DB_PREFIX . "supplier_proposal SET ref='" . $this->db->escape($this->ref) . "' WHERE rowid=" . ((int) $this->id);
 
-                dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $error++;
@@ -1083,7 +1083,7 @@ class SupplierProposal extends CommonObject
 
             if (!$error) {
                 $this->db->commit();
-                dol_syslog(get_class($this) . "::create done id=" . $this->id);
+                dol_syslog(get_only_class($this) . "::create done id=" . $this->id);
                 return $this->id;
             } else {
                 $this->db->rollback();
@@ -1226,7 +1226,7 @@ class SupplierProposal extends CommonObject
             $sql .= " AND p.rowid = " . ((int) $rowid);
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -1426,7 +1426,7 @@ class SupplierProposal extends CommonObject
             $sql .= " fk_statut = 1, date_valid='" . $this->db->idate($now) . "', fk_user_valid=" . ((int) $user->id);
             $sql .= " WHERE rowid = " . ((int) $this->id) . " AND fk_statut = 0";
 
-            dol_syslog(get_class($this) . "::valid", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::valid", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 dol_print_error($this->db);
@@ -1470,7 +1470,7 @@ class SupplierProposal extends CommonObject
                     $dirsource = $conf->supplier_proposal->dir_output . '/' . $oldref;
                     $dirdest = $conf->supplier_proposal->dir_output . '/' . $newref;
                     if (!$error && file_exists($dirsource)) {
-                        dol_syslog(get_class($this) . "::valid rename dir " . $dirsource . " into " . $dirdest);
+                        dol_syslog(get_only_class($this) . "::valid rename dir " . $dirsource . " into " . $dirdest);
                         if (@rename($dirsource, $dirdest)) {
                             dol_syslog("Rename ok");
                             // Rename docs starting with $oldref with $newref
@@ -1539,7 +1539,7 @@ class SupplierProposal extends CommonObject
                 return 1;
             } else {
                 $this->error = $this->db->error();
-                dol_syslog(get_class($this) . "::setDeliveryDate Erreur SQL");
+                dol_syslog(get_only_class($this) . "::setDeliveryDate Erreur SQL");
                 return -1;
             }
         }
@@ -1642,7 +1642,7 @@ class SupplierProposal extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::reopen", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::reopen", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -1663,7 +1663,7 @@ class SupplierProposal extends CommonObject
         if ($error) {
             if (!empty($this->errors)) {
                 foreach ($this->errors as $errmsg) {
-                    dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                     $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
                 }
             }
@@ -1761,7 +1761,7 @@ class SupplierProposal extends CommonObject
     {
         global $conf;
 
-        dol_syslog(get_class($this) . "::updateOrCreatePriceFournisseur", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::updateOrCreatePriceFournisseur", LOG_DEBUG);
         foreach ($this->lines as $product) {
             if ($product->subprice <= 0) {
                 continue;
@@ -1891,7 +1891,7 @@ class SupplierProposal extends CommonObject
         $error = 0;
 
         if ($this->statut == self::STATUS_DRAFT) {
-            dol_syslog(get_class($this) . "::setDraft already draft status", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::setDraft already draft status", LOG_WARNING);
             return 0;
         }
 
@@ -2085,12 +2085,12 @@ class SupplierProposal extends CommonObject
                         if ($result < 0) {
                             $error++;
                             $errorflag = -4;
-                            dol_syslog(get_class($this) . "::delete erreur " . $errorflag . " " . $this->error, LOG_ERR);
+                            dol_syslog(get_only_class($this) . "::delete erreur " . $errorflag . " " . $this->error, LOG_ERR);
                         }
                     }
 
                     if (!$error) {
-                        dol_syslog(get_class($this) . "::delete " . $this->id . " by " . $user->id, LOG_DEBUG);
+                        dol_syslog(get_only_class($this) . "::delete " . $this->id . " by " . $user->id, LOG_DEBUG);
                         $this->db->commit();
                         return 1;
                     } else {
@@ -2621,7 +2621,7 @@ class SupplierProposal extends CommonObject
         $sql .= ' WHERE pt.fk_supplier_proposal = ' . ((int) $this->id);
         $sql .= ' ORDER BY pt.rang ASC, pt.rowid';
 
-        dol_syslog(get_class($this) . '::getLinesArray', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::getLinesArray', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);

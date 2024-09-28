@@ -201,7 +201,7 @@ class ExportExcel2007 extends ModeleExports
         // phpcs:enable
         global $user, $langs;
 
-        dol_syslog(get_class($this) . "::open_file file=" . $file);
+        dol_syslog(get_only_class($this) . "::open_file file=" . $file);
         $this->file = $file;
 
         $ret = 1;

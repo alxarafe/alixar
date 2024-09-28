@@ -300,7 +300,7 @@ class Reader extends XMLReader
         if ('string' === $type) {
             $type .= ' (' . $deserializer . ')';
         } elseif ('object' === $type) {
-            $type .= ' (' . get_class($deserializer) . ')';
+            $type .= ' (' . get_only_class($deserializer) . ')';
         }
         throw new \LogicException('Could not use this type as a deserializer: ' . $type . ' for element: ' . $name);
     }

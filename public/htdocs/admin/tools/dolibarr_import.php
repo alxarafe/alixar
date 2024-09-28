@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006-2021  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2006-2012	Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2006-2021  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006-2012	Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,12 +16,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
- */
-
-/**
- *      \file       htdocs/admin/tools/dolibarr_import.php
- *      \ingroup    core
- *      \brief      Page to import database
  */
 
 if (!defined('CSRFCHECK_WITH_TOKEN')) {
@@ -41,14 +35,12 @@ if (!$user->admin) {
 $radio_dump = GETPOST('radio_dump');
 $showpass = GETPOST('showpass');
 
-
 /*
  * View
  */
 
 $label = $db::LABEL;
 $type = $db->type;
-
 
 $help_url = 'EN:Restores|FR:Restaurations|ES:Restauraciones';
 llxHeader('', '', $help_url, '', 0, 0, '', '', '', 'mod-admin page-tools_dolibarr_import');

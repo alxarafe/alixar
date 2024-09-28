@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2021	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2004		Sebastien Di Cintio		<sdicintio@ressource-toi.org>
- * Copyright (C) 2004		Benoit Mortier			<benoit.mortier@opensides.be>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
+/* Copyright (C) 2003       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2021	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2004		Sebastien Di Cintio		    <sdicintio@ressource-toi.org>
+ * Copyright (C) 2004		Benoit Mortier			    <benoit.mortier@opensides.be>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,11 +19,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
- */
-
-/**
- *  \file       htdocs/admin/system/database-tables.php
- *  \brief      Page with information on database tables. Add also some maintenance action to convert tables.
  */
 
 if (!defined('CSRFCHECK_WITH_TOKEN')) {

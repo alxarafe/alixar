@@ -922,13 +922,13 @@ function projectLinesa(&$inc, $parent, &$lines, &$level, $var, $showproject, &$t
                                 }
                                 $c->fetch($contacttask['id']);
                                 if (!empty($c->photo)) {
-                                    if (get_class($c) == 'User') {
+                                    if (get_only_class($c) == 'User') {
                                         print $c->getNomUrl(-2, '', 0, 0, 24, 1, '', ($ifisrt ? '' : 'notfirst'));
                                     } else {
                                         print $c->getNomUrl(-2, '', 0, '', -1, 0, ($ifisrt ? '' : 'notfirst'));
                                     }
                                 } else {
-                                    if (get_class($c) == 'User') {
+                                    if (get_only_class($c) == 'User') {
                                         print $c->getNomUrl(2, '', 0, 0, 24, 1, '', ($ifisrt ? '' : 'notfirst'));
                                     } else {
                                         print $c->getNomUrl(2, '', 0, '', -1, 0, ($ifisrt ? '' : 'notfirst'));

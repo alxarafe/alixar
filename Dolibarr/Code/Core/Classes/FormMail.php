@@ -1751,7 +1751,7 @@ class FormMail extends Form
             $this->db->free($resql);
             return $num;
         } else {
-            $this->error = get_class($this) . ' ' . __METHOD__ . ' ERROR:' . $this->db->lasterror();
+            $this->error = get_only_class($this) . ' ' . __METHOD__ . ' ERROR:' . $this->db->lasterror();
             return -1;
         }
     }
@@ -1811,7 +1811,7 @@ class FormMail extends Form
             $this->db->free($resql);
             return $num;
         } else {
-            $this->error = get_class($this) . ' ' . __METHOD__ . ' ERROR:' . $this->db->lasterror();
+            $this->error = get_only_class($this) . ' ' . __METHOD__ . ' ERROR:' . $this->db->lasterror();
             return -1;
         }
     }

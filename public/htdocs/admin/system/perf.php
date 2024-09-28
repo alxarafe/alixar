@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2013-2019  Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2013-2019  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,10 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *  \file       htdocs/admin/system/perf.php
- *  \brief      Page to show Performance information
- */
+use Dolibarr\Code\Core\Classes\Form;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

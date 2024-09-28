@@ -58,7 +58,7 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
 
         foreach ($scopes as $scope) {
             if (!$this->isValidScope($scope)) {
-                throw new InvalidScopeException('Scope ' . $scope . ' is not valid for service ' . get_class($this));
+                throw new InvalidScopeException('Scope ' . $scope . ' is not valid for service ' . get_only_class($this));
             }
         }
 
@@ -242,7 +242,7 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
      */
     public function isValidScope($scope)
     {
-        $reflectionClass = new \ReflectionClass(get_class($this));
+        $reflectionClass = new \ReflectionClass(get_only_class($this));
 
         return in_array($scope, $reflectionClass->getConstants(), true);
     }

@@ -262,7 +262,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
         if (isModEnabled('agenda')) {
             $permok = $user->hasRight('agenda', 'myactions', 'create');
             if ((!empty($objthirdparty->id) || !empty($objcon->id)) && $permok) {
-                if (is_object($objthirdparty) && get_class($objthirdparty) == 'Societe') {
+                if (is_object($objthirdparty) && get_only_class($objthirdparty) == 'Societe') {
                     $out .= '&amp;originid=' . $objthirdparty->id . ($objthirdparty->id > 0 ? '&amp;socid=' . $objthirdparty->id : '');
                 }
                 $out .= (!empty($objcon->id) ? '&amp;contactid=' . $objcon->id : '') . '&amp;origin=contact&amp;originid=' . $object->id . '&amp;backtopage=' . urlencode($_SERVER['PHP_SELF'] . ($objcon->id > 0 ? '?id=' . $objcon->id : ''));

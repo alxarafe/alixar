@@ -91,7 +91,7 @@ class FormIntervention
             $sql .= " AND f.fk_statut = 0";
         }
 
-        dol_syslog(get_class($this) . "::select_intervention", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_intervention", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $out .= '<select id="interventionid" class="flat" name="' . dol_escape_htmltag($htmlname) . '">';

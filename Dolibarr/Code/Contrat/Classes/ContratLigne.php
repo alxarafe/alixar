@@ -445,7 +445,7 @@ class ContratLigne extends CommonObjectLine
             $sql .= " WHERE t.rowid = '" . $this->db->escape($ref) . "'";
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -647,7 +647,7 @@ class ContratLigne extends CommonObjectLine
         $sql .= " rang = " . (empty($this->rang) ? '0' : (int) $this->rang);
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
@@ -663,7 +663,7 @@ class ContratLigne extends CommonObjectLine
 
         // If we change a planned date (start or end) of one contract line, sync dates for all other services too
         if (!$error && getDolGlobalString('CONTRACT_SYNC_PLANNED_DATE_OF_SERVICES')) {
-            dol_syslog(get_class($this) . "::update CONTRACT_SYNC_PLANNED_DATE_OF_SERVICES is on so we update date for all lines", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::update CONTRACT_SYNC_PLANNED_DATE_OF_SERVICES is on so we update date for all lines", LOG_DEBUG);
 
             if ($this->date_start != $this->oldcopy->date_start) {
                 $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'contratdet SET';
@@ -731,7 +731,7 @@ class ContratLigne extends CommonObjectLine
         $sql .= ",total_ttc=" . price2num($this->total_ttc, 'MT');
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update_total", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update_total", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -803,7 +803,7 @@ class ContratLigne extends CommonObjectLine
         }
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::insert", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::insert", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -871,7 +871,7 @@ class ContratLigne extends CommonObjectLine
         $sql .= " commentaire = '" . $this->db->escape($comment) . "'";
         $sql .= " WHERE rowid = " . ((int) $this->id) . " AND (statut = " . ContratLigne::STATUS_INITIAL . " OR statut = " . ContratLigne::STATUS_CLOSED . ")";
 
-        dol_syslog(get_class($this) . "::active_line", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::active_line", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             // Call trigger

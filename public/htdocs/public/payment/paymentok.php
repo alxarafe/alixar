@@ -1843,7 +1843,7 @@ if ($ispaymentok) {
             $error++;
         }
         // End call triggers
-    } elseif (get_class($object) == 'stdClass') {
+    } elseif (get_only_class($object) == 'stdClass') {
         //In some case $object is not instantiate (for paiement on custom object) We need to deal with payment
         include_once DOL_DOCUMENT_ROOT . '/compta/paiement/class/paiement.class.php';
         $paiement = new Paiement($db);

@@ -238,7 +238,7 @@ class RssParser
 
                 $this->_lastfetchdate = $filedate;
             } else {
-                dol_syslog(get_class($this) . "::parser cache file " . $newpathofdestfile . " is not found or older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . ") so we can't use it.");
+                dol_syslog(get_only_class($this) . "::parser cache file " . $newpathofdestfile . " is not found or older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . ") so we can't use it.");
             }
         }
 
@@ -316,7 +316,7 @@ class RssParser
         if ($rss) {
             // Save file into cache
             if (empty($foundintocache) && $cachedir) {
-                dol_syslog(get_class($this) . "::parser cache file " . $newpathofdestfile . " is saved onto disk.");
+                dol_syslog(get_only_class($this) . "::parser cache file " . $newpathofdestfile . " is saved onto disk.");
                 if (!dol_is_dir($cachedir)) {
                     dol_mkdir($cachedir);
                 }

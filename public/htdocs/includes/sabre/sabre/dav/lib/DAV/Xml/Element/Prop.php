@@ -94,7 +94,7 @@ class Prop implements XmlDeserializable
                 if ('string' === $type) {
                     $type .= ' (' . $deserializer . ')';
                 } elseif ('object' === $type) {
-                    $type .= ' (' . get_class($deserializer) . ')';
+                    $type .= ' (' . get_only_class($deserializer) . ')';
                 }
                 throw new \LogicException('Could not use this type as a deserializer: ' . $type);
             }

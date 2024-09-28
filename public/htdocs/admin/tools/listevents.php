@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2004-2023  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012  Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2015       Bahfir Abbes		<bafbes@gmail.com>
- * Copyright (C) 2018       Frédéric France     <frederic.france@netlogic.fr>
+/* Copyright (C) 2004-2023  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012  Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2015       Bahfir Abbes		        <bafbes@gmail.com>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,11 +21,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *      \file       htdocs/admin/tools/listevents.php
- *      \ingroup    core
- *      \brief      List of security events
- */
+use Dolibarr\Code\Core\Classes\Events;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\User\Classes\User;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

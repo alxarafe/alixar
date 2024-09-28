@@ -504,7 +504,7 @@ class ExpenseReport extends CommonObject
                     return -3;
                 }
             } else {
-                dol_syslog(get_class($this) . "::create error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create error " . $this->error, LOG_ERR);
                 $this->db->rollback();
                 return -2;
             }
@@ -629,7 +629,7 @@ class ExpenseReport extends CommonObject
         $sql .= " , detail_refuse = " . (!empty($this->detail_refuse) ? "'" . $this->db->escape($this->detail_refuse) . "'" : "''");
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             if (!$notrigger) {
@@ -683,7 +683,7 @@ class ExpenseReport extends CommonObject
         }
         //$sql.= $restrict;
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $obj = $this->db->fetch_object($resql);
@@ -780,7 +780,7 @@ class ExpenseReport extends CommonObject
     public function set_paid($id, $fuser, $notrigger = 0)
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::set_paid is deprecated, use setPaid instead", LOG_NOTICE);
+        dol_syslog(get_only_class($this) . "::set_paid is deprecated, use setPaid instead", LOG_NOTICE);
         return $this->setPaid($id, $fuser, $notrigger);
     }
 
@@ -801,7 +801,7 @@ class ExpenseReport extends CommonObject
         $sql .= " SET fk_statut = " . self::STATUS_CLOSED . ", paid=1";
         $sql .= " WHERE rowid = " . ((int) $id) . " AND fk_statut = " . self::STATUS_APPROVED;
 
-        dol_syslog(get_class($this) . "::setPaid", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::setPaid", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->affected_rows($resql)) {
@@ -1005,7 +1005,7 @@ class ExpenseReport extends CommonObject
             $sql .= " FROM " . MAIN_DB_PREFIX . "expensereport_det as de";
             $sql .= " WHERE de.fk_projet = " . ((int) $projectid);
 
-            dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
             $result = $this->db->query($sql);
             if ($result) {
                 $num = $this->db->num_rows($result);
@@ -1174,7 +1174,7 @@ class ExpenseReport extends CommonObject
             return 1;
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . "::fetch_lines: Error " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetch_lines: Error " . $this->error, LOG_ERR);
             return -3;
         }
     }
@@ -1214,7 +1214,7 @@ class ExpenseReport extends CommonObject
                 $error++;
                 $this->error = $this->db->lasterror();
                 $this->errors[] = $this->error;
-                dol_syslog(get_class($this) . "::delete error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error " . $this->error, LOG_ERR);
             }
         }
 
@@ -1239,7 +1239,7 @@ class ExpenseReport extends CommonObject
             $result = $this->deleteExtraFields();
             if ($result < 0) {
                 $error++;
-                dol_syslog(get_class($this) . "::delete error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error " . $this->error, LOG_ERR);
             }
         }
 
@@ -1251,7 +1251,7 @@ class ExpenseReport extends CommonObject
                 $error++;
                 $this->error = $this->db->lasterror();
                 $this->errors[] = $this->error;
-                dol_syslog(get_class($this) . "::delete error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error " . $this->error, LOG_ERR);
             }
         }
 
@@ -1293,7 +1293,7 @@ class ExpenseReport extends CommonObject
         }
 
         if (!$error) {
-            dol_syslog(get_class($this) . "::delete " . $this->id . " by " . $user->id, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete " . $this->id . " by " . $user->id, LOG_DEBUG);
             $this->db->commit();
             return 1;
         } else {
@@ -1318,7 +1318,7 @@ class ExpenseReport extends CommonObject
 
         // Protection
         if ($this->status == self::STATUS_VALIDATED) {
-            dol_syslog(get_class($this) . "::valid action abandoned: already validated", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::valid action abandoned: already validated", LOG_WARNING);
             return 0;
         }
 
@@ -1386,7 +1386,7 @@ class ExpenseReport extends CommonObject
                     $dirsource = $conf->expensereport->multidir_output[$this->entity] . '/' . $oldref;
                     $dirdest = $conf->expensereport->multidir_output[$this->entity] . '/' . $newref;
                     if (!$error && file_exists($dirsource)) {
-                        dol_syslog(get_class($this) . "::setValidate() rename dir " . $dirsource . " into " . $dirdest);
+                        dol_syslog(get_only_class($this) . "::setValidate() rename dir " . $dirsource . " into " . $dirdest);
 
                         if (@rename($dirsource, $dirdest)) {
                             dol_syslog("Rename ok");
@@ -1451,7 +1451,7 @@ class ExpenseReport extends CommonObject
             $sql .= " SET fk_statut = " . self::STATUS_VALIDATED;
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::set_save_from_refuse", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::set_save_from_refuse", LOG_DEBUG);
 
             if ($this->db->query($sql)) {
                 return 1;
@@ -1460,7 +1460,7 @@ class ExpenseReport extends CommonObject
                 return -1;
             }
         } else {
-            dol_syslog(get_class($this) . "::set_save_from_refuse expensereport already with save status", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::set_save_from_refuse expensereport already with save status", LOG_WARNING);
         }
 
         return 0;
@@ -1512,7 +1512,7 @@ class ExpenseReport extends CommonObject
                 return -1;
             }
         } else {
-            dol_syslog(get_class($this) . "::setApproved expensereport already with approve status", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::setApproved expensereport already with approve status", LOG_WARNING);
         }
 
         return 0;
@@ -1570,7 +1570,7 @@ class ExpenseReport extends CommonObject
                 return -1;
             }
         } else {
-            dol_syslog(get_class($this) . "::setDeny expensereport already with refuse status", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::setDeny expensereport already with refuse status", LOG_WARNING);
         }
 
         return 0;
@@ -1589,7 +1589,7 @@ class ExpenseReport extends CommonObject
     public function set_unpaid($fuser, $notrigger = 0)
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::set_unpaid is deprecated, use setUnpaid instead", LOG_NOTICE);
+        dol_syslog(get_only_class($this) . "::set_unpaid is deprecated, use setUnpaid instead", LOG_NOTICE);
         return $this->setUnpaid($fuser, $notrigger);
     }
 
@@ -1611,7 +1611,7 @@ class ExpenseReport extends CommonObject
             $sql .= " SET paid = 0, fk_statut = " . self::STATUS_APPROVED;
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::set_unpaid", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::set_unpaid", LOG_DEBUG);
 
             if ($this->db->query($sql)) {
                 if (!$notrigger) {
@@ -1638,7 +1638,7 @@ class ExpenseReport extends CommonObject
                 return -1;
             }
         } else {
-            dol_syslog(get_class($this) . "::set_unpaid expensereport already with unpaid status", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::set_unpaid expensereport already with unpaid status", LOG_WARNING);
         }
 
         return 0;
@@ -1667,7 +1667,7 @@ class ExpenseReport extends CommonObject
             $sql .= ", detail_cancel='" . $this->db->escape($detail) . "'";
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::set_cancel", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::set_cancel", LOG_DEBUG);
 
             if ($this->db->query($sql)) {
                 if (!$notrigger) {
@@ -1694,7 +1694,7 @@ class ExpenseReport extends CommonObject
                 return -1;
             }
         } else {
-            dol_syslog(get_class($this) . "::set_cancel expensereport already with cancel status", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::set_cancel expensereport already with cancel status", LOG_WARNING);
         }
         return 0;
     }
@@ -1737,7 +1737,7 @@ class ExpenseReport extends CommonObject
             } else {
                 $this->error = $obj->error;
                 $this->errors = $obj->errors;
-                //dol_print_error($this->db,get_class($this)."::getNextNumRef ".$obj->error);
+                //dol_print_error($this->db,get_only_class($this)."::getNextNumRef ".$obj->error);
                 return -1;
             }
         } else {
@@ -1927,7 +1927,7 @@ class ExpenseReport extends CommonObject
     {
         global $langs, $mysoc;
 
-        dol_syslog(get_class($this) . "::addline qty=$qty, up=$up, fk_c_type_fees=$fk_c_type_fees, vatrate=$vatrate, date=$date, fk_project=$fk_project, type=$type, comments=$comments", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::addline qty=$qty, up=$up, fk_c_type_fees=$fk_c_type_fees, vatrate=$vatrate, date=$date, fk_project=$fk_project, type=$type, comments=$comments", LOG_DEBUG);
 
         if ($this->status == self::STATUS_DRAFT) {
             if (empty($qty)) {
@@ -2017,12 +2017,12 @@ class ExpenseReport extends CommonObject
                 }
             } else {
                 $this->error = $this->line->error;
-                dol_syslog(get_class($this) . "::addline error=" . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::addline error=" . $this->error, LOG_ERR);
                 $this->db->rollback();
                 return -2;
             }
         } else {
-            dol_syslog(get_class($this) . "::addline status of expense report must be Draft to allow use of ->addline()", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::addline status of expense report must be Draft to allow use of ->addline()", LOG_ERR);
             $this->error = 'ErrorExpenseNotDraft';
             return -3;
         }
@@ -2181,7 +2181,7 @@ class ExpenseReport extends CommonObject
             $sql .= ' AND d.rowid <> ' . ((int) $this->line->id);
         }
 
-        dol_syslog(get_class($this) . "::offsetAlreadyGiven");
+        dol_syslog(get_only_class($this) . "::offsetAlreadyGiven");
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -2357,12 +2357,12 @@ class ExpenseReport extends CommonObject
         $sql = ' DELETE FROM ' . MAIN_DB_PREFIX . $this->table_element_line;
         $sql .= ' WHERE rowid = ' . ((int) $rowid);
 
-        dol_syslog(get_class($this) . "::deleteline sql=" . $sql);
+        dol_syslog(get_only_class($this) . "::deleteline sql=" . $sql);
         $result = $this->db->query($sql);
 
         if (!$result || $error > 0) {
             $this->error = $this->db->error();
-            dol_syslog(get_class($this) . "::deleteline  Error " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::deleteline  Error " . $this->error, LOG_ERR);
             $this->db->rollback();
             return -1;
         }
@@ -2393,7 +2393,7 @@ class ExpenseReport extends CommonObject
         $sql .= " WHERE entity = " . ((int) $conf->entity); // not shared, only for the current entity
         $sql .= " AND fk_user_author = " . ((int) $fuser->id);
 
-        dol_syslog(get_class($this) . "::periode_existe sql=" . $sql);
+        dol_syslog(get_only_class($this) . "::periode_existe sql=" . $sql);
         $result = $this->db->query($sql);
         if ($result) {
             $num_rows = $this->db->num_rows($result);
@@ -2422,7 +2422,7 @@ class ExpenseReport extends CommonObject
             }
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . "::periode_existe  Error " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::periode_existe  Error " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -2449,7 +2449,7 @@ class ExpenseReport extends CommonObject
         $sql .= " WHERE ugu.fk_usergroup = ur.fk_usergroup AND ur.fk_id = rd.id and rd.module = 'expensereport' AND rd.perms = 'approve'"; // Permission 'Approve';
         //print $sql;
 
-        dol_syslog(get_class($this) . "::fetch_users_approver_expensereport sql=" . $sql);
+        dol_syslog(get_only_class($this) . "::fetch_users_approver_expensereport sql=" . $sql);
         $result = $this->db->query($sql);
         if ($result) {
             $num_rows = $this->db->num_rows($result);
@@ -2462,7 +2462,7 @@ class ExpenseReport extends CommonObject
             return $users_validator;
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . "::fetch_users_approver_expensereport  Error " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetch_users_approver_expensereport  Error " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -2512,7 +2512,7 @@ class ExpenseReport extends CommonObject
         $sql = "SELECT id, code, label";
         $sql .= " FROM " . MAIN_DB_PREFIX . "c_type_fees";
         $sql .= " WHERE active = " . ((int) $active);
-        dol_syslog(get_class($this) . "::listOfTypes", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::listOfTypes", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $num = $this->db->num_rows($result);
@@ -2705,7 +2705,7 @@ class ExpenseReport extends CommonObject
         $sql .= ' FROM ' . MAIN_DB_PREFIX . $table;
         $sql .= " WHERE " . $field . " = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::getSumPayments", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getSumPayments", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $obj = $this->db->fetch_object($resql);

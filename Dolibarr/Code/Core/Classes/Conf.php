@@ -303,7 +303,7 @@ class Conf extends stdClass
      */
     public function setValues($db)
     {
-        dol_syslog(get_class($this) . "::setValues");
+        dol_syslog(get_only_class($this) . "::setValues");
 
         // Unset all old modules values
         if (!empty($this->modules)) {
