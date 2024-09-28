@@ -162,7 +162,7 @@ class doc_generic_product_odt extends ModelePDFProduct
         }
 
         if ($nbofiles) {
-            $texte .= '<div id="div_' . get_class($this) . '" class="hiddenx">';
+            $texte .= '<div id="div_' . get_only_class($this) . '" class="hiddenx">';
             // Show list of found files
             foreach ($listoffiles as $file) {
                 $texte .= '- ' . $file['name'];

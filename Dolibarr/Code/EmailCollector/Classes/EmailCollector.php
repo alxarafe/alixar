@@ -1882,25 +1882,25 @@ class EmailCollector extends CommonObject
                                 $fk_element_type = 'invoice';
                             }
 
-                            if (get_class($objectemail) != 'Societe') {
+                            if (get_only_class($objectemail) != 'Societe') {
                                 $thirdpartyid = $objectemail->fk_soc ?? $objectemail->socid;
                             } else {
                                 $thirdpartyid = $objectemail->id;
                             }
 
-                            if (get_class($objectemail) != 'Contact') {
+                            if (get_only_class($objectemail) != 'Contact') {
                                 $contactid = $objectemail->fk_socpeople;
                             } else {
                                 $contactid = $objectemail->id;
                             }
 
-                            if (get_class($objectemail) != 'Project') {
+                            if (get_only_class($objectemail) != 'Project') {
                                 $projectid = isset($objectemail->fk_project) ? $objectemail->fk_project : $objectemail->fk_projet;
                             } else {
                                 $projectid = $objectemail->id;
                             }
 
-                            if (get_class($objectemail) == 'Ticket') {
+                            if (get_only_class($objectemail) == 'Ticket') {
                                 $ticketid = $objectemail->id;
 
                                 $changeonticket_references = false;

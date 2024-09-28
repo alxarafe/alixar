@@ -204,7 +204,7 @@ class MouvementStock extends CommonObject
 
 
         $error = 0;
-        dol_syslog(get_class($this) . "::_create start userid=$user->id, fk_product=$fk_product, warehouse_id=$entrepot_id, qty=$qty, type=$type, price=$price, label=$label, inventorycode=$inventorycode, datem=" . $datem . ", eatby=" . $eatby . ", sellby=" . $sellby . ", batch=" . $batch . ", skip_batch=" . json_encode($skip_batch));
+        dol_syslog(get_only_class($this) . "::_create start userid=$user->id, fk_product=$fk_product, warehouse_id=$entrepot_id, qty=$qty, type=$type, price=$price, label=$label, inventorycode=$inventorycode, datem=" . $datem . ", eatby=" . $eatby . ", sellby=" . $sellby . ", batch=" . $batch . ", skip_batch=" . json_encode($skip_batch));
 
         // Call hook at beginning
         global $action, $hookmanager;
@@ -257,12 +257,12 @@ class MouvementStock extends CommonObject
         }
 
         if (is_numeric($eatby) && $eatby < 0) {
-            dol_syslog(get_class($this) . "::_create start ErrorBadValueForParameterEatBy eatby = " . $eatby);
+            dol_syslog(get_only_class($this) . "::_create start ErrorBadValueForParameterEatBy eatby = " . $eatby);
             $this->errors[] = 'ErrorBadValueForParameterEatBy';
             return -1;
         }
         if (is_numeric($sellby) && $sellby < 0) {
-            dol_syslog(get_class($this) . "::_create start ErrorBadValueForParameterSellBy sellby = " . $sellby);
+            dol_syslog(get_only_class($this) . "::_create start ErrorBadValueForParameterSellBy sellby = " . $sellby);
             $this->errors[] = 'ErrorBadValueForParameterSellBy';
             return -1;
         }
@@ -328,7 +328,7 @@ class MouvementStock extends CommonObject
             $sql = "SELECT pb.rowid, pb.batch, pb.eatby, pb.sellby FROM " . $this->db->prefix() . "product_lot as pb";
             $sql .= " WHERE pb.fk_product = " . ((int) $fk_product) . " AND pb.batch = '" . $this->db->escape($batch) . "'";
 
-            dol_syslog(get_class($this) . "::_create scan serial for this product to check if eatby and sellby match", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::_create scan serial for this product to check if eatby and sellby match", LOG_DEBUG);
 
             $resql = $this->db->query($sql);
             if ($resql) {
@@ -498,7 +498,7 @@ class MouvementStock extends CommonObject
             $sql .= " " . ((int) $fk_project);
             $sql .= ")";
 
-            dol_syslog(get_class($this) . "::_create insert record into stock_mouvement", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::_create insert record into stock_mouvement", LOG_DEBUG);
             $resql = $this->db->query($sql);
 
             if ($resql) {
@@ -521,7 +521,7 @@ class MouvementStock extends CommonObject
                 $sql = "SELECT rowid, reel FROM " . $this->db->prefix() . "product_stock";
                 $sql .= " WHERE fk_entrepot = " . ((int) $entrepot_id) . " AND fk_product = " . ((int) $fk_product); // This is a unique key
 
-                dol_syslog(get_class($this) . "::_create check if a record already exists in product_stock", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::_create check if a record already exists in product_stock", LOG_DEBUG);
                 $resql = $this->db->query($sql);
                 if ($resql) {
                     $obj = $this->db->fetch_object($resql);
@@ -577,7 +577,7 @@ class MouvementStock extends CommonObject
                     $sql .= " (" . ((float) $qty) . ", " . ((int) $entrepot_id) . ", " . ((int) $fk_product) . ")";
                 }
 
-                dol_syslog(get_class($this) . "::_create update stock value", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::_create update stock value", LOG_DEBUG);
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $this->errors[] = $this->db->lasterror();
@@ -615,7 +615,7 @@ class MouvementStock extends CommonObject
                 $sql .= " stock=(SELECT SUM(ps.reel) FROM " . $this->db->prefix() . "product_stock as ps WHERE ps.fk_product = p.rowid)";
                 $sql .= " WHERE rowid = " . ((int) $fk_product);
 
-                dol_syslog(get_class($this) . "::_create update AWP", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::_create update AWP", LOG_DEBUG);
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $this->errors[] = $this->db->lasterror();
@@ -660,7 +660,7 @@ class MouvementStock extends CommonObject
             return $mvid;
         } else {
             $this->db->rollback();
-            dol_syslog(get_class($this) . "::_create error code=" . $error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::_create error code=" . $error, LOG_ERR);
             return -6;
         }
     }
@@ -778,7 +778,7 @@ class MouvementStock extends CommonObject
         $sql .= " WHERE fk_product_pere = " . ((int) $idProduct);
         $sql .= " AND incdec = 1";
 
-        dol_syslog(get_class($this) . "::_createSubProduct for parent product " . $idProduct, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::_createSubProduct for parent product " . $idProduct, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $i = 0;
@@ -883,7 +883,7 @@ class MouvementStock extends CommonObject
         $sql .= " WHERE fk_product = " . ((int) $productidselected);
         $sql .= " AND datem < '" . $this->db->idate($datebefore) . "'";
 
-        dol_syslog(get_class($this) . __METHOD__, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . __METHOD__, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $obj = $this->db->fetch_object($resql);
@@ -932,11 +932,11 @@ class MouvementStock extends CommonObject
 
                 $result = $pdluo->find($vfk_product_stock, '', '', $vbatchnumber); // Search on batch number only (eatby and sellby are deprecated here)
             } else {
-                dol_syslog(get_class($this) . "::createBatch array param dluo must contain at least key fk_product_stock", LOG_ERR);
+                dol_syslog(get_only_class($this) . "::createBatch array param dluo must contain at least key fk_product_stock", LOG_ERR);
                 $result = -1;
             }
         } else {
-            dol_syslog(get_class($this) . "::createBatch error invalid param dluo", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::createBatch error invalid param dluo", LOG_ERR);
             $result = -1;
         }
 

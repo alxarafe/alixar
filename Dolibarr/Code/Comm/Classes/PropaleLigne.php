@@ -317,7 +317,7 @@ class PropaleLigne extends CommonObjectLine
 
         $error = 0;
 
-        dol_syslog(get_class($this) . "::insert rang=" . $this->rang);
+        dol_syslog(get_only_class($this) . "::insert rang=" . $this->rang);
 
         $pa_ht_isemptystring = (empty($this->pa_ht) && $this->pa_ht == ''); // If true, we can use a default value. If this->pa_ht = '0', we must use '0'.
 
@@ -443,7 +443,7 @@ class PropaleLigne extends CommonObjectLine
         $sql .= ", " . price2num($this->multicurrency_total_ttc, 'CT');
         $sql .= ')';
 
-        dol_syslog(get_class($this) . '::insert', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::insert', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->rowid = $this->db->last_insert_id(MAIN_DB_PREFIX . 'propaldet');
@@ -508,7 +508,7 @@ class PropaleLigne extends CommonObjectLine
                     $result = $this->deleteExtraFields();
                     if ($result < 0) {
                         $error++;
-                        dol_syslog(get_class($this) . "::delete error -4 " . $this->error, LOG_ERR);
+                        dol_syslog(get_only_class($this) . "::delete error -4 " . $this->error, LOG_ERR);
                     }
                 }
             } else {
@@ -651,7 +651,7 @@ class PropaleLigne extends CommonObjectLine
 
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if (!$error) {

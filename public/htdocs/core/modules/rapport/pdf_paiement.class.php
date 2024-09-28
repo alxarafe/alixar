@@ -292,7 +292,7 @@ class pdf_paiement extends CommonDocGenerator
                 break;
         }
 
-        dol_syslog(get_class($this) . "::write_file", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::write_file", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $num = $this->db->num_rows($result);

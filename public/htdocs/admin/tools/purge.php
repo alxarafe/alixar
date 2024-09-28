@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006-2017  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2006-2012	Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2006-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006-2012	Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,10 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *      \file       htdocs/admin/tools/purge.php
- *      \brief      Page to purge files (temporary or not)
- */
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Utils;
 
 if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');        // Force use of CSRF protection with tokens even for GET
@@ -29,7 +27,7 @@ if (!defined('CSRFCHECK_WITH_TOKEN')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-include_once DOL_DOCUMENT_ROOT . '/core/lib/files.lib.php';
+include_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
 $langs->load("admin");
 
@@ -50,7 +48,6 @@ if (!$user->admin) {
     accessforbidden();
 }
 
-
 /*
  *	Actions
  */
@@ -66,7 +63,6 @@ if ($action == 'purge' && !preg_match('/^confirm/i', $choice) && ($choice != 'al
         error_reporting($err);
     }
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/utils.class.php';
     $utils = new Utils($db);
 
     $result = $utils->purgeFiles($choice, $nbsecondsold);

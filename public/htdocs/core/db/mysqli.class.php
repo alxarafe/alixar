@@ -83,14 +83,14 @@ class DoliDBMysqli extends DoliDB
             $this->connected = false;
             $this->ok = false;
             $this->error = "Mysqli PHP functions for using Mysqli driver are not available in this version of PHP. Try to use another driver.";
-            dol_syslog(get_class($this) . "::DoliDBMysqli : Mysqli PHP functions for using Mysqli driver are not available in this version of PHP. Try to use another driver.", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::DoliDBMysqli : Mysqli PHP functions for using Mysqli driver are not available in this version of PHP. Try to use another driver.", LOG_ERR);
         }
 
         if (!$host) {
             $this->connected = false;
             $this->ok = false;
             $this->error = $langs->trans("ErrorWrongHostParameter");
-            dol_syslog(get_class($this) . "::DoliDBMysqli : Connect error, wrong host parameters", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::DoliDBMysqli : Connect error, wrong host parameters", LOG_ERR);
         }
 
         // Try server connection
@@ -104,7 +104,7 @@ class DoliDBMysqli extends DoliDB
             $this->connected = false;
             $this->ok = false;
             $this->error = empty($this->db) ? 'Failed to connect' : $this->db->connect_error;
-            dol_syslog(get_class($this) . "::DoliDBMysqli Connect error: " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::DoliDBMysqli Connect error: " . $this->error, LOG_ERR);
         }
 
         // If server connection is ok, we try to connect to the database
@@ -124,7 +124,7 @@ class DoliDBMysqli extends DoliDB
                 if (empty($disableforcecharset) && $this->db->character_set_name() != $clientmustbe) {
                     try {
                         //print "You should set the \$dolibarr_main_db_character_set and \$dolibarr_main_db_collation for the PHP to the one of the database ".$this->db->character_set_name();
-                        dol_syslog(get_class($this) . "::DoliDBMysqli You should set the \$dolibarr_main_db_character_set and \$dolibarr_main_db_collation for the PHP to the one of the database " . $this->db->character_set_name(), LOG_WARNING);
+                        dol_syslog(get_only_class($this) . "::DoliDBMysqli You should set the \$dolibarr_main_db_character_set and \$dolibarr_main_db_collation for the PHP to the one of the database " . $this->db->character_set_name(), LOG_WARNING);
                         $this->db->set_charset($clientmustbe); // This set charset, but with a bad collation
                     } catch (Exception $e) {
                         print 'Failed to force character_set_client to ' . $clientmustbe . " (according to setup) to match the one of the server database.<br>\n";
@@ -154,7 +154,7 @@ class DoliDBMysqli extends DoliDB
                 $this->database_name = '';
                 $this->ok = false;
                 $this->error = $this->error();
-                dol_syslog(get_class($this) . "::DoliDBMysqli : Select_db error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::DoliDBMysqli : Select_db error " . $this->error, LOG_ERR);
             }
         } else {
             // No selection of database done. We may only be connected or not (ok or ko) to the server.
@@ -226,7 +226,7 @@ class DoliDBMysqli extends DoliDB
     public function select_db($database)
     {
         // phpcs:enable
-        dol_syslog(get_class($this) . "::select_db database=" . $database, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_db database=" . $database, LOG_DEBUG);
         $result = false;
         try {
             $result = $this->db->select_db($database);
@@ -250,7 +250,7 @@ class DoliDBMysqli extends DoliDB
      */
     public function connect($host, $login, $passwd, $name, $port = 0)
     {
-        dol_syslog(get_class($this) . "::connect host=$host, port=$port, login=$login, passwd=--hidden--, name=$name", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::connect host=$host, port=$port, login=$login, passwd=--hidden--, name=$name", LOG_DEBUG);
 
         //mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
@@ -265,7 +265,7 @@ class DoliDBMysqli extends DoliDB
                 $tmp = new mysqli($host, $login, $passwd, $name, $port);
             }
         } catch (Exception $e) {
-            dol_syslog(get_class($this) . "::connect failed", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::connect failed", LOG_DEBUG);
         }
         return $tmp;
     }
@@ -301,7 +301,7 @@ class DoliDBMysqli extends DoliDB
     {
         if ($this->db) {
             if ($this->transaction_opened > 0) {
-                dol_syslog(get_class($this) . "::close Closing a connection with an opened transaction depth=" . $this->transaction_opened, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::close Closing a connection with an opened transaction depth=" . $this->transaction_opened, LOG_ERR);
             }
             $this->connected = false;
             return $this->db->close();
@@ -346,7 +346,7 @@ class DoliDBMysqli extends DoliDB
         try {
             $ret = $this->db->query($query, $result_mode);
         } catch (Exception $e) {
-            dol_syslog(get_class($this) . "::query Exception in query instead of returning an error: " . $e->getMessage(), LOG_ERR);
+            dol_syslog(get_only_class($this) . "::query Exception in query instead of returning an error: " . $e->getMessage(), LOG_ERR);
             $ret = false;
         }
 
@@ -358,9 +358,9 @@ class DoliDBMysqli extends DoliDB
                 $this->lasterrno = $this->errno();
 
                 if (getDolGlobalInt('SYSLOG_LEVEL') < LOG_DEBUG) {
-                    dol_syslog(get_class($this) . "::query SQL Error query: " . $query, LOG_ERR); // Log of request was not yet done previously
+                    dol_syslog(get_only_class($this) . "::query SQL Error query: " . $query, LOG_ERR); // Log of request was not yet done previously
                 }
-                dol_syslog(get_class($this) . "::query SQL Error message: " . $this->lasterrno . " " . $this->lasterror . self::getCallerInfoString(), LOG_ERR);
+                dol_syslog(get_only_class($this) . "::query SQL Error message: " . $this->lasterrno . " " . $this->lasterror . self::getCallerInfoString(), LOG_ERR);
                 //var_dump(debug_print_backtrace());
             }
             $this->lastquery = $query;
@@ -957,7 +957,7 @@ class DoliDBMysqli extends DoliDB
         // phpcs:enable
         $sql = "DESC " . $this->sanitize($table) . " " . $this->sanitize($field);
 
-        dol_syslog(get_class($this) . "::DDLDescTable " . $sql, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::DDLDescTable " . $sql, LOG_DEBUG);
         $this->_results = $this->query($sql);
         return $this->_results;
     }
@@ -1005,7 +1005,7 @@ class DoliDBMysqli extends DoliDB
         }
         $sql .= " " . $this->sanitize($field_position, 0, 0, 1);
 
-        dol_syslog(get_class($this) . "::DDLAddField " . $sql, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::DDLAddField " . $sql, LOG_DEBUG);
         if ($this->query($sql)) {
             return 1;
         }
@@ -1051,7 +1051,7 @@ class DoliDBMysqli extends DoliDB
             }
         }
 
-        dol_syslog(get_class($this) . "::DDLUpdateField " . $sql, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::DDLUpdateField " . $sql, LOG_DEBUG);
         if (!$this->query($sql)) {
             return -1;
         } else {
@@ -1097,14 +1097,14 @@ class DoliDBMysqli extends DoliDB
     {
         // phpcs:enable
         $sql = "CREATE USER '" . $this->escape($dolibarr_main_db_user) . "' IDENTIFIED BY '" . $this->escape($dolibarr_main_db_pass) . "'";
-        dol_syslog(get_class($this) . "::DDLCreateUser", LOG_DEBUG); // No sql to avoid password in log
+        dol_syslog(get_only_class($this) . "::DDLCreateUser", LOG_DEBUG); // No sql to avoid password in log
         $resql = $this->query($sql);
         if (!$resql) {
             if ($this->lasterrno != 'DB_ERROR_USER_ALREADY_EXISTS') {
                 return -1;
             } else {
                 // If user already exists, we continue to set permissions
-                dol_syslog(get_class($this) . "::DDLCreateUser sql=" . $sql, LOG_WARNING);
+                dol_syslog(get_only_class($this) . "::DDLCreateUser sql=" . $sql, LOG_WARNING);
             }
         }
 
@@ -1113,7 +1113,7 @@ class DoliDBMysqli extends DoliDB
         $resql = $this->query($sql);
 
         $sql = "GRANT ALL PRIVILEGES ON " . $this->escape($dolibarr_main_db_name) . ".* TO '" . $this->escape($dolibarr_main_db_user) . "'@'" . $this->escape($dolibarr_main_db_host) . "'";
-        dol_syslog(get_class($this) . "::DDLCreateUser", LOG_DEBUG); // No sql to avoid password in log
+        dol_syslog(get_only_class($this) . "::DDLCreateUser", LOG_DEBUG); // No sql to avoid password in log
         $resql = $this->query($sql);
         if (!$resql) {
             $this->error = "Connected user not allowed to GRANT ALL PRIVILEGES ON " . $this->escape($dolibarr_main_db_name) . ".* TO '" . $this->escape($dolibarr_main_db_user) . "'@'" . $this->escape($dolibarr_main_db_host) . "'";
@@ -1122,7 +1122,7 @@ class DoliDBMysqli extends DoliDB
 
         $sql = "FLUSH Privileges";
 
-        dol_syslog(get_class($this) . "::DDLCreateUser", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::DDLCreateUser", LOG_DEBUG);
         $resql = $this->query($sql);
         if (!$resql) {
             return -1;

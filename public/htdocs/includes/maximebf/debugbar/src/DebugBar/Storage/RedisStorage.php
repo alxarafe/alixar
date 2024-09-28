@@ -59,7 +59,7 @@ class RedisStorage implements StorageInterface
     {
         $results = [];
         $cursor = "0";
-        $isPhpRedis = get_class($this->redis) === 'Redis';
+        $isPhpRedis = get_only_class($this->redis) === 'Redis';
 
         do {
             if ($isPhpRedis) {

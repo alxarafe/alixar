@@ -84,7 +84,7 @@ class Collection extends StripeObject implements \Countable, \IteratorAggregate
         $obj = Util\Util::convertToStripeObject($response, $opts);
         if (!($obj instanceof \Stripe\Collection)) {
             throw new \Stripe\Exception\UnexpectedValueException(
-                'Expected type ' . \Stripe\Collection::class . ', got "' . \get_class($obj) . '" instead.'
+                'Expected type ' . \Stripe\Collection::class . ', got "' . \get_only_class($obj) . '" instead.'
             );
         }
         $obj->setFilters($params);

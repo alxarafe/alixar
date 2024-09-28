@@ -217,7 +217,7 @@ class mod_facture_terre extends ModeleNumRefFactures
     {
         global $db;
 
-        dol_syslog(get_class($this) . "::getNextValue mode=" . $mode, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getNextValue mode=" . $mode, LOG_DEBUG);
 
         $prefix = $this->prefixinvoice;
         if ($invoice->type == 2) {
@@ -280,7 +280,7 @@ class mod_facture_terre extends ModeleNumRefFactures
                 $num = sprintf("%04d", $max + 1);
             }
 
-            dol_syslog(get_class($this) . "::getNextValue return " . $prefix . $yymm . "-" . $num);
+            dol_syslog(get_only_class($this) . "::getNextValue return " . $prefix . $yymm . "-" . $num);
             return $prefix . $yymm . "-" . $num;
         } else {
             dol_print_error(null, 'Bad parameter for getNextValue');

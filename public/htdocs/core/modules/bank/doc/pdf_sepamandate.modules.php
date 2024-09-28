@@ -133,7 +133,7 @@ class pdf_sepamandate extends ModeleBankAccountDoc
         global $conf, $hookmanager, $langs, $user, $mysoc;
 
         if (!$object instanceof CompanyBankAccount) {
-            dol_syslog(get_class($this) . "::write_file object is of type " . get_class($object) . " which is not expected", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::write_file object is of type " . get_only_class($object) . " which is not expected", LOG_ERR);
             return -1;
         }
 

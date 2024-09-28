@@ -215,7 +215,7 @@ class PaymentExpenseReport extends CommonObject
             $sql .= " " . ((int) $this->fk_typepayment) . ", '" . $this->db->escape($this->num_payment) . "', '" . $this->db->escape($this->note_public) . "', " . ((int) $user->id) . ",";
             $sql .= " 0)";  // fk_bank is ID of transaction into ll_bank
 
-            dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "payment_expensereport");
@@ -263,7 +263,7 @@ class PaymentExpenseReport extends CommonObject
         $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'bank as b ON t.fk_bank = b.rowid';
         $sql .= " WHERE t.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -356,7 +356,7 @@ class PaymentExpenseReport extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -366,7 +366,7 @@ class PaymentExpenseReport extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -396,7 +396,7 @@ class PaymentExpenseReport extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "bank_url";
             $sql .= " WHERE type='payment_expensereport' AND url_id=" . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -408,7 +408,7 @@ class PaymentExpenseReport extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "payment_expensereport";
             $sql .= " WHERE rowid=" . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -419,7 +419,7 @@ class PaymentExpenseReport extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -615,7 +615,7 @@ class PaymentExpenseReport extends CommonObject
                             );
                             if ($result <= 0) {
                                 $this->error = $this->db->lasterror();
-                                dol_syslog(get_class($this) . '::addPaymentToBank ' . $this->error);
+                                dol_syslog(get_only_class($this) . '::addPaymentToBank ' . $this->error);
                                 $error++;
                             }
                         }
@@ -648,7 +648,7 @@ class PaymentExpenseReport extends CommonObject
 		// phpcs:enable
         $sql = "UPDATE " . MAIN_DB_PREFIX . "payment_expensereport SET fk_bank = " . ((int) $id_bank) . " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update_fk_bank", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update_fk_bank", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             return 1;
@@ -723,7 +723,7 @@ class PaymentExpenseReport extends CommonObject
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'payment_expensereport as e';
         $sql .= ' WHERE e.rowid = ' . ((int) $id);
 
-        dol_syslog(get_class($this) . '::info', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::info', LOG_DEBUG);
         $result = $this->db->query($sql);
 
         if ($result) {

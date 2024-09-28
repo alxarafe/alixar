@@ -249,7 +249,7 @@ class Holiday extends CommonObject
                 return $numref;
             } else {
                 $this->error = $obj->error;
-                //dol_print_error($this->db,get_class($this)."::getNextNumRef ".$obj->error);
+                //dol_print_error($this->db,get_only_class($this)."::getNextNumRef ".$obj->error);
                 return "";
             }
         } else {
@@ -341,7 +341,7 @@ class Holiday extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -384,7 +384,7 @@ class Holiday extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -437,7 +437,7 @@ class Holiday extends CommonObject
             $sql .= " WHERE cp.ref = '" . $this->db->escape($ref) . "'";
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -547,7 +547,7 @@ class Holiday extends CommonObject
             $sql .= $order;
         }
 
-        dol_syslog(get_class($this) . "::fetchByUser", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchByUser", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         // If no SQL error
@@ -676,7 +676,7 @@ class Holiday extends CommonObject
             $sql .= $order;
         }
 
-        dol_syslog(get_class($this) . "::fetchAll", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchAll", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         // If no SQL error
@@ -795,7 +795,7 @@ class Holiday extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::validate", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::validate", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -840,7 +840,7 @@ class Holiday extends CommonObject
                 $dirsource = $conf->holiday->multidir_output[$this->entity] . '/' . $oldref;
                 $dirdest = $conf->holiday->multidir_output[$this->entity] . '/' . $newref;
                 if (!$error && file_exists($dirsource)) {
-                    dol_syslog(get_class($this) . "::validate rename dir " . $dirsource . " into " . $dirdest);
+                    dol_syslog(get_only_class($this) . "::validate rename dir " . $dirsource . " into " . $dirdest);
                     if (@rename($dirsource, $dirdest)) {
                         dol_syslog("Rename ok");
                         // Rename docs starting with $oldref with $newref
@@ -861,7 +861,7 @@ class Holiday extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::validate " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::validate " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -968,7 +968,7 @@ class Holiday extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::approve", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::approve", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -989,7 +989,7 @@ class Holiday extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::approve " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::approve " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -1099,7 +1099,7 @@ class Holiday extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -1120,7 +1120,7 @@ class Holiday extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -1149,7 +1149,7 @@ class Holiday extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -1170,7 +1170,7 @@ class Holiday extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -1587,7 +1587,7 @@ class Holiday extends CommonObject
         $sql .= " value = '" . $this->db->escape($value) . "'";
         $sql .= " WHERE name = '" . $this->db->escape($name) . "'";
 
-        dol_syslog(get_class($this) . '::updateConfCP name=' . $name, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::updateConfCP name=' . $name, LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             return true;
@@ -1610,7 +1610,7 @@ class Holiday extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . "holiday_config";
         $sql .= " WHERE name = '" . $this->db->escape($name) . "'";
 
-        dol_syslog(get_class($this) . '::getConfCP name=' . $name . ' createifnotfound=' . $createifnotfound, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::getConfCP name=' . $name . ' createifnotfound=' . $createifnotfound, LOG_DEBUG);
         $result = $this->db->query($sql);
 
         if ($result) {
@@ -1770,7 +1770,7 @@ class Holiday extends CommonObject
     {
         // do we have to add balance for all users ?
         if (!$single) {
-            dol_syslog(get_class($this) . '::createCPusers');
+            dol_syslog(get_only_class($this) . '::createCPusers');
             $arrayofusers = $this->fetchUsers(false, true);
 
             foreach ($arrayofusers as $users) {
@@ -1811,7 +1811,7 @@ class Holiday extends CommonObject
             $sql .= " AND fk_type = " . (int) $fk_type;
         }
 
-        dol_syslog(get_class($this) . '::getCPforUser user_id=' . $user_id . ' type_id=' . $fk_type, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::getCPforUser user_id=' . $user_id . ' type_id=' . $fk_type, LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $obj = $this->db->fetch_object($result);
@@ -1838,7 +1838,7 @@ class Holiday extends CommonObject
     {
         global $conf;
 
-        dol_syslog(get_class($this) . "::fetchUsers", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchUsers", LOG_DEBUG);
 
         if ($stringlist) {
             if ($type) {
@@ -2059,7 +2059,7 @@ class Holiday extends CommonObject
         $sql .= " WHERE ugu.fk_usergroup = ur.fk_usergroup AND ur.fk_id = rd.id and rd.module = 'holiday' AND rd.perms = 'approve'"; // Permission 'Approve';
         //print $sql;
 
-        dol_syslog(get_class($this) . "::fetch_users_approver_holiday sql=" . $sql);
+        dol_syslog(get_only_class($this) . "::fetch_users_approver_holiday sql=" . $sql);
         $result = $this->db->query($sql);
         if ($result) {
             $num_rows = $this->db->num_rows($result);
@@ -2072,7 +2072,7 @@ class Holiday extends CommonObject
             return $users_validator;
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . "::fetch_users_approver_holiday  Error " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetch_users_approver_holiday  Error " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -2123,7 +2123,7 @@ class Holiday extends CommonObject
         if (empty($userCP)) {
             $userCP = 0;
         }
-        dol_syslog(get_class($this) . '::verifNbUsers userDolibarr=' . $userDolibarrWithoutCP . ' userCP=' . $userCP);
+        dol_syslog(get_only_class($this) . '::verifNbUsers userDolibarr=' . $userDolibarrWithoutCP . ' userCP=' . $userCP);
         return 1;
     }
 
@@ -2186,7 +2186,7 @@ class Holiday extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::addLogCP " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::addLogCP " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -2228,7 +2228,7 @@ class Holiday extends CommonObject
             $sql .= " " . $order;
         }
 
-        dol_syslog(get_class($this) . "::fetchLog", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchLog", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         // Si pas d'erreur SQL

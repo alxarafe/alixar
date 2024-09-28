@@ -90,7 +90,7 @@ class ModeleExports extends CommonDocGenerator    // This class can't be abstrac
     {
         global $langs;
 
-        dol_syslog(get_class($this) . "::listOfAvailableExportFormat");
+        dol_syslog(get_only_class($this) . "::listOfAvailableExportFormat");
 
         $dir = DOL_DOCUMENT_ROOT . "/core/modules/export/";
         $handle = opendir($dir);

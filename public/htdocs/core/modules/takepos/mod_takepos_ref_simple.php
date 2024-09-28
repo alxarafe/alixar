@@ -163,7 +163,7 @@ class mod_takepos_ref_simple extends ModeleNumRefTakepos
                 $max = 0;
             }
         } else {
-            dol_syslog(get_class($this) . "::getNextValue", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::getNextValue", LOG_DEBUG);
             return -1;
         }
 
@@ -202,7 +202,7 @@ class mod_takepos_ref_simple extends ModeleNumRefTakepos
                 $num = sprintf("%04d", $max + 1);
             }
 
-            dol_syslog(get_class($this) . "::getNextValue return " . $this->prefix . $pos_source . '-' . $yymm . '-' . $num);
+            dol_syslog(get_only_class($this) . "::getNextValue return " . $this->prefix . $pos_source . '-' . $yymm . '-' . $num);
             return $this->prefix . $pos_source . '-' . $yymm . '-' . $num;
         } else {
             dol_print_error(null, 'Bad parameter for getNextValue');

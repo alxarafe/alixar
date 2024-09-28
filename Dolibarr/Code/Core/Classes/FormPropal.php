@@ -90,7 +90,7 @@ class FormPropal
 
             $sql = "SELECT id, code, label, active FROM " . $this->db->prefix() . "c_propalst";
             $sql .= " WHERE active = 1";
-            dol_syslog(get_class($this) . "::selectProposalStatus", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::selectProposalStatus", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $num = $this->db->num_rows($resql);

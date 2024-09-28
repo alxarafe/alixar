@@ -99,7 +99,7 @@ class DolGeoPHP
 
         $geom = geoPHP::load($value, 'wkt');
         if ($geom) {
-            $value = get_class($geom) . ' : ' . $geom->numPoints() . ' Points';
+            $value = get_only_class($geom) . ' : ' . $geom->numPoints() . ' Points';
         }
         return $value;
     }

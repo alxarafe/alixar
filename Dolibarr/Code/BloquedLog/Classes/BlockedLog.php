@@ -898,7 +898,7 @@ class BlockedLog
         // Clean data
         $this->amounts = (float) $this->amounts;
 
-        dol_syslog(get_class($this) . '::create action=' . $this->action . ' fk_user=' . $this->fk_user . ' user_fullname=' . $this->user_fullname, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::create action=' . $this->action . ' fk_user=' . $this->fk_user . ' user_fullname=' . $this->user_fullname, LOG_DEBUG);
 
         // Check parameters/properties
         if (!isset($this->amounts)) {   // amount can be 0 for some events (like when module is disabled)

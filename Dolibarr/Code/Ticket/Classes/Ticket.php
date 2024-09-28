@@ -428,7 +428,7 @@ class Ticket extends CommonObject
             $this->message = trim($this->message);
             if (dol_strlen($this->message) > 65000) {
                 $this->errors[] = 'ErrorFieldTooLong';
-                dol_syslog(get_class($this) . '::create error -1 message too long', LOG_ERR);
+                dol_syslog(get_only_class($this) . '::create error -1 message too long', LOG_ERR);
                 $result = -1;
             }
         }
@@ -463,7 +463,7 @@ class Ticket extends CommonObject
 
         if (empty($this->ref)) {
             $this->errors[] = 'ErrorTicketRefRequired';
-            dol_syslog(get_class($this) . "::create error -1 ref null", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create error -1 ref null", LOG_ERR);
             $result = -1;
         }
 
@@ -581,7 +581,7 @@ class Ticket extends CommonObject
 
             $this->db->begin();
 
-            dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -637,7 +637,7 @@ class Ticket extends CommonObject
             // Commit or rollback
             if ($error) {
                 foreach ($this->errors as $errmsg) {
-                    dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                     $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
                 }
                 $this->db->rollback();
@@ -648,7 +648,7 @@ class Ticket extends CommonObject
             }
         } else {
             $this->db->rollback();
-            dol_syslog(get_class($this) . "::Create fails verify " . implode(',', $this->errors), LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::Create fails verify " . implode(',', $this->errors), LOG_WARNING);
             return -3;
         }
     }
@@ -669,7 +669,7 @@ class Ticket extends CommonObject
         // Check parameters
         if (empty($id) && empty($ref) && empty($track_id) && empty($email_msgid)) {
             $this->error = 'ErrorWrongParameters';
-            dol_print_error(null, get_class($this) . "::fetch " . $this->error);
+            dol_print_error(null, get_only_class($this) . "::fetch " . $this->error);
             return -1;
         }
 
@@ -724,7 +724,7 @@ class Ticket extends CommonObject
             }
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -788,7 +788,7 @@ class Ticket extends CommonObject
             }
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::fetch " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetch " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -916,7 +916,7 @@ class Ticket extends CommonObject
             $sql .= $this->db->plimit($limit + 1, $offset);
         }
 
-        dol_syslog(get_class($this) . "::fetchAll", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchAll", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         if ($resql) {
@@ -986,7 +986,7 @@ class Ticket extends CommonObject
             return $num;
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::fetchAll " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetchAll " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -1049,7 +1049,7 @@ class Ticket extends CommonObject
             $this->message = trim($this->message);
             if (dol_strlen($this->message) > 65000) {
                 $this->errors[] = 'ErrorFieldTooLong';
-                dol_syslog(get_class($this) . '::update error -1 message too long', LOG_ERR);
+                dol_syslog(get_only_class($this) . '::update error -1 message too long', LOG_ERR);
                 return -1;
             }
         }
@@ -1142,7 +1142,7 @@ class Ticket extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -1181,7 +1181,7 @@ class Ticket extends CommonObject
             // Delete linked contacts
             $res = $this->delete_linked_contact();
             if ($res < 0) {
-                dol_syslog(get_class($this) . "::delete error", LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error", LOG_ERR);
                 $error++;
             }
         }
@@ -1199,7 +1199,7 @@ class Ticket extends CommonObject
             $result = $this->deleteExtraFields();
             if ($result < 0) {
                 $error++;
-                dol_syslog(get_class($this) . "::delete error -3 " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error -3 " . $this->error, LOG_ERR);
             }
         }
 
@@ -1220,7 +1220,7 @@ class Ticket extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "ticket";
             $sql .= " WHERE rowid=" . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete sql=" . $sql);
+            dol_syslog(get_only_class($this) . "::delete sql=" . $sql);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -1242,7 +1242,7 @@ class Ticket extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -1366,7 +1366,7 @@ class Ticket extends CommonObject
         $sql .= " WHERE entity IN (" . getEntity('c_ticket_type') . ")";
         $sql .= " AND active > 0";
         $sql .= " ORDER BY pos";
-        dol_syslog(get_class($this) . "::load_cache_type_tickets", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::load_cache_type_tickets", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -1411,7 +1411,7 @@ class Ticket extends CommonObject
         }
         $sql .= " ORDER BY pos";
 
-        dol_syslog(get_class($this) . "::load_cache_categories_tickets", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::load_cache_categories_tickets", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -1460,7 +1460,7 @@ class Ticket extends CommonObject
         $sql .= " WHERE entity IN (" . getEntity('c_ticket_severity') . ")";
         $sql .= " AND active > 0";
         $sql .= " ORDER BY pos";
-        dol_syslog(get_class($this) . "::loadCacheSeveritiesTickets", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::loadCacheSeveritiesTickets", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -1718,7 +1718,7 @@ class Ticket extends CommonObject
             $sql .= " SET fk_statut = " . Ticket::STATUS_READ . ", date_read = '" . $this->db->idate(dol_now()) . "'";
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::markAsRead");
+            dol_syslog(get_only_class($this) . "::markAsRead");
             $resql = $this->db->query($sql);
             if ($resql) {
                 $this->context['actionmsg'] = $langs->trans('TicketLogMesgReadBy', $this->ref, $user->getFullName($langs));
@@ -1739,13 +1739,13 @@ class Ticket extends CommonObject
                 } else {
                     $this->db->rollback();
                     $this->error = implode(',', $this->errors);
-                    dol_syslog(get_class($this) . "::markAsRead " . $this->error, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::markAsRead " . $this->error, LOG_ERR);
                     return -1;
                 }
             } else {
                 $this->db->rollback();
                 $this->error = $this->db->lasterror();
-                dol_syslog(get_class($this) . "::markAsRead " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::markAsRead " . $this->error, LOG_ERR);
                 return -1;
             }
         }
@@ -1777,7 +1777,7 @@ class Ticket extends CommonObject
         }
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::assignUser sql=" . $sql);
+        dol_syslog(get_only_class($this) . "::assignUser sql=" . $sql);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->fk_user_assign = $id_assign_user; // May be used by trigger
@@ -1797,13 +1797,13 @@ class Ticket extends CommonObject
             } else {
                 $this->db->rollback();
                 $this->error = implode(',', $this->errors);
-                dol_syslog(get_class($this) . "::assignUser " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::assignUser " . $this->error, LOG_ERR);
                 return -1;
             }
         } else {
             $this->db->rollback();
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . "::assignUser " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::assignUser " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -1949,7 +1949,7 @@ class Ticket extends CommonObject
         $sql .= " AND elementtype = 'ticket'";
         $sql .= " ORDER BY datep DESC";
 
-        dol_syslog(get_class($this) . "::load_cache_actions_ticket", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::load_cache_actions_ticket", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -1971,7 +1971,7 @@ class Ticket extends CommonObject
             return $num;
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::load_cache_actions_ticket " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::load_cache_actions_ticket " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -1994,7 +1994,7 @@ class Ticket extends CommonObject
             $sql .= " SET fk_statut=" . ($mode ? Ticket::STATUS_CANCELED : Ticket::STATUS_CLOSED) . ", progress=100, date_close='" . $this->db->idate(dol_now()) . "'";
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::close mode=" . $mode);
+            dol_syslog(get_only_class($this) . "::close mode=" . $mode);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $error = 0;
@@ -2038,13 +2038,13 @@ class Ticket extends CommonObject
                 } else {
                     $this->db->rollback();
                     $this->error = implode(',', $this->errors);
-                    dol_syslog(get_class($this) . "::close " . $this->error, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::close " . $this->error, LOG_ERR);
                     return -1;
                 }
             } else {
                 $this->db->rollback();
                 $this->error = $this->db->lasterror();
-                dol_syslog(get_class($this) . "::close " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::close " . $this->error, LOG_ERR);
                 return -1;
             }
         }
@@ -2112,7 +2112,7 @@ class Ticket extends CommonObject
             return $thirdparties;
         } else {
             $this->error = $this->db->error() . ' sql=' . $sql;
-            dol_syslog(get_class($this) . "::searchSocidByEmail " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::searchSocidByEmail " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -2155,7 +2155,7 @@ class Ticket extends CommonObject
             return $contacts;
         } else {
             $this->error = $this->db->error() . ' sql=' . $sql;
-            dol_syslog(get_class($this) . "::searchContactByEmail " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::searchContactByEmail " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -2172,7 +2172,7 @@ class Ticket extends CommonObject
             $sql = "UPDATE " . MAIN_DB_PREFIX . "ticket";
             $sql .= " SET fk_soc = " . ($id > 0 ? $id : "null");
             $sql .= " WHERE rowid = " . ((int) $this->id);
-            dol_syslog(get_class($this) . '::setCustomer sql=' . $sql);
+            dol_syslog(get_only_class($this) . '::setCustomer sql=' . $sql);
             $resql = $this->db->query($sql);
             if ($resql) {
                 return 1;
@@ -2196,7 +2196,7 @@ class Ticket extends CommonObject
             $sql = "UPDATE " . MAIN_DB_PREFIX . "ticket";
             $sql .= " SET progress = " . ($percent > 0 ? $percent : "null");
             $sql .= " WHERE rowid = " . ((int) $this->id);
-            dol_syslog(get_class($this) . '::set_progression sql=' . $sql);
+            dol_syslog(get_only_class($this) . '::set_progression sql=' . $sql);
             $resql = $this->db->query($sql);
             if ($resql) {
                 return 1;
@@ -2220,7 +2220,7 @@ class Ticket extends CommonObject
             $sql = "UPDATE " . MAIN_DB_PREFIX . "ticket";
             $sql .= " SET fk_contract = " . ($contractid > 0 ? $contractid : "null");
             $sql .= " WHERE rowid = " . ((int) $this->id);
-            dol_syslog(get_class($this) . '::setContract sql=' . $sql);
+            dol_syslog(get_only_class($this) . '::setContract sql=' . $sql);
             $resql = $this->db->query($sql);
             if ($resql) {
                 return 1;
@@ -3023,7 +3023,7 @@ class Ticket extends CommonObject
         global $conf, $langs, $user;
 
         if (getDolGlobalString('TICKET_DISABLE_ALL_MAILS')) {
-            dol_syslog(get_class($this) . '::sendTicketMessageByEmail: Emails are disable into ticket setup by option TICKET_DISABLE_ALL_MAILS', LOG_WARNING);
+            dol_syslog(get_only_class($this) . '::sendTicketMessageByEmail: Emails are disable into ticket setup by option TICKET_DISABLE_ALL_MAILS', LOG_WARNING);
             return false;
         }
 

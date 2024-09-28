@@ -64,7 +64,7 @@ class Mrp extends DolibarrModules
         // Gives the possibility for the module, to provide his own family info and position of this family (Overwrite $this->family and $this->module_position. Avoid this)
         //$this->familyinfo = array('myownfamily' => array('position' => '01', 'label' => $langs->trans("MyOwnFamily")));
         // Module label (no space allowed), used if translation string 'ModuleMrpName' not found (Mrp is name of module).
-        $this->name = preg_replace('/^mod/i', '', get_class($this));
+        $this->name = preg_replace('/^mod/i', '', get_only_class($this));
         // Module description, used if translation string 'ModuleMrpDesc' not found (Mrp is name of module).
         $this->description = "Module to Manage Manufacturing Orders (MO)";
         // Used only if file README.md and README-LL.md not found.

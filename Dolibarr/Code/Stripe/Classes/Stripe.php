@@ -130,7 +130,7 @@ class Stripe extends CommonObject
         }
         $sql .= " AND fk_user IS NULL AND fk_adherent IS NULL";
 
-        dol_syslog(get_class($this) . "::getStripeAccount", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getStripeAccount", LOG_DEBUG);
 
         $result = $this->db->query($sql);
         if ($result) {
@@ -202,7 +202,7 @@ class Stripe extends CommonObject
         $sql .= " AND (sa.site_account IS NULL OR sa.site_account = '' OR sa.site_account = '" . $this->db->escape($stripearrayofkeysbyenv[$status]['publishable_key']) . "')";
         $sql .= " AND sa.key_account IS NOT NULL AND sa.key_account <> ''";
 
-        dol_syslog(get_class($this) . "::customerStripe search stripe customer id for thirdparty id=" . $object->id, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::customerStripe search stripe customer id for thirdparty id=" . $object->id, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -210,7 +210,7 @@ class Stripe extends CommonObject
                 $obj = $this->db->fetch_object($resql);
                 $tiers = $obj->key_account;
 
-                dol_syslog(get_class($this) . "::customerStripe found stripe customer key_account = " . $tiers . ". We will try to read it on Stripe with publishable_key = " . $stripearrayofkeysbyenv[$status]['publishable_key']);
+                dol_syslog(get_only_class($this) . "::customerStripe found stripe customer key_account = " . $tiers . ". We will try to read it on Stripe with publishable_key = " . $stripearrayofkeysbyenv[$status]['publishable_key']);
 
                 try {
                     if (empty($key)) {              // If the Stripe connect account not set, we use common API usage
@@ -374,7 +374,7 @@ class Stripe extends CommonObject
     {
         global $conf, $user;
 
-        dol_syslog(get_class($this) . "::getPaymentIntent", LOG_INFO, 1);
+        dol_syslog(get_only_class($this) . "::getPaymentIntent", LOG_INFO, 1);
 
         $error = 0;
 
@@ -422,7 +422,7 @@ class Stripe extends CommonObject
             $sql .= " AND pi.entity IN (" . getEntity('societe') . ")";
             $sql .= " AND pi.ext_payment_site = '" . $this->db->escape($service) . "'";
 
-            dol_syslog(get_class($this) . "::getPaymentIntent search stripe payment intent for object id = " . $object->id, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::getPaymentIntent search stripe payment intent for object id = " . $object->id, LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $num = $this->db->num_rows($resql);
@@ -430,7 +430,7 @@ class Stripe extends CommonObject
                     $obj = $this->db->fetch_object($resql);
                     $intent = $obj->ext_payment_id;
 
-                    dol_syslog(get_class($this) . "::getPaymentIntent found existing payment intent record");
+                    dol_syslog(get_only_class($this) . "::getPaymentIntent found existing payment intent record");
 
                     // Force to use the correct API key
                     global $stripearrayofkeysbyenv;
@@ -572,7 +572,7 @@ class Stripe extends CommonObject
 
                     if ($did > 0) {
                         // If a payment request line provided, we do not need to recreate one, we just update it
-                        dol_syslog(get_class($this) . "::getPaymentIntent search if payment intent already in prelevement_demande", LOG_DEBUG);
+                        dol_syslog(get_only_class($this) . "::getPaymentIntent search if payment intent already in prelevement_demande", LOG_DEBUG);
 
                         $sql = "UPDATE " . MAIN_DB_PREFIX . "prelevement_demande SET";
                         $sql .= " ext_payment_site = '" . $this->db->escape($service) . "',";
@@ -588,7 +588,7 @@ class Stripe extends CommonObject
                         }
                     } else {
                         // Check that payment intent $paymentintent->id is not already recorded.
-                        dol_syslog(get_class($this) . "::getPaymentIntent search if payment intent already in prelevement_demande", LOG_DEBUG);
+                        dol_syslog(get_only_class($this) . "::getPaymentIntent search if payment intent already in prelevement_demande", LOG_DEBUG);
 
                         $sql = "SELECT pi.rowid";
                         $sql .= " FROM " . MAIN_DB_PREFIX . "prelevement_demande as pi";
@@ -620,7 +620,7 @@ class Stripe extends CommonObject
                         if (!$resql) {
                             $error++;
                             $this->error = $this->db->lasterror();
-                            dol_syslog(get_class($this) . "::PaymentIntent failed to insert paymentintent with id=" . $paymentintent->id . " into database.", LOG_ERR);
+                            dol_syslog(get_only_class($this) . "::PaymentIntent failed to insert paymentintent with id=" . $paymentintent->id . " into database.", LOG_ERR);
                         }
                     }
                 } else {
@@ -645,7 +645,7 @@ class Stripe extends CommonObject
             }
         }
 
-        dol_syslog(get_class($this) . "::getPaymentIntent return error=" . $error . " this->error=" . $this->error, LOG_INFO, -1);
+        dol_syslog(get_only_class($this) . "::getPaymentIntent return error=" . $error . " this->error=" . $this->error, LOG_INFO, -1);
 
         if (!$error) {
             return $paymentintent;
@@ -772,7 +772,7 @@ class Stripe extends CommonObject
                     $sql.= " AND pi.ext_payment_site = '" . $this->db->escape($service) . "'";
                     $sql.= " AND pi.ext_payment_id = '".$this->db->escape($setupintent->id)."'";
 
-                    dol_syslog(get_class($this) . "::getPaymentIntent search if payment intent already in prelevement_demande", LOG_DEBUG);
+                    dol_syslog(get_only_class($this) . "::getPaymentIntent search if payment intent already in prelevement_demande", LOG_DEBUG);
                     $resql = $this->db->query($sql);
                     if ($resql) {
                         $num = $this->db->num_rows($resql);
@@ -795,7 +795,7 @@ class Stripe extends CommonObject
                         {
                             $error++;
                             $this->error = $this->db->lasterror();
-                            dol_syslog(get_class($this) . "::PaymentIntent failed to insert paymentintent with id=".$setupintent->id." into database.");
+                            dol_syslog(get_only_class($this) . "::PaymentIntent failed to insert paymentintent with id=".$setupintent->id." into database.");
                         }
                     }
                 }
@@ -845,14 +845,14 @@ class Stripe extends CommonObject
         $sql .= " WHERE sa.rowid = " . ((int) $object->id); // We get record from ID, no need for filter on entity
         $sql .= " AND sa.type = 'card'";
 
-        dol_syslog(get_class($this) . "::cardStripe search stripe card id for paymentmode id=" . $object->id . ", stripeacc=" . $stripeacc . ", status=" . $status . ", createifnotlinkedtostripe=" . $createifnotlinkedtostripe, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::cardStripe search stripe card id for paymentmode id=" . $object->id . ", stripeacc=" . $stripeacc . ", status=" . $status . ", createifnotlinkedtostripe=" . $createifnotlinkedtostripe, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
             if ($num) {
                 $obj = $this->db->fetch_object($resql);
                 $cardref = $obj->stripe_card_ref;
-                dol_syslog(get_class($this) . "::cardStripe cardref=" . $cardref);
+                dol_syslog(get_only_class($this) . "::cardStripe cardref=" . $cardref);
                 if ($cardref) {
                     try {
                         if (empty($stripeacc)) {                // If the Stripe connect account not set, we use common API usage
@@ -999,14 +999,14 @@ class Stripe extends CommonObject
         $soc = new Societe($this->db);
         $soc->fetch($object->fk_soc);
 
-        dol_syslog(get_class($this) . "::sepaStripe search stripe ban id for paymentmode id=" . $object->id . ", stripeacc=" . $stripeacc . ", status=" . $status . ", createifnotlinkedtostripe=" . $createifnotlinkedtostripe, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::sepaStripe search stripe ban id for paymentmode id=" . $object->id . ", stripeacc=" . $stripeacc . ", status=" . $status . ", createifnotlinkedtostripe=" . $createifnotlinkedtostripe, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
             if ($num) {
                 $obj = $this->db->fetch_object($resql);
                 $cardref = $obj->stripe_card_ref;
-                dol_syslog(get_class($this) . "::sepaStripe paymentmode=" . $cardref);
+                dol_syslog(get_only_class($this) . "::sepaStripe paymentmode=" . $cardref);
                 if ($cardref) {
                     try {
                         if (empty($stripeacc)) {                // If the Stripe connect account not set, we use common API usage
@@ -1182,7 +1182,7 @@ class Stripe extends CommonObject
         //$sql.= " AND sa.entity IN (".getEntity('societe').")";
         $sql .= " AND sa.site = 'stripe' AND sa.status = " . ((int) $status);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             if ($this->db->num_rows($result)) {

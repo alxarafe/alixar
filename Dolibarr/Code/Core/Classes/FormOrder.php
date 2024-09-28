@@ -131,7 +131,7 @@ class FormOrder extends Form
         $sql .= " FROM " . $this->db->prefix() . "c_input_method";
         $sql .= " WHERE active = 1";
 
-        dol_syslog(get_class($this) . "::selectInputMethod", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectInputMethod", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         if (!$resql) {

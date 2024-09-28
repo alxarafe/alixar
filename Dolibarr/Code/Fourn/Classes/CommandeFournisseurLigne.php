@@ -235,7 +235,7 @@ class CommandeFournisseurLigne extends CommonOrderLine
                 return 1;
             } else {
                 $this->error = 'Supplier order line  with id=' . $rowid . ' not found';
-                dol_syslog(get_class($this) . "::fetch Error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::fetch Error " . $this->error, LOG_ERR);
                 return 0;
             }
         } else {
@@ -256,7 +256,7 @@ class CommandeFournisseurLigne extends CommonOrderLine
 
         $error = 0;
 
-        dol_syslog(get_class($this) . "::insert rang=" . $this->rang);
+        dol_syslog(get_only_class($this) . "::insert rang=" . $this->rang);
 
         // Clean parameters
         if (empty($this->tva_tx)) {
@@ -358,7 +358,7 @@ class CommandeFournisseurLigne extends CommonOrderLine
         $sql .= ", " . ((!empty($this->fk_parent_line) && $this->fk_parent_line > 0) ? $this->fk_parent_line : 'null');
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::insert", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::insert", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id($this->db->prefix() . $this->table_element);
@@ -386,7 +386,7 @@ class CommandeFournisseurLigne extends CommonOrderLine
             }
 
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->errors[] = ($this->errors ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -445,7 +445,7 @@ class CommandeFournisseurLigne extends CommonOrderLine
 
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::updateline", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::updateline", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if (!$error) {
@@ -530,7 +530,7 @@ class CommandeFournisseurLigne extends CommonOrderLine
             }
 
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();

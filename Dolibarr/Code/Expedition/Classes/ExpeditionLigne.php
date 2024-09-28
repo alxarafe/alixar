@@ -323,7 +323,7 @@ class ExpeditionLigne extends CommonObjectLine
         $sql .= ", " . ((int)$ranktouse);
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::insert", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::insert", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "expeditiondet");
@@ -346,7 +346,7 @@ class ExpeditionLigne extends CommonObjectLine
 
             if ($error) {
                 foreach ($this->errors as $errmsg) {
-                    dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                     $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
                 }
             }
@@ -418,7 +418,7 @@ class ExpeditionLigne extends CommonObjectLine
             return 1;
         } else {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -437,7 +437,7 @@ class ExpeditionLigne extends CommonObjectLine
     {
         $error = 0;
 
-        dol_syslog(get_class($this) . "::update id=$this->id, entrepot_id=$this->entrepot_id, product_id=$this->fk_product, qty=$this->qty");
+        dol_syslog(get_only_class($this) . "::update id=$this->id, entrepot_id=$this->entrepot_id, product_id=$this->fk_product, qty=$this->qty");
 
         $this->db->begin();
 
@@ -452,7 +452,7 @@ class ExpeditionLigne extends CommonObjectLine
         $expedition_batch_id = null;
         if (is_array($this->detail_batch)) {    // array of ExpeditionLineBatch
             if (count($this->detail_batch) > 1) {
-                dol_syslog(get_class($this) . '::update only possible for one batch', LOG_ERR);
+                dol_syslog(get_only_class($this) . '::update only possible for one batch', LOG_ERR);
                 $this->errors[] = 'ErrorBadParameters';
                 $error++;
             } else {
@@ -460,7 +460,7 @@ class ExpeditionLigne extends CommonObjectLine
                 $batch_id = $this->detail_batch[0]->fk_origin_stock;
                 $expedition_batch_id = $this->detail_batch[0]->id;
                 if ($this->entrepot_id != $this->detail_batch[0]->entrepot_id) {
-                    dol_syslog(get_class($this) . '::update only possible for batch of same warehouse', LOG_ERR);
+                    dol_syslog(get_only_class($this) . '::update only possible for batch of same warehouse', LOG_ERR);
                     $this->errors[] = 'ErrorBadParameters';
                     $error++;
                 }
@@ -471,7 +471,7 @@ class ExpeditionLigne extends CommonObjectLine
             $batch_id = $this->detail_batch->fk_origin_stock;
             $expedition_batch_id = $this->detail_batch->id;
             if ($this->entrepot_id != $this->detail_batch->entrepot_id) {
-                dol_syslog(get_class($this) . '::update only possible for batch of same warehouse', LOG_ERR);
+                dol_syslog(get_only_class($this) . '::update only possible for batch of same warehouse', LOG_ERR);
                 $this->errors[] = 'ErrorBadParameters';
                 $error++;
             }
@@ -480,7 +480,7 @@ class ExpeditionLigne extends CommonObjectLine
 
         // check parameters
         if (!isset($this->id) || !isset($this->entrepot_id)) {
-            dol_syslog(get_class($this) . '::update missing line id and/or warehouse id', LOG_ERR);
+            dol_syslog(get_only_class($this) . '::update missing line id and/or warehouse id', LOG_ERR);
             $this->errors[] = 'ErrorMandatoryParametersNotProvided';
             $error++;
             return -1;
@@ -490,10 +490,10 @@ class ExpeditionLigne extends CommonObjectLine
 
         if (!empty($batch) && isModEnabled('productbatch')) {
             $batch_id_str = $batch_id ?? 'null';
-            dol_syslog(get_class($this) . "::update expedition batch id=$expedition_batch_id, batch_id=$batch_id_str, batch=$batch");
+            dol_syslog(get_only_class($this) . "::update expedition batch id=$expedition_batch_id, batch_id=$batch_id_str, batch=$batch");
 
             if (empty($batch_id) || empty($this->fk_product)) {
-                dol_syslog(get_class($this) . '::update missing fk_origin_stock (batch_id) and/or fk_product', LOG_ERR);
+                dol_syslog(get_only_class($this) . '::update missing fk_origin_stock (batch_id) and/or fk_product', LOG_ERR);
                 $this->errors[] = 'ErrorMandatoryParametersNotProvided';
                 $error++;
             }
@@ -585,7 +585,7 @@ class ExpeditionLigne extends CommonObjectLine
             return 1;
         } else {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();

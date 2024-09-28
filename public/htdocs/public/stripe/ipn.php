@@ -141,7 +141,7 @@ if (isModEnabled('multicompany') && !empty($conf->stripeconnect->enabled) && is_
     $sql .= " FROM " . MAIN_DB_PREFIX . "oauth_token";
     $sql .= " WHERE service = '" . $db->escape($service) . "' and tokenstring LIKE '%" . $db->escape($db->escapeforlike($event->account)) . "%'";
 
-    dol_syslog(get_class($db) . "::fetch", LOG_DEBUG);
+    dol_syslog(get_only_class($db) . "::fetch", LOG_DEBUG);
     $result = $db->query($sql);
     if ($result) {
         if ($db->num_rows($result)) {

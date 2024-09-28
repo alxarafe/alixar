@@ -148,7 +148,7 @@ class VarCloner extends AbstractCloner
                         if (empty($objRefs[$h = $zval['object_handle'] ?: ($hashMask ^ hexdec(substr(spl_object_hash($v), $hashOffset, PHP_INT_SIZE)))])) {
                             $stub = new Stub();
                             $stub->type = Stub::TYPE_OBJECT;
-                            $stub->class = $zval['object_class'] ?: get_class($v);
+                            $stub->class = $zval['object_class'] ?: get_only_class($v);
                             $stub->value = $v;
                             $stub->handle = $h;
                             $a = $this->castObject($stub, 0 < $i);

@@ -264,7 +264,7 @@ class FactureLigne extends CommonInvoiceLine
 
         $pa_ht_isemptystring = (empty($this->pa_ht) && $this->pa_ht == ''); // If true, we can use a default value. If this->pa_ht = '0', we must use '0'.
 
-        dol_syslog(get_class($this) . "::insert rang=" . $this->rang, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::insert rang=" . $this->rang, LOG_DEBUG);
 
         // Clean parameters
         $this->desc = trim($this->desc);
@@ -353,7 +353,7 @@ class FactureLigne extends CommonInvoiceLine
             $result = Product::isExistingObject('product', $this->fk_product);
             if ($result <= 0) {
                 $this->error = 'ErrorProductIdDoesNotExists';
-                dol_syslog(get_class($this) . "::insert Error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::insert Error " . $this->error, LOG_ERR);
                 return -1;
             }
         }
@@ -415,7 +415,7 @@ class FactureLigne extends CommonInvoiceLine
         $sql .= ", " . price2num($this->multicurrency_total_ttc);
         $sql .= ')';
 
-        dol_syslog(get_class($this) . "::insert", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::insert", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . 'facturedet');
@@ -440,7 +440,7 @@ class FactureLigne extends CommonInvoiceLine
                         if ($discount->fk_facture_line > 0) {
                             if (empty($noerrorifdiscountalreadylinked)) {
                                 $this->error = $langs->trans("ErrorDiscountAlreadyUsed", $discount->id);
-                                dol_syslog(get_class($this) . "::insert Error " . $this->error, LOG_ERR);
+                                dol_syslog(get_only_class($this) . "::insert Error " . $this->error, LOG_ERR);
                                 $this->db->rollback();
                                 return -3;
                             }
@@ -448,20 +448,20 @@ class FactureLigne extends CommonInvoiceLine
                             $result = $discount->link_to_invoice($this->rowid, 0);
                             if ($result < 0) {
                                 $this->error = $discount->error;
-                                dol_syslog(get_class($this) . "::insert Error " . $this->error, LOG_ERR);
+                                dol_syslog(get_only_class($this) . "::insert Error " . $this->error, LOG_ERR);
                                 $this->db->rollback();
                                 return -3;
                             }
                         }
                     } else {
                         $this->error = $langs->trans("ErrorADiscountThatHasBeenRemovedIsIncluded");
-                        dol_syslog(get_class($this) . "::insert Error " . $this->error, LOG_ERR);
+                        dol_syslog(get_only_class($this) . "::insert Error " . $this->error, LOG_ERR);
                         $this->db->rollback();
                         return -3;
                     }
                 } else {
                     $this->error = $discount->error;
-                    dol_syslog(get_class($this) . "::insert Error " . $this->error, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::insert Error " . $this->error, LOG_ERR);
                     $this->db->rollback();
                     return -3;
                 }
@@ -629,7 +629,7 @@ class FactureLigne extends CommonInvoiceLine
 
         $sql .= " WHERE rowid = " . ((int)$this->rowid);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if (!$error) {
@@ -693,7 +693,7 @@ class FactureLigne extends CommonInvoiceLine
         $sql .= ' SET fk_facture_line = NULL';
         $sql .= ' WHERE fk_facture_line = ' . ((int)$this->id);
 
-        dol_syslog(get_class($this) . "::deleteline", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::deleteline", LOG_DEBUG);
         $result = $this->db->query($sql);
         if (!$result) {
             $this->error = $this->db->error();
@@ -737,7 +737,7 @@ class FactureLigne extends CommonInvoiceLine
     {
         // phpcs:enable
         $this->db->begin();
-        dol_syslog(get_class($this) . "::update_total", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update_total", LOG_DEBUG);
 
         // Clean parameters
         if (empty($this->total_localtax1)) {
@@ -756,7 +756,7 @@ class FactureLigne extends CommonInvoiceLine
         $sql .= ",total_ttc=" . price2num($this->total_ttc);
         $sql .= " WHERE rowid = " . ((int)$this->rowid);
 
-        dol_syslog(get_class($this) . "::update_total", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update_total", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -830,7 +830,7 @@ class FactureLigne extends CommonInvoiceLine
                 return $returnPercent;
             } else {
                 $this->error = $this->db->error();
-                dol_syslog(get_class($this) . "::select Error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::select Error " . $this->error, LOG_ERR);
                 $this->db->rollback();
                 return -1;
             }
@@ -902,7 +902,7 @@ class FactureLigne extends CommonInvoiceLine
                     }
                 } else {
                     $this->error = $this->db->error();
-                    dol_syslog(get_class($this) . "::select Error " . $this->error, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::select Error " . $this->error, LOG_ERR);
                     $this->db->rollback();
                     return -1;
                 }

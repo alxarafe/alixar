@@ -173,7 +173,7 @@ class Import
 		// phpcs:enable
         global $langs, $conf;
 
-        dol_syslog(get_class($this) . "::load_arrays user=" . $user->id . " filter=" . $filter);
+        dol_syslog(get_only_class($this) . "::load_arrays user=" . $user->id . " filter=" . $filter);
 
         $i = 0;
 
@@ -308,7 +308,7 @@ class Import
 
         $indice = 0;
 
-        dol_syslog(get_class($this) . "::build_example_file " . $model);
+        dol_syslog(get_only_class($this) . "::build_example_file " . $model);
 
         // Create the import class for the model Import_XXX
         $dir = DOL_DOCUMENT_ROOT . "/core/modules/import/";
@@ -400,7 +400,7 @@ class Import
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'import_model as em';
         $sql .= ' WHERE em.rowid = ' . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $obj = $this->db->fetch_object($result);
@@ -437,7 +437,7 @@ class Import
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -458,7 +458,7 @@ class Import
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();

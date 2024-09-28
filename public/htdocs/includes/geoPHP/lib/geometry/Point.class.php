@@ -174,7 +174,7 @@ class Point extends Geometry
 
     public function equals($geometry)
     {
-        if (get_class($geometry) != 'Point') {
+        if (get_only_class($geometry) != 'Point') {
             return false;
         }
         if (!$this->isEmpty() && !$geometry->isEmpty()) {

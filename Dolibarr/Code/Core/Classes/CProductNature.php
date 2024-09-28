@@ -88,11 +88,11 @@ class CProductNature extends CommonDict
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         // Commit or rollback
         if (!$resql) {
-            dol_syslog(get_class($this) . "::create " . $this->db->lasterror(), LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->db->lasterror(), LOG_ERR);
             $this->error = "Error " . $this->db->lasterror();
             $this->db->rollback();
             return -1;
@@ -260,11 +260,11 @@ class CProductNature extends CommonDict
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         // Commit or rollback
         if (!$resql) {
-            dol_syslog(get_class($this) . "::update Error " . $this->db->lasterror(), LOG_ERR);
+            dol_syslog(get_only_class($this) . "::update Error " . $this->db->lasterror(), LOG_ERR);
             $this->error = "Error " . $this->db->lasterror();
             $this->db->rollback();
             return -1;
@@ -292,11 +292,11 @@ class CProductNature extends CommonDict
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $resql = $this->db->query($sql);
         // Commit or rollback
         if (!$resql) {
-            dol_syslog(get_class($this) . "::delete Error " . $this->db->lasterror(), LOG_ERR);
+            dol_syslog(get_only_class($this) . "::delete Error " . $this->db->lasterror(), LOG_ERR);
             $this->error = "Error " . $this->db->lasterror();
             $this->db->rollback();
             return -1;

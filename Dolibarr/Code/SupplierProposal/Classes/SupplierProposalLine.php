@@ -332,7 +332,7 @@ class SupplierProposalLine extends CommonObjectLine
 
         $error = 0;
 
-        dol_syslog(get_class($this) . "::insert rang=" . $this->rang);
+        dol_syslog(get_only_class($this) . "::insert rang=" . $this->rang);
 
         // Clean parameters
         if (empty($this->tva_tx)) {
@@ -453,7 +453,7 @@ class SupplierProposalLine extends CommonObjectLine
         $sql .= ", " . ($this->fk_unit ? ((int) $this->fk_unit) : 'null');
         $sql .= ')';
 
-        dol_syslog(get_class($this) . '::insert', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::insert', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . 'supplier_proposaldet');
@@ -505,7 +505,7 @@ class SupplierProposalLine extends CommonObjectLine
                 $result = $this->deleteExtraFields();
                 if ($result < 0) {
                     $error++;
-                    dol_syslog(get_class($this) . "::delete error -4 " . $this->error, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::delete error -4 " . $this->error, LOG_ERR);
                 }
             }
 
@@ -646,7 +646,7 @@ class SupplierProposalLine extends CommonObjectLine
 
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if (!$error) {

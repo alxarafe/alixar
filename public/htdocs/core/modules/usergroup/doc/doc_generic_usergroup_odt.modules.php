@@ -188,7 +188,7 @@ class doc_generic_usergroup_odt extends ModelePDFUserGroup
                 $texte .= "</td></tr>";
                 $texte .= '</table>';
             }
-            $texte .= '<div id="div_' . get_class($this) . '" class="hiddenx">';
+            $texte .= '<div id="div_' . get_only_class($this) . '" class="hiddenx">';
             // Show list of found files
             foreach ($listoffiles as $file) {
                 $texte .= '- ' . $file['name'] . ' <a href="' . constant('BASE_URL') . 'document.php?modulepart=doctemplates&file=usergroups/' . urlencode(basename($file['name'])) . '">' . img_picto('', 'listlight') . '</a>';

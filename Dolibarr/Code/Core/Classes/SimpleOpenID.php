@@ -507,7 +507,7 @@ class SimpleOpenID
             $url = getDolGlobalString('MAIN_AUTHENTICATION_OPENID_URL');
         }
 
-        dol_syslog(get_class($this) . '::sendDiscoveryRequestToGetXRDS get XRDS');
+        dol_syslog(get_only_class($this) . '::sendDiscoveryRequestToGetXRDS get XRDS');
 
         $addheaders = array('Accept: application/xrds+xml');
         $response = getURLContent($url, 'GET', '', 1, $addheaders, array('http', 'https'), 0);
@@ -535,7 +535,7 @@ class SimpleOpenID
             $this->ErrorStore('OPENID_NOSERVERSFOUND');
             return false;
         } else {
-            dol_syslog(get_class($this) . '::sendDiscoveryRequestToGetXRDS found endpoint = ' . $server);
+            dol_syslog(get_only_class($this) . '::sendDiscoveryRequestToGetXRDS found endpoint = ' . $server);
             $this->SetOpenIDServer($server);
             return $server;
         }

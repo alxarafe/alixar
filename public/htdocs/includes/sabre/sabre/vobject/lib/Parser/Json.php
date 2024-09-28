@@ -165,7 +165,7 @@ class Json extends Parser
         // If the value type we received (e.g.: TEXT) was not the default value
         // type for the given property (e.g.: BDAY), we need to add a VALUE=
         // parameter.
-        if ($defaultPropertyClass !== get_class($prop)) {
+        if ($defaultPropertyClass !== get_only_class($prop)) {
             $prop['VALUE'] = $valueType;
         }
 

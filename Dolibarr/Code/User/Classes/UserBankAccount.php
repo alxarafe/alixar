@@ -25,13 +25,7 @@
 
 namespace Dolibarr\Code\User\Classes;
 
-/**
- *      \file       htdocs/user/class/userbankaccount.class.php
- *      \ingroup    user
- *      \brief      File of class to manage bank accounts description of users
- */
-
-
+use Dolibarr\Code\Compta\Classes\Account;
 use DoliDB;
 
 /**
@@ -163,7 +157,7 @@ class UserBankAccount extends Account
         // Triggers
         if (!$error && !$notrigger) {
             // Call triggers
-            $result = $this->call_trigger(strtoupper(get_class($this)) . '_MODIFY', $user);
+            $result = $this->call_trigger(strtoupper(get_only_class($this)) . '_MODIFY', $user);
             if ($result < 0) {
                 $error++;
             } //Do also here what you must do to rollback action if trigger fail
@@ -289,7 +283,7 @@ class UserBankAccount extends Account
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . $this->table_element;
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $result = $this->db->query($sql);
             if ($result) {
                 // Remove extrafields
@@ -298,7 +292,7 @@ class UserBankAccount extends Account
                     $result = $this->deleteExtraFields();
                     if ($result < 0) {
                         $error++;
-                        dol_syslog(get_class($this)."::delete error -4 ".$this->error, LOG_ERR);
+                        dol_syslog(get_only_class($this)."::delete error -4 ".$this->error, LOG_ERR);
                     }
                 }*/
             } else {

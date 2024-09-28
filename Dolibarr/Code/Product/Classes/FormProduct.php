@@ -151,7 +151,7 @@ class FormProduct
         }
         $sql .= " ORDER BY " . $orderBy;
 
-        dol_syslog(get_class($this) . '::loadWarehouses', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::loadWarehouses', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -213,7 +213,7 @@ class FormProduct
 
         $sql .= " ORDER BY " . $orderBy;
 
-        dol_syslog(get_class($this) . '::loadWorkstations', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::loadWorkstations', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -295,7 +295,7 @@ class FormProduct
     {
         global $conf, $langs, $user, $hookmanager;
 
-        dol_syslog(get_class($this) . "::selectWarehouses " . (is_array($selected) ? 'selected is array' : $selected) . ", $htmlname, $filterstatus, $empty, $disabled, $fk_product, $empty_label, $showstock, $forcecombo, $morecss", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectWarehouses " . (is_array($selected) ? 'selected is array' : $selected) . ", $htmlname, $filterstatus, $empty, $disabled, $fk_product, $empty_label, $showstock, $forcecombo, $morecss", LOG_DEBUG);
 
         $out = '';
         if (!getDolGlobalString('ENTREPOT_EXTRA_STATUS')) {
@@ -419,7 +419,7 @@ class FormProduct
     {
         global $conf, $langs, $user, $hookmanager;
 
-        dol_syslog(get_class($this) . "::selectWorkstations $selected, $htmlname, $empty, $disabled, $fk_product, $empty_label, $forcecombo, $morecss", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectWorkstations $selected, $htmlname, $empty, $disabled, $fk_product, $empty_label, $forcecombo, $morecss", LOG_DEBUG);
 
         $filterstatus = '';
         $out = '';
@@ -716,7 +716,7 @@ class FormProduct
     {
         global $conf, $langs;
 
-        dol_syslog(get_class($this) . "::selectLotStock $selected, $htmlname, $filterstatus, $empty, $disabled, $fk_product, $fk_entrepot, $empty_label, $forcecombo, $morecss", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectLotStock $selected, $htmlname, $filterstatus, $empty, $disabled, $fk_product, $fk_entrepot, $empty_label, $forcecombo, $morecss", LOG_DEBUG);
 
         $out = '';
         $productIdArray = array();
@@ -799,7 +799,7 @@ class FormProduct
     {
         global $langs, $hookmanager;
 
-        dol_syslog(get_class($this) . "::selectLotDataList $htmlname, $empty, $fk_product, $fk_entrepot", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectLotDataList $htmlname, $empty, $fk_product, $fk_entrepot", LOG_DEBUG);
 
         $out = '';
         $productIdArray = array();
@@ -916,7 +916,7 @@ class FormProduct
             }
             $sql .= " ORDER BY e.ref, pb.batch";
 
-            dol_syslog(get_class($this) . '::loadLotStock', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::loadLotStock', LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $num = $this->db->num_rows($resql);

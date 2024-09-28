@@ -387,7 +387,7 @@ function build_rssfile($format, $title, $desc, $events_array, $outputfile, $filt
             if ($eventqualified) {
                 $nbevents++;
 
-                if (is_object($event) && get_class($event) == 'WebsitePage') {
+                if (is_object($event) && get_only_class($event) == 'WebsitePage') {
                     // Convert object WebsitePage into an array $event
                     $tmpevent = array();
                     $tmpevent['uid'] = (string)$event->id;

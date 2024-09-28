@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006-2018  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2006-2021	Regis Houssin		<regis.houssin@inodbox.com>
+/* Copyright (C) 2006-2018  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006-2021	Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,11 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *      \file       htdocs/admin/tools/dolibarr_export.php
- *      \ingroup    core
- *      \brief      Page to export database
- */
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormFile;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -77,7 +74,6 @@ if ($action == 'deletefile') {
     }
     $action = '';
 }
-
 
 /*
  * View

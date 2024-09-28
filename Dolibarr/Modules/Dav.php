@@ -64,7 +64,7 @@ class Dav extends DolibarrModules
         //$this->familyinfo = array('myownfamily' => array('position' => '01', 'label' => $langs->trans("MyOwnFamily")));
 
         // Module label (no space allowed), used if translation string 'ModuledavName' not found (MyModue is name of module).
-        $this->name = preg_replace('/^mod/i', '', get_class($this));
+        $this->name = preg_replace('/^mod/i', '', get_only_class($this));
         // Module description, used if translation string 'ModuledavDesc' not found (MyModue is name of module).
         $this->description = "davDescription";
         // Used only if file README.md and README-LL.md not found.

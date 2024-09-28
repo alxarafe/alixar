@@ -400,7 +400,7 @@ class SupplierInvoiceLine extends CommonObjectLine
     {
         global $user;
 
-        dol_syslog(get_class($this) . "::deleteline rowid=" . ((int) $this->id), LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::deleteline rowid=" . ((int)$this->id), LOG_DEBUG);
 
         $error = 0;
 
@@ -419,7 +419,7 @@ class SupplierInvoiceLine extends CommonObjectLine
             $result = $this->deleteExtraFields();
             if ($result < 0) {
                 $error++;
-                dol_syslog(get_class($this) . "::delete error -4 " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error -4 " . $this->error, LOG_ERR);
             }
         }
 
@@ -427,7 +427,7 @@ class SupplierInvoiceLine extends CommonObjectLine
             // Supprime ligne
             $sql = 'DELETE FROM ' . MAIN_DB_PREFIX . 'facture_fourn_det ';
             $sql .= " WHERE rowid = " . ((int) $this->id);
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -543,7 +543,7 @@ class SupplierInvoiceLine extends CommonObjectLine
 
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         if (!$resql) {
@@ -595,7 +595,7 @@ class SupplierInvoiceLine extends CommonObjectLine
 
         $error = 0;
 
-        dol_syslog(get_class($this) . "::insert rang=" . $this->rang, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::insert rang=" . $this->rang, LOG_DEBUG);
 
         // Clean parameters
         $this->desc = trim($this->desc);
@@ -754,7 +754,7 @@ class SupplierInvoiceLine extends CommonObjectLine
                         if ($discount->fk_facture_line > 0) {
                             if (empty($noerrorifdiscountalreadylinked)) {
                                 $this->error = $langs->trans("ErrorDiscountAlreadyUsed", $discount->id);
-                                dol_syslog(get_class($this) . "::insert Error " . $this->error, LOG_ERR);
+                                dol_syslog(get_only_class($this) . "::insert Error " . $this->error, LOG_ERR);
                                 $this->db->rollback();
                                 return -3;
                             }
@@ -762,20 +762,20 @@ class SupplierInvoiceLine extends CommonObjectLine
                             $result = $discount->link_to_invoice($this->id, 0);
                             if ($result < 0) {
                                 $this->error = $discount->error;
-                                dol_syslog(get_class($this) . "::insert Error " . $this->error, LOG_ERR);
+                                dol_syslog(get_only_class($this) . "::insert Error " . $this->error, LOG_ERR);
                                 $this->db->rollback();
                                 return -3;
                             }
                         }
                     } else {
                         $this->error = $langs->trans("ErrorADiscountThatHasBeenRemovedIsIncluded");
-                        dol_syslog(get_class($this) . "::insert Error " . $this->error, LOG_ERR);
+                        dol_syslog(get_only_class($this) . "::insert Error " . $this->error, LOG_ERR);
                         $this->db->rollback();
                         return -3;
                     }
                 } else {
                     $this->error = $discount->error;
-                    dol_syslog(get_class($this) . "::insert Error " . $this->error, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::insert Error " . $this->error, LOG_ERR);
                     $this->db->rollback();
                     return -3;
                 }

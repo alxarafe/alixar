@@ -199,7 +199,7 @@ $morehtmlright .= dolGetButtonTitle($langs->trans('MessageListViewType'), '', 'f
 if (isModEnabled('agenda')) {
     $permok = $user->hasRight('agenda', 'myactions', 'create');
     if ((!empty($objproduct->id) || !empty($objcon->id)) && $permok) {
-        if (get_class($objproduct) == 'Product') {
+        if (get_only_class($objproduct) == 'Product') {
             $out .= '&amp;prodid=' . $objproduct->id . '&origin=product&originid=' . $id;
         }
         $out .= (!empty($objcon->id) ? '&amp;contactid=' . $objcon->id : '') . '&amp;backtopage=' . $_SERVER["PHP_SELF"] . '?id=' . $object->id;

@@ -383,7 +383,7 @@ class Paiement extends CommonObject
             return -1;
         }
 
-        dol_syslog(get_class($this) . "::create insert paiement (closepaidinvoices = " . $closepaidinvoices . ")", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create insert paiement (closepaidinvoices = " . $closepaidinvoices . ")", LOG_DEBUG);
 
         $this->db->begin();
 
@@ -420,7 +420,7 @@ class Paiement extends CommonObject
                     $sql = "INSERT INTO " . MAIN_DB_PREFIX . "paiement_facture (fk_facture, fk_paiement, amount, multicurrency_amount, multicurrency_code, multicurrency_tx)";
                     $sql .= " VALUES (" . ((int) $facid) . ", " . ((int) $this->id) . ", " . ((float) $amount) . ", " . ((float) $this->multicurrency_amounts[$key]) . ", " . ($currencyofpayment ? "'" . $this->db->escape($currencyofpayment) . "'" : 'NULL') . ", " . (!empty($this->multicurrency_tx) ? (float) $currencytxofpayment : 1) . ")";
 
-                    dol_syslog(get_class($this) . '::create Amount line ' . $key . ' insert paiement_facture', LOG_DEBUG);
+                    dol_syslog(get_only_class($this) . '::create Amount line ' . $key . ' insert paiement_facture', LOG_DEBUG);
                     $resql = $this->db->query($sql);
                     if ($resql) {
                         $invoice = new Facture($this->db);
@@ -529,7 +529,7 @@ class Paiement extends CommonObject
 
                         // Regenerate documents of invoices
                         if (!getDolGlobalString('MAIN_DISABLE_PDF_AUTOUPDATE')) {
-                            dol_syslog(get_class($this) . '::create Regenerate the document after inserting payment for thirdparty default_lang=' . (is_object($invoice->thirdparty) ? $invoice->thirdparty->default_lang : 'null'), LOG_DEBUG);
+                            dol_syslog(get_only_class($this) . '::create Regenerate the document after inserting payment for thirdparty default_lang=' . (is_object($invoice->thirdparty) ? $invoice->thirdparty->default_lang : 'null'), LOG_DEBUG);
 
                             $newlang = '';
                             $outputlangs = $langs;
@@ -550,7 +550,7 @@ class Paiement extends CommonObject
 
                             $result = $invoice->generateDocument($invoice->model_pdf, $outputlangs, $hidedetails, $hidedesc, $hideref);
 
-                            dol_syslog(get_class($this) . '::create Regenerate end result=' . $result, LOG_DEBUG);
+                            dol_syslog(get_only_class($this) . '::create Regenerate end result=' . $result, LOG_DEBUG);
 
                             if ($result < 0) {
                                 $this->error = $invoice->error;
@@ -563,11 +563,11 @@ class Paiement extends CommonObject
                         $error++;
                     }
                 } else {
-                    dol_syslog(get_class($this) . '::Create Amount line ' . $key . ' not a number. We discard it.');
+                    dol_syslog(get_only_class($this) . '::Create Amount line ' . $key . ' not a number. We discard it.');
                 }
             }
 
-            dol_syslog(get_class($this) . '::create Now we call the triggers if no error (error = ' . $error . ')', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::create Now we call the triggers if no error (error = ' . $error . ')', LOG_DEBUG);
 
             if (!$error) {    // All payments into $this->amounts were recorded without errors
                 // Appel des triggers
@@ -713,7 +713,7 @@ class Paiement extends CommonObject
         if (isModEnabled("bank")) {
             if ($accountid <= 0) {
                 $this->error = 'Bad value for parameter accountid=' . $accountid;
-                dol_syslog(get_class($this) . '::addPaymentToBank ' . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . '::addPaymentToBank ' . $this->error, LOG_ERR);
                 return -1;
             }
 
@@ -812,7 +812,7 @@ class Paiement extends CommonObject
                                     'company'
                                 );
                                 if ($result <= 0) {
-                                    dol_syslog(get_class($this) . '::addPaymentToBank ' . $this->db->lasterror());
+                                    dol_syslog(get_only_class($this) . '::addPaymentToBank ' . $this->db->lasterror());
                                 }
                                 $linkaddedforthirdparty[$fac->thirdparty->id] = $fac->thirdparty->id; // Mark as done for this thirdparty
                             }
@@ -830,7 +830,7 @@ class Paiement extends CommonObject
                                     'company'
                                 );
                                 if ($result <= 0) {
-                                    dol_syslog(get_class($this) . '::addPaymentToBank ' . $this->db->lasterror());
+                                    dol_syslog(get_only_class($this) . '::addPaymentToBank ' . $this->db->lasterror());
                                 }
                                 $linkaddedforthirdparty[$fac->thirdparty->id] = $fac->thirdparty->id; // Mark as done for this thirdparty
                             }
@@ -902,13 +902,13 @@ class Paiement extends CommonObject
         $sql = 'UPDATE ' . MAIN_DB_PREFIX . $this->table_element . ' set fk_bank = ' . ((int) $id_bank);
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . '::update_fk_bank', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::update_fk_bank', LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             return 1;
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . '::update_fk_bank ' . $this->error);
+            dol_syslog(get_only_class($this) . '::update_fk_bank ' . $this->error);
             return -1;
         }
     }
@@ -928,7 +928,7 @@ class Paiement extends CommonObject
         if (!empty($date) && $this->statut != 1) {
             $this->db->begin();
 
-            dol_syslog(get_class($this) . "::update_date with date = " . $date, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::update_date with date = " . $date, LOG_DEBUG);
 
             $sql = "UPDATE " . MAIN_DB_PREFIX . $this->table_element;
             $sql .= " SET datep = '" . $this->db->idate($date) . "'";
@@ -985,7 +985,7 @@ class Paiement extends CommonObject
             $sql .= " SET num_paiement = '" . $this->db->escape($num_payment) . "'";
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::update_num", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::update_num", LOG_DEBUG);
             $result = $this->db->query($sql);
             if ($result) {
                 $this->num_payment = $this->db->escape($num_payment);
@@ -1020,13 +1020,13 @@ class Paiement extends CommonObject
     {
         $sql = 'UPDATE ' . MAIN_DB_PREFIX . $this->table_element . ' SET statut = 1 WHERE rowid = ' . ((int) $this->id);
 
-        dol_syslog(get_class($this) . '::valide', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::valide', LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             return 1;
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . '::valide ' . $this->error);
+            dol_syslog(get_only_class($this) . '::valide ' . $this->error);
             return -1;
         }
     }
@@ -1041,13 +1041,13 @@ class Paiement extends CommonObject
     {
         $sql = 'UPDATE ' . MAIN_DB_PREFIX . $this->table_element . ' SET statut = 2 WHERE rowid = ' . ((int) $this->id);
 
-        dol_syslog(get_class($this) . '::reject', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::reject', LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             return 1;
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . '::reject ' . $this->error);
+            dol_syslog(get_only_class($this) . '::reject ' . $this->error);
             return -1;
         }
     }
@@ -1064,7 +1064,7 @@ class Paiement extends CommonObject
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'paiement as p';
         $sql .= ' WHERE p.rowid = ' . ((int) $id);
 
-        dol_syslog(get_class($this) . '::info', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::info', LOG_DEBUG);
         $result = $this->db->query($sql);
 
         if ($result) {
@@ -1114,7 +1114,7 @@ class Paiement extends CommonObject
             return $billsarray;
         } else {
             $this->error = $this->db->error();
-            dol_syslog(get_class($this) . '::getBillsArray Error ' . $this->error . ' -', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::getBillsArray Error ' . $this->error . ' -', LOG_DEBUG);
             return -1;
         }
     }
@@ -1145,7 +1145,7 @@ class Paiement extends CommonObject
             return $amounts;
         } else {
             $this->error = $this->db->error();
-            dol_syslog(get_class($this) . '::getAmountsArray Error ' . $this->error . ' -', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::getAmountsArray Error ' . $this->error . ' -', LOG_DEBUG);
             return -1;
         }
     }

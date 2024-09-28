@@ -222,7 +222,7 @@ class Dolresource extends CommonObject
         // Database session
         $this->db->begin();
         try {
-            dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         } catch (Exception $exception) {
             error_log('dol_syslog error: ' . $exception->getMessage());
         }
@@ -251,7 +251,7 @@ class Dolresource extends CommonObject
         if ($error) {
             foreach ($this->errors as $errmsg) {
                 try {
-                    dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                 } catch (Exception $exception) {
                     error_log('dol_syslog error: ' . $exception->getMessage());
                 }
@@ -302,7 +302,7 @@ class Dolresource extends CommonObject
             $sql .= " WHERE t.ref = '" . $this->db->escape($ref) . "'";
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -337,7 +337,7 @@ class Dolresource extends CommonObject
             return $this->id;
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . "::fetch " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::fetch " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -419,7 +419,7 @@ class Dolresource extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -464,7 +464,7 @@ class Dolresource extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -496,7 +496,7 @@ class Dolresource extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . "element_resources as t";
         $sql .= " WHERE t.rowid = " . ($id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -550,11 +550,11 @@ class Dolresource extends CommonObject
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . $this->table_element;
         $sql .= " WHERE rowid = " . ($rowid);
 
-        dol_syslog(get_class($this), LOG_DEBUG);
+        dol_syslog(get_only_class($this), LOG_DEBUG);
         if ($this->db->query($sql)) {
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "element_resources";
             $sql .= " WHERE element_type='resource' AND resource_id = " . ((int) $rowid);
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $this->error = $this->db->lasterror();
@@ -570,7 +570,7 @@ class Dolresource extends CommonObject
             $result = $this->deleteExtraFields();
             if ($result < 0) {
                 $error++;
-                dol_syslog(get_class($this) . "::delete error -3 " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error -3 " . $this->error, LOG_ERR);
             }
         }
 
@@ -679,7 +679,7 @@ class Dolresource extends CommonObject
             $sql .= $this->db->plimit($limit, $offset);
         }
 
-        dol_syslog(get_class($this) . "::fetchAll", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchAll", LOG_DEBUG);
 
         $this->lines = array();
         $resql = $this->db->query($sql);
@@ -765,7 +765,7 @@ class Dolresource extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -786,7 +786,7 @@ class Dolresource extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -817,7 +817,7 @@ class Dolresource extends CommonObject
         }
         $sql .= ' ORDER BY resource_type';
 
-        dol_syslog(get_class($this) . "::getElementResources", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getElementResources", LOG_DEBUG);
 
         $resources = array();
         $resql = $this->db->query($sql);
@@ -876,7 +876,7 @@ class Dolresource extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . "c_type_resource";
         $sql .= " WHERE active > 0";
         $sql .= " ORDER BY rowid";
-        dol_syslog(get_class($this) . "::load_cache_code_type_resource", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::load_cache_code_type_resource", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);

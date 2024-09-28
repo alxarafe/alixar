@@ -94,7 +94,7 @@ class PartnershipUtils
             return -1;
         }
 
-        dol_syslog(get_class($this) . "::doCancelStatusOfMemberPartnership cancel expired partnerships with grace delay of " . $gracedelay);
+        dol_syslog(get_only_class($this) . "::doCancelStatusOfMemberPartnership cancel expired partnerships with grace delay of " . $gracedelay);
 
         $now = dol_now();
         $datetotest = dol_time_plus_duree($now, -1 * abs((float) $gracedelay), 'd');
@@ -307,7 +307,7 @@ class PartnershipUtils
 
         $fk_partner = ($managedfor == 'member') ? 'fk_member' : 'fk_soc';
 
-        dol_syslog(get_class($this) . "::doWarningOfPartnershipIfDolibarrBacklinkNotfound Warning of partnership");
+        dol_syslog(get_only_class($this) . "::doWarningOfPartnershipIfDolibarrBacklinkNotfound Warning of partnership");
 
         $now = dol_now();
         //$datetotest = dol_time_plus_duree($now, -1 * abs($gracedelay), 'd');

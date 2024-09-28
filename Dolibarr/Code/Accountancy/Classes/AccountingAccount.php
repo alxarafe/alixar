@@ -202,7 +202,7 @@ class AccountingAccount extends CommonObject
                 $sql .= " AND a.fk_pcg_version = '" . $this->db->escape($limittoachartaccount) . "'";
             }
 
-            dol_syslog(get_class($this) . "::fetch rowid=" . $rowid . " account_number=" . $account_number, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::fetch rowid=" . $rowid . " account_number=" . $account_number, LOG_DEBUG);
 
             $result = $this->db->query($sql);
             if ($result) {
@@ -309,7 +309,7 @@ class AccountingAccount extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -333,7 +333,7 @@ class AccountingAccount extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -372,7 +372,7 @@ class AccountingAccount extends CommonObject
         $sql .= " , reconcilable = " . (int) $this->reconcilable;
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->db->commit();
@@ -406,7 +406,7 @@ class AccountingAccount extends CommonObject
         $sql .= " (SELECT fk_code_ventilation FROM " . MAIN_DB_PREFIX . "facture_fourn_det";
         $sql .= " WHERE fk_code_ventilation=" . ((int) $this->id) . ")";
 
-        dol_syslog(get_class($this) . "::checkUsage", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::checkUsage", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         if ($resql) {
@@ -443,7 +443,7 @@ class AccountingAccount extends CommonObject
                 $sql = "DELETE FROM " . MAIN_DB_PREFIX . "accounting_account";
                 $sql .= " WHERE rowid=" . ((int) $this->id);
 
-                dol_syslog(get_class($this) . "::delete sql=" . $sql);
+                dol_syslog(get_only_class($this) . "::delete sql=" . $sql);
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $error++;
@@ -454,7 +454,7 @@ class AccountingAccount extends CommonObject
             // Commit or rollback
             if ($error) {
                 foreach ($this->errors as $errmsg) {
-                    dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                     $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
                 }
                 $this->db->rollback();
@@ -592,7 +592,7 @@ class AccountingAccount extends CommonObject
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'accounting_account as a';
         $sql .= ' WHERE a.rowid = ' . ((int) $id);
 
-        dol_syslog(get_class($this) . '::info sql=' . $sql);
+        dol_syslog(get_only_class($this) . '::info sql=' . $sql);
         $resql = $this->db->query($sql);
 
         if ($resql) {
@@ -635,7 +635,7 @@ class AccountingAccount extends CommonObject
             $sql .= "SET " . $this->db->sanitize($fieldtouse) . " = 0";
             $sql .= " WHERE rowid = " . ((int) $id);
 
-            dol_syslog(get_class($this) . "::accountDeactivate " . $fieldtouse, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::accountDeactivate " . $fieldtouse, LOG_DEBUG);
             $result = $this->db->query($sql);
 
             if ($result) {
@@ -673,7 +673,7 @@ class AccountingAccount extends CommonObject
         $sql .= " SET " . $this->db->sanitize($fieldtouse) . " = 1";
         $sql .= " WHERE rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::account_activate " . $fieldtouse, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::account_activate " . $fieldtouse, LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->db->commit();

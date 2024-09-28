@@ -186,7 +186,7 @@ class Salary extends CommonObject
         $sql .= " fk_user_modif=" . ($this->fk_user_modif > 0 ? (int) $this->fk_user_modif : (int) $user->id);
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
@@ -251,7 +251,7 @@ class Salary extends CommonObject
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "bank as b ON s.fk_bank = b.rowid";
         $sql .= " WHERE s.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -412,7 +412,7 @@ class Salary extends CommonObject
         $sql .= ", " . ((int) $conf->entity);
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "salary");
@@ -603,7 +603,7 @@ class Salary extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . $table;
         $sql .= " WHERE " . $field . " = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::getSommePaiement", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getSommePaiement", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
 
@@ -647,7 +647,7 @@ class Salary extends CommonObject
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'salary as ps';
         $sql .= ' WHERE ps.rowid = ' . ((int) $id);
 
-        dol_syslog(get_class($this) . '::info', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::info', LOG_DEBUG);
         $result = $this->db->query($sql);
 
         if ($result) {
@@ -679,7 +679,7 @@ class Salary extends CommonObject
     public function set_paid($user)
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::set_paid is deprecated, use setPaid instead", LOG_NOTICE);
+        dol_syslog(get_only_class($this) . "::set_paid is deprecated, use setPaid instead", LOG_NOTICE);
         return $this->setPaid($user);
     }
 
@@ -855,7 +855,7 @@ class Salary extends CommonObject
 
         $error = 0;
 
-        dol_syslog(get_class($this) . "::demande_prelevement", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::demande_prelevement", LOG_DEBUG);
         if ($this->paye == 0) {
             $bac = new CompanyBankAccount($this->db);
             // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
@@ -873,7 +873,7 @@ class Salary extends CommonObject
                 $sql .= " AND traite = 0";
             }
 
-            dol_syslog(get_class($this) . "::demande_prelevement", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::demande_prelevement", LOG_DEBUG);
 
             $resql = $this->db->query($sql);
             if ($resql) {
@@ -915,16 +915,16 @@ class Salary extends CommonObject
                         $sql .= ", " . ((int) $conf->entity);
                         $sql .= ")";
 
-                        dol_syslog(get_class($this) . "::demande_prelevement", LOG_DEBUG);
+                        dol_syslog(get_only_class($this) . "::demande_prelevement", LOG_DEBUG);
                         $resql = $this->db->query($sql);
                         if (!$resql) {
                             $this->error = $this->db->lasterror();
-                            dol_syslog(get_class($this) . '::demandeprelevement Erreur');
+                            dol_syslog(get_only_class($this) . '::demandeprelevement Erreur');
                             $error++;
                         }
                     } else {
                         $this->error = 'WithdrawRequestErrorNilAmount';
-                        dol_syslog(get_class($this) . '::demandeprelevement WithdrawRequestErrorNilAmount');
+                        dol_syslog(get_only_class($this) . '::demandeprelevement WithdrawRequestErrorNilAmount');
                         $error++;
                     }
 
@@ -942,17 +942,17 @@ class Salary extends CommonObject
                     return 1;
                 } else {
                     $this->error = "A request already exists";
-                    dol_syslog(get_class($this) . '::demandeprelevement Can t create a request to generate a direct debit, a request already exists.');
+                    dol_syslog(get_only_class($this) . '::demandeprelevement Can t create a request to generate a direct debit, a request already exists.');
                     return 0;
                 }
             } else {
                 $this->error = $this->db->error();
-                dol_syslog(get_class($this) . '::demandeprelevement Error -2');
+                dol_syslog(get_only_class($this) . '::demandeprelevement Error -2');
                 return -2;
             }
         } else {
             $this->error = "Status of invoice does not allow this";
-            dol_syslog(get_class($this) . "::demandeprelevement " . $this->error . " $this->status, $this->paye, $this->mode_reglement_id");
+            dol_syslog(get_only_class($this) . "::demandeprelevement " . $this->error . " $this->status, $this->paye, $this->mode_reglement_id");
             return -3;
         }
     }
@@ -975,7 +975,7 @@ class Salary extends CommonObject
             return 0;
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . '::demande_prelevement_delete Error ' . $this->error);
+            dol_syslog(get_only_class($this) . '::demande_prelevement_delete Error ' . $this->error);
             return -1;
         }
     }

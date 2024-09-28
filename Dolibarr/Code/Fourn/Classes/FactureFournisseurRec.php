@@ -557,7 +557,7 @@ class FactureFournisseurRec extends CommonInvoice
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if (!$error) {
@@ -831,7 +831,7 @@ class FactureFournisseurRec extends CommonInvoice
     {
         $rowid = $this->id;
 
-        dol_syslog(get_class($this) . "::delete rowid=" . ((int) $rowid), LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete rowid=" . ((int)$rowid), LOG_DEBUG);
 
         $error = 0;
         $this->db->begin();
@@ -915,7 +915,7 @@ class FactureFournisseurRec extends CommonInvoice
 
         $facid = $this->id; //Supplier invoice template ID linked to
 
-        dol_syslog(get_class($this) . "::addline facid=$facid,desc=$desc,pu_ht=$pu_ht,qty=$qty,txtva=$txtva,txlocaltax1=$txlocaltax1,txlocaltax2=$txlocaltax2,fk_product=$fk_product,remise_percent=$remise_percent,info_bits=$info_bits,price_base_type=$price_base_type,pu_ttc=$pu_ttc,type=$type,fk_unit=$fk_unit,pu_ht_devise=$pu_ht_devise,date_start_fill=$date_start,date_end_fill=$date_end", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::addline facid=$facid,desc=$desc,pu_ht=$pu_ht,qty=$qty,txtva=$txtva,txlocaltax1=$txlocaltax1,txlocaltax2=$txlocaltax2,fk_product=$fk_product,remise_percent=$remise_percent,info_bits=$info_bits,price_base_type=$price_base_type,pu_ttc=$pu_ttc,type=$type,fk_unit=$fk_unit,pu_ht_devise=$pu_ht_devise,date_start_fill=$date_start,date_end_fill=$date_end", LOG_DEBUG);
 
         // Check if object of the line is product or service
         if ($type < 0) {
@@ -1053,7 +1053,7 @@ class FactureFournisseurRec extends CommonInvoice
             $sql .= ', ' . price2num($multicurrency_total_ttc, 'CT');
             $sql .= ')';
 
-            dol_syslog(get_class($this) . '::addline', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::addline', LOG_DEBUG);
             if ($this->db->query($sql)) {
                 $lineId = $this->db->last_insert_id(MAIN_DB_PREFIX . 'facture_fourn_det_rec');
                 $this->update_price();
@@ -1106,7 +1106,7 @@ class FactureFournisseurRec extends CommonInvoice
 
         $facid = $this->id;
 
-        dol_syslog(get_class($this) . '::updateline facid=' . $facid . " rowid=$rowid, desc=$desc, pu_ht=$pu_ht, qty=$qty, txtva=$txtva, txlocaltax1=$txlocaltax1, txlocaltax2=$txlocaltax2, fk_product=$fk_product, remise_percent=$remise_percent, info_bits=$info_bits, price_base_type=$price_base_type, pu_ttc=$pu_ttc, type=$type, fk_unit=$fk_unit, pu_ht_devise=$pu_ht_devise", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::updateline facid=' . $facid . " rowid=$rowid, desc=$desc, pu_ht=$pu_ht, qty=$qty, txtva=$txtva, txlocaltax1=$txlocaltax1, txlocaltax2=$txlocaltax2, fk_product=$fk_product, remise_percent=$remise_percent, info_bits=$info_bits, price_base_type=$price_base_type, pu_ttc=$pu_ttc, type=$type, fk_unit=$fk_unit, pu_ht_devise=$pu_ht_devise", LOG_DEBUG);
         include_once DOL_DOCUMENT_ROOT . '/core/lib/price.lib.php';
 
         // Check parameters
@@ -1210,7 +1210,7 @@ class FactureFournisseurRec extends CommonInvoice
             $sql .= ', multicurrency_total_ttc = ' . price2num($multicurrency_total_ttc);
             $sql .= ' WHERE rowid = ' . (int) $rowid;
 
-            dol_syslog(get_class($this) . '::updateline', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::updateline', LOG_DEBUG);
             if ($this->db->query($sql)) {
                 $this->id = $facid;
                 $this->update_price();
@@ -1822,12 +1822,12 @@ class FactureFournisseurRec extends CommonInvoice
     public function setFrequencyAndUnit($frequency, $unit)
     {
         if (!$this->table_element) {
-            dol_syslog(get_class($this) . '::setFrequencyAndUnit was called on object with property table_element not defined', LOG_ERR);
+            dol_syslog(get_only_class($this) . '::setFrequencyAndUnit was called on object with property table_element not defined', LOG_ERR);
             return -1;
         }
 
         if (!empty($frequency) && empty($unit)) {
-            dol_syslog(get_class($this) . '::setFrequencyAndUnit was called on object with params frequency defined but unit not defined', LOG_ERR);
+            dol_syslog(get_only_class($this) . '::setFrequencyAndUnit was called on object with params frequency defined but unit not defined', LOG_ERR);
             return -2;
         }
 
@@ -1838,7 +1838,7 @@ class FactureFournisseurRec extends CommonInvoice
         }
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . '::setFrequencyAndUnit', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::setFrequencyAndUnit', LOG_DEBUG);
 
         if ($this->db->query($sql)) {
             $this->frequency = $frequency;
@@ -1862,7 +1862,7 @@ class FactureFournisseurRec extends CommonInvoice
     public function setNextDate($date, $increment_nb_gen_done = 0)
     {
         if (!$this->table_element) {
-            dol_syslog(get_class($this) . '::setNextDate was called on object with property table_element not defined', LOG_ERR);
+            dol_syslog(get_only_class($this) . '::setNextDate was called on object with property table_element not defined', LOG_ERR);
             return -1;
         }
         $sql = "UPDATE " . MAIN_DB_PREFIX . $this->table_element;
@@ -1872,7 +1872,7 @@ class FactureFournisseurRec extends CommonInvoice
         }
         $sql .= " WHERE rowid = " . (int) $this->id;
 
-        dol_syslog(get_class($this) . '::setNextDate', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::setNextDate', LOG_DEBUG);
 
         if ($this->db->query($sql)) {
             $this->date_when = $date;
@@ -1895,7 +1895,7 @@ class FactureFournisseurRec extends CommonInvoice
     public function setMaxPeriod($nb)
     {
         if (!$this->table_element) {
-            dol_syslog(get_class($this) . '::setMaxPeriod was called on object with property table_element not defined', LOG_ERR);
+            dol_syslog(get_only_class($this) . '::setMaxPeriod was called on object with property table_element not defined', LOG_ERR);
             return -1;
         }
 
@@ -1907,7 +1907,7 @@ class FactureFournisseurRec extends CommonInvoice
         $sql .= " SET nb_gen_max = " . (int) $nb;
         $sql .= " WHERE rowid = " . (int) $this->id;
 
-        dol_syslog(get_class($this) . '::setMaxPeriod', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::setMaxPeriod', LOG_DEBUG);
 
         if ($this->db->query($sql)) {
             $this->nb_gen_max = $nb;
@@ -1927,7 +1927,7 @@ class FactureFournisseurRec extends CommonInvoice
     public function setAutoValidate($validate)
     {
         if (!$this->table_element) {
-            dol_syslog(get_class($this) . '::setAutoValidate was called on object with property table_element not defined', LOG_ERR);
+            dol_syslog(get_only_class($this) . '::setAutoValidate was called on object with property table_element not defined', LOG_ERR);
             return -1;
         }
 
@@ -1935,7 +1935,7 @@ class FactureFournisseurRec extends CommonInvoice
         $sql .= " SET auto_validate = " . ((int) $validate);
         $sql .= " WHERE rowid = " . (int) $this->id;
 
-        dol_syslog(get_class($this) . '::setAutoValidate', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::setAutoValidate', LOG_DEBUG);
 
         if ($this->db->query($sql)) {
             $this->auto_validate = $validate;
@@ -1955,7 +1955,7 @@ class FactureFournisseurRec extends CommonInvoice
     public function setGeneratePdf($validate)
     {
         if (!$this->table_element) {
-            dol_syslog(get_class($this) . '::setGeneratePdf was called on object with property table_element not defined', LOG_ERR);
+            dol_syslog(get_only_class($this) . '::setGeneratePdf was called on object with property table_element not defined', LOG_ERR);
             return -1;
         }
 
@@ -1963,7 +1963,7 @@ class FactureFournisseurRec extends CommonInvoice
         $sql .= " SET generate_pdf = " . (int) $validate;
         $sql .= " WHERE rowid = " . (int) $this->id;
 
-        dol_syslog(get_class($this) . '::setGeneratePdf', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::setGeneratePdf', LOG_DEBUG);
 
         if ($this->db->query($sql)) {
             $this->generate_pdf = $validate;
@@ -1983,7 +1983,7 @@ class FactureFournisseurRec extends CommonInvoice
     public function setModelPdf($model)
     {
         if (!$this->table_element) {
-            dol_syslog(get_class($this) . '::setModelPdf was called on object with property table_element not defined', LOG_ERR);
+            dol_syslog(get_only_class($this) . '::setModelPdf was called on object with property table_element not defined', LOG_ERR);
             return -1;
         }
 
@@ -1991,7 +1991,7 @@ class FactureFournisseurRec extends CommonInvoice
         $sql .= " SET modelpdf = '" . $this->db->escape($model) . "'";
         $sql .= " WHERE rowid = " . (int) $this->id;
 
-        dol_syslog(get_class($this) . '::setModelPdf', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::setModelPdf', LOG_DEBUG);
 
         if ($this->db->query($sql)) {
             $this->model_pdf = $model;

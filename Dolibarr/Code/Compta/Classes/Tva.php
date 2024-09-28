@@ -190,7 +190,7 @@ class Tva extends CommonObject
         $sql .= " " . ($this->fk_user_modif > 0 ? (int) $this->fk_user_modif : (int) $user->id);
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "tva");
@@ -253,7 +253,7 @@ class Tva extends CommonObject
         $sql .= " fk_user_modif=" . ((int) ($this->fk_user_modif > 0 ? $this->fk_user_modif : $user->id));
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
@@ -345,7 +345,7 @@ class Tva extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . "tva as t";
         $sql .= " WHERE t.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -401,7 +401,7 @@ class Tva extends CommonObject
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "tva";
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
@@ -639,7 +639,7 @@ class Tva extends CommonObject
         $sql .= ", " . ((int) $conf->entity);
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::addPayment", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::addPayment", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "tva"); // TODO should be called 'payment_vat'
@@ -809,7 +809,7 @@ class Tva extends CommonObject
         $sql .= ' FROM ' . MAIN_DB_PREFIX . $table;
         $sql .= " WHERE " . $field . " = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::getSommePaiement", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getSommePaiement", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $amount = 0;
@@ -838,7 +838,7 @@ class Tva extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . "tva as t";
         $sql .= " WHERE t.rowid = " . (int) $id;
 
-        dol_syslog(get_class($this) . "::info", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::info", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             if ($this->db->num_rows($result)) {

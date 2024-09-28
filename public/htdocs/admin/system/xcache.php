@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2009-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2009-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,11 +17,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *     \file       htdocs/admin/system/xcache.php
- *     \brief      Page administration XCache
- */
-
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
@@ -32,7 +27,6 @@ if (!$user->admin) {
 }
 
 $action = GETPOST('action', 'aZ09');
-
 
 /*
  * View
@@ -50,7 +44,6 @@ if (!function_exists('xcache_info')) {
     exit;
 }
 
-
 print 'Opcode cache XCache is on<br><br>' . "\n\n";
 
 print $langs->trans("Split") . ': ' . ini_get('xcache.count') . ' &nbsp; &nbsp; &nbsp; ' . $langs->trans("Recommended") . ': (cat /proc/cpuinfo | grep -c processor) + 1<br>' . "\n";
@@ -60,7 +53,6 @@ print $langs->trans("xcache.cacher") . ': ' . yn(ini_get('xcache.cacher')) . '<b
 print $langs->trans("xcache.optimizer") . ': ' . yn(ini_get('xcache.optimizer')) . ' (will be useful only with xcache v2)<br>' . "\n";
 print $langs->trans("xcache.stat") . ': ' . yn(ini_get('xcache.stat')) . '<br>' . "\n";
 print $langs->trans("xcache.coverager") . ': ' . yn(ini_get('xcache.coverager')) . '<br>' . "\n";
-
 
 // End of page
 llxFooter();

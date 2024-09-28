@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2001-2004  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2006	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
+/* Copyright (C) 2001-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2006	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Code\Core\Classes\Form;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Load translation files required by the page
@@ -33,7 +35,6 @@ $langs->loadLangs(array("companies", "admin"));
 if (!$user->admin) {
     accessforbidden();
 }
-
 
 /*
  * View
@@ -54,7 +55,6 @@ print "<br>";
 print info_admin($langs->trans("SystemAreaForAdminOnly")) . '<br>';
 
 print '<br><br>';
-
 
 // Show logo
 //print '<div class="center"><div class="logo_setup"></div></div>';

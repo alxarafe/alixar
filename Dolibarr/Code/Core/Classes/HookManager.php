@@ -133,7 +133,7 @@ class HookManager
                 continue;
             }
 
-            //dol_syslog(get_class($this).'::initHooks module='.$module.' arraycontext='.join(',',$arraycontext));
+            //dol_syslog(get_only_class($this).'::initHooks module='.$module.' arraycontext='.join(',',$arraycontext));
             foreach ($arraycontext as $context) {
                 if (is_array($hooks)) {
                     $arrayhooks = $hooks; // New system = array of hook contexts claimed by the module $module
@@ -164,9 +164,9 @@ class HookManager
 
                             // Hook has been initialized with another couple $context/$module
                             $stringtolog = 'context=' . $context . '-path=' . $path . $actionfile . '-priority=' . $priority;
-                            dol_syslog(get_class($this) . "::initHooks Loading hooks: " . $stringtolog, LOG_DEBUG);
+                            dol_syslog(get_only_class($this) . "::initHooks Loading hooks: " . $stringtolog, LOG_DEBUG);
                         } else {
-                            dol_syslog(get_class($this) . "::initHooks Failed to load hook in " . $path . $actionfile, LOG_WARNING);
+                            dol_syslog(get_only_class($this) . "::initHooks Failed to load hook in " . $path . $actionfile, LOG_WARNING);
                         }
                     } else {
                         // Hook was already initialized for this context and module
@@ -176,7 +176,7 @@ class HookManager
         }
 
         // Log the init of hook
-        // dol_syslog(get_class($this)."::initHooks Loading hooks: ".implode(', ', $arraytolog), LOG_DEBUG);
+        // dol_syslog(get_only_class($this)."::initHooks Loading hooks: ".implode(', ', $arraytolog), LOG_DEBUG);
 
         if ($foundcontextmodule) {
             foreach ($arraycontext as $context) {
@@ -204,7 +204,7 @@ class HookManager
     public function executeHooks($method, $parameters = array(), &$object = null, &$action = '')
     {
         //global $debugbar;
-        //if (is_object($debugbar) && get_class($debugbar) === 'DolibarrDebugBar') {
+        //if (is_object($debugbar) && get_only_class($debugbar) === 'DolibarrDebugBar') {
         if (isModEnabled('debugbar') && function_exists('debug_backtrace')) {
             $trace = debug_backtrace();
             if (isset($trace[0])) {
@@ -234,7 +234,7 @@ class HookManager
         }
 
         $parameters['context'] = implode(':', $this->contextarray);
-        //dol_syslog(get_class($this).'::executeHooks method='.$method." action=".$action." context=".$parameters['context']);
+        //dol_syslog(get_only_class($this).'::executeHooks method='.$method." action=".$action." context=".$parameters['context']);
 
         // Define type of hook ('output' or 'addreplace').
         $hooktype = 'addreplace';
@@ -295,7 +295,7 @@ class HookManager
                 // Loop on each active hooks of module for this context
                 foreach ($modules as $module => $actionclassinstance) {
                     $module = preg_replace('/^\d+:/', '', $module);     // $module string is 'priority:module'
-                    //print "Before hook ".get_class($actionclassinstance)." method=".$method." module=".$module." hooktype=".$hooktype." results=".count($actionclassinstance->results)." resprints=".count($actionclassinstance->resprints)." resaction=".$resaction."<br>\n";
+                    //print "Before hook ".get_only_class($actionclassinstance)." method=".$method." module=".$module." hooktype=".$hooktype." results=".count($actionclassinstance->results)." resprints=".count($actionclassinstance->resprints)." resaction=".$resaction."<br>\n";
 
                     // test to avoid running twice a hook, when a module implements several active contexts
                     if (in_array($module, $modulealreadyexecuted)) {
@@ -317,7 +317,7 @@ class HookManager
 
                     if (getDolGlobalInt('MAIN_HOOK_DEBUG')) {
                         // This his too much verbose, enabled if const enabled only
-                        dol_syslog(get_class($this) . "::executeHooks Qualified hook found (hooktype=" . $hooktype . "). We call method " . get_class($actionclassinstance) . '->' . $method . ", context=" . $context . ", module=" . $module . ", action=" . $action . ((is_object($object) && property_exists($object, 'id')) ? ', object id=' . $object->id : '') . ((is_object($object) && property_exists($object, 'element')) ? ', object element=' . $object->element : ''), LOG_DEBUG);
+                        dol_syslog(get_only_class($this) . "::executeHooks Qualified hook found (hooktype=" . $hooktype . "). We call method " . get_only_class($actionclassinstance) . '->' . $method . ", context=" . $context . ", module=" . $module . ", action=" . $action . ((is_object($object) && property_exists($object, 'id')) ? ', object id=' . $object->id : '') . ((is_object($object) && property_exists($object, 'element')) ? ', object element=' . $object->element : ''), LOG_DEBUG);
                     }
 
                     // Add current context to avoid method execution in bad context, you can add this test in your method : eg if($currentcontext != 'formfile') return;
@@ -333,7 +333,7 @@ class HookManager
                             $error++;
                             $this->error = $actionclassinstance->error;
                             $this->errors = array_merge($this->errors, (array) $actionclassinstance->errors);
-                            dol_syslog("Error on hook module=" . $module . ", method " . $method . ", class " . get_class($actionclassinstance) . ", hooktype=" . $hooktype . (empty($this->error) ? '' : " " . $this->error) . (empty($this->errors) ? '' : " " . implode(",", $this->errors)), LOG_ERR);
+                            dol_syslog("Error on hook module=" . $module . ", method " . $method . ", class " . get_only_class($actionclassinstance) . ", hooktype=" . $hooktype . (empty($this->error) ? '' : " " . $this->error) . (empty($this->errors) ? '' : " " . implode(",", $this->errors)), LOG_ERR);
                         }
 
                         if (isset($actionclassinstance->results) && is_array($actionclassinstance->results)) {
@@ -360,7 +360,7 @@ class HookManager
                         }
 
                         if (getDolGlobalInt('MAIN_HOOK_DEBUG')) {
-                            dol_syslog("Call method " . $method . " of class " . get_class($actionclassinstance) . ", module=" . $module . ", hooktype=" . $hooktype, LOG_DEBUG);
+                            dol_syslog("Call method " . $method . " of class " . get_only_class($actionclassinstance) . ", module=" . $module . ", hooktype=" . $hooktype, LOG_DEBUG);
                         }
 
                         // @phan-suppress-next-line PhanUndeclaredMethod  The method's existence is tested above.
@@ -377,19 +377,19 @@ class HookManager
                             $error++;
                             $this->error = $actionclassinstance->error;
                             $this->errors = array_merge($this->errors, (array) $actionclassinstance->errors);
-                            dol_syslog("Error on hook module=" . $module . ", method " . $method . ", class " . get_class($actionclassinstance) . ", hooktype=" . $hooktype . (empty($this->error) ? '' : " " . $this->error) . (empty($this->errors) ? '' : " " . implode(",", $this->errors)), LOG_ERR);
+                            dol_syslog("Error on hook module=" . $module . ", method " . $method . ", class " . get_only_class($actionclassinstance) . ", hooktype=" . $hooktype . (empty($this->error) ? '' : " " . $this->error) . (empty($this->errors) ? '' : " " . implode(",", $this->errors)), LOG_ERR);
                         }
 
                         // TODO dead code to remove (do not disable this, but fix your hook instead): result must not be a string but an int. you must use $actionclassinstance->resprints to return a string
                         if (!is_array($resactiontmp) && !is_numeric($resactiontmp)) {
-                            dol_syslog('Error: Bug into hook ' . $method . ' of module class ' . get_class($actionclassinstance) . '. Method must not return a string but an int (0=OK, 1=Replace, -1=KO) and set string into ->resprints', LOG_ERR);
+                            dol_syslog('Error: Bug into hook ' . $method . ' of module class ' . get_only_class($actionclassinstance) . '. Method must not return a string but an int (0=OK, 1=Replace, -1=KO) and set string into ->resprints', LOG_ERR);
                             if (empty($actionclassinstance->resprints)) {
                                 $localResPrint .= $resactiontmp;
                             }
                         }
                     }
 
-                    //print "After hook context=".$context." ".get_class($actionclassinstance)." method=".$method." hooktype=".$hooktype." results=".count($actionclassinstance->results)." resprints=".count($actionclassinstance->resprints)." resaction=".$resaction."<br>\n";
+                    //print "After hook context=".$context." ".get_only_class($actionclassinstance)." method=".$method." hooktype=".$hooktype." results=".count($actionclassinstance->results)." resprints=".count($actionclassinstance->resprints)." resaction=".$resaction."<br>\n";
 
                     $actionclassinstance->results = array();
                     $actionclassinstance->resprints = null;

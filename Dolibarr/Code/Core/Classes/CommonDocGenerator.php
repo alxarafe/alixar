@@ -563,7 +563,7 @@ abstract class CommonDocGenerator
 
         $date = (isset($object->element) && $object->element == 'contrat' && isset($object->date_contrat)) ? $object->date_contrat : (isset($object->date) ? $object->date : null);
 
-        if (get_class($object) == 'CommandeFournisseur') {
+        if (get_only_class($object) == 'CommandeFournisseur') {
             /** @var CommandeFournisseur $object*/
             $object->date_validation =  $object->date_valid;
             $object->date_commande = $object->date;
@@ -656,7 +656,7 @@ abstract class CommonDocGenerator
             $resarray[$array_key . '_bank_country'] = (empty($bank_account) ? '' : $bank_account->country);
         }
 
-        if (method_exists($object, 'getTotalDiscount') && in_array(get_class($object), array('Propal', 'Proposal', 'Commande', 'Facture', 'SupplierProposal', 'CommandeFournisseur', 'FactureFournisseur'))) {
+        if (method_exists($object, 'getTotalDiscount') && in_array(get_only_class($object), array('Propal', 'Proposal', 'Commande', 'Facture', 'SupplierProposal', 'CommandeFournisseur', 'FactureFournisseur'))) {
             $resarray[$array_key . '_total_discount_ht_locale'] = price($object->getTotalDiscount(), 0, $outputlangs);
             $resarray[$array_key . '_total_discount_ht'] = price2num($object->getTotalDiscount());
         } else {
@@ -709,7 +709,7 @@ abstract class CommonDocGenerator
             // Note that this added fields does not match a field into database in Dolibarr (Dolibarr manage discount on lines not as a global property of object)
             $resarray['object_total_up'] = $totalUp;
             $resarray['object_total_up_locale'] = price($resarray['object_total_up'], 0, $outputlangs);
-            if (method_exists($object, 'getTotalDiscount') && in_array(get_class($object), array('Propal', 'Proposal', 'Commande', 'Facture', 'SupplierProposal', 'CommandeFournisseur', 'FactureFournisseur'))) {
+            if (method_exists($object, 'getTotalDiscount') && in_array(get_only_class($object), array('Propal', 'Proposal', 'Commande', 'Facture', 'SupplierProposal', 'CommandeFournisseur', 'FactureFournisseur'))) {
                 $totalDiscount = $object->getTotalDiscount();
             } else {
                 $totalDiscount = 0;
@@ -808,7 +808,7 @@ abstract class CommonDocGenerator
         $resarray = $this->fill_substitutionarray_with_extrafields($line, $resarray, $extrafields, $array_key, $outputlangs);
 
         // Check if the current line belongs to a supplier order
-        if (get_class($line) == 'CommandeFournisseurLigne') {
+        if (get_only_class($line) == 'CommandeFournisseurLigne') {
             // Add the product supplier extrafields to the substitutions
             $extrafields->fetch_name_optionals_label("product_fournisseur_price");
             $extralabels = $extrafields->attributes["product_fournisseur_price"]['label'];

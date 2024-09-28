@@ -100,7 +100,7 @@ class ProjectStats extends Stats
 
         $result = array();
 
-        dol_syslog(get_class($this) . '::' . __METHOD__, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::' . __METHOD__, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -128,7 +128,7 @@ class ProjectStats extends Stats
             $this->db->free($resql);
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . '::' . __METHOD__ . ' ' . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . '::' . __METHOD__ . ' ' . $this->error, LOG_ERR);
             return -1;
         }
 
@@ -311,7 +311,7 @@ class ProjectStats extends Stats
             include_once DOL_DOCUMENT_ROOT . '/core/lib/json.lib.php';
         }
 
-        $newpathofdestfile = $conf->user->dir_temp . '/' . get_class($this) . '_' . __FUNCTION__ . '_' . (empty($this->cachefilesuffix) ? '' : $this->cachefilesuffix . '_') . $langs->defaultlang . '_user' . $user->id . '.cache';
+        $newpathofdestfile = $conf->user->dir_temp . '/' . get_only_class($this) . '_' . __FUNCTION__ . '_' . (empty($this->cachefilesuffix) ? '' : $this->cachefilesuffix . '_') . $langs->defaultlang . '_user' . $user->id . '.cache';
         $newmask = '0644';
 
         $nowgmt = dol_now();
@@ -322,15 +322,15 @@ class ProjectStats extends Stats
             if ($filedate >= ($nowgmt - $cachedelay)) {
                 $foundintocache = 1;
 
-                $this->lastfetchdate[get_class($this) . '_' . __FUNCTION__] = $filedate;
+                $this->lastfetchdate[get_only_class($this) . '_' . __FUNCTION__] = $filedate;
             } else {
-                dol_syslog(get_class($this) . '::' . __FUNCTION__ . " cache file " . $newpathofdestfile . " is not found or older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . ") so we can't use it.");
+                dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " cache file " . $newpathofdestfile . " is not found or older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . ") so we can't use it.");
             }
         }
 
         // Load file into $data
         if ($foundintocache) {    // Cache file found and is not too old
-            dol_syslog(get_class($this) . '::' . __FUNCTION__ . " read data from cache file " . $newpathofdestfile . " " . $filedate . ".");
+            dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " read data from cache file " . $newpathofdestfile . " " . $filedate . ".");
             $data = json_decode(file_get_contents($newpathofdestfile), true);
             '@phan-var-force array $data';  // Phan can not interpret json_decode
         } else {
@@ -354,7 +354,7 @@ class ProjectStats extends Stats
 
         // Save cache file
         if (empty($foundintocache) && ($cachedelay > 0 || $cachedelay == -1)) {
-            dol_syslog(get_class($this) . '::' . __FUNCTION__ . " save cache file " . $newpathofdestfile . " onto disk.");
+            dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " save cache file " . $newpathofdestfile . " onto disk.");
             if (!dol_is_dir($conf->user->dir_temp)) {
                 dol_mkdir($conf->user->dir_temp);
             }
@@ -366,7 +366,7 @@ class ProjectStats extends Stats
             } else {
                 dol_syslog("Failed to write cache file", LOG_ERR);
             }
-            $this->lastfetchdate[get_class($this) . '_' . __FUNCTION__] = $nowgmt;
+            $this->lastfetchdate[get_only_class($this) . '_' . __FUNCTION__] = $nowgmt;
         }
 
         return $data;
@@ -422,7 +422,7 @@ class ProjectStats extends Stats
             include_once DOL_DOCUMENT_ROOT . '/core/lib/json.lib.php';
         }
 
-        $newpathofdestfile = $conf->user->dir_temp . '/' . get_class($this) . '_' . __FUNCTION__ . '_' . (empty($this->cachefilesuffix) ? '' : $this->cachefilesuffix . '_') . $langs->defaultlang . '_user' . $user->id . '.cache';
+        $newpathofdestfile = $conf->user->dir_temp . '/' . get_only_class($this) . '_' . __FUNCTION__ . '_' . (empty($this->cachefilesuffix) ? '' : $this->cachefilesuffix . '_') . $langs->defaultlang . '_user' . $user->id . '.cache';
         $newmask = '0644';
 
         $nowgmt = dol_now();
@@ -433,15 +433,15 @@ class ProjectStats extends Stats
             if ($filedate >= ($nowgmt - $cachedelay)) {
                 $foundintocache = 1;
 
-                $this->lastfetchdate[get_class($this) . '_' . __FUNCTION__] = $filedate;
+                $this->lastfetchdate[get_only_class($this) . '_' . __FUNCTION__] = $filedate;
             } else {
-                dol_syslog(get_class($this) . '::' . __FUNCTION__ . " cache file " . $newpathofdestfile . " is not found or older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . ") so we can't use it.");
+                dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " cache file " . $newpathofdestfile . " is not found or older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . ") so we can't use it.");
             }
         }
 
         // Load file into $data
         if ($foundintocache) { // Cache file found and is not too old
-            dol_syslog(get_class($this) . '::' . __FUNCTION__ . " read data from cache file " . $newpathofdestfile . " " . $filedate . ".");
+            dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " read data from cache file " . $newpathofdestfile . " " . $filedate . ".");
             $data = json_decode(file_get_contents($newpathofdestfile), true);
             '@phan-var-force array $data';  // Phan can not interpret json_decode
         } else {
@@ -465,7 +465,7 @@ class ProjectStats extends Stats
 
         // Save cache file
         if (empty($foundintocache) && ($cachedelay > 0 || $cachedelay == - 1)) {
-            dol_syslog(get_class($this) . '::' . __FUNCTION__ . " save cache file " . $newpathofdestfile . " onto disk.");
+            dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " save cache file " . $newpathofdestfile . " onto disk.");
             if (!dol_is_dir($conf->user->dir_temp)) {
                 dol_mkdir($conf->user->dir_temp);
             }
@@ -476,7 +476,7 @@ class ProjectStats extends Stats
                 dolChmod($newpathofdestfile);
             }
 
-            $this->lastfetchdate[get_class($this) . '_' . __FUNCTION__] = $nowgmt;
+            $this->lastfetchdate[get_only_class($this) . '_' . __FUNCTION__] = $nowgmt;
         }
 
         return $data;

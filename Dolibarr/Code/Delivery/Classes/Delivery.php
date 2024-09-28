@@ -290,7 +290,7 @@ class Delivery extends CommonObject
         $sql .= " " . ($description ? "'" . $this->db->escape($description) . "'" : "null") . ",";
         $sql .= (price2num($qty, 'MS')) . ")";
 
-        dol_syslog(get_class($this) . "::create_line", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create_line", LOG_DEBUG);
         if (!$this->db->query($sql)) {
             $error++;
         }
@@ -330,7 +330,7 @@ class Delivery extends CommonObject
         $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . 'c_incoterms as i ON l.fk_incoterms = i.rowid';
         $sql .= " WHERE l.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             if ($this->db->num_rows($result)) {
@@ -378,7 +378,7 @@ class Delivery extends CommonObject
                 return 1;
             } else {
                 $this->error = 'Delivery with id ' . $id . ' not found sql=' . $sql;
-                dol_syslog(get_class($this) . '::fetch Error ' . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . '::fetch Error ' . $this->error, LOG_ERR);
                 return -2;
             }
         } else {
@@ -400,7 +400,7 @@ class Delivery extends CommonObject
 
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
-        dol_syslog(get_class($this) . "::valid begin");
+        dol_syslog(get_only_class($this) . "::valid begin");
 
         $this->db->begin();
 
@@ -497,7 +497,7 @@ class Delivery extends CommonObject
                             $dirsource = $conf->expedition->dir_output . '/receipt/' . $oldref;
                             $dirdest = $conf->expedition->dir_output . '/receipt/' . $newref;
                             if (!$error && file_exists($dirsource)) {
-                                dol_syslog(get_class($this) . "::valid rename dir " . $dirsource . " into " . $dirdest);
+                                dol_syslog(get_only_class($this) . "::valid rename dir " . $dirsource . " into " . $dirdest);
 
                                 if (@rename($dirsource, $dirdest)) {
                                     dol_syslog("Rename ok");
@@ -520,7 +520,7 @@ class Delivery extends CommonObject
                             $this->statut = 1;
                         }
 
-                        dol_syslog(get_class($this) . "::valid ok");
+                        dol_syslog(get_only_class($this) . "::valid ok");
                     }
 
                     if (!$error) {
@@ -536,7 +536,7 @@ class Delivery extends CommonObject
             return -1;
         } else {
             $this->error = "NotAllowed";
-            dol_syslog(get_class($this) . "::valid " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::valid " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -855,7 +855,7 @@ class Delivery extends CommonObject
         $sql .= " WHERE ld.fk_origin_line = cd.rowid";
         $sql .= " AND ld.fk_delivery = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::fetch_lines", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch_lines", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -1094,7 +1094,7 @@ class Delivery extends CommonObject
             $sql .= " SET date_delivery = " . ($delivery_date ? "'" . $this->db->idate($delivery_date) . "'" : 'null');
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::setDeliveryDate", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::setDeliveryDate", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $this->date_delivery = $delivery_date;

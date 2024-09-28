@@ -370,7 +370,7 @@ class EcmFiles extends CommonObject
             // Triggers
             if (!$notrigger) {
                 // Call triggers
-                $result = $this->call_trigger(strtoupper(get_class($this)) . '_CREATE', $user);
+                $result = $this->call_trigger(strtoupper(get_only_class($this)) . '_CREATE', $user);
                 if ($result < 0) {
                     $error++;
                 }
@@ -764,7 +764,7 @@ class EcmFiles extends CommonObject
         // Triggers
         if (!$error && !$notrigger) {
             // Call triggers
-            $result = $this->call_trigger(strtoupper(get_class($this)) . '_MODIFY', $user);
+            $result = $this->call_trigger(strtoupper(get_only_class($this)) . '_MODIFY', $user);
             if ($result < 0) {
                 $error++;
             } //Do also here what you must do to rollback action if trigger fail
@@ -801,7 +801,7 @@ class EcmFiles extends CommonObject
         // Triggers
         if (!$notrigger) {
             // Call triggers
-            $result = $this->call_trigger(strtoupper(get_class($this)) . '_DELETE', $user);
+            $result = $this->call_trigger(strtoupper(get_only_class($this)) . '_DELETE', $user);
             if ($result < 0) {
                 $error++;
             } //Do also here what you must do to rollback action if trigger fail
@@ -812,7 +812,7 @@ class EcmFiles extends CommonObject
         if (!$error) {
             $result = $this->deleteExtraFields();
             if (!$result) {
-                dol_syslog(get_class($this) . "::delete error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error " . $this->error, LOG_ERR);
                 $error++;
             }
         }

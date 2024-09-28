@@ -372,7 +372,7 @@ class Mailing extends CommonObject
             $sql .= " AND m.rowid = " . (int) $rowid;
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             if ($this->db->num_rows($result)) {
@@ -418,11 +418,11 @@ class Mailing extends CommonObject
 
                 return 1;
             } else {
-                dol_syslog(get_class($this) . "::fetch Erreur -1");
+                dol_syslog(get_only_class($this) . "::fetch Erreur -1");
                 return -1;
             }
         } else {
-            dol_syslog(get_class($this) . "::fetch Erreur -2");
+            dol_syslog(get_only_class($this) . "::fetch Erreur -2");
             return -2;
         }
     }

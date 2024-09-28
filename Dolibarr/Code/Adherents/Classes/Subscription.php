@@ -251,7 +251,7 @@ class Subscription extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . "subscription";
         $sql .= " WHERE rowid = " . ((int) $rowid);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -314,7 +314,7 @@ class Subscription extends CommonObject
         $sql .= " fk_bank = " . ($this->fk_bank ? ((int) $this->fk_bank) : 'null');
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $member = new Adherent($this->db);
@@ -377,7 +377,7 @@ class Subscription extends CommonObject
 
         if (!$error) {
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "subscription WHERE rowid = " . ((int) $this->id);
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $num = $this->db->affected_rows($resql);

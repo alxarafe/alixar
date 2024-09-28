@@ -115,7 +115,7 @@ class Export
 		// phpcs:enable
         global $langs, $conf, $mysoc;
 
-        dol_syslog(get_class($this) . "::load_arrays user=" . $user->id . " filter=" . $filter);
+        dol_syslog(get_only_class($this) . "::load_arrays user=" . $user->id . " filter=" . $filter);
 
         $i = 0;
 
@@ -231,7 +231,7 @@ class Export
                                     $this->array_export_sql_order[$i] = (!empty($module->export_sql_order[$r]) ? $module->export_sql_order[$r] : null);
                                     //$this->array_export_sql[$i]=$module->export_sql[$r];
 
-                                    dol_syslog(get_class($this) . "::load_arrays loaded for module " . $modulename . " with index " . $i . ", dataset=" . $module->export_code[$r] . ", nb of fields=" . (!empty($module->export_fields_code[$r]) ? count($module->export_fields_code[$r]) : ''));
+                                    dol_syslog(get_only_class($this) . "::load_arrays loaded for module " . $modulename . " with index " . $i . ", dataset=" . $module->export_code[$r] . ", nb of fields=" . (!empty($module->export_fields_code[$r]) ? count($module->export_fields_code[$r]) : ''));
                                     $i++;
                                     //            }
                                 }
@@ -895,7 +895,7 @@ class Export
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -905,7 +905,7 @@ class Export
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();

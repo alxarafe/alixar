@@ -434,7 +434,7 @@ class BOM extends CommonObject
     {
         $this->lines = array();
 
-        $objectlineclassname = get_class($this) . 'Line';
+        $objectlineclassname = get_only_class($this) . 'Line';
         if (!class_exists($objectlineclassname)) {
             $this->error = 'Error, class ' . $objectlineclassname . ' not found during call of fetchLinesCommon';
             return -1;
@@ -589,7 +589,7 @@ class BOM extends CommonObject
 
         $logtext = "::addLine bomid=$this->id, qty=$qty, fk_product=$fk_product, qty_frozen=$qty_frozen, disable_stock_change=$disable_stock_change, efficiency=$efficiency";
         $logtext .= ", fk_bom_child=$fk_bom_child, import_key=$import_key";
-        dol_syslog(get_class($this) . $logtext, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . $logtext, LOG_DEBUG);
 
         if ($this->statut == self::STATUS_DRAFT) {
             include_once DOL_DOCUMENT_ROOT . '/core/lib/price.lib.php';
@@ -666,12 +666,12 @@ class BOM extends CommonObject
                 return $result;
             } else {
                 $this->setErrorsFromObject($line);
-                dol_syslog(get_class($this) . "::addLine error=" . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::addLine error=" . $this->error, LOG_ERR);
                 $this->db->rollback();
                 return -2;
             }
         } else {
-            dol_syslog(get_class($this) . "::addLine status of BOM must be Draft to allow use of ->addLine()", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::addLine status of BOM must be Draft to allow use of ->addLine()", LOG_ERR);
             return -3;
         }
     }
@@ -697,7 +697,7 @@ class BOM extends CommonObject
 
         $logtext = "::updateLine bomid=$this->id, qty=$qty, qty_frozen=$qty_frozen, disable_stock_change=$disable_stock_change, efficiency=$efficiency";
         $logtext .= ", import_key=$import_key";
-        dol_syslog(get_class($this) . $logtext, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . $logtext, LOG_DEBUG);
 
         if ($this->statut == self::STATUS_DRAFT) {
             include_once DOL_DOCUMENT_ROOT . '/core/lib/price.lib.php';
@@ -785,12 +785,12 @@ class BOM extends CommonObject
                 return $result;
             } else {
                 $this->setErrorsFromObject($line);
-                dol_syslog(get_class($this) . "::addLine error=" . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::addLine error=" . $this->error, LOG_ERR);
                 $this->db->rollback();
                 return -2;
             }
         } else {
-            dol_syslog(get_class($this) . "::addLine status of BOM must be Draft to allow use of ->addLine()", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::addLine status of BOM must be Draft to allow use of ->addLine()", LOG_ERR);
             return -3;
         }
     }
@@ -837,7 +837,7 @@ class BOM extends CommonObject
             return $result;
         } else {
             $this->setErrorsFromObject($line);
-            dol_syslog(get_class($this) . "::addLine error=" . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::addLine error=" . $this->error, LOG_ERR);
             $this->db->rollback();
             return -2;
         }
@@ -882,7 +882,7 @@ class BOM extends CommonObject
                 return $numref;
             } else {
                 $this->error = $obj->error;
-                //dol_print_error($this->db,get_class($this)."::getNextNumRef ".$obj->error);
+                //dol_print_error($this->db,get_only_class($this)."::getNextNumRef ".$obj->error);
                 return "";
             }
         } else {
@@ -908,7 +908,7 @@ class BOM extends CommonObject
 
         // Protection
         if ($this->status == self::STATUS_VALIDATED) {
-            dol_syslog(get_class($this) . "::validate action abandoned: already validated", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::validate action abandoned: already validated", LOG_WARNING);
             return 0;
         }
 
@@ -933,7 +933,7 @@ class BOM extends CommonObject
         $sql .= " fk_user_valid = " . ((int) $user->id);
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::validate()", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::validate()", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             dol_print_error($this->db);
@@ -977,7 +977,7 @@ class BOM extends CommonObject
                 $dirsource = $conf->bom->dir_output . '/' . $oldref;
                 $dirdest = $conf->bom->dir_output . '/' . $newref;
                 if (!$error && file_exists($dirsource)) {
-                    dol_syslog(get_class($this) . "::validate() rename dir " . $dirsource . " into " . $dirdest);
+                    dol_syslog(get_only_class($this) . "::validate() rename dir " . $dirsource . " into " . $dirdest);
 
                     if (@rename($dirsource, $dirdest)) {
                         dol_syslog("Rename ok");

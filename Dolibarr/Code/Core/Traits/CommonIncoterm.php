@@ -120,7 +120,7 @@ trait CommonIncoterm
             $sql .= " SET fk_incoterms = " . ($id_incoterm > 0 ? ((int) $id_incoterm) : "null");
             $sql .= ", location_incoterms = " . ($id_incoterm > 0 ? "'" . $this->db->escape($location) . "'" : "null");
             $sql .= " WHERE rowid = " . ((int) $this->id);
-            dol_syslog(get_class($this) . '::setIncoterms', LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::setIncoterms', LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $this->fk_incoterms = $id_incoterm;

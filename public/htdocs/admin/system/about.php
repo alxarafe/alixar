@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2003-2004 Rodolphe Quiedeville  <rodolphe@quiedeville.org>
- * Copyright (C) 2003      Jean-Louis Bergamo    <jlb@j1b.org>
- * Copyright (C) 2004-2013 Laurent Destailleur   <eldy@users.sourceforge.net>
- * Copyright (C) 2007      Franky Van Liedekerke <franky.van.liedekerke@telenet.be>
- * Copyright (C) 2005-2007 Regis Houssin         <regis.houssin@inodbox.com>
+/* Copyright (C) 2003-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2003       Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2004-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007       Franky Van Liedekerke       <franky.van.liedekerke@telenet.be>
+ * Copyright (C) 2005-2007  Regis Houssin               <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,11 +19,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
- */
-
-/**
- *       \file       htdocs/admin/system/about.php
- *       \brief      About Dolibarr File page
  */
 
 // Load Dolibarr environment
@@ -43,13 +38,11 @@ if (!$user->admin) {
 $sfurl = '';
 $version = '0.0';
 
-
 /*
  *	Actions
  */
 
 // None
-
 
 /*
  * View
@@ -57,11 +50,9 @@ $version = '0.0';
 
 llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_about');
 
-
 print load_fiche_titre($langs->trans("ExternalResources"), '', 'title_setup');
 
 print '<div style="padding-left: 30px;">' . img_picto_common('', 'dolibarr_box.png', 'height="120"') . '</div>';
-
 
 print '<div class="fichecenter"><div class="fichehalfleft">';
 
@@ -137,9 +128,7 @@ print '<a target="_blank" href="https://www.dolistore.com" rel="noopener norefer
 print '</li>';
 print '</ul>';
 
-
 print '</div><div class="fichehalfright">';
-
 
 print $langs->trans("HelpCenter") . ':';
 print '<ul>';
@@ -148,7 +137,6 @@ print '<li>';
 print '<a target="_blank" rel="noopener noreferrer external" href="' . constant('BASE_URL') . '/support/index.php" data-ajax="false">' . $langs->trans("HelpCenter") . '</a>';
 print '</li>';
 print '</ul>';
-
 
 print $langs->trans("Foundation") . ':';
 
@@ -199,25 +187,21 @@ print '</div>';
 print '</div>';
 print '<div class="clearboth"></div>';
 
+$tmp = versiondolibarrarray();
+if (is_numeric($tmp[2])) {    // Not alpha, beta or rc
+    print '<br>';
+    print '<br>';
 
-$showpromotemessage = 1;
-if ($showpromotemessage) {
-    $tmp = versiondolibarrarray();
-    if (is_numeric($tmp[2])) {    // Not alpha, beta or rc
-        print '<br>';
-        print '<br>';
-
-        if ((empty($tmp[2]) && (strpos($tmp[1], '0') === 0)) || (strpos($tmp[2], '0') === 0)) {
-            print $langs->trans("TitleExampleForMajorRelease") . ':<br>';
-            print '<textarea style="width:80%; min-height: 60px">';
-            print $langs->trans("ExampleOfNewsMessageForMajorRelease", DOL_VERSION, DOL_VERSION);
-            print '</textarea>';
-        } else {
-            print $langs->trans("TitleExampleForMaintenanceRelease") . ':<br>';
-            print '<textarea style="width:80%; min-height: 60px">';
-            print $langs->trans("ExampleOfNewsMessageForMaintenanceRelease", DOL_VERSION, DOL_VERSION);
-            print '</textarea>';
-        }
+    if ((empty($tmp[2]) && (str_starts_with($tmp[1], '0'))) || (str_starts_with($tmp[2], '0'))) {
+        print $langs->trans("TitleExampleForMajorRelease") . ':<br>';
+        print '<textarea style="width:80%; min-height: 60px">';
+        print $langs->trans("ExampleOfNewsMessageForMajorRelease", DOL_VERSION, DOL_VERSION);
+        print '</textarea>';
+    } else {
+        print $langs->trans("TitleExampleForMaintenanceRelease") . ':<br>';
+        print '<textarea style="width:80%; min-height: 60px">';
+        print $langs->trans("ExampleOfNewsMessageForMaintenanceRelease", DOL_VERSION, DOL_VERSION);
+        print '</textarea>';
     }
 }
 

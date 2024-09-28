@@ -255,7 +255,7 @@ abstract class CommonObjectLine extends CommonObject
             return $label;
         } else {
             $this->error = $this->db->lasterror();
-            dol_syslog(get_class($this) . "::getLabelOfUnit Error " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::getLabelOfUnit Error " . $this->error, LOG_ERR);
             return -1;
         }
     }

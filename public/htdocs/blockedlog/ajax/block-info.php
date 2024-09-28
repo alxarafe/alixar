@@ -100,7 +100,7 @@ function formatObject($objtoshow, $prefix)
                     //var_dump(is_object($val));
                     //var_dump(is_array($val));
                     //var_dump(is_array($val));
-                    //var_dump(@get_class($val));
+                    //var_dump(@get_only_class($val));
                     //var_dump($val);
                     $s .= dol_print_date($val, 'dayhour');
                 } else {

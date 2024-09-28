@@ -101,7 +101,7 @@ class FormContract
         }
         $sql .= " ORDER BY c.ref ";
 
-        dol_syslog(get_class($this) . "::select_contract", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_contract", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $ret .= '<select class="flat' . ($morecss ? ' ' . $morecss : '') . '" name="' . $htmlname . '" id="' . $htmlname . '">';

@@ -93,7 +93,7 @@ class DoliDBSqlite3 extends DoliDB
             $this->connected = false;
             $this->ok = false;
             $this->error="Sqlite PHP functions for using Sqlite driver are not available in this version of PHP. Try to use another driver.";
-            dol_syslog(get_class($this)."::DoliDBSqlite3 : Sqlite PHP functions for using Sqlite driver are not available in this version of PHP. Try to use another driver.",LOG_ERR);
+            dol_syslog(get_only_class($this)."::DoliDBSqlite3 : Sqlite PHP functions for using Sqlite driver are not available in this version of PHP. Try to use another driver.",LOG_ERR);
             return;
         }*/
 
@@ -102,7 +102,7 @@ class DoliDBSqlite3 extends DoliDB
             $this->connected = false;
             $this->ok = false;
             $this->error=$langs->trans("ErrorWrongHostParameter");
-            dol_syslog(get_class($this)."::DoliDBSqlite3 : Erreur Connect, wrong host parameters",LOG_ERR);
+            dol_syslog(get_only_class($this)."::DoliDBSqlite3 : Erreur Connect, wrong host parameters",LOG_ERR);
             return;
         }*/
 
@@ -132,7 +132,7 @@ class DoliDBSqlite3 extends DoliDB
             $this->database_selected = false;
             $this->database_name = '';
             //$this->error=sqlite_connect_error();
-            dol_syslog(get_class($this) . "::DoliDBSqlite3 : Error Connect " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::DoliDBSqlite3 : Error Connect " . $this->error, LOG_ERR);
         }
     }
 
@@ -262,7 +262,7 @@ class DoliDBSqlite3 extends DoliDB
                 }
                 if (preg_match('/ALTER\s+TABLE\s*(.*)\s*ADD\s+CONSTRAINT\s+(.*)\s*FOREIGN\s+KEY\s*\(([\w,\s]+)\)\s*REFERENCES\s+(\w+)\s*\(([\w,\s]+)\)/i', $line, $reg)) {
                     // Pour l'instant les contraintes ne sont pas créées
-                    dol_syslog(get_class() . '::query line emptied');
+                    dol_syslog(get_only_class() . '::query line emptied');
                     $line = 'SELECT 0;';
                 }
 
@@ -308,7 +308,7 @@ class DoliDBSqlite3 extends DoliDB
     public function select_db($database)
     {
         // phpcs:enable
-        dol_syslog(get_class($this) . "::select_db database=" . $database, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_db database=" . $database, LOG_DEBUG);
         // sqlite_select_db() does not exist
         //return sqlite_select_db($this->db,$database);
         return true;
@@ -330,7 +330,7 @@ class DoliDBSqlite3 extends DoliDB
     {
         global $main_data_dir;
 
-        dol_syslog(get_class($this) . "::connect name=" . $name, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::connect name=" . $name, LOG_DEBUG);
 
         $dir = $main_data_dir;
         if (empty($dir)) {
@@ -386,7 +386,7 @@ class DoliDBSqlite3 extends DoliDB
     {
         if ($this->db) {
             if ($this->transaction_opened > 0) {
-                dol_syslog(get_class($this) . "::close Closing a connection with an opened transaction depth=" . $this->transaction_opened, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::close Closing a connection with an opened transaction depth=" . $this->transaction_opened, LOG_ERR);
             }
             $this->connected = false;
             $this->db->close();
@@ -494,18 +494,18 @@ class DoliDBSqlite3 extends DoliDB
                 $this->lasterror = $this->error();
                 $this->lasterrno = $this->errno();
 
-                dol_syslog(get_class($this) . "::query SQL Error query: " . $query, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::query SQL Error query: " . $query, LOG_ERR);
 
-                $errormsg = get_class($this) . "::query SQL Error message: " . $this->lasterror;
+                $errormsg = get_only_class($this) . "::query SQL Error message: " . $this->lasterror;
 
                 if (preg_match('/[0-9]/', $this->lasterrno)) {
                     $errormsg .= ' (' . $this->lasterrno . ')';
                 }
 
                 if ($conf->global->SYSLOG_LEVEL < LOG_DEBUG) {
-                    dol_syslog(get_class($this) . "::query SQL Error query: " . $query, LOG_ERR); // Log of request was not yet done previously
+                    dol_syslog(get_only_class($this) . "::query SQL Error query: " . $query, LOG_ERR); // Log of request was not yet done previously
                 }
-                dol_syslog(get_class($this) . "::query SQL Error message: " . $errormsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::query SQL Error message: " . $errormsg, LOG_ERR);
             }
             $this->lastquery = $query;
             $this->_results = $ret;
@@ -1103,7 +1103,7 @@ class DoliDBSqlite3 extends DoliDB
         // phpcs:enable
         $sql = "DESC " . $table . " " . $field;
 
-        dol_syslog(get_class($this) . "::DDLDescTable " . $sql, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::DDLDescTable " . $sql, LOG_DEBUG);
         $this->_results = $this->query($sql);
         return $this->_results;
     }
@@ -1151,7 +1151,7 @@ class DoliDBSqlite3 extends DoliDB
         }
         $sql .= " " . $this->sanitize($field_position, 0, 0, 1);
 
-        dol_syslog(get_class($this) . "::DDLAddField " . $sql, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::DDLAddField " . $sql, LOG_DEBUG);
         if (!$this->query($sql)) {
             return -1;
         }
@@ -1177,7 +1177,7 @@ class DoliDBSqlite3 extends DoliDB
             $sql .= "(" . $this->sanitize($field_desc['value']) . ")";
         }
 
-        dol_syslog(get_class($this) . "::DDLUpdateField " . $sql, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::DDLUpdateField " . $sql, LOG_DEBUG);
         if (!$this->query($sql)) {
             return -1;
         }
@@ -1226,7 +1226,7 @@ class DoliDBSqlite3 extends DoliDB
         $sql .= " VALUES ('" . $this->escape($dolibarr_main_db_host) . "','" . $this->escape($dolibarr_main_db_user) . "',password('" . addslashes($dolibarr_main_db_pass) . "')";
         $sql .= ",'Y','Y','Y','Y','Y','Y','Y','Y','Y')";
 
-        dol_syslog(get_class($this) . "::DDLCreateUser", LOG_DEBUG); // No sql to avoid password in log
+        dol_syslog(get_only_class($this) . "::DDLCreateUser", LOG_DEBUG); // No sql to avoid password in log
         $resql = $this->query($sql);
         if (!$resql) {
             return -1;
@@ -1237,7 +1237,7 @@ class DoliDBSqlite3 extends DoliDB
         $sql .= " VALUES ('" . $this->escape($dolibarr_main_db_host) . "','" . $this->escape($dolibarr_main_db_name) . "','" . addslashes($dolibarr_main_db_user) . "'";
         $sql .= ",'Y','Y','Y','Y','Y','Y','Y','Y','Y')";
 
-        dol_syslog(get_class($this) . "::DDLCreateUser", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::DDLCreateUser", LOG_DEBUG);
         $resql = $this->query($sql);
         if (!$resql) {
             return -1;
@@ -1245,7 +1245,7 @@ class DoliDBSqlite3 extends DoliDB
 
         $sql = "FLUSH Privileges";
 
-        dol_syslog(get_class($this) . "::DDLCreateUser", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::DDLCreateUser", LOG_DEBUG);
         $resql = $this->query($sql);
         if (!$resql) {
             return -1;
@@ -1377,7 +1377,7 @@ class DoliDBSqlite3 extends DoliDB
             $resql = $this->query($sql);
             if ($resql) {
                 $obj = $this->fetch_row($resql);
-                //dol_syslog(get_class($this)."::select_db getServerParametersValues $var=". print_r($obj, true), LOG_DEBUG);
+                //dol_syslog(get_only_class($this)."::select_db getServerParametersValues $var=". print_r($obj, true), LOG_DEBUG);
                 $result[$var] = $obj[0];
             } else {
                 // TODO Récupérer le message

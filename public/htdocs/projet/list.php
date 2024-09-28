@@ -1641,7 +1641,7 @@ while ($i < $imaxinloop) {
                             $conf->cache['contact'][$contactproject['id']] = $c;
                         }
                     }
-                    if (get_class($c) == 'User') {
+                    if (get_only_class($c) == 'User') {
                         $stringassignedusers .= $c->getNomUrl(-2, '', 0, 0, 24, 1, '', 'valignmiddle' . ($ifisrt ? '' : ' notfirst'));
                     } else {
                         $stringassignedusers .= $c->getNomUrl(-2, '', 0, '', -1, 0, 'valignmiddle' . ($ifisrt ? '' : ' notfirst'));

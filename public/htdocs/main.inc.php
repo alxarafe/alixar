@@ -324,6 +324,31 @@ function analyseVarsForSqlAndScriptsInjection(&$var, $type, $stopcode = 1)
     }
 }
 
+function getConstants()
+{
+    global $conf, $db, $user;
+
+    $sql = "SELECT";
+    $sql .= " rowid";
+    $sql .= ", " . $db->decrypt('name') . " as name";
+    $sql .= ", " . $db->decrypt('value') . " as value";
+    $sql .= ", type";
+    $sql .= ", note";
+    $sql .= ", entity";
+    $sql .= " FROM " . MAIN_DB_PREFIX . "const";
+    if (!isModEnabled('multicompany')) {
+        // If no multicompany mode, admins can see global and their constantes
+        $sql .= " WHERE entity IN (0," . $conf->entity . ")";
+    } else {
+        // If multicompany mode, superadmin (user->entity=0) can see everything, admin are limited to their entities.
+        if ($user->entity) {
+            $sql .= " WHERE entity IN (" . $db->sanitize($user->entity . "," . $conf->entity) . ")";
+        }
+    }
+    $sql .= " ORDER BY entity, name ASC";
+    return $db->query($sql);
+}
+
 // To disable the WAF for GET and POST and PHP_SELF, uncomment this
 //define('NOSCANPHPSELFFORINJECTION', 1);
 //define('NOSCANGETFORINJECTION', 1);

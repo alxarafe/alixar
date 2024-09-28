@@ -166,7 +166,7 @@ class Login
             $sql .= " SET api_key = '" . $this->db->escape(dolEncrypt($token, '', '', 'dolibarr')) . "'";
             $sql .= " WHERE login = '" . $this->db->escape($login) . "'";
 
-            dol_syslog(get_class($this) . "::login", LOG_DEBUG); // No log
+            dol_syslog(get_only_class($this) . "::login", LOG_DEBUG); // No log
             $result = $this->db->query($sql);
             if (!$result) {
                 throw new RestException(500, 'Error when updating api_key for user :' . $this->db->lasterror());

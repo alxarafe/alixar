@@ -730,8 +730,8 @@ if ($mode == 'common' || $mode == 'commonkanban') {
             continue;
         }
 
-        $modulenameshort = strtolower(preg_replace('/^mod/i', '', get_class($objMod)));
-        $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_class($objMod)));
+        $modulenameshort = strtolower(preg_replace('/^mod/i', '', get_only_class($objMod)));
+        $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_only_class($objMod)));
 
         // Check filters
         $modulename = $objMod->getName();

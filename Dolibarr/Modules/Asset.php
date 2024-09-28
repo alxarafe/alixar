@@ -62,7 +62,7 @@ class  Asset extends DolibarrModules
         //$this->familyinfo = array('myownfamily' => array('position' => '01', 'label' => $langs->trans("MyOwnFamily")));
 
         // Module label (no space allowed), used if translation string 'ModuleAssetsName' not found (MyModue is name of module).
-        $this->name = preg_replace('/^mod/i', '', get_class($this));
+        $this->name = preg_replace('/^mod/i', '', get_only_class($this));
         // Module description, used if translation string 'ModuleAssetsDesc' not found (MyModue is name of module).
         $this->description = "Asset module";
         // Used only if file README.md and README-LL.md not found.

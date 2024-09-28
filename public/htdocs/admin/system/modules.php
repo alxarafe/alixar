@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2005-2009  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2007		Rodolphe Quiedeville	<rodolphe@quiedeville.org>
- * Copyright (C) 2010-2012	Regis Houssin			<regis.houssin@inodbox.com>
+/* Copyright (C) 2005-2009  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007		Rodolphe Quiedeville	    <rodolphe@quiedeville.org>
+ * Copyright (C) 2010-2012	Regis Houssin			    <regis.houssin@inodbox.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -20,10 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *  \file       htdocs/admin/system/modules.php
- *  \brief      File to list all Dolibarr modules
- */
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Core\Base\DolibarrModules;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -109,8 +107,7 @@ foreach ($allModules as $modName => $filename) {
     '@phan-var-force DolibarrModules $objMod';
 
     $modules[$objMod->numero] = $objMod;
-    dd(['objMod' => $objMod]);
-    $modules_files[$objMod->numero] = $file;
+    $modules_files[$objMod->numero] = $filename;
 }
 '@phan-var-force array<string,DolibarrModules> $modules';
 

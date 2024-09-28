@@ -177,7 +177,7 @@ class Deplacement extends CommonObject
         $sql .= ", " . ($this->fk_soc > 0 ? ((int) $this->fk_soc) : "null");
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "deplacement");
@@ -249,7 +249,7 @@ class Deplacement extends CommonObject
         $sql .= " , fk_projet = " . ($this->fk_project > 0 ? $this->fk_project : 0);
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->db->commit();
@@ -279,7 +279,7 @@ class Deplacement extends CommonObject
             $sql .= " AND rowid = " . ((int) $id);
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $obj = $this->db->fetch_object($result);
@@ -319,7 +319,7 @@ class Deplacement extends CommonObject
 
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "deplacement WHERE rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->db->commit();
@@ -421,7 +421,7 @@ class Deplacement extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . "c_type_fees";
         $sql .= " WHERE active = " . ((int) $active);
 
-        dol_syslog(get_class($this) . "::listOfTypes", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::listOfTypes", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $num = $this->db->num_rows($result);
@@ -451,7 +451,7 @@ class Deplacement extends CommonObject
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'deplacement as c';
         $sql .= ' WHERE c.rowid = ' . ((int) $id);
 
-        dol_syslog(get_class($this) . '::info', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::info', LOG_DEBUG);
         $result = $this->db->query($sql);
 
         if ($result) {

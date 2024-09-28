@@ -903,7 +903,7 @@ class Workstation extends CommonObject
                     return $numref;
                 } else {
                     $this->error = $obj->error;
-                    //dol_print_error($this->db,get_class($this)."::getNextNumRef ".$obj->error);
+                    //dol_print_error($this->db,get_only_class($this)."::getNextNumRef ".$obj->error);
                     return "";
                 }
             } else {

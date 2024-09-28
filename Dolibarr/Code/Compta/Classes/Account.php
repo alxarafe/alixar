@@ -518,7 +518,7 @@ class Account extends CommonObject
         $sql .= ", '" . $this->db->escape($type) . "'";
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::add_url_line", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::add_url_line", LOG_DEBUG);
         if ($this->db->query($sql)) {
             $rowid = $this->db->last_insert_id(MAIN_DB_PREFIX . "bank_url");
             return $rowid;
@@ -558,7 +558,7 @@ class Account extends CommonObject
         }
         $sql .= " ORDER BY type, label";
 
-        dol_syslog(get_class($this) . "::get_url", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::get_url", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $i = 0;
@@ -734,17 +734,17 @@ class Account extends CommonObject
         // Check parameters
         if (empty($this->country_id)) {
             $this->error = $langs->transnoentitiesnoconv("ErrorFieldRequired", $langs->transnoentitiesnoconv("Country"));
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
             return -1;
         }
         if (empty($this->ref)) {
             $this->error = $langs->transnoentitiesnoconv("ErrorFieldRequired", $langs->transnoentitiesnoconv("Ref"));
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
             return -1;
         }
         if (empty($this->date_solde)) {
             $this->error = $langs->transnoentitiesnoconv("ErrorFieldRequired", $langs->transnoentitiesnoconv("DateInitialBalance"));
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
             return -1;
         }
 
@@ -757,11 +757,11 @@ class Account extends CommonObject
             $balance = 0;
         }
         if (empty($this->address && !empty($this->domiciliation))) {
-            dol_syslog(get_class($this) . "::create domiciliation is deprecated use address", LOG_NOTICE);
+            dol_syslog(get_only_class($this) . "::create domiciliation is deprecated use address", LOG_NOTICE);
             $this->address = $this->domiciliation;
         }
         if (empty($this->status && !empty($this->clos))) {
-            dol_syslog(get_class($this) . "::create clos is deprecated use status", LOG_NOTICE);
+            dol_syslog(get_only_class($this) . "::create clos is deprecated use status", LOG_NOTICE);
             $this->status = $this->clos;
         }
 
@@ -834,7 +834,7 @@ class Account extends CommonObject
         $sql .= ", '" . $this->db->escape($this->ics_transfer) . "'";
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "bank_account");
@@ -912,12 +912,12 @@ class Account extends CommonObject
         // Check parameters
         if (empty($this->country_id)) {
             $this->error = $langs->transnoentitiesnoconv("ErrorFieldRequired", $langs->transnoentitiesnoconv("Country"));
-            dol_syslog(get_class($this) . "::update " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::update " . $this->error, LOG_ERR);
             return -1;
         }
         if (empty($this->ref)) {
             $this->error = $langs->transnoentitiesnoconv("ErrorFieldRequired", $langs->transnoentitiesnoconv("Ref"));
-            dol_syslog(get_class($this) . "::update " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::update " . $this->error, LOG_ERR);
             return -1;
         }
         if (!$this->label) {
@@ -963,7 +963,7 @@ class Account extends CommonObject
 
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             // Actions on extra fields (by external module or standard code)
@@ -1013,7 +1013,7 @@ class Account extends CommonObject
         // Load library to get BAN control function
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 
-        dol_syslog(get_class($this) . "::update_bban $this->code_banque,$this->code_guichet,$this->number,$this->cle_rib,$this->iban");
+        dol_syslog(get_only_class($this) . "::update_bban $this->code_banque,$this->code_guichet,$this->number,$this->cle_rib,$this->iban");
 
         // Check parameters
         if (!$this->ref) {
@@ -1040,7 +1040,7 @@ class Account extends CommonObject
         $sql .= " WHERE rowid = " . ((int) $this->id);
         $sql .= " AND entity = " . ((int) $conf->entity);
 
-        dol_syslog(get_class($this) . "::update_bban", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update_bban", LOG_DEBUG);
 
         $result = $this->db->query($sql);
         if ($result) {
@@ -1088,7 +1088,7 @@ class Account extends CommonObject
             $sql .= " AND ba.ref = '" . $this->db->escape($ref) . "'";
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             if ($this->db->num_rows($result)) {
@@ -1207,7 +1207,7 @@ class Account extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . $this->table_element;
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $result = $this->db->query($sql);
             if ($result) {
                 // Remove extrafields
@@ -1215,7 +1215,7 @@ class Account extends CommonObject
                     $result = $this->deleteExtraFields();
                     if ($result < 0) {
                         $error++;
-                        dol_syslog(get_class($this) . "::delete error -4 " . $this->error, LOG_ERR);
+                        dol_syslog(get_only_class($this) . "::delete error -4 " . $this->error, LOG_ERR);
                     }
                 }
             } else {

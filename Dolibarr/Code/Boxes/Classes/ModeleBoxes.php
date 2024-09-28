@@ -176,7 +176,7 @@ class ModeleBoxes // Can't be abstract as it is instantiated to build "empty" bo
         $sql .= " WHERE b.entity = " . $conf->entity;
         $sql .= " AND b.rowid = " . ((int)$rowid);
 
-        dol_syslog(get_class($this) . "::fetch rowid=" . ((int)$rowid));
+        dol_syslog(get_only_class($this) . "::fetch rowid=" . ((int)$rowid));
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -210,7 +210,7 @@ class ModeleBoxes // Can't be abstract as it is instantiated to build "empty" bo
         global $langs, $user, $conf;
 
         if (!empty($this->hidden)) {
-            return "\n<!-- Box " . get_class($this) . " hidden -->\n"; // Nothing done if hidden (for example when user has no permission)
+            return "\n<!-- Box " . get_only_class($this) . " hidden -->\n"; // Nothing done if hidden (for example when user has no permission)
         }
 
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -219,13 +219,13 @@ class ModeleBoxes // Can't be abstract as it is instantiated to build "empty" bo
 
         $cachetime = 900; // 900 : 15mn
         $cachedir = DOL_DATA_ROOT . '/users/temp/widgets';
-        $fileid = get_class($this) . 'id-' . $this->box_id . '-e' . $conf->entity . '-u' . $user->id . '-s' . $user->socid . '.cache';
+        $fileid = get_only_class($this) . 'id-' . $this->box_id . '-e' . $conf->entity . '-u' . $user->id . '-s' . $user->socid . '.cache';
         $filename = '/box-' . $fileid;
         $refresh = dol_cache_refresh($cachedir, $filename, $cachetime);
         $out = '';
 
         if ($refresh) {
-            dol_syslog(get_class($this) . '::showBox');
+            dol_syslog(get_only_class($this) . '::showBox');
 
             // Define nbcol and nblines of the box to show
             $nbcol = 0;
@@ -234,7 +234,7 @@ class ModeleBoxes // Can't be abstract as it is instantiated to build "empty" bo
             }
             $nblines = count($contents);
 
-            $out .= "\n<!-- Box " . get_class($this) . " start -->\n";
+            $out .= "\n<!-- Box " . get_only_class($this) . " start -->\n";
 
             $out .= '<div class="box divboxtable boxdraggable" id="boxto_' . $this->box_id . '">' . "\n";
             if (!empty($head['text']) || !empty($head['sublink']) || !empty($head['subpicto']) || $nblines) {
@@ -398,13 +398,13 @@ class ModeleBoxes // Can't be abstract as it is instantiated to build "empty" bo
 
             $out .= "</div>\n";
 
-            $out .= "<!-- Box " . get_class($this) . " end -->\n\n";
+            $out .= "<!-- Box " . get_only_class($this) . " end -->\n\n";
             if (getDolGlobalString('MAIN_ACTIVATE_FILECACHE')) {
                 dol_filecache($cachedir, $filename, $out);
             }
         } else {
-            dol_syslog(get_class($this) . '::showBoxCached');
-            $out = "<!-- Box " . get_class($this) . " from cache -->";
+            dol_syslog(get_only_class($this) . '::showBoxCached');
+            $out = "<!-- Box " . get_only_class($this) . " from cache -->";
             $out .= dol_readcachefile($cachedir, $filename);
         }
 

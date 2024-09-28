@@ -160,7 +160,7 @@ class modPhpbarcode extends ModeleBarCode
             $filebarcode = '';
         }
 
-        dol_syslog(get_class($this) . "::buildBarCode $code,$encoding,$scale,$mode,$filebarcode");
+        dol_syslog(get_only_class($this) . "::buildBarCode $code,$encoding,$scale,$mode,$filebarcode");
         if ($code) {
             $result = barcode_print($code, $encoding, $scale, $mode, $filebarcode);
         }

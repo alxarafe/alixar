@@ -172,7 +172,7 @@ class BaseStripeClient implements StripeClientInterface, StripeStreamingClientIn
     {
         $obj = $this->request($method, $path, $params, $opts);
         if (!($obj instanceof \Stripe\Collection)) {
-            $received_class = \get_class($obj);
+            $received_class = \get_only_class($obj);
             $msg = "Expected to receive `Stripe\\Collection` object from Stripe API. Instead received `{$received_class}`.";
 
             throw new \Stripe\Exception\UnexpectedValueException($msg);
@@ -196,7 +196,7 @@ class BaseStripeClient implements StripeClientInterface, StripeStreamingClientIn
     {
         $obj = $this->request($method, $path, $params, $opts);
         if (!($obj instanceof \Stripe\SearchResult)) {
-            $received_class = \get_class($obj);
+            $received_class = \get_only_class($obj);
             $msg = "Expected to receive `Stripe\\SearchResult` object from Stripe API. Instead received `{$received_class}`.";
 
             throw new \Stripe\Exception\UnexpectedValueException($msg);

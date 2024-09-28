@@ -189,7 +189,7 @@ class PaymentSalary extends CommonObject
 
         $now = dol_now();
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
 
         //deprecatd
         if (!empty($this->datepaye) && empty($this->datep)) {
@@ -334,7 +334,7 @@ class PaymentSalary extends CommonObject
         $sql .= " WHERE t.rowid = " . ((int) $id);
         // TODO link on entity of tax;
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -435,7 +435,7 @@ class PaymentSalary extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -445,7 +445,7 @@ class PaymentSalary extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -468,7 +468,7 @@ class PaymentSalary extends CommonObject
     {
         $error = 0;
 
-        dol_syslog(get_class($this) . "::delete");
+        dol_syslog(get_only_class($this) . "::delete");
 
         $this->db->begin();
 
@@ -486,7 +486,7 @@ class PaymentSalary extends CommonObject
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "payment_salary";
             $sql .= " WHERE rowid=" . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -497,7 +497,7 @@ class PaymentSalary extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -670,7 +670,7 @@ class PaymentSalary extends CommonObject
                             }
                             if ($result <= 0) {
                                 $this->error = $this->db->lasterror();
-                                dol_syslog(get_class($this) . '::addPaymentToBank ' . $this->error);
+                                dol_syslog(get_only_class($this) . '::addPaymentToBank ' . $this->error);
                                 $error++;
                             }
                         }
@@ -702,7 +702,7 @@ class PaymentSalary extends CommonObject
 		// phpcs:enable
         $sql = "UPDATE " . MAIN_DB_PREFIX . "payment_salary SET fk_bank = " . ((int) $id_bank) . " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update_fk_bank", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update_fk_bank", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             return 1;
@@ -726,7 +726,7 @@ class PaymentSalary extends CommonObject
         if (!empty($date)) {
             $this->db->begin();
 
-            dol_syslog(get_class($this) . "::updatePaymentDate with date = " . $date, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::updatePaymentDate with date = " . $date, LOG_DEBUG);
 
             $sql = "UPDATE " . MAIN_DB_PREFIX . $this->table_element;
             $sql .= " SET datep = '" . $this->db->idate($date) . "'";

@@ -64,7 +64,7 @@ abstract class ServerPlugin
      */
     public function getPluginName()
     {
-        return get_class($this);
+        return get_only_class($this);
     }
 
     /**

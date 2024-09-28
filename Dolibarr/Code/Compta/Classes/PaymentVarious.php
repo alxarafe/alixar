@@ -270,7 +270,7 @@ class PaymentVarious extends CommonObject
         $sql .= " fk_user_modif=" . (int) $this->fk_user_modif;
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
@@ -330,7 +330,7 @@ class PaymentVarious extends CommonObject
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "bank as b ON v.fk_bank = b.rowid";
         $sql .= " WHERE v.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -392,7 +392,7 @@ class PaymentVarious extends CommonObject
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "payment_various";
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
@@ -531,7 +531,7 @@ class PaymentVarious extends CommonObject
         $sql .= ", " . ((int) $conf->entity);
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "payment_various");
@@ -772,7 +772,7 @@ class PaymentVarious extends CommonObject
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'payment_various as v';
         $sql .= ' WHERE v.rowid = ' . ((int) $id);
 
-        dol_syslog(get_class($this) . '::info', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::info', LOG_DEBUG);
         $result = $this->db->query($sql);
 
         if ($result) {

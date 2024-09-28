@@ -1363,7 +1363,7 @@ function complete_dictionary_with_modules(&$taborder, &$tabname, &$tablib, &$tab
         $modulequalified = 1;
 
         // We discard modules according to features level (PS: if module is activated we always show it)
-        $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_class($objMod)));
+        $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_only_class($objMod)));
         if ($objMod->version == 'development' && getDolGlobalInt('MAIN_FEATURES_LEVEL') < 2 && !getDolGlobalString($const_name)) {
             $modulequalified = 0;
         }
@@ -1477,7 +1477,7 @@ function complete_dictionary_with_modules(&$taborder, &$tabname, &$tablib, &$tab
             $j++;
             $i++;
         } else {
-            dol_syslog("Module " . get_class($objMod) . " not qualified");
+            dol_syslog("Module " . get_only_class($objMod) . " not qualified");
         }
     }
 
@@ -1508,7 +1508,7 @@ function activateModulesRequiredByCountry($country_code)
         $modulequalified = 1;
 
         // We discard modules according to features level (PS: if module is activated we always show it)
-        $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_class($objMod)));
+        $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_only_class($objMod)));
 
         if ($objMod->version == 'development' && getDolGlobalInt('MAIN_FEATURES_LEVEL') < 2) {
             $modulequalified = 0;
@@ -1528,7 +1528,7 @@ function activateModulesRequiredByCountry($country_code)
                 setEventMessages($objMod->automatic_activation[$country_code], null, 'warnings');
             }
         } else {
-            dol_syslog("Module " . get_class($objMod) . " not qualified");
+            dol_syslog("Module " . get_only_class($objMod) . " not qualified");
         }
     }
 
@@ -1576,7 +1576,7 @@ function complete_elementList_with_modules(&$elementList)
         $modulequalified = 1;
 
         // We discard modules according to features level (PS: if module is activated we always show it)
-        $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_class($objMod)));
+        $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_only_class($objMod)));
         if ($objMod->version == 'development' && getDolGlobalInt('MAIN_FEATURES_LEVEL') < 2 && getDolGlobalString($const_name)) {
             $modulequalified = 0;
         }
@@ -1615,7 +1615,7 @@ function complete_elementList_with_modules(&$elementList)
             $j++;
             $i++;
         } else {
-            dol_syslog("Module " . get_class($objMod) . " not qualified");
+            dol_syslog("Module " . get_only_class($objMod) . " not qualified");
         }
     }
 

@@ -93,7 +93,7 @@ class Link extends CommonObject
         }
         $this->url = trim($this->url);
 
-        dol_syslog(get_class($this) . "::create " . $this->url);
+        dol_syslog(get_only_class($this) . "::create " . $this->url);
 
         // Check parameters
         if (empty($this->url)) {
@@ -110,7 +110,7 @@ class Link extends CommonObject
         $sql .= ", '" . $this->db->escape($this->objecttype) . "'";
         $sql .= ", " . ((int) $this->objectid) . ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $this->id = $this->db->last_insert_id($this->db->prefix() . "links");
@@ -127,11 +127,11 @@ class Link extends CommonObject
             }
 
             if (!$error) {
-                dol_syslog(get_class($this) . "::Create success id=" . $this->id);
+                dol_syslog(get_only_class($this) . "::Create success id=" . $this->id);
                 $this->db->commit();
                 return $this->id;
             } else {
-                dol_syslog(get_class($this) . "::Create echec update " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::Create echec update " . $this->error, LOG_ERR);
                 $this->db->rollback();
                 return -3;
             }
@@ -163,7 +163,7 @@ class Link extends CommonObject
         $langs->load("errors");
         $error = 0;
 
-        dol_syslog(get_class($this) . "::Update id = " . $this->id . " call_trigger = " . $call_trigger);
+        dol_syslog(get_only_class($this) . "::Update id = " . $this->id . " call_trigger = " . $call_trigger);
 
         // Check parameters
         if (empty($this->url)) {
@@ -190,7 +190,7 @@ class Link extends CommonObject
         $sql .= ", objectid = " . $this->objectid;
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update sql = " . $sql);
+        dol_syslog(get_only_class($this) . "::update sql = " . $sql);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($call_trigger) {
@@ -203,7 +203,7 @@ class Link extends CommonObject
             }
 
             if (!$error) {
-                dol_syslog(get_class($this) . "::Update success");
+                dol_syslog(get_only_class($this) . "::Update success");
                 $this->db->commit();
                 return 1;
             } else {
@@ -251,11 +251,11 @@ class Link extends CommonObject
             $sql .= " ORDER BY " . $sortfield . " " . $sortorder;
         }
 
-        dol_syslog(get_class($this) . "::fetchAll", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchAll", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
-            dol_syslog(get_class($this) . "::fetchAll num=" . ((int) $num), LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::fetchAll num=" . ((int)$num), LOG_DEBUG);
             if ($num > 0) {
                 while ($obj = $this->db->fetch_object($resql)) {
                     $link = new Link($this->db);
@@ -325,7 +325,7 @@ class Link extends CommonObject
             $sql .= " AND entity = " . $conf->entity;
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql) > 0) {
@@ -356,7 +356,7 @@ class Link extends CommonObject
      */
     public function delete($user)
     {
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $error = 0;
 
         $this->db->begin();
@@ -373,7 +373,7 @@ class Link extends CommonObject
         $sql = "DELETE FROM " . $this->db->prefix() . "links";
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         if (!$this->db->query($sql)) {
             $error++;
             $this->error = $this->db->lasterror();

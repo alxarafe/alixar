@@ -5098,7 +5098,7 @@ if ($mode == 'replacesite' || $massaction == 'replace') {
             $totalnbwords = 0;
 
             foreach ($listofpages['list'] as $answerrecord) {
-                if (is_object($answerrecord) && get_class($answerrecord) == 'WebsitePage') {
+                if (is_object($answerrecord) && get_only_class($answerrecord) == 'WebsitePage') {
                     $param = '?mode=replacesite';
                     $param .= '&websiteid=' . $website->id;
                     $param .= '&optioncontent=' . GETPOST('optioncontent', 'aZ09');

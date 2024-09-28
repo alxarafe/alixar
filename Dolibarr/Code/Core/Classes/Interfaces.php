@@ -83,21 +83,21 @@ class Interfaces
 
         if (getDolGlobalInt('MAIN_TRIGGER_DEBUG')) {
             // This his too much verbose, enabled if const enabled only
-            dol_syslog(get_class($this) . "::run_triggers action=" . $action . " Launch run_triggers", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::run_triggers action=" . $action . " Launch run_triggers", LOG_DEBUG);
         }
 
         // Check parameters
         if (!is_object($object) || !is_object($conf)) { // Error
             $error = 'function run_triggers called with wrong parameters action=' . $action . ' object=' . ((string) (int) is_object($object)) . ' user=' . ((string) (int) is_object($user)) . ' langs=' . ((string) (int) is_object($langs)) . ' conf=' . ((string) (int) is_object($conf));
-            dol_syslog(get_class($this) . '::run_triggers ' . $error, LOG_ERR);
+            dol_syslog(get_only_class($this) . '::run_triggers ' . $error, LOG_ERR);
             $this->errors[] = $error;
             return -1;
         }
         if (!is_object($langs)) {   // Warning
-            dol_syslog(get_class($this) . '::run_triggers was called with wrong parameters action=' . $action . ' object=' . ((string) (int) is_object($object)) . ' user=' . ((string) (int) is_object($user)) . ' langs=' . ((string) (int) is_object($langs)) . ' conf=' . ((string) (int) is_object($conf)), LOG_WARNING);
+            dol_syslog(get_only_class($this) . '::run_triggers was called with wrong parameters action=' . $action . ' object=' . ((string)(int)is_object($object)) . ' user=' . ((string)(int)is_object($user)) . ' langs=' . ((string)(int)is_object($langs)) . ' conf=' . ((string)(int)is_object($conf)), LOG_WARNING);
         }
         if (!is_object($user)) {        // Warning
-            dol_syslog(get_class($this) . '::run_triggers was called with wrong parameters action=' . $action . ' object=' . ((string) (int) is_object($object)) . ' user=' . ((string) (int) is_object($user)) . ' langs=' . ((string) (int) is_object($langs)) . ' conf=' . ((string) (int) is_object($conf)), LOG_WARNING);
+            dol_syslog(get_only_class($this) . '::run_triggers was called with wrong parameters action=' . $action . ' object=' . ((string)(int)is_object($object)) . ' user=' . ((string)(int)is_object($user)) . ' langs=' . ((string)(int)is_object($langs)) . ' conf=' . ((string)(int)is_object($conf)), LOG_WARNING);
             $user = new User($this->db);
         }
 
@@ -146,7 +146,7 @@ class Interfaces
                         }
 
                         if (!$qualified) {
-                            //dol_syslog(get_class($this)."::run_triggers action=".$action." Triggers for file '".$file."' need module to be enabled", LOG_DEBUG);
+                            //dol_syslog(get_only_class($this)."::run_triggers action=".$action." Triggers for file '".$file."' need module to be enabled", LOG_DEBUG);
                             continue;
                         }
 
@@ -154,7 +154,7 @@ class Interfaces
                         //print "file=$file - modName=$modName\n";
                         if (in_array($modName, $modules)) {    // $modules = list of modName already loaded
                             $langs->load("errors");
-                            dol_syslog(get_class($this) . "::run_triggers action=" . $action . " " . $langs->trans("ErrorDuplicateTrigger", $newdir . "/" . $file, $fullpathfiles[$modName]), LOG_WARNING);
+                            dol_syslog(get_only_class($this) . "::run_triggers action=" . $action . " " . $langs->trans("ErrorDuplicateTrigger", $newdir . "/" . $file, $fullpathfiles[$modName]), LOG_WARNING);
                             continue;
                         }
 
@@ -195,13 +195,13 @@ class Interfaces
                 $result = 0;
 
                 if (method_exists($objMod, 'runTrigger')) { // New method to implement
-                    //dol_syslog(get_class($this)."::run_triggers action=".$action." Launch runTrigger for file '".$files[$key]."'", LOG_DEBUG);
+                    //dol_syslog(get_only_class($this)."::run_triggers action=".$action." Launch runTrigger for file '".$files[$key]."'", LOG_DEBUG);
                     $result = $objMod->runTrigger($action, $object, $user, $langs, $conf);
                 } elseif (method_exists($objMod, 'run_trigger')) {  // Deprecated method
-                    dol_syslog(get_class($this) . "::run_triggers action=" . $action . " Launch old method run_trigger (rename your trigger into runTrigger) for file '" . $files[$key] . "'", LOG_WARNING);
+                    dol_syslog(get_only_class($this) . "::run_triggers action=" . $action . " Launch old method run_trigger (rename your trigger into runTrigger) for file '" . $files[$key] . "'", LOG_WARNING);
                     $result = $objMod->run_trigger($action, $object, $user, $langs, $conf);
                 } else {
-                    dol_syslog(get_class($this) . "::run_triggers action=" . $action . " A trigger was declared for class " . get_class($objMod) . " but method runTrigger was not found", LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::run_triggers action=" . $action . " A trigger was declared for class " . get_only_class($objMod) . " but method runTrigger was not found", LOG_ERR);
                 }
 
                 $dblevelafter = $this->db->transaction_opened;
@@ -236,15 +236,15 @@ class Interfaces
                     //dol_syslog("Error in trigger ".$action." - Nb of error string returned = ".count($this->errors), LOG_ERR);
                 }
             } else {
-                dol_syslog(get_class($this) . "::run_triggers action=" . $action . " Failed to instantiate trigger for file '" . $files[$key] . "'", LOG_ERR);
+                dol_syslog(get_only_class($this) . "::run_triggers action=" . $action . " Failed to instantiate trigger for file '" . $files[$key] . "'", LOG_ERR);
             }
         }
 
         if ($nbko) {
-            dol_syslog(get_class($this) . "::run_triggers action=" . $action . " Files found: " . $nbfile . ", Files launched: " . $nbtotal . ", Done: " . $nbok . ", Failed: " . $nbko . ($this->lastmoduleerror ? " - Last module in error: " . $this->lastmoduleerror : "") . " - Nb of error string returned in this->errors = " . count($this->errors), LOG_ERR);
+            dol_syslog(get_only_class($this) . "::run_triggers action=" . $action . " Files found: " . $nbfile . ", Files launched: " . $nbtotal . ", Done: " . $nbok . ", Failed: " . $nbko . ($this->lastmoduleerror ? " - Last module in error: " . $this->lastmoduleerror : "") . " - Nb of error string returned in this->errors = " . count($this->errors), LOG_ERR);
             return -$nbko;
         } else {
-            //dol_syslog(get_class($this)."::run_triggers Files found: ".$nbfile.", Files launched: ".$nbtotal.", Done: ".$nbok.", Failed: ".$nbko, LOG_DEBUG);
+            //dol_syslog(get_only_class($this)."::run_triggers Files found: ".$nbfile.", Files launched: ".$nbtotal.", Done: ".$nbok.", Failed: ".$nbko, LOG_DEBUG);
             return $nbok;
         }
     }

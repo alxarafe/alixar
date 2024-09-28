@@ -649,7 +649,7 @@ class FormProjets extends Form
         }
         $sql .= " ORDER BY ref DESC";
 
-        dol_syslog(get_class($this) . '::select_element', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::select_element', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -686,7 +686,7 @@ class FormProjets extends Form
             dol_print_error($this->db);
             $this->error = $this->db->lasterror();
             $this->errors[] = $this->db->lasterror();
-            dol_syslog(get_class($this) . "::select_element " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::select_element " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -774,7 +774,7 @@ class FormProjets extends Form
         } else {
             $this->error = $this->db->lasterror();
             $this->errors[] = $this->db->lasterror();
-            dol_syslog(get_class($this) . "::selectOpportunityStatus " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::selectOpportunityStatus " . $this->error, LOG_ERR);
             return -1;
         }
     }

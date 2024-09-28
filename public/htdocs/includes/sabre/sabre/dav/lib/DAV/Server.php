@@ -271,7 +271,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
                 $error->appendChild($DOM->createElement('s:sabredav-version', $h(Version::VERSION)));
             }
 
-            $error->appendChild($DOM->createElement('s:exception', $h(get_class($e))));
+            $error->appendChild($DOM->createElement('s:exception', $h(get_only_class($e))));
             $error->appendChild($DOM->createElement('s:message', $h($e->getMessage())));
             if ($this->debugExceptions) {
                 $error->appendChild($DOM->createElement('s:file', $h($e->getFile())));
@@ -284,7 +284,7 @@ class Server implements LoggerAwareInterface, EmitterInterface
                 $previous = $e;
                 while ($previous = $previous->getPrevious()) {
                     $xPrevious = $DOM->createElement('s:previous-exception');
-                    $xPrevious->appendChild($DOM->createElement('s:exception', $h(get_class($previous))));
+                    $xPrevious->appendChild($DOM->createElement('s:exception', $h(get_only_class($previous))));
                     $xPrevious->appendChild($DOM->createElement('s:message', $h($previous->getMessage())));
                     $xPrevious->appendChild($DOM->createElement('s:file', $h($previous->getFile())));
                     $xPrevious->appendChild($DOM->createElement('s:line', $h($previous->getLine())));

@@ -322,7 +322,7 @@ class ReceptionLineBatch extends CommonObjectLine
             $sql .= " WHERE t.rowid = " . ((int) $id);
         }
 
-        dol_syslog(get_class($this) . "::fetch");
+        dol_syslog(get_only_class($this) . "::fetch");
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -497,7 +497,7 @@ class ReceptionLineBatch extends CommonObjectLine
             $result = $this->deleteExtraFields();
             if ($result < 0) {
                 $error++;
-                dol_syslog(get_class($this) . "::delete error deleteExtraFields " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error deleteExtraFields " . $this->error, LOG_ERR);
             }
         }
 

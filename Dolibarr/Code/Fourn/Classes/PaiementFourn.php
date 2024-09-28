@@ -246,7 +246,7 @@ class PaiementFourn extends Paiement
         $totalamount = (float) price2num($totalamount);
         $totalamount_converted = (float) price2num($totalamount_converted);
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
 
         $this->db->begin();
 
@@ -392,7 +392,7 @@ class PaiementFourn extends Paiement
                             $error++;
                         }
                     } else {
-                        dol_syslog(get_class($this) . '::Create Amount line ' . $key . ' not a number. We discard it.');
+                        dol_syslog(get_only_class($this) . '::Create Amount line ' . $key . ' not a number. We discard it.');
                     }
                 }
 
@@ -565,7 +565,7 @@ class PaiementFourn extends Paiement
             $sql .= " AND " . $filter;
         }
 
-        dol_syslog(get_class($this) . '::getBillsArray', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::getBillsArray', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $i = 0;
@@ -581,7 +581,7 @@ class PaiementFourn extends Paiement
             return $billsarray;
         } else {
             $this->error = $this->db->error();
-            dol_syslog(get_class($this) . '::getBillsArray Error ' . $this->error);
+            dol_syslog(get_only_class($this) . '::getBillsArray Error ' . $this->error);
             return -1;
         }
     }

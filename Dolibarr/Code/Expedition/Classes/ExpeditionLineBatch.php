@@ -88,7 +88,7 @@ class ExpeditionLineBatch extends CommonObject
         $sql .= ' LEFT JOIN ' . MAIN_DB_PREFIX . "product_lot as pl on pl.batch = pb.batch AND pl.fk_product = ps.fk_product";
         $sql .= " WHERE pb.rowid = " . (int) $id_stockdluo;
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -173,7 +173,7 @@ class ExpeditionLineBatch extends CommonObject
             return $this->id;
         } else {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             return -1 * $error;

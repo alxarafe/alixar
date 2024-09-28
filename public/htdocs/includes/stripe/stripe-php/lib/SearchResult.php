@@ -96,7 +96,7 @@ class SearchResult extends StripeObject implements \Countable, \IteratorAggregat
         $obj = Util\Util::convertToStripeObject($response, $opts);
         if (!($obj instanceof \Stripe\SearchResult)) {
             throw new \Stripe\Exception\UnexpectedValueException(
-                'Expected type ' . \Stripe\SearchResult::class . ', got "' . \get_class($obj) . '" instead.'
+                'Expected type ' . \Stripe\SearchResult::class . ', got "' . \get_only_class($obj) . '" instead.'
             );
         }
         $obj->setFilters($params);

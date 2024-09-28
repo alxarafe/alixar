@@ -418,7 +418,7 @@ public $demand_reason;
             $qty = 1;
         }
 
-        dol_syslog(get_class($this) . "::add_product $idproduct, $qty, $remise_percent");
+        dol_syslog(get_only_class($this) . "::add_product $idproduct, $qty, $remise_percent");
         if ($idproduct > 0) {
             $prod = new Product($this->db);
             $prod->fetch($idproduct);
@@ -522,7 +522,7 @@ public $demand_reason;
             $sql .= " WHERE p.rowid = " . ((int)$rowid);
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -663,7 +663,7 @@ public $demand_reason;
         }
         $sql .= ' ORDER by d.rang';
 
-        dol_syslog(get_class($this) . "::fetch_lines", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch_lines", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
 
@@ -867,7 +867,7 @@ public $demand_reason;
     {
         global $mysoc, $langs;
 
-        dol_syslog(get_class($this) . "::updateLine rowid=$rowid, pu=$pu, qty=$qty, remise_percent=$remise_percent,
+        dol_syslog(get_only_class($this) . "::updateLine rowid=$rowid, pu=$pu, qty=$qty, remise_percent=$remise_percent,
         txtva=$txtva, desc=$desc, price_base_type=$price_base_type, info_bits=$info_bits, special_code=$special_code, fk_parent_line=$fk_parent_line, pa_ht=$pa_ht, type=$type, date_start=$date_start, date_end=$date_end");
         include_once DOL_DOCUMENT_ROOT . '/core/lib/price.lib.php';
 
@@ -1025,7 +1025,7 @@ public $demand_reason;
                 return -1;
             }
         } else {
-            dol_syslog(get_class($this) . "::updateline Erreur -2 Propal en mode incompatible pour cette action");
+            dol_syslog(get_only_class($this) . "::updateline Erreur -2 Propal en mode incompatible pour cette action");
             return -2;
         }
     }
@@ -1101,7 +1101,7 @@ public $demand_reason;
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -1127,7 +1127,7 @@ public $demand_reason;
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -1222,7 +1222,7 @@ public $demand_reason;
                 $error++;
                 $this->error = $this->db->lasterror();
                 $this->errors[] = $this->error;
-                dol_syslog(get_class($this) . "::delete error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error " . $this->error, LOG_ERR);
             }
         }
 
@@ -1247,7 +1247,7 @@ public $demand_reason;
             $result = $this->deleteExtraFields();
             if ($result < 0) {
                 $error++;
-                dol_syslog(get_class($this) . "::delete error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error " . $this->error, LOG_ERR);
             }
         }
 
@@ -1259,7 +1259,7 @@ public $demand_reason;
                 $error++;
                 $this->error = $this->db->lasterror();
                 $this->errors[] = $this->error;
-                dol_syslog(get_class($this) . "::delete error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error " . $this->error, LOG_ERR);
             }
         }
 
@@ -1301,7 +1301,7 @@ public $demand_reason;
         }
 
         if (!$error) {
-            dol_syslog(get_class($this) . "::delete " . $this->id . " by " . $user->id, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete " . $this->id . " by " . $user->id, LOG_DEBUG);
             $this->db->commit();
             return 1;
         } else {
@@ -1538,13 +1538,13 @@ public $demand_reason;
         // Set tmp vars
         $delivery_date = $this->delivery_date;
 
-        dol_syslog(get_class($this) . "::create");
+        dol_syslog(get_only_class($this) . "::create");
 
         // Check parameters
         $result = $this->fetch_thirdparty();
         if ($result < 0) {
             $this->error = "Failed to fetch company";
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
             return -3;
         }
 
@@ -1553,7 +1553,7 @@ public $demand_reason;
             $result = self::isExistingObject($this->element, 0, $this->ref); // Check ref is not yet used
             if ($result > 0) {
                 $this->error = 'ErrorRefAlreadyExists';
-                dol_syslog(get_class($this) . "::create " . $this->error, LOG_WARNING);
+                dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_WARNING);
                 $this->db->rollback();
                 return -1;
             }
@@ -1561,7 +1561,7 @@ public $demand_reason;
 
         if (empty($this->date)) {
             $this->error = "Date of proposal is required";
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
             return -4;
         }
 
@@ -1634,7 +1634,7 @@ public $demand_reason;
         $sql .= ", " . (float)$this->multicurrency_tx;
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "propal");
@@ -1643,7 +1643,7 @@ public $demand_reason;
                 $this->ref = '(PROV' . $this->id . ')';
                 $sql = 'UPDATE ' . MAIN_DB_PREFIX . "propal SET ref='" . $this->db->escape($this->ref) . "' WHERE rowid=" . ((int)$this->id);
 
-                dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
                 $resql = $this->db->query($sql);
                 if (!$resql) {
                     $error++;
@@ -1800,7 +1800,7 @@ public $demand_reason;
 
             if (!$error) {
                 $this->db->commit();
-                dol_syslog(get_class($this) . "::create done id=" . $this->id);
+                dol_syslog(get_only_class($this) . "::create done id=" . $this->id);
                 return $this->id;
             } else {
                 $this->db->rollback();
@@ -1856,7 +1856,7 @@ public $demand_reason;
     {
         global $mysoc, $conf, $langs;
 
-        dol_syslog(get_class($this) . "::addline propalid=$this->id, desc=$desc, pu_ht=$pu_ht, qty=$qty, txtva=$txtva, fk_product=$fk_product, remise_except=$remise_percent, price_base_type=$price_base_type, pu_ttc=$pu_ttc, info_bits=$info_bits, type=$type, fk_remise_except=" . $fk_remise_except);
+        dol_syslog(get_only_class($this) . "::addline propalid=$this->id, desc=$desc, pu_ht=$pu_ht, qty=$qty, txtva=$txtva, fk_product=$fk_product, remise_except=$remise_percent, price_base_type=$price_base_type, pu_ttc=$pu_ttc, info_bits=$info_bits, type=$type, fk_remise_except=" . $fk_remise_except);
 
         if ($this->statut == self::STATUS_DRAFT) {
             include_once DOL_DOCUMENT_ROOT . '/core/lib/price.lib.php';
@@ -2063,7 +2063,7 @@ public $demand_reason;
                 return -2;
             }
         } else {
-            dol_syslog(get_class($this) . "::addline status of proposal must be Draft to allow use of ->addline()", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::addline status of proposal must be Draft to allow use of ->addline()", LOG_ERR);
             return -3;
         }
     }
@@ -2087,7 +2087,7 @@ public $demand_reason;
 
         // Protection
         if ($this->statut == self::STATUS_VALIDATED) {
-            dol_syslog(get_class($this) . "::valid action abandoned: already validated", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::valid action abandoned: already validated", LOG_WARNING);
             return 0;
         }
 
@@ -2096,7 +2096,7 @@ public $demand_reason;
                 || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('propal', 'propal_advance', 'validate')))
         ) {
             $this->error = 'ErrorPermissionDenied';
-            dol_syslog(get_class($this) . "::valid " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::valid " . $this->error, LOG_ERR);
             return -1;
         }
 
@@ -2121,7 +2121,7 @@ public $demand_reason;
         $sql .= " fk_statut = " . self::STATUS_VALIDATED . ", date_valid='" . $this->db->idate($now) . "', fk_user_valid=" . ((int)$user->id);
         $sql .= " WHERE rowid = " . ((int)$this->id) . " AND fk_statut = " . self::STATUS_DRAFT;
 
-        dol_syslog(get_class($this) . "::valid", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::valid", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             dol_print_error($this->db);
@@ -2165,7 +2165,7 @@ public $demand_reason;
                 $dirsource = $conf->propal->multidir_output[$this->entity] . '/' . $oldref;
                 $dirdest = $conf->propal->multidir_output[$this->entity] . '/' . $newref;
                 if (!$error && file_exists($dirsource)) {
-                    dol_syslog(get_class($this) . "::validate rename dir " . $dirsource . " into " . $dirdest);
+                    dol_syslog(get_only_class($this) . "::validate rename dir " . $dirsource . " into " . $dirdest);
                     if (@rename($dirsource, $dirdest)) {
                         dol_syslog("Rename ok");
                         // Rename docs starting with $oldref with $newref
@@ -2262,7 +2262,7 @@ public $demand_reason;
         // phpcs:enable
         if (empty($date)) {
             $this->error = 'ErrorBadParameter';
-            dol_syslog(get_class($this) . "::set_date " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::set_date " . $this->error, LOG_ERR);
             return -1;
         }
 
@@ -2652,7 +2652,7 @@ public $demand_reason;
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::reopen", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::reopen", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -2673,7 +2673,7 @@ public $demand_reason;
         if ($error) {
             if (!empty($this->errors)) {
                 foreach ($this->errors as $errmsg) {
-                    dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                     $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
                 }
             }
@@ -2986,7 +2986,7 @@ public $demand_reason;
         $sql .= " fk_user_modif = " . ((int)$user->id);
         $sql .= " WHERE rowid = " . ((int)$this->id);
 
-        dol_syslog(get_class($this) . "::cancel", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::cancel", LOG_DEBUG);
         if ($this->db->query($sql)) {
             if (!$error) {
                 // Call trigger
@@ -3003,7 +3003,7 @@ public $demand_reason;
                 return 1;
             } else {
                 foreach ($this->errors as $errmsg) {
-                    dol_syslog(get_class($this) . "::cancel " . $errmsg, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::cancel " . $errmsg, LOG_ERR);
                     $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
                 }
                 $this->db->rollback();
@@ -3035,7 +3035,7 @@ public $demand_reason;
             return 0;
         }
 
-        dol_syslog(get_class($this) . "::setDraft", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::setDraft", LOG_DEBUG);
 
         $this->db->begin();
 
@@ -3212,7 +3212,7 @@ public $demand_reason;
             $sql .= " FROM " . MAIN_DB_PREFIX . "facture";
             $sql .= " WHERE rowid IN (" . $this->db->sanitize(implode(',', $linkedInvoices)) . ")";
 
-            dol_syslog(get_class($this) . "::InvoiceArrayList", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::InvoiceArrayList", LOG_DEBUG);
             $resql = $this->db->query($sql);
 
             if ($resql) {

@@ -165,7 +165,7 @@ class UserGroup extends CommonObject
     {
         global $conf;
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         if (!empty($groupname)) {
             $result = $this->fetchCommon(0, '', ' AND nom = \'' . $this->db->escape($groupname) . '\'');
         } else {
@@ -212,7 +212,7 @@ class UserGroup extends CommonObject
         }
         $sql .= " ORDER BY g.nom";
 
-        dol_syslog(get_class($this) . "::listGroupsForUser", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::listGroupsForUser", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             while ($obj = $this->db->fetch_object($result)) {
@@ -274,7 +274,7 @@ class UserGroup extends CommonObject
             $sql .= ' AND (' . $excludefilter . ')';
         }
 
-        dol_syslog(get_class($this) . "::listUsersForGroup", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::listUsersForGroup", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         if ($resql) {
@@ -332,7 +332,7 @@ class UserGroup extends CommonObject
 
         $entity = (!empty($entity) ? $entity : $conf->entity);
 
-        dol_syslog(get_class($this) . "::addrights $rid, $allmodule, $allperms, $entity");
+        dol_syslog(get_only_class($this) . "::addrights $rid, $allmodule, $allperms, $entity");
         $error = 0;
         $whereforadd = '';
 
@@ -603,7 +603,7 @@ class UserGroup extends CommonObject
             $sql .= " AND r.module = '" . $this->db->escape($moduletag) . "'";
         }
 
-        dol_syslog(get_class($this) . '::getrights', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::getrights', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);

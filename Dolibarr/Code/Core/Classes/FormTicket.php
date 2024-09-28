@@ -779,7 +779,7 @@ class FormTicket
         $selected = is_array($selected) ? $selected : (!empty($selected) ? explode(',', $selected) : array());
         $ticketstat = new Ticket($this->db);
 
-        dol_syslog(get_class($this) . "::select_types_tickets " . implode(';', $selected) . ", " . $htmlname . ", " . $filtertype . ", " . $format . ", " . $multiselect, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_types_tickets " . implode(';', $selected) . ", " . $htmlname . ", " . $filtertype . ", " . $format . ", " . $multiselect, LOG_DEBUG);
 
         $filterarray = array();
 
@@ -875,7 +875,7 @@ class FormTicket
     {
         global $conf, $langs, $user;
 
-        dol_syslog(get_class($this) . "::selectCategoryTickets " . $selected . ", " . $htmlname . ", " . $filtertype . ", " . $format, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectCategoryTickets " . $selected . ", " . $htmlname . ", " . $filtertype . ", " . $format, LOG_DEBUG);
 
         if (is_null($outputlangs) || !is_object($outputlangs)) {
             $outputlangs = $langs;
@@ -1229,7 +1229,7 @@ class FormTicket
 
         $ticketstat = new Ticket($this->db);
 
-        dol_syslog(get_class($this) . "::selectSeveritiesTickets " . $selected . ", " . $htmlname . ", " . $filtertype . ", " . $format, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectSeveritiesTickets " . $selected . ", " . $htmlname . ", " . $filtertype . ", " . $format, LOG_DEBUG);
 
         $filterarray = array();
 

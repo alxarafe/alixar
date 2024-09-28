@@ -977,7 +977,7 @@ class Form
         $sql .= " WHERE active > 0";
         //$sql.= " ORDER BY code ASC";
 
-        dol_syslog(get_class($this) . "::select_country", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_country", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $out .= '<select id="select' . $htmlname . '" class="flat maxwidth200onsmartphone selectcountry' . ($morecss ? ' ' . $morecss : '') . '" name="' . $htmlname . '" ' . $htmloption . '>';
@@ -1108,7 +1108,7 @@ class Form
         $sql .= " WHERE active > 0";
         $sql .= " ORDER BY code ASC";
 
-        dol_syslog(get_class($this) . "::select_incoterm", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_incoterm", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($conf->use_javascript_ajax && !$forcecombo) {
@@ -1627,7 +1627,7 @@ class Form
         $sql .= $this->db->plimit($limit, 0);
 
         // Build output string
-        dol_syslog(get_class($this) . "::select_thirdparty_list", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_thirdparty_list", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             // Construct $out and $outarray
@@ -1850,7 +1850,7 @@ class Form
         $sql .= $hookmanager->resPrint;
         $sql .= " ORDER BY sp.lastname ASC";
 
-        dol_syslog(get_class($this) . "::selectcontacts", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectcontacts", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -2050,7 +2050,7 @@ class Form
         }
         $sql .= " ORDER BY re.description ASC";
 
-        dol_syslog(get_class($this) . "::select_remises", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_remises", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             print '<select id="select_' . $htmlname . '" class="flat maxwidthonsmartphone" name="' . $htmlname . '">';
@@ -2262,7 +2262,7 @@ class Form
             $sql .= " ORDER BY u.statut DESC, u.lastname ASC, u.firstname ASC";
         }
 
-        dol_syslog(get_class($this) . "::select_dolusers", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_dolusers", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -3114,7 +3114,7 @@ class Form
         $sql .= $this->db->plimit($limit, 0);
 
         // Build output string
-        dol_syslog(get_class($this) . "::select_produits_list search products", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_produits_list search products", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
@@ -3160,7 +3160,7 @@ class Form
                     $sql .= " WHERE fk_product_price = " . ((int) $objp->price_rowid);
                     $sql .= " ORDER BY quantity ASC";
 
-                    dol_syslog(get_class($this) . "::select_produits_list search prices by qty", LOG_DEBUG);
+                    dol_syslog(get_only_class($this) . "::select_produits_list search prices by qty", LOG_DEBUG);
                     $result2 = $this->db->query($sql);
                     if ($result2) {
                         $nb_prices = $this->db->num_rows($result2);
@@ -3407,7 +3407,7 @@ class Form
             $sql .= " ORDER BY date_price DESC, rowid DESC"; // Warning DESC must be both on date_price and rowid.
             $sql .= " LIMIT 1";
 
-            dol_syslog(get_class($this) . '::constructProductListOption search price for product ' . $objp->rowid . ' AND level ' . $price_level, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::constructProductListOption search price for product ' . $objp->rowid . ' AND level ' . $price_level, LOG_DEBUG);
             $result2 = $this->db->query($sql);
             if ($result2) {
                 $objp2 = $this->db->fetch_object($result2);
@@ -3733,7 +3733,7 @@ class Form
 
         // Build output string
 
-        dol_syslog(get_class($this) . "::select_produits_fournisseurs_list", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_produits_fournisseurs_list", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/product.lib.php';
@@ -4108,7 +4108,7 @@ class Form
             $sql .= " ORDER BY pfp.unitprice ASC";
         }
 
-        dol_syslog(get_class($this) . "::select_product_fourn_price", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_product_fourn_price", LOG_DEBUG);
         $result = $this->db->query($sql);
 
         if ($result) {
@@ -4881,7 +4881,7 @@ class Form
         }
         $sql .= " ORDER BY libelle ASC";
 
-        dol_syslog(get_class($this) . "::selectShippingMode", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectShippingMode", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $num = $this->db->num_rows($result);
@@ -5086,7 +5086,7 @@ class Form
         }
         $sql .= " ORDER BY label";
 
-        dol_syslog(get_class($this) . "::select_comptes", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_comptes", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $num = $this->db->num_rows($result);
@@ -5169,7 +5169,7 @@ class Form
         }
         $sql .= " ORDER BY name";
 
-        dol_syslog(get_class($this) . "::select_establishment", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_establishment", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $num = $this->db->num_rows($result);
@@ -7648,7 +7648,7 @@ class Form
         $sql .= $this->db->plimit($limit, 0);
 
         // Build output string
-        dol_syslog(get_class($this) . "::selectTicketsList search tickets", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectTicketsList search tickets", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ticket.lib.php';
@@ -7871,7 +7871,7 @@ class Form
         $sql .= $this->db->plimit($limit, 0);
 
         // Build output string
-        dol_syslog(get_class($this) . "::selectProjectsList search projects", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectProjectsList search projects", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
@@ -8103,7 +8103,7 @@ class Form
         $sql .= $this->db->plimit($limit, 0);
 
         // Build output string
-        dol_syslog(get_class($this) . "::selectMembersList search adherents", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectMembersList search adherents", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
@@ -8325,7 +8325,7 @@ class Form
         }
         $confkeyforautocompletemode = strtoupper($prefixforautocompletemode) . '_USE_SEARCH_TO_SELECT'; // For example COMPANY_USE_SEARCH_TO_SELECT
 
-        dol_syslog(get_class($this) . "::selectForForms filter=" . $filter, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectForForms filter=" . $filter, LOG_DEBUG);
 
         // Generate the combo HTML component
         $out = '';
@@ -10293,7 +10293,7 @@ class Form
         }
         $sql .= " ORDER BY ug.nom ASC";
 
-        dol_syslog(get_class($this) . "::select_dolgroups", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_dolgroups", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             // Enhance with select2

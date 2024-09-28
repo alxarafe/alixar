@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2005-2020  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2007       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2007-2012  Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2015-2019  Frederic France         <frederic.france@netlogic.fr>
- * Copyright (C) 2017       Nicolas ZABOURI         <info@inovea-conseil.com>
+/* Copyright (C) 2005-2020  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2007       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2007-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2015-2019  Frederic France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2017       Nicolas ZABOURI             <info@inovea-conseil.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,11 +22,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *  \file       htdocs/admin/system/filecheck.php
- *  \brief      Page to check Dolibarr files integrity
- */
-
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -39,7 +34,6 @@ if (!$user->admin) {
 }
 
 $error = 0;
-
 
 /*
  * View

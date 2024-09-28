@@ -69,7 +69,7 @@ class ExceptionCaster
 
         if (isset($a[$xPrefix . 'previous'], $a[$xPrefix . 'trace']) && $a[$xPrefix . 'previous'] instanceof \Exception) {
             $b = (array)$a[$xPrefix . 'previous'];
-            self::traceUnshift($b[$xPrefix . 'trace'], get_class($a[$xPrefix . 'previous']), $b[$prefix . 'file'], $b[$prefix . 'line']);
+            self::traceUnshift($b[$xPrefix . 'trace'], get_only_class($a[$xPrefix . 'previous']), $b[$prefix . 'file'], $b[$prefix . 'line']);
             $a[$xPrefix . 'trace'] = new TraceStub($b[$xPrefix . 'trace'], false, 0, -1 - count($a[$xPrefix . 'trace']->value));
         }
 

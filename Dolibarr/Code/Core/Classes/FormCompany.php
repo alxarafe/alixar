@@ -67,7 +67,7 @@ class FormCompany extends Form
             $sql .= " " . $filter;
         }
         $sql .= " ORDER by position, id";
-        dol_syslog(get_class($this) . '::typent_array', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::typent_array', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -116,7 +116,7 @@ class FormCompany extends Form
             $sql .= " " . $filter;
         }
         $sql .= " ORDER BY id ASC";
-        dol_syslog(get_class($this) . '::effectif_array', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::effectif_array', LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -160,7 +160,7 @@ class FormCompany extends Form
         print '<input type="hidden" name="action" value="setprospectlevel">';
         print '<input type="hidden" name="token" value="' . newToken() . '">';
 
-        dol_syslog(get_class($this) . '::form_prospect_level', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::form_prospect_level', LOG_DEBUG);
         $sql = "SELECT code, label";
         $sql .= " FROM " . $this->db->prefix() . "c_prospectlevel";
         $sql .= " WHERE active > 0";
@@ -282,7 +282,7 @@ class FormCompany extends Form
 		// phpcs:enable
         global $conf, $langs, $user;
 
-        dol_syslog(get_class($this) . "::select_departement selected=" . $selected . ", country_codeid=" . $country_codeid, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_departement selected=" . $selected . ", country_codeid=" . $country_codeid, LOG_DEBUG);
 
         $langs->load("dict");
 
@@ -311,7 +311,7 @@ class FormCompany extends Form
             }
             $num = $this->db->num_rows($result);
             $i = 0;
-            dol_syslog(get_class($this) . "::select_departement num=" . $num, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::select_departement num=" . $num, LOG_DEBUG);
             if ($num) {
                 $country = '';
                 while ($i < $num) {
@@ -424,7 +424,7 @@ class FormCompany extends Form
         $sql .= " WHERE r.fk_pays=c.rowid AND r.active = 1 and c.active = 1";
         $sql .= " ORDER BY c.code, c.label ASC";
 
-        dol_syslog(get_class($this) . "::select_region", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_region", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             print '<select class="flat" id="' . $htmlname . '" name="' . $htmlname . '">';
@@ -571,7 +571,7 @@ class FormCompany extends Form
         }
         $sql .= " ORDER BY c.code";
 
-        dol_syslog(get_class($this) . "::select_juridicalstatus", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::select_juridicalstatus", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $out .= '<div id="particulier2" class="visible">';

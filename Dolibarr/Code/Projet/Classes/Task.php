@@ -291,7 +291,7 @@ class Task extends CommonObjectLine
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -321,7 +321,7 @@ class Task extends CommonObjectLine
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -381,7 +381,7 @@ class Task extends CommonObjectLine
             $sql .= "t.rowid = " . ((int) $id);
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num_rows = $this->db->num_rows($resql);
@@ -508,7 +508,7 @@ class Task extends CommonObjectLine
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -589,7 +589,7 @@ class Task extends CommonObjectLine
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -618,7 +618,7 @@ class Task extends CommonObjectLine
         $this->db->begin();
 
         if ($this->hasChildren() > 0) {
-            dol_syslog(get_class($this) . "::delete Can't delete record as it has some sub tasks", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::delete Can't delete record as it has some sub tasks", LOG_WARNING);
             $this->error = 'ErrorRecordHasSubTasks';
             $this->db->rollback();
             return 0;
@@ -626,7 +626,7 @@ class Task extends CommonObjectLine
 
         $objectisused = $this->isObjectUsed($this->id);
         if (!empty($objectisused)) {
-            dol_syslog(get_class($this) . "::delete Can't delete record as it has some child", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::delete Can't delete record as it has some child", LOG_WARNING);
             $this->error = 'ErrorRecordHasChildren';
             $this->db->rollback();
             return 0;
@@ -690,7 +690,7 @@ class Task extends CommonObjectLine
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -702,7 +702,7 @@ class Task extends CommonObjectLine
                 $projectstatic->fetch($this->fk_project);
 
                 $dir = $conf->project->dir_output . "/" . dol_sanitizeFileName($projectstatic->ref) . '/' . dol_sanitizeFileName($this->id);
-                dol_syslog(get_class($this) . "::delete dir=" . $dir, LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::delete dir=" . $dir, LOG_DEBUG);
                 if (file_exists($dir)) {
                     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
                     $res = @dol_delete_dir_recursive($dir);
@@ -734,7 +734,7 @@ class Task extends CommonObjectLine
         $sql .= " FROM " . MAIN_DB_PREFIX . "projet_task";
         $sql .= " WHERE fk_task_parent = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::hasChildren", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::hasChildren", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -769,7 +769,7 @@ class Task extends CommonObjectLine
         $sql .= " WHERE fk_element = " . ((int) $this->id);
         $sql .= " AND elementtype = 'task'";
 
-        dol_syslog(get_class($this) . "::hasTimeSpent", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::hasTimeSpent", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -1111,7 +1111,7 @@ class Task extends CommonObjectLine
         }
 
         //print $sql;exit;
-        dol_syslog(get_class($this) . "::getTasksArray", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getTasksArray", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -1221,7 +1221,7 @@ class Task extends CommonObjectLine
     {
         $arrayroles = array();
 
-        dol_syslog(get_class($this) . "::getUserRolesForProjectsOrTasks userp=" . json_encode(is_object($userp)) . " usert=" . json_encode(is_object($usert)) . " projectid=" . $projectid . " taskid=" . $taskid);
+        dol_syslog(get_only_class($this) . "::getUserRolesForProjectsOrTasks userp=" . json_encode(is_object($userp)) . " usert=" . json_encode(is_object($usert)) . " projectid=" . $projectid . " taskid=" . $taskid);
 
         // We want role of user for a projet or role of user for a task. Both are not possible.
         if (empty($userp) && empty($usert)) {
@@ -1296,7 +1296,7 @@ class Task extends CommonObjectLine
         }
         //print $sql;
 
-        dol_syslog(get_class($this) . "::getUserRolesForProjectsOrTasks execute request", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getUserRolesForProjectsOrTasks execute request", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -1390,7 +1390,7 @@ class Task extends CommonObjectLine
         $sql .= " WHERE et.elementtype = 'task'";
         $sql .= " AND et.fk_element = " . ((int) $origin_id);
 
-        dol_syslog(get_class($this) . "::mergeTimeSpentTask", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::mergeTimeSpentTask", LOG_DEBUG);
         if (!$this->db->query($sql)) {
             $this->error = $this->db->lasterror();
             $ret = false;
@@ -1401,7 +1401,7 @@ class Task extends CommonObjectLine
             $sql .= " SET duration_effective = (SELECT SUM(element_duration) FROM " . MAIN_DB_PREFIX . "element_time as ptt where ptt.elementtype = 'task' AND ptt.fk_element = " . ((int) $dest_id) . ")";
             $sql .= " WHERE rowid = " . ((int) $dest_id);
 
-            dol_syslog(get_class($this) . "::mergeTimeSpentTask update project_task", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::mergeTimeSpentTask update project_task", LOG_DEBUG);
             if (!$this->db->query($sql)) {
                 $this->error = $this->db->lasterror();
                 $ret = false;
@@ -1427,7 +1427,7 @@ class Task extends CommonObjectLine
     {
         global $langs;
 
-        dol_syslog(get_class($this) . "::addTimeSpent", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::addTimeSpent", LOG_DEBUG);
 
         $ret = 0;
         $now = dol_now();
@@ -1499,7 +1499,7 @@ class Task extends CommonObjectLine
             }
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::addTimeSpent", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::addTimeSpent", LOG_DEBUG);
             if (!$this->db->query($sql)) {
                 $this->error = $this->db->lasterror();
                 $ret = -2;
@@ -1513,7 +1513,7 @@ class Task extends CommonObjectLine
             }
             $res_update = $timespent->update($user);
 
-            dol_syslog(get_class($this) . "::addTimeSpent", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::addTimeSpent", LOG_DEBUG);
             if ($res_update <= 0) {
                 $this->error = $this->db->lasterror();
                 $ret = -2;
@@ -1569,7 +1569,7 @@ class Task extends CommonObjectLine
             $sql .= $morewherefilter;
         }
 
-        dol_syslog(get_class($this) . "::fetchAllTimeSpent", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchAllTimeSpent", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -1662,7 +1662,7 @@ class Task extends CommonObjectLine
             $sql .= " AND t.fk_user = " . ((int) $userid);
         }
 
-        dol_syslog(get_class($this) . "::getSummaryOfTimeSpent", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getSummaryOfTimeSpent", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $obj = $this->db->fetch_object($resql);
@@ -1717,7 +1717,7 @@ class Task extends CommonObjectLine
         }
         //print $sql;
 
-        dol_syslog(get_class($this) . "::getSumOfAmount", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getSumOfAmount", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $obj = $this->db->fetch_object($resql);
@@ -1745,7 +1745,7 @@ class Task extends CommonObjectLine
         $timespent = new TimeSpent($this->db);
         $timespent->fetch($id);
 
-        dol_syslog(get_class($this) . "::fetchTimeSpent", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchTimeSpent", LOG_DEBUG);
 
         if ($timespent->id > 0) {
             $this->timespent_id = $timespent->id;
@@ -1806,7 +1806,7 @@ class Task extends CommonObjectLine
             $sql .= $morewherefilter;
         }
 
-        dol_syslog(get_class($this) . "::fetchAllTimeSpent", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchAllTimeSpent", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -1910,7 +1910,7 @@ class Task extends CommonObjectLine
         $timespent->invoice_id = $this->timespent_invoiceid;
         $timespent->invoice_line_id = $this->timespent_invoicelineid;
 
-        dol_syslog(get_class($this) . "::updateTimeSpent", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::updateTimeSpent", LOG_DEBUG);
         if ($timespent->update($user) > 0) {
             if (!$notrigger) {
                 // Call trigger
@@ -1941,7 +1941,7 @@ class Task extends CommonObjectLine
                 }
                 $sql .= " WHERE rowid = " . ((int) $this->id);
 
-                dol_syslog(get_class($this) . "::updateTimeSpent", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::updateTimeSpent", LOG_DEBUG);
                 if (!$this->db->query($sql)) {
                     $this->error = $this->db->lasterror();
                     $this->db->rollback();
@@ -1960,7 +1960,7 @@ class Task extends CommonObjectLine
                 $res_update = $timespent->update($user);
             }
 
-            dol_syslog(get_class($this) . "::updateTimeSpent", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::updateTimeSpent", LOG_DEBUG);
             if ($res_update <= 0) {
                 $this->error = $this->db->lasterror();
                 $ret = -2;
@@ -2025,7 +2025,7 @@ class Task extends CommonObjectLine
             $sql .= " SET duration_effective = duration_effective - " . $this->db->escape($this->timespent_duration ? $this->timespent_duration : 0);
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delTimeSpent", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delTimeSpent", LOG_DEBUG);
             if ($this->db->query($sql)) {
                 $result = 0;
             } else {
@@ -2037,7 +2037,7 @@ class Task extends CommonObjectLine
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delTimeSpent " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delTimeSpent " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -2244,7 +2244,7 @@ class Task extends CommonObjectLine
             return $clone_task_id;
         } else {
             $this->db->rollback();
-            dol_syslog(get_class($this) . "::createFromClone nbError: " . $error . " error : " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::createFromClone nbError: " . $error . " error : " . $this->error, LOG_ERR);
             return -1;
         }
     }

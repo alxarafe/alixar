@@ -170,7 +170,7 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
         global $db;
 
         if (is_object($objproduct) && !$objproduct instanceof Product) {
-            dol_syslog(get_class($this) . "::getNextValue used on incompatible" . get_class($objproduct), LOG_ERR);
+            dol_syslog(get_only_class($this) . "::getNextValue used on incompatible" . get_only_class($objproduct), LOG_ERR);
             return -1;
         }
 
@@ -266,7 +266,7 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
             }
         }
 
-        dol_syslog(get_class($this) . "::verif type=" . $thirdparty_type . " result=" . $result);
+        dol_syslog(get_only_class($this) . "::verif type=" . $thirdparty_type . " result=" . $result);
         return $result;
     }
 
@@ -327,7 +327,7 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
             return -1;
         }
 
-        dol_syslog(get_class($this) . '::verif_syntax codefortest=' . $codefortest . " typefortest=" . $typefortest);
+        dol_syslog(get_only_class($this) . '::verif_syntax codefortest=' . $codefortest . " typefortest=" . $typefortest);
 
         $newcodefortest = $codefortest;
 
@@ -337,7 +337,7 @@ class mod_barcode_product_standard extends ModeleNumRefBarCode
                 if (strlen($reg[1]) == 12) {
                     $newcodefortest = substr($newcodefortest, 0, 12);
                 }
-                dol_syslog(get_class($this) . '::verif_syntax newcodefortest=' . $newcodefortest);
+                dol_syslog(get_only_class($this) . '::verif_syntax newcodefortest=' . $newcodefortest);
             }
         }
 

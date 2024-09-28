@@ -71,7 +71,7 @@ class TaskStats extends Stats
 
         $result = array();
 
-        dol_syslog(get_class($this) . '::' . __METHOD__, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::' . __METHOD__, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -98,7 +98,7 @@ class TaskStats extends Stats
             $this->db->free($resql);
         } else {
             $this->error = "Error " . $this->db->lasterror();
-            dol_syslog(get_class($this) . '::' . __METHOD__ . ' ' . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . '::' . __METHOD__ . ' ' . $this->error, LOG_ERR);
             return -1;
         }
 

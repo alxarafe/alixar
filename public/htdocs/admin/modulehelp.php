@@ -128,7 +128,7 @@ foreach ($allModules as $modName => $filename) {
         $modulequalified = 1;
 
         // We discard modules according to features level (PS: if module is activated we always show it)
-        $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_class($objMod)));
+        $const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_only_class($objMod)));
         if ($objMod->version == 'development' && (!getDolGlobalString($const_name) && (getDolGlobalInt('MAIN_FEATURES_LEVEL') < 2))) {
             $modulequalified = 0;
         }
@@ -199,7 +199,7 @@ foreach ($allModules as $modName => $filename) {
             $j++;
             $i++;
         } else {
-            dol_syslog("Module " . get_class($objMod) . " not qualified");
+            dol_syslog("Module " . get_only_class($objMod) . " not qualified");
         }
     } catch (Exception $e) {
 
@@ -239,9 +239,9 @@ $head = modulehelp_prepare_head($objMod);
 $modulename = $objMod->getName();
 $moduledesc = $objMod->getDesc();
 $moduleauthor = $objMod->getPublisher();
-$moduledir = strtolower(preg_replace('/^mod/i', '', get_class($objMod)));
+$moduledir = strtolower(preg_replace('/^mod/i', '', get_only_class($objMod)));
 
-$const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_class($objMod)));
+$const_name = 'MAIN_MODULE_' . strtoupper(preg_replace('/^mod/i', '', get_only_class($objMod)));
 
 $text = '<span class="opacitymedium">' . $langs->trans("LastActivationDate") . ':</span> ';
 if (getDolGlobalString($const_name)) {
@@ -321,7 +321,7 @@ if ($mode == 'desc') {
         $text .= '<br>' . $moduledesc . '<br><br><br>';
     }
 
-    $moduledescriptorfile = get_class($objMod) . '.class.php';
+    $moduledescriptorfile = get_only_class($objMod) . '.class.php';
     $text .= '<span class="opacitymedium">' . $langs->trans("DescriptorFile") . ':</span> ' . $moduledescriptorfile;
 
     $text .= '<br><span class="opacitymedium">' . $langs->trans("IdModule") . ':</span> ' . $objMod->numero;

@@ -43,7 +43,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/modulebuilder.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/utils.class.php';
 
 // Load translation files required by the page
 $langs->loadLangs(array("admin", "modulebuilder", "exports", "other", "cron", "errors"));

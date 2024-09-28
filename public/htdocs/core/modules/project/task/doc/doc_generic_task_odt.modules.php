@@ -273,7 +273,7 @@ class doc_generic_task_odt extends ModelePDFTask
     {
         // phpcs:enable
 
-        //dol_syslog(get_class($this).'::get_substitutionarray_tasksressource taskressource='.var_export($taskressource,true),LOG_DEBUG);
+        //dol_syslog(get_only_class($this).'::get_substitutionarray_tasksressource taskressource='.var_export($taskressource,true),LOG_DEBUG);
         return array(
             'taskressource_rowid' => $taskresource['rowid'],
             'taskressource_role' => $taskresource['libelle'],
@@ -394,14 +394,14 @@ class doc_generic_task_odt extends ModelePDFTask
         $nbofiles = count($listoffiles);
         if (getDolGlobalString('PROJECT_TASK_ADDON_PDF_ODT_PATH')) {
             $texte .= $langs->trans("NumberOfModelFilesFound") . ': <b>';
-            //$texte.=$nbofiles?'<a id="a_'.get_class($this).'" href="#">':'';
+            //$texte.=$nbofiles?'<a id="a_'.get_only_class($this).'" href="#">':'';
             $texte .= $nbofiles;
             //$texte.=$nbofiles?'</a>':'';
             $texte .= '</b>';
         }
 
         if ($nbofiles) {
-            $texte .= '<div id="div_' . get_class($this) . '" class="hiddenx">';
+            $texte .= '<div id="div_' . get_only_class($this) . '" class="hiddenx">';
             // Show list of found files
             foreach ($listoffiles as $file) {
                 $texte .= '- ' . $file['name'] . ' <a href="' . constant('BASE_URL') . 'document.php?modulepart=doctemplates&file=tasks/' . urlencode(basename($file['name'])) . '">' . img_picto('', 'listlight') . '</a>';
@@ -695,7 +695,7 @@ class doc_generic_task_odt extends ModelePDFTask
 
                     foreach ($filearray as $filedetail) {
                         $tmparray = $this->get_substitutionarray_task_file($filedetail, $outputlangs);
-                        //dol_syslog(get_class($this).'::main $tmparray'.var_export($tmparray,true));
+                        //dol_syslog(get_only_class($this).'::main $tmparray'.var_export($tmparray,true));
                         foreach ($tmparray as $key => $val) {
                             try {
                                 $listtasksfiles->setVars($key, $val, true, 'UTF-8');
@@ -726,7 +726,7 @@ class doc_generic_task_odt extends ModelePDFTask
 
 
                     foreach ($filearray as $filedetail) {
-                        //dol_syslog(get_class($this).'::main $filedetail'.var_export($filedetail,true));
+                        //dol_syslog(get_only_class($this).'::main $filedetail'.var_export($filedetail,true));
                         $tmparray = $this->get_substitutionarray_project_file($filedetail, $outputlangs);
 
                         foreach ($tmparray as $key => $val) {

@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004-2012	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2016       Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2020       Tobias Sekan			<tobias.sekan@startmail.com>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004-2012	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2005-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2016       Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2020       Tobias Sekan			    <tobias.sekan@startmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -22,11 +22,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *      \file       htdocs/admin/system/phpinfo.php
- *      \brief      Page des infos systeme de php
- */
-
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
@@ -37,7 +32,6 @@ $langs->loadLangs(array("admin", "install", "errors"));
 if (!$user->admin) {
     accessforbidden();
 }
-
 
 /*
  * View
@@ -93,13 +87,12 @@ if ($maxphp > 0 && $maxphp2 > 0 && $maxphp > $maxphp2) {
     print '<br>';
 }
 
-
 print '<table class="noborder centpercent">';
 print '<tr class="liste_titre"><td class="titlefield">' . $langs->trans("Parameter") . '</td><td>' . $langs->trans("Value") . '</td></tr>';
 
-$ErrorPicturePath = "../../theme/eldy/img/error.png";
-$WarningPicturePath = "../../theme/eldy/img/warning.png";
-$OkayPicturePath = "../../theme/eldy/img/tick.png";
+$ErrorPicturePath = constant('DOL_URL_ROOT') . '/theme/eldy/img/error.png';
+$WarningPicturePath = constant('DOL_URL_ROOT') . '/theme/eldy/img/warning.png';
+$OkayPicturePath = constant('DOL_URL_ROOT') . '/theme/eldy/img/tick.png';
 
 print '<tr><td>' . $langs->trans("Version") . '</td><td>';
 

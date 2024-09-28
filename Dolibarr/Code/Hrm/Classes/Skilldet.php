@@ -478,7 +478,7 @@ class Skilldet extends CommonObjectLine
 
         // Protection
         if ($this->status == self::STATUS_VALIDATED) {
-            dol_syslog(get_class($this) . "::validate action abandoned: already validated", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::validate action abandoned: already validated", LOG_WARNING);
             return 0;
         }
 
@@ -486,7 +486,7 @@ class Skilldet extends CommonObjectLine
          || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->hrm->skilldet->skilldet_advance->validate))))
          {
          $this->error='NotEnoughPermissions';
-         dol_syslog(get_class($this)."::valid ".$this->error, LOG_ERR);
+         dol_syslog(get_only_class($this)."::valid ".$this->error, LOG_ERR);
          return -1;
          }*/
 
@@ -515,7 +515,7 @@ class Skilldet extends CommonObjectLine
             }
             $sql .= " WHERE rowid = " . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::validate()", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::validate()", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 dol_print_error($this->db);
@@ -560,7 +560,7 @@ class Skilldet extends CommonObjectLine
                 $dirsource = $conf->hrm->dir_output . '/skilldet/' . $oldref;
                 $dirdest = $conf->hrm->dir_output . '/skilldet/' . $newref;
                 if (!$error && file_exists($dirsource)) {
-                    dol_syslog(get_class($this) . "::validate() rename dir " . $dirsource . " into " . $dirdest);
+                    dol_syslog(get_only_class($this) . "::validate() rename dir " . $dirsource . " into " . $dirdest);
 
                     if (@rename($dirsource, $dirdest)) {
                         dol_syslog("Rename ok");
@@ -912,7 +912,7 @@ class Skilldet extends CommonObjectLine
                     return $numref;
                 } else {
                     $this->error = $obj->error;
-                    //dol_print_error($this->db,get_class($this)."::getNextNumRef ".$obj->error);
+                    //dol_print_error($this->db,get_only_class($this)."::getNextNumRef ".$obj->error);
                     return "";
                 }
             } else {

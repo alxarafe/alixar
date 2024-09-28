@@ -514,7 +514,7 @@ class StockTransferLine extends CommonObjectLine
 
         // Protection
         if ($this->status == self::STATUS_VALIDATED) {
-            dol_syslog(get_class($this) . "::validate action abandoned: already validated", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::validate action abandoned: already validated", LOG_WARNING);
             return 0;
         }
 
@@ -522,7 +522,7 @@ class StockTransferLine extends CommonObjectLine
          || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->stocktransfer->stocktransferline->stocktransferline_advance->validate))))
          {
          $this->error='NotEnoughPermissions';
-         dol_syslog(get_class($this)."::valid ".$this->error, LOG_ERR);
+         dol_syslog(get_only_class($this)."::valid ".$this->error, LOG_ERR);
          return -1;
          }*/
 
@@ -551,7 +551,7 @@ class StockTransferLine extends CommonObjectLine
             }
             $sql .= " WHERE rowid = " . ((int)$this->id);
 
-            dol_syslog(get_class($this) . "::validate()", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::validate()", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 dol_print_error($this->db);
@@ -596,7 +596,7 @@ class StockTransferLine extends CommonObjectLine
                 $dirsource = $conf->stocktransfer->dir_output . '/stocktransferline/' . $oldref;
                 $dirdest = $conf->stocktransfer->dir_output . '/stocktransferline/' . $newref;
                 if (!$error && file_exists($dirsource)) {
-                    dol_syslog(get_class($this) . "::validate() rename dir " . $dirsource . " into " . $dirdest);
+                    dol_syslog(get_only_class($this) . "::validate() rename dir " . $dirsource . " into " . $dirdest);
 
                     if (@rename($dirsource, $dirdest)) {
                         dol_syslog("Rename ok");
@@ -935,7 +935,7 @@ class StockTransferLine extends CommonObjectLine
                     return $numref;
                 } else {
                     $this->error = $obj->error;
-                    //dol_print_error($this->db,get_class($this)."::getNextNumRef ".$obj->error);
+                    //dol_print_error($this->db,get_only_class($this)."::getNextNumRef ".$obj->error);
                     return "";
                 }
             } else {

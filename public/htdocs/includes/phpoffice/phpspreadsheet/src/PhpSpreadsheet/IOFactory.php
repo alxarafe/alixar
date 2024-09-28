@@ -105,7 +105,7 @@ abstract class IOFactory
     public static function identify($pFilename)
     {
         $reader = self::createReaderForFile($pFilename);
-        $className = get_class($reader);
+        $className = get_only_class($reader);
         $classType = explode('\\', $className);
         unset($reader);
 

@@ -128,7 +128,7 @@ class mailing_thirdparties_services_expired extends MailingTargets
             $num = $this->db->num_rows($result);
             $i = 0;
 
-            dol_syslog(get_class($this) . "::add_to_target " . $num . " targets found");
+            dol_syslog(get_only_class($this) . "::add_to_target " . $num . " targets found");
 
             $old = '';
             while ($i < $num) {

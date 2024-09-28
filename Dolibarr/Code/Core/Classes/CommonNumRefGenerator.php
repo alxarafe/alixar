@@ -110,7 +110,7 @@ abstract class CommonNumRefGenerator
      */
     public function getName($langs)
     {
-        return empty($this->name) ? get_class($this) : $this->name;
+        return empty($this->name) ? get_only_class($this) : $this->name;
     }
 
     /**

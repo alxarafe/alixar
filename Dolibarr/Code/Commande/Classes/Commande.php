@@ -432,7 +432,7 @@ class Commande extends CommonOrder
                 return $numref;
             } else {
                 $this->error = $obj->error;
-                //dol_print_error($this->db,get_class($this)."::getNextNumRef ".$obj->error);
+                //dol_print_error($this->db,get_only_class($this)."::getNextNumRef ".$obj->error);
                 return "";
             }
         } else {
@@ -460,7 +460,7 @@ class Commande extends CommonOrder
 
         // Protection
         if ($this->statut == self::STATUS_VALIDATED) {
-            dol_syslog(get_class($this) . "::valid action abandoned: already validated", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::valid action abandoned: already validated", LOG_WARNING);
             return 0;
         }
 
@@ -469,7 +469,7 @@ class Commande extends CommonOrder
             || (getDolGlobalString('MAIN_USE_ADVANCED_PERMS') && $user->hasRight('commande', 'order_advance', 'validate')))
         ) {
             $this->error = 'NotEnoughPermissions';
-            dol_syslog(get_class($this) . "::valid " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::valid " . $this->error, LOG_ERR);
             return -1;
         }
 
@@ -501,7 +501,7 @@ class Commande extends CommonOrder
         $sql .= " fk_user_modif = " . ((int) $user->id);
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::valid", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::valid", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             dol_print_error($this->db);
@@ -571,7 +571,7 @@ class Commande extends CommonOrder
                 $dirsource = $conf->commande->multidir_output[$this->entity] . '/' . $oldref;
                 $dirdest = $conf->commande->multidir_output[$this->entity] . '/' . $newref;
                 if (!$error && file_exists($dirsource)) {
-                    dol_syslog(get_class($this) . "::valid rename dir " . $dirsource . " into " . $dirdest);
+                    dol_syslog(get_only_class($this) . "::valid rename dir " . $dirsource . " into " . $dirdest);
 
                     if (@rename($dirsource, $dirdest)) {
                         dol_syslog("Rename ok");
@@ -708,7 +708,7 @@ class Commande extends CommonOrder
         $error = 0;
 
         if ($this->statut != self::STATUS_CANCELED && $this->statut != self::STATUS_CLOSED) {
-            dol_syslog(get_class($this) . "::set_reopen order has not status closed", LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::set_reopen order has not status closed", LOG_WARNING);
             return 0;
         }
 
@@ -719,7 +719,7 @@ class Commande extends CommonOrder
         $sql .= " fk_user_modif = " . ((int) $user->id);
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::set_reopen", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::set_reopen", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             // Call trigger
@@ -742,7 +742,7 @@ class Commande extends CommonOrder
             return 1;
         } else {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::set_reopen " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::set_reopen " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -831,7 +831,7 @@ class Commande extends CommonOrder
         $sql .= " WHERE rowid = " . ((int) $this->id);
         $sql .= " AND fk_statut = " . self::STATUS_VALIDATED;
 
-        dol_syslog(get_class($this) . "::cancel", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::cancel", LOG_DEBUG);
         if ($this->db->query($sql)) {
             // If stock is decremented on validate order, we must reincrement it
             if (isModEnabled('stock') && getDolGlobalInt('STOCK_CALCULATE_ON_VALIDATE_ORDER') == 1) {
@@ -868,7 +868,7 @@ class Commande extends CommonOrder
                 return 1;
             } else {
                 foreach ($this->errors as $errmsg) {
-                    dol_syslog(get_class($this) . "::cancel " . $errmsg, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::cancel " . $errmsg, LOG_ERR);
                     $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
                 }
                 $this->db->rollback();
@@ -912,14 +912,14 @@ class Commande extends CommonOrder
             $this->multicurrency_tx = 1;
         }
 
-        dol_syslog(get_class($this) . "::create user=" . $user->id);
+        dol_syslog(get_only_class($this) . "::create user=" . $user->id);
 
         // Check parameters
         if (!empty($this->ref)) {   // We check that ref is not already used
             $result = self::isExistingObject($this->element, 0, $this->ref); // Check ref is not yet used
             if ($result > 0) {
                 $this->error = 'ErrorRefAlreadyExists';
-                dol_syslog(get_class($this) . "::create " . $this->error, LOG_WARNING);
+                dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_WARNING);
                 $this->db->rollback();
                 return -1;
             }
@@ -929,12 +929,12 @@ class Commande extends CommonOrder
         $result = $soc->fetch($this->socid);
         if ($result < 0) {
             $this->error = "Failed to fetch company";
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
             return -2;
         }
         if (getDolGlobalString('ORDER_REQUIRE_SOURCE') && $this->source < 0) {
             $this->error = $langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("Source"));
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
             return -1;
         }
 
@@ -982,7 +982,7 @@ class Commande extends CommonOrder
         $sql .= ", " . (float) $this->multicurrency_tx;
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . 'commande');
@@ -1498,7 +1498,7 @@ class Commande extends CommonOrder
         $logtext = "::addline commandeid=$this->id, desc=$desc, pu_ht=$pu_ht, qty=$qty, txtva=$txtva, fk_product=$fk_product, remise_percent=$remise_percent";
         $logtext .= ", info_bits=$info_bits, fk_remise_except=$fk_remise_except, price_base_type=$price_base_type, pu_ttc=$pu_ttc, date_start=$date_start";
         $logtext .= ", date_end=$date_end, type=$type special_code=$special_code, fk_unit=$fk_unit, origin=$origin, origin_id=$origin_id, pu_ht_devise=$pu_ht_devise, ref_ext=$ref_ext";
-        dol_syslog(get_class($this) . $logtext, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . $logtext, LOG_DEBUG);
 
         if ($this->statut == self::STATUS_DRAFT) {
             include_once DOL_DOCUMENT_ROOT . '/core/lib/price.lib.php';
@@ -1578,7 +1578,7 @@ class Commande extends CommonOrder
                     $langs->load("errors");
                     $this->error = $langs->trans('ErrorStockIsNotEnoughToAddProductOnOrder', $product->ref);
                     $this->errors[] = $this->error;
-                    dol_syslog(get_class($this) . "::addline error=Product " . $product->ref . ": " . $this->error, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::addline error=Product " . $product->ref . ": " . $this->error, LOG_ERR);
                     $this->db->rollback();
                     return self::STOCK_NOT_ENOUGH_FOR_ORDER;
                 }
@@ -1720,12 +1720,12 @@ class Commande extends CommonOrder
                 }
             } else {
                 $this->error = $this->line->error;
-                dol_syslog(get_class($this) . "::addline error=" . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::addline error=" . $this->error, LOG_ERR);
                 $this->db->rollback();
                 return -2;
             }
         } else {
-            dol_syslog(get_class($this) . "::addline status of order must be Draft to allow use of ->addline()", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::addline status of order must be Draft to allow use of ->addline()", LOG_ERR);
             return -3;
         }
     }
@@ -1879,7 +1879,7 @@ class Commande extends CommonOrder
             $sql .= " AND c.ref_ext='" . $this->db->escape($ref_ext) . "'";
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $obj = $this->db->fetch_object($result);
@@ -2082,7 +2082,7 @@ class Commande extends CommonOrder
         }
         $sql .= ' ORDER BY l.rang, l.rowid';
 
-        dol_syslog(get_class($this) . "::fetch_lines", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch_lines", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             $num = $this->db->num_rows($result);
@@ -2235,7 +2235,7 @@ class Commande extends CommonOrder
         $sql .= ' AND cd.fk_commande = ' . ((int) $this->id);
         //print $sql;
 
-        dol_syslog(get_class($this) . "::getNbOfShipments", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getNbOfShipments", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $obj = $this->db->fetch_object($resql);
@@ -2285,7 +2285,7 @@ class Commande extends CommonOrder
         $sql .= ' GROUP BY cd.rowid, cd.fk_product';
         //print $sql;
 
-        dol_syslog(get_class($this) . "::loadExpeditions", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::loadExpeditions", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -2434,7 +2434,7 @@ class Commande extends CommonOrder
     public function set_remise($user, $remise, $notrigger = 0)
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::set_remise is deprecated, use setDiscount instead", LOG_NOTICE);
+        dol_syslog(get_only_class($this) . "::set_remise is deprecated, use setDiscount instead", LOG_NOTICE);
         // @phan-suppress-next-line PhanDeprecatedFunction
         return $this->setDiscount($user, $remise, $notrigger);
     }
@@ -2976,7 +2976,7 @@ class Commande extends CommonOrder
         $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'commande SET facture = 1';
         $sql .= " WHERE rowid = " . ((int) $this->id) . ' AND fk_statut > ' . self::STATUS_DRAFT;
 
-        dol_syslog(get_class($this) . "::classifyBilled", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::classifyBilled", LOG_DEBUG);
         if ($this->db->query($sql)) {
             if (!$error) {
                 $this->oldcopy = clone $this;
@@ -2997,7 +2997,7 @@ class Commande extends CommonOrder
                 return 1;
             } else {
                 foreach ($this->errors as $errmsg) {
-                    dol_syslog(get_class($this) . "::classifyBilled " . $errmsg, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::classifyBilled " . $errmsg, LOG_ERR);
                     $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
                 }
                 $this->db->rollback();
@@ -3026,7 +3026,7 @@ class Commande extends CommonOrder
         $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'commande SET facture = 0';
         $sql .= " WHERE rowid = " . ((int) $this->id) . ' AND fk_statut > ' . self::STATUS_DRAFT;
 
-        dol_syslog(get_class($this) . "::classifyUnBilled", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::classifyUnBilled", LOG_DEBUG);
         if ($this->db->query($sql)) {
             if (!$error) {
                 $this->oldcopy = clone $this;
@@ -3049,7 +3049,7 @@ class Commande extends CommonOrder
                 return 1;
             } else {
                 foreach ($this->errors as $errmsg) {
-                    dol_syslog(get_class($this) . "::classifyUnBilled " . $errmsg, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::classifyUnBilled " . $errmsg, LOG_ERR);
                     $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
                 }
                 $this->db->rollback();
@@ -3097,7 +3097,7 @@ class Commande extends CommonOrder
     {
         global $conf, $mysoc, $langs, $user;
 
-        dol_syslog(get_class($this) . "::updateline id=$rowid, desc=$desc, pu=$pu, qty=$qty, remise_percent=$remise_percent, txtva=$txtva, txlocaltax1=$txlocaltax1, txlocaltax2=$txlocaltax2, price_base_type=$price_base_type, info_bits=$info_bits, date_start=$date_start, date_end=$date_end, type=$type, fk_parent_line=$fk_parent_line, pa_ht=$pa_ht, special_code=$special_code, ref_ext=$ref_ext");
+        dol_syslog(get_only_class($this) . "::updateline id=$rowid, desc=$desc, pu=$pu, qty=$qty, remise_percent=$remise_percent, txtva=$txtva, txlocaltax1=$txlocaltax1, txlocaltax2=$txlocaltax2, price_base_type=$price_base_type, info_bits=$info_bits, date_start=$date_start, date_end=$date_end, type=$type, fk_parent_line=$fk_parent_line, pa_ht=$pa_ht, special_code=$special_code, ref_ext=$ref_ext");
         include_once DOL_DOCUMENT_ROOT . '/core/lib/price.lib.php';
 
         if ($this->statut == Commande::STATUS_DRAFT) {
@@ -3206,7 +3206,7 @@ class Commande extends CommonOrder
                     $this->error = $langs->trans('ErrorStockIsNotEnoughToAddProductOnOrder', $product->ref);
                     $this->errors[] = $this->error;
 
-                    dol_syslog(get_class($this) . "::addline error=Product " . $product->ref . ": " . $this->error, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::addline error=Product " . $product->ref . ": " . $this->error, LOG_ERR);
 
                     $this->db->rollback();
                     return self::STOCK_NOT_ENOUGH_FOR_ORDER;
@@ -3292,7 +3292,7 @@ class Commande extends CommonOrder
                 return -1;
             }
         } else {
-            $this->error = get_class($this) . "::updateline Order status makes operation forbidden";
+            $this->error = get_only_class($this) . "::updateline Order status makes operation forbidden";
             $this->errors = array('OrderStatusMakeOperationForbidden');
             return -2;
         }
@@ -3372,7 +3372,7 @@ class Commande extends CommonOrder
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -3398,7 +3398,7 @@ class Commande extends CommonOrder
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -3423,7 +3423,7 @@ class Commande extends CommonOrder
 
         $error = 0;
 
-        dol_syslog(get_class($this) . "::delete " . $this->id, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete " . $this->id, LOG_DEBUG);
 
         $this->db->begin();
 
@@ -3451,7 +3451,7 @@ class Commande extends CommonOrder
                 $error++;
                 $this->error = $this->db->lasterror();
                 $this->errors[] = $this->error;
-                dol_syslog(get_class($this) . "::delete error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error " . $this->error, LOG_ERR);
             }
         }
 
@@ -3476,7 +3476,7 @@ class Commande extends CommonOrder
             $result = $this->deleteExtraFields();
             if ($result < 0) {
                 $error++;
-                dol_syslog(get_class($this) . "::delete error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error " . $this->error, LOG_ERR);
             }
         }
 
@@ -3488,7 +3488,7 @@ class Commande extends CommonOrder
                 $error++;
                 $this->error = $this->db->lasterror();
                 $this->errors[] = $this->error;
-                dol_syslog(get_class($this) . "::delete error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete error " . $this->error, LOG_ERR);
             }
         }
 
@@ -3530,7 +3530,7 @@ class Commande extends CommonOrder
         }
 
         if (!$error) {
-            dol_syslog(get_class($this) . "::delete " . $this->id . " by " . $user->id, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete " . $this->id . " by " . $user->id, LOG_DEBUG);
             $this->db->commit();
             return 1;
         } else {
@@ -3965,7 +3965,7 @@ class Commande extends CommonOrder
     {
         global $conf, $langs;
 
-        dol_syslog(get_class($this) . "::initAsSpecimen");
+        dol_syslog(get_only_class($this) . "::initAsSpecimen");
 
         // Load array of products prodids
         $num_prods = 0;

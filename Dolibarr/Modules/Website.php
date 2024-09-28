@@ -49,7 +49,7 @@ class Website extends DolibarrModules
         $this->family = "portal";
         $this->module_position = '50';
         // Module label (no space allowed), used if translation string 'ModuleXXXName' not found (where XXX is value of numeric property 'numero' of module)
-        $this->name = preg_replace('/^mod/i', '', get_class($this));
+        $this->name = preg_replace('/^mod/i', '', get_only_class($this));
         $this->description = "Enable to build and serve public web sites with CMS features";
         // Possible values for version are: 'development', 'experimental', 'dolibarr' or version
         $this->version = 'dolibarr';

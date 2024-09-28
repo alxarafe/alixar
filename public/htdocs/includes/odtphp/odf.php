@@ -825,7 +825,7 @@ IMG;
 
         if ($name == "") $name = "temp" . md5(uniqid());
 
-        dol_syslog(get_class($this) . '::exportAsAttachedPDF $name=' . $name, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::exportAsAttachedPDF $name=' . $name, LOG_DEBUG);
         $this->saveToDisk($name);
 
         $execmethod = (empty($conf->global->MAIN_EXEC_USE_POPEN) ? 1 : 2);    // 1 or 2
@@ -879,7 +879,7 @@ IMG;
             if (getDolGlobalString('MAIN_DOL_SCRIPTS_ROOT')) {
                 $command = getDolGlobalString('MAIN_DOL_SCRIPTS_ROOT') . '/scripts/odt2pdf/odt2pdf.sh ' . escapeshellcmd($tmpname) . ' ' . (is_numeric(getDolGlobalString('MAIN_ODT_AS_PDF')) ? 'jodconverter' : getDolGlobalString('MAIN_ODT_AS_PDF'));
             } else {
-                dol_syslog(get_class($this) . '::exportAsAttachedPDF is used but the constant MAIN_DOL_SCRIPTS_ROOT with path to script directory was not defined.', LOG_WARNING);
+                dol_syslog(get_only_class($this) . '::exportAsAttachedPDF is used but the constant MAIN_DOL_SCRIPTS_ROOT with path to script directory was not defined.', LOG_WARNING);
                 $command = '../../scripts/odt2pdf/odt2pdf.sh ' . escapeshellcmd($tmpname) . ' ' . (is_numeric(getDolGlobalString('MAIN_ODT_AS_PDF')) ? 'jodconverter' : getDolGlobalString('MAIN_ODT_AS_PDF'));
             }
         }
@@ -887,7 +887,7 @@ IMG;
         //$dirname=dirname($name);
         //$command = DOL_DOCUMENT_ROOT.'/includes/odtphp/odt2pdf.sh '.$name.' '.$dirname;
 
-        dol_syslog(get_class($this) . '::exportAsAttachedPDF $execmethod=' . $execmethod . ' Run command=' . $command, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::exportAsAttachedPDF $execmethod=' . $execmethod . ' Run command=' . $command, LOG_DEBUG);
         // TODO Use:
         // $outputfile = DOL_DATA_ROOT.'/odt2pdf.log';
         // $result = $utils->executeCLI($command, $outputfile);  and replace test on $execmethod.
@@ -904,7 +904,7 @@ IMG;
             $ok = 0;
             $handle = fopen($outputfile, 'w');
             if ($handle) {
-                dol_syslog(get_class($this) . "Run command " . $command, LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "Run command " . $command, LOG_DEBUG);
                 fwrite($handle, $command . "\n");
                 $handlein = popen($command, 'r');
                 while (!feof($handlein)) {
@@ -919,7 +919,7 @@ IMG;
         }
 
         if ($retval == 0) {
-            dol_syslog(get_class($this) . '::exportAsAttachedPDF $ret_val=' . $retval, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::exportAsAttachedPDF $ret_val=' . $retval, LOG_DEBUG);
             $filename = '';
             $linenum = 0;
 
@@ -940,8 +940,8 @@ IMG;
                 unlink($name);
             }
         } else {
-            dol_syslog(get_class($this) . '::exportAsAttachedPDF $ret_val=' . $retval, LOG_DEBUG);
-            dol_syslog(get_class($this) . '::exportAsAttachedPDF $output_arr=' . var_export($output_arr, true), LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::exportAsAttachedPDF $ret_val=' . $retval, LOG_DEBUG);
+            dol_syslog(get_only_class($this) . '::exportAsAttachedPDF $output_arr=' . var_export($output_arr, true), LOG_DEBUG);
 
             if ($retval == 126) {
                 throw new OdfException('Permission execute convert script : ' . $command);

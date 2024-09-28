@@ -161,7 +161,7 @@ $objcon = new stdClass();
 $out = '';
 $permok = $user->hasRight('agenda', 'myactions', 'create');
 if ((!empty($objthirdparty->id) || !empty($objcon->id)) && $permok) {
-    if (is_object($objthirdparty) && get_class($objthirdparty) == 'Societe') {
+    if (is_object($objthirdparty) && get_only_class($objthirdparty) == 'Societe') {
         $out .= '&amp;originid=' . $objthirdparty->id . ($objthirdparty->id > 0 ? '&amp;socid=' . $objthirdparty->id : '') . '&amp;backtopage=' . urlencode($_SERVER['PHP_SELF'] . ($objthirdparty->id > 0 ? '?socid=' . $objthirdparty->id : ''));
     }
     $out .= (!empty($objcon->id) ? '&amp;contactid=' . $objcon->id : '');

@@ -431,7 +431,7 @@ class CompanyPaymentMode extends CommonObject
         $sql1 = "SELECT rowid as id, fk_soc, type FROM " . MAIN_DB_PREFIX . "societe_rib";
         $sql1 .= " WHERE rowid = " . ($id ? $id : $this->id);
 
-        dol_syslog(get_class($this) . '::setAsDefault', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::setAsDefault', LOG_DEBUG);
         $result1 = $this->db->query($sql1);
         if ($result1) {
             if ($this->db->num_rows($result1) == 0) {
@@ -451,7 +451,7 @@ class CompanyPaymentMode extends CommonObject
                 if ($type) {
                     $sql2 .= " AND type = '" . $this->db->escape($type) . "'";
                 }
-                dol_syslog(get_class($this) . '::setAsDefault', LOG_DEBUG);
+                dol_syslog(get_only_class($this) . '::setAsDefault', LOG_DEBUG);
                 $result2 = $this->db->query($sql2);
 
                 $sql3 = "UPDATE " . MAIN_DB_PREFIX . "societe_rib SET default_rib = 1";
@@ -459,7 +459,7 @@ class CompanyPaymentMode extends CommonObject
                 if ($type) {
                     $sql3 .= " AND type = '" . $this->db->escape($type) . "'";
                 }
-                dol_syslog(get_class($this) . '::setAsDefault', LOG_DEBUG);
+                dol_syslog(get_only_class($this) . '::setAsDefault', LOG_DEBUG);
                 $result3 = $this->db->query($sql3);
 
                 if (!$result2 || !$result3) {

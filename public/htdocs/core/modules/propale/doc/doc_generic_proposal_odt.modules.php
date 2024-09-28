@@ -168,14 +168,14 @@ class doc_generic_proposal_odt extends ModelePDFPropales
         $nbofiles = count($listoffiles);
         if (!empty($odtPath)) {
             $texte .= $langs->trans("NumberOfModelFilesFound") . ': <b>';
-            //$texte.=$nbofiles?'<a id="a_'.get_class($this).'" href="#">':'';
+            //$texte.=$nbofiles?'<a id="a_'.get_only_class($this).'" href="#">':'';
             $texte .= count($listoffiles);
             //$texte.=$nbofiles?'</a>':'';
             $texte .= '</b>';
         }
 
         if ($nbofiles) {
-            $texte .= '<div id="div_' . get_class($this) . '" class="hiddenx">';
+            $texte .= '<div id="div_' . get_only_class($this) . '" class="hiddenx">';
             // Show list of found files
             foreach ($listoffiles as $file) {
                 $texte .= '- ' . $file['name'];

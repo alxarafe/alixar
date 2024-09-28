@@ -144,7 +144,7 @@ class Loan extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . "loan as l";
         $sql .= " WHERE l.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -272,7 +272,7 @@ class Loan extends CommonObject
         $sql .= " '" . price2num($newinsuranceamount) . "'";
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "loan");
@@ -319,7 +319,7 @@ class Loan extends CommonObject
         // Delete payments
         if (!$error) {
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "payment_loan where fk_loan=" . ((int) $this->id);
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -329,7 +329,7 @@ class Loan extends CommonObject
 
         if (!$error) {
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "loan where rowid=" . ((int) $this->id);
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -377,7 +377,7 @@ class Loan extends CommonObject
         $sql .= " insurance_amount = '" . price2num($this->db->escape($this->insurance_amount)) . "'";
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->db->commit();
@@ -424,7 +424,7 @@ class Loan extends CommonObject
     public function set_started($user)
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::set_started is deprecated, use setStarted instead", LOG_NOTICE);
+        dol_syslog(get_only_class($this) . "::set_started is deprecated, use setStarted instead", LOG_NOTICE);
         return $this->setStarted($user);
     }
 
@@ -654,7 +654,7 @@ class Loan extends CommonObject
         $sql .= ' FROM ' . MAIN_DB_PREFIX . $table;
         $sql .= " WHERE " . $field . " = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::getSumPayment", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getSumPayment", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $amount = 0;
@@ -684,7 +684,7 @@ class Loan extends CommonObject
         $sql .= ' l.tms as datem';
         $sql .= ' WHERE l.rowid = ' . ((int) $id);
 
-        dol_syslog(get_class($this) . '::info', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::info', LOG_DEBUG);
         $result = $this->db->query($sql);
 
         if ($result) {

@@ -1039,7 +1039,6 @@ class Utils
                 $currentdir = getcwd();
                 chdir($dirofmodule);
 
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/utils.class.php';
                 $utils = new Utils($this->db);
 
                 // Build HTML doc

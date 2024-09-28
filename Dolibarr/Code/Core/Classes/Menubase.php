@@ -297,11 +297,11 @@ class Menubase
                 $sql .= " '" . $this->db->escape($this->user) . "'";
                 $sql .= ")";
 
-                dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+                dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
                 $resql = $this->db->query($sql);
                 if ($resql) {
                     $this->id = $this->db->last_insert_id($this->db->prefix() . "menu");
-                    dol_syslog(get_class($this) . "::create record added has rowid=" . ((int) $this->id), LOG_DEBUG);
+                    dol_syslog(get_only_class($this) . "::create record added has rowid=" . ((int)$this->id), LOG_DEBUG);
 
                     return $this->id;
                 } else {
@@ -309,7 +309,7 @@ class Menubase
                     return -1;
                 }
             } else {
-                dol_syslog(get_class($this) . "::create menu entry already exists", LOG_WARNING);
+                dol_syslog(get_only_class($this) . "::create menu entry already exists", LOG_WARNING);
                 $this->error = 'Error Menu entry (' . $this->menu_handler . ',' . $this->position . ',' . $this->url . ') already exists';
                 return 0;
             }
@@ -372,7 +372,7 @@ class Menubase
         $sql .= " usertype='" . $this->db->escape($this->user) . "'";
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
@@ -418,7 +418,7 @@ class Menubase
         $sql .= " FROM " . $this->db->prefix() . "menu as t";
         $sql .= " WHERE t.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -469,7 +469,7 @@ class Menubase
         $sql = "DELETE FROM " . $this->db->prefix() . "menu";
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
@@ -655,7 +655,7 @@ class Menubase
         $sql .= " ORDER BY m.type DESC, m.position, m.rowid";
         //print $sql;
 
-        //dol_syslog(get_class($this)."::menuLoad mymainmenu=".$mymainmenu." myleftmenu=".$myleftmenu." type_user=".$type_user." menu_handler=".$menu_handler." tabMenu size=".count($tabMenu), LOG_DEBUG);
+        //dol_syslog(get_only_class($this)."::menuLoad mymainmenu=".$mymainmenu." myleftmenu=".$myleftmenu." type_user=".$type_user." menu_handler=".$menu_handler." tabMenu size=".count($tabMenu), LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $numa = $this->db->num_rows($resql);

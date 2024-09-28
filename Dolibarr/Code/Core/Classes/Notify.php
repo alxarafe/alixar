@@ -258,7 +258,7 @@ class Notify
     {
         $error = 0;
 
-        dol_syslog(get_class($this) . "::delete " . $this->id, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete " . $this->id, LOG_DEBUG);
 
         $this->db->begin();
 
@@ -640,7 +640,7 @@ class Notify
 
         include_once DOL_DOCUMENT_ROOT . '/core/lib/files.lib.php';
 
-        dol_syslog(get_class($this) . "::send notifcode=" . $notifcode . ", object id=" . $object->id);
+        dol_syslog(get_only_class($this) . "::send notifcode=" . $notifcode . ", object id=" . $object->id);
 
         $langs->load("other");
 

@@ -176,7 +176,7 @@ class ChargeSociales extends CommonObject
             $sql .= " AND cs.rowid = " . ((int) $id);
         }
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -270,7 +270,7 @@ class ChargeSociales extends CommonObject
         $sql .= ", '" . $this->db->idate($now) . "'";
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "chargesociales");
@@ -327,7 +327,7 @@ class ChargeSociales extends CommonObject
         // Delete payments
         if (!$error) {
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "paiementcharge WHERE fk_charge=" . ((int) $this->id);
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -337,7 +337,7 @@ class ChargeSociales extends CommonObject
 
         if (!$error) {
             $sql = "DELETE FROM " . MAIN_DB_PREFIX . "chargesociales WHERE rowid=" . ((int) $this->id);
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -377,7 +377,7 @@ class ChargeSociales extends CommonObject
         $sql .= ", fk_user_modif=" . $user->id;
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         if (!$resql) {
@@ -399,7 +399,7 @@ class ChargeSociales extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -456,7 +456,7 @@ class ChargeSociales extends CommonObject
     public function set_paid($user)
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::set_paid is deprecated, use setPaid instead", LOG_NOTICE);
+        dol_syslog(get_only_class($this) . "::set_paid is deprecated, use setPaid instead", LOG_NOTICE);
         return $this->setPaid($user);
     }
 
@@ -495,7 +495,7 @@ class ChargeSociales extends CommonObject
     public function set_unpaid($user)
     {
 		// phpcs:enable
-        dol_syslog(get_class($this) . "::set_unpaid is deprecated, use setUnpaid instead", LOG_NOTICE);
+        dol_syslog(get_only_class($this) . "::set_unpaid is deprecated, use setUnpaid instead", LOG_NOTICE);
         return $this->setUnpaid($user);
     }
 
@@ -685,7 +685,7 @@ class ChargeSociales extends CommonObject
         $sql .= ' FROM ' . MAIN_DB_PREFIX . $table;
         $sql .= " WHERE " . $field . " = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::getSommePaiement", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::getSommePaiement", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $amount = 0;
@@ -715,7 +715,7 @@ class ChargeSociales extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . "chargesociales as e";
         $sql .= " WHERE e.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::info", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::info", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             if ($this->db->num_rows($result)) {

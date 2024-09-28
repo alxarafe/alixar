@@ -561,7 +561,7 @@ class CompanyBankAccount extends Account
     {
         $error = 0;
 
-        dol_syslog(get_class($this) . "::delete " . $this->id, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete " . $this->id, LOG_DEBUG);
 
         $this->db->begin();
 
@@ -626,7 +626,7 @@ class CompanyBankAccount extends Account
         $sql1 = "SELECT rowid as id, fk_soc as socid FROM " . MAIN_DB_PREFIX . "societe_rib";
         $sql1 .= " WHERE rowid = " . ($rib ? $rib : $this->id);
 
-        dol_syslog(get_class($this) . '::setAsDefault', LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::setAsDefault', LOG_DEBUG);
         $result1 = $this->db->query($sql1);
         if ($result1) {
             if ($this->db->num_rows($result1) == 0) {

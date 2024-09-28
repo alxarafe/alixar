@@ -420,7 +420,7 @@ class Lettering extends BookKeeping
         if ($error) {
             $this->db->rollback();
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             return -1 * $error;
@@ -446,7 +446,7 @@ class Lettering extends BookKeeping
         $sql .= " WHERE rowid IN (" . $this->db->sanitize(implode(',', $ids)) . ")";
         $sql .= " AND subledger_account != ''";
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -456,7 +456,7 @@ class Lettering extends BookKeeping
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             return -1 * $error;

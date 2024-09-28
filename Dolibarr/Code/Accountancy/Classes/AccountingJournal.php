@@ -133,7 +133,7 @@ class AccountingJournal extends CommonObject
                 $sql .= " AND entity  = " . $conf->entity;
             }
 
-            dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
             $result = $this->db->query($sql);
             if ($result) {
                 $obj = $this->db->fetch_object($result);

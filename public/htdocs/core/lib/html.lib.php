@@ -47,11 +47,16 @@
 
 use Dolibarr\Code\Bom\Classes\BOM;
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Comm\Classes\CActionComm;
+use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\Conf;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\Website\Classes\Website;
@@ -2548,19 +2553,19 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
         $sql .= " a.email_from as msg_from,";
         $sql .= " c.code as acode, c.libelle as alabel, c.picto as apicto,";
         $sql .= " u.rowid as user_id, u.login as user_login, u.photo as user_photo, u.firstname as user_firstname, u.lastname as user_lastname";
-        if (is_object($filterobj) && get_class($filterobj) == 'Societe') {
+        if (is_object($filterobj) && get_only_class($filterobj) == 'Societe') {
             $sql .= ", sp.lastname, sp.firstname";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'Adherent') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Adherent') {
             $sql .= ", m.lastname, m.firstname";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'CommandeFournisseur') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'CommandeFournisseur') {
             $sql .= ", o.ref";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'Product') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Product') {
             $sql .= ", o.ref";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'Ticket') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Ticket') {
             $sql .= ", o.ref";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'BOM') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'BOM') {
             $sql .= ", o.ref";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'Contrat') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Contrat') {
             $sql .= ", o.ref";
         }
         $sql .= " FROM " . MAIN_DB_PREFIX . "actioncomm as a";
@@ -2575,59 +2580,59 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
             $sql .= " AND r.element_type = '" . $db->escape($objcon->table_element) . "' AND r.fk_element = " . ((int)$objcon->id);
         }
 
-        if (is_object($filterobj) && get_class($filterobj) == 'Societe') {
+        if (is_object($filterobj) && get_only_class($filterobj) == 'Societe') {
             $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "socpeople as sp ON a.fk_contact = sp.rowid";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'Dolresource') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Dolresource') {
             $sql .= " INNER JOIN " . MAIN_DB_PREFIX . "element_resources as er";
             $sql .= " ON er.resource_type = 'dolresource'";
             $sql .= " AND er.element_id = a.id";
             $sql .= " AND er.resource_id = " . ((int)$filterobj->id);
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'Adherent') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Adherent') {
             $sql .= ", " . MAIN_DB_PREFIX . "adherent as m";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'CommandeFournisseur') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'CommandeFournisseur') {
             $sql .= ", " . MAIN_DB_PREFIX . "commande_fournisseur as o";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'Product') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Product') {
             $sql .= ", " . MAIN_DB_PREFIX . "product as o";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'Ticket') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Ticket') {
             $sql .= ", " . MAIN_DB_PREFIX . "ticket as o";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'BOM') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'BOM') {
             $sql .= ", " . MAIN_DB_PREFIX . "bom_bom as o";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'Contrat') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Contrat') {
             $sql .= ", " . MAIN_DB_PREFIX . "contrat as o";
         }
 
         $sql .= " WHERE a.entity IN (" . getEntity('agenda') . ")";
         if (!$force_filter_contact) {
-            if (is_object($filterobj) && in_array(get_class($filterobj), array('Societe', 'Client', 'Fournisseur')) && $filterobj->id) {
+            if (is_object($filterobj) && in_array(get_only_class($filterobj), array('Societe', 'Client', 'Fournisseur')) && $filterobj->id) {
                 $sql .= " AND a.fk_soc = " . ((int)$filterobj->id);
-            } elseif (is_object($filterobj) && get_class($filterobj) == 'Project' && $filterobj->id) {
+            } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Project' && $filterobj->id) {
                 $sql .= " AND a.fk_project = " . ((int)$filterobj->id);
-            } elseif (is_object($filterobj) && get_class($filterobj) == 'Adherent') {
+            } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Adherent') {
                 $sql .= " AND a.fk_element = m.rowid AND a.elementtype = 'member'";
                 if ($filterobj->id) {
                     $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
-            } elseif (is_object($filterobj) && get_class($filterobj) == 'CommandeFournisseur') {
+            } elseif (is_object($filterobj) && get_only_class($filterobj) == 'CommandeFournisseur') {
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = 'order_supplier'";
                 if ($filterobj->id) {
                     $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
-            } elseif (is_object($filterobj) && get_class($filterobj) == 'Product') {
+            } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Product') {
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = 'product'";
                 if ($filterobj->id) {
                     $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
-            } elseif (is_object($filterobj) && get_class($filterobj) == 'Ticket') {
+            } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Ticket') {
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = 'ticket'";
                 if ($filterobj->id) {
                     $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
-            } elseif (is_object($filterobj) && get_class($filterobj) == 'BOM') {
+            } elseif (is_object($filterobj) && get_only_class($filterobj) == 'BOM') {
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = 'bom'";
                 if ($filterobj->id) {
                     $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
                 }
-            } elseif (is_object($filterobj) && get_class($filterobj) == 'Contrat') {
+            } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Contrat') {
                 $sql .= " AND a.fk_element = o.rowid AND a.elementtype = 'contract'";
                 if ($filterobj->id) {
                     $sql .= " AND a.fk_element = " . ((int)$filterobj->id);
@@ -2682,15 +2687,15 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
         $sql2 .= ", null as fk_element, '' as elementtype, null as contact_id";
         $sql2 .= ", 'AC_EMAILING' as acode, '' as alabel, '' as apicto";
         $sql2 .= ", u.rowid as user_id, u.login as user_login, u.photo as user_photo, u.firstname as user_firstname, u.lastname as user_lastname"; // User that valid action
-        if (is_object($filterobj) && get_class($filterobj) == 'Societe') {
+        if (is_object($filterobj) && get_only_class($filterobj) == 'Societe') {
             $sql2 .= ", '' as lastname, '' as firstname";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'Adherent') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Adherent') {
             $sql2 .= ", '' as lastname, '' as firstname";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'CommandeFournisseur') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'CommandeFournisseur') {
             $sql2 .= ", '' as ref";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'Product') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Product') {
             $sql2 .= ", '' as ref";
-        } elseif (is_object($filterobj) && get_class($filterobj) == 'Ticket') {
+        } elseif (is_object($filterobj) && get_only_class($filterobj) == 'Ticket') {
             $sql2 .= ", '' as ref";
         }
         $sql2 .= " FROM " . MAIN_DB_PREFIX . "mailing as m, " . MAIN_DB_PREFIX . "mailing_cibles as mc, " . MAIN_DB_PREFIX . "user as u";
@@ -2825,14 +2830,14 @@ function show_actions_messaging($conf, $langs, $db, $filterobj, $objcon = null, 
         $out .= '<input type="hidden" name="token" value="' . newToken() . '">';
 
         if (
-            $objcon && get_class($objcon) == 'Contact' &&
-            (is_null($filterobj) || get_class($filterobj) == 'Societe')
+            $objcon && get_only_class($objcon) == 'Contact' &&
+            (is_null($filterobj) || get_only_class($filterobj) == 'Societe')
         ) {
             $out .= '<input type="hidden" name="id" value="' . $objcon->id . '" />';
         } else {
             $out .= '<input type="hidden" name="id" value="' . $filterobj->id . '" />';
         }
-        if (($filterobj && get_class($filterobj) == 'Societe')) {
+        if (($filterobj && get_only_class($filterobj) == 'Societe')) {
             $out .= '<input type="hidden" name="socid" value="' . $filterobj->id . '" />';
         } else {
             $out .= '<input type="hidden" name="userid" value="' . $filterobj->id . '" />';

@@ -113,7 +113,7 @@ abstract class Stats
             include_once DOL_DOCUMENT_ROOT . '/core/lib/json.lib.php';
         }
 
-        $newpathofdestfile = $conf->user->dir_temp . '/' . get_class($this) . '_' . __FUNCTION__ . '_' . (empty($this->cachefilesuffix) ? '' : $this->cachefilesuffix . '_') . $langs->defaultlang . '_entity.' . $conf->entity . '_user' . $user->id . '.cache';
+        $newpathofdestfile = $conf->user->dir_temp . '/' . get_only_class($this) . '_' . __FUNCTION__ . '_' . (empty($this->cachefilesuffix) ? '' : $this->cachefilesuffix . '_') . $langs->defaultlang . '_entity.' . $conf->entity . '_user' . $user->id . '.cache';
         $newmask = '0644';
 
         $nowgmt = dol_now();
@@ -124,14 +124,14 @@ abstract class Stats
             if ($filedate >= ($nowgmt - $cachedelay)) {
                 $foundintocache = 1;
 
-                $this->lastfetchdate[get_class($this) . '_' . __FUNCTION__] = $filedate;
+                $this->lastfetchdate[get_only_class($this) . '_' . __FUNCTION__] = $filedate;
             } else {
-                dol_syslog(get_class($this) . '::' . __FUNCTION__ . " cache file " . $newpathofdestfile . " is not found or older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . ") so we can't use it.");
+                dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " cache file " . $newpathofdestfile . " is not found or older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . ") so we can't use it.");
             }
         }
         // Load file into $data
         if ($foundintocache) {    // Cache file found and is not too old
-            dol_syslog(get_class($this) . '::' . __FUNCTION__ . " read data from cache file " . $newpathofdestfile . " " . $filedate . ".");
+            dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " read data from cache file " . $newpathofdestfile . " " . $filedate . ".");
             $data = json_decode(file_get_contents($newpathofdestfile), true);
             '@phan-var-force array<int<0,11>,array{0:int<1,12>,1:int}> $data';
         } else {
@@ -159,7 +159,7 @@ abstract class Stats
 
         // Save cache file
         if (empty($foundintocache) && ($cachedelay > 0 || $cachedelay == -1)) {
-            dol_syslog(get_class($this) . '::' . __FUNCTION__ . " save cache file " . $newpathofdestfile . " onto disk.");
+            dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " save cache file " . $newpathofdestfile . " onto disk.");
             if (!dol_is_dir($conf->user->dir_temp)) {
                 dol_mkdir($conf->user->dir_temp);
             }
@@ -172,7 +172,7 @@ abstract class Stats
             }
             dolChmod($newpathofdestfile);
 
-            $this->lastfetchdate[get_class($this) . '_' . __FUNCTION__] = $nowgmt;
+            $this->lastfetchdate[get_only_class($this) . '_' . __FUNCTION__] = $nowgmt;
         }
 
         return $data;
@@ -215,7 +215,7 @@ abstract class Stats
             include_once DOL_DOCUMENT_ROOT . '/core/lib/json.lib.php';
         }
 
-        $newpathofdestfile = $conf->user->dir_temp . '/' . get_class($this) . '_' . __FUNCTION__ . '_' . (empty($this->cachefilesuffix) ? '' : $this->cachefilesuffix . '_') . $langs->defaultlang . '_entity.' . $conf->entity . '_user' . $user->id . '.cache';
+        $newpathofdestfile = $conf->user->dir_temp . '/' . get_only_class($this) . '_' . __FUNCTION__ . '_' . (empty($this->cachefilesuffix) ? '' : $this->cachefilesuffix . '_') . $langs->defaultlang . '_entity.' . $conf->entity . '_user' . $user->id . '.cache';
         $newmask = '0644';
 
         $nowgmt = dol_now();
@@ -226,15 +226,15 @@ abstract class Stats
             if ($filedate >= ($nowgmt - $cachedelay)) {
                 $foundintocache = 1;
 
-                $this->lastfetchdate[get_class($this) . '_' . __FUNCTION__] = $filedate;
+                $this->lastfetchdate[get_only_class($this) . '_' . __FUNCTION__] = $filedate;
             } else {
-                dol_syslog(get_class($this) . '::' . __FUNCTION__ . " cache file " . $newpathofdestfile . " is not found or older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . ") so we can't use it.");
+                dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " cache file " . $newpathofdestfile . " is not found or older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . ") so we can't use it.");
             }
         }
 
         // Load file into $data
         if ($foundintocache) {    // Cache file found and is not too old
-            dol_syslog(get_class($this) . '::' . __FUNCTION__ . " read data from cache file " . $newpathofdestfile . " " . $filedate . ".");
+            dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " read data from cache file " . $newpathofdestfile . " " . $filedate . ".");
             $data = json_decode(file_get_contents($newpathofdestfile), true);
         } else {
             $year = $startyear;
@@ -261,7 +261,7 @@ abstract class Stats
 
         // Save cache file
         if (empty($foundintocache) && ($cachedelay > 0 || $cachedelay == -1)) {
-            dol_syslog(get_class($this) . '::' . __FUNCTION__ . " save cache file " . $newpathofdestfile . " onto disk.");
+            dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " save cache file " . $newpathofdestfile . " onto disk.");
             if (!dol_is_dir($conf->user->dir_temp)) {
                 dol_mkdir($conf->user->dir_temp);
             }
@@ -274,7 +274,7 @@ abstract class Stats
             }
             dolChmod($newpathofdestfile);
 
-            $this->lastfetchdate[get_class($this) . '_' . __FUNCTION__] = $nowgmt;
+            $this->lastfetchdate[get_only_class($this) . '_' . __FUNCTION__] = $nowgmt;
         }
 
         return $data;
@@ -340,7 +340,7 @@ abstract class Stats
             include_once DOL_DOCUMENT_ROOT . '/core/lib/json.lib.php';
         }
 
-        $newpathofdestfile = $conf->user->dir_temp . '/' . get_class($this) . '_' . __FUNCTION__ . '_' . (empty($this->cachefilesuffix) ? '' : $this->cachefilesuffix . '_') . $langs->defaultlang . '_entity.' . $conf->entity . '_user' . $user->id . '.cache';
+        $newpathofdestfile = $conf->user->dir_temp . '/' . get_only_class($this) . '_' . __FUNCTION__ . '_' . (empty($this->cachefilesuffix) ? '' : $this->cachefilesuffix . '_') . $langs->defaultlang . '_entity.' . $conf->entity . '_user' . $user->id . '.cache';
         $newmask = '0644';
 
         $nowgmt = dol_now();
@@ -351,15 +351,15 @@ abstract class Stats
             if ($filedate >= ($nowgmt - $cachedelay)) {
                 $foundintocache = 1;
 
-                $this->lastfetchdate[get_class($this) . '_' . __FUNCTION__] = $filedate;
+                $this->lastfetchdate[get_only_class($this) . '_' . __FUNCTION__] = $filedate;
             } else {
-                dol_syslog(get_class($this) . '::' . __FUNCTION__ . " cache file " . $newpathofdestfile . " is not found or older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . ") so we can't use it.");
+                dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " cache file " . $newpathofdestfile . " is not found or older than now - cachedelay (" . $nowgmt . " - " . $cachedelay . ") so we can't use it.");
             }
         }
 
         // Load file into $data
         if ($foundintocache) {    // Cache file found and is not too old
-            dol_syslog(get_class($this) . '::' . __FUNCTION__ . " read data from cache file " . $newpathofdestfile . " " . $filedate . ".");
+            dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " read data from cache file " . $newpathofdestfile . " " . $filedate . ".");
             $data = json_decode(file_get_contents($newpathofdestfile), true);
             '@phan-var-force array<int<0,11>,array{0:int<1,12>,1:int|float}> $data';  // Phan can't decode json_decode's return value
         } else {
@@ -370,7 +370,7 @@ abstract class Stats
 
         // Save cache file
         if (empty($foundintocache) && ($cachedelay > 0 || $cachedelay == -1)) {
-            dol_syslog(get_class($this) . '::' . __FUNCTION__ . " save cache file " . $newpathofdestfile . " onto disk.");
+            dol_syslog(get_only_class($this) . '::' . __FUNCTION__ . " save cache file " . $newpathofdestfile . " onto disk.");
             if (!dol_is_dir($conf->user->dir_temp)) {
                 dol_mkdir($conf->user->dir_temp);
             }
@@ -383,7 +383,7 @@ abstract class Stats
             }
             dolChmod($newpathofdestfile);
 
-            $this->lastfetchdate[get_class($this) . '_' . __FUNCTION__] = $nowgmt;
+            $this->lastfetchdate[get_only_class($this) . '_' . __FUNCTION__] = $nowgmt;
         }
 
         return $data;
@@ -405,7 +405,7 @@ abstract class Stats
 		// phpcs:enable
         $result = array();
 
-        dol_syslog(get_class($this) . '::' . __FUNCTION__, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::' . __FUNCTION__, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -434,7 +434,7 @@ abstract class Stats
 		// phpcs:enable
         $result = array();
 
-        dol_syslog(get_class($this) . '::' . __FUNCTION__, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::' . __FUNCTION__, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -494,7 +494,7 @@ abstract class Stats
         $result = array();
         $res = array();
 
-        dol_syslog(get_class($this) . '::' . __FUNCTION__, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::' . __FUNCTION__, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -551,7 +551,7 @@ abstract class Stats
         $result = array();
         $res = array();
 
-        dol_syslog(get_class($this) . '::' . __FUNCTION__, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::' . __FUNCTION__, LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -608,7 +608,7 @@ abstract class Stats
         $result = array();
         $res = array();
 
-        dol_syslog(get_class($this) . '::' . __FUNCTION__, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::' . __FUNCTION__, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);
@@ -664,7 +664,7 @@ abstract class Stats
 
         $result = array();
 
-        dol_syslog(get_class($this) . '::' . __FUNCTION__, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . '::' . __FUNCTION__, LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $num = $this->db->num_rows($resql);

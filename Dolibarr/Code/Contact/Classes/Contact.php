@@ -524,7 +524,7 @@ class Contact extends CommonObject
         $sql .= " " . (!empty($this->import_key) ? "'" . $this->db->escape($this->import_key) . "'" : "null");
         $sql .= ")";
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "socpeople");
@@ -559,14 +559,14 @@ class Contact extends CommonObject
                 return $this->id;
             } else {
                 $this->db->rollback();
-                dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
                 return -2;
             }
         } else {
             $this->error = $this->db->lasterror();
 
             $this->db->rollback();
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_ERR);
             return -1;
         }
     }
@@ -653,7 +653,7 @@ class Contact extends CommonObject
         $sql .= ", entity = " . ((int) $this->entity);
         $sql .= " WHERE rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
             unset($this->country_code);
@@ -740,7 +740,7 @@ class Contact extends CommonObject
                 $this->db->commit();
                 return 1;
             } else {
-                dol_syslog(get_class($this) . "::update Error " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update Error " . $this->error, LOG_ERR);
                 $this->db->rollback();
                 return -$error;
             }
@@ -917,7 +917,7 @@ class Contact extends CommonObject
         }
         $sql .= " WHERE rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::update_perso this->birthday=" . $this->birthday . " -", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update_perso this->birthday=" . $this->birthday . " -", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -966,7 +966,7 @@ class Contact extends CommonObject
             $this->db->commit();
             return 1;
         } else {
-            dol_syslog(get_class($this) . "::update Error " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::update Error " . $this->error, LOG_ERR);
             $this->db->rollback();
             return -$error;
         }
@@ -987,7 +987,7 @@ class Contact extends CommonObject
     {
         global $langs;
 
-        dol_syslog(get_class($this) . "::fetch id=" . $id . " ref_ext=" . $ref_ext . " email=" . $email, LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch id=" . $id . " ref_ext=" . $ref_ext . " email=" . $email, LOG_DEBUG);
 
         if (empty($id) && empty($ref_ext) && empty($email)) {
             $this->error = 'BadParameter';
@@ -1207,7 +1207,7 @@ class Contact extends CommonObject
         $sql .= " AND tc.source = 'external'";
         $sql .= " GROUP BY tc.element";
 
-        dol_syslog(get_class($this) . "::load_ref_elements", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::load_ref_elements", LOG_DEBUG);
 
         $resql = $this->db->query($sql);
         if ($resql) {
@@ -1731,7 +1731,7 @@ class Contact extends CommonObject
         $sql .= " WHERE rowid = " . ((int) $this->id);
         $result = $this->db->query($sql);
 
-        dol_syslog(get_class($this) . "::setstatus", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::setstatus", LOG_DEBUG);
         if ($result) {
             // Call trigger
             $result = $this->call_trigger('CONTACT_ENABLEDISABLE', $user);

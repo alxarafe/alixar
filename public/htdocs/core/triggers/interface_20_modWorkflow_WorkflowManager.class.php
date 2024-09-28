@@ -51,7 +51,7 @@ class InterfaceWorkflowManager extends DolibarrTriggers
     {
         $this->db = $db;
 
-        $this->name = preg_replace('/^Interface/i', '', get_class($this));
+        $this->name = preg_replace('/^Interface/i', '', get_only_class($this));
         $this->family = "core";
         $this->description = "Triggers of this module allows to manage workflows";
         $this->version = self::VERSIONS['prod'];

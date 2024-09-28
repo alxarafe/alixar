@@ -102,7 +102,7 @@ class DoliDBPgsql extends DoliDB
             $this->connected = false;
             $this->ok = false;
             $this->error = "Pgsql PHP functions are not available in this version of PHP";
-            dol_syslog(get_class($this) . "::DoliDBPgsql : Pgsql PHP functions are not available in this version of PHP", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::DoliDBPgsql : Pgsql PHP functions are not available in this version of PHP", LOG_ERR);
             return;
         }
 
@@ -110,7 +110,7 @@ class DoliDBPgsql extends DoliDB
             $this->connected = false;
             $this->ok = false;
             $this->error = $langs->trans("ErrorWrongHostParameter");
-            dol_syslog(get_class($this) . "::DoliDBPgsql : Erreur Connect, wrong host parameters", LOG_ERR);
+            dol_syslog(get_only_class($this) . "::DoliDBPgsql : Erreur Connect, wrong host parameters", LOG_ERR);
             return;
         }
 
@@ -126,7 +126,7 @@ class DoliDBPgsql extends DoliDB
             $this->connected = false;
             $this->ok = false;
             $this->error = 'Host, login or password incorrect';
-            dol_syslog(get_class($this) . "::DoliDBPgsql : Erreur Connect " . $this->error . '. Failed to connect to host=' . $host . ' port=' . $port . ' user=' . $user, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::DoliDBPgsql : Erreur Connect " . $this->error . '. Failed to connect to host=' . $host . ' port=' . $port . ' user=' . $user, LOG_ERR);
         }
 
         // If server connection serveur ok and DB connection is requested, try to connect to DB
@@ -140,7 +140,7 @@ class DoliDBPgsql extends DoliDB
                 $this->database_name = '';
                 $this->ok = false;
                 $this->error = $this->error();
-                dol_syslog(get_class($this) . "::DoliDBPgsql : Erreur Select_db " . $this->error, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::DoliDBPgsql : Erreur Select_db " . $this->error, LOG_ERR);
             }
         } else {
             // Pas de selection de base demandee, ok ou ko
@@ -497,7 +497,7 @@ class DoliDBPgsql extends DoliDB
     {
         if ($this->db) {
             if ($this->transaction_opened > 0) {
-                dol_syslog(get_class($this) . "::close Closing a connection with an opened transaction depth=" . $this->transaction_opened, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::close Closing a connection with an opened transaction depth=" . $this->transaction_opened, LOG_ERR);
             }
             $this->connected = false;
             return pg_close($this->db);
@@ -569,10 +569,10 @@ class DoliDBPgsql extends DoliDB
                     $this->lasterrno = $this->errno();
 
                     if (getDolGlobalInt('SYSLOG_LEVEL') < LOG_DEBUG) {
-                        dol_syslog(get_class($this) . "::query SQL Error query: " . $query, LOG_ERR); // Log of request was not yet done previously
+                        dol_syslog(get_only_class($this) . "::query SQL Error query: " . $query, LOG_ERR); // Log of request was not yet done previously
                     }
-                    dol_syslog(get_class($this) . "::query SQL Error message: " . $this->lasterror . " (" . $this->lasterrno . ")", LOG_ERR);
-                    dol_syslog(get_class($this) . "::query SQL Error usesavepoint = " . $usesavepoint, LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::query SQL Error message: " . $this->lasterror . " (" . $this->lasterrno . ")", LOG_ERR);
+                    dol_syslog(get_only_class($this) . "::query SQL Error usesavepoint = " . $usesavepoint, LOG_ERR);
                 }
 
                 if ($usesavepoint && $this->transaction_opened) {   // Warning, after that errno will be erased
@@ -1339,7 +1339,7 @@ class DoliDBPgsql extends DoliDB
         // Note: using ' on user does not works with pgsql
         $sql = "CREATE USER " . $this->sanitize($dolibarr_main_db_user) . " with password '" . $this->escape($dolibarr_main_db_pass) . "'";
 
-        dol_syslog(get_class($this) . "::DDLCreateUser", LOG_DEBUG); // No sql to avoid password in log
+        dol_syslog(get_only_class($this) . "::DDLCreateUser", LOG_DEBUG); // No sql to avoid password in log
         $resql = $this->query($sql);
         if (!$resql) {
             return -1;

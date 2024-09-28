@@ -46,7 +46,7 @@ class InterfaceMailmanSpipsynchro extends DolibarrTriggers
     {
         $this->db = $db;
 
-        $this->name = preg_replace('/^Interface/i', '', get_class($this));
+        $this->name = preg_replace('/^Interface/i', '', get_only_class($this));
         $this->family = "mailmanspip";
         $this->description = "Triggers of this module allows to synchronize Mailman an Spip.";
         $this->version = self::VERSIONS['prod'];

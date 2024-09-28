@@ -267,7 +267,7 @@ class ProductCustomerPrice extends CommonObject
 
         $this->db->begin();
 
-        dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -295,7 +295,7 @@ class ProductCustomerPrice extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::create " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::create " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -340,7 +340,7 @@ class ProductCustomerPrice extends CommonObject
         $sql .= " FROM " . $this->db->prefix() . "product_customer_price as t";
         $sql .= " WHERE t.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             if ($this->db->num_rows($resql)) {
@@ -470,7 +470,7 @@ class ProductCustomerPrice extends CommonObject
             $sql .= $this->db->plimit($limit + 1, $offset);
         }
 
-        dol_syslog(get_class($this) . "::fetchAll", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchAll", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->lines = array();
@@ -581,7 +581,7 @@ class ProductCustomerPrice extends CommonObject
             $sql .= $this->db->plimit($limit + 1, $offset);
         }
 
-        dol_syslog(get_class($this) . "::fetchAllLog", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetchAllLog", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->lines = array();
@@ -776,7 +776,7 @@ class ProductCustomerPrice extends CommonObject
         $sql .= " WHERE t.rowid = " . ((int) $this->id);
 
         $this->db->begin();
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -810,7 +810,7 @@ class ProductCustomerPrice extends CommonObject
 
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -836,7 +836,7 @@ class ProductCustomerPrice extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::update " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::update " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();
@@ -870,7 +870,7 @@ class ProductCustomerPrice extends CommonObject
         $sql .= " WHERE s.parent = " . ((int) $this->fk_soc);
         $sql .= " AND s.entity IN (" . getEntity('societe') . ")";
 
-        dol_syslog(get_class($this) . "::setPriceOnAffiliateThirdparty", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::setPriceOnAffiliateThirdparty", LOG_DEBUG);
         $resql = $this->db->query($sql);
 
         if ($resql) {
@@ -969,7 +969,7 @@ class ProductCustomerPrice extends CommonObject
             $sql = "DELETE FROM " . $this->db->prefix() . "product_customer_price";
             $sql .= " WHERE rowid=" . ((int) $this->id);
 
-            dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if (!$resql) {
                 $error++;
@@ -980,7 +980,7 @@ class ProductCustomerPrice extends CommonObject
         // Commit or rollback
         if ($error) {
             foreach ($this->errors as $errmsg) {
-                dol_syslog(get_class($this) . "::delete " . $errmsg, LOG_ERR);
+                dol_syslog(get_only_class($this) . "::delete " . $errmsg, LOG_ERR);
                 $this->error .= ($this->error ? ', ' . $errmsg : $errmsg);
             }
             $this->db->rollback();

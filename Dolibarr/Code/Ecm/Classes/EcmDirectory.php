@@ -182,7 +182,7 @@ class EcmDirectory extends CommonObject
 
         if ($pathfound) {
             $this->error = "ErrorDirAlreadyExists";
-            dol_syslog(get_class($this) . "::create " . $this->error, LOG_WARNING);
+            dol_syslog(get_only_class($this) . "::create " . $this->error, LOG_WARNING);
             return -1;
         } else {
             $this->db->begin();
@@ -206,7 +206,7 @@ class EcmDirectory extends CommonObject
             $sql .= " " . ($this->fk_user_c > 0 ? ((int) $this->fk_user_c) : "null");
             $sql .= ")";
 
-            dol_syslog(get_class($this) . "::create", LOG_DEBUG);
+            dol_syslog(get_only_class($this) . "::create", LOG_DEBUG);
             $resql = $this->db->query($sql);
             if ($resql) {
                 $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . "ecm_directories");
@@ -269,7 +269,7 @@ class EcmDirectory extends CommonObject
         $sql .= " description = '" . $this->db->escape($this->description) . "'";
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::update", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::update", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $error++;
@@ -312,7 +312,7 @@ class EcmDirectory extends CommonObject
         }
         $sql .= " WHERE rowid = " . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::changeNbOfFiles", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::changeNbOfFiles", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->error = "Error " . $this->db->lasterror();
@@ -352,7 +352,7 @@ class EcmDirectory extends CommonObject
         $sql .= " FROM " . MAIN_DB_PREFIX . "ecm_directories as t";
         $sql .= " WHERE t.rowid = " . ((int) $id);
 
-        dol_syslog(get_class($this) . "::fetch", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::fetch", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $obj = $this->db->fetch_object($resql);
@@ -403,14 +403,14 @@ class EcmDirectory extends CommonObject
             $relativepath = $this->getRelativePath(1); // Ex: dir1/dir2/dir3
         }
 
-        dol_syslog(get_class($this) . "::delete remove directory id=" . $this->id . " mode=" . $mode . (($mode == 'databaseonly') ? '' : ' relativepath=' . $relativepath));
+        dol_syslog(get_only_class($this) . "::delete remove directory id=" . $this->id . " mode=" . $mode . (($mode == 'databaseonly') ? '' : ' relativepath=' . $relativepath));
 
         $this->db->begin();
 
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "ecm_directories";
         $sql .= " WHERE rowid=" . ((int) $this->id);
 
-        dol_syslog(get_class($this) . "::delete", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::delete", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if (!$resql) {
             $this->db->rollback();
@@ -439,7 +439,7 @@ class EcmDirectory extends CommonObject
             $this->db->commit();
         } else {
             $this->error = 'ErrorFailToDeleteDir';
-            dol_syslog(get_class($this) . "::delete " . $this->error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::delete " . $this->error, LOG_ERR);
             $this->db->rollback();
             $error++;
         }
@@ -582,7 +582,7 @@ class EcmDirectory extends CommonObject
         $sql .= " WHERE fk_parent != 0";
         $sql .= " AND entity = " . $conf->entity;
 
-        dol_syslog(get_class($this) . "::load_motherof", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::load_motherof", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             // This assignment in condition is not a bug. It allows walking the results.
@@ -671,7 +671,7 @@ class EcmDirectory extends CommonObject
         $sql .= " AND c.entity = " . $conf->entity;
         $sql .= " ORDER BY c.label, c.rowid";
 
-        dol_syslog(get_class($this) . "::get_full_arbo", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::get_full_arbo", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->cats = array();
@@ -783,7 +783,7 @@ class EcmDirectory extends CommonObject
             $sql .= " WHERE entity = " . $conf->entity;
         }
 
-        dol_syslog(get_class($this) . "::refreshcachenboffile", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::refreshcachenboffile", LOG_DEBUG);
         $resql = $this->db->query($sql);
         if ($resql) {
             $this->cachenbofdoc = count($filelist);

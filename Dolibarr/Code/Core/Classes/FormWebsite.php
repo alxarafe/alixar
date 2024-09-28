@@ -126,7 +126,7 @@ class FormWebsite
         $sql .= " WHERE active = 1 AND entity IN (" . getEntity('c_type_container') . ")";
         $sql .= " ORDER BY position ASC, typecontainer DESC, label ASC";
 
-        dol_syslog(get_class($this) . "::selectTypeOfContainer", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::selectTypeOfContainer", LOG_DEBUG);
 
         $result = $this->db->query($sql);
         if ($result) {
