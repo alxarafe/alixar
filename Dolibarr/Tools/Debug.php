@@ -21,7 +21,9 @@
 namespace Dolibarr\Tools;
 
 use Alxarafe\Tools\DebugBarCollector\PhpCollector;
+use DebugBar\DataCollector\PDO\PDOCollector;
 use DebugBar\DebugBar;
+use Dolibarr\Core\Base\Database;
 use Dolibarr\Tools\DebugBarCollector\DolHooksCollector;
 use Dolibarr\Tools\DebugBarCollector\DolibarrCollector;
 use Dolibarr\Tools\DebugBarCollector\DolLogsCollector;
@@ -49,6 +51,8 @@ class Debug extends DebugBar
      */
     public function __construct()
     {
+        global $db;
+
         //$this->addCollector(new PhpInfoCollector());
         //$this->addCollector(new DolMessagesCollector());
         $this->addCollector(new DolRequestDataCollector());
@@ -63,6 +67,20 @@ class Debug extends DebugBar
         if (isModEnabled('syslog')) {
             $this->addCollector(new DolLogsCollector());
         }
+
+        $pdo = Database::getPdo();
+        $this->addCollector(new PDOCollector($pdo));
+    }
+
+    /**
+     * Returns a JavascriptRenderer for this instance
+     *
+     * @return \DebugBar\JavascriptRenderer      String content
+     * @deprecated Use getJavascriptRenderer
+     */
+    public function getRenderer()
+    {
+        return $this->getJavascriptRenderer();
     }
 
     /**
@@ -84,16 +102,5 @@ class Debug extends DebugBar
         $renderer->setEnableJqueryNoConflict(false);    // We don't need no conflict
 
         return $renderer;
-    }
-
-    /**
-     * Returns a JavascriptRenderer for this instance
-     *
-     * @return \DebugBar\JavascriptRenderer      String content
-     * @deprecated Use getJavascriptRenderer
-     */
-    public function getRenderer()
-    {
-        return $this->getJavascriptRenderer();
     }
 }

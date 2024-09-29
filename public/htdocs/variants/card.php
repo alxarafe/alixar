@@ -30,8 +30,6 @@ use Dolibarr\Code\Variants\Classes\ProductAttributeValue;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require 'class/ProductAttribute.class.php';
-require 'class/ProductAttributeValue.class.php';
 require 'lib/variants.lib.php';
 
 // Load translation files required by the page

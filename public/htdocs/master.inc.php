@@ -28,6 +28,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Tools\Debug;
 use Dolibarr\Code\Core\Classes\Conf;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
@@ -162,7 +163,6 @@ if (!defined('NOREQUIREDB')) {
 // Now database connection is known, so we can forget password
 //unset($dolibarr_main_db_pass);    // We comment this because this constant is used in some other pages
 unset($conf->db->pass); // This is to avoid password to be shown in memory/swap dump
-
 
 /*
  * Object $user

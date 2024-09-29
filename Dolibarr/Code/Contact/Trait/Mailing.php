@@ -18,9 +18,6 @@
 
 namespace Dolibarr\Code\Contact\Trait;
 
-use Dolibarr\Code\Contact\Classes\MailingUnsubscribe;
-use Exception;
-
 trait Mailing
 {
     /**
