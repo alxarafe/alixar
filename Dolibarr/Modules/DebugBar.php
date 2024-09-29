@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2019-2020 AXeL-dev <contact.axel.dev@gmail.com>
+/* Copyright (C) 2019-2020  AXeL-dev                    <contact.axel.dev@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -89,7 +89,6 @@ class DebugBar extends DolibarrModules
         $this->rights[1][3] = 0; // La permission est-elle une permission par default
         $this->rights[1][4] = 'read';
     }
-
 
     /**
      *      Function called when module is enabled.
