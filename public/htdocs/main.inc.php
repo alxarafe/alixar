@@ -38,6 +38,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Tools\Debug;
 
 /**
  *  \file       htdocs/main.inc.php
@@ -510,9 +511,8 @@ register_shutdown_function('dol_shutdown');
 // Load debugbar
 if (isModEnabled('debugbar') && !GETPOST('dol_use_jmobile') && empty($_SESSION['dol_use_jmobile'])) {
     global $debugbar;
-    include_once DOL_DOCUMENT_ROOT . '/debugbar/class/DebugBar.php';
 
-    $debugbar = new DolibarrDebugBar();
+    $debugbar = new Debug();
     $renderer = $debugbar->getJavascriptRenderer();
     if (!getDolGlobalString('MAIN_HTML_HEADER')) {
         $conf->global->MAIN_HTML_HEADER = '';
