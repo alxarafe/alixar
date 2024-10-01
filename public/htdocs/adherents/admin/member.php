@@ -29,6 +29,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\AveryLabels;
 
 /**
  *      \file       htdocs/adherents/admin/member.php
@@ -627,7 +628,7 @@ print "</tr>\n";
 // Format of cards page
 print '<tr class="oddeven"><td>' . $langs->trans("DescADHERENT_CARD_TYPE") . '</td><td>';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/format_cards.lib.php'; // List of possible labels (defined into $_Avery_Labels variable set into format_cards.lib.php)
+$_Avery_Labels = AveryLabels::getAveryLabels();
 $arrayoflabels = array();
 foreach (array_keys($_Avery_Labels) as $codecards) {
     $arrayoflabels[$codecards] = $_Avery_Labels[$codecards]['name'];
@@ -696,7 +697,7 @@ print "</tr>\n";
 // Format of labels page
 print '<tr class="oddeven"><td>' . $langs->trans("DescADHERENT_ETIQUETTE_TYPE") . '</td><td>';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/format_cards.lib.php'; // List of possible labels (defined into $_Avery_Labels variable set into format_cards.lib.php)
+$_Avery_Labels = AveryLabels::getAveryLabels();
 $arrayoflabels = array();
 foreach (array_keys($_Avery_Labels) as $codecards) {
     $arrayoflabels[$codecards] = $_Avery_Labels[$codecards]['name'];

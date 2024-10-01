@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormMail;
 use Dolibarr\Core\Base\DolibarrModules;
+use Dolibarr\Lib\AveryLabels;
 
 /**
  *  \file           htdocs/core/lib/admin.lib.php
@@ -1755,9 +1756,8 @@ function form_constantes($tableau, $strictw3c = 2, $helptext = '', $text = 'Valu
             // Value
             if ($const == 'ADHERENT_CARD_TYPE' || $const == 'ADHERENT_ETIQUETTE_TYPE') {
                 print '<td>';
-                // List of possible labels (defined into $_Avery_Labels variable set into format_cards.lib.php)
-                require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/format_cards.lib.php';
                 $arrayoflabels = array();
+                $_Avery_Labels = AveryLabels::getAveryLabels();
                 foreach (array_keys($_Avery_Labels) as $codecards) {
                     $arrayoflabels[$codecards] = $_Avery_Labels[$codecards]['name'];
                 }

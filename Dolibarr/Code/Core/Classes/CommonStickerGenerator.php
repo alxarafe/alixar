@@ -48,6 +48,8 @@ namespace Dolibarr\Code\Core\Classes;
 //      8600                        : thanx to Kunal Walia : kunal@u.washington.edu
 //    + : Added 3mm to the position of labels to avoid errors
 ////////////////////////////////////////////////////
+use DoliDB;
+use TCPDF;
 
 /**
  *  \file       htdocs/core/class/commonstickergenerator.class.php
@@ -57,7 +59,6 @@ namespace Dolibarr\Code\Core\Classes;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/pdf.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/images.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/format_cards.lib.php';
 
 
 /**

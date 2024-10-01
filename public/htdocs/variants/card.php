@@ -22,12 +22,6 @@
 use Dolibarr\Code\Variants\Classes\ProductAttribute;
 use Dolibarr\Code\Variants\Classes\ProductAttributeValue;
 
-/**
- * \file    htdocs/variants/card.php
- * \ingroup variants
- * \brief   Page to show product attribute
- */
-
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require 'lib/variants.lib.php';

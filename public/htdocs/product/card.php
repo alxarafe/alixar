@@ -41,13 +41,17 @@
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormBarCode;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\GenericObject;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Variants\Model\ProductCombination;
 
 /**
  *  \file       htdocs/product/card.php
@@ -2647,7 +2651,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
 
                 // Parent product.
                 if (isModEnabled('variants') && ($object->isProduct() || $object->isService())) {
-                    $combination = new ProductCombination($db);
+                    $combination = new ProductCombination();
 
                     if ($combination->fetchByFkProductChild($object->id) > 0) {
                         $prodstatic = new Product($db);

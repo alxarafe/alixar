@@ -22,6 +22,7 @@
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\AveryLabels;
 
 /**
  *  \file       htdocs/adherents/cartes/carte.php
@@ -30,7 +31,6 @@ use Dolibarr\Code\Core\Classes\Form;
  */
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/format_cards.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
 $langs->loadLangs(array("members", "errors"));
@@ -286,7 +286,9 @@ print '<input type="hidden" name="foruserid" value="all">';
 print '<input type="hidden" name="mode" value="card">';
 print '<input type="hidden" name="action" value="builddoc">';
 print $langs->trans("DescADHERENT_CARD_TYPE") . ' ';
+
 // List of possible labels (defined into $_Avery_Labels variable set into format_cards.lib.php)
+$_Avery_Labels = AveryLabels::getAveryLabels();
 $arrayoflabels = array();
 foreach (array_keys($_Avery_Labels) as $codecards) {
     $arrayoflabels[$codecards] = $_Avery_Labels[$codecards]['name'];

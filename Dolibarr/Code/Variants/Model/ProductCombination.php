@@ -18,13 +18,17 @@
 
 namespace Dolibarr\Code\Variants\Model;
 
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\Model;
+use Illuminate\Database\Capsule\Manager as DB;
+
 class ProductCombination extends Model
 {
     public $table = 'product_attribute_combination';
 
     public function fetch($rowid)
     {
-        return DB::firstWhere('rowid', $rowid);
+        return ProductCombination::firstWhere('rowid', $rowid);
     }
 
     public function fetchCombinationPriceLevels($fk_price_level = 0, $useCache = true)
@@ -39,14 +43,16 @@ class ProductCombination extends Model
 
     public function fetchByFkProductChild($productid, $donotloadpricelevel = 0)
     {
-        die(__METHOD__ . ' of ' . __CLASS__);
+        $result = ProductCombination::firstWhere('fk_product_child', $productid);
+        if (empty($donotloadpricelevel) && getDolGlobalString('PRODUIT_MULTIPRICES')) {
+            $this->fetchCombinationPriceLevels();
+        }
+        return $result;
     }
 
     public function fetchAllByFkProductParent($fk_product_parent, $sort_by_ref = false)
     {
-        $result = ProductCombination::where('fk_product_parent', $fk_product_parent);
-        dump($result);
-        return $result;
+        return ProductCombination::where('fk_product_parent', $fk_product_parent);
     }
 
     public function countNbOfCombinationForFkProductParent($fk_product_parent)

@@ -21,6 +21,7 @@
 
 namespace Dolibarr\Code\Product\Classes;
 
+use Dolibarr\Code\Core\Classes\CProductNature;
 use Dolibarr\Code\Core\Classes\CUnits;
 use DoliDB;
 use Exception;
@@ -644,7 +645,6 @@ class FormProduct
         $return = '';
 
         // TODO Use a cache
-        require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cproductnature.class.php';
         $productNature = new CProductNature($db);
 
         $filter = array();

@@ -26,6 +26,7 @@ use Dolibarr\Code\Fourn\Classes\Fournisseur;
 use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
+use Dolibarr\Code\Variants\Model\ProductCombination;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 

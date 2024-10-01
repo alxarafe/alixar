@@ -36,8 +36,10 @@
 
 namespace Dolibarr\Code\Product\Classes;
 
+use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Code\Variants\Model\ProductCombination;
 use DoliDB;
 
 /**
@@ -1478,7 +1480,7 @@ class Product extends CommonObject
                     if (isModEnabled('variants')) {
                         include_once DOL_DOCUMENT_ROOT . '/variants/class/ProductCombination.class.php';
 
-                        $comb = new ProductCombination($this->db);
+                        $comb = new ProductCombination();
 
                         foreach ($comb->fetchAllByFkProductParent($this->id) as $currcomb) {
                             $currcomb->updateProperties($this, $user);
