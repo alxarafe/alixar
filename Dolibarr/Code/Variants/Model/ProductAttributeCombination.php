@@ -20,6 +20,7 @@ namespace Dolibarr\Code\Variants\Model;
 
 use Dolibarr\Core\Base\Model;
 
-class ProductCombination2ValuePair extends Model
+class ProductAttributeCombination extends Model
 {
+    protected $table = 'product_attribute_combination';
 }

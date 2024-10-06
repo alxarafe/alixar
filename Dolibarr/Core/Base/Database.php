@@ -52,8 +52,8 @@ class Database extends CapsuleManager
             'database' => $db->name,
             'username' => $db->user,
             'password' => $dolibarr_main_db_pass,
-            'charset' => $db->charset,
-            'collation' => $db->collation,
+            'charset' => $db->charset ?? 'utf8',
+            'collation' => $db->collation ?? 'utf8_unicode_ci',
             'prefix' => $db->prefix,
         ]);
 

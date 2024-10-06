@@ -58,6 +58,7 @@ use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\Misc;
 use DoliDB;
 use stdClass;
 
@@ -8224,7 +8225,7 @@ class Form
      */
     public function selectForForms($objectdesc, $htmlname, $preSelectedValue, $showempty = '', $searchkey = '', $placeholder = '', $morecss = '', $moreparams = '', $forcecombo = 0, $disabled = 0, $selected_input_value = '', $objectfield = '')
     {
-        global $conf, $extrafields, $user;
+        global $conf, $extrafields, $user, $db;
 
         //var_dump($objectdesc); debug_print_backtrace();
 
@@ -8287,8 +8288,10 @@ class Form
             $filter = empty($InfoFieldList[3]) ? '' : $InfoFieldList[3];
             $sortfield = empty($InfoFieldList[4]) ? '' : $InfoFieldList[4];
 
+
             // Load object according to $id and $element
-            $objecttmp = fetchObjectByElement(0, strtolower($InfoFieldList[0]));
+            // $objecttmp = fetchObjectByElement(0, strtolower($InfoFieldList[0]));
+            $objecttmp = Misc::loadModel($InfoFieldList[0], $db);
 
             // Fallback to another solution to get $objecttmp
             if (empty($objecttmp) && !empty($classpath)) {

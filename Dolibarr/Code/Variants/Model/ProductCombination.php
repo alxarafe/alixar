@@ -20,7 +20,6 @@ namespace Dolibarr\Code\Variants\Model;
 
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\Model;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class ProductCombination extends Model
 {
@@ -28,12 +27,7 @@ class ProductCombination extends Model
 
     public function fetch($rowid)
     {
-        return ProductCombination::firstWhere('rowid', $rowid);
-    }
-
-    public function fetchCombinationPriceLevels($fk_price_level = 0, $useCache = true)
-    {
-        die(__METHOD__ . ' of ' . __CLASS__);
+        return static::firstWhere('rowid', $rowid);
     }
 
     public function saveCombinationPriceLevels($clean = 1)
@@ -43,21 +37,62 @@ class ProductCombination extends Model
 
     public function fetchByFkProductChild($productid, $donotloadpricelevel = 0)
     {
-        $result = ProductCombination::firstWhere('fk_product_child', $productid);
+        $result = static::firstWhere('fk_product_child', $productid);
         if (empty($donotloadpricelevel) && getDolGlobalString('PRODUIT_MULTIPRICES')) {
             $this->fetchCombinationPriceLevels();
         }
         return $result;
     }
 
+    public function fetchCombinationPriceLevels($fk_price_level = 0, $useCache = true)
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
+
     public function fetchAllByFkProductParent($fk_product_parent, $sort_by_ref = false)
     {
-        return ProductCombination::where('fk_product_parent', $fk_product_parent);
+        $entities = getEntity('product');
+        if (!is_array($entities)) {
+            $entities = [$entities];
+        }
+
+        $query = ProductAttributeCombination::where('fk_product_parent', $fk_product_parent)
+            ->whereIn('product_attribute_combination.entity', $entities);
+
+        if ($sort_by_ref) {
+            $query->leftJoin('product', 'product.rowid', '=', 'product_attribute_combination.fk_product_child')
+                ->orderBy('product.ref', 'ASC');
+        }
+
+        $results = $query->get();
+
+        $return = [];
+
+        foreach ($results as $result) {
+            $tmp = new ProductCombination();
+            $tmp->id = $result->rowid;
+            $tmp->fk_product_parent = $result->fk_product_parent;
+            $tmp->fk_product_child = $result->fk_product_child;
+            $tmp->variation_price = $result->variation_price;
+            $tmp->variation_price_percentage = $result->variation_price_percentage;
+            $tmp->variation_weight = $result->variation_weight;
+            $tmp->variation_ref_ext = $result->variation_ref_ext;
+
+            if (getDolGlobalString('PRODUIT_MULTIPRICES')) {
+                $tmp->fetchCombinationPriceLevels();
+            }
+
+            $return[] = $tmp;
+        }
+
+        return $return;
     }
 
     public function countNbOfCombinationForFkProductParent($fk_product_parent)
     {
-        die(__METHOD__ . ' of ' . __CLASS__);
+        return static::where('fk_product_parent', $fk_product_parent)
+            ->where('entity', getEntity('product'))
+            ->count();
     }
 
     public function create($user)
