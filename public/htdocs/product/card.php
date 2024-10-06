@@ -59,7 +59,7 @@ use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
 use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Code\Variants\Model\ProductCombination;
+use Dolibarr\Code\Variants\Model\ProductAttributeCombination;
 use Dolibarr\Code\Workstation\Classes\Workstation;
 
 /**
@@ -2660,7 +2660,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
 
                 // Parent product.
                 if (isModEnabled('variants') && ($object->isProduct() || $object->isService())) {
-                    $combination = new ProductCombination();
+                    $combination = new ProductAttributeCombination();
 
                     if ($combination->fetchByFkProductChild($object->id) > 0) {
                         $prodstatic = new Product($db);

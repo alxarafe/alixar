@@ -39,7 +39,7 @@ namespace Dolibarr\Code\Product\Classes;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\User\Classes\User;
-use Dolibarr\Code\Variants\Model\ProductCombination;
+use Dolibarr\Code\Variants\Model\ProductAttributeCombination;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
@@ -1558,7 +1558,7 @@ class Product extends CommonObject
 
                 if (!$error) {
                     if (isModEnabled('variants')) {
-                        $comb = new ProductCombination();
+                        $comb = new ProductAttributeCombination();
 
                         foreach ($comb->fetchAllByFkProductParent($this->id) as $currcomb) {
                             $currcomb->updateProperties($this, $user);
@@ -3115,7 +3115,7 @@ class Product extends CommonObject
 
             if (!$error) {
                 //If it is a parent product, then we remove the association with child products
-                $prodcomb = new ProductCombination($this->db);
+                $prodcomb = new ProductAttributeCombination($this->db);
 
                 if ($prodcomb->deleteByFkProductParent($user, $this->id) < 0) {
                     $error++;

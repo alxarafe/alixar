@@ -24,7 +24,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Variants\Classes\ProductAttribute;
 use Dolibarr\Code\Variants\Classes\ProductAttributeValue;
-use Dolibarr\Code\Variants\Model\ProductCombination;
+use Dolibarr\Code\Variants\Model\ProductAttributeCombination;
 use Dolibarr\Code\Variants\Model\ProductCombination2ValuePair;
 use Dolibarr\Code\Variants\Model\ProductCombinationLevel;
 
@@ -141,7 +141,7 @@ if ($action == 'create' && $subaction == 'delete') {    // We click on select co
     }
 }
 
-$prodcomb = new ProductCombination();
+$prodcomb = new ProductAttributeCombination();
 $prodcomb2val = new ProductCombination2ValuePair();
 
 $productCombination2ValuePairs1 = array();

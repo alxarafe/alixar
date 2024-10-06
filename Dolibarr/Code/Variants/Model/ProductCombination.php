@@ -21,7 +21,7 @@ namespace Dolibarr\Code\Variants\Model;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\Model;
 
-class ProductCombination extends Model
+class ProductAttributeCombination extends Model
 {
     public $table = 'product_attribute_combination';
 
@@ -69,7 +69,7 @@ class ProductCombination extends Model
         $return = [];
 
         foreach ($results as $result) {
-            $tmp = new ProductCombination();
+            $tmp = new ProductAttributeCombination();
             $tmp->id = $result->rowid;
             $tmp->fk_product_parent = $result->fk_product_parent;
             $tmp->fk_product_child = $result->fk_product_child;

@@ -20,7 +20,42 @@ namespace Dolibarr\Code\Variants\Model;
 
 use Dolibarr\Core\Base\Model;
 
+/**
+ * Class ProductAttributeCombination
+ *
+ * @property int $rowid
+ * @property int $fk_product_parent
+ * @property int $fk_product_child
+ * @property float $variation_price
+ * @property int|null $variation_price_percentage
+ * @property float $variation_weight
+ * @property string|null $variation_ref_ext
+ * @property int $entity
+ *
+ * @package App\Models
+ */
 class ProductAttributeCombination extends Model
 {
+    public $timestamps = false;
+
     protected $table = 'product_attribute_combination';
+
+    protected $casts = [
+        'fk_product_parent' => 'int',
+        'fk_product_child' => 'int',
+        'variation_price' => 'float',
+        'variation_price_percentage' => 'int',
+        'variation_weight' => 'float',
+        'entity' => 'int'
+    ];
+
+    protected $fillable = [
+        'fk_product_parent',
+        'fk_product_child',
+        'variation_price',
+        'variation_price_percentage',
+        'variation_weight',
+        'variation_ref_ext',
+        'entity'
+    ];
 }
