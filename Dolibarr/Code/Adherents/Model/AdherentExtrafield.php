@@ -5,7 +5,7 @@
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,8 +16,32 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Dolibarr\Code\Variants\Model;
+namespace Dolibarr\Code\Adherents\Model;
 
-class ProductCombinationLevel extends Model
+use Carbon\Carbon;
+use Dolibarr\Core\Base\Model;
+
+/**
+ * Class AdherentExtrafield
+ *
+ * @property int $rowid
+ * @property Carbon|null $tms
+ * @property int $fk_object
+ * @property string|null $import_key
+ */
+class AdherentExtrafield extends Model
 {
+    protected $table = 'adherent_extrafields';
+    public $timestamps = false;
+
+    protected $casts = [
+        'tms' => 'datetime',
+        'fk_object' => 'int'
+    ];
+
+    protected $fillable = [
+        'tms',
+        'fk_object',
+        'import_key'
+    ];
 }

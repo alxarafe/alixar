@@ -16,48 +16,35 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Dolibarr\Code\Accountancy\Model;
+namespace Dolibarr\Code\Adherents\Model;
 
-use Dolibarr\Code\Bank\Model\BankAccount;
 use Dolibarr\Core\Base\Model;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
- * Class AccountingJournal
+ * Class AdherentTypeLang
  *
  * @property int $rowid
- * @property int $entity
- * @property string $code
+ * @property int $fk_type
+ * @property string $lang
  * @property string $label
- * @property int $nature
- * @property int|null $active
- *
- * @property Collection|BankAccount[] $bank_accounts
- *
- * @package Dolibarr\Code\Accountancy\Model
+ * @property string|null $description
+ * @property string|null $email
+ * @property string|null $import_key
  */
-class AccountingJournal extends Model
+class AdherentTypeLang extends Model
 {
     public $timestamps = false;
-
-    protected $table = 'accounting_journal';
-
+    protected $table = 'adherent_type_lang';
     protected $casts = [
-        'entity' => 'int',
-        'nature' => 'int',
-        'active' => 'int'
+        'fk_type' => 'int'
     ];
 
     protected $fillable = [
-        'entity',
-        'code',
+        'fk_type',
+        'lang',
         'label',
-        'nature',
-        'active'
+        'description',
+        'email',
+        'import_key'
     ];
-
-    public function bankAccounts()
-    {
-        return $this->hasMany(BankAccount::class, 'fk_accountancy_journal');
-    }
 }

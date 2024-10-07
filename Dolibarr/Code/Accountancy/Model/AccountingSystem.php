@@ -18,46 +18,44 @@
 
 namespace Dolibarr\Code\Accountancy\Model;
 
-use Dolibarr\Code\Bank\Model\BankAccount;
 use Dolibarr\Core\Base\Model;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
- * Class AccountingJournal
+ * Class AccountingSystem
+ *
+ * TODO: Possibly not being used
  *
  * @property int $rowid
- * @property int $entity
- * @property string $code
+ * @property int|null $fk_country
+ * @property string $pcg_version
  * @property string $label
- * @property int $nature
  * @property int|null $active
  *
- * @property Collection|BankAccount[] $bank_accounts
+ * @property Collection|AccountingAccount[] $accounting_accounts
  *
- * @package Dolibarr\Code\Accountancy\Model
+ * @package Dolibarr\Code\Compta\Model
  */
-class AccountingJournal extends Model
+class AccountingSystem extends Model
 {
     public $timestamps = false;
 
-    protected $table = 'accounting_journal';
+    protected $table = 'accounting_system';
 
     protected $casts = [
-        'entity' => 'int',
-        'nature' => 'int',
+        'fk_country' => 'int',
         'active' => 'int'
     ];
 
     protected $fillable = [
-        'entity',
-        'code',
+        'fk_country',
+        'pcg_version',
         'label',
-        'nature',
         'active'
     ];
 
-    public function bankAccounts()
+    public function accountingAccounts()
     {
-        return $this->hasMany(BankAccount::class, 'fk_accountancy_journal');
+        return $this->hasMany(AccountingAccount::class, 'fk_pcg_version', 'pcg_version');
     }
 }

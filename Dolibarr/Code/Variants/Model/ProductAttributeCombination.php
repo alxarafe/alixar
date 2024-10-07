@@ -18,10 +18,12 @@
 
 namespace Dolibarr\Code\Variants\Model;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\Model;
 
 /**
  * Class ProductAttributeCombination
+ * Before if was ProductCombination class
  *
  * @property int $rowid
  * @property int $fk_product_parent
@@ -31,8 +33,6 @@ use Dolibarr\Core\Base\Model;
  * @property float $variation_weight
  * @property string|null $variation_ref_ext
  * @property int $entity
- *
- * @package App\Models
  */
 class ProductAttributeCombination extends Model
 {
@@ -58,4 +58,124 @@ class ProductAttributeCombination extends Model
         'variation_ref_ext',
         'entity'
     ];
+
+    public function fetch($rowid)
+    {
+        return static::firstWhere('rowid', $rowid);
+    }
+
+    public function saveCombinationPriceLevels($clean = 1)
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
+
+    public function fetchByFkProductChild($productid, $donotloadpricelevel = 0)
+    {
+        $result = static::firstWhere('fk_product_child', $productid);
+        if (empty($donotloadpricelevel) && getDolGlobalString('PRODUIT_MULTIPRICES')) {
+            $this->fetchCombinationPriceLevels();
+        }
+        return $result;
+    }
+
+    public function fetchCombinationPriceLevels($fk_price_level = 0, $useCache = true)
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
+
+    public function fetchAllByFkProductParent($fk_product_parent, $sort_by_ref = false)
+    {
+        $entities = getEntity('product');
+        if (!is_array($entities)) {
+            $entities = [$entities];
+        }
+
+        $query = ProductAttributeCombination::where('fk_product_parent', $fk_product_parent)
+            ->whereIn('product_attribute_combination.entity', $entities);
+
+        if ($sort_by_ref) {
+            $query->leftJoin('product', 'product.rowid', '=', 'product_attribute_combination.fk_product_child')
+                ->orderBy('product.ref', 'ASC');
+        }
+
+        $results = $query->get();
+
+        $return = [];
+
+        foreach ($results as $result) {
+            $tmp = new ProductAttributeCombination();
+            $tmp->id = $result->rowid;
+            $tmp->fk_product_parent = $result->fk_product_parent;
+            $tmp->fk_product_child = $result->fk_product_child;
+            $tmp->variation_price = $result->variation_price;
+            $tmp->variation_price_percentage = $result->variation_price_percentage;
+            $tmp->variation_weight = $result->variation_weight;
+            $tmp->variation_ref_ext = $result->variation_ref_ext;
+
+            if (getDolGlobalString('PRODUIT_MULTIPRICES')) {
+                $tmp->fetchCombinationPriceLevels();
+            }
+
+            $return[] = $tmp;
+        }
+
+        return $return;
+    }
+
+    public function countNbOfCombinationForFkProductParent($fk_product_parent)
+    {
+        return static::where('fk_product_parent', $fk_product_parent)
+            ->where('entity', getEntity('product'))
+            ->count();
+    }
+
+    public function create($user)
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
+
+    public function update2(User $user)
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
+
+    public function delete2(User $user)
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
+
+    public function deleteByFkProductParent($user, $fk_product_parent)
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
+
+    public function updateProperties(Product $parent, User $user)
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
+
+    public function fetchByProductCombination2ValuePairs($prodid, array $features)
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
+
+    public function getUniqueAttributesAndValuesByFkProductParent($productid)
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
+
+    public function createProductCombination(User $user, Product $product, array $combinations, array $variations, $price_var_percent = false, $forced_pricevar = false, $forced_weightvar = false, $forced_refvar = false, $ref_ext = '')
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
+
+    public function copyAll(User $user, $origProductId, Product $destProduct)
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
+
+    public function getCombinationLabel($prod_child)
+    {
+        die(__METHOD__ . ' of ' . __CLASS__);
+    }
 }

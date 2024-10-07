@@ -32,9 +32,6 @@ use Dolibarr\Code\Core\Classes\Stats;
  *  \brief      File for class managing statistics of members
  */
 
-include_once DOL_DOCUMENT_ROOT . '/adherents/class/subscription.class.php';
-
-
 /**
  *  Class to manage statistics of members
  */

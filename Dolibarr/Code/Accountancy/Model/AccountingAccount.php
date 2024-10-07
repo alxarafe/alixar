@@ -16,7 +16,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Dolibarr\Code\Compta\Model;
+namespace Dolibarr\Code\Accountancy\Model;
 
 use Carbon\Carbon;
 use Dolibarr\Core\Base\Model;

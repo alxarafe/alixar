@@ -16,48 +16,35 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Dolibarr\Code\Accountancy\Model;
+namespace Dolibarr\Code\Variants\Model;
 
-use Dolibarr\Code\Bank\Model\BankAccount;
 use Dolibarr\Core\Base\Model;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
- * Class AccountingJournal
+ * Class ProductAttributeValue
  *
  * @property int $rowid
+ * @property int $fk_product_attribute
+ * @property string $ref
+ * @property string $value
  * @property int $entity
- * @property string $code
- * @property string $label
- * @property int $nature
- * @property int|null $active
- *
- * @property Collection|BankAccount[] $bank_accounts
- *
- * @package Dolibarr\Code\Accountancy\Model
+ * @property int $position
  */
-class AccountingJournal extends Model
+class ProductAttributeValue extends Model
 {
     public $timestamps = false;
-
-    protected $table = 'accounting_journal';
-
+    protected $table = 'product_attribute_value';
     protected $casts = [
+        'fk_product_attribute' => 'int',
         'entity' => 'int',
-        'nature' => 'int',
-        'active' => 'int'
+        'position' => 'int'
     ];
 
     protected $fillable = [
+        'fk_product_attribute',
+        'ref',
+        'value',
         'entity',
-        'code',
-        'label',
-        'nature',
-        'active'
+        'position'
     ];
-
-    public function bankAccounts()
-    {
-        return $this->hasMany(BankAccount::class, 'fk_accountancy_journal');
-    }
 }

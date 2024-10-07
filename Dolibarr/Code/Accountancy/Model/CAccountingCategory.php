@@ -16,46 +16,48 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Dolibarr\Code\Compta\Model;
+namespace Dolibarr\Code\Accountancy\Model;
 
 use Dolibarr\Core\Base\Model;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
- * Class AccountingSystem
- *
- * TODO: Possibly not being used
+ * Class CAccountingCategory
  *
  * @property int $rowid
- * @property int|null $fk_country
- * @property string $pcg_version
+ * @property int $entity
+ * @property string $code
  * @property string $label
+ * @property string $range_account
+ * @property int $sens
+ * @property int $category_type
+ * @property string $formula
+ * @property int|null $position
+ * @property int|null $fk_country
  * @property int|null $active
- *
- * @property Collection|AccountingAccount[] $accounting_accounts
- *
- * @package Dolibarr\Code\Compta\Model
  */
-class AccountingSystem extends Model
+class CAccountingCategory extends Model
 {
     public $timestamps = false;
-
-    protected $table = 'accounting_system';
-
+    protected $table = 'c_accounting_category';
     protected $casts = [
+        'entity' => 'int',
+        'sens' => 'int',
+        'category_type' => 'int',
+        'position' => 'int',
         'fk_country' => 'int',
         'active' => 'int'
     ];
 
     protected $fillable = [
-        'fk_country',
-        'pcg_version',
+        'entity',
+        'code',
         'label',
+        'range_account',
+        'sens',
+        'category_type',
+        'formula',
+        'position',
+        'fk_country',
         'active'
     ];
-
-    public function accountingAccounts()
-    {
-        return $this->hasMany(AccountingAccount::class, 'fk_pcg_version', 'pcg_version');
-    }
 }

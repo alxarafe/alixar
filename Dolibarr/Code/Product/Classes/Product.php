@@ -38,6 +38,7 @@ namespace Dolibarr\Code\Product\Classes;
 
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Product\Model\ProductLot;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\Variants\Model\ProductAttributeCombination;
 use Dolibarr\Core\Base\CommonObject;

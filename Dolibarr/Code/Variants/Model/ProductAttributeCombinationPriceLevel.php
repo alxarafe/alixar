@@ -16,48 +16,35 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Dolibarr\Code\Accountancy\Model;
+namespace Dolibarr\Code\Variants\Model;
 
-use Dolibarr\Code\Bank\Model\BankAccount;
 use Dolibarr\Core\Base\Model;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
- * Class AccountingJournal
+ * Class ProductAttributeCombinationPriceLevel
+ * Before if was ProductCombinationLevel class
  *
  * @property int $rowid
- * @property int $entity
- * @property string $code
- * @property string $label
- * @property int $nature
- * @property int|null $active
- *
- * @property Collection|BankAccount[] $bank_accounts
- *
- * @package Dolibarr\Code\Accountancy\Model
+ * @property int $fk_product_attribute_combination
+ * @property int $fk_price_level
+ * @property float $variation_price
+ * @property int|null $variation_price_percentage
  */
-class AccountingJournal extends Model
+class ProductAttributeCombinationPriceLevel extends Model
 {
     public $timestamps = false;
-
-    protected $table = 'accounting_journal';
-
+    protected $table = 'product_attribute_combination_price_level';
     protected $casts = [
-        'entity' => 'int',
-        'nature' => 'int',
-        'active' => 'int'
+        'fk_product_attribute_combination' => 'int',
+        'fk_price_level' => 'int',
+        'variation_price' => 'float',
+        'variation_price_percentage' => 'int'
     ];
 
     protected $fillable = [
-        'entity',
-        'code',
-        'label',
-        'nature',
-        'active'
+        'fk_product_attribute_combination',
+        'fk_price_level',
+        'variation_price',
+        'variation_price_percentage'
     ];
-
-    public function bankAccounts()
-    {
-        return $this->hasMany(BankAccount::class, 'fk_accountancy_journal');
-    }
 }

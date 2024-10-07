@@ -16,48 +16,60 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Dolibarr\Code\Accountancy\Model;
+namespace Dolibarr\Code\Adherents\Model;
 
-use Dolibarr\Code\Bank\Model\BankAccount;
+use Carbon\Carbon;
 use Dolibarr\Core\Base\Model;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
- * Class AccountingJournal
+ * Class AdherentType
  *
  * @property int $rowid
  * @property int $entity
- * @property string $code
- * @property string $label
- * @property int $nature
- * @property int|null $active
+ * @property Carbon|null $tms
+ * @property int $statut
+ * @property string $libelle
+ * @property string $morphy
+ * @property string|null $duration
+ * @property string $subscription
+ * @property float|null $amount
+ * @property int|null $caneditamount
+ * @property string $vote
+ * @property string|null $note
+ * @property string|null $mail_valid
  *
- * @property Collection|BankAccount[] $bank_accounts
- *
- * @package Dolibarr\Code\Accountancy\Model
+ * @property Collection|Adherent[] $adherents
  */
-class AccountingJournal extends Model
+class AdherentType extends Model
 {
     public $timestamps = false;
-
-    protected $table = 'accounting_journal';
-
+    protected $table = 'adherent_type';
     protected $casts = [
         'entity' => 'int',
-        'nature' => 'int',
-        'active' => 'int'
+        'tms' => 'datetime',
+        'statut' => 'int',
+        'amount' => 'float',
+        'caneditamount' => 'int'
     ];
 
     protected $fillable = [
         'entity',
-        'code',
-        'label',
-        'nature',
-        'active'
+        'tms',
+        'statut',
+        'libelle',
+        'morphy',
+        'duration',
+        'subscription',
+        'amount',
+        'caneditamount',
+        'vote',
+        'note',
+        'mail_valid'
     ];
 
-    public function bankAccounts()
+    public function adherents()
     {
-        return $this->hasMany(BankAccount::class, 'fk_accountancy_journal');
+        return $this->hasMany(Adherent::class, 'fk_adherent_type');
     }
 }
