@@ -19,7 +19,7 @@
 namespace Dolibarr\Code\Adherents\Model;
 
 use Carbon\Carbon;
-use Dolibarr\Code\Categories\Model\CategorieMember;
+use Dolibarr\Code\Members\Model\CategorieMember;
 use Dolibarr\Code\Societe\Model\Societe;
 use Dolibarr\Core\Base\Model;
 use Illuminate\Database\Eloquent\Collection;
