@@ -16,83 +16,58 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Dolibarr\Code\Compta\Model;
+namespace Dolibarr\Code\Don\Model;
 
 use Carbon\Carbon;
 use Dolibarr\Core\Base\Model;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
- * Class Paiement
+ * Class PaymentDonation
  *
  * @property int $rowid
- * @property string|null $ref
- * @property string|null $ref_ext
- * @property int $entity
+ * @property int|null $fk_donation
  * @property Carbon|null $datec
  * @property Carbon|null $tms
  * @property Carbon|null $datep
  * @property float|null $amount
- * @property float|null $multicurrency_amount
- * @property int $fk_paiement
- * @property string|null $num_paiement
+ * @property int $fk_typepayment
+ * @property string|null $num_payment
  * @property string|null $note
  * @property string|null $ext_payment_id
  * @property string|null $ext_payment_site
  * @property int $fk_bank
  * @property int|null $fk_user_creat
  * @property int|null $fk_user_modif
- * @property int $statut
- * @property int $fk_export_compta
- * @property float|null $pos_change
- *
- * @property Collection|Facture[] $factures
  */
-class Paiement extends Model
+class PaymentDonation extends Model
 {
     public $timestamps = false;
-    protected $table = 'paiement';
+    protected $table = 'payment_donation';
     protected $casts = [
-        'entity' => 'int',
+        'fk_donation' => 'int',
         'datec' => 'datetime',
         'tms' => 'datetime',
         'datep' => 'datetime',
         'amount' => 'float',
-        'multicurrency_amount' => 'float',
-        'fk_paiement' => 'int',
+        'fk_typepayment' => 'int',
         'fk_bank' => 'int',
         'fk_user_creat' => 'int',
-        'fk_user_modif' => 'int',
-        'statut' => 'int',
-        'fk_export_compta' => 'int',
-        'pos_change' => 'float'
+        'fk_user_modif' => 'int'
     ];
 
     protected $fillable = [
-        'ref',
-        'ref_ext',
-        'entity',
+        'fk_donation',
         'datec',
         'tms',
         'datep',
         'amount',
-        'multicurrency_amount',
-        'fk_paiement',
-        'num_paiement',
+        'fk_typepayment',
+        'num_payment',
         'note',
         'ext_payment_id',
         'ext_payment_site',
         'fk_bank',
         'fk_user_creat',
-        'fk_user_modif',
-        'statut',
-        'fk_export_compta',
-        'pos_change'
+        'fk_user_modif'
     ];
-
-    public function factures()
-    {
-        return $this->belongsToMany(Facture::class, 'alx_paiement_facture', 'fk_paiement', 'fk_facture')
-            ->withPivot('rowid', 'amount', 'multicurrency_code', 'multicurrency_tx', 'multicurrency_amount');
-    }
 }
