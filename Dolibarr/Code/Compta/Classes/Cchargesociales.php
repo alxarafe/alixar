@@ -35,6 +35,7 @@ namespace Dolibarr\Code\Compta\Classes;
 //
 /**
  * Class Cchargesociales
+ * Model CChargeSocial
  */
 class Cchargesociales
 {

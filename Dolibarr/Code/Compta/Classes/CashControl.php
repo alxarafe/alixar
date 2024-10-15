@@ -35,6 +35,7 @@ use DoliDB;
 
 /**
  *    Class to manage cash fence
+ * Model PosCashFence
  */
 class CashControl extends CommonObject
 {

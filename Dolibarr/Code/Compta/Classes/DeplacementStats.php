@@ -31,6 +31,7 @@ include_once DOL_DOCUMENT_ROOT . '/compta/deplacement/class/deplacement.class.ph
 
 /**
  *  Class to manage the statistics of travel and expense notes
+ * Model not found
  */
 class DeplacementStats extends Stats
 {

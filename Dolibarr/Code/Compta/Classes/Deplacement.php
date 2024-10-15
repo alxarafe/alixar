@@ -34,6 +34,7 @@ use DoliDB;
 
 /**
  *      Class to manage trips and working credit notes
+ * Model not found
  */
 class Deplacement extends CommonObject
 {

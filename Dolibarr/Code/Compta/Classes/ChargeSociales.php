@@ -38,6 +38,7 @@ use DoliDB;
 /**
  *  Class for managing the social charges.
  *  The collected VAT is computed only on the paid invoices/charges
+ * Model ChargeSocial
  */
 class ChargeSociales extends CommonObject
 {

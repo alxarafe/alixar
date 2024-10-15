@@ -32,6 +32,7 @@ namespace Dolibarr\Code\Compta\Classes;
 
 /**
  *  Class to manage standing orders rejects
+ * Model PreleventRejet
  */
 class RejetPrelevement
 {

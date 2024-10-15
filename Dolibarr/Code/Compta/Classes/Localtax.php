@@ -31,6 +31,7 @@ use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  Class to manage local tax
+ * Model Localtax
  */
 class Localtax extends CommonObject
 {

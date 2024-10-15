@@ -35,6 +35,7 @@ use DoliDB;
 
 /**
  *  Class to manage payments of social contributions
+ * Model Paiementcharge
  */
 class PaymentSocialContribution extends CommonObject
 {

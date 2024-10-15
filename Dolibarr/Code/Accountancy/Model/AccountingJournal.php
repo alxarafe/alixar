@@ -18,7 +18,7 @@
 
 namespace Dolibarr\Code\Accountancy\Model;
 
-use Dolibarr\Code\Bank\Model\BankAccount;
+use Dolibarr\Code\Compta\Model\BankAccount;
 use Dolibarr\Core\Base\Model;
 use Illuminate\Database\Eloquent\Collection;
 

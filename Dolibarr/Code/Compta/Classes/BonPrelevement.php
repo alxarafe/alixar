@@ -46,6 +46,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/bank.lib.php';
 
 /**
  *  Class to manage withdrawal receipts
+ * Model PrelevementBon
  */
 class BonPrelevement extends CommonObject
 {

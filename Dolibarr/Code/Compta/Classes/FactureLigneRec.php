@@ -41,6 +41,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 /**
  *  Class to manage invoice lines of templates.
  *  Saved into database table llx_facturedet_rec
+ * Model not found
  */
 class FactureLigneRec extends CommonInvoiceLine
 {

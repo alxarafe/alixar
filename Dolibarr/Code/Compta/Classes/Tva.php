@@ -36,6 +36,7 @@ use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  Put here description of your class
+ * Model Tva
  */
 class Tva extends CommonObject
 {

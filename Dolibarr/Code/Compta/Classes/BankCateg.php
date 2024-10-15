@@ -33,6 +33,7 @@ use DoliDB;
 
 /**
  *    Class to manage bank categories
+ * Model BankCateg
  */
 class BankCateg // extends CommonObject
 {

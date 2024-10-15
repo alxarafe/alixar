@@ -50,6 +50,7 @@ use Exception;
 
 /**
  *  Class to manage contact/addresses
+ * Class Socperson
  */
 class Contact extends CommonObject
 {

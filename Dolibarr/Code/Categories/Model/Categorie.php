@@ -19,8 +19,8 @@
 namespace Dolibarr\Code\Categories\Model;
 
 use Carbon\Carbon;
-use Dolibarr\Code\Bank\Model\CategorieAccount;
 use Dolibarr\Code\Comm\Model\Actioncomm;
+use Dolibarr\Code\Compta\Model\CategorieAccount;
 use Dolibarr\Code\Contact\Model\CategorieContact;
 use Dolibarr\Code\Fourn\Model\CategorieFournisseur;
 use Dolibarr\Code\KnowledgeManagement\Model\CategorieKnowledgemanagement;
