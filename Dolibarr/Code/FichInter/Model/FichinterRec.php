@@ -20,7 +20,7 @@ namespace Dolibarr\Code\FichInter\Model;
 
 use Carbon\Carbon;
 use Dolibarr\Code\Projet\Model\Projet;
-use Dolibarr\Code\UserGroup\Model\User;
+use Dolibarr\Code\User\Model\User;
 use Dolibarr\Core\Base\Model;
 
 /**

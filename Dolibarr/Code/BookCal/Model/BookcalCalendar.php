@@ -19,7 +19,7 @@
 namespace Dolibarr\Code\BookCal\Model;
 
 use Carbon\Carbon;
-use Dolibarr\Code\UserGroup\Model\User;
+use Dolibarr\Code\User\Model\User;
 use Dolibarr\Core\Base\Model;
 use Illuminate\Database\Eloquent\Collection;
 

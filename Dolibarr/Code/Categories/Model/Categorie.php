@@ -30,7 +30,7 @@ use Dolibarr\Code\ProductStock\Model\CategorieWarehouse;
 use Dolibarr\Code\Projet\Model\CategorieProject;
 use Dolibarr\Code\Societe\Model\Societe;
 use Dolibarr\Code\Ticket\Model\Ticket;
-use Dolibarr\Code\UserGroup\Model\User;
+use Dolibarr\Code\User\Model\User;
 use Dolibarr\Code\Website\Model\WebsitePage;
 use Dolibarr\Core\Base\Model;
 use Dolibarr\Core\Model\ElementCategorie;

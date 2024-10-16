@@ -22,7 +22,7 @@ use Carbon\Carbon;
 use Dolibarr\Code\Projet\Model\Projet;
 use Dolibarr\Code\Societe\Model\Societe;
 use Dolibarr\Code\Societe\Model\SocieteRemiseExcept;
-use Dolibarr\Code\UserGroup\Model\User;
+use Dolibarr\Code\User\Model\User;
 use Dolibarr\Core\Base\Model;
 use Illuminate\Database\Eloquent\Collection;
 

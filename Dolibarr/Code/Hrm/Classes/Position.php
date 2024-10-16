@@ -38,6 +38,7 @@ use DoliDB;
 
 /**
  * Class for Position
+ * Model HrmJobUser
  */
 class Position extends CommonObject
 {

@@ -20,7 +20,7 @@ namespace Dolibarr\Code\Contrat\Model;
 
 use Carbon\Carbon;
 use Dolibarr\Code\Societe\Model\Societe;
-use Dolibarr\Code\UserGroup\Model\User;
+use Dolibarr\Code\User\Model\User;
 use Dolibarr\Core\Base\Model;
 use Illuminate\Database\Eloquent\Collection;
 
