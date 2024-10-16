@@ -34,6 +34,7 @@ use DoliDB;
 
 /**
  *  Class to manage various payments
+ * Model PaymentVariou
  */
 class PaymentVarious extends CommonObject
 {

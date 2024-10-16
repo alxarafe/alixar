@@ -33,6 +33,7 @@ use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  Class to manage payments of social contributions
+ * Model PaymentVat
  */
 class PaymentVAT extends CommonObject
 {

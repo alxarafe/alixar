@@ -36,6 +36,7 @@
 //print xdebug_print_function_stack('Functions2.lib was called');exit;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\AveryLabels;
 
 /**
  * Same function than javascript unescape() function but in PHP.
@@ -1957,8 +1958,7 @@ function getListOfModels($db, $type, $maxfilenamelength = 0)
                 }
             } else {
                 if ($type == 'member' && $obj->doc_template_name == 'standard') {   // Special case, if member template, we add variant per format
-                    global $_Avery_Labels;
-                    include_once DOL_DOCUMENT_ROOT . '/core/lib/format_cards.lib.php';
+                    $_Avery_Labels = AveryLabels::getAveryLabels();
                     foreach ($_Avery_Labels as $key => $val) {
                         $liste[$obj->id . ':' . $key] = ($obj->label ? $obj->label : $obj->doc_template_name) . ' ' . $val['name'];
                     }

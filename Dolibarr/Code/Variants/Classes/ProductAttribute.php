@@ -22,6 +22,7 @@
 
 namespace Dolibarr\Code\Variants\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 

@@ -443,7 +443,6 @@ if ($ispaymentok) {
 
         // Record subscription
         include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent_type.class.php';
-        include_once DOL_DOCUMENT_ROOT . '/adherents/class/subscription.class.php';
         $adht = new AdherentType($db);
         $object = new Adherent($db);
 

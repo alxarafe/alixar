@@ -24,9 +24,9 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Variants\Classes\ProductAttribute;
 use Dolibarr\Code\Variants\Classes\ProductAttributeValue;
-use Dolibarr\Code\Variants\Classes\ProductCombination;
-use Dolibarr\Code\Variants\Classes\ProductCombination2ValuePair;
-use Dolibarr\Code\Variants\Classes\ProductCombinationLevel;
+use Dolibarr\Code\Variants\Model\ProductAttributeCombination;
+use Dolibarr\Code\Variants\Model\ProductCombination2ValuePair;
+use Dolibarr\Code\Variants\Model\ProductCombinationLevel;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -141,8 +141,8 @@ if ($action == 'create' && $subaction == 'delete') {    // We click on select co
     }
 }
 
-$prodcomb = new ProductCombination($db);
-$prodcomb2val = new ProductCombination2ValuePair($db);
+$prodcomb = new ProductAttributeCombination();
+$prodcomb2val = new ProductCombination2ValuePair();
 
 $productCombination2ValuePairs1 = array();
 
@@ -813,7 +813,7 @@ if (!empty($id) || !empty($ref)) {
             print $form->formconfirm('combinations.php?id=' . $id, $langs->trans('ToClone'), $langs->trans('ConfirmCloneProductCombinations'), 'confirm_copycombination', array(array('type' => 'text', 'label' => $langs->trans('CloneDestinationReference'), 'name' => 'dest_product')), 0, 1);
         }
 
-        $comb2val = new ProductCombination2ValuePair($db);
+        $comb2val = new ProductCombination2ValuePair();
 
         if ($productCombinations) {
             ?>

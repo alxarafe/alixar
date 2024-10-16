@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2012      Regis Houssin       <regis.houssin@inodbox.com>
- * Copyright (C) 2013      Florian Henry	   <florian.henry@open-concept.pro>
- * Copyright (C) 2014-2020 Laurent Destailleur <eldy@destailleur.fr>
+/* Copyright (C) 2012       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2013       Florian Henry	            <florian.henry@open-concept.pro>
+ * Copyright (C) 2014-2020  Laurent Destailleur         <eldy@destailleur.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Product\Classes\Product;
 
 // Protection to avoid direct call of template
 if (empty($object) || !is_object($object)) {

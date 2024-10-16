@@ -39,15 +39,28 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Bom\Classes\BOM;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\Canvas;
+use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormBarCode;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\GenericObject;
+use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Variants\Model\ProductAttributeCombination;
+use Dolibarr\Code\Workstation\Classes\Workstation;
 
 /**
  *  \file       htdocs/product/card.php
@@ -2173,7 +2186,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
 
                 if (!$object->isService() && isModEnabled('bom')) {
                     print '<tr><td>' . $form->textwithpicto($langs->trans("DefaultBOM"), $langs->trans("DefaultBOMDesc", $langs->transnoentitiesnoconv("Finished"))) . '</td><td>';
-                    $bomkey = "Bom:bom/class/bom.class.php:0:(t.status:=:1) AND (t.fk_product:=:" . ((int)$object->id) . ')';
+                    $bomkey = "BOM:bom/class/bom.class.php:0:(t.status:=:1) AND (t.fk_product:=:" . ((int)$object->id) . ')';
                     print $form->selectForForms($bomkey, 'fk_default_bom', (GETPOSTISSET('fk_default_bom') ? GETPOST('fk_default_bom') : $object->fk_default_bom), 1);
                     print '</td></tr>';
                 }
@@ -2647,7 +2660,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
 
                 // Parent product.
                 if (isModEnabled('variants') && ($object->isProduct() || $object->isService())) {
-                    $combination = new ProductCombination($db);
+                    $combination = new ProductAttributeCombination();
 
                     if ($combination->fetchByFkProductChild($object->id) > 0) {
                         $prodstatic = new Product($db);

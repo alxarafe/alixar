@@ -55,6 +55,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 
 /**
  *  Class to manage invoices
+ * Model Facture
  */
 class Facture extends CommonInvoice
 {

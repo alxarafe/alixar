@@ -34,6 +34,7 @@ namespace Dolibarr\Code\Compta\Classes;
 
 /**
  * Class Cpaiement
+ * Model CPaiement
  */
 class Cpaiement extends CommonDict
 {

@@ -774,14 +774,14 @@ abstract class CommonObject
             $sql .= " AND ref_ext = '" . $db->escape($ref_ext) . "'";
         } else {
             $error = 'ErrorWrongParameters';
-            dol_syslog(get_only_class() . "::isExistingObject " . $error, LOG_ERR);
+            dol_syslog(get_only_class($this) . "::isExistingObject " . $error, LOG_ERR);
             return -1;
         }
         if ($ref || $ref_ext) {     // Because the same ref can exists in 2 different entities, we force the current one in priority
             $sql .= " AND entity = " . ((int)$conf->entity);
         }
 
-        dol_syslog(get_only_class() . "::isExistingObject", LOG_DEBUG);
+        dol_syslog(get_only_class($this) . "::isExistingObject", LOG_DEBUG);
         $resql = $db->query($sql);
         if ($resql) {
             $num = $db->num_rows($resql);

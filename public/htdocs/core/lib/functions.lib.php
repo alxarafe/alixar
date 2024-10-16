@@ -1282,7 +1282,7 @@ function dol_include_once($relpath, $classname = '')
  *                                              2:If $type==0 and if file was not found into alternate dir, test into main dir, return default path if found, empty string if not found
  * @return string                              Full filesystem path (if path=0) or '' if file not found, Full url path (if mode=1)
  */
-function dol_buildpath($path, $type = 0, $returnemptyifnotfound = 0)
+function dol_buildpath($path, $type = 0, $returnemptyifnotfound = 0): string
 {
     global $conf;
 

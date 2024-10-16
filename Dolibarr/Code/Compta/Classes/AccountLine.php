@@ -35,7 +35,8 @@ use Dolibarr\Core\Base\CommonObjectLine;
 use DoliDB;
 
 /**
- *  Class to manage bank transaction lines
+ * Class to manage bank transaction lines
+ * Model Bank
  */
 class AccountLine extends CommonObjectLine
 {

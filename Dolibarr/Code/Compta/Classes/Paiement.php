@@ -44,6 +44,7 @@ use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
 /**
  *  Class to manage payments of customer invoices
+ * Model Paiement
  */
 class Paiement extends CommonObject
 {

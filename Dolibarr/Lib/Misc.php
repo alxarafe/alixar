@@ -60,7 +60,10 @@ abstract class Misc
         }
         $file = $path . '/classpaths.json';
         if (file_exists($file)) {
-            return json_decode(file_get_contents($file), true);
+            $result = json_decode(file_get_contents($file), true);
+            if (!empty($result)) {
+                return $result;
+            }
         }
         $data = static::createClassPaths();
         file_put_contents($file, json_encode($data));
@@ -85,13 +88,14 @@ abstract class Misc
      *
      * @return array
      */
-    private static function createClassPaths($searchPath = '/../Dolibarr/Modules', $folderName = 'Model')
+    private static function createClassPaths($searchPath = '/../Dolibarr/Code', $folderName = 'Classes')
     {
         $result = [];
         $path = realpath(BASE_PATH . $searchPath) . DIRECTORY_SEPARATOR;
         $folders = scandir($path);
         foreach ($folders as $folder) {
-            $folderPath = realpath($path . $folder . DIRECTORY_SEPARATOR . $folderName);
+            $fullPath = $path . $folder . DIRECTORY_SEPARATOR . $folderName;
+            $folderPath = realpath($fullPath);
             if (!is_dir($folderPath)) {
                 continue;
             }
@@ -101,7 +105,7 @@ abstract class Misc
                     continue;
                 }
                 $className = substr($class, 0, -4);
-                $result[$className] = "\\DoliModules\\$folder\\$folderName\\$className";
+                $result[$className] = "\\Dolibarr\\Code\\$folder\\$folderName\\$className";
             }
         }
         return $result;

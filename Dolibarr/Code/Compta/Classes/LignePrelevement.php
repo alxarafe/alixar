@@ -32,6 +32,7 @@ namespace Dolibarr\Code\Compta\Classes;
 
 /**
  *  Class to manage withdrawals
+ * Model PrelevementLigne
  */
 class LignePrelevement
 {

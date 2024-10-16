@@ -36,6 +36,7 @@ include_once DOL_DOCUMENT_ROOT . '/core/lib/date.lib.php';
 
 /**
  *  Class to manage stats for invoices (customer and supplier)
+ * Model not found
  */
 class FactureStats extends Stats
 {

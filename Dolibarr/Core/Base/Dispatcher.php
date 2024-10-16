@@ -38,10 +38,6 @@ class Dispatcher extends DispatcherBase
      */
     protected static function processFolder(string $module, string $controller): bool
     {
-        if (parent::processFolder($module, $controller)) {
-            return true;
-        }
-
         $className = 'Dolibarr\\Code\\' . $module . '\\Controller\\' . $controller;
         $filename = realpath(constant('BASE_PATH') . '/../Dolibarr/Code/' . $module . '/Controller/' . $controller . '.php');
         // Debug::message('Filename: ' . $filename);

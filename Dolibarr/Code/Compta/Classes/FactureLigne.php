@@ -62,6 +62,7 @@ if (isModEnabled('accounting')) {
 /**
  *  Class to manage invoice lines.
  *  Saved into database table llx_facturedet
+ * Model Facturedet
  */
 class FactureLigne extends CommonInvoiceLine
 {

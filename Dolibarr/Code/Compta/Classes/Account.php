@@ -44,7 +44,8 @@ use DoliDB;
  */
 
 /**
- *  Class to manage bank accounts
+ * Class to manage bank accounts
+ * Model BankAccount
  */
 class Account extends CommonObject
 {

@@ -29,6 +29,7 @@ namespace Dolibarr\Code\Compta\Classes;
 
 /**
  *  Class to manage payment terms records in dictionary
+ * Model CPaymentTerm
  */
 class PaymentTerm // extends CommonObject
 {

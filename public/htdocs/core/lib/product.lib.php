@@ -31,7 +31,7 @@ use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
-use Dolibarr\Code\Variants\Classes\ProductCombination;
+use Dolibarr\Code\Variants\Model\ProductAttributeCombination;
 
 /**
  * \file       htdocs/core/lib/product.lib.php
@@ -125,8 +125,7 @@ function product_prepare_head($object)
     if (isModEnabled('variants') && ($object->isProduct() || $object->isService())) {
         global $db;
 
-
-        $prodcomb = new ProductCombination($db);
+        $prodcomb = new ProductAttributeCombination();
 
         if ($prodcomb->fetchByFkProductChild($object->id) <= 0) {
             $head[$h][0] = constant('BASE_URL') . "/variants/combinations.php?id=" . $object->id;

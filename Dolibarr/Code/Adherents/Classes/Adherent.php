@@ -41,6 +41,7 @@ namespace Dolibarr\Code\Adherents\Classes;
  *  \brief      File of class to manage members of a foundation
  */
 
+use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Core\Classes\CMailFile;
 use Dolibarr\Code\Core\Classes\Form;
@@ -49,12 +50,10 @@ use Dolibarr\Code\Core\Traits\CommonPeople;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-
-use Dolibarr\Code\Categories\Classes\Categorie;
 use DoliDB;
 use Exception;
 
+require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 /**
  *      Class to manage members of a foundation

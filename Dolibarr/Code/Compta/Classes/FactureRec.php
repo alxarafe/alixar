@@ -42,6 +42,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 /**
  *  Class to manage invoice templates
+ * Model FactureRec
  */
 class FactureRec extends CommonInvoice
 {

@@ -32,9 +32,12 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Product\Classes\PriceExpression;
 use Dolibarr\Code\Product\Classes\PriceParser;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  * \file htdocs/product/price.php

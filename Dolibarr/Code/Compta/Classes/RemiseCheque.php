@@ -36,6 +36,7 @@ use Dolibarr\Core\Base\CommonObject;
 
 /**
  *  Class to manage cheque delivery receipts
+ * Model BordereauCheque
  */
 class RemiseCheque extends CommonObject
 {
