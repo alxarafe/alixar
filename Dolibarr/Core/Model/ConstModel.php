@@ -32,23 +32,17 @@ use Carbon\Carbon;
  * @property string|null $note
  * @property Carbon|null $tms
  */
-class const extends Model
+class ConstModel extends Model
 {
-    public
-    $timestamps = false;
-    protected
-    $table = 'const';
-    protected
-    $primaryKey = 'rowid';
-    protected
-    $casts = [
+    public $timestamps = false;
+    protected $table = 'const';
+    protected $primaryKey = 'rowid';
+    protected $casts = [
         'entity' => 'int',
         'visible' => 'int',
         'tms' => 'datetime'
     ];
-
-    protected
-    $fillable = [
+    protected $fillable = [
         'name',
         'entity',
         'value',
