@@ -1,7 +1,6 @@
 <?php
 
 /**
- * Copyright (C) 2024       Rafael San José         <rsanjose@alxarafe.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +18,7 @@
  */
 
 use Alxarafe\Lib\Dispatcher;
+use Alxarafe\Lib\Functions;
 
 /**
  * Gets the URL segment corresponding to the controller route.
@@ -34,44 +34,14 @@ function getControllerRoute(): string
     }
     /**
      * If the URL is formed as a subdirectory, it will have to be accessed through
-     * the public subdirectory.
-     * In that case, the path is from the public folder, since up to public, it
-     * will be part of BASE_URL.
+     * the public subdirectory. In that case, BASE_URL will end in /public.
      */
-    $public_cad = '/public/';
-    $public_pos = strpos($full, $public_cad);
-    if ($public_pos !== false) {
-        $full = substr($full, $public_pos + strlen($public_cad) - 1);
+    $public_cad = '/public';
+    if (str_ends_with(constant('BASE_URL'), $public_cad)) {
+        $public_pos = strpos($full, $public_cad . '/');
+        $full = substr($full, $public_pos + strlen($public_cad));
     }
     return $full;
-}
-
-/**
- * Obtains the main url
- *
- * TODO: This function is defined in Alxarafe.
- *       As soon as the Alxarafe code is brought in, it will be removed and
- *       Functions::getUrl() will be used instead.
- *
- * @return string
- */
-function getUrl()
-{
-    $ssl = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
-    $proto = strtolower($_SERVER['SERVER_PROTOCOL']);
-    $proto = substr($proto, 0, strpos($proto, '/')) . ($ssl ? 's' : '');
-    if (isset($_SERVER['HTTP_HOST'])) {
-        $host = $_SERVER['HTTP_HOST'];
-    } else {
-        $port = $_SERVER['SERVER_PORT'];
-        $port = ((!$ssl && $port == '80') || ($ssl && $port == '443')) ? '' : ':' . $port;
-        $host = $_SERVER['SERVER_NAME'] . $port;
-    }
-
-    $script = $_SERVER['SCRIPT_NAME'];
-
-    $script = substr($script, 0, strlen($script) - strlen('/index.php'));
-    return $proto . '://' . $host . $script;
 }
 const BASE_PATH = __DIR__;
 
@@ -82,7 +52,7 @@ if (!file_exists($autoload_filename)) {
 
 require_once $autoload_filename;
 
-define('BASE_URL', getUrl());
+define('BASE_URL', Functions::getUrl());
 
 // Define Dolibarr Constants
 define('DOL_DOCUMENT_ROOT', constant('BASE_PATH') . '/htdocs');
