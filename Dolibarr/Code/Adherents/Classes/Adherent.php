@@ -1759,7 +1759,6 @@ class Adherent extends CommonObject
 
         // If option chosen, we create invoice
         if (($option == 'bankviainvoice' && $accountid) || $option == 'invoiceonly') {
-            require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/paymentterm.class.php';
 
             $invoice = new Facture($this->db);
             $customer = new Societe($this->db);

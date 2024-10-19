@@ -31,7 +31,6 @@ use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/lib/eventorganization_conferenceorboothattendee.lib.php';
 
 // Load translation files required by the page

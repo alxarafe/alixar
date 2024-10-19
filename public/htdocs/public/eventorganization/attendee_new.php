@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2021       Dorian Vabre            <dorian.vabre@gmail.com>
- * Copyright (C) 2023		Laurent Destailleur		<eldy@users.sourceforge.net>
+/* Copyright (C) 2021       Dorian Vabre                <dorian.vabre@gmail.com>
+ * Copyright (C) 2023		Laurent Destailleur		    <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,7 +19,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\PaymentTerm;
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\Images;
 
 /**
  *  \file       htdocs/public/eventorganization/attendee_new.php
@@ -43,7 +57,6 @@ if (!defined('NOIPCHECK')) {
     define('NOIPCHECK', '1'); // Do not check IP defined into conf $dolibarr_main_restrict_ip
 }
 
-
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref
@@ -55,9 +68,6 @@ if (is_numeric($entity)) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorbooth.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/compta/facture/class/paymentterm.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 global $dolibarr_main_url_root;
@@ -669,7 +679,6 @@ if (empty($reshook) && $action == 'add' && (!empty($conference->id) && $conferen
     }
 }
 
-
 /*
  * View
  */
@@ -678,7 +687,6 @@ $form = new Form($db);
 $formcompany = new FormCompany($db);
 
 llxHeaderVierge($langs->trans("NewRegistration"));
-
 
 print '<div align="center">';
 print '<div id="divsubscribe">';

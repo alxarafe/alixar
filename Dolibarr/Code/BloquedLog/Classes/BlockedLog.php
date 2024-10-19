@@ -606,7 +606,6 @@ class BlockedLog
                     } elseif ($this->element == 'payment') {
                         $tmpobject = new Facture($this->db);
                     } elseif ($this->element == 'payment_donation') {
-                        include_once DOL_DOCUMENT_ROOT . '/don/class/don.class.php';
                         $tmpobject = new Don($this->db);
                     } elseif ($this->element == 'payment_various') {
                         include_once DOL_DOCUMENT_ROOT . '/compta/bank/class/paymentvarious.class.php';

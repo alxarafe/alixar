@@ -1,11 +1,11 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2013	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2012		Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2021-2023	Waël Almoman			<info@almoman.com>
- * Copyright (C) 2021		Maxime Demarest			<maxime@indelog.fr>
- * Copyright (C) 2021		Dorian Vabre			<dorian.vabre@gmail.com>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2013	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2012		Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2021-2023	Waël Almoman			    <info@almoman.com>
+ * Copyright (C) 2021		Maxime Demarest			    <maxime@indelog.fr>
+ * Copyright (C) 2021		Dorian Vabre			    <dorian.vabre@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\Don\Classes\PaymentDonation;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Stripe\Classes\Stripe;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *      \file       htdocs/public/payment/paymentok.php
@@ -442,7 +460,6 @@ if ($ispaymentok) {
         // Send confirmation email
 
         // Record subscription
-        include_once DOL_DOCUMENT_ROOT . '/adherents/class/adherent_type.class.php';
         $adht = new AdherentType($db);
         $object = new Adherent($db);
 
@@ -893,7 +910,6 @@ if ($ispaymentok) {
                 $db->begin();
 
                 // Creation of payment line
-                include_once DOL_DOCUMENT_ROOT . '/compta/paiement/class/paiement.class.php';
                 $paiement = new Paiement($db);
                 $paiement->datepaye = $now;
                 if ($currencyCodeType == $conf->currency) {
@@ -1020,7 +1036,6 @@ if ($ispaymentok) {
                         $object->classifyBilled($user);
                         $invoice->validate($user);
                         // Creation of payment line
-                        include_once DOL_DOCUMENT_ROOT . '/compta/paiement/class/paiement.class.php';
                         $paiement = new Paiement($db);
                         $paiement->datepaye = $now;
                         if ($currencyCodeType == $conf->currency) {
@@ -1114,7 +1129,6 @@ if ($ispaymentok) {
             $ispostactionok = -1;
         }
     } elseif (array_key_exists('DON', $tmptag) && $tmptag['DON'] > 0) {
-        include_once DOL_DOCUMENT_ROOT . '/don/class/don.class.php';
         $don = new Don($db);
         $result = $don->fetch((int)$tmptag['DON']);
         if ($result) {
@@ -1149,7 +1163,6 @@ if ($ispaymentok) {
                 $db->begin();
 
                 // Creation of paiement line for donation
-                include_once DOL_DOCUMENT_ROOT . '/don/class/paymentdonation.class.php';
                 $paiement = new PaymentDonation($db);
 
                 $totalpaid = $FinalPaymentAmt;
@@ -1244,7 +1257,6 @@ if ($ispaymentok) {
         //      (we need first that the donation module is able to generate a pdf document for the cerfa with pre filled content)
     } elseif (array_key_exists('ATT', $tmptag) && $tmptag['ATT'] > 0) {
         // Record payment for registration to an event for an attendee
-        require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorbooth.class.php';
         $object = new Facture($db);
         $result = $object->fetch($ref);
         if ($result) {
@@ -1285,7 +1297,6 @@ if ($ispaymentok) {
                     $db->begin();
 
                     // Creation of payment line
-                    include_once DOL_DOCUMENT_ROOT . '/compta/paiement/class/paiement.class.php';
                     $paiement = new Paiement($db);
                     $paiement->datepaye = $now;
                     if ($currencyCodeType == $conf->currency) {
@@ -1471,7 +1482,6 @@ if ($ispaymentok) {
         }
     } elseif (array_key_exists('BOO', $tmptag) && $tmptag['BOO'] > 0) {
         // Record payment for booth or conference
-        require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorbooth.class.php';
         $object = new Facture($db);
         $result = $object->fetch($ref);
         if ($result) {
@@ -1514,7 +1524,6 @@ if ($ispaymentok) {
                     $db->begin();
 
                     // Creation of payment line
-                    include_once DOL_DOCUMENT_ROOT . '/compta/paiement/class/paiement.class.php';
                     $paiement = new Paiement($db);
                     $paiement->datepaye = $now;
                     if ($currencyCodeType == $conf->currency) {
@@ -1720,7 +1729,6 @@ if ($ispaymentok) {
                         // $object->classifyBilled($user);
                         $invoice->validate($user);
                         // Creation of payment line
-                        include_once DOL_DOCUMENT_ROOT . '/compta/paiement/class/paiement.class.php';
                         $paiement = new Paiement($db);
                         $paiement->datepaye = $now;
                         if ($currencyCodeType == $conf->currency) {

@@ -1,9 +1,9 @@
 <?php
 
 /* Copyright (C) 2012       Nicolas Villa aka Boyquotes http://informetic.fr
- * Copyright (C) 2013		Florian Henry		<forian.henry@open-cocnept.pro>
- * Copyright (C) 2013-2015	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2017		Regis Houssin		<regis.houssin@inodbox.com>
+ * Copyright (C) 2013		Florian Henry		        <forian.henry@open-cocnept.pro>
+ * Copyright (C) 2013-2015	Laurent Destailleur	        <eldy@users.sourceforge.net>
+ * Copyright (C) 2017		Regis Houssin		        <regis.houssin@inodbox.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Cron\Classes\Cronjob;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *  \file       htdocs/public/cron/cron_run_jobs_by_url.php
@@ -105,8 +108,6 @@ if (empty($userlogin)) {
     echo 'Userlogin is required.';
     exit;
 }
-
-use Dolibarr\Code\User\Classes\User;
 
 $user = new User($db);
 $result = $user->fetch('', $userlogin);

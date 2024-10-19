@@ -234,7 +234,6 @@ function ajouter_sondage()
 {
     global $db, $user;
 
-    require_once constant('DOL_DOCUMENT_ROOT') . '/opensurvey/class/opensurveysondage.class.php';
 
     $sondage = dol_survey_random(16);
 
