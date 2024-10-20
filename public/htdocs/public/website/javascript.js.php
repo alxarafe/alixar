@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2016-2023 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2016-2023  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Website\Classes\Website;
+use Dolibarr\Code\Website\Classes\WebsitePage;
 
 /**
  *      \file       htdocs/public/website/javascript.js.php

@@ -1,4 +1,21 @@
 <?php
+
+/* Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 //define("NOLOGIN",1);      // This means this output page does not require to be logged.
 //if (!defined('NOREQUIREUSER'))  define('NOREQUIREUSER', '1');
 //if (!defined('NOREQUIREDB'))    define('NOREQUIREDB', '1');
@@ -45,7 +62,7 @@ This is a form to test if a CSRF exists into a Dolibarr page.<br>
 
 <br>
 <?php
-$urltosendrequest = "http://127.0.0.1/dolibarr/htdocs/user/group/card.php";
+$urltosendrequest = constant('BASE_URL') . '/user/group/card.php';
 print 'urltosendrequest = ' . $urltosendrequest . '<br><br>';
 ?>
 
@@ -62,7 +79,7 @@ Test logout
 <html>
 <body>
 <script>history.pushState('', '', '/')</script>
-<form action="http://localhostgit/dolibarr_dev/htdocs/user/logout.php">
+<form action="<?= constant('BASE_URL') ?>/user/logout.php">
     <input type="submit" value="Submit request"/>
 </form>
 <script>

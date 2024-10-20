@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2013-2016  Jean-François FERRY     <hello@librethic.io>
- * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2023		Benjamin Falière		<benjamin.faliere@altairis.fr>
+/* Copyright (C) 2013-2016  Jean-François FERRY         <hello@librethic.io>
+ * Copyright (C) 2018       Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2023		Benjamin Falière		    <benjamin.faliere@altairis.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormTicket;
+use Dolibarr\Code\Ticket\Classes\ActionsTicket;
+use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Code\User\Classes\User;
 
 /**
  *       \file       htdocs/public/ticket/view.php

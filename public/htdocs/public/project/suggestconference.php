@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2021       Dorian Vabre            <dorian.vabre@gmail.com>
+/* Copyright (C) 2021       Dorian Vabre                <dorian.vabre@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -19,7 +19,17 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Comm\Classes\CActionComm;
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Societe\Classes\Societe;
 
 /**
  *  \file       htdocs/public/project/suggestconference.php
