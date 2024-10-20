@@ -745,7 +745,7 @@ class ImportCsv extends ModeleImports
                             }
 
                             // Check HTML injection
-                            $inj = testSqlAndScriptInject($newval, 0);
+                            $inj = Filters::testSqlAndScriptInject($newval, 0);
                             if ($inj) {
                                 $this->errors[$error]['lib'] = $langs->transnoentitiesnoconv('ErrorHtmlInjectionForField', num2Alpha($key - 1), dol_trunc($newval, 100));
                                 $this->errors[$error]['type'] = 'HTMLINJECTION';

@@ -45,4 +45,27 @@ abstract class Model extends EloquentModel
      * @var string
      */
     protected $primaryKey = 'rowid';
+
+    public static function decrypt($value)
+    {
+        global $conf;
+
+        // Type of encryption (2: AES (recommended), 1: DES , 0: no encryption)
+        $cryptType = (!empty($conf->db->dolibarr_main_db_encryption) ? $conf->db->dolibarr_main_db_encryption : 0);
+
+        //Encryption key
+        $cryptKey = (!empty($conf->db->dolibarr_main_db_cryptkey) ? $conf->db->dolibarr_main_db_cryptkey : '');
+
+        $return = $value;
+
+        if ($cryptType && !empty($cryptKey)) {
+            if ($cryptType == 2) {
+                $return = 'AES_DECRYPT(' . $value . ',\'' . $cryptKey . '\')';
+            } elseif ($cryptType == 1) {
+                $return = 'DES_DECRYPT(' . $value . ',\'' . $cryptKey . '\')';
+            }
+        }
+
+        return $return;
+    }
 }

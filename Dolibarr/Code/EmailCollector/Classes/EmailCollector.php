@@ -23,6 +23,7 @@ namespace Dolibarr\Code\EmailCollector\Classes;
 
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\Filters;
 use DoliDB;
 use Exception;
 use OAuth\Common\Consumer\Credentials;
@@ -1529,7 +1530,7 @@ class EmailCollector extends CommonObject
                     dol_syslog("msgid=" . $overview['message_id'] . " date=" . dol_print_date($overview['date'], 'dayrfc', 'gmt') . " from=" . $overview['from'] . " to=" . $overview['to'] . " subject=" . $overview['subject']);
 
                     // Removed emojis
-                    $overview['subject'] = removeEmoji($overview['subject'], getDolGlobalInt('MAIN_EMAIL_COLLECTOR_ACCEPT_EMOJIS', 1));
+                    $overview['subject'] = Filters::removeEmoji($overview['subject'], getDolGlobalInt('MAIN_EMAIL_COLLECTOR_ACCEPT_EMOJIS', 1));
                 } else {
                     dol_syslog("msgid=" . $overview[0]->message_id . " date=" . dol_print_date($overview[0]->udate, 'dayrfc', 'gmt') . " from=" . $overview[0]->from . " to=" . $overview[0]->to . " subject=" . $overview[0]->subject);
 
@@ -1538,7 +1539,7 @@ class EmailCollector extends CommonObject
                     $overview[0]->from = $this->decodeSMTPSubject($overview[0]->from);
 
                     // Removed emojis
-                    $overview[0]->subject = removeEmoji($overview[0]->subject, getDolGlobalInt('MAIN_EMAIL_COLLECTOR_ACCEPT_EMOJIS', 1));
+                    $overview[0]->subject = Filters::removeEmoji($overview[0]->subject, getDolGlobalInt('MAIN_EMAIL_COLLECTOR_ACCEPT_EMOJIS', 1));
                 }
                 // GET IMAP email structure/content
                 global $htmlmsg, $plainmsg, $charset, $attachments;
@@ -1569,7 +1570,7 @@ class EmailCollector extends CommonObject
                 // Removed emojis
 
                 if (utf8_valid($messagetext)) {
-                    $messagetext = removeEmoji($messagetext, getDolGlobalInt('MAIN_EMAIL_COLLECTOR_ACCEPT_EMOJIS', 1));
+                    $messagetext = Filters::removeEmoji($messagetext, getDolGlobalInt('MAIN_EMAIL_COLLECTOR_ACCEPT_EMOJIS', 1));
                 } else {
                     $operationslog .= '<br>Discarded - Email body is not valid utf8';
                     dol_syslog(" Discarded - Email body is not valid utf8");

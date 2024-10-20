@@ -789,7 +789,7 @@ class ImportXlsx extends ModeleImports
                             }
 
                             // Check HTML injection
-                            $inj = testSqlAndScriptInject($newval, 0);
+                            $inj = Filters::testSqlAndScriptInject($newval, 0);
                             if ($inj) {
                                 // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
                                 $this->errors[$error]['lib'] = $langs->transnoentitiesnoconv('ErrorHtmlInjectionForField', $key, dol_trunc($newval, 100));

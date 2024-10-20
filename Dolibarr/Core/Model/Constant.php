@@ -19,6 +19,7 @@
 namespace Dolibarr\Core\Model;
 
 use Carbon\Carbon;
+use Dolibarr\Core\Base\Model;
 
 /**
  * Class Const
@@ -32,7 +33,7 @@ use Carbon\Carbon;
  * @property string|null $note
  * @property Carbon|null $tms
  */
-class ConstModel extends Model
+class Constant extends Model
 {
     public $timestamps = false;
     protected $table = 'const';
@@ -51,4 +52,34 @@ class ConstModel extends Model
         'note',
         'tms'
     ];
+
+    public static function getConstants()
+    {
+        global $conf, $user; // Suponiendo que estás usando variables globales
+
+        // Construir la consulta
+        $query = Constant::select('rowid')
+            ->selectRaw(static::decrypt('name') . ' AS name')
+            ->selectRaw(static::decrypt('value') . ' AS value')
+            ->addSelect('type', 'note', 'entity');
+
+        // Condiciones basadas en el modo multicompany
+        if (!isModEnabled('multicompany')) {
+            // Si no está habilitado el modo multicompany
+            $query->whereIn('entity', [0, $conf->entity]);
+        } else {
+            // Si está habilitado el modo multicompany
+            if ($user->entity) {
+                // Si el usuario tiene una entidad, restringir la consulta
+                $query->whereIn('entity', explode(',', $user->entity . ',' . $conf->entity));
+            }
+        }
+
+        // Ordenar los resultados
+        $query->orderBy('entity')
+            ->orderBy('name', 'ASC');
+
+        // Obtener los resultados
+        return $query->get();
+    }
 }
