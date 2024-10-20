@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2017	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2018	    Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2018-2021	Thibault FOUCART	    <support@ptibogxiv.net>
- * Copyright (C) 2021		Waël Almoman	    	<info@almoman.com>
- * Copyright (C) 2021		Dorian Vabre			<dorian.vabre@gmail.com>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2017	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2018	    Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2018-2021	Thibault FOUCART	        <support@ptibogxiv.net>
+ * Copyright (C) 2021		Waël Almoman	    	    <info@almoman.com>
+ * Copyright (C) 2021		Dorian Vabre			    <dorian.vabre@gmail.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -33,6 +33,19 @@
  */
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Adherents\Classes\Subscription;
+use Dolibarr\Code\Commande\Classes\Commande;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Contrat\Classes\Contrat;
+use Dolibarr\Code\Contrat\Classes\ContratLigne;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Stripe\Classes\Stripe;
 
 /**
  *      \file       htdocs/public/payment/newpayment.php
@@ -66,7 +79,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
 
 // Hook to be used by external payment modules (ie Payzen, ...)
 $hookmanager = new HookManager($db);

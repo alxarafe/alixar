@@ -46,7 +46,6 @@ if (!defined('NOBROWSERNOTIF')) {
 }
 
 include_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cunits.class.php';
 
 
 $action = GETPOST('action', 'aZ09');

@@ -1,10 +1,10 @@
 <?php
 
-/* Copyright (C) 2001-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2002-2003  Jean-Louis Bergamo      <jlb@j1b.org>
- * Copyright (C) 2007-2012  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2012       Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2018       Alexandre Spangaro      <aspangaro@open-dsi.fr>
+/* Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2002-2003  Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2007-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2018       Alexandre Spangaro          <aspangaro@open-dsi.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,8 @@
  */
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
 
 /**
  *  \file       htdocs/public/members/public_card.php

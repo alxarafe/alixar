@@ -20,8 +20,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Adherents\Classes\Adherent;
-use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Compta\Classes\Paiement;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Societe\Classes\CompanyPaymentMode;
+use Dolibarr\Code\Societe\Classes\SocieteAccount;
+use Dolibarr\Code\Stripe\Classes\Stripe;
 use Dolibarr\Code\User\Classes\User;
 
 if (!defined('NOLOGIN')) {

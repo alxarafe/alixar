@@ -39,7 +39,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
 use Dolibarr\Code\Projet\Classes\Project;
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorbooth.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/lib/eventorganization_conferenceorbooth.lib.php';
 
 

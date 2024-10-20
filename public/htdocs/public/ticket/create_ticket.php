@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2013-2016    Jean-François FERRY <hello@librethic.io>
- * Copyright (C) 2016         Christophe Battarel <christophe@altairis.fr>
- * Copyright (C) 2023         Laurent Destailleur <eldy@users.sourceforge.net>
+/* Copyright (C) 2013-2016  Jean-François FERRY         <hello@librethic.io>
+ * Copyright (C) 2016       Christophe Battarel         <christophe@altairis.fr>
+ * Copyright (C) 2023       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,13 @@
  */
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\FormTicket;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
 
 /**

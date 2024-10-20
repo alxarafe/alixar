@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2001-2002  Jean-Louis Bergamo      <jlb@j1b.org>
- * Copyright (C) 2006-2013  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2012       Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2012       J. Fernando Lagrange    <fernando@demo-tic.org>
- * Copyright (C) 2018-2019  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2018       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2021       Waël Almoman            <info@almoman.com>
- * Copyright (C) 2022       Udo Tamm                <dev@dolibit.de>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2001-2002  Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2006-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       J. Fernando Lagrange        <fernando@demo-tic.org>
+ * Copyright (C) 2018-2019  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2018       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2021       Waël Almoman                <info@almoman.com>
+ * Copyright (C) 2022       Udo Tamm                    <dev@dolibit.de>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -26,7 +26,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\Images;
 
 /**
  *  \file       htdocs/public/company/new.php
@@ -34,8 +40,6 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
  *  \brief      Example of form to add a new prospect
  *
  */
-
-use Dolibarr\Lib\Images;
 
 if (!defined('NOLOGIN')) {
     define("NOLOGIN", 1); // This means this output page does not require to be logged.
@@ -61,7 +65,6 @@ if (is_numeric($entity)) {
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cunits.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 // Init vars
 $backtopage = GETPOST('backtopage', 'alpha');

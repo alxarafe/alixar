@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2023       Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2023       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -17,6 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\OpenSurvey\Classes\Opensurveysondage;
 
 /**
  *       \file       htdocs/public/opensurvey/index.php
@@ -39,7 +41,6 @@ if (!defined('NOBROWSERNOTIF')) {
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/opensurvey/class/opensurveysondage.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';

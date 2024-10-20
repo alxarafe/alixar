@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2006-2017	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2023		anthony Berton			<anthony.berton@bb2a.fr>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2006-2017	Laurent Destailleur		    <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2012	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2023		anthony Berton			    <anthony.berton@bb2a.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Frédéric France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
@@ -22,7 +22,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\BookCal\Classes\Availabilities;
+use Dolibarr\Code\BookCal\Classes\Calendar;
+use Dolibarr\Code\Comm\Classes\ActionComm;
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\Images;
 
 /**
  *      \file       htdocs/public/bookcal/index.php
@@ -30,8 +36,6 @@ use Dolibarr\Code\Contact\Classes\Contact;
  *      \brief      File to offer a way to book a rendez-vous into a public calendar
  *                  Example of URL: https://localhost/public/bookcal/index.php?id=...
  */
-
-use Dolibarr\Lib\Images;
 
 if (!defined('NOLOGIN')) {
     define("NOLOGIN", 1); // This means this output page does not require to be logged.

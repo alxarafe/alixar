@@ -22,6 +22,9 @@
 namespace Dolibarr\Code\EventOrganizaction\Classes;
 
 use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
+use DoliDB;
 
 /**
  * \file        class/conferenceorbooth.class.php

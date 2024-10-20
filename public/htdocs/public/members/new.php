@@ -1,14 +1,14 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2001-2002  Jean-Louis Bergamo      <jlb@j1b.org>
- * Copyright (C) 2006-2013  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2012       Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2012       J. Fernando Lagrange    <fernando@demo-tic.org>
- * Copyright (C) 2018-2019  Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2018       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2021       Waël Almoman            <info@almoman.com>
- * Copyright (C) 2022       Udo Tamm                <dev@dolibit.de>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2001-2002  Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2006-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       J. Fernando Lagrange        <fernando@demo-tic.org>
+ * Copyright (C) 2018-2019  Frédéric France             <frederic.france@netlogic.fr>
+ * Copyright (C) 2018       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2021       Waël Almoman                <info@almoman.com>
+ * Copyright (C) 2022       Udo Tamm                    <dev@dolibit.de>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -27,6 +27,16 @@
  */
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\CUnits;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\Images;
 
 /**
  *  \file       htdocs/public/members/new.php
@@ -44,8 +54,6 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
  *  MEMBER_NEWFORM_FORCECOUNTRYCODE     Force country
  */
 
-use Dolibarr\Lib\Images;
-
 if (!defined('NOLOGIN')) {
     define("NOLOGIN", 1); // This means this output page does not require to be logged.
 }
@@ -56,7 +64,6 @@ if (!defined('NOBROWSERNOTIF')) {
     define('NOBROWSERNOTIF', '1');
 }
 
-
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php
 // Because 2 entities can have the same ref.
@@ -65,12 +72,10 @@ if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
 
-
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/payments.lib.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cunits.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 // Init vars

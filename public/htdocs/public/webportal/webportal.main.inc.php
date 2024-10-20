@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2023-2024  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2023-2024	Lionel Vessiller		<lvessiller@easya.solutions>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2023-2024  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2023-2024	Lionel Vessiller		    <lvessiller@easya.solutions>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\SocieteAccount;
+use Dolibarr\Code\WebPortal\Classes\Context;
 
 /**
  * \file    htdocs/public/webportal/webportal.main.inc.php
@@ -81,6 +85,8 @@ if (!function_exists('dol_getprefix')) {
 include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Code\WebPortal\Classes\WebPortalMember;
+use Dolibarr\Code\WebPortal\Classes\WebPortalPartnership;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/public/webportal/lib/webportal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/webportal/class/context.class.php';

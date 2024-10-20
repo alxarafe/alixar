@@ -1,13 +1,13 @@
 <?php
 
-/* Copyright (C) 2001-2002  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2001-2002  Jean-Louis Bergamo      <jlb@j1b.org>
- * Copyright (C) 2006-2013  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2012       Regis Houssin           <regis.houssin@inodbox.com>
- * Copyright (C) 2012       J. Fernando Lagrange    <fernando@demo-tic.org>
- * Copyright (C) 2018-2024  Frédéric France         <frederic.france@free.fr>
- * Copyright (C) 2018       Alexandre Spangaro      <aspangaro@open-dsi.fr>
- * Copyright (C) 2021       Waël Almoman            <info@almoman.com>
+/* Copyright (C) 2001-2002  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2001-2002  Jean-Louis Bergamo          <jlb@j1b.org>
+ * Copyright (C) 2006-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2012       J. Fernando Lagrange        <fernando@demo-tic.org>
+ * Copyright (C) 2018-2024  Frédéric France             <frederic.france@free.fr>
+ * Copyright (C) 2018       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+ * Copyright (C) 2021       Waël Almoman                <info@almoman.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -24,6 +24,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Partnerships\Classes\Partnership;
+use Dolibarr\Code\Partnerships\Classes\PartnershipType;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\Images;
 
 /**
  *  \file       htdocs/public/partnership/new.php
@@ -56,10 +64,6 @@ if (is_numeric($entity)) {
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
-
-use Dolibarr\Code\Partnerships\Classes\Partnership;
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/class/partnership_type.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 
 // Init vars

@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2016-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* Copyright (C) 2016-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -26,6 +26,9 @@
  * SCRIPT_FILENAME: /var/www/test/php/script.php
  * __FILE__ : /var/www/test/php/script_included.php
  */
+
+use Dolibarr\Code\Website\Classes\Website;
+use Dolibarr\Code\Website\Classes\WebsitePage;
 
 /**
  *      \file       htdocs/public/website/index.php

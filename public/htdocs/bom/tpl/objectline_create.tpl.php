@@ -183,7 +183,6 @@ if ($filtertype != 1) {
     print '</td>';
 } else {
     $coldisplay++;
-    require_once constant('DOL_DOCUMENT_ROOT') . '/core/class/cunits.class.php';
     $cUnit = new CUnits($this->db);
     $fk_unit_default = $cUnit->getUnitFromCode('h', 'short_label', 'time');
     print '<td class="bordertop nobottom nowrap linecolunit">';

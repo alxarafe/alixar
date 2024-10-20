@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2010 Servitux Servicios Informaticos <info@servitux.es>
+/* Copyright (C) 2010       Servitux Servicios Informat.<info@servitux.es>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify

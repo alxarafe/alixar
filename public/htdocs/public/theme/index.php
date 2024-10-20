@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2015 Raphaël Doursenaud   <rdoursenaud@gpcsolutions.fr>
+/* Copyright (C) 2009       Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify

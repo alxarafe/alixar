@@ -36,8 +36,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/project.lib.php';
 
-require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorbooth.class.php';
-require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/class/conferenceorboothattendee.class.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/eventorganization/lib/eventorganization_conferenceorbooth.lib.php';
 
 // Load translation files required by the page
