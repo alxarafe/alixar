@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Core\Model\Constant;
 
 /**
  *       \file       htdocs/ftp/admin/ftpclient.php
@@ -49,18 +50,11 @@ if (!$user->admin) {
  */
 
 // Get value for $lastftpentry
-$sql = "select MAX(name) as name from " . MAIN_DB_PREFIX . "const";
-$sql .= " WHERE name like 'FTP_SERVER_%'";
-$result = $db->query($sql);
-if ($result) {
-    $obj = $db->fetch_object($result);
-    $reg = array();
-    preg_match('/([0-9]+)$/i', $obj->name, $reg);
-    if (!empty($reg[1])) {
-        $lastftpentry = $reg[1];
-    }
-} else {
-    dol_print_error($db);
+//$find='FTP_SERVER_';
+$find = 'SYSLOG_';
+$lastftpentry = Constant::getMaxNameLike($find);
+if ($lastftpentry === null) {
+    dol_print_error(null, "Name '$find%' not found in const table.");
 }
 
 if ($action == 'add' || GETPOST('modify', 'alpha')) {

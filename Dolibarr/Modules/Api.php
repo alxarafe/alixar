@@ -32,7 +32,8 @@ namespace Dolibarr\Modules;
  */
 
 use Dolibarr\Core\Base\DolibarrModules;
-use Modules\Api\DoliDB;
+use Dolibarr\Core\Model\Constant;
+use DoliDB;
 use stdClass;
 
 /**
@@ -232,12 +233,23 @@ class  Api extends DolibarrModules
      */
     public function remove($options = '')
     {
-        // Remove old constants with entity fields different of 0
-        $sql = array(
-            "DELETE FROM " . MAIN_DB_PREFIX . "const WHERE name = " . $this->db->encrypt('MAIN_MODULE_API'),      // API can't be enabled per environment. Why ?
-            "DELETE FROM " . MAIN_DB_PREFIX . "const WHERE name = " . $this->db->encrypt('API_PRODUCTION_MODE')   // Not in production mode by default at activation
-        );
+        $db->begin();
+        if (!$this->_remove([], $options)) {
+            $db->rollback();
+            return false;
+        }
 
-        return $this->_remove($sql, $options);
+        /**
+         * Remove old constants with entity fields different of 0:
+         * API can't be enabled per environment. Why?
+         * Not in production mode by default at activation
+         */
+        if (!Constant::deleteByName('MAIN_MODULE_API') || !Constant::deleteByName('API_PRODUCTION_MODE')) {
+            $db->rollback();
+            return false;
+        }
+
+        $db->commit();
+        return true;
     }
 }

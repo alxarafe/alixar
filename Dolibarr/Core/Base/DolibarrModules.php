@@ -31,6 +31,7 @@ namespace Dolibarr\Core\Base;
 use Dolibarr\Code\Core\Classes\InfoBox;
 use Dolibarr\Code\Core\Classes\Menubase;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Model\Constant;
 use DoliDB;
 
 /**
@@ -459,22 +460,6 @@ abstract class DolibarrModules
     // a try catch on Fatal error to manage this correctly.
     // We need constructor into function unActivateModule into admin.lib.php
 
-    public static function _getModuleName($file)
-    {
-        $new_type = !str_starts_with($file, 'mod') && str_ends_with($file, '.php');
-        $old_type = str_starts_with($file, 'mod') && str_ends_with($file, '.class.php');
-
-        if (!($new_type || $old_type)) {
-            return null;
-        }
-
-        if ($new_type) {
-            return substr($file, 0, strrpos($file, '.'));
-        }
-
-        return substr($file, 0, dol_strlen($file) - 10);
-    }
-
     /**
      * Obtiene un array con los módulos instalados.
      * TODO: Sustituir donde se use:
@@ -518,6 +503,22 @@ abstract class DolibarrModules
         return $result;
     }
 
+    public static function _getModuleName($file)
+    {
+        $new_type = !str_starts_with($file, 'mod') && str_ends_with($file, '.php');
+        $old_type = str_starts_with($file, 'mod') && str_ends_with($file, '.class.php');
+
+        if (!($new_type || $old_type)) {
+            return null;
+        }
+
+        if ($new_type) {
+            return substr($file, 0, strrpos($file, '.'));
+        }
+
+        return substr($file, 0, dol_strlen($file) - 10);
+    }
+
     /**
      * Adds access rights
      *
@@ -537,18 +538,10 @@ abstract class DolibarrModules
         dol_syslog(get_only_class($this) . "::insert_permissions", LOG_DEBUG);
 
         // Test if module is activated
-        $sql_del = "SELECT " . $this->db->decrypt('value') . " as value";
-        $sql_del .= " FROM " . MAIN_DB_PREFIX . "const";
-        $sql_del .= " WHERE " . $this->db->decrypt('name') . " = '" . $this->db->escape($this->const_name) . "'";
-        $sql_del .= " AND entity IN (0," . ((int)$entity) . ")";
+        $result = Constant::isActivated($this->const_name, $entity);
+        if ($result === null) {
+            if ($result && !empty($this->rights)) {
 
-        $resql = $this->db->query($sql_del);
-
-        if ($resql) {
-            $obj = $this->db->fetch_object($resql);
-
-            if ($obj !== null && !empty($obj->value) && !empty($this->rights)) {
-    
                 // TODO rights parameters with integer indexes are deprecated
                 // $this->rights[$key][0] = $this->rights[$key][self::KEY_ID]
                 // $this->rights[$key][1] = $this->rights[$key][self::KEY_LABEL]
@@ -676,31 +669,18 @@ abstract class DolibarrModules
                     $user->getrights();
                 }
             }
-            $this->db->free($resql);
         } else {
-            $this->error = $this->db->lasterror();
+            $this->error = 'isActivated query fails';
             $err++;
         }
 
         return $err;
     }
 
-    public static function forceDeactivate($modName)
+    public static function isActivated($modName)
     {
-        // phpcs:enable
-        global $conf, $db;
-
-        $name = static::getNameOf($modName);
-        $entity = $conf->entity;
-
-        $sql = "DELETE FROM " . MAIN_DB_PREFIX . "const";
-        $sql .= " WHERE " . $db->decrypt('name') . " = '" . $name . "'";
-        $sql .= " AND entity IN (0, " . $entity . ")";
-
-        dump(['sql in DolibarrModules::forceDeactivate' => $sql]);
-
-        dol_syslog($name . "::_unactive", LOG_DEBUG);
-        $db->query($sql);
+        $name = 'MAIN_MODULE_' . static::getNameOf($modName);
+        return !empty(getDolGlobalString($name));
     }
 
     public static function getNameOf($modName)
@@ -721,10 +701,17 @@ abstract class DolibarrModules
         return strtoupper($name);
     }
 
-    public static function isActivated($modName)
+    public static function forceDeactivate($modName)
     {
-        $name = 'MAIN_MODULE_' . static::getNameOf($modName);
-        return !empty(getDolGlobalString($name));
+        // phpcs:enable
+        global $conf, $db;
+
+        $name = static::getNameOf($modName);
+        $entity = $conf->entity;
+
+        Constant::deleteByName($name, $entity);
+
+        dol_syslog($name . "::_unactive", LOG_DEBUG);
     }
 
     /**
@@ -908,12 +895,9 @@ abstract class DolibarrModules
         // Common module
         $entity = ((!empty($this->always_enabled) || !empty($this->core_enabled)) ? 0 : $conf->entity);
 
-        $sql = "DELETE FROM " . MAIN_DB_PREFIX . "const";
-        $sql .= " WHERE " . $this->db->decrypt('name') . " = '" . $this->db->escape($this->const_name) . "'";
-        $sql .= " AND entity IN (0, " . $entity . ")";
-
         dol_syslog(get_only_class($this) . "::_unactive", LOG_DEBUG);
-        $this->db->query($sql);
+
+        Constant::deleteByName($this->const_name, $entity);
 
         return $err;
     }
@@ -930,12 +914,8 @@ abstract class DolibarrModules
 
         $err = 0;
 
-        $sql = "DELETE FROM " . MAIN_DB_PREFIX . "const";
-        $sql .= " WHERE " . $this->db->decrypt('name') . " like '" . $this->db->escape($this->const_name) . "_TABS_%'";
-        $sql .= " AND entity = " . $conf->entity;
-
         dol_syslog(get_only_class($this) . "::delete_tabs", LOG_DEBUG);
-        if (!$this->db->query($sql)) {
+        if (!Constant::deleteByNameLike($this->db->escape($this->const_name) . '_TABS_', $conf->entity)) {
             $this->error = $this->db->lasterror();
             $err++;
         }
@@ -970,11 +950,7 @@ abstract class DolibarrModules
                     $entity = $conf->entity;
                 }
 
-                $sql = "DELETE FROM " . MAIN_DB_PREFIX . "const";
-                $sql .= " WHERE " . $this->db->decrypt('name') . " LIKE '" . $this->db->escape($this->const_name) . "_" . strtoupper($key) . "'";
-                $sql .= " AND entity = " . ((int)$entity);
-
-                if (!$this->db->query($sql)) {
+                if (!Constant::deleteByNameLike($this->db->escape($this->const_name) . '_' . strtoupper($key), $entity)) {
                     $this->error = $this->db->lasterror();
                     $err++;
                 }
@@ -1004,11 +980,8 @@ abstract class DolibarrModules
             $deleteonunactive = (!empty($this->const[$key][6])) ? 1 : 0;
 
             if ($deleteonunactive) {
-                $sql = "DELETE FROM " . MAIN_DB_PREFIX . "const";
-                $sql .= " WHERE " . $this->db->decrypt('name') . " = '" . $this->db->escape($name) . "'";
-                $sql .= " AND entity in (0, " . $conf->entity . ")";
                 dol_syslog(get_only_class($this) . "::delete_const", LOG_DEBUG);
-                if (!$this->db->query($sql)) {
+                if (!Constant::deleteByName($name, $conf->entity)) {
                     $this->error = $this->db->lasterror();
                     $err++;
                 }
@@ -1194,12 +1167,8 @@ abstract class DolibarrModules
 
         $err = 0;
 
-        $sql = "DELETE FROM " . MAIN_DB_PREFIX . "const";
-        $sql .= " WHERE " . $this->db->decrypt('name') . " LIKE '" . $this->db->escape($this->const_name) . "_DIR_%'";
-        $sql .= " AND entity = " . $conf->entity;
-
         dol_syslog(get_only_class($this) . "::delete_dirs", LOG_DEBUG);
-        if (!$this->db->query($sql)) {
+        if (!Constant::deleteByNameLike($this->db->escape($this->const_name) . '_DIR_', $conf->entity)) {
             $this->error = $this->db->lasterror();
             $err++;
         }
@@ -1464,18 +1433,14 @@ abstract class DolibarrModules
 
         $err = 0;
 
-        $sql = "SELECT tms FROM " . MAIN_DB_PREFIX . "const";
-        $sql .= " WHERE " . $this->db->decrypt('name') . " = '" . $this->db->escape($this->const_name) . "'";
-        $sql .= " AND entity IN (0, " . ((int)$conf->entity) . ")";
-
+        $result = Constant::selectByName($this->db->escape($this->const_name), $conf->entity);
         dol_syslog(get_only_class($this) . "::getLastActiveDate", LOG_DEBUG);
-        $resql = $this->db->query($sql);
-        if (!$resql) {
+
+        if (!$result === null) {
             $err++;
         } else {
-            $obj = $this->db->fetch_object($resql);
-            if ($obj) {
-                return $this->db->jdate($obj->tms);
+            if ($result) {
+                return $this->db->jdate($result->tms);
             }
         }
 
@@ -1495,28 +1460,22 @@ abstract class DolibarrModules
 
         $err = 0;
 
-        $sql = "SELECT tms, note FROM " . MAIN_DB_PREFIX . "const";
-        $sql .= " WHERE " . $this->db->decrypt('name') . " = '" . $this->db->escape($this->const_name) . "'";
-        $sql .= " AND entity IN (0, " . $conf->entity . ")";
+        $result = Constant::selectByName($this->const_name, $conf->entity);
 
         dol_syslog(get_only_class($this) . "::getLastActiveDate", LOG_DEBUG);
-        $resql = $this->db->query($sql);
-        if (!$resql) {
+        if (!$result === null) {
             $err++;
         } else {
-            $obj = $this->db->fetch_object($resql);
-            if ($obj) {
-                $tmp = array();
-                if ($obj->note) {
-                    $tmp = json_decode($obj->note, true);
-                }
-                return array(
-                    'authorid' => empty($tmp['authorid']) ? '' : $tmp['authorid'],
-                    'ip' => empty($tmp['ip']) ? '' : $tmp['ip'],
-                    'lastactivationdate' => $this->db->jdate($obj->tms),
-                    'lastactivationversion' => (!empty($tmp['lastactivationversion']) ? $tmp['lastactivationversion'] : 'unknown'),
-                );
+            $tmp = array();
+            if ($result->note) {
+                $tmp = json_decode($result->note, true);
             }
+            return array(
+                'authorid' => empty($tmp['authorid']) ? '' : $tmp['authorid'],
+                'ip' => empty($tmp['ip']) ? '' : $tmp['ip'],
+                'lastactivationdate' => $this->db->jdate($result->tms),
+                'lastactivationversion' => (!empty($tmp['lastactivationversion']) ? $tmp['lastactivationversion'] : 'unknown'),
+            );
         }
 
         return array();
@@ -1668,13 +1627,8 @@ abstract class DolibarrModules
         // Common module
         $entity = ((!empty($this->always_enabled) || !empty($this->core_enabled)) ? 0 : $conf->entity);
 
-        $sql = "DELETE FROM " . MAIN_DB_PREFIX . "const";
-        $sql .= " WHERE " . $this->db->decrypt('name') . " = '" . $this->db->escape($this->const_name) . "'";
-        $sql .= " AND entity IN (0, " . $entity . ")";
-
         dol_syslog(get_only_class($this) . "::_active delete activation constant", LOG_DEBUG);
-        $resql = $this->db->query($sql);
-        if (!$resql) {
+        if (!Constant::deleteByName($this->db->escape($this->const_name), $entity)) {
             $err++;
         }
 
@@ -1686,15 +1640,8 @@ abstract class DolibarrModules
             )
         );
 
-        $sql = "INSERT INTO " . MAIN_DB_PREFIX . "const (name, value, visible, entity, note) VALUES";
-        $sql .= " (" . $this->db->encrypt($this->const_name);
-        $sql .= ", " . $this->db->encrypt('1');
-        $sql .= ", 0, " . ((int)$entity);
-        $sql .= ", '" . $this->db->escape($note) . "')";
-
         dol_syslog(get_only_class($this) . "::_active insert activation constant", LOG_DEBUG);
-        $resql = $this->db->query($sql);
-        if (!$resql) {
+        if (!Constant::insert($this->const_name, 1, null, $note, 0, $entity)) {
             $err++;
         }
 
@@ -1735,25 +1682,16 @@ abstract class DolibarrModules
                 }
 
                 if ($newvalue) {
-                    $sql = "INSERT INTO " . MAIN_DB_PREFIX . "const (";
-                    $sql .= "name";
-                    $sql .= ", type";
-                    $sql .= ", value";
-                    $sql .= ", note";
-                    $sql .= ", visible";
-                    $sql .= ", entity";
-                    $sql .= ")";
-                    $sql .= " VALUES (";
-                    $sql .= $this->db->encrypt($this->const_name . "_TABS_" . $i);
-                    $sql .= ", 'chaine'";
-                    $sql .= ", " . $this->db->encrypt($newvalue);
-                    $sql .= ", null";
-                    $sql .= ", '0'";
-                    $sql .= ", " . ((int)$entity);
-                    $sql .= ")";
+                    $res = Constant::insert(
+                        $this->const_name . "_TABS_" . $i,
+                        $newvalue,
+                        'chaine',
+                        null,
+                        0,
+                        $entity,
+                    );
 
-                    $resql = $this->db->query($sql);
-                    if (!$resql) {
+                    if (!$res) {
                         dol_syslog($this->db->lasterror(), LOG_ERR);
                         if ($this->db->lasterrno() != 'DB_ERROR_RECORD_ALREADY_EXISTS') {
                             $this->error = $this->db->lasterror();
@@ -1851,27 +1789,16 @@ abstract class DolibarrModules
                 }
 
                 if (!empty($newvalue)) {
-                    $sql = "INSERT INTO " . MAIN_DB_PREFIX . "const (";
-                    $sql .= "name";
-                    $sql .= ", type";
-                    $sql .= ", value";
-                    $sql .= ", note";
-                    $sql .= ", visible";
-                    $sql .= ", entity";
-                    $sql .= ")";
-                    $sql .= " VALUES (";
-                    $sql .= " " . $this->db->encrypt($this->const_name . "_" . strtoupper($key), 1);
-                    $sql .= ", 'chaine'";
-                    $sql .= ", " . $this->db->encrypt($newvalue, 1);
-                    $sql .= ", null";
-                    $sql .= ", '0'";
-                    $sql .= ", " . ((int)$entity);
-                    $sql .= ")";
-
+                    $res = Constant::insert(
+                        $this->const_name . "_" . strtoupper($key),
+                        $newvalue,
+                        'chaine',
+                        null,
+                        0,
+                        $entity
+                    );
                     dol_syslog(get_only_class($this) . "::insert_module_parts for key=" . $this->const_name . "_" . strtoupper($key), LOG_DEBUG);
-
-                    $resql = $this->db->query($sql, 1);
-                    if (!$resql) {
+                    if (!$res) {
                         if ($this->db->lasterrno() != 'DB_ERROR_RECORD_ALREADY_EXISTS') {
                             $error++;
                             $this->error = $this->db->lasterror();
@@ -1922,37 +1849,33 @@ abstract class DolibarrModules
                 $val = '';
             }
 
-            $sql = "SELECT count(*) as nb";
-            $sql .= " FROM " . MAIN_DB_PREFIX . "const";
-            $sql .= " WHERE " . $this->db->decrypt('name') . " = '" . $this->db->escape($name) . "'";
-            $sql .= " AND entity = " . ((int)$entity);
-
-            $result = $this->db->query($sql);
-            if ($result) {
-                $row = $this->db->fetch_row($result);
-
-                if ($row[0] == 0) {   // If not found
-                    $sql = "INSERT INTO " . MAIN_DB_PREFIX . "const (name,type,value,note,visible,entity)";
-                    $sql .= " VALUES (";
-                    $sql .= $this->db->encrypt($name);
-                    $sql .= ",'" . $this->db->escape($type) . "'";
-                    $sql .= "," . (($val != '') ? $this->db->encrypt($val) : "''");
-                    $sql .= "," . ($note ? "'" . $this->db->escape($note) . "'" : "null");
-                    $sql .= ",'" . $this->db->escape($visible) . "'";
-                    $sql .= "," . $entity;
-                    $sql .= ")";
-
-                    if (!$this->db->query($sql)) {
-                        $err++;
-                    }
-                } else {
-                    dol_syslog(__METHOD__ . " constant '" . $name . "' already exists", LOG_DEBUG);
-                }
-            } else {
+            $res = Constant::getByName($name, $entity);
+            if ($res === null) {
+                $this->error = $this->db->lasterror();
                 $err++;
+                return $err;
+            }
+
+            if (!$res) {
+                $res = Constant::insert(
+                    $name,
+                    $val ?? '',
+                    $type,
+                    $note ?? null,
+                    $visible,
+                    $entity,
+                );
+                if ($res === null) {
+                    $this->error = $this->db->lasterror();
+                    $err++;
+                    return $err;
+                }
+                if ($res) {
+                    dol_syslog(__METHOD__ . " constant '" . $name . "' already exists", LOG_DEBUG);
+
+                }
             }
         }
-
         return $err;
     }
 
@@ -2375,26 +2298,24 @@ abstract class DolibarrModules
 
         $err = 0;
 
-        $sql = "SELECT count(*)";
-        $sql .= " FROM " . MAIN_DB_PREFIX . "const";
-        $sql .= " WHERE " . $this->db->decrypt('name') . " = '" . $this->db->escape($name) . "'";
-        $sql .= " AND entity = " . $conf->entity;
-
-        dol_syslog(get_only_class($this) . "::insert_dirs", LOG_DEBUG);
-        $result = $this->db->query($sql);
-        if ($result) {
-            $row = $this->db->fetch_row($result);
-
-            if ($row[0] == 0) {
-                $sql = "INSERT INTO " . MAIN_DB_PREFIX . "const (name, type, value, note, visible, entity)";
-                $sql .= " VALUES (" . $this->db->encrypt($name) . ", 'chaine', " . $this->db->encrypt($dir) . ", '" . $this->db->escape("Directory for module " . $this->name) . "', '0', " . ((int)$conf->entity) . ")";
-
-                dol_syslog(get_only_class($this) . "::insert_dirs", LOG_DEBUG);
-                $this->db->query($sql);
-            }
-        } else {
+        $res = Constant::getByName($name, $conf->entity);
+        if ($res === null) {
             $this->error = $this->db->lasterror();
             $err++;
+            return $err;
+        }
+
+        dol_syslog(get_only_class($this) . "::insert_dirs", LOG_DEBUG);
+        if (!$res) {
+            dol_syslog(get_only_class($this) . "::insert_dirs", LOG_DEBUG);
+            Constant::insert(
+                $name,
+                $dir,
+                'chaine',
+                $this->db->escape("Directory for module " . $this->name),
+                0,
+                $conf->entity,
+            );
         }
 
         return $err;
