@@ -30,10 +30,6 @@ class Database extends CapsuleManager
 {
     /**
      * Construct the database access
-     *
-     * @param $db
-     *
-     * @throws DebugBarException
      */
     public function __construct()
     {

@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Core\Model\Constant;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -494,13 +495,7 @@ if (!isModEnabled('multicompany') || !$user->entity) {
 }
 print "</tr>\n";
 
-if (getConstants()) {
-    $num = $db->num_rows($resql);
-    $i = 0;
-
-    while ($i < $num) {
-        $obj = $db->fetch_object($resql);
-
+foreach (Constant::getConstants() as $obj) {
         print '<tr class="oddeven">';
         print '<td class="tdoverflowmax600" title="' . dol_escape_htmltag($obj->name) . '">' . dol_escape_htmltag($obj->name) . '</td>' . "\n";
         print '<td class="tdoverflowmax300">';
@@ -517,9 +512,6 @@ if (getConstants()) {
             print '<td class="center" width="80px">' . $obj->entity . '</td>' . "\n"; // If superadmin or multicompany disabled
         }
         print "</tr>\n";
-
-        $i++;
-    }
 }
 
 print '</table>';

@@ -20,6 +20,8 @@
  */
 
 // Load Dolibarr environment
+use Dolibarr\Core\Model\Constant;
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Load translation files required by the page
@@ -204,23 +206,14 @@ if (!isModEnabled('multicompany') || !$user->entity) {
 }
 print "</tr>\n";
 
-if (getConstants()) {
-    $num = $db->num_rows($resql);
-    $i = 0;
-
-    while ($i < $num) {
-        $obj = $db->fetch_object($resql);
-
-        print '<tr class="oddeven">';
-        print '<td>' . $obj->name . '</td>' . "\n";
-        print '<td>' . $obj->value . '</td>' . "\n";
-        if (!isModEnabled('multicompany') || !$user->entity) {
-            print '<td>' . $obj->entity . '</td>' . "\n"; // If superadmin or multicompany disabled
-        }
-        print "</tr>\n";
-
-        $i++;
+foreach (Constant::getConstants() as $obj) {
+    print '<tr class="oddeven">';
+    print '<td>' . $obj->name . '</td>' . "\n";
+    print '<td>' . $obj->value . '</td>' . "\n";
+    if (!isModEnabled('multicompany') || !$user->entity) {
+        print '<td>' . $obj->entity . '</td>' . "\n"; // If superadmin or multicompany disabled
     }
+    print "</tr>\n";
 }
 
 print '</table>';

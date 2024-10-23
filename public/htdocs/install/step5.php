@@ -39,6 +39,7 @@
  */
 
 use Dolibarr\Core\Base\DolibarrModules;
+use Dolibarr\Core\Model\Constant;
 
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
@@ -259,8 +260,7 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
                 // Insert MAIN_VERSION_FIRST_INSTALL in a dedicated transaction. So if it fails (when first install was already done), we can do other following requests.
                 $db->begin();
                 dolibarr_install_syslog('step5: set MAIN_VERSION_FIRST_INSTALL const to ' . $targetversion, LOG_DEBUG);
-                $resql = $db->query("INSERT INTO " . MAIN_DB_PREFIX . "const(name, value, type, visible, note, entity) values(" . $db->encrypt('MAIN_VERSION_FIRST_INSTALL') . ", " . $db->encrypt($targetversion) . ", 'chaine', 0, 'Dolibarr version when first install', 0)");
-                if ($resql) {
+                if (Constant::insert('MAIN_VERSION_FIRST_INSTALL', $targetversion, 'chaine', 'Dolibarr version when first install')) {
                     $conf->global->MAIN_VERSION_FIRST_INSTALL = $targetversion;
                     $db->commit();
                 } else {
@@ -271,20 +271,15 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
                 $db->begin();
 
                 dolibarr_install_syslog('step5: set MAIN_VERSION_LAST_INSTALL const to ' . $targetversion, LOG_DEBUG);
-                $resql = $db->query("DELETE FROM " . MAIN_DB_PREFIX . "const WHERE " . $db->decrypt('name') . " = 'MAIN_VERSION_LAST_INSTALL'");
-                if (!$resql) {
+                if (!Constant::deleteByName('MAIN_VERSION_LAST_INSTALL') || !Constant::insert('MAIN_VERSION_LAST_INSTALL', $targetversion, 'chaine', 'Dolibarr version when last install')) {
                     dol_print_error($db, 'Error in setup program');
                 }
-                $resql = $db->query("INSERT INTO " . MAIN_DB_PREFIX . "const(name,value,type,visible,note,entity) values(" . $db->encrypt('MAIN_VERSION_LAST_INSTALL') . ", " . $db->encrypt($targetversion) . ", 'chaine', 0, 'Dolibarr version when last install', 0)");
-                if (!$resql) {
-                    dol_print_error($db, 'Error in setup program');
-                }
+
                 $conf->global->MAIN_VERSION_LAST_INSTALL = $targetversion;
 
                 if ($useforcedwizard) {
                     dolibarr_install_syslog('step5: set MAIN_REMOVE_INSTALL_WARNING const to 1', LOG_DEBUG);
-                    $resql = $db->query("DELETE FROM " . MAIN_DB_PREFIX . "const WHERE " . $db->decrypt('name') . " = 'MAIN_REMOVE_INSTALL_WARNING'");
-                    if (!$resql) {
+                    if (!Constant::deleteByName('MAIN_REMOVE_INSTALL_WARNING')) {
                         dol_print_error($db, 'Error in setup program');
                     }
                     // The install.lock file is created few lines later if version is last one or if option MAIN_ALWAYS_CREATE_LOCK_AFTER_LAST_UPGRADE is on
@@ -346,15 +341,15 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
 
                 // Now delete the flag that say installation is not complete
                 dolibarr_install_syslog('step5: remove MAIN_NOT_INSTALLED const');
-                $resql = $db->query("DELETE FROM " . MAIN_DB_PREFIX . "const WHERE " . $db->decrypt('name') . " = 'MAIN_NOT_INSTALLED'");
-                if (!$resql) {
+                if (!Constant::deleteByName('MAIN_NOT_INSTALLED')) {
                     dol_print_error($db, 'Error in setup program');
                 }
 
                 // May fail if parameter already defined
                 dolibarr_install_syslog('step5: set the default language');
-                $resql = $db->query("INSERT INTO " . MAIN_DB_PREFIX . "const(name,value,type,visible,note,entity) VALUES (" . $db->encrypt('MAIN_LANG_DEFAULT') . ", " . $db->encrypt($setuplang) . ", 'chaine', 0, 'Default language', 1)");
-                //if (! $resql) dol_print_error($db,'Error in setup program');
+                if (!Constant::deleteByName('MAIN_VERSION_LAST_INSTALL') || !Constant::insert('MAIN_LANG_DEFAULT', $targetversion, 'chaine', 'Default language', 0, 1)) {
+                    // dol_print_error($db, 'Error in setup program');
+                }
 
                 $db->commit();
             }
@@ -385,12 +380,7 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
 
             if ($tagdatabase) {
                 dolibarr_install_syslog('step5: set MAIN_VERSION_LAST_UPGRADE const to value ' . $targetversion);
-                $resql = $db->query("DELETE FROM " . MAIN_DB_PREFIX . "const WHERE " . $db->decrypt('name') . " = 'MAIN_VERSION_LAST_UPGRADE'");
-                if (!$resql) {
-                    dol_print_error($db, 'Error in setup program');
-                }
-                $resql = $db->query("INSERT INTO " . MAIN_DB_PREFIX . "const(name, value, type, visible, note, entity) VALUES (" . $db->encrypt('MAIN_VERSION_LAST_UPGRADE') . ", " . $db->encrypt($targetversion) . ", 'chaine', 0, 'Dolibarr version for last upgrade', 0)");
-                if (!$resql) {
+                if (!Constant::deleteByName('MAIN_VERSION_LAST_UPGRADE') || !Constant::insert('MAIN_VERSION_LAST_UPGRADE', $targetversion, 'chaine', 'Dolibarr version for last upgrade')) {
                     dol_print_error($db, 'Error in setup program');
                 }
                 $conf->global->MAIN_VERSION_LAST_UPGRADE = $targetversion;
@@ -399,8 +389,7 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
 
                 // Force the delete of the flag that say installation is not complete
                 dolibarr_install_syslog('step5: remove MAIN_NOT_INSTALLED const after upgrade process (should not exists but this is a security)');
-                $resql = $db->query("DELETE FROM " . MAIN_DB_PREFIX . "const WHERE " . $db->decrypt('name') . " = 'MAIN_NOT_INSTALLED'");
-                if (!$resql) {
+                if (!Constant::deleteByName('MAIN_NOT_INSTALLED')) {
                     dol_print_error($db, 'Error in setup program');
                 }
             }

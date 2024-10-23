@@ -61,6 +61,7 @@ use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\Website\Classes\Website;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\Filters;
 
 /**
  * Create a dialog with two buttons for export and overwrite of a website
@@ -5098,7 +5099,7 @@ function dol_htmlwithnojs($stringtoencode, $nouseofiframesandbox = 0, $check = '
                  * @return string
                  */
                 static function ($m) {
-                    return realCharForNumericEntities($m);
+                    return Filters::realCharForNumericEntities($m);
                 },
                 $out
             );

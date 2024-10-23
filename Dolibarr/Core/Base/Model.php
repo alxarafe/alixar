@@ -45,4 +45,64 @@ abstract class Model extends EloquentModel
      * @var string
      */
     protected $primaryKey = 'rowid';
+
+    /**
+     * Encrypt sensitive data in database
+     * Warning: This function includes the escape and add the SQL simple quotes on strings.
+     *
+     * @param string $fieldorvalue Field name or value to encrypt
+     * @param int $withQuotes Return string including the SQL simple quotes. This param must always be 1 (Value 0 is bugged and deprecated).
+     * @return  string                  XXX(field) or XXX('value') or field or 'value'
+     */
+    public static function encrypt($fieldorvalue, $withQuotes = 1)
+    {
+        global $conf;
+
+        // Type of encryption (2: AES (recommended), 1: DES , 0: no encryption)
+        $cryptType = (!empty($conf->db->dolibarr_main_db_encryption) ? $conf->db->dolibarr_main_db_encryption : 0);
+
+        //Encryption key
+        $cryptKey = (!empty($conf->db->dolibarr_main_db_cryptkey) ? $conf->db->dolibarr_main_db_cryptkey : '');
+
+        $escapedstringwithquotes = ($withQuotes ? "'" : "") . $fieldorvalue . ($withQuotes ? "'" : "");
+
+        if ($cryptType && !empty($cryptKey)) {
+            if ($cryptType == 2) {
+                $escapedstringwithquotes = "AES_ENCRYPT(" . $escapedstringwithquotes . ", '" . $cryptKey . "')";
+            } elseif ($cryptType == 1) {
+                $escapedstringwithquotes = "DES_ENCRYPT(" . $escapedstringwithquotes . ", '" . $cryptKey . "')";
+            }
+        }
+
+        return $escapedstringwithquotes;
+    }
+
+    /**
+     *  Decrypt sensitive data in database
+     *
+     * @param string $value Value to decrypt
+     * @return string                  Decrypted value if used
+     */
+    public static function decrypt($value)
+    {
+        global $conf;
+
+        // Type of encryption (2: AES (recommended), 1: DES , 0: no encryption)
+        $cryptType = (!empty($conf->db->dolibarr_main_db_encryption) ? $conf->db->dolibarr_main_db_encryption : 0);
+
+        //Encryption key
+        $cryptKey = (!empty($conf->db->dolibarr_main_db_cryptkey) ? $conf->db->dolibarr_main_db_cryptkey : '');
+
+        $return = $value;
+
+        if ($cryptType && !empty($cryptKey)) {
+            if ($cryptType == 2) {
+                $return = 'AES_DECRYPT(' . $value . ',\'' . $cryptKey . '\')';
+            } elseif ($cryptType == 1) {
+                $return = 'DES_DECRYPT(' . $value . ',\'' . $cryptKey . '\')';
+            }
+        }
+
+        return $return;
+    }
 }

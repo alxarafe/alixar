@@ -29,6 +29,10 @@
  *      \brief      Run repair script
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Core\Base\Database;
+use Dolibarr\Core\Model\Constant;
+
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
 if (file_exists($conffile)) {
     include_once $conffile;
@@ -143,12 +147,14 @@ $conf->db->port = $dolibarr_main_db_port;
 $conf->db->name = $dolibarr_main_db_name;
 $conf->db->user = $dolibarr_main_db_user;
 $conf->db->pass = $dolibarr_main_db_pass;
+$conf->db->prefix = MAIN_DB_PREFIX ?? DEFAULT_DB_PREFIX;
 
 // For encryption
 $conf->db->dolibarr_main_db_encryption = isset($dolibarr_main_db_encryption) ? $dolibarr_main_db_encryption : 0;
 $conf->db->dolibarr_main_db_cryptkey = isset($dolibarr_main_db_cryptkey) ? $dolibarr_main_db_cryptkey : '';
 
 $db = getDoliDBInstance($conf->db->type, $conf->db->host, $conf->db->user, $conf->db->pass, $conf->db->name, (int)$conf->db->port);
+new Database();
 
 if ($db->connected) {
     print '<tr><td class="nowrap">';
@@ -368,75 +374,31 @@ if ($ok && GETPOST('standard', 'alpha')) {
     }
 }
 
-
 // clean_data_ecm_dir: Clean data into ecm_directories table
 if ($ok && GETPOST('standard', 'alpha')) {
     clean_data_ecm_directories();
 }
 
-
 // clean declaration constants
 if ($ok && GETPOST('standard', 'alpha')) {
     print '<tr><td colspan="2"><br>*** Clean constant record of modules not enabled</td></tr>';
 
-    $sql = "SELECT name, entity, value";
-    $sql .= " FROM " . MAIN_DB_PREFIX . "const as c";
-    $sql .= " WHERE name LIKE 'MAIN_MODULE_%_TPL' OR name LIKE 'MAIN_MODULE_%_CSS' OR name LIKE 'MAIN_MODULE_%_JS' OR name LIKE 'MAIN_MODULE_%_HOOKS'";
-    $sql .= " OR name LIKE 'MAIN_MODULE_%_TRIGGERS' OR name LIKE 'MAIN_MODULE_%_THEME' OR name LIKE 'MAIN_MODULE_%_SUBSTITUTIONS' OR name LIKE 'MAIN_MODULE_%_MODELS'";
-    $sql .= " OR name LIKE 'MAIN_MODULE_%_MENUS' OR name LIKE 'MAIN_MODULE_%_LOGIN' OR name LIKE 'MAIN_MODULE_%_BARCODE' OR name LIKE 'MAIN_MODULE_%_TABS_%'";
-    $sql .= " OR name LIKE 'MAIN_MODULE_%_MODULEFOREXTERNAL'";
-    $sql .= " ORDER BY name, entity";
-
-    $resql = $db->query($sql);
-    if ($resql) {
-        $num = $db->num_rows($resql);
-
-        if ($num) {
-            $db->begin();
-
-            $i = 0;
-            while ($i < $num) {
-                $obj = $db->fetch_object($resql);
-
-                $reg = array();
-                if (preg_match('/MAIN_MODULE_([^_]+)_(.+)/i', $obj->name, $reg)) {
-                    $name = $reg[1];
-                    $type = $reg[2];
-
-                    $sql2 = "SELECT COUNT(*) as nb";
-                    $sql2 .= " FROM " . MAIN_DB_PREFIX . "const as c";
-                    $sql2 .= " WHERE name = 'MAIN_MODULE_" . $name . "'";
-                    $sql2 .= " AND entity = " . ((int)$obj->entity);
-                    $resql2 = $db->query($sql2);
-                    if ($resql2) {
-                        $obj2 = $db->fetch_object($resql2);
-                        if ($obj2 && $obj2->nb == 0) {
-                            // Module not found, so we can remove entry
-                            $sqldelete = "DELETE FROM " . MAIN_DB_PREFIX . "const WHERE name = '" . $db->escape($obj->name) . "' AND entity = " . ((int)$obj->entity);
-
-                            if (GETPOST('standard', 'alpha') == 'confirmed') {
-                                $db->query($sqldelete);
-
-                                print '<tr><td>Widget ' . $obj->name . ' set in entity ' . $obj->entity . ' with value ' . $obj->value . ' -> Module ' . $name . ' not enabled in entity ' . ((int)$obj->entity) . ', we delete record</td></tr>';
-                            } else {
-                                print '<tr><td>Widget ' . $obj->name . ' set in entity ' . $obj->entity . ' with value ' . $obj->value . ' -> Module ' . $name . ' not enabled in entity ' . ((int)$obj->entity) . ', we should delete record (not done, mode test)</td></tr>';
-                            }
-                        } else {
-                            //print '<tr><td>Constant '.$obj->name.' set in entity '.$obj->entity.' with value '.$obj->value.' -> Module found in entity '.$obj->entity.', we keep record</td></tr>';
-                        }
-                    }
-                }
-
-                $i++;
-            }
-
-            $db->commit();
+    $constants = Constant::getAllModulesConstants();
+    foreach ($constants as $constant) {
+        if (!preg_match('/MAIN_MODULE_([^_]+)_(.+)/i', $constant->name, $reg)) {
+            continue;
         }
-    } else {
-        dol_print_error($db);
+        $name = $reg[1];
+
+        if (GETPOST('standard', 'alpha') !== 'confirmed') {
+            print '<tr><td>Widget ' . $constant->name . ' set in entity ' . $constant->entity . ' with value ' . $constant->value . ' -> Module ' . $name . ' not enabled in entity ' . ((int)$constant->entity) . ', we should delete record (not done, mode test)</td></tr>';
+            continue;
+        }
+
+        print '<tr><td>Widget ' . $constant->name . ' set in entity ' . $constant->entity . ' with value ' . $constant->value . ' -> Module ' . $name . ' not enabled in entity ' . ((int)$constant->entity) . ', we delete record</td></tr>';
+        Constant::deleteByName($constant->name, $constant->entity);
     }
 }
-
 
 // clean box of not enabled modules
 if ($ok && GETPOST('standard', 'alpha')) {
@@ -461,29 +423,19 @@ if ($ok && GETPOST('standard', 'alpha')) {
                     $name = $reg[1];
                     $module = $reg[2];
 
-                    $sql2 = "SELECT COUNT(*) as nb";
-                    $sql2 .= " FROM " . MAIN_DB_PREFIX . "const as c";
-                    $sql2 .= " WHERE name = 'MAIN_MODULE_" . strtoupper($module) . "'";
-                    $sql2 .= " AND entity = " . ((int)$obj->entity);
-                    $sql2 .= " AND value <> 0";
-                    $resql2 = $db->query($sql2);
-                    if ($resql2) {
-                        $obj2 = $db->fetch_object($resql2);
-                        if ($obj2 && $obj2->nb == 0) {
-                            // Module not found, so we canremove entry
-                            $sqldeletea = "DELETE FROM " . MAIN_DB_PREFIX . "boxes WHERE entity = " . ((int)$obj->entity) . " AND box_id IN (SELECT rowid FROM " . MAIN_DB_PREFIX . "boxes_def WHERE file = '" . $db->escape($obj->file) . "' AND entity = " . ((int)$obj->entity) . ")";
-                            $sqldeleteb = "DELETE FROM " . MAIN_DB_PREFIX . "boxes_def WHERE file = '" . $db->escape($obj->file) . "' AND entity = " . ((int)$obj->entity);
+                    $module_instance = Constant::getByName('MAIN_MODULE_' . $module, $obj->entity);
+                    if ($module_instance && $module_instance->value !== 0) {
+                        // Module not found, so we canremove entry
+                        $sqldeletea = "DELETE FROM " . MAIN_DB_PREFIX . "boxes WHERE entity = " . ((int)$obj->entity) . " AND box_id IN (SELECT rowid FROM " . MAIN_DB_PREFIX . "boxes_def WHERE file = '" . $db->escape($obj->file) . "' AND entity = " . ((int)$obj->entity) . ")";
+                        $sqldeleteb = "DELETE FROM " . MAIN_DB_PREFIX . "boxes_def WHERE file = '" . $db->escape($obj->file) . "' AND entity = " . ((int)$obj->entity);
 
-                            if (GETPOST('standard', 'alpha') == 'confirmed') {
-                                $db->query($sqldeletea);
-                                $db->query($sqldeleteb);
+                        if (GETPOST('standard', 'alpha') == 'confirmed') {
+                            $db->query($sqldeletea);
+                            $db->query($sqldeleteb);
 
-                                print '<tr><td>Constant ' . $obj->file . ' set in boxes_def for entity ' . $obj->entity . ' but MAIN_MODULE_' . strtoupper($module) . ' not defined in entity ' . ((int)$obj->entity) . ', we delete record</td></tr>';
-                            } else {
-                                print '<tr><td>Constant ' . $obj->file . ' set in boxes_def for entity ' . $obj->entity . ' but MAIN_MODULE_' . strtoupper($module) . ' not defined in entity ' . ((int)$obj->entity) . ', we should delete record (not done, mode test)</td></tr>';
-                            }
+                            print '<tr><td>Constant ' . $obj->file . ' set in boxes_def for entity ' . $obj->entity . ' but MAIN_MODULE_' . strtoupper($module) . ' not defined in entity ' . ((int)$obj->entity) . ', we delete record</td></tr>';
                         } else {
-                            //print '<tr><td>Constant '.$obj->name.' set in entity '.$obj->entity.' with value '.$obj->value.' -> Module found in entity '.$obj->entity.', we keep record</td></tr>';
+                            print '<tr><td>Constant ' . $obj->file . ' set in boxes_def for entity ' . $obj->entity . ' but MAIN_MODULE_' . strtoupper($module) . ' not defined in entity ' . ((int)$obj->entity) . ', we should delete record (not done, mode test)</td></tr>';
                         }
                     }
                 }
@@ -1120,117 +1072,90 @@ if ($ok && GETPOST('set_empty_time_spent_amount', 'alpha')) {
     }
 }
 
-
 // force_disable_of_modules_not_found
 if ($ok && GETPOST('force_disable_of_modules_not_found', 'alpha')) {
     print '<tr><td colspan="2"><br>*** Force modules not found physically to be disabled (only modules adding js, css or hooks can be detected as removed physically)</td></tr>';
 
+    $db->begin();
+
     $arraylistofkey = array('hooks', 'js', 'css');
 
     foreach ($arraylistofkey as $key) {
-        $sql = "SELECT DISTINCT name, value";
-        $sql .= " FROM " . MAIN_DB_PREFIX . "const as c";
-        $sql .= " WHERE name LIKE 'MAIN_MODULE_%_" . strtoupper($key) . "'";
-        $sql .= " ORDER BY name";
+        $result = Constant::selectByNameAndSuffix('MAIN_MODULE', $key);
+        foreach ($result as $obj) {
+            $constantname = $obj->name; // Name of constant for hook or js or css declaration
 
-        $resql = $db->query($sql);
-        if ($resql) {
-            $num = $db->num_rows($resql);
-            if ($num) {
-                $i = 0;
-                while ($i < $num) {
-                    $obj = $db->fetch_object($resql);
-                    $constantname = $obj->name; // Name of constant for hook or js or css declaration
+            print '<tr><td>';
+            print dol_escape_htmltag($constantname);
 
-                    print '<tr><td>';
-                    print dol_escape_htmltag($constantname);
+            $reg = array();
+            if (!preg_match('/MAIN_MODULE_(.*)_' . strtoupper($key) . '/i', $constantname, $reg)) {
+                print '<tr><td>No active module with missing files found by searching on MAIN_MODULE_(.*)_' . strtoupper($key) . '</td></tr>';
+                continue;
+            }
 
-                    $db->begin();
+            $name = strtolower($reg[1]);
+            if (!$name) {   // No entry for key $key and module $name was found in database.
+                continue;
+            }
 
-                    $reg = array();
-                    if (preg_match('/MAIN_MODULE_(.*)_' . strtoupper($key) . '/i', $constantname, $reg)) {
-                        $name = strtolower($reg[1]);
+            $reloffile = '';
+            $result = 'found';
 
-                        if ($name) {        // An entry for key $key and module $name was found in database.
-                            $reloffile = '';
-                            $result = 'found';
+            if ($key == 'hooks') {
+                $reloffile = $name . '/class/actions_' . $name . '.class.php';
+            }
+            if ($key == 'js') {
+                $value = $obj->value;
+                $valuearray = (array)json_decode($value);  // Force cast into array because sometimes it is a stdClass
+                $reloffile = $valuearray[0];
+                $reloffile = preg_replace('/^\//', '', $valuearray[0]);
+            }
+            if ($key == 'css') {
+                $value = $obj->value;
+                $valuearray = (array)json_decode($value);  // Force cast into array because sometimes it is a stdClass
+                if ($value && (!is_array($valuearray) || count($valuearray) == 0)) {
+                    $valuearray = array();
+                    $valuearray[0] = $value; // If value was not a json array but a string
+                }
+                $reloffile = preg_replace('/^\//', '', $valuearray[0]);
+            }
 
-                            if ($key == 'hooks') {
-                                $reloffile = $name . '/class/actions_' . $name . '.class.php';
-                            }
-                            if ($key == 'js') {
-                                $value = $obj->value;
-                                $valuearray = (array)json_decode($value);  // Force cast into array because sometimes it is a stdClass
-                                $reloffile = $valuearray[0];
-                                $reloffile = preg_replace('/^\//', '', $valuearray[0]);
-                            }
-                            if ($key == 'css') {
-                                $value = $obj->value;
-                                $valuearray = (array)json_decode($value);  // Force cast into array because sometimes it is a stdClass
-                                if ($value && (!is_array($valuearray) || count($valuearray) == 0)) {
-                                    $valuearray = array();
-                                    $valuearray[0] = $value; // If value was not a json array but a string
-                                }
-                                $reloffile = preg_replace('/^\//', '', $valuearray[0]);
-                            }
-
-                            if ($reloffile) {
-                                //var_dump($key.' - '.$value.' - '.$reloffile);
-                                try {
-                                    $result = dol_buildpath($reloffile, 0, 2);
-                                } catch (Exception $e) {
-                                    $result = 'found'; // If error, we force like if we found to avoid any deletion
-                                }
-                            } else {
-                                $result = 'found';  //
-                            }
-
-                            if (!$result) {
-                                print ' - File of ' . $key . ' (' . $reloffile . ') NOT found, we disable the module.';
-                                if (GETPOST('force_disable_of_modules_not_found') == 'confirmed') {
-                                    $sql2 = "DELETE FROM " . MAIN_DB_PREFIX . "const WHERE name = 'MAIN_MODULE_" . strtoupper($name) . "_" . strtoupper($key) . "'";
-                                    $resql2 = $db->query($sql2);
-                                    if (!$resql2) {
-                                        $error++;
-                                        dol_print_error($db);
-                                    }
-                                    $sql3 = "DELETE FROM " . MAIN_DB_PREFIX . "const WHERE name = 'MAIN_MODULE_" . strtoupper($name) . "'";
-                                    $resql3 = $db->query($sql3);
-                                    if (!$resql3) {
-                                        $error++;
-                                        dol_print_error($db);
-                                    } else {
-                                        print ' - <span class="warning">Cleaned</span>';
-                                    }
-                                } else {
-                                    print ' - <span class="warning">Canceled (test mode)</span>';
-                                }
-                            } else {
-                                print ' - File of ' . $key . ' (' . $reloffile . ') found, we do nothing.';
-                            }
-                        }
-
-                        if (!$error) {
-                            $db->commit();
-                        } else {
-                            $db->rollback();
-                        }
-                    }
-
-                    print'</td></tr>';
-
-                    if ($error) {
-                        break;
-                    }
-
-                    $i++;
+            if ($reloffile) {
+                //var_dump($key.' - '.$value.' - '.$reloffile);
+                try {
+                    $result = dol_buildpath($reloffile, 0, 2);
+                } catch (Exception $e) {
+                    $result = 'found'; // If error, we force like if we found to avoid any deletion
                 }
             } else {
-                print '<tr><td>No active module with missing files found by searching on MAIN_MODULE_(.*)_' . strtoupper($key) . '</td></tr>';
+                $result = 'found';  //
             }
-        } else {
-            dol_print_error($db);
+
+            if (!$result) {
+                print ' - File of ' . $key . ' (' . $reloffile . ') NOT found, we disable the module.';
+                if (GETPOST('force_disable_of_modules_not_found') == 'confirmed') {
+                    if (!Constant::deleteByName('MAIN_MODULE_' . strtoupper($name) . '_' . strtoupper($key))) {
+                        dol_print_error(null, 'Fail deleting MAIN_MODULE_' . strtoupper($name) . '_' . strtoupper($key) . ' from const.');
+                    }
+                    if (!Constant::deleteByName('MAIN_MODULE_' . strtoupper($name))) {
+                        dol_print_error(null, 'Fail deleting MAIN_MODULE_' . strtoupper($name) . ' from const.');
+                    }
+                    print ' - <span class="warning">Cleaned</span>';
+                } else {
+                    print ' - <span class="warning">Canceled (test mode)</span>';
+                }
+            } else {
+                print ' - File of ' . $key . ' (' . $reloffile . ') found, we do nothing.';
+            }
+
+            print'</td></tr>';
         }
+    }
+    if (!$error) {
+        $db->commit();
+    } else {
+        $db->rollback();
     }
 }
 

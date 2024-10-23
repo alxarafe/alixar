@@ -40,6 +40,7 @@
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Core\Model\Constant;
 
 /**
  *  \file       htdocs/install/upgrade2.php
@@ -615,8 +616,7 @@ if (!GETPOST('action', 'aZ09') || preg_match('/upgrade/i', GETPOST('action', 'aZ
 
     if (!$error) {
         // Set constant to ask to remake a new ping to inform about upgrade (if first ping was done and OK)
-        $sql = 'UPDATE ' . MAIN_DB_PREFIX . "const SET VALUE = 'torefresh' WHERE name = 'MAIN_FIRST_PING_OK_ID'";
-        $db->query($sql, 1);
+        Constant::updateValueByName('MAIN_FIRST_PING_OK_ID', 'torefresh');
     }
 
     // We always commit.
